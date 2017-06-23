@@ -1,0 +1,569 @@
+= Quickstart
+
+== Concepts
+This chapter describes basic concepts behind {sponge}. For more information see User Guide.
+
+=== Event processors
+Event processors are objects that listen to certain events and perform specified operations when some conditions are met. {sponge} allows to introduce temporal and logical conditions to processed events.
+
+.Event processors
+****
+Filter:: Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and aggregators).
+
+Trigger:: Triggers execute specified operations when an appropriate event occurs.
+
+Rule:: Rules are used to detect correlations (temporal or logical) between events.
+
+Aggregator:: Aggregators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+****
+
+=== Knowledge base
+A knowledge base is a registry where event processors are defined.
+
+There are two types of knowledge bases:
+
+* scripting knowledge bases (i.e. written in a supported scripting language),
+* Java-based knowledge bases (i.e. written in Java).
+
+The main advantage of scripting knowledge bases is a possibility of modification without the need of recompilation or even restarting the system.
+
+Basic features of a knowledge base:
+
+* contains the logic of event processing,
+* defines callback functions performed in certain states of the system (e.g. on startup, on shutdown).
+
+=== Plugins
+The connection between the outside world and knowledge bases is provided by plugins.
+
+=== Event flow
+The figure below shows event flow in the {sponge} engine.
+
+image::engine_event_flow.svg[title="Event flow"]
+
+.Event flow in event processors
+****
+Filter:: An event that is put into the Input Event Queue goes through defined filters. If the event hasn't been accepted by one or more of the filters, the event is discarded.
+
+Trigger:: If there is a trigger listening for an event that successfully passed the filters, than the body of the trigger is executed.
+
+Rule:: If there is a rule that listens to that event, the event will be processed by that rule. In this case the engine will:
++
+* create a new instance of a rule,
+* or save the event in the internal event tree of the already running rule instance,
+* or cause the already running rule instance to fire (i.e. execute the body of the rule).
+
+Aggregator:: If there is an aggregator that listens to that event, the event will be processed by that aggregator.
+****
+
+== Distributions
+
+=== Embedded in a Java application
+{sponge} could be embedded in a Java application by adding a maven dependency.
+
+==== Maven dependency
+For example, if you want to use {sponge} with Python scripting knowledge bases, just add this dependency to your `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-jython</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+There is also a Bill Of Materials style maven artifact for {sponge}. Example usage in your `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-bom</artifactId>
+            <version>{projectVersion}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+==== Creating and starting the {sponge} engine
+The following example shows how to make {sponge} a part of a custom Java application.
+
+.Example of starting embedded {sponge} with the configuration file
+[source,java]
+----
+Engine engine = DefaultEngine.builder().config("examples/script/py/hello_world.xml").build(); // <1>
+engine.startup(); // <2>
+----
+<1> Creates an {sponge} engine by using Engine Builder API providing XML configuration file.
+<2> Starts up the engine. After startup the engine runs in the background, i.e. using threads other than the current one.
+
+.Example of starting embedded {sponge} with the knowledge base file
+[source,java]
+----
+Engine engine = DefaultEngine.builder().knowledgeBase("knowledgeBaseName", "examples/script/py/hello_world.py").build(); // <1>
+engine.startup();
+----
+<1> Creates an {sponge} engine by using Engine Builder API providing a Python script knowledge base.
+
+=== Standalone command-line program
+Prerequisites:
+
+* Installed *Java 1.8 or above.*
+* Environment variable `JAVA_HOME` set or `java` executable placed in `PATH`.
+
+.Verify Java version
+[source,bash,subs="verbatim,attributes"]
+----
+java -version
+----
+
+TIP: If necessary, logging levels could be changed in `config/logback.xml`. Logs will be written to the console as well as to log files placed in `logs/` directory.
+
+Download http://www.openksavi.org/sponge/downloads[`{standalonePackage}.zip`^].
+
+==== Linux/MacOS/Unix
+First steps:
+
+* Unpack the archive
++
+[source,bash,subs="verbatim,attributes"]
+----
+unzip -q {standalonePackage}.zip
+----
+* Run {sponge} example using a configuration file.
++
+[source,bash,subs="verbatim,attributes"]
+----
+cd bin
+./sponge -c ../examples/script/py/hello_world.xml
+----
++
+.Output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Hello World!
+----
++
+Press `CTRL+C` to exit {sponge} standalone command-line application.
+* Run {sponge} example using a knowledge base file
++
+[source,bash,subs="verbatim,attributes"]
+----
+./sponge -k ../examples/script/py/hello_world.py
+----
++
+Press `CTRL+C` to exit.
+* In most common situations you would run {sponge} in the background
++
+[source,bash,subs="verbatim,attributes"]
+----
+./sponge -k ../examples/script/py/rules_heartbeat.py &
+----
+
+When {sponge} process is running you may send `HUP` signal to that process in order to reload knowledge bases.
+
+.Reloading of running knowledge bases
+[source,bash,subs="verbatim,attributes"]
+----
+kill -HUP pid
+----
+Where `pid` is the process id of the Java executable that started the {sponge} program. 
+
+IMPORTANT: See User Guide for limitations of reloading knowledge bases.
+
+==== Windows
+First steps:
+
+* Unpack the archive
+* Run {sponge} using a configuration file.
++
+[source,bash,subs="verbatim,attributes"]
+----
+cd bin
+sponge.bat -c ..\config\py\hello_world.xml
+----
++
+.Output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Hello World!
+----
++
+Press `CTRL+C` to exit {sponge} standalone command-line application.
+* Run {sponge} using a knowledge base file
++
+[source,bash,subs="verbatim,attributes"]
+----
+sponge.bat -k ..\kb\py\hello_world.py
+----
++
+Press `CTRL+C` to exit.
+* Run another example
++
+[source,bash,subs="verbatim,attributes"]
+----
+sponge -k ..\kb\py\rules_heartbeat.py
+----
++
+Press `CTRL+C` to exit.
+
+IMPORTANT: When running on Windows {sponge} standalone command-line program doesn't support reloading of running knowledge bases by sending operating system signal to the background process.
+
+==== Interactive mode
+Standalone {sponge} may be invoked in the interactive mode, providing direct, command-line access to the knowledge base interpreter.
+
+.Invoke {sponge} in the interactive mode
+[source,bash,subs="verbatim,attributes"]
+----
+./sponge -k ../examples/standalone/trigger_simple.py -i
+----
+
+.Send a new event from the console
+[source,bash,subs="verbatim,attributes"]
+----
+> EPS.event("alarm").send()
+----
+
+`EPS` is a facade to the {sponge} engine. The name `EPS` stands for Event Processing System or Event Processing Sponge if you like.
+
+TIP: Because of {sponge} may print messages and exceptions to the console concurrently, the prompt could be lost in between the lines (for example in case of an exception stack trace). In that case press `Enter` key to make a prompt visible.
+
+.Output shows that the event has been processed by a trigger
+[source,bash,subs="verbatim,attributes"]
+----
+Sound the alarm!
+----
+
+Multi-line statements should be entered by adding a backslash (`\`) to the end of all lines except the last one, e.g.:
+
+[source,bash,subs="verbatim,attributes"]
+----
+> def printHello():\
+>     print("Hello")
+----
+
+You may exit the program by entering command `exit`, `quit` or pressing `CTRL-D`.
+
+
+== Examples
+This chapter provides introductory examples of {sponge}. For detailed information see User Guide.
+
+Presented here shell commands used to run the examples require installation of {sponge} standalone command-line application and are specific to Linux/MacOS/Unix. For more information how to run examples see the next chapter.
+
+=== Hello World example
+Let's see the time-honored Hello World example. In this case the text `"Hello World!"` will be printed when an event `helloEvent` fires a trigger `HelloWorldTrigger`.
+
+{sponge} is a polyglot system. It allows creating knowledge bases in several scripting languages.
+
+==== Python
+
+.Python Hello World example knowledge base file
+[source,python]
+----
+# Trigger definition section.
+class HelloWorldTrigger(Trigger): # <1>
+    def configure(self): # <2>
+        self.eventName = "helloEvent" # <3>
+    def run(self, event): # <4>
+        print event.get("say") # <5>
+
+# Startup section.
+def onStartup(): # <6>
+    EPS.event("helloEvent").set("say", "Hello World!").send() # <7>
+----
+<1> The definition of the trigger `HelloWorldTrigger`.
+<2> The trigger configuration method.
+<3> Sets up `HelloWorldTrigger` to listen to `helloEvent` events (i.e. events that have name `"helloEvent"`).
+<4> The trigger `run` method will be called when an event `helloEvent` occurs. The `event` argument is a reference to the event instance.
+<5> Prints the value of the event attribute `"say"`.
+<6> Knowledge base startup function `onStartup()`.
+<7> Send a new event `helloEvent` that has an attribute `"say"` with the text value `"Hello World!"`.
+
+The trigger `HelloWorldTrigger` is enabled automatically before executing `onStartup()`. Enabling means that an instance of `HelloWorldTrigger` class is created and then `HelloWorldTrigger.configure` method is invoked to setup this trigger.
+
+The full source code of this example can be found in the file `hello_world.py`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/py/hello_world.py
+----
+
+.Output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Hello World!
+----
+
+Press `CTRL+C` to exit {sponge} standalone command-line application.
+
+NOTE: All callouts placed in the source code in the examples below remain the same, because they are functionally equivalent.
+
+==== Ruby
+
+.Ruby Hello World example knowledge base file
+[source,ruby]
+----
+class HelloWorldTrigger < Trigger # <1>
+    def configure # <2>
+        self.eventName = "helloEvent" # <3>
+    end
+
+    def run(event) # <4>
+        puts event.get("say") # <5>
+    end
+end
+
+def onStartup # <6>
+    $EPS.event("helloEvent").set("say", "Hello World!").send() # <7>
+end
+----
+
+The full source code of this example can be found in the file `hello_world.rb`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/rb/hello_world.rb
+----
+
+Press `CTRL+C` to exit.
+
+==== Groovy
+
+.Groovy Hello World example knowledge base file
+[source,groovy]
+----
+class HelloWorldTrigger extends Trigger { // <1>
+    void configure() { // <2>
+        this.eventName = "helloEvent" // <3>
+    }
+    void run(Event event) { // <4>
+        println event.get("say") // <5>
+    }
+}
+
+void onStartup() { // <6>
+    EPS.event("helloEvent").set("say", "Hello World!").send() // <7>
+}
+----
+
+The full source code of this example can be found in the file `hello_world.groovy`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/groovy/hello_world.groovy
+----
+
+Press `CTRL+C` to exit.
+
+==== JavaScript
+
+.JavaScript Hello World example knowledge base file
+[source,javascript]
+----
+var HelloWorldTrigger = Java.extend(Trigger, { // <1>
+    configure: function(self) { // <2>
+        self.eventName = "helloEvent"; // <3>
+    },
+    run: function(self, event) { // <4>
+        print(event.get("say")); // <5>
+    }
+});
+
+function onStartup() { // <6>
+    EPS.event("helloEvent").set("say", "Hello World!").send(); // <7>
+}
+----
+
+The full source code of this example can be found in the file `hello_world.js`
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/js/hello_world.js
+----
+
+Press `CTRL+C` to exit.
+
+=== Heartbeat example
+This example presents a more realistic use case of {sponge}.
+
+The rule `HeartbeatRule` will fire (i.e. execute its `run` method) when it detects a time gap between `heartbeat` events that is longer 
+than `2` seconds. This scenario could be used in a monitoring system to verify that a particular service is running.
+
+==== Python
+
+.Python Heartbeat example knowledge base file
+[source,python]
+----
+# Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+class HeartbeatRule(Rule): # <1>
+    def configure(self): # <2>
+        self.events = ["heartbeat h1", "heartbeat h2 :none"] # <3>
+        self.duration = Duration.ofSeconds(2) # <4>
+    def run(self, event): # <5>
+        EPS.event("alarm").set("severity", 1).send() # <6>
+
+class AlarmTrigger(Trigger): # <7>
+    def configure(self):
+        self.eventName = "alarm"
+    def run(self, event):
+        print "Sound the alarm!"
+----
+<1> The definition of the rule `HeartbeatRule`.
+<2> Rule configuration method.
+<3> Setup `HeartbeatRule` to listen to `heartbeat` events (i.e. events that have name `"heartbeat"`) and *detect a situation* that when `heartbeat` event occurs, then there will be no new `heartbeat` event for 2 seconds. So it detects a time gap between `heartbeat` events.
+To first occurrence of event `heartbeat` is assigned an alias `h1`, to the next `h2`. They are required because the same event type is used more than once. `:none` sets an event mode for the second occurrence of `heartbeat` that tells that there should occur no such event.
+<4> Set the duration of this rule to `2` seconds. After that time (counting since the occurrence of `h1`) the state of the rule will be verified and if the specified situation occurs, the rule will fire.
+<5> Rule `run` method will be called when the specified situation takes place. The `event` argument is a reference to the last event in the sequence, so in this case it is `null` because there is no second event. The complete sequence of events will be returned by the method `getEventSequence()`. A single event instance is returned by the method `getEvent(eventAlias)`.
+<6> Send a new `alarm` event that will be processed in a more abstract level.
+<7> A trigger that listens to `alarm` events and prints that the alarm has been activated. Of course in real use case the rule could for example send an email or SMS.
+
+The full source code of this example can be found in the file `rules_heartbeat.py`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/py/rules_heartbeat.py
+----
+
+.After a few seconds the output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Sound the alarm!
+----
+
+Press `CTRL+C` to exit {sponge} standalone command-line application.
+
+==== Ruby
+
+.Ruby Heartbeat example knowledge base file
+[source,ruby]
+----
+# Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+class HeartbeatRule < Rule # <1>
+    def configure # <2>
+        self.events = ["heartbeat h1", "heartbeat h2 :none"] # <3>
+        self.duration = Duration.ofSeconds(2) # <4>
+    end
+    def run(event) # <5>
+        $EPS.event("alarm").set("severity", 1).send() # <6>
+    end
+end
+
+class AlarmTrigger < Trigger # <7>
+    def configure
+        self.eventName = "alarm"
+    end
+    def run(event)
+        puts "Sound the alarm!"
+    end
+end
+----
+
+The full source code of this example can be found in the file `rules_heartbeat.rb`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/rb/rules_heartbeat.rb
+----
+
+.After a few seconds the output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Sound the alarm!
+----
+
+Press `CTRL+C` to exit.
+
+==== Groovy
+
+.Groovy Heartbeat example knowledge base file
+[source,groovy]
+----
+// Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+class HeartbeatRule extends Rule { // <1>
+    void configure() { // <2>
+        this.events = ["heartbeat h1", "heartbeat h2 :none"] // <3>
+        this.duration = Duration.ofSeconds(2) // <4>
+    }
+    void run(Event event) { // <5>
+        EPS.event("alarm").set("severity", 1).send() // <6>
+    }
+}
+
+class AlarmTrigger extends Trigger { // <7>
+    void configure() {
+        this.eventName = "alarm"
+    }
+    void run(Event event) {
+        println "Sound the alarm!"
+    }
+}
+----
+
+The full source code of this example can be found in the file `rules_heartbeat.groovy`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/groovy/rules_heartbeat.groovy
+----
+
+.After a few seconds the output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Sound the alarm!
+----
+
+Press `CTRL+C` to exit.
+
+==== JavaScript
+
+.JavaScript Heartbeat example knowledge base file
+[source,javascript]
+----
+// Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+var HeartbeatRule = Java.extend(Rule, { // <1>
+    configure: function(self) { // <2>
+        self.events = ["heartbeat h1", "heartbeat h2 :none"]; // <3>
+        self.duration = Duration.ofSeconds(2); // <4>
+    },
+    run: function(self, event) { // <5>
+        EPS.event("alarm").set("severity", 1).send(); // <6>
+    }
+});
+
+var AlarmTrigger = Java.extend(Trigger, { // <7>
+    configure: function(self) {
+        self.eventName = "alarm";
+    },
+    run: function(self, event) {
+        print("Sound the alarm!");
+    }
+});
+----
+
+The full source code of this example can be found in the file `rules_heartbeat.js`.
+
+.Running this example in a standalone command-line application
+[source,bash,subs="verbatim,attributes"]
+----
+bin/sponge -k examples/script/js/rules_heartbeat.js
+----
+
+.After a few seconds the output console shows
+[source,bash,subs="verbatim,attributes"]
+----
+Sound the alarm!
+----
+
+Press `CTRL+C` to exit.
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+    <properties>
+        <property name="sponge.home">.</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="ruby">
+            <file>examples/script/rb/plugins_java.rb</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="connectionPlugin" description="A simple plugin used as an example"
+                class="org.openksavi.sponge.examples.ConnectionPlugin">
+            <connection>
+                <name>Example connection</name>
+            </connection>
+        </plugin>
+        <plugin name="echoPlugin" description="A simple plugin used as an example" 
+                class="org.openksavi.sponge.examples.EchoPlugin">
+            <echo>Echo test!</echo>
+            <count>2</count>
+        </plugin>
+    </plugins>
+</sponge>
+

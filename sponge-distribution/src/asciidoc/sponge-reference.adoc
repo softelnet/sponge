@@ -1,0 +1,9 @@
+= Sponge Reference Documentation
+Marcin Paś / Softelnet <marcin.pas@softelnet.com>
+This is a reference documentation for project {sponge}.
+
+include::sponge-overview.adoc[leveloffset=+1]
+
+include::sponge-quickstart.adoc[leveloffset=+1]
+
+include::sponge-user-guide.adoc[leveloffset=+1]

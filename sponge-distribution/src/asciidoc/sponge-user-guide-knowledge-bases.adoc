@@ -1,0 +1,280 @@
+= Knowledge bases
+A knowledge base is used mainly to define and register event processors.
+
+Typically you write knowledge bases in one or more of the supported scripting languages. An alternative way of defining knowledge bases is to write them directly in Java. However, using a scripting knowledge base has advantages such as a modified script knowledge base doesn't need recompilation.
+
+There is a global namespace for all processors (i.e. event processors, actions), regardless of a knowledge base they are defined in. When there is more than one processor of the same name in the engine, only the last enabled one will be registered. However, you can't enable a processor if an another one of a different type is already enabled.
+
+Script knowledge base files are searched in the file system, then in the classpath and then in the {sponge} home directory. This could be changed by providing a custom implementation of `IKnowledgeBaseFileProvider`.
+
+The order of loading knowledge bases preserves the order specified in the configuration. Likewise the order of loading files of the same knowledge base preserves the order specified in the configuration.
+
+== Knowledge base file structure
+Generally, script knowledge base files consist of a few parts:
+
+. Import of modules and packages (from the scripting language or Java).
+. Definitions of knowledge base processors (actions, filters, triggers, rules and aggregators).
+. Definitions of callback functions that will be invoked in particular situations:
++
+.Callback functions
+[cols="1,4"]
+|===
+|Function |Description
+
+|`onInit()`
+|Called once on the initialization of the knowledge base.
+
+|`onLoad()`
+|Called on the loading of the knowledge base and also every time the knowledge base is reloaded.
+
+|`onStartup()`
+|Called once after the startup of the system (after `onInit()` and initial `onLoad()`).
+
+|`onShutdown()`
+|Called once before the shutdown of the system.
+
+|`onBeforeReload()`
+|Called before every reloading of the knowledge base.
+
+|`onAfterReload()`
+|Called after every reloading of the knowledge base.
+|===
+
+CAUTION: You shouldn't place more than one callback function that has the same name in the same knowledge base (event in different files of that knowledge base). If there is more than one callback function that has the same name in the same knowledge base *only the last loaded function will be invoked*. Furthermore it could depend on the specific scripting language.
+
+When {sponge} is starting, callback functions are invoked in the following order:
+
+. executing all knowledge base files as scripts, i.e. executing the main body of the script files,
+. `onInit()`,
+. `onLoad()`,
+. `onStartup()`.
+
+When the knowledge base is reloaded, callback functions are invoked in the following order:
+
+. `onBeforeReload()` executed in the previous version of the reloaded knowledge base,
+. executing all knowledge base files as scripts, i.e. executing the main body of the script files,
+. `onLoad()` executed in the new version of the reloaded knowledge base,
+. `onAfterReload()` executed in the new version of the reloaded knowledge base.
+
+== Variables
+A variable could be defined in one of the two scopes:
+
+* a session (engine) scope,
+* a knowledge base interpreter scope.
+
+IMPORTANT: Currently there is only one session per a single {sponge} engine instance.
+
+=== A session (engine) scope
+A session (engine) scope variables could be accessed in any knowledge base.
+
+.A session (engine) scope variable examples
+[source,python]
+----
+EPS.setVariable("soundTheAlarm", AtomicBoolean(False))
+EPS.getVariable("soundTheAlarm").set(True)
+----
+
+=== A knowledge base interpreter scope
+A knowledge base interpreter scope variables may be accessed only in the knowledge base they are defined in.
+
+.A knowledge base interpreter scope variable examples
+[source,python]
+----
+hearbeatEventEntry = None
+
+def onStartup():
+    global hearbeatEventEntry
+    hearbeatEventEntry = EPS.event("heartbeat").sendAfter(100, 1000)
+----
+
+=== Predefined global variables
+The following predefined global variables are available in a knowledge base:
+
+.Global variables
+[cols="1,5"]
+|===
+|Global variable |Description
+
+|`EPS`
+|The facade to the {sponge} engine operations, which provides methods to send events, manually enable or disable event processors etc. This variable represents an instance of a Java class implementing `org.openksavi.sponge.kb.KnowledgeBaseEngineOperations`. The name `EPS` stands for Event Processing System or Event Processing Sponge.
+|===
+
+.Sponge global variable usage cases
+[cols="1,5"]
+|===
+|Usage case |Description
+
+|`EPS.kb`
+|The knowledge base to which belongs the script using this variable. This value represents a processor of a Java class implementing `org.openksavi.sponge.kb.KnowledgeBase` (for script knowledge base it is `org.openksavi.sponge.kb.ScriptKnowledgeBase`).
+
+|`EPS.interpreter` 
+|The knowledge base interpreter that read the script using this variable. Generally it is an implementation of `org.openksavi.sponge.kb.KnowledgeBaseInterpreter`. In the case of a scripting knowledge base it returns an implementation of `org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter`.
+
+|`EPS.logger`
+|Global logger instance. Please note, that event processors and actions have their own loggers (they are referenced as `self.logger`).
+|===
+
+For each plugin a global variable will be created. The name of this variable is the plugin name (i.e. the value configured as the plugin `name` attribute in the configuration).
+
+== Enabling processors
+Processors could be enabled:
+
+* by auto-enable (this is the default setting for script-based processors),
+* manually.
+
+=== Auto-enable
+{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and aggregators) defined in a knowledge base. This is done just before invoking `onLoad` callback function in the knowledge base.
+
+CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they wouldn't be enabled automatically.
+
+Auto-enable scans only for processors defined in the scripting knowledge base. Enabling Java-based processors have to be done manually.
+
+You may turn off auto-enable by setting `autoEnable` configuration parameter to `false`. In that case you have to enable processors manually.
+
+=== Manual enabling
+In most cases enabling processors manually should be done in `onLoad` callback function.
+
+To manually enable any script-based processors in the script knowledge base you may use `EPS.enable()` to enable one processor and `EPS.enableAll()` to enable many processors.
+
+.Enabling script-based processor example
+[source,python]
+----
+def onLoad:
+    EPS.enable(TriggerA)
+----
+
+.Enabling script-based processors example
+[source,python]
+----
+def onLoad:
+    EPS.enableAll(Trigger1, Trigger3)
+----
+
+To manually enable any Java-based processors in the script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`.
+
+.Enabling Java-based processor example
+[source,python]
+----
+def onLoad():
+    EPS.enableJava(SameSourceJavaRule)
+----
+
+== Disabling processors
+Processors could be disabled only manually. To disable any script-based processors in the script knowledge base you may use `EPS.disable()` to disable one processor and `EPS.disableAll()` to disable many processors.
+
+.Disabling script-based processor example
+[source,python]
+----
+def onLoad:
+    EPS.disable(EchoAction)
+----
+
+To disable any Java-based processors in the script knowledge base you may use `EPS.disableJava()` and `EPS.disableJavaAll()`.
+
+.Disabling Java-based processor example
+[source,python]
+----
+def onLoad():
+    EPS.disableJava(SameSourceJavaRule)
+----
+
+== Loading knowledge base from an additional file
+{sponge} gives the possibility to define a knowledge base in a few files. In order to do that, in the configuration file in the `<engine>` section you may define which files should be loaded by adding `<file>` tags to `<knowledgeBase>`. Additional files could also be loaded from a knowledge base level.
+
+[source,python]
+----
+EPS.kb.load("triggers.py")
+----
+
+****
+When the same name is used for a new processor, the previous definition will be replaced with the new one. However, this behavior could depend on the specific scripting language.
+****
+
+== Reloading
+While the system is working a situation may occur that there will be a need for a dynamic modification of event processors, for example to add a new rule or remove an existing one. It is possible to do it without the need of shutting down and then starting the system again. However, depending on the specific interactions and taking into account differences in third-party implementations of scripting languages, it sometimes may lead to problems, so it should be used carefully.
+
+When {sponge} global variables are used (session or knowledge base interpreter scope) and you don't want them to be changed after reloading of the knowledge base, you should place their declarations or definitions in `onInit()` callback functions rather than simply in the main script or in `onLoad()`. That is because the main script and `onLoad()` are always executed during reloading but `onInit()` function is not.
+
+When reloading the system, the configuration file is not loaded again. If the changes in this file (e.g. registering a new plugin) are to be visible in the system, the only way is to restart.
+
+When the {sponge} engine is being reloaded, the previously defined processors will not be removed from the registry. When a processor definition has changed in the file being reloaded, it will be auto-enabled so that it is registered once more in the system with the new definition. If auto-enable is off, then `EPS.enable` method must be invoked. In that case `EPS.enable` should be placed in `onLoad()` callback function.
+
+WARNING: If auto-enable is on (this is the default setting), then all processors will be enabled after reloading, even processors that have been manually disabled before.
+
+CAUTION: There is a limitation in reloading a knowledge base that uses event set processors (i.e. rules, aggregators). When there are existing instances of event set processors, they will be dismissed.
+
+== Use of many knowledge base files
+As mentioned before, {sponge} provides the possibility to read a knowledge base from many files. Dividing a knowledge base into a few files allows in an easy way to separate some functionalities.
+
+The order in which the files are loaded is important. The files will be loaded in such order in which they were placed in the configuration.
+
+Because of the names of events and event processors must be unique you should create a consistent convention of naming.
+
+== Synchronization of processes in a knowledge base
+{sponge} is a multi-threaded system. Attention should be payed then so that event processors defined in the knowledge base provide safe access to  shared resources. This could be achieved in various ways using Java or scripting language mechanisms.
+
+{sponge} engine operations are thread-safe.
+
+== Java knowledge base
+
+.Example of sending events from within a Java knowledge base
+[source,java]
+----
+public class TestKnowledgeBase extends JavaKnowledgeBase { // <1>
+
+    @Override
+    public void onStartup() {
+        getEPS().event("e1").set("mark", 1).sendAfter(100); // <2>
+    }
+}
+----
+<1> The definition of the Java-based knowledge base class.
+<2> Makes an event of type (name) `e1` with an attribute `mark` set to `1` and schedules it to be sent after `1` second.
+
+
+== Scripting knowledge bases interoperability
+There are some limitation in the interoperability between scripting knowledge bases:
+
+* You shouldn't pass knowledge base interpreter scope variables from one knowledge base to another. Even if they are written in the same scripting language. This is because each knowledge base has its own instance of an interpreter.
+* Data structures used to communicate between different knowledge bases should by rather Java types or simple types that would be handled smoothly by Java implementations of scripting languages (for example Jython). For example you shouldn't use a script-based plugin in knowledge bases other than the one in which this plugin has been defined.
+* Using more than one knowledge bases using the same scripting language may cause problems in certain situations due to the internal implementations of scripting language interpreters.
+
+== Useful knowledge base commands
+
+.Safely shutdown {sponge}
+[source,python]
+----
+EPS.engine.requestShutdown()
+----
+
+.Make and send a new event.
+[source,python]
+----
+EPS.event("alarm").event("severity", 10).send()
+----
+
+.Print registered (i.e. enabled) triggers.
+[source,python]
+----
+print EPS.engine.triggers
+----
+
+.Print registered rule groups.
+[source,python]
+----
+print EPS.engine.ruleGroups
+----
+
+.Print instances of the first rule group.
+[source,python]
+----
+print EPS.engine.ruleGroups[0].rules
+----
+
+.Print registered aggregator groups.
+[source,python]
+----
+print EPS.engine.aggregatorGroups
+----
+
+For more information see {sponge} JavaDoc.

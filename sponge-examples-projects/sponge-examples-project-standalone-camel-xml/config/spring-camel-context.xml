@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:lang="http://www.springframework.org/schema/lang"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/lang
+                           http://www.springframework.org/schema/lang/spring-lang.xsd
+                           http://camel.apache.org/schema/spring
+                           http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route id="spongeConsumerXmlSpringRoute">
+            <from uri="sponge:spongeEngine" />
+            <transform>
+                <simple>XML/Spring route - Received message: ${body}</simple>
+            </transform>
+            <to uri="stream:out" />
+        </route>
+    </camelContext>
+
+    <!-- Should be created manually because a custom Camel context is used. -->
+    <bean name="camel" class="org.openksavi.sponge.camel.CamelPlugin" />
+</beans>

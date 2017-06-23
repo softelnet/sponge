@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <properties>
+        <!-- Base directory. -->
+        <property name="baseDir" variable="true">examples/standalone/camel_template</property>
+        <property name="templateUri" variable="true">file:${baseDir}/template.mustache</property>
+    </properties>
+
+    <knowledgeBases>
+        <!-- Main knowledge base (implemented in Python). -->
+        <knowledgeBase name="main" type="python">
+            <file>${baseDir}/main.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <!-- Standalone plugin that configures Spring and Camel. -->
+        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <spring camel="true">
+                <file>${baseDir}/CamelRoutes.groovy</file>
+            </spring>
+        </plugin>
+    </plugins>
+</sponge>
+

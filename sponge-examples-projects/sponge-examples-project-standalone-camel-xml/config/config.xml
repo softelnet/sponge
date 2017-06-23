@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="python_kb" type="python">
+            <file>kb/python_kb.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="javascript_kb" type="javascript">
+            <file>kb/javascript_kb.js</file>
+        </knowledgeBase>
+        <knowledgeBase name="ruby_kb" type="ruby">
+            <file>kb/ruby_kb.rb</file>
+        </knowledgeBase>
+        <knowledgeBase name="groovy_kb" type="groovy">
+            <file>kb/groovy_kb.groovy</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <spring>
+                <!-- Manual Camel context configuration. -->
+                <file>config/spring-camel-context.xml</file>
+            </spring>
+        </plugin>
+    </plugins>
+</sponge>
+

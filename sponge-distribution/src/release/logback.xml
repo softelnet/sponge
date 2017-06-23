@@ -1,0 +1,49 @@
+<configuration debug="false" scan="false">
+
+    <contextName>sponge-logger</contextName>
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <jmxConfigurator />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${sponge.home}/logs/sponge.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${sponge.home}/logs/sponge-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.openksavi" level="info" />
+    <logger name="org.openksavi.sponge.core.rule" level="error" />
+    <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup" level="error" />
+    <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="error" />
+    <logger name="org.openksavi.sponge.core.engine.processing.collisionmap" level="error" />
+    <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
+    <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="error" />
+    <logger name="kb" level="debug" />
+
+    <logger name="jdbc.sqlonly" level="error" />
+    <logger name="org.apache.commons.beanutils.FluentPropertyBeanIntrospector" level="error" />
+    <logger name="org.quartz" level="error" />
+    <logger name="org.apache.camel" level="error" />
+    <logger name="org.springframework" level="error" />
+    <logger name="ch.qos.logback" level="error" />
+
+    <root level="info">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+</configuration>

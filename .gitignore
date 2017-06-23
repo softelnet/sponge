@@ -1,0 +1,9 @@
+.settings
+.DS_Store
+.classpath
+.project
+target/
+*.dia~
+.pydevproject
+*.class
+*.log

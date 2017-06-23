@@ -1,0 +1,9 @@
+= Sponge Changelog
+:uri-repo: https://github.com/softelnet/sponge
+:icons: font
+
+This document provides a high-level view of the changes introduced in {sponge} releases.
+For a detailed view of what has changed, refer to the {uri-repo}/commits/master[commit history] on GitHub.
+
+== 0.1.0 (2017.04.18)
+Initial release.

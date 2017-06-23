@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="rss" type="python">
+            <file>examples/standalone/python_rss/python_rss.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <spring camel="true" />
+        </plugin>
+    </plugins>
+</sponge>
+

@@ -1,0 +1,32 @@
+= Sponge Developer Guide
+
+== Generating www project page contents (including standalone distribution)
+
+ cd sponge
+ mvn clean package
+
+The result directory is `sponge-distribution/sponge-{projectVersion}-www`. Change `package` to `install` to install in a local maven repository
+
+== Generating www project page contents (including standalone distribution) - without tests, licenses, javadoc, documentation and assembly
+
+ mvn clean package -DskipTests -P-create-license-list -P-download-licenses -P-javadoc -P-documentation -P-assembly
+
+== Generating only ADOC documentation
+
+ cd sponge-distribution
+ mvn generate-resources
+
+== Generating third party licenses
+
+ cd sponge-distribution
+ mvn license:download-licenses license:add-third-party -Pcreate-license-list -Pdownload-licenses
+
+
+== Eclipse plugins
+
+* http://dist.springsource.org/snapshot/GRECLIPSE/e4.7/[Groovy plugin for Eclipse Neon^]
+
+== Code verification
+
+* http://findbugs.sourceforge.net[Findbugs^]
+

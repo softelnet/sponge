@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.openksavi.sponge</groupId>
+        <artifactId>sponge-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>sponge-examples-project-camel-rss-news</artifactId>
+    <name>Sponge - Examples - Project - Camel RSS news</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-jython</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-jruby</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-nashorn</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-camel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-rss</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-bom</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

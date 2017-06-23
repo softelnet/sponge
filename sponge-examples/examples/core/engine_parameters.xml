@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <engine>
+        <mainProcessingUnitThreadCount>21</mainProcessingUnitThreadCount>
+        <asyncEventSetProcessorExecutorThreadCount>${mainProcessingUnitThreadCount}</asyncEventSetProcessorExecutorThreadCount>
+        <eventClonePolicy>deep</eventClonePolicy>
+        <autoEnable>false</autoEnable>
+    </engine>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="python">
+            <file>examples/core/engine_parameters.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+

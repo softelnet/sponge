@@ -1,0 +1,6 @@
+= Sponge
+:url: http://www.openksavi.org/sponge
+
+This is a source code repository for an open source, Apache licensed, Java based Event Processing System *Sponge*.
+
+For more information see a main project page {url}.

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles>
+<profile formatter="org.eclipse.dltk.ruby.formatter.RubyFormatterFactory" name="OpenKsavi-ruby" version="1">
+<setting id="indent.if" value="true"/>
+<setting id="formatter.tabulation.char" value="space"/>
+<setting id="wrap.comments.length" value="80"/>
+<setting id="line.file.require.after" value="1"/>
+<setting id="wrap.comments" value="false"/>
+<setting id="line.file.module.between" value="1"/>
+<setting id="line.first.before" value="0"/>
+<setting id="indent.when" value="true"/>
+<setting id="indent.module" value="true"/>
+<setting id="line.module.before" value="1"/>
+<setting id="line.method.before" value="1"/>
+<setting id="line.file.method.between" value="1"/>
+<setting id="lines.preserve" value="1"/>
+<setting id="indent.method" value="true"/>
+<setting id="formatter.indentation.size" value="4"/>
+<setting id="indent.case" value="false"/>
+<setting id="indent.blocks" value="true"/>
+<setting id="indent.class" value="true"/>
+<setting id="formatter.tabulation.size" value="4"/>
+<setting id="line.file.class.between" value="1"/>
+<setting id="line.class.before" value="1"/>
+</profile>
+</profiles>

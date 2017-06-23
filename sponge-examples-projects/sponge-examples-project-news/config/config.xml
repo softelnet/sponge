@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <properties>
+        <!-- News that have less words in the title than specified by this parameter will be rejected by filters. -->
+        <property name="newsFilterWordThreshold" variable="true">3</property>
+        <!-- Max size of a buffer that stores latest news. -->
+        <property name="latestNewsMaxSize" variable="true">5</property>
+    </properties>
+
+    <knowledgeBases>
+        <!-- Main knowledge base (implemented in Python) that uses 3 files. These files will be loaded by the same interpreter. -->
+        <knowledgeBase name="main" type="python">
+            <!-- Plugin implemented in Python. -->
+            <file>kb/main_plugins.py</file>
+            <!-- Main event processors. For the sake of clarity registration of event processors is placed in the next file. -->
+            <file>kb/main_event_processors.py</file>
+            <!-- Knowledge base callback functions: onInit, onLoad, etc. -->
+            <file>kb/main_functions.py</file>
+        </knowledgeBase>
+        <!-- Actions knowledge base (implemented in JavaScript). -->
+        <knowledgeBase name="actions" type="javascript">
+            <file>kb/actions.js</file>
+        </knowledgeBase>
+        <!-- News generator knowledge base. -->
+        <knowledgeBase name="newsGenerator" type="python">
+            <file>kb/news_generator.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <!-- Plugin defined in Java. -->
+        <plugin name="echoPlugin" description="Multi echo plugin" class="org.openksavi.sponge.examples.project.news.MultiEchoPlugin">
+            <count>2</count>
+        </plugin>
+
+        <!-- Plugin defined in Python. -->
+        <plugin name="storagePlugin" description="Stores the last news entry" class="StoragePlugin"
+            knowledgeBaseName="main">
+            <storedValue>no news yet</storedValue>
+        </plugin>
+    </plugins>
+</sponge>
+

@@ -1,0 +1,82 @@
+/*
+ * Copyright 2016-2017 Softelnet.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.openksavi.sponge.nashorn;
+
+import org.openksavi.sponge.event.Event;
+
+/**
+ * JavaScript-specific implementation of the aggregator.
+ */
+public abstract class NashornAggregator extends org.openksavi.sponge.core.aggregator.BaseAggregator implements NashornScriptObject {
+
+    /** JavaScript processor used to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
+    private Object target;
+
+    @Override
+    public Object getSelf() {
+        return this;
+    }
+
+    @Override
+    public Object getTarget() {
+        return target;
+    }
+
+    @Override
+    public void setTarget(Object target) {
+        this.target = target;
+    }
+
+    @Override
+    public final void configure() {
+        configure(getSelf());
+    }
+
+    @Override
+    public final void init() {
+        init(getSelf());
+    }
+
+    @Override
+    public final boolean acceptsAsFirst(Event event) {
+        return acceptsAsFirst(getSelf(), event);
+    }
+
+    @Override
+    public final void onEvent(Event event) {
+        onEvent(getSelf(), event);
+    }
+
+    @Override
+    public final void onDuration() {
+        onDuration(getSelf());
+    }
+
+    public abstract void configure(Object self);
+
+    public void init(Object self) {
+        //
+    }
+
+    public abstract boolean acceptsAsFirst(Object self, Event event);
+
+    public abstract void onEvent(Object self, Event event);
+
+    public void onDuration(Object self) {
+        //
+    }
+}

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z $JAVA_HOME ]; then
+    JAVA_CMD=java
+else
+    JAVA_CMD=$JAVA_HOME/bin/java
+fi
+
+if [ -z $JAVA_OPTIONS ]; then
+    JAVA_OPTIONS=-Xmx512m -Xms256m -XX:+UseG1GC -XX:+UseStringDeduplication
+fi
+
+if [ -z $SPONGE_HOME ]; then
+    SPONGE_HOME=`dirname $BASH_SOURCE`/..
+fi
+
+if [ -z $COLUMNS ]; then
+    if [ ! -z `type -P tput` ]; then
+        export COLUMNS=`tput cols`
+    fi
+fi
+
+
+$JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml ${mainClass} "$@"

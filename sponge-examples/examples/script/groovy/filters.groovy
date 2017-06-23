@@ -1,0 +1,47 @@
+/**
+ * Sponge Knowledge base
+ * Using filters
+ */
+
+import java.util.concurrent.atomic.AtomicInteger
+
+void onInit() {
+    // Variables for assertions only
+    eventCounter = Collections.synchronizedMap(new HashMap())
+    eventCounter.put("blue", new AtomicInteger(0))
+    eventCounter.put("red", new AtomicInteger(0))
+    EPS.setVariable("eventCounter", eventCounter)
+}
+
+class ColorFilter extends Filter {
+    void configure() {
+        this.eventName = "e1"
+    }
+    boolean accepts(Event event) {
+        this.logger.debug("Received event {}", event)
+        String color = event.get("color")
+        if (color == null || color != "blue") {
+            this.logger.debug("rejected")
+            return false
+        } else {
+            this.logger.debug("accepted")
+            return true
+        }
+    }
+}
+
+class ColorTrigger extends Trigger {
+    void configure() {
+        this.eventName = "e1"
+    }
+    void run(Event event) {
+        this.logger.debug("Received event {}", event)
+        EPS.getVariable("eventCounter").get(event.get("color")).incrementAndGet()
+    }
+}
+
+void onStartup() {
+    EPS.event("e1").sendAfter(100)
+    EPS.event("e1").set("color", "red").sendAfter(100)
+    EPS.event("e1").set("color", "blue").sendAfter(100)
+}

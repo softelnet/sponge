@@ -1,0 +1,379 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.openksavi.sponge</groupId>
+        <artifactId>sponge-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>sponge-distribution</artifactId>
+    <name>Sponge - Distribution</name>
+
+    <properties>
+        <rootDir>${basedir}/..</rootDir>
+        <examplesProject>${rootDir}/sponge-examples</examplesProject>
+        <completeExamplesProject>${rootDir}/sponge-examples-projects</completeExamplesProject>
+        <executableJar>sponge-${release.version}.jar</executableJar>
+        <standalonePackageName>sponge-${release.version}</standalonePackageName>
+        <mainClass>org.openksavi.sponge.standalone.StandaloneEngineMain</mainClass>
+        <sourcesUrl>https://github.com/softelnet/sponge/tree/master</sourcesUrl>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-standalone</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-standalone-extensions</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+<!--                             <addClasspath>true</addClasspath> -->
+<!--                             <classpathPrefix>lib/</classpathPrefix> -->
+                            <mainClass>${mainClass}</mainClass>
+                            <packageName>sponge</packageName>
+                        </manifest>
+                    </archive>
+                </configuration>
+<!--                 <executions> -->
+<!--                     <execution> -->
+<!--                         <phase>package</phase> -->
+<!--                         <goals> -->
+<!--                             <goal>jar</goal> -->
+<!--                         </goals> -->
+<!--                     </execution> -->
+<!--                 </executions> -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>documentation</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <configuration>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <sourceDirectory>src/asciidoc</sourceDirectory>
+
+                            <attributes>
+                                <toclevels>5</toclevels>
+                                <homepage>http://www.openksavi.org/sponge</homepage>
+                                <sectnums>true</sectnums>
+                                <sectnumlevels>5</sectnumlevels>
+                                <icons>font</icons>
+                                <prewrap>false</prewrap>
+                                <linkattrs>true</linkattrs>
+                                <description>Sponge - open source, Java-based complex event processing</description>
+                                <keywords>Sponge,CEP,Complex Event Processing,Java,Open
+                                    Source,Ruby,Groovy,JavaScript,IoT,Internet of
+                                    things,Apache license,Apache Camel</keywords>
+                                <linkcss>true</linkcss>
+
+                                <sponge>Sponge</sponge>
+                                <projectVersion>${release.version}</projectVersion>
+                                <examplesDir>${examplesProject}/examples</examplesDir>
+                                <javaTestDir>${examplesProject}/src/test/java</javaTestDir>
+                                <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>
+                                <standaloneDir>${standalonePackageName}</standaloneDir>
+                                <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
+                                <sourcesUrl>${sourcesUrl}</sourcesUrl>
+                            </attributes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>output-html-overview-www</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html</backend>
+                                    <sourceDocumentName>sponge-overview.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <sectnums>false</sectnums>
+                                        <headerFooter>false</headerFooter>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-html-quickstart-www</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html</backend>
+                                    <sourceDocumentName>sponge-quickstart.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <sectnums>false</sectnums>
+                                        <headerFooter>false</headerFooter>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-html-user-guide-www</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html</backend>
+                                    <sourceDocumentName>sponge-user-guide.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <useReferences></useReferences>
+                                        <toc>auto</toc>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-html-reference-www</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html</backend>
+                                    <sourceDocumentName>sponge-reference.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <useReferences></useReferences>
+                                        <toc>left</toc>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-html-examples</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html</backend>
+                                    <sourceDocumentName>sponge-examples.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <toc>auto</toc>
+                                        <revnumber>${release.version}</revnumber>
+                                        <revdate>${maven.build.timestamp}</revdate>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>output-pdf-reference</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>pdf</backend>
+                                    <doctype>book</doctype>
+                                    <sourceDocumentName>sponge-reference.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <toc>auto</toc>
+                                        <revnumber>${release.version}</revnumber>
+                                        <revdate>${maven.build.timestamp}</revdate>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-pdf-examples</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>pdf</backend>
+                                    <doctype>book</doctype>
+                                    <sourceDocumentName>sponge-examples.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <toc>auto</toc>
+                                        <revnumber>${release.version}</revnumber>
+                                        <revdate>${maven.build.timestamp}</revdate>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-pdf-developer-guide</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>pdf</backend>
+                                    <doctype>book</doctype>
+                                    <sourceDocumentName>sponge-developer-guide.adoc</sourceDocumentName>
+                                    <attributes>
+                                        <toc>auto</toc>
+                                        <revnumber>${release.version}</revnumber>
+                                        <revdate>${maven.build.timestamp}</revdate>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>javadoc</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <includeDependencySources>true</includeDependencySources>
+                            <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
+                            <dependencySourceIncludes>
+                                <dependencySourceInclude>org.openksavi.sponge:*</dependencySourceInclude>
+                            </dependencySourceIncludes>
+                            <dependencySourceExcludes>
+                                <dependencySourceExclude>org.openksavi.sponge:sponge-distribution</dependencySourceExclude>
+                                <dependencySourceExclude>org.openksavi.sponge:sponge-standalone-extensions</dependencySourceExclude>
+                                <dependencySourceExclude>org.openksavi.sponge:sponge-examples*</dependencySourceExclude>
+                            </dependencySourceExcludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>create-license-list</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <configuration>
+                            <verbose>false</verbose>
+                            <licenseMerges>
+                                <licenseMerge>The Apache Software License, Version 2.0|Apache Software License - Version 2.0|Apache License Version 2.0|ASF 2.0|Apache 2|Apache 2.0|Apache 2.0 License|Apache License|Apache License 2.0|Apache License, Version 2.0|Apache License, version 2.0|Apache Public License 2.0|Apache License v2</licenseMerge>
+                                <licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
+                                <licenseMerge>Mozilla Public License|MPL 1.1</licenseMerge>
+                                <licenseMerge>Eclipse Public License (EPL) 1.0|Eclipse Public License v1.0|Eclipse Public License - Version 1.0|Eclipse Public License (EPL), Version 1.0</licenseMerge>
+                                <licenseMerge>The BSD License|BSD|BSD licence|BSD License|BSD style</licenseMerge>
+                                <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE|lgpl</licenseMerge>
+                                <licenseMerge>GNU Lesser General Public License Version 2.1, February 1999|LGPL 2.1</licenseMerge>
+                                <licenseMerge>Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|CDDL 1.0|CDDL License</licenseMerge>
+                                <licenseMerge>Bouncy Castle License|Bouncy Castle Licence</licenseMerge>
+                                <licenseMerge>The W3C License|The W3C Software License</licenseMerge>
+                            </licenseMerges>
+                            <sortArtifactByName>true</sortArtifactByName>
+                            <useMissingFile>false</useMissingFile>
+                            <excludedGroups>org.openksavi.sponge</excludedGroups>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>add-third-party</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>download-licenses</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <configuration>
+                            <verbose>false</verbose>
+                            <excludedGroups>org.openksavi.sponge</excludedGroups>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>download-licenses</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>assembly</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <finalName>${standalonePackageName}</finalName>
+        <!--                     <appendAssemblyId>false</appendAssemblyId> -->
+                            <descriptors>
+                                <descriptor>src/assembly/standalone.xml</descriptor>
+                                <descriptor>src/assembly/www.xml</descriptor>
+                            </descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

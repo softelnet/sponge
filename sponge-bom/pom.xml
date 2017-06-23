@@ -1,0 +1,70 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.openksavi.sponge</groupId>
+        <artifactId>sponge-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>sponge-bom</artifactId>
+    <name>Sponge - Bill Of Materials</name>
+    <packaging>pom</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-api</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-core</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-jython</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-jruby</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-nashorn</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-groovy</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-spring</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-camel</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-signal</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-standalone</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

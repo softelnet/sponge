@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <engine>
+        <mainProcessingUnitThreadCount>1</mainProcessingUnitThreadCount>
+    </engine>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="javascript">
+            <file>examples/script/js/hello_world.js</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+
