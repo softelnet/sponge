@@ -200,42 +200,41 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         return Executors.newFixedThreadPool(threadCount, createThreadFactory(named));
     }
 
-    protected ExecutorService addFixedExecutor(String name, int workers) {
+    @Override
+    public ExecutorService addMainProcessingUnitWorkerExecutor() {
+        return addMainProcessingUnitWorkerExecutor("MainProcessingUnit.WorkerExecutor",
+                engine.getConfigurationManager().getMainProcessingUnitThreadCount());
+    }
+
+    protected ExecutorService addMainProcessingUnitWorkerExecutor(String name, int workers) {
         if (namedExecutors.containsKey(name)) {
             throw new IllegalArgumentException("Executor named " + name + " already exists.");
         }
-        // logger.debug("Starting named executor {}.", name);
-        ExecutorService executor = createFixedExecutor(name, workers);
+        ExecutorService executor = new ThreadPoolExecutor(workers, workers, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(getEngine().getDefaultParameters().getMainProcessingUnitWorkerExecutorQueueSize()),
+                createThreadFactory(name));
         namedExecutors.put(name, new ExecutorEntry(workers, executor));
 
         return executor;
     }
 
-    protected ExecutorService addDynamicExecutor(String name, int maxThreadCount) {
+    @Override
+    public ExecutorService addAsyncEventSetProcessorExecutor() {
+        return addAsyncEventSetProcessorExecutor("MainProcessingUnit.AsyncEventSetExecutor",
+                engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
+    }
+
+    protected ExecutorService addAsyncEventSetProcessorExecutor(String name, int maxThreadCount) {
         if (namedExecutors.containsKey(name)) {
             throw new IllegalArgumentException("Executor named " + name + " already exists.");
         }
-        // logger.debug("Starting named executor {}.", name);
-        ExecutorService executor = new ThreadPoolExecutor(Utils.calculateInitialDynamicThreadPoolSize(maxThreadCount), maxThreadCount,
-                EngineConstants.DYNAMIC_THREAD_POOL_KEEP_ALIVE_TIME, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-                createThreadFactory(name));
+        ExecutorService executor = new ThreadPoolExecutor(Utils.calculateInitialDynamicThreadPoolSize(getEngine(), maxThreadCount),
+                maxThreadCount, getEngine().getDefaultParameters().getDynamicThreadPoolKeepAliveTime(), TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(), createThreadFactory(name));
 
         namedExecutors.put(name, new ExecutorEntry(maxThreadCount, executor));
 
         return executor;
-    }
-
-    @Override
-    public ExecutorService addMainProcessingUnitWorkerExecutor() {
-        return addFixedExecutor("MainProcessingUnit.WorkerExecutor", engine.getConfigurationManager().getMainProcessingUnitThreadCount());
-    }
-
-    @Override
-    public ExecutorService addAsyncEventSetProcessorExecutor() {
-        // return addFixedExecutor("MainProcessingUnit.AsyncEventSetExecutor",
-        // engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
-        return addDynamicExecutor("MainProcessingUnit.AsyncEventSetExecutor",
-                engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
     }
 
     @Override

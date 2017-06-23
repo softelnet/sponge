@@ -42,7 +42,7 @@ public interface EventDefinition {
     EventDefinition modify(EventDefinitionModifier modifier);
 
     /**
-     * Sends the event to the Input Event Queue.
+     * Sends the event to the Input Event Queue. May throw {@code QueueFullException} if the Input Event Queue is full.
      *
      * @return an event.
      */

@@ -73,11 +73,11 @@ public interface ConfigurationManager extends EngineModule {
     int getProcessingUnitConcurrentListenerThreadCount();
 
     /**
-     * Returns the maximum event queue size.
+     * Returns the event queue capacity.
      *
-     * @return the maximum event queue size.
+     * @return the event queue capacity.
      */
-    int getEventQueueMaxSize();
+    int getEventQueueCapacity();
 
     /**
      * Returns the number of threads used by cron.
@@ -154,12 +154,12 @@ public interface ConfigurationManager extends EngineModule {
     void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount);
 
     /**
-     * Sets event queue max size.
+     * Sets event queue capacity.
      *
-     * @param eventQueueMaxSize
-     *            event queue max size.
+     * @param eventQueueCapacity
+     *            event queue capacity.
      */
-    void setEventQueueMaxSize(int eventQueueMaxSize);
+    void setEventQueueCapacity(int eventQueueCapacity);
 
     /**
      * Sets cron thread count.

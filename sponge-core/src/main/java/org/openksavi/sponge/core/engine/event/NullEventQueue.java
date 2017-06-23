@@ -52,14 +52,14 @@ public class NullEventQueue extends BaseEventQueue {
      * Empty implementation.
      */
     @Override
-    public void setMaxSize(int maxSize) {
+    public void setCapacity(int capacity) {
     }
 
     /**
      * Always returns {@code -1}, that means unlimited size.
      */
     @Override
-    public int getMaxSize() {
+    public int getCapacity() {
         return -1;
     }
 
@@ -68,5 +68,10 @@ public class NullEventQueue extends BaseEventQueue {
      */
     @Override
     public void clear() {
+    }
+
+    @Override
+    public int getSize() {
+        return 0;
     }
 }

@@ -16,26 +16,24 @@
 
 package org.openksavi.sponge.core.engine.event;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
- * A priority event queue. Event queue may have a limited size. It supports priority of events.
- * Greater value of the priority signifies a more important event.
+ * A queue that blocks put operation when a queue is full.
  */
-public class PriorityEventQueue extends BaseEventQueue {
-
-    protected static final int QUEUE_INITIAL_CAPACITY = 100;
+public class SynchroEventQueue extends BaseEventQueue {
 
     /** Thread safe priority blocking queue. */
-    private BlockingQueue<Event> queue;
+    private LinkedBlockingQueue<Event> queue;
 
+    /** Synchronization lock. */
     private Lock lock = new ReentrantLock(true);
 
     /**
@@ -44,18 +42,22 @@ public class PriorityEventQueue extends BaseEventQueue {
      * @param name
      *            queue name.
      */
-    public PriorityEventQueue(String name) {
+    public SynchroEventQueue(String name) {
         super(name);
-
-        queue = createBlockingQueue();
-    }
-
-    protected BlockingQueue<Event> createBlockingQueue() {
-        return new PriorityBlockingQueue<>(QUEUE_INITIAL_CAPACITY, PriorityEventQueueComparator.INSTANCE);
     }
 
     /**
-     * Puts a new event into the event queue.
+     * Starts up this managed entity.
+     */
+    @Override
+    public void startup() {
+        setRunning(true);
+
+        queue = capacity >= 0 ? new LinkedBlockingQueue<>(getCapacity()) : new LinkedBlockingQueue<>();
+    }
+
+    /**
+     * Puts a new event into the event queue. Blocks if there is no capacity.
      *
      * @param event
      *            a new event.
@@ -63,15 +65,25 @@ public class PriorityEventQueue extends BaseEventQueue {
      *             when the queue is full.
      */
     @Override
-    public void put(Event event) throws QueueFullException {
+    public void put(Event event) {
         lock.lock();
 
         try {
-            if (capacity > -1 && queue.size() >= capacity) {
-                throw new QueueFullException("Event queue " + getName() + " is full. Capacity is " + capacity + ".");
-            }
+            boolean success = false;
 
-            queue.add(event);
+            while (!success) {
+                try {
+                    queue.add(event);
+                    success = true;
+                } catch (IllegalStateException e) {
+                    // If the queue is full, than try again after sleep.
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
+                    } catch (InterruptedException ie) {
+                        throw new SpongeException(ie);
+                    }
+                }
+            }
         } finally {
             lock.unlock();
         }

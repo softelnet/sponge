@@ -35,10 +35,6 @@ Apart from this, you could add any number of additional attributes to each event
 {sponge} supports only point-in-time events.
 
 ==== Event queues
-The maximum size of a queue of events can be set in the configuration file as `eventQueueMaxSize`. One should pay attention that this parameter defines the maximum size of each queue in the system. When the maximal size is reached every next try of adding an event will cause an exception. Giving value `-1` as `eventQueueMaxSize`, you decide that the queue is unlimited (it is set by default).
-
-The queue works according to the FIFO but the priorities of the events are also supported.
-
 Events that haven't been processed (i.e. listened to) by any event processor in the Main Processing Unit are sent to the Output Event Queue. Default behavior in such case is to forget such events.
 
 ==== Event priorities

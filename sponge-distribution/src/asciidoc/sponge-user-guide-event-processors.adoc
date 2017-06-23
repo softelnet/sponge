@@ -230,7 +230,7 @@ EPS.enableJava(SampleJavaTrigger)
 ----
 
 == Rules
-Sometimes there is a need to perform certain actions when an ordered sequence of events has occurred, additionally fulfilling some conditions. To handle such complex relationships {sponge} provides rules. Rules allow detection of correlations between events.
+Sometimes there is a need to perform certain actions when an ordered sequence of events has occurred, additionally fulfilling some conditions. To handle such complex relationships {sponge} provides rules. Rules allow detection of correlations between events. Note that events that happened first must be sent first into the engine.
 
 Every rule should implement the abstract `configure` and `run` methods:
 
@@ -240,7 +240,7 @@ void configure();
 void run(Event event);
 ----
 
-The `run` method is called when a sequence of events specified by this rule has occurred and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. Note that there could be many such sequences fitting the rule definition.
+The `run` method is called when a sequence of events specified by this rule has happened and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. Note that there could be many such sequences fitting the rule definition.
 
 In many cases a rule may also implement one or more event conditions:
 
@@ -294,10 +294,10 @@ A rule group is a set of instances of rules of the same type.
 === Important methods
 `configure()`:: A configuration callback method that is invoked when a rule is being enabled. In this method it should be established for what type of events the rule listens. Optionally event conditions for incoming events or rule duration could be set. This method is mandatory.
 `init()`:: An initialization callback method that is invoked before creating a new rule instance.
-`run(event)`:: A callback method invoked when the proper sequence of events occurs and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
+`run(event)`:: A callback method invoked when the proper sequence of events happens and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
 `setEvents(eventSpecifications)`:: This method sets the specifications of events whose sequence causes a rule to fire.
 `setConditions(alias, conditions)`:: Sets conditions for the event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the method is irrelevant as long as it returns value `true` or `false` and takes an event as an argument.
-`setDuration()`:: Sets the time how long a rule lasts (represented as `java.time.Duration`). The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that occurs.
+`setDuration()`:: Sets the time how long a rule lasts (represented as `java.time.Duration`). The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
 `setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for a rule. If a rule is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this rule. If a rule is asynchronous then an event will be processed by the instances of this rule concurrently (in many threads). If the _synchronous flag_ is not set then the default value as specified by `eventSetProcessorDefaultSynchronous` configuration parameter will be used. In most cases there should be no need to change this flag.
 `setDisplayName(name)`:: The method sets a display name of this rule.
 
@@ -331,13 +331,13 @@ If the mode of the last (final) specified event is `last` or `none`, a duration 
 |All suitable events for the duration of the rule.
 
 |`none`
-|An event that cannot occur in the sequence.
+|An event that cannot happen in the sequence.
 |===
 +
 
 Event specification for one event in a script knowledge base could be formatted as text `"eventName eventAlias :eventMode"`. White characters between all elements are allowed. For example specifications `"event1 e1 :first"`, `"event1"`, `"event1 e1"` define the first event named `"event1"`.
 
-The following examples of complete events specifications assume that the rule has a duration that spans over all incoming events listed in the second column. The integer value in the brackets is the `id` of the event. An element `null` means that the event hasn't occurred. Incoming events: `e1[1]`, `e2[2]`, `e2[3]`, `e3[4]`, `e2[5]`, `e3[6]`, `e3[7]`.
+The following examples of complete events specifications assume that the rule has a duration that spans over all incoming events listed in the second column. The integer value in the brackets is the `id` of the event. An element `null` means that the event hasn't happened. Incoming events: `e1[1]`, `e2[2]`, `e2[3]`, `e3[4]`, `e2[5]`, `e3[6]`, `e3[7]`.
 
 .Examples of events specifications
 [cols="1,3"]
@@ -390,12 +390,12 @@ The following examples of complete events specifications assume that the rule ha
 |`[e1[1], null, e3[7]]`
 
 |`["e1", "e2", "e3 :none"]`
-|_This rule hasn't been fired because the event_ `e3` _wasn't supposed to occur._
+|_This rule hasn't been fired because the event_ `e3` _wasn't supposed to happen._
 |===
 
 === Example in a script language
 The code presented below defines a rule named `SameSourceAllRule` listening to a sequence of events (`"filesystemFailure"`, `"diskFailure"`).
-The two events have to have the same `source` and `severity` greater than `5`. Moreover the second event has to occur not later than after `4` seconds since the first one. For every sequence of events that match this definition, the sequence of events will be logged. It means that the method `run()` may be invoked more than once.
+The two events have to have the same `source` and `severity` greater than `5`. Moreover the second event has to happen not later than after `4` seconds since the first one. For every sequence of events that match this definition, the sequence of events will be logged. It means that the method `run()` may be invoked more than once.
 
 .Rule example
 [source,python]
@@ -424,13 +424,13 @@ class SameSourceAllRule(Rule): # <1>
 <4> Setting a condition checking `"e1"` event severity.
 <5> Setting conditions checking `"e2"` event severity and event source.
 <6> Setting a duration of the rule.
-<7> The rule `run` method will be called when the proper sequence of events occurs and all the conditions have been fulfilled. `event` argument specifies the last event in that sequence.
+<7> The `run` method will be called when the proper sequence of events happens and all the conditions have been fulfilled. `event` argument specifies the last event in that sequence.
 <8> Logs message and the sequence of events.
 <9> An event condition method `severityCondition`.
 <10> Accept only events that have `severity` greater than `5`.
 <11> An event condition method `diskFailureSourceCondition`.
 <12> Assigns the first event (`e1`) to the local variable `event1`.
-<13> Accept only `e2` events that have the same `source` as the first event `e1` and that occurred not later than after `4` seconds since the corresponding `e1` event.
+<13> Accept only `e2` events that have the same `source` as the first event `e1` and that happened not later than after `4` seconds since the corresponding `e1` event.
 
 The rule will be enabled automatically. Then, in case of occurrence of `e1` event that has `severity` greater than `5`, a new instance of a rule `SameSourceAllRule` will be created.
 
@@ -482,7 +482,7 @@ public class SameSourceJavaRule extends JavaRule { // <1>
 <4> Setting a condition checking `"e1"` event severity.
 <5> Setting conditions checking `"e2"` event severity (as a class method name) and event source (as a Java lambda expression).
 <6> Setting a duration of the rule. The rule lasts for `8` seconds. So, for `8` seconds since the occurrence of the first matching `e1` a tree of event instances will be constantly built with the root containing the instance of initial `e1` event. Each matching `e2` event will cause the rule to fire immediately for the current event sequence. After reaching the duration time this rule instance will be discarded.
-<7> The rule `run` method will be called when the proper sequence of events occurs and all the conditions have been fulfilled. `event` argument specifies the last event in that sequence.
+<7> The `run` method will be called when the proper sequence of events occurs and all the conditions have been fulfilled. `event` argument specifies the last event in that sequence.
 <8> Logs message and the sequence of events.
 <9> An event condition method `severityCondition`.
 <10> Accept only events that have `severity` greater than `5`.
@@ -534,7 +534,7 @@ The above values should be set in the `configure` method by using methods `setEv
 `configure()`:: A configuration callback method that is invoked when the aggregator is being enabled. In this method it should be established for what type of events this aggregator listens. Optionally an aggregator duration could be set. This method is mandatory.
 `init()`:: An initialization callback method that is invoked before creating a new aggregator instance. This method is optional.
 `boolean acceptsAsFirst(Event event)`:: Checks if the event should be accepted as the first event of an aggregator, therefore starting a new working instance. `acceptsAsFirst()` is invoked after `init()`. This method is mandatory.
-`onEvent(Event event)`:: A callback method invoked when an event that an aggregator listens to occurs. This method is mandatory.
+`onEvent(Event event)`:: A callback method invoked when an event that an aggregator listens to happens. This method is mandatory.
 `onDuration()`:: A callback method invoked when the duration timeout occurs. This method should be implemented if a duration timeout is set. After invoking this callback method, `finish()` is invoked automatically.
 `finish()`:: A final method that should be invoked, in `onEvent(Event event)` method, when the aggregator has done its work. Only by invoking `finish()` this instance of the aggregator is closed and its resources are released.
 `setDuration()`:: Optionally the time how long an aggregator lasts (represented as `java.time.Duration`). The instance of an aggregator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this aggregator the `onDuration()` callback method will be invoked.

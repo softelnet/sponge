@@ -18,7 +18,7 @@ package org.openksavi.sponge.core.engine;
 
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.StatisticsManager;
-import org.openksavi.sponge.engine.processing.ProcessingUnit;
+import org.openksavi.sponge.engine.event.EventQueue;
 
 /**
  * Statistics Manager.
@@ -75,6 +75,10 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
         return engine.getPluginManager().getPlugins().size();
     }
 
+    private String getQueueSummary(EventQueue queue) {
+        return queue.getName() + "; capacity=" + queue.getCapacity() + "; size=" + queue.getSize();
+    }
+
     /**
      * Returns statistics summary.
      *
@@ -84,18 +88,16 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
     public String getSummary() {
         StringBuffer sb = new StringBuffer(512);
 
-        sb.append("Processing units: ");
-        for (ProcessingUnit<?> processingUnit : engine.getProcessingUnitManager().getProcessingUnits()) {
-            if (processingUnit.getName() != null) {
-                sb.append(processingUnit.getName() != null ? processingUnit.getName() : processingUnit.getClass().getName());
-                sb.append("=" + processingUnit.getRegisteredProcessorAdapterMap().size() + ", ");
-            }
-        }
-        sb.setLength(sb.length() - 2);
-
-        sb.append(". Actions: " + engine.getActions().size());
-
-        sb.append(". Event scheduler: scheduled=" + getScheduledEventCount());
+        sb.append(getQueueSummary(engine.getEventQueueManager().getInputEventQueue()));
+        sb.append(". " + getQueueSummary(engine.getEventQueueManager().getMainEventQueue()));
+        sb.append("\n");
+        sb.append("Actions: " + engine.getActions().size());
+        sb.append(". Filters: " + engine.getFilters().size());
+        sb.append(". Triggers: " + engine.getTriggers().size());
+        sb.append(". Rules: " + engine.getRuleGroups().size());
+        sb.append(". Aggregators: " + engine.getAggregatorGroups().size());
+        sb.append("\n");
+        sb.append("Event scheduler: scheduled=" + getScheduledEventCount());
         sb.append(". Cron: entries=" + getCronEventCount());
         sb.append(". Threads: active threads=" + getActiveThreadCount());
         sb.append(". Plugins: plugins=" + getPluginCount());

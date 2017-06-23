@@ -1,1 +1,84 @@
-<?xml version="1.0" encoding="UTF-8"?><xs:schema targetNamespace="http://www.openksavi.org/sponge" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.openksavi.org/sponge"    elementFormDefault="qualified">    <xs:element name="sponge" type="Sponge" />    <xs:complexType name="Sponge">        <xs:sequence>            <xs:element name="properties" type="Properties" minOccurs="0" />            <xs:element name="engine" type="Engine" minOccurs="0" />            <xs:element name="knowledgeBases" type="KnowledgeBases" minOccurs="0" />            <xs:element name="plugins" type="Plugins" minOccurs="0" />        </xs:sequence>    </xs:complexType>    <xs:complexType name="Properties">        <xs:sequence>            <xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded" />        </xs:sequence>    </xs:complexType>    <xs:complexType name="Property" mixed="true">        <xs:attribute name="name" type="xs:string" />        <xs:attribute name="variable" type="xs:boolean" />        <xs:attribute name="system" type="xs:boolean" />    </xs:complexType>    <xs:simpleType name="EventClonePolicy" final="restriction">        <xs:restriction base="xs:string">            <xs:enumeration value="shallow" />            <xs:enumeration value="deep" />        </xs:restriction>    </xs:simpleType>    <xs:complexType name="Engine">        <xs:all>            <xs:element name="mainProcessingUnitThreadCount" type="xs:string" minOccurs="0" />            <xs:element name="asyncEventSetProcessorExecutorThreadCount" type="xs:string" minOccurs="0" />            <xs:element name="eventSetProcessorDefaultSynchronous" type="xs:string" minOccurs="0" />            <xs:element name="eventQueueMaxSize" type="xs:string" minOccurs="0" />            <xs:element name="eventClonePolicy" type="EventClonePolicy" minOccurs="0" />            <xs:element name="autoEnable" type="xs:string" minOccurs="0" />            <xs:element name="cronThreadCount" type="xs:string" minOccurs="0" />            <xs:element name="durationThreadCount" type="xs:string" minOccurs="0" />            <xs:element name="processingUnitConcurrentListenerThreadCount" type="xs:string" minOccurs="0" />        </xs:all>    </xs:complexType>    <xs:complexType name="KnowledgeBases">        <xs:sequence>            <xs:element name="knowledgeBase" type="KnowledgeBase" minOccurs="0" maxOccurs="unbounded" />        </xs:sequence>    </xs:complexType>    <xs:complexType name="KnowledgeBase">        <xs:sequence>            <xs:element name="file" type="KnowledgeBaseFile" minOccurs="1" maxOccurs="unbounded" />        </xs:sequence>        <xs:attribute name="name" type="xs:string" use="required" />        <xs:attribute name="type" type="xs:string" use="required" />    </xs:complexType>    <xs:complexType name="KnowledgeBaseFile" mixed="true">        <xs:attribute name="charset" type="xs:string" use="optional" />    </xs:complexType>    <xs:complexType name="Plugins">        <xs:sequence>            <xs:element name="plugin" type="Plugin" minOccurs="0" maxOccurs="unbounded" />        </xs:sequence>    </xs:complexType>    <xs:complexType name="Plugin">        <xs:sequence>            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded" />        </xs:sequence>        <xs:attribute name="name" type="xs:string" use="required" />        <xs:attribute name="description" type="xs:string" />        <xs:attribute name="class" type="xs:string" use="required" />        <xs:attribute name="knowledgeBaseName" type="xs:string" />    </xs:complexType></xs:schema>
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.openksavi.org/sponge" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.openksavi.org/sponge"
+    elementFormDefault="qualified">
+
+    <xs:element name="sponge" type="Sponge" />
+
+    <xs:complexType name="Sponge">
+        <xs:sequence>
+            <xs:element name="properties" type="Properties" minOccurs="0" />
+            <xs:element name="engine" type="Engine" minOccurs="0" />
+            <xs:element name="knowledgeBases" type="KnowledgeBases" minOccurs="0" />
+            <xs:element name="plugins" type="Plugins" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Properties">
+        <xs:sequence>
+            <xs:element name="property" type="Property" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Property" mixed="true">
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="variable" type="xs:boolean" />
+        <xs:attribute name="system" type="xs:boolean" />
+    </xs:complexType>
+
+    <xs:simpleType name="EventClonePolicy" final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="shallow" />
+            <xs:enumeration value="deep" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Engine">
+        <xs:all>
+            <xs:element name="mainProcessingUnitThreadCount" type="xs:string" minOccurs="0" />
+            <xs:element name="asyncEventSetProcessorExecutorThreadCount" type="xs:string" minOccurs="0" />
+            <xs:element name="eventSetProcessorDefaultSynchronous" type="xs:string" minOccurs="0" />
+            <xs:element name="eventQueueCapacity" type="xs:string" minOccurs="0" />
+            <xs:element name="eventClonePolicy" type="EventClonePolicy" minOccurs="0" />
+            <xs:element name="autoEnable" type="xs:string" minOccurs="0" />
+
+            <xs:element name="cronThreadCount" type="xs:string" minOccurs="0" />
+            <xs:element name="durationThreadCount" type="xs:string" minOccurs="0" />
+            <xs:element name="processingUnitConcurrentListenerThreadCount" type="xs:string" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="KnowledgeBases">
+        <xs:sequence>
+            <xs:element name="knowledgeBase" type="KnowledgeBase" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="KnowledgeBase">
+        <xs:sequence>
+            <xs:element name="file" type="KnowledgeBaseFile" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="type" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="KnowledgeBaseFile" mixed="true">
+        <xs:attribute name="charset" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="Plugins">
+        <xs:sequence>
+            <xs:element name="plugin" type="Plugin" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Plugin">
+        <xs:sequence>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="description" type="xs:string" />
+        <xs:attribute name="class" type="xs:string" use="required" />
+        <xs:attribute name="knowledgeBaseName" type="xs:string" />
+    </xs:complexType>
+</xs:schema>
+

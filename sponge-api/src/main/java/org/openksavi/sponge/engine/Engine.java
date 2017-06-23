@@ -22,7 +22,6 @@ import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
 import org.openksavi.sponge.engine.event.CronEventGenerator;
-import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.engine.processing.EventSetProcessorDurationStrategy;
 import org.openksavi.sponge.event.EventIdGenerator;
@@ -74,11 +73,11 @@ public interface Engine extends Manageable {
     ProcessingUnitManager getProcessingUnitManager();
 
     /**
-     * Returns event queues.
+     * Returns Event Queue Manager.
      *
-     * @return event queues.
+     * @return Event Queue Manager.
      */
-    List<EventQueue> getEventQueues();
+    EventQueueManager getEventQueueManager();
 
     /**
      * Returns Event Scheduler.

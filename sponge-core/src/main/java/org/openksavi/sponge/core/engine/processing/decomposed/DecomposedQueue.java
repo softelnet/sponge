@@ -16,9 +16,9 @@
 
 package org.openksavi.sponge.core.engine.processing.decomposed;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.core.engine.processing.EventProcessorRegistrationListener;
+import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
@@ -43,7 +44,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     private static final Logger logger = LoggerFactory.getLogger(DecomposedQueue.class);
 
     /** A list containing pairs (trigger adapter or event set processor group adapter, event). */
-    private List<Pair<T, Event>> entries = Collections.synchronizedList(new LinkedList<>());
+    private List<Pair<T, Event>> entries;
 
     /** Allows for concurrent processing of events that have the same type. Default is {@code true}. */
     private boolean allowConcurrentEventTypeProcessing;
@@ -54,6 +55,9 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     /** Currently processed event types (i.e. events that have the same name). */
     private Set<String> currentlyProcessedEventNames = Collections.synchronizedSet(new HashSet<>());
 
+    /** Queue capacity. */
+    private int capacity;
+
     /** Main lock. */
     private Lock lock = new ReentrantLock(true);
 
@@ -63,8 +67,11 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     /** Internal lock for atomic operations on internal data structures. */
     private Lock internalLock = new ReentrantLock(true);
 
-    public DecomposedQueue(boolean allowConcurrentEventTypeProcessing) {
+    public DecomposedQueue(int capacity, boolean allowConcurrentEventTypeProcessing) {
+        this.capacity = capacity;
         this.allowConcurrentEventTypeProcessing = allowConcurrentEventTypeProcessing;
+
+        entries = Collections.synchronizedList(new ArrayList<>(capacity));
     }
 
     /**
@@ -78,6 +85,11 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
 
         try {
             internalLock.lock();
+
+            if (entries.size() >= capacity) {
+                throw new QueueFullException("Decomposed queue is full");
+            }
+
             logger.debug("put: {}", entry);
             entries.add(entry);
             lockCondition.signal();

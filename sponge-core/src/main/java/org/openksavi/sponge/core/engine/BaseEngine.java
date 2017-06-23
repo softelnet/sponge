@@ -463,13 +463,13 @@ public class BaseEngine implements Engine {
         EventQueue outputQueue = eventQueueProvider.getOutputQueue();
 
         // Add event queues to the queue manager.
-        eventQueueManager.addEventQueue(inputQueue);
-        eventQueueManager.addEventQueue(mainProcessingQueue);
-        eventQueueManager.addEventQueue(outputQueue);
+        eventQueueManager.setInputEventQueue(inputQueue);
+        eventQueueManager.setMainEventQueue(mainProcessingQueue);
+        eventQueueManager.setOutputEventQueue(outputQueue);
 
-        // Set event queues max size.
-        int maxEventQueueSize = configurationManager.getEventQueueMaxSize();
-        eventQueueManager.getEventQueues().forEach(queue -> queue.setMaxSize(maxEventQueueSize));
+        // Set input event queue capacity.
+        inputQueue.setCapacity(configurationManager.getEventQueueCapacity());
+        mainProcessingQueue.setCapacity(getDefaultParameters().getMainEventQueueCapacity());
 
         // Create event scheduler and cron.
         eventScheduler = moduleProvider.createEventScheduler(this, inputQueue);
@@ -526,16 +526,6 @@ public class BaseEngine implements Engine {
     @Override
     public ConfigurationManager getConfigurationManager() {
         return configurationManager;
-    }
-
-    /**
-     * Returns event queues.
-     *
-     * @return event queues.
-     */
-    @Override
-    public List<EventQueue> getEventQueues() {
-        return eventQueueManager.getEventQueues();
     }
 
     /**
@@ -751,6 +741,7 @@ public class BaseEngine implements Engine {
         rememberedException.set(null);
     }
 
+    @Override
     public EventQueueManager getEventQueueManager() {
         return eventQueueManager;
     }

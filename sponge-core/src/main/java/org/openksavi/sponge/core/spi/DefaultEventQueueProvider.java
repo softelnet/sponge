@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.spi;
 
 import org.openksavi.sponge.core.engine.event.NullEventQueue;
 import org.openksavi.sponge.core.engine.event.PriorityEventQueue;
+import org.openksavi.sponge.core.engine.event.SynchroEventQueue;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.spi.EventQueueProvider;
 
@@ -28,12 +29,12 @@ public class DefaultEventQueueProvider implements EventQueueProvider {
 
     @Override
     public EventQueue getInputQueue() {
-        return new PriorityEventQueue("Input");
+        return new PriorityEventQueue("InputQueue");
     }
 
     @Override
     public EventQueue getMainQueue() {
-        return new PriorityEventQueue("Main");
+        return new SynchroEventQueue("MainQueue");
     }
 
     @Override
