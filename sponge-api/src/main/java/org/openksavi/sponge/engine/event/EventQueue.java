@@ -49,19 +49,26 @@ public interface EventQueue extends EngineModule {
     Event get(long timeout) throws InterruptedException;
 
     /**
-     * Sets the maximum size of the queue.
+     * Sets the capacity of the queue.
      *
-     * @param maxSize
-     *            the maximum size of the queue.
+     * @param capacity
+     *            the capacity of the queue.
      */
-    void setMaxSize(int maxSize);
+    void setCapacity(int capacity);
 
     /**
-     * Returns the maximum size of the queue.
+     * Returns the capacity of the queue.
      *
-     * @return the maximum size of the queue.
+     * @return the capacity of the queue.
      */
-    int getMaxSize();
+    int getCapacity();
+
+    /**
+     * Returns the size of the queue.
+     *
+     * @return the size of the queue.
+     */
+    int getSize();
 
     /**
      * Returns the name of the event queue.

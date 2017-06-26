@@ -26,17 +26,54 @@ import org.openksavi.sponge.engine.event.EventQueue;
 public interface EventQueueManager extends EngineModule {
 
     /**
+     * Returns an Input Event Queue.
+     *
+     * @return an Input Event Queue.
+     */
+    EventQueue getInputEventQueue();
+
+    /**
+     * Sets an Input Event Queue.
+     *
+     * @param inputEventQueue
+     *            an Input Event Queue.
+     */
+    void setInputEventQueue(EventQueue inputEventQueue);
+
+    /**
+     * Returns a Main Event Queue.
+     *
+     * @return a Main Event Queue.
+     */
+    EventQueue getMainEventQueue();
+
+    /**
+     * Sets a Main Event Queue.
+     *
+     * @param mainEventQueue
+     *            a Main Event Queue.
+     */
+    void setMainEventQueue(EventQueue mainEventQueue);
+
+    /**
+     * Returns an Output Event Queue.
+     *
+     * @return an Output Event Queue.
+     */
+    EventQueue getOutputEventQueue();
+
+    /**
+     * Sets an Output Event Queue.
+     *
+     * @param outputEventQueue
+     *            an Output Event Queue.
+     */
+    void setOutputEventQueue(EventQueue outputEventQueue);
+
+    /**
      * Returns event queues.
      *
      * @return event queues.
      */
     List<EventQueue> getEventQueues();
-
-    /**
-     * Adds a new event queue.
-     *
-     * @param eventQueue
-     *            event queue.
-     */
-    void addEventQueue(EventQueue eventQueue);
 }

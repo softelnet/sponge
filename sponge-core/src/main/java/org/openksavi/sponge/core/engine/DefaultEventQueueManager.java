@@ -16,9 +16,9 @@
 
 package org.openksavi.sponge.core.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EventQueueManager;
@@ -29,8 +29,14 @@ import org.openksavi.sponge.engine.event.EventQueue;
  */
 public class DefaultEventQueueManager extends BaseEngineModule implements EventQueueManager {
 
-    /** The list of event queues. */
-    private List<EventQueue> eventQueues = Collections.synchronizedList(new ArrayList<>());
+    /** An Input Event Queue. */
+    private EventQueue inputEventQueue;
+
+    /** A Main Event Queue. */
+    private EventQueue mainEventQueue;
+
+    /** An Output Event Queue. */
+    private EventQueue outputEventQueue;
 
     /**
      * Creates a new Event Queue Manager.
@@ -51,7 +57,11 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
             return;
         }
 
-        eventQueues.forEach(queue -> queue.startup());
+        getEventQueues().forEach(queue -> queue.setEngine(getEngine()));
+
+        outputEventQueue.startup();
+        mainEventQueue.startup();
+        inputEventQueue.startup();
 
         setRunning(true);
     }
@@ -63,7 +73,39 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
     public void shutdown() {
         setRunning(false);
 
-        eventQueues.forEach(queue -> queue.shutdown());
+        inputEventQueue.startup();
+        mainEventQueue.startup();
+        outputEventQueue.startup();
+    }
+
+    @Override
+    public EventQueue getInputEventQueue() {
+        return inputEventQueue;
+    }
+
+    @Override
+    public void setInputEventQueue(EventQueue inputEventQueue) {
+        this.inputEventQueue = inputEventQueue;
+    }
+
+    @Override
+    public EventQueue getMainEventQueue() {
+        return mainEventQueue;
+    }
+
+    @Override
+    public void setMainEventQueue(EventQueue mainEventQueue) {
+        this.mainEventQueue = mainEventQueue;
+    }
+
+    @Override
+    public EventQueue getOutputEventQueue() {
+        return outputEventQueue;
+    }
+
+    @Override
+    public void setOutputEventQueue(EventQueue outputEventQueue) {
+        this.outputEventQueue = outputEventQueue;
     }
 
     /**
@@ -73,19 +115,6 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
      */
     @Override
     public List<EventQueue> getEventQueues() {
-        return eventQueues;
-    }
-
-    /**
-     * Adds a new event queue.
-     *
-     * @param eventQueue
-     *            event queue.
-     */
-    @Override
-    public void addEventQueue(EventQueue eventQueue) {
-        eventQueue.setEngine(engine);
-
-        eventQueues.add(eventQueue);
+        return ImmutableList.of(inputEventQueue, mainEventQueue, outputEventQueue);
     }
 }

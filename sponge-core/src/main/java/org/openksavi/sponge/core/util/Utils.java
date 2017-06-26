@@ -248,8 +248,8 @@ public abstract class Utils {
         return EngineConstants.CONTROL_EVENT_PREFIX + StringUtils.uncapitalize(controlEventClass.getSimpleName());
     }
 
-    public static int calculateInitialDynamicThreadPoolSize(int maxPoolSize) {
-        return (int) Math.round(EngineConstants.INITIAL_DYNAMIC_THREAD_POOL_SIZE_RATIO * maxPoolSize);
+    public static int calculateInitialDynamicThreadPoolSize(Engine engine, int maxPoolSize) {
+        return (int) Math.round(engine.getDefaultParameters().getInitialDynamicThreadPoolSizeRatio() * maxPoolSize);
     }
 
     public static String getPackagePath(Class<?> cls) {

@@ -19,6 +19,7 @@ package org.openksavi.sponge.core.engine.processing.decomposed;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -34,6 +35,7 @@ import org.openksavi.sponge.core.engine.processing.BaseMainProcessingUnit;
 import org.openksavi.sponge.core.event.ProcessorControlEvent;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
@@ -67,8 +69,8 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     public DecomposedQueueMainProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
 
-        setDecomposedQueue(
-                new DecomposedQueue<>(engine.getDefaultParameters().getAllowConcurrentEventTypeProcessingByEventSetProcessors()));
+        setDecomposedQueue(new DecomposedQueue<>(engine.getDefaultParameters().getDecomposedQueueCapacity(),
+                engine.getDefaultParameters().getAllowConcurrentEventTypeProcessingByEventSetProcessors()));
     }
 
     public void setDecomposedQueue(DecomposedQueue<EventProcessorAdapter<?>> decomposedQueue) {
@@ -122,22 +124,38 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
      *
      * @return {@code true} if the event has been processed by at least one adapter.
      */
-    protected boolean processEvent(Event event) {
+    protected boolean processEvent(Event event) throws InterruptedException {
         if (event instanceof ControlEvent) {
             if (event instanceof ProcessorControlEvent) {
                 ProcessorAdapter<?> processorAdapter = ((ProcessorControlEvent) event).getProcessorAdapter();
                 if (processorAdapter instanceof EventProcessorAdapter && supportsControlEventForProcessor(processorAdapter)) {
-                    decomposedQueue.put(new ImmutablePair<>((EventProcessorAdapter<?>) processorAdapter, event));
+                    putIntoDecomposedQueue(new ImmutablePair<>((EventProcessorAdapter<?>) processorAdapter, event));
                 }
             }
 
             return true;
+        } else {
+            Set<AtomicReference<EventProcessorAdapter<?>>> adapterRs = getEventProcessors(event.getName());
+            for (AtomicReference<EventProcessorAdapter<?>> adapterR : adapterRs) {
+                putIntoDecomposedQueue(new ImmutablePair<>(adapterR.get(), event));
+            }
+
+            return !adapterRs.isEmpty();
         }
+    }
 
-        Set<AtomicReference<EventProcessorAdapter<?>>> adapterRs = getEventProcessors(event.getName());
-        adapterRs.forEach(adapterR -> decomposedQueue.put(new ImmutablePair<>(adapterR.get(), event)));
+    protected void putIntoDecomposedQueue(Pair<EventProcessorAdapter<?>, Event> entry) throws InterruptedException {
+        boolean entryPut = false;
 
-        return !adapterRs.isEmpty();
+        while (!entryPut) {
+            try {
+                decomposedQueue.put(entry);
+                entryPut = true;
+            } catch (QueueFullException e) {
+                // If decomposed queue is full, than try again after sleep.
+                TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
+            }
+        }
     }
 
     protected class DecomposedQueueWriterLoopWorker extends LoopWorker {
@@ -193,12 +211,21 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                         final EventProcessorAdapter<?> adapter = entry.getLeft();
                         final Event event = entry.getRight();
 
-                        // Process an event by the adapter asynchronously in a thread from a thread pool.
-                        CompletableFuture.runAsync(() -> getHandler(adapter.getType()).processEvent(adapter, event), workerExecutor)
-                                .handle((result, exception) -> {
-                                    decomposedQueue.release(entry);
-                                    return null;
-                                });
+                        boolean hasBeenRun = false;
+                        while (!hasBeenRun) {
+                            try {
+                                // Process an event by the adapter asynchronously in a thread from a thread pool.
+                                CompletableFuture.runAsync(() -> getHandler(adapter.getType()).processEvent(adapter, event), workerExecutor)
+                                        .handle((result, exception) -> {
+                                            decomposedQueue.release(entry);
+                                            return null;
+                                        });
+                                hasBeenRun = true;
+                            } catch (RejectedExecutionException e) {
+                                // If rejected because of the lack of free threads, than try again after sleep.
+                                TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
+                            }
+                        }
 
                         return true;
                     }

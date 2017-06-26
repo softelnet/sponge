@@ -76,13 +76,13 @@ The engine configuration section (`<engine>`) contains configuration parameters 
 |The number of threads used by an event set processor executor for asynchronous processing of events by rules and aggregators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or aggregators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
 |`5`
 
+|`eventQueueCapacity`
+|The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to the reasonable value taking into account the number of events, event size, number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
+|`-1`
+
 |`eventClonePolicy`
 |Event clone policy (`shallow` or `deep`).
 |`shallow`
-
-|`eventQueueMaxSize`
-|The maximum size of the queue storing events. Value `-1` means infinity.
-|`-1`
 
 |`autoEnable`
 |Auto-enable script-based processors.

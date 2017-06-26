@@ -41,7 +41,7 @@ public final class ConfigurationConstants {
 
     public static final String TAG_ENGINE_PROCESSING_UNIT_CONCURRENT_LISTENER_THREAD_COUNT = "processingUnitConcurrentListenerThreadCount";
 
-    public static final String TAG_ENGINE_EVENT_QUEUE_MAX_SIZE = "eventQueueMaxSize";
+    public static final String TAG_ENGINE_EVENT_QUEUE_CAPACITY = "eventQueueCapacity";
 
     public static final String TAG_ENGINE_CRON_THREAD_COUNT = "cronThreadCount";
 

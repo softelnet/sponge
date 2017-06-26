@@ -18,7 +18,6 @@ package org.openksavi.sponge.core.engine.event;
 
 import java.util.TimerTask;
 
-import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.event.EventSchedulerTask;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventSchedulerEntry;
@@ -90,7 +89,7 @@ public class TimerEventSchedulerTask extends TimerTask implements EventScheduler
                 eventScheduler.remove(entry);
             }
         } catch (Throwable e) {
-            throw Utils.wrapException(eventScheduler.getName(), e);
+            eventScheduler.getEngine().handleError(eventScheduler.getName(), e);
         }
     }
 

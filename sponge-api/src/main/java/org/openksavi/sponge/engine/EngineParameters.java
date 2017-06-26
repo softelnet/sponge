@@ -38,11 +38,11 @@ public interface EngineParameters {
     int getProcessingUnitConcurrentListenerThreadCount();
 
     /**
-     * Returns the maximum event queue size.
+     * Returns the event queue capacity.
      *
-     * @return the maximum event queue size.
+     * @return the event queue capacity.
      */
-    int getEventQueueMaxSize();
+    int getEventQueueCapacity();
 
     /**
      * Returns the number of threads used by cron.
@@ -131,12 +131,12 @@ public interface EngineParameters {
     void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount);
 
     /**
-     * Sets event queue max size.
+     * Sets event queue capacity.
      *
-     * @param eventQueueMaxSize
-     *            event queue max size.
+     * @param eventQueueCapacity
+     *            event queue capacity.
      */
-    void setEventQueueMaxSize(int eventQueueMaxSize);
+    void setEventQueueCapacity(int eventQueueCapacity);
 
     /**
      * Sets cron thread count.
@@ -212,4 +212,94 @@ public interface EngineParameters {
      *            auto-enable of processors.
      */
     void setAutoEnable(boolean autoEnable);
+
+    /**
+     * Returns a Main Processing Unit worker executor queue size.
+     *
+     * @return a Main Processing Unit worker executor queue size.
+     */
+    int getMainProcessingUnitWorkerExecutorQueueSize();
+
+    /**
+     * Sets a Main Processing Unit worker executor queue size.
+     *
+     * @param mainProcessingUnitWorkerExecutorQueueSize
+     *            a Main Processing Unit worker executor queue size.
+     */
+    void setMainProcessingUnitWorkerExecutorQueueSize(int mainProcessingUnitWorkerExecutorQueueSize);
+
+    /**
+     * Returns internal queue blocking put operation sleep time between retries (in milliseconds).
+     *
+     * @return internal queue blocking put operation sleep time between retries.
+     */
+    long getInternalQueueBlockingPutSleep();
+
+    /**
+     * Sets internal queue blocking put operation sleep time between retries (in milliseconds).
+     *
+     * @param internalQueueBlockingPutSleep
+     *            internal queue blocking put operation sleep time between retries.
+     */
+    void setInternalQueueBlockingPutSleep(long internalQueueBlockingPutSleep);
+
+    /**
+     * Returns a decomposed queue capacity.
+     *
+     * @return a decomposed queue capacity.
+     */
+    int getDecomposedQueueCapacity();
+
+    /**
+     * Sets a decomposed queue capacity.
+     *
+     * @param decomposedQueueCapacity
+     *            a decomposed queue capacity.
+     */
+    void setDecomposedQueueCapacity(int decomposedQueueCapacity);
+
+    /**
+     * Returns a Main Event Queue capacity.
+     *
+     * @return a Main Event Queue capacity.
+     */
+    int getMainEventQueueCapacity();
+
+    /**
+     * Sets a Main Event Queue capacity.
+     *
+     * @param mainEventQueueCapacity
+     *            a Main Event Queue capacity.
+     */
+    void setMainEventQueueCapacity(int mainEventQueueCapacity);
+
+    /**
+     * Returns a dynamic thread pool initial size ratio.
+     *
+     * @return a dynamic thread pool initial size ratio.
+     */
+    double getInitialDynamicThreadPoolSizeRatio();
+
+    /**
+     * Sets a dynamic thread pool initial size ratio.
+     *
+     * @param initialDynamicThreadPoolSizeRatio
+     *            a dynamic thread pool initial size ratio.
+     */
+    void setInitialDynamicThreadPoolSizeRatio(double initialDynamicThreadPoolSizeRatio);
+
+    /**
+     * Returns a dynamic thread pool keep alive time (in milliseconds).
+     *
+     * @return a dynamic thread pool keep alive time.
+     */
+    long getDynamicThreadPoolKeepAliveTime();
+
+    /**
+     * Sets a dynamic thread pool keep alive time (in milliseconds).
+     *
+     * @param dynamicThreadPoolKeepAliveTime
+     *            a dynamic thread pool keep alive time.
+     */
+    void setDynamicThreadPoolKeepAliveTime(long dynamicThreadPoolKeepAliveTime);
 }

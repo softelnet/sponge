@@ -33,8 +33,8 @@ public class DefaultEngineParameters implements EngineParameters {
     /** Default number of threads used by processing units to listen to an event queue concurrently. */
     private int processingUnitConcurrentListenerThreadCount = 1;
 
-    /** Default max event queue size. */
-    private int eventQueueMaxSize = -1;
+    /** Default event queue capacity. */
+    private int eventQueueCapacity = -1;
 
     /** Default cron thread count. */
     private int cronThreadCount = 1;
@@ -65,6 +65,24 @@ public class DefaultEngineParameters implements EngineParameters {
     /** A flag to allow for concurrent processing of events that have the same type by event set processors. */
     private boolean allowConcurrentEventTypeProcessingByEventSetProcessors = true;
 
+    /** A main Processing Unit worker executor queue size. */
+    private int mainProcessingUnitWorkerExecutorQueueSize = 100;
+
+    /** An internal queue blocking put operation sleep time between retries (in milliseconds). */
+    private long internalQueueBlockingPutSleep = 10;
+
+    /** A decomposed queue capacity. */
+    private int decomposedQueueCapacity = 100;
+
+    /** A Main Event Queue capacity. */
+    private int mainEventQueueCapacity = 10;
+
+    /** A dynamic thread pool initial size ratio. */
+    private double initialDynamicThreadPoolSizeRatio = 0.3;
+
+    /** A dynamic thread pool keep alive time (in milliseconds). */
+    private long dynamicThreadPoolKeepAliveTime = 60000;
+
     @Override
     public int getMainProcessingUnitThreadCount() {
         return mainProcessingUnitThreadCount;
@@ -76,8 +94,8 @@ public class DefaultEngineParameters implements EngineParameters {
     }
 
     @Override
-    public int getEventQueueMaxSize() {
-        return eventQueueMaxSize;
+    public int getEventQueueCapacity() {
+        return eventQueueCapacity;
     }
 
     @Override
@@ -136,8 +154,8 @@ public class DefaultEngineParameters implements EngineParameters {
     }
 
     @Override
-    public void setEventQueueMaxSize(int eventQueueMaxSize) {
-        this.eventQueueMaxSize = eventQueueMaxSize;
+    public void setEventQueueCapacity(int eventQueueCapacity) {
+        this.eventQueueCapacity = eventQueueCapacity;
     }
 
     @Override
@@ -193,5 +211,65 @@ public class DefaultEngineParameters implements EngineParameters {
     @Override
     public void setAsyncEventSetProcessorProcessingThreshold(int asyncEventSetProcessorProcessingThreshold) {
         this.asyncEventSetProcessorProcessingThreshold = asyncEventSetProcessorProcessingThreshold;
+    }
+
+    @Override
+    public int getMainProcessingUnitWorkerExecutorQueueSize() {
+        return mainProcessingUnitWorkerExecutorQueueSize;
+    }
+
+    @Override
+    public void setMainProcessingUnitWorkerExecutorQueueSize(int mainProcessingUnitWorkerExecutorQueueSize) {
+        this.mainProcessingUnitWorkerExecutorQueueSize = mainProcessingUnitWorkerExecutorQueueSize;
+    }
+
+    @Override
+    public long getInternalQueueBlockingPutSleep() {
+        return internalQueueBlockingPutSleep;
+    }
+
+    @Override
+    public void setInternalQueueBlockingPutSleep(long internalQueueBlockingPutSleep) {
+        this.internalQueueBlockingPutSleep = internalQueueBlockingPutSleep;
+    }
+
+    @Override
+    public int getDecomposedQueueCapacity() {
+        return decomposedQueueCapacity;
+    }
+
+    @Override
+    public void setDecomposedQueueCapacity(int decomposedQueueCapacity) {
+        this.decomposedQueueCapacity = decomposedQueueCapacity;
+    }
+
+    @Override
+    public int getMainEventQueueCapacity() {
+        return mainEventQueueCapacity;
+    }
+
+    @Override
+    public void setMainEventQueueCapacity(int mainEventQueueCapacity) {
+        this.mainEventQueueCapacity = mainEventQueueCapacity;
+    }
+
+    @Override
+    public double getInitialDynamicThreadPoolSizeRatio() {
+        return initialDynamicThreadPoolSizeRatio;
+    }
+
+    @Override
+    public void setInitialDynamicThreadPoolSizeRatio(double initialDynamicThreadPoolSizeRatio) {
+        this.initialDynamicThreadPoolSizeRatio = initialDynamicThreadPoolSizeRatio;
+    }
+
+    @Override
+    public long getDynamicThreadPoolKeepAliveTime() {
+        return dynamicThreadPoolKeepAliveTime;
+    }
+
+    @Override
+    public void setDynamicThreadPoolKeepAliveTime(long dynamicThreadPoolKeepAliveTime) {
+        this.dynamicThreadPoolKeepAliveTime = dynamicThreadPoolKeepAliveTime;
     }
 }

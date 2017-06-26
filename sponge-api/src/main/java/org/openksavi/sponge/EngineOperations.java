@@ -60,7 +60,7 @@ public interface EngineOperations {
     void requestReload();
 
     /**
-     * Sends an event to the Input Event Queue.
+     * Sends an event to the Input Event Queue. May throw {@code QueueFullException} if the Input Event Queue is full.
      *
      * @param event
      *            an event.
@@ -69,7 +69,7 @@ public interface EngineOperations {
     Event send(Event event);
 
     /**
-     * Sends a new event to the Input Event Queue.
+     * Sends a new event to the Input Event Queue. May throw {@code QueueFullException} if the Input Event Queue is full.
      *
      * @param eventName
      *            an event name.

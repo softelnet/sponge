@@ -78,8 +78,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** The number of threads used by processing units to listen to an event queue concurrently. */
     private Integer processingUnitConcurrentListenerThreadCount;
 
-    /** Max event queue size. */
-    private Integer eventQueueMaxSize;
+    /** Event queue capacity. */
+    private Integer eventQueueCapacity;
 
     /** The number of cron threads. */
     private Integer cronThreadCount;
@@ -160,9 +160,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                             engine.getDefaultParameters().getProcessingUnitConcurrentListenerThreadCount());
         }
 
-        if (eventQueueMaxSize == null) {
-            eventQueueMaxSize = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_MAX_SIZE,
-                    engine.getDefaultParameters().getEventQueueMaxSize());
+        if (eventQueueCapacity == null) {
+            eventQueueCapacity = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
+                    engine.getDefaultParameters().getEventQueueCapacity());
         }
 
         if (cronThreadCount == null) {
@@ -383,13 +383,13 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     /**
-     * Returns the maximum event queue size.
+     * Returns the event queue capacity.
      *
-     * @return the maximum event queue size.
+     * @return the event queue capacity.
      */
     @Override
-    public int getEventQueueMaxSize() {
-        return eventQueueMaxSize;
+    public int getEventQueueCapacity() {
+        return eventQueueCapacity;
     }
 
     @Override
@@ -434,7 +434,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                 .append("home", home)
                 .append("mainProcessingUnitThreadCount", mainProcessingUnitThreadCount)
                 .append("asyncEventSetProcessorExecutorThreadCount", asyncEventSetProcessorExecutorThreadCount)
-                .append("eventQueueMaxSize", eventQueueMaxSize)
+                .append("eventQueueCapacity", eventQueueCapacity)
                 .append("eventSetProcessorDefaultSynchronous", eventSetProcessorDefaultSynchronous)
                 .append("eventClonePolicy", eventClonePolicy)
                 .append("autoEnable", autoEnable)
@@ -479,8 +479,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
-    public void setEventQueueMaxSize(int eventQueueMaxSize) {
-        this.eventQueueMaxSize = eventQueueMaxSize;
+    public void setEventQueueCapacity(int eventQueueCapacity) {
+        this.eventQueueCapacity = eventQueueCapacity;
     }
 
     @Override

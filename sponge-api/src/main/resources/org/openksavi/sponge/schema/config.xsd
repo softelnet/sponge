@@ -37,7 +37,7 @@
             <xs:element name="mainProcessingUnitThreadCount" type="xs:string" minOccurs="0" />
             <xs:element name="asyncEventSetProcessorExecutorThreadCount" type="xs:string" minOccurs="0" />
             <xs:element name="eventSetProcessorDefaultSynchronous" type="xs:string" minOccurs="0" />
-            <xs:element name="eventQueueMaxSize" type="xs:string" minOccurs="0" />
+            <xs:element name="eventQueueCapacity" type="xs:string" minOccurs="0" />
             <xs:element name="eventClonePolicy" type="EventClonePolicy" minOccurs="0" />
             <xs:element name="autoEnable" type="xs:string" minOccurs="0" />
 

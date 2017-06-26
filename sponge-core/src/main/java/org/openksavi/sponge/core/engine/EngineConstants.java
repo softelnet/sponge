@@ -24,12 +24,6 @@ public final class EngineConstants {
     /** Control event name prefix. */
     public static final String CONTROL_EVENT_PREFIX = "$";
 
-    /** Dynamic thread pool initial size ratio. */
-    public static final double INITIAL_DYNAMIC_THREAD_POOL_SIZE_RATIO = 0.3;
-
-    /** Dynamic thread pool keep alive time (in seconds). */
-    public static final long DYNAMIC_THREAD_POOL_KEEP_ALIVE_TIME = 60;
-
     private EngineConstants() {
         //
     }

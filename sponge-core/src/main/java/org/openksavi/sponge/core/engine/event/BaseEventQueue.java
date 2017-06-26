@@ -24,6 +24,9 @@ import org.openksavi.sponge.engine.event.EventQueue;
  */
 public abstract class BaseEventQueue extends BaseEngineModule implements EventQueue {
 
+    /** Queue capacity. -1 means unlimited. */
+    protected int capacity = -1;
+
     /**
      * Creates a new event queue.
      *
@@ -32,5 +35,26 @@ public abstract class BaseEventQueue extends BaseEngineModule implements EventQu
      */
     protected BaseEventQueue(String name) {
         super(name);
+    }
+
+    /**
+     * Sets the capacity of the queue.
+     *
+     * @param capacity
+     *            the capacity of the queue.
+     */
+    @Override
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    /**
+     * Returns the capacity of the queue.
+     *
+     * @return the capacity of the queue.
+     */
+    @Override
+    public int getCapacity() {
+        return capacity;
     }
 }
