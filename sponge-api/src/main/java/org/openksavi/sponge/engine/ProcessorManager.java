@@ -86,14 +86,14 @@ public interface ProcessorManager extends EngineModule {
     void enableRule(KnowledgeBase knowledgeBase, Object ruleClass);
 
     /**
-     * Enables an aggregator.
+     * Enables a correlator.
      *
      * @param knowledgeBase
      *            knowledge base.
-     * @param aggregatorClass
-     *            aggregator class.
+     * @param correlatorClass
+     *            correlator class.
      */
-    void enableAggregator(KnowledgeBase knowledgeBase, Object aggregatorClass);
+    void enableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass);
 
     /**
      * Disables the action.
@@ -136,14 +136,14 @@ public interface ProcessorManager extends EngineModule {
     void disableRule(KnowledgeBase knowledgeBase, Object ruleClass);
 
     /**
-     * Disables the aggregator.
+     * Disables the correlator.
      *
      * @param knowledgeBase
      *            knowledge base.
-     * @param aggregatorClass
-     *            aggregator class.
+     * @param correlatorClass
+     *            correlator class.
      */
-    void disableAggregator(KnowledgeBase knowledgeBase, Object aggregatorClass);
+    void disableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass);
 
     /**
      * Creates a new uninitialized processor instance.

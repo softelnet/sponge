@@ -33,16 +33,16 @@ import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapterFactory;
 import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
-import org.openksavi.sponge.core.aggregator.BaseAggregatorAdapter;
-import org.openksavi.sponge.core.aggregator.BaseAggregatorAdapterGroup;
+import org.openksavi.sponge.core.correlator.BaseCorrelatorAdapter;
+import org.openksavi.sponge.core.correlator.BaseCorrelatorAdapterGroup;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.rule.BaseRuleAdapter;
 import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
 import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -81,13 +81,13 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
                                     .getMainProcessingUnit().getHandler(ProcessorType.RULE_GROUP))),
                     (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
                     (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.RULE_GROUP)),
-            ProcessorType.AGGREGATOR, new RegistrationHandler(
+            ProcessorType.CORRELATOR, new RegistrationHandler(
                     (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
-                            new BaseAggregatorAdapterGroup(((BaseAggregatorAdapter) adapter).getDefinition(),
-                            (EventSetProcessorMainProcessingUnitHandler<AggregatorAdapterGroup, AggregatorAdapter>) getEngine()
-                                    .getMainProcessingUnit().getHandler(ProcessorType.AGGREGATOR_GROUP))),
+                            new BaseCorrelatorAdapterGroup(((BaseCorrelatorAdapter) adapter).getDefinition(),
+                            (EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>) getEngine()
+                                    .getMainProcessingUnit().getHandler(ProcessorType.CORRELATOR_GROUP))),
                     (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
-                    (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.AGGREGATOR_GROUP))
+                    (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.CORRELATOR_GROUP))
             );
             //@formatter:on
 
@@ -262,8 +262,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     }
 
     @Override
-    public void enableAggregator(KnowledgeBase knowledgeBase, Object aggregatorClass) {
-        doEnable(knowledgeBase, aggregatorClass, ProcessorType.AGGREGATOR);
+    public void enableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass) {
+        doEnable(knowledgeBase, correlatorClass, ProcessorType.CORRELATOR);
     }
 
     @Override
@@ -287,8 +287,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     }
 
     @Override
-    public void disableAggregator(KnowledgeBase knowledgeBase, Object aggregatorClass) {
-        doDisable(knowledgeBase, aggregatorClass, ProcessorType.AGGREGATOR);
+    public void disableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass) {
+        doDisable(knowledgeBase, correlatorClass, ProcessorType.CORRELATOR);
     }
 
     protected String resolveProcessorName(KnowledgeBase knowledgeBase, Object processorClass, Class javaClass) {

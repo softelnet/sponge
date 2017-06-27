@@ -22,9 +22,9 @@ import org.jruby.RubyClass;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.rule.Rule;
@@ -157,18 +157,18 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
         engine.getProcessorManager().disableRule(getKnowledgeBase(), ruleClass);
     }
 
-    public void enableAggregator(RubyClass aggregatorClass) {
-        engine.getProcessorManager().enableAggregator(getKnowledgeBase(), aggregatorClass);
+    public void enableCorrelator(RubyClass correlatorClass) {
+        engine.getProcessorManager().enableCorrelator(getKnowledgeBase(), correlatorClass);
     }
 
-    public void enableAggregators(RubyClass... aggregatorClasses) {
-        for (RubyClass aggregatorClass : aggregatorClasses) {
-            enableAggregator(aggregatorClass);
+    public void enableCorrelators(RubyClass... correlatorClasses) {
+        for (RubyClass correlatorClass : correlatorClasses) {
+            enableCorrelator(correlatorClass);
         }
     }
 
-    public void disableAggregator(RubyClass aggregatorClass) {
-        engine.getProcessorManager().disableAggregator(getKnowledgeBase(), aggregatorClass);
+    public void disableCorrelator(RubyClass correlatorClass) {
+        engine.getProcessorManager().disableCorrelator(getKnowledgeBase(), correlatorClass);
     }
 
     /**
@@ -288,25 +288,25 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     }
 
     /**
-     * Enables Java aggregator.
+     * Enables Java correlator.
      *
-     * @param aggregatorClass
-     *            aggregator Java class.
+     * @param correlatorClass
+     *            correlator Java class.
      */
     @SuppressWarnings("unchecked")
-    public void enableJavaAggregator(RubyClass aggregatorClass) {
-        enableJavaAggregator((Class<? extends Aggregator>) aggregatorClass.toJava(Class.class));
+    public void enableJavaCorrelator(RubyClass correlatorClass) {
+        enableJavaCorrelator((Class<? extends Correlator>) correlatorClass.toJava(Class.class));
     }
 
     /**
-     * Disables Java aggregator.
+     * Disables Java correlator.
      *
-     * @param aggregatorClass
-     *            aggregator Java class.
+     * @param correlatorClass
+     *            correlator Java class.
      */
     @SuppressWarnings("unchecked")
-    public void disableJavaAggregator(RubyClass aggregatorClass) {
-        disableJavaAggregator((Class<? extends Aggregator>) aggregatorClass.toJava(Class.class));
+    public void disableJavaCorrelator(RubyClass correlatorClass) {
+        disableJavaCorrelator((Class<? extends Correlator>) correlatorClass.toJava(Class.class));
     }
 
     /**

@@ -8,13 +8,13 @@ Event processors are objects that listen to certain events and perform specified
 
 .Event processors
 ****
-Filter:: Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and aggregators).
+Filter:: Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and correlators).
 
 Trigger:: Triggers execute specified operations when an appropriate event happens.
 
 Rule:: Rules are used to detect correlations (temporal or logical) between events.
 
-Aggregator:: Aggregators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+Correlator:: Correlators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
 ****
 
 === Knowledge base
@@ -52,7 +52,7 @@ Rule:: If there is a rule that listens to that event, the event will be processe
 * or save the event in the internal event tree of the already running rule instance,
 * or cause the already running rule instance to fire (i.e. execute the body of the rule).
 
-Aggregator:: If there is an aggregator that listens to that event, the event will be processed by that aggregator.
+Correlator:: If there is a correlator that listens to that event, the event will be processed by that correlator.
 ****
 
 == Distributions

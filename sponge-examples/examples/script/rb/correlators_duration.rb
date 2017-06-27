@@ -1,20 +1,20 @@
 # Sponge Knowledge base
-# Using aggregators
+# Using correlator duration
 
-java_import org.openksavi.sponge.examples.SampleJavaAggregator
+java_import org.openksavi.sponge.examples.SampleJavaCorrelator
 java_import java.util.concurrent.atomic.AtomicInteger
 java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
     # Variables for assertions only
     $EPS.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
-    $EPS.setVariable("hardwareFailureJavaCount", AtomicInteger.new(0))
 end
 
-class SampleAggregator < Aggregator
+class SampleCorrelator < Correlator
     @@instanceStarted = AtomicBoolean.new(false)
     def configure
         self.eventNames = ["filesystemFailure", "diskFailure"]
+        self.duration = Duration.ofSeconds(2)
     end
     def init
         @eventLog = []
@@ -24,16 +24,11 @@ class SampleAggregator < Aggregator
     end
     def onEvent(event)
         @eventLog  << event
-        self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, @eventLog.map(&:to_s))
         $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
-        if @eventLog.length >= 4
-            self.finish()
-        end
     end
-end
-
-def onLoad
-    $EPS.enableJava(SampleJavaAggregator)
+    def onDuration()
+        self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, @eventLog.map(&:to_s))
+    end
 end
 
 def onStartup

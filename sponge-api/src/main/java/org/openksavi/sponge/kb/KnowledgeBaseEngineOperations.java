@@ -19,7 +19,7 @@ package org.openksavi.sponge.kb;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.trigger.Trigger;
@@ -121,20 +121,20 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     void disableJavaRule(Class<? extends Rule> ruleClass);
 
     /**
-     * Enables Java-based aggregator.
+     * Enables Java-based correlator.
      *
-     * @param aggregatorClass
-     *            aggregator Java class.
+     * @param correlatorClass
+     *            correlator Java class.
      */
-    void enableJavaAggregator(Class<? extends Aggregator> aggregatorClass);
+    void enableJavaCorrelator(Class<? extends Correlator> correlatorClass);
 
     /**
-     * Disables Java-based aggregator.
+     * Disables Java-based correlator.
      *
-     * @param aggregatorClass
-     *            aggregator Java class.
+     * @param correlatorClass
+     *            correlator Java class.
      */
-    void disableJavaAggregator(Class<? extends Aggregator> aggregatorClass);
+    void disableJavaCorrelator(Class<? extends Correlator> correlatorClass);
 
     /**
      * Enables Java-based action.

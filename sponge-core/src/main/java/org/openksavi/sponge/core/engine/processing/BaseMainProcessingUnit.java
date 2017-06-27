@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.ProcessorAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -43,7 +43,7 @@ import org.openksavi.sponge.rule.RuleAdapterGroup;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 
 /**
- * Main processing unit that handles rules and aggregators.
+ * Main processing unit that handles rules and correlators.
  */
 public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventProcessorAdapter<?>> implements MainProcessingUnit {
 
@@ -75,9 +75,9 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
         handlers.put(ProcessorType.TRIGGER, new TriggerMainProcessingUnitHandler(this));
         handlers.put(ProcessorType.RULE_GROUP,
                 new SyncAsyncEventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter>(ProcessorType.RULE_GROUP, this));
-        handlers.put(ProcessorType.AGGREGATOR_GROUP,
-                new SyncAsyncEventSetProcessorMainProcessingUnitHandler<AggregatorAdapterGroup, AggregatorAdapter>(
-                        ProcessorType.AGGREGATOR_GROUP, this));
+        handlers.put(ProcessorType.CORRELATOR_GROUP,
+                new SyncAsyncEventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>(
+                        ProcessorType.CORRELATOR_GROUP, this));
     }
 
     /**
@@ -129,8 +129,8 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
     }
 
     @Override
-    public List<AggregatorAdapterGroup> getAggregatorAdapterGroups() {
-        return getProcessorAdapterList(ProcessorType.AGGREGATOR_GROUP);
+    public List<CorrelatorAdapterGroup> getCorrelatorAdapterGroups() {
+        return getProcessorAdapterList(ProcessorType.CORRELATOR_GROUP);
     }
 
     @Override

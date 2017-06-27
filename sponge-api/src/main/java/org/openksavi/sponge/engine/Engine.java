@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.event.CronEventGenerator;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.engine.processing.EventSetProcessorDurationStrategy;
@@ -136,11 +136,11 @@ public interface Engine extends Manageable {
     List<RuleAdapterGroup> getRuleGroups();
 
     /**
-     * Returns the list of aggregator adapter groups.
+     * Returns the list of correlator adapter groups.
      *
-     * @return the list of aggregator adapter groups.
+     * @return the list of correlator adapter groups.
      */
-    List<AggregatorAdapterGroup> getAggregatorGroups();
+    List<CorrelatorAdapterGroup> getCorrelatorGroups();
 
     /**
      * Returns the list of action adapters.

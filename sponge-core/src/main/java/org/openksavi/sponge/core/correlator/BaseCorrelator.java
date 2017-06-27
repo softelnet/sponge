@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.aggregator;
+package org.openksavi.sponge.core.correlator;
 
-import org.openksavi.sponge.aggregator.Aggregator;
-import org.openksavi.sponge.aggregator.AggregatorAdapter;
 import org.openksavi.sponge.core.BaseEventSetProcessor;
+import org.openksavi.sponge.correlator.Correlator;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
 
-public abstract class BaseAggregator extends BaseEventSetProcessor<AggregatorAdapter> implements Aggregator {
+public abstract class BaseCorrelator extends BaseEventSetProcessor<CorrelatorAdapter> implements Correlator {
 
     @Override
     public final void finish() {
@@ -33,7 +33,7 @@ public abstract class BaseAggregator extends BaseEventSetProcessor<AggregatorAda
     }
 
     @Override
-    public final AggregatorAdapter createAdapter() {
-        return new BaseAggregatorAdapter(new BaseAggregatorDefinition());
+    public final CorrelatorAdapter createAdapter() {
+        return new BaseCorrelatorAdapter(new BaseCorrelatorDefinition());
     }
 }

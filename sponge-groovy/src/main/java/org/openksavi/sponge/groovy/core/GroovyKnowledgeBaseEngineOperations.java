@@ -158,18 +158,18 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
         engine.getProcessorManager().disableRule(getKnowledgeBase(), wrapClass(ruleClass));
     }
 
-    public void enableAggregator(Class aggregatorClass) {
-        engine.getProcessorManager().enableAggregator(getKnowledgeBase(), wrapClass(aggregatorClass));
+    public void enableCorrelator(Class correlatorClass) {
+        engine.getProcessorManager().enableCorrelator(getKnowledgeBase(), wrapClass(correlatorClass));
     }
 
-    public void enableAggregators(Class... aggregatorClasses) {
-        for (Class aggregatorClass : aggregatorClasses) {
-            enableAggregator(aggregatorClass);
+    public void enableCorrelators(Class... correlatorClasses) {
+        for (Class correlatorClass : correlatorClasses) {
+            enableCorrelator(correlatorClass);
         }
     }
 
-    public void disableAggregator(Class aggregatorClass) {
-        engine.getProcessorManager().disableAggregator(getKnowledgeBase(), wrapClass(aggregatorClass));
+    public void disableCorrelator(Class correlatorClass) {
+        engine.getProcessorManager().disableCorrelator(getKnowledgeBase(), wrapClass(correlatorClass));
     }
 
     /**

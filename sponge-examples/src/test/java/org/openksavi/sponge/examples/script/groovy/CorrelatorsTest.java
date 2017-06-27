@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.examples.script.js;
+package org.openksavi.sponge.examples.script.groovy;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.examples.script.template.AggregatorsTestTemplate;
+import org.openksavi.sponge.examples.script.template.CorrelatorsTestTemplate;
+import org.openksavi.sponge.groovy.GroovyConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.nashorn.JavaScriptConstants;
 
-public class AggregatorsTest {
+public class CorrelatorsTest {
 
-    private static final KnowledgeBaseType TYPE = JavaScriptConstants.TYPE;
+    private static final KnowledgeBaseType TYPE = GroovyConstants.TYPE;
 
     @Test
-    public void testAggregators() throws InterruptedException {
-        AggregatorsTestTemplate.testAggregators(TYPE);
+    public void testCorrelators() throws InterruptedException {
+        CorrelatorsTestTemplate.testCorrelators(TYPE);
     }
 
     @Test
-    public void testAggregatorsRepeated() throws InterruptedException {
-        AggregatorsTestTemplate.testAggregatorsRepeated(TYPE);
+    public void testCorrelatorsRepeated() throws InterruptedException {
+        CorrelatorsTestTemplate.testCorrelatorsRepeated(TYPE);
     }
 
     @Test
-    public void testAggregatorsDuration() throws InterruptedException {
-        AggregatorsTestTemplate.testAggregatorsDuration(TYPE);
+    public void testCorrelatorsDuration() throws InterruptedException {
+        CorrelatorsTestTemplate.testCorrelatorsDuration(TYPE);
     }
 }

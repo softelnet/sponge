@@ -19,9 +19,9 @@ package org.openksavi.sponge.nashorn;
 import org.openksavi.sponge.event.Event;
 
 /**
- * JavaScript-specific implementation of the aggregator.
+ * JavaScript-specific implementation of the correlator.
  */
-public abstract class NashornAggregator extends org.openksavi.sponge.core.aggregator.BaseAggregator implements NashornScriptObject {
+public abstract class NashornCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator implements NashornScriptObject {
 
     /** JavaScript processor used to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;

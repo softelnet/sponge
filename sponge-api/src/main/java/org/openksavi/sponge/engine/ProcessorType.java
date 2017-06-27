@@ -18,8 +18,8 @@ package org.openksavi.sponge.engine;
 
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.filter.FilterAdapter;
 import org.openksavi.sponge.rule.RuleAdapter;
 import org.openksavi.sponge.rule.RuleAdapterGroup;
@@ -41,9 +41,9 @@ public enum ProcessorType {
 
     RULE("rule", RuleAdapter.class),
 
-    AGGREGATOR_GROUP("aggregatorGroup", AggregatorAdapterGroup.class),
+    CORRELATOR_GROUP("correlatorGroup", CorrelatorAdapterGroup.class),
 
-    AGGREGATOR("aggregator", AggregatorAdapter.class);
+    CORRELATOR("correlator", CorrelatorAdapter.class);
 
     private String name;
 

@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.aggregator;
-
-import org.openksavi.sponge.EventSetProcessorDefinition;
+package org.openksavi.sponge.jython;
 
 /**
- * Aggregator definition.
+ * Jython-specific implementation of the correlator.
  */
-public interface AggregatorDefinition extends EventSetProcessorDefinition {
+public abstract class JythonCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator {
 
 }

@@ -6,12 +6,12 @@
 :exampleName: actions
 include::sponge-example-script.adoc[]
 
-:exampleDisplayName: Aggregators
-:exampleName: aggregators
+:exampleDisplayName: Correlators
+:exampleName: correlators
 include::sponge-example-script.adoc[]
 
-:exampleDisplayName: Aggregators duration
-:exampleName: aggregators_duration
+:exampleDisplayName: Correlators duration
+:exampleName: correlators_duration
 include::sponge-example-script.adoc[]
 
 :exampleDisplayName: Events clone policy

@@ -42,13 +42,13 @@ import com.google.common.collect.Streams;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.jython.JythonAction;
-import org.openksavi.sponge.jython.JythonAggregator;
+import org.openksavi.sponge.jython.JythonCorrelator;
 import org.openksavi.sponge.jython.JythonFilter;
 import org.openksavi.sponge.jython.JythonPlugin;
 import org.openksavi.sponge.jython.JythonRule;
@@ -79,7 +79,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
             Filter.class, JythonFilter.class,
             Trigger.class, JythonTrigger.class,
             Rule.class, JythonRule.class,
-            Aggregator.class, JythonAggregator.class
+            Correlator.class, JythonCorrelator.class
             );
     //@formatter:on
 

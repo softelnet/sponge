@@ -49,7 +49,7 @@ var AutoRule = Java.extend(Rule, {
     }
 });
 
-var AutoAggregator = Java.extend(Aggregator, {
+var AutoCorrelator = Java.extend(Correlator, {
     configure: function(self) {
         self.eventNames = ["e1", "e2"];
     },

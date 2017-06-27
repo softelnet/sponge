@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.aggregator;
+package org.openksavi.sponge.correlator;
 
 import org.openksavi.sponge.EventSetProcessor;
 import org.openksavi.sponge.event.Event;
 
 /**
- * Aggregator.
+ * Correlator.
  */
-public interface Aggregator extends EventSetProcessor<AggregatorAdapter> {
+public interface Correlator extends EventSetProcessor<CorrelatorAdapter> {
 
     /**
-     * Checks if this event should be accepted as the first event of this aggregator therefore starting the new instance.
+     * Checks if this event should be accepted as the first event of this correlator therefore starting the new instance.
      *
      * @param event
      *            the incoming event.
@@ -34,7 +34,7 @@ public interface Aggregator extends EventSetProcessor<AggregatorAdapter> {
     boolean acceptsAsFirst(Event event);
 
     /**
-     * Callback invoked when event happens.
+     * Callback invoked when an event happens.
      *
      * @param event
      *            event.

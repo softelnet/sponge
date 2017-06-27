@@ -64,7 +64,7 @@ The standard implementation of events allows choosing the cloning policy `shallo
 {sponge} allows to use custom event implementations, apart from the default implementation of `Event` type (i.e. `AttributeMapEvent` class). It requires implementation of `Event` interface.
 
 ==== Creating and sending events
-*Creating an event means creating an instance of an event class. Sending an event means that the created event will be put into the Input Event Queue, to be processed by filters and then by triggers, rules and aggregators.*
+*Creating an event means creating an instance of an event class. Sending an event means that the created event will be put into the Input Event Queue, to be processed by filters and then by triggers, rules and correlators.*
 
 Event could be created and sent:
 
@@ -128,7 +128,7 @@ Types of processors:
 ** *Triggers* -  event processors that execute a specified code when an event happens.
 ** *Event set processors* - event processors that correlate and process sets of events.
 *** *Rules* - event set processors that correlate ordered sequences of events.
-*** *Aggregators* - event set processors that are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+*** *Correlators* - event set processors that are used to implement any complex event processing that isn't provided by filters, triggers or rules.
 * *Actions* - processors that are used to provide functionality similar to functions. They don't listen to events.
 
 include::sponge-user-guide-event-processors.adoc[leveloffset=+2]
@@ -411,8 +411,8 @@ Triggers should be implemented in a way to support concurrent processing of many
 === Rules
 Rules should be used when triggers functionality is not sufficient for the problem you try to solve.
 
-=== Aggregators
-Aggregators should be used when filters, triggers and rules functionality is not sufficient for the problem you try to solve.
+=== Correlators
+Correlators should be used when filters, triggers and rules functionality is not sufficient for the problem you try to solve.
 
 === Actions
 Actions should be created only when there is a need to provide some functionality that is to be used in many knowledge bases that are written in different scripting languages and only when you don't want to write it in Java.
@@ -565,7 +565,7 @@ Event flow:
 * Every event named `news` is filtered to discard news that have empty or short (according to `newsFilterWordThreshold` configuration property) titles. This is done by `NewsFilter` filter.
 * Events named `news` are logged by `LogNewsTrigger` trigger.
 * When there are no new `news` events (that passed filters) for a specified time, then `alarm` event is sent. This is done by `NoNewNewsAlarmRule` rule.
-* `LatestNewsAggregator` aggregator listens to `news` events and stores the latest news in `storagePlugin` plugin in a Python `deque`. The number of latest news is configured as `latestNewsMaxSize` property.
+* `LatestNewsCorrelator` correlator listens to `news` events and stores the latest news in `storagePlugin` plugin in a Python `deque`. The number of latest news is configured as `latestNewsMaxSize` property.
 * When `alarm` event happens, this fact is logged by `AlarmTrigger` trigger using `echoPlugin` plugin and `EmphasizeAction` action.
 
 
@@ -682,13 +682,13 @@ Directory `examples/script` contains examples implemented in all supported scrip
 ifdef::useReferences[(link:sponge-examples.html#actions-py[py^], link:sponge-examples.html#actions-rb[rb^], link:sponge-examples.html#actions-groovy[groovy^], link:sponge-examples.html#actions-js[js^])]
 |Shows how to use actions.
 
-|`aggregators`
-ifdef::useReferences[(link:sponge-examples.html#aggregators-py[py^], link:sponge-examples.html#aggregators-rb[rb^], link:sponge-examples.html#aggregators-groovy[groovy^], link:sponge-examples.html#aggregators-js[js^])]
-|Shows how to use aggregators. The script defined aggregator creates an event log - a list of all events that it listens to.
+|`correlators`
+ifdef::useReferences[(link:sponge-examples.html#correlators-py[py^], link:sponge-examples.html#correlators-rb[rb^], link:sponge-examples.html#correlators-groovy[groovy^], link:sponge-examples.html#correlators-js[js^])]
+|Shows how to use correlators. The script defined correlator creates an event log - a list of all events that it listens to.
 
-|`aggregators_duration`
-ifdef::useReferences[(link:sponge-examples.html#aggregators_duration-py[py^], link:sponge-examples.html#aggregators_duration-rb[rb^], link:sponge-examples.html#aggregators_duration-groovy[groovy^], link:sponge-examples.html#aggregators_duration-js[js^])]
-|Shows how to use aggregators with duration. The script defined aggregator creates an event log - a list of all events that it listens to.
+|`correlators_duration`
+ifdef::useReferences[(link:sponge-examples.html#correlators_duration-py[py^], link:sponge-examples.html#correlators_duration-rb[rb^], link:sponge-examples.html#correlators_duration-groovy[groovy^], link:sponge-examples.html#correlators_duration-js[js^])]
+|Shows how to use correlators with duration. The script defined correlator creates an event log - a list of all events that it listens to.
 
 |`events_clone_policy`
 ifdef::useReferences[(link:sponge-examples.html#events_clone_policy-py[py^], link:sponge-examples.html#events_clone_policy-rb[rb^], link:sponge-examples.html#events_clone_policy-groovy[groovy^], link:sponge-examples.html#events_clone_policy-js[js^], link:sponge-examples.html#events_clone_policy-xml-py[XML configuration^])]

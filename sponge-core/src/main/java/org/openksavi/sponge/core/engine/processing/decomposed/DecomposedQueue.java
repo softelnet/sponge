@@ -174,7 +174,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
 
                     return entry;
                 } else {
-                    // Non-singletons (in this case rule group adapters and aggregator group adapters) are blocked while processing
+                    // Non-singletons (in this case rule group adapters and correlator group adapters) are blocked while processing
                     // the previous event.
                     // Note that only the earliest event going to the given adapter should be considered.
                     if (!currentlyProcessedNonSingletons.contains(adapter.getName()) &&

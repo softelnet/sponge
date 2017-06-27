@@ -149,18 +149,18 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
         engine.getProcessorManager().disableRule(getKnowledgeBase(), resolveProcessorName(ruleClass));
     }
 
-    public void enableAggregator(Object aggregatorClass) {
-        engine.getProcessorManager().enableAggregator(getKnowledgeBase(), resolveProcessorName(aggregatorClass));
+    public void enableCorrelator(Object correlatorClass) {
+        engine.getProcessorManager().enableCorrelator(getKnowledgeBase(), resolveProcessorName(correlatorClass));
     }
 
-    public void enableAggregators(Object... aggregatorClasses) {
-        for (Object aggregatorClass : aggregatorClasses) {
-            enableAggregator(aggregatorClass);
+    public void enableCorrelators(Object... correlatorClasses) {
+        for (Object correlatorClass : correlatorClasses) {
+            enableCorrelator(correlatorClass);
         }
     }
 
-    public void disableAggregator(Object aggregatorClass) {
-        engine.getProcessorManager().disableAggregator(getKnowledgeBase(), resolveProcessorName(aggregatorClass));
+    public void disableCorrelator(Object correlatorClass) {
+        engine.getProcessorManager().disableCorrelator(getKnowledgeBase(), resolveProcessorName(correlatorClass));
     }
 
     /**

@@ -69,11 +69,11 @@ An engine configuration section (`<engine>`) contains configuration parameters o
 |Parameter |Description |Default value
 
 |*`mainProcessingUnitThreadCount`*
-|The number of Main Processing Unit worker threads. You could increase this parameter if your knowledge bases require concurrent processing of many events by triggers, rules or aggregators.
+|The number of Main Processing Unit worker threads. You could increase this parameter if your knowledge bases require concurrent processing of many events by triggers, rules or correlators.
 |5
 
 |*`asyncEventSetProcessorExecutorThreadCount`*
-|The number of threads used by an event set processor executor for asynchronous processing of events by rules and aggregators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or aggregators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
+|The number of threads used by an event set processor executor for asynchronous processing of events by rules and correlators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or correlators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
 |`5`
 
 |*`eventQueueCapacity`*
@@ -97,7 +97,7 @@ An engine configuration section (`<engine>`) contains configuration parameters o
 |`1`
 
 |`eventSetProcessorDefaultSynchronous`
-|The event set processor default synchronous flag. If this parameter is set to `true` then all rules and aggregators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.
+|The event set processor default synchronous flag. If this parameter is set to `true` then all rules and correlators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.
 |`false`
 
 |`processingUnitConcurrentListenerThreadCount`

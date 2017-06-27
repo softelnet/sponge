@@ -95,7 +95,7 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
         sb.append(". Filters: " + engine.getFilters().size());
         sb.append(". Triggers: " + engine.getTriggers().size());
         sb.append(". Rules: " + engine.getRuleGroups().size());
-        sb.append(". Aggregators: " + engine.getAggregatorGroups().size());
+        sb.append(". Correlators: " + engine.getCorrelatorGroups().size());
         sb.append("\n");
         sb.append("Event scheduler: scheduled=" + getScheduledEventCount());
         sb.append(". Cron: entries=" + getCronEventCount());

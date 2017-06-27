@@ -19,8 +19,6 @@ stateful
 heartbeat
 standalone
 processable
-aggregators
-aggregator
 init
 groovy
 transactional
@@ -30,3 +28,5 @@ endpoint
 interoperation
 endpoints
 interoperability
+correlator
+correlators

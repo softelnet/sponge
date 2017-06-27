@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
 import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.processing.QueuedEventSetProcessorDurationStrategy;
 import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
@@ -40,6 +39,7 @@ import org.openksavi.sponge.core.spi.DefaultEventQueueProvider;
 import org.openksavi.sponge.core.spi.DefaultProcessingUnitProvider;
 import org.openksavi.sponge.core.util.ServiceLoaderUtils;
 import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.Engine;
@@ -609,13 +609,13 @@ public class BaseEngine implements Engine {
     }
 
     /**
-     * Returns the list of aggregator adapter groups.
+     * Returns the list of correlator adapter groups.
      *
-     * @return the list of aggregator adapter groups.
+     * @return the list of correlator adapter groups.
      */
     @Override
-    public List<AggregatorAdapterGroup> getAggregatorGroups() {
-        return mainProcessingUnit.getAggregatorAdapterGroups();
+    public List<CorrelatorAdapterGroup> getCorrelatorGroups() {
+        return mainProcessingUnit.getCorrelatorAdapterGroups();
     }
 
     /**

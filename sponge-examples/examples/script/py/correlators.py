@@ -1,9 +1,9 @@
 """
 Sponge Knowledge base
-Using aggregators duration
+Using correlator duration
 """
 
-from org.openksavi.sponge.examples import SampleJavaAggregator
+from org.openksavi.sponge.examples import SampleJavaCorrelator
 
 from java.util.concurrent.atomic import AtomicInteger, AtomicBoolean
 
@@ -12,14 +12,14 @@ def onInit():
     EPS.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
     EPS.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
 
-class SampleAggregator(Aggregator):
+class SampleCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def configure(self):
         self.eventNames = ["filesystemFailure", "diskFailure"]
     def init(self):
         self.eventLog = []
     def acceptsAsFirst(self, event):
-        return SampleAggregator.instanceStarted.compareAndSet(False, True)
+        return SampleCorrelator.instanceStarted.compareAndSet(False, True)
     def onEvent(self, event):
         self.eventLog.append(event)
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))
@@ -28,7 +28,7 @@ class SampleAggregator(Aggregator):
             self.finish()
 
 def onLoad():
-    EPS.enableJava(SampleJavaAggregator)
+    EPS.enableJava(SampleJavaCorrelator)
 
 def onStartup():
     EPS.event("filesystemFailure").set("source", "server1").sendAfter(100)

@@ -1,6 +1,6 @@
 /**
  * Sponge Knowledge base
- * Using aggregators
+ * Using correlators
  */
 
 var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
@@ -12,7 +12,7 @@ function onInit() {
     EPS.setVariable("hardwareFailureJavaCount", new AtomicInteger(0));
 }
 
-var SampleAggregator = Java.extend(Aggregator, {
+var SampleCorrelator = Java.extend(Correlator, {
     configure: function(self) {
         self.eventNames = ["filesystemFailure", "diskFailure"];
     },
@@ -20,10 +20,10 @@ var SampleAggregator = Java.extend(Aggregator, {
         self.target = new function() {
             this.eventLog = [];
         }
-        EPS.setVariableIfNone("SampleAggregator_instanceStarted", function() { return new AtomicBoolean(false)});
+        EPS.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
     },
     acceptsAsFirst: function(self, event) {
-        return EPS.getVariable("SampleAggregator_instanceStarted").compareAndSet(false, true);
+        return EPS.getVariable("SampleCorrelator_instanceStarted").compareAndSet(false, true);
     },
     onEvent: function(self, event) {
         self.target.eventLog.push(event);
@@ -36,7 +36,7 @@ var SampleAggregator = Java.extend(Aggregator, {
 });
 
 function onLoad() {
-    EPS.enableJava(org.openksavi.sponge.examples.SampleJavaAggregator.class);
+    EPS.enableJava(org.openksavi.sponge.examples.SampleJavaCorrelator.class);
 }
 
 function onStartup() {

@@ -151,18 +151,18 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
         engine.getProcessorManager().disableRule(getKnowledgeBase(), ruleClass);
     }
 
-    public void enableAggregator(PyType aggregatorClass) {
-        engine.getProcessorManager().enableAggregator(getKnowledgeBase(), aggregatorClass);
+    public void enableCorrelator(PyType correlatorClass) {
+        engine.getProcessorManager().enableCorrelator(getKnowledgeBase(), correlatorClass);
     }
 
-    public void enableAggregators(PyType... aggregatorClasses) {
-        for (PyType aggregatorClass : aggregatorClasses) {
-            enableAggregator(aggregatorClass);
+    public void enableCorrelators(PyType... correlatorClasses) {
+        for (PyType correlatorClass : correlatorClasses) {
+            enableCorrelator(correlatorClass);
         }
     }
 
-    public void disableAggregator(PyType aggregatorClass) {
-        engine.getProcessorManager().disableAggregator(getKnowledgeBase(), aggregatorClass);
+    public void disableCorrelator(PyType correlatorClass) {
+        engine.getProcessorManager().disableCorrelator(getKnowledgeBase(), correlatorClass);
     }
 
     /**

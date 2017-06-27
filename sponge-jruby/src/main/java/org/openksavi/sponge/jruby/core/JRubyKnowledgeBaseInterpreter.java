@@ -41,14 +41,14 @@ import com.google.common.collect.ImmutableMap;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.jruby.JRubyAction;
-import org.openksavi.sponge.jruby.JRubyAggregator;
+import org.openksavi.sponge.jruby.JRubyCorrelator;
 import org.openksavi.sponge.jruby.JRubyFilter;
 import org.openksavi.sponge.jruby.JRubyPlugin;
 import org.openksavi.sponge.jruby.JRubyRule;
@@ -78,7 +78,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
             Filter.class, JRubyFilter.class,
             Trigger.class, JRubyTrigger.class,
             Rule.class, JRubyRule.class,
-            Aggregator.class, JRubyAggregator.class
+            Correlator.class, JRubyCorrelator.class
             );
     //@formatter:on
 

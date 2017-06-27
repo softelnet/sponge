@@ -32,13 +32,13 @@ The {sponge} engine consists of the following components.
 |A queue of events that passed all filters and are to be processes by other event processors in the Main Processing Unit.
 
 |Main Processing Unit
-|Responsible for processing events by triggers, rules and aggregators. It is also a registry of such event processors.
+|Responsible for processing events by triggers, rules and correlators. It is also a registry of such event processors.
 
 |Output Event Queue
 |A queue of events that haven't been processed (i.e. listened to) by any event processor in the Main Processing Unit. Default behavior is to forget such events.
 
 |Processor Manager
-|A module responsible for enabling and disabling processors, i.e. actions, filters, triggers, rules and aggregators.
+|A module responsible for enabling and disabling processors, i.e. actions, filters, triggers, rules and correlators.
 
 |Action Manager
 |A registry of enabled actions.

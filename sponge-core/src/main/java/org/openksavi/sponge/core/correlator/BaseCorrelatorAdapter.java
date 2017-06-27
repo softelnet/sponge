@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.aggregator;
+package org.openksavi.sponge.core.correlator;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.aggregator.Aggregator;
-import org.openksavi.sponge.aggregator.AggregatorAdapter;
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
+import org.openksavi.sponge.correlator.Correlator;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.event.Event;
 
 /**
- * Abstract aggregator.
+ * Base correlator adapter.
  */
-public class BaseAggregatorAdapter extends BaseEventSetProcessorAdapter<Aggregator> implements AggregatorAdapter {
+public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlator> implements CorrelatorAdapter {
 
-    public BaseAggregatorAdapter(BaseEventSetProcessorDefinition definition) {
+    public BaseCorrelatorAdapter(BaseEventSetProcessorDefinition definition) {
         super(definition);
     }
 
     @Override
     public ProcessorType getType() {
-        return ProcessorType.AGGREGATOR;
+        return ProcessorType.CORRELATOR;
     }
 
     @Override
@@ -56,10 +56,10 @@ public class BaseAggregatorAdapter extends BaseEventSetProcessorAdapter<Aggregat
     @Override
     public void validate() {
         if (getName() == null) {
-            throw new SpongeException("Invalid aggregator. Name must not be empty.");
+            throw new SpongeException("Invalid correlator. Name must not be empty.");
         }
         if (getEventNames() == null || getEventNames().length < 1) {
-            throw new SpongeException("Invalid aggregator " + getName() + ". At least one event must be specified.");
+            throw new SpongeException("Invalid correlator " + getName() + ". At least one event must be specified.");
         }
     }
 }

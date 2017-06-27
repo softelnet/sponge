@@ -37,7 +37,7 @@ class AutoRule(Rule):
         self.logger.debug("Running for sequence: {}", self.eventSequence)
         EPS.getVariable("counter").incrementAndGet()
 
-class AutoAggregator(Aggregator):
+class AutoCorrelator(Correlator):
     def configure(self):
         self.eventNames = ["e1", "e2"]
     def acceptsAsFirst(self, event):

@@ -39,16 +39,16 @@ class AlarmTrigger(Trigger):
                          EPS.callAction("EmphasizeAction", echoPlugin.echo(storagePlugin.storedValue[-1])))
         EPS.getVariable("alarmSounded").set(True)
 
-# Start only one instance of this aggregator for the system. Note that in this example data is stored in a plugin,
-# not in this aggregator.
-class LatestNewsAggregator(Aggregator):
+# Start only one instance of this correlator for the system. Note that in this example data is stored in a plugin,
+# not in this correlator.
+class LatestNewsCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def configure(self):
         self.eventNames = ["news"]
     def init(self):
         storagePlugin.storedValue = collections.deque(maxlen=int(EPS.getVariable("latestNewsMaxSize", 2)))
     def acceptsAsFirst(self, event):
-        return LatestNewsAggregator.instanceStarted.compareAndSet(False, True)
+        return LatestNewsCorrelator.instanceStarted.compareAndSet(False, True)
     def onEvent(self, event):
         storagePlugin.storedValue.append(event.get("title"))
         self.logger.debug("{} - latest news: {}", self.hashCode(), str(storagePlugin.storedValue))

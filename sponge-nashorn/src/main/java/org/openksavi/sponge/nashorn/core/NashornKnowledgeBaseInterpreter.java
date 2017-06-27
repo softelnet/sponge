@@ -32,9 +32,9 @@ import com.google.common.collect.ImmutableMap;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -42,7 +42,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.nashorn.JavaScriptConstants;
 import org.openksavi.sponge.nashorn.NashornAction;
-import org.openksavi.sponge.nashorn.NashornAggregator;
+import org.openksavi.sponge.nashorn.NashornCorrelator;
 import org.openksavi.sponge.nashorn.NashornFilter;
 import org.openksavi.sponge.nashorn.NashornPlugin;
 import org.openksavi.sponge.nashorn.NashornRule;
@@ -72,7 +72,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
             Filter.class, NashornFilter.class,
             Trigger.class, NashornTrigger.class,
             Rule.class, NashornRule.class,
-            Aggregator.class, NashornAggregator.class
+            Correlator.class, NashornCorrelator.class
             );
     //@formatter:on
 

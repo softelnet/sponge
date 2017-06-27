@@ -25,10 +25,10 @@ import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.examples.script.ScriptTestUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
-public class AggregatorsTestTemplate {
+public class CorrelatorsTestTemplate {
 
-    public static void testAggregators(KnowledgeBaseType type) throws InterruptedException {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "aggregators");
+    public static void testCorrelators(KnowledgeBaseType type) throws InterruptedException {
+        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators");
 
         try {
             await().atMost(5, TimeUnit.SECONDS)
@@ -42,12 +42,12 @@ public class AggregatorsTestTemplate {
     }
 
     // To test global class fields in scripts.
-    public static void testAggregatorsRepeated(KnowledgeBaseType type) throws InterruptedException {
-        testAggregators(type);
+    public static void testCorrelatorsRepeated(KnowledgeBaseType type) throws InterruptedException {
+        testCorrelators(type);
     }
 
-    public static void testAggregatorsDuration(KnowledgeBaseType type) throws InterruptedException {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "aggregators_duration");
+    public static void testCorrelatorsDuration(KnowledgeBaseType type) throws InterruptedException {
+        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators_duration");
 
         try {
             await().atMost(10, TimeUnit.SECONDS)

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.groovy;
+package org.openksavi.sponge.java;
+
+import org.openksavi.sponge.core.correlator.BaseCorrelator;
 
 /**
- * Groovy-specific implementation of the aggregator.
+ * Java-specific implementation of the correlator.
  */
-public abstract class GroovyAggregator extends org.openksavi.sponge.core.aggregator.BaseAggregator {
+public abstract class JavaCorrelator extends BaseCorrelator {
 
 }

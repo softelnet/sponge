@@ -42,7 +42,7 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.util.Processable;
 
 /**
- * Main processing unit that handles triggers, rules and aggregators.
+ * Main processing unit that handles triggers, rules and correlators.
  */
 public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
 
@@ -112,8 +112,8 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     protected boolean supportsControlEventForProcessor(ProcessorAdapter<?> processorAdapter) {
         ProcessorType type = processorAdapter.getType();
 
-        return type == ProcessorType.TRIGGER || type == ProcessorType.RULE || type == ProcessorType.AGGREGATOR ||
-                type == ProcessorType.RULE_GROUP || type == ProcessorType.AGGREGATOR_GROUP;
+        return type == ProcessorType.TRIGGER || type == ProcessorType.RULE || type == ProcessorType.CORRELATOR ||
+                type == ProcessorType.RULE_GROUP || type == ProcessorType.CORRELATOR_GROUP;
     }
 
     /**

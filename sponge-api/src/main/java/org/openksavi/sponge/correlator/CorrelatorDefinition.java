@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.java;
+package org.openksavi.sponge.correlator;
 
-import org.openksavi.sponge.core.aggregator.BaseAggregator;
+import org.openksavi.sponge.EventSetProcessorDefinition;
 
 /**
- * Java-specific implementation of the aggregator.
+ * Correlator definition.
  */
-public abstract class JavaAggregator extends BaseAggregator {
+public interface CorrelatorDefinition extends EventSetProcessorDefinition {
 
 }

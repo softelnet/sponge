@@ -356,13 +356,13 @@ public interface EngineOperations {
     boolean existsRule(String name);
 
     /**
-     * Returns {@code true} if an aggregator named {@code name} exists.
+     * Returns {@code true} if a correlator named {@code name} exists.
      *
      * @param name
-     *            aggregator name.
-     * @return {@code true} if an aggregator named {@code name} exists.
+     *            correlator name.
+     * @return {@code true} if a correlator named {@code name} exists.
      */
-    boolean existsAggregator(String name);
+    boolean existsCorrelator(String name);
 
     /**
      * Sets the global variable value.

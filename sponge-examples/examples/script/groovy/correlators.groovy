@@ -1,35 +1,41 @@
 /**
  * Sponge Knowledge base
- * Using aggregators duration
+ * Using correlators
  */
 
-import org.openksavi.sponge.examples.SampleJavaAggregator
+import org.openksavi.sponge.examples.SampleJavaCorrelator
 
 import java.util.concurrent.atomic.*
 
 void onInit() {
     // Variables for assertions only
     EPS.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
+    EPS.setVariable("hardwareFailureJavaCount", new AtomicInteger(0))
 }
 
-class SampleAggregator extends Aggregator {
+class SampleCorrelator extends Correlator {
     static AtomicBoolean instanceStarted = new AtomicBoolean(false)
     def eventLog = []
 
     void configure() {
         this.eventNames = ["filesystemFailure", "diskFailure"]
-        this.duration = Duration.ofSeconds(2)
     }
     boolean acceptsAsFirst(Event event) {
         return instanceStarted.compareAndSet(false, true)
     }
     void onEvent(Event event) {
         this.eventLog << event
-        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
-    }
-    void onDuration() {
         this.logger.debug("{} - event: {}, log: {}", this.hashCode(), event.name, this.eventLog)
+        //hardwareFailureScriptCount.incrementAndGet()
+        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        if (this.eventLog.size() >= 4) {
+            finish()
+        }
     }
+}
+
+void onLoad() {
+    EPS.enableJava(SampleJavaCorrelator)
 }
 
 void onStartup() {

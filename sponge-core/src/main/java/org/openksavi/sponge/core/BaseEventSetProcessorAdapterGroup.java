@@ -173,7 +173,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     }
 
     /**
-     * Clears this aggregator group.
+     * Clears this correlator group.
      */
     @Override
     public void clear() {

@@ -49,7 +49,7 @@ class AutoRule extends Rule {
     }
 }
 
-class AutoAggregator extends Aggregator {
+class AutoCorrelator extends Correlator {
     void configure() {
         this.eventNames = ["e1", "e2"]
     }

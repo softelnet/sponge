@@ -22,9 +22,9 @@ import org.slf4j.Logger;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
 import org.openksavi.sponge.core.BaseEngineOperations;
 import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
@@ -140,13 +140,13 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     }
 
     @Override
-    public void enableJavaAggregator(Class<? extends Aggregator> aggregatorClass) {
-        engine.getProcessorManager().enableAggregator(knowledgeBase, aggregatorClass);
+    public void enableJavaCorrelator(Class<? extends Correlator> correlatorClass) {
+        engine.getProcessorManager().enableCorrelator(knowledgeBase, correlatorClass);
     }
 
     @Override
-    public void disableJavaAggregator(Class<? extends Aggregator> aggregatorClass) {
-        engine.getProcessorManager().disableAggregator(knowledgeBase, aggregatorClass);
+    public void disableJavaCorrelator(Class<? extends Correlator> correlatorClass) {
+        engine.getProcessorManager().disableCorrelator(knowledgeBase, correlatorClass);
     }
 
     /**

@@ -20,12 +20,12 @@ Instances of event processors, depending on their type, may be created:
 |Rule
 |No
 
-|Aggregator
+|Correlator
 |No
 |===
 
 == Filters
-Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and aggregators). In order to define your own filter, the class inherited from `Filter` should be created. The name of a filter is the name of the class defining this filter.
+Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and correlators). In order to define your own filter, the class inherited from `Filter` should be created. The name of a filter is the name of the class defining this filter.
 
 Every filter should implement abstract `configure` and `accepts` methods:
 
@@ -493,17 +493,17 @@ public class SameSourceJavaRule extends JavaRule { // <1>
 EPS.enableJava(SameSourceJavaRule)
 ----
 
-== Aggregators
-Aggregators are a generalized form of rules. Internally rules and aggregators are two types of vent set processors. Aggregators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+== Correlators
+Correlators are a generalized form of rules. Internally rules and correlators are two types of vent set processors. Correlators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
 
-Aggregators listen to a specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling `finish()` method.
+Correlators listen to a specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling `finish()` method.
 
-An aggregator may be finished:
+A correlator may be finished:
 
 * manually by invoking `finish()` method from inside `onEvent()` method,
 * automatically when `duration` is set and the duration timeout takes place.
 
-Every aggregator should implement abstract `acceptsAsFirst` and `onEvent` methods:
+Every correlator should implement abstract `acceptsAsFirst` and `onEvent` methods:
 
 [source,java]
 ----
@@ -515,80 +515,80 @@ When duration is set up, the `void onDuration()` method should be implemented as
 
 All these methods are explained in the next chapter.
 
-In order to manually enable a previously defined aggregator one of the following methods could be invoked:
+In order to manually enable a previously defined correlator one of the following methods could be invoked:
 
 [source,python]
 ----
-EPS.enable(SomeAggregator)
-EPS.enableJava(SomeJavaAggregator)
+EPS.enable(SomeCorrelator)
+EPS.enableJava(SomeJavaCorrelator)
 ----
 
-Each aggregator defines:
+Each correlator defines:
 
-* event names – event names to which the aggregator listens (mandatory),
+* event names – event names to which the correlator listens (mandatory),
 * displayName – the display name of the rule (optional).
 
 The above values should be set in the `configure` method by using methods `setEventNames()` and `setDisplayName()`. Thanks to many scripting languages `setEventNames()` and `setDisplayName()` setters may be simplified to substitutions, e.g. `eventNames =`, `displayName =`.
 
 === Important methods
-`configure()`:: A configuration callback method that is invoked when the aggregator is being enabled. In this method it should be established for what type of events this aggregator listens. Optionally an aggregator duration could be set. This method is mandatory.
-`init()`:: An initialization callback method that is invoked before creating a new aggregator instance. This method is optional.
-`boolean acceptsAsFirst(Event event)`:: Checks if the event should be accepted as the first event of an aggregator, therefore starting a new working instance. `acceptsAsFirst()` is invoked after `init()`. This method is mandatory.
-`onEvent(Event event)`:: A callback method invoked when an event that an aggregator listens to happens. This method is mandatory.
+`configure()`:: A configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
+`init()`:: An initialization callback method that is invoked before creating a new correlator instance. This method is optional.
+`boolean acceptsAsFirst(Event event)`:: Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. `acceptsAsFirst()` is invoked after `init()`. This method is mandatory.
+`onEvent(Event event)`:: A callback method invoked when an event that a correlator listens to happens. This method is mandatory.
 `onDuration()`:: A callback method invoked when the duration timeout occurs. This method should be implemented if a duration timeout is set. After invoking this callback method, `finish()` is invoked automatically.
-`finish()`:: A final method that should be invoked, in `onEvent(Event event)` method, when the aggregator has done its work. Only by invoking `finish()` this instance of the aggregator is closed and its resources are released.
-`setDuration()`:: Optionally the time how long an aggregator lasts (represented as `java.time.Duration`). The instance of an aggregator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this aggregator the `onDuration()` callback method will be invoked.
-`setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for an aggregator. For details see a description of this flag for rules.
-`setDisplayName(name)`:: The method sets a display name of this aggregator.
+`finish()`:: A final method that should be invoked, in `onEvent(Event event)` method, when the correlator has done its work. Only by invoking `finish()` this instance of the correlator is closed and its resources are released.
+`setDuration()`:: Optionally the time how long a correlator lasts (represented as `java.time.Duration`). The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration()` callback method will be invoked.
+`setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for a correlator. For details see a description of this flag for rules.
+`setDisplayName(name)`:: The method sets a display name of this correlator.
 
-IMPORTANT: Because of aggregators are not singletons the `configure()` method is invoked *only once* while enabling the aggregator. So it should contain only basic configuration as stated before. The `init()` method *must not* contain such configuration because it is invoked every time a new instance of the aggregator is created.
+IMPORTANT: Because of correlators are not singletons the `configure()` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `init()` method *must not* contain such configuration because it is invoked every time a new instance of the correlator is created.
 
 === Example in a script language
-The code presented below defines an aggregator named `SampleAggregator` that listens to events `"filesystemFailure"` and `"diskFailure"` in no particular order. The aggregator is activated only once (`acceptsAsFirst` method) and builds an internal event log list `eventLog` any time a suitable event comes. When `4` fitting events are collected the aggregator will finish.
+The code presented below defines a correlator named `SampleCorrelator` that listens to events `"filesystemFailure"` and `"diskFailure"` in no particular order. The correlator is activated only once (`acceptsAsFirst` method) and builds an internal event log list `eventLog` any time a suitable event comes. When `4` fitting events are collected the correlator will finish.
 
-.Aggregator example
+.Correlator example
 [source,python]
 ----
-class SampleAggregator(Aggregator): # <1>
+class SampleCorrelator(Correlator): # <1>
     instanceStarted = AtomicBoolean(False) # <2>
     def configure(self): # <3>
         self.eventNames = ["filesystemFailure", "diskFailure"] # <4>
     def init(self): # <5>
         self.eventLog = [] # <6>
     def acceptsAsFirst(self, event): # <7>
-        return SampleAggregator.instanceStarted.compareAndSet(False, True) # <8>
+        return SampleCorrelator.instanceStarted.compareAndSet(False, True) # <8>
     def onEvent(self, event): # <9>
         self.eventLog.append(event) # <10>
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog)) # <11>
         if len(self.eventLog) >= 4:
             self.finish() # <12>
 ----
-<1> The definition of the aggregator `SampleAggregator`. The aggregator is represented by a class of the same name.
+<1> The definition of the correlator `SampleCorrelator`. The correlator is represented by a class of the same name.
 <2> Setting a static class variable.
-<3> The aggregator configuration callback method.
-<4> Define that the aggregator is supposed to wait for events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
-<5> The aggregator initialization callback method. It is invoked before `acceptsAsFirst`.
+<3> The correlator configuration callback method.
+<4> Define that the correlator is supposed to wait for events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
+<5> The correlator initialization callback method. It is invoked before `acceptsAsFirst`.
 <6> Setting an initial value to the field `eventLog`.
-<7> The aggregator `acceptsAsFirst` callback method.
-<8> The aggregator will accept as first any event that it listens to but only when no other instance of `SampleAggregator` is created.
-<9> The aggregator `onEvent` callback method.
+<7> The correlator `acceptsAsFirst` callback method.
+<8> The correlator will accept as first any event that it listens to but only when no other instance of `SampleCorrelator` is created.
+<9> The correlator `onEvent` callback method.
 <10> Adds a new event to `eventLog`.
 <11> Logs message.
-<12> This aggregator instance will finish when `4` fitting events are collected into `eventLog`.
+<12> This correlator instance will finish when `4` fitting events are collected into `eventLog`.
 
-The aggregator will be enabled automatically. Then, in case of acceptance of an event, a new instance of an aggregator `SampleAggregator` will be created.
+The correlator will be enabled automatically. Then, in case of acceptance of an event, a new instance of a correlator `SampleCorrelator` will be created.
 
 === Example in Java
-The code presented below defines an aggregator analogous to the one shown above but defined as a Java class.
+The code presented below defines a correlator analogous to the one shown above but defined as a Java class.
 
-.Java aggregator example
+.Java correlator example
 [source,java]
 ----
-public class SampleJavaAggregator extends JavaAggregator { // <1>
+public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 
-    private static final Logger logger = LoggerFactory.getLogger(SampleJavaAggregator.class);
+    private static final Logger logger = LoggerFactory.getLogger(SampleJavaCorrelator.class);
 
-    private static final String VAR_INSTANCE_STARTED = SampleJavaAggregator.class.getSimpleName() + "InstanceStarted";
+    private static final String VAR_INSTANCE_STARTED = SampleJavaCorrelator.class.getSimpleName() + "InstanceStarted";
 
     private List<Event> eventLog = new ArrayList<>(); // <2>
 
@@ -617,21 +617,21 @@ public class SampleJavaAggregator extends JavaAggregator { // <1>
     }
 }
 ----
-<1> The definition of the aggregator `SampleJavaAggregator`. The aggregator is represented by a Java class of the same name.
+<1> The definition of the correlator `SampleJavaCorrelator`. The correlator is represented by a Java class of the same name.
 <2> Setting a class attribute `eventLog`.
-<3> The aggregator configuration callback method.
-<4> Define that the aggregator is supposed to wait for events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
-<5> The aggregator initialization callback method. It is invoked before `acceptsAsFirst`.
+<3> The correlator configuration callback method.
+<4> Define that the correlator is supposed to wait for events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
+<5> The correlator initialization callback method. It is invoked before `acceptsAsFirst`.
 <6> Setting an engine scope variable `VAR_INSTANCE_STARTED` (if not set already).
-<7> The aggregator `acceptsAsFirst` callback method.
-<8> The aggregator will accept as first any event that it listens to but only when no other instance of `SampleJavaAggregator` is created.
-<9> The aggregator `onEvent` callback method.
+<7> The correlator `acceptsAsFirst` callback method.
+<8> The correlator will accept as first any event that it listens to but only when no other instance of `SampleJavaCorrelator` is created.
+<9> The correlator `onEvent` callback method.
 <10> Adds a new event to `eventLog`.
 <11> Logs message.
-<12> This aggregator instance will finish when `4` fitting events are collected into `eventLog`.
+<12> This correlator instance will finish when `4` fitting events are collected into `eventLog`.
 
-.Java aggregator manual registration in the Python knowledge base
+.Java correlator manual registration in the Python knowledge base
 [source,python]
 ----
-EPS.enableJava(SampleJavaAggregator)
+EPS.enableJava(SampleJavaCorrelator)
 ----

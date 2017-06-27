@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.aggregator;
+package org.openksavi.sponge.correlator;
 
 import java.util.List;
 
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 
 /**
- * Aggregator adapter group.
+ * Correlator adapter group.
  */
-public interface AggregatorAdapterGroup extends EventSetProcessorAdapterGroup<AggregatorAdapter> {
+public interface CorrelatorAdapterGroup extends EventSetProcessorAdapterGroup<CorrelatorAdapter> {
 
-    List<AggregatorAdapter> getAggregators();
+    List<CorrelatorAdapter> getCorrelators();
 }

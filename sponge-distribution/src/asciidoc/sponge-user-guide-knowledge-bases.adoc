@@ -13,7 +13,7 @@ The order of loading knowledge bases preserves the order specified in the config
 Generally, script knowledge base files consist of a few parts:
 
 . Import of modules and packages (from the scripting language or Java).
-. Definitions of knowledge base processors (actions, filters, triggers, rules and aggregators).
+. Definitions of knowledge base processors (actions, filters, triggers, rules and correlators).
 . Definitions of callback functions that will be invoked in particular situations:
 +
 .Callback functions
@@ -123,7 +123,7 @@ Processors could be enabled:
 * manually.
 
 === Auto-enable
-{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and aggregators) defined in a knowledge base. This is done just before invoking `onLoad` callback function in the knowledge base.
+{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a knowledge base. This is done just before invoking `onLoad` callback function in the knowledge base.
 
 CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they wouldn't be enabled automatically.
 
@@ -201,7 +201,7 @@ When the {sponge} engine is being reloaded, the previously defined processors wi
 
 WARNING: If auto-enable is on (this is the default setting), then all processors will be enabled after reloading, even processors that have been manually disabled before.
 
-CAUTION: There is a limitation in reloading a knowledge base that uses event set processors (i.e. rules, aggregators). When there are existing instances of event set processors, they will be dismissed.
+CAUTION: There is a limitation in reloading a knowledge base that uses event set processors (i.e. rules, correlators). When there are existing instances of event set processors, they will be dismissed.
 
 == Use of many knowledge base files
 As mentioned before, {sponge} provides the possibility to read a knowledge base from many files. Dividing a knowledge base into a few files allows in an easy way to separate some functionalities.
@@ -271,10 +271,10 @@ print EPS.engine.ruleGroups
 print EPS.engine.ruleGroups[0].rules
 ----
 
-.Print registered aggregator groups.
+.Print registered correlator groups.
 [source,python]
 ----
-print EPS.engine.aggregatorGroups
+print EPS.engine.correlatorGroups
 ----
 
 For more information see {sponge} JavaDoc.

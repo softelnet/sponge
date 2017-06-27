@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.aggregator;
+package org.openksavi.sponge.groovy;
 
-import org.openksavi.sponge.aggregator.AggregatorDefinition;
-import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
-
-public class BaseAggregatorDefinition extends BaseEventSetProcessorDefinition implements AggregatorDefinition {
+/**
+ * Groovy-specific implementation of the correlator.
+ */
+public abstract class GroovyCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator {
 
 }

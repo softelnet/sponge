@@ -14,37 +14,37 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.aggregator;
+package org.openksavi.sponge.core.correlator;
 
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import org.openksavi.sponge.aggregator.AggregatorAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup;
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.event.Event;
 
 /**
- * Aggregator adapter group.
+ * Correlator adapter group.
  */
-public class BaseAggregatorAdapterGroup extends BaseEventSetProcessorAdapterGroup<AggregatorAdapter> implements AggregatorAdapterGroup {
+public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGroup<CorrelatorAdapter> implements CorrelatorAdapterGroup {
 
     /**
-     * Creates a new aggregator group.
+     * Creates a new correlator group.
      *
-     * @param aggregatorDefinition
-     *            aggregator definition.
+     * @param correlatorDefinition
+     *            correlator definition.
      * @param handler
      *            handler.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public BaseAggregatorAdapterGroup(BaseEventSetProcessorDefinition aggregatorDefinition,
-            EventSetProcessorMainProcessingUnitHandler<AggregatorAdapterGroup, AggregatorAdapter> handler) {
-        super(aggregatorDefinition, (EventSetProcessorMainProcessingUnitHandler) handler);
+    public BaseCorrelatorAdapterGroup(BaseEventSetProcessorDefinition correlatorDefinition,
+            EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter> handler) {
+        super(correlatorDefinition, (EventSetProcessorMainProcessingUnitHandler) handler);
     }
 
     @Override
@@ -54,16 +54,16 @@ public class BaseAggregatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
 
     @Override
     public ProcessorType getType() {
-        return ProcessorType.AGGREGATOR_GROUP;
+        return ProcessorType.CORRELATOR_GROUP;
     }
 
     /**
-     * Checks if there is a need for creating a new aggregator instance.
+     * Checks if there is a need for creating a new correlator instance.
      *
      * @param event
      *            event.
      * @return {@code true} if there is a need for creating
-     *         a new aggregator instance.
+     *         a new correlator instance.
      */
     @Override
     public boolean needNewInstance(Event event) {
@@ -71,8 +71,8 @@ public class BaseAggregatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     }
 
     @Override
-    protected BaseAggregatorAdapter createNewEventSetProcessorAdapter() {
-        return new BaseAggregatorAdapter(getDefinition());
+    protected BaseCorrelatorAdapter createNewEventSetProcessorAdapter() {
+        return new BaseCorrelatorAdapter(getDefinition());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BaseAggregatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     }
 
     @Override
-    public List<AggregatorAdapter> getAggregators() {
+    public List<CorrelatorAdapter> getCorrelators() {
         return getEventSetProcessorAdapters();
     }
 }

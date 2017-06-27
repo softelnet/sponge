@@ -26,11 +26,11 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.event.Event;
 
-public class SampleJavaAggregator extends org.openksavi.sponge.java.JavaAggregator {
+public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelator {
 
-    private static final Logger logger = LoggerFactory.getLogger(SampleJavaAggregator.class);
+    private static final Logger logger = LoggerFactory.getLogger(SampleJavaCorrelator.class);
 
-    private static final String VAR_INSTANCE_STARTED = SampleJavaAggregator.class.getSimpleName() + "InstanceStarted";
+    private static final String VAR_INSTANCE_STARTED = SampleJavaCorrelator.class.getSimpleName() + "InstanceStarted";
 
     private List<Event> eventLog = new ArrayList<>();
 

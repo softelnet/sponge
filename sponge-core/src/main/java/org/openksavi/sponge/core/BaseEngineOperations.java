@@ -284,7 +284,7 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public boolean existsAggregator(String name) {
+    public boolean existsCorrelator(String name) {
         return engine.getMainProcessingUnit().existsProcessor(name);
     }
 

@@ -42,14 +42,14 @@ import com.google.common.collect.Maps;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.aggregator.Aggregator;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.groovy.GroovyAction;
-import org.openksavi.sponge.groovy.GroovyAggregator;
+import org.openksavi.sponge.groovy.GroovyCorrelator;
 import org.openksavi.sponge.groovy.GroovyConstants;
 import org.openksavi.sponge.groovy.GroovyFilter;
 import org.openksavi.sponge.groovy.GroovyPlugin;
@@ -90,7 +90,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
             Filter.class, GroovyFilter.class,
             Trigger.class, GroovyTrigger.class,
             Rule.class, GroovyRule.class,
-            Aggregator.class, GroovyAggregator.class
+            Correlator.class, GroovyCorrelator.class
             );
     //@formatter:on
 

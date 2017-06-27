@@ -19,13 +19,13 @@ package org.openksavi.sponge.engine.processing;
 import java.util.List;
 
 import org.openksavi.sponge.EventProcessorAdapter;
-import org.openksavi.sponge.aggregator.AggregatorAdapterGroup;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.rule.RuleAdapterGroup;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 
 /**
- * Main processing unit that handles triggers, rules and aggregators.
+ * Main processing unit that handles triggers, rules and correlators.
  */
 public interface MainProcessingUnit extends ProcessingUnit<EventProcessorAdapter<?>> {
 
@@ -53,11 +53,11 @@ public interface MainProcessingUnit extends ProcessingUnit<EventProcessorAdapter
     List<RuleAdapterGroup> getRuleAdapterGroups();
 
     /**
-     * Returns the list of aggregator adapter groups.
+     * Returns the list of correlator adapter groups.
      *
-     * @return the list of aggregator adapter groups.
+     * @return the list of correlator adapter groups.
      */
-    List<AggregatorAdapterGroup> getAggregatorAdapterGroups();
+    List<CorrelatorAdapterGroup> getCorrelatorAdapterGroups();
 
     /**
      * Returns {@code true} if a processor of type {@code type} named {@code name} exists.

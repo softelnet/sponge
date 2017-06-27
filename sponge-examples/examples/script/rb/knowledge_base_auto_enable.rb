@@ -47,7 +47,7 @@ class AutoRule < Rule
     end
 end
 
-class AutoAggregator < Aggregator
+class AutoCorrelator < Correlator
     def configure
         self.eventNames = ["e1", "e2"]
     end
