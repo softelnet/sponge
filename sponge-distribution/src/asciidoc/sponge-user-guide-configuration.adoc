@@ -23,7 +23,7 @@ In a general form an XML configuration file is built as in the following example
     </properties>
 
     <!-- Engine configuration section -->
-    <engine>
+    <engine name="SampleSponge">
         <mainProcessingUnitThreadCount>6</mainProcessingUnitThreadCount>
     </engine>
 
@@ -61,7 +61,7 @@ Properties could also be used as an {sponge} variables for session (engine) scop
 In the above example a property `sponge.home` has been defined and it could be used e.g. in plugins section.
 
 === Engine configuration
-An engine configuration section (`<engine>`) contains configuration parameters of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
+An engine configuration section (`<engine>`) contains configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
 
 .Engine parameters
 [cols="2,5,1"]

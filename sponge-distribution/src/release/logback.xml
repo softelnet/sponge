@@ -6,6 +6,8 @@
 
     <jmxConfigurator />
 
+<!--     <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/> -->
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
@@ -16,15 +18,25 @@
     </appender>
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${sponge.home}/logs/sponge.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${sponge.home}/logs/sponge-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>100MB</maxFileSize>
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${sponge.home}/logs/sponge-%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%date{ISO8601} [%thread] %level %logger - %msg%n</pattern>
         </encoder>
     </appender>
+
+<!--     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender"> -->
+<!--         <file>${sponge.home}/logs/sponge-${bySecond}.log</file> -->
+<!--         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"> -->
+<!--             <fileNamePattern>${sponge.home}/logs/sponge-${bySecond}-%d{yyyy-MM-dd}.%i.log</fileNamePattern> -->
+<!--             <maxFileSize>100MB</maxFileSize> -->
+<!--         </rollingPolicy> -->
+<!--         <encoder> -->
+<!--             <pattern>%date{ISO8601} [%thread] %level %logger - %msg%n</pattern> -->
+<!--         </encoder> -->
+<!--     </appender> -->
 
     <logger name="org.openksavi" level="info" />
     <logger name="org.openksavi.sponge.core.rule" level="error" />

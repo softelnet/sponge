@@ -80,6 +80,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
                     engine.reload();
                 } else {
                     engine.shutdown();
+                    System.exit(0);
                 }
             } catch (Exception e) {
                 logger.error("Signal handler failed", e);

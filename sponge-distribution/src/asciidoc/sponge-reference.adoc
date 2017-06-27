@@ -1,5 +1,5 @@
 = Sponge Reference Documentation
-Marcin Paś / Softelnet <marcin.pas@softelnet.com>
+Marcin Paś
 This is a reference documentation for project {sponge}.
 
 include::sponge-overview.adoc[leveloffset=+1]

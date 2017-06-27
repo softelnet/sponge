@@ -26,7 +26,7 @@ public class VersionInfo {
 
     private static final String VERSION_PROPERTIES = "/org/openksavi/sponge/version.properties";
 
-    private static final String DESCRIPTION = "Sponge";
+    private static final String PRODUCT = "Sponge";
 
     private String version;
 
@@ -62,6 +62,22 @@ public class VersionInfo {
      * @return the engine description.
      */
     public String getDescription() {
-        return DESCRIPTION + " " + getVersion();
+        return PRODUCT + " " + getVersion();
+    }
+
+    /**
+     * Returns the engine description.
+     *
+     * @param engineName
+     *            the engine name.
+     *
+     * @return the engine description.
+     */
+    public String getDescription(String engineName) {
+        return PRODUCT + (engineName != null ? "(" + engineName + ")" : "") + " " + getVersion();
+    }
+
+    public String getProduct() {
+        return PRODUCT;
     }
 }

@@ -16,28 +16,42 @@
 
 package org.openksavi.sponge.camel;
 
+import java.util.Map;
+import java.util.Objects;
+
 import org.apache.camel.Exchange;
 
-import org.openksavi.sponge.core.event.AttributeMapEvent;
+import com.google.common.collect.ImmutableMap;
+
+import org.openksavi.sponge.core.event.BaseEvent;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
  * Sponge event containing a Camel message body.
  */
-public class SpongeCamelEvent extends AttributeMapEvent {
+public class SpongeCamelEvent extends BaseEvent {
 
     private static final long serialVersionUID = -4656303834851564743L;
+
+    public static final String ATTR_ROUTE_ID = "routeId";
+
+    public static final String ATTR_BODY = "body";
+
+    public static final String ATTR_HEADERS = "headers";
 
     private final String routeId;
 
     private Object body;
 
-    public SpongeCamelEvent(String name, EventClonePolicy clonePolicy, String routeId, Object body) {
+    private Map<String, Object> headers;
+
+    public SpongeCamelEvent(String name, EventClonePolicy clonePolicy, String routeId, Object body, Map<String, Object> headers) {
         super(name, clonePolicy);
 
         this.routeId = routeId;
         this.body = body;
+        this.headers = headers;
     }
 
     public Object getBody() {
@@ -52,14 +66,67 @@ public class SpongeCamelEvent extends AttributeMapEvent {
         return routeId;
     }
 
+    public Map<String, Object> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, Object> headers) {
+        this.headers = headers;
+    }
+
+    @Override
+    public Object get(String name) {
+        switch (name) {
+        case ATTR_ROUTE_ID:
+            return routeId;
+        case ATTR_BODY:
+            return body;
+        case ATTR_HEADERS:
+            return headers;
+        default:
+            throw new IllegalArgumentException("Unknown attribute " + name);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public SpongeCamelEvent set(String name, Object value) {
+        switch (name) {
+        case ATTR_ROUTE_ID:
+            if (!Objects.equals(routeId, value)) {
+                throw new IllegalArgumentException("Attribute " + name + " can't be changed");
+            }
+        case ATTR_BODY:
+            body = value;
+            break;
+        case ATTR_HEADERS:
+            headers = (Map<String, Object>) value;
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown attribute " + name);
+        }
+
+        return this;
+    }
+
+    @Override
+    public boolean has(String name) {
+        return ATTR_ROUTE_ID.equals(name) || ATTR_BODY.equals(name) || ATTR_HEADERS.equals(name);
+    }
+
+    @Override
+    public Map<String, Object> getAll() {
+        return ImmutableMap.of(ATTR_ROUTE_ID, routeId, ATTR_BODY, body, ATTR_HEADERS, headers);
+    }
+
     public static SpongeCamelEvent create(Engine engine, String name, Exchange exchange) {
         return new SpongeCamelEvent(name, engine.getConfigurationManager().getEventClonePolicy(),
-                exchange.getUnitOfWork().getRouteContext().getRoute().getId(), exchange.getIn().getBody());
+                exchange.getUnitOfWork().getRouteContext().getRoute().getId(), exchange.getIn().getBody(), exchange.getIn().getHeaders());
     }
 
     public static SpongeCamelEvent create(Engine engine, Exchange exchange) {
         String exchangRouteId = exchange.getUnitOfWork().getRouteContext().getRoute().getId();
         return new SpongeCamelEvent(exchangRouteId, engine.getConfigurationManager().getEventClonePolicy(), exchangRouteId,
-                exchange.getIn().getBody());
+                exchange.getIn().getBody(), exchange.getIn().getHeaders());
     }
 }

@@ -63,6 +63,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** The engine home directory. */
     private String home;
 
+    /** The engine name. */
+    private String engineName;
+
     /** Root configuration. */
     private CommonsConfiguration rootConfig;
 
@@ -129,6 +132,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         applySystemProperties();
         applyVariableProperties();
         engineConfig = rootConfig.getChildConfiguration(ConfigurationConstants.TAG_ENGINE_CONFIG);
+        engineName = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_NAME, null);
         setupEngineParameters();
 
         if (home == null) {
@@ -362,6 +366,16 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         return engineConfig;
     }
 
+    @Override
+    public String getEngineName() {
+        return engineName;
+    }
+
+    @Override
+    public void setEngineName(String engineName) {
+        this.engineName = engineName;
+    }
+
     /**
      * Returns the number of the Main Processing Unit worker threads.
      *
@@ -432,6 +446,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         //@formatter:off
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("home", home)
+                .append("engineName", engineName)
                 .append("mainProcessingUnitThreadCount", mainProcessingUnitThreadCount)
                 .append("asyncEventSetProcessorExecutorThreadCount", asyncEventSetProcessorExecutorThreadCount)
                 .append("eventQueueCapacity", eventQueueCapacity)

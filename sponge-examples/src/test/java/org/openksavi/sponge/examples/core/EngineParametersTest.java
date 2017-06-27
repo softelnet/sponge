@@ -32,6 +32,7 @@ public class EngineParametersTest {
         engine.startup();
 
         try {
+            assertEquals("EngineParametersTest", engine.getName());
             assertEquals(21, engine.getConfigurationManager().getMainProcessingUnitThreadCount());
             assertEquals(engine.getConfigurationManager().getMainProcessingUnitThreadCount(),
                     engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());

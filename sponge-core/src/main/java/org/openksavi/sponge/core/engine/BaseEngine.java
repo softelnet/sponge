@@ -81,6 +81,9 @@ public class BaseEngine implements Engine {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseEngine.class);
 
+    /** The name of this engine. May be {@code null}. */
+    protected String name;
+
     /** Engine module provider. */
     protected EngineModuleProvider moduleProvider;
 
@@ -186,6 +189,15 @@ public class BaseEngine implements Engine {
      */
     public BaseEngine() {
         //
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -347,6 +359,7 @@ public class BaseEngine implements Engine {
                 clearRememberedException();
 
                 configurationManager.startup();
+                setupEngineName();
 
                 configureEngineModules();
 
@@ -384,6 +397,15 @@ public class BaseEngine implements Engine {
             } catch (Throwable ex) {
                 logger.warn(module.getName(), ex);
             }
+        }
+    }
+
+    /**
+     * Setup engine name.
+     */
+    protected void setupEngineName() {
+        if (name == null) {
+            name = configurationManager.getEngineName();
         }
     }
 
@@ -711,7 +733,7 @@ public class BaseEngine implements Engine {
      */
     @Override
     public String getDescription() {
-        return versionInfo.getDescription();
+        return versionInfo.getDescription(getName());
     }
 
     /**

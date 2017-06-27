@@ -59,6 +59,21 @@ public interface ConfigurationManager extends EngineModule {
     String getHome();
 
     /**
+     * Returns the engine name.
+     *
+     * @return the engine name.
+     */
+    String getEngineName();
+
+    /**
+     * Sets the engine name.
+     *
+     * @param engineName
+     *            the engine name.
+     */
+    void setEngineName(String engineName);
+
+    /**
      * Returns the number of the Main Processing Unit worker threads.
      *
      * @return the number of the Main Processing Unit worker threads.

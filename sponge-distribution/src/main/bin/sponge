@@ -7,7 +7,7 @@ else
 fi
 
 if [ -z $JAVA_OPTIONS ]; then
-    JAVA_OPTIONS=-Xmx512m -Xms256m -XX:+UseG1GC -XX:+UseStringDeduplication
+    JAVA_OPTIONS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:+UseStringDeduplication"
 fi
 
 if [ -z $SPONGE_HOME ]; then
@@ -20,5 +20,9 @@ if [ -z $COLUMNS ]; then
     fi
 fi
 
+trap 'kill -TERM $PID' TERM INT
+trap 'kill -HUP $PID' HUP
 
 $JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml ${mainClass} "$@"
+
+trap - TERM INT HUP

@@ -175,6 +175,12 @@ Where `pid` is the process id of the Java executable that started the {sponge} p
 
 IMPORTANT: See User Guide for limitations of reloading knowledge bases.
 
+.Terminating a {sponge} process running in the background
+[source,bash,subs="verbatim,attributes"]
+----
+pkill -TERM -P pid
+----
+
 ==== Windows
 First steps:
 

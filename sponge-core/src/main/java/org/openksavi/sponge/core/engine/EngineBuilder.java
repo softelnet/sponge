@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EngineParameters;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -43,7 +42,7 @@ import org.openksavi.sponge.spi.ProcessingUnitProvider;
 /**
  * Engine builder.
  */
-public class EngineBuilder<T extends Engine> {
+public class EngineBuilder<T extends BaseEngine> {
 
     protected T engine;
 
@@ -55,6 +54,11 @@ public class EngineBuilder<T extends Engine> {
 
     public EngineBuilder(T engine) {
         this.engine = engine;
+    }
+
+    public EngineBuilder<T> name(String name) {
+        engine.setName(name);
+        return this;
     }
 
     public EngineBuilder<T> moduleProvider(EngineModuleProvider moduleProvider) {

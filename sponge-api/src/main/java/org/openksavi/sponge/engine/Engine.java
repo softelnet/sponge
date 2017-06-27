@@ -42,6 +42,16 @@ import org.openksavi.sponge.util.Manageable;
  */
 public interface Engine extends Manageable {
 
+    /**
+     * Returns this engine name. May be {@code null}.
+     *
+     * @return this engine name.
+     */
+    String getName();
+
+    /**
+     * Initialized the engine (before starting up).
+     */
     void init();
 
     /**

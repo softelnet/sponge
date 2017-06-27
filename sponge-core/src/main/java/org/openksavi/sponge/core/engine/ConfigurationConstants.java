@@ -65,6 +65,8 @@ public final class ConfigurationConstants {
 
     public static final String PROP_ATTRIBUTE_SYSTEM = "system";
 
+    public static final String ENGINE_ATTRIBUTE_NAME = "name";
+
     private ConfigurationConstants() {
         //
     }
