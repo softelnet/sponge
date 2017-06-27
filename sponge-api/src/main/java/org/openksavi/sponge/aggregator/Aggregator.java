@@ -34,7 +34,7 @@ public interface Aggregator extends EventSetProcessor<AggregatorAdapter> {
     boolean acceptsAsFirst(Event event);
 
     /**
-     * Callback invoked when event occurs.
+     * Callback invoked when event happens.
      *
      * @param event
      *            event.

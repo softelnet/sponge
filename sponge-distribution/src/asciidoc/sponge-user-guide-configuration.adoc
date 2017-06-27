@@ -1,11 +1,11 @@
 = Configuration
 {sponge} may be configured:
 
-* in the XML configuration file,
-* using the Engine Builder API.
+* in an XML configuration file,
+* using an Engine Builder API.
 
 == XML configuration file
-In a general form the XML configuration file is built as in the following example:
+In a general form an XML configuration file is built as in the following example:
 
 .Example XML configuration file
 [source,xml]
@@ -47,12 +47,12 @@ In a general form the XML configuration file is built as in the following exampl
 </sponge>
 ----
 
-The precise specification of the configuration XML file is provided by a schema file http://www.openksavi.org/sponge/schema/config.xsd[`config.xsd`^].
+The precise specification of a configuration XML file is provided by a schema file http://www.openksavi.org/sponge/schema/config.xsd[`config.xsd`^].
 
-The configuration file is searched for using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration^] (e.g. first in the file system and then in the classpath). If not found, the configuration file is searched in {sponge} home directory (may be provided as a Java system property `sponge.home`).
+A configuration file is searched for using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration^] (e.g. first in the file system and then in the classpath). If not found, a configuration file is searched in {sponge} home directory (may be provided as a Java system property `sponge.home`).
 
 === Properties configuration
-The properties configuration section (`properties`) is used for setting the configuration properties. Configuration properties may be used in the configuration file.
+A properties configuration section (`properties`) is used for setting a configuration properties. Configuration properties may be used in other places in a configuration file.
 
 Moreover properties could be used as Java system properties if attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
 
@@ -61,23 +61,23 @@ Properties could also be used as an {sponge} variables for session (engine) scop
 In the above example a property `sponge.home` has been defined and it could be used e.g. in plugins section.
 
 === Engine configuration
-The engine configuration section (`<engine>`) contains configuration parameters of the {sponge} engine.
+An engine configuration section (`<engine>`) contains configuration parameters of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
 
 .Engine parameters
 [cols="2,5,1"]
 |===
 |Parameter |Description |Default value
 
-|`mainProcessingUnitThreadCount`
+|*`mainProcessingUnitThreadCount`*
 |The number of Main Processing Unit worker threads. You could increase this parameter if your knowledge bases require concurrent processing of many events by triggers, rules or aggregators.
 |5
 
-|`asyncEventSetProcessorExecutorThreadCount`
+|*`asyncEventSetProcessorExecutorThreadCount`*
 |The number of threads used by an event set processor executor for asynchronous processing of events by rules and aggregators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or aggregators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
 |`5`
 
-|`eventQueueCapacity`
-|The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to the reasonable value taking into account the number of events, event size, number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
+|*`eventQueueCapacity`*
+|The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to a reasonable value taking into account a number of events, an event size, a number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
 |`-1`
 
 |`eventClonePolicy`
@@ -107,7 +107,7 @@ The engine configuration section (`<engine>`) contains configuration parameters 
 
 
 === Knowledge bases configuration
-The knowledge bases configuration section (`<knowledgeBases>`) lists all script knowledge bases that are to be loaded into the {sponge}.
+A knowledge bases configuration section (`<knowledgeBases>`) lists all script knowledge bases that are to be loaded into the engine.
 
 Each `<knowledgeBase>` tag contains:
 
@@ -130,7 +130,7 @@ Each `<knowledgeBase>` tag contains:
 |===
 
 === Plugins configuration
-The plugins configuration section (`<plugins>`) contains plugin definitions (`<plugin>`) built as follows:
+A plugins configuration section (`<plugins>`) contains plugin definitions (`<plugin>`) built as follows:
 
 .Plugin configuration attributes
 [cols="1,1,5"]
@@ -158,7 +158,7 @@ Inside a `<plugin>` element you may provide a custom plugin configuration sectio
 
 [[engine-builder-api]]
 == Engine Builder API
-Engine Builder API is provided by `DefaultEngine.builder()` static method that returns `EngineBuilder` instance. This API follows the builder design pattern.
+Engine Builder API is provided by `DefaultEngine.builder()` static method that returns `EngineBuilder` instance. This API follows a builder design pattern.
 
 .Example of configuration using Engine Builder API.
 [source,java]
@@ -181,7 +181,7 @@ engine.getConfigurationManager().setEventClonePolicy(EventClonePolicy.DEEP);
 engine.startup();
 ----
 
-Engine Builder API provides a method to read an XML configuration file `config()` as well.
+Engine Builder API provides a method `config()` to read an XML configuration file as well.
 
 .Example of using an XML configuration file in Engine Builder API.
 [source,java]

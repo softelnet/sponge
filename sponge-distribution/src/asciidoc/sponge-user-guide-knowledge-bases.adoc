@@ -49,7 +49,7 @@ When {sponge} is starting, callback functions are invoked in the following order
 . `onLoad()`,
 . `onStartup()`.
 
-When the knowledge base is reloaded, callback functions are invoked in the following order:
+When a knowledge base is reloaded, callback functions are invoked in the following order:
 
 . `onBeforeReload()` executed in the previous version of the reloaded knowledge base,
 . executing all knowledge base files as scripts, i.e. executing the main body of the script files,
@@ -191,7 +191,7 @@ When the same name is used for a new processor, the previous definition will be 
 ****
 
 == Reloading
-While the system is working a situation may occur that there will be a need for a dynamic modification of event processors, for example to add a new rule or remove an existing one. It is possible to do it without the need of shutting down and then starting the system again. However, depending on the specific interactions and taking into account differences in third-party implementations of scripting languages, it sometimes may lead to problems, so it should be used carefully.
+While the system is working a situation may happen that there will be a need for a dynamic modification of event processors, for example to add a new rule or remove an existing one. It is possible to do it without the need of shutting down and then starting the system again. However, depending on the specific interactions and taking into account differences in third-party implementations of scripting languages, it sometimes may lead to problems, so it should be used carefully.
 
 When {sponge} global variables are used (session or knowledge base interpreter scope) and you don't want them to be changed after reloading of the knowledge base, you should place their declarations or definitions in `onInit()` callback functions rather than simply in the main script or in `onLoad()`. That is because the main script and `onLoad()` are always executed during reloading but `onInit()` function is not.
 

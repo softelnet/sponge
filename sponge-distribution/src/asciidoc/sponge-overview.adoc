@@ -23,7 +23,8 @@ The main features of {sponge}:
 
 * provides a concurrent processing of incoming events,
 * allows generating and scheduling of events (e.g. supports cron notation),
-* supports writing knowledge bases in several scripting languages (there is no need to learn yet another notation),
+* supports writing knowledge bases in several scripting languages,
+* there is no need to learn yet another notation/DSL, however you have to learn at least the basics of the {sponge} API,
 * allows embedding in a custom Java application (using Maven) or could be used as a standalone command-line application,
 * supports connecting with a large number of external systems by integration with http://camel.apache.org[Apache Camel^],
 * provides own Apache Camel component for including {sponge} engine in any Camel route,
@@ -61,7 +62,7 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 
 == Considerations
 
-* Because of {sponge} doesn't introduce its own notation for knowledge bases, it provides a shorter learning curve for users that know one of the supported scripting languages. However it could lack more sophisticated features and could be less optimized for certain uses than other solutions. For example you specify event conditions by writing any code in a scripting language that is to be executed when a matching event occurs. On one hand it gives you a flexibility and on the other hand it doesn't provide optimizations that could be possible if, for example, a strict temporal reasoning notation is used.
+* Because of {sponge} doesn't introduce its own notation for knowledge bases, it provides a shorter learning curve for users that know one of the supported scripting languages. However it could lack more sophisticated features and could be less optimized for certain uses than other solutions. For example you specify event conditions by writing any code in a scripting language that is to be executed when a matching event happens. On one hand it gives you a flexibility and on the other hand it doesn't provide optimizations that could be possible if, for example, a strict temporal reasoning notation is used.
 * Currently {sponge} doesn't provide persistence out of the box.
 
 

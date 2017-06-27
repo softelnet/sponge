@@ -167,11 +167,14 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
             });
 
             if (!commandLine.hasOption(OPTION_CONFIG) && !commandLine.hasOption(OPTION_KNOWLEDGE_BASE)) {
-                throw new StandaloneInitializationException("An Sponge XML configuration file or a knowledge base file(s) should be provided.");
+                throw new StandaloneInitializationException(
+                        "An Sponge XML configuration file or a knowledge base file(s) should be provided.");
             }
 
             // Apply standard parameters.
             super.build();
+
+            applyDefaultParameters();
 
             if (commandLine.hasOption(OPTION_INTERACTIVE)) {
                 InteractiveMode interactiveMode = new InteractiveMode(engine, commandLine.getOptionValue(OPTION_INTERACTIVE));
@@ -219,6 +222,13 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         }
 
         return engine;
+    }
+
+    protected void applyDefaultParameters() {
+        engine.getDefaultParameters().setMainProcessingUnitThreadCount(StandaloneConstants.MAIN_PROCESSING_UNIT_THREAD_COUNT);
+        engine.getDefaultParameters()
+                .setAsyncEventSetProcessorExecutorThreadCount(engine.getDefaultParameters().getMainProcessingUnitThreadCount());
+        engine.getDefaultParameters().setEventQueueCapacity(StandaloneConstants.EVENT_QUEUE_CAPACITY);
     }
 
     protected void printHelp(Options options) {

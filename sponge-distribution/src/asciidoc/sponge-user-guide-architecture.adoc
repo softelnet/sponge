@@ -1,5 +1,5 @@
 = Architecture
-The figure below presents the architecture of the {sponge} system.
+The figure below presents an architecture of the {sponge} system.
 
 image::engine_architecture.svg[title="Architecture"]
 
@@ -11,7 +11,7 @@ The {sponge} engine consists of the following components.
 |Engine component |Description
 
 |Configuration Manager
-|A module responsible for reading of the configuration.
+|A module responsible for reading of a configuration.
 
 |Plugin Manager
 |A module responsible for managing plugins.
@@ -20,7 +20,7 @@ The {sponge} engine consists of the following components.
 |A module responsible for managing of knowledge bases. Scripting knowledge bases are read by interpreters. For every knowledge base there is one instance of an interpreter.
 
 |Event Scheduler, Cron
-|Modules representing schedulers of future events that are to be added into the input event queue.
+|Modules representing schedulers of future events that are to be added into the Input Event Queue.
 
 |Input Event Queue
 |An input queue of events that are sent to {sponge}. Events can get to this queue form different sources: plugins, Event Scheduler, Cron or knowledge bases.
@@ -29,7 +29,7 @@ The {sponge} engine consists of the following components.
 |Responsible for filtering events. It is also a registry of enabled filters.
 
 |Main Event Queue
-|A queue of events that passed the filters and are to be processes by other event processors in the Main Processing Unit.
+|A queue of events that passed all filters and are to be processes by other event processors in the Main Processing Unit.
 
 |Main Processing Unit
 |Responsible for processing events by triggers, rules and aggregators. It is also a registry of such event processors.

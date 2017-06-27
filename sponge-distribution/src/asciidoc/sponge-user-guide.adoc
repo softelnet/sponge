@@ -19,7 +19,7 @@ include::sponge-user-guide-knowledge-bases.adoc[leveloffset=+2]
 === Events
 Events are the basic element of processing in {sponge}. They have standard attributes such as id, name, time and priority, that are associated with each event instance.
 
-The name of the event is also the type of the event, so all events than have the same name are of the same type. Event names should follow Java naming conventions for variable names.
+The name of an event is also the type of this event, so all events than have the same name are of the same type. Event names should follow Java naming conventions for variable names.
 
 These attributes could be read by invoking functions:
 
@@ -42,7 +42,7 @@ A priority defines a level of the importance of an event. Events are added to an
 
 Each event is given a priority `0` by default. *For standard events the priority always equals to `0` and cannot be modified.* 
 
-The priority may be assigned only to control events.
+A priority may be assigned only to control events.
 
 ==== Typical event processing
 In order to process an event there must be an event processor listening to events of that type (the types of events are recognized by their names). So this steps should be taken:
@@ -125,7 +125,7 @@ Types of processors:
 
 * *Event processors* - processors that perform specified operations using events they listen to.
 ** *Filters* - event processors used for allowing only certain events to be later processed by other event processors.
-** *Triggers* -  event processors that execute a specified code when an event occurs.
+** *Triggers* -  event processors that execute a specified code when an event happens.
 ** *Event set processors* - event processors that correlate and process sets of events.
 *** *Rules* - event set processors that correlate ordered sequences of events.
 *** *Aggregators* - event set processors that are used to implement any complex event processing that isn't provided by filters, triggers or rules.
@@ -566,7 +566,7 @@ Event flow:
 * Events named `news` are logged by `LogNewsTrigger` trigger.
 * When there are no new `news` events (that passed filters) for a specified time, then `alarm` event is sent. This is done by `NoNewNewsAlarmRule` rule.
 * `LatestNewsAggregator` aggregator listens to `news` events and stores the latest news in `storagePlugin` plugin in a Python `deque`. The number of latest news is configured as `latestNewsMaxSize` property.
-* When `alarm` event occurs, this fact is logged by `AlarmTrigger` trigger using `echoPlugin` plugin and `EmphasizeAction` action.
+* When `alarm` event happens, this fact is logged by `AlarmTrigger` trigger using `echoPlugin` plugin and `EmphasizeAction` action.
 
 
 .Main class - NewsExampleMain
@@ -631,7 +631,7 @@ Event flow:
 * RSS feeds are read from external sources, transformed to {sponge} events and sent to the {sponge} engine. This is done in Camel routes.
 * Because of `main` knowledge base is the same as in the previous example, so are the event flow parts here.
 * After time configured as a property `durationOfReadingRss` Camel routes that read RSS feeds from external sources are stopped. It simulates lack of new news. This is done in `simulator` knowledge base.
-* When `alarm` event occurs, not only `AlarmTrigger` (as described in the previous example) handles that event, but here also `ForwardAlarmTrigger` trigger, defined in `consumer` knowledge base. It sends the alarm message to:
+* When `alarm` event happens, not only `AlarmTrigger` (as described in the previous example) handles that event, but here also `ForwardAlarmTrigger` trigger, defined in `consumer` knowledge base. It sends the alarm message to:
 ** all Camel endpoints that use the Sponge engine as a consumer in their routes,
 ** to a specific endpoint given as URI.
 

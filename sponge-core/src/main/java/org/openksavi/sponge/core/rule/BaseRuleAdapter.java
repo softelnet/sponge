@@ -195,7 +195,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     protected boolean shouldAddToEventTreeForNMode(TreeNode<Event> parentNode, Mutable<TreeNode<Event>> newNodeHolder, Event event) {
         boolean result = false;
 
-        // If the event is expected NOT to be, since this is NONE mode but occurred anyway.
+        // If the event is expected NOT to happen, since this is NONE mode, but happened anyway.
         if (isEventExpected(newNodeHolder.getValue().getLevel(), event)) {
             // Check conditions for this event.
             if (checkConditions(newNodeHolder.getValue())) {
@@ -206,10 +206,10 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
             }
         }
 
-        // We need only one node marking NONE event that has not occurred, so others are removed.
+        // We need only one node marking NONE event that has not happened, so others are removed.
         parentNode.getChildren().subList(1, parentNode.getChildren().size()).clear();
 
-        // Empty node marks the event that hasn't occurred, so the value of the node is null.
+        // Because an event hasn't happened, the value of the node will be set to null.
         TreeNode<Event> emptyNode = parentNode.getChildren().get(0);
         if (emptyNode.getValue() != null) {
             emptyNode.setValue(null);

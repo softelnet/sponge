@@ -123,6 +123,8 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
      *            an event.
      *
      * @return {@code true} if the event has been processed by at least one adapter.
+     * @throws java.lang.InterruptedException
+     *             if interrupted.
      */
     protected boolean processEvent(Event event) throws InterruptedException {
         if (event instanceof ControlEvent) {

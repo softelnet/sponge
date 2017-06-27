@@ -10,7 +10,7 @@ Event processors are objects that listen to certain events and perform specified
 ****
 Filter:: Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and aggregators).
 
-Trigger:: Triggers execute specified operations when an appropriate event occurs.
+Trigger:: Triggers execute specified operations when an appropriate event happens.
 
 Rule:: Rules are used to detect correlations (temporal or logical) between events.
 
@@ -29,11 +29,11 @@ The main advantage of scripting knowledge bases is a possibility of modification
 
 Basic features of a knowledge base:
 
-* contains the logic of event processing,
+* contains a logic of event processing,
 * defines callback functions performed in certain states of the system (e.g. on startup, on shutdown).
 
 === Plugins
-The connection between the outside world and knowledge bases is provided by plugins.
+The connection between outside world and knowledge bases is provided by plugins.
 
 === Event flow
 The figure below shows event flow in the {sponge} engine.
@@ -42,9 +42,9 @@ image::engine_event_flow.svg[title="Event flow"]
 
 .Event flow in event processors
 ****
-Filter:: An event that is put into the Input Event Queue goes through defined filters. If the event hasn't been accepted by one or more of the filters, the event is discarded.
+Filter:: An event that is put into the Input Event Queue goes through defined filters. If the event hasn't been accepted by one or more of  the filters, the event is discarded.
 
-Trigger:: If there is a trigger listening for an event that successfully passed the filters, than the body of the trigger is executed.
+Trigger:: If there is a trigger listening for an event that successfully passed the filters, than a body of this trigger is executed.
 
 Rule:: If there is a rule that listens to that event, the event will be processed by that rule. In this case the engine will:
 +
@@ -275,10 +275,10 @@ class HelloWorldTrigger(Trigger): # <1>
 def onStartup(): # <6>
     EPS.event("helloEvent").set("say", "Hello World!").send() # <7>
 ----
-<1> The definition of the trigger `HelloWorldTrigger`.
+<1> The definition of a trigger `HelloWorldTrigger`.
 <2> The trigger configuration method.
 <3> Sets up `HelloWorldTrigger` to listen to `helloEvent` events (i.e. events that have name `"helloEvent"`).
-<4> The trigger `run` method will be called when an event `helloEvent` occurs. The `event` argument is a reference to the event instance.
+<4> The trigger `run` method will be called when an event `helloEvent` happens. The `event` argument is a reference to the event instance.
 <5> Prints the value of the event attribute `"say"`.
 <6> Knowledge base startup function `onStartup()`.
 <7> Send a new event `helloEvent` that has an attribute `"say"` with the text value `"Hello World!"`.
@@ -402,7 +402,7 @@ than `2` seconds. This scenario could be used in a monitoring system to verify t
 .Python Heartbeat example knowledge base file
 [source,python]
 ----
-# Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+# Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 class HeartbeatRule(Rule): # <1>
     def configure(self): # <2>
         self.events = ["heartbeat h1", "heartbeat h2 :none"] # <3>
@@ -416,12 +416,12 @@ class AlarmTrigger(Trigger): # <7>
     def run(self, event):
         print "Sound the alarm!"
 ----
-<1> The definition of the rule `HeartbeatRule`.
+<1> The definition of a rule `HeartbeatRule`.
 <2> Rule configuration method.
-<3> Setup `HeartbeatRule` to listen to `heartbeat` events (i.e. events that have name `"heartbeat"`) and *detect a situation* that when `heartbeat` event occurs, then there will be no new `heartbeat` event for 2 seconds. So it detects a time gap between `heartbeat` events.
-To first occurrence of event `heartbeat` is assigned an alias `h1`, to the next `h2`. They are required because the same event type is used more than once. `:none` sets an event mode for the second occurrence of `heartbeat` that tells that there should occur no such event.
-<4> Set the duration of this rule to `2` seconds. After that time (counting since the occurrence of `h1`) the state of the rule will be verified and if the specified situation occurs, the rule will fire.
-<5> Rule `run` method will be called when the specified situation takes place. The `event` argument is a reference to the last event in the sequence, so in this case it is `null` because there is no second event. The complete sequence of events will be returned by the method `getEventSequence()`. A single event instance is returned by the method `getEvent(eventAlias)`.
+<3> Setup `HeartbeatRule` to listen to `heartbeat` events (i.e. events that have name `"heartbeat"`) and *detect a situation* that when `heartbeat` event happens, then there will be no new `heartbeat` event for 2 seconds. So it detects a time gap between `heartbeat` events.
+To first occurrence of event `heartbeat` is assigned an alias `h1`, to the next `h2`. They are required because the same event type is used more than once. `:none` sets an event mode for the second occurrence of `heartbeat` that tells that there should happen no such event.
+<4> Set a duration of this rule to `2` seconds. After that time (counting since the occurrence of `h1`) the state of the rule will be verified and if the specified situation happens, the rule will fire.
+<5> Rule `run` method will be called when a specified situation takes place. The `event` argument is a reference to the last event in the sequence, so in this case it is `null` because there is no second event. The complete sequence of events will be returned by the method `getEventSequence()`. A single event instance is returned by the method `getEvent(eventAlias)`.
 <6> Send a new `alarm` event that will be processed in a more abstract level.
 <7> A trigger that listens to `alarm` events and prints that the alarm has been activated. Of course in real use case the rule could for example send an email or SMS.
 
@@ -446,7 +446,7 @@ Press `CTRL+C` to exit {sponge} standalone command-line application.
 .Ruby Heartbeat example knowledge base file
 [source,ruby]
 ----
-# Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+# Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 class HeartbeatRule < Rule # <1>
     def configure # <2>
         self.events = ["heartbeat h1", "heartbeat h2 :none"] # <3>
@@ -488,7 +488,7 @@ Press `CTRL+C` to exit.
 .Groovy Heartbeat example knowledge base file
 [source,groovy]
 ----
-// Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+// Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 class HeartbeatRule extends Rule { // <1>
     void configure() { // <2>
         this.events = ["heartbeat h1", "heartbeat h2 :none"] // <3>
@@ -530,7 +530,7 @@ Press `CTRL+C` to exit.
 .JavaScript Heartbeat example knowledge base file
 [source,javascript]
 ----
-// Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
+// Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 var HeartbeatRule = Java.extend(Rule, { // <1>
     configure: function(self) { // <2>
         self.events = ["heartbeat h1", "heartbeat h2 :none"]; // <3>

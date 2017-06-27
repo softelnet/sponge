@@ -36,6 +36,24 @@ Standalone command-line application doesn't support history of entered commands/
 |Print the version information and exit.
 |===
 
+== Default parameters
+Standalone command-line application sets own default values for the following parameters. You may change them in an XML configuration file.
+
+[width=50%]
+|===
+|Parameter |Value
+
+|`mainProcessingUnitThreadCount`
+|`10`
+
+|`asyncEventSetProcessorExecutorThreadCount`
+|Same as `mainProcessingUnitThreadCount`
+
+|`eventQueueCapacity`
+|`100000`
+|===
+
+
 .Examples
 [source,bash,subs="verbatim,attributes"]
 ----

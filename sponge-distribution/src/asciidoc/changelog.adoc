@@ -3,7 +3,6 @@
 :icons: font
 
 This document provides a high-level view of the changes introduced in {sponge} releases.
-For a detailed view of what has changed, refer to the {uri-repo}/commits/master[commit history] on GitHub.
 
-== 0.1.0 (2017.04.18)
+== 0.1.0 (2017.06.27)
 Initial release.

@@ -27,7 +27,7 @@ Instances of event processors, depending on their type, may be created:
 == Filters
 Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and aggregators). In order to define your own filter, the class inherited from `Filter` should be created. The name of a filter is the name of the class defining this filter.
 
-Every filter should implement the abstract `configure` and `accepts` methods:
+Every filter should implement abstract `configure` and `accepts` methods:
 
 [source,java]
 ----
@@ -64,7 +64,7 @@ Filters are executed in the same order as the order of their registration (i.e. 
 `setDisplayName(name)`:: The method sets a display name of this filter.
 
 === Example in a script language
-The code presented below creates a filter which filters only events whose name is `"e1"`. Other events are not processed by this filter. Events `e1` successfully pass through the filter only if they have the attribute `"color"` set to the value `"blue"`. The others are rejected.
+The code presented below creates a filter which filters only events whose name is `"e1"`. Other events are not processed by this filter. Events `e1` successfully pass through the filter only if they have an attribute `"color"` set to the value `"blue"`. The others are rejected.
 
 TIP: Class methods defined in a Python class have instance object (`self`) as the first parameter.
 
@@ -84,10 +84,10 @@ class ColorFilter(Filter): # <1>
             self.logger.debug("accepted")
             return True
 ----
-<1> The definition of the filter `ColorFilter`. The filter is represented by a class of the same name.
+<1> The definition of a filter `ColorFilter`. The filter is represented by a class of the same name.
 <2> The filter configuration callback method.
 <3> Sets up `ColorFilter` to listen to `e1` events (i.e. events that have name `"e1"`).
-<4> The filter `accepts` method will be called when an event `e1` occurs. `event` argument specifies that event instance.
+<4> The filter `accepts` method will be called when an event `e1` happens. `event` argument specifies that event instance.
 <5> Logs the event.
 <6> Assigns the value of the event attribute `"color"` to the local variable `color`.
 <7> If `color` is not set or is not `"blue"` then reject that event by returning `false`.
@@ -125,7 +125,7 @@ public class ShapeFilter extends JavaFilter { // <1>
 <1> The definition of the filter `ShapeFilter`. The filter is represented by a Java class of the same name.
 <2> The filter configuration callback method.
 <3> Sets up `ShapeFilter` to listen to `e1`, `e2` and `e3` events.
-<4> The filter `accepts` method will be called when any of these events occur. `event` argument specifies that event instance.
+<4> The filter `accepts` method will be called when any of these events happen. `event` argument specifies that event instance.
 <5> Assigns the value of the event attribute `"shape"` to the local variable `shape`.
 <6> If `shape` is not set then reject that event by returning `false`.
 <7> Otherwise accept the event by returning `true`.
@@ -139,11 +139,11 @@ EPS.enableJava(ShapeFilter)
 ----
 
 == Triggers
-The trigger purpose is to run the specified code when an event occurs.
+A trigger purpose is to run a specified code when an event happens.
 
 In order to define your own trigger, the class inherited from `Trigger` should be created. The name of a trigger is the name of the class defining this trigger.
 
-Every trigger should implement the abstract `configure` and `run` methods:
+Every trigger should implement abstract `configure` and `run` methods:
 
 [source,java]
 ----
@@ -151,7 +151,7 @@ void configure();
 void run(Event event);
 ----
 
-The `run` method is called when a specified event (or one of the events) occurs.
+The `run` method is called when a specified event (or one of the events) happens.
 
 In order to enable manually a previously defined trigger one of the following methods could be invoked:
 
@@ -191,7 +191,7 @@ class TriggerA(Trigger): # <1>
 <1> The definition of the trigger `TriggerA`. The trigger is represented by a class of the same name.
 <2> The trigger configuration callback method.
 <3> Sets up `TriggerA` to listen to `a` events (i.e. events that have name `"a"`).
-<4> The trigger `run` method will be called when an event `a` occurs. `event` argument specifies that event instance.
+<4> The trigger `run` method will be called when an event `a` happen. The `event` argument specifies that event instance.
 <5> Logs the event.
 
 The trigger `TriggerA` will be enabled automatically. The enabling creates an instance of `TriggerA` class and invokes `TriggerA.configure` method to setup it. Since that moment the trigger listens to the specified events.
@@ -220,7 +220,7 @@ public class SampleJavaTrigger extends JavaTrigger { // <1>
 <1> The definition of the trigger `SampleJavaTrigger`. The trigger is represented by a Java class of the same name.
 <2> The trigger configuration callback method.
 <3> Sets up `SampleJavaTrigger` to listen to `e1` events (i.e. events that have name `"e1"`).
-<4> The trigger `run` method will be called when an event `e1` occurs. `event` argument specifies that event instance.
+<4> The trigger `run` method will be called when an event `e1` happen. The `event` argument specifies that event instance.
 <5> Logs the event.
 
 .Java trigger manual registration in the Python knowledge base
@@ -230,7 +230,7 @@ EPS.enableJava(SampleJavaTrigger)
 ----
 
 == Rules
-Sometimes there is a need to perform certain actions when an ordered sequence of events has occurred, additionally fulfilling some conditions. To handle such complex relationships {sponge} provides rules. Rules allow detection of correlations between events. Note that events that happened first must be sent first into the engine.
+Sometimes there is a need to perform certain actions when an ordered sequence of events has happened, additionally fulfilling some conditions. To handle such complex relationships {sponge} provides rules. Rules allow detection of correlations between events. Note that events that happened first must be sent first into the engine.
 
 Every rule should implement the abstract `configure` and `run` methods:
 
@@ -294,9 +294,9 @@ A rule group is a set of instances of rules of the same type.
 === Important methods
 `configure()`:: A configuration callback method that is invoked when a rule is being enabled. In this method it should be established for what type of events the rule listens. Optionally event conditions for incoming events or rule duration could be set. This method is mandatory.
 `init()`:: An initialization callback method that is invoked before creating a new rule instance.
-`run(event)`:: A callback method invoked when the proper sequence of events happens and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
-`setEvents(eventSpecifications)`:: This method sets the specifications of events whose sequence causes a rule to fire.
-`setConditions(alias, conditions)`:: Sets conditions for the event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the method is irrelevant as long as it returns value `true` or `false` and takes an event as an argument.
+`run(event)`:: A callback method invoked when a proper sequence of events happens and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
+`setEvents(eventSpecifications)`:: This method sets specifications of events whose sequence causes a rule to fire.
+`setConditions(alias, conditions)`:: Sets conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the method is irrelevant as long as it returns value `true` or `false` and takes an event as an argument.
 `setDuration()`:: Sets the time how long a rule lasts (represented as `java.time.Duration`). The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
 `setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for a rule. If a rule is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this rule. If a rule is asynchronous then an event will be processed by the instances of this rule concurrently (in many threads). If the _synchronous flag_ is not set then the default value as specified by `eventSetProcessorDefaultSynchronous` configuration parameter will be used. In most cases there should be no need to change this flag.
 `setDisplayName(name)`:: The method sets a display name of this rule.
@@ -434,7 +434,7 @@ class SameSourceAllRule(Rule): # <1>
 
 The rule will be enabled automatically. Then, in case of occurrence of `e1` event that has `severity` greater than `5`, a new instance of a rule `SameSourceAllRule` will be created.
 
-The condition could be expressed as a lambda function, for example:
+A condition could be expressed as a lambda function, for example:
 [source,python]
 ----
 self.setConditions("e1", lambda rule, event: int(event.get("severity")) > 5)
@@ -482,7 +482,7 @@ public class SameSourceJavaRule extends JavaRule { // <1>
 <4> Setting a condition checking `"e1"` event severity.
 <5> Setting conditions checking `"e2"` event severity (as a class method name) and event source (as a Java lambda expression).
 <6> Setting a duration of the rule. The rule lasts for `8` seconds. So, for `8` seconds since the occurrence of the first matching `e1` a tree of event instances will be constantly built with the root containing the instance of initial `e1` event. Each matching `e2` event will cause the rule to fire immediately for the current event sequence. After reaching the duration time this rule instance will be discarded.
-<7> The `run` method will be called when the proper sequence of events occurs and all the conditions have been fulfilled. `event` argument specifies the last event in that sequence.
+<7> The `run` method will be called when the proper sequence of events happen and all the conditions have been fulfilled. `event` argument specifies the last event in that sequence.
 <8> Logs message and the sequence of events.
 <9> An event condition method `severityCondition`.
 <10> Accept only events that have `severity` greater than `5`.
@@ -496,14 +496,14 @@ EPS.enableJava(SameSourceJavaRule)
 == Aggregators
 Aggregators are a generalized form of rules. Internally rules and aggregators are two types of vent set processors. Aggregators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
 
-Aggregators listen to the specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling `finish()` method.
+Aggregators listen to a specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling `finish()` method.
 
 An aggregator may be finished:
 
 * manually by invoking `finish()` method from inside `onEvent()` method,
 * automatically when `duration` is set and the duration timeout takes place.
 
-Every aggregator should implement the abstract `acceptsAsFirst` and `onEvent` methods:
+Every aggregator should implement abstract `acceptsAsFirst` and `onEvent` methods:
 
 [source,java]
 ----
