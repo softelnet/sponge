@@ -4,26 +4,26 @@
 [[{exampleName}-py]]
 [source,python]
 ----
-include::{examplesDir}/script/py/{exampleName}.py[]
+include::{rootDir}/sponge-jython/examples/script/py/{exampleName}.py[]
 ----
 
 .Ruby - {exampleName}.rb
 [[{exampleName}-rb]]
 [source,ruby]
 ----
-include::{examplesDir}/script/rb/{exampleName}.rb[]
+include::{rootDir}/sponge-jruby/examples/script/rb/{exampleName}.rb[]
 ----
 
 .Groovy - {exampleName}.groovy
 [[{exampleName}-groovy]]
 [source,groovy]
 ----
-include::{examplesDir}/script/groovy/{exampleName}.groovy[]
+include::{rootDir}/sponge-groovy/examples/script/groovy/{exampleName}.groovy[]
 ----
 
 .JavaScript - {exampleName}.js
 [[{exampleName}-js]]
 [source,javascript]
 ----
-include::{examplesDir}/script/js/{exampleName}.js[]
+include::{rootDir}/sponge-nashorn/examples/script/js/{exampleName}.js[]
 ----

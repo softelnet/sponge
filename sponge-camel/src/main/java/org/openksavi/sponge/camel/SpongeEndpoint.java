@@ -180,7 +180,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
     @Override
     protected void doStop() throws Exception {
         // Automatic shutdown only if auto started.
-        synchronized (engine) {
+        synchronized (getComponent()) {
             if (managed != null && managed) {
                 if (autoStarted && engine.isRunning()) {
                     engine.shutdown();

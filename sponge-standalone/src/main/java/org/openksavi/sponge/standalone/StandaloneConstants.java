@@ -17,7 +17,7 @@
 package org.openksavi.sponge.standalone;
 
 /**
- * Stand-alone engine constants.
+ * Standalone engine constants.
  */
 public final class StandaloneConstants {
 

@@ -39,7 +39,7 @@ Standalone command-line application doesn't support history of entered commands/
 == Default parameters
 Standalone command-line application sets own default values for the following parameters. You may change them in an XML configuration file.
 
-[width=50%]
+[width=80%]
 |===
 |Parameter |Value
 

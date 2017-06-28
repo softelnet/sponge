@@ -61,6 +61,31 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-groovy</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-test</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mustache</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-rss</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -74,6 +99,17 @@
                             <mainClass>org.openksavi.sponge.standalone.StandaloneEngineMain</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>logs</directory>
+                        </fileset>
+                    </filesets>
                 </configuration>
             </plugin>
         </plugins>

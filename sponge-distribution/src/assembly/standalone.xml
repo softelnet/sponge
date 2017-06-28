@@ -26,7 +26,63 @@
             <filtered>true</filtered>
         </fileSet>
         <fileSet>
-            <directory>${examplesProject}</directory>
+            <directory>../sponge-camel</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-core</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-groovy</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-integration-tests</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-jruby</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-jython</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-nashorn</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-spring</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-standalone</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>examples/**</include>

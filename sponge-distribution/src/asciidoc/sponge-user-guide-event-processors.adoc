@@ -230,7 +230,7 @@ EPS.enableJava(SampleJavaTrigger)
 ----
 
 == Rules
-Sometimes there is a need to perform certain actions when an ordered sequence of events has happened, additionally fulfilling some conditions. To handle such complex relationships {sponge} provides rules. Rules allow detection of correlations between events. Note that events that happened first must be sent first into the engine.
+Sometimes there is a need to perform certain actions when an ordered sequence of events has happened, additionally fulfilling some conditions. To handle such relationships (both temporal and logical), {sponge} provides rules. Note that events that happened first must be sent first into the engine.
 
 Every rule should implement the abstract `configure` and `run` methods:
 
@@ -494,7 +494,7 @@ EPS.enableJava(SameSourceJavaRule)
 ----
 
 == Correlators
-Correlators are a generalized form of rules. Internally rules and correlators are two types of vent set processors. Correlators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+Correlators could be viewed as a generalized form of rules. In fact rules and correlators are two types of event set processors. Correlators detect correlations between events and could also be used to implement any complex event processing that isn't provided by filters, triggers or rules.
 
 Correlators listen to a specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling `finish()` method.
 

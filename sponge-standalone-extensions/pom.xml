@@ -13,6 +13,12 @@
     <name>Sponge - Standalone - Extensions</name>
 
     <dependencies>
+        <!-- Selected Spring components available in a standalone application out of the box: -->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-http</artifactId>
+        </dependency>
+
         <!-- Selected Camel components available in a standalone application out of the box: -->
         <dependency>
             <groupId>org.apache.camel</groupId>

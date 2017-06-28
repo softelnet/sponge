@@ -70,7 +70,7 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 
 |*`mainProcessingUnitThreadCount`*
 |The number of Main Processing Unit worker threads. You could increase this parameter if your knowledge bases require concurrent processing of many events by triggers, rules or correlators.
-|5
+|`5`
 
 |*`asyncEventSetProcessorExecutorThreadCount`*
 |The number of threads used by an event set processor executor for asynchronous processing of events by rules and correlators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or correlators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.

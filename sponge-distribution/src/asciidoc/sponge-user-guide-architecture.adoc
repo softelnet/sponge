@@ -6,7 +6,7 @@ image::engine_architecture.svg[title="Architecture"]
 The {sponge} engine consists of the following components.
 
 .Engine components
-[cols="1,5"]
+[cols="1,4"]
 |===
 |Engine component |Description
 

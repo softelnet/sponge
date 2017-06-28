@@ -102,7 +102,6 @@ Where `engineRef` represents the name of the `Engine` implementation instance lo
 ==== CamelPlugin
 `CamelPlugin` provides an interface to the Camel context so it may be used in a knowledge base. `CamelPlugin` may be configured in three different ways.
 
-* Implicitly when creating an {sponge} Camel endpoint.
 * Explicitly as a Spring bean and assigned to the engine using Engine Builder API. This is the preferred way.
 +
 .Example
@@ -121,6 +120,7 @@ public class SpringConfiguration extends EngineCamelConfiguration {
     }
 }
 ----
+* Implicitly when creating an {sponge} Camel endpoint.
 * Explicitly in {sponge} XML configuration file.
 +
 .Example
@@ -142,6 +142,7 @@ TIP: If you use an implicit configuration and you get an error stating that `cam
 Only one `CamelContext` may be used with one instance of {sponge} engine, bound by a single `CamelPlugin`.
 
 Important methods:
+
 `send(body)`:: Sends the body to all current consumers.
 `send(uri, body)`:: Sends the body to an endpoint.
 `request(body)`:: Sends the body to an endpoint returning any result output body.

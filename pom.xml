@@ -448,6 +448,7 @@
     <modules>
         <module>sponge-api</module>
         <module>sponge-core</module>
+        <module>sponge-test</module>
         <module>sponge-jython</module>
         <module>sponge-jruby</module>
         <module>sponge-nashorn</module>
@@ -455,9 +456,9 @@
         <module>sponge-spring</module>
         <module>sponge-camel</module>
         <module>sponge-signal</module>
+        <module>sponge-integration-tests</module>
         <module>sponge-standalone</module>
         <module>sponge-bom</module>
-        <module>sponge-examples</module>
         <module>sponge-examples-projects</module>
         <module>sponge-standalone-extensions</module>
         <module>sponge-distribution</module>

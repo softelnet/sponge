@@ -92,7 +92,7 @@
                                 <icons>font</icons>
                                 <prewrap>false</prewrap>
                                 <linkattrs>true</linkattrs>
-                                <description>Sponge - open source, Java-based complex event processing</description>
+                                <description>Sponge - open source, Java-based Event Processing System</description>
                                 <keywords>Sponge,CEP,Complex Event Processing,Java,Open
                                     Source,Ruby,Groovy,JavaScript,IoT,Internet of
                                     things,Apache license,Apache Camel</keywords>
@@ -100,6 +100,7 @@
 
                                 <sponge>Sponge</sponge>
                                 <projectVersion>${release.version}</projectVersion>
+                                <rootDir>${rootDir}</rootDir>
                                 <examplesDir>${examplesProject}/examples</examplesDir>
                                 <javaTestDir>${examplesProject}/src/test/java</javaTestDir>
                                 <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>

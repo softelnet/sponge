@@ -24,7 +24,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[events_clone_policy-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/events_clone_policy.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/events_clone_policy.xml[]
 ----
 
 :exampleDisplayName: Cron
@@ -57,7 +57,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[hello_world-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/hello_world.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/hello_world.xml[]
 ----
 
 :exampleDisplayName: Knowledge base callbacks
@@ -73,7 +73,7 @@ include::sponge-example-script.adoc[]
 include::sponge-example-script.adoc[]
 
 :exampleDisplayName: Library
-:exampleName: library
+:exampleName: knowledge_base_library
 include::sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
@@ -82,7 +82,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[library-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/library.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/knowledge_base_library.xml[]
 ----
 
 :exampleDisplayName: Java-based plugins
@@ -95,7 +95,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[plugins_java-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/plugins_java.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/plugins_java.xml[]
 ----
 
 :exampleDisplayName: Script-based plugins
@@ -108,7 +108,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[plugins_script-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/plugins_script.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/plugins_script.xml[]
 ----
 
 :exampleDisplayName: Rules and events
@@ -121,7 +121,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[rules_events-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/rules_events.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/rules_events.xml[]
 ----
 
 :exampleDisplayName: Heartbeat example
@@ -150,7 +150,7 @@ These knowledge bases use a custom XML configuration. Note that `<knowledgeBase>
 [[triggers-xml-py]]
 [source,xml]
 ----
-include::{examplesDir}/script/py/triggers.xml[]
+include::{rootDir}/sponge-jython/examples/script/py/triggers.xml[]
 ----
 
 == Examples for selected languages
@@ -160,7 +160,7 @@ include::{examplesDir}/script/py/triggers.xml[]
 [[fibonacci-py]]
 [source,python]
 ----
-include::{examplesDir}/core/fibonacci.py[]
+include::{rootDir}/sponge-integration-tests/examples/core/fibonacci.py[]
 ----
 
 === Setting engine parameters
@@ -168,7 +168,7 @@ include::{examplesDir}/core/fibonacci.py[]
 [[engine_parameters-xml]]
 [source,xml]
 ----
-include::{examplesDir}/core/engine_parameters.xml[]
+include::{rootDir}/sponge-integration-tests/examples/core/engine_parameters.xml[]
 ----
 
 === Integration with Spring framework
@@ -176,14 +176,14 @@ include::{examplesDir}/core/engine_parameters.xml[]
 [[spring-py]]
 [source,python]
 ----
-include::{examplesDir}/spring/spring.py[]
+include::{rootDir}/sponge-spring/examples/spring/spring.py[]
 ----
 
 .Spring configuration and simple test - SpringTest.java
 [[spring-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/spring/SpringTest.java[]
+include::{rootDir}/sponge-spring/src/test/java/org/openksavi/sponge/spring/test/SpringTest.java[]
 ----
 
 === Integration with Apache Camel - RSS
@@ -191,14 +191,14 @@ include::{javaTestDir}/org/openksavi/sponge/examples/spring/SpringTest.java[]
 [[camel_rss-py]]
 [source,python]
 ----
-include::{examplesDir}/camel/camel_rss.py[]
+include::{rootDir}/sponge-camel/examples/camel/camel_rss.py[]
 ----
 
 .Camel configuration and simple test - CamelRssTest.java
 [[camel_rss-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelRssTest.java[]
+include::{rootDir}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/CamelRssTest.java[]
 ----
 
 === Integration with Apache Camel - producer
@@ -206,14 +206,14 @@ include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelRssTest.java[]
 [[camel_producer-py]]
 [source,python]
 ----
-include::{examplesDir}/camel/camel_producer.py[]
+include::{rootDir}/sponge-camel/examples/camel/camel_producer.py[]
 ----
 
 .Camel configuration and simple test - SimpleCamelProducerTest.java
 [[camel_producer-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/camel/SimpleCamelProducerTest.java[]
+include::{rootDir}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/SimpleCamelProducerTest.java[]
 ----
 
 === Integration with Apache Camel - consumer
@@ -221,14 +221,14 @@ include::{javaTestDir}/org/openksavi/sponge/examples/camel/SimpleCamelProducerTe
 [[camel_consumer-py]]
 [source,python]
 ----
-include::{examplesDir}/camel/camel_consumer.py[]
+include::{rootDir}/sponge-camel/examples/camel/camel_consumer.py[]
 ----
 
 .Camel configuration and simple test - SimpleCamelConsumerTest.java
 [[camel_simple_consumer-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/camel/SimpleCamelConsumerTest.java[]
+include::{rootDir}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/SimpleCamelConsumerTest.java[]
 ----
 
 === Integration with Apache Camel - producer with an overridden action
@@ -236,14 +236,14 @@ include::{javaTestDir}/org/openksavi/sponge/examples/camel/SimpleCamelConsumerTe
 [[camel_producer_overridden_action-py]]
 [source,python]
 ----
-include::{examplesDir}/camel/camel_producer_overridden_action.py[]
+include::{rootDir}/sponge-camel/examples/camel/camel_producer_overridden_action.py[]
 ----
 
 .Camel configuration and simple test - CamelProducerCustomActionTest.java
 [[camel_producer_overridden_action-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelProducerOverriddenActionTest.java[]
+include::{rootDir}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/CamelProducerOverriddenActionTest.java[]
 ----
 
 === Integration with Apache Camel - producer with custom action
@@ -251,14 +251,14 @@ include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelProducerOverridd
 [[camel_producer_custom_action-py]]
 [source,python]
 ----
-include::{examplesDir}/camel/camel_producer_custom_action.py[]
+include::{rootDir}/sponge-camel/examples/camel/camel_producer_custom_action.py[]
 ----
 
 .Camel configuration and simple test - CamelProducerCustomActionTest.java
 [[camel_producer_custom_action-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelProducerCustomActionTest.java[]
+include::{rootDir}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/CamelProducerCustomActionTest.java[]
 ----
 
 === Integration with Apache Camel - sending Camel messages to many endpoints
@@ -266,12 +266,12 @@ include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelProducerCustomAc
 [[camel_multiple_consumer-py]]
 [source,python]
 ----
-include::{examplesDir}/camel/camel_multiple_consumer.py[]
+include::{rootDir}/sponge-camel/examples/camel/camel_multiple_consumer.py[]
 ----
 
 .Camel configuration and simple test - CamelMultipleConsumerTest.java
 [[camel_multiple_consumer-java]]
 [source,java]
 ----
-include::{javaTestDir}/org/openksavi/sponge/examples/camel/CamelMultipleConsumerTest.java[]
+include::{rootDir}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/CamelMultipleConsumerTest.java[]
 ----

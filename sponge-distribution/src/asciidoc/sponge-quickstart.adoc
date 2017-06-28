@@ -8,13 +8,13 @@ Event processors are objects that listen to certain events and perform specified
 
 .Event processors
 ****
-Filter:: Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and correlators).
+Filter:: Filters allow only certain events to be processed by other event processors (triggers, rules and correlators).
 
 Trigger:: Triggers execute specified operations when an appropriate event happens.
 
-Rule:: Rules are used to detect correlations (temporal or logical) between events.
+Rule:: Rules detect situations when an ordered sequence of events happens.
 
-Correlator:: Correlators are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+Correlator:: Correlators detect correlations between events and could also be used to implement any complex event processing that isn't provided by filters, triggers or rules.
 ****
 
 === Knowledge base
@@ -212,7 +212,7 @@ Press `CTRL+C` to exit.
 +
 [source,bash,subs="verbatim,attributes"]
 ----
-sponge -k ..\kb\py\rules_heartbeat.py
+sponge.bat -k ..\kb\py\rules_heartbeat.py
 ----
 +
 Press `CTRL+C` to exit.

@@ -126,9 +126,9 @@ Types of processors:
 * *Event processors* - processors that perform specified operations using events they listen to.
 ** *Filters* - event processors used for allowing only certain events to be later processed by other event processors.
 ** *Triggers* -  event processors that execute a specified code when an event happens.
-** *Event set processors* - event processors that correlate and process sets of events.
-*** *Rules* - event set processors that correlate ordered sequences of events.
-*** *Correlators* - event set processors that are used to implement any complex event processing that isn't provided by filters, triggers or rules.
+** *Event set processors* - event processors that process sets of events.
+*** *Rules* - event set processors that detect ordered sequences of events.
+*** *Correlators* - event set processors that detect any set of events and could be also used to implement any complex event processing that isn't provided by filters, triggers or rules.
 * *Actions* - processors that are used to provide functionality similar to functions. They don't listen to events.
 
 include::sponge-user-guide-event-processors.adoc[leveloffset=+2]
@@ -810,7 +810,7 @@ ifdef::useReferences[(link:sponge-examples.html#camel_multiple_consumer-py[py^],
 |Shows sending Camel messages to many endpoints in a single {sponge} trigger.
 |===
 
-=== Examples for standalone {sponge}
+=== Standalone examples
 
 .Examples for standalone {sponge}
 [cols="1,3"]
@@ -900,6 +900,15 @@ ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples
 |`org.openksavi.sponge`
 |`sponge-distribution`
 |Contains documentation, release configuration etc.
+
+|`org.openksavi.sponge`
+|`sponge-test`
+|{sponge} test support.
+
+
+|`org.openksavi.sponge`
+|`sponge-integration-tests`
+|Internal integration tests.
 |===
 
 

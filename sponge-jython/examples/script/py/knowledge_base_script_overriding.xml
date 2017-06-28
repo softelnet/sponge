@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="python">
+            <file>examples/script/py/knowledge_base_script_overriding.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+
