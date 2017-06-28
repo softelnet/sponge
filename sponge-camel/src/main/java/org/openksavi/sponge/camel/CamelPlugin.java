@@ -63,12 +63,14 @@ public class CamelPlugin extends JavaPlugin implements CamelContextAware {
         return camelContext;
     }
 
-    public synchronized void setContext(CamelContext camelContext) {
-        if (this.camelContext != null && this.camelContext != camelContext) {
-            throw new SpongeException("Camel plugin has already been initialized with a different Camel context");
-        }
+    public void setContext(CamelContext camelContext) {
+        synchronized (this) {
+            if (this.camelContext != null && this.camelContext != camelContext) {
+                throw new SpongeException("Camel plugin has already been initialized with a different Camel context");
+            }
 
-        this.camelContext = camelContext;
+            this.camelContext = camelContext;
+        }
     }
 
     public List<CamelConsumer> getConsumers() {
