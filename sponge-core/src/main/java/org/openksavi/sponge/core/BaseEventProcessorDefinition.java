@@ -33,6 +33,11 @@ public abstract class BaseEventProcessorDefinition extends BaseProcessorDefiniti
         return eventNames;
     }
 
+    @Override
+    public String getEventName(int index) {
+        return eventNames[index];
+    }
+
     /**
      * Sets event names for which this processor definition is registered.
      *

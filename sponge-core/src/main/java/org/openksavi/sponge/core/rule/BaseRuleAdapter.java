@@ -93,7 +93,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
      * @return {@code true} if all conditions are met.
      */
     protected boolean checkConditions(TreeNode<Event> node) {
-        List<EventCondition> conditions = getConditions(getEventAliases()[node.getLevel()]);
+        List<EventCondition> conditions = getConditions(getEventAlias(node.getLevel()));
         boolean result = true;
 
         if (conditions == null) {
@@ -149,7 +149,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
      * @return {@code true} if there should be an attempt to run the rule.
      */
     private boolean shouldRunRule() {
-        EventMode lastMode = getEventModes()[getEventModes().length - 1];
+        EventMode lastMode = getEventMode(getEventModes().length - 1);
 
         // If the mode of the last specified event is FIRST or ALL always try to run the rule.
         if (lastMode == EventMode.FIRST || lastMode == EventMode.ALL) {
@@ -251,7 +251,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
             // Recursively try to continue building the event tree, but only for modes FIRST, LAST and ALL.
             node.getChildren().forEach(child -> {
                 // NONE events are processed in shouldAddToEventTreeForNMode(), not here.
-                if (getEventModes()[child.getLevel()] != EventMode.NONE) {
+                if (getEventMode(child.getLevel()) != EventMode.NONE) {
                     buildEventTree(child, event);
                 }
             });
@@ -298,7 +298,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
      * @return event mode.
      */
     protected EventMode getEventMode(TreeNode<Event> node) {
-        return node == null ? EventMode.FIRST : getEventModes()[node.getLevel()];
+        return node == null ? EventMode.FIRST : getEventMode(node.getLevel());
     }
 
     /**
@@ -336,7 +336,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
                 logger.debug("Event tree: {}", eventTree);
             }
 
-            switch (getEventModes()[maxLevel]) {
+            switch (getEventMode(maxLevel)) {
             case FIRST:
                 return true;
             case LAST:
@@ -445,11 +445,9 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     private void prepareEventAliasMap(TreeNode<Event> node) {
         eventAliasMap.clear();
 
-        String[] eventAliases = getEventAliases();
         List<Event> path = eventTree.getPathValues(node);
-
         for (int i = 0; i < path.size(); i++) {
-            eventAliasMap.put(eventAliases[i], path.get(i));
+            eventAliasMap.put(getEventAlias(i), path.get(i));
         }
     }
 
@@ -486,12 +484,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
 
     @Override
     public void validate() {
-        if (getName() == null) {
-            throw new SpongeException("Invalid rule. Name must not be empty.");
-        }
-        if (getEventNames() == null || getEventNames().length < 1) {
-            throw createValidationException("At least one event must be specified.");
-        }
+        super.validate();
 
         if (getEventModes() == null || getEventModes().length < 1) {
             throw createValidationException("Event modes are not specified.");

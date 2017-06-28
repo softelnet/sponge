@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class VersionInfo {
+public final class VersionInfo {
 
     private static final String VERSION_PROPERTY = "version";
 

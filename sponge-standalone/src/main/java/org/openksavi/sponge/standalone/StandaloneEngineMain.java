@@ -31,10 +31,6 @@ public class StandaloneEngineMain {
 
     private static final Logger logger = LoggerFactory.getLogger(StandaloneEngineMain.class);
 
-    public static final int OK_CODE = 0;
-
-    public static final int ERROR_CODE = -1;
-
     private StandaloneEngine engine;
 
     private boolean testMode;
@@ -60,14 +56,11 @@ public class StandaloneEngineMain {
             engine = StandaloneEngine.builder().commandLineArgs(args).build();
 
             // If help or version option is specified.
-            if (engine == null) {
-                System.exit(OK_CODE);
+            if (engine != null) {
+                engine.startup();
             }
-
-            engine.startup();
         } catch (Throwable e) {
             handleError(e);
-            System.exit(ERROR_CODE);
         }
     }
 
@@ -96,8 +89,6 @@ public class StandaloneEngineMain {
 
         if (testMode) {
             throw Utils.wrapException("handleError", e);
-        } else {
-            System.exit(ERROR_CODE);
         }
     }
 

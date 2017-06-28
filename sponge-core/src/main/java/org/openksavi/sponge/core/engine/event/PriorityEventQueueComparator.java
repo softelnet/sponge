@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.engine.event;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.openksavi.sponge.core.event.EventId;
@@ -24,9 +25,9 @@ import org.openksavi.sponge.event.Event;
 /**
  * Comparator for events that are being put into a priority queue.
  */
-public class PriorityEventQueueComparator implements Comparator<Event> {
+public class PriorityEventQueueComparator implements Comparator<Event>, Serializable {
 
-    public static final Comparator<Event> INSTANCE = new PriorityEventQueueComparator();
+    private static final long serialVersionUID = 258251261730002206L;
 
     @Override
     public int compare(Event event1, Event event2) {

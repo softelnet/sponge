@@ -27,7 +27,7 @@ public class PowerEchoAction extends org.openksavi.sponge.java.JavaAction {
                 if (args[i] instanceof String) {
                     args[i] = ((String) args[i]).toUpperCase();
                 } else if (args[i] instanceof Number) {
-                    args[i] = new Integer(((Number) args[i]).intValue() + 1);
+                    args[i] = Integer.valueOf(((Number) args[i]).intValue() + 1);
                 }
             }
         } else {

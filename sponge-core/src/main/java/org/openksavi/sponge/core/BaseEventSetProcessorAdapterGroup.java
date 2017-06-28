@@ -196,4 +196,9 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
             lock.unlock();
         }
     }
+
+    @Override
+    public void validate() {
+        //
+    }
 }

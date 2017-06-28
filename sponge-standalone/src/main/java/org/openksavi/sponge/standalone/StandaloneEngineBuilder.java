@@ -80,7 +80,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         super(engine);
     }
 
-    public StandaloneEngineBuilder commandLineArgs(String[] commandLineArgs) {
+    public StandaloneEngineBuilder commandLineArgs(String... commandLineArgs) {
         this.commandLineArgs = commandLineArgs;
         return this;
     }
@@ -239,7 +239,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         String columns = System.getenv(ENV_COLUMNS);
         if (columns != null) {
             try {
-                formatter.setWidth(Integer.valueOf(columns));
+                formatter.setWidth(Integer.parseInt(columns));
             } catch (Exception e) {
                 logger.warn(e.toString());
             }

@@ -25,7 +25,7 @@ import org.openksavi.sponge.util.HasPriority;
 /**
  * An event. Event has the following standard attributes: name (type), id, time, priority.
  */
-public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPriority<Event> {
+public interface Event extends Cloneable, Serializable, HasPriority<Event> {
 
     /**
      * Returns event name.

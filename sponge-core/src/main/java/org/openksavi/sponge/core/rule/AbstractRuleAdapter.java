@@ -67,7 +67,7 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     protected abstract boolean runRule();
 
     @Override
-    public void setEventAliases(String[] aliases) {
+    public void setEventAliases(String... aliases) {
         getDefinition().setEventAliases(aliases);
     }
 
@@ -77,13 +77,23 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     }
 
     @Override
-    public void setEventModes(EventMode[] modes) {
+    public String getEventAlias(int index) {
+        return getDefinition().getEventAlias(index);
+    }
+
+    @Override
+    public void setEventModes(EventMode... modes) {
         getDefinition().setEventModes(modes);
     }
 
     @Override
     public EventMode[] getEventModes() {
         return getDefinition().getEventModes();
+    }
+
+    @Override
+    public EventMode getEventMode(int index) {
+        return getDefinition().getEventMode(index);
     }
 
     public void setEvents(Object[] events) {

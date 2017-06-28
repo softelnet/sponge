@@ -37,7 +37,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public void onInit() {
         logger.debug("onInit");
 
-        getEPS().setVariable(EventsLog.VARIABLE_NAME, eventsLog);
+        getEps().setVariable(EventsLog.VARIABLE_NAME, eventsLog);
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +45,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public void onLoad() {
         logger.debug("onLoad");
 
-        getEPS().enableAll(TestFilter.class, TestTrigger.class, NotToBeRunTrigger.class, TestFirstRule.class, TestLastRule.class,
+        getEps().enableAll(TestFilter.class, TestTrigger.class, NotToBeRunTrigger.class, TestFirstRule.class, TestLastRule.class,
                 TestAllRule.class);
     }
 
@@ -53,13 +53,13 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public void onStartup() {
         logger.debug("onStartup");
 
-        getEPS().event("e1").set("mark", 1).sendAfter(100);
-        getEPS().event("e2").set("mark", 2).sendAfter(200);
-        getEPS().event("e1").set("mark", 3).sendAfter(300);
-        getEPS().event("e2").set("mark", 4).sendAfter(400);
-        getEPS().event("e2").set("mark", 5).sendAfter(500);
-        getEPS().event("e2").set("mark", 6).sendAfter(600);
-        getEPS().event("e3").sendAfter(1000, 100);
+        getEps().event("e1").set("mark", 1).sendAfter(100);
+        getEps().event("e2").set("mark", 2).sendAfter(200);
+        getEps().event("e1").set("mark", 3).sendAfter(300);
+        getEps().event("e2").set("mark", 4).sendAfter(400);
+        getEps().event("e2").set("mark", 5).sendAfter(500);
+        getEps().event("e2").set("mark", 6).sendAfter(600);
+        getEps().event("e3").sendAfter(1000, 100);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
 
         @Override
         public void run(Event event) {
-            EventsLog.getInstance(getEPS()).addEvent("e3", event);
+            EventsLog.getInstance(getEps()).addEvent("e3", event);
             throw new SpongeException("Should not be fired!");
         }
     }
@@ -112,7 +112,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         @Override
         public void run(Event event) {
             getLogger().debug("Run");
-            EventsLog.getInstance(getEPS()).addEvent("e1", event);
+            EventsLog.getInstance(getEps()).addEvent("e1", event);
         }
     }
 
@@ -132,7 +132,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         @Override
         public void run(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
-            EventsLog.getInstance(getEPS()).addEvent("e1e2-last", event);
+            EventsLog.getInstance(getEps()).addEvent("e1e2-last", event);
         }
     }
 
@@ -147,7 +147,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         @Override
         public void run(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
-            EventsLog.getInstance(getEPS()).addEvent("e1e2-first", event);
+            EventsLog.getInstance(getEps()).addEvent("e1e2-first", event);
         }
     }
 
@@ -162,7 +162,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         @Override
         public void run(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
-            EventsLog.getInstance(getEPS()).addEvent("e1e2-all", event);
+            EventsLog.getInstance(getEps()).addEvent("e1e2-all", event);
         }
     }
 }

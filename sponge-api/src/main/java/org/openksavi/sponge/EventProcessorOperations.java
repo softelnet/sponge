@@ -30,6 +30,16 @@ public interface EventProcessorOperations extends ProcessorOperations {
     String[] getEventNames();
 
     /**
+     * Returns an event name for the specified event index.
+     *
+     * @param index
+     *            event index.
+     *
+     * @return event name.
+     */
+    String getEventName(int index);
+
+    /**
      * Sets event names for which this processor is registered.
      *
      * @param eventNames

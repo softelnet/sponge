@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<FindBugsFilter>
+    <!-- Reason: Optimization of uses -->
+    <Match>
+        <Class name="org.openksavi.sponge.camel.CamelPlugin" />
+        <Or>
+            <Field name="camelContext" />
+            <Field name="producerTemplateCreatedManually" />
+        </Or>
+        <Bug pattern="IS2_INCONSISTENT_SYNC" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.core.BaseEventProcessorDefinition" />
+        <Method name="getEventNames" />
+        <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.core.rule.BaseRuleDefinition" />
+        <Or>
+            <Method name="getEventAliases" />
+            <Method name="getEventModes" />
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+
+    <!-- Reason: Platform dependent encoding is sufficient for an interactive mode -->
+    <Match>
+        <Class name="org.openksavi.sponge.core.engine.InteractiveMode" />
+        <Method name="loop" />
+        <Bug pattern="DM_DEFAULT_ENCODING" />
+    </Match>
+
+    <!-- Reason: Used only in tests -->
+    <Match>
+        <Class name="org.openksavi.sponge.test.TestStatus" />
+        <Field name="onShutdownCalled" />
+        <Bug pattern="MS_CANNOT_BE_FINAL" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.test.script.template.RulesTestTemplate" />
+        <Method name="doTestRulesEvents" />
+        <Bug pattern="UC_USELESS_OBJECT" />
+    </Match>
+</FindBugsFilter>

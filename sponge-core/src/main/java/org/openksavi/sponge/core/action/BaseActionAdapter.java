@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.action;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
@@ -40,12 +39,5 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     @Override
     public ProcessorType getType() {
         return ProcessorType.ACTION;
-    }
-
-    @Override
-    public void validate() {
-        if (getName() == null) {
-            throw new SpongeException("Invalid action. Name must not be empty.");
-        }
     }
 }

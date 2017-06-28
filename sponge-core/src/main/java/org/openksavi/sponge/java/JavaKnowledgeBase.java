@@ -64,7 +64,7 @@ public abstract class JavaKnowledgeBase extends BaseKnowledgeBase {
     }
 
     @Override
-    public JavaKnowledgeBaseEngineOperations getEPS() {
+    public JavaKnowledgeBaseEngineOperations getEps() {
         return getEngineOperations();
     }
 }

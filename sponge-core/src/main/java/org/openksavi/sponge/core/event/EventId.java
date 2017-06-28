@@ -20,6 +20,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Event ID.
@@ -56,6 +58,27 @@ public class EventId implements Serializable, Comparable<EventId> {
         String[] elements = StringUtils.split(s, SEPARATOR);
 
         return new EventId(Long.parseLong(elements[0]), Long.parseLong(elements[1]));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        EventId eventId = (EventId) obj;
+
+        return new EqualsBuilder().append(baseTimestamp, eventId.baseTimestamp).append(id, eventId.id).build();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(baseTimestamp).append(id).build();
     }
 
     @Override

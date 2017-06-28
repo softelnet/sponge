@@ -3,7 +3,7 @@
 
 java_import java.util.concurrent.atomic.AtomicBoolean
 java_import java.util.concurrent.atomic.AtomicInteger
-java_import org.openksavi.sponge.examples.TestStatus
+java_import org.openksavi.sponge.test.TestStatus
 
 class ReloadTrigger < Trigger
     def configure

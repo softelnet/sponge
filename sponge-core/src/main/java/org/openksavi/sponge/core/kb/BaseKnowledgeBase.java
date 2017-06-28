@@ -46,7 +46,7 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
      *
      * @return engine operations.
      */
-    public KnowledgeBaseEngineOperations getEPS() {
+    public KnowledgeBaseEngineOperations getEps() {
         return getEngineOperations();
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.examples;
+package org.openksavi.sponge.test;
 
 public class TestStatus {
 

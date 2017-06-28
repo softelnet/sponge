@@ -51,7 +51,7 @@ public class PriorityEventQueue extends BaseEventQueue {
     }
 
     protected BlockingQueue<Event> createBlockingQueue() {
-        return new PriorityBlockingQueue<>(QUEUE_INITIAL_CAPACITY, PriorityEventQueueComparator.INSTANCE);
+        return new PriorityBlockingQueue<>(QUEUE_INITIAL_CAPACITY, new PriorityEventQueueComparator());
     }
 
     /**

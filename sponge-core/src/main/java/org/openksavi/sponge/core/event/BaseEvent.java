@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.engine.event.PriorityEventQueueComparator;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 
@@ -205,11 +204,6 @@ public abstract class BaseEvent implements Event {
         }
 
         return true;
-    }
-
-    @Override
-    public int compareTo(Event event) {
-        return PriorityEventQueueComparator.INSTANCE.compare(this, event);
     }
 
     protected void valudateAttribute(String name, Object value) {

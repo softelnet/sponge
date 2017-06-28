@@ -16,9 +16,19 @@
 
 package org.openksavi.sponge.groovy;
 
+import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+
 /**
  * Groovy-specific implementation of the filter.
  */
 public abstract class GroovyFilter extends org.openksavi.sponge.core.filter.BaseFilter {
 
+    /**
+     * Method required for accessing EPS in Groovy-based processors.
+     *
+     * @return EPS.
+     */
+    public final KnowledgeBaseEngineOperations getEPS() {
+        return getEps();
+    }
 }

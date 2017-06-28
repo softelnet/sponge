@@ -1,0 +1,7 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-development-tools</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>Sponge - Development tools</name>
+</project>

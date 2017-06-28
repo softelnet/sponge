@@ -28,7 +28,7 @@ public class DurationControlEvent extends ProcessorControlEvent {
 
     private static final long serialVersionUID = 639657397395742783L;
 
-    private EventSetProcessorAdapter eventSetProcessorAdapter;
+    private transient EventSetProcessorAdapter eventSetProcessorAdapter;
 
     public DurationControlEvent(EventSetProcessorAdapter eventSetProcessorAdapter) {
         super(Utils.createControlEventName(DurationControlEvent.class), eventSetProcessorAdapter.getGroup());

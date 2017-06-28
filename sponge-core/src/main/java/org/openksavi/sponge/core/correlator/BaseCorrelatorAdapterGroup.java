@@ -76,11 +76,6 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     }
 
     @Override
-    public void validate() {
-        //
-    }
-
-    @Override
     public List<CorrelatorAdapter> getCorrelators() {
         return getEventSetProcessorAdapters();
     }

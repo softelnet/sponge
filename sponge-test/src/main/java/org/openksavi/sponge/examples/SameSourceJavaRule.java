@@ -49,7 +49,7 @@ public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
     public void run(Event event) {
         logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"),
                 getEventAliasMap());
-        getEPS().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
+        getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
     }
 
     public boolean severityCondition(Event event) {

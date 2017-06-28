@@ -39,7 +39,7 @@ public class TimerEventSchedulerTask extends TimerTask implements EventScheduler
     private long counter = 0;
 
     /** Event scheduler reference. */
-    private TimerEventScheduler eventScheduler;
+    private transient TimerEventScheduler eventScheduler;
 
     private EventSchedulerEntry entry;
 

@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.correlator;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
 import org.openksavi.sponge.correlator.Correlator;
@@ -51,15 +50,5 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     @Override
     protected void onEvent(Event event) {
         getProcessor().onEvent(event);
-    }
-
-    @Override
-    public void validate() {
-        if (getName() == null) {
-            throw new SpongeException("Invalid correlator. Name must not be empty.");
-        }
-        if (getEventNames() == null || getEventNames().length < 1) {
-            throw new SpongeException("Invalid correlator " + getName() + ". At least one event must be specified.");
-        }
     }
 }

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -186,5 +187,12 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     @Override
     public String toString() {
         return getName() != null ? getName() : super.toString();
+    }
+
+    @Override
+    public void validate() {
+        if (getName() == null) {
+            throw new SpongeException("Invalid " + getType().getName() + ". Name must not be empty.");
+        }
     }
 }

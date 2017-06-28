@@ -35,7 +35,7 @@ public class ProcessorControlEvent extends BaseControlEvent {
     public static final String ATTR_PROCESSOR_ADAPTER = "processorAdapter";
 
     /** A processor adapter for which this control event is intended. */
-    private ProcessorAdapter processorAdapter;
+    private transient ProcessorAdapter processorAdapter;
 
     public ProcessorControlEvent(ProcessorAdapter processorAdapter) {
         this(Utils.createControlEventName(ProcessorControlEvent.class), processorAdapter);

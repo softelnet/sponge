@@ -27,11 +27,11 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapterFactory;
 import org.openksavi.sponge.ProcessorDefinition;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
@@ -65,7 +65,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
             ProcessorType.ACTION, new RegistrationHandler(
                     (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
                     (adapter) -> getEngine().getActionManager().removeAction(adapter.getName()),
-                    (adapter) -> getEngine(). getActionManager().existsAction(adapter.getName())),
+                    (adapter) -> getEngine().getActionManager().existsAction(adapter.getName())),
             ProcessorType.FILTER, new RegistrationHandler(
                     (adapter) -> getEngine().getFilterProcessingUnit().addProcessor((FilterAdapter) adapter),
                     (adapter) -> getEngine().getFilterProcessingUnit().removeProcessor(adapter.getName()),
@@ -317,7 +317,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     /**
      * Processor registration handler.
      */
-    protected class RegistrationHandler {
+    protected static class RegistrationHandler {
 
         private Consumer<ProcessorAdapter> registration;
 
@@ -345,7 +345,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         }
     }
 
-    protected class InstanceHolder {
+    protected static class InstanceHolder {
 
         private Processor processor;
 

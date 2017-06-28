@@ -246,7 +246,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         return executorEntry.getExecutor();
     }
 
-    public class WaitRejectedExecutionHandlerPolicy implements RejectedExecutionHandler {
+    public static class WaitRejectedExecutionHandlerPolicy implements RejectedExecutionHandler {
 
         public WaitRejectedExecutionHandlerPolicy() {
             //
