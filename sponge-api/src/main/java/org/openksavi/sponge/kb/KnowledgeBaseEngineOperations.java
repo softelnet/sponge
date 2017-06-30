@@ -39,8 +39,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     /**
      * Enables Java-based processor.
      *
-     * @param processorClass
-     *            Java-based processor class.
+     * @param processorClass Java-based processor class.
      */
     @SuppressWarnings("rawtypes")
     void enableJava(Class<? extends Processor> processorClass);
@@ -48,8 +47,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     /**
      * Enables Java-based processors.
      *
-     * @param processorClasses
-     *            Java-based processor classes.
+     * @param processorClasses Java-based processor classes.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     void enableJavaAll(Class<? extends Processor>... processorClasses);
@@ -57,8 +55,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     /**
      * Disables Java-based processor.
      *
-     * @param processorClass
-     *            Java-based processor class.
+     * @param processorClass Java-based processor class.
      */
     @SuppressWarnings("rawtypes")
     void disableJava(Class<? extends Processor> processorClass);
@@ -66,8 +63,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     /**
      * Disables Java-based processors.
      *
-     * @param processorClasses
-     *            Java-based processor classes.
+     * @param processorClasses Java-based processor classes.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     void disableJavaAll(Class<? extends Processor>... processorClasses);
@@ -75,80 +71,70 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     /**
      * Enables Java-based filter.
      *
-     * @param filterClass
-     *            filter Java class.
+     * @param filterClass filter Java class.
      */
     void enableJavaFilter(Class<? extends Filter> filterClass);
 
     /**
      * Disables Java-based filter.
      *
-     * @param filterClass
-     *            filter Java class.
+     * @param filterClass filter Java class.
      */
     void disableJavaFilter(Class<? extends Filter> filterClass);
 
     /**
      * Enables Java-based trigger.
      *
-     * @param triggerClass
-     *            trigger Java class.
+     * @param triggerClass trigger Java class.
      */
     void enableJavaTrigger(Class<? extends Trigger> triggerClass);
 
     /**
      * Disables Java-based trigger.
      *
-     * @param triggerClass
-     *            trigger Java class.
+     * @param triggerClass trigger Java class.
      */
     void disableJavaTrigger(Class<? extends Trigger> triggerClass);
 
     /**
      * Enables Java-based rule.
      *
-     * @param ruleClass
-     *            rule Java class.
+     * @param ruleClass rule Java class.
      */
     void enableJavaRule(Class<? extends Rule> ruleClass);
 
     /**
      * Disables Java-based rule.
      *
-     * @param ruleClass
-     *            rule Java class.
+     * @param ruleClass rule Java class.
      */
     void disableJavaRule(Class<? extends Rule> ruleClass);
 
     /**
      * Enables Java-based correlator.
      *
-     * @param correlatorClass
-     *            correlator Java class.
+     * @param correlatorClass correlator Java class.
      */
     void enableJavaCorrelator(Class<? extends Correlator> correlatorClass);
 
     /**
      * Disables Java-based correlator.
      *
-     * @param correlatorClass
-     *            correlator Java class.
+     * @param correlatorClass correlator Java class.
      */
     void disableJavaCorrelator(Class<? extends Correlator> correlatorClass);
 
     /**
      * Enables Java-based action.
      *
-     * @param actionClass
-     *            action Java class.
+     * @param actionClass action Java class.
      */
     void enableJavaAction(Class<? extends Action> actionClass);
 
     /**
      * Disables Java-based action.
      *
-     * @param actionClass
-     *            action Java class.
+     * @param actionClass action Java class.
      */
     void disableJavaAction(Class<? extends Action> actionClass);
 }

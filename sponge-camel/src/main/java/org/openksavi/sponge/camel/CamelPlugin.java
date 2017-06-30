@@ -91,6 +91,17 @@ public class CamelPlugin extends JavaPlugin implements CamelContextAware {
         return SpongeCamelEvent.create(getEngine(), name, exchange);
     }
 
+    public void send(Object body) {
+        if (consumers.isEmpty()) {
+            logger.debug("No consumer to send a message");
+        }
+
+        consumers.forEach(consumer -> {
+            logger.debug("Sending to consumer {}", consumer);
+            consumer.send(body);
+        });
+    }
+
     public void send(String uri, Object body) {
         getProducerTemplate().sendBody(uri, body);
     }
@@ -121,17 +132,6 @@ public class CamelPlugin extends JavaPlugin implements CamelContextAware {
 
     public Object request(String uri, Object body) {
         return getProducerTemplate().requestBody(uri, body);
-    }
-
-    public void send(Object body) {
-        if (consumers.isEmpty()) {
-            logger.debug("No consumer to send a message");
-        }
-
-        consumers.forEach(consumer -> {
-            logger.debug("Sending to consumer {}", consumer);
-            consumer.send(body);
-        });
     }
 
     public String getRouteId(Exchange exchange) {

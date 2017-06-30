@@ -18,10 +18,10 @@ package org.openksavi.sponge.core.engine;
 
 import java.util.stream.Collectors;
 
+import com.google.common.base.Throwables;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Throwables;
 
 import org.openksavi.sponge.engine.ExceptionContext;
 import org.openksavi.sponge.engine.ExceptionHandler;

@@ -33,8 +33,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.EventProcessorAdapter;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -71,14 +71,10 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     /**
      * Creates a new processing unit.
      *
-     * @param name
-     *            name.
-     * @param engine
-     *            the engine.
-     * @param inQueue
-     *            input queue.
-     * @param outQueue
-     *            output queue.
+     * @param name name.
+     * @param engine the engine.
+     * @param inQueue input queue.
+     * @param outQueue output queue.
      */
     public BaseProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine);
@@ -162,8 +158,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     /**
      * Returns an event map.
      *
-     * @param eventName
-     *            an event name.
+     * @param eventName an event name.
      *
      * @return an event map.
      */
@@ -192,8 +187,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     /**
      * Adds a new processor to this processing unit.
      *
-     * @param processor
-     *            processor.
+     * @param processor processor.
      */
     @Override
     public void addProcessor(T processor) {
@@ -248,25 +242,6 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     }
 
     /**
-     * Removes processor specified by its name.
-     *
-     * @param name
-     *            processor name.
-     */
-    @Override
-    public void removeProcessor(String name) {
-        try {
-            lock.lock();
-
-            eventMap.values().forEach(eventProcessors -> removeProcessor(eventProcessors, name, true));
-
-            registeredProcessorAdapterMap.remove(name);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
      * Removes all processors.
      */
     @Override
@@ -298,15 +273,29 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     }
 
     /**
+     * Removes processor specified by its name.
+     *
+     * @param name processor name.
+     */
+    @Override
+    public void removeProcessor(String name) {
+        try {
+            lock.lock();
+
+            eventMap.values().forEach(eventProcessors -> removeProcessor(eventProcessors, name, true));
+
+            registeredProcessorAdapterMap.remove(name);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
      * Removes processor.
      *
-     * @param processorList
-     *            processor list.
-     * @param removedProcessorName
-     *            name of the processor to remove.
-     * @param clear
-     *            whether to clear the removed processor
-     *            (i.e. invoke {@code clear()}).
+     * @param processorList processor list.
+     * @param removedProcessorName name of the processor to remove.
+     * @param clear whether to clear the removed processor (i.e. invoke {@code clear()}).
      */
     private void removeProcessor(Set<AtomicReference<T>> processorList, String removedProcessorName, boolean clear) {
         lock.lock();

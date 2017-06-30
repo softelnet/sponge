@@ -24,10 +24,8 @@ public interface EventDefinition {
     /**
      * Sets event attribute.
      *
-     * @param name
-     *            attribute name.
-     * @param value
-     *            attribute value.
+     * @param name attribute name.
+     * @param value attribute value.
      * @return this event definition for fluent API.
      */
     EventDefinition set(String name, Object value);
@@ -35,8 +33,7 @@ public interface EventDefinition {
     /**
      * Modifies the underlying event.
      *
-     * @param modifier
-     *            event definition modifier.
+     * @param modifier event definition modifier.
      * @return this event definition for fluent API.
      */
     EventDefinition modify(EventDefinitionModifier modifier);
@@ -51,8 +48,7 @@ public interface EventDefinition {
     /**
      * Sends the event to the Input Event Queue after a specified time.
      *
-     * @param delay
-     *            delay in milliseconds.
+     * @param delay delay in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAfter(long delay);
@@ -60,10 +56,8 @@ public interface EventDefinition {
     /**
      * Sends the event to the Input Event Queue periodically after a specified time.
      *
-     * @param delay
-     *            delay in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param delay delay in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAfter(long delay, long interval);
@@ -71,8 +65,7 @@ public interface EventDefinition {
     /**
      * Sends the event to the Input Event Queue at a specified time.
      *
-     * @param milliseconds
-     *            time in milliseconds.
+     * @param milliseconds time in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(long milliseconds);
@@ -80,10 +73,8 @@ public interface EventDefinition {
     /**
      * Sends the event to the Input Event Queue at a specified time and then periodically.
      *
-     * @param milliseconds
-     *            time in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param milliseconds time in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(long milliseconds, long interval);
@@ -91,8 +82,7 @@ public interface EventDefinition {
     /**
      * Sends the event to the Input Event Queue at a time specified by the crontab spec.
      *
-     * @param crontabSpec
-     *            crontab spec.
+     * @param crontabSpec crontab spec.
      * @return cron entry.
      */
     EventCronEntry sendAt(String crontabSpec);

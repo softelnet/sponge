@@ -43,8 +43,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a processor.
      *
-     * @param processorClass
-     *            a processor class.
+     * @param processorClass a processor class.
      */
     public void enable(Class processorClass) {
         engine.getProcessorManager().enable(getKnowledgeBase(), wrapClass(processorClass));
@@ -53,8 +52,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables processors.
      *
-     * @param processorClasses
-     *            processor classes.
+     * @param processorClasses processor classes.
      */
     public void enableAll(Class... processorClasses) {
         Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
@@ -71,8 +69,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void enableFilter(Class filterClass) {
         engine.getProcessorManager().enableFilter(getKnowledgeBase(), wrapClass(filterClass));
@@ -81,8 +78,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables filters.
      *
-     * @param filterClasses
-     *            filter classes.
+     * @param filterClasses filter classes.
      */
     public void enableFilters(Class... filterClasses) {
         for (Class filterClass : filterClasses) {
@@ -93,8 +89,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void disableFilter(Class filterClass) {
         engine.getProcessorManager().disableFilter(getKnowledgeBase(), wrapClass(filterClass));
@@ -103,8 +98,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void enableTrigger(Class triggerClass) {
         engine.getProcessorManager().enableTrigger(getKnowledgeBase(), wrapClass(triggerClass));
@@ -119,8 +113,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void disableTrigger(Class triggerClass) {
         engine.getProcessorManager().disableTrigger(getKnowledgeBase(), wrapClass(triggerClass));
@@ -129,8 +122,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void enableRule(Class ruleClass) {
         engine.getProcessorManager().enableRule(getKnowledgeBase(), wrapClass(ruleClass));
@@ -139,8 +131,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables rules.
      *
-     * @param ruleClasses
-     *            rule KB classes.
+     * @param ruleClasses rule KB classes.
      */
     public void enableRules(Class... ruleClasses) {
         for (Class ruleClass : ruleClasses) {
@@ -151,8 +142,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void disableRule(Class ruleClass) {
         engine.getProcessorManager().disableRule(getKnowledgeBase(), wrapClass(ruleClass));
@@ -175,8 +165,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void enableAction(Class actionClass) {
         engine.getProcessorManager().enableAction(getKnowledgeBase(), wrapClass(actionClass));
@@ -185,8 +174,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables actions.
      *
-     * @param actionClasses
-     *            action classes.
+     * @param actionClasses action classes.
      */
     public void enableActions(Class... actionClasses) {
         for (Class actionClass : actionClasses) {
@@ -197,8 +185,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void disableAction(Class actionClass) {
         engine.getProcessorManager().disableAction(getKnowledgeBase(), wrapClass(actionClass));

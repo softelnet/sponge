@@ -45,10 +45,8 @@ public class BaseEngineOperations implements EngineOperations {
     /**
      * Calls registered action with arguments.
      *
-     * @param actionName
-     *            name of the action.
-     * @param args
-     *            arguments to pass to action.
+     * @param actionName name of the action.
+     * @param args arguments to pass to action.
      */
     @Override
     public Object callAction(String actionName, Object... args) {
@@ -135,8 +133,7 @@ public class BaseEngineOperations implements EngineOperations {
     /**
      * Removes event from Event Scheduler.
      *
-     * @param entry
-     *            scheduled event entry.
+     * @param entry scheduled event entry.
      * @return informs whether the specified event has been scheduled.
      */
     @Override
@@ -150,8 +147,7 @@ public class BaseEngineOperations implements EngineOperations {
     /**
      * Removes event crontab entry.
      *
-     * @param entry
-     *            cron entry.
+     * @param entry cron entry.
      * @return informs whether the specified event has been scheduled.
      */
     @Override
@@ -163,11 +159,9 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     /**
-     * Returns the plugin that has the specified name or {@code null}
-     * if there is no such plugin.
+     * Returns the plugin that has the specified name or {@code null} if there is no such plugin.
      *
-     * @param name
-     *            plugin name.
+     * @param name plugin name.
      * @return plugin.
      */
     @Override
@@ -218,8 +212,7 @@ public class BaseEngineOperations implements EngineOperations {
     /**
      * Creates a new named event with default clone policy.
      *
-     * @param name
-     *            event name.
+     * @param name event name.
      * @return a new event.
      */
     @Override
@@ -230,10 +223,8 @@ public class BaseEngineOperations implements EngineOperations {
     /**
      * Creates a new named event with specified clone policy.
      *
-     * @param name
-     *            event name.
-     * @param policy
-     *            event clone policy.
+     * @param name event name.
+     * @param policy event clone policy.
      * @return a new event.
      */
     @Override

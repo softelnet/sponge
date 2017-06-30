@@ -26,8 +26,7 @@ public class SpongeException extends RuntimeException {
     /**
      * Creates a new exception.
      *
-     * @param message
-     *            exception message.
+     * @param message exception message.
      */
     public SpongeException(String message) {
         super(message);
@@ -36,8 +35,7 @@ public class SpongeException extends RuntimeException {
     /**
      * Creates a new exception.
      *
-     * @param throwable
-     *            source throwable.
+     * @param throwable source throwable.
      */
     public SpongeException(Throwable throwable) {
         super(throwable);
@@ -46,10 +44,8 @@ public class SpongeException extends RuntimeException {
     /**
      * Creates a new exception.
      *
-     * @param message
-     *            exception message.
-     * @param throwable
-     *            source throwable.
+     * @param message exception message.
+     * @param throwable source throwable.
      */
     public SpongeException(String message, Throwable throwable) {
         super(message, throwable);

@@ -548,11 +548,13 @@
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <failsOnError>false</failsOnError> <!-- true -->
+                            <failsOnError>true</failsOnError>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
-                            <configLocation>checkstyle/checkstyle.xml</configLocation>
-                            <headerLocation>checkstyle/LICENSE.txt</headerLocation>
+                            <configLocation>checkstyle/sponge-checkstyle.xml</configLocation>
+                            <suppressionsLocation>checkstyle/sponge-checkstyle-suppressions.xml</suppressionsLocation>
+                            <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+<!--                             <headerLocation>checkstyle/LICENSE.txt</headerLocation> -->
                         </configuration>
                         <executions>
                             <execution>

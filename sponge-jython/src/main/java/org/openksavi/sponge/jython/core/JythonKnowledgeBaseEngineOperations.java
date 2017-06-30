@@ -36,8 +36,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a processor.
      *
-     * @param processorClass
-     *            a processor class.
+     * @param processorClass a processor class.
      */
     public void enable(PyType processorClass) {
         engine.getProcessorManager().enable(getKnowledgeBase(), processorClass);
@@ -46,8 +45,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables processors.
      *
-     * @param processorClasses
-     *            processor classes.
+     * @param processorClasses processor classes.
      */
     public void enableAll(PyType... processorClasses) {
         Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
@@ -64,8 +62,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void enableFilter(PyType filterClass) {
         engine.getProcessorManager().enableFilter(getKnowledgeBase(), filterClass);
@@ -74,8 +71,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables filters.
      *
-     * @param filterClasses
-     *            filter classes.
+     * @param filterClasses filter classes.
      */
     public void enableFilters(PyType... filterClasses) {
         for (PyType filterClass : filterClasses) {
@@ -86,8 +82,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void disableFilter(PyType filterClass) {
         engine.getProcessorManager().disableFilter(getKnowledgeBase(), filterClass);
@@ -96,8 +91,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void enableTrigger(PyType triggerClass) {
         engine.getProcessorManager().enableTrigger(getKnowledgeBase(), triggerClass);
@@ -112,8 +106,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void disableTrigger(PyType triggerClass) {
         engine.getProcessorManager().disableTrigger(getKnowledgeBase(), triggerClass);
@@ -122,8 +115,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void enableRule(PyType ruleClass) {
         engine.getProcessorManager().enableRule(getKnowledgeBase(), ruleClass);
@@ -132,8 +124,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables rules.
      *
-     * @param ruleClasses
-     *            rule classes.
+     * @param ruleClasses rule classes.
      */
     public void enableRules(PyType... ruleClasses) {
         for (PyType ruleClass : ruleClasses) {
@@ -144,8 +135,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void disableRule(PyType ruleClass) {
         engine.getProcessorManager().disableRule(getKnowledgeBase(), ruleClass);
@@ -168,8 +158,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void enableAction(PyType actionClass) {
         engine.getProcessorManager().enableAction(getKnowledgeBase(), actionClass);
@@ -178,8 +167,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Enables actions.
      *
-     * @param actionClasses
-     *            action classes.
+     * @param actionClasses action classes.
      */
     public void enableActions(PyType... actionClasses) {
         for (PyType actionClass : actionClasses) {
@@ -190,8 +178,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     /**
      * Disables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void disableAction(PyType actionClass) {
         engine.getProcessorManager().disableAction(getKnowledgeBase(), actionClass);

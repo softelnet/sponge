@@ -29,10 +29,8 @@ public interface EventScheduler extends EventGenerator {
     /**
      * Schedules an event after a specified time.
      *
-     * @param event
-     *            event.
-     * @param delay
-     *            delay in milliseconds.
+     * @param event event.
+     * @param delay delay in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry scheduleAfter(Event event, long delay);
@@ -40,12 +38,9 @@ public interface EventScheduler extends EventGenerator {
     /**
      * Schedules an event after a specified time with the specified interval.
      *
-     * @param event
-     *            event.
-     * @param delay
-     *            delay in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param event event.
+     * @param delay delay in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry scheduleAfter(Event event, long delay, long interval);
@@ -53,10 +48,8 @@ public interface EventScheduler extends EventGenerator {
     /**
      * Schedules an event at a specified time.
      *
-     * @param event
-     *            event.
-     * @param at
-     *            time in milliseconds.
+     * @param event event.
+     * @param at time in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry scheduleAt(Event event, long at);
@@ -64,12 +57,9 @@ public interface EventScheduler extends EventGenerator {
     /**
      * Schedules an event at a specified time with the specified interval.
      *
-     * @param event
-     *            event.
-     * @param at
-     *            time in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param event event.
+     * @param at time in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry scheduleAt(Event event, long at, long interval);
@@ -77,8 +67,7 @@ public interface EventScheduler extends EventGenerator {
     /**
      * Schedules a specified event now (inserts to the queue immediately).
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     void scheduleNow(Event event);
 
@@ -92,8 +81,7 @@ public interface EventScheduler extends EventGenerator {
     /**
      * Removes the specified event task.
      *
-     * @param entry
-     *            event scheduler entry.
+     * @param entry event scheduler entry.
      * @return {@code true} if the specified event scheduler entry has been scheduled.
      */
     boolean remove(EventSchedulerEntry entry);

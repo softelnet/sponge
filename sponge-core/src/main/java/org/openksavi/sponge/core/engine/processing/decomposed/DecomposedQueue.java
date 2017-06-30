@@ -77,8 +77,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     /**
      * Puts a new entry (trigger adapter or event set processor group adapter, event) at the end of this decomposed queue.
      *
-     * @param entry
-     *            a pair (trigger adapter or event set processor group adapter).
+     * @param entry a pair (trigger adapter or event set processor group adapter).
      */
     public void put(Pair<T, Event> entry) {
         lock.lock();
@@ -100,26 +99,21 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     }
 
     /**
-     * Returns the next pair (trigger adapter or event set processor group adapter) available to processing. Trigger adapter is always
-     * ready to process an event because it is a singleton. Event set processor group adapter is ready to process an event
-     * only one at a time, i.e. processed events sequentially to preserve event order.
-     * <p>
-     * This method is blocking.
-     * <p>
-     * When timeout occurs {@code null} is returned.
-     * <p>
-     * If this method returns non-{@code null} value, you have to invoke {@code release} after the processing by the returned
-     * adapter completes.
+     * Returns the next pair (trigger adapter or event set processor group adapter) available to processing. Trigger adapter is always ready
+     * to process an event because it is a singleton. Event set processor group adapter is ready to process an event only one at a time,
+     * i.e. processed events sequentially to preserve event order.
      *
-     * @param timeout
-     *            how long to wait before giving up, in units of
-     *            {@code unit}.
-     * @param unit
-     *            unit a {@code TimeUnit} determining how to interpret the
-     *            {@code timeout} parameter.
+     * <p>This method is blocking.
+     *
+     * <p>When timeout occurs {@code null} is returned.
+     *
+     * <p>If this method returns non-{@code null} value, you have to invoke {@code release} after the processing by the returned adapter
+     * completes.
+     *
+     * @param timeout how long to wait before giving up, in units of {@code unit}.
+     * @param unit unit a {@code TimeUnit} determining how to interpret the {@code timeout} parameter.
      * @return the next pair (trigger adapter or event set processor group adapter) available to processing.
-     * @throws InterruptedException
-     *             if interrupted while waiting.
+     * @throws InterruptedException if interrupted while waiting.
      */
     public Pair<T, Event> get(long timeout, TimeUnit unit) throws InterruptedException {
         lock.lock();
@@ -145,12 +139,8 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     }
 
     /**
-     * Returns the next pair (trigger adapter or event set processor group adapter) available to processing.
-     * <p>
-     * Not-Blocking.
-     * </p>
-     * Returns {@code null} if currently there is no pair (trigger adapter or event set processor group adapter)
-     * available to processing.
+     * Returns the next pair (trigger adapter or event set processor group adapter) available to processing. <p> Not-Blocking. </p> Returns
+     * {@code null} if currently there is no pair (trigger adapter or event set processor group adapter) available to processing.
      *
      * @return the next pair (trigger adapter or event set processor group adapter) available to processing or {@code null} if none found.
      */
@@ -177,8 +167,8 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
                     // Non-singletons (in this case rule group adapters and correlator group adapters) are blocked while processing
                     // the previous event.
                     // Note that only the earliest event going to the given adapter should be considered.
-                    if (!currentlyProcessedNonSingletons.contains(adapter.getName()) &&
-                            !nonSingletonsWaitningForEarlierEvent.contains(adapter.getName())) {
+                    if (!currentlyProcessedNonSingletons.contains(adapter.getName())
+                            && !nonSingletonsWaitningForEarlierEvent.contains(adapter.getName())) {
                         // If necessary verify also event name readiness.
                         if (allowConcurrentEventTypeProcessing || !currentlyProcessedEventNames.contains(event.getName())) {
                             currentlyProcessedNonSingletons.add(adapter.getName());
@@ -202,8 +192,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     /**
      * Releases trigger adapter or event set processor group adapter after the completion of processing the event.
      *
-     * @param entry
-     *            an entry.
+     * @param entry an entry.
      */
     public void release(Pair<T, Event> entry) {
         lock.lock();

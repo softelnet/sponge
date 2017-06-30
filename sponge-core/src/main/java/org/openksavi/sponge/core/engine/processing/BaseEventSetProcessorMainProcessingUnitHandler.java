@@ -38,8 +38,9 @@ import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.event.Event;
 
-public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends EventSetProcessorAdapterGroup<T>, T extends EventSetProcessorAdapter<?>>
-        extends BaseMainProcessingUnitHandler implements EventSetProcessorMainProcessingUnitHandler<G, T> {
+public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends EventSetProcessorAdapterGroup<T>,
+        T extends EventSetProcessorAdapter<?>> extends BaseMainProcessingUnitHandler
+        implements EventSetProcessorMainProcessingUnitHandler<G, T> {
 
     private ScheduledExecutorService executorService;
 

@@ -28,134 +28,107 @@ public interface ProcessorManager extends EngineModule {
     /**
      * Enables a processor.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param processorClass
-     *            processor class.
+     * @param knowledgeBase knowledge base.
+     * @param processorClass processor class.
      */
     void enable(KnowledgeBase knowledgeBase, Object processorClass);
 
     /**
      * Disables a processor.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param processorClass
-     *            processor class.
+     * @param knowledgeBase knowledge base.
+     * @param processorClass processor class.
      */
     void disable(KnowledgeBase knowledgeBase, Object processorClass);
 
     /**
      * Enables an action.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param actionClass
-     *            action class.
+     * @param knowledgeBase knowledge base.
+     * @param actionClass action class.
      */
     void enableAction(KnowledgeBase knowledgeBase, Object actionClass);
 
     /**
      * Enables a filter.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param filterClass
-     *            filter class.
+     * @param knowledgeBase knowledge base.
+     * @param filterClass filter class.
      */
     void enableFilter(KnowledgeBase knowledgeBase, Object filterClass);
 
     /**
      * Enables a trigger.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param triggerClass
-     *            trigger class.
+     * @param knowledgeBase knowledge base.
+     * @param triggerClass trigger class.
      */
     void enableTrigger(KnowledgeBase knowledgeBase, Object triggerClass);
 
     /**
      * Enables a rule.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param ruleClass
-     *            rule class.
+     * @param knowledgeBase knowledge base.
+     * @param ruleClass rule class.
      */
     void enableRule(KnowledgeBase knowledgeBase, Object ruleClass);
 
     /**
      * Enables a correlator.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param correlatorClass
-     *            correlator class.
+     * @param knowledgeBase knowledge base.
+     * @param correlatorClass correlator class.
      */
     void enableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass);
 
     /**
      * Disables the action.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param actionClass
-     *            action class.
+     * @param knowledgeBase knowledge base.
+     * @param actionClass action class.
      */
     void disableAction(KnowledgeBase knowledgeBase, Object actionClass);
 
     /**
      * Disables the filter.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param filterClass
-     *            filter class.
+     * @param knowledgeBase knowledge base.
+     * @param filterClass filter class.
      */
     void disableFilter(KnowledgeBase knowledgeBase, Object filterClass);
 
     /**
      * Disables the trigger.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param triggerClass
-     *            trigger class.
+     * @param knowledgeBase knowledge base.
+     * @param triggerClass trigger class.
      */
     void disableTrigger(KnowledgeBase knowledgeBase, Object triggerClass);
 
     /**
      * Disables the rule.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param ruleClass
-     *            rule class.
+     * @param knowledgeBase knowledge base.
+     * @param ruleClass rule class.
      */
     void disableRule(KnowledgeBase knowledgeBase, Object ruleClass);
 
     /**
      * Disables the correlator.
      *
-     * @param knowledgeBase
-     *            knowledge base.
-     * @param correlatorClass
-     *            correlator class.
+     * @param knowledgeBase knowledge base.
+     * @param correlatorClass correlator class.
      */
     void disableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass);
 
     /**
      * Creates a new uninitialized processor instance.
      *
-     * @param definition
-     *            processor definition.
-     * @param cls
-     *            processor class.
+     * @param definition processor definition.
+     * @param cls processor class.
      * @return a new uninitialized processor instance.
      *
-     * @param <T>
-     *            processor.
+     * @param <T> processor.
      */
     @SuppressWarnings("rawtypes")
     <T extends Processor> T createProcessorInstance(ProcessorDefinition definition, Class<T> cls);

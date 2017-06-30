@@ -50,8 +50,7 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
     /**
      * Sets event names for which this processor is registered.
      *
-     * @param eventNames
-     *            event names.
+     * @param eventNames event names.
      */
     @Override
     public void setEventNames(String... eventNames) {
@@ -61,8 +60,7 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
     /**
      * Sets event name for which this processor is registered.
      *
-     * @param eventName
-     *            event name.
+     * @param eventName event name.
      */
     @Override
     public void setEventName(String eventName) {

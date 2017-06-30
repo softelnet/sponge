@@ -41,8 +41,7 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
     /**
      * Creates a new Event Queue Manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultEventQueueManager(Engine engine) {
         super("EventQueueManager", engine);

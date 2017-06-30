@@ -46,8 +46,7 @@ public class BaseEventGenerateEntry implements EventGenerateEntry {
     /**
      * Sets entry ID.
      *
-     * @param id
-     *            entry ID.
+     * @param id entry ID.
      */
     public void setId(Object id) {
         this.id = id;
@@ -66,8 +65,7 @@ public class BaseEventGenerateEntry implements EventGenerateEntry {
     /**
      * Sets event name.
      *
-     * @param eventName
-     *            event name.
+     * @param eventName event name.
      */
     public void setEventName(String eventName) {
         this.eventName = eventName;

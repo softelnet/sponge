@@ -11,10 +11,8 @@ public interface MainProcessingUnitHandler {
     /**
      * Processes the incoming event by the specified processor.
      *
-     * @param adatper
-     *            processor adapter.
-     * @param event
-     *            the incoming event.
+     * @param adatper processor adapter.
+     * @param event the incoming event.
      */
     void processEvent(ProcessorAdapter<?> adatper, Event event);
 

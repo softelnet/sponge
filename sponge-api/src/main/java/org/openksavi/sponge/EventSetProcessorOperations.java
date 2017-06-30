@@ -33,8 +33,7 @@ public interface EventSetProcessorOperations extends EventProcessorOperations {
     /**
      * Sets a duration.
      *
-     * @param duration
-     *            a duration.
+     * @param duration a duration.
      */
     void setDuration(Duration duration);
 
@@ -55,8 +54,7 @@ public interface EventSetProcessorOperations extends EventProcessorOperations {
     /**
      * Sets synchronous flag.
      *
-     * @param synchronous
-     *            synchronous flag.
+     * @param synchronous synchronous flag.
      */
     void setSynchronous(Boolean synchronous);
 }

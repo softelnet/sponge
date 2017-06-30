@@ -34,8 +34,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables a processor.
      *
-     * @param processorClass
-     *            processor class.
+     * @param processorClass processor class.
      */
     public void enable(Object processorClass) {
         engine.getProcessorManager().enable(getKnowledgeBase(), resolveProcessorName(processorClass));
@@ -44,8 +43,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables processors.
      *
-     * @param processorClasses
-     *            processor classes.
+     * @param processorClasses processor classes.
      */
     public void enableAll(Object... processorClasses) {
         Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
@@ -62,8 +60,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void enableFilter(Object filterClass) {
         engine.getProcessorManager().enableFilter(getKnowledgeBase(), resolveProcessorName(filterClass));
@@ -72,8 +69,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables filters.
      *
-     * @param filterClasses
-     *            filter classes.
+     * @param filterClasses filter classes.
      */
     public void enableFilters(Object... filterClasses) {
         for (Object filterClass : filterClasses) {
@@ -84,8 +80,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Disables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void disableFilter(Object filterClass) {
         engine.getProcessorManager().disableFilter(getKnowledgeBase(), resolveProcessorName(filterClass));
@@ -94,8 +89,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void enableTrigger(Object triggerClass) {
         engine.getProcessorManager().enableTrigger(getKnowledgeBase(), resolveProcessorName(triggerClass));
@@ -110,8 +104,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Disables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void disableTrigger(Object triggerClass) {
         engine.getProcessorManager().disableTrigger(getKnowledgeBase(), resolveProcessorName(triggerClass));
@@ -120,8 +113,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void enableRule(Object ruleClass) {
         engine.getProcessorManager().enableRule(getKnowledgeBase(), resolveProcessorName(ruleClass));
@@ -130,8 +122,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables rules.
      *
-     * @param ruleClasses
-     *            rule classes.
+     * @param ruleClasses rule classes.
      */
     public void enableRules(Object... ruleClasses) {
         for (Object ruleClass : ruleClasses) {
@@ -142,8 +133,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Disables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void disableRule(Object ruleClass) {
         engine.getProcessorManager().disableRule(getKnowledgeBase(), resolveProcessorName(ruleClass));
@@ -166,8 +156,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void enableAction(Object actionClass) {
         engine.getProcessorManager().enableAction(getKnowledgeBase(), resolveProcessorName(actionClass));
@@ -176,8 +165,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Enables actions.
      *
-     * @param actionClasses
-     *            action classes.
+     * @param actionClasses action classes.
      */
     public void enableActions(Object... actionClasses) {
         for (Object actionClass : actionClasses) {
@@ -188,8 +176,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     /**
      * Disables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void disableAction(Object actionClass) {
         engine.getProcessorManager().disableAction(getKnowledgeBase(), resolveProcessorName(actionClass));

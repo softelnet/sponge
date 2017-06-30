@@ -52,8 +52,8 @@ public class StandaloneTest {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/news/config/config.xml");
             Engine engine = engineMain.getEngine();
 
-            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null &&
-                    engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
+            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
+                    && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
             TimeUnit.SECONDS.sleep(1);
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
@@ -83,8 +83,8 @@ public class StandaloneTest {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/camel_template/config.xml");
             Engine engine = engineMain.getEngine();
 
-            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null &&
-                    engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
+            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
+                    && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
             TimeUnit.SECONDS.sleep(1);
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);

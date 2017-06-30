@@ -32,8 +32,7 @@ public interface EventProcessorOperations extends ProcessorOperations {
     /**
      * Returns an event name for the specified event index.
      *
-     * @param index
-     *            event index.
+     * @param index event index.
      *
      * @return event name.
      */
@@ -42,16 +41,14 @@ public interface EventProcessorOperations extends ProcessorOperations {
     /**
      * Sets event names for which this processor is registered.
      *
-     * @param eventNames
-     *            event names.
+     * @param eventNames event names.
      */
     void setEventNames(String... eventNames);
 
     /**
      * Sets event name for which this processor is registered.
      *
-     * @param eventName
-     *            event name.
+     * @param eventName event name.
      */
     void setEventName(String eventName);
 }

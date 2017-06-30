@@ -16,10 +16,10 @@
 
 package org.openksavi.sponge.standalone;
 
+import ch.qos.logback.core.Appender;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.core.Appender;
 
 /**
  * This class defines a set of utility methods.
@@ -33,8 +33,7 @@ public abstract class StandaloneUtils {
     /**
      * Starts or stops logging to the console.
      *
-     * @param start
-     *            starts or stops logging to the console.
+     * @param start starts or stops logging to the console.
      */
     @SuppressWarnings("rawtypes")
     public static void logToConsole(boolean start) {

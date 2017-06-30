@@ -63,8 +63,7 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
     /**
      * Sets event set processor state.
      *
-     * @param state
-     *            event set processor state.
+     * @param state event set processor state.
      */
     @Override
     public void setState(EventSetProcessorState state) {

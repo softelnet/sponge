@@ -29,8 +29,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     /**
      * Creates a new action adapter.
      *
-     * @param definition
-     *            a base action definition.
+     * @param definition a base action definition.
      */
     public BaseActionAdapter(BaseActionDefinition definition) {
         super(definition);

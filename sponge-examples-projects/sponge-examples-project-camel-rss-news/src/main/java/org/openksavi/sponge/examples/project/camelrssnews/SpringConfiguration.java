@@ -61,13 +61,13 @@ public class SpringConfiguration extends EngineCamelConfiguration {
     public RouteBuilder rssInputRoute() {
         return new RouteBuilder() {
 
+            // @formatter:off
             @SuppressWarnings("unchecked")
             @Override
             public void configure() throws Exception {
                 EngineOperations operations = camelRssEngine().getOperations();
                 Map<String, String> rssSources = operations.getVariable(Map.class, CamelRssConstants.VAR_RSS_SOURCES);
 
-                // @formatter:off
                 // Read RSS feeds from all configured sources.
                 rssSources.forEach((source, url) ->
                         from("rss:" + url + operations.getVariable(CamelRssConstants.VAR_RSS_ENDPOINT_PARAMETERS, "")).routeId(source)
@@ -89,8 +89,8 @@ public class SpringConfiguration extends EngineCamelConfiguration {
                                 .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()"))
                                 .make()))
                         .to("sponge:camelRssEngine");
-                // @formatter:on
             }
+            // @formatter:on
         };
     }
 
@@ -120,8 +120,7 @@ public class SpringConfiguration extends EngineCamelConfiguration {
      * Camel producer template used by Sponge Camel component.
      *
      * @return producer template.
-     * @throws Exception
-     *             Camel context specific exception.
+     * @throws Exception Camel context specific exception.
      */
     @Bean
     public ProducerTemplate spongeProducerTemplate() throws Exception {

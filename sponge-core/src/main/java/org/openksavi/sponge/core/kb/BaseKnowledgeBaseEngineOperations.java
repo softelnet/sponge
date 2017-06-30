@@ -76,8 +76,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Enables Java filter.
      *
-     * @param filterClass
-     *            filter Java class.
+     * @param filterClass filter Java class.
      */
     @Override
     public void enableJavaFilter(Class<? extends Filter> filterClass) {
@@ -87,8 +86,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Disables Java filter.
      *
-     * @param filterClass
-     *            filter Java class.
+     * @param filterClass filter Java class.
      */
     @Override
     public void disableJavaFilter(Class<? extends Filter> filterClass) {
@@ -98,8 +96,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Enables Java trigger.
      *
-     * @param triggerClass
-     *            trigger Java class.
+     * @param triggerClass trigger Java class.
      */
     @Override
     public void enableJavaTrigger(Class<? extends Trigger> triggerClass) {
@@ -109,8 +106,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Disables Java trigger.
      *
-     * @param triggerClass
-     *            trigger Java class.
+     * @param triggerClass trigger Java class.
      */
     @Override
     public void disableJavaTrigger(Class<? extends Trigger> triggerClass) {
@@ -120,8 +116,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Enables Java rule.
      *
-     * @param ruleClass
-     *            rule Java class.
+     * @param ruleClass rule Java class.
      */
     @Override
     public void enableJavaRule(Class<? extends Rule> ruleClass) {
@@ -131,8 +126,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Disables Java rule.
      *
-     * @param ruleClass
-     *            rule Java class.
+     * @param ruleClass rule Java class.
      */
     @Override
     public void disableJavaRule(Class<? extends Rule> ruleClass) {
@@ -152,8 +146,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Enables Java action.
      *
-     * @param actionClass
-     *            action Java class.
+     * @param actionClass action Java class.
      */
     @Override
     public void enableJavaAction(Class<? extends Action> actionClass) {
@@ -163,8 +156,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     /**
      * Disables Java action.
      *
-     * @param actionClass
-     *            action Java class.
+     * @param actionClass action Java class.
      */
     @Override
     public void disableJavaAction(Class<? extends Action> actionClass) {

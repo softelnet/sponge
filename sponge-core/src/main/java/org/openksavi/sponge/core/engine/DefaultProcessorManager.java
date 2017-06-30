@@ -23,9 +23,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.apache.commons.lang3.Validate;
-
 import com.google.common.collect.ImmutableMap;
+
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
@@ -59,45 +59,44 @@ import org.openksavi.sponge.trigger.TriggerAdapter;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class DefaultProcessorManager extends BaseEngineModule implements ProcessorManager {
 
+    //@formatter:off
     /** Processor registration handlers. */
     protected Map<ProcessorType, RegistrationHandler> registrationHandlers = ImmutableMap.of(
-            //@formatter:off
-            ProcessorType.ACTION, new RegistrationHandler(
-                    (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
-                    (adapter) -> getEngine().getActionManager().removeAction(adapter.getName()),
-                    (adapter) -> getEngine().getActionManager().existsAction(adapter.getName())),
-            ProcessorType.FILTER, new RegistrationHandler(
-                    (adapter) -> getEngine().getFilterProcessingUnit().addProcessor((FilterAdapter) adapter),
-                    (adapter) -> getEngine().getFilterProcessingUnit().removeProcessor(adapter.getName()),
-                    (adapter) -> getEngine().getFilterProcessingUnit().existsProcessor(adapter.getName())),
-            ProcessorType.TRIGGER, new RegistrationHandler(
-                    (adapter) -> getEngine().getMainProcessingUnit().addProcessor((TriggerAdapter) adapter),
-                    (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
-                    (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), adapter.getType())),
-            ProcessorType.RULE, new RegistrationHandler(
-                    (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
-                            new BaseRuleAdapterGroup(((BaseRuleAdapter) adapter).getDefinition(),
-                            (EventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter>) getEngine()
-                                    .getMainProcessingUnit().getHandler(ProcessorType.RULE_GROUP))),
-                    (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
-                    (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.RULE_GROUP)),
-            ProcessorType.CORRELATOR, new RegistrationHandler(
-                    (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
-                            new BaseCorrelatorAdapterGroup(((BaseCorrelatorAdapter) adapter).getDefinition(),
-                            (EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>) getEngine()
-                                    .getMainProcessingUnit().getHandler(ProcessorType.CORRELATOR_GROUP))),
-                    (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
-                    (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.CORRELATOR_GROUP))
-            );
-            //@formatter:on
+        ProcessorType.ACTION, new RegistrationHandler(
+            (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
+            (adapter) -> getEngine().getActionManager().removeAction(adapter.getName()),
+            (adapter) -> getEngine().getActionManager().existsAction(adapter.getName())),
+        ProcessorType.FILTER, new RegistrationHandler(
+            (adapter) -> getEngine().getFilterProcessingUnit().addProcessor((FilterAdapter) adapter),
+            (adapter) -> getEngine().getFilterProcessingUnit().removeProcessor(adapter.getName()),
+            (adapter) -> getEngine().getFilterProcessingUnit().existsProcessor(adapter.getName())),
+        ProcessorType.TRIGGER, new RegistrationHandler(
+            (adapter) -> getEngine().getMainProcessingUnit().addProcessor((TriggerAdapter) adapter),
+            (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
+            (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), adapter.getType())),
+        ProcessorType.RULE, new RegistrationHandler(
+            (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
+                        new BaseRuleAdapterGroup(((BaseRuleAdapter) adapter).getDefinition(),
+                        (EventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter>) getEngine()
+                                .getMainProcessingUnit().getHandler(ProcessorType.RULE_GROUP))),
+            (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
+            (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.RULE_GROUP)),
+        ProcessorType.CORRELATOR, new RegistrationHandler(
+            (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
+                        new BaseCorrelatorAdapterGroup(((BaseCorrelatorAdapter) adapter).getDefinition(),
+                        (EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>) getEngine()
+                                .getMainProcessingUnit().getHandler(ProcessorType.CORRELATOR_GROUP))),
+            (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
+            (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.CORRELATOR_GROUP))
+        );
+    //@formatter:on
 
     private Lock lock = new ReentrantLock();
 
     /**
      * Creates a new processor manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultProcessorManager(Engine engine) {
         super("ProcessorManager", engine);

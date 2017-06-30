@@ -28,8 +28,7 @@ public interface RuleOperations extends EventSetProcessorOperations {
     /**
      * Sets event aliases.
      *
-     * @param aliases
-     *            event aliases.
+     * @param aliases event aliases.
      */
     void setEventAliases(String... aliases);
 
@@ -43,8 +42,7 @@ public interface RuleOperations extends EventSetProcessorOperations {
     /**
      * Returns an event alias for the specified event index.
      *
-     * @param index
-     *            event index.
+     * @param index event index.
      *
      * @return event alias.
      */
@@ -53,8 +51,7 @@ public interface RuleOperations extends EventSetProcessorOperations {
     /**
      * Sets event modes.
      *
-     * @param modes
-     *            event modes.
+     * @param modes event modes.
      */
     void setEventModes(EventMode... modes);
 
@@ -68,8 +65,7 @@ public interface RuleOperations extends EventSetProcessorOperations {
     /**
      * Returns an event mode for the specified event index.
      *
-     * @param index
-     *            event index.
+     * @param index event index.
      *
      * @return event mode.
      */
@@ -78,28 +74,23 @@ public interface RuleOperations extends EventSetProcessorOperations {
     /**
      * Sets event conditions.
      *
-     * @param eventAlias
-     *            event alias.
-     * @param conditions
-     *            event conditions.
+     * @param eventAlias event alias.
+     * @param conditions event conditions.
      */
     void setJavaConditions(String eventAlias, EventCondition... conditions);
 
     /**
      * Adds an event condition.
      *
-     * @param eventAlias
-     *            event alias.
-     * @param condition
-     *            event condition.
+     * @param eventAlias event alias.
+     * @param condition event condition.
      */
     void addJavaCondition(String eventAlias, EventCondition condition);
 
     /**
      * Returns event conditions for the specified event alias.
      *
-     * @param eventAlias
-     *            event alias.
+     * @param eventAlias event alias.
      * @return event conditions.
      */
     List<EventCondition> getConditions(String eventAlias);

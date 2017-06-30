@@ -27,8 +27,7 @@ public interface Trigger extends EventProcessor<TriggerAdapter> {
     /**
      * Informs whether the specified event is to be accepted.
      *
-     * @param event
-     *            event.
+     * @param event event.
      * @return whether the specified event is to be accepted.
      */
     boolean accepts(Event event);
@@ -36,8 +35,7 @@ public interface Trigger extends EventProcessor<TriggerAdapter> {
     /**
      * Runs this trigger.
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     void run(Event event);
 }

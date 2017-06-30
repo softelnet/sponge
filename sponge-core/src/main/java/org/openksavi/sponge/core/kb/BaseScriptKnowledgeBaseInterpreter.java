@@ -57,10 +57,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     /**
      * Creates a new knowledge base interpreter.
      *
-     * @param engineOperations
-     *            an engine operations.
-     * @param type
-     *            a knowledge base type.
+     * @param engineOperations an engine operations.
+     * @param type a knowledge base type.
      */
     protected BaseScriptKnowledgeBaseInterpreter(KnowledgeBaseEngineOperations engineOperations, KnowledgeBaseType type) {
         super(engineOperations, type);
@@ -84,26 +82,10 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         }
     }
 
-    @Override
-    public void reload(List<KnowledgeBaseScript> scripts) {
-        load(scripts);
-    }
-
-    private void loadKnowledgeBaseScript(KnowledgeBaseScript script) {
-        logger.info("Loading knowledge base '{}' file '{}'.", script.getKnowledgeBase().getName(), script.getFileName());
-
-        if (script.getCharset() != null) {
-            load(script.getFileName(), script.getCharset());
-        } else {
-            load(script.getFileName());
-        }
-    }
-
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName
-     *            file name.
+     * @param fileName file name.
      */
     @Override
     public void load(String fileName) {
@@ -113,10 +95,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName
-     *            file name.
-     * @param charset
-     *            charset.
+     * @param fileName file name.
+     * @param charset charset.
      */
     @Override
     public void load(String fileName, String charset) {
@@ -132,6 +112,21 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
             } catch (Throwable e) {
                 throw Utils.wrapException("load", e);
             }
+        }
+    }
+
+    @Override
+    public void reload(List<KnowledgeBaseScript> scripts) {
+        load(scripts);
+    }
+
+    private void loadKnowledgeBaseScript(KnowledgeBaseScript script) {
+        logger.info("Loading knowledge base '{}' file '{}'.", script.getKnowledgeBase().getName(), script.getFileName());
+
+        if (script.getCharset() != null) {
+            load(script.getFileName(), script.getCharset());
+        } else {
+            load(script.getFileName());
         }
     }
 

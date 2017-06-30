@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jruby.RubyClass;
@@ -36,8 +38,6 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
@@ -174,8 +174,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     /**
      * Adds import from the package.
      *
-     * @param clazz
-     *            class to be imported.
+     * @param clazz class to be imported.
      */
     protected void addImport(Class<?> clazz) {
         eval("java_import " + clazz.getName());
@@ -293,8 +292,8 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
             Object symbol = eval(((RubySymbol) element).asJavaString());
             if (symbol != null && symbol instanceof RubyClass) {
                 RubyClass rubyClass = (RubyClass) symbol;
-                if (!processorRubyTypes.contains(rubyClass) &&
-                        CollectionUtils.containsAny(rubyClass.getAncestorList(), processorRubyTypes)) {
+                if (!processorRubyTypes.contains(rubyClass)
+                        && CollectionUtils.containsAny(rubyClass.getAncestorList(), processorRubyTypes)) {
                     autoEnabled.add(rubyClass);
                     ((JRubyKnowledgeBaseEngineOperations) getEngineOperations()).enable(rubyClass);
                 }

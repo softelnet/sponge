@@ -20,8 +20,7 @@ import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
- * Null event queue that forgets all events.
- * It can be used as event queue terminator.
+ * Null event queue that forgets all events. It can be used as event queue terminator.
  */
 public class NullEventQueue extends BaseEventQueue {
 

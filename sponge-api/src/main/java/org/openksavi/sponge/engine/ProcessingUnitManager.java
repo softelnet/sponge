@@ -35,8 +35,7 @@ public interface ProcessingUnitManager extends EngineModule {
     /**
      * Adds a new processing unit.
      *
-     * @param processingUnit
-     *            processing unit.
+     * @param processingUnit processing unit.
      */
     void addProcessingUnit(ProcessingUnit<?> processingUnit);
 

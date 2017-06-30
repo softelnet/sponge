@@ -46,14 +46,10 @@ public class TimerEventSchedulerTask extends TimerTask implements EventScheduler
     /**
      * Creates a new event scheduler task.
      *
-     * @param entry
-     *            an event scheduler entry.
-     * @param eventScheduler
-     *            an event scheduler reference.
-     * @param event
-     *            the scheduled event.
-     * @param sequential
-     *            whether this task defines sequential events or not.
+     * @param entry an event scheduler entry.
+     * @param eventScheduler an event scheduler reference.
+     * @param event the scheduled event.
+     * @param sequential whether this task defines sequential events or not.
      */
     public TimerEventSchedulerTask(EventSchedulerEntry entry, TimerEventScheduler eventScheduler, Event event, boolean sequential) {
         this.entry = entry;
@@ -65,12 +61,9 @@ public class TimerEventSchedulerTask extends TimerTask implements EventScheduler
     /**
      * Creates a new event scheduler task.
      *
-     * @param entry
-     *            an event scheduler entry.
-     * @param eventScheduler
-     *            an event scheduler reference.
-     * @param event
-     *            the scheduled event.
+     * @param entry an event scheduler entry.
+     * @param eventScheduler an event scheduler reference.
+     * @param event the scheduled event.
      */
     public TimerEventSchedulerTask(EventSchedulerEntry entry, TimerEventScheduler eventScheduler, Event event) {
         this(entry, eventScheduler, event, false);

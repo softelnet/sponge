@@ -24,8 +24,7 @@ public interface SystemSignalListener {
     /**
      * Callback method called when an OS signal is received.
      *
-     * @param signal
-     *            system signal.
+     * @param signal system signal.
      */
     void signalReceived(SystemSignal signal);
 }

@@ -22,7 +22,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.TestUtils;
 
 /**
- *
+ * Script tests utility methods.
  */
 public class ScriptTestUtils {
 

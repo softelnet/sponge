@@ -36,16 +36,14 @@ public interface EventSetProcessorAdapterGroup<T extends EventSetProcessorAdapte
     /**
      * Processes a specified event.
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     void processEvent(Event event);
 
     /**
      * Invoked when event set processor adapter duration occurs.
      *
-     * @param adapter
-     *            adapter.
+     * @param adapter adapter.
      */
     void durationOccurred(T adapter);
 }

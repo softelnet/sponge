@@ -41,8 +41,7 @@ public abstract class BaseEventProcessorDefinition extends BaseProcessorDefiniti
     /**
      * Sets event names for which this processor definition is registered.
      *
-     * @param eventNames
-     *            event names.
+     * @param eventNames event names.
      */
     @Override
     public void setEventNames(String... eventNames) {

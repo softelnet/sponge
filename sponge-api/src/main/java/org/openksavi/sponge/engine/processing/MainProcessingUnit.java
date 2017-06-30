@@ -32,8 +32,7 @@ public interface MainProcessingUnit extends ProcessingUnit<EventProcessorAdapter
     /**
      * Returns handler for the specified processor type.
      *
-     * @param type
-     *            processor type.
+     * @param type processor type.
      * @return handler.
      */
     MainProcessingUnitHandler getHandler(ProcessorType type);
@@ -62,10 +61,8 @@ public interface MainProcessingUnit extends ProcessingUnit<EventProcessorAdapter
     /**
      * Returns {@code true} if a processor of type {@code type} named {@code name} exists.
      *
-     * @param name
-     *            processor name.
-     * @param type
-     *            processor type.
+     * @param name processor name.
+     * @param type processor type.
      * @return {@code true} if a processor of type {@code type} named {@code name} exists.
      */
     boolean existsProcessor(String name, ProcessorType type);

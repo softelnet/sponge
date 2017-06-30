@@ -27,8 +27,7 @@ public interface Correlator extends EventSetProcessor<CorrelatorAdapter> {
     /**
      * Checks if this event should be accepted as the first event of this correlator therefore starting the new instance.
      *
-     * @param event
-     *            the incoming event.
+     * @param event the incoming event.
      * @return if this event should be accepted as the first event.
      */
     boolean acceptsAsFirst(Event event);
@@ -36,8 +35,7 @@ public interface Correlator extends EventSetProcessor<CorrelatorAdapter> {
     /**
      * Callback invoked when an event happens.
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     void onEvent(Event event);
 

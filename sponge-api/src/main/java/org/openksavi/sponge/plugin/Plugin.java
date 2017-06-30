@@ -29,8 +29,7 @@ public interface Plugin extends EngineModule, Configurable {
     /**
      * Sets a plugin description.
      *
-     * @param description
-     *            a plugin description.
+     * @param description a plugin description.
      */
     void setDescription(String description);
 
@@ -44,10 +43,8 @@ public interface Plugin extends EngineModule, Configurable {
     /**
      * Sets a plugin configuration.
      *
-     * @param configuration
-     *            a plugin configuration.
-     * @param configure
-     *            whether this configuration should be applied immediately.
+     * @param configuration a plugin configuration.
+     * @param configure whether this configuration should be applied immediately.
      */
     void setConfiguration(Configuration configuration, boolean configure);
 
@@ -93,8 +90,7 @@ public interface Plugin extends EngineModule, Configurable {
     /**
      * Sets the knowledge base associated with this plugin.
      *
-     * @param knowledgeBase
-     *            the knowledge base.
+     * @param knowledgeBase the knowledge base.
      */
     void setKnowledgeBase(KnowledgeBase knowledgeBase);
 }

@@ -18,6 +18,8 @@ package org.openksavi.sponge.groovy;
 
 import java.util.function.Function;
 
+import groovy.lang.Closure;
+
 import org.codehaus.groovy.runtime.MethodClosure;
 
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
@@ -25,8 +27,6 @@ import org.openksavi.sponge.core.rule.ScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.groovy.core.GroovyClosureEventCondition;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.rule.EventCondition;
-
-import groovy.lang.Closure;
 
 /**
  * Groovy-specific implementation of the rule.

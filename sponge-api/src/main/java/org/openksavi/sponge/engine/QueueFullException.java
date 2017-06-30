@@ -28,8 +28,7 @@ public class QueueFullException extends SpongeException {
     /**
      * Creates a new exception representing a full event queue.
      *
-     * @param message
-     *            exception message.
+     * @param message exception message.
      */
     public QueueFullException(String message) {
         super(message);

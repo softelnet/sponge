@@ -24,8 +24,7 @@ public interface ProcessorAdapterImplementor extends ProcessorOperations {
     /**
      * Sets the knowledge base associated with this processor.
      *
-     * @param knowledgeBase
-     *            the knowledge base.
+     * @param knowledgeBase the knowledge base.
      */
     void setKnowledgeBase(BaseKnowledgeBase knowledgeBase);
 
@@ -39,8 +38,7 @@ public interface ProcessorAdapterImplementor extends ProcessorOperations {
     /**
      * Sets processor definition.
      *
-     * @param processorDef
-     *            processor definition.
+     * @param processorDef processor definition.
      */
     void setDefinition(BaseProcessorDefinition processorDef);
 

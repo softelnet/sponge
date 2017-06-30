@@ -55,8 +55,8 @@ public class DefaultEngineParameters implements EngineParameters {
     private long executorShutdownTimeout = 20;
 
     /**
-     * A specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation
-     * parameter - an asynchronous processing partition size.
+     * A specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter - an
+     * asynchronous processing partition size.
      */
     private int asyncEventSetProcessorProcessingPartitionSize = 1000;
 

@@ -21,38 +21,32 @@ import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
- * Event queue.
- * Event queue may have a limited size.
+ * Event queue. Event queue may have a limited size.
  */
 public interface EventQueue extends EngineModule {
 
     /**
      * Puts a new event into the event queue.
      *
-     * @param event
-     *            a new event.
-     * @throws org.openksavi.sponge.engine.QueueFullException
-     *             when the queue is full.
+     * @param event a new event.
+     * @throws org.openksavi.sponge.engine.QueueFullException when the queue is full.
      */
     void put(Event event) throws QueueFullException;
 
     /**
      * Returns the first event from the queue.
      *
-     * @param timeout
-     *            the timeout in milliseconds.
+     * @param timeout the timeout in milliseconds.
      *
      * @return the first event from the queue or {@code null} when there was none.
-     * @throws java.lang.InterruptedException
-     *             if any.
+     * @throws java.lang.InterruptedException if any.
      */
     Event get(long timeout) throws InterruptedException;
 
     /**
      * Sets the capacity of the queue.
      *
-     * @param capacity
-     *            the capacity of the queue.
+     * @param capacity the capacity of the queue.
      */
     void setCapacity(int capacity);
 

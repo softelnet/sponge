@@ -27,16 +27,14 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
     /**
      * Runs (fires) this rule.
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     void run(Event event);
 
     /**
      * Returns an event that has a specified alias.
      *
-     * @param eventAlias
-     *            an event alias.
+     * @param eventAlias an event alias.
      * @return an event.
      */
     Event getEvent(String eventAlias);
@@ -44,20 +42,16 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
     /**
      * Sets events.
      *
-     * @param events
-     *            events.
+     * @param events events.
      */
     void setEvents(Object[] events);
 
     /**
      * Creates a new rule event specification.
      *
-     * @param eventName
-     *            an event name.
-     * @param eventAlias
-     *            an event alias.
-     * @param eventMode
-     *            an event mode.
+     * @param eventName an event name.
+     * @param eventAlias an event alias.
+     * @param eventMode an event mode.
      *
      * @return a new rule event specification.
      */
@@ -66,10 +60,8 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
     /**
      * Creates a new rule event specification.
      *
-     * @param eventName
-     *            an event name.
-     * @param eventMode
-     *            an event mode.
+     * @param eventName an event name.
+     * @param eventMode an event mode.
      *
      * @return a new rule event specification.
      */
@@ -78,10 +70,8 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
     /**
      * Creates a new rule event specification.
      *
-     * @param eventName
-     *            an event name.
-     * @param eventAlias
-     *            an event alias.
+     * @param eventName an event name.
+     * @param eventAlias an event alias.
      *
      * @return a new rule event specification.
      */
@@ -90,8 +80,7 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
     /**
      * Creates a new rule event specification.
      *
-     * @param eventName
-     *            an event name.
+     * @param eventName an event name.
      *
      * @return a new rule event specification.
      */

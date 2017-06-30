@@ -28,18 +28,15 @@ public interface Session extends Serializable {
     /**
      * Sets session variable value.
      *
-     * @param name
-     *            variable name.
-     * @param value
-     *            variable value.
+     * @param name variable name.
+     * @param value variable value.
      */
     void setVariable(String name, Object value);
 
     /**
      * Returns the value of the session variable. Throws exception if not found.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return variable value.
      */
     Object getVariable(String name);
@@ -47,60 +44,48 @@ public interface Session extends Serializable {
     /**
      * Returns the value of the session variable. Throws exception if not found.
      *
-     * @param cls
-     *            variable class.
-     * @param name
-     *            variable name.
+     * @param cls variable class.
+     * @param name variable name.
      *
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(Class<T> cls, String name);
 
     /**
      * Returns the value of the session variable or {@code defaultValue} if not found.
      *
-     * @param name
-     *            variable name.
-     * @param defaultValue
-     *            default value.
+     * @param name variable name.
+     * @param defaultValue default value.
      *
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(String name, T defaultValue);
 
     /**
      * Returns the value of the session variable or {@code defaultValue} if not found.
      *
-     * @param cls
-     *            variable class.
-     * @param name
-     *            variable name.
-     * @param defaultValue
-     *            default value.
+     * @param cls variable class.
+     * @param name variable name.
+     * @param defaultValue default value.
      *
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(Class<T> cls, String name, T defaultValue);
 
     /**
      * Removes a session variable.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      */
     void removeVariable(String name);
 
     /**
      * Returns {@code true} if a session variable named {@code name} exists.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return {@code true} if a session variable named {@code name} exists.
      */
     boolean existsVariable(String name);
@@ -108,20 +93,16 @@ public interface Session extends Serializable {
     /**
      * Sets the session variable if not set already.
      *
-     * @param name
-     *            variable name.
-     * @param supplier
-     *            variable value supplier.
-     * @param <T>
-     *            variable.
+     * @param name variable name.
+     * @param supplier variable value supplier.
+     * @param <T> variable.
      */
     <T> void setVariableIfNone(String name, Supplier<T> supplier);
 
     /**
      * Updates the session variable.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      */
     void updateVariable(String name);
 }

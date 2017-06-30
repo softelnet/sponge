@@ -12,23 +12,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openksavi.sponge.standalone.test;
 
 import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
-public class StandaloneTestUtils {
+import org.slf4j.LoggerFactory;
 
-    private static final Logger logger = LoggerFactory.getLogger(StandaloneTestUtils.class);
+import org.openksavi.sponge.standalone.StandaloneEngineMain;
+
+public class StandaloneTestUtils {
 
     public static StandaloneEngineMain startupStandaloneEngineMain(String... args) {
         System.out.println("Starting up standalone engine with args: " + Arrays.asList(args));

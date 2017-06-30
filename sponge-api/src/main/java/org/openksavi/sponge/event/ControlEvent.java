@@ -27,8 +27,7 @@ public interface ControlEvent extends Event {
     /**
      * Sets the priority. Greater value means greater priority.
      *
-     * @param priority
-     *            the priority.
+     * @param priority the priority.
      * @return the holder of the priority for fluent API.
      */
     ControlEvent setPriority(int priority);

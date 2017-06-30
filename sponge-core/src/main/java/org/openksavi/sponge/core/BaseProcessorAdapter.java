@@ -40,8 +40,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     /**
      * Creates a new processor.
      *
-     * @param definition
-     *            a processor definition.
+     * @param definition a processor definition.
      */
     protected BaseProcessorAdapter(BaseProcessorDefinition definition) {
         this.definition = definition;
@@ -66,8 +65,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     /**
      * Sets processor definition.
      *
-     * @param definition
-     *            processor definition.
+     * @param definition processor definition.
      */
     @Override
     public void setDefinition(BaseProcessorDefinition definition) {
@@ -110,8 +108,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     /**
      * Sets this processor name.
      *
-     * @param name
-     *            processor name.
+     * @param name processor name.
      */
     @Override
     public void setName(String name) {
@@ -142,8 +139,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     /**
      * Sets display name.
      *
-     * @param displayName
-     *            display name.
+     * @param displayName display name.
      */
     @Override
     public void setDisplayName(String displayName) {

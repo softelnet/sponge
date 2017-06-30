@@ -36,10 +36,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     /**
      * Creates a new correlator group.
      *
-     * @param correlatorDefinition
-     *            correlator definition.
-     * @param handler
-     *            handler.
+     * @param correlatorDefinition correlator definition.
+     * @param handler handler.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public BaseCorrelatorAdapterGroup(BaseEventSetProcessorDefinition correlatorDefinition,
@@ -60,10 +58,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     /**
      * Checks if there is a need for creating a new correlator instance.
      *
-     * @param event
-     *            event.
-     * @return {@code true} if there is a need for creating
-     *         a new correlator instance.
+     * @param event event.
+     * @return {@code true} if there is a need for creating a new correlator instance.
      */
     @Override
     public boolean needNewInstance(Event event) {

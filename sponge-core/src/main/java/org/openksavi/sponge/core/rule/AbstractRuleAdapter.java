@@ -18,9 +18,6 @@ package org.openksavi.sponge.core.rule;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.EventMode;
@@ -32,8 +29,6 @@ import org.openksavi.sponge.rule.RuleEventSpec;
  * Abstract rule adapter.
  */
 public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetProcessorAdapter<Rule> implements RuleAdapter {
-
-    private static final Logger logger = LoggerFactory.getLogger(AbstractRuleAdapter.class);
 
     protected AbstractRuleAdapter(BaseRuleDefinition definition) {
         super(definition);

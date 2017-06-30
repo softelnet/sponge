@@ -5,7 +5,7 @@ Fibonacci numbers
 Note that this example is intended ONLY to show how to send a chain of events (each carrying a Fibonacci number as an attribute).
 If you need to generate Fibonacci numbers you should use a simpler method.
 """
-maxIndex = 1000
+maxIndex = 100
 
 def onInit():
     EPS.setVariable("f(maxIndex)", None)

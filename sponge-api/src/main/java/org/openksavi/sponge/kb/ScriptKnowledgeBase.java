@@ -34,8 +34,7 @@ public interface ScriptKnowledgeBase extends KnowledgeBase {
     /**
      * Adds a new knowledge base script.
      *
-     * @param script
-     *            knowledge base script.
+     * @param script knowledge base script.
      */
     void addScript(KnowledgeBaseScript script);
 
@@ -43,6 +42,29 @@ public interface ScriptKnowledgeBase extends KnowledgeBase {
      * Loads a knowledge base from scripts.
      */
     void load();
+
+    /**
+     * Loads the knowledge base from the file.
+     *
+     * @param fileName file name.
+     */
+    void load(String fileName);
+
+    /**
+     * Loads the knowledge base from the file.
+     *
+     * @param fileName file name.
+     * @param charset charset.
+     */
+    void load(String fileName, String charset);
+
+    /**
+     * Loads the knowledge base from the file.
+     *
+     * @param fileName file name.
+     * @param charset charset.
+     */
+    void load(String fileName, Charset charset);
 
     /**
      * Reloads the knowledge base from scripts.
@@ -54,32 +76,4 @@ public interface ScriptKnowledgeBase extends KnowledgeBase {
      */
     @Override
     ScriptKnowledgeBaseInterpreter getInterpreter();
-
-    /**
-     * Loads the knowledge base from the file.
-     *
-     * @param fileName
-     *            file name.
-     */
-    void load(String fileName);
-
-    /**
-     * Loads the knowledge base from the file.
-     *
-     * @param fileName
-     *            file name.
-     * @param charset
-     *            charset.
-     */
-    void load(String fileName, String charset);
-
-    /**
-     * Loads the knowledge base from the file.
-     *
-     * @param fileName
-     *            file name.
-     * @param charset
-     *            charset.
-     */
-    void load(String fileName, Charset charset);
 }

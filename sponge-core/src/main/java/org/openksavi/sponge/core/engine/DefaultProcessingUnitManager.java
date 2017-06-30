@@ -35,8 +35,7 @@ public class DefaultProcessingUnitManager extends BaseEngineModule implements Pr
     /**
      * Creates a new Processing Unit Manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultProcessingUnitManager(Engine engine) {
         super("ProcessingUnitManager", engine);
@@ -55,8 +54,7 @@ public class DefaultProcessingUnitManager extends BaseEngineModule implements Pr
     /**
      * Adds a new processing unit.
      *
-     * @param processingUnit
-     *            processing unit.
+     * @param processingUnit processing unit.
      */
     @Override
     public void addProcessingUnit(ProcessingUnit<?> processingUnit) {

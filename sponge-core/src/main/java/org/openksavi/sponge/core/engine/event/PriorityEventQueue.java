@@ -26,8 +26,8 @@ import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
- * A priority event queue. Event queue may have a limited size. It supports priority of events.
- * Greater value of the priority signifies a more important event.
+ * A priority event queue. Event queue may have a limited size. It supports priority of events. Greater value of the priority signifies a
+ * more important event.
  */
 public class PriorityEventQueue extends BaseEventQueue {
 
@@ -41,8 +41,7 @@ public class PriorityEventQueue extends BaseEventQueue {
     /**
      * Creates a new priority event queue.
      *
-     * @param name
-     *            queue name.
+     * @param name queue name.
      */
     public PriorityEventQueue(String name) {
         super(name);
@@ -57,10 +56,8 @@ public class PriorityEventQueue extends BaseEventQueue {
     /**
      * Puts a new event into the event queue.
      *
-     * @param event
-     *            a new event.
-     * @throws QueueFullException
-     *             when the queue is full.
+     * @param event a new event.
+     * @throws QueueFullException when the queue is full.
      */
     @Override
     public void put(Event event) throws QueueFullException {

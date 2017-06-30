@@ -42,8 +42,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables a processor.
      *
-     * @param processorClass
-     *            a processor class.
+     * @param processorClass a processor class.
      */
     public void enable(RubyClass processorClass) {
         engine.getProcessorManager().enable(getKnowledgeBase(), processorClass);
@@ -52,8 +51,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables processors.
      *
-     * @param processorClasses
-     *            processor classes.
+     * @param processorClasses processor classes.
      */
     public void enableAll(RubyClass... processorClasses) {
         Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
@@ -70,8 +68,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables a filter.
      *
-     * @param filterClass
-     *            filter KB class.
+     * @param filterClass filter KB class.
      */
     public void enableFilter(RubyClass filterClass) {
         engine.getProcessorManager().enableFilter(getKnowledgeBase(), filterClass);
@@ -80,8 +77,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables filters.
      *
-     * @param filterClasses
-     *            filter classes.
+     * @param filterClasses filter classes.
      */
     public void enableFilters(RubyClass... filterClasses) {
         for (RubyClass filterClass : filterClasses) {
@@ -92,8 +88,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables a filter.
      *
-     * @param filterClass
-     *            filter class.
+     * @param filterClass filter class.
      */
     public void disableFilter(RubyClass filterClass) {
         engine.getProcessorManager().disableFilter(getKnowledgeBase(), filterClass);
@@ -102,8 +97,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void enableTrigger(RubyClass triggerClass) {
         engine.getProcessorManager().enableTrigger(getKnowledgeBase(), triggerClass);
@@ -118,8 +112,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables a trigger.
      *
-     * @param triggerClass
-     *            trigger class.
+     * @param triggerClass trigger class.
      */
     public void disableTrigger(RubyClass triggerClass) {
         engine.getProcessorManager().disableTrigger(getKnowledgeBase(), triggerClass);
@@ -128,8 +121,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void enableRule(RubyClass ruleClass) {
         engine.getProcessorManager().enableRule(getKnowledgeBase(), ruleClass);
@@ -138,8 +130,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables rules.
      *
-     * @param ruleClasses
-     *            rule classes.
+     * @param ruleClasses rule classes.
      */
     public void enableRules(RubyClass... ruleClasses) {
         for (RubyClass ruleClass : ruleClasses) {
@@ -150,8 +141,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables a rule.
      *
-     * @param ruleClass
-     *            rule class.
+     * @param ruleClass rule class.
      */
     public void disableRule(RubyClass ruleClass) {
         engine.getProcessorManager().disableRule(getKnowledgeBase(), ruleClass);
@@ -174,8 +164,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void enableAction(RubyClass actionClass) {
         engine.getProcessorManager().enableAction(getKnowledgeBase(), actionClass);
@@ -184,8 +173,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables actions.
      *
-     * @param actionClasses
-     *            action classes.
+     * @param actionClasses action classes.
      */
     public void enableActions(RubyClass... actionClasses) {
         for (RubyClass actionClass : actionClasses) {
@@ -196,8 +184,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables an action.
      *
-     * @param actionClass
-     *            action class.
+     * @param actionClass action class.
      */
     public void disableAction(RubyClass actionClass) {
         engine.getProcessorManager().disableAction(getKnowledgeBase(), actionClass);
@@ -224,8 +211,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables Java filter.
      *
-     * @param filterClass
-     *            filter Java class.
+     * @param filterClass filter Java class.
      */
     @SuppressWarnings("unchecked")
     public void enableJavaFilter(RubyClass filterClass) {
@@ -235,8 +221,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables Java filter.
      *
-     * @param filterClass
-     *            filter Java class.
+     * @param filterClass filter Java class.
      */
     @SuppressWarnings("unchecked")
     public void disableJavaFilter(RubyClass filterClass) {
@@ -246,8 +231,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables Java trigger.
      *
-     * @param triggerClass
-     *            trigger Java class.
+     * @param triggerClass trigger Java class.
      */
     @SuppressWarnings("unchecked")
     public void enableJavaTrigger(RubyClass triggerClass) {
@@ -257,8 +241,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables Java trigger.
      *
-     * @param triggerClass
-     *            trigger Java class.
+     * @param triggerClass trigger Java class.
      */
     @SuppressWarnings("unchecked")
     public void disableJavaTrigger(RubyClass triggerClass) {
@@ -268,8 +251,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables Java rule.
      *
-     * @param ruleClass
-     *            rule Java class.
+     * @param ruleClass rule Java class.
      */
     @SuppressWarnings("unchecked")
     public void enableJavaRule(RubyClass ruleClass) {
@@ -279,8 +261,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables Java rule.
      *
-     * @param ruleClass
-     *            rule Java class.
+     * @param ruleClass rule Java class.
      */
     @SuppressWarnings("unchecked")
     public void disableJavaRule(RubyClass ruleClass) {
@@ -290,8 +271,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables Java correlator.
      *
-     * @param correlatorClass
-     *            correlator Java class.
+     * @param correlatorClass correlator Java class.
      */
     @SuppressWarnings("unchecked")
     public void enableJavaCorrelator(RubyClass correlatorClass) {
@@ -301,8 +281,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables Java correlator.
      *
-     * @param correlatorClass
-     *            correlator Java class.
+     * @param correlatorClass correlator Java class.
      */
     @SuppressWarnings("unchecked")
     public void disableJavaCorrelator(RubyClass correlatorClass) {
@@ -312,8 +291,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Enables Java action.
      *
-     * @param actionClass
-     *            action Java class.
+     * @param actionClass action Java class.
      */
     @SuppressWarnings("unchecked")
     public void enableJavaAction(RubyClass actionClass) {
@@ -323,8 +301,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     /**
      * Disables Java action.
      *
-     * @param actionClass
-     *            action Java class.
+     * @param actionClass action Java class.
      */
     @SuppressWarnings("unchecked")
     public void disableJavaAction(RubyClass actionClass) {

@@ -29,6 +29,10 @@ This generates all but without tests, licenses, javadoc, documentation, review a
 
  mvn install -DskipTests -P-create-license-list -P-download-licenses -P-javadoc -P-documentation -P-assembly
 
+== Code style
+Formatter and checkstyle based on Google configuration.
+
+Project specific files located in `sponge-development-tools`.
 
 == Eclipse
 

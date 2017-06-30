@@ -121,11 +121,6 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
     }
 
     @Override
-    public void reload() {
-        getInterpreter().reload(scripts);
-    }
-
-    @Override
     public void load(String fileName) {
         getInterpreter().load(fileName);
     }
@@ -138,5 +133,10 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
     @Override
     public void load(String fileName, Charset charset) {
         getInterpreter().load(fileName, charset);
+    }
+
+    @Override
+    public void reload() {
+        getInterpreter().reload(scripts);
     }
 }

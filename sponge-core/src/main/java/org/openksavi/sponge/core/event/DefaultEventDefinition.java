@@ -33,12 +33,9 @@ public class DefaultEventDefinition implements EventDefinition {
     /**
      * Creates a new event definition.
      *
-     * @param engineOperations
-     *            an engine operations.
-     * @param name
-     *            an event name.
-     * @param clonePolicy
-     *            an event clone policy.
+     * @param engineOperations an engine operations.
+     * @param name an event name.
+     * @param clonePolicy an event clone policy.
      */
     public DefaultEventDefinition(EngineOperations engineOperations, String name, EventClonePolicy clonePolicy) {
         this.engineOperations = engineOperations;
@@ -48,10 +45,8 @@ public class DefaultEventDefinition implements EventDefinition {
     /**
      * Creates a new event definition.
      *
-     * @param engineOperations
-     *            an engine operations.
-     * @param event
-     *            an event.
+     * @param engineOperations an engine operations.
+     * @param event an event.
      */
     public DefaultEventDefinition(EngineOperations engineOperations, Event event) {
         this.engineOperations = engineOperations;

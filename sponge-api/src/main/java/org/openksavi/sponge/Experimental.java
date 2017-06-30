@@ -23,9 +23,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Signifies that a public API (public class, method or field) implementation is in an experimental state. An API bearing this annotation
- * is not guaranteed to be stable and you should avoid using it. Typically it marks a functionality that will be available in future
- * versions.
+ * Signifies that a public API (public class, method or field) implementation is in an experimental state. An API bearing this annotation is
+ * not guaranteed to be stable and you should avoid using it. Typically it marks a functionality that will be available in future versions.
  */
 @Retention(RetentionPolicy.CLASS)
 @Target({ ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })

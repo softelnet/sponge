@@ -24,8 +24,7 @@ public interface EventSchedulerEntry extends EventGenerateEntry {
     /**
      * Returns scheduled event delay (in milliseconds).
      *
-     * @return scheduled event delay or {@code 0} if there is no
-     *         delay (event is generated at a specified time).
+     * @return scheduled event delay or {@code 0} if there is no delay (event is generated at a specified time).
      */
     long getDelay();
 
@@ -39,8 +38,7 @@ public interface EventSchedulerEntry extends EventGenerateEntry {
     /**
      * Returns scheduled event time (in milliseconds).
      *
-     * @return scheduled event time or {@code 0} if there is no
-     *         specific time (event is generated after delay).
+     * @return scheduled event time or {@code 0} if there is no specific time (event is generated after delay).
      */
     long getMilliseconds();
 }

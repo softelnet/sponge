@@ -24,11 +24,13 @@ import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 
+import com.google.common.collect.ImmutableMap;
+
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
@@ -50,8 +52,6 @@ import org.openksavi.sponge.nashorn.NashornTrigger;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.trigger.Trigger;
-
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 /**
  * Knowledge base interpreter supporting knowledge base to be defined in the Jython (Python) language.
@@ -106,10 +106,8 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
     /**
      * Adds import from the package.
      *
-     * @param scriptEngine
-     *            scripting engine.
-     * @param clazz
-     *            class to be imported.
+     * @param scriptEngine scripting engine.
+     * @param clazz class to be imported.
      */
     protected void addImport(ScriptEngine scriptEngine, Class<?> clazz) {
         addImport(scriptEngine, clazz, clazz.getSimpleName());

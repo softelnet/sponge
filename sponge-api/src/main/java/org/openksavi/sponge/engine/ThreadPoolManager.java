@@ -28,18 +28,15 @@ public interface ThreadPoolManager extends EngineModule {
     /**
      * Adds a processable.
      *
-     * @param processable
-     *            a processable.
+     * @param processable a processable.
      */
     void addProcessable(Processable processable);
 
     /**
      * Adds a processable.
      *
-     * @param processable
-     *            a processable.
-     * @param workers
-     *            amount of worker threads.
+     * @param processable a processable.
+     * @param workers amount of worker threads.
      */
     void addProcessable(Processable processable, int workers);
 
@@ -70,8 +67,7 @@ public interface ThreadPoolManager extends EngineModule {
     /**
      * Returns an executor.
      *
-     * @param name
-     *            executor name.
+     * @param name executor name.
      * @return executor.
      */
     ExecutorService getExecutor(String name);

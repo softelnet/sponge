@@ -43,8 +43,7 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
     /**
      * Sets plugin description.
      *
-     * @param description
-     *            plugin description.
+     * @param description plugin description.
      */
     @Override
     public void setDescription(String description) {
@@ -64,10 +63,8 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
     /**
      * Sets plugin configuration.
      *
-     * @param configuration
-     *            plugin configuration.
-     * @param configure
-     *            whether this configuration should be applied immediately.
+     * @param configuration plugin configuration.
+     * @param configure whether this configuration should be applied immediately.
      */
     @Override
     public void setConfiguration(Configuration configuration, boolean configure) {
@@ -190,7 +187,8 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
      * @return logger.
      */
     public Logger getLogger() {
-        return LoggerFactory.getLogger(KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." +
-                getKnowledgeBase().getInterpreter().getType().getTypeCode() + "." + (getName() != null ? getName() : getClass().getName()));
+        return LoggerFactory
+                .getLogger(KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." + getKnowledgeBase().getInterpreter().getType().getTypeCode()
+                        + "." + (getName() != null ? getName() : getClass().getName()));
     }
 }

@@ -29,8 +29,7 @@ public interface PluginManager extends Configurable, EngineModule {
     /**
      * Checks whether a plugin with the specified name exists.
      *
-     * @param name
-     *            plugin name.
+     * @param name plugin name.
      * @return {@code true} if the plugin exists.
      */
     boolean existsPlugin(String name);
@@ -38,16 +37,14 @@ public interface PluginManager extends Configurable, EngineModule {
     /**
      * Adds the specified plugin.
      *
-     * @param plugin
-     *            plugin.
+     * @param plugin plugin.
      */
     void addPlugin(Plugin plugin);
 
     /**
      * Removes the specified plugin.
      *
-     * @param plugin
-     *            plugin.
+     * @param plugin plugin.
      */
     void removePlugin(Plugin plugin);
 
@@ -61,35 +58,27 @@ public interface PluginManager extends Configurable, EngineModule {
     /**
      * Returns a plugin identified by the name.
      *
-     * @param name
-     *            plugin name.
+     * @param name plugin name.
      * @return plugin or {@code null} if there is no such plugin.
      */
     Plugin getPlugin(String name);
 
     /**
-     * Returns the plugin that has the specified name and type or {@code null}
-     * if there is no such plugin.
+     * Returns the plugin that has the specified name and type or {@code null} if there is no such plugin.
      *
-     * @param name
-     *            plugin name.
-     * @param cls
-     *            plugin class.
+     * @param name plugin name.
+     * @param cls plugin class.
      * @return plugin.
-     * @param <T>
-     *            Plugin type.
+     * @param <T> Plugin type.
      */
     <T extends Plugin> T getPlugin(String name, Class<T> cls);
 
     /**
-     * Returns the plugin that has the specified type or {@code null}
-     * if there is no such plugin.
+     * Returns the plugin that has the specified type or {@code null} if there is no such plugin.
      *
-     * @param cls
-     *            plugin class.
+     * @param cls plugin class.
      * @return plugin.
-     * @param <T>
-     *            Plugin type.
+     * @param <T> Plugin type.
      */
     <T extends Plugin> T getPlugin(Class<T> cls);
 

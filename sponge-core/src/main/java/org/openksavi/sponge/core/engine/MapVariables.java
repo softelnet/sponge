@@ -48,6 +48,23 @@ public class MapVariables implements Variables {
         return doGet(name, true);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(Class<T> cls, String name) {
+        return (T) get(name);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(String name, T defaultValue) {
+        return (T) ObjectUtils.defaultIfNull(doGet(name, false), defaultValue);
+    }
+
+    @Override
+    public <T> T get(Class<T> cls, String name, T defaultValue) {
+        return get(name, defaultValue);
+    }
+
     protected Object doGet(String name, boolean required) {
         String normalizedName = normalizeName(name);
         synchronized (variables) {
@@ -57,12 +74,6 @@ public class MapVariables implements Variables {
 
             return variables.get(normalizedName);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T get(Class<T> cls, String name) {
-        return (T) get(name);
     }
 
     @Override
@@ -82,16 +93,5 @@ public class MapVariables implements Variables {
                 set(name, supplier.get());
             }
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T get(String name, T defaultValue) {
-        return (T) ObjectUtils.defaultIfNull(doGet(name, false), defaultValue);
-    }
-
-    @Override
-    public <T> T get(Class<T> cls, String name, T defaultValue) {
-        return get(name, defaultValue);
     }
 }

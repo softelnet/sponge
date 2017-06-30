@@ -33,8 +33,8 @@ import org.openksavi.sponge.event.Event;
  * Asynchronous event set processors are processed asynchronously (in many threads) in the boundaries of one event set processor adapter
  * group.
  */
-public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends EventSetProcessorAdapterGroup<T>, T extends EventSetProcessorAdapter<?>>
-        extends BaseEventSetProcessorMainProcessingUnitHandler<G, T> {
+public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends EventSetProcessorAdapterGroup<T>,
+        T extends EventSetProcessorAdapter<?>> extends BaseEventSetProcessorMainProcessingUnitHandler<G, T> {
 
     private int asyncEventSetProcessorProcessingPartitionSize;
 

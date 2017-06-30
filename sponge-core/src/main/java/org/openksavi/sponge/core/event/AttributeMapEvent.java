@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -28,9 +29,7 @@ import org.openksavi.sponge.event.EventClonePolicy;
 /**
  * An event. Event has the following standard attributes name, id, time, priority.
  *
- * <p>
- * Note: this class has a natural ordering that is inconsistent with equals.
- * </p>
+ * <p> Note: this class has a natural ordering that is inconsistent with equals. </p>
  */
 public class AttributeMapEvent extends BaseEvent {
 
@@ -42,10 +41,8 @@ public class AttributeMapEvent extends BaseEvent {
     /**
      * Creates a new event that has no ID and time set (both are 0).
      *
-     * @param name
-     *            an event name.
-     * @param clonePolicy
-     *            an event clone policy.
+     * @param name an event name.
+     * @param clonePolicy an event clone policy.
      */
     public AttributeMapEvent(String name, EventClonePolicy clonePolicy) {
         super(name, clonePolicy);
@@ -54,8 +51,7 @@ public class AttributeMapEvent extends BaseEvent {
     /**
      * Returns attribute value.
      *
-     * @param name
-     *            attribute name.
+     * @param name attribute name.
      * @return attribute value.
      */
     @Override
@@ -66,10 +62,8 @@ public class AttributeMapEvent extends BaseEvent {
     /**
      * Sets attribute value.
      *
-     * @param name
-     *            attribute name.
-     * @param value
-     *            attribute value.
+     * @param name attribute name.
+     * @param value attribute value.
      * @return this event for fluent API.
      */
     @Override
@@ -84,8 +78,7 @@ public class AttributeMapEvent extends BaseEvent {
     /**
      * Checks whether this event has an attribute with the specified name.
      *
-     * @param name
-     *            attribute name.
+     * @param name attribute name.
      * @return {@code true} if there is such attribute.
      */
     @Override
@@ -120,6 +113,8 @@ public class AttributeMapEvent extends BaseEvent {
             case DEEP:
                 event.attributes = (Map<String, Object>) Utils.deepClone((Serializable) attributes);
                 break;
+            default:
+                throw new SpongeException("Unsupported value: " + clonePolicy);
             }
         }
 
