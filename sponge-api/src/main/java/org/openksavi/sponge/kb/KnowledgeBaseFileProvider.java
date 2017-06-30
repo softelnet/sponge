@@ -30,17 +30,13 @@ public interface KnowledgeBaseFileProvider {
     /**
      * Returns a reader for the specified knowledge base file name.
      *
-     * @param engine
-     *            the engine.
-     * @param fileName
-     *            a knowledge base file name.
-     * @param charset
-     *            a knowledge base file charset.
+     * @param engine the engine.
+     * @param fileName a knowledge base file name.
+     * @param charset a knowledge base file charset.
      *
      * @return a reader for the specified knowledge base file name.
      *
-     * @throws IOException
-     *             when IO error.
+     * @throws IOException when IO error.
      */
     Reader getReader(Engine engine, String fileName, Charset charset) throws IOException;
 }

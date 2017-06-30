@@ -35,8 +35,7 @@ public interface EventQueueManager extends EngineModule {
     /**
      * Sets an Input Event Queue.
      *
-     * @param inputEventQueue
-     *            an Input Event Queue.
+     * @param inputEventQueue an Input Event Queue.
      */
     void setInputEventQueue(EventQueue inputEventQueue);
 
@@ -50,8 +49,7 @@ public interface EventQueueManager extends EngineModule {
     /**
      * Sets a Main Event Queue.
      *
-     * @param mainEventQueue
-     *            a Main Event Queue.
+     * @param mainEventQueue a Main Event Queue.
      */
     void setMainEventQueue(EventQueue mainEventQueue);
 
@@ -65,8 +63,7 @@ public interface EventQueueManager extends EngineModule {
     /**
      * Sets an Output Event Queue.
      *
-     * @param outputEventQueue
-     *            an Output Event Queue.
+     * @param outputEventQueue an Output Event Queue.
      */
     void setOutputEventQueue(EventQueue outputEventQueue);
 

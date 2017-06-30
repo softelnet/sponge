@@ -28,8 +28,7 @@ public class ConfigException extends SpongeException {
     /**
      * Creates a new exception representing a failure in the configuration.
      *
-     * @param message
-     *            exception message.
+     * @param message exception message.
      */
     public ConfigException(String message) {
         super(message);
@@ -38,8 +37,7 @@ public class ConfigException extends SpongeException {
     /**
      * Creates a new exception representing a failure in the configuration.
      *
-     * @param e
-     *            source exception.
+     * @param e source exception.
      */
     public ConfigException(Throwable e) {
         super(e);

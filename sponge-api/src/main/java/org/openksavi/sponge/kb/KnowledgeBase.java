@@ -31,8 +31,7 @@ public interface KnowledgeBase extends KnowledgeBaseOperations {
     /**
      * Sets the name of this knowledge base.
      *
-     * @param name
-     *            the name of this knowledge base.
+     * @param name the name of this knowledge base.
      */
     void setName(String name);
 
@@ -46,8 +45,7 @@ public interface KnowledgeBase extends KnowledgeBaseOperations {
     /**
      * Sets knowledge base interpreter type.
      *
-     * @param type
-     *            knowledge base interpreter type.
+     * @param type knowledge base interpreter type.
      */
     void setType(KnowledgeBaseType type);
 
@@ -68,8 +66,7 @@ public interface KnowledgeBase extends KnowledgeBaseOperations {
     /**
      * Sets an interpreter associated with this knowledge base.
      *
-     * @param knowledgeBaseInterpreter
-     *            an interpreter associated with this knowledge base.
+     * @param knowledgeBaseInterpreter an interpreter associated with this knowledge base.
      */
     void setInterpreter(KnowledgeBaseInterpreter knowledgeBaseInterpreter);
 }

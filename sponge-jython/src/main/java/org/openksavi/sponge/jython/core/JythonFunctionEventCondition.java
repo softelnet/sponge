@@ -34,8 +34,7 @@ public class JythonFunctionEventCondition implements EventCondition {
     /**
      * Creates a new Jython function rule event condition.
      *
-     * @param function
-     *            a Jython function.
+     * @param function a Jython function.
      *
      */
     public JythonFunctionEventCondition(PyFunction function) {
@@ -43,13 +42,10 @@ public class JythonFunctionEventCondition implements EventCondition {
     }
 
     /**
-     * Checks rule event condition by evaluating the defined
-     * knowledge base rule method.
+     * Checks rule event condition by evaluating the defined knowledge base rule method.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     @Override

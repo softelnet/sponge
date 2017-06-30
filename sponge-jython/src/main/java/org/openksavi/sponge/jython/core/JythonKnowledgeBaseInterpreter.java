@@ -27,6 +27,9 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
+
 import org.apache.commons.lang3.StringUtils;
 import org.python.core.Py;
 import org.python.core.PyObject;
@@ -36,9 +39,6 @@ import org.python.jsr223.PyScriptEngineScope;
 import org.python.jsr223.PyScriptEngineScope.ScopeIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Streams;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
@@ -127,10 +127,8 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     /**
      * Adds import from the package.
      *
-     * @param scriptEngine
-     *            scripting engine.
-     * @param clazz
-     *            class to be imported.
+     * @param scriptEngine scripting engine.
+     * @param clazz class to be imported.
      */
     protected void addImport(ScriptEngine scriptEngine, Class<?> clazz) {
         eval(scriptEngine, "from " + clazz.getPackage().getName() + " import " + clazz.getSimpleName());

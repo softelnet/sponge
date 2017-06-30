@@ -33,8 +33,7 @@ public class JRubyProcEventCondition implements EventCondition {
     /**
      * Creates a new JRuby proc rule event condition.
      *
-     * @param proc
-     *            JRuby proc.
+     * @param proc JRuby proc.
      *
      */
     public JRubyProcEventCondition(RubyProc proc) {
@@ -42,13 +41,10 @@ public class JRubyProcEventCondition implements EventCondition {
     }
 
     /**
-     * Checks rule event condition by evaluating the defined
-     * knowledge base rule method.
+     * Checks rule event condition by evaluating the defined knowledge base rule method.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     @Override

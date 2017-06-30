@@ -27,41 +27,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.mutable.Mutable;
-import org.apache.commons.lang3.mutable.MutableObject;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.customizers.ImportCustomizer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.engine.BaseEngine;
-import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
-import org.openksavi.sponge.core.util.Utils;
-import org.openksavi.sponge.correlator.Correlator;
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.filter.Filter;
-import org.openksavi.sponge.groovy.GroovyAction;
-import org.openksavi.sponge.groovy.GroovyCorrelator;
-import org.openksavi.sponge.groovy.GroovyConstants;
-import org.openksavi.sponge.groovy.GroovyFilter;
-import org.openksavi.sponge.groovy.GroovyPlugin;
-import org.openksavi.sponge.groovy.GroovyRule;
-import org.openksavi.sponge.groovy.GroovyTrigger;
-import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.kb.KnowledgeBaseConstants;
-import org.openksavi.sponge.kb.KnowledgeBaseScript;
-import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
-import org.openksavi.sponge.plugin.Plugin;
-import org.openksavi.sponge.rule.Rule;
-import org.openksavi.sponge.trigger.Trigger;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyObject;
@@ -73,6 +41,38 @@ import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
+
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.correlator.Correlator;
+import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.filter.Filter;
+import org.openksavi.sponge.groovy.GroovyAction;
+import org.openksavi.sponge.groovy.GroovyConstants;
+import org.openksavi.sponge.groovy.GroovyCorrelator;
+import org.openksavi.sponge.groovy.GroovyFilter;
+import org.openksavi.sponge.groovy.GroovyPlugin;
+import org.openksavi.sponge.groovy.GroovyRule;
+import org.openksavi.sponge.groovy.GroovyTrigger;
+import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.kb.KnowledgeBaseConstants;
+import org.openksavi.sponge.kb.KnowledgeBaseScript;
+import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.trigger.Trigger;
 
 /**
  * Knowledge base interpreter supporting knowledge base to be defined in the Groovy language.
@@ -174,8 +174,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
      * Result {@code null} means that there is no variable. Result other than {@code null} means that there is a variable (that may possibly
      * be {@code null}).
      *
-     * @param name
-     *            the name of the variable.
+     * @param name the name of the variable.
      * @return a holder for a variable.
      */
     protected Mutable<Object> doGetVariable(String name) {
@@ -220,10 +219,8 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     /**
      * Adds import from the package.
      *
-     * @param importCustomizer
-     *            Groovy import customizer.
-     * @param clazz
-     *            class to be imported.
+     * @param importCustomizer Groovy import customizer.
+     * @param clazz class to be imported.
      */
     protected void addImport(ImportCustomizer importCustomizer, Class<?> clazz) {
         addImport(importCustomizer, clazz, clazz.getSimpleName());

@@ -26,12 +26,12 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.correlator.CorrelatorAdapter;
-import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.ProcessorAdapter;
+import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.correlator.CorrelatorAdapter;
+import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -56,14 +56,10 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
     /**
      * Creates a new main processing unit.
      *
-     * @param name
-     *            name.
-     * @param engine
-     *            the engine.
-     * @param inQueue
-     *            input queue.
-     * @param outQueue
-     *            output queue.
+     * @param name name.
+     * @param engine the engine.
+     * @param inQueue input queue.
+     * @param outQueue output queue.
      */
     protected BaseMainProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);

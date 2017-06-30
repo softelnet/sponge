@@ -24,8 +24,7 @@ public interface Configurable {
     /**
      * Applies a configuration to this entity.
      *
-     * @param configuration
-     *            configuration.
+     * @param configuration configuration.
      */
     void configure(Configuration configuration);
 }

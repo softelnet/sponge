@@ -28,26 +28,22 @@ public interface ActionManager extends EngineModule {
     /**
      * Adds a new action adapter.
      *
-     * @param actionAdapter
-     *            a new action adapter.
+     * @param actionAdapter a new action adapter.
      */
     void addAction(ActionAdapter actionAdapter);
 
     /**
      * Removes the action adapter.
      *
-     * @param actionName
-     *            the name of the action adapter.
+     * @param actionName the name of the action adapter.
      */
     void removeAction(String actionName);
 
     /**
      * Calls the action.
      *
-     * @param actionName
-     *            Name of registered action.
-     * @param args
-     *            Arguments for Action.
+     * @param actionName Name of registered action.
+     * @param args Arguments for Action.
      * @return result of executing action.
      */
     Object callAction(String actionName, Object... args);
@@ -62,8 +58,7 @@ public interface ActionManager extends EngineModule {
     /**
      * Returns {@code true} if an action named {@code name} exists.
      *
-     * @param name
-     *            action name.
+     * @param name action name.
      * @return {@code true} if an action named {@code name} exists.
      */
     boolean existsAction(String name);

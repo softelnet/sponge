@@ -26,8 +26,7 @@ public interface Action extends Processor<ActionAdapter> {
     /**
      * Perform an operation and return a result.
      *
-     * @param args
-     *            arguments for action call.
+     * @param args arguments for action call.
      * @return result of executing action.
      */
     Object run(Object... args);

@@ -32,8 +32,8 @@ public class CorrelatorsTestTemplate {
 
         try {
             await().atMost(5, TimeUnit.SECONDS)
-                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 4 &&
-                            engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue() >= 4);
+                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 4
+                            && engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue() >= 4);
             assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue());
             assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue());
         } finally {

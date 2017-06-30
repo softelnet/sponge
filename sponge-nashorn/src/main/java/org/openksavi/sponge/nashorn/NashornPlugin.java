@@ -46,9 +46,17 @@ public abstract class NashornPlugin extends org.openksavi.sponge.core.plugin.Bas
         configure(getSelf(), configuration);
     }
 
+    public void configure(Object self, Configuration configuration) {
+        //
+    }
+
     @Override
     public final void init() {
         init(getSelf());
+    }
+
+    public void init(Object self) {
+        //
     }
 
     @Override
@@ -56,9 +64,17 @@ public abstract class NashornPlugin extends org.openksavi.sponge.core.plugin.Bas
         onStartup(getSelf());
     }
 
+    public void onStartup(Object self) {
+        //
+    }
+
     @Override
     public final void onShutdown() {
         onShutdown(getSelf());
+    }
+
+    public void onShutdown(Object self) {
+        //
     }
 
     @Override
@@ -66,29 +82,13 @@ public abstract class NashornPlugin extends org.openksavi.sponge.core.plugin.Bas
         onBeforeReload(getSelf());
     }
 
+    public void onBeforeReload(Object self) {
+        //
+    }
+
     @Override
     public final void onAfterReload() {
         onAfterReload(getSelf());
-    }
-
-    public void configure(Object self, Configuration configuration) {
-        //
-    }
-
-    public void init(Object self) {
-        //
-    }
-
-    public void onStartup(Object self) {
-        //
-    }
-
-    public void onShutdown(Object self) {
-        //
-    }
-
-    public void onBeforeReload(Object self) {
-        //
     }
 
     public void onAfterReload(Object self) {

@@ -38,10 +38,8 @@ public interface EngineModuleProvider {
     /**
      * Creates a new configuration manager.
      *
-     * @param engine
-     *            the engine.
-     * @param configurationFilename
-     *            configuration file name.
+     * @param engine the engine.
+     * @param configurationFilename configuration file name.
      * @return a new configuration manager.
      */
     ConfigurationManager createConfigurationManager(Engine engine, String configurationFilename);
@@ -49,8 +47,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new plugin manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new plugin manager.
      */
     PluginManager createPluginManager(Engine engine);
@@ -58,8 +55,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new knowledge base manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new knowledge base manager.
      */
     KnowledgeBaseManager createKnowledgeBaseManager(Engine engine);
@@ -67,8 +63,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new thread pool manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new thread pool manager.
      */
     ThreadPoolManager createThreadPoolManager(Engine engine);
@@ -76,8 +71,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new processors manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new processors manager.
      */
     ProcessorManager createProcessorManager(Engine engine);
@@ -85,8 +79,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new action manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new action manager.
      */
     ActionManager createActionManager(Engine engine);
@@ -94,8 +87,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new statistics manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new statistics manager.
      */
     StatisticsManager createStatisticsManager(Engine engine);
@@ -103,8 +95,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new processing unit manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new processing unit manager.
      */
     ProcessingUnitManager createProcessingUnitManager(Engine engine);
@@ -112,8 +103,7 @@ public interface EngineModuleProvider {
     /**
      * Creates a new event queue manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      * @return new event queue manager.
      */
     EventQueueManager createEventQueueManager(Engine engine);
@@ -121,10 +111,8 @@ public interface EngineModuleProvider {
     /**
      * Creates a new event scheduler.
      *
-     * @param engine
-     *            the engine.
-     * @param queue
-     *            event queue where generated events will be sent to.
+     * @param engine the engine.
+     * @param queue event queue where generated events will be sent to.
      * @return new event scheduler.
      */
     EventScheduler createEventScheduler(Engine engine, EventQueue queue);
@@ -132,10 +120,8 @@ public interface EngineModuleProvider {
     /**
      * Creates a new cron event generator.
      *
-     * @param engine
-     *            the engine.
-     * @param queue
-     *            event queue where generated events will be sent to.
+     * @param engine the engine.
+     * @param queue event queue where generated events will be sent to.
      * @return new cron event generator.
      */
     CronEventGenerator createCronEventGenerator(Engine engine, EventQueue queue);

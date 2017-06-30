@@ -40,7 +40,7 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     }
 
     @Override
-    public void setEventAliases(String[] aliases) {
+    public void setEventAliases(String... aliases) {
         this.aliases = aliases;
     }
 
@@ -50,13 +50,23 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     }
 
     @Override
-    public void setEventModes(EventMode[] modes) {
+    public String getEventAlias(int index) {
+        return aliases[index];
+    }
+
+    @Override
+    public void setEventModes(EventMode... modes) {
         this.modes = modes;
     }
 
     @Override
     public EventMode[] getEventModes() {
         return modes;
+    }
+
+    @Override
+    public EventMode getEventMode(int index) {
+        return modes[index];
     }
 
     @Override

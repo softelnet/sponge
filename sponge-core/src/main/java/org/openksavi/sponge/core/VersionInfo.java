@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class VersionInfo {
+public final class VersionInfo {
+
+    public static final String PRODUCT = "Sponge";
 
     private static final String VERSION_PROPERTY = "version";
 
     private static final String VERSION_PROPERTIES = "/org/openksavi/sponge/version.properties";
-
-    private static final String PRODUCT = "Sponge";
 
     private String version;
 
@@ -68,8 +68,7 @@ public class VersionInfo {
     /**
      * Returns the engine description.
      *
-     * @param engineName
-     *            the engine name.
+     * @param engineName the engine name.
      *
      * @return the engine description.
      */

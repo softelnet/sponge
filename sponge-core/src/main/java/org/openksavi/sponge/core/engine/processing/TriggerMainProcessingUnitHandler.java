@@ -18,12 +18,11 @@ package org.openksavi.sponge.core.engine.processing;
 
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.engine.ProcessorType;
-import org.openksavi.sponge.engine.processing.MainProcessingUnitHandler;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 
-public class TriggerMainProcessingUnitHandler extends BaseMainProcessingUnitHandler implements MainProcessingUnitHandler {
+public class TriggerMainProcessingUnitHandler extends BaseMainProcessingUnitHandler {
 
     public TriggerMainProcessingUnitHandler(BaseMainProcessingUnit processingUnit) {
         super(ProcessorType.TRIGGER, processingUnit);

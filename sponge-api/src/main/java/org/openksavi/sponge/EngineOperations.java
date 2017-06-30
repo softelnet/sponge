@@ -41,10 +41,8 @@ public interface EngineOperations {
     /**
      * Calls registered action with arguments.
      *
-     * @param actionName
-     *            actionName name of the action.
-     * @param args
-     *            arguments to pass to action.
+     * @param actionName actionName name of the action.
+     * @param args arguments to pass to action.
      * @return result of action called for specified arguments.
      */
     Object callAction(String actionName, Object... args);
@@ -62,8 +60,7 @@ public interface EngineOperations {
     /**
      * Sends an event to the Input Event Queue. May throw {@code QueueFullException} if the Input Event Queue is full.
      *
-     * @param event
-     *            an event.
+     * @param event an event.
      * @return an event.
      */
     Event send(Event event);
@@ -71,8 +68,7 @@ public interface EngineOperations {
     /**
      * Sends a new event to the Input Event Queue. May throw {@code QueueFullException} if the Input Event Queue is full.
      *
-     * @param eventName
-     *            an event name.
+     * @param eventName an event name.
      * @return an event.
      */
     Event send(String eventName);
@@ -80,10 +76,8 @@ public interface EngineOperations {
     /**
      * Sends a new event to the Input Event Queue after a specified time.
      *
-     * @param name
-     *            event name.
-     * @param delay
-     *            delay in milliseconds.
+     * @param name event name.
+     * @param delay delay in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAfter(String name, long delay);
@@ -91,12 +85,9 @@ public interface EngineOperations {
     /**
      * Sends a new event to the Input Event Queue periodically after a specified time.
      *
-     * @param name
-     *            event name.
-     * @param delay
-     *            delay in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param name event name.
+     * @param delay delay in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAfter(String name, long delay, long interval);
@@ -104,10 +95,8 @@ public interface EngineOperations {
     /**
      * Sends an event to the Input Event Queue after a specified time.
      *
-     * @param event
-     *            an event.
-     * @param delay
-     *            delay in milliseconds.
+     * @param event an event.
+     * @param delay delay in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAfter(final Event event, long delay);
@@ -115,12 +104,9 @@ public interface EngineOperations {
     /**
      * Sends an event to the Input Event Queue periodically after a specified time.
      *
-     * @param event
-     *            an event.
-     * @param delay
-     *            delay in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param event an event.
+     * @param delay delay in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAfter(final Event event, long delay, long interval);
@@ -128,10 +114,8 @@ public interface EngineOperations {
     /**
      * Sends a new event to the Input Event Queue at a specified time.
      *
-     * @param name
-     *            event name.
-     * @param milliseconds
-     *            time in milliseconds.
+     * @param name event name.
+     * @param milliseconds time in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(String name, long milliseconds);
@@ -139,12 +123,9 @@ public interface EngineOperations {
     /**
      * Sends a new event to the Input Event Queue at a specified time and then periodically.
      *
-     * @param name
-     *            event name.
-     * @param milliseconds
-     *            time in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param name event name.
+     * @param milliseconds time in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(String name, long milliseconds, long interval);
@@ -152,10 +133,8 @@ public interface EngineOperations {
     /**
      * Sends an event to the Input Event Queue at a specified time.
      *
-     * @param event
-     *            event.
-     * @param milliseconds
-     *            time in milliseconds.
+     * @param event event.
+     * @param milliseconds time in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(final Event event, long milliseconds);
@@ -163,12 +142,9 @@ public interface EngineOperations {
     /**
      * Sends an event to the Input Event Queue at a specified time and then periodically.
      *
-     * @param event
-     *            event.
-     * @param milliseconds
-     *            time in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param event event.
+     * @param milliseconds time in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(final Event event, long milliseconds, long interval);
@@ -176,10 +152,8 @@ public interface EngineOperations {
     /**
      * Sends an event to the Input Event Queue at a time specified by the crontab spec.
      *
-     * @param event
-     *            event.
-     * @param crontabSpec
-     *            crontab spec.
+     * @param event event.
+     * @param crontabSpec crontab spec.
      * @return cron entry.
      */
     EventCronEntry sendAt(final Event event, String crontabSpec);
@@ -187,10 +161,8 @@ public interface EngineOperations {
     /**
      * Sends a new event to the Input Event Queue at a time specified by the crontab spec.
      *
-     * @param name
-     *            event name.
-     * @param crontabSpec
-     *            crontab spec.
+     * @param name event name.
+     * @param crontabSpec crontab spec.
      * @return cron entry.
      */
     EventCronEntry sendAt(String name, String crontabSpec);
@@ -198,8 +170,7 @@ public interface EngineOperations {
     /**
      * Removes event from Event Scheduler.
      *
-     * @param entry
-     *            scheduled event entry.
+     * @param entry scheduled event entry.
      * @return informs whether the specified event has been scheduled.
      */
     boolean removeEvent(EventSchedulerEntry entry);
@@ -207,45 +178,35 @@ public interface EngineOperations {
     /**
      * Removes event cron entry.
      *
-     * @param entry
-     *            cron entry.
+     * @param entry cron entry.
      * @return informs whether the specified event has been scheduled.
      */
     boolean removeEvent(EventCronEntry entry);
 
     /**
-     * Returns the plugin that has the specified name or {@code null}
-     * if there is no such plugin.
+     * Returns the plugin that has the specified name or {@code null} if there is no such plugin.
      *
-     * @param name
-     *            plugin name.
+     * @param name plugin name.
      * @return plugin.
      */
     Plugin getPlugin(String name);
 
     /**
-     * Returns the plugin that has the specified name and type or {@code null}
-     * if there is no such plugin.
+     * Returns the plugin that has the specified name and type or {@code null} if there is no such plugin.
      *
-     * @param name
-     *            plugin name.
-     * @param cls
-     *            plugin class.
+     * @param name plugin name.
+     * @param cls plugin class.
      * @return plugin.
-     * @param <T>
-     *            Plugin type.
+     * @param <T> Plugin type.
      */
     <T extends Plugin> T getPlugin(String name, Class<T> cls);
 
     /**
-     * Returns the plugin that has the specified type or {@code null}
-     * if there is no such plugin.
+     * Returns the plugin that has the specified type or {@code null} if there is no such plugin.
      *
-     * @param cls
-     *            plugin class.
+     * @param cls plugin class.
      * @return plugin.
-     * @param <T>
-     *            Plugin type.
+     * @param <T> Plugin type.
      */
     <T extends Plugin> T getPlugin(Class<T> cls);
 
@@ -273,8 +234,7 @@ public interface EngineOperations {
     /**
      * Creates a new named event with default clone policy.
      *
-     * @param name
-     *            event name.
+     * @param name event name.
      * @return a new event.
      */
     Event makeEvent(String name);
@@ -282,10 +242,8 @@ public interface EngineOperations {
     /**
      * Creates a new named event with specified clone policy.
      *
-     * @param name
-     *            event name.
-     * @param policy
-     *            event clone policy.
+     * @param name event name.
+     * @param policy event clone policy.
      * @return a new event.
      */
     Event makeEvent(String name, EventClonePolicy policy);
@@ -293,8 +251,7 @@ public interface EngineOperations {
     /**
      * Creates a new event definition.
      *
-     * @param name
-     *            event name.
+     * @param name event name.
      * @return a new event definition.
      */
     EventDefinition event(String name);
@@ -302,10 +259,8 @@ public interface EngineOperations {
     /**
      * Creates a new event definition.
      *
-     * @param name
-     *            event name.
-     * @param policy
-     *            event clone policy.
+     * @param name event name.
+     * @param policy event clone policy.
      * @return a new event definition.
      */
     EventDefinition event(String name, EventClonePolicy policy);
@@ -313,8 +268,7 @@ public interface EngineOperations {
     /**
      * Creates a new event definition.
      *
-     * @param event
-     *            an event.
+     * @param event an event.
      * @return a new event definition.
      */
     EventDefinition event(Event event);
@@ -322,8 +276,7 @@ public interface EngineOperations {
     /**
      * Returns {@code true} if an action named {@code name} exists.
      *
-     * @param name
-     *            action name.
+     * @param name action name.
      * @return {@code true} if an action named {@code name} exists.
      */
     boolean existsAction(String name);
@@ -331,8 +284,7 @@ public interface EngineOperations {
     /**
      * Returns {@code true} if a filter named {@code name} exists.
      *
-     * @param name
-     *            filter name.
+     * @param name filter name.
      * @return {@code true} if a filter named {@code name} exists.
      */
     boolean existsFilter(String name);
@@ -340,8 +292,7 @@ public interface EngineOperations {
     /**
      * Returns {@code true} if a trigger named {@code name} exists.
      *
-     * @param name
-     *            trigger name.
+     * @param name trigger name.
      * @return {@code true} if a trigger named {@code name} exists.
      */
     boolean existsTrigger(String name);
@@ -349,8 +300,7 @@ public interface EngineOperations {
     /**
      * Returns {@code true} if a rule named {@code name} exists.
      *
-     * @param name
-     *            rule name.
+     * @param name rule name.
      * @return {@code true} if a rule named {@code name} exists.
      */
     boolean existsRule(String name);
@@ -358,8 +308,7 @@ public interface EngineOperations {
     /**
      * Returns {@code true} if a correlator named {@code name} exists.
      *
-     * @param name
-     *            correlator name.
+     * @param name correlator name.
      * @return {@code true} if a correlator named {@code name} exists.
      */
     boolean existsCorrelator(String name);
@@ -367,18 +316,15 @@ public interface EngineOperations {
     /**
      * Sets the global variable value.
      *
-     * @param name
-     *            variable name.
-     * @param value
-     *            variable value.
+     * @param name variable name.
+     * @param value variable value.
      */
     void setVariable(String name, Object value);
 
     /**
      * Returns the value of the global variable. Throws exception if not found.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return variable value.
      */
     Object getVariable(String name);
@@ -386,60 +332,48 @@ public interface EngineOperations {
     /**
      * Returns the value of the global variable. Throws exception if not found.
      *
-     * @param cls
-     *            variable class.
-     * @param name
-     *            variable name.
+     * @param cls variable class.
+     * @param name variable name.
      *
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(Class<T> cls, String name);
 
     /**
      * Returns the value of the global variable or {@code defaultValue} if not found.
      *
-     * @param name
-     *            variable name.
-     * @param defaultValue
-     *            default value.
+     * @param name variable name.
+     * @param defaultValue default value.
      *
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(String name, T defaultValue);
 
     /**
      * Returns the value of the global variable or {@code defaultValue} if not found.
      *
-     * @param cls
-     *            variable class.
-     * @param name
-     *            variable name.
-     * @param defaultValue
-     *            default value.
+     * @param cls variable class.
+     * @param name variable name.
+     * @param defaultValue default value.
      *
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(Class<T> cls, String name, T defaultValue);
 
     /**
      * Removes a global variable.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      */
     void removeVariable(String name);
 
     /**
      * Returns {@code true} if a global variable named {@code name} exists.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return {@code true} if a global variable named {@code name} exists.
      */
     boolean existsVariable(String name);
@@ -447,20 +381,16 @@ public interface EngineOperations {
     /**
      * Sets the global variable if not set already.
      *
-     * @param name
-     *            variable name.
-     * @param supplier
-     *            variable value supplier.
-     * @param <T>
-     *            variable.
+     * @param name variable name.
+     * @param supplier variable value supplier.
+     * @param <T> variable.
      */
     <T> void setVariableIfNone(String name, Supplier<T> supplier);
 
     /**
      * Updates the global variable.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      */
     void updateVariable(String name);
 }

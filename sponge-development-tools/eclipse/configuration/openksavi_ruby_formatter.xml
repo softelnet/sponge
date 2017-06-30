@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <profiles>
-<profile formatter="org.eclipse.dltk.ruby.formatter.RubyFormatterFactory" name="OpenKsavi-ruby" version="1">
+<profile formatter="org.eclipse.dltk.ruby.formatter.RubyFormatterFactory" name="OpenKsavi-Ruby" version="1">
 <setting id="indent.if" value="true"/>
 <setting id="formatter.tabulation.char" value="space"/>
 <setting id="wrap.comments.length" value="80"/>

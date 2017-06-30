@@ -94,8 +94,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
     /**
      * To lookup the Sponge engine from the registry with the given name.
      *
-     * @param engineRef
-     *            the engine reference in the repository.
+     * @param engineRef the engine reference in the repository.
      */
     public void setEngineRef(String engineRef) {
         this.engineRef = engineRef;
@@ -108,8 +107,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
     /**
      * To use the given Sponge engine instance.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public void setEngine(Engine engine) {
         this.engine = engine;

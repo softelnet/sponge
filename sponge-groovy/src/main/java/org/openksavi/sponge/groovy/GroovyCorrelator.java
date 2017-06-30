@@ -16,9 +16,19 @@
 
 package org.openksavi.sponge.groovy;
 
+import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+
 /**
  * Groovy-specific implementation of the correlator.
  */
 public abstract class GroovyCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator {
 
+    /**
+     * Method required for accessing EPS in Groovy-based processors.
+     *
+     * @return EPS.
+     */
+    public final KnowledgeBaseEngineOperations getEPS() {
+        return getEps();
+    }
 }

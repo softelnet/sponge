@@ -35,12 +35,9 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Invokes a method.
      *
-     * @param target
-     *            the processor containing the method to be invoked.
-     * @param name
-     *            method name.
-     * @param args
-     *            method arguments.
+     * @param target the processor containing the method to be invoked.
+     * @param name method name.
+     * @param args method arguments.
      * @return method result.
      */
     Object invokeMethod(Object target, String name, Object... args);
@@ -48,18 +45,15 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Sets the variable value.
      *
-     * @param name
-     *            variable name.
-     * @param value
-     *            variable value.
+     * @param name variable name.
+     * @param value variable value.
      */
     void setVariable(String name, Object value);
 
     /**
      * Returns the value of the variable. Throws exception if not found.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return variable value.
      */
     Object getVariable(String name);
@@ -67,21 +61,17 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Returns the value of the variable. Throws exception if not found.
      *
-     * @param name
-     *            variable name.
-     * @param cls
-     *            variable class.
+     * @param name variable name.
+     * @param cls variable class.
      * @return variable value.
-     * @param <T>
-     *            variable.
+     * @param <T> variable.
      */
     <T> T getVariable(String name, Class<T> cls);
 
     /**
      * Returns {@code true} if a variable named {@code name} exists.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return {@code true} if a variable named {@code name} exists.
      */
     boolean existsVariable(String name);
@@ -89,13 +79,10 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Creates a new processor instance.
      *
-     * @param processorClassName
-     *            processor class name.
+     * @param processorClassName processor class name.
      * @return a new processor instance.
-     * @param javaClass
-     *            processor class.
-     * @param <T>
-     *            processor type.
+     * @param javaClass processor class.
+     * @param <T> processor type.
      */
     @SuppressWarnings("rawtypes")
     <T extends Processor> T createProcessorInstance(String processorClassName, Class<T> javaClass);
@@ -103,8 +90,7 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Creates a plugin instance.
      *
-     * @param pluginClassName
-     *            a plugin class name.
+     * @param pluginClassName a plugin class name.
      * @return the plugin instance.
      */
     Plugin createPluginInstance(String pluginClassName);
@@ -112,8 +98,7 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Returns event specification for rule defined in the knowledge base.
      *
-     * @param eventSpecEntry
-     *            event specification entry.
+     * @param eventSpecEntry event specification entry.
      * @return event specification.
      */
     RuleEventSpec getRuleEventSpec(Object eventSpecEntry);
@@ -121,8 +106,7 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Verifies if the given exception is a knowledge base specific one.
      *
-     * @param exception
-     *            an exception to be verified.
+     * @param exception an exception to be verified.
      * @return is the exception knowledge base specific.
      */
     boolean isKnowledgeBaseException(Throwable exception);
@@ -130,8 +114,7 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Returns a Java exception corresponding to the knowledge base specific exception.
      *
-     * @param knowledgeBaseException
-     *            the knowledge base specific exception.
+     * @param knowledgeBaseException the knowledge base specific exception.
      * @return Java exception.
      */
     Throwable getJavaException(Throwable knowledgeBaseException);
@@ -139,10 +122,9 @@ public interface KnowledgeBaseInterpreter {
     /**
      * Returns script knowledge base processor class name.
      *
-     * @param processorClass
-     *            processor class.
-     * @return script knowledge base processor class name or {@code null} if {@code processorClass}
-     *         doesn't represent a script knowledge base processor.
+     * @param processorClass processor class.
+     * @return script knowledge base processor class name or {@code null} if {@code processorClass} doesn't represent a script knowledge
+     *         base processor.
      */
     String getScriptKnowledgeBaseProcessorClassName(Object processorClass);
 

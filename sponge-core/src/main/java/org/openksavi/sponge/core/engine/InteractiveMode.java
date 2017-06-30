@@ -71,8 +71,8 @@ public class InteractiveMode {
 
             ScriptKnowledgeBaseInterpreter scriptInterpreter = (ScriptKnowledgeBaseInterpreter) interpreter;
 
-            print(console, "Running " + engine.getDescription() + " in an interactive mode. Type \"" + EXIT_COMMAND + "\", \"" +
-                    QUIT_COMMAND + "\" or press CTRL-D to exit.\n");
+            print(console, "Running " + engine.getDescription() + " in an interactive mode. Type \"" + EXIT_COMMAND + "\", \""
+                    + QUIT_COMMAND + "\" or press CTRL-D to exit.\n");
 
             while (true) {
                 try {
@@ -105,8 +105,7 @@ public class InteractiveMode {
         }
     }
 
-    private boolean iteration(Console console, BufferedReader reader, ScriptKnowledgeBaseInterpreter scriptInterpreter)
-            throws IOException {
+    private boolean iteration(Console console, BufferedReader reader, ScriptKnowledgeBaseInterpreter scriptInterpreter) throws IOException {
         StringBuffer commandBuffer = new StringBuffer();
         while (true) {
             if (!engine.isRunning()) {

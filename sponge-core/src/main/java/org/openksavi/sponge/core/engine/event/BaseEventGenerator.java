@@ -38,12 +38,9 @@ public abstract class BaseEventGenerator extends BaseEngineModule implements Eve
     /**
      * Creates a new event scheduler.
      *
-     * @param name
-     *            name.
-     * @param engine
-     *            the engine.
-     * @param outQueue
-     *            output event queue.
+     * @param name name.
+     * @param engine the engine.
+     * @param outQueue output event queue.
      */
     public BaseEventGenerator(String name, Engine engine, EventQueue outQueue) {
         super(name, engine);

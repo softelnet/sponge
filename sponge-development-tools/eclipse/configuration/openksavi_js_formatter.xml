@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <profiles version="11">
-<profile kind="CodeFormatterProfile" name="openksavi-js" version="11">
+<profile kind="CodeFormatterProfile" name="OpenKsavi-JavaScript" version="11">
 <setting id="org.eclipse.wst.jsdt.core.formatter.alignment_for_binary_expression" value="16"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_before_opening_brace_in_block" value="insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_before_opening_angle_bracket_in_type_arguments" value="do not insert"/>

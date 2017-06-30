@@ -25,8 +25,7 @@ public interface EventDefinitionModifier {
     /**
      * Modifies the event.
      *
-     * @param event
-     *            the event.
+     * @param event the event.
      */
     void modify(Event event);
 }

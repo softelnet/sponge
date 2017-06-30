@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Splitter;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -31,8 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Splitter;
-
+import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.CombinedExceptionHandler;
 import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.engine.InteractiveMode;
@@ -80,7 +81,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         super(engine);
     }
 
-    public StandaloneEngineBuilder commandLineArgs(String[] commandLineArgs) {
+    public StandaloneEngineBuilder commandLineArgs(String... commandLineArgs) {
         this.commandLineArgs = commandLineArgs;
         return this;
     }
@@ -91,24 +92,24 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         options.addOption(Option.builder(OPTION_CONFIG).longOpt("config").hasArg().argName("file")
                 .desc("Use given Sponge XML configuration file. Only one configuration file may be provided.").build());
         options.addOption(Option.builder(OPTION_KNOWLEDGE_BASE).longOpt("knowledge-base").hasArg().argName("[name=]files]")
-                .desc("Use given knowledge base by setting its name (optional) and files (comma-separated). " +
-                        "When no name is provided, a default name 'kb' will be used. " +
-                        "This option may be used more than once to provide many knowledge bases. Each of them could use many files.")
+                .desc("Use given knowledge base by setting its name (optional) and files (comma-separated). "
+                        + "When no name is provided, a default name 'kb' will be used. "
+                        + "This option may be used more than once to provide many knowledge bases. Each of them could use many files.")
                 .build());
         options.addOption(
-                Option.builder(OPTION_SPRING).longOpt("spring").hasArg().argName("file").desc("Use given Spring configuration file. " +
-                        "This option may be used more than once to provide many Spring configuration files.").build());
+                Option.builder(OPTION_SPRING).longOpt("spring").hasArg().argName("file").desc("Use given Spring configuration file. "
+                        + "This option may be used more than once to provide many Spring configuration files.").build());
         options.addOption(Option.builder(OPTION_CAMEL).longOpt("camel")
                 .desc("Create an Apache Camel context. Works only if one or more 'spring' options are present.").build());
         options.addOption(Option.builder(OPTION_INTERACTIVE).longOpt("interactive").hasArg().argName("[name]").optionalArg(true)
-                .desc("Run in an interactive mode by connecting to a knowledge base interpreter. " +
-                        "You may provide the name of one of the loaded knowledge bases, otherwise " +
-                        "the first loaded knowledge base will be chosen.")
+                .desc("Run in an interactive mode by connecting to a knowledge base interpreter. "
+                        + "You may provide the name of one of the loaded knowledge bases, otherwise "
+                        + "the first loaded knowledge base will be chosen.")
                 .build());
         options.addOption(Option.builder(OPTION_PRINT_ALL_EXCEPTIONS).longOpt("print-all-exceptions")
-                .desc("Applicable only in an interactive mode. " +
-                        "Print all exceptions (e.g. also thrown in event processors running in other threads). " +
-                        "Helpful for development purposes.")
+                .desc("Applicable only in an interactive mode. "
+                        + "Print all exceptions (e.g. also thrown in event processors running in other threads). "
+                        + "Helpful for development purposes.")
                 .build());
         options.addOption(Option.builder(OPTION_HELP).longOpt("help").desc("Print help message and exit.").build());
         options.addOption(Option.builder(OPTION_VERSION).longOpt("version").desc("Print the version information and exit.").build());
@@ -239,22 +240,26 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         String columns = System.getenv(ENV_COLUMNS);
         if (columns != null) {
             try {
-                formatter.setWidth(Integer.valueOf(columns));
+                formatter.setWidth(Integer.parseInt(columns));
             } catch (Exception e) {
                 logger.warn(e.toString());
             }
         }
 
-        String header = "Run Sponge standalone command-line application.\n\n";
+        String header = "Run " + VersionInfo.PRODUCT + " standalone command-line application.\n\n";
         String leftPadding = StringUtils.repeat(' ', formatter.getLeftPadding());
         //@formatter:off
-        String footer = "\nExamples (change directory to Sponge bin/ first):\n" +
-                leftPadding + "./" + EXECUTABLE_NAME + " -c ../examples/script/py/hello_world.xml\n" +
-                leftPadding + "./" + EXECUTABLE_NAME + " -k helloWorldKb=../examples/script/py/hello_world.py\n" +
-                leftPadding + "./" + EXECUTABLE_NAME + " -k ../examples/script/py/hello_world.py\n" +
-                leftPadding + "./" + EXECUTABLE_NAME + " -k filtersKb=../examples/script/py/filters.py -k heartbeatKb=../examples/script/js/rules_heartbeat.js\n" +
-                leftPadding + "./" + EXECUTABLE_NAME + " -k ../examples/standalone/multiple_kb_files/event_processors.py,../examples/standalone/multiple_kb_files/example2.py\n" +
-                "\nSee http://www.openksavi.org/sponge for more details.";
+        String footer = new StringBuilder()
+                .append("\nExamples (change directory to " + VersionInfo.PRODUCT + " bin/ first):\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME + " -c ../examples/script/py/hello_world.xml\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k helloWorldKb=../examples/script/py/hello_world.py\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k ../examples/script/py/hello_world.py\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME
+                        + " -k filtersKb=../examples/script/py/filters.py -k heartbeatKb=../examples/script/js/rules_heartbeat.js\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME
+                        + " -k ../examples/standalone/multiple_kb_files/event_processors.py"
+                        + ",../examples/standalone/multiple_kb_files/example2.py\n")
+                .append("\nSee http://www.openksavi.org/sponge for more details.").toString();
         //@formatter:on
         formatter.printHelp(EXECUTABLE_NAME, header, options, footer, true);
     }

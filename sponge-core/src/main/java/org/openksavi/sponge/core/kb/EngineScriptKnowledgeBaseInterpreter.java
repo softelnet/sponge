@@ -43,10 +43,8 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     /**
      * Creates a new Knowledge Interpreter.
      *
-     * @param engineOperations
-     *            an engine operations.
-     * @param type
-     *            a knowledge base type.
+     * @param engineOperations an engine operations.
+     * @param type a knowledge base type.
      */
     protected EngineScriptKnowledgeBaseInterpreter(KnowledgeBaseEngineOperations engineOperations, KnowledgeBaseType type) {
         super(engineOperations, type);
@@ -114,10 +112,8 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     /**
      * Sets the variable value.
      *
-     * @param name
-     *            variable name.
-     * @param value
-     *            variable value.
+     * @param name variable name.
+     * @param value variable value.
      */
     @Override
     public void setVariable(String name, Object value) {

@@ -36,10 +36,8 @@ public interface KnowledgeBaseInterpreterFactory {
     /**
      * Creates a new knowledge base interpreter.
      *
-     * @param engine
-     *            an engine.
-     * @param knowledgeBase
-     *            a knowledge base.
+     * @param engine an engine.
+     * @param knowledgeBase a knowledge base.
      * @return a new knowledge base interpreter.
      */
     KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase);

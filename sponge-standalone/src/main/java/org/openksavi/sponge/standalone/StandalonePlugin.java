@@ -89,8 +89,7 @@ public class StandalonePlugin extends JavaPlugin {
     /**
      * Sets a bean name for the engine.
      *
-     * @param engineBeanName
-     *            a bean name for the engine.
+     * @param engineBeanName a bean name for the engine.
      */
     public void setEngineBeanName(String engineBeanName) {
         this.engineBeanName = engineBeanName;
@@ -99,8 +98,7 @@ public class StandalonePlugin extends JavaPlugin {
     /**
      * Sets Spring configuration files.
      *
-     * @param springConfigurationFiles
-     *            Spring configuration files.
+     * @param springConfigurationFiles Spring configuration files.
      */
     public void setSpringConfigurationFiles(List<String> springConfigurationFiles) {
         this.springConfigurationFiles = springConfigurationFiles;
@@ -118,8 +116,7 @@ public class StandalonePlugin extends JavaPlugin {
     /**
      * If {@code camel} is {@code true}, then a Camel context will be created.
      *
-     * @param camel
-     *            should Camel context be created.
+     * @param camel should Camel context be created.
      */
     public void setCamel(boolean camel) {
         this.camel = camel;

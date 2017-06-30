@@ -4,7 +4,7 @@
 
 var AtomicBoolean = java.util.concurrent.atomic.AtomicBoolean;
 var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
-var TestStatus = org.openksavi.sponge.examples.TestStatus;
+var TestStatus = org.openksavi.sponge.test.TestStatus;
 
 var ReloadTrigger = Java.extend(Trigger, {
     configure : function(self) {

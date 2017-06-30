@@ -46,20 +46,20 @@ public abstract class NashornTrigger extends org.openksavi.sponge.core.trigger.B
         configure(getSelf());
     }
 
+    public abstract void configure(Object self);
+
     @Override
     public final void init() {
         init(getSelf());
     }
 
+    public void init(Object self) {
+        //
+    }
+
     @Override
     public final void run(Event event) {
         run(getSelf(), event);
-    }
-
-    public abstract void configure(Object self);
-
-    public void init(Object self) {
-        //
     }
 
     public abstract void run(Object self, Event event);

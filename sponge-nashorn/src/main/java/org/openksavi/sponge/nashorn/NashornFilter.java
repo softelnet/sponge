@@ -46,20 +46,20 @@ public abstract class NashornFilter extends org.openksavi.sponge.core.filter.Bas
         configure(getSelf());
     }
 
+    public abstract void configure(Object self);
+
     @Override
     public final void init() {
         init(getSelf());
     }
 
+    public void init(Object self) {
+        //
+    }
+
     @Override
     public final boolean accepts(Event event) {
         return accepts(getSelf(), event);
-    }
-
-    public abstract void configure(Object self);
-
-    public void init(Object self) {
-        //
     }
 
     public abstract boolean accepts(Object self, Event event);

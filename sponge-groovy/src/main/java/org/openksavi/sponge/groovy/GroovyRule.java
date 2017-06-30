@@ -18,14 +18,15 @@ package org.openksavi.sponge.groovy;
 
 import java.util.function.Function;
 
+import groovy.lang.Closure;
+
 import org.codehaus.groovy.runtime.MethodClosure;
 
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.groovy.core.GroovyClosureEventCondition;
+import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.rule.EventCondition;
-
-import groovy.lang.Closure;
 
 /**
  * Groovy-specific implementation of the rule.
@@ -47,5 +48,14 @@ public abstract class GroovyRule extends org.openksavi.sponge.core.rule.BaseRule
 
     public void addCondition(String eventAlias, Closure<Boolean> closure) {
         addJavaCondition(eventAlias, MAPPER.apply(closure));
+    }
+
+    /**
+     * Method required for accessing EPS in Groovy-based processors.
+     *
+     * @return EPS.
+     */
+    public final KnowledgeBaseEngineOperations getEPS() {
+        return getEps();
     }
 }

@@ -21,8 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -33,8 +31,6 @@ import org.openksavi.sponge.engine.Engine;
  * Action manager.
  */
 public class DefaultActionManager extends BaseEngineModule implements ActionManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultActionManager.class);
 
     /** Registered actions map (action name, action adapter). */
     private Map<String, ActionAdapter> registeredActions = Collections.synchronizedMap(new LinkedHashMap<>());

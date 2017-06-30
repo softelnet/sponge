@@ -31,8 +31,7 @@ public interface KnowledgeBaseScript {
     /**
      * Sets a knowledge base that uses this script.
      *
-     * @param knowledgeBase
-     *            a knowledge base.
+     * @param knowledgeBase a knowledge base.
      */
     void setKnowledgeBase(ScriptKnowledgeBase knowledgeBase);
 
@@ -44,10 +43,9 @@ public interface KnowledgeBaseScript {
     String getFileName();
 
     /**
-     * Sets the filename
+     * Sets the filename.
      *
-     * @param fileName
-     *            the filename
+     * @param fileName the filename.
      */
     void setFileName(String fileName);
 
@@ -61,8 +59,7 @@ public interface KnowledgeBaseScript {
     /**
      * Sets the charset.
      *
-     * @param charset
-     *            the charset
+     * @param charset the charset
      */
     void setCharset(String charset);
 }

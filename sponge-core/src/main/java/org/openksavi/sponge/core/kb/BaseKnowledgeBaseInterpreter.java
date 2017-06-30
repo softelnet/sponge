@@ -25,8 +25,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.rule.GenericRuleEventSpec;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
@@ -54,8 +54,7 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
     /**
      * Creates processor instance.
      *
-     * @param processorClassName
-     *            processor class name.
+     * @param processorClassName processor class name.
      * @return processor instance.
      */
     @SuppressWarnings("rawtypes")
@@ -67,12 +66,9 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
     /**
      * Creates an instance of the given class.
      *
-     * @param className
-     *            class name.
-     * @param javaClass
-     *            processor class.
-     * @param <T>
-     *            instance type
+     * @param className class name.
+     * @param javaClass processor class.
+     * @param <T> instance type
      * @return processor instance.
      */
     protected abstract <T> T doCreateInstance(String className, Class<T> javaClass);
@@ -80,8 +76,7 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
     /**
      * Creates plugin instance.
      *
-     * @param pluginClassName
-     *            plugin class name.
+     * @param pluginClassName plugin class name.
      * @return plugin instance.
      */
     @Override
@@ -121,8 +116,7 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
     /**
      * Resolves event specification "&lt;name&gt; &lt;alias&gt; : &lt;mode&gt;". Uses default value when one not provided.
      *
-     * @param eventSpecString
-     *            event specification.
+     * @param eventSpecString event specification.
      * @return rule event specification, i.e. a triple of (name, alias, mode).
      */
     protected RuleEventSpec getCustomRuleEventSpec(String eventSpecString) {

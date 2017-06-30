@@ -34,8 +34,7 @@ public class JavaKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOp
     /**
      * Enables Java processor.
      *
-     * @param processorClass
-     *            Java processor class.
+     * @param processorClass Java processor class.
      */
     public void enable(Class<? extends Processor> processorClass) {
         super.enableJava(processorClass);
@@ -44,8 +43,7 @@ public class JavaKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOp
     /**
      * Enables Java processors.
      *
-     * @param processorClasses
-     *            Java processor classes.
+     * @param processorClasses Java processor classes.
      */
     public void enableAll(Class<? extends Processor>... processorClasses) {
         super.enableJavaAll(processorClasses);
@@ -54,8 +52,7 @@ public class JavaKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOp
     /**
      * Disables Java processor.
      *
-     * @param processorClass
-     *            Java processor class.
+     * @param processorClass Java processor class.
      */
     public void disable(Class<? extends Processor> processorClass) {
         super.disableJava(processorClass);
@@ -65,8 +62,7 @@ public class JavaKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOp
     /**
      * Disables Java processors.
      *
-     * @param processorClasses
-     *            Java processor classes.
+     * @param processorClasses Java processor classes.
      */
     public void disableAll(Class<? extends Processor>... processorClasses) {
         super.disableJavaAll(processorClasses);

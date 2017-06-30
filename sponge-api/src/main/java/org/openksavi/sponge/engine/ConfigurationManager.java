@@ -23,16 +23,14 @@ import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
- * Configuration manager interface. It contains methods for accessing configuration
- * parameters.
+ * Configuration manager interface. It contains methods for accessing configuration parameters.
  */
 public interface ConfigurationManager extends EngineModule {
 
     /**
      * Resolves property value.
      *
-     * @param name
-     *            property name.
+     * @param name property name.
      * @return property value.
      */
     String resolveProperty(String name);
@@ -68,8 +66,7 @@ public interface ConfigurationManager extends EngineModule {
     /**
      * Sets the engine name.
      *
-     * @param engineName
-     *            the engine name.
+     * @param engineName the engine name.
      */
     void setEngineName(String engineName);
 
@@ -139,148 +136,126 @@ public interface ConfigurationManager extends EngineModule {
     /**
      * Sets the number of the Main Processing Unit worker threads.
      *
-     * @param mainProcessingUnitThreadCount
-     *            the number of the Main Processing Unit worker threads.
+     * @param mainProcessingUnitThreadCount the number of the Main Processing Unit worker threads.
      */
     void setMainProcessingUnitThreadCount(int mainProcessingUnitThreadCount);
 
     /**
      * Sets an event set processor default synchronous flag.
      *
-     * @param eventSetProcessorDefaultSynchronous
-     *            an event set processor default synchronous flag.
+     * @param eventSetProcessorDefaultSynchronous an event set processor default synchronous flag.
      */
     void setEventSetProcessorDefaultSynchronous(boolean eventSetProcessorDefaultSynchronous);
 
     /**
      * Sets event clone policy.
      *
-     * @param eventClonePolicy
-     *            event clone policy.
+     * @param eventClonePolicy event clone policy.
      */
     void setEventClonePolicy(EventClonePolicy eventClonePolicy);
 
     /**
      * Sets the number of threads used by processing units to listen to an event queue concurrently.
      *
-     * @param processingUnitConcurrentListenerThreadCount
-     *            the number of threads used by processing units to listen to an event queue concurrently.
+     * @param processingUnitConcurrentListenerThreadCount the number of threads used by processing units to listen to an event queue
+     *        concurrently.
      */
     void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount);
 
     /**
      * Sets event queue capacity.
      *
-     * @param eventQueueCapacity
-     *            event queue capacity.
+     * @param eventQueueCapacity event queue capacity.
      */
     void setEventQueueCapacity(int eventQueueCapacity);
 
     /**
      * Sets cron thread count.
      *
-     * @param cronThreadCount
-     *            cron thread count.
+     * @param cronThreadCount cron thread count.
      */
     void setCronThreadCount(int cronThreadCount);
 
     /**
      * Sets duration executor thread count.
      *
-     * @param durationThreadCount
-     *            duration executor thread count.
+     * @param durationThreadCount duration executor thread count.
      */
     void setDurationThreadCount(int durationThreadCount);
 
     /**
      * Sets the number of threads used by an event set processor asynchronous executor.
      *
-     * @param asyncEventSetProcessorExecutorThreadCount
-     *            the number of threads used by an event set processor asynchronous executor.
+     * @param asyncEventSetProcessorExecutorThreadCount the number of threads used by an event set processor asynchronous executor.
      */
     void setAsyncEventSetProcessorExecutorThreadCount(int asyncEventSetProcessorExecutorThreadCount);
 
     /**
      * Sets property.
      *
-     * @param key
-     *            property key.
-     * @param value
-     *            property value.
-     * @param variable
-     *            should this property be set as a variable.
-     * @param system
-     *            is a system property.
+     * @param key property key.
+     * @param value property value.
+     * @param variable should this property be set as a variable.
+     * @param system is a system property.
      */
     void setProperty(String key, Object value, boolean variable, boolean system);
 
     /**
      * Sets property.
      *
-     * @param key
-     *            property key.
-     * @param value
-     *            property value.
+     * @param key property key.
+     * @param value property value.
      */
     void setProperty(String key, Object value);
 
     /**
      * Sets a property that is also a system property.
      *
-     * @param key
-     *            property key.
-     * @param value
-     *            property value.
+     * @param key property key.
+     * @param value property value.
      */
     void setSystemProperty(String key, Object value);
 
     /**
      * Sets a property that is also an engine scope variable.
      *
-     * @param key
-     *            property key.
-     * @param value
-     *            property value.
+     * @param key property key.
+     * @param value property value.
      */
     void setVariableProperty(String key, Object value);
 
     /**
      * Sets properties.
      *
-     * @param properties
-     *            property map.
+     * @param properties property map.
      */
     void setProperties(Map<String, Object> properties);
 
     /**
      * Sets property entries.
      *
-     * @param propertyEntries
-     *            property entries.
+     * @param propertyEntries property entries.
      */
     void setPropertyEntries(Map<String, PropertyEntry> propertyEntries);
 
     /**
      * Sets system properties.
      *
-     * @param systemProperties
-     *            system property map.
+     * @param systemProperties system property map.
      */
     void setSystemProperties(Map<String, String> systemProperties);
 
     /**
      * Sets variable properties.
      *
-     * @param variableProperties
-     *            variable property map.
+     * @param variableProperties variable property map.
      */
     void setVariableProperties(Map<String, String> variableProperties);
 
     /**
      * Sets auto-enable of processors.
      *
-     * @param autoEnable
-     *            auto-enable of processors.
+     * @param autoEnable auto-enable of processors.
      */
     void setAutoEnable(boolean autoEnable);
 }

@@ -38,14 +38,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.util.concurrent.MoreExecutors;
+
 import org.apache.commons.configuration2.ConfigurationUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.util.concurrent.MoreExecutors;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
@@ -72,10 +72,8 @@ public abstract class Utils {
     /**
      * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.
      *
-     * @param engine
-     *            the engine.
-     * @param timeout
-     *            timeout in seconds.
+     * @param engine the engine.
+     * @param timeout timeout in seconds.
      */
     public static void trialRunEngine(Engine engine, int timeout) {
         final Semaphore semaphore = new Semaphore(0, true);
@@ -148,8 +146,7 @@ public abstract class Utils {
     /**
      * Dumps configuration to string.
      *
-     * @param configuration
-     *            a configuration.
+     * @param configuration a configuration.
      * @return a configuration dump string.
      */
     public static String dumpConfiguration(org.apache.commons.configuration2.Configuration configuration) {
@@ -180,8 +177,8 @@ public abstract class Utils {
     }
 
     public static String createLoggerName(KnowledgeBase knowledgeBase, String targetName) {
-        return KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." + knowledgeBase.getType().getTypeCode() + "." + knowledgeBase.getName() +
-                "." + targetName;
+        return KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." + knowledgeBase.getType().getTypeCode() + "." + knowledgeBase.getName() + "."
+                + targetName;
     }
 
     public static void shutdownExecutorService(Engine engine, Object named, ExecutorService executorService) {
@@ -208,10 +205,8 @@ public abstract class Utils {
     /**
      * Wraps or creates a new Sponge exception.
      *
-     * @param sourceName
-     *            source name of the exception.
-     * @param throwable
-     *            source throwable.
+     * @param sourceName source name of the exception.
+     * @param throwable source throwable.
      * @return Sponge exception.
      */
     public static SpongeException wrapException(String sourceName, Throwable throwable) {
@@ -240,8 +235,8 @@ public abstract class Utils {
     }
 
     public static String toStringEventSequence(Collection<Event> events, String attributeName) {
-        return events.stream().map(event -> event != null ? event.getName() + "(" + EventId.fromString(event.getId()).getId() + ")" +
-                (attributeName != null ? "/" + event.get(attributeName) : "") : "null").collect(Collectors.joining(", "));
+        return events.stream().map(event -> event != null ? event.getName() + "(" + EventId.fromString(event.getId()).getId() + ")"
+                + (attributeName != null ? "/" + event.get(attributeName) : "") : "null").collect(Collectors.joining(", "));
     }
 
     public static String createControlEventName(Class<? extends ControlEvent> controlEventClass) {

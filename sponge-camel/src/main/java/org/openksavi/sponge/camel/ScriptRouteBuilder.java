@@ -21,8 +21,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.RouteDefinition;
 
 /**
- * Introduces {@code fromS} methods that delegate to the corresponding {@code from} methods in order to avoid using 'from'
- * since it could be a reserved keyword in scripting languages (e.g. in Python).
+ * Introduces {@code fromS} methods that delegate to the corresponding {@code from} methods in order to avoid using 'from' since it could be
+ * a reserved keyword in scripting languages (e.g. in Python).
  */
 public abstract class ScriptRouteBuilder extends RouteBuilder {
 

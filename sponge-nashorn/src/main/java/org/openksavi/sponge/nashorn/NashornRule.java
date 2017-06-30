@@ -18,12 +18,12 @@ package org.openksavi.sponge.nashorn;
 
 import java.util.function.Function;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.nashorn.core.NashornScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.rule.EventCondition;
-
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
  * JavaScript-specific implementation of the rule.
@@ -57,20 +57,20 @@ public abstract class NashornRule extends org.openksavi.sponge.core.rule.BaseRul
         configure(getSelf());
     }
 
+    public abstract void configure(Object self);
+
     @Override
     public final void init() {
         init(getSelf());
     }
 
+    public void init(Object self) {
+        //
+    }
+
     @Override
     public final void run(Event event) {
         run(getSelf(), event);
-    }
-
-    public abstract void configure(Object self);
-
-    public void init(Object self) {
-        //
     }
 
     public abstract void run(Object self, Event event);

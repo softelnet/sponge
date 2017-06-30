@@ -27,21 +27,17 @@ public class ScriptKnowledgeBaseEventCondition extends MethodNameEventCondition 
     /**
      * Creates a new knowledge base rule event condition.
      *
-     * @param methodName
-     *            knowledge base rule method name.
+     * @param methodName knowledge base rule method name.
      */
     public ScriptKnowledgeBaseEventCondition(String methodName) {
         super(methodName);
     }
 
     /**
-     * Checks rule event condition by evaluating the defined
-     * knowledge base rule method.
+     * Checks rule event condition by evaluating the defined knowledge base rule method.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     @Override

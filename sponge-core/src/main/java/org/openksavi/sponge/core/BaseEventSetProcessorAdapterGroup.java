@@ -56,10 +56,8 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     /**
      * Creates a new event set processor adapter group.
      *
-     * @param processorDefinition
-     *            an event set processor definition.
-     * @param handler
-     *            a processing unit handler.
+     * @param processorDefinition an event set processor definition.
+     * @param handler a processing unit handler.
      */
     protected BaseEventSetProcessorAdapterGroup(BaseEventSetProcessorDefinition processorDefinition,
             EventSetProcessorMainProcessingUnitHandler<EventSetProcessorAdapterGroup<T>, T> handler) {
@@ -87,8 +85,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     /**
      * Tries to add a new event set processor adapter to this group.
      *
-     * @param event
-     *            an event.
+     * @param event an event.
      */
     @SuppressWarnings("unchecked")
     protected void tryAddNewEventSetProcessor(Event event) {
@@ -149,8 +146,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     /**
      * Processes a specified event.
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     @Override
     public void processEvent(Event event) {
@@ -195,5 +191,10 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public void validate() {
+        //
     }
 }

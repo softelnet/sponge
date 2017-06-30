@@ -26,8 +26,7 @@ public interface EventSetProcessorDurationStrategy {
     /**
      * Invoked when a duration timeout occurs.
      *
-     * @param adapter
-     *            event set processor adapter.
+     * @param adapter event set processor adapter.
      */
     void durationOccurred(EventSetProcessorAdapter<?> adapter);
 }

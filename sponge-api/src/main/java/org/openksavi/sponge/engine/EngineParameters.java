@@ -117,81 +117,72 @@ public interface EngineParameters {
     /**
      * Sets the number of the Main Processing Unit worker threads.
      *
-     * @param mainProcessingUnitThreadCount
-     *            the number of the Main Processing Unit worker threads.
+     * @param mainProcessingUnitThreadCount the number of the Main Processing Unit worker threads.
      */
     void setMainProcessingUnitThreadCount(int mainProcessingUnitThreadCount);
 
     /**
      * Sets the number of threads used by processing units to listen to an event queue concurrently.
      *
-     * @param processingUnitConcurrentListenerThreadCount
-     *            the number of threads used by processing units to listen to an event queue concurrently.
+     * @param processingUnitConcurrentListenerThreadCount the number of threads used by processing units to listen to an event queue
+     *        concurrently.
      */
     void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount);
 
     /**
      * Sets event queue capacity.
      *
-     * @param eventQueueCapacity
-     *            event queue capacity.
+     * @param eventQueueCapacity event queue capacity.
      */
     void setEventQueueCapacity(int eventQueueCapacity);
 
     /**
      * Sets cron thread count.
      *
-     * @param cronThreadCount
-     *            cron thread count.
+     * @param cronThreadCount cron thread count.
      */
     void setCronThreadCount(int cronThreadCount);
 
     /**
      * Sets duration executor thread count.
      *
-     * @param durationThreadCount
-     *            duration executor thread count.
+     * @param durationThreadCount duration executor thread count.
      */
     void setDurationThreadCount(int durationThreadCount);
 
     /**
      * Sets the number of threads used by an event set processor asynchronous executor.
      *
-     * @param asyncEventSetProcessorExecutorThreadCount
-     *            the number of threads used by an event set processor asynchronous executor.
+     * @param asyncEventSetProcessorExecutorThreadCount the number of threads used by an event set processor asynchronous executor.
      */
     void setAsyncEventSetProcessorExecutorThreadCount(int asyncEventSetProcessorExecutorThreadCount);
 
     /**
      * Sets event clone policy.
      *
-     * @param eventClonePolicy
-     *            event clone policy.
+     * @param eventClonePolicy event clone policy.
      */
     void setEventClonePolicy(EventClonePolicy eventClonePolicy);
 
     /**
      * Sets an event set processor default synchronous flag.
      *
-     * @param eventSetProcessorDefaultSynchronous
-     *            an event set processor default synchronous flag.
+     * @param eventSetProcessorDefaultSynchronous an event set processor default synchronous flag.
      */
     void setEventSetProcessorDefaultSynchronous(boolean eventSetProcessorDefaultSynchronous);
 
     /**
      * Sets an Executor shutdown timeout.
      *
-     * @param executorShutdownTimeout
-     *            an Executor shutdown timeout.
+     * @param executorShutdownTimeout an Executor shutdown timeout.
      */
     void setExecutorShutdownTimeout(long executorShutdownTimeout);
 
     /**
-     * Sets a specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation
-     * parameter - an asynchronous processing partition size.
+     * Sets a specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter -
+     * an asynchronous processing partition size.
      *
-     * @param asyncEventSetProcessorProcessingPartitionSize
-     *            a partition size.
+     * @param asyncEventSetProcessorProcessingPartitionSize a partition size.
      */
     void setAsyncEventSetProcessorProcessingPartitionSize(int asyncEventSetProcessorProcessingPartitionSize);
 
@@ -200,16 +191,15 @@ public interface EngineParameters {
     /**
      * Sets a flag to allow for concurrent processing of events that have the same type by event set processors.
      *
-     * @param allowConcurrentEventTypeProcessingByEventSetProcessors
-     *            a flag to allow for concurrent processing of events that have the same type by event set processors.
+     * @param allowConcurrentEventTypeProcessingByEventSetProcessors a flag to allow for concurrent processing of events that have the same
+     *        type by event set processors.
      */
     void setAllowConcurrentEventTypeProcessingByEventSetProcessors(boolean allowConcurrentEventTypeProcessingByEventSetProcessors);
 
     /**
      * Sets auto-enable of processors.
      *
-     * @param autoEnable
-     *            auto-enable of processors.
+     * @param autoEnable auto-enable of processors.
      */
     void setAutoEnable(boolean autoEnable);
 
@@ -223,8 +213,7 @@ public interface EngineParameters {
     /**
      * Sets a Main Processing Unit worker executor queue size.
      *
-     * @param mainProcessingUnitWorkerExecutorQueueSize
-     *            a Main Processing Unit worker executor queue size.
+     * @param mainProcessingUnitWorkerExecutorQueueSize a Main Processing Unit worker executor queue size.
      */
     void setMainProcessingUnitWorkerExecutorQueueSize(int mainProcessingUnitWorkerExecutorQueueSize);
 
@@ -238,8 +227,7 @@ public interface EngineParameters {
     /**
      * Sets internal queue blocking put operation sleep time between retries (in milliseconds).
      *
-     * @param internalQueueBlockingPutSleep
-     *            internal queue blocking put operation sleep time between retries.
+     * @param internalQueueBlockingPutSleep internal queue blocking put operation sleep time between retries.
      */
     void setInternalQueueBlockingPutSleep(long internalQueueBlockingPutSleep);
 
@@ -253,8 +241,7 @@ public interface EngineParameters {
     /**
      * Sets a decomposed queue capacity.
      *
-     * @param decomposedQueueCapacity
-     *            a decomposed queue capacity.
+     * @param decomposedQueueCapacity a decomposed queue capacity.
      */
     void setDecomposedQueueCapacity(int decomposedQueueCapacity);
 
@@ -268,8 +255,7 @@ public interface EngineParameters {
     /**
      * Sets a Main Event Queue capacity.
      *
-     * @param mainEventQueueCapacity
-     *            a Main Event Queue capacity.
+     * @param mainEventQueueCapacity a Main Event Queue capacity.
      */
     void setMainEventQueueCapacity(int mainEventQueueCapacity);
 
@@ -283,8 +269,7 @@ public interface EngineParameters {
     /**
      * Sets a dynamic thread pool initial size ratio.
      *
-     * @param initialDynamicThreadPoolSizeRatio
-     *            a dynamic thread pool initial size ratio.
+     * @param initialDynamicThreadPoolSizeRatio a dynamic thread pool initial size ratio.
      */
     void setInitialDynamicThreadPoolSizeRatio(double initialDynamicThreadPoolSizeRatio);
 
@@ -298,8 +283,7 @@ public interface EngineParameters {
     /**
      * Sets a dynamic thread pool keep alive time (in milliseconds).
      *
-     * @param dynamicThreadPoolKeepAliveTime
-     *            a dynamic thread pool keep alive time.
+     * @param dynamicThreadPoolKeepAliveTime a dynamic thread pool keep alive time.
      */
     void setDynamicThreadPoolKeepAliveTime(long dynamicThreadPoolKeepAliveTime);
 }

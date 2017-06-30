@@ -23,11 +23,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.collect.ImmutableList;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
@@ -52,8 +52,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Creates a new Plugin Manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultPluginManager(Engine engine) {
         super("PluginManager", engine);
@@ -62,8 +61,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Configures plugins.
      *
-     * @param configuration
-     *            plugins configuration.
+     * @param configuration plugins configuration.
      */
     @Override
     public void configure(Configuration configuration) {
@@ -74,8 +72,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Creates and configures a plugin.
      *
-     * @param pluginConfig
-     *            plugin configuration.
+     * @param pluginConfig plugin configuration.
      * @return a plugin.
      */
     public Plugin createAndConfigurePlugin(Configuration pluginConfig) {
@@ -116,8 +113,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Checks whether a plugin with the specified name exists.
      *
-     * @param name
-     *            plugin name.
+     * @param name plugin name.
      * @return {@code true} if the plugin exists.
      */
     @Override
@@ -128,8 +124,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Adds the specified plugin.
      *
-     * @param plugin
-     *            plugin.
+     * @param plugin plugin.
      */
     @Override
     public void addPlugin(Plugin plugin) {
@@ -153,8 +148,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Removes the specified plugin.
      *
-     * @param plugin
-     *            plugin.
+     * @param plugin plugin.
      */
     @Override
     public void removePlugin(Plugin plugin) {
@@ -177,8 +171,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Returns a plugin identified by the name.
      *
-     * @param name
-     *            plugin name.
+     * @param name plugin name.
      * @return plugin or {@code null} if there is no such plugin.
      */
     @Override
@@ -219,12 +212,9 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Creates a plugin stub.
      *
-     * @param pluginName
-     *            a plugin name.
-     * @param knowledgeBaseName
-     *            a knowledge base name.
-     * @param pluginClassName
-     *            a plugin class name.
+     * @param pluginName a plugin name.
+     * @param knowledgeBaseName a knowledge base name.
+     * @param pluginClassName a plugin class name.
      * @return a plugin stub.
      */
     protected Plugin createPluginStub(String pluginName, String knowledgeBaseName, String pluginClassName) {
@@ -241,8 +231,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     /**
      * Loads a plugin.
      *
-     * @param pluginStub
-     *            a plugin stub.
+     * @param pluginStub a plugin stub.
      * @return loaded plugin.
      */
     protected Plugin loadPlugin(KnowledgeBasePluginStub pluginStub) {

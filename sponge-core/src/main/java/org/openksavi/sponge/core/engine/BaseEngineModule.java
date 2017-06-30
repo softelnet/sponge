@@ -38,10 +38,8 @@ public abstract class BaseEngineModule implements EngineModule {
     /**
      * Creates a new engine module.
      *
-     * @param name
-     *            name.
-     * @param engine
-     *            the engine.
+     * @param name name.
+     * @param engine the engine.
      */
     protected BaseEngineModule(String name, Engine engine) {
         this.name = name;
@@ -51,8 +49,7 @@ public abstract class BaseEngineModule implements EngineModule {
     /**
      * Creates a new engine module.
      *
-     * @param name
-     *            name.
+     * @param name name.
      */
     protected BaseEngineModule(String name) {
         this(name, null);
@@ -67,8 +64,7 @@ public abstract class BaseEngineModule implements EngineModule {
     /**
      * Sets the engine.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     @Override
     public void setEngine(Engine engine) {
@@ -98,8 +94,7 @@ public abstract class BaseEngineModule implements EngineModule {
     /**
      * Sets module name.
      *
-     * @param name
-     *            module name.
+     * @param name module name.
      */
     @Override
     public void setName(String name) {

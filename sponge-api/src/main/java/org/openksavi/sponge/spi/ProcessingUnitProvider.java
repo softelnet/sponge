@@ -30,12 +30,9 @@ public interface ProcessingUnitProvider {
     /**
      * Creates a new filter processing unit.
      *
-     * @param engine
-     *            an engine.
-     * @param inQueue
-     *            an input event queue for the returned processing unit.
-     * @param outQueue
-     *            an output event queue for the returned processing unit.
+     * @param engine an engine.
+     * @param inQueue an input event queue for the returned processing unit.
+     * @param outQueue an output event queue for the returned processing unit.
      * @return a new filter processing unit.
      */
     ProcessingUnit<FilterAdapter> createFilterProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue);
@@ -43,12 +40,9 @@ public interface ProcessingUnitProvider {
     /**
      * Creates a new main processing unit.
      *
-     * @param engine
-     *            an engine.
-     * @param inQueue
-     *            an input event queue for the returned processing unit.
-     * @param outQueue
-     *            an output event queue for the returned processing unit.
+     * @param engine an engine.
+     * @param inQueue an input event queue for the returned processing unit.
+     * @param outQueue an output event queue for the returned processing unit.
      * @return a new main processing unit.
      */
     MainProcessingUnit createMainProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue);

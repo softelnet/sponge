@@ -30,10 +30,8 @@ public interface CronEventGenerator extends EventGenerator, Manageable {
     /**
      * Schedules an event in Cron.
      *
-     * @param event
-     *            event.
-     * @param crontabSpec
-     *            crontab time specification.
+     * @param event event.
+     * @param crontabSpec crontab time specification.
      * @return cron entry.
      */
     EventCronEntry schedule(Event event, String crontabSpec);
@@ -41,8 +39,7 @@ public interface CronEventGenerator extends EventGenerator, Manageable {
     /**
      * Removes a crontab entry.
      *
-     * @param entry
-     *            cron entry.
+     * @param entry cron entry.
      * @return {@code true} if the specified entry has been scheduled.
      */
     boolean remove(EventCronEntry entry);

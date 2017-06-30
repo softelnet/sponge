@@ -157,6 +157,23 @@
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>3.0.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.17</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>7.6</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -204,6 +221,38 @@
                                         <versionRange>[1,)</versionRange>
                                         <goals>
                                             <goal>add-third-party</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute>
+                                            <runOnIncremental>false</runOnIncremental>
+                                            <runOnConfiguration>false</runOnConfiguration>
+                                        </execute>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>findbugs-maven-plugin</artifactId>
+                                        <versionRange>[3,)</versionRange>
+                                        <goals>
+                                            <goal>check</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute>
+                                            <runOnIncremental>false</runOnIncremental>
+                                            <runOnConfiguration>false</runOnConfiguration>
+                                        </execute>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-checkstyle-plugin</artifactId>
+                                        <versionRange>[2,)</versionRange>
+                                        <goals>
+                                            <goal>check</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -420,6 +469,11 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.puppycrawl.tools</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>7.8.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -430,22 +484,8 @@
         </dependency>
     </dependencies>
 
-    <reporting>
-        <plugins>
-<!--             <plugin> -->
-<!--                 <groupId>org.apache.maven.plugins</groupId> -->
-<!--                 <artifactId>maven-javadoc-plugin</artifactId> -->
-<!--                 <version>2.10.4</version> -->
-<!--             </plugin> -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
     <modules>
+        <module>sponge-development-tools</module>
         <module>sponge-api</module>
         <module>sponge-core</module>
         <module>sponge-test</module>
@@ -463,4 +503,71 @@
         <module>sponge-standalone-extensions</module>
         <module>sponge-distribution</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>review</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <configuration>
+                            <failOnError>true</failOnError>
+                            <effort>Max</effort>
+                            <threshold>Default</threshold>
+                            <xmlOutput>true</xmlOutput>
+                            <excludeFilterFile>${project.parent.basedir}/sponge-development-tools/src/main/resources/findbugs/findbugs-exclude-filter.xml</excludeFilterFile>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>findbugs</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <dependencies>
+<!--                             <dependency> -->
+<!--                                 <groupId>com.puppycrawl.tools</groupId> -->
+<!--                                 <artifactId>checkstyle</artifactId> -->
+<!--                                 <version>7.6</version> -->
+<!--                             </dependency> -->
+                            <dependency>
+                                <groupId>org.openksavi.sponge</groupId>
+                                <artifactId>sponge-development-tools</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <failsOnError>true</failsOnError>
+                            <encoding>UTF-8</encoding>
+                            <consoleOutput>true</consoleOutput>
+                            <configLocation>checkstyle/sponge-checkstyle.xml</configLocation>
+                            <suppressionsLocation>checkstyle/sponge-checkstyle-suppressions.xml</suppressionsLocation>
+                            <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+<!--                             <headerLocation>checkstyle/LICENSE.txt</headerLocation> -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>checkstyle</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

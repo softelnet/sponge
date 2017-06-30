@@ -61,10 +61,8 @@ public class SystemSignal implements SignalHandler {
     /**
      * Creates a new instance of the signal supporting class.
      *
-     * @param signalName
-     *            signal name.
-     * @param listener
-     *            signal listener.
+     * @param signalName signal name.
+     * @param listener signal listener.
      */
     protected SystemSignal(String signalName, SystemSignalListener listener) {
         this.listener = listener;
@@ -85,8 +83,7 @@ public class SystemSignal implements SignalHandler {
     /**
      * Handles a signal by calling a listener method.
      *
-     * @param signal
-     *            a signal.
+     * @param signal a signal.
      */
     @Override
     public void handle(Signal signal) {
@@ -108,8 +105,7 @@ public class SystemSignal implements SignalHandler {
     /**
      * Checks if the name of the handled signal is equal to {@code signalName}.
      *
-     * @param signalName
-     *            signal name.
+     * @param signalName signal name.
      * @return {@code true} if the name of the handled signal is equal to {@code signalName}.
      */
     public boolean isSignal(String signalName) {
@@ -119,10 +115,8 @@ public class SystemSignal implements SignalHandler {
     /**
      * Sets the listener for the signal named {@code signalName}.
      *
-     * @param signalName
-     *            signal name.
-     * @param listener
-     *            signal listener.
+     * @param signalName signal name.
+     * @param listener signal listener.
      * @return newly created instance of {@code SystemSignal}.
      */
     public static SystemSignal setSystemSignalListener(String signalName, SystemSignalListener listener) {

@@ -41,10 +41,8 @@ public abstract class JavaRule extends BaseRule {
     /**
      * Sets event conditions.
      *
-     * @param eventAlias
-     *            event alias.
-     * @param javaObjects
-     *            conditions (e.g. method names or direct EventCondition).
+     * @param eventAlias event alias.
+     * @param javaObjects conditions (e.g. method names or direct EventCondition).
      */
     public void setConditions(String eventAlias, Object... javaObjects) {
         setJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, javaObjects));
@@ -53,10 +51,8 @@ public abstract class JavaRule extends BaseRule {
     /**
      * Adds an event condition.
      *
-     * @param eventAlias
-     *            an event alias.
-     * @param javaObject
-     *            an event condition in a general form.
+     * @param eventAlias an event alias.
+     * @param javaObject an event condition in a general form.
      */
     public void addCondition(String eventAlias, Object javaObject) {
         addJavaCondition(eventAlias, MAPPER.apply(javaObject));

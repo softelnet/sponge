@@ -19,9 +19,9 @@ package org.openksavi.sponge.camel;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.camel.Exchange;
-
 import com.google.common.collect.ImmutableMap;
+
+import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.core.event.BaseEvent;
 import org.openksavi.sponge.engine.Engine;
@@ -96,6 +96,7 @@ public class SpongeCamelEvent extends BaseEvent {
             if (!Objects.equals(routeId, value)) {
                 throw new IllegalArgumentException("Attribute " + name + " can't be changed");
             }
+            break;
         case ATTR_BODY:
             body = value;
             break;

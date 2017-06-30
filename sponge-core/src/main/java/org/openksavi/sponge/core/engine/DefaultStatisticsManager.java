@@ -28,8 +28,7 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
     /**
      * Creates a new Statistics Manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultStatisticsManager(Engine engine) {
         super("StatisticsManager", engine);

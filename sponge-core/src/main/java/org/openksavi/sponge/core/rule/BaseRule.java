@@ -34,7 +34,7 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     @Override
-    public final void setEventAliases(String[] aliases) {
+    public final void setEventAliases(String... aliases) {
         getAdapter().setEventAliases(aliases);
     }
 
@@ -44,14 +44,23 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     @Override
-    public final void setEventModes(EventMode[] modes) {
-        getAdapter().setEventModes(modes);
+    public final String getEventAlias(int index) {
+        return getAdapter().getEventAlias(index);
+    }
 
+    @Override
+    public final void setEventModes(EventMode... modes) {
+        getAdapter().setEventModes(modes);
     }
 
     @Override
     public final EventMode[] getEventModes() {
         return getAdapter().getEventModes();
+    }
+
+    @Override
+    public final EventMode getEventMode(int index) {
+        return getAdapter().getEventMode(index);
     }
 
     @Override

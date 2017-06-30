@@ -18,8 +18,10 @@ package org.openksavi.sponge.core;
 
 import org.openksavi.sponge.EventProcessor;
 import org.openksavi.sponge.EventProcessorAdapter;
+import org.openksavi.sponge.SpongeException;
 
-public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> extends BaseProcessorAdapter<T> implements EventProcessorAdapter<T> {
+public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> extends BaseProcessorAdapter<T>
+        implements EventProcessorAdapter<T> {
 
     protected BaseEventProcessorAdapter(BaseProcessorDefinition definition) {
         super(definition);
@@ -40,11 +42,15 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
         return getDefinition().getEventNames();
     }
 
+    @Override
+    public String getEventName(int index) {
+        return getDefinition().getEventName(index);
+    }
+
     /**
      * Sets event names for which this processor is registered.
      *
-     * @param eventNames
-     *            event names.
+     * @param eventNames event names.
      */
     @Override
     public void setEventNames(String... eventNames) {
@@ -54,11 +60,19 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
     /**
      * Sets event name for which this processor is registered.
      *
-     * @param eventName
-     *            event name.
+     * @param eventName event name.
      */
     @Override
     public void setEventName(String eventName) {
         getDefinition().setEventNames(eventName);
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+
+        if (getEventNames() == null || getEventNames().length < 1) {
+            throw new SpongeException("Invalid " + getType().getName() + " " + getName() + ". At least one event must be specified.");
+        }
     }
 }

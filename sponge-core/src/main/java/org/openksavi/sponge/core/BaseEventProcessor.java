@@ -27,6 +27,11 @@ public abstract class BaseEventProcessor<T extends EventProcessorAdapter<?>> ext
     }
 
     @Override
+    public final String getEventName(int index) {
+        return getAdapter().getEventName(index);
+    }
+
+    @Override
     public final void setEventNames(String... eventNames) {
         getAdapter().setEventNames(eventNames);
     }

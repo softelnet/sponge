@@ -27,10 +27,8 @@ public interface EventGenerator extends EngineModule {
     /**
      * Puts a new event into the event queue associated with this event generator.
      *
-     * @param event
-     *            an event instance.
-     * @param newInstance
-     *            should create a new instance of this event.
+     * @param event an event instance.
+     * @param newInstance should create a new instance of this event.
      */
     void putEvent(Event event, boolean newInstance);
 }

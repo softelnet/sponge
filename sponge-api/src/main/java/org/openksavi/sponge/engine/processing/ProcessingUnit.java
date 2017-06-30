@@ -37,16 +37,14 @@ public interface ProcessingUnit<T extends EventProcessorAdapter<?>> extends Engi
     /**
      * Adds a new processor to this processing unit.
      *
-     * @param processor
-     *            processor.
+     * @param processor processor.
      */
     void addProcessor(T processor);
 
     /**
      * Removes processor specified by its name.
      *
-     * @param name
-     *            processor name.
+     * @param name processor name.
      */
     void removeProcessor(String name);
 
@@ -58,8 +56,7 @@ public interface ProcessingUnit<T extends EventProcessorAdapter<?>> extends Engi
     /**
      * Returns {@code true} if a processor named {@code name} exists.
      *
-     * @param name
-     *            processor name.
+     * @param name processor name.
      * @return {@code true} if a processor named {@code name} exists.
      */
     boolean existsProcessor(String name);

@@ -33,16 +33,14 @@ public interface EngineModule extends Manageable {
     /**
      * Sets the name.
      *
-     * @param name
-     *            the name.
+     * @param name the name.
      */
     void setName(String name);
 
     /**
      * Sets the engine.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     void setEngine(Engine engine);
 

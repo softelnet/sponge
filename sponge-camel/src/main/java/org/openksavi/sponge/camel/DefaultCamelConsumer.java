@@ -23,15 +23,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.util.AsyncProcessorConverterHelper;
 import org.apache.camel.util.ObjectHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Default Camel consumer facade to Sponge.
  */
 public class DefaultCamelConsumer implements CamelConsumer {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultCamelConsumer.class);
 
     protected final SpongeEndpoint spongeEndpoint;
 

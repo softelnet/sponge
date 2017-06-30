@@ -31,8 +31,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
@@ -43,8 +41,6 @@ import org.openksavi.sponge.util.Processable;
  * Default Thread Pool Manager.
  */
 public class DefaultThreadPoolManager extends BaseEngineModule implements ThreadPoolManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultThreadPoolManager.class);
 
     /** Map of (processable, ExecutorEntry). */
     protected Map<Processable, ExecutorEntry> processableExecutors = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -73,42 +69,53 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         }
 
         /**
-         * @return the threadCount
+         * Returns the thread count.
+         *
+         * @return the thread count.
          */
         public int getThreadCount() {
             return threadCount;
         }
 
         /**
-         * @param threadCount
-         *            the threadCount to set
+         * Sets a thread count.
+         *
+         * @param threadCount the thread count to set.
          */
         public void setThreadCount(int threadCount) {
             this.threadCount = threadCount;
         }
 
         /**
-         * @return the executor
+         * Returns the executor.
+         *
+         * @return the executor.
          */
         public ExecutorService getExecutor() {
             return executor;
         }
 
         /**
-         * @param executor
-         *            the executor to set
+         * Sets an executor.
+         *
+         * @param executor the executor to set.
          */
         public void setExecutor(ExecutorService executor) {
             this.executor = executor;
         }
 
         /**
-         * @return the future
+         * Returns the future.
+         *
+         * @return the future.
          */
         public List<Future<?>> getFutures() {
             return futures;
         }
 
+        /**
+         * Clears this entry.
+         */
         public void clear() {
             executor = null;
             futures.clear();
@@ -118,8 +125,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
     /**
      * Creates a new Thread Pool Manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultThreadPoolManager(Engine engine) {
         super("ThreadPoolManager", engine);
@@ -246,7 +252,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         return executorEntry.getExecutor();
     }
 
-    public class WaitRejectedExecutionHandlerPolicy implements RejectedExecutionHandler {
+    public static class WaitRejectedExecutionHandlerPolicy implements RejectedExecutionHandler {
 
         public WaitRejectedExecutionHandlerPolicy() {
             //

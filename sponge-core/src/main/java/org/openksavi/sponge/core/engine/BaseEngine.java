@@ -212,8 +212,7 @@ public class BaseEngine implements Engine {
     /**
      * Sets a module provider.
      *
-     * @param moduleProvider
-     *            the moduleProvider to set.
+     * @param moduleProvider the moduleProvider to set.
      */
     @Override
     public void setModuleProvider(EngineModuleProvider moduleProvider) {
@@ -233,8 +232,7 @@ public class BaseEngine implements Engine {
     /**
      * Sets the event queue provider.
      *
-     * @param eventQueueProvider
-     *            the eventQueueProvider to set.
+     * @param eventQueueProvider the eventQueueProvider to set.
      */
     @Override
     public void setEventQueueProvider(EventQueueProvider eventQueueProvider) {
@@ -244,8 +242,7 @@ public class BaseEngine implements Engine {
     /**
      * Sets the processing unit provider.
      *
-     * @param processingUnitProvider
-     *            the processingUnitProvider to set.
+     * @param processingUnitProvider the processingUnitProvider to set.
      */
     @Override
     public void setProcessingUnitProvider(ProcessingUnitProvider processingUnitProvider) {
@@ -675,10 +672,8 @@ public class BaseEngine implements Engine {
     /**
      * Processes error.
      *
-     * @param processorAdapter
-     *            processor adapter.
-     * @param e
-     *            exception.
+     * @param processorAdapter processor adapter.
+     * @param e exception.
      */
     @Override
     public void handleError(ProcessorAdapter<?> processorAdapter, Throwable e) {
@@ -689,10 +684,8 @@ public class BaseEngine implements Engine {
     /**
      * Processes error.
      *
-     * @param sourceName
-     *            source name.
-     * @param e
-     *            exception.
+     * @param sourceName source name.
+     * @param e exception.
      */
     @Override
     public void handleError(String sourceName, Throwable e) {
@@ -749,8 +742,7 @@ public class BaseEngine implements Engine {
     /**
      * Remembers the first exception.
      *
-     * @param e
-     *            exception.
+     * @param e exception.
      */
     protected void tryRememberException(Throwable e) {
         rememberedException.updateAndGet(previous -> previous != null ? previous : e);

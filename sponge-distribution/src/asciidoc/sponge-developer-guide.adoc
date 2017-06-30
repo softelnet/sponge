@@ -1,32 +1,43 @@
 = Sponge Developer Guide
 
-== Generating www project page contents (including standalone distribution)
+== Maven
+
+=== Create all
+This includes www project page contents and standalone distribution).
 
  cd sponge
- mvn clean package
+ mvn clean install
 
-The result directory is `sponge-distribution/sponge-{projectVersion}-www`. Change `package` to `install` to install in a local maven repository
+The result directory is `sponge-distribution/sponge-{projectVersion}-www`. Change `package` to `install` to install in the local maven repository
 
-== Generating www project page contents (including standalone distribution) - without tests, licenses, javadoc, documentation and assembly
+=== Turn off specified profiles
+This generates all but without tests, licenses, javadoc, documentation, review and assembly.
 
- mvn clean package -DskipTests -P-create-license-list -P-download-licenses -P-javadoc -P-documentation -P-assembly
+ mvn clean install -DskipTests -P-create-license-list -P-download-licenses -P-javadoc -P-documentation -P-review -P-assembly
 
-== Generating only ADOC documentation
+=== Only generate the documentation
 
  cd sponge-distribution
  mvn generate-resources
 
-== Generating third party licenses
+=== Generate third party licenses info
 
  cd sponge-distribution
  mvn license:download-licenses license:add-third-party -Pcreate-license-list -Pdownload-licenses
 
+=== Code review only
 
-== Eclipse plugins
+ mvn install -DskipTests -P-create-license-list -P-download-licenses -P-javadoc -P-documentation -P-assembly
+
+== Code style
+Formatter and checkstyle based on Google configuration.
+
+Project specific files located in `sponge-development-tools`.
+
+== Eclipse
+
+=== Eclipse plugins
 
 * http://dist.springsource.org/snapshot/GRECLIPSE/e4.7/[Groovy plugin for Eclipse Neon^]
 
-== Code verification
-
-* http://findbugs.sourceforge.net[Findbugs^]
 

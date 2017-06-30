@@ -16,11 +16,11 @@
 
 package org.openksavi.sponge.groovy.core;
 
+import groovy.lang.Closure;
+
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
-
-import groovy.lang.Closure;
 
 /**
  * Groovy closure rule event condition.
@@ -32,8 +32,7 @@ public class GroovyClosureEventCondition implements EventCondition {
     /**
      * Creates a new Groovy closure rule event condition.
      *
-     * @param closure
-     *            a Groovy closure.
+     * @param closure a Groovy closure.
      *
      */
     public GroovyClosureEventCondition(Closure<Boolean> closure) {
@@ -41,13 +40,10 @@ public class GroovyClosureEventCondition implements EventCondition {
     }
 
     /**
-     * Checks rule event condition by evaluating the defined
-     * knowledge base rule method.
+     * Checks rule event condition by evaluating the defined knowledge base rule method.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     @Override

@@ -33,16 +33,14 @@ public interface ProcessorOperations {
     /**
      * Sets this processor name.
      *
-     * @param name
-     *            processor name.
+     * @param name processor name.
      */
     void setName(String name);
 
     /**
      * Sets display name.
      *
-     * @param displayName
-     *            display name.
+     * @param displayName display name.
      */
     void setDisplayName(String displayName);
 

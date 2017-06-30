@@ -20,8 +20,7 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName
-     *            file name.
+     * @param fileName file name.
      */
     public FileKnowledgeBaseScript(String fileName) {
         this.fileName = fileName;
@@ -30,10 +29,8 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName
-     *            file name.
-     * @param charset
-     *            charset.
+     * @param fileName file name.
+     * @param charset charset.
      */
     public FileKnowledgeBaseScript(String fileName, String charset) {
         this.fileName = fileName;

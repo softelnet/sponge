@@ -26,8 +26,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapter;
@@ -46,8 +44,6 @@ import org.openksavi.sponge.util.Processable;
  */
 public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
 
-    private static final Logger logger = LoggerFactory.getLogger(DecomposedQueueMainProcessingUnit.class);
-
     /** Decomposed custom queue of entries (trigger adapter or event set processor group adapter, event). */
     private DecomposedQueue<EventProcessorAdapter<?>> decomposedQueue;
 
@@ -57,14 +53,10 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     /**
      * Creates a new main processing unit.
      *
-     * @param name
-     *            name.
-     * @param engine
-     *            the engine.
-     * @param inQueue
-     *            input queue.
-     * @param outQueue
-     *            output queue.
+     * @param name name.
+     * @param engine the engine.
+     * @param inQueue input queue.
+     * @param outQueue output queue.
      */
     public DecomposedQueueMainProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
@@ -112,19 +104,17 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     protected boolean supportsControlEventForProcessor(ProcessorAdapter<?> processorAdapter) {
         ProcessorType type = processorAdapter.getType();
 
-        return type == ProcessorType.TRIGGER || type == ProcessorType.RULE || type == ProcessorType.CORRELATOR ||
-                type == ProcessorType.RULE_GROUP || type == ProcessorType.CORRELATOR_GROUP;
+        return type == ProcessorType.TRIGGER || type == ProcessorType.RULE || type == ProcessorType.CORRELATOR
+                || type == ProcessorType.RULE_GROUP || type == ProcessorType.CORRELATOR_GROUP;
     }
 
     /**
      * Processes an event.
      *
-     * @param event
-     *            an event.
+     * @param event an event.
      *
      * @return {@code true} if the event has been processed by at least one adapter.
-     * @throws java.lang.InterruptedException
-     *             if interrupted.
+     * @throws java.lang.InterruptedException if interrupted.
      */
     protected boolean processEvent(Event event) throws InterruptedException {
         if (event instanceof ControlEvent) {

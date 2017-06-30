@@ -44,10 +44,8 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
     /**
      * Creates a new event scheduler.
      *
-     * @param engine
-     *            the engine.
-     * @param outQueue
-     *            output event queue.
+     * @param engine the engine.
+     * @param outQueue output event queue.
      */
     public TimerEventScheduler(Engine engine, EventQueue outQueue) {
         super("EventScheduler", engine, outQueue);
@@ -85,10 +83,8 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
     /**
      * Schedules an event after a specified time.
      *
-     * @param event
-     *            event.
-     * @param delay
-     *            delay in milliseconds.
+     * @param event event.
+     * @param delay delay in milliseconds.
      * @return scheduled event task.
      */
     @Override
@@ -106,19 +102,12 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
         return entry;
     }
 
-    protected GenericEventSchedulerEntry createNewEventSchedulerEntry() {
-        return new GenericEventSchedulerEntry(getNextEntryId());
-    }
-
     /**
      * Schedules an event after a specified time with the specified interval.
      *
-     * @param event
-     *            event.
-     * @param delay
-     *            delay in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param event event.
+     * @param delay delay in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event task.
      */
     @Override
@@ -144,13 +133,15 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
         return entry;
     }
 
+    protected GenericEventSchedulerEntry createNewEventSchedulerEntry() {
+        return new GenericEventSchedulerEntry(getNextEntryId());
+    }
+
     /**
      * Schedules an event at a specified time.
      *
-     * @param event
-     *            event.
-     * @param at
-     *            time in milliseconds.
+     * @param event event.
+     * @param at time in milliseconds.
      * @return scheduled event task.
      */
     @Override
@@ -171,12 +162,9 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
     /**
      * Schedules an event at a specified time with the specified interval.
      *
-     * @param event
-     *            event.
-     * @param at
-     *            time in milliseconds.
-     * @param interval
-     *            interval in milliseconds.
+     * @param event event.
+     * @param at time in milliseconds.
+     * @param interval interval in milliseconds.
      * @return scheduled event task.
      */
     @Override
@@ -206,8 +194,7 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
     /**
      * Schedules a specified event now (inserts to the queue immediately).
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     @Override
     public void scheduleNow(Event event) {
@@ -227,8 +214,7 @@ public class TimerEventScheduler extends BaseEventGenerator implements EventSche
     /**
      * Removes the specified scheduler entry.
      *
-     * @param entry
-     *            event scheduler entry.
+     * @param entry event scheduler entry.
      * @return {@code true} if the specified event scheduler entry has been scheduled.
      */
     @Override

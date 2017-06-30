@@ -79,8 +79,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     /**
      * Creates a new knowledge base manager.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public DefaultKnowledgeBaseManager(Engine engine) {
         super("KnowledgeBaseManager", engine);
@@ -96,8 +95,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     /**
      * Configures this knowledge base manager.
      *
-     * @param configuration
-     *            configuration.
+     * @param configuration configuration.
      */
     @Override
     public void configure(Configuration configuration) {
@@ -337,8 +335,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
                 .map(factory -> factory.getSupportedType()).findFirst();
 
         if (!typeO.isPresent()) {
-            throw new SpongeException("Unsupported file extension '" + extension + "' for file '" + fileName + "' in knowledge base '" +
-                    scriptKnowledgeBase.getName() + "'");
+            throw new SpongeException("Unsupported file extension '" + extension + "' for file '" + fileName + "' in knowledge base '"
+                    + scriptKnowledgeBase.getName() + "'");
         }
 
         return typeO.get();

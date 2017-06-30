@@ -162,20 +162,16 @@ public interface Engine extends Manageable {
     /**
      * Handles an error.
      *
-     * @param processorAdapter
-     *            processor adapter.
-     * @param e
-     *            exception.
+     * @param processorAdapter processor adapter.
+     * @param e exception.
      */
     void handleError(ProcessorAdapter<?> processorAdapter, Throwable e);
 
     /**
      * Handles an error.
      *
-     * @param sourceName
-     *            source name.
-     * @param e
-     *            exception.
+     * @param sourceName source name.
+     * @param e exception.
      */
     void handleError(String sourceName, Throwable e);
 
@@ -253,8 +249,7 @@ public interface Engine extends Manageable {
     /**
      * Adds OnStartup listener.
      *
-     * @param onStartupListener
-     *            OnStartup listener.
+     * @param onStartupListener OnStartup listener.
      */
     void addOnStartupListener(OnStartupListener onStartupListener);
 
@@ -268,8 +263,7 @@ public interface Engine extends Manageable {
     /**
      * Removes OnStartup listener.
      *
-     * @param onStartupListener
-     *            OnStartup listener.
+     * @param onStartupListener OnStartup listener.
      * @return {@code true} if there was such OnStartup listener.
      */
     boolean removeOnStartupListener(OnStartupListener onStartupListener);
@@ -277,8 +271,7 @@ public interface Engine extends Manageable {
     /**
      * Adds OnShutdown listener.
      *
-     * @param onShutdownListener
-     *            OnShutdown listener.
+     * @param onShutdownListener OnShutdown listener.
      */
     void addOnShutdownListener(OnShutdownListener onShutdownListener);
 
@@ -292,8 +285,7 @@ public interface Engine extends Manageable {
     /**
      * Removes OnShutdown listener.
      *
-     * @param onShutdownListener
-     *            OnShutdown listener.
+     * @param onShutdownListener OnShutdown listener.
      * @return {@code true} if there was such OnShutdown listener.
      */
     boolean removeOnShutdownListener(OnShutdownListener onShutdownListener);
@@ -308,14 +300,13 @@ public interface Engine extends Manageable {
     /**
      * Sets an exception handler.
      *
-     * @param exceptionHandler
-     *            the new exception handler.
+     * @param exceptionHandler the new exception handler.
      */
     void setExceptionHandler(ExceptionHandler exceptionHandler);
 
     /**
-     * Returns default parameters. Notice that they are only default values. Current parameter values are provided
-     * by {@link org.openksavi.sponge.engine.ConfigurationManager}.
+     * Returns default parameters. Notice that they are only default values. Current parameter values are provided by
+     * {@link org.openksavi.sponge.engine.ConfigurationManager}.
      *
      * @return default parameters.
      */
@@ -324,32 +315,28 @@ public interface Engine extends Manageable {
     /**
      * Sets an event ID generator.
      *
-     * @param eventIdGenerator
-     *            an event ID generator.
+     * @param eventIdGenerator an event ID generator.
      */
     void setEventIdGenerator(EventIdGenerator eventIdGenerator);
 
     /**
      * Sets a configuration file name.
      *
-     * @param configurationFilename
-     *            a configuration file name.
+     * @param configurationFilename a configuration file name.
      */
     void setConfigurationFilename(String configurationFilename);
 
     /**
      * Sets a processing unit provider.
      *
-     * @param processingUnitProvider
-     *            a processing unit provider.
+     * @param processingUnitProvider a processing unit provider.
      */
     void setProcessingUnitProvider(ProcessingUnitProvider processingUnitProvider);
 
     /**
      * Sets a knowledge base interpreter factory providers.
      *
-     * @param knowledgeBaseInterpreterFactoryProviders
-     *            a knowledge base interpreter factory providers.
+     * @param knowledgeBaseInterpreterFactoryProviders a knowledge base interpreter factory providers.
      */
     void setKnowledgeBaseInterpreterFactoryProviders(
             List<KnowledgeBaseInterpreterFactoryProvider> knowledgeBaseInterpreterFactoryProviders);
@@ -357,24 +344,21 @@ public interface Engine extends Manageable {
     /**
      * Sets a module provider.
      *
-     * @param moduleProvider
-     *            a module provider.
+     * @param moduleProvider a module provider.
      */
     void setModuleProvider(EngineModuleProvider moduleProvider);
 
     /**
      * Sets an event queue provider.
      *
-     * @param eventQueueProvider
-     *            an event queue provider.
+     * @param eventQueueProvider an event queue provider.
      */
     void setEventQueueProvider(EventQueueProvider eventQueueProvider);
 
     /**
      * Sets a knowledge base file provider.
      *
-     * @param knowledgeBaseFileProvider
-     *            a knowledge base file provider.
+     * @param knowledgeBaseFileProvider a knowledge base file provider.
      */
     void setKnowledgeBaseFileProvider(KnowledgeBaseFileProvider knowledgeBaseFileProvider);
 
@@ -388,8 +372,7 @@ public interface Engine extends Manageable {
     /**
      * Sets a strategy for handling an event set processor duration timeout.
      *
-     * @param durationStrategy
-     *            a duration strategy.
+     * @param durationStrategy a duration strategy.
      */
     void setEventSetProcessorDurationStrategy(EventSetProcessorDurationStrategy durationStrategy);
 }

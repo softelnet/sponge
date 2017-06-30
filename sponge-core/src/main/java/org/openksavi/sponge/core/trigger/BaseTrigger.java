@@ -26,8 +26,7 @@ public abstract class BaseTrigger extends BaseEventProcessor<TriggerAdapter> imp
     /**
      * Informs whether the specified event is to be accepted.
      *
-     * @param event
-     *            event.
+     * @param event event.
      * @return whether the specified event is to be accepted.
      */
     @Override

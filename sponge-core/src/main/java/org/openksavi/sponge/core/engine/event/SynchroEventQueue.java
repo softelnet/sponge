@@ -39,8 +39,7 @@ public class SynchroEventQueue extends BaseEventQueue {
     /**
      * Creates a new priority event queue.
      *
-     * @param name
-     *            queue name.
+     * @param name queue name.
      */
     public SynchroEventQueue(String name) {
         super(name);
@@ -59,10 +58,8 @@ public class SynchroEventQueue extends BaseEventQueue {
     /**
      * Puts a new event into the event queue. Blocks if there is no capacity.
      *
-     * @param event
-     *            a new event.
-     * @throws QueueFullException
-     *             when the queue is full.
+     * @param event a new event.
+     * @throws QueueFullException when the queue is full.
      */
     @Override
     public void put(Event event) {

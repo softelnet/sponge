@@ -22,12 +22,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Iterables;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.Tree;
@@ -66,7 +66,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
         eventTree.setRoot(newNode);
         // Note that this check will be performed later one more time if this event is accepted as the first. The mode for the first event
         // is always FIRST.
-        shouldAddToEventTreeForFLAModes(newNode, event);
+        shouldAddToEventTreeForFlaModes(newNode, event);
         eventTree.setRoot(null);
         return true;
     }
@@ -74,10 +74,8 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Checks if the specified event is expected for the given level.
      *
-     * @param level
-     *            level for the event.
-     * @param event
-     *            event instance.
+     * @param level level for the event.
+     * @param event event instance.
      * @return {@code true} if the specified event is expected for the given level.
      */
     protected boolean isEventExpected(int level, Event event) {
@@ -88,12 +86,11 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Checks conditions for the given node (containing level and event).
      *
-     * @param node
-     *            event tree node.
+     * @param node event tree node.
      * @return {@code true} if all conditions are met.
      */
     protected boolean checkConditions(TreeNode<Event> node) {
-        List<EventCondition> conditions = getConditions(getEventAliases()[node.getLevel()]);
+        List<EventCondition> conditions = getConditions(getEventAlias(node.getLevel()));
         boolean result = true;
 
         if (conditions == null) {
@@ -149,7 +146,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
      * @return {@code true} if there should be an attempt to run the rule.
      */
     private boolean shouldRunRule() {
-        EventMode lastMode = getEventModes()[getEventModes().length - 1];
+        EventMode lastMode = getEventMode(getEventModes().length - 1);
 
         // If the mode of the last specified event is FIRST or ALL always try to run the rule.
         if (lastMode == EventMode.FIRST || lastMode == EventMode.ALL) {
@@ -163,13 +160,11 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Checks if the event should be added to the event tree for modes FIRST, LAST or ALL.
      *
-     * @param newNode
-     *            new event tree node.
-     * @param event
-     *            new event.
+     * @param newNode new event tree node.
+     * @param event new event.
      * @return {@code true} if the event should be added to the event tree.
      */
-    protected boolean shouldAddToEventTreeForFLAModes(TreeNode<Event> newNode, Event event) {
+    protected boolean shouldAddToEventTreeForFlaModes(TreeNode<Event> newNode, Event event) {
         // Checks if the incoming event is expected by this rule.
         if (isEventExpected(newNode.getLevel(), event)) {
             // Check conditions for this event.
@@ -184,12 +179,9 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Checks if the event should be added to the event tree for mode NONE. Holder allows returning changed newNode.
      *
-     * @param parentNode
-     *            parent event tree node.
-     * @param newNodeHolder
-     *            new event tree node holder.
-     * @param event
-     *            new event.
+     * @param parentNode parent event tree node.
+     * @param newNodeHolder new event tree node holder.
+     * @param event new event.
      * @return {@code true} if the event should be added to the event tree.
      */
     protected boolean shouldAddToEventTreeForNMode(TreeNode<Event> parentNode, Mutable<TreeNode<Event>> newNodeHolder, Event event) {
@@ -232,10 +224,8 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Continues building the event tree for the incoming event starting at the specified node.
      *
-     * @param node
-     *            event tree node.
-     * @param event
-     *            incoming event.
+     * @param node event tree node.
+     * @param event incoming event.
      */
     protected void buildEventTree(TreeNode<Event> node, Event event) {
         // Check if this event is the first event that starts the rule instance.
@@ -251,7 +241,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
             // Recursively try to continue building the event tree, but only for modes FIRST, LAST and ALL.
             node.getChildren().forEach(child -> {
                 // NONE events are processed in shouldAddToEventTreeForNMode(), not here.
-                if (getEventModes()[child.getLevel()] != EventMode.NONE) {
+                if (getEventMode(child.getLevel()) != EventMode.NONE) {
                     buildEventTree(child, event);
                 }
             });
@@ -267,17 +257,20 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
 
         boolean rememberEvent = false; // Should this event be added to the event tree in this place.
 
-        switch (getEventMode(newNode)) {
+        EventMode eventMode = getEventMode(newNode);
+        switch (eventMode) {
         case FIRST:
         case LAST:
         case ALL:
-            rememberEvent = shouldAddToEventTreeForFLAModes(newNode, event);
+            rememberEvent = shouldAddToEventTreeForFlaModes(newNode, event);
             break;
         case NONE:
             Mutable<TreeNode<Event>> newNodeHolder = new MutableObject<>(newNode);
             rememberEvent = shouldAddToEventTreeForNMode(node, newNodeHolder, event);
             newNode = newNodeHolder.getValue(); // shouldAddToEventTreeForNMode() may change newNode.
             break;
+        default:
+            throw new SpongeException("Unsupported value: " + eventMode);
         }
 
         // Remove the node for the incoming event if the event doesn't match.
@@ -293,12 +286,11 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Returns event mode.
      *
-     * @param node
-     *            event tree node.
+     * @param node event tree node.
      * @return event mode.
      */
     protected EventMode getEventMode(TreeNode<Event> node) {
-        return node == null ? EventMode.FIRST : getEventModes()[node.getLevel()];
+        return node == null ? EventMode.FIRST : getEventMode(node.getLevel());
     }
 
     /**
@@ -315,8 +307,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Attempts to run (fire) this rule for the specified node in the event tree.
      *
-     * @param node
-     *            event tree node.
+     * @param node event tree node.
      * @return {@code true} if this rule has been run (fired) all times it ought to. In that case it will be finished.
      */
     private boolean runRule(TreeNode<Event> node) {
@@ -336,7 +327,8 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
                 logger.debug("Event tree: {}", eventTree);
             }
 
-            switch (getEventModes()[maxLevel]) {
+            EventMode eventMode = getEventMode(maxLevel);
+            switch (eventMode) {
             case FIRST:
                 return true;
             case LAST:
@@ -353,11 +345,14 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
                     // Return false because there could be new suitable event sequences in the future.
                     return false;
                 }
+            default:
+                throw new SpongeException("Unsupported value: " + eventMode);
             }
         } else if (node.getLevel() < maxLevel) { // The node is not a leaf of the event tree.
             TreeNode<Event> child;
 
-            switch (getEventModes()[node.getLevel() + 1]) {
+            EventMode eventMode = getEventModes()[node.getLevel() + 1];
+            switch (eventMode) {
             case FIRST:
                 // For FIRST mode consider only the first event in the next level.
                 if (node.hasChildren()) {
@@ -406,6 +401,8 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
                     }
                 }
                 break;
+            default:
+                throw new SpongeException("Unsupported value: " + eventMode);
             }
         }
 
@@ -439,17 +436,14 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     /**
      * Clears and sets up event alias map (event alias -> event instance).
      *
-     * @param node
-     *            the node for the last event.
+     * @param node the node for the last event.
      */
     private void prepareEventAliasMap(TreeNode<Event> node) {
         eventAliasMap.clear();
 
-        String[] eventAliases = getEventAliases();
         List<Event> path = eventTree.getPathValues(node);
-
         for (int i = 0; i < path.size(); i++) {
-            eventAliasMap.put(eventAliases[i], path.get(i));
+            eventAliasMap.put(getEventAlias(i), path.get(i));
         }
     }
 
@@ -486,12 +480,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
 
     @Override
     public void validate() {
-        if (getName() == null) {
-            throw new SpongeException("Invalid rule. Name must not be empty.");
-        }
-        if (getEventNames() == null || getEventNames().length < 1) {
-            throw createValidationException("At least one event must be specified.");
-        }
+        super.validate();
 
         if (getEventModes() == null || getEventModes().length < 1) {
             throw createValidationException("Event modes are not specified.");

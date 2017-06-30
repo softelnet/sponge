@@ -54,8 +54,7 @@ public class SpongeComponent extends DefaultComponent {
     /**
      * To use the given Sponge engine instance.
      *
-     * @param engine
-     *            the engine.
+     * @param engine the engine.
      */
     public void setEngine(Engine engine) {
         this.engine = engine;

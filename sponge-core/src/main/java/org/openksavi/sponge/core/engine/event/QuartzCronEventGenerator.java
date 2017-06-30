@@ -68,10 +68,8 @@ public class QuartzCronEventGenerator extends BaseEventGenerator implements Cron
     /**
      * Creates a new Cron event generator.
      *
-     * @param engine
-     *            the engine.
-     * @param outQueue
-     *            an output event queue.
+     * @param engine the engine.
+     * @param outQueue an output event queue.
      */
     public QuartzCronEventGenerator(Engine engine, EventQueue outQueue) {
         super("Cron", engine, outQueue);
@@ -175,8 +173,7 @@ public class QuartzCronEventGenerator extends BaseEventGenerator implements Cron
     /**
      * Removes the crontab entry.
      *
-     * @param entry
-     *            crontab entry.
+     * @param entry crontab entry.
      * @return {@code true} if the specified entry has been scheduled.
      */
     @Override

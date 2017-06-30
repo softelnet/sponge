@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.trigger;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.BaseEventProcessorAdapter;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -35,15 +34,5 @@ public class BaseTriggerAdapter extends BaseEventProcessorAdapter<Trigger> imple
     @Override
     public ProcessorType getType() {
         return ProcessorType.TRIGGER;
-    }
-
-    @Override
-    public void validate() {
-        if (getName() == null) {
-            throw new SpongeException("Invalid trigger. Name must not be empty.");
-        }
-        if (getEventNames() == null || getEventNames().length < 1) {
-            throw new SpongeException("Invalid trigger " + getName() + ". At least one event must be specified.");
-        }
     }
 }

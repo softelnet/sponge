@@ -16,11 +16,11 @@
 
 package org.openksavi.sponge.nashorn.core;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
-
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
  * Script knowledge base rule event condition.
@@ -35,13 +35,10 @@ public class NashornScriptKnowledgeBaseEventCondition implements EventCondition 
     }
 
     /**
-     * Checks rule event condition by evaluating the defined
-     * knowledge base rule method.
+     * Checks rule event condition by evaluating the defined knowledge base rule method.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     @Override

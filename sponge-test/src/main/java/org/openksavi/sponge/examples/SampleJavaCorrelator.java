@@ -41,19 +41,19 @@ public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelat
 
     @Override
     public void init() {
-        getEPS().setVariableIfNone(VAR_INSTANCE_STARTED, () -> new AtomicBoolean(false));
+        getEps().setVariableIfNone(VAR_INSTANCE_STARTED, () -> new AtomicBoolean(false));
     }
 
     @Override
     public boolean acceptsAsFirst(Event event) {
-        return getEPS().getVariable(AtomicBoolean.class, VAR_INSTANCE_STARTED).compareAndSet(false, true);
+        return getEps().getVariable(AtomicBoolean.class, VAR_INSTANCE_STARTED).compareAndSet(false, true);
     }
 
     @Override
     public void onEvent(Event event) {
         eventLog.add(event);
         logger.debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog);
-        getEPS().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
+        getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
         if (eventLog.size() >= 4) {
             finish();
         }

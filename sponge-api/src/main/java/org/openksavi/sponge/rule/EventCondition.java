@@ -27,10 +27,8 @@ public interface EventCondition {
     /**
      * Checks rule event condition.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     boolean condition(Rule rule, Event event);

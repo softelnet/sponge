@@ -4,7 +4,7 @@
  */
 
 import java.util.concurrent.atomic.*
-import org.openksavi.sponge.examples.TestStatus
+import org.openksavi.sponge.test.TestStatus
 
 class ReloadTrigger extends Trigger {
     void configure() {

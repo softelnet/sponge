@@ -25,7 +25,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.examples.project.news.NewsExampleMain;
 
 public class NewsTest {
 

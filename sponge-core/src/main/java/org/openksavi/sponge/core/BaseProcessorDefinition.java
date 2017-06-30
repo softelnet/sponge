@@ -58,8 +58,7 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /**
      * Sets this processor definition name.
      *
-     * @param name
-     *            processor definition name.
+     * @param name processor definition name.
      */
     @Override
     public void setName(String name) {
@@ -93,8 +92,7 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /**
      * Sets display name.
      *
-     * @param displayName
-     *            display name.
+     * @param displayName display name.
      */
     @Override
     public void setDisplayName(String displayName) {
@@ -114,8 +112,7 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /**
      * Sets Java-defined flag.
      *
-     * @param javaDefined
-     *            Java-defined flag.
+     * @param javaDefined Java-defined flag.
      */
     public void setJavaDefined(boolean javaDefined) {
         this.javaDefined = javaDefined;

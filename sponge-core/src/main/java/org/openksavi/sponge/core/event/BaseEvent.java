@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.engine.event.PriorityEventQueueComparator;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 
@@ -51,10 +50,8 @@ public abstract class BaseEvent implements Event {
     /**
      * Creates a new event that has no ID and time set (both are 0).
      *
-     * @param name
-     *            an event name.
-     * @param clonePolicy
-     *            an event clone policy.
+     * @param name an event name.
+     * @param clonePolicy an event clone policy.
      */
     protected BaseEvent(String name, EventClonePolicy clonePolicy) {
         if (name == null) {
@@ -87,8 +84,7 @@ public abstract class BaseEvent implements Event {
     /**
      * Sets event time.
      *
-     * @param time
-     *            event time.
+     * @param time event time.
      */
     @Override
     public void setTime(Instant time) {
@@ -108,8 +104,7 @@ public abstract class BaseEvent implements Event {
     /**
      * Sets event ID.
      *
-     * @param id
-     *            event ID.
+     * @param id event ID.
      */
     @Override
     public void setId(String id) {
@@ -129,10 +124,8 @@ public abstract class BaseEvent implements Event {
     /**
      * Returns attribute value.
      *
-     * @param name
-     *            attribute name.
-     * @param cls
-     *            attribute class.
+     * @param name attribute name.
+     * @param cls attribute class.
      * @return attribute value.
      */
     @Override
@@ -144,8 +137,7 @@ public abstract class BaseEvent implements Event {
     /**
      * Compares events by ID.
      *
-     * @param event
-     *            compared event.
+     * @param event compared event.
      * @return {@code true} if both events are equal by ID.
      */
     @Override
@@ -156,8 +148,7 @@ public abstract class BaseEvent implements Event {
     /**
      * Compares events by attributes.
      *
-     * @param event
-     *            compared event.
+     * @param event compared event.
      * @return {@code true} if both events are equal by attributes.
      */
     @Override
@@ -176,10 +167,8 @@ public abstract class BaseEvent implements Event {
     /**
      * Matches this event to the specified template.
      *
-     * @param template
-     *            event template.
-     * @return {@code true} if this event matches the specified
-     *         template.
+     * @param template event template.
+     * @return {@code true} if this event matches the specified template.
      */
     @Override
     public boolean matches(Event template) {
@@ -205,11 +194,6 @@ public abstract class BaseEvent implements Event {
         }
 
         return true;
-    }
-
-    @Override
-    public int compareTo(Event event) {
-        return PriorityEventQueueComparator.INSTANCE.compare(this, event);
     }
 
     protected void valudateAttribute(String name, Object value) {

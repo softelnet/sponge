@@ -45,13 +45,10 @@ public class TreeNode<T> {
         return parent != null;
     }
 
-    public int addChild(TreeNode<T> node) {
-        int index = children.size();
+    public void addChild(TreeNode<T> node) {
         children.add(node);
         node.parent = this;
         node.level = level + 1;
-
-        return index;
     }
 
     public void removeChild(TreeNode<T> node) {

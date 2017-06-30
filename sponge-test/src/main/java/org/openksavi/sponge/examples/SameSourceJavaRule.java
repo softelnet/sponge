@@ -38,8 +38,8 @@ public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
         setConditions("e2", "severityCondition", (EventCondition) (rule, event) -> {
             // Both events have to have the same source
             Event event1 = rule.getEvent("e1");
-            return event.get("source").equals(event1.get("source")) &&
-                    Duration.between(event1.getTime(), event.getTime()).getSeconds() <= 4;
+            return event.get("source").equals(event1.get("source"))
+                    && Duration.between(event1.getTime(), event.getTime()).getSeconds() <= 4;
         });
 
         setDuration(Duration.ofSeconds(8));
@@ -47,9 +47,8 @@ public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
 
     @Override
     public void run(Event event) {
-        logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"),
-                getEventAliasMap());
-        getEPS().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
+        logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"), getEventAliasMap());
+        getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
     }
 
     public boolean severityCondition(Event event) {

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+    <suppress checks="AbbreviationAsWordInName" files="org[\\/]openksavi[\\/]sponge[\\/]groovy[\\/]Groovy.+.java" />
+    <suppress checks="Indentation" files="org[\\/]openksavi[\\/]sponge[\\/]nashorn[\\/]NashornRule.java" />
+    <suppress checks=".*" files=".+[\\\/]target[\\\/].+\.java" />
+</suppressions>

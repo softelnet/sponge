@@ -33,10 +33,8 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
     /**
      * Creates a new rule group.
      *
-     * @param ruleDefinition
-     *            rule definition.
-     * @param handler
-     *            a processing unit handler.
+     * @param ruleDefinition rule definition.
+     * @param handler a processing unit handler.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public BaseRuleAdapterGroup(BaseRuleDefinition ruleDefinition,
@@ -52,25 +50,17 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
     /**
      * Checks if there is a need for creating a new rule instance.
      *
-     * @param event
-     *            event.
-     * @return {@code true} if there is a need for creating
-     *         a new rule instance.
+     * @param event event.
+     * @return {@code true} if there is a need for creating a new rule instance.
      */
     @Override
     public boolean needNewInstance(Event event) {
-        String events[] = getDefinition().getEventNames();
-        return (events.length > 0 && event.getName().equals(events[0]));
+        return event.getName().equals(getDefinition().getEventName(0));
     }
 
     @Override
     protected BaseRuleAdapter createNewEventSetProcessorAdapter() {
         return new BaseRuleAdapter((BaseRuleDefinition) getDefinition());
-    }
-
-    @Override
-    public void validate() {
-        //
     }
 
     @Override

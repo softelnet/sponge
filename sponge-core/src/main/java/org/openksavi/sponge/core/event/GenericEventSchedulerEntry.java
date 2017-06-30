@@ -38,8 +38,7 @@ public class GenericEventSchedulerEntry extends BaseEventGenerateEntry implement
     /**
      * Returns scheduled event delay (in milliseconds).
      *
-     * @return scheduled event delay or {@code 0} if there is no
-     *         delay (event is generated at a specified time).
+     * @return scheduled event delay or {@code 0} if there is no delay (event is generated at a specified time).
      */
     @Override
     public long getDelay() {
@@ -49,8 +48,7 @@ public class GenericEventSchedulerEntry extends BaseEventGenerateEntry implement
     /**
      * Sets event delay.
      *
-     * @param delay
-     *            event delay.
+     * @param delay event delay.
      */
     public void setDelay(long delay) {
         this.delay = delay;
@@ -69,8 +67,7 @@ public class GenericEventSchedulerEntry extends BaseEventGenerateEntry implement
     /**
      * Sets event interval.
      *
-     * @param interval
-     *            event interval.
+     * @param interval event interval.
      */
     public void setInterval(long interval) {
         this.interval = interval;
@@ -79,8 +76,7 @@ public class GenericEventSchedulerEntry extends BaseEventGenerateEntry implement
     /**
      * Returns scheduled event time (in milliseconds).
      *
-     * @return scheduled event time or {@code 0} if there is no
-     *         specific time (event is generated after delay).
+     * @return scheduled event time or {@code 0} if there is no specific time (event is generated after delay).
      */
     @Override
     public long getMilliseconds() {
@@ -90,8 +86,7 @@ public class GenericEventSchedulerEntry extends BaseEventGenerateEntry implement
     /**
      * Sets event milliseconds.
      *
-     * @param milliseconds
-     *            event milliseconds.
+     * @param milliseconds event milliseconds.
      */
     public void setMilliseconds(long milliseconds) {
         this.milliseconds = milliseconds;

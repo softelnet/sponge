@@ -27,66 +27,54 @@ public interface ScriptKnowledgeBaseInterpreter extends KnowledgeBaseInterpreter
     /**
      * Loads scripts.
      *
-     * @param scripts
-     *            knowledge base scripts.
+     * @param scripts knowledge base scripts.
      */
     void load(List<KnowledgeBaseScript> scripts);
 
     /**
-     * Reloads scripts.
-     *
-     * @param scripts
-     *            knowledge base scripts.
-     */
-    void reload(List<KnowledgeBaseScript> scripts);
-
-    /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName
-     *            file name.
+     * @param fileName file name.
      */
     void load(String fileName);
 
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName
-     *            file name.
-     * @param charset
-     *            charset.
+     * @param fileName file name.
+     * @param charset charset.
      */
     void load(String fileName, String charset);
 
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName
-     *            file name.
-     * @param charset
-     *            charset.
+     * @param fileName file name.
+     * @param charset charset.
      */
     void load(String fileName, Charset charset);
 
     /**
+     * Reloads scripts.
+     *
+     * @param scripts knowledge base scripts.
+     */
+    void reload(List<KnowledgeBaseScript> scripts);
+
+    /**
      * Invokes a knowledge base function.
      *
-     * @param name
-     *            function name.
+     * @param name function name.
      */
     void invokeOptionalFunction(String name);
 
     /**
      * Invokes a knowledge base function.
      *
-     * @param name
-     *            function name.
-     * @param cls
-     *            result type.
-     * @param args
-     *            function arguments.
-     * @param <T>
-     *            return value type.
+     * @param name function name.
+     * @param cls result type.
+     * @param args function arguments.
+     * @param <T> return value type.
      * @return function return value.
      */
     <T> T invokeFunction(String name, Class<T> cls, Object... args);
@@ -94,10 +82,8 @@ public interface ScriptKnowledgeBaseInterpreter extends KnowledgeBaseInterpreter
     /**
      * Evaluates an expression.
      *
-     * @param expression
-     *            expression.
-     * @param <T>
-     *            result type.
+     * @param expression expression.
+     * @param <T> result type.
      * @return result.
      */
     <T> T eval(String expression);
@@ -105,12 +91,9 @@ public interface ScriptKnowledgeBaseInterpreter extends KnowledgeBaseInterpreter
     /**
      * Evaluates an expression.
      *
-     * @param expression
-     *            expression.
-     * @param cls
-     *            result class.
-     * @param <T>
-     *            result type.
+     * @param expression expression.
+     * @param cls result class.
+     * @param <T> result type.
      * @return result.
      */
     <T> T eval(String expression, Class<T> cls);

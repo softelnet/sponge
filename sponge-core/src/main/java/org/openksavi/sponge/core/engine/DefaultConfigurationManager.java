@@ -105,10 +105,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /**
      * Creates a new configuration manager.
      *
-     * @param engine
-     *            the engine.
-     * @param configurationFilename
-     *            configuration file name.
+     * @param engine the engine.
+     * @param configurationFilename configuration file name.
      */
     public DefaultConfigurationManager(Engine engine, String configurationFilename) {
         super("ConfigurationManager", engine);
@@ -334,8 +332,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /**
      * Checks if the property should be saved to system properties.
      *
-     * @param configuration
-     *            property configuration.
+     * @param configuration property configuration.
      * @return {@code true} if the property should be saved to system properties.
      */
     private boolean isPropertySystem(Configuration configuration) {

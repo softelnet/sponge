@@ -33,14 +33,10 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
     /**
      * Creates a new Filter Processing Unit.
      *
-     * @param name
-     *            processing unit name.
-     * @param engine
-     *            the engine.
-     * @param inQueue
-     *            input event queue.
-     * @param outQueue
-     *            output event queue.
+     * @param name processing unit name.
+     * @param engine the engine.
+     * @param inQueue input event queue.
+     * @param outQueue output event queue.
      */
     public DefaultFilterProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
@@ -59,10 +55,8 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
     /**
      * Processes the specified event.
      *
-     * @param event
-     *            event.
-     * @return {@code true} if this event should be put in the output
-     *         queue.
+     * @param event event.
+     * @return {@code true} if this event should be put in the output queue.
      */
     protected boolean processEvent(Event event) {
         for (AtomicReference<FilterAdapter> filterContextR : getEventProcessors(event.getName())) {
@@ -82,10 +76,8 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
     /**
      * Runs a filter.
      *
-     * @param filterContext
-     *            a filter context.
-     * @param event
-     *            an event.
+     * @param filterContext a filter context.
+     * @param event an event.
      * @return {@code true} if the filter accepts the specified event.
      */
     protected boolean runFilter(FilterAdapter filterContext, Event event) {

@@ -42,9 +42,9 @@ public class EventsTestTemplate {
 
         try {
             await().atMost(10, TimeUnit.SECONDS)
-                    .until(() -> TestUtils.getEvents(engine, "defaultClonePolicy").size() >= 3 &&
-                            TestUtils.getEvents(engine, "deepClonePolicy").size() >= 3 &&
-                            TestUtils.getEvents(engine, "shallowClonePolicy").size() >= 3);
+                    .until(() -> TestUtils.getEvents(engine, "defaultClonePolicy").size() >= 3
+                            && TestUtils.getEvents(engine, "deepClonePolicy").size() >= 3
+                            && TestUtils.getEvents(engine, "shallowClonePolicy").size() >= 3);
 
             // Default clone policy is set to DEEP in the configuration xml.
             List<Event> defaultClonePolicyEvents = TestUtils.getEvents(engine, "defaultClonePolicy");

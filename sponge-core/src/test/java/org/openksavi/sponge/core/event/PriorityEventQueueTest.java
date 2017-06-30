@@ -28,10 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
-import org.openksavi.sponge.core.event.AttributeMapEvent;
-import org.openksavi.sponge.core.event.BaseControlEvent;
-import org.openksavi.sponge.core.event.EventId;
+import org.openksavi.sponge.core.engine.event.PriorityEventQueueComparator;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 
@@ -76,35 +73,35 @@ public class PriorityEventQueueTest {
 
     @Test
     public void testPriorityBlockingQueue() throws InterruptedException {
-        PriorityBlockingQueue<Event> queue = new PriorityBlockingQueue<>();
+        PriorityBlockingQueue<Event> queue = new PriorityBlockingQueue<>(20, new PriorityEventQueueComparator());
 
-        Event e1_1 = addEvent(queue, 1, 1);
-        Event e2_1 = addEvent(queue, 2, 1);
-        Event e3_1 = addEvent(queue, 3, 1);
-        Event e4_1 = addEvent(queue, 4, 1);
+        Event e1p1 = addEvent(queue, 1, 1);
+        Event e2p1 = addEvent(queue, 2, 1);
+        Event e3p1 = addEvent(queue, 3, 1);
+        Event e4p1 = addEvent(queue, 4, 1);
 
-        Event e5_2 = addEvent(queue, 5, 2);
-        Event e6_2 = addEvent(queue, 6, 2);
-        Event e7_2 = addEvent(queue, 7, 2);
-        Event e8_2 = addEvent(queue, 8, 2);
+        Event e5p2 = addEvent(queue, 5, 2);
+        Event e6p2 = addEvent(queue, 6, 2);
+        Event e7p2 = addEvent(queue, 7, 2);
+        Event e8p2 = addEvent(queue, 8, 2);
 
-        Event e21_0 = addEvent(queue, 21, 0);
+        Event e21p0 = addEvent(queue, 21, 0);
 
-        Event e31_5 = addEvent(queue, 31, 5);
+        Event e31p5 = addEvent(queue, 31, 5);
 
         // First event should have the greatest priority and the lowest id
-        Assert.assertEquals(e31_5, queue.take());
+        Assert.assertEquals(e31p5, queue.take());
 
-        Assert.assertEquals(e5_2, queue.take());
-        Assert.assertEquals(e6_2, queue.take());
-        Assert.assertEquals(e7_2, queue.take());
-        Assert.assertEquals(e8_2, queue.take());
+        Assert.assertEquals(e5p2, queue.take());
+        Assert.assertEquals(e6p2, queue.take());
+        Assert.assertEquals(e7p2, queue.take());
+        Assert.assertEquals(e8p2, queue.take());
 
-        Assert.assertEquals(e1_1, queue.take());
-        Assert.assertEquals(e2_1, queue.take());
-        Assert.assertEquals(e3_1, queue.take());
-        Assert.assertEquals(e4_1, queue.take());
+        Assert.assertEquals(e1p1, queue.take());
+        Assert.assertEquals(e2p1, queue.take());
+        Assert.assertEquals(e3p1, queue.take());
+        Assert.assertEquals(e4p1, queue.take());
 
-        Assert.assertEquals(e21_0, queue.take());
+        Assert.assertEquals(e21p0, queue.take());
     }
 }

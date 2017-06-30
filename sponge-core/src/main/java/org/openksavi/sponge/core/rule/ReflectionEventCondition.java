@@ -36,8 +36,7 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
     /**
      * Creates a new reflection rule event condition.
      *
-     * @param methodName
-     *            Java-based rule class method name.
+     * @param methodName Java-based rule class method name.
      */
     public ReflectionEventCondition(String methodName) {
         super(methodName);
@@ -46,10 +45,8 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
     /**
      * Checks rule event condition by invoking the defined Java rule class method.
      *
-     * @param rule
-     *            rule.
-     * @param event
-     *            event.
+     * @param rule rule.
+     * @param event event.
      * @return {@code true} if this condition is met.
      */
     @Override

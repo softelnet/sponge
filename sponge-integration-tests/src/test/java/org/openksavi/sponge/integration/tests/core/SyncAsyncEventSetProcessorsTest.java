@@ -41,16 +41,6 @@ public class SyncAsyncEventSetProcessorsTest {
         testAsyncEventSetProcessors(engine);
     }
 
-    @Test
-    public void testSyncEventSetProcessorsConfig() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/sync_async_event_set_processors.py").build();
-        engine.startup();
-
-        assertFalse(engine.getConfigurationManager().getEventSetProcessorDefaultSynchronous());
-
-        testAsyncEventSetProcessors(engine);
-    }
-
     private void testAsyncEventSetProcessors(Engine engine) throws InterruptedException {
         try {
             CorrelationEventsLog eventsLog =
@@ -64,5 +54,15 @@ public class SyncAsyncEventSetProcessorsTest {
         } finally {
             engine.shutdown();
         }
+    }
+
+    @Test
+    public void testSyncEventSetProcessorsConfig() throws InterruptedException {
+        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/sync_async_event_set_processors.py").build();
+        engine.startup();
+
+        assertFalse(engine.getConfigurationManager().getEventSetProcessorDefaultSynchronous());
+
+        testAsyncEventSetProcessors(engine);
     }
 }

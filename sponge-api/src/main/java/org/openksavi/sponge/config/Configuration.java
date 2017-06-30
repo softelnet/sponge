@@ -35,26 +35,22 @@ public interface Configuration {
     /**
      * Sets configuration variables.
      *
-     * @param variables
-     *            configuration variables.
+     * @param variables configuration variables.
      */
     void setVariables(Properties variables);
 
     /**
      * Sets configuration variable.
      *
-     * @param name
-     *            configuration variable name.
-     * @param value
-     *            configuration variable value.
+     * @param name configuration variable name.
+     * @param value configuration variable value.
      */
     void setVariable(String name, Object value);
 
     /**
      * Returns configuration variable.
      *
-     * @param name
-     *            variable name.
+     * @param name variable name.
      * @return variable value.
      */
     Object getVariable(String name);
@@ -62,8 +58,7 @@ public interface Configuration {
     /**
      * Returns a child configuration.
      *
-     * @param key
-     *            child configuration key.
+     * @param key child configuration key.
      * @return child configuration.
      */
     Configuration getChildConfiguration(String key);
@@ -71,8 +66,7 @@ public interface Configuration {
     /**
      * Returns {@code true} if there is a child configuration specified by {@code key}.
      *
-     * @param key
-     *            child configuration key.
+     * @param key child configuration key.
      * @return {@code true} if there is a child configuration specified by {@code key}.
      */
     boolean hasChildConfiguration(String key);
@@ -80,8 +74,7 @@ public interface Configuration {
     /**
      * Returns all child configurations of the node specified by {@code key}.
      *
-     * @param key
-     *            key of the parent node.
+     * @param key key of the parent node.
      * @return child configurations.
      */
     Configuration[] getChildConfigurationsOf(String key);
@@ -89,8 +82,7 @@ public interface Configuration {
     /**
      * Returns all sub configurations specified by {@code key}.
      *
-     * @param key
-     *            key of the returned nodes.
+     * @param key key of the returned nodes.
      * @return sub configurations.
      */
     Configuration[] getConfigurationsAt(String key);
@@ -98,10 +90,8 @@ public interface Configuration {
     /**
      * Returns string value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return string value.
      */
     String getString(String key, String defaultValue);
@@ -109,10 +99,8 @@ public interface Configuration {
     /**
      * Returns integer value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return integer value.
      */
     Integer getInt(String key, Integer defaultValue);
@@ -120,10 +108,8 @@ public interface Configuration {
     /**
      * Returns long value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return long value.
      */
     Long getLong(String key, Long defaultValue);
@@ -131,10 +117,8 @@ public interface Configuration {
     /**
      * Returns boolean value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return boolean value.
      */
     Boolean getBoolean(String key, Boolean defaultValue);
@@ -142,10 +126,8 @@ public interface Configuration {
     /**
      * Returns byte value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return byte value.
      */
     Byte getByte(String key, Byte defaultValue);
@@ -153,10 +135,8 @@ public interface Configuration {
     /**
      * Returns double value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return double value.
      */
     Double getDouble(String key, Double defaultValue);
@@ -164,10 +144,8 @@ public interface Configuration {
     /**
      * Returns float value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return float value.
      */
     Float getFloat(String key, Float defaultValue);
@@ -175,10 +153,8 @@ public interface Configuration {
     /**
      * Returns short value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return short value.
      */
     Short getShort(String key, Short defaultValue);
@@ -186,10 +162,8 @@ public interface Configuration {
     /**
      * Returns big decimal value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return big decimal value.
      */
     BigDecimal getBigDecimal(String key, BigDecimal defaultValue);
@@ -197,10 +171,8 @@ public interface Configuration {
     /**
      * Returns big integer value.
      *
-     * @param key
-     *            configuration key.
-     * @param defaultValue
-     *            default value.
+     * @param key configuration key.
+     * @param defaultValue default value.
      * @return big integer value.
      */
     BigInteger getBigInteger(String key, BigInteger defaultValue);
@@ -215,8 +187,7 @@ public interface Configuration {
     /**
      * Returns configuration value.
      *
-     * @param defaultValue
-     *            default value.
+     * @param defaultValue default value.
      * @return configuration value.
      */
     String getValue(String defaultValue);
@@ -224,10 +195,8 @@ public interface Configuration {
     /**
      * Returns attribute value.
      *
-     * @param name
-     *            attribute name.
-     * @param defaultValue
-     *            default value.
+     * @param name attribute name.
+     * @param defaultValue default value.
      * @return attribute value.
      */
     String getAttribute(String name, String defaultValue);

@@ -28,11 +28,11 @@ public interface CamelConsumer {
 
     boolean send(Object body);
 
-    Endpoint getEndpoint();
-
-    Processor getProcessor();
-
     boolean send(Exchange exchange);
 
     boolean send(final Exchange exchange, AsyncCallback callback);
+
+    Endpoint getEndpoint();
+
+    Processor getProcessor();
 }

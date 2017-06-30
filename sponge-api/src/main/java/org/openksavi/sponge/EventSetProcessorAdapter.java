@@ -26,8 +26,7 @@ public interface EventSetProcessorAdapter<T extends EventSetProcessor<?>> extend
     /**
      * Sets the state.
      *
-     * @param state
-     *            the state.
+     * @param state the state.
      */
     void setState(EventSetProcessorState state);
 
@@ -58,16 +57,14 @@ public interface EventSetProcessorAdapter<T extends EventSetProcessor<?>> extend
     /**
      * Processes an event.
      *
-     * @param event
-     *            event.
+     * @param event event.
      */
     void processEvent(Event event);
 
     /**
      * Sets event set processor group.
      *
-     * @param group
-     *            event set processor group.
+     * @param group event set processor group.
      */
     void setGroup(EventSetProcessorAdapterGroup<? extends EventSetProcessorAdapter<?>> group);
 
@@ -81,8 +78,7 @@ public interface EventSetProcessorAdapter<T extends EventSetProcessor<?>> extend
     /**
      * Checks if the event should be accepted as the first event of this event set processor, therefore starting the new instance.
      *
-     * @param event
-     *            the incoming event.
+     * @param event the incoming event.
      * @return if the event should be accepted as the first event.
      */
     boolean acceptsAsFirst(Event event);

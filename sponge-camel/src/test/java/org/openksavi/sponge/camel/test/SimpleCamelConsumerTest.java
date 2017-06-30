@@ -53,7 +53,8 @@ public class SimpleCamelConsumerTest {
                     // @formatter:off
                     from("sponge:spongeEngine").routeId("spongeConsumer")
                         .log("${body}")
-                        .process(exchange -> spongeEngine().getOperations().getVariable(AtomicBoolean.class, "receivedCamelMessage").set(true))
+                        .process(exchange -> spongeEngine().getOperations().getVariable(AtomicBoolean.class, "receivedCamelMessage")
+                                .set(true))
                         .to("stream:out");
                     // @formatter:on
                 }

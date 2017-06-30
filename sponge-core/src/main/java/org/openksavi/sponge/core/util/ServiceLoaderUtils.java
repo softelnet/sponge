@@ -29,11 +29,9 @@ public class ServiceLoaderUtils {
     /**
      * Loads service implementation using Java {@link ServiceLoader}. Returns {@code null} if no implementation has been found.
      *
-     * @param serviceClass
-     *            service interface.
+     * @param serviceClass service interface.
+     * @param <T> service.
      * @return service implementation.
-     * @param <T>
-     *            service.
      */
     public static <T> T loadService(Class<T> serviceClass) {
         return loadService(serviceClass, false);
@@ -42,14 +40,11 @@ public class ServiceLoaderUtils {
     /**
      * Loads service implementation using Java {@link ServiceLoader}.
      *
-     * @param serviceClass
-     *            service interface.
-     * @param required
-     *            if {@code true} and there is no implementation found, throws {@link IllegalArgumentException}.
-     *            Otherwise returns {@code null}.
+     * @param serviceClass service interface.
+     * @param required if {@code true} and there is no implementation found, throws {@link IllegalArgumentException}. Otherwise returns
+     *        {@code null}.
+     * @param <T> service.
      * @return service implementation.
-     * @param <T>
-     *            service.
      */
     public static <T> T loadService(Class<T> serviceClass, boolean required) {
         List<T> result = loadServices(serviceClass);
@@ -71,11 +66,9 @@ public class ServiceLoaderUtils {
     /**
      * Loads service implementations using Java {@link ServiceLoader}.
      *
-     * @param serviceClass
-     *            service interface.
+     * @param serviceClass service interface.
+     * @param <T> service.
      * @return service implementations.
-     * @param <T>
-     *            service.
      */
     public static <T> List<T> loadServices(Class<T> serviceClass) {
         Iterator<T> iterator = ServiceLoader.load(serviceClass).iterator();

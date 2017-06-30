@@ -70,10 +70,6 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         return adapter.getKnowledgeBase();
     }
 
-    public final KnowledgeBaseEngineOperations getEPS() {
-        return getKnowledgeBase().getEngineOperations();
-    }
-
     public final KnowledgeBaseEngineOperations getEps() {
         return getKnowledgeBase().getEngineOperations();
     }

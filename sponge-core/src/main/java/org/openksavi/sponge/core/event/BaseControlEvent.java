@@ -50,8 +50,7 @@ public abstract class BaseControlEvent extends BaseEvent implements ControlEvent
     /**
      * Sets event priority.
      *
-     * @param priority
-     *            event priority.
+     * @param priority event priority.
      * @return this event for fluent API.
      */
     @Override

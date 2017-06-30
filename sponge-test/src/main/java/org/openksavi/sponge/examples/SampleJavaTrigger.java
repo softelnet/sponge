@@ -32,7 +32,7 @@ public class SampleJavaTrigger extends org.openksavi.sponge.java.JavaTrigger {
 
     @Override
     public void run(Event event) {
-        getEPS().setVariable("receivedEventTestJavaCount", getEPS().getVariable(Number.class, "receivedEventTestJavaCount").intValue() + 1);
+        getEps().setVariable("receivedEventTestJavaCount", getEps().getVariable(Number.class, "receivedEventTestJavaCount").intValue() + 1);
         logger.debug("TRIGGER TEST from Java");
     }
 }

@@ -30,8 +30,7 @@ public abstract class BaseEventQueue extends BaseEngineModule implements EventQu
     /**
      * Creates a new event queue.
      *
-     * @param name
-     *            queue name.
+     * @param name queue name.
      */
     protected BaseEventQueue(String name) {
         super(name);
@@ -40,8 +39,7 @@ public abstract class BaseEventQueue extends BaseEngineModule implements EventQu
     /**
      * Sets the capacity of the queue.
      *
-     * @param capacity
-     *            the capacity of the queue.
+     * @param capacity the capacity of the queue.
      */
     @Override
     public void setCapacity(int capacity) {

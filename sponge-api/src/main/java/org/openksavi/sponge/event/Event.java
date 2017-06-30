@@ -25,7 +25,7 @@ import org.openksavi.sponge.util.HasPriority;
 /**
  * An event. Event has the following standard attributes: name (type), id, time, priority.
  */
-public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPriority<Event> {
+public interface Event extends Cloneable, Serializable, HasPriority<Event> {
 
     /**
      * Returns event name.
@@ -44,8 +44,7 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Sets event time.
      *
-     * @param time
-     *            event time.
+     * @param time event time.
      */
     void setTime(Instant time);
 
@@ -59,16 +58,14 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Sets event ID.
      *
-     * @param id
-     *            event ID.
+     * @param id event ID.
      */
     void setId(String id);
 
     /**
      * Returns attribute value.
      *
-     * @param name
-     *            attribute name.
+     * @param name attribute name.
      * @return attribute value.
      */
     Object get(String name);
@@ -76,23 +73,18 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Returns attribute value.
      *
-     * @param name
-     *            attribute name.
-     * @param cls
-     *            attribute class.
+     * @param name attribute name.
+     * @param cls attribute class.
      * @return attribute value.
-     * @param <T>
-     *            attribute.
+     * @param <T> attribute.
      */
     <T> T get(String name, Class<T> cls);
 
     /**
      * Sets attribute value.
      *
-     * @param name
-     *            attribute name.
-     * @param value
-     *            attribute value.
+     * @param name attribute name.
+     * @param value attribute value.
      * @return this event for fluent API.
      */
     Event set(String name, Object value);
@@ -100,8 +92,7 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Checks whether this event has an attribute with the specified name.
      *
-     * @param name
-     *            attribute name.
+     * @param name attribute name.
      * @return {@code true} if there is such attribute.
      */
     boolean has(String name);
@@ -116,8 +107,7 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Compares events by ID.
      *
-     * @param event
-     *            compared event.
+     * @param event compared event.
      * @return {@code true} if both events are equal by ID.
      */
     boolean equalsById(Event event);
@@ -125,8 +115,7 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Compares events by attributes.
      *
-     * @param event
-     *            compared event.
+     * @param event compared event.
      * @return {@code true} if both events are equal by attributes.
      */
     boolean equalsByAttributes(Event event);
@@ -134,10 +123,8 @@ public interface Event extends Cloneable, Serializable, Comparable<Event>, HasPr
     /**
      * Matches this event to the specified template.
      *
-     * @param template
-     *            event template.
-     * @return {@code true} if this event matches the specified
-     *         template.
+     * @param template event template.
+     * @return {@code true} if this event matches the specified template.
      */
     boolean matches(Event template);
 
