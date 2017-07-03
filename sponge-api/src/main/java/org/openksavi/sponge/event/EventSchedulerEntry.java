@@ -16,29 +16,24 @@
 
 package org.openksavi.sponge.event;
 
+import java.io.Serializable;
+
 /**
- * Entry identifying an event scheduled in Event Scheduler.
+ * Entry identifying an event scheduled in the Event Scheduler.
  */
-public interface EventSchedulerEntry extends EventGenerateEntry {
+public interface EventSchedulerEntry extends Serializable {
 
     /**
-     * Returns scheduled event delay (in milliseconds).
+     * Returns entry ID.
      *
-     * @return scheduled event delay or {@code 0} if there is no delay (event is generated at a specified time).
+     * @return entry ID.
      */
-    long getDelay();
+    Object getId();
 
     /**
-     * Returns scheduled event interval (in milliseconds).
+     * Returns the scheduled event.
      *
-     * @return scheduled event interval or {@code 0} if there is no interval.
+     * @return the scheduled event.
      */
-    long getInterval();
-
-    /**
-     * Returns scheduled event time (in milliseconds).
-     *
-     * @return scheduled event time or {@code 0} if there is no specific time (event is generated after delay).
-     */
-    long getMilliseconds();
+    Event getEvent();
 }

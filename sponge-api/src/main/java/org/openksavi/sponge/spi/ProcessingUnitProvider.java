@@ -18,9 +18,8 @@ package org.openksavi.sponge.spi;
 
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.event.EventQueue;
+import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
-import org.openksavi.sponge.engine.processing.ProcessingUnit;
-import org.openksavi.sponge.filter.FilterAdapter;
 
 /**
  * Processing Unit provider.
@@ -35,7 +34,7 @@ public interface ProcessingUnitProvider {
      * @param outQueue an output event queue for the returned processing unit.
      * @return a new filter processing unit.
      */
-    ProcessingUnit<FilterAdapter> createFilterProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue);
+    FilterProcessingUnit createFilterProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue);
 
     /**
      * Creates a new main processing unit.

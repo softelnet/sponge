@@ -12,11 +12,10 @@
         </encoder>
     </appender>
 
-    <logger name="org.openksavi" level="debug" />
+    <logger name="org.openksavi" level="info" />
     <logger name="org.openksavi.sponge.core.rule" level="info" />
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup" level="info" />
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="info" />
-    <logger name="org.openksavi.sponge.core.engine.processing.collisionmap" level="info" />
     <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
     <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="warn" />
     <logger name="kb" level="debug" />

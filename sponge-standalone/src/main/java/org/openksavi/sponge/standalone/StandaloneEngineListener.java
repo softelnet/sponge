@@ -67,7 +67,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
     public void onStartup() {
         initSystemSignals();
         addShutdownHook();
-        configureSpring();
+        createSpringContext();
     }
 
     /**
@@ -206,9 +206,9 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
     }
 
     /**
-     * Configures a Spring context.
+     * Creates a Spring context.
      */
-    protected void configureSpring() {
+    protected void createSpringContext() {
         List<Resource> resources = resolveSpringConfigurationResources();
         if (resources.isEmpty()) {
             return;

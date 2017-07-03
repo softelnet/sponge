@@ -310,7 +310,7 @@ Event specification for the rule consists of:
 
 Event name:: A name of the event (mandatory).
 Event alias:: An optional alias for the event. The alias is an unique (in the rule) text assigned to the event. Aliases are mandatory if there are more than one event of the same type (i.e. having the same name). When each of the events is of different type, there is no need to specify the alias. In such case aliases will be defined automatically and equal to the name of the corresponding event type.
-Event mode:: Specifies which sequences of events suitable to this rule should be used to run the rule body (i.e. `run` method). Event modes are defined in `EventMode` Java enumeration. Default mode is `first`.
+Event mode:: Specifies which sequences of events suitable to this rule should be used for running the rule body (i.e. `run` method). Event modes are defined in `EventMode` Java enumeration. Default mode is `first`.
 +
 The first event in the sequence, i.e. the event that would initiate the rule, must always have the mode `first`.
 +
@@ -494,7 +494,7 @@ EPS.enableJava(SameSourceJavaRule)
 ----
 
 == Correlators
-Correlators could be viewed as a generalized form of rules. In fact rules and correlators are two types of event set processors. Correlators detect correlations between events and could also be used to implement any complex event processing that isn't provided by filters, triggers or rules.
+Correlators could be viewed as a generalized form of rules. In fact rules and correlators are two types of event set processors. Correlators detect correlations between events and could also be used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 
 Correlators listen to a specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling `finish()` method.
 

@@ -109,7 +109,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
      */
     @Override
     public BaseEngine getEngine() {
-        return (BaseEngine) engine;
+        return (BaseEngine) super.getEngine();
     }
 
     @Override

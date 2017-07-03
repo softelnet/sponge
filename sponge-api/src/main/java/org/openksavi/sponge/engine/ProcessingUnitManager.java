@@ -16,9 +16,8 @@
 
 package org.openksavi.sponge.engine;
 
-import java.util.List;
-
-import org.openksavi.sponge.engine.processing.ProcessingUnit;
+import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
+import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 
 /**
  * Processing Unit Manager.
@@ -26,21 +25,30 @@ import org.openksavi.sponge.engine.processing.ProcessingUnit;
 public interface ProcessingUnitManager extends EngineModule {
 
     /**
-     * Returns processing units.
+     * Returns the Filter Processing Unit.
      *
-     * @return processing units.
+     * @return the Filter Processing Unit.
      */
-    List<ProcessingUnit<?>> getProcessingUnits();
+    FilterProcessingUnit getFilterProcessingUnit();
 
     /**
-     * Adds a new processing unit.
+     * Sets the Filter Processing Unit.
      *
-     * @param processingUnit processing unit.
+     * @param filterProcessingUnit the Filter Processing Unit.
      */
-    void addProcessingUnit(ProcessingUnit<?> processingUnit);
+    void setFilterProcessingUnit(FilterProcessingUnit filterProcessingUnit);
 
     /**
-     * Clears processing units. Removes all processors registered in all processing units.
+     * Returns the Main Processing Unit.
+     *
+     * @return the Main Processing Unit.
      */
-    void clear();
+    MainProcessingUnit getMainProcessingUnit();
+
+    /**
+     * Sets the Main Processing Unit.
+     *
+     * @param mainProcessingUnit the Main Processing Unit.
+     */
+    void setMainProcessingUnit(MainProcessingUnit mainProcessingUnit);
 }

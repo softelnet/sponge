@@ -19,7 +19,6 @@ package org.openksavi.sponge.core.event;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
-import org.openksavi.sponge.event.EventCronEntry;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventDefinitionModifier;
 import org.openksavi.sponge.event.EventSchedulerEntry;
@@ -91,7 +90,7 @@ public class DefaultEventDefinition implements EventDefinition {
     }
 
     @Override
-    public EventCronEntry sendAt(String crontabSpec) {
+    public EventSchedulerEntry sendAt(String crontabSpec) {
         return engineOperations.sendAt(event, crontabSpec);
     }
 

@@ -3,7 +3,7 @@ Sponge Knowledge base
 Using rules - immediate, duration
 """
 
-from org.openksavi.sponge.core.util import CorrelationEventsLog
+from org.openksavi.sponge.test.util import CorrelationEventsLog
 from org.openksavi.sponge.core.event import EventId
 
 def onInit():

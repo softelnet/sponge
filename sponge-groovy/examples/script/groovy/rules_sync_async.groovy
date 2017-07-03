@@ -3,7 +3,7 @@
  * Using rules - synchronous and asynchronous
  */
 
-import org.openksavi.sponge.core.util.CorrelationEventsLog
+import org.openksavi.sponge.test.util.CorrelationEventsLog
 
 void onInit() {
     // Variables for assertions only

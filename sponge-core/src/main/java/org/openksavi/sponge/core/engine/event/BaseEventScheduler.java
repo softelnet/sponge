@@ -20,46 +20,62 @@ import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.openksavi.sponge.core.engine.BaseEngineModule;
+import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
 import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.engine.event.EventGenerator;
 import org.openksavi.sponge.engine.event.EventQueue;
+import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.event.EventIdGenerator;
 
 /**
- * Base event generator.
+ * A base event scheduler.
  */
-public abstract class BaseEventGenerator extends BaseEngineModule implements EventGenerator {
+public abstract class BaseEventScheduler extends BaseEngineModule implements EventScheduler {
+
+    /** Current event scheduler entry id. */
+    protected AtomicLong currentEntryId = new AtomicLong(1);
 
     /** Out event queue to which events will be inserted. */
     protected EventQueue outQueue;
 
-    protected AtomicLong currentEntryId = new AtomicLong(1);
+    /** Event ID generator. */
+    protected EventIdGenerator eventIdGenerator = new AtomicLongEventIdGenerator();
 
     /**
      * Creates a new event scheduler.
      *
-     * @param name name.
      * @param engine the engine.
-     * @param outQueue output event queue.
+     * @param outQueue an output event queue.
      */
-    public BaseEventGenerator(String name, Engine engine, EventQueue outQueue) {
-        super(name, engine);
+    protected BaseEventScheduler(Engine engine, EventQueue outQueue) {
+        super("EventScheduler", engine);
+
         this.outQueue = outQueue;
+    }
+
+    /**
+     * Schedules a specified event now (inserts to the queue immediately).
+     *
+     * @param event event.
+     */
+    @Override
+    public void scheduleNow(Event event) {
+        event.setId(eventIdGenerator.getNext());
+        event.setTime(Instant.now());
+
+        outQueue.put(event);
     }
 
     protected String getNextEntryId() {
         return getName() + "-" + currentEntryId.getAndIncrement();
     }
 
+    public EventIdGenerator getEventIdGenerator() {
+        return eventIdGenerator;
+    }
+
     @Override
-    public void putEvent(Event event, boolean newInstance) {
-        if (newInstance) {
-            event = event.clone();
-        }
-
-        event.setId(engine.newGlobalEventId());
-        event.setTime(Instant.now());
-
-        outQueue.put(event);
+    public void setEventIdGenerator(EventIdGenerator eventIdGenerator) {
+        this.eventIdGenerator = eventIdGenerator;
     }
 }

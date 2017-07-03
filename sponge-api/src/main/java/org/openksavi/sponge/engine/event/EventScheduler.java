@@ -16,15 +16,24 @@
 
 package org.openksavi.sponge.engine.event;
 
-import java.util.Collection;
+import java.util.List;
 
+import org.openksavi.sponge.engine.EngineModule;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.event.EventIdGenerator;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 
 /**
  * Event scheduler.
  */
-public interface EventScheduler extends EventGenerator {
+public interface EventScheduler extends EngineModule {
+
+    /**
+     * Puts a specified event into the event queue now.
+     *
+     * @param event event.
+     */
+    void scheduleNow(Event event);
 
     /**
      * Schedules an event after a specified time.
@@ -65,24 +74,33 @@ public interface EventScheduler extends EventGenerator {
     EventSchedulerEntry scheduleAt(Event event, long at, long interval);
 
     /**
-     * Schedules a specified event now (inserts to the queue immediately).
+     * Schedules an event in Cron.
      *
      * @param event event.
+     * @param crontabSpec crontab time specification.
+     * @return cron entry.
      */
-    void scheduleNow(Event event);
+    EventSchedulerEntry scheduleAt(Event event, String crontabSpec);
 
     /**
-     * Returns scheduled event tasks.
-     *
-     * @return scheduled event tasks.
-     */
-    Collection<EventSchedulerTask> getScheduledEventTasks();
-
-    /**
-     * Removes the specified event task.
+     * Removes the specified event scheduler entry.
      *
      * @param entry event scheduler entry.
      * @return {@code true} if the specified event scheduler entry has been scheduled.
      */
     boolean remove(EventSchedulerEntry entry);
+
+    /**
+     * Returns all scheduled entries.
+     *
+     * @return all scheduled entries.
+     */
+    List<EventSchedulerEntry> getEntries();
+
+    /**
+     * Sets an event ID generator.
+     *
+     * @param eventIdGenerator an event ID generator.
+     */
+    void setEventIdGenerator(EventIdGenerator eventIdGenerator);
 }

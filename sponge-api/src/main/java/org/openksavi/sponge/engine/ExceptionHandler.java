@@ -17,8 +17,8 @@
 package org.openksavi.sponge.engine;
 
 /**
- * Exception handler that is used to handle exceptions that are thrown in other threads than the thread that started the engine. For example
- * handles exceptions that are thrown in event processors.
+ * Exception handler handles exceptions that are thrown in other threads than the thread that started the engine. For example handles
+ * exceptions that are thrown in event processors.
  */
 public interface ExceptionHandler {
 

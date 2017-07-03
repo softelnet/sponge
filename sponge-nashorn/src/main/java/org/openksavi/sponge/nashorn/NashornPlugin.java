@@ -23,7 +23,7 @@ import org.openksavi.sponge.config.Configuration;
  */
 public abstract class NashornPlugin extends org.openksavi.sponge.core.plugin.BasePlugin implements NashornScriptObject {
 
-    /** JavaScript processor used to overcome class inheritance limitations in JavaScript and Nashorn. Must be be thread safe. */
+    /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Must be be thread safe. */
     private Object target;
 
     @Override

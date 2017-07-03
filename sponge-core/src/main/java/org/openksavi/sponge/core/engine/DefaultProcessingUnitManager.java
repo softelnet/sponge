@@ -16,21 +16,21 @@
 
 package org.openksavi.sponge.core.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessingUnitManager;
-import org.openksavi.sponge.engine.processing.ProcessingUnit;
+import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
+import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 
 /**
  * Processing Unit Manager.
  */
 public class DefaultProcessingUnitManager extends BaseEngineModule implements ProcessingUnitManager {
 
-    /** The list of processing units. */
-    private List<ProcessingUnit<?>> processingUnits = Collections.synchronizedList(new ArrayList<>());
+    /** The Filter Processing Unit. */
+    private FilterProcessingUnit filterProcessingUnit;
+
+    /** The Main Processing Unit. */
+    private MainProcessingUnit mainProcessingUnit;
 
     /**
      * Creates a new Processing Unit Manager.
@@ -41,29 +41,30 @@ public class DefaultProcessingUnitManager extends BaseEngineModule implements Pr
         super("ProcessingUnitManager", engine);
     }
 
-    /**
-     * Returns processing units.
-     *
-     * @return processing units.
-     */
     @Override
-    public List<ProcessingUnit<?>> getProcessingUnits() {
-        return processingUnits;
+    public FilterProcessingUnit getFilterProcessingUnit() {
+        return filterProcessingUnit;
     }
 
-    /**
-     * Adds a new processing unit.
-     *
-     * @param processingUnit processing unit.
-     */
     @Override
-    public void addProcessingUnit(ProcessingUnit<?> processingUnit) {
-        processingUnits.add(processingUnit);
+    public void setFilterProcessingUnit(FilterProcessingUnit filterProcessingUnit) {
+        this.filterProcessingUnit = filterProcessingUnit;
+    }
+
+    @Override
+    public MainProcessingUnit getMainProcessingUnit() {
+        return mainProcessingUnit;
+    }
+
+    @Override
+    public void setMainProcessingUnit(MainProcessingUnit mainProcessingUnit) {
+        this.mainProcessingUnit = mainProcessingUnit;
     }
 
     @Override
     public void startup() {
-        processingUnits.forEach(processingUnit -> processingUnit.startup());
+        mainProcessingUnit.startup();
+        filterProcessingUnit.startup();
 
         setRunning(true);
     }
@@ -74,18 +75,9 @@ public class DefaultProcessingUnitManager extends BaseEngineModule implements Pr
             return;
         }
 
-        super.shutdown();
+        setRunning(false);
 
-        processingUnits.forEach(processingUnit -> processingUnit.shutdown());
-    }
-
-    /**
-     * Clears processing units. Removes all processors registered in all processing units.
-     */
-    @Override
-    public void clear() {
-        synchronized (processingUnits) {
-            processingUnits.forEach(processingUnit -> processingUnit.removeAllProcessors());
-        }
+        filterProcessingUnit.shutdown();
+        mainProcessingUnit.shutdown();
     }
 }

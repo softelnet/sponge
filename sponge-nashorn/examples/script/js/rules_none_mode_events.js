@@ -7,7 +7,7 @@ var correlationEventsLog;
 
 function onInit() {
     // Variables for assertions only
-    correlationEventsLog = new org.openksavi.sponge.core.util.CorrelationEventsLog();
+    correlationEventsLog = new org.openksavi.sponge.test.util.CorrelationEventsLog();
     EPS.setVariable("correlationEventsLog", correlationEventsLog);
 }
 

@@ -72,9 +72,9 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
     public void shutdown() {
         setRunning(false);
 
-        inputEventQueue.startup();
-        mainEventQueue.startup();
-        outputEventQueue.startup();
+        inputEventQueue.shutdown();
+        mainEventQueue.shutdown();
+        outputEventQueue.shutdown();
     }
 
     @Override

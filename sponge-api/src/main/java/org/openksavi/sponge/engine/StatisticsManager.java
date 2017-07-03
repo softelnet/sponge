@@ -29,13 +29,6 @@ public interface StatisticsManager extends EngineModule {
     int getScheduledEventCount();
 
     /**
-     * Returns the number of events scheduled in Cron.
-     *
-     * @return the number of events scheduled in Cron.
-     */
-    int getCronEventCount();
-
-    /**
      * Returns active thread count.
      *
      * @return active thread count.

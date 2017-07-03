@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.event;
+package org.openksavi.sponge.java.spi;
 
-import java.io.Serializable;
+import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactory;
+import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 
 /**
- * Entry containing information concerning an event to generate in future.
+ * Provider for Java-based knowledge base interpreter factory.
  */
-public interface EventGenerateEntry extends Serializable {
+public class JavaKnowledgeBaseInterpreterFactoryProvider implements KnowledgeBaseInterpreterFactoryProvider {
 
-    /**
-     * Returns entry ID.
-     *
-     * @return entry ID.
-     */
-    Object getId();
+    private KnowledgeBaseInterpreterFactory factory = new JavaKnowledgeBaseInterpreterFactory();
 
-    /**
-     * Returns event name.
-     *
-     * @return event name.
-     */
-    String getEventName();
+    @Override
+    public KnowledgeBaseInterpreterFactory getKnowledgeBaseInterpreterFactory() {
+        return factory;
+    }
 }

@@ -6,7 +6,6 @@ import javax.inject.Inject
 
 import org.apache.camel.CamelContext
 
-import org.openksavi.sponge.core.util.Utils
 import org.openksavi.sponge.engine.Engine
 
 public class CamelService {

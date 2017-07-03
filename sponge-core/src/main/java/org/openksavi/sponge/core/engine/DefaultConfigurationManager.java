@@ -84,8 +84,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** Event queue capacity. */
     private Integer eventQueueCapacity;
 
-    /** The number of cron threads. */
-    private Integer cronThreadCount;
+    /** The number of the Event Scheduler threads. */
+    private Integer eventSchedulerThreadCount;
 
     /** The number of duration executor threads. */
     private Integer durationThreadCount;
@@ -148,50 +148,50 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     private void setupEngineParameters() {
         if (mainProcessingUnitThreadCount == null) {
             mainProcessingUnitThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_MAIN_PROCESSING_UNIT_THREAD_COUNT,
-                    engine.getDefaultParameters().getMainProcessingUnitThreadCount());
+                    getEngine().getDefaultParameters().getMainProcessingUnitThreadCount());
         }
 
         if (eventClonePolicy == null) {
             eventClonePolicy = EventClonePolicy.valueOf(engineConfig.getString(ConfigurationConstants.TAG_ENGINE_EVENT_CLONE_POLICY,
-                    engine.getDefaultParameters().getEventClonePolicy().name()).toUpperCase());
+                    getEngine().getDefaultParameters().getEventClonePolicy().name()).toUpperCase());
         }
 
         if (processingUnitConcurrentListenerThreadCount == null) {
             processingUnitConcurrentListenerThreadCount =
                     engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_PROCESSING_UNIT_CONCURRENT_LISTENER_THREAD_COUNT,
-                            engine.getDefaultParameters().getProcessingUnitConcurrentListenerThreadCount());
+                            getEngine().getDefaultParameters().getProcessingUnitConcurrentListenerThreadCount());
         }
 
         if (eventQueueCapacity == null) {
             eventQueueCapacity = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
-                    engine.getDefaultParameters().getEventQueueCapacity());
+                    getEngine().getDefaultParameters().getEventQueueCapacity());
         }
 
-        if (cronThreadCount == null) {
-            cronThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_CRON_THREAD_COUNT,
-                    engine.getDefaultParameters().getCronThreadCount());
+        if (eventSchedulerThreadCount == null) {
+            eventSchedulerThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_SCHEDULER_THREAD_COUNT,
+                    getEngine().getDefaultParameters().getEventSchedulerThreadCount());
         }
 
         if (durationThreadCount == null) {
             durationThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_DURATION_THREAD_COUNT,
-                    engine.getDefaultParameters().getDurationThreadCount());
+                    getEngine().getDefaultParameters().getDurationThreadCount());
         }
 
         if (asyncEventSetProcessorExecutorThreadCount == null) {
             asyncEventSetProcessorExecutorThreadCount =
                     engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_ASYNC_EVENT_SET_PROCESSOR_EXECUTOR_THREAD_COUNT,
-                            engine.getDefaultParameters().getAsyncEventSetProcessorExecutorThreadCount());
+                            getEngine().getDefaultParameters().getAsyncEventSetProcessorExecutorThreadCount());
         }
 
         if (eventSetProcessorDefaultSynchronous == null) {
             eventSetProcessorDefaultSynchronous =
                     engineConfig.getBoolean(ConfigurationConstants.TAG_ENGINE_EVENT_SET_PROCESSOR_DEFAULT_SYNCHRONOUS,
-                            engine.getDefaultParameters().getEventSetProcessorDefaultSynchronous());
+                            getEngine().getDefaultParameters().getEventSetProcessorDefaultSynchronous());
         }
 
         if (autoEnable == null) {
-            autoEnable =
-                    engineConfig.getBoolean(ConfigurationConstants.TAG_ENGINE_AUTO_ENABLE, engine.getDefaultParameters().getAutoEnable());
+            autoEnable = engineConfig.getBoolean(ConfigurationConstants.TAG_ENGINE_AUTO_ENABLE,
+                    getEngine().getDefaultParameters().getAutoEnable());
         }
     }
 
@@ -216,7 +216,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     private void applyVariableProperties() {
         properties.forEach((name, entry) -> {
             if (entry.isVariable()) {
-                engine.getOperations().setVariable(name, entry.getValue());
+                getEngine().getOperations().setVariable(name, entry.getValue());
             }
         });
     }
@@ -404,8 +404,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
-    public int getCronThreadCount() {
-        return cronThreadCount;
+    public int getEventSchedulerThreadCount() {
+        return eventSchedulerThreadCount;
     }
 
     @Override
@@ -451,7 +451,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                 .append("eventClonePolicy", eventClonePolicy)
                 .append("autoEnable", autoEnable)
                 .append("properties", properties)
-                .append("cronThreadCount", cronThreadCount)
+                .append("eventSchedulerThreadCount", eventSchedulerThreadCount)
                 .append("durationThreadCount", durationThreadCount)
                 .append("processingUnitConcurrentListenerThreadCount", processingUnitConcurrentListenerThreadCount)
                 .toString();
@@ -496,8 +496,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
-    public void setCronThreadCount(int cronThreadCount) {
-        this.cronThreadCount = cronThreadCount;
+    public void setEventSchedulerThreadCount(int eventSchedulerThreadCount) {
+        this.eventSchedulerThreadCount = eventSchedulerThreadCount;
     }
 
     @Override

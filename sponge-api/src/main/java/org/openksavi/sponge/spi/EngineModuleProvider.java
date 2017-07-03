@@ -26,7 +26,6 @@ import org.openksavi.sponge.engine.ProcessingUnitManager;
 import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPoolManager;
-import org.openksavi.sponge.engine.event.CronEventGenerator;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
 
@@ -116,13 +115,4 @@ public interface EngineModuleProvider {
      * @return new event scheduler.
      */
     EventScheduler createEventScheduler(Engine engine, EventQueue queue);
-
-    /**
-     * Creates a new cron event generator.
-     *
-     * @param engine the engine.
-     * @param queue event queue where generated events will be sent to.
-     * @return new cron event generator.
-     */
-    CronEventGenerator createCronEventGenerator(Engine engine, EventQueue queue);
 }

@@ -81,12 +81,12 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
 
         startupHandlers();
 
-        startupGroupExecutor();
+        createMainProcessingUnitAsyncEventSetProcessorThreadPool();
+
+        workerExecutor = getEngine().getThreadPoolManager().createMainProcessingUnitWorkerThreadPool();
 
         // One thread for reading from the decomposed queue.
-        engine.getThreadPoolManager().addProcessable(new DecomposedQueueReaderProcessable());
-
-        workerExecutor = engine.getThreadPoolManager().addMainProcessingUnitWorkerExecutor();
+        getEngine().getThreadPoolManager().createMainProcessingUnitDecomposedQueueThreadPool(new DecomposedQueueReaderProcessable());
 
         setRunning(true);
     }
@@ -232,7 +232,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                     throw (InterruptedException) rootCause;
                 }
 
-                engine.handleError("runIteration", e);
+                getEngine().handleError("runIteration", e);
                 return true;
             }
         }

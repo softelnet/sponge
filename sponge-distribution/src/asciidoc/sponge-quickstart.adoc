@@ -14,7 +14,7 @@ Trigger:: Triggers execute specified operations when an appropriate event happen
 
 Rule:: Rules detect situations when an ordered sequence of events happens.
 
-Correlator:: Correlators detect correlations between events and could also be used to implement any complex event processing that isn't provided by filters, triggers or rules.
+Correlator:: Correlators detect correlations between events and could also be used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 ****
 
 === Knowledge base
@@ -258,7 +258,7 @@ You may exit the program by entering command `exit`, `quit` or pressing `CTRL-D`
 == Examples
 This chapter provides introductory examples of {sponge}. For detailed information see User Guide.
 
-Presented here shell commands used to run the examples require installation of {sponge} standalone command-line application and are specific to Linux/MacOS/Unix. For more information how to run examples see the next chapter.
+These examples require installation of {sponge} standalone command-line application and are specific to Linux/MacOS/Unix. For more information how to run examples see the next chapter.
 
 === Hello World example
 Let's see the time-honored Hello World example. In this case the text `"Hello World!"` will be printed when an event `helloEvent` fires a trigger `HelloWorldTrigger`.

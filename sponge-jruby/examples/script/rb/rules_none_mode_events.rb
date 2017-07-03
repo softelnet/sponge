@@ -1,7 +1,7 @@
 # Sponge Knowledge base
 # Using rules - events
 
-java_import org.openksavi.sponge.core.util.CorrelationEventsLog
+java_import org.openksavi.sponge.test.util.CorrelationEventsLog
 
 def onInit
     # Variables for assertions only

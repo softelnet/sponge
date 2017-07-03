@@ -24,7 +24,6 @@ import org.openksavi.sponge.core.event.AttributeMapEvent;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
-import org.openksavi.sponge.event.EventCronEntry;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
@@ -115,18 +114,18 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public EventCronEntry sendAt(final Event event, String crontabSpec) {
+    public EventSchedulerEntry sendAt(final Event event, String crontabSpec) {
         if (event == null) {
             throw new IllegalArgumentException("Event cannot be null");
         }
         if (crontabSpec == null) {
             throw new IllegalArgumentException("Crontab specification cannot be null");
         }
-        return engine.getCron().schedule(event, crontabSpec);
+        return engine.getEventScheduler().scheduleAt(event, crontabSpec);
     }
 
     @Override
-    public EventCronEntry sendAt(String name, String crontabSpec) {
+    public EventSchedulerEntry sendAt(String name, String crontabSpec) {
         return sendAt(makeEvent(name), crontabSpec);
     }
 
@@ -142,20 +141,6 @@ public class BaseEngineOperations implements EngineOperations {
             throw new IllegalArgumentException("Event entry cannot be null");
         }
         return engine.getEventScheduler().remove(entry);
-    }
-
-    /**
-     * Removes event crontab entry.
-     *
-     * @param entry cron entry.
-     * @return informs whether the specified event has been scheduled.
-     */
-    @Override
-    public boolean removeEvent(EventCronEntry entry) {
-        if (entry == null) {
-            throw new IllegalArgumentException("Event entry cannot be null");
-        }
-        return engine.getCron().remove(entry);
     }
 
     /**
@@ -232,14 +217,17 @@ public class BaseEngineOperations implements EngineOperations {
         return new AttributeMapEvent(name, policy);
     }
 
+    @Override
     public EventDefinition event(String name) {
         return new DefaultEventDefinition(this, name, engine.getConfigurationManager().getEventClonePolicy());
     }
 
+    @Override
     public EventDefinition event(String name, EventClonePolicy policy) {
         return new DefaultEventDefinition(this, name, policy);
     }
 
+    @Override
     public EventDefinition event(Event event) {
         return new DefaultEventDefinition(this, event);
     }

@@ -25,13 +25,13 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.EventsLog;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.examples.EchoPlugin;
 import org.openksavi.sponge.examples.TestKnowledgeBase;
+import org.openksavi.sponge.test.util.EventsLog;
 
 public class EngineBuilderTest {
 

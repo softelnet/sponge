@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.CorrelationEventsLog;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.test.TestUtils;
+import org.openksavi.sponge.test.util.CorrelationEventsLog;
 
 public class SyncAsyncEventSetProcessorsTest {
 

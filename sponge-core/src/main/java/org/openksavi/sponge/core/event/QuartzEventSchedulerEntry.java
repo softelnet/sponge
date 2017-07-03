@@ -14,21 +14,33 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.engine.event;
+package org.openksavi.sponge.core.event;
 
-import org.openksavi.sponge.engine.EngineModule;
+import org.quartz.JobKey;
+
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.event.EventSchedulerEntry;
 
-/**
- * Event generator.
- */
-public interface EventGenerator extends EngineModule {
+public class QuartzEventSchedulerEntry implements EventSchedulerEntry {
 
-    /**
-     * Puts a new event into the event queue associated with this event generator.
-     *
-     * @param event an event instance.
-     * @param newInstance should create a new instance of this event.
-     */
-    void putEvent(Event event, boolean newInstance);
+    private static final long serialVersionUID = 7609940705260150180L;
+
+    private JobKey id;
+
+    private Event event;
+
+    public QuartzEventSchedulerEntry(JobKey id, Event event) {
+        this.id = id;
+        this.event = event;
+    }
+
+    @Override
+    public JobKey getId() {
+        return id;
+    }
+
+    @Override
+    public Event getEvent() {
+        return event;
+    }
 }

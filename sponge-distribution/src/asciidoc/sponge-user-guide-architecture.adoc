@@ -19,11 +19,11 @@ The {sponge} engine consists of the following components.
 |Knowledge Base Manager
 |A module responsible for managing of knowledge bases. Scripting knowledge bases are read by interpreters. For every knowledge base there is one instance of an interpreter.
 
-|Event Scheduler, Cron
-|Modules representing schedulers of future events that are to be added into the Input Event Queue.
+|Event Scheduler
+|A scheduler of future events that are to be added into the Input Event Queue.
 
 |Input Event Queue
-|An input queue of events that are sent to {sponge}. Events can get to this queue form different sources: plugins, Event Scheduler, Cron or knowledge bases.
+|An input queue of events that are sent to {sponge}. Events can get to this queue form different sources: plugins, Event Scheduler or knowledge bases.
 
 |Filter Processing Unit
 |Responsible for filtering events. It is also a registry of enabled filters.

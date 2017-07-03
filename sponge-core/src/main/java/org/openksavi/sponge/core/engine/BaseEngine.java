@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -31,7 +32,6 @@ import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.processing.QueuedEventSetProcessorDurationStrategy;
-import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBaseFileProvider;
 import org.openksavi.sponge.core.spi.DefaultEngineModuleProvider;
@@ -56,13 +56,11 @@ import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.Session;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPoolManager;
-import org.openksavi.sponge.engine.event.CronEventGenerator;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.engine.processing.EventSetProcessorDurationStrategy;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
-import org.openksavi.sponge.event.EventIdGenerator;
 import org.openksavi.sponge.filter.FilterAdapter;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
@@ -77,12 +75,9 @@ import org.openksavi.sponge.trigger.TriggerAdapter;
 /**
  * Base engine implementation.
  */
-public class BaseEngine implements Engine {
+public class BaseEngine extends BaseEngineModule implements Engine {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseEngine.class);
-
-    /** The name of this engine. May be {@code null}. */
-    protected String name;
 
     /** Engine module provider. */
     protected EngineModuleProvider moduleProvider;
@@ -108,12 +103,6 @@ public class BaseEngine implements Engine {
     /** Thread pool manager. */
     protected ThreadPoolManager threadPoolManager;
 
-    /** Filter processing unit. */
-    protected ProcessingUnit<FilterAdapter> filterProcessingUnit;
-
-    /** Main processing unit. */
-    protected MainProcessingUnit mainProcessingUnit;
-
     /** Knowledge base manager. */
     protected KnowledgeBaseManager knowledgeBaseManager;
 
@@ -132,9 +121,6 @@ public class BaseEngine implements Engine {
     /** Lock. */
     protected Lock lock = new ReentrantLock();
 
-    /** Cron. */
-    protected CronEventGenerator cron;
-
     /** Processor manager. */
     protected ProcessorManager processorManager;
 
@@ -146,11 +132,6 @@ public class BaseEngine implements Engine {
 
     /** Input event queue. */
     protected EventQueue inputQueue;
-
-    private AtomicBoolean running = new AtomicBoolean(false);
-
-    /** Event ID generator. */
-    private EventIdGenerator eventIdGenerator = new AtomicLongEventIdGenerator();
 
     /** Remembered exception. */
     private AtomicReference<Throwable> rememberedException = new AtomicReference<>();
@@ -188,16 +169,7 @@ public class BaseEngine implements Engine {
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
      */
     public BaseEngine() {
-        //
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        setEngine(this);
     }
 
     /**
@@ -268,15 +240,6 @@ public class BaseEngine implements Engine {
         this.configurationFilename = configurationFilename;
     }
 
-    public EventIdGenerator getEventIdGenerator() {
-        return eventIdGenerator;
-    }
-
-    @Override
-    public void setEventIdGenerator(EventIdGenerator eventIdGenerator) {
-        this.eventIdGenerator = eventIdGenerator;
-    }
-
     /**
      * Initializes the engine by creating providers and engine modules.
      */
@@ -344,41 +307,55 @@ public class BaseEngine implements Engine {
     public void startup() {
         lock.lock();
         try {
-            if (running.get()) {
+            if (isRunning()) {
                 return;
             }
 
-            logger.debug("Starting up {}", getDescription());
+            logger.info("Starting up {}", getDescription());
 
             init();
 
             try {
                 clearRememberedException();
 
+                // Read the configuration.
                 configurationManager.startup();
-                setupEngineName();
 
+                // Bind and configure engine modules (including plugins).
                 configureEngineModules();
 
-                knowledgeBaseManager.startup();
+                // Create event queues. They are not read from yet. Note that here the Input Event Queue is created.
                 eventQueueManager.startup();
-                pluginManager.startup();
+
+                // Creates an event scheduler.
                 eventScheduler.startup();
-                cron.startup();
 
-                running.set(true);
+                // Read knowledge bases files and invoke onInit and onLoad for each knowledge base.
+                knowledgeBaseManager.startup();
 
+                // Invoke configure, init and invoke onStartup for each plugin.
+                pluginManager.startup();
+
+                setRunning(true);
+
+                // Invoke OnStartup listeners.
                 onStartupListeners.forEach(listener -> listener.onStartup());
 
+                // Invoke onStartup for each knowledge base.
                 knowledgeBaseManager.onStartup();
 
+                // Start Main Processing Unit internal managed thread pools. The Filter Processing Unit uses only queue listener thread
+                // that will be stared later.
                 processingUnitManager.startup();
+
+                // Start Thread pool Manager managed thread pools, i.e. event queues listener threads and Main Processing Unit
+                // decomposed queue thread. Note that a Filter Processing Unit thread will be started as the last, because
+                // it listens directly to the Input Event Queue and in fact starts all processing.
                 threadPoolManager.startup();
             } catch (Throwable e) {
-                running.set(false);
-                safelyShutdownIfStartupError(cron);
-                safelyShutdownIfStartupError(processingUnitManager);
-                safelyShutdownIfStartupError(threadPoolManager);
+                setRunning(false);
+
+                safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
 
                 throw Utils.wrapException("startup", e);
             }
@@ -387,22 +364,22 @@ public class BaseEngine implements Engine {
         }
     }
 
-    protected void safelyShutdownIfStartupError(EngineModule module) {
-        if (module != null) {
+    protected void safelyShutdownIfStartupError(EngineModule... modules) {
+        Stream.of(modules).forEach(module -> {
             try {
                 module.shutdown();
             } catch (Throwable ex) {
                 logger.warn(module.getName(), ex);
             }
-        }
+        });
     }
 
     /**
      * Setup engine name.
      */
     protected void setupEngineName() {
-        if (name == null) {
-            name = configurationManager.getEngineName();
+        if (getName() == null) {
+            setName(configurationManager.getEngineName());
         }
     }
 
@@ -413,13 +390,13 @@ public class BaseEngine implements Engine {
     public void shutdown() {
         lock.lock();
         try {
-            if (!running.get()) {
+            if (!isRunning()) {
                 return;
             }
 
-            logger.debug("Shutting down {}", getDescription());
+            logger.info("Shutting down {}", getDescription());
 
-            running.set(false);
+            setRunning(false);
             AtomicReference<Throwable> exceptionHolder = new AtomicReference<>(null);
 
             safelyShutdownModule(threadPoolManager, exceptionHolder);
@@ -429,11 +406,10 @@ public class BaseEngine implements Engine {
 
             onShutdownListeners.forEach(listener -> listener.onShutdown());
 
-            safelyShutdownModule(cron, exceptionHolder);
-            safelyShutdownModule(eventScheduler, exceptionHolder);
             safelyShutdownModule(pluginManager, exceptionHolder);
-            safelyShutdownModule(eventQueueManager, exceptionHolder);
             safelyShutdownModule(knowledgeBaseManager, exceptionHolder);
+            safelyShutdownModule(eventScheduler, exceptionHolder);
+            safelyShutdownModule(eventQueueManager, exceptionHolder);
 
             if (exceptionHolder.get() != null) {
                 throw exceptionHolder.get();
@@ -461,19 +437,13 @@ public class BaseEngine implements Engine {
     }
 
     /**
-     * Informs whether this managed entity is running.
-     *
-     * @return if this managed entity is running.
-     */
-    @Override
-    public boolean isRunning() {
-        return running.get();
-    }
-
-    /**
      * Configures engine modules.
      */
     protected void configureEngineModules() {
+        // Setup engine name.
+        setupEngineName();
+
+        // Register interpreter factories for scripting languages.
         knowledgeBaseManager.setKnowledgeBaseInterpreterFactoryProviders(knowledgeBaseInterpreterFactoryProviders);
 
         // Create event queues.
@@ -490,23 +460,22 @@ public class BaseEngine implements Engine {
         inputQueue.setCapacity(configurationManager.getEventQueueCapacity());
         mainProcessingQueue.setCapacity(getDefaultParameters().getMainEventQueueCapacity());
 
-        // Create event scheduler and cron.
+        // Create event scheduler.
         eventScheduler = moduleProvider.createEventScheduler(this, inputQueue);
-        cron = moduleProvider.createCronEventGenerator(this, inputQueue);
 
         // Create processing units.
-        filterProcessingUnit = processingUnitProvider.createFilterProcessingUnit(this, inputQueue, mainProcessingQueue);
-        mainProcessingUnit = processingUnitProvider.createMainProcessingUnit(this, mainProcessingQueue, outputQueue);
-
-        // Add processing unit to the processing unit manager.
-        processingUnitManager.addProcessingUnit(filterProcessingUnit);
-        processingUnitManager.addProcessingUnit(mainProcessingUnit);
+        processingUnitManager
+                .setFilterProcessingUnit(processingUnitProvider.createFilterProcessingUnit(this, inputQueue, mainProcessingQueue));
+        processingUnitManager
+                .setMainProcessingUnit(processingUnitProvider.createMainProcessingUnit(this, mainProcessingQueue, outputQueue));
 
         // Add to the thread manager.
-        threadPoolManager.addProcessable(filterProcessingUnit, filterProcessingUnit.supportsConcurrentListenerThreadPool()
-                ? getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1);
-        threadPoolManager.addProcessable(mainProcessingUnit, mainProcessingUnit.supportsConcurrentListenerThreadPool()
-                ? getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1);
+        threadPoolManager.createFilterProcessingUnitListenerThreadPool(getFilterProcessingUnit(),
+                getFilterProcessingUnit().supportsConcurrentListenerThreadPool()
+                        ? getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1);
+        threadPoolManager.createMainProcessingUnitListenerThreadPool(getMainProcessingUnit(),
+                getMainProcessingUnit().supportsConcurrentListenerThreadPool()
+                        ? getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1);
 
         if (configurationManager.getRootConfig() != null) {
             pluginManager.configure(configurationManager.getRootConfig());
@@ -558,16 +527,6 @@ public class BaseEngine implements Engine {
     }
 
     /**
-     * Returns Cron.
-     *
-     * @return Cron.
-     */
-    @Override
-    public CronEventGenerator getCron() {
-        return cron;
-    }
-
-    /**
      * Returns Statistics Manager.
      *
      * @return Statistics Manager.
@@ -604,7 +563,7 @@ public class BaseEngine implements Engine {
      */
     @Override
     public List<FilterAdapter> getFilters() {
-        return new ArrayList<>(filterProcessingUnit.getRegisteredProcessorAdapterMap().values());
+        return new ArrayList<>(getFilterProcessingUnit().getRegisteredProcessorAdapterMap().values());
     }
 
     /**
@@ -614,7 +573,7 @@ public class BaseEngine implements Engine {
      */
     @Override
     public List<TriggerAdapter> getTriggers() {
-        return mainProcessingUnit.getTriggerAdapters();
+        return getMainProcessingUnit().getTriggerAdapters();
     }
 
     /**
@@ -624,7 +583,7 @@ public class BaseEngine implements Engine {
      */
     @Override
     public List<RuleAdapterGroup> getRuleGroups() {
-        return mainProcessingUnit.getRuleAdapterGroups();
+        return getMainProcessingUnit().getRuleAdapterGroups();
     }
 
     /**
@@ -634,7 +593,7 @@ public class BaseEngine implements Engine {
      */
     @Override
     public List<CorrelatorAdapterGroup> getCorrelatorGroups() {
-        return mainProcessingUnit.getCorrelatorAdapterGroups();
+        return getMainProcessingUnit().getCorrelatorAdapterGroups();
     }
 
     /**
@@ -655,9 +614,7 @@ public class BaseEngine implements Engine {
         lock.lock();
         try {
             pluginManager.onBeforeReload();
-
             knowledgeBaseManager.reload();
-
             pluginManager.onAfterReload();
         } finally {
             lock.unlock();
@@ -730,16 +687,6 @@ public class BaseEngine implements Engine {
     }
 
     /**
-     * Returns a new global event ID.
-     *
-     * @return a new global event ID.
-     */
-    @Override
-    public String newGlobalEventId() {
-        return eventIdGenerator.getNext();
-    }
-
-    /**
      * Remembers the first exception.
      *
      * @param e exception.
@@ -761,11 +708,11 @@ public class BaseEngine implements Engine {
     }
 
     public ProcessingUnit<FilterAdapter> getFilterProcessingUnit() {
-        return filterProcessingUnit;
+        return processingUnitManager.getFilterProcessingUnit();
     }
 
     public MainProcessingUnit getMainProcessingUnit() {
-        return mainProcessingUnit;
+        return processingUnitManager.getMainProcessingUnit();
     }
 
     @Override

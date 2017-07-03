@@ -36,8 +36,8 @@ public class DefaultEngineParameters implements EngineParameters {
     /** Default event queue capacity. */
     private int eventQueueCapacity = -1;
 
-    /** Default cron thread count. */
-    private int cronThreadCount = 1;
+    /** Default Event Scheduler thread count. */
+    private int eventSchedulerThreadCount = 1;
 
     /** Default duration thread count. */
     private int durationThreadCount = 1;
@@ -99,8 +99,8 @@ public class DefaultEngineParameters implements EngineParameters {
     }
 
     @Override
-    public int getCronThreadCount() {
-        return cronThreadCount;
+    public int getEventSchedulerThreadCount() {
+        return eventSchedulerThreadCount;
     }
 
     @Override
@@ -159,8 +159,8 @@ public class DefaultEngineParameters implements EngineParameters {
     }
 
     @Override
-    public void setCronThreadCount(int cronThreadCount) {
-        this.cronThreadCount = cronThreadCount;
+    public void setEventSchedulerThreadCount(int eventSchedulerThreadCount) {
+        this.eventSchedulerThreadCount = eventSchedulerThreadCount;
     }
 
     @Override

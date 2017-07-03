@@ -33,10 +33,8 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
-import org.openksavi.sponge.core.spi.JavaKnowledgeBaseInterpreterFactory;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.KnowledgeBaseManager;
-import org.openksavi.sponge.java.JavaKnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
@@ -83,9 +81,6 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
      */
     public DefaultKnowledgeBaseManager(Engine engine) {
         super("KnowledgeBaseManager", engine);
-
-        // Add Java-based knowledge base interpreter factory.
-        knowledgeBaseInterpreterFactories.put(JavaKnowledgeBaseInterpreter.TYPE.getTypeCode(), new JavaKnowledgeBaseInterpreterFactory());
 
         // Add default, Java-based knowledge base (mainly for plugin registration).
         defaultKnowledgeBase = new DefaultKnowledgeBase();
@@ -283,7 +278,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     }
 
     public KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(String typeCode, KnowledgeBase knowledgeBase) {
-        return getKnowledgeBaseInterpreterFactory(typeCode).createKnowledgeBaseInterpreter(engine, knowledgeBase);
+        return getKnowledgeBaseInterpreterFactory(typeCode).createKnowledgeBaseInterpreter(getEngine(), knowledgeBase);
     }
 
     @Override

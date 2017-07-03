@@ -49,6 +49,8 @@ When {sponge} is starting, callback functions are invoked in the following order
 . `onLoad()`,
 . `onStartup()`.
 
+Note that before `onStartup()` is invoked you will not be able to send events or access plugins. That is because the engine hasn't started fully yet.
+
 When a knowledge base is reloaded, callback functions are invoked in the following order:
 
 . `onBeforeReload()` executed in the previous version of the reloaded knowledge base,
@@ -236,7 +238,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase { // <1>
 There are some limitation in the interoperability between scripting knowledge bases:
 
 * You shouldn't pass knowledge base interpreter scope variables from one knowledge base to another. Even if they are written in the same scripting language. This is because each knowledge base has its own instance of an interpreter.
-* Data structures used to communicate between different knowledge bases should by rather Java types or simple types that would be handled smoothly by Java implementations of scripting languages (for example Jython). For example you shouldn't use a script-based plugin in knowledge bases other than the one in which this plugin has been defined.
+* Data structures used for communicating between different knowledge bases should by rather Java types or simple types that would be handled smoothly by Java implementations of scripting languages (for example Jython). For example you shouldn't use a script-based plugin in knowledge bases other than the one in which this plugin has been defined.
 * Using more than one knowledge bases using the same scripting language may cause problems in certain situations due to the internal implementations of scripting language interpreters.
 
 == Useful knowledge base commands

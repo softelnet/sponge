@@ -18,9 +18,7 @@ package org.openksavi.sponge.core.engine;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -29,6 +27,8 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
@@ -42,48 +42,42 @@ import org.openksavi.sponge.util.Processable;
  */
 public class DefaultThreadPoolManager extends BaseEngineModule implements ThreadPoolManager {
 
-    /** Map of (processable, ExecutorEntry). */
-    protected Map<Processable, ExecutorEntry> processableExecutors = Collections.synchronizedMap(new LinkedHashMap<>());
+    /** The thread pool used by the Filter Processing Unit for listening to the Input Event Queue. */
+    protected ProcessableExecutorEntry filterProcessingUnitListenerThreadPoolEntry;
 
-    /** Map of (name, ExecutorEntry). */
-    protected Map<String, ExecutorEntry> namedExecutors = Collections.synchronizedMap(new LinkedHashMap<>());
+    /** The thread pool used by the Main Processing Unit for listening to the Main Event Queue. */
+    protected ProcessableExecutorEntry mainProcessingUnitListenerThreadPoolEntry;
+
+    /** The thread pool used by the Main Processing Unit for listening to the decomposed queue. */
+    protected ProcessableExecutorEntry mainProcessingUnitDecomposedQueueThreadPoolEntry;
+
+    /** The thread pool used by the Main Processing Unit for worker threads. */
+    protected ExecutorEntry mainProcessingUnitWorkerThreadPoolEntry;
+
+    /** The thread pool used by the Main Processing Unit for asynchronous processing of event set processors. */
+    protected ExecutorEntry mainProcessingUnitAsyncEventSetProcessorThreadPoolEntry;
+
+    /** Lock. */
+    protected Lock lock = new ReentrantLock();
 
     /**
      * Executor entry.
      */
     protected static class ExecutorEntry {
 
-        private int threadCount;
+        private String name;
 
         private ExecutorService executor;
 
         private List<Future<?>> futures = Collections.synchronizedList(new ArrayList<>());
 
-        public ExecutorEntry(int threadCount) {
-            this.threadCount = threadCount;
-        }
-
-        public ExecutorEntry(int threadCount, ExecutorService executor) {
-            this.threadCount = threadCount;
+        public ExecutorEntry(String name, ExecutorService executor) {
+            this.name = name;
             this.executor = executor;
         }
 
-        /**
-         * Returns the thread count.
-         *
-         * @return the thread count.
-         */
-        public int getThreadCount() {
-            return threadCount;
-        }
-
-        /**
-         * Sets a thread count.
-         *
-         * @param threadCount the thread count to set.
-         */
-        public void setThreadCount(int threadCount) {
-            this.threadCount = threadCount;
+        public String getName() {
+            return name;
         }
 
         /**
@@ -122,6 +116,25 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         }
     }
 
+    protected static class ProcessableExecutorEntry extends ExecutorEntry {
+
+        private Processable processable;
+
+        public ProcessableExecutorEntry(ExecutorService executor, Processable processable) {
+            super(processable.toString(), executor);
+
+            this.processable = processable;
+        }
+
+        public Processable getProcessable() {
+            return processable;
+        }
+
+        public void setProcessable(Processable processable) {
+            this.processable = processable;
+        }
+    }
+
     /**
      * Creates a new Thread Pool Manager.
      *
@@ -133,21 +146,26 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
 
     @Override
     public void startup() {
-        processableExecutors.forEach((processable, executorEntry) -> startupExecutor(processable, executorEntry));
+        lock.lock();
+        try {
+            if (isRunning()) {
+                return;
+            }
 
-        setRunning(true);
+            startupProcessableExecutor(mainProcessingUnitDecomposedQueueThreadPoolEntry);
+            startupProcessableExecutor(mainProcessingUnitListenerThreadPoolEntry);
+
+            // The Filter Processing Unit thread pool should be started as the last.
+            startupProcessableExecutor(filterProcessingUnitListenerThreadPoolEntry);
+
+            setRunning(true);
+        } finally {
+            lock.unlock();
+        }
     }
 
-    private void startupExecutor(Processable processable, ExecutorEntry executorEntry) {
-        int threadCount = executorEntry.getThreadCount();
-
-        ExecutorService executor = /* MoreExecutors.getExitingExecutorService( */createFixedExecutor(processable, threadCount);
-        // EXECUTOR_SHUTDOWN_TIMEOUT, TimeUnit.SECONDS);
-        executorEntry.setExecutor(executor);
-
-        for (int i = 0; i < threadCount; i++) {
-            executorEntry.getFutures().add(executor.submit(processable.createWorker()));
-        }
+    private void startupProcessableExecutor(ProcessableExecutorEntry executorEntry) {
+        executorEntry.getFutures().add(executorEntry.getExecutor().submit(executorEntry.getProcessable().createWorker()));
     }
 
     /**
@@ -155,12 +173,28 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
      */
     @Override
     public void shutdown() {
-        processableExecutors.forEach((processable, executorEntry) -> shutdownExecutor(processable, executorEntry));
-        namedExecutors.forEach((name, executorEntry) -> shutdownExecutor(name, executorEntry));
-        setRunning(false);
+        lock.lock();
+        try {
+            if (!isRunning()) {
+                return;
+            }
+
+            // Stop processable thread pools.
+            shutdownExecutor(filterProcessingUnitListenerThreadPoolEntry, true);
+            shutdownExecutor(mainProcessingUnitListenerThreadPoolEntry, true);
+            shutdownExecutor(mainProcessingUnitDecomposedQueueThreadPoolEntry, true);
+
+            // Stop other thread pools here too.
+            shutdownExecutor(mainProcessingUnitWorkerThreadPoolEntry, false);
+            shutdownExecutor(mainProcessingUnitAsyncEventSetProcessorThreadPoolEntry, false);
+
+            setRunning(false);
+        } finally {
+            lock.unlock();
+        }
     }
 
-    private void shutdownExecutor(Object named, ExecutorEntry executorEntry) {
+    private void shutdownExecutor(ExecutorEntry executorEntry, boolean mayInterruptIfRunning) {
         ExecutorService executor = executorEntry.getExecutor();
 
         if (executor == null) {
@@ -168,22 +202,26 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         }
 
         try {
-            executorEntry.getFutures().forEach(future -> future.cancel(true));
-            Utils.shutdownExecutorService(getEngine(), named, executor);
+            executorEntry.getFutures().forEach(future -> future.cancel(mayInterruptIfRunning));
+            Utils.shutdownExecutorService(getEngine(), executorEntry.getName(), executor);
         } finally {
             executorEntry.clear();
         }
     }
 
     @Override
-    public void addProcessable(Processable processable) {
-        addProcessable(processable, 1);
-
+    public void createFilterProcessingUnitListenerThreadPool(Processable processable, int workers) {
+        filterProcessingUnitListenerThreadPoolEntry = new ProcessableExecutorEntry(createFixedExecutor(processable, workers), processable);
     }
 
     @Override
-    public void addProcessable(Processable processable, int workers) {
-        processableExecutors.put(processable, new ExecutorEntry(workers));
+    public void createMainProcessingUnitListenerThreadPool(Processable processable, int workers) {
+        mainProcessingUnitListenerThreadPoolEntry = new ProcessableExecutorEntry(createFixedExecutor(processable, workers), processable);
+    }
+
+    @Override
+    public void createMainProcessingUnitDecomposedQueueThreadPool(Processable processable) {
+        mainProcessingUnitDecomposedQueueThreadPoolEntry = new ProcessableExecutorEntry(createFixedExecutor(processable, 1), processable);
     }
 
     @Override
@@ -204,52 +242,40 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
 
     protected ExecutorService createFixedExecutor(Object named, int threadCount) {
         return Executors.newFixedThreadPool(threadCount, createThreadFactory(named));
+        // ExecutorService executor = /* MoreExecutors.getExitingExecutorService( */createFixedExecutor(processable, threadCount);
+        // // EXECUTOR_SHUTDOWN_TIMEOUT, TimeUnit.SECONDS);
     }
 
     @Override
-    public ExecutorService addMainProcessingUnitWorkerExecutor() {
-        return addMainProcessingUnitWorkerExecutor("MainProcessingUnit.WorkerExecutor",
-                engine.getConfigurationManager().getMainProcessingUnitThreadCount());
+    public ExecutorService createMainProcessingUnitWorkerThreadPool() {
+        return addMainProcessingUnitWorkerExecutor("MainProcessingUnit.Worker",
+                getEngine().getConfigurationManager().getMainProcessingUnitThreadCount());
     }
 
     protected ExecutorService addMainProcessingUnitWorkerExecutor(String name, int workers) {
-        if (namedExecutors.containsKey(name)) {
-            throw new IllegalArgumentException("Executor named " + name + " already exists.");
-        }
         ExecutorService executor = new ThreadPoolExecutor(workers, workers, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(getEngine().getDefaultParameters().getMainProcessingUnitWorkerExecutorQueueSize()),
                 createThreadFactory(name));
-        namedExecutors.put(name, new ExecutorEntry(workers, executor));
+
+        mainProcessingUnitWorkerThreadPoolEntry = new ExecutorEntry(name, executor);
 
         return executor;
     }
 
     @Override
-    public ExecutorService addAsyncEventSetProcessorExecutor() {
-        return addAsyncEventSetProcessorExecutor("MainProcessingUnit.AsyncEventSetExecutor",
-                engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
+    public ExecutorService createMainProcessingUnitAsyncEventSetProcessorThreadPool() {
+        return addMainProcessingUnitAsyncEventSetProcessorExecutor("MainProcessingUnit.AsyncEventSet",
+                getEngine().getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
     }
 
-    protected ExecutorService addAsyncEventSetProcessorExecutor(String name, int maxThreadCount) {
-        if (namedExecutors.containsKey(name)) {
-            throw new IllegalArgumentException("Executor named " + name + " already exists.");
-        }
+    protected ExecutorService addMainProcessingUnitAsyncEventSetProcessorExecutor(String name, int maxThreadCount) {
         ExecutorService executor = new ThreadPoolExecutor(Utils.calculateInitialDynamicThreadPoolSize(getEngine(), maxThreadCount),
                 maxThreadCount, getEngine().getDefaultParameters().getDynamicThreadPoolKeepAliveTime(), TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(), createThreadFactory(name));
 
-        namedExecutors.put(name, new ExecutorEntry(maxThreadCount, executor));
+        mainProcessingUnitAsyncEventSetProcessorThreadPoolEntry = new ExecutorEntry(name, executor);
 
         return executor;
-    }
-
-    @Override
-    public ExecutorService getExecutor(String name) {
-        ExecutorEntry executorEntry = namedExecutors.get(name);
-        if (executorEntry == null) {
-            throw new IllegalArgumentException("Executor named " + name + " doesn't exist.");
-        }
-        return executorEntry.getExecutor();
     }
 
     public static class WaitRejectedExecutionHandlerPolicy implements RejectedExecutionHandler {

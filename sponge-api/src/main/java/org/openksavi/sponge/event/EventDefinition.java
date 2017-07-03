@@ -83,9 +83,9 @@ public interface EventDefinition {
      * Sends the event to the Input Event Queue at a time specified by the crontab spec.
      *
      * @param crontabSpec crontab spec.
-     * @return cron entry.
+     * @return scheduled event entry.
      */
-    EventCronEntry sendAt(String crontabSpec);
+    EventSchedulerEntry sendAt(String crontabSpec);
 
     /**
      * Returns the event.

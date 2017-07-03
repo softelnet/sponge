@@ -41,17 +41,7 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
      */
     @Override
     public int getScheduledEventCount() {
-        return engine.getEventScheduler().getScheduledEventTasks().size();
-    }
-
-    /**
-     * Returns the number of events scheduled in Cron.
-     *
-     * @return the number of events scheduled in Cron.
-     */
-    @Override
-    public int getCronEventCount() {
-        return engine.getCron().getEntries().size();
+        return getEngine().getEventScheduler().getEntries().size();
     }
 
     /**
@@ -71,7 +61,7 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
      */
     @Override
     public int getPluginCount() {
-        return engine.getPluginManager().getPlugins().size();
+        return getEngine().getPluginManager().getPlugins().size();
     }
 
     private String getQueueSummary(EventQueue queue) {
@@ -87,17 +77,16 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
     public String getSummary() {
         StringBuffer sb = new StringBuffer(512);
 
-        sb.append(getQueueSummary(engine.getEventQueueManager().getInputEventQueue()));
-        sb.append(". " + getQueueSummary(engine.getEventQueueManager().getMainEventQueue()));
+        sb.append(getQueueSummary(getEngine().getEventQueueManager().getInputEventQueue()));
+        sb.append(". " + getQueueSummary(getEngine().getEventQueueManager().getMainEventQueue()));
         sb.append("\n");
-        sb.append("Actions: " + engine.getActions().size());
-        sb.append(". Filters: " + engine.getFilters().size());
-        sb.append(". Triggers: " + engine.getTriggers().size());
-        sb.append(". Rules: " + engine.getRuleGroups().size());
-        sb.append(". Correlators: " + engine.getCorrelatorGroups().size());
+        sb.append("Actions: " + getEngine().getActions().size());
+        sb.append(". Filters: " + getEngine().getFilters().size());
+        sb.append(". Triggers: " + getEngine().getTriggers().size());
+        sb.append(". Rules: " + getEngine().getRuleGroups().size());
+        sb.append(". Correlators: " + getEngine().getCorrelatorGroups().size());
         sb.append("\n");
         sb.append("Event scheduler: scheduled=" + getScheduledEventCount());
-        sb.append(". Cron: entries=" + getCronEventCount());
         sb.append(". Threads: active threads=" + getActiveThreadCount());
         sb.append(". Plugins: plugins=" + getPluginCount());
 

@@ -21,10 +21,8 @@ import java.util.List;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
-import org.openksavi.sponge.engine.event.CronEventGenerator;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.engine.processing.EventSetProcessorDurationStrategy;
-import org.openksavi.sponge.event.EventIdGenerator;
 import org.openksavi.sponge.filter.FilterAdapter;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
@@ -35,18 +33,18 @@ import org.openksavi.sponge.spi.EventQueueProvider;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
-import org.openksavi.sponge.util.Manageable;
 
 /**
  * The engine. This is the main interface of the system. An instance of this interface manages all main components.
  */
-public interface Engine extends Manageable {
+public interface Engine extends EngineModule {
 
     /**
      * Returns this engine name. May be {@code null}.
      *
      * @return this engine name.
      */
+    @Override
     String getName();
 
     /**
@@ -95,13 +93,6 @@ public interface Engine extends Manageable {
      * @return Event Scheduler.
      */
     EventScheduler getEventScheduler();
-
-    /**
-     * Returns Cron.
-     *
-     * @return Cron.
-     */
-    CronEventGenerator getCron();
 
     /**
      * Returns thread pool manager.
@@ -181,13 +172,6 @@ public interface Engine extends Manageable {
      * @return the list of plugins.
      */
     List<Plugin> getPlugins();
-
-    /**
-     * Returns a new global event ID.
-     *
-     * @return a new global event ID.
-     */
-    String newGlobalEventId();
 
     /**
      * Reloads script-based knowledge bases.
@@ -312,12 +296,12 @@ public interface Engine extends Manageable {
      */
     EngineParameters getDefaultParameters();
 
-    /**
-     * Sets an event ID generator.
-     *
-     * @param eventIdGenerator an event ID generator.
-     */
-    void setEventIdGenerator(EventIdGenerator eventIdGenerator);
+    // /**
+    // * Sets an event ID generator.
+    // *
+    // * @param eventIdGenerator an event ID generator.
+    // */
+    // void setEventIdGenerator(EventIdGenerator eventIdGenerator);
 
     /**
      * Sets a configuration file name.

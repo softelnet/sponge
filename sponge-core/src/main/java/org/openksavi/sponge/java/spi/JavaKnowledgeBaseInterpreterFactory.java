@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.spi;
+package org.openksavi.sponge.java.spi;
 
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.java.JavaKnowledgeBaseInterpreter;

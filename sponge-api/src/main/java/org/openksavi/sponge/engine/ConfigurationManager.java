@@ -92,11 +92,11 @@ public interface ConfigurationManager extends EngineModule {
     int getEventQueueCapacity();
 
     /**
-     * Returns the number of threads used by cron.
+     * Returns the number of threads used by the Event Scheduler.
      *
-     * @return the number of threads used by cron.
+     * @return the number of threads used by the Event Scheduler.
      */
-    int getCronThreadCount();
+    int getEventSchedulerThreadCount();
 
     /**
      * Returns the number of threads used by a duration executor.
@@ -170,11 +170,11 @@ public interface ConfigurationManager extends EngineModule {
     void setEventQueueCapacity(int eventQueueCapacity);
 
     /**
-     * Sets cron thread count.
+     * Sets the Event Scheduler thread count.
      *
-     * @param cronThreadCount cron thread count.
+     * @param eventSchedulerThreadCount the Event Scheduler thread count.
      */
-    void setCronThreadCount(int cronThreadCount);
+    void setEventSchedulerThreadCount(int eventSchedulerThreadCount);
 
     /**
      * Sets duration executor thread count.

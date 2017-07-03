@@ -92,8 +92,8 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |The number of threads used by an event set processors duration executor. The default implementation uses these threads to send a control event. In most cases there should be no need to change this parameter, because generating and sending a new event is fast.
 |`1`
 
-|`cronThreadCount`
-|The number of threads used by a cron to generate and send scheduled events. In most cases there should be no need to change this parameter, because generating and sending a new event is fast.
+|`eventSchedulerThreadCount`
+|The number of threads used by the Event Scheduler to generate and send scheduled events. In most cases there should be no need to change this parameter, because generating and sending a new event is fast.
 |`1`
 
 |`eventSetProcessorDefaultSynchronous`
@@ -192,7 +192,7 @@ engine.startup();
 
 Note that you may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.
 
-When an application is about to exit it is recommended to execute `engine.shutdown()` first. It instructs the engine to do some clean up, stop all managed threads, free resources, etc.
+When an application is about to exit it is recommended to execute `engine.shutdown()` first. It instructs the engine to do some clean up, stop all managed threads, free resources, etc. Note that `shutdown` doesn't guarantee that all events sent to the engine will be processed.
 
 .Example of shutting down
 [source,java]

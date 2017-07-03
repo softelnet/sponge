@@ -42,7 +42,6 @@
     <logger name="org.openksavi.sponge.core.rule" level="error" />
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup" level="error" />
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="error" />
-    <logger name="org.openksavi.sponge.core.engine.processing.collisionmap" level="error" />
     <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
     <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="error" />
     <logger name="kb" level="debug" />

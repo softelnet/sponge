@@ -26,19 +26,41 @@ import org.openksavi.sponge.util.Processable;
 public interface ThreadPoolManager extends EngineModule {
 
     /**
-     * Adds a processable.
+     * Creates a new thread pool used by the Filter Processing Unit for listening to the Input Event Queue.
      *
      * @param processable a processable.
+     * @param workers amount of threads.
      */
-    void addProcessable(Processable processable);
+    void createFilterProcessingUnitListenerThreadPool(Processable processable, int workers);
 
     /**
-     * Adds a processable.
+     * Creates a new thread pool used by the Main Processing Unit for listening to the Main Event Queue.
      *
      * @param processable a processable.
-     * @param workers amount of worker threads.
+     * @param workers amount of threads.
      */
-    void addProcessable(Processable processable, int workers);
+    void createMainProcessingUnitListenerThreadPool(Processable processable, int workers);
+
+    /**
+     * Creates a new thread pool used by the Main Processing Unit for listening to the decomposed queue.
+     *
+     * @param processable a processable.
+     */
+    void createMainProcessingUnitDecomposedQueueThreadPool(Processable processable);
+
+    /**
+     * Creates a new thread pool used by the Main Processing Unit for worker threads.
+     *
+     * @return a thread pool.
+     */
+    ExecutorService createMainProcessingUnitWorkerThreadPool();
+
+    /**
+     * Creates a new thread pool used by the Main Processing Unit for asynchronous processing of event set processors.
+     *
+     * @return a thread pool.
+     */
+    ExecutorService createMainProcessingUnitAsyncEventSetProcessorThreadPool();
 
     /**
      * Pauses this thread pool manager.
@@ -49,26 +71,4 @@ public interface ThreadPoolManager extends EngineModule {
      * Resumes this thread pool manager.
      */
     void resume();
-
-    /**
-     * Adds an executor.
-     *
-     * @return executor.
-     */
-    ExecutorService addMainProcessingUnitWorkerExecutor();
-
-    /**
-     * Adds an executor.
-     *
-     * @return executor.
-     */
-    ExecutorService addAsyncEventSetProcessorExecutor();
-
-    /**
-     * Returns an executor.
-     *
-     * @param name executor name.
-     * @return executor.
-     */
-    ExecutorService getExecutor(String name);
 }

@@ -23,7 +23,7 @@ import org.openksavi.sponge.event.Event;
  */
 public abstract class NashornFilter extends org.openksavi.sponge.core.filter.BaseFilter implements NashornScriptObject {
 
-    /** JavaScript processor used to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
+    /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;
 
     @Override

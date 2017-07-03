@@ -22,10 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.util.EventsLog;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.java.JavaKnowledgeBase;
 import org.openksavi.sponge.rule.EventMode;
+import org.openksavi.sponge.test.util.EventsLog;
 
 public class TestKnowledgeBase extends JavaKnowledgeBase {
 

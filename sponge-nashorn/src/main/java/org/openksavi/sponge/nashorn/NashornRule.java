@@ -34,7 +34,7 @@ public abstract class NashornRule extends org.openksavi.sponge.core.rule.BaseRul
     private static final Function<? super ScriptObjectMirror, ? extends EventCondition> MAPPER =
             function -> new NashornScriptKnowledgeBaseEventCondition(function);
 
-    /** JavaScript processor used to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
+    /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;
 
     @Override

@@ -66,7 +66,7 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
                     return false;
                 }
             } catch (Exception e) {
-                engine.handleError(filterContext, e);
+                getEngine().handleError(filterContext, e);
             }
         }
 

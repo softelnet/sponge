@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.util;
+package org.openksavi.sponge.test.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

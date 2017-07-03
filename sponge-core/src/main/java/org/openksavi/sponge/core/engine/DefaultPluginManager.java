@@ -137,10 +137,11 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
         logger.debug("Adding plugin '{}'.", name);
 
         pluginMap.put(name, plugin);
-        plugin.setEngine(engine);
+        plugin.setEngine(getEngine());
 
         if (isRunning()) {
-            initAndStartupPlugin(plugin);
+            initPlugin(plugin);
+            plugin.startup();
             definePluginVariable(name, plugin);
         }
     }
@@ -237,8 +238,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     protected Plugin loadPlugin(KnowledgeBasePluginStub pluginStub) {
         try {
             KnowledgeBase knowledgeBase = pluginStub.getKnowledgeBaseName() != null
-                    ? engine.getKnowledgeBaseManager().getKnowledgeBase(pluginStub.getKnowledgeBaseName())
-                    : engine.getKnowledgeBaseManager().getDefaultKnowledgeBase();
+                    ? getEngine().getKnowledgeBaseManager().getKnowledgeBase(pluginStub.getKnowledgeBaseName())
+                    : getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase();
 
             Plugin plugin = knowledgeBase.getInterpreter().createPluginInstance(pluginStub.getPluginClassName());
             if (pluginStub.getName() != null) {
@@ -267,33 +268,37 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             return;
         }
 
-        initAndStartupPlugins();
+        initPlugins();
+        startupPlugins();
         definePluginVariables();
 
         setRunning(true);
     }
 
-    protected void initAndStartupPlugins() {
-        pluginMap.values().forEach(plugin -> initAndStartupPlugin(plugin));
+    public void startupPlugins() {
+        pluginMap.values().forEach(Plugin::startup);
     }
 
-    protected void initAndStartupPlugin(Plugin plugin) {
+    protected void initPlugins() {
+        pluginMap.values().forEach(plugin -> initPlugin(plugin));
+    }
+
+    protected void initPlugin(Plugin plugin) {
         if (plugin instanceof KnowledgeBasePluginStub) {
             KnowledgeBasePluginStub stub = (KnowledgeBasePluginStub) plugin;
             plugin = loadPlugin(stub);
             replacePlugin(stub, plugin);
         } else if (plugin.getKnowledgeBase() == null) {
-            plugin.setKnowledgeBase(engine.getKnowledgeBaseManager().getDefaultKnowledgeBase());
+            plugin.setKnowledgeBase(getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase());
         }
 
         plugin.init();
-        plugin.startup();
     }
 
     /**
      * Defines plugin variables.
      */
-    protected void definePluginVariables() {
+    public void definePluginVariables() {
         pluginMap.values().forEach(plugin -> definePluginVariable(plugin.getName(), plugin));
     }
 

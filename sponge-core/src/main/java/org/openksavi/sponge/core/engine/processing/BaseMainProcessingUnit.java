@@ -83,9 +83,9 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
         handlers.values().forEach(handler -> handler.startup());
     }
 
-    protected void startupGroupExecutor() {
+    protected void createMainProcessingUnitAsyncEventSetProcessorThreadPool() {
         // A thread pool for processing asynchronously event set processor groups internally.
-        asyncEventSetProcessorExecutor = engine.getThreadPoolManager().addAsyncEventSetProcessorExecutor();
+        asyncEventSetProcessorExecutor = getEngine().getThreadPoolManager().createMainProcessingUnitAsyncEventSetProcessorThreadPool();
     }
 
     /**

@@ -50,7 +50,7 @@ In order to process an event there must be an event processor listening to event
 * Creating an event processor.
 * Enabling the event processor automatically or manually (by invoking a proper `EPS.enable*()` method).
 * Creating a new event instance and sending it to the system (e.g. `EPS.event("alarm").set("location", "Building 1").send()`.
-* The event goes directly to the Input Queue or is scheduled to be inserted to the Input Queue later. Scheduling is performed by Event Scheduler (events which are executed periodically or after a delay) or Cron (events which are to be processed at precisely given time).
+* The event goes directly to the Input Queue or is scheduled to be inserted to the Input Queue later. Scheduling is performed by the Event Scheduler.
 * From this queue the events are taken by the Filter Processing Unit. The list of filters defined for this event type is taken and then each of them is invoked. If all the filters accept the event, it will be put to the main queue in which it awaits to be processed by other event processors.
 * Then the event is collected by the Main Processing Unit. The list of event processors listening to this type of events is selected and then each of them is given the event to process.
 * After processing by the Main Processing Unit the event goes to the output queue if and only if it hasn't been processed (i.e. listened to) by any of event processors.
@@ -128,14 +128,14 @@ Types of processors:
 ** *Triggers* -  event processors that execute a specified code when an event happens.
 ** *Event set processors* - event processors that process sets of events.
 *** *Rules* - event set processors that detect ordered sequences of events.
-*** *Correlators* - event set processors that detect any set of events and could be also used to implement any complex event processing that isn't provided by filters, triggers or rules.
-* *Actions* - processors that are used to provide functionality similar to functions. They don't listen to events.
+*** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
+* *Actions* - processors that provide functionality similar to functions. They don't listen to events.
 
 include::sponge-user-guide-event-processors.adoc[leveloffset=+2]
 
 
 === Actions
-Actions are used to provide functionality that is to be used in many knowledge bases that are written in different languages.
+Actions provide functionality that is to be used in many knowledge bases that are written in different languages.
 
 Every action should implement the abstract `run` method:
 
@@ -362,8 +362,8 @@ class ScriptPlugin(Plugin):
 
 . Create the plugin class instance. The class must have a no-parameter constructor.
 . Configure the plugin by invoking the method `configure()`.
-. Initialize the plugin by invoking the method `onInit()`.
-. Start up the plugin by invoking the method `onStartup()`.
+. Initialize the plugin by invoking the method `init()`.
+. Invoke the callback method `onStartup()` when starting the engine.
 . After starting all plugins the methods `onStartup()` defined in all knowledge bases are invoked.
 . In case of reloading the knowledge base, the method `onBeforeReload()` of each plugin is invoked before the method `onBeforeReload()` of  knowledge bases. Invoking of the methods `onAfterReload()` goes in reverse (first the methods `onAfterReload()` of all knowledge bases and then the methods defined in plugins).
 . Before {sponge} shuts down, methods `onShutdown()` of all knowledge bases are invoked and then a method `onShutdown()` is invoked for each plugin.

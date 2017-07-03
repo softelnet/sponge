@@ -41,5 +41,4 @@ public class PriorityEventQueueComparator implements Comparator<Event>, Serializ
         // ID should be lower for the more important event.
         return EventId.compare(event1.getId(), event2.getId());
     }
-
 }

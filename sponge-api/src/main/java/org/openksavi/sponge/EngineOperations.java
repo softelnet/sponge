@@ -21,7 +21,6 @@ import java.util.function.Supplier;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
-import org.openksavi.sponge.event.EventCronEntry;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
@@ -154,34 +153,26 @@ public interface EngineOperations {
      *
      * @param event event.
      * @param crontabSpec crontab spec.
-     * @return cron entry.
+     * @return scheduled event entry.
      */
-    EventCronEntry sendAt(final Event event, String crontabSpec);
+    EventSchedulerEntry sendAt(final Event event, String crontabSpec);
 
     /**
      * Sends a new event to the Input Event Queue at a time specified by the crontab spec.
      *
      * @param name event name.
      * @param crontabSpec crontab spec.
-     * @return cron entry.
+     * @return scheduled event entry.
      */
-    EventCronEntry sendAt(String name, String crontabSpec);
+    EventSchedulerEntry sendAt(String name, String crontabSpec);
 
     /**
-     * Removes event from Event Scheduler.
+     * Removes scheduled event.
      *
      * @param entry scheduled event entry.
      * @return informs whether the specified event has been scheduled.
      */
     boolean removeEvent(EventSchedulerEntry entry);
-
-    /**
-     * Removes event cron entry.
-     *
-     * @param entry cron entry.
-     * @return informs whether the specified event has been scheduled.
-     */
-    boolean removeEvent(EventCronEntry entry);
 
     /**
      * Returns the plugin that has the specified name or {@code null} if there is no such plugin.

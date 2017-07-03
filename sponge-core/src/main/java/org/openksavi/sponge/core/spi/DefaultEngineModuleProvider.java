@@ -25,8 +25,7 @@ import org.openksavi.sponge.core.engine.DefaultProcessingUnitManager;
 import org.openksavi.sponge.core.engine.DefaultProcessorManager;
 import org.openksavi.sponge.core.engine.DefaultStatisticsManager;
 import org.openksavi.sponge.core.engine.DefaultThreadPoolManager;
-import org.openksavi.sponge.core.engine.event.QuartzCronEventGenerator;
-import org.openksavi.sponge.core.engine.event.TimerEventScheduler;
+import org.openksavi.sponge.core.engine.event.QuartzEventScheduler;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.Engine;
@@ -37,7 +36,6 @@ import org.openksavi.sponge.engine.ProcessingUnitManager;
 import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPoolManager;
-import org.openksavi.sponge.engine.event.CronEventGenerator;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.spi.EngineModuleProvider;
@@ -94,11 +92,6 @@ public class DefaultEngineModuleProvider implements EngineModuleProvider {
 
     @Override
     public EventScheduler createEventScheduler(Engine engine, EventQueue queue) {
-        return new TimerEventScheduler(engine, queue);
-    }
-
-    @Override
-    public CronEventGenerator createCronEventGenerator(Engine engine, EventQueue queue) {
-        return new QuartzCronEventGenerator(engine, queue);
+        return new QuartzEventScheduler(engine, queue);
     }
 }

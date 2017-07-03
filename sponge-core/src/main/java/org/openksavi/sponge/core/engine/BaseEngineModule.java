@@ -27,7 +27,7 @@ import org.openksavi.sponge.engine.EngineModule;
 public abstract class BaseEngineModule implements EngineModule {
 
     /** The engine. */
-    protected Engine engine;
+    private Engine engine;
 
     /** Name. */
     private String name;
@@ -58,7 +58,7 @@ public abstract class BaseEngineModule implements EngineModule {
     /**
      * Creates a new engine module.
      */
-    public BaseEngineModule() {
+    protected BaseEngineModule() {
     }
 
     /**

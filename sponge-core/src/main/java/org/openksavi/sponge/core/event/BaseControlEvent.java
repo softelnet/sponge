@@ -26,8 +26,11 @@ public abstract class BaseControlEvent extends BaseEvent implements ControlEvent
 
     private static final long serialVersionUID = 3385700335341046972L;
 
+    /** Default control event priority. Equals to {@code 10}. */
+    public static final int DEFAULT_CONTROL_EVENT_PRIORITY = 10;
+
     /** Event priority. */
-    private int priority = DEFAULT_PRIORITY;
+    private int priority = DEFAULT_CONTROL_EVENT_PRIORITY;
 
     protected BaseControlEvent(String name, EventClonePolicy clonePolicy) {
         super(name, clonePolicy);

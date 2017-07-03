@@ -43,7 +43,7 @@ public final class ConfigurationConstants {
 
     public static final String TAG_ENGINE_EVENT_QUEUE_CAPACITY = "eventQueueCapacity";
 
-    public static final String TAG_ENGINE_CRON_THREAD_COUNT = "cronThreadCount";
+    public static final String TAG_ENGINE_EVENT_SCHEDULER_THREAD_COUNT = "eventSchedulerThreadCount";
 
     public static final String TAG_ENGINE_DURATION_THREAD_COUNT = "durationThreadCount";
 
