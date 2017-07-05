@@ -153,24 +153,16 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
      * Starts up this managed entity.
      */
     @Override
-    public void startup() {
-        if (isRunning()) {
-            return;
-        }
-
+    public void doStartup() {
         onInit();
         onLoad();
-
-        setRunning(true);
     }
 
     /**
      * Shuts down this managed entity.
      */
     @Override
-    public void shutdown() {
-        setRunning(false);
-
+    public void doShutdown() {
         onClear();
     }
 

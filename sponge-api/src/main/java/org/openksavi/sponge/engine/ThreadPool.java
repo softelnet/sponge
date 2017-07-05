@@ -14,37 +14,40 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.util;
+package org.openksavi.sponge.engine;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
- * Represents an entity that can be managed.
+ * A thread pool.
  */
-public interface Manageable {
+public interface ThreadPool {
 
     /**
-     * Starts up this managed entity.
-     */
-    void startup();
-
-    /**
-     * Shuts down this managed entity.
-     */
-    void shutdown();
-
-    boolean isStarting();
-
-    /**
-     * Informs whether this managed entity is running.
+     * Returns the name of this thread pool.
      *
-     * @return if this managed entity is running.
+     * @return the name.
      */
-    boolean isRunning();
+    String getName();
 
-    boolean isNew();
+    /**
+     * Returns the executor.
+     *
+     * @return the executor.
+     */
+    ExecutorService getExecutor();
 
-    boolean isStopping();
+    /**
+     * Returns the futures.
+     *
+     * @return the futures.
+     */
+    List<Future<?>> getFutures();
 
-    boolean isTerminated();
-
-    boolean isFailed();
+    /**
+     * Clears the futures.
+     */
+    void clear();
 }

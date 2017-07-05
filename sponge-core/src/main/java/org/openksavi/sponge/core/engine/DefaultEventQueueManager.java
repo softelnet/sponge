@@ -51,27 +51,19 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
      * Starts up this managed entity.
      */
     @Override
-    public void startup() {
-        if (isRunning()) {
-            return;
-        }
-
+    public void doStartup() {
         getEventQueues().forEach(queue -> queue.setEngine(getEngine()));
 
         outputEventQueue.startup();
         mainEventQueue.startup();
         inputEventQueue.startup();
-
-        setRunning(true);
     }
 
     /**
      * Shuts down this managed entity.
      */
     @Override
-    public void shutdown() {
-        setRunning(false);
-
+    public void doShutdown() {
         inputEventQueue.shutdown();
         mainEventQueue.shutdown();
         outputEventQueue.shutdown();

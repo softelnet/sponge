@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,9 +48,6 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
 
     /** Map of handlers. */
     protected Map<ProcessorType, MainProcessingUnitHandler> handlers = Collections.synchronizedMap(new LinkedHashMap<>());
-
-    /** Thread pool for asynchronous processing of event set processor groups. */
-    protected ExecutorService asyncEventSetProcessorExecutor;
 
     /**
      * Creates a new main processing unit.
@@ -83,22 +79,7 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
         handlers.values().forEach(handler -> handler.startup());
     }
 
-    protected void createMainProcessingUnitAsyncEventSetProcessorThreadPool() {
-        // A thread pool for processing asynchronously event set processor groups internally.
-        asyncEventSetProcessorExecutor = getEngine().getThreadPoolManager().createMainProcessingUnitAsyncEventSetProcessorThreadPool();
-    }
-
-    /**
-     * Shuts down this managed entity.
-     */
-    @Override
-    public void shutdown() {
-        if (!isRunning()) {
-            return;
-        }
-
-        setRunning(false);
-
+    protected void shutdownHandlers() {
         handlers.values().forEach(handler -> handler.shutdown());
     }
 
@@ -139,9 +120,7 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
         return handler;
     }
 
-    public Executor getAsyncEventSetProcessorExecutor() {
-        return asyncEventSetProcessorExecutor;
-    }
+    public abstract Executor getAsyncEventSetProcessorExecutor();
 
     public Map<ProcessorType, MainProcessingUnitHandler> getHandlers() {
         return handlers;

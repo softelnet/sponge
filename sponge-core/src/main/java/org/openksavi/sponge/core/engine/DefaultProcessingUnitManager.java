@@ -62,21 +62,13 @@ public class DefaultProcessingUnitManager extends BaseEngineModule implements Pr
     }
 
     @Override
-    public void startup() {
+    public void doStartup() {
         mainProcessingUnit.startup();
         filterProcessingUnit.startup();
-
-        setRunning(true);
     }
 
     @Override
-    public void shutdown() {
-        if (!isRunning()) {
-            return;
-        }
-
-        setRunning(false);
-
+    public void doShutdown() {
         filterProcessingUnit.shutdown();
         mainProcessingUnit.shutdown();
     }

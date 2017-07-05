@@ -77,7 +77,7 @@ public class QuartzEventScheduler extends BaseEventScheduler {
      * Starts up this event scheduler.
      */
     @Override
-    public void startup() {
+    public void doStartup() {
         try {
             Properties props = new Properties();
             props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, getName());
@@ -99,7 +99,7 @@ public class QuartzEventScheduler extends BaseEventScheduler {
      * Shuts down this event scheduler.
      */
     @Override
-    public void shutdown() {
+    public void doShutdown() {
         if (scheduler != null) {
             try {
                 scheduler.shutdown();

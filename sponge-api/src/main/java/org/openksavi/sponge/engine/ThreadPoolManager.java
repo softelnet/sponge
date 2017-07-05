@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge.engine;
 
-import java.util.concurrent.ExecutorService;
-
+import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
+import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 import org.openksavi.sponge.util.Processable;
 
 /**
@@ -31,7 +31,7 @@ public interface ThreadPoolManager extends EngineModule {
      * @param processable a processable.
      * @param workers amount of threads.
      */
-    void createFilterProcessingUnitListenerThreadPool(Processable processable, int workers);
+    ProcessableThreadPool createFilterProcessingUnitListenerThreadPool(FilterProcessingUnit filterProcessingUnit);
 
     /**
      * Creates a new thread pool used by the Main Processing Unit for listening to the Main Event Queue.
@@ -39,36 +39,48 @@ public interface ThreadPoolManager extends EngineModule {
      * @param processable a processable.
      * @param workers amount of threads.
      */
-    void createMainProcessingUnitListenerThreadPool(Processable processable, int workers);
+    ProcessableThreadPool createMainProcessingUnitListenerThreadPool(MainProcessingUnit mainProcessingUnit);
 
     /**
      * Creates a new thread pool used by the Main Processing Unit for listening to the decomposed queue.
      *
      * @param processable a processable.
      */
-    void createMainProcessingUnitDecomposedQueueThreadPool(Processable processable);
+    ProcessableThreadPool createMainProcessingUnitDecomposedQueueThreadPool(Processable processable);
 
     /**
      * Creates a new thread pool used by the Main Processing Unit for worker threads.
      *
      * @return a thread pool.
      */
-    ExecutorService createMainProcessingUnitWorkerThreadPool();
+    ThreadPool createMainProcessingUnitWorkerThreadPool();
 
     /**
      * Creates a new thread pool used by the Main Processing Unit for asynchronous processing of event set processors.
      *
      * @return a thread pool.
      */
-    ExecutorService createMainProcessingUnitAsyncEventSetProcessorThreadPool();
+    ThreadPool createMainProcessingUnitAsyncEventSetProcessorThreadPool();
 
     /**
-     * Pauses this thread pool manager.
+     * Creates a new thread pool used by the Main Processing Unit for event set processors duration.
+     *
+     * @return a thread pool.
      */
-    void pause();
+    ThreadPool createMainProcessingUnitEventSetProcessorDurationThreadPool();
 
     /**
-     * Resumes this thread pool manager.
+     * Starts up a processable thread pool.
+     *
+     * @param threadPool the thread pool.
      */
-    void resume();
+    void startupProcessableThreadPool(ProcessableThreadPool threadPool);
+
+    /**
+     * Shuts down a thread pool.
+     *
+     * @param threadPool the thread pool.
+     * @param mayInterruptIfRunning allow to interrupt.
+     */
+    void shutdownThreadPool(ThreadPool threadPool, boolean mayInterruptIfRunning);
 }

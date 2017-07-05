@@ -45,8 +45,8 @@ public class StandaloneEngine extends BaseEngine implements ApplicationContextAw
     }
 
     @Override
-    public void startup() {
-        super.startup();
+    public void doStartup() {
+        super.doStartup();
 
         if (interactiveMode != null) {
             interactiveMode.loop();

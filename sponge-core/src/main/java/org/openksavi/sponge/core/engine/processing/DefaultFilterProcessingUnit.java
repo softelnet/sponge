@@ -19,6 +19,7 @@ package org.openksavi.sponge.core.engine.processing;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
 import org.openksavi.sponge.event.Event;
@@ -30,6 +31,9 @@ import org.openksavi.sponge.util.Processable;
  */
 public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapter> implements FilterProcessingUnit {
 
+    /** The thread pool used by the Filter Processing Unit for listening to the Input Event Queue. */
+    protected ProcessableThreadPool filterProcessingUnitListenerThreadPoolEntry;
+
     /**
      * Creates a new Filter Processing Unit.
      *
@@ -40,6 +44,17 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
      */
     public DefaultFilterProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
+    }
+
+    @Override
+    public void doStartup() {
+        filterProcessingUnitListenerThreadPoolEntry = getEngine().getThreadPoolManager().createFilterProcessingUnitListenerThreadPool(this);
+        getEngine().getThreadPoolManager().startupProcessableThreadPool(filterProcessingUnitListenerThreadPoolEntry);
+    }
+
+    @Override
+    public void doShutdown() {
+        getEngine().getThreadPoolManager().shutdownThreadPool(filterProcessingUnitListenerThreadPoolEntry, true);
     }
 
     /**

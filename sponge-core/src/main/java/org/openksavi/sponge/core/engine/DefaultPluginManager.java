@@ -263,16 +263,10 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      * Starts up plugins.
      */
     @Override
-    public void startup() {
-        if (isRunning()) {
-            return;
-        }
-
+    public void doStartup() {
         initPlugins();
         startupPlugins();
         definePluginVariables();
-
-        setRunning(true);
     }
 
     public void startupPlugins() {
@@ -316,13 +310,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      * Shuts down plugins.
      */
     @Override
-    public void shutdown() {
-        if (!isRunning()) {
-            return;
-        }
-
-        setRunning(false);
-
+    public void doShutdown() {
         pluginMap.values().forEach(plugin -> plugin.shutdown());
     }
 

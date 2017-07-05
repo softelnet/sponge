@@ -20,21 +20,18 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.ProcessorAdapter;
-import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.event.Event;
 
@@ -42,7 +39,7 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
         T extends EventSetProcessorAdapter<?>> extends BaseMainProcessingUnitHandler
         implements EventSetProcessorMainProcessingUnitHandler<G, T> {
 
-    private ScheduledExecutorService executorService;
+    private ThreadPool durationThreadPool;
 
     private Map<T, EventSetProcessorDurationTask<T>> durationTasks = Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -52,17 +49,12 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
         super(type, processingUnit);
     }
 
-    private String getName() {
-        return getType().getName() + "-duration";
-    }
-
     @Override
     public void startup() {
         lock.lock();
         try {
-            executorService =
-                    Executors.newScheduledThreadPool(getProcessingUnit().getEngine().getConfigurationManager().getDurationThreadCount(),
-                            new BasicThreadFactory.Builder().namingPattern(getName() + "-%d").build());
+            durationThreadPool =
+                    getProcessingUnit().getEngine().getThreadPoolManager().createMainProcessingUnitEventSetProcessorDurationThreadPool();
         } finally {
             lock.unlock();
         }
@@ -72,11 +64,11 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
     public void shutdown() {
         lock.lock();
         try {
-            if (executorService != null) {
+            if (durationThreadPool != null) {
                 durationTasks.values().stream().filter(task -> task.getFuture() != null).forEach(task -> task.getFuture().cancel(false));
-                Utils.shutdownExecutorService(getProcessingUnit().getEngine(), getName(), executorService);
+                getProcessingUnit().getEngine().getThreadPoolManager().shutdownThreadPool(durationThreadPool, false);
 
-                executorService = null;
+                durationThreadPool = null;
             }
         } finally {
             lock.unlock();
@@ -96,7 +88,8 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
             if (adapter.hasDuration()) {
                 EventSetProcessorDurationTask<T> task = new EventSetProcessorDurationTask<>(adapter);
                 durationTasks.put(adapter, task);
-                ScheduledFuture<?> future = executorService.schedule(task, adapter.getDuration().toMillis(), TimeUnit.MILLISECONDS);
+                ScheduledFuture<?> future = ((ScheduledExecutorService) durationThreadPool.getExecutor()).schedule(task,
+                        adapter.getDuration().toMillis(), TimeUnit.MILLISECONDS);
                 task.setFuture(future);
             }
         } finally {

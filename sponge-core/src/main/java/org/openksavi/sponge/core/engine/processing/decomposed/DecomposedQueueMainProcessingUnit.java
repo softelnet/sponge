@@ -18,7 +18,7 @@ package org.openksavi.sponge.core.engine.processing.decomposed;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,9 +31,12 @@ import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.core.engine.processing.BaseMainProcessingUnit;
 import org.openksavi.sponge.core.event.ProcessorControlEvent;
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.QueueFullException;
+import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
@@ -44,11 +47,20 @@ import org.openksavi.sponge.util.Processable;
  */
 public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
 
+    /** The thread pool used by the Main Processing Unit for listening to the Main Event Queue. */
+    protected ProcessableThreadPool listenerThreadPool;
+
+    /** The thread pool used by the Main Processing Unit for listening to the decomposed queue. */
+    protected ProcessableThreadPool decomposedQueueThreadPool;
+
+    /** The thread pool used by the Main Processing Unit for worker threads. */
+    protected ThreadPool workerThreadPool;
+
+    /** The thread pool used by the Main Processing Unit for asynchronous processing of event set processors. */
+    protected ThreadPool asyncEventSetProcessorThreadPool;
+
     /** Decomposed custom queue of entries (trigger adapter or event set processor group adapter, event). */
     private DecomposedQueue<EventProcessorAdapter<?>> decomposedQueue;
-
-    /** Thread pool for processing an event by a single trigger or a single event set processor group. */
-    private ExecutorService workerExecutor;
 
     /**
      * Creates a new main processing unit.
@@ -74,21 +86,30 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
      * Starts up this managed entity.
      */
     @Override
-    public void startup() {
-        if (isRunning()) {
-            return;
-        }
-
+    public void doStartup() {
         startupHandlers();
 
-        createMainProcessingUnitAsyncEventSetProcessorThreadPool();
-
-        workerExecutor = getEngine().getThreadPoolManager().createMainProcessingUnitWorkerThreadPool();
+        asyncEventSetProcessorThreadPool = getEngine().getThreadPoolManager().createMainProcessingUnitAsyncEventSetProcessorThreadPool();
+        workerThreadPool = getEngine().getThreadPoolManager().createMainProcessingUnitWorkerThreadPool();
 
         // One thread for reading from the decomposed queue.
-        getEngine().getThreadPoolManager().createMainProcessingUnitDecomposedQueueThreadPool(new DecomposedQueueReaderProcessable());
+        decomposedQueueThreadPool = getEngine().getThreadPoolManager()
+                .createMainProcessingUnitDecomposedQueueThreadPool(new DecomposedQueueReaderProcessable());
+        listenerThreadPool = getEngine().getThreadPoolManager().createMainProcessingUnitListenerThreadPool(this);
 
-        setRunning(true);
+        getEngine().getThreadPoolManager().startupProcessableThreadPool(decomposedQueueThreadPool);
+        getEngine().getThreadPoolManager().startupProcessableThreadPool(listenerThreadPool);
+    }
+
+    @Override
+    public void doShutdown() {
+        getEngine().getThreadPoolManager().shutdownThreadPool(listenerThreadPool, true);
+        getEngine().getThreadPoolManager().shutdownThreadPool(decomposedQueueThreadPool, true);
+
+        getEngine().getThreadPoolManager().shutdownThreadPool(workerThreadPool, false);
+        getEngine().getThreadPoolManager().shutdownThreadPool(asyncEventSetProcessorThreadPool, false);
+
+        shutdownHandlers();
     }
 
     /**
@@ -197,7 +218,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
         @Override
         public boolean runIteration() throws InterruptedException {
             try {
-                while (isRunning()) {
+                while (Utils.isNewOrStartingOrRunning(getState())) {
                     final Pair<EventProcessorAdapter<?>, Event> entry = decomposedQueue.get(GET_ITERATION_TIMEOUT, TimeUnit.MILLISECONDS);
                     if (entry != null) {
                         final EventProcessorAdapter<?> adapter = entry.getLeft();
@@ -207,8 +228,8 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                         while (!hasBeenRun) {
                             try {
                                 // Process an event by the adapter asynchronously in a thread from a thread pool.
-                                CompletableFuture.runAsync(() -> getHandler(adapter.getType()).processEvent(adapter, event), workerExecutor)
-                                        .handle((result, exception) -> {
+                                CompletableFuture.runAsync(() -> getHandler(adapter.getType()).processEvent(adapter, event),
+                                        workerThreadPool.getExecutor()).handle((result, exception) -> {
                                             decomposedQueue.release(entry);
                                             return null;
                                         });
@@ -236,6 +257,11 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                 return true;
             }
         }
+    }
+
+    @Override
+    public Executor getAsyncEventSetProcessorExecutor() {
+        return asyncEventSetProcessorThreadPool.getExecutor();
     }
 
     @Override

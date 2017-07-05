@@ -16,7 +16,9 @@
 
 package org.openksavi.sponge.core.engine;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.google.common.util.concurrent.AbstractIdleService;
+import com.google.common.util.concurrent.Service;
+import com.google.common.util.concurrent.Service.State;
 
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EngineModule;
@@ -32,8 +34,21 @@ public abstract class BaseEngineModule implements EngineModule {
     /** Name. */
     private String name;
 
-    /** If this managed entity is running. */
-    private AtomicBoolean running = new AtomicBoolean(false);
+    /** Guava service. */
+    private Service service = new EngineModuleService();
+
+    public class EngineModuleService extends AbstractIdleService {
+
+        @Override
+        protected void startUp() throws Exception {
+            doStartup();
+        }
+
+        @Override
+        protected void shutDown() throws Exception {
+            doShutdown();
+        }
+    }
 
     /**
      * Creates a new engine module.
@@ -101,20 +116,46 @@ public abstract class BaseEngineModule implements EngineModule {
         this.name = name;
     }
 
+    protected void doStartup() {
+        //
+    }
+
+    protected void doShutdown() {
+        //
+    }
+
     /**
      * Starts up this managed entity.
      */
     @Override
-    public void startup() {
-        setRunning(true);
+    public final void startup() {
+        if (isStarting() || isRunning()) {
+            return;
+        }
+
+        service.startAsync().awaitRunning();
     }
 
     /**
      * Shuts down this managed entity.
      */
     @Override
-    public void shutdown() {
-        setRunning(false);
+    public final void shutdown() {
+        if (isStopping() || isTerminated()) {
+            return;
+        }
+
+        service.stopAsync().awaitTerminated();
+    }
+
+    @Override
+    public final boolean isNew() {
+        return service.state() == State.NEW;
+    }
+
+    @Override
+    public final boolean isStarting() {
+        return service.state() == State.STARTING;
     }
 
     /**
@@ -123,12 +164,31 @@ public abstract class BaseEngineModule implements EngineModule {
      * @return if this managed entity is running.
      */
     @Override
-    public boolean isRunning() {
-        return running.get();
+    public final boolean isRunning() {
+        return service.isRunning();
     }
 
-    protected void setRunning(boolean running) {
-        this.running.set(running);
+    @Override
+    public final boolean isStopping() {
+        return service.state() == State.STOPPING;
+    }
+
+    @Override
+    public final boolean isTerminated() {
+        return service.state() == State.TERMINATED;
+    }
+
+    @Override
+    public final boolean isFailed() {
+        return service.state() == State.FAILED;
+    }
+
+    public State getState() {
+        return service.state();
+    }
+
+    public Service getService() {
+        return service;
     }
 
     @Override

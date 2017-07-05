@@ -139,14 +139,14 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
 
         synchronized (getComponent()) {
             if (managed != null && managed) {
-                if (!engine.isRunning()) {
+                if (!(engine.isStarting() || engine.isRunning())) {
                     engine.startup();
                     autoStarted = true;
                 }
             }
 
-            if (!engine.isRunning()) {
-                throw new SpongeException("Sponge engine is not running");
+            if (!(engine.isStarting() || engine.isRunning())) {
+                throw new SpongeException("Sponge engine is not starting or running");
             }
 
             configureEngine();

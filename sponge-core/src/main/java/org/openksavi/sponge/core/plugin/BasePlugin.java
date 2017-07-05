@@ -99,25 +99,15 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
      * Starts up this managed entity.
      */
     @Override
-    public final void startup() {
-        if (isRunning()) {
-            return;
-        }
-
+    public final void doStartup() {
         onStartup();
-        setRunning(true);
     }
 
     /**
      * Shuts down this managed entity.
      */
     @Override
-    public final void shutdown() {
-        if (!isRunning()) {
-            return;
-        }
-
-        setRunning(false);
+    public final void doShutdown() {
         onShutdown();
     }
 

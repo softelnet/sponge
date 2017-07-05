@@ -304,13 +304,9 @@ public class BaseEngine extends BaseEngineModule implements Engine {
      * Starts up the engine.
      */
     @Override
-    public void startup() {
+    public void doStartup() {
         lock.lock();
         try {
-            if (isRunning()) {
-                return;
-            }
-
             logger.info("Starting up {}", getDescription());
 
             init();
@@ -336,27 +332,20 @@ public class BaseEngine extends BaseEngineModule implements Engine {
                 // Invoke configure, init and invoke onStartup for each plugin.
                 pluginManager.startup();
 
-                setRunning(true);
-
                 // Invoke OnStartup listeners.
                 onStartupListeners.forEach(listener -> listener.onStartup());
 
                 // Invoke onStartup for each knowledge base.
                 knowledgeBaseManager.onStartup();
 
-                // Start Main Processing Unit internal managed thread pools. The Filter Processing Unit uses only queue listener thread
-                // that will be stared later.
-                processingUnitManager.startup();
-
-                // Start Thread pool Manager managed thread pools, i.e. event queues listener threads and Main Processing Unit
-                // decomposed queue thread. Note that a Filter Processing Unit thread will be started as the last, because
-                // it listens directly to the Input Event Queue and in fact starts all processing.
+                // Starts Thread Pool Manager only. Note that thread pools are not started here yet.
                 threadPoolManager.startup();
+
+                // Start Main Processing Unit and Filter Processing Unit thread pools. Note that the Filter Processing Unit thread
+                // will be started as the last, because it listens directly to the Input Event Queue and in fact starts all processing.
+                processingUnitManager.startup();
             } catch (Throwable e) {
-                setRunning(false);
-
                 safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
-
                 throw Utils.wrapException("startup", e);
             }
         } finally {
@@ -387,20 +376,15 @@ public class BaseEngine extends BaseEngineModule implements Engine {
      * Shuts down the engine.
      */
     @Override
-    public void shutdown() {
+    public void doShutdown() {
         lock.lock();
         try {
-            if (!isRunning()) {
-                return;
-            }
-
             logger.info("Shutting down {}", getDescription());
 
-            setRunning(false);
             AtomicReference<Throwable> exceptionHolder = new AtomicReference<>(null);
 
-            safelyShutdownModule(threadPoolManager, exceptionHolder);
             safelyShutdownModule(processingUnitManager, exceptionHolder);
+            safelyShutdownModule(threadPoolManager, exceptionHolder);
 
             knowledgeBaseManager.onShutdown();
 
@@ -468,14 +452,6 @@ public class BaseEngine extends BaseEngineModule implements Engine {
                 .setFilterProcessingUnit(processingUnitProvider.createFilterProcessingUnit(this, inputQueue, mainProcessingQueue));
         processingUnitManager
                 .setMainProcessingUnit(processingUnitProvider.createMainProcessingUnit(this, mainProcessingQueue, outputQueue));
-
-        // Add to the thread manager.
-        threadPoolManager.createFilterProcessingUnitListenerThreadPool(getFilterProcessingUnit(),
-                getFilterProcessingUnit().supportsConcurrentListenerThreadPool()
-                        ? getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1);
-        threadPoolManager.createMainProcessingUnitListenerThreadPool(getMainProcessingUnit(),
-                getMainProcessingUnit().supportsConcurrentListenerThreadPool()
-                        ? getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1);
 
         if (configurationManager.getRootConfig() != null) {
             pluginManager.configure(configurationManager.getRootConfig());

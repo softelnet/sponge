@@ -31,7 +31,7 @@ public class UtilsTest {
         Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 3));
         Assert.assertEquals(2, Utils.calculateInitialDynamicThreadPoolSize(engine, 5));
         Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 2));
-        Assert.assertEquals(0, Utils.calculateInitialDynamicThreadPoolSize(engine, 1));
+        Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 1));
         Assert.assertEquals(5, Utils.calculateInitialDynamicThreadPoolSize(engine, 15));
         Assert.assertEquals(6, Utils.calculateInitialDynamicThreadPoolSize(engine, 20));
         Assert.assertEquals(2, Utils.calculateInitialDynamicThreadPoolSize(engine, 8));

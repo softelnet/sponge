@@ -14,37 +14,19 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.util;
+package org.openksavi.sponge.engine;
+
+import org.openksavi.sponge.util.Processable;
 
 /**
- * Represents an entity that can be managed.
+ * A thread pool for a processable.
  */
-public interface Manageable {
+public interface ProcessableThreadPool extends ThreadPool {
 
     /**
-     * Starts up this managed entity.
-     */
-    void startup();
-
-    /**
-     * Shuts down this managed entity.
-     */
-    void shutdown();
-
-    boolean isStarting();
-
-    /**
-     * Informs whether this managed entity is running.
+     * Returns the processable.
      *
-     * @return if this managed entity is running.
+     * @return the processable.
      */
-    boolean isRunning();
-
-    boolean isNew();
-
-    boolean isStopping();
-
-    boolean isTerminated();
-
-    boolean isFailed();
+    Processable getProcessable();
 }

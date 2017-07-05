@@ -49,9 +49,7 @@ public class SynchroEventQueue extends BaseEventQueue {
      * Starts up this managed entity.
      */
     @Override
-    public void startup() {
-        setRunning(true);
-
+    public void doStartup() {
         queue = capacity >= 0 ? new LinkedBlockingQueue<>(getCapacity()) : new LinkedBlockingQueue<>();
     }
 

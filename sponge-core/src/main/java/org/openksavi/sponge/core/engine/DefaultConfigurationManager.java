@@ -117,11 +117,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      * Starts up this managed entity.
      */
     @Override
-    public void startup() {
-        if (isRunning()) {
-            return;
-        }
-
+    public void doStartup() {
         home = System.getProperty(ConfigurationConstants.PROP_HOME);
 
         rootConfig = createRootConfig();
@@ -138,8 +134,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
 
         logger.debug(toString());
-
-        setRunning(true);
     }
 
     /**
