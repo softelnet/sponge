@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.common.util.concurrent.Service.State;
 
 import org.apache.commons.configuration2.ConfigurationUtils;
 import org.apache.commons.lang3.SerializationUtils;
@@ -256,17 +255,5 @@ public abstract class Utils {
 
     public static String getPackagePath(Class<?> cls) {
         return cls.getPackage().getName().replace('.', '/');
-    }
-
-    public static boolean isNewOrStarting(State state) {
-        return state == State.NEW || state == State.STARTING;
-    }
-
-    public static boolean isNewOrStartingOrRunning(State state) {
-        return state == State.NEW || state == State.STARTING || state == State.RUNNING;
-    }
-
-    public static boolean isStoppingOrTerminated(State state) {
-        return state == State.STOPPING || state == State.TERMINATED;
     }
 }

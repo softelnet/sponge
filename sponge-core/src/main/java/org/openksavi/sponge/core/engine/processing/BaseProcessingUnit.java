@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
-import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
@@ -100,7 +99,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         }
 
         protected Event getInEvent() throws InterruptedException {
-            while (Utils.isNewOrStartingOrRunning(getState())) {
+            while (isNewOrStartingOrRunning()) {
                 Event event = getInQueue().get(GET_ITERATION_TIMEOUT);
                 if (event != null) {
                     return event;
@@ -138,7 +137,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
 
         private boolean handleInterruptedException(InterruptedException e) {
             // Expected while shutting down.
-            if (Utils.isStoppingOrTerminated(getState())) {
+            if (isStopping() || isTerminated()) {
                 return true;
             } else {
                 logger.warn(createMessage("Interrupted"));

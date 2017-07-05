@@ -44,16 +44,6 @@ public class StandaloneEngine extends BaseEngine implements ApplicationContextAw
         this.interactiveMode = interactiveMode;
     }
 
-    @Override
-    public void doStartup() {
-        super.doStartup();
-
-        if (interactiveMode != null) {
-            interactiveMode.loop();
-            shutdown();
-        }
-    }
-
     public static StandaloneEngineBuilder builder() {
         return new StandaloneEngineBuilder(new StandaloneEngine());
     }

@@ -28,16 +28,16 @@ public interface ThreadPoolManager extends EngineModule {
     /**
      * Creates a new thread pool used by the Filter Processing Unit for listening to the Input Event Queue.
      *
-     * @param processable a processable.
-     * @param workers amount of threads.
+     * @param filterProcessingUnit the Filter Processing Unit.
+     * @return a thread pool.
      */
     ProcessableThreadPool createFilterProcessingUnitListenerThreadPool(FilterProcessingUnit filterProcessingUnit);
 
     /**
      * Creates a new thread pool used by the Main Processing Unit for listening to the Main Event Queue.
      *
-     * @param processable a processable.
-     * @param workers amount of threads.
+     * @param mainProcessingUnit the Main Processing Unit.
+     * @return a thread pool.
      */
     ProcessableThreadPool createMainProcessingUnitListenerThreadPool(MainProcessingUnit mainProcessingUnit);
 
@@ -45,6 +45,7 @@ public interface ThreadPoolManager extends EngineModule {
      * Creates a new thread pool used by the Main Processing Unit for listening to the decomposed queue.
      *
      * @param processable a processable.
+     * @return a thread pool.
      */
     ProcessableThreadPool createMainProcessingUnitDecomposedQueueThreadPool(Processable processable);
 

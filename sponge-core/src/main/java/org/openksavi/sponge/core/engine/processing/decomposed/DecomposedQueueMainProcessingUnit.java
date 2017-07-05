@@ -31,7 +31,6 @@ import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.core.engine.processing.BaseMainProcessingUnit;
 import org.openksavi.sponge.core.event.ProcessorControlEvent;
-import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -218,7 +217,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
         @Override
         public boolean runIteration() throws InterruptedException {
             try {
-                while (Utils.isNewOrStartingOrRunning(getState())) {
+                while (isNewOrStartingOrRunning()) {
                     final Pair<EventProcessorAdapter<?>, Event> entry = decomposedQueue.get(GET_ITERATION_TIMEOUT, TimeUnit.MILLISECONDS);
                     if (entry != null) {
                         final EventProcessorAdapter<?> adapter = entry.getLeft();

@@ -58,6 +58,9 @@ public class StandaloneEngineMain {
             // If help or version option is specified.
             if (engine != null) {
                 engine.startup();
+                if (engine.getInteractiveMode() != null) {
+                    engine.getInteractiveMode().loop();
+                }
             }
         } catch (Throwable e) {
             handleError(e);

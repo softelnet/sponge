@@ -31,20 +31,45 @@ public interface Manageable {
      */
     void shutdown();
 
+    /**
+     * Informs whether this managed entity is new.
+     *
+     * @return {@code true} if this managed entity is new.
+     */
+    boolean isNew();
+
+    /**
+     * Informs whether this managed entity is starting.
+     *
+     * @return {@code true} if this managed entity is starting.
+     */
     boolean isStarting();
 
     /**
      * Informs whether this managed entity is running.
      *
-     * @return if this managed entity is running.
+     * @return {@code true} if this managed entity is running.
      */
     boolean isRunning();
 
-    boolean isNew();
-
+    /**
+     * Informs whether this managed entity is stopping.
+     *
+     * @return {@code true} if this managed entity is stopping.
+     */
     boolean isStopping();
 
+    /**
+     * Informs whether this managed entity is terminated.
+     *
+     * @return {@code true} if this managed entity is terminated.
+     */
     boolean isTerminated();
 
+    /**
+     * Informs whether this managed entity failed.
+     *
+     * @return {@code true} if this managed entity failed.
+     */
     boolean isFailed();
 }

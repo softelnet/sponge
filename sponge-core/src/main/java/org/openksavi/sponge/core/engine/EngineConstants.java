@@ -21,6 +21,9 @@ package org.openksavi.sponge.core.engine;
  */
 public final class EngineConstants {
 
+    /** Default engine name. */
+    public static final String DEFAULT_ENGINE_NAME = "Sponge";
+
     /** Control event name prefix. */
     public static final String CONTROL_EVENT_PREFIX = "$";
 

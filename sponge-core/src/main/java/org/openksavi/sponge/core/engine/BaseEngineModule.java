@@ -16,10 +16,15 @@
 
 package org.openksavi.sponge.core.engine;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.Service.State;
 
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EngineModule;
 
@@ -35,9 +40,7 @@ public abstract class BaseEngineModule implements EngineModule {
     private String name;
 
     /** Guava service. */
-    private Service service = new EngineModuleService();
-
-    public class EngineModuleService extends AbstractIdleService {
+    private Service service = new AbstractIdleService() {
 
         @Override
         protected void startUp() throws Exception {
@@ -48,7 +51,17 @@ public abstract class BaseEngineModule implements EngineModule {
         protected void shutDown() throws Exception {
             doShutdown();
         }
-    }
+
+        @Override
+        protected String serviceName() {
+            return getName() != null ? getName() : BaseEngineModule.this.getClass().getSimpleName();
+        }
+    };
+
+    private AtomicBoolean afterManualShutdown = new AtomicBoolean(false);
+
+    /** Lock. */
+    private Lock lock = new ReentrantLock();
 
     /**
      * Creates a new engine module.
@@ -133,7 +146,12 @@ public abstract class BaseEngineModule implements EngineModule {
             return;
         }
 
-        service.startAsync().awaitRunning();
+        try {
+            service.startAsync().awaitRunning();
+        } catch (IllegalStateException e) {
+            // If Guava Service startup has failed, throw only the cause exception.
+            throw isFailed() && e.getCause() != null ? Utils.wrapException("startup", e.getCause()) : e;
+        }
     }
 
     /**
@@ -145,7 +163,27 @@ public abstract class BaseEngineModule implements EngineModule {
             return;
         }
 
-        service.stopAsync().awaitTerminated();
+        lock.lock();
+        try {
+            if (afterManualShutdown.get()) {
+                return;
+            }
+
+            // Stop Guava Service in a Guava way only if it isn't in FAILED state.
+            if (!isFailed()) {
+                try {
+                    service.stopAsync().awaitTerminated();
+                } catch (IllegalStateException e) {
+                    // If Guava Service stopping has failed, throw only the cause exception.
+                    throw isFailed() && e.getCause() != null ? Utils.wrapException("shutdown", e.getCause()) : e;
+                }
+            } else {
+                doShutdown();
+                afterManualShutdown.set(true);
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
@@ -189,6 +227,10 @@ public abstract class BaseEngineModule implements EngineModule {
 
     public Service getService() {
         return service;
+    }
+
+    public boolean isNewOrStartingOrRunning() {
+        return isNew() || isStarting() || isRunning();
     }
 
     @Override

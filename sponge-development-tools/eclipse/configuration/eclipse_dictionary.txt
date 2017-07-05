@@ -30,3 +30,4 @@ endpoints
 interoperability
 correlator
 correlators
+guava
