@@ -54,7 +54,7 @@ public abstract class BaseEngineModule implements EngineModule {
 
         @Override
         protected String serviceName() {
-            return getName() != null ? getName() : BaseEngineModule.this.getClass().getSimpleName();
+            return BaseEngineModule.this.getClass().getSimpleName();
         }
     };
 

@@ -40,8 +40,6 @@
             <xs:element name="eventQueueCapacity" type="xs:string" minOccurs="0" />
             <xs:element name="eventClonePolicy" type="EventClonePolicy" minOccurs="0" />
             <xs:element name="autoEnable" type="xs:string" minOccurs="0" />
-
-            <xs:element name="eventSchedulerThreadCount" type="xs:string" minOccurs="0" />
             <xs:element name="durationThreadCount" type="xs:string" minOccurs="0" />
             <xs:element name="processingUnitConcurrentListenerThreadCount" type="xs:string" minOccurs="0" />
         </xs:all>

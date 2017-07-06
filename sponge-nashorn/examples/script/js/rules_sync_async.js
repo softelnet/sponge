@@ -41,5 +41,5 @@ function onStartup() {
     EPS.event("e2").set("label", "4").sendAfter(4);
     EPS.event("e3").set("label", "5").sendAfter(5);
     EPS.event("e3").set("label", "6").sendAfter(6);
-    EPS.event("e3").set("label", "7").sendAfter(7)
-};
+    EPS.event("e3").set("label", "7").sendAfter(7);
+}

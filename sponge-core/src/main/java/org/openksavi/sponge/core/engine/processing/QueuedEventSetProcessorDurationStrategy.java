@@ -29,6 +29,4 @@ public class QueuedEventSetProcessorDurationStrategy implements EventSetProcesso
     public void durationOccurred(EventSetProcessorAdapter<?> adapter) {
         adapter.getKnowledgeBase().getEngineOperations().event(new DurationControlEvent(adapter)).send();
     }
-
-    // adapter.getGroup().durationOccurred(adapter);
 }

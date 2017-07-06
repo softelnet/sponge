@@ -34,6 +34,10 @@ public class DurationControlEvent extends ProcessorControlEvent {
         super(Utils.createControlEventName(DurationControlEvent.class), eventSetProcessorAdapter.getGroup());
 
         this.eventSetProcessorAdapter = eventSetProcessorAdapter;
+
+        // Setting the default priority (as for normal events, not control events) is important to defer handling of a duration timeout
+        // until all previous normal events are processed.
+        setPriority(DEFAULT_PRIORITY);
     }
 
     public EventSetProcessorAdapterGroup getEventSetProcessorAdapterGroup() {

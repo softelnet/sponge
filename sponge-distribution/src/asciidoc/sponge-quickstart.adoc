@@ -171,14 +171,14 @@ When {sponge} process is running you may send `HUP` signal to that process in or
 ----
 kill -HUP pid
 ----
-Where `pid` is the process id of the Java executable that started the {sponge} program. 
+Where `pid` is the process id of the Java executable running the {sponge}. Note that it isn't the PID of the shell script `sponge`.
 
 IMPORTANT: See User Guide for limitations of reloading knowledge bases.
 
 .Terminating a {sponge} process running in the background
 [source,bash,subs="verbatim,attributes"]
 ----
-pkill -TERM -P pid
+kill -TERM pid
 ----
 
 ==== Windows

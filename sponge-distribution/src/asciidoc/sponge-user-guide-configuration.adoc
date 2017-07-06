@@ -70,11 +70,11 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 
 |*`mainProcessingUnitThreadCount`*
 |The number of Main Processing Unit worker threads. You could increase this parameter if your knowledge bases require concurrent processing of many events by triggers, rules or correlators.
-|`5`
+|`10`
 
 |*`asyncEventSetProcessorExecutorThreadCount`*
 |The number of threads used by an event set processor executor for asynchronous processing of events by rules and correlators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or correlators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
-|`5`
+|`10`
 
 |*`eventQueueCapacity`*
 |The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to a reasonable value taking into account a number of events, an event size, a number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
@@ -89,12 +89,8 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`true`
 
 |`durationThreadCount`
-|The number of threads used by an event set processors duration executor. The default implementation uses these threads to send a control event. In most cases there should be no need to change this parameter, because generating and sending a new event is fast.
-|`1`
-
-|`eventSchedulerThreadCount`
-|The number of threads used by the Event Scheduler to generate and send scheduled events. In most cases there should be no need to change this parameter, because generating and sending a new event is fast.
-|`1`
+|The number of threads used by an event set processors duration executor. The default implementation uses these threads only to send control events. In most cases there should be no need to change this parameter, because sending a new event is fast.
+|`2`
 
 |`eventSetProcessorDefaultSynchronous`
 |The event set processor default synchronous flag. If this parameter is set to `true` then all rules and correlators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.

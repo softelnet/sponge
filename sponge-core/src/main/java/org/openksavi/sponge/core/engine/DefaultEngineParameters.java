@@ -25,10 +25,10 @@ import org.openksavi.sponge.event.EventClonePolicy;
 public class DefaultEngineParameters implements EngineParameters {
 
     /** Default number of the Main Processing Unit worker threads. */
-    private int mainProcessingUnitThreadCount = 5;
+    private int mainProcessingUnitThreadCount = 10;
 
     /** Default number of threads used by an event set processor asynchronous executor. */
-    private int asyncEventSetProcessorExecutorThreadCount = 5;
+    private int asyncEventSetProcessorExecutorThreadCount = 10;
 
     /** Default number of threads used by processing units to listen to an event queue concurrently. */
     private int processingUnitConcurrentListenerThreadCount = 1;
@@ -36,11 +36,8 @@ public class DefaultEngineParameters implements EngineParameters {
     /** Default event queue capacity. */
     private int eventQueueCapacity = -1;
 
-    /** Default Event Scheduler thread count. */
-    private int eventSchedulerThreadCount = 1;
-
     /** Default duration thread count. */
-    private int durationThreadCount = 1;
+    private int durationThreadCount = 2;
 
     /** Default event clone policy. */
     private EventClonePolicy eventClonePolicy = EventClonePolicy.SHALLOW;
@@ -99,11 +96,6 @@ public class DefaultEngineParameters implements EngineParameters {
     }
 
     @Override
-    public int getEventSchedulerThreadCount() {
-        return eventSchedulerThreadCount;
-    }
-
-    @Override
     public int getDurationThreadCount() {
         return durationThreadCount;
     }
@@ -156,11 +148,6 @@ public class DefaultEngineParameters implements EngineParameters {
     @Override
     public void setEventQueueCapacity(int eventQueueCapacity) {
         this.eventQueueCapacity = eventQueueCapacity;
-    }
-
-    @Override
-    public void setEventSchedulerThreadCount(int eventSchedulerThreadCount) {
-        this.eventSchedulerThreadCount = eventSchedulerThreadCount;
     }
 
     @Override

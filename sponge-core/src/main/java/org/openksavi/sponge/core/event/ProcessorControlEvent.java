@@ -28,7 +28,7 @@ import org.openksavi.sponge.event.EventClonePolicy;
  * A control event for a processor.
  */
 @SuppressWarnings("rawtypes")
-public class ProcessorControlEvent extends BaseControlEvent {
+public abstract class ProcessorControlEvent extends BaseControlEvent {
 
     private static final long serialVersionUID = 6259820942438546724L;
 

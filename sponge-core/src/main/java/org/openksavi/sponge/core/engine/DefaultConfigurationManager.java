@@ -84,9 +84,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** Event queue capacity. */
     private Integer eventQueueCapacity;
 
-    /** The number of the Event Scheduler threads. */
-    private Integer eventSchedulerThreadCount;
-
     /** The number of duration executor threads. */
     private Integer durationThreadCount;
 
@@ -159,11 +156,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         if (eventQueueCapacity == null) {
             eventQueueCapacity = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
                     getEngine().getDefaultParameters().getEventQueueCapacity());
-        }
-
-        if (eventSchedulerThreadCount == null) {
-            eventSchedulerThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_SCHEDULER_THREAD_COUNT,
-                    getEngine().getDefaultParameters().getEventSchedulerThreadCount());
         }
 
         if (durationThreadCount == null) {
@@ -398,11 +390,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
-    public int getEventSchedulerThreadCount() {
-        return eventSchedulerThreadCount;
-    }
-
-    @Override
     public int getDurationThreadCount() {
         return durationThreadCount;
     }
@@ -445,7 +432,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                 .append("eventClonePolicy", eventClonePolicy)
                 .append("autoEnable", autoEnable)
                 .append("properties", properties)
-                .append("eventSchedulerThreadCount", eventSchedulerThreadCount)
                 .append("durationThreadCount", durationThreadCount)
                 .append("processingUnitConcurrentListenerThreadCount", processingUnitConcurrentListenerThreadCount)
                 .toString();
@@ -487,11 +473,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public void setEventQueueCapacity(int eventQueueCapacity) {
         this.eventQueueCapacity = eventQueueCapacity;
-    }
-
-    @Override
-    public void setEventSchedulerThreadCount(int eventSchedulerThreadCount) {
-        this.eventSchedulerThreadCount = eventSchedulerThreadCount;
     }
 
     @Override

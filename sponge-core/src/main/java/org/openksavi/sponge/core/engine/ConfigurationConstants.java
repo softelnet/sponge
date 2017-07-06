@@ -43,8 +43,6 @@ public final class ConfigurationConstants {
 
     public static final String TAG_ENGINE_EVENT_QUEUE_CAPACITY = "eventQueueCapacity";
 
-    public static final String TAG_ENGINE_EVENT_SCHEDULER_THREAD_COUNT = "eventSchedulerThreadCount";
-
     public static final String TAG_ENGINE_DURATION_THREAD_COUNT = "durationThreadCount";
 
     public static final String TAG_ENGINE_ASYNC_EVENT_SET_PROCESSOR_EXECUTOR_THREAD_COUNT = "asyncEventSetProcessorExecutorThreadCount";

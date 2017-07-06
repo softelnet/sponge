@@ -83,7 +83,9 @@ public class QuartzEventScheduler extends BaseEventScheduler {
             props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, getName());
             props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, getName());
             props.put(StdSchedulerFactory.PROP_THREAD_POOL_CLASS, SimpleThreadPool.class.getName());
-            props.put(PROP_THREAD_COUNT, Integer.toString(getEngine().getConfigurationManager().getEventSchedulerThreadCount()));
+
+            // There should be only one thread here to ensure the proper order of scheduled events.
+            props.put(PROP_THREAD_COUNT, Integer.toString(1));
 
             StdSchedulerFactory schedulerFactory = new StdSchedulerFactory();
             schedulerFactory.initialize(props);
