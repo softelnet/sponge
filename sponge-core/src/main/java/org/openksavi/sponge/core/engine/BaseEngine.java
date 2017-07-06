@@ -367,9 +367,8 @@ public class BaseEngine extends BaseEngineModule implements Engine {
      * Setup engine name.
      */
     protected void setupEngineName() {
-        if (getName() == null) {
-            setName(configurationManager.getEngineName() != null ? configurationManager.getEngineName()
-                    : EngineConstants.DEFAULT_ENGINE_NAME);
+        if (getName() == null && configurationManager.getEngineName() != null) {
+            setName(configurationManager.getEngineName());
         }
     }
 

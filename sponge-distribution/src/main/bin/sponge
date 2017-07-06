@@ -20,9 +20,4 @@ if [ -z $COLUMNS ]; then
     fi
 fi
 
-trap 'kill -TERM $PID' TERM INT
-trap 'kill -HUP $PID' HUP
-
 $JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml ${mainClass} "$@"
-
-trap - TERM INT HUP
