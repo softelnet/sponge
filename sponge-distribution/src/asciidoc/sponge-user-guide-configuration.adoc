@@ -95,10 +95,6 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`eventSetProcessorDefaultSynchronous`
 |The event set processor default synchronous flag. If this parameter is set to `true` then all rules and correlators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.
 |`false`
-
-|`processingUnitConcurrentListenerThreadCount`
-|The number of threads used by processing units to listen to an event queue concurrently. In the current implementation this parameter is not used.
-|`1`
 |===
 
 

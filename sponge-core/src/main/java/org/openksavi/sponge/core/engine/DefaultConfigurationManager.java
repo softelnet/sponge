@@ -78,9 +78,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** Event clone policy. */
     private EventClonePolicy eventClonePolicy;
 
-    /** The number of threads used by processing units to listen to an event queue concurrently. */
-    private Integer processingUnitConcurrentListenerThreadCount;
-
     /** Event queue capacity. */
     private Integer eventQueueCapacity;
 
@@ -145,12 +142,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         if (eventClonePolicy == null) {
             eventClonePolicy = EventClonePolicy.valueOf(engineConfig.getString(ConfigurationConstants.TAG_ENGINE_EVENT_CLONE_POLICY,
                     getEngine().getDefaultParameters().getEventClonePolicy().name()).toUpperCase());
-        }
-
-        if (processingUnitConcurrentListenerThreadCount == null) {
-            processingUnitConcurrentListenerThreadCount =
-                    engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_PROCESSING_UNIT_CONCURRENT_LISTENER_THREAD_COUNT,
-                            getEngine().getDefaultParameters().getProcessingUnitConcurrentListenerThreadCount());
         }
 
         if (eventQueueCapacity == null) {
@@ -370,16 +361,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     /**
-     * Returns the number of threads used by processing units to listen to an event queue concurrently.
-     *
-     * @return the number of threads.
-     */
-    @Override
-    public int getProcessingUnitConcurrentListenerThreadCount() {
-        return processingUnitConcurrentListenerThreadCount;
-    }
-
-    /**
      * Returns the event queue capacity.
      *
      * @return the event queue capacity.
@@ -431,9 +412,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                 .append("eventSetProcessorDefaultSynchronous", eventSetProcessorDefaultSynchronous)
                 .append("eventClonePolicy", eventClonePolicy)
                 .append("autoEnable", autoEnable)
-                .append("properties", properties)
                 .append("durationThreadCount", durationThreadCount)
-                .append("processingUnitConcurrentListenerThreadCount", processingUnitConcurrentListenerThreadCount)
+                .append("properties", properties)
                 .toString();
         //@formatter:on
     }
@@ -463,11 +443,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public void setMainProcessingUnitThreadCount(int mainProcessingUnitThreadCount) {
         this.mainProcessingUnitThreadCount = mainProcessingUnitThreadCount;
-    }
-
-    @Override
-    public void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount) {
-        this.processingUnitConcurrentListenerThreadCount = processingUnitConcurrentListenerThreadCount;
     }
 
     @Override

@@ -30,7 +30,10 @@ public class DefaultEngineParameters implements EngineParameters {
     /** Default number of threads used by an event set processor asynchronous executor. */
     private int asyncEventSetProcessorExecutorThreadCount = 10;
 
-    /** Default number of threads used by processing units to listen to an event queue concurrently. */
+    /**
+     * Default number of threads used by processing units to listen to an event queue concurrently. In the current implementation this
+     * parameter is not used.
+     */
     private int processingUnitConcurrentListenerThreadCount = 1;
 
     /** Default event queue capacity. */

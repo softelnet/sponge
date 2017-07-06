@@ -78,13 +78,6 @@ public interface ConfigurationManager extends EngineModule {
     int getMainProcessingUnitThreadCount();
 
     /**
-     * Returns the number of threads used by processing units to listen to an event queue concurrently.
-     *
-     * @return the number of threads.
-     */
-    int getProcessingUnitConcurrentListenerThreadCount();
-
-    /**
      * Returns the event queue capacity.
      *
      * @return the event queue capacity.
@@ -146,14 +139,6 @@ public interface ConfigurationManager extends EngineModule {
      * @param eventClonePolicy event clone policy.
      */
     void setEventClonePolicy(EventClonePolicy eventClonePolicy);
-
-    /**
-     * Sets the number of threads used by processing units to listen to an event queue concurrently.
-     *
-     * @param processingUnitConcurrentListenerThreadCount the number of threads used by processing units to listen to an event queue
-     *        concurrently.
-     */
-    void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount);
 
     /**
      * Sets event queue capacity.

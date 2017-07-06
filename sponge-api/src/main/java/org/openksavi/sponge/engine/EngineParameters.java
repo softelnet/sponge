@@ -31,7 +31,8 @@ public interface EngineParameters {
     int getMainProcessingUnitThreadCount();
 
     /**
-     * Returns the number of threads used by processing units to listen to an event queue concurrently.
+     * Returns the number of threads used by processing units to listen to an event queue concurrently. In the current implementation this
+     * parameter is not used.
      *
      * @return the number of threads.
      */
@@ -115,7 +116,8 @@ public interface EngineParameters {
     void setMainProcessingUnitThreadCount(int mainProcessingUnitThreadCount);
 
     /**
-     * Sets the number of threads used by processing units to listen to an event queue concurrently.
+     * Sets the number of threads used by processing units to listen to an event queue concurrently. In the current implementation this
+     * parameter is not used.
      *
      * @param processingUnitConcurrentListenerThreadCount the number of threads used by processing units to listen to an event queue
      *        concurrently.

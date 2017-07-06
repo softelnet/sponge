@@ -52,14 +52,14 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
     @Override
     public ProcessableThreadPool createFilterProcessingUnitListenerThreadPool(FilterProcessingUnit filterProcessingUnit) {
         int threadCount = filterProcessingUnit.supportsConcurrentListenerThreadPool()
-                ? getEngine().getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1;
+                ? getEngine().getDefaultParameters().getProcessingUnitConcurrentListenerThreadCount() : 1;
         return new DefaultProcessableThreadPool(createFixedExecutor(filterProcessingUnit, threadCount), filterProcessingUnit);
     }
 
     @Override
     public ProcessableThreadPool createMainProcessingUnitListenerThreadPool(MainProcessingUnit mainProcessingUnit) {
         int threadCount = mainProcessingUnit.supportsConcurrentListenerThreadPool()
-                ? getEngine().getConfigurationManager().getProcessingUnitConcurrentListenerThreadCount() : 1;
+                ? getEngine().getDefaultParameters().getProcessingUnitConcurrentListenerThreadCount() : 1;
         return new DefaultProcessableThreadPool(createFixedExecutor(mainProcessingUnit, threadCount), mainProcessingUnit);
     }
 
