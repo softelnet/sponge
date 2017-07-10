@@ -2,6 +2,10 @@
 
 == Maven
 
+=== Settings
+
+ export MAVEN_OPTS="-Xmx2048m"
+
 === Create all
 This includes www project page contents and standalone distribution).
 

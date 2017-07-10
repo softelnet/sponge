@@ -51,6 +51,8 @@ public interface EventSetProcessorAdapterGroup<T extends EventSetProcessorAdapte
      * Removes the event set processor adapter from this group.
      *
      * @param eventSetProcessorAdapter the event set processor adapter.
+     *
+     * @return {@code true} if this group contained the specified event set processor adapter.
      */
     boolean removeEventSetProcessorAdapter(T eventSetProcessorAdapter);
 }
