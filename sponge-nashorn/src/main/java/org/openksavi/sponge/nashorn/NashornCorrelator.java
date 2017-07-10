@@ -62,7 +62,9 @@ public abstract class NashornCorrelator extends org.openksavi.sponge.core.correl
         return acceptsAsFirst(getSelf(), event);
     }
 
-    public abstract boolean acceptsAsFirst(Object self, Event event);
+    public boolean acceptsAsFirst(Object self, Event event) {
+        return super.acceptsAsFirst(event);
+    }
 
     @Override
     public final void onEvent(Event event) {

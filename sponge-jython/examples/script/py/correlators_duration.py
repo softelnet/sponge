@@ -3,8 +3,6 @@ Sponge Knowledge base
 Using correlator duration
 """
 
-from org.openksavi.sponge.examples import SampleJavaCorrelator
-
 from java.util.concurrent.atomic import AtomicInteger, AtomicBoolean
 
 def onInit():

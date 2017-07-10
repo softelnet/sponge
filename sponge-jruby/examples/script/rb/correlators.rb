@@ -9,24 +9,24 @@ def onInit
     # Variables for assertions only
     $EPS.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
     $EPS.setVariable("hardwareFailureJavaCount", AtomicInteger.new(0))
+    $EPS.setVariable("hardwareFailureScriptFinishCount", AtomicInteger.new(0))
+    $EPS.setVariable("hardwareFailureJavaFinishCount", AtomicInteger.new(0))
 end
 
 class SampleCorrelator < Correlator
-    @@instanceStarted = AtomicBoolean.new(false)
     def configure
         self.eventNames = ["filesystemFailure", "diskFailure"]
+        self.maxInstances = 1
     end
     def init
         @eventLog = []
-    end
-    def acceptsAsFirst(event)
-        return @@instanceStarted.compareAndSet(false, true)
     end
     def onEvent(event)
         @eventLog  << event
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, @eventLog.map(&:to_s))
         $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
         if @eventLog.length >= 4
+            $EPS.getVariable("hardwareFailureScriptFinishCount").incrementAndGet()
             self.finish()
         end
     end
@@ -38,6 +38,8 @@ end
 
 def onStartup
     $EPS.event("filesystemFailure").set("source", "server1").sendAfter(100)
-    $EPS.event("diskFailure").set("source", "server1").sendAfter(200, 100)
-    $EPS.event("diskFailure").set("source", "server2").sendAfter(200, 100)
+    $EPS.event("diskFailure").set("source", "server1").sendAfter(200)
+    $EPS.event("diskFailure").set("source", "server2").sendAfter(200)
+    $EPS.event("diskFailure").set("source", "server1").sendAfter(300)
+    $EPS.event("diskFailure").set("source", "server2").sendAfter(300)
 end

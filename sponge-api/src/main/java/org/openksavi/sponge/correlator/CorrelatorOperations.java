@@ -16,11 +16,24 @@
 
 package org.openksavi.sponge.correlator;
 
-import org.openksavi.sponge.EventSetProcessorAdapter;
+import org.openksavi.sponge.EventSetProcessorOperations;
 
 /**
- * Correlator adapter.
+ * Correlator operations.
  */
-public interface CorrelatorAdapter extends EventSetProcessorAdapter<Correlator>, CorrelatorOperations {
+public interface CorrelatorOperations extends EventSetProcessorOperations {
 
+    /**
+     * Sets the maximum number of concurrent instances allowed for this correlator.
+     *
+     * @param maxInstances the maximum number of concurrent instances allowed for this correlator.
+     */
+    void setMaxInstances(int maxInstances);
+
+    /**
+     * Returns the maximum number of concurrent instances allowed for this correlator.
+     *
+     * @return the maximum number of concurrent instances allowed for this correlator.
+     */
+    int getMaxInstances();
 }

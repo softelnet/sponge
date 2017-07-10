@@ -19,12 +19,28 @@ package org.openksavi.sponge.core.correlator;
 import org.openksavi.sponge.core.BaseEventSetProcessor;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
+import org.openksavi.sponge.event.Event;
 
 public abstract class BaseCorrelator extends BaseEventSetProcessor<CorrelatorAdapter> implements Correlator {
 
     @Override
+    public final void setMaxInstances(int maxInstances) {
+        getAdapter().setMaxInstances(maxInstances);
+    }
+
+    @Override
+    public final int getMaxInstances() {
+        return getAdapter().getMaxInstances();
+    }
+
+    @Override
     public final void finish() {
         getAdapter().finish();
+    }
+
+    @Override
+    public boolean acceptsAsFirst(Event event) {
+        return true;
     }
 
     @Override

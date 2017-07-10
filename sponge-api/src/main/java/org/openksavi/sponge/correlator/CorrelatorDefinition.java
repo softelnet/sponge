@@ -21,6 +21,6 @@ import org.openksavi.sponge.EventSetProcessorDefinition;
 /**
  * Correlator definition.
  */
-public interface CorrelatorDefinition extends EventSetProcessorDefinition {
+public interface CorrelatorDefinition extends EventSetProcessorDefinition, CorrelatorOperations {
 
 }

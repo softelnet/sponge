@@ -46,8 +46,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     }
 
     @Override
-    public BaseEventSetProcessorDefinition getDefinition() {
-        return super.getDefinition();
+    public BaseCorrelatorDefinition getDefinition() {
+        return (BaseCorrelatorDefinition) super.getDefinition();
     }
 
     @Override
@@ -63,7 +63,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
      */
     @Override
     public boolean needNewInstance(Event event) {
-        return ArrayUtils.contains(getDefinition().getEventNames(), event.getName());
+        return ArrayUtils.contains(getDefinition().getEventNames(), event.getName())
+                && (getDefinition().isMaxInstancesUnbound() || getCorrelators().size() < getDefinition().getMaxInstances());
     }
 
     @Override

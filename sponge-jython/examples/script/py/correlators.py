@@ -11,20 +11,21 @@ def onInit():
     # Variables for assertions only
     EPS.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
     EPS.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
+    EPS.setVariable("hardwareFailureScriptFinishCount", AtomicInteger(0))
+    EPS.setVariable("hardwareFailureJavaFinishCount", AtomicInteger(0))
 
 class SampleCorrelator(Correlator):
-    instanceStarted = AtomicBoolean(False)
     def configure(self):
         self.eventNames = ["filesystemFailure", "diskFailure"]
+        self.maxInstances = 1
     def init(self):
         self.eventLog = []
-    def acceptsAsFirst(self, event):
-        return SampleCorrelator.instanceStarted.compareAndSet(False, True)
     def onEvent(self, event):
         self.eventLog.append(event)
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
         if len(self.eventLog) >= 4:
+            EPS.getVariable("hardwareFailureScriptFinishCount").incrementAndGet()
             self.finish()
 
 def onLoad():
@@ -32,5 +33,7 @@ def onLoad():
 
 def onStartup():
     EPS.event("filesystemFailure").set("source", "server1").sendAfter(100)
-    EPS.event("diskFailure").set("source", "server1").sendAfter(200, 100)
-    EPS.event("diskFailure").set("source", "server2").sendAfter(200, 100)
+    EPS.event("diskFailure").set("source", "server1").sendAfter(200)
+    EPS.event("diskFailure").set("source", "server2").sendAfter(200)
+    EPS.event("diskFailure").set("source", "server1").sendAfter(300)
+    EPS.event("diskFailure").set("source", "server2").sendAfter(300)

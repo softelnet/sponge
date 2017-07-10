@@ -22,7 +22,7 @@ import org.openksavi.sponge.event.Event;
 /**
  * Correlator.
  */
-public interface Correlator extends EventSetProcessor<CorrelatorAdapter> {
+public interface Correlator extends EventSetProcessor<CorrelatorAdapter>, CorrelatorOperations {
 
     /**
      * Checks if this event should be accepted as the first event of this correlator therefore starting the new instance.

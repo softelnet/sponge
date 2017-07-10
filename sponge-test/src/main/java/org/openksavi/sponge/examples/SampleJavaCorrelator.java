@@ -18,7 +18,6 @@ package org.openksavi.sponge.examples;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -30,23 +29,12 @@ public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelat
 
     private static final Logger logger = LoggerFactory.getLogger(SampleJavaCorrelator.class);
 
-    private static final String VAR_INSTANCE_STARTED = SampleJavaCorrelator.class.getSimpleName() + "InstanceStarted";
-
     private List<Event> eventLog = new ArrayList<>();
 
     @Override
     public void configure() {
         setEventNames("filesystemFailure", "diskFailure");
-    }
-
-    @Override
-    public void init() {
-        getEps().setVariableIfNone(VAR_INSTANCE_STARTED, () -> new AtomicBoolean(false));
-    }
-
-    @Override
-    public boolean acceptsAsFirst(Event event) {
-        return getEps().getVariable(AtomicBoolean.class, VAR_INSTANCE_STARTED).compareAndSet(false, true);
+        setMaxInstances(1);
     }
 
     @Override
@@ -55,6 +43,7 @@ public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelat
         logger.debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog);
         getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
         if (eventLog.size() >= 4) {
+            getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaFinishCount").incrementAndGet();
             finish();
         }
     }

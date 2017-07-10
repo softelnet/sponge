@@ -46,4 +46,11 @@ public interface EventSetProcessorAdapterGroup<T extends EventSetProcessorAdapte
      * @param adapter adapter.
      */
     void durationOccurred(T adapter);
+
+    /**
+     * Removes the event set processor adapter from this group.
+     *
+     * @param eventSetProcessorAdapter the event set processor adapter.
+     */
+    boolean removeEventSetProcessorAdapter(T eventSetProcessorAdapter);
 }

@@ -3,8 +3,6 @@
  * Using correlator duration
  */
 
-import org.openksavi.sponge.examples.SampleJavaCorrelator
-
 import java.util.concurrent.atomic.*
 
 void onInit() {

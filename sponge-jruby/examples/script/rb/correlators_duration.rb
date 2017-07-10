@@ -1,7 +1,6 @@
 # Sponge Knowledge base
 # Using correlator duration
 
-java_import org.openksavi.sponge.examples.SampleJavaCorrelator
 java_import java.util.concurrent.atomic.AtomicInteger
 java_import java.util.concurrent.atomic.AtomicBoolean
 

@@ -503,7 +503,7 @@ A correlator may be finished:
 * manually by invoking `finish()` method from inside `onEvent()` method,
 * automatically when `duration` is set and the duration timeout takes place.
 
-Every correlator should implement abstract `acceptsAsFirst` and `onEvent` methods:
+Every correlator may implement `acceptsAsFirst` method and should implement abstract `onEvent` method:
 
 [source,java]
 ----
@@ -533,11 +533,12 @@ The above values should be set in the `configure` method by using methods `setEv
 === Important methods
 `configure()`:: A configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
 `init()`:: An initialization callback method that is invoked before creating a new correlator instance. This method is optional.
-`boolean acceptsAsFirst(Event event)`:: Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. `acceptsAsFirst()` is invoked after `init()`. This method is mandatory.
+`boolean acceptsAsFirst(Event event)`:: Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. `acceptsAsFirst()` is invoked after `init()`. This method is optional. The default implementation returns `true`.
 `onEvent(Event event)`:: A callback method invoked when an event that a correlator listens to happens. This method is mandatory.
 `onDuration()`:: A callback method invoked when the duration timeout occurs. This method should be implemented if a duration timeout is set. After invoking this callback method, `finish()` is invoked automatically.
 `finish()`:: A final method that should be invoked, in `onEvent(Event event)` method, when the correlator has done its work. Only by invoking `finish()` this instance of the correlator is closed and its resources are released.
 `setDuration()`:: Optionally the time how long a correlator lasts (represented as `java.time.Duration`). The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration()` callback method will be invoked.
+`setMaxInstances()`:: The maximum number of concurrent instances allowed for this correlator. If this value is not set, there will be no limit of concurrent instances. In that case you will probably need to implement `acceptsAsFirst()` method.
 `setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for a correlator. For details see a description of this flag for rules.
 `setDisplayName(name)`:: The method sets a display name of this correlator.
 
@@ -588,31 +589,20 @@ public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 
     private static final Logger logger = LoggerFactory.getLogger(SampleJavaCorrelator.class);
 
-    private static final String VAR_INSTANCE_STARTED = SampleJavaCorrelator.class.getSimpleName() + "InstanceStarted";
-
     private List<Event> eventLog = new ArrayList<>(); // <2>
 
     @Override
     public void configure() { // <3>
         setEventNames("filesystemFailure", "diskFailure"); // <4>
+        setMaxInstances(1); // <5>
     }
 
     @Override
-    public void init() { // <5>
-        getEPS().setVariableIfNone(VAR_INSTANCE_STARTED, () -> new AtomicBoolean(false)); // <6>
-    }
-
-    @Override
-    public boolean acceptsAsFirst(Event event) { // <7>
-        return getEPS().getVariable(AtomicBoolean.class, VAR_INSTANCE_STARTED).compareAndSet(false, true); // <8>
-    }
-
-    @Override
-    public void onEvent(Event event) { // <9>
-        eventLog.add(event); // <10>
-        logger.debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog); // <11>
+    public void onEvent(Event event) { // <6>
+        eventLog.add(event); // <7>
+        logger.debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog); // <8>
         if (eventLog.size() >= 4) {
-            finish(); // <12>
+            finish(); // <9>
         }
     }
 }
@@ -621,14 +611,11 @@ public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 <2> Setting a class attribute `eventLog`.
 <3> The correlator configuration callback method.
 <4> Define that the correlator is supposed to wait for events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
-<5> The correlator initialization callback method. It is invoked before `acceptsAsFirst`.
-<6> Setting an engine scope variable `VAR_INSTANCE_STARTED` (if not set already).
-<7> The correlator `acceptsAsFirst` callback method.
-<8> The correlator will accept as first any event that it listens to but only when no other instance of `SampleJavaCorrelator` is created.
-<9> The correlator `onEvent` callback method.
-<10> Adds a new event to `eventLog`.
-<11> Logs message.
-<12> This correlator instance will finish when `4` fitting events are collected into `eventLog`.
+<5> Set the maximum number of concurrent instances allowed for this correlator. Note that any first event matching the names will be accepted as the first event, starting the instance of this correlator.
+<6> The correlator `onEvent` callback method.
+<7> Adds the new event to `eventLog`.
+<8> Logs the message.
+<9> This correlator instance will finish when `4` fitting events are collected into `eventLog`. After finishing the first instance, a new instance could be created, and so on.
 
 .Java correlator manual registration in the Python knowledge base
 [source,python]

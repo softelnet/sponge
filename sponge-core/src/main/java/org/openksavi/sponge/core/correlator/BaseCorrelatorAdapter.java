@@ -38,6 +38,11 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     }
 
     @Override
+    public BaseCorrelatorDefinition getDefinition() {
+        return (BaseCorrelatorDefinition) super.getDefinition();
+    }
+
+    @Override
     protected void onDuration() {
         getProcessor().onDuration();
     }
@@ -50,5 +55,15 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     @Override
     protected void onEvent(Event event) {
         getProcessor().onEvent(event);
+    }
+
+    @Override
+    public void setMaxInstances(int maxInstances) {
+        getDefinition().setMaxInstances(maxInstances);
+    }
+
+    @Override
+    public int getMaxInstances() {
+        return getDefinition().getMaxInstances();
     }
 }

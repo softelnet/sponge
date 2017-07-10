@@ -115,6 +115,11 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
         }
     }
 
+    @Override
+    public boolean removeEventSetProcessorAdapter(T eventSetProcessorAdapter) {
+        return eventSetProcessorAdapters.remove(eventSetProcessorAdapter);
+    }
+
     /**
      * Removes stopped event set processors within this group.
      */
