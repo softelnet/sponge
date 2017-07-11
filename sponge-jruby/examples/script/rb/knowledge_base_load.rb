@@ -21,7 +21,7 @@ end
 class Trigger1 < Trigger
     def configure
         self.displayName = "Trigger1, file1"
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def run(event)
         self.logger.debug("file1: Received event {}", event)
@@ -33,7 +33,7 @@ end
 class Trigger2 < Trigger
     def configure
         self.displayName = "Trigger2, file1"
-        self.eventName = "e2"
+        self.event = "e2"
     end
     def run(event)
         self.logger.debug("file1: Received event {}", event)
@@ -43,7 +43,7 @@ end
 
 class LoadKbFile < Trigger
     def configure
-        self.eventName = "loadKbFile"
+        self.event = "loadKbFile"
     end
     def run(event)
         kbFile = event.get("kbFile")

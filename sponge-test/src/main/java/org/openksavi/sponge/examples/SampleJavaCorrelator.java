@@ -33,7 +33,7 @@ public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelat
 
     @Override
     public void configure() {
-        setEventNames("filesystemFailure", "diskFailure");
+        setEvents("filesystemFailure", "diskFailure");
         setMaxInstances(1);
     }
 

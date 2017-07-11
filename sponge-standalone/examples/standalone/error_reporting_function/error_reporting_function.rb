@@ -3,7 +3,7 @@
 
 class HelloWorldTrigger < Trigger
     def configure
-        self.eventName = "helloEvent"
+        self.event = "helloEvent"
     end
 
     def run(event)

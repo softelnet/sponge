@@ -12,7 +12,7 @@ def onInit():
 
 class HeartbeatFilter(Filter):
     def configure(self):
-        self.eventName = "heartbeat"
+        self.event = "heartbeat"
     def init(self):
         self.heartbeatCounter = 0
     def accepts(self, event):
@@ -34,7 +34,7 @@ class HeartbeatRule(Rule):
 
 class AlarmTrigger(Trigger):
     def configure(self):
-        self.eventName = "alarm"
+        self.event = "alarm"
     def run(self, event):
         print "Sound the alarm!"
         EPS.getVariable("soundTheAlarm").set(True)

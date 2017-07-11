@@ -16,7 +16,7 @@ def onInit():
 
 class ColorFilter(Filter):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def accepts(self, event):
         self.logger.debug("Received event {}", event)
         color = event.get("color")
@@ -29,7 +29,7 @@ class ColorFilter(Filter):
 
 class ColorTrigger(Trigger):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
         self.logger.debug("Received event {}", event)
         global eventCounter

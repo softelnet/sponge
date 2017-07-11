@@ -5,6 +5,6 @@ Interactive mode example
 
 class AlarmTrigger(Trigger):
     def configure(self):
-        self.eventName = "alarm"
+        self.event = "alarm"
     def run(self, event):
         print "Sound the alarm!"

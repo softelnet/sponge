@@ -14,7 +14,7 @@ def onInit():
 
 class A(Trigger):
     def configure(self):
-        self.eventName = "a"
+        self.event = "a"
     def run(self, event):
         self.logger.debug("A start")
         index = 0
@@ -33,7 +33,7 @@ class A(Trigger):
 
 class B(Trigger):
     def configure(self):
-        self.eventName = "b"
+        self.event = "b"
     def run(self, event):
         self.logger.debug("Received {}", event.name)
 

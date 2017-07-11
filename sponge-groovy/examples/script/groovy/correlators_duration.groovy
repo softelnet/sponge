@@ -15,7 +15,7 @@ class SampleCorrelator extends Correlator {
     def eventLog = []
 
     void configure() {
-        this.eventNames = ["filesystemFailure", "diskFailure"]
+        this.events = ["filesystemFailure", "diskFailure"]
         this.duration = Duration.ofSeconds(2)
     }
     boolean acceptsAsFirst(Event event) {

@@ -47,10 +47,10 @@ EPS.enableJava(SomeJavaFilter)
 
 Each filter defines:
 
-* eventNames – types of events to which the filter listens (mandatory),
+* events – names (types) of events to which the filter listens to (mandatory),
 * displayName – the display name of the filter (optional).
 
-The above values should be set in the `configure` method by using methods `setEventNames()` and `setDisplayName()`. Thanks to many scripting languages they may be simplified to substitutions `eventNames =` and `displayName =`. The method `setEventNames()` as a parameter takes an array of event names. For a filter listening to only one event type, the function `setEventName()` (or `eventName =`) could be used instead.
+The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages they may be simplified to substitutions `events =` and `displayName =`. The method `setEvents()` as a parameter takes an array of event names. For a filter listening to only one event type, the function `setEvent()` (or `event =`) could be used instead.
 
 You could modify event attributes in filters if necessary.
 
@@ -60,7 +60,7 @@ Filters are executed in the same order as the order of their registration (i.e. 
 `configure()`:: A configuration callback method that is invoked before creating a filter. This method is mandatory.
 `init()`:: An initialization callback method that is invoked while creating a filter.
 `boolean accepts(event)`:: This method checks if an incoming event should be further processed. If any of the conditions is not fulfilled this method should return `false`. It will cause the event to be rejected. This method is mandatory.
-`setEventName(eventName)` / `setEventNames(eventNames)`:: These methods set names of filtered events.
+`setEvent(eventName)` / `setEvents(eventNames)`:: These methods set names of filtered events.
 `setDisplayName(name)`:: The method sets a display name of this filter.
 
 === Example in a script language
@@ -73,7 +73,7 @@ TIP: Class methods defined in a Python class have instance object (`self`) as th
 ----
 class ColorFilter(Filter): # <1>
     def configure(self): # <2>
-        self.eventName = "e1" # <3>
+        self.event = "e1" # <3>
     def accepts(self, event): # <4>
         self.logger.debug("Received event {}", event) # <5>
         color = event.get("color") # <6>
@@ -105,7 +105,7 @@ public class ShapeFilter extends JavaFilter { // <1>
 
     @Override
     public void configure() { // <2>
-        setEventNames("e1", "e2", "e3"); // <3>
+        setEvents("e1", "e2", "e3"); // <3>
     }
 
     @Override
@@ -163,17 +163,17 @@ EPS.enableJava(SomeJavaTrigger)
 
 Each trigger defines:
 
-* eventNames – types of events to which the trigger listens (mandatory),
+* events – names (types) of events to which the trigger listens to (mandatory),
 * displayName – the display name of the trigger (optional).
 
-The above values should be set in the `configure` method by using methods `setEventNames()` and `setDisplayName()`. Thanks to many scripting languages they may be simplified to substitutions `eventNames =` and `displayName =`. The method `setEventNames()` as a parameter takes an array of event names. For a trigger listening to only one event type, the function `setEventName()` (or `eventName =`) could be used instead.
+The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages they may be simplified to substitutions `events =` and `displayName =`. The method `setEvents()` as a parameter takes an array of event names. For a trigger listening to only one event type, the function `setEvent()` (or `event =`) could be used instead.
 
 === Important methods
 `configure()`:: A configuration callback method that is invoked before creating a trigger. This method is mandatory.
 `init()`:: An initialization callback method that is invoked while creating a trigger.
 `run(event)`:: A callback method used for processing the event, invoked when the proper event reaches this trigger. This method is mandatory.
 `boolean accepts(event)`:: This optional callback method checks if an incoming event should processed by this trigger. The default implementation returns `true`.
-`setEventName(eventName)` and `setEventNames(eventNames)`:: These methods set names of the events that cause this trigger to fire.
+`setEvent(eventName)` and `setEvents(eventNames)`:: These methods set names of the events that cause this trigger to fire.
 `setDisplayName(name)`:: The method sets a display name of this trigger.
 
 === Example in a script language
@@ -184,7 +184,7 @@ The code presented below defines a trigger named `TriggerA` listening to events 
 ----
 class TriggerA(Trigger): # <1>
     def configure(self): # <2>
-        self.eventName = "a" # <3>
+        self.event = "a" # <3>
     def run(self, event): # <4>
         self.logger.debug("Received event: {}", event.name) # <5>
 ----
@@ -208,7 +208,7 @@ public class SampleJavaTrigger extends JavaTrigger { // <1>
 
     @Override
     public void configure() { // <2>
-        setEventName("e1"); // <3>
+        setEvent("e1"); // <3>
     }
 
     @Override
@@ -528,7 +528,7 @@ Each correlator defines:
 * event names – event names to which the correlator listens (mandatory),
 * displayName – the display name of the rule (optional).
 
-The above values should be set in the `configure` method by using methods `setEventNames()` and `setDisplayName()`. Thanks to many scripting languages `setEventNames()` and `setDisplayName()` setters may be simplified to substitutions, e.g. `eventNames =`, `displayName =`.
+The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages `setEvents()` and `setDisplayName()` setters may be simplified to substitutions, e.g. `events =`, `displayName =`.
 
 === Important methods
 `configure()`:: A configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
@@ -553,7 +553,7 @@ The code presented below defines a correlator named `SampleCorrelator` that list
 class SampleCorrelator(Correlator): # <1>
     instanceStarted = AtomicBoolean(False) # <2>
     def configure(self): # <3>
-        self.eventNames = ["filesystemFailure", "diskFailure"] # <4>
+        self.events = ["filesystemFailure", "diskFailure"] # <4>
     def init(self): # <5>
         self.eventLog = [] # <6>
     def acceptsAsFirst(self, event): # <7>
@@ -593,7 +593,7 @@ public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 
     @Override
     public void configure() { // <3>
-        setEventNames("filesystemFailure", "diskFailure"); // <4>
+        setEvents("filesystemFailure", "diskFailure"); // <4>
         setMaxInstances(1); // <5>
     }
 

@@ -12,7 +12,7 @@ end
 class SampleCorrelator < Correlator
     @@instanceStarted = AtomicBoolean.new(false)
     def configure
-        self.eventNames = ["filesystemFailure", "diskFailure"]
+        self.events = ["filesystemFailure", "diskFailure"]
         self.duration = Duration.ofSeconds(2)
     end
     def init

@@ -24,7 +24,7 @@ class ScriptPlugin(Plugin):
 
 class PluginTrigger(Trigger):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
     	valueBefore = scriptPlugin.getStoredValue()
     	self.logger.info("Plugin stored value: {}", valueBefore)

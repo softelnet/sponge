@@ -6,7 +6,7 @@
 var Trigger1 = Java.extend(Trigger, {
     configure: function(self) {
         self.displayName = "Trigger1, file3";
-        self.eventName = "e1";
+        self.event = "e1";
     },
     run: function(self, event) {
         self.logger.debug("file3: Received event {}", event);
@@ -17,7 +17,7 @@ var Trigger1 = Java.extend(Trigger, {
 var Trigger3 = Java.extend(Trigger, {
     configure: function(self) {
         self.displayName = "Trigger3, file3";
-        self.eventName = "e3";
+        self.event = "e3";
     },
     run: function(self, event) {
         self.logger.debug("file3: Received event {}", event);

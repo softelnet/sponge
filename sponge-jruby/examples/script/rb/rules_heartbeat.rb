@@ -10,7 +10,7 @@ end
 
 class HeartbeatFilter < Filter
     def configure
-        self.eventName = "heartbeat"
+        self.event = "heartbeat"
     end
     def init
         @heartbeatCounter = 0
@@ -39,7 +39,7 @@ end
 
 class AlarmTrigger < Trigger
     def configure
-        self.eventName = "alarm"
+        self.event = "alarm"
     end
     def run(event)
         puts "Sound the alarm!"

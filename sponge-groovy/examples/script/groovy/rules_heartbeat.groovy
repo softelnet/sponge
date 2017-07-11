@@ -14,7 +14,7 @@ class HeartbeatFilter extends Filter {
     int heartbeatCounter = 0
 
     void configure() {
-        this.eventName = "heartbeat"
+        this.event = "heartbeat"
     }
     boolean accepts(Event event) {
         this.heartbeatCounter += 1
@@ -40,7 +40,7 @@ class HeartbeatRule extends Rule {
 
 class AlarmTrigger extends Trigger {
     void configure() {
-        this.eventName = "alarm"
+        this.event = "alarm"
     }
     void run(Event event) {
         println "Sound the alarm!"

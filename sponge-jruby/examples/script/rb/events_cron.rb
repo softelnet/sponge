@@ -11,7 +11,7 @@ end
 
 class CronTrigger < Trigger
     def configure
-        self.eventName = "cronEvent"
+        self.event = "cronEvent"
     end
     def run(event)
         self.logger.debug("Received event {}: {}", $eventCounter.get() + 1, event.name)

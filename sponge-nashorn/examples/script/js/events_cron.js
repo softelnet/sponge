@@ -12,7 +12,7 @@ function onInit() {
 
 var CronTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "cronEvent";
+        self.event = "cronEvent";
     },
     run: function(self, event) {
         eventCounter = EPS.getVariable("eventCounter")

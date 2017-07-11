@@ -14,7 +14,7 @@ def onInit():
 
 class TriggerA(Trigger):
     def configure(self):
-        self.eventName = "a"
+        self.event = "a"
     def run(self, event):
         EPS.getVariable("receivedEventA1").set(1)
 
@@ -23,7 +23,7 @@ EPS.enable(TriggerA)
 
 class TriggerA(Trigger):
     def configure(self):
-        self.eventName = "a"
+        self.event = "a"
     def run(self, event):
         EPS.getVariable("receivedEventA2").set(2)
 

@@ -19,7 +19,7 @@ class SampleCorrelator extends Correlator {
     def eventLog = []
 
     void configure() {
-        this.eventNames = ["filesystemFailure", "diskFailure"]
+        this.events = ["filesystemFailure", "diskFailure"]
         this.maxInstances = 1
     }
     void onEvent(Event event) {

@@ -21,7 +21,7 @@ void onInit() {
 class ColorDeduplicationFilter extends Filter {
     def deduplication = new Deduplication("color")
     void configure() {
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void init() {
         this.deduplication.cacheBuilder.maximumSize(1000).expireAfterWrite(5, TimeUnit.MINUTES)
@@ -33,7 +33,7 @@ class ColorDeduplicationFilter extends Filter {
 
 class ColorTrigger extends Trigger {
     void configure() {
-        this.eventNames = ["e1", "e2"]
+        this.events = ["e1", "e2"]
     }
     void run(Event event) {
         this.logger.debug("Received event {}", event)

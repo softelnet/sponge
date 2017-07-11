@@ -273,7 +273,7 @@ Let's see the time-honored Hello World example. In this case the text `"Hello Wo
 # Trigger definition section.
 class HelloWorldTrigger(Trigger): # <1>
     def configure(self): # <2>
-        self.eventName = "helloEvent" # <3>
+        self.event = "helloEvent" # <3>
     def run(self, event): # <4>
         print event.get("say") # <5>
 
@@ -316,7 +316,7 @@ NOTE: All callouts placed in the source code in the examples below remain the sa
 ----
 class HelloWorldTrigger < Trigger # <1>
     def configure # <2>
-        self.eventName = "helloEvent" # <3>
+        self.event = "helloEvent" # <3>
     end
 
     def run(event) # <4>
@@ -346,7 +346,7 @@ Press `CTRL+C` to exit.
 ----
 class HelloWorldTrigger extends Trigger { // <1>
     void configure() { // <2>
-        this.eventName = "helloEvent" // <3>
+        this.event = "helloEvent" // <3>
     }
     void run(Event event) { // <4>
         println event.get("say") // <5>
@@ -375,7 +375,7 @@ Press `CTRL+C` to exit.
 ----
 var HelloWorldTrigger = Java.extend(Trigger, { // <1>
     configure: function(self) { // <2>
-        self.eventName = "helloEvent"; // <3>
+        self.event = "helloEvent"; // <3>
     },
     run: function(self, event) { // <4>
         print(event.get("say")); // <5>
@@ -418,7 +418,7 @@ class HeartbeatRule(Rule): # <1>
 
 class AlarmTrigger(Trigger): # <7>
     def configure(self):
-        self.eventName = "alarm"
+        self.event = "alarm"
     def run(self, event):
         print "Sound the alarm!"
 ----
@@ -465,7 +465,7 @@ end
 
 class AlarmTrigger < Trigger # <7>
     def configure
-        self.eventName = "alarm"
+        self.event = "alarm"
     end
     def run(event)
         puts "Sound the alarm!"
@@ -507,7 +507,7 @@ class HeartbeatRule extends Rule { // <1>
 
 class AlarmTrigger extends Trigger { // <7>
     void configure() {
-        this.eventName = "alarm"
+        this.event = "alarm"
     }
     void run(Event event) {
         println "Sound the alarm!"
@@ -549,7 +549,7 @@ var HeartbeatRule = Java.extend(Rule, { // <1>
 
 var AlarmTrigger = Java.extend(Trigger, { // <7>
     configure: function(self) {
-        self.eventName = "alarm";
+        self.event = "alarm";
     },
     run: function(self, event) {
         print("Sound the alarm!");

@@ -14,7 +14,7 @@ void onInit() {
 
 class ClonePolicyTrigger extends Trigger {
     void configure() {
-        this.eventNames = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
+        this.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
     }
     void run(Event event) {
         Map events = EPS.getVariable("events")

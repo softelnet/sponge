@@ -8,7 +8,7 @@ var TestStatus = org.openksavi.sponge.test.TestStatus;
 
 var ReloadTrigger = Java.extend(Trigger, {
     configure : function(self) {
-        self.eventName = "reload";
+        self.event = "reload";
     },
     run : function(self, event) {
         self.logger.debug("Received event: {}", event.name);

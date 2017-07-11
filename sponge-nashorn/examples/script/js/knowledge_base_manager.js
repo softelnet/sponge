@@ -27,7 +27,7 @@ function verifyManager() {
 
 var VerifyTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "verify";
+        self.event = "verify";
     },
     run: function(self, event) {
         verifyManager();
@@ -36,7 +36,7 @@ var VerifyTrigger = Java.extend(Trigger, {
 
 var TriggerA = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "a";
+        self.event = "a";
     },
     run: function(self, event) {
         //

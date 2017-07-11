@@ -15,7 +15,7 @@ end
 
 class SampleCorrelator < Correlator
     def configure
-        self.eventNames = ["filesystemFailure", "diskFailure"]
+        self.events = ["filesystemFailure", "diskFailure"]
         self.maxInstances = 1
     end
     def init

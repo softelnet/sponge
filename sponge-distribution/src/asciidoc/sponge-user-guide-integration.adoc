@@ -36,7 +36,7 @@ public class TestConfig {
 ----
 class SpringTrigger(Trigger):
     def configure(self):
-        self.eventName = "springEvent"
+        self.event = "springEvent"
     def run(self, event):
         beanValue = spring.context.getBean("testBean") # <1>
         self.logger.debug("Bean value = {}", beanValue)
@@ -196,7 +196,7 @@ public class ExampleConfiguration extends EngineCamelConfiguration {
 ----
 class CamelTrigger(Trigger):
     def configure(self):
-        self.eventName = "spongeProducer"
+        self.event = "spongeProducer"
     def run(self, event):
         print event.body
 ----
@@ -294,7 +294,7 @@ public class ExampleConfiguration extends EngineCamelConfiguration {
 ----
 class CamelTrigger(Trigger):
     def configure(self):
-        self.eventName = "spongeEvent"
+        self.event = "spongeEvent"
     def run(self, event):
         camel.send(event.get("message"))
 

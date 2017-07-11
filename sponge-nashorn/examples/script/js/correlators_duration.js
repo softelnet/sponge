@@ -13,7 +13,7 @@ function onInit() {
 
 var SampleCorrelator = Java.extend(Correlator, {
     configure: function(self) {
-        self.eventNames = ["filesystemFailure", "diskFailure"];
+        self.events = ["filesystemFailure", "diskFailure"];
         self.duration = Duration.ofSeconds(2);
     },
     init: function(self) {

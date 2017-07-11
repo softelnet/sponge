@@ -29,7 +29,7 @@ end
 
 class HttpStatusTrigger < Trigger
     def configure
-        self.eventName = "checkStatus"
+        self.event = "checkStatus"
     end
     def init
         @mutex = Mutex.new

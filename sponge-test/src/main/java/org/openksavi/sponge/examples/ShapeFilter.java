@@ -22,7 +22,7 @@ public class ShapeFilter extends org.openksavi.sponge.java.JavaFilter {
 
     @Override
     public void configure() {
-        setEventNames("e1", "e2", "e3");
+        setEvents("e1", "e2", "e3");
     }
 
     @Override

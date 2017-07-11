@@ -11,7 +11,7 @@ def onInit():
 
 class CamelTrigger(Trigger):
     def configure(self):
-        self.eventName = "spongeProducer"
+        self.event = "spongeProducer"
     def run(self, event):
         print event.body
         EPS.getVariable("sentCamelMessage").set(True)

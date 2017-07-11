@@ -29,7 +29,7 @@ end
 
 class PluginTrigger < Trigger
     def configure
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def run(event)
     	valueBefore = $scriptPlugin.getStoredValue()

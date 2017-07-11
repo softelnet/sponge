@@ -33,7 +33,7 @@ var ScriptPlugin = Java.extend(Plugin, {
 
 var PluginTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "e1";
+        self.event = "e1";
     },
     run: function(self, event) {
     	valueBefore = scriptPlugin.target.getStoredValue();

@@ -14,7 +14,7 @@ function onInit() {
 
 var HeartbeatFilter = Java.extend(Filter, {
     configure: function(self) {
-        self.eventName = "heartbeat";
+        self.event = "heartbeat";
     },
     init: function(self) {
         self.target = new function() {
@@ -46,7 +46,7 @@ var HeartbeatRule = Java.extend(Rule, {
 
 var AlarmTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "alarm";
+        self.event = "alarm";
     },
     run: function(self, event) {
         print("Sound the alarm!");

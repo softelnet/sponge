@@ -14,7 +14,7 @@ end
 
 class TriggerA < Trigger
     def configure
-        self.eventName = "a"
+        self.event = "a"
     end
 
     def run(event)
@@ -27,7 +27,7 @@ $EPS.enable(TriggerA)
 
 class TriggerA < Trigger
     def configure
-        self.eventName = "a"
+        self.event = "a"
     end
 
     def run(event)

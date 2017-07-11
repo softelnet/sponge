@@ -9,7 +9,7 @@ void onInit() {
 
 class CronTrigger extends Trigger {
     void configure() {
-        this.eventName = "cronEvent"
+        this.event = "cronEvent"
     }
     void run(Event event) {
         int eventCounter = EPS.getVariable("eventCounter")

@@ -21,7 +21,7 @@ package org.openksavi.sponge.jruby;
  */
 public abstract class JRubyFilter extends org.openksavi.sponge.core.filter.BaseFilter {
 
-    public final void setEventNames(Object eventNames) {
-        super.setEventNames(RubyUtils.toJavaArray(eventNames));
+    public final void setEvents(Object eventNames) {
+        super.setEvents(RubyUtils.toJavaArray(eventNames));
     }
 }

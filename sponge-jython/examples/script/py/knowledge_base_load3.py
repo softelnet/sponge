@@ -6,7 +6,7 @@ Loading knowledge bases
 class Trigger1(Trigger):
     def configure(self):
         self.displayName = "Trigger1, file3"
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
         self.logger.debug("file3: Received event {}", event)
         global eventCounter
@@ -15,7 +15,7 @@ class Trigger1(Trigger):
 class Trigger3(Trigger):
     def configure(self):
         self.displayName = "Trigger3, file3"
-        self.eventName = "e3"
+        self.event = "e3"
     def run(self, event):
         self.logger.debug("file3: Received event {}", event)
         global eventCounter

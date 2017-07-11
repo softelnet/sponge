@@ -12,7 +12,7 @@ def onInit():
 
 class UnusedCamelTrigger(Trigger):
     def configure(self):
-        self.eventName = "spongeProducer"
+        self.event = "spongeProducer"
     def run(self, event):
         EPS.getVariable("sentCamelMessage_" + event.name).set(True)
 

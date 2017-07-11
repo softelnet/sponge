@@ -25,13 +25,13 @@ def verifyManager():
 
 class VerifyTrigger(Trigger):
     def configure(self):
-        self.eventName = "verify"
+        self.event = "verify"
     def run(self, event):
         verifyManager()
 
 class TriggerA(Trigger):
     def configure(self):
-        self.eventName = "a"
+        self.event = "a"
     def run(self, event):
         pass
 

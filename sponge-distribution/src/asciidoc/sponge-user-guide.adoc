@@ -304,7 +304,7 @@ public class EchoPlugin extends JavaPlugin { // <1>
 ----
 class PluginTrigger(Trigger):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
         self.logger.debug("Echo from the plugin: {}", echoPlugin.echo) # <1>
 ----
@@ -513,7 +513,7 @@ There is a limitation for using custom class attributes and methods in event pro
 ----
 var HeartbeatFilter = Java.extend(Filter, {
     configure: function(self) {
-        self.eventName = "heartbeat";
+        self.event = "heartbeat";
     },
     init: function(self) {
         self.target = new function() { // <1>

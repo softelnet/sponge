@@ -11,7 +11,7 @@ def onInit():
 
 class SpringTrigger(Trigger):
     def configure(self):
-        self.eventName = "spring"
+        self.event = "spring"
     def run(self, event):
         beanValue = spring.context.getBean("testBean")
         self.logger.debug("Bean value = {}", beanValue)

@@ -14,14 +14,14 @@ def onInit():
 
 class TriggerA(Trigger):
     def configure(self):
-        self.eventName = "a"
+        self.event = "a"
     def run(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.getVariable("receivedEventA").set(True)
 
 class TriggerB(Trigger):
     def configure(self):
-        self.eventName = "b"
+        self.event = "b"
     def run(self, event):
         self.logger.debug("Received event: {}", event.name)
         receivedEventBCount = EPS.getVariable("receivedEventBCount")

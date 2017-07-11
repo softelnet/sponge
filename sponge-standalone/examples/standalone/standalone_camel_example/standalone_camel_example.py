@@ -12,7 +12,7 @@ def onInit():
 
 class CamelTrigger(Trigger):
     def configure(self):
-        self.eventName = "spongeEvent"
+        self.event = "spongeEvent"
     def run(self, event):
         message = spring.context.getBean("spongeEngine").description + ": " + event.get("message")
         camel.send(message)

@@ -8,7 +8,7 @@ import re, collections
 # Reject news with empty or short titles.
 class NewsFilter(Filter):
     def configure(self):
-        self.eventName = "news"
+        self.event = "news"
     def accepts(self, event):
         title = event.get("title")
         words = len(re.findall("\w+", title))
@@ -17,7 +17,7 @@ class NewsFilter(Filter):
 # Log every news.
 class LogNewsTrigger(Trigger):
     def configure(self):
-        self.eventName = "news"
+        self.event = "news"
     def run(self, event):
         print("News from {} - {}".format(event.get("source"), event.get("title")))
 
@@ -32,7 +32,7 @@ class NoNewNewsAlarmRule(Rule):
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
     def configure(self):
-        self.eventName = "alarm"
+        self.event = "alarm"
     def run(self, event):
         print("Sound the alarm! {}".format(event.get("message")))
         print("Last news was:\n{}".format(EPS.callAction("EmphasizeAction", storagePlugin.storedValue[-1])))
@@ -43,7 +43,7 @@ class AlarmTrigger(Trigger):
 class LatestNewsCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def configure(self):
-        self.eventNames = ["news"]
+        self.events = ["news"]
     def init(self):
         storagePlugin.storedValue = collections.deque(maxlen=int(EPS.getVariable("latestNewsMaxSize", 2)))
     def acceptsAsFirst(self, event):

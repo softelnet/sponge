@@ -91,13 +91,13 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
         return getDefinition().getEventMode(index);
     }
 
-    public void setEvents(Object[] events) {
-        String[] eventNames = new String[events.length];
-        String[] eventAliases = new String[events.length];
-        EventMode[] modes = new EventMode[events.length];
+    public void setEventSpecs(List<Object> events) {
+        String[] eventNames = new String[events.size()];
+        String[] eventAliases = new String[events.size()];
+        EventMode[] modes = new EventMode[events.size()];
 
-        for (int i = 0; i < events.length; i++) {
-            RuleEventSpec eventSpec = getKnowledgeBase().getInterpreter().getRuleEventSpec(events[i]);
+        for (int i = 0; i < events.size(); i++) {
+            RuleEventSpec eventSpec = getKnowledgeBase().getInterpreter().getRuleEventSpec(events.get(i));
 
             eventNames[i] = eventSpec.getEventName();
             eventAliases[i] = eventSpec.getEventAlias();

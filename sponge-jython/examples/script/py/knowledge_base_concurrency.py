@@ -12,7 +12,7 @@ def onInit():
 
 class A(Trigger):
     def configure(self):
-        self.eventName = "a"
+        self.event = "a"
     def run(self, event):
         TimeUnit.SECONDS.sleep(1)
         EPS.getVariable("value").set("A1")
@@ -21,7 +21,7 @@ class A(Trigger):
 
 class B(Trigger):
     def configure(self):
-        self.eventName = "b"
+        self.event = "b"
     def run(self, event):
         TimeUnit.SECONDS.sleep(2)
         EPS.getVariable("value").set("B1")
@@ -30,7 +30,7 @@ class B(Trigger):
 
 class C(Trigger):
     def configure(self):
-        self.eventName = "c"
+        self.event = "c"
     def run(self, event):
         TimeUnit.SECONDS.sleep(8)
         EPS.getVariable("value").set("C1")

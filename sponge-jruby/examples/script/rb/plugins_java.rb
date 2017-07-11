@@ -9,7 +9,7 @@ end
 
 class PluginTrigger < Trigger
     def configure
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def run(event)
         self.logger.debug("Connection name is still: {}", $connectionPlugin.connectionName)

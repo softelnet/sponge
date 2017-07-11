@@ -16,8 +16,11 @@
 
 package org.openksavi.sponge.core.rule;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Lists;
 
 import org.openksavi.sponge.core.BaseEventSetProcessor;
 import org.openksavi.sponge.event.Event;
@@ -83,9 +86,20 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
         return getAdapterImpl().getEvent(eventAlias);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public final void setEvents(Object[] events) {
-        getAdapterImpl().setEvents(events);
+    public void setEvents(Object[] events) {
+        // Some scripting languages may invoke this method differently, because the array of Objects is too generic.
+        if (events.length == 1 && events[0] != null && events[0] instanceof Iterable) {
+            getAdapterImpl().setEventSpecs(Lists.newArrayList((Iterable<Object>) events[0]));
+        } else {
+            getAdapterImpl().setEventSpecs(Arrays.asList(events));
+        }
+    }
+
+    @Override
+    public void setEvents(String... eventSpecs) {
+        setEvents((Object[]) eventSpecs);
     }
 
     @Override

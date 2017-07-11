@@ -13,7 +13,7 @@ def onInit():
 
 class CronTrigger(Trigger):
     def configure(self):
-        self.eventName = "cronEvent"
+        self.event = "cronEvent"
     def run(self, event):
         global eventCounter
         self.logger.debug("Received event {}: {}", eventCounter.get() + 1, event.name)

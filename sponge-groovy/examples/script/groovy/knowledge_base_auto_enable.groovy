@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
  class AutoFilter extends Filter {
      void configure() {
-         this.eventName = "e1"
+         this.event = "e1"
      }
      boolean accepts(Event event) {
          this.logger.debug("Received event: {}", event.name)
@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class AutoTrigger extends Trigger {
     void configure() {
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void run(Event event) {
         this.logger.debug("Received event: {}", event.name)
@@ -51,7 +51,7 @@ class AutoRule extends Rule {
 
 class AutoCorrelator extends Correlator {
     void configure() {
-        this.eventNames = ["e1", "e2"]
+        this.events = ["e1", "e2"]
     }
     boolean acceptsAsFirst(Event event) {
         return event.name == "e1"

@@ -22,7 +22,7 @@ def onInit():
 class Trigger1(Trigger):
     def configure(self):
         self.displayName = "Trigger1, file1"
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
         self.logger.debug("file1: Received event {}", event)
         global eventCounter
@@ -32,7 +32,7 @@ class Trigger1(Trigger):
 class Trigger2(Trigger):
     def configure(self):
         self.displayName = "Trigger2, file1"
-        self.eventName = "e2"
+        self.event = "e2"
     def run(self, event):
         self.logger.debug("file1: Received event {}", event)
         global eventCounter
@@ -41,7 +41,7 @@ class Trigger2(Trigger):
 
 class LoadKbFile(Trigger):
     def configure(self):
-        self.eventName = "loadKbFile"
+        self.event = "loadKbFile"
     def run(self, event):
         kbFile = event.get("kbFile")
         EPS.kb.load(kbFile)

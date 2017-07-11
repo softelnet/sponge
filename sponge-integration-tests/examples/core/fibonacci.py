@@ -27,7 +27,7 @@ class FibonacciRule(Rule):
 
 class LogTrigger(Trigger):
     def configure(self):
-        self.eventName = "f"
+        self.event = "f"
     def run(self, event):
         self.logger.debug("f({}) = {}", event.get("index"), event.get("value"))
 

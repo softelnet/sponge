@@ -15,7 +15,7 @@ def onInit():
 
 class RssTrigger(Trigger):
     def configure(self):
-        self.eventName = "rss"
+        self.event = "rss"
     def run(self, event):
         camel.send("[" + event.get("channel") + "] " + event.get("title"))
 

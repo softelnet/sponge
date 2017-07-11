@@ -79,7 +79,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
 
         @Override
         public void configure() {
-            setEventNames("e3");
+            setEvents("e3");
         }
 
         @Override

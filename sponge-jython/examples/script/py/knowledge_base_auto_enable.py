@@ -17,7 +17,7 @@ class AutoAction(Action):
 
 class AutoFilter(Filter):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def accepts(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.getVariable("counter").incrementAndGet()
@@ -25,7 +25,7 @@ class AutoFilter(Filter):
 
 class AutoTrigger(Trigger):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.getVariable("counter").incrementAndGet()
@@ -39,7 +39,7 @@ class AutoRule(Rule):
 
 class AutoCorrelator(Correlator):
     def configure(self):
-        self.eventNames = ["e1", "e2"]
+        self.events = ["e1", "e2"]
     def acceptsAsFirst(self, event):
         return event.name == "e1"
     def onEvent(self, event):

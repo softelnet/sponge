@@ -42,8 +42,8 @@ public abstract class JRubyRule extends org.openksavi.sponge.core.rule.BaseRule 
         }
     };
 
-    public final void setEventNames(Object eventNames) {
-        super.setEventNames(RubyUtils.toJavaArray(eventNames));
+    public final void setEvents(Object eventNames) {
+        super.setEvents(RubyUtils.toJavaArray(eventNames));
     }
 
     public void setConditions(String eventAlias, RubyObject... rubyObjects) {

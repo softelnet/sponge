@@ -10,7 +10,7 @@ void onInit() {
 
 class Trigger1 extends Trigger {
     void configure() {
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void run(Event event) {
     	int eventCounter = EPS.getVariable("eventCounter")
@@ -25,7 +25,7 @@ class Trigger1 extends Trigger {
 
 class Trigger2 extends Trigger {
     void configure() {
-        this.eventName = "e2"
+        this.event = "e2"
     }
     void run(Event event) {
         this.logger.debug("Removing entry")

@@ -12,7 +12,7 @@ end
 
 class Trigger1 < Trigger
     def configure
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def run(event)
     	$eventCounter.incrementAndGet
@@ -25,7 +25,7 @@ end
 
 class Trigger2 < Trigger
     def configure
-        self.eventName = "e2"
+        self.event = "e2"
     end
     def run(event)
         self.logger.debug("Removing entry")

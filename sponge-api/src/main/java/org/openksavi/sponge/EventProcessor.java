@@ -21,4 +21,17 @@ package org.openksavi.sponge;
  */
 public interface EventProcessor<T extends EventProcessorAdapter<?>> extends Processor<T>, EventProcessorOperations {
 
+    /**
+     * A convenient method for setting event names that this event processor will be listening to.
+     *
+     * @param eventNames the event names.
+     */
+    void setEvents(String... eventNames);
+
+    /**
+     * A convenient method for setting event name that this event processor will be listening to.
+     *
+     * @param eventName the event name.
+     */
+    void setEvent(String eventName);
 }

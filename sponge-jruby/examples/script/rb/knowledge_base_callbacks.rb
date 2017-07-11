@@ -7,7 +7,7 @@ java_import org.openksavi.sponge.test.TestStatus
 
 class ReloadTrigger < Trigger
     def configure
-        self.eventName = "reload"
+        self.event = "reload"
     end
 
     def run(event)

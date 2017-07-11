@@ -13,7 +13,7 @@ function onInit() {
 
 var Trigger1 = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "e1";
+        self.event = "e1";
     },
     run: function(self, event) {
         eventCounter = EPS.getVariable("eventCounter")
@@ -28,7 +28,7 @@ var Trigger1 = Java.extend(Trigger, {
 
 var Trigger2 = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "e2";
+        self.event = "e2";
     },
     run: function(self, event) {
         self.logger.debug("Removing entry");

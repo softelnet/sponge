@@ -5,7 +5,7 @@ Error reporting
 
 class HelloWorldTrigger(Trigger):
     def configure(self):
-        self.eventName = "helloEvent"
+        self.event = "helloEvent"
     def run(self, event):
         whatIsThis.doSomething()
         print event.get("say")

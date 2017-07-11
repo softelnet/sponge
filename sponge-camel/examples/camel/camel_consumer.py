@@ -11,7 +11,7 @@ def onInit():
 
 class CamelTrigger(Trigger):
     def configure(self):
-        self.eventName = "spongeEvent"
+        self.event = "spongeEvent"
     def run(self, event):
         camel.send(event.get("message"))
 

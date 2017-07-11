@@ -10,7 +10,7 @@ def onInit():
 
 class PluginTrigger(Trigger):
     def configure(self):
-        self.eventName = "e1"
+        self.event = "e1"
     def run(self, event):
         self.logger.debug("Connection name is still: {}", connectionPlugin.connectionName)
         EPS.setVariable("connectionName", connectionPlugin.connectionName)

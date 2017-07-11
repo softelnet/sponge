@@ -26,7 +26,7 @@ class ScriptPlugin extends Plugin {
 
 class PluginTrigger extends Trigger {
     void configure() {
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void run(Event event) {
         def scriptPlugin = EPS.getPlugin("scriptPlugin")

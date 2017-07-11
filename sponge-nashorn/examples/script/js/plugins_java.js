@@ -11,7 +11,7 @@ function onInit() {
 
 var PluginTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "e1";
+        self.event = "e1";
     },
     run: function(self, event) {
         self.logger.debug("Connection name is still: {}", connectionPlugin.connectionName);

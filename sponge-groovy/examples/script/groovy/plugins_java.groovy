@@ -11,7 +11,7 @@ void onInit() {
 
 class PluginTrigger extends Trigger {
     void configure() {
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void run(Event event) {
         def connectionPlugin = EPS.getPlugin("connectionPlugin")

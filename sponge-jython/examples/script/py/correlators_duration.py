@@ -12,7 +12,7 @@ def onInit():
 class SampleCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def configure(self):
-        self.eventNames = ["filesystemFailure", "diskFailure"]
+        self.events = ["filesystemFailure", "diskFailure"]
         self.duration = Duration.ofSeconds(2)
     def init(self):
         self.eventLog = []

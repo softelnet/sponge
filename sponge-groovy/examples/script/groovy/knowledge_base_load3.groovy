@@ -6,7 +6,7 @@
 class Trigger1 extends Trigger {
     void configure() {
         this.displayName = "Trigger1, file3"
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void run(Event event) {
         this.logger.debug("file3: Received event {}", event)
@@ -17,7 +17,7 @@ class Trigger1 extends Trigger {
 class Trigger3 extends Trigger {
     void configure() {
         this.displayName = "Trigger3, file3"
-        this.eventName = "e3"
+        this.event = "e3"
     }
     void run(Event event) {
         this.logger.debug("file3: Received event {}", event)

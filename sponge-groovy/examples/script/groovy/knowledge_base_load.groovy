@@ -21,7 +21,7 @@ void onInit() {
 class Trigger1 extends Trigger {
     void configure() {
         this.displayName = "Trigger1, file1"
-        this.eventName = "e1"
+        this.event = "e1"
     }
     void run(Event event) {
         this.logger.debug("file1: Received event {}", event)
@@ -32,7 +32,7 @@ class Trigger1 extends Trigger {
 class Trigger2 extends Trigger {
     void configure() {
         this.displayName = "Trigger2, file1"
-        this.eventName = "e2"
+        this.event = "e2"
     }
     void run(Event event) {
         this.logger.debug("file1: Received event {}", event)
@@ -43,7 +43,7 @@ class Trigger2 extends Trigger {
 
 class LoadKbFile extends Trigger {
     void configure() {
-        this.eventName = "loadKbFile"
+        this.event = "loadKbFile"
     }
     void run(Event event) {
         def kbFile = event.get("kbFile")

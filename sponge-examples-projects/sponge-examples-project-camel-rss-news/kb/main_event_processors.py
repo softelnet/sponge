@@ -8,7 +8,7 @@ import re, collections
 # Reject news with empty or short titles.
 class NewsFilter(Filter):
     def configure(self):
-        self.eventName = "news"
+        self.event = "news"
     def accepts(self, event):
         title = event.get("title")
         words = len(re.findall("\w+", title))
@@ -17,7 +17,7 @@ class NewsFilter(Filter):
 # Log every news.
 class LogNewsTrigger(Trigger):
     def configure(self):
-        self.eventName = "news"
+        self.event = "news"
     def run(self, event):
         self.logger.info("News from " + event.get("source") + " - " + event.get("title"))
 
@@ -32,7 +32,7 @@ class NoNewNewsAlarmRule(Rule):
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
     def configure(self):
-        self.eventName = "alarm"
+        self.event = "alarm"
     def run(self, event):
         self.logger.info("Sound the alarm! {}", event.get("message"))
         self.logger.info("Last news was (repeat {} time(s)):\n{}", echoPlugin.count,
@@ -42,13 +42,11 @@ class AlarmTrigger(Trigger):
 # Start only one instance of this correlator for the system. Note that in this example data is stored in a plugin,
 # not in this correlator.
 class LatestNewsCorrelator(Correlator):
-    instanceStarted = AtomicBoolean(False)
     def configure(self):
-        self.eventNames = ["news"]
+        self.events = ["news"]
+        self.maxInstances = 1
     def init(self):
         storagePlugin.storedValue = collections.deque(maxlen=int(EPS.getVariable("latestNewsMaxSize", 2)))
-    def acceptsAsFirst(self, event):
-        return LatestNewsCorrelator.instanceStarted.compareAndSet(False, True)
     def onEvent(self, event):
         storagePlugin.storedValue.append(event.get("title"))
         self.logger.debug("{} - latest news: {}", self.hashCode(), str(storagePlugin.storedValue))

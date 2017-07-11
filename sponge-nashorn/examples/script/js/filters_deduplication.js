@@ -18,7 +18,7 @@ function onInit() {
 
 var ColorDeduplicationFilter = Java.extend(Filter, {
     configure: function(self) {
-        self.eventName = "e1";
+        self.event = "e1";
     },
     init: function(self) {
         // There is some magic required here because of the limitations in JavaScript support.
@@ -34,7 +34,7 @@ var ColorDeduplicationFilter = Java.extend(Filter, {
 
 var ColorTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventNames = ["e1", "e2"];
+        self.events = ["e1", "e2"];
     },
     run: function(self, event) {
         self.logger.debug("Received event {}", event);

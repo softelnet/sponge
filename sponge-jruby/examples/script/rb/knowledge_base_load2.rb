@@ -4,7 +4,7 @@
 class Trigger1 < Trigger
     def configure
         self.displayName = "Trigger1, file2"
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def run(event)
         self.logger.debug("file2: Received event {}", event)
@@ -15,7 +15,7 @@ end
 class Trigger2 < Trigger
     def configure
         self.displayName = "Trigger2, file2"
-        self.eventName = "e2"
+        self.event = "e2"
     end
     def run(event)
         self.logger.debug("file2: Received event {}", event)

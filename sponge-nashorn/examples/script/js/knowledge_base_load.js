@@ -23,7 +23,7 @@ function onInit() {
 var Trigger1 = Java.extend(Trigger, {
     configure: function(self) {
         self.displayName = "Trigger1, file1";
-        self.eventName = "e1";
+        self.event = "e1";
     },
     run: function(self, event) {
         self.logger.debug("file1: Received event {}", event);
@@ -34,7 +34,7 @@ var Trigger1 = Java.extend(Trigger, {
 var Trigger2 = Java.extend(Trigger, {
     configure: function(self) {
         self.displayName = "Trigger2, file1";
-        self.eventName = "e2";
+        self.event = "e2";
     },
     run: function(self, event) {
         self.logger.debug("file1: Received event {}", event);
@@ -44,7 +44,7 @@ var Trigger2 = Java.extend(Trigger, {
 
 var LoadKbFile = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventName = "loadKbFile";
+        self.event = "loadKbFile";
     },
     run: function(self, event) {
         var kbFile = event.get("kbFile");

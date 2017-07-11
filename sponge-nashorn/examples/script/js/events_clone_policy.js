@@ -14,7 +14,7 @@ function onInit() {
 
 var ClonePolicyTrigger = Java.extend(Trigger, {
     configure: function(self) {
-        self.eventNames = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"];
+        self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"];
     },
     run: function(self, event) {
         var events = EPS.getVariable("events");

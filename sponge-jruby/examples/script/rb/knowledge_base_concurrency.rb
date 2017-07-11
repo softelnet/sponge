@@ -11,7 +11,7 @@ end
 
 class A < Trigger
     def configure
-        self.eventName = "a"
+        self.event = "a"
     end
     def run(event)
         TimeUnit::SECONDS::sleep(1)
@@ -23,7 +23,7 @@ end
 
 class B < Trigger
     def configure
-        self.eventName = "b"
+        self.event = "b"
     end
     def run(event)
         TimeUnit::SECONDS::sleep(2)
@@ -35,7 +35,7 @@ end
 
 class C < Trigger
     def configure
-        self.eventName = "c"
+        self.event = "c"
     end
     def run(event)
         TimeUnit::SECONDS::sleep(8)

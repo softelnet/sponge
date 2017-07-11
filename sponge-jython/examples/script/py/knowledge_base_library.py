@@ -24,7 +24,7 @@ def checkPageStatus(host):
 
 class HttpStatusTrigger(Trigger):
     def configure(self):
-        self.eventName = "checkStatus"
+        self.event = "checkStatus"
     def run(self, event):
         status = checkPageStatus(event.get("host"))
         EPS.getVariable("hostStatus").put(event.get("host"), status)

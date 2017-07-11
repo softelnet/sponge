@@ -18,7 +18,7 @@ end
 
 class AutoFilter < Filter
     def configure
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def accepts(event)
         self.logger.debug("Received event: {}", event.name)
@@ -29,7 +29,7 @@ end
 
 class AutoTrigger < Trigger
     def configure
-        self.eventName = "e1"
+        self.event = "e1"
     end
     def run(event)
         self.logger.debug("Received event: {}", event.name)
@@ -49,7 +49,7 @@ end
 
 class AutoCorrelator < Correlator
     def configure
-        self.eventNames = ["e1", "e2"]
+        self.events = ["e1", "e2"]
     end
     def acceptsAsFirst(event)
         return event.name == "e1"
