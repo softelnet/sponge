@@ -24,5 +24,5 @@ class CamelConsumerTrigger(Trigger):
         camel.send(event.get("message"))
 
 def onStartup():
-    EPS.event("e2").set("message", "Hi there").sendAfter(1000)
+    EPS.event("e2").set("message", "Hi there").send()
 

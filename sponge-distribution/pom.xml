@@ -101,8 +101,6 @@
                                 <sponge>Sponge</sponge>
                                 <projectVersion>${release.version}</projectVersion>
                                 <rootDir>${rootDir}</rootDir>
-                                <examplesDir>${examplesProject}/examples</examplesDir>
-                                <javaTestDir>${examplesProject}/src/test/java</javaTestDir>
                                 <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>
                                 <standaloneDir>${standalonePackageName}</standaloneDir>
                                 <standalonePackage>${standalonePackageName}-standalone</standalonePackage>

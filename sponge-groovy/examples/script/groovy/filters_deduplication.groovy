@@ -42,13 +42,13 @@ class ColorTrigger extends Trigger {
 }
 
 void onStartup() {
-    EPS.event("e1").set("color", "red").sendAfter(100)
-    EPS.event("e1").set("color", "blue").sendAfter(100)
-    EPS.event("e2").set("color", "red").sendAfter(200)
-    EPS.event("e2").set("color", "blue").sendAfter(200)
+    EPS.event("e1").set("color", "red").send()
+    EPS.event("e1").set("color", "blue").send()
+    EPS.event("e2").set("color", "red").send()
+    EPS.event("e2").set("color", "blue").send()
 
-    EPS.event("e1").set("color", "red").sendAfter(300)
-    EPS.event("e1").set("color", "blue").sendAfter(300)
-    EPS.event("e2").set("color", "red").sendAfter(400)
-    EPS.event("e2").set("color", "blue").sendAfter(400)
+    EPS.event("e1").set("color", "red").send()
+    EPS.event("e1").set("color", "blue").send()
+    EPS.event("e2").set("color", "red").send()
+    EPS.event("e2").set("color", "blue").send()
 }

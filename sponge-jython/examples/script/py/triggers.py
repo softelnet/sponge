@@ -35,9 +35,9 @@ def onLoad():
 def onStartup():
     EPS.logger.debug("Startup {}, triggers: {}", EPS.description, EPS.engine.triggers)
     EPS.logger.debug("Knowledge base name: {}", EPS.kb.name)
-    EPS.event("a").sendAfter(100)
+    EPS.event("a").send()
     EPS.event("b").sendAfter(200, 200)
-    EPS.event("testJava").sendAfter(100)
+    EPS.event("testJava").send()
 
 def onShutdown():
     EPS.logger.debug("Shutting down")

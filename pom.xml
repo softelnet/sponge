@@ -197,10 +197,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute>
-                                            <runOnIncremental>false</runOnIncremental>
-                                            <runOnConfiguration>false</runOnConfiguration>
-                                        </execute>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -213,10 +210,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute>
-                                            <runOnIncremental>false</runOnIncremental>
-                                            <runOnConfiguration>false</runOnConfiguration>
-                                        </execute>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -229,10 +223,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute>
-                                            <runOnIncremental>false</runOnIncremental>
-                                            <runOnConfiguration>false</runOnConfiguration>
-                                        </execute>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -245,10 +236,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute>
-                                            <runOnIncremental>false</runOnIncremental>
-                                            <runOnConfiguration>false</runOnConfiguration>
-                                        </execute>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -261,10 +249,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute>
-                                            <runOnIncremental>false</runOnIncremental>
-                                            <runOnConfiguration>false</runOnConfiguration>
-                                        </execute>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -278,10 +263,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute>
-                                            <runOnIncremental>false</runOnIncremental>
-                                            <runOnConfiguration>false</runOnConfiguration>
-                                        </execute>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

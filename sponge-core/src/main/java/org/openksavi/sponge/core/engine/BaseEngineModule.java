@@ -61,7 +61,7 @@ public abstract class BaseEngineModule implements EngineModule {
     private AtomicBoolean afterManualShutdown = new AtomicBoolean(false);
 
     /** Lock. */
-    private Lock lock = new ReentrantLock();
+    private Lock lock = new ReentrantLock(true);
 
     /**
      * Creates a new engine module.

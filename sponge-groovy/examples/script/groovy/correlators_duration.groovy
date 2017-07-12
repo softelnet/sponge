@@ -31,7 +31,7 @@ class SampleCorrelator extends Correlator {
 }
 
 void onStartup() {
-    EPS.event("filesystemFailure").set("source", "server1").sendAfter(100)
-    EPS.event("diskFailure").set("source", "server1").sendAfter(200, 100)
-    EPS.event("diskFailure").set("source", "server2").sendAfter(200, 100)
+    EPS.event("filesystemFailure").set("source", "server1").send()
+    EPS.event("diskFailure").set("source", "server1").send()
+    EPS.event("diskFailure").set("source", "server2").send()
 }

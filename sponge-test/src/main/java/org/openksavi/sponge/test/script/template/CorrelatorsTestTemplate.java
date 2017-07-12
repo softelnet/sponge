@@ -53,7 +53,7 @@ public class CorrelatorsTestTemplate {
 
         try {
             await().atMost(10, TimeUnit.SECONDS)
-                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 4);
+                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 3);
         } finally {
             engine.shutdown();
         }

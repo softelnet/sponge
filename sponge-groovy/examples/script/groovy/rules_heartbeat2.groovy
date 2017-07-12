@@ -22,6 +22,6 @@ class HeartbeatRule extends Rule {
 }
 
 void onStartup() {
-    EPS.event("heartbeat").sendAfter(100)
+    EPS.event("heartbeat").send()
     EPS.event("heartbeat").sendAfter(1000)
 }

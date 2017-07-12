@@ -18,5 +18,5 @@ class HeartbeatRule(Rule):
         EPS.getVariable("soundTheAlarm").set(True)
 
 def onStartup():
-    EPS.event("heartbeat").sendAfter(100)
+    EPS.event("heartbeat").send()
     EPS.event("heartbeat").sendAfter(1000)

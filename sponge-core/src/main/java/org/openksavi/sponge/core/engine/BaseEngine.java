@@ -119,7 +119,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     protected Session session = DefaultSession.createNewSession();
 
     /** Lock. */
-    protected Lock lock = new ReentrantLock();
+    protected Lock lock = new ReentrantLock(true);
 
     /** Processor manager. */
     protected ProcessorManager processorManager;

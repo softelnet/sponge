@@ -35,11 +35,11 @@ var RuleFFL = Java.extend(Rule, {
 });
 
 function onStartup() {
-    EPS.event("e1").set("label", "1").sendAfter(1);
-    EPS.event("e2").set("label", "2").sendAfter(2);
-    EPS.event("e2").set("label", "3").sendAfter(3);
-    EPS.event("e2").set("label", "4").sendAfter(4);
-    EPS.event("e3").set("label", "5").sendAfter(5);
-    EPS.event("e3").set("label", "6").sendAfter(6);
-    EPS.event("e3").set("label", "7").sendAfter(7);
+    EPS.event("e1").set("label", "1").send();
+    EPS.event("e2").set("label", "2").send();
+    EPS.event("e2").set("label", "3").send();
+    EPS.event("e2").set("label", "4").send();
+    EPS.event("e3").set("label", "5").send();
+    EPS.event("e3").set("label", "6").send();
+    EPS.event("e3").set("label", "7").send();
 }

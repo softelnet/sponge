@@ -91,7 +91,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         );
     //@formatter:on
 
-    private Lock lock = new ReentrantLock();
+    private Lock lock = new ReentrantLock(true);
 
     /**
      * Creates a new processor manager.

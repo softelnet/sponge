@@ -157,12 +157,10 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     }
 
     protected void putIntoDecomposedQueue(Pair<EventProcessorAdapter<?>, Event> entry) throws InterruptedException {
-        boolean entryPut = false;
-
-        while (!entryPut) {
+        while (true) {
             try {
                 decomposedQueue.put(entry);
-                entryPut = true;
+                break;
             } catch (QueueFullException e) {
                 // If decomposed queue is full, than try again after sleep.
                 TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
@@ -223,8 +221,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                         final EventProcessorAdapter<?> adapter = entry.getLeft();
                         final Event event = entry.getRight();
 
-                        boolean hasBeenRun = false;
-                        while (!hasBeenRun) {
+                        while (true) {
                             try {
                                 // Process an event by the adapter asynchronously in a thread from a thread pool.
                                 CompletableFuture.runAsync(() -> getHandler(adapter.getType()).processEvent(adapter, event),
@@ -232,7 +229,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                                             decomposedQueue.release(entry);
                                             return null;
                                         });
-                                hasBeenRun = true;
+                                break;
                             } catch (RejectedExecutionException e) {
                                 // If rejected because of the lack of free threads, than try again after sleep.
                                 TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());

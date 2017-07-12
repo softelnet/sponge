@@ -26,7 +26,7 @@ def doWork(rule):
 def assertState(condition, message):
     if not condition:
         EPS.setVariable("testStatus", message)
-        raise EpsException(message)
+        raise SpongeException(message)
 
 class Rule1(Rule):
     def configure(self):

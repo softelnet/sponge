@@ -25,6 +25,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import org.quartz.Job;
@@ -61,7 +63,10 @@ public class QuartzEventScheduler extends BaseEventScheduler {
     protected static final String KEY_PARAMETERS = "parameters";
 
     /** Quartz scheduler. */
-    protected Scheduler scheduler;
+    private Scheduler scheduler;
+
+    /** Lock. */
+    private Lock lock = new ReentrantLock(true);
 
     /**
      * Creates a new event scheduler.
@@ -189,29 +194,34 @@ public class QuartzEventScheduler extends BaseEventScheduler {
     }
 
     protected EventSchedulerEntry doSchedule(Event event, Trigger trigger, boolean single) {
-        JobDataMap data = new JobDataMap();
-        EventSchedulerJobParameters parameters = new EventSchedulerJobParameters(this, event, single);
-        data.put(KEY_PARAMETERS, parameters);
-
-        //@formatter:off
-        JobDetail job = newJob(EventSchedulerJob.class)
-                .withIdentity(getNextEntryId(), getName())
-                .setJobData(data)
-                .build();
-        //@formatter:on
-
+        lock.lock();
         try {
-            scheduler.scheduleJob(job, trigger);
-        } catch (SchedulerException e) {
-            throw Utils.wrapException(getName(), e);
+            JobDataMap data = new JobDataMap();
+            EventSchedulerJobParameters parameters = new EventSchedulerJobParameters(this, event, single);
+            data.put(KEY_PARAMETERS, parameters);
+
+            //@formatter:off
+            JobDetail job = newJob(EventSchedulerJob.class)
+                    .withIdentity(getNextEntryId(), getName())
+                    .setJobData(data)
+                    .build();
+            //@formatter:on
+
+            try {
+                scheduler.scheduleJob(job, trigger);
+            } catch (SchedulerException e) {
+                throw Utils.wrapException(getName(), e);
+            }
+
+            EventSchedulerEntry entry = new QuartzEventSchedulerEntry(job.getKey(), event);
+            parameters.setEntry(entry);
+
+            logger.debug("Scheduling event: {}", event);
+
+            return entry;
+        } finally {
+            lock.unlock();
         }
-
-        EventSchedulerEntry entry = new QuartzEventSchedulerEntry(job.getKey(), event);
-        parameters.setEntry(entry);
-
-        logger.debug("Scheduling event: {}", event);
-
-        return entry;
     }
 
     /**
@@ -243,7 +253,8 @@ public class QuartzEventScheduler extends BaseEventScheduler {
         }
 
         if (interval > 0) {
-            builder.withSchedule(simpleSchedule().withIntervalInMilliseconds(interval).repeatForever());
+            builder.withSchedule(
+                    simpleSchedule().withIntervalInMilliseconds(interval).repeatForever().withMisfireHandlingInstructionFireNow());
         }
 
         return doSchedule(event, builder.build(), interval == 0);
@@ -320,5 +331,9 @@ public class QuartzEventScheduler extends BaseEventScheduler {
         } catch (SchedulerException e) {
             throw Utils.wrapException(getName(), e);
         }
+    }
+
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 }

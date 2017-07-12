@@ -113,7 +113,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
 
         @Override
         public final void run() {
-            while (!Thread.currentThread().isInterrupted()) {
+            while (isNewOrStartingOrRunning() && !Thread.currentThread().isInterrupted()) {
                 try {
                     if (!runIteration()) {
                         return; // Graceful shutdown

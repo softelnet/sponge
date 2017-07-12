@@ -45,8 +45,8 @@ def onInit():
 
 def onStartup():
     EPS.event("reload").sendAfter(1000)
-    EPS.event("e1").sendAfter(100)
-    EPS.event("e2").sendAfter(200)
+    EPS.event("e1").send()
+    EPS.event("e2").send()
     EPS.event("e3").sendAfter(2000)
 
 def onBeforeReload():

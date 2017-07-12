@@ -17,7 +17,7 @@ var FirstRule = Java.extend(Rule, {
         // Events specified without aliases
         self.events = ["filesystemFailure", "diskFailure"];
         self.setConditions("diskFailure", function(rule, event) {
-            return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds > 0;
+            return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0;
         });
     },
     run: function(self, event) {
@@ -54,11 +54,11 @@ function onLoad() {
 }
 
 function onStartup() {
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").sendAfter(1000);
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").sendAfter(2000);
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").sendAfter(2000);
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").sendAfter(2100);
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").sendAfter(2200);
-    EPS.event("diskFailure").set("severity", 1).set("source", "server1").sendAfter(2000);
+    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send();
+    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send();
+    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send();
+    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send();
+    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send();
+    EPS.event("diskFailure").set("severity", 1).set("source", "server1").send();
 }
 

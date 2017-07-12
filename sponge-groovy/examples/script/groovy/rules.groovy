@@ -18,7 +18,7 @@ class FirstRule extends Rule {
         // Events specified without aliases
         this.events = ["filesystemFailure", "diskFailure"]
         this.setConditions("diskFailure", { rule, event ->
-                return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds > 0
+                return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     }
     void run(Event event) {
@@ -55,10 +55,10 @@ void onLoad() {
 }
 
 void onStartup() {
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").sendAfter(1000)
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").sendAfter(2000)
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").sendAfter(2000)
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").sendAfter(2100)
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").sendAfter(2200)
-    EPS.event("diskFailure").set("severity", 1).set("source", "server1").sendAfter(2000)
+    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send()
+    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 1).set("source", "server1").send()
 }

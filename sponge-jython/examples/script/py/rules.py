@@ -18,7 +18,7 @@ class FirstRule(Rule):
         # Events specified without aliases
         self.events = ["filesystemFailure", "diskFailure"]
         self.setConditions("diskFailure", lambda rule, event:
-                           Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds > 0)
+                           Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0)
     def run(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
@@ -46,9 +46,9 @@ def onLoad():
     EPS.enableJava(SameSourceJavaRule)
 
 def onStartup():
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").sendAfter(1000);
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").sendAfter(2000);
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").sendAfter(2000);
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").sendAfter(2100);
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").sendAfter(2200);
-    EPS.event("diskFailure").set("severity", 1).set("source", "server1").sendAfter(2000);
+    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send()
+    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    EPS.event("diskFailure").set("severity", 1).set("source", "server1").send()

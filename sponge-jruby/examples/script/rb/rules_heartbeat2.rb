@@ -20,6 +20,6 @@ class HeartbeatRule < Rule
 end
 
 def onStartup
-    $EPS.event("heartbeat").sendAfter(100)
+    $EPS.event("heartbeat").send()
     $EPS.event("heartbeat").sendAfter(1000)
 end

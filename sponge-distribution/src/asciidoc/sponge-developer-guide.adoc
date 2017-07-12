@@ -39,9 +39,15 @@ Formatter and checkstyle based on Google configuration.
 Project specific files located in `sponge-development-tools`.
 
 == Eclipse
+Eclipse Oxygene (4.7.0) or above is recommended.
+
+* Clone the repository.
+* Import existing maven projects into the Eclipse.
+* If there are error messages in Eclipse after the initial build, try to refresh all projects and run Maven/Update Project on all projects.
+* Import code style settings and dictionary from /sponge-development-tools/eclipse/configuration.
+* Go to Preferences/General/Editors/Text editors, check Insert spaces for tabs and set Show print margin: 140.
+* Additionally you may want to set Java/Editor/Save actions: Format, Organize Imports, Remove trailing whitespaces, Correct indentation, Add missing annotations, Remove unused imports.
 
 === Eclipse plugins
-
-* http://dist.springsource.org/snapshot/GRECLIPSE/e4.7/[Groovy plugin for Eclipse Neon^]
 
 

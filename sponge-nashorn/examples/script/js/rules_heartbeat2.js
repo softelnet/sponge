@@ -22,6 +22,6 @@ var HeartbeatRule = Java.extend(Rule, {
 });
 
 function onStartup() {
-    EPS.event("heartbeat").sendAfter(100);
+    EPS.event("heartbeat").send();
     EPS.event("heartbeat").sendAfter(1000);
 }

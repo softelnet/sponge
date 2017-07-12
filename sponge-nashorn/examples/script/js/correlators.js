@@ -40,9 +40,9 @@ function onLoad() {
 }
 
 function onStartup() {
-    EPS.event("filesystemFailure").set("source", "server1").sendAfter(100);
-    EPS.event("diskFailure").set("source", "server1").sendAfter(200);
-    EPS.event("diskFailure").set("source", "server2").sendAfter(200);
-    EPS.event("diskFailure").set("source", "server1").sendAfter(300);
-    EPS.event("diskFailure").set("source", "server2").sendAfter(300);
+    EPS.event("filesystemFailure").set("source", "server1").send();
+    EPS.event("diskFailure").set("source", "server1").send();
+    EPS.event("diskFailure").set("source", "server2").send();
+    EPS.event("diskFailure").set("source", "server1").send();
+    EPS.event("diskFailure").set("source", "server2").send();
 }

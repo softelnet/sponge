@@ -89,7 +89,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
                 throw new QueueFullException("Decomposed queue is full");
             }
 
-            logger.debug("put: {}", entry);
+            logger.debug("Put: {}", entry);
             entries.add(entry);
             lockCondition.signal();
         } finally {
@@ -129,7 +129,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
             }
 
             if (entry != null) {
-                logger.debug("get: {}", entry);
+                logger.debug("Get: {}", entry);
             }
 
             return entry;
@@ -199,7 +199,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
 
         try {
             internalLock.lock();
-            logger.debug("release: {}", entry);
+            logger.debug("Release: {}", entry);
             currentlyProcessedNonSingletons.remove(entry.getLeft().getName());
             currentlyProcessedEventNames.remove(entry.getRight().getName());
             lockCondition.signal();

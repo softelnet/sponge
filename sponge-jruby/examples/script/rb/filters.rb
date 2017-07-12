@@ -42,8 +42,8 @@ class ColorTrigger < Trigger
 end
 
 def onStartup
-    $EPS.event("e1").sendAfter(100)
-    $EPS.event("e1").set("color", "red").sendAfter(100)
-    $EPS.event("e1").set("color", "blue").sendAfter(100)
+    $EPS.event("e1").send()
+    $EPS.event("e1").set("color", "red").send()
+    $EPS.event("e1").set("color", "blue").send()
 end
 
