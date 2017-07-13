@@ -4,19 +4,19 @@
 
 :exampleDisplayName: Actions
 :exampleName: actions
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Correlators
 :exampleName: correlators
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Correlators duration
 :exampleName: correlators_duration
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Events clone policy
 :exampleName: events_clone_policy
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 
@@ -29,27 +29,27 @@ include::{rootDir}/sponge-jython/examples/script/py/events_clone_policy.xml[]
 
 :exampleDisplayName: Cron
 :exampleName: events_cron
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Removing scheduled events
 :exampleName: events_removing
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Deduplication of events by filters
 :exampleName: filters_deduplication
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Java-based filters
 :exampleName: filters_java
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Filters
 :exampleName: filters
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Hello World example
 :exampleName: hello_world
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 
@@ -62,19 +62,19 @@ include::{rootDir}/sponge-jython/examples/script/py/hello_world.xml[]
 
 :exampleDisplayName: Knowledge base callbacks
 :exampleName: knowledge_base_callbacks
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Knowledge base loading
 :exampleName: knowledge_base_load
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Knowledge base manager
 :exampleName: knowledge_base_manager
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Library
 :exampleName: knowledge_base_library
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 
@@ -87,7 +87,7 @@ include::{rootDir}/sponge-jython/examples/script/py/knowledge_base_library.xml[]
 
 :exampleDisplayName: Java-based plugins
 :exampleName: plugins_java
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 
@@ -100,7 +100,7 @@ include::{rootDir}/sponge-jython/examples/script/py/plugins_java.xml[]
 
 :exampleDisplayName: Script-based plugins
 :exampleName: plugins_script
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 
@@ -113,7 +113,7 @@ include::{rootDir}/sponge-jython/examples/script/py/plugins_script.xml[]
 
 :exampleDisplayName: Rules and events
 :exampleName: rules_events
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 
@@ -126,23 +126,23 @@ include::{rootDir}/sponge-jython/examples/script/py/rules_events.xml[]
 
 :exampleDisplayName: Heartbeat example
 :exampleName: rules_heartbeat
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Rules with `none` event mode and conditions
 :exampleName: rules_none_mode_events_conditions
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Rules with `none` event mode
 :exampleName: rules_none_mode_events
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Rules
 :exampleName: rules
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 :exampleDisplayName: Triggers
 :exampleName: triggers
-include::sponge-example-script.adoc[]
+include::includes/sponge-example-script.adoc[]
 
 These knowledge bases use a custom XML configuration. Note that `<knowledgeBase><file>` should correspond to the scripting language. Here is an example for Python.
 

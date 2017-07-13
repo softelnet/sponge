@@ -179,7 +179,13 @@
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.7.9</version>
                 </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse 
+                    m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -197,7 +203,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -210,7 +216,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -223,7 +229,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -236,7 +242,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -249,7 +255,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -263,7 +269,20 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-antrun-plugin</artifactId>
+                                        <versionRange>[1,)</versionRange>
+                                        <goals>
+                                            <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -287,11 +306,11 @@
                 <version>${javax.transaction.version}</version>
             </dependency>
 
-<!--             <dependency> -->
-<!--                 <groupId>org.python</groupId> -->
-<!--                 <artifactId>jython-standalone</artifactId> -->
-<!--                 <version>${jython.version}</version> -->
-<!--             </dependency> -->
+            <!-- <dependency> -->
+            <!-- <groupId>org.python</groupId> -->
+            <!-- <artifactId>jython-standalone</artifactId> -->
+            <!-- <version>${jython.version}</version> -->
+            <!-- </dependency> -->
             <dependency>
                 <groupId>org.scijava</groupId>
                 <artifactId>jython-shaded</artifactId>
@@ -540,11 +559,11 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <dependencies>
-<!--                             <dependency> -->
-<!--                                 <groupId>com.puppycrawl.tools</groupId> -->
-<!--                                 <artifactId>checkstyle</artifactId> -->
-<!--                                 <version>7.6</version> -->
-<!--                             </dependency> -->
+                            <!-- <dependency> -->
+                            <!-- <groupId>com.puppycrawl.tools</groupId> -->
+                            <!-- <artifactId>checkstyle</artifactId> -->
+                            <!-- <version>7.6</version> -->
+                            <!-- </dependency> -->
                             <dependency>
                                 <groupId>org.openksavi.sponge</groupId>
                                 <artifactId>sponge-development-tools</artifactId>
@@ -558,7 +577,7 @@
                             <configLocation>checkstyle/sponge-checkstyle.xml</configLocation>
                             <suppressionsLocation>checkstyle/sponge-checkstyle-suppressions.xml</suppressionsLocation>
                             <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-<!--                             <headerLocation>checkstyle/LICENSE.txt</headerLocation> -->
+                            <!-- <headerLocation>checkstyle/LICENSE.txt</headerLocation> -->
                         </configuration>
                         <executions>
                             <execution>
@@ -570,38 +589,39 @@
                             </execution>
                         </executions>
                     </plugin>
-<!--                     <plugin> -->
-<!--                         <groupId>org.jacoco</groupId> -->
-<!--                         <artifactId>jacoco-maven-plugin</artifactId> -->
-<!--                         <configuration> -->
-<!--                         </configuration> -->
-<!--                         <executions> -->
-<!--                             <execution> -->
-<!--                                 <id>prepare-agent</id> -->
-<!--                                 <goals> -->
-<!--                                     <goal>prepare-agent</goal> -->
-<!--                                 </goals> -->
-<!--                             </execution> -->
-<!--                             <execution> -->
-<!--                                 <id>report</id> -->
-<!--                                 <phase>prepare-package</phase> -->
-<!--                                 <goals> -->
-<!--                                     <goal>report</goal> -->
-<!--                                 </goals> -->
-<!--                             </execution> -->
-<!--                             <execution> -->
-<!--                                 <id>post-unit-test</id> -->
-<!--                                 <phase>test</phase> -->
-<!--                                 <goals> -->
-<!--                                     <goal>report</goal> -->
-<!--                                 </goals> -->
-<!--                                 <configuration> -->
-<!--                                     Sets the output directory for the code coverage report. -->
-<!--                                     <outputDirectory>target/jacoco-ut</outputDirectory> -->
-<!--                                 </configuration> -->
-<!--                             </execution> -->
-<!--                         </executions> -->
-<!--                     </plugin> -->
+                    <!-- <plugin> -->
+                    <!-- <groupId>org.jacoco</groupId> -->
+                    <!-- <artifactId>jacoco-maven-plugin</artifactId> -->
+                    <!-- <configuration> -->
+                    <!-- </configuration> -->
+                    <!-- <executions> -->
+                    <!-- <execution> -->
+                    <!-- <id>prepare-agent</id> -->
+                    <!-- <goals> -->
+                    <!-- <goal>prepare-agent</goal> -->
+                    <!-- </goals> -->
+                    <!-- </execution> -->
+                    <!-- <execution> -->
+                    <!-- <id>report</id> -->
+                    <!-- <phase>prepare-package</phase> -->
+                    <!-- <goals> -->
+                    <!-- <goal>report</goal> -->
+                    <!-- </goals> -->
+                    <!-- </execution> -->
+                    <!-- <execution> -->
+                    <!-- <id>post-unit-test</id> -->
+                    <!-- <phase>test</phase> -->
+                    <!-- <goals> -->
+                    <!-- <goal>report</goal> -->
+                    <!-- </goals> -->
+                    <!-- <configuration> -->
+                    <!-- Sets the output directory for the code coverage 
+                        report. -->
+                    <!-- <outputDirectory>target/jacoco-ut</outputDirectory> -->
+                    <!-- </configuration> -->
+                    <!-- </execution> -->
+                    <!-- </executions> -->
+                    <!-- </plugin> -->
                 </plugins>
             </build>
         </profile>

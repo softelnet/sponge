@@ -1,5 +1,5 @@
 = Architecture
-The figure below presents an architecture of the {sponge} system.
+The figure below presents the architecture of the {sponge} system.
 
 image::engine_architecture.svg[title="Architecture"]
 

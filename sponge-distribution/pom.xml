@@ -43,21 +43,21 @@
                 <configuration>
                     <archive>
                         <manifest>
-<!--                             <addClasspath>true</addClasspath> -->
-<!--                             <classpathPrefix>lib/</classpathPrefix> -->
+                            <!-- <addClasspath>true</addClasspath> -->
+                            <!-- <classpathPrefix>lib/</classpathPrefix> -->
                             <mainClass>${mainClass}</mainClass>
                             <packageName>sponge</packageName>
                         </manifest>
                     </archive>
                 </configuration>
-<!--                 <executions> -->
-<!--                     <execution> -->
-<!--                         <phase>package</phase> -->
-<!--                         <goals> -->
-<!--                             <goal>jar</goal> -->
-<!--                         </goals> -->
-<!--                     </execution> -->
-<!--                 </executions> -->
+                <!-- <executions> -->
+                <!-- <execution> -->
+                <!-- <phase>package</phase> -->
+                <!-- <goals> -->
+                <!-- <goal>jar</goal> -->
+                <!-- </goals> -->
+                <!-- </execution> -->
+                <!-- </executions> -->
                 <executions>
                     <execution>
                         <goals>
@@ -92,15 +92,20 @@
                                 <icons>font</icons>
                                 <prewrap>false</prewrap>
                                 <linkattrs>true</linkattrs>
-                                <description>Sponge - open source, Java-based Event Processing System</description>
-                                <keywords>Sponge,CEP,Complex Event Processing,Java,Open
-                                    Source,Ruby,Groovy,JavaScript,IoT,Internet of
+                                <description>Sponge - open source,
+                                    Java-based Event Processing
+                                    System</description>
+                                <keywords>Sponge,CEP,Complex Event
+                                    Processing,Java,Open
+                                    Source,Ruby,Groovy,JavaScript,IoT,Internet
+                                    of
                                     things,Apache license,Apache Camel</keywords>
                                 <linkcss>true</linkcss>
 
                                 <sponge>Sponge</sponge>
                                 <projectVersion>${release.version}</projectVersion>
                                 <rootDir>${rootDir}</rootDir>
+                                <includesRootDir>${rootDir}</includesRootDir>
                                 <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>
                                 <standaloneDir>${standalonePackageName}</standaloneDir>
                                 <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
@@ -355,7 +360,7 @@
                         <artifactId>maven-assembly-plugin</artifactId>
                         <configuration>
                             <finalName>${standalonePackageName}</finalName>
-        <!--                     <appendAssemblyId>false</appendAssemblyId> -->
+                            <!-- <appendAssemblyId>false</appendAssemblyId> -->
                             <descriptors>
                                 <descriptor>src/assembly/standalone.xml</descriptor>
                                 <descriptor>src/assembly/www.xml</descriptor>
@@ -368,6 +373,55 @@
                                 <goals>
                                     <goal>single</goal>
                                 </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>jekyll</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <finalName>jekyll</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/assembly/jekyll.xml</descriptor>
+                            </descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <symlink link="${project.build.directory}/jekyll/jekyll/root" resource="${rootDir}"/>
+                                        <symlink link="${project.build.directory}/jekyll/jekyll/index.adoc" resource="sponge-overview.adoc"/>
+                                    </target>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

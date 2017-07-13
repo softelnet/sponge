@@ -6,14 +6,14 @@
 For the purpose of clarity, examples in this chapter are written in Python (http://www.jython.org[Jython^]) as one of the supported scripting languages and in Java. All examples written in Python may have equivalent ones written in any of the other <<supported-script-languages,supported script languages>>.
 
 
-include::sponge-user-guide-architecture.adoc[leveloffset=+1]
+include::includes/sponge-user-guide-architecture.adoc[leveloffset=+1]
 
 
 == Main components
 
-include::sponge-user-guide-configuration.adoc[leveloffset=+2]
+include::includes/sponge-user-guide-configuration.adoc[leveloffset=+2]
 
-include::sponge-user-guide-knowledge-bases.adoc[leveloffset=+2]
+include::includes/sponge-user-guide-knowledge-bases.adoc[leveloffset=+2]
 
 
 === Events
@@ -131,7 +131,7 @@ Types of processors:
 *** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 * *Actions* - processors that provide functionality similar to functions. They don't listen to events.
 
-include::sponge-user-guide-event-processors.adoc[leveloffset=+2]
+include::includes/sponge-user-guide-event-processors.adoc[leveloffset=+2]
 
 
 === Actions
@@ -375,7 +375,7 @@ class ScriptPlugin(Plugin):
 == Embedding {sponge} in custom applications
 {sponge} may be embedded in a custom Java application using <<engine-builder-api,Engine Builder API>>.
 
-include::sponge-user-guide-integration.adoc[leveloffset=+1]
+include::includes/sponge-user-guide-integration.adoc[leveloffset=+1]
 
 == Best practices
 When developing an application using {sponge} you have to be aware of the fact that knowledge bases could be created in two categories of programming languages:
@@ -667,7 +667,7 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 
 
 === Features examples
-The features examples shows how to use certain functionalities. They are placed in `sponge-examples/examples` (see {sourcesUrl}/sponge-examples/examples[sources^]).
+The features examples shows how to use certain functionalities. See the sources in {sourcesUrl}/sponge-jython/examples[Python examples^], {sourcesUrl}/sponge-jruby/examples[Ruby examples^], {sourcesUrl}/sponge-groovy/examples[Groovy examples^] and {sourcesUrl}/sponge-nashorn/examples[JavaScript examples^].
 
 CAUTION: Not all examples will work in the standalone application because some of them require additional setup.
 
@@ -912,7 +912,7 @@ ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples
 |===
 
 
-include::sponge-user-guide-standalone.adoc[leveloffset=+1]
+include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 
 
 == Third party software
@@ -957,7 +957,7 @@ include::sponge-user-guide-standalone.adoc[leveloffset=+1]
 
 |https://github.com/google/guava[Guava^]
 |Apache 2.0
-|Utilities library.
+|Used for services and as a utilities library.
 |===
 
 The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution as well as in the source code (Maven dependencies).

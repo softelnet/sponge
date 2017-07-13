@@ -19,6 +19,14 @@ This generates all but without tests, licenses, javadoc, documentation, review a
 
  mvn clean install -DskipTests -P-create-license-list -P-download-licenses -P-javadoc -P-documentation -P-review -P-assembly
 
+ === Generate Jekyll source directory
+
+ # Create all, i.e. run 'mvn clean install' in sponge directory and then:
+ cd sponge-distribution
+ mvn package -Pjekyll
+
+The generated source directory will be placed in target/jekyll/jekyll. Contents of this directory should be copied to the web server.
+
 === Only generate the documentation
 
  cd sponge-distribution

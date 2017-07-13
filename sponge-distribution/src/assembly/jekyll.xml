@@ -1,0 +1,68 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>jekyll</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/src/jekyll</directory>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/generated-docs</directory>
+            <outputDirectory>docs</outputDirectory>
+            <includes>
+                <include>*.pdf</include>
+                <include>sponge-reference.html</include>
+                <include>sponge-examples.html</include>
+                <include>asciidoctor.css</include>
+                <include>coderay-asciidoctor.css</include>
+                <include>images/</include>
+            </includes>
+            <excludes>
+                <exclude>*.dia</exclude>
+                <exclude>*.dia~</exclude>
+            </excludes>
+        </fileSet>
+<!--         <fileSet> -->
+<!--             <directory>${project.build.directory}/generated-docs</directory> -->
+<!--             <outputDirectory>css</outputDirectory> -->
+<!--             <includes> -->
+<!--                 <include>asciidoctor.css</include> -->
+<!--                 <include>coderay-asciidoctor.css</include> -->
+<!--             </includes> -->
+<!--         </fileSet> -->
+
+        <fileSet>
+            <directory>${project.basedir}/src/asciidoc</directory>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>changelog.adoc</exclude>
+                <exclude>sponge-developer-guide.adoc</exclude>
+                <exclude>sponge-reference.adoc</exclude>
+                <exclude>images/</exclude>
+            </excludes>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.build.directory}/apidocs</directory>
+            <outputDirectory>docs/javadoc</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/../sponge-api/src/main/resources/org/openksavi/sponge/schema/</directory>
+            <outputDirectory>schema</outputDirectory>
+            <includes>
+                <include>config.xsd</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>download</outputDirectory>
+            <includes>
+                <include>${standalonePackageName}-standalone.*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

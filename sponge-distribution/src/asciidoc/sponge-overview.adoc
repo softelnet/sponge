@@ -67,5 +67,5 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 
 
 == Source code
-The {sponge} source code is hosted in https://github.com/softelnet/sponge[Github^].
+The {sponge} source code is hosted on https://github.com/softelnet/sponge[Github^].
 
