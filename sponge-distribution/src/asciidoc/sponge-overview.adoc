@@ -1,19 +1,20 @@
 = Overview
+:page-permalink: index.html
 
-== The {sponge} project
-*{sponge} (www.openksavi.org/sponge) is an open-source, Java-based Event Processing System.*
+== {sponge}
+*{sponge} is an open-source, Apache 2.0 licensed, Java-based Event Processing System.*
 
 {sponge} provides a framework for implementing event processors, i.e. objects that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events.
 
 Event processors are defined in knowledge bases. Knowledge base files may be written in several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java.
 
-{sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing^] system.
+{sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system.
 
 {sponge} requires Java 1.8 or above.
 
-{sponge} has been created by http://www.softelnet.com[Softelnet^] and belongs to OpenKsavi family of open source products.
+{sponge} has been created by https://www.softelnet.com[Softelnet]. The project pages are hosted at http://www.openksavi.org/sponge. The source code is hosted at https://github.com/softelnet/sponge[Github].
 
-[quote, Oxford Dictionaries, 'https://en.oxforddictionaries.com/definition/sponge[Sponge^]']
+[quote, Oxford Dictionaries, 'https://en.oxforddictionaries.com/definition/sponge[Sponge]']
 ____
 A primitive sedentary aquatic invertebrate with a soft porous body that is typically supported by a framework of fibres or calcareous or glassy spicules. Sponges draw in a current of water to extract nutrients and oxygen.
 ____
@@ -26,7 +27,7 @@ The main features of {sponge}:
 * supports writing knowledge bases in several scripting languages,
 * there is no need to learn yet another notation/DSL, however you have to learn at least the basics of the {sponge} API,
 * allows embedding in a custom Java application (using Maven) or could be used as a standalone command-line application,
-* supports connecting with a large number of external systems by integration with http://camel.apache.org[Apache Camel^],
+* supports connecting with a large number of external systems by integration with http://camel.apache.org[Apache Camel],
 * provides own Apache Camel component for including {sponge} engine in any Camel route,
 * supports creation of custom plugins (e.g. built-in plugin for integration with Camel),
 * supports deployment in enterprise environments by integration with Spring framework,
@@ -36,18 +37,18 @@ The main features of {sponge}:
 * provides comprehensive documentation and many examples.
 
 == License
-{sponge} is released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license^].
+{sponge} is released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license].
 
 == Applications
-*{sponge} could be used in such applications as:*
+{sponge} could be used in such applications as:
 
-* https://en.wikipedia.org/wiki/Internet_of_things[internet of things (IoT)^], e.g. in https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway^],
-* https://en.wikipedia.org/wiki/SCADA[supervisory control and data acquisition (SCADA)^],
-* https://en.wikipedia.org/wiki/Fault_management[fault management^],
-* https://en.wikipedia.org/wiki/System_monitoring[system monitoring^],
-* https://en.wikipedia.org/wiki/Network_monitoring[network monitoring^],
-* https://en.wikipedia.org/wiki/System_integration[system integration^],
-* https://en.wikipedia.org/wiki/Data_analysis_techniques_for_fraud_detection[fraud detection^].
+* https://en.wikipedia.org/wiki/Internet_of_things[internet of things (IoT)], e.g. in https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway],
+* https://en.wikipedia.org/wiki/SCADA[supervisory control and data acquisition (SCADA)],
+* https://en.wikipedia.org/wiki/Fault_management[fault management],
+* https://en.wikipedia.org/wiki/System_monitoring[system monitoring],
+* https://en.wikipedia.org/wiki/Network_monitoring[network monitoring],
+* https://en.wikipedia.org/wiki/System_integration[system integration],
+* https://en.wikipedia.org/wiki/Data_analysis_techniques_for_fraud_detection[fraud detection].
 
 == Users
 The potential users of an embedded {sponge} are Java developers.
@@ -64,8 +65,3 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 
 * Because of {sponge} doesn't introduce its own notation for knowledge bases, it provides a shorter learning curve for users that know one of the supported scripting languages. However it could lack more sophisticated features and could be less optimized for certain uses than other solutions. For example you specify event conditions by writing any code in a scripting language that is to be executed when a matching event happens. On one hand it gives you a flexibility and on the other hand it doesn't provide optimizations that could be possible if, for example, a strict temporal reasoning notation is used.
 * Currently {sponge} doesn't provide persistence out of the box.
-
-
-== Source code
-The {sponge} source code is hosted on https://github.com/softelnet/sponge[Github^].
-

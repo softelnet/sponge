@@ -252,7 +252,7 @@ EPS.engine.requestShutdown()
 .Make and send a new event.
 [source,python]
 ----
-EPS.event("alarm").event("severity", 10).send()
+EPS.event("alarm").set("severity", 10).send()
 ----
 
 .Print registered (i.e. enabled) triggers.

@@ -26,14 +26,6 @@
                 <exclude>*.dia~</exclude>
             </excludes>
         </fileSet>
-<!--         <fileSet> -->
-<!--             <directory>${project.build.directory}/generated-docs</directory> -->
-<!--             <outputDirectory>css</outputDirectory> -->
-<!--             <includes> -->
-<!--                 <include>asciidoctor.css</include> -->
-<!--                 <include>coderay-asciidoctor.css</include> -->
-<!--             </includes> -->
-<!--         </fileSet> -->
 
         <fileSet>
             <directory>${project.basedir}/src/asciidoc</directory>
@@ -63,6 +55,14 @@
             <includes>
                 <include>${standalonePackageName}-standalone.*</include>
             </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/images</directory>
+            <outputDirectory>images</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/favicons</directory>
+            <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>

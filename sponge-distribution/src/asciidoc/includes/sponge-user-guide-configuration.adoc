@@ -47,9 +47,9 @@ In a general form an XML configuration file is built as in the following example
 </sponge>
 ----
 
-The precise specification of a configuration XML file is provided by a schema file http://www.openksavi.org/sponge/schema/config.xsd[`config.xsd`^].
+The precise specification of a configuration XML file is provided by a schema file {homepage}/schema/config.xsd[`config.xsd`].
 
-A configuration file is searched for using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration^] (e.g. first in the file system and then in the classpath). If not found, a configuration file is searched in {sponge} home directory (may be provided as a Java system property `sponge.home`).
+A configuration file is searched for using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration] (e.g. first in the file system and then in the classpath). If not found, a configuration file is searched in {sponge} home directory (may be provided as a Java system property `sponge.home`).
 
 === Properties configuration
 A properties configuration section (`properties`) is used for setting a configuration properties. Configuration properties may be used in other places in a configuration file.

@@ -1,0 +1,11 @@
+= Download
+:page-permalink: /download/
+
+[subs="attributes"]
+++++
+<p>
+<a href="{downloadUrl}"><i class="fa fa-download" aria-hidden="true"></i>Download {standalonePackage}.zip</a>
+</p>
+++++
+
+For information on how to start using {sponge} standalone command-line program or how to embed {sponge} in your Java application using Maven dependency see link:/quickstart/[Quickstart] page.
