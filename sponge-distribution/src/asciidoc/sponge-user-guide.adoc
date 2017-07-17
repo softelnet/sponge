@@ -1,9 +1,11 @@
 = User Guide
+:page-permalink: /user-guide/
+:toc:
 
-== Abstract
+== Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
 
-For the purpose of clarity, examples in this chapter are written in Python (http://www.jython.org[Jython^]) as one of the supported scripting languages and in Java. All examples written in Python may have equivalent ones written in any of the other <<supported-script-languages,supported script languages>>.
+For the purpose of clarity, examples in this chapter are written in Python (http://www.jython.org[Jython]) as one of the supported scripting languages and in Java. All examples written in Python may have equivalent ones written in any of the other <<supported-script-languages,supported script languages>>.
 
 
 include::includes/sponge-user-guide-architecture.adoc[leveloffset=+1]
@@ -454,7 +456,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
-The dependency for Jython used in {sponge} is https://github.com/scijava/jython-shaded[Jython shaded^].
+The dependency for Jython used in {sponge} is https://github.com/scijava/jython-shaded[Jython shaded].
 
 === Ruby
 
@@ -503,7 +505,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 === JavaScript
-JavaScript interpreter supports https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/shell.html[shell scripting extensions in Nashorn^] to provide simpler shell integration.
+JavaScript interpreter supports https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/shell.html[shell scripting extensions in Nashorn] to provide simpler shell integration.
 
 ==== Limitations
 There is a limitation for using custom class attributes and methods in event processors written in JavaScript implementation Nashorn. In that case you should set a class field `target` in the `init()` method as in the following example. All class fields and methods that are new (i.e. not inherited from the base classes) *must be defined in `target`*.
@@ -547,9 +549,9 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 == Logging
-{sponge} uses https://www.slf4j.org[SLF4J^] facade for logging.
+{sponge} uses https://www.slf4j.org[SLF4J] facade for logging.
 
-Examples and standalone version use https://logback.qos.ch[Logback^] as a logging implementation.
+Examples and standalone version use https://logback.qos.ch[Logback] as a logging implementation.
 
 == Examples
 
@@ -557,7 +559,7 @@ Examples and standalone version use https://logback.qos.ch[Logback^] as a loggin
 The complete projects could be used as a point of reference to embed {sponge} in your Java application. They are placed in `sponge-examples-projects`.
 
 ==== News project
-This project shows how to process news as events. It is placed in `sponge-examples-project-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-news[sources^]).
+This project shows how to process news as events. It is placed in `sponge-examples-project-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-news[sources]).
 
 Event flow:
 
@@ -618,7 +620,7 @@ include::{completeExamplesProject}/sponge-examples-project-news/src/main/java/or
 ----
 
 ==== Camel RSS News project
-This example is an enhancement over the News project example. It is placed in `sponge-examples-project-camel-rss-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-camel-rss-news[sources^]).
+This example is an enhancement over the News project example. It is placed in `sponge-examples-project-camel-rss-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-camel-rss-news[sources]).
 
 The main change here is that news are acquired as RSS feeds from news services: BBC and CNN. Reading of RSS feeds and transformation to {sponge} events is performed in a Camel route. {sponge} acts as a producer in this Camel route. This example shows {sponge} as a consumer in other Camel routes as well.
 
@@ -667,7 +669,7 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 
 
 === Features examples
-The features examples shows how to use certain functionalities. See the sources in {sourcesUrl}/sponge-jython/examples[Python examples^], {sourcesUrl}/sponge-jruby/examples[Ruby examples^], {sourcesUrl}/sponge-groovy/examples[Groovy examples^] and {sourcesUrl}/sponge-nashorn/examples[JavaScript examples^].
+The features examples shows how to use certain functionalities. See the sources in {sourcesUrl}/sponge-jython/examples[Python examples], {sourcesUrl}/sponge-jruby/examples[Ruby examples], {sourcesUrl}/sponge-groovy/examples[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples[JavaScript examples].
 
 CAUTION: Not all examples will work in the standalone application because some of them require additional setup.
 
@@ -679,91 +681,91 @@ Directory `examples/script` contains examples implemented in all supported scrip
 |Name |Description
 
 |`actions`
-ifdef::useReferences[(link:sponge-examples.html#actions-py[py^], link:sponge-examples.html#actions-rb[rb^], link:sponge-examples.html#actions-groovy[groovy^], link:sponge-examples.html#actions-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#actions-py[py], link:sponge-examples.html#actions-rb[rb], link:sponge-examples.html#actions-groovy[groovy], link:sponge-examples.html#actions-js[js])]
 |Shows how to use actions.
 
 |`correlators`
-ifdef::useReferences[(link:sponge-examples.html#correlators-py[py^], link:sponge-examples.html#correlators-rb[rb^], link:sponge-examples.html#correlators-groovy[groovy^], link:sponge-examples.html#correlators-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#correlators-py[py], link:sponge-examples.html#correlators-rb[rb], link:sponge-examples.html#correlators-groovy[groovy], link:sponge-examples.html#correlators-js[js])]
 |Shows how to use correlators. The script defined correlator creates an event log - a list of all events that it listens to.
 
 |`correlators_duration`
-ifdef::useReferences[(link:sponge-examples.html#correlators_duration-py[py^], link:sponge-examples.html#correlators_duration-rb[rb^], link:sponge-examples.html#correlators_duration-groovy[groovy^], link:sponge-examples.html#correlators_duration-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#correlators_duration-py[py], link:sponge-examples.html#correlators_duration-rb[rb], link:sponge-examples.html#correlators_duration-groovy[groovy], link:sponge-examples.html#correlators_duration-js[js])]
 |Shows how to use correlators with duration. The script defined correlator creates an event log - a list of all events that it listens to.
 
 |`events_clone_policy`
-ifdef::useReferences[(link:sponge-examples.html#events_clone_policy-py[py^], link:sponge-examples.html#events_clone_policy-rb[rb^], link:sponge-examples.html#events_clone_policy-groovy[groovy^], link:sponge-examples.html#events_clone_policy-js[js^], link:sponge-examples.html#events_clone_policy-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#events_clone_policy-py[py], link:sponge-examples.html#events_clone_policy-rb[rb], link:sponge-examples.html#events_clone_policy-groovy[groovy], link:sponge-examples.html#events_clone_policy-js[js], link:sponge-examples.html#events_clone_policy-xml-py[XML configuration])]
 |Shows difference between event clone policies.
 
 |`events_cron`
-ifdef::useReferences[(link:sponge-examples.html#events_cron-py[py^], link:sponge-examples.html#events_cron-rb[rb^], link:sponge-examples.html#events_cron-groovy[groovy^], link:sponge-examples.html#events_cron-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#events_cron-py[py], link:sponge-examples.html#events_cron-rb[rb], link:sponge-examples.html#events_cron-groovy[groovy], link:sponge-examples.html#events_cron-js[js])]
 |Shows sending events using Cron.
 
 |`events_removing`
-ifdef::useReferences[(link:sponge-examples.html#events_removing-py[py^], link:sponge-examples.html#events_removing-rb[rb^], link:sponge-examples.html#events_removing-groovy[groovy^], link:sponge-examples.html#events_removing-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#events_removing-py[py], link:sponge-examples.html#events_removing-rb[rb], link:sponge-examples.html#events_removing-groovy[groovy], link:sponge-examples.html#events_removing-js[js])]
 |Shows how to remove scheduled events.
 
 |`filters_deduplication`
-ifdef::useReferences[(link:sponge-examples.html#filters_deduplication-py[py^], link:sponge-examples.html#filters_deduplication-rb[rb^], link:sponge-examples.html#filters_deduplication-groovy[groovy^], link:sponge-examples.html#filters_deduplication-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#filters_deduplication-py[py], link:sponge-examples.html#filters_deduplication-rb[rb], link:sponge-examples.html#filters_deduplication-groovy[groovy], link:sponge-examples.html#filters_deduplication-js[js])]
 |Shows how to use a deduplication filter to prevent from processing many events that carry the same information.
 
 |`filters_java`
-ifdef::useReferences[(link:sponge-examples.html#filters_java-py[py^], link:sponge-examples.html#filters_java-rb[rb^], link:sponge-examples.html#filters_java-groovy[groovy^], link:sponge-examples.html#filters_java-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#filters_java-py[py], link:sponge-examples.html#filters_java-rb[rb], link:sponge-examples.html#filters_java-groovy[groovy], link:sponge-examples.html#filters_java-js[js])]
 |Shows how to use a Java-based filter.
 
 |`filters`
-ifdef::useReferences[(link:sponge-examples.html#filters-py[py^], link:sponge-examples.html#filters-rb[rb^], link:sponge-examples.html#filters-groovy[groovy^], link:sponge-examples.html#filters-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#filters-py[py], link:sponge-examples.html#filters-rb[rb], link:sponge-examples.html#filters-groovy[groovy], link:sponge-examples.html#filters-js[js])]
 |Shows how to use script-based filters.
 
 |`hello_world`
-ifdef::useReferences[(link:sponge-examples.html#hello_world-py[py^], link:sponge-examples.html#hello_world-rb[rb^], link:sponge-examples.html#hello_world-groovy[groovy^], link:sponge-examples.html#hello_world-js[js^], link:sponge-examples.html#hello_world-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#hello_world-py[py], link:sponge-examples.html#hello_world-rb[rb], link:sponge-examples.html#hello_world-groovy[groovy], link:sponge-examples.html#hello_world-js[js], link:sponge-examples.html#hello_world-xml-py[XML configuration])]
 |Hello world complete example.
 
 |`knowledge_base_callbacks`
-ifdef::useReferences[(link:sponge-examples.html#knowledge_base_callbacks-py[py^], link:sponge-examples.html#knowledge_base_callbacks-rb[rb^], link:sponge-examples.html#knowledge_base_callbacks-groovy[groovy^], link:sponge-examples.html#knowledge_base_callbacks-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#knowledge_base_callbacks-py[py], link:sponge-examples.html#knowledge_base_callbacks-rb[rb], link:sponge-examples.html#knowledge_base_callbacks-groovy[groovy], link:sponge-examples.html#knowledge_base_callbacks-js[js])]
 |Shows how to use knowledge base callback functions: `onInit`, `onStartup`, `onShutdown`, `onBeforeReload` and `onAfterReload`.
 
 |`knowledge_base_load`
-ifdef::useReferences[(link:sponge-examples.html#knowledge_base_load-py[py^], link:sponge-examples.html#knowledge_base_load-rb[rb^], link:sponge-examples.html#knowledge_base_load-groovy[groovy^], link:sponge-examples.html#knowledge_base_load-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#knowledge_base_load-py[py], link:sponge-examples.html#knowledge_base_load-rb[rb], link:sponge-examples.html#knowledge_base_load-groovy[groovy], link:sponge-examples.html#knowledge_base_load-js[js])]
 |Shows how to load an additional knowledge base file by using `EPS.interpreter.load()`.
 
 |`knowledge_base_manager`
-ifdef::useReferences[(link:sponge-examples.html#knowledge_base_manager-py[py^], link:sponge-examples.html#knowledge_base_manager-rb[rb^], link:sponge-examples.html#knowledge_base_manager-groovy[groovy^], link:sponge-examples.html#knowledge_base_manager-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#knowledge_base_manager-py[py], link:sponge-examples.html#knowledge_base_manager-rb[rb], link:sponge-examples.html#knowledge_base_manager-groovy[groovy], link:sponge-examples.html#knowledge_base_manager-js[js])]
 |Shows knowledge base operations.
 
 |`library`
-ifdef::useReferences[(link:sponge-examples.html#library-py[py^], link:sponge-examples.html#library-rb[rb^], link:sponge-examples.html#library-groovy[groovy^], link:sponge-examples.html#library-js[js^], link:sponge-examples.html#library-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#library-py[py], link:sponge-examples.html#library-rb[rb], link:sponge-examples.html#library-groovy[groovy], link:sponge-examples.html#library-js[js], link:sponge-examples.html#library-xml-py[XML configuration])]
 |Shows how to use a scripting language specific library (e.g. `httplib` for Python) to check HTTPS host status.
 
 |`plugins_java`
-ifdef::useReferences[(link:sponge-examples.html#plugins_java-py[py^], link:sponge-examples.html#plugins_java-rb[rb^], link:sponge-examples.html#plugins_java-groovy[groovy^], link:sponge-examples.html#plugins_java-js[js^], link:sponge-examples.html#plugins_java-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#plugins_java-py[py], link:sponge-examples.html#plugins_java-rb[rb], link:sponge-examples.html#plugins_java-groovy[groovy], link:sponge-examples.html#plugins_java-js[js], link:sponge-examples.html#plugins_java-xml-py[XML configuration])]
 |Shows how to define and use a Java-based plugins.
 
 |`plugins_script`
-ifdef::useReferences[(link:sponge-examples.html#plugins_script-py[py^], link:sponge-examples.html#plugins_script-rb[rb^], link:sponge-examples.html#plugins_script-groovy[groovy^], link:sponge-examples.html#plugins_script-js[js^], link:sponge-examples.html#plugins_script-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#plugins_script-py[py], link:sponge-examples.html#plugins_script-rb[rb], link:sponge-examples.html#plugins_script-groovy[groovy], link:sponge-examples.html#plugins_script-js[js], link:sponge-examples.html#plugins_script-xml-py[XML configuration])]
 |Shows how to define and use a script-based plugins.
 
 |`rules_events`
-ifdef::useReferences[(link:sponge-examples.html#rules_events-py[py^], link:sponge-examples.html#rules_events-rb[rb^], link:sponge-examples.html#rules_events-groovy[groovy^], link:sponge-examples.html#rules_events-js[js^], link:sponge-examples.html#rules_events-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#rules_events-py[py], link:sponge-examples.html#rules_events-rb[rb], link:sponge-examples.html#rules_events-groovy[groovy], link:sponge-examples.html#rules_events-js[js], link:sponge-examples.html#rules_events-xml-py[XML configuration])]
 |Shows how to define and use rules that have different event modes, durations etc.
 
 |`rules_heartbeat`
-ifdef::useReferences[(link:sponge-examples.html#rules_heartbeat-py[py^], link:sponge-examples.html#rules_heartbeat-rb[rb^], link:sponge-examples.html#rules_heartbeat-groovy[groovy^], link:sponge-examples.html#rules_heartbeat-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#rules_heartbeat-py[py], link:sponge-examples.html#rules_heartbeat-rb[rb], link:sponge-examples.html#rules_heartbeat-groovy[groovy], link:sponge-examples.html#rules_heartbeat-js[js])]
 |Heartbeat complete example.
 
 |`rules_none_mode_events_conditions`
-ifdef::useReferences[(link:sponge-examples.html#rules_none_mode_events_conditions-py[py^], link:sponge-examples.html#rules_none_mode_events_conditions-rb[rb^], link:sponge-examples.html#rules_none_mode_events_conditions-groovy[groovy^], link:sponge-examples.html#rules_none_mode_events_conditions-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#rules_none_mode_events_conditions-py[py], link:sponge-examples.html#rules_none_mode_events_conditions-rb[rb], link:sponge-examples.html#rules_none_mode_events_conditions-groovy[groovy], link:sponge-examples.html#rules_none_mode_events_conditions-js[js])]
 |Shows how to define and use rules that have `none` event mode and event conditions.
 
 |`rules_none_mode_events`
-ifdef::useReferences[(link:sponge-examples.html#rules_none_mode_events-py[py^], link:sponge-examples.html#rules_none_mode_events-rb[rb^], link:sponge-examples.html#rules_none_mode_events-groovy[groovy^], link:sponge-examples.html#rules_none_mode_events-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#rules_none_mode_events-py[py], link:sponge-examples.html#rules_none_mode_events-rb[rb], link:sponge-examples.html#rules_none_mode_events-groovy[groovy], link:sponge-examples.html#rules_none_mode_events-js[js])]
 |Shows how to define and use rules that have `none` event mode.
 
 |`rules`
-ifdef::useReferences[(link:sponge-examples.html#rules-py[py^], link:sponge-examples.html#rules-rb[rb^], link:sponge-examples.html#rules-groovy[groovy^], link:sponge-examples.html#rules-js[js^])]
+ifdef::useReferences[(link:sponge-examples.html#rules-py[py], link:sponge-examples.html#rules-rb[rb], link:sponge-examples.html#rules-groovy[groovy], link:sponge-examples.html#rules-js[js])]
 |Shows how to define and use rules. Event conditions are specified using lambda expressions as well as class methods.
 
 |`triggers`
-ifdef::useReferences[(link:sponge-examples.html#triggers-py[py^], link:sponge-examples.html#triggers-rb[rb^], link:sponge-examples.html#triggers-groovy[groovy^], link:sponge-examples.html#triggers-js[js^], link:sponge-examples.html#triggers-xml-py[XML configuration^])]
+ifdef::useReferences[(link:sponge-examples.html#triggers-py[py], link:sponge-examples.html#triggers-rb[rb], link:sponge-examples.html#triggers-groovy[groovy], link:sponge-examples.html#triggers-js[js], link:sponge-examples.html#triggers-xml-py[XML configuration])]
 |Shows how to define and use triggers.
 |===
 
@@ -774,39 +776,39 @@ ifdef::useReferences[(link:sponge-examples.html#triggers-py[py^], link:sponge-ex
 |Name |Description
 
 |`fibonacci`
-ifdef::useReferences[(link:sponge-examples.html#fibonacci-py[py^])]
+ifdef::useReferences[(link:sponge-examples.html#fibonacci-py[py])]
 |Shows how to send a chain of events, each carrying a Fibonacci number as an attribute.
 
 |`engine_parameters`
-ifdef::useReferences[(link:sponge-examples.html#engine_parameters-xml[xml^])]
+ifdef::useReferences[(link:sponge-examples.html#engine_parameters-xml[xml])]
 |Shows how to set engine parameters in the XML configuration file.
 
 |`spring`
-ifdef::useReferences[(link:sponge-examples.html#spring-py[py^], link:sponge-examples.html#spring-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#spring-py[py], link:sponge-examples.html#spring-java[java])]
 |Shows how to integrate with Spring framework.
 
 |`camel_producer`
-ifdef::useReferences[(link:sponge-examples.html#camel_producer-py[py^], link:sponge-examples.html#camel_producer-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#camel_producer-py[py], link:sponge-examples.html#camel_producer-java[java])]
 |Shows how to handle messages coming from Apache Camel route by an {sponge} trigger.
 
 |`camel_consumer`
-ifdef::useReferences[(link:sponge-examples.html#camel_consumer-py[py^], link:sponge-examples.html#camel_consumer-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#camel_consumer-py[py], link:sponge-examples.html#camel_consumer-java[java])]
 |Shows how to handle messages coming from {sponge} by an Apache Camel route.
 
 |`camel_rss`
-ifdef::useReferences[(link:sponge-examples.html#camel_rss-py[py^], link:sponge-examples.html#camel_rss-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#camel_rss-py[py], link:sponge-examples.html#camel_rss-java[java])]
 |Shows how to integrate with Apache Camel to send and handle {sponge} events based on RSS feeds. This example uses a Spring configuration.
 
 |`camel_producer_overridden_action`
-ifdef::useReferences[(link:sponge-examples.html#camel_producer_overridden_action-py[py^], link:sponge-examples.html#camel_producer_overridden_action-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#camel_producer_overridden_action-py[py], link:sponge-examples.html#camel_producer_overridden_action-java[java])]
 |Shows how to handle messages coming from Apache Camel route by an {sponge} trigger using an overridden Camel producer action.
 
 |`camel_producer_custom_action`
-ifdef::useReferences[(link:sponge-examples.html#camel_producer_custom_action-py[py^], link:sponge-examples.html#camel_producer_custom_action-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#camel_producer_custom_action-py[py], link:sponge-examples.html#camel_producer_custom_action-java[java])]
 |Shows how to handle messages coming from Apache Camel route by an {sponge} trigger using a custom Camel producer action.
 
 |`camel_multiple_consumer`
-ifdef::useReferences[(link:sponge-examples.html#camel_multiple_consumer-py[py^], link:sponge-examples.html#camel_multiple_consumer-java[java^])]
+ifdef::useReferences[(link:sponge-examples.html#camel_multiple_consumer-py[py], link:sponge-examples.html#camel_multiple_consumer-java[java])]
 |Shows sending Camel messages to many endpoints in a single {sponge} trigger.
 |===
 
@@ -818,19 +820,19 @@ ifdef::useReferences[(link:sponge-examples.html#camel_multiple_consumer-py[py^],
 |Name |Description
 
 |`standalone_news`
-ifdef::useReferences[(link:{sourcesUrl}/sponge-examples/examples/standalone/news[sources^])]
+ifdef::useReferences[(link:{sourcesUrl}/sponge-examples/examples/standalone/news[sources])]
 |This example is based on complete example project of embedding {sponge} - News, but adjusted to a standalone version.
 
 |`standalone_camel_rss_news`
-ifdef::useReferences[(link:{sourcesUrl}/sponge-examples/examples/standalone/camel_rss_news[sources^])]
+ifdef::useReferences[(link:{sourcesUrl}/sponge-examples/examples/standalone/camel_rss_news[sources])]
 |This example is based on complete example project of embedding {sponge} - Camel RSS News, but adjusted to a standalone version.
 
 |`camel_route_groovy`
-ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples-project-standalone-camel-groovy[sources^])]
+ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples-project-standalone-camel-groovy[sources])]
 |Camel routes in Groovy Spring configuration.
 
 |`camel_route_xml`
-ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples-project-standalone-camel-xml[sources^])]
+ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples-project-standalone-camel-xml[sources])]
 |Camel context and routes in XML Spring configuration.
 |===
 
@@ -923,39 +925,39 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |===
 |Package |License |Description
 
-|https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration^]
+|https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration]
 |Apache 2.0
 |Used for reading configuration files.
 
-|http://www.jython.org[Jython^]
-|http://www.jython.org/license.html[Jython license^]
+|http://www.jython.org[Jython]
+|http://www.jython.org/license.html[Jython license]
 |Supports writing scripting knowledge bases in Python.
 
-|http://jruby.org[JRuby^]
+|http://jruby.org[JRuby]
 |EPL 1.0, GPL 2 or LGPL 2.1
 |Supports writing scripting knowledge bases in Ruby.
 
-|http://www.groovy-lang.org[Groovy^]
+|http://www.groovy-lang.org[Groovy]
 |Apache 2.0
 |Supports writing scripting knowledge bases in Groovy.
 
-|https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/[Nashorn^]
+|https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/[Nashorn]
 |GPL with a linking exception
 |Supports writing scripting knowledge bases in JavaScript.
 
-|http://www.quartz-scheduler.org[Quartz^]
+|http://www.quartz-scheduler.org[Quartz]
 |Apache 2.0
 |Used for scheduling events (e.g. provides cron functionality).
 
-|http://camel.apache.org[Apache Camel^]
+|http://camel.apache.org[Apache Camel]
 |Apache 2.0
 |Used as an integration facade to external systems.
 
-|http://projects.spring.io/spring-framework[Spring framework^]
+|http://projects.spring.io/spring-framework[Spring framework]
 |Apache 2.0
 |Used for integration with Spring framework.
 
-|https://github.com/google/guava[Guava^]
+|https://github.com/google/guava[Guava]
 |Apache 2.0
 |Used for services and as a utilities library.
 |===

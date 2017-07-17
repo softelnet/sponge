@@ -20,6 +20,11 @@
         <standalonePackageName>sponge-${release.version}</standalonePackageName>
         <mainClass>org.openksavi.sponge.standalone.StandaloneEngineMain</mainClass>
         <sourcesUrl>https://github.com/softelnet/sponge/tree/master</sourcesUrl>
+        <jekyllBuildDir>${project.build.directory}/jekyll/jekyll</jekyllBuildDir>
+        <logoDir>${basedir}/src/images</logoDir>
+        <homepage>http://www.openksavi.org/sponge</homepage>
+        <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
+        <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
     </properties>
 
     <dependencies>
@@ -86,7 +91,7 @@
 
                             <attributes>
                                 <toclevels>5</toclevels>
-                                <homepage>http://www.openksavi.org/sponge</homepage>
+                                <homepage>${homepage}</homepage>
                                 <sectnums>true</sectnums>
                                 <sectnumlevels>5</sectnumlevels>
                                 <icons>font</icons>
@@ -108,58 +113,15 @@
                                 <includesRootDir>${rootDir}</includesRootDir>
                                 <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>
                                 <standaloneDir>${standalonePackageName}</standaloneDir>
-                                <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
+                                <standalonePackage>${standalonePackage}</standalonePackage>
                                 <sourcesUrl>${sourcesUrl}</sourcesUrl>
+                                <logoDir>${logoDir}</logoDir>
+                                <downloadUrl>${downloadUrl}</downloadUrl>
                             </attributes>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>output-html-overview-www</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>html</backend>
-                                    <sourceDocumentName>sponge-overview.adoc</sourceDocumentName>
-                                    <attributes>
-                                        <sectnums>false</sectnums>
-                                        <headerFooter>false</headerFooter>
-                                    </attributes>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>output-html-quickstart-www</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>html</backend>
-                                    <sourceDocumentName>sponge-quickstart.adoc</sourceDocumentName>
-                                    <attributes>
-                                        <sectnums>false</sectnums>
-                                        <headerFooter>false</headerFooter>
-                                    </attributes>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>output-html-user-guide-www</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>html</backend>
-                                    <sourceDocumentName>sponge-user-guide.adoc</sourceDocumentName>
-                                    <attributes>
-                                        <useReferences></useReferences>
-                                        <toc>auto</toc>
-                                    </attributes>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>output-html-reference-www</id>
+                                <id>output-html-reference</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>process-asciidoc</goal>
@@ -363,7 +325,6 @@
                             <!-- <appendAssemblyId>false</appendAssemblyId> -->
                             <descriptors>
                                 <descriptor>src/assembly/standalone.xml</descriptor>
-                                <descriptor>src/assembly/www.xml</descriptor>
                             </descriptors>
                             <tarLongFileMode>gnu</tarLongFileMode>
                         </configuration>
@@ -418,8 +379,7 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <symlink link="${project.build.directory}/jekyll/jekyll/root" resource="${rootDir}"/>
-                                        <symlink link="${project.build.directory}/jekyll/jekyll/index.adoc" resource="sponge-overview.adoc"/>
+                                        <symlink link="${jekyllBuildDir}/root" resource="${rootDir}" overwrite="true"/>
                                     </target>
                                 </configuration>
                             </execution>

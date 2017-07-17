@@ -1,4 +1,5 @@
 = Quickstart
+:page-permalink: /quickstart/
 
 == Concepts
 This chapter describes basic concepts behind {sponge}. For more information see User Guide.
@@ -123,7 +124,7 @@ java -version
 
 TIP: If necessary, logging levels could be changed in `config/logback.xml`. Logs will be written to the console as well as to log files placed in `logs/` directory.
 
-Download http://www.openksavi.org/sponge/downloads[`{standalonePackage}.zip`^].
+Download link:{downloadUrl}[`{standalonePackage}.zip`].
 
 ==== Linux/MacOS/Unix
 First steps:
@@ -236,7 +237,7 @@ Standalone {sponge} may be invoked in the interactive mode, providing direct, co
 
 `EPS` is a facade to the {sponge} engine. The name `EPS` stands for Event Processing System or Event Processing Sponge if you like.
 
-TIP: Because of {sponge} may print messages and exceptions to the console concurrently, the prompt could be lost in between the lines (for example in case of an exception stack trace). In that case press `Enter` key to make a prompt visible.
+TIP: Because of {sponge} may print messages and exceptions to the console concurrently, the prompt could be lost in between the lines (for example in case of an exception stack trace). In that case press btn:[Enter] key to make a prompt visible.
 
 .Output shows that the event has been processed by a trigger
 [source,bash,subs="verbatim,attributes"]

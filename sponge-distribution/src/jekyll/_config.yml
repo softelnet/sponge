@@ -16,15 +16,18 @@ description: > # this means to ignore newlines until "baseurl:"
   Sponge is an open-source, Java-based Event Processing System.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
+show_downloads: true
+
+product_name: Sponge
+owner_name: Softelnet
+owner_url: https://www.softelnet.com
 
 repository: "softelnet/sponge"
 
 # Build settings
-#theme: minima
-theme: jekyll-theme-slate
+theme: jekyll-theme-cayman
 
 gems:
-  - jekyll-feed
   - jekyll-asciidoc
 
 asciidoc: {}
@@ -32,7 +35,8 @@ asciidoctor:
   base_dir: :docdir
   safe: unsafe
   attributes:
-    - imagesdir=docs/images
+    - projectVersion=0.1.0
+    - imagesdir=/docs/images
     - toclevels=5
     - homepage=http://www.openksavi.org/sponge
     - sectnums=true
@@ -44,15 +48,19 @@ asciidoctor:
     - keywords="Sponge,Event Processing System,CEP,Complex Event Processing,Java,Open Source,Ruby,Groovy,JavaScript,IoT,Internet of things,Apache license,Apache Camel"
 #    - linkcss=true
     - source-highlighter=coderay
+#    - source-highlighter=pygments
+#    - stylesdir=css
+#    - pygments-style=friendly
     - sponge=Sponge
     - rootDir=root
-    - includesRootDir=../root
-    - projectVersion=0.1.0
-    - completeExamplesProject=root/sponge-examples-projects
-    - standaloneDir=root/sponge-standalone
-    - standalonePackage=sponge-0.1.0-standalone
+    - includesRootDir=../{rootDir}
+    - completeExamplesProject={rootDir}/sponge-examples-projects
+    - standaloneDir={rootDir}/sponge-standalone
+    - standalonePackage=sponge-{projectVersion}-standalone
     - sourcesUrl=https://github.com/softelnet/sponge/tree/master
     - useReferences=true
+    - downloadUrl=/download/{standalonePackage}.zip
+    - logoDir=images
 
 defaults:
   -
@@ -64,11 +72,11 @@ defaults:
 # to override the default setting.
 exclude:
    - includes/
-   - root
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+   - root/
+   - Gemfile
+   - Gemfile.lock
+   - node_modules
+   - vendor/bundle/
+   - vendor/cache/
+   - vendor/gems/
+   - vendor/ruby/

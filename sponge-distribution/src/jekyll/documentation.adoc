@@ -1,0 +1,6 @@
+= Documentation
+:page-permalink: /documentation/
+
+* The {sponge} Reference Documentation (link:/docs/sponge-reference.pdf[PDF], link:/docs/sponge-reference.html[HTML]) is a combined Overview, Quickstart and User Guide,
+* The Javadoc API documentation (link:/docs/javadoc/index.html[HTML]).
+
