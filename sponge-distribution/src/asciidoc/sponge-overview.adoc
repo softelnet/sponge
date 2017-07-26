@@ -12,7 +12,7 @@ Event processors are defined in knowledge bases. Knowledge base files may be wri
 
 {sponge} requires Java 1.8 or above.
 
-{sponge} has been created by https://www.softelnet.com[Softelnet]. The project pages are hosted at http://www.openksavi.org/sponge. The source code is hosted at https://github.com/softelnet/sponge[Github].
+{sponge} has been created by https://www.softelnet.com[Softelnet]. The project pages are hosted at {homepage}. The source code is hosted at https://github.com/softelnet/sponge[Github].
 
 [quote, Oxford Dictionaries, 'https://en.oxforddictionaries.com/definition/sponge[Sponge]']
 ____

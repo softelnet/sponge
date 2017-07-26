@@ -62,7 +62,7 @@ Correlator:: If there is a correlator that listens to that event, the event will
 {sponge} could be embedded in a Java application by adding a maven dependency.
 
 ==== Maven dependency
-For example, if you want to use {sponge} with Python scripting knowledge bases, just add this dependency to your `pom.xml`:
+If you want to use {sponge} with, for example, Python scripting knowledge bases, just add this dependency to your `pom.xml`:
 
 [source,xml,subs="verbatim,attributes"]
 ----
@@ -88,6 +88,16 @@ There is also a Bill Of Materials style maven artifact for {sponge}. Example usa
         </dependency>
     </dependencies>
 </dependencyManagement>
+----
+
+In that case you may omit the version of the dependency.
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-jython</artifactId>
+</dependency>
 ----
 
 ==== Creating and starting the {sponge} engine
@@ -221,7 +231,7 @@ Press `CTRL+C` to exit.
 IMPORTANT: When running on Windows {sponge} standalone command-line program doesn't support reloading of running knowledge bases by sending operating system signal to the background process.
 
 ==== Interactive mode
-Standalone {sponge} may be invoked in the interactive mode, providing direct, command-line access to the knowledge base interpreter.
+Standalone {sponge} may be invoked in the (very simple) interactive mode, providing command-line access to the knowledge base interpreter.
 
 .Invoke {sponge} in the interactive mode
 [source,bash,subs="verbatim,attributes"]
