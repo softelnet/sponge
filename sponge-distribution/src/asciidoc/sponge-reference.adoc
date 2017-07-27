@@ -6,3 +6,5 @@ include::sponge-overview.adoc[leveloffset=+1]
 include::sponge-quickstart.adoc[leveloffset=+1]
 
 include::sponge-user-guide.adoc[leveloffset=+1]
+
+include::sponge-release-notes.adoc[leveloffset=+1]

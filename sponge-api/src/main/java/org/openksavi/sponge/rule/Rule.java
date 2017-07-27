@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.rule;
 
+import java.util.List;
+
 import org.openksavi.sponge.EventSetProcessor;
 import org.openksavi.sponge.event.Event;
 
@@ -38,6 +40,13 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
      * @return an event.
      */
     Event getEvent(String eventAlias);
+
+    /**
+     * Returns a sequence of actual events.
+     *
+     * @return an event sequence.
+     */
+    List<Event> getEventSequence();
 
     /**
      * Sets events.

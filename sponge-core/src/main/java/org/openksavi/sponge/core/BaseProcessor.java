@@ -78,6 +78,7 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         return getKnowledgeBase();
     }
 
+    @Override
     public final Logger getLogger() {
         return ((BaseProcessorAdapter<?>) adapter).getLogger();
     }
