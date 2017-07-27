@@ -1,8 +1,0 @@
-= Sponge Changelog
-:uri-repo: https://github.com/softelnet/sponge
-:icons: font
-
-This document provides a high-level view of the changes introduced in {sponge} releases.
-
-== 0.1.0 (2017.06.27)
-Initial release.

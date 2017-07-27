@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge;
 
+import org.slf4j.Logger;
+
 /**
  * Processor.
  */
@@ -37,4 +39,11 @@ public interface Processor<T extends ProcessorAdapter<?>> extends ProcessorOpera
      * @return the adapter.
      */
     T getAdapter();
+
+    /**
+     * Returns the logger.
+     *
+     * @return the logger.
+     */
+    Logger getLogger();
 }

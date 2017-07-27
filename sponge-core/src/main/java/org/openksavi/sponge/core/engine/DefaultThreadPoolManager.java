@@ -115,7 +115,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
     }
 
     @Override
-    public void shutdownThreadPool(ThreadPool threadPool, boolean mayInterruptIfRunning) {
+    public void shutdownThreadPool(ThreadPool threadPool) {
         ExecutorService executor = threadPool.getExecutor();
 
         if (executor == null) {
@@ -123,7 +123,6 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         }
 
         try {
-            threadPool.getFutures().forEach(future -> future.cancel(mayInterruptIfRunning));
             Utils.shutdownExecutorService(getEngine(), threadPool.getName(), executor);
         } finally {
             threadPool.clear();

@@ -66,7 +66,7 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
         try {
             if (durationThreadPool != null) {
                 durationTasks.values().stream().filter(task -> task.getFuture() != null).forEach(task -> task.getFuture().cancel(false));
-                getProcessingUnit().getEngine().getThreadPoolManager().shutdownThreadPool(durationThreadPool, false);
+                getProcessingUnit().getEngine().getThreadPoolManager().shutdownThreadPool(durationThreadPool);
 
                 durationThreadPool = null;
             }

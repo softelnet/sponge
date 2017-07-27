@@ -51,8 +51,8 @@ public class DefaultEngineParameters implements EngineParameters {
     /** Auto-enable processors. */
     private boolean autoEnable = true;
 
-    /** Executor shutdown timeout (in seconds). */
-    private long executorShutdownTimeout = 20;
+    /** Executor shutdown timeout (in milliseconds). */
+    private long executorShutdownTimeout = 60000;
 
     /**
      * A specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter - an

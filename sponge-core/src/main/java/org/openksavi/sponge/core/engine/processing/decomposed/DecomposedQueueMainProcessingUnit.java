@@ -88,25 +88,25 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     public void doStartup() {
         startupHandlers();
 
-        asyncEventSetProcessorThreadPool = getEngine().getThreadPoolManager().createMainProcessingUnitAsyncEventSetProcessorThreadPool();
-        workerThreadPool = getEngine().getThreadPoolManager().createMainProcessingUnitWorkerThreadPool();
+        asyncEventSetProcessorThreadPool = getThreadPoolManager().createMainProcessingUnitAsyncEventSetProcessorThreadPool();
+        workerThreadPool = getThreadPoolManager().createMainProcessingUnitWorkerThreadPool();
 
         // One thread for reading from the decomposed queue.
-        decomposedQueueThreadPool = getEngine().getThreadPoolManager()
-                .createMainProcessingUnitDecomposedQueueThreadPool(new DecomposedQueueReaderProcessable());
-        listenerThreadPool = getEngine().getThreadPoolManager().createMainProcessingUnitListenerThreadPool(this);
+        decomposedQueueThreadPool =
+                getThreadPoolManager().createMainProcessingUnitDecomposedQueueThreadPool(new DecomposedQueueReaderProcessable());
+        listenerThreadPool = getThreadPoolManager().createMainProcessingUnitListenerThreadPool(this);
 
-        getEngine().getThreadPoolManager().startupProcessableThreadPool(decomposedQueueThreadPool);
-        getEngine().getThreadPoolManager().startupProcessableThreadPool(listenerThreadPool);
+        getThreadPoolManager().startupProcessableThreadPool(decomposedQueueThreadPool);
+        getThreadPoolManager().startupProcessableThreadPool(listenerThreadPool);
     }
 
     @Override
     public void doShutdown() {
-        getEngine().getThreadPoolManager().shutdownThreadPool(listenerThreadPool, true);
-        getEngine().getThreadPoolManager().shutdownThreadPool(decomposedQueueThreadPool, true);
+        getThreadPoolManager().shutdownThreadPool(listenerThreadPool);
+        getThreadPoolManager().shutdownThreadPool(decomposedQueueThreadPool);
 
-        getEngine().getThreadPoolManager().shutdownThreadPool(workerThreadPool, false);
-        getEngine().getThreadPoolManager().shutdownThreadPool(asyncEventSetProcessorThreadPool, false);
+        getThreadPoolManager().shutdownThreadPool(workerThreadPool);
+        getThreadPoolManager().shutdownThreadPool(asyncEventSetProcessorThreadPool);
 
         shutdownHandlers();
     }
@@ -129,7 +129,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     }
 
     /**
-     * Processes an event.
+     * Processes an event. Adds a decomposed entry (trigger adapter or event set processor group adapter, event) to the decomposed queue.
      *
      * @param event an event.
      *
@@ -168,28 +168,21 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
         }
     }
 
-    protected class DecomposedQueueWriterLoopWorker extends LoopWorker {
+    protected class DecomposedQueueWriterLoopWorker extends EventLoopWorker {
 
         public DecomposedQueueWriterLoopWorker(Processable processable) {
             super(processable);
         }
 
         @Override
-        public boolean runIteration() throws InterruptedException {
-            // Get an event from the input queue (blocking operation).
-            Event event = getInEvent();
+        public boolean shouldContinueLoop() {
+            // When shutting down, process all events remaining in the Main Input Queue.
+            return (isNewOrStartingOrRunning() || isStopping() && getLastEvent() != null) && !Thread.currentThread().isInterrupted();
+        }
 
-            if (event == null) {
-                return false;
-            }
-
-            // Add a decomposed entry (trigger adapter or event set processor group adapter, event) to the decomposed queue.
-            if (!processEvent(event)) {
-                // If the event isn't listened to by any event processor then put the event in the output queue.
-                getOutQueue().put(event);
-            }
-
-            return true;
+        @Override
+        public boolean processEvent(Event event) throws InterruptedException {
+            return DecomposedQueueMainProcessingUnit.this.processEvent(event);
         }
     }
 
@@ -208,15 +201,24 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
 
     protected class DecomposedQueueReaderWorker extends LoopWorker {
 
+        private Pair<EventProcessorAdapter<?>, Event> lastEntry;
+
         public DecomposedQueueReaderWorker(DecomposedQueueReaderProcessable processable) {
             super(processable);
         }
 
         @Override
+        public boolean shouldContinueLoop() {
+            // When shutting down, process all entries remaining in the Decomposed Queue.
+            return (isNewOrStartingOrRunning() || isStopping() && lastEntry != null) && !Thread.currentThread().isInterrupted();
+        }
+
+        @Override
         public boolean runIteration() throws InterruptedException {
             try {
-                while (isNewOrStartingOrRunning()) {
+                while (shouldContinueLoop()) {
                     final Pair<EventProcessorAdapter<?>, Event> entry = decomposedQueue.get(GET_ITERATION_TIMEOUT, TimeUnit.MILLISECONDS);
+                    lastEntry = entry;
                     if (entry != null) {
                         final EventProcessorAdapter<?> adapter = entry.getLeft();
                         final Event event = entry.getRight();
@@ -264,4 +266,13 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     public boolean supportsConcurrentListenerThreadPool() {
         return false;
     }
+
+    public DecomposedQueue<EventProcessorAdapter<?>> getDecomposedQueue() {
+        return decomposedQueue;
+    }
+
+    public ThreadPool getWorkerThreadPool() {
+        return workerThreadPool;
+    }
+
 }

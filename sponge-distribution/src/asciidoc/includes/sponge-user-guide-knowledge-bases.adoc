@@ -243,12 +243,6 @@ There are some limitation in the interoperability between scripting knowledge ba
 
 == Useful knowledge base commands
 
-.Safely shutdown {sponge}
-[source,python]
-----
-EPS.engine.requestShutdown()
-----
-
 .Make and send a new event.
 [source,python]
 ----
@@ -277,6 +271,12 @@ print EPS.engine.ruleGroups[0].rules
 [source,python]
 ----
 print EPS.engine.correlatorGroups
+----
+
+.Shutdown using a new thread
+[source,python]
+----
+EPS.engine.requestShutdown()
 ----
 
 For more information see {sponge} JavaDoc.

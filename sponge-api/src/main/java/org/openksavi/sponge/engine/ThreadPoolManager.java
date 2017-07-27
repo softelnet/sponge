@@ -81,7 +81,6 @@ public interface ThreadPoolManager extends EngineModule {
      * Shuts down a thread pool.
      *
      * @param threadPool the thread pool.
-     * @param mayInterruptIfRunning allow to interrupt.
      */
-    void shutdownThreadPool(ThreadPool threadPool, boolean mayInterruptIfRunning);
+    void shutdownThreadPool(ThreadPool threadPool);
 }

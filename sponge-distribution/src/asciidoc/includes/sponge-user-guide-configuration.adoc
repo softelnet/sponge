@@ -95,6 +95,10 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`eventSetProcessorDefaultSynchronous`
 |The event set processor default synchronous flag. If this parameter is set to `true` then all rules and correlators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.
 |`false`
+
+|`executorShutdownTimeout`
+|The executor shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing. Note that shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several executors in the engine.
+|`60000`
 |===
 
 
@@ -184,7 +188,9 @@ engine.startup();
 
 Note that you may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.
 
-When an application is about to exit it is recommended to execute `engine.shutdown()` first. It instructs the engine to do some clean up, stop all managed threads, free resources, etc. Note that `shutdown` doesn't guarantee that all events sent to the engine will be processed.
+When a {sponge} instance is no longer needed it is recommended to execute `engine.shutdown()` first. It instructs the engine to do some clean up, stop all managed threads, free resources, etc. 
+
+Note that `shutdown` doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
 
 .Example of shutting down
 [source,java]

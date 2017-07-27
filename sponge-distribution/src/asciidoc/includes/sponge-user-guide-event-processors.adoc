@@ -24,8 +24,32 @@ Instances of event processors, depending on their type, may be created:
 |No
 |===
 
+== Properties and methods
+
+[[event-processor-methods]]
+.Event processor properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`configure()`*
+|A configuration callback method that is invoked before creating an event processor. This method is mandatory.
+
+|`init()`
+|An initialization callback method that is invoked while creating an event processor.
+
+|`name`
+|A property that is the name of the event processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
+
+|`displayName`
+|A property that is the display name of the event processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful for a client code.
+
+|`logger`
+|A property that provides a logger. This is a shortcut for `getLogger()` method.
+|===
+
 == Filters
-Filters are used for allowing only certain events to be processed by other event processors (triggers, rules and correlators). In order to define your own filter, the class inherited from `Filter` should be created. The name of a filter is the name of the class defining this filter.
+Filters allow only certain events to be processed by other event processors (triggers, rules and correlators). In order to define your own filter, the class inherited from `Filter` should be created. The name of a filter is the name of the class defining this filter.
 
 Every filter should implement abstract `configure` and `accepts` methods:
 
@@ -56,12 +80,20 @@ You could modify event attributes in filters if necessary.
 
 Filters are executed in the same order as the order of their registration (i.e. enabling).
 
-=== Important methods
-`configure()`:: A configuration callback method that is invoked before creating a filter. This method is mandatory.
-`init()`:: An initialization callback method that is invoked while creating a filter.
-`boolean accepts(event)`:: This method checks if an incoming event should be further processed. If any of the conditions is not fulfilled this method should return `false`. It will cause the event to be rejected. This method is mandatory.
-`setEvent(eventName)` / `setEvents(eventNames)`:: These methods set names of filtered events.
-`setDisplayName(name)`:: The method sets a display name of this filter.
+=== Properties and methods
+In addition to the inherited <<event-processor-methods,event processor properties and methods>>, filters provide the following ones.
+
+.Filter properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`event` or `events`*
+|These properties should be used to set the names of filtered events. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively.
+
+|*`boolean accepts(event)`*
+|This method checks if an incoming event should be further processed. If any of the conditions is not fulfilled this method should return `false`. It will cause the event to be rejected. This method is mandatory.
+|===
 
 === Example in a script language
 The code presented below creates a filter which filters only events whose name is `"e1"`. Other events are not processed by this filter. Events `e1` successfully pass through the filter only if they have an attribute `"color"` set to the value `"blue"`. The others are rejected.
@@ -168,13 +200,23 @@ Each trigger defines:
 
 The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages they may be simplified to substitutions `events =` and `displayName =`. The method `setEvents()` as a parameter takes an array of event names. For a trigger listening to only one event type, the function `setEvent()` (or `event =`) could be used instead.
 
-=== Important methods
-`configure()`:: A configuration callback method that is invoked before creating a trigger. This method is mandatory.
-`init()`:: An initialization callback method that is invoked while creating a trigger.
-`run(event)`:: A callback method used for processing the event, invoked when the proper event reaches this trigger. This method is mandatory.
-`boolean accepts(event)`:: This optional callback method checks if an incoming event should processed by this trigger. The default implementation returns `true`.
-`setEvent(eventName)` and `setEvents(eventNames)`:: These methods set names of the events that cause this trigger to fire.
-`setDisplayName(name)`:: The method sets a display name of this trigger.
+=== Properties and methods
+In addition to the inherited <<event-processor-methods,event processor properties and methods>>, triggers provide the following ones.
+
+.Trigger properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`event` or `events`*
+|These properties should be used to set the names of the events that cause this trigger to fire. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively.
+
+|*`run(event)`*
+|A callback method used for processing the event, invoked when the proper event reaches this trigger. This method is mandatory.
+
+|`boolean accepts(event)`
+|This optional callback method checks if an incoming event should processed by this trigger. The default implementation returns `true`.
+|===
 
 === Example in a script language
 The code presented below defines a trigger named `TriggerA` listening to events named `"a"`.
@@ -291,15 +333,41 @@ The above values should be set in the `configure` method by using methods `setEv
 
 A rule group is a set of instances of rules of the same type.
 
-=== Important methods
-`configure()`:: A configuration callback method that is invoked when a rule is being enabled. In this method it should be established for what type of events the rule listens. Optionally event conditions for incoming events or rule duration could be set. This method is mandatory.
-`init()`:: An initialization callback method that is invoked before creating a new rule instance.
-`run(event)`:: A callback method invoked when a proper sequence of events happens and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
-`setEvents(eventSpecifications)`:: This method sets specifications of events whose sequence causes a rule to fire.
-`setConditions(alias, conditions)`:: Sets conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the method is irrelevant as long as it returns value `true` or `false` and takes an event as an argument.
-`setDuration()`:: Sets the time how long a rule lasts (represented as `java.time.Duration`). The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
-`setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for a rule. If a rule is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this rule. If a rule is asynchronous then an event will be processed by the instances of this rule concurrently (in many threads). If the _synchronous flag_ is not set then the default value as specified by `eventSetProcessorDefaultSynchronous` configuration parameter will be used. In most cases there should be no need to change this flag.
-`setDisplayName(name)`:: The method sets a display name of this rule.
+=== Properties and methods
+In addition to the inherited <<event-processor-methods,event processor properties and methods>>, rules provide the following ones.
+
+.Rule properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`configure()`*
+|A callback method that is invoked only once, when a rule is being enabled. In this method it should be established for what type of events the rule listens. Optionally event conditions for incoming events or rule duration could be set. This method is mandatory.
+
+|`init()`
+|An initialization callback method that is invoked before creating every new rule instance.
+
+|*`events`*
+|This property should be used to set the specifications of events whose sequence causes the rule to fire. It may be used only as a setter. It is a shortcut for `setEvents(eventSpecifications)` method.
+
+|`setConditions(alias, conditions)`
+|Sets conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the method is irrelevant as long as it returns value `true` or `false` and takes an event as an argument.
+
+|`duration`
+|This property may be used to set the time how long a rule lasts (represented as `java.time.Duration`). It is a shortcut for `setDuration(value)` method. The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
+
+|*`run(event)`*
+|A callback method invoked when a proper sequence of events happens and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
+
+|`Event getEvent(String eventAlias)`
+|Returns the instance of the event that already happened and that has a specified alias. This method may be used inside `run` method. Note that if an event hasn't happened yet, this method throws an exception. This method may return `null` only when an event that supposed not to happen didn't occur as specified.
+
+|`eventSequence`
+|Returns a sequence of events that happened as a list of event instances. The sequence may contain `null` values when an event that supposed not to happen didn't occur as specified. This method may be used inside `run` method. 
+
+|`synchronous`
+|This property may be used to set a boolean _synchronous flag_ for a rule. It is a shortcut for `setSynchronous(synchronous)` method. If a rule is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this rule. If a rule is asynchronous then an event will be processed by the instances of this rule concurrently (in many threads). If the _synchronous flag_ is not set then the default value as specified by `eventSetProcessorDefaultSynchronous` configuration parameter will be used. In most cases there should be no need to change this flag.
+|===
 
 IMPORTANT: Because of rules are not singletons the `configure()` method is invoked *only once*, while enabling the rule. So it should contain only basic configuration as stated before. The `init()` method *must not* contain such configuration because it is invoked every time the new instance of the rule is created.
 
@@ -530,17 +598,45 @@ Each correlator defines:
 
 The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages `setEvents()` and `setDisplayName()` setters may be simplified to substitutions, e.g. `events =`, `displayName =`.
 
-=== Important methods
-`configure()`:: A configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
-`init()`:: An initialization callback method that is invoked before creating a new correlator instance. This method is optional.
-`boolean acceptsAsFirst(Event event)`:: Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. `acceptsAsFirst()` is invoked after `init()`. This method is optional. The default implementation returns `true`.
-`onEvent(Event event)`:: A callback method invoked when an event that a correlator listens to happens. This method is mandatory.
-`onDuration()`:: A callback method invoked when the duration timeout occurs. This method should be implemented if a duration timeout is set. After invoking this callback method, `finish()` is invoked automatically.
-`finish()`:: A final method that should be invoked, in `onEvent(Event event)` method, when the correlator has done its work. Only by invoking `finish()` this instance of the correlator is closed and its resources are released.
-`setDuration()`:: Optionally the time how long a correlator lasts (represented as `java.time.Duration`). The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration()` callback method will be invoked.
-`setMaxInstances()`:: The maximum number of concurrent instances allowed for this correlator. If this value is not set, there will be no limit of concurrent instances. In that case you will probably need to implement `acceptsAsFirst()` method.
-`setSynchronous(synchronous)`:: The method sets a boolean _synchronous flag_ for a correlator. For details see a description of this flag for rules.
-`setDisplayName(name)`:: The method sets a display name of this correlator.
+=== Properties and methods
+In addition to the inherited <<event-processor-methods,event processor properties and methods>>, correlators provide the following ones.
+
+.Correlator properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`configure()`*
+|A configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
+
+|*`events`*
+|This property should be used to set the names of events that this correlator listens to. It may be used only as a setter. It is a shortcut for `setEvents(eventNames)` method.
+
+|`maxInstances`
+|This property may be used to set the maximum number of concurrent instances allowed for this correlator. It is a shortcut for `setMaxInstances(value)` method. If this value is not set, there will be no limit of concurrent instances. In that case you will probably need to implement `acceptsAsFirst()` method.
+
+|`duration`
+|This property may be used to set the time how long a correlator lasts (represented as `java.time.Duration`). It is a shortcut for `setDuration(value)` method. The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration()` callback method will be invoked.
+
+|`init()`
+|An initialization callback method that is invoked before creating a new correlator instance. This method is optional.
+
+|`boolean acceptsAsFirst(Event event)`
+|Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. A method `acceptsAsFirst()` is invoked after `init()`. This method is optional. The default implementation returns `true`.
+
+|*`onEvent(Event event)`*
+|A callback method invoked when an event that a correlator listens to happens. This method is mandatory.
+
+|`onDuration()`
+|A callback method invoked when the duration timeout occurs. This method should be implemented if a duration timeout is set. After invoking this callback method, `finish()` is invoked automatically.
+
+|`finish()`
+|A final method that should be invoked, in `onEvent(Event event)` method, when the correlator has done its work. Only by invoking `finish()` this instance of the correlator is closed and its resources are released.
+
+|`synchronous`
+|This property may be used to set a boolean _synchronous flag_ for a correlator. For details see a description of this flag for rules.
+|===
+
 
 IMPORTANT: Because of correlators are not singletons the `configure()` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `init()` method *must not* contain such configuration because it is invoked every time a new instance of the correlator is created.
 
