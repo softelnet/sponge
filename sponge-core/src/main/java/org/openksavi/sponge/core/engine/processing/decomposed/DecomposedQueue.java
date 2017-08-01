@@ -218,4 +218,8 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     public void onProcessorRemoved(T eventProcessorAdapter) {
         // Nothing to do.
     }
+
+    public int getSize() {
+        return entries.size();
+    }
 }

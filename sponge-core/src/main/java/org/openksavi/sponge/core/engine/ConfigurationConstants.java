@@ -51,6 +51,8 @@ public final class ConfigurationConstants {
 
     public static final String TAG_ENGINE_EVENT_CLONE_POLICY = "eventClonePolicy";
 
+    public static final String TAG_ENGINE_EXECUTOR_SHUTDOWN_TIMEOUT = "executorShutdownTimeout";
+
     public static final String TAG_PROPERTIES = "properties";
 
     public static final String TAG_PROPERTY = "property";

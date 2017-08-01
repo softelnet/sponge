@@ -344,6 +344,8 @@ public class BaseEngine extends BaseEngineModule implements Engine {
                 // Start Main Processing Unit and Filter Processing Unit thread pools. Note that the Filter Processing Unit thread
                 // will be started as the last, because it listens directly to the Input Event Queue and in fact starts all processing.
                 processingUnitManager.startup();
+
+                logger.info("{} is running", getDescription());
             } catch (Throwable e) {
                 safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
                 throw Utils.wrapException("startup", e);
@@ -356,7 +358,9 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     protected void safelyShutdownIfStartupError(EngineModule... modules) {
         Stream.of(modules).forEach(module -> {
             try {
-                module.shutdown();
+                if (module != null) {
+                    module.shutdown();
+                }
             } catch (Throwable ex) {
                 logger.warn(module.getName(), ex);
             }
@@ -398,6 +402,8 @@ public class BaseEngine extends BaseEngineModule implements Engine {
             if (exceptionHolder.get() != null) {
                 throw exceptionHolder.get();
             }
+
+            logger.info("{} is terminated", getDescription());
         } catch (Throwable e) {
             throw Utils.wrapException("shutdown", e);
         } finally {

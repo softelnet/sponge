@@ -74,9 +74,9 @@ public interface EngineParameters {
     boolean getEventSetProcessorDefaultSynchronous();
 
     /**
-     * Returns an Executor shutdown timeout.
+     * Returns an executor shutdown timeout (in milliseconds).
      *
-     * @return an Executor shutdown timeout.
+     * @return an executor shutdown timeout.
      */
     long getExecutorShutdownTimeout();
 
@@ -160,9 +160,9 @@ public interface EngineParameters {
     void setEventSetProcessorDefaultSynchronous(boolean eventSetProcessorDefaultSynchronous);
 
     /**
-     * Sets an Executor shutdown timeout.
+     * Sets an executor shutdown timeout (in milliseconds).
      *
-     * @param executorShutdownTimeout an Executor shutdown timeout.
+     * @param executorShutdownTimeout an executor shutdown timeout.
      */
     void setExecutorShutdownTimeout(long executorShutdownTimeout);
 
