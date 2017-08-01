@@ -36,7 +36,7 @@ public class EchoPlugin extends JavaPlugin {
     @Override
     public void configure(Configuration configuration) {
         echo = configuration.getString("echo", echo);
-        count = configuration.getInt("count", count);
+        count = configuration.getInteger("count", count);
     }
 
     @Override

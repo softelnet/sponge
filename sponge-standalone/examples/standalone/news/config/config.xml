@@ -32,10 +32,11 @@
     </knowledgeBases>
 
     <plugins>
-        <!-- Plugin defined in Python. -->
-        <plugin name="storagePlugin" description="Stores the last news entry" class="StoragePlugin"
-            knowledgeBaseName="main">
-            <storedValue>no news yet</storedValue>
+        <!-- Plugin defined in Python. Stores the last news entry". -->
+        <plugin name="storagePlugin" class="StoragePlugin" knowledgeBaseName="main">
+            <configuration>
+                <storedValue>no news yet</storedValue>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

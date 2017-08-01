@@ -22,7 +22,7 @@ class A(Trigger):
             if index % 5 == 0:
                 self.logger.debug("Statistics {}", EPS.engine.statisticsManager.summary)
             try:
-                EPS.event("b").set("payload", ''.join([chr(random.randint(0, 255)) for i in xrange(0, 1000)])).send()
+                EPS.event("b").set("payload", ''.join(['*' for i in xrange(0, 1000)])).send()
             except QueueFullException as e:
                 self.logger.debug("Statistics {}", EPS.engine.statisticsManager.summary)
                 EPS.setVariable("testStatus", e)

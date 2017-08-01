@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.configuration2.BaseHierarchicalConfiguration;
+import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 
@@ -64,7 +65,8 @@ public class CommonsConfiguration implements Configuration {
 
     @Override
     public CommonsConfiguration getChildConfiguration(String child) {
-        return new CommonsConfiguration((BaseHierarchicalConfiguration) config.configurationAt(child));
+        return new CommonsConfiguration(
+                hasChildConfiguration(child) ? (BaseHierarchicalConfiguration) config.configurationAt(child) : new CombinedConfiguration());
     }
 
     @Override
@@ -108,8 +110,8 @@ public class CommonsConfiguration implements Configuration {
     }
 
     @Override
-    public Integer getInt(String key, Integer defaultValue) {
-        return config.getInt(key, defaultValue);
+    public Integer getInteger(String key, Integer defaultValue) {
+        return config.getInteger(key, defaultValue);
     }
 
     @Override

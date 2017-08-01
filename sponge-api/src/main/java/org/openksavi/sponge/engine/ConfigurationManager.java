@@ -120,6 +120,13 @@ public interface ConfigurationManager extends EngineModule {
     boolean getAutoEnable();
 
     /**
+     * Returns an executor shutdown timeout (in milliseconds).
+     *
+     * @return an executor shutdown timeout.
+     */
+    long getExecutorShutdownTimeout();
+
+    /**
      * Sets the number of the Main Processing Unit worker threads.
      *
      * @param mainProcessingUnitThreadCount the number of the Main Processing Unit worker threads.
@@ -229,4 +236,11 @@ public interface ConfigurationManager extends EngineModule {
      * @param autoEnable auto-enable of processors.
      */
     void setAutoEnable(boolean autoEnable);
+
+    /**
+     * Sets an executor shutdown timeout (in milliseconds).
+     *
+     * @param executorShutdownTimeout an executor shutdown timeout.
+     */
+    void setExecutorShutdownTimeout(long executorShutdownTimeout);
 }

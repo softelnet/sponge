@@ -14,7 +14,9 @@
 
     <plugins>
         <plugin name="scriptPlugin" class="ScriptPlugin" knowledgeBaseName="kb">
-            <storedValue>Value A</storedValue>
+            <configuration>
+                <storedValue>Value A</storedValue>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

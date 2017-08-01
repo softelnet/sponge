@@ -2,7 +2,6 @@
 <sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
 
-    <engine>
-    </engine>
+<!--     <engine/> -->
 </sponge>
 

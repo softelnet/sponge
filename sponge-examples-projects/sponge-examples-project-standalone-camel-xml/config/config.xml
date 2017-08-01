@@ -19,10 +19,12 @@
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring>
-                <!-- Manual Camel context configuration. -->
-                <file>config/spring-camel-context.xml</file>
-            </spring>
+            <configuration>
+                <spring>
+                    <!-- Manual Camel context configuration. -->
+                    <file>config/spring-camel-context.xml</file>
+                </spring>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

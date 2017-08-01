@@ -10,7 +10,9 @@
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring camel="true" />
+            <configuration>
+                <spring camel="true" />
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

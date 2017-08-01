@@ -48,13 +48,16 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
 
     @Override
     public void doStartup() {
-        filterProcessingUnitListenerThreadPoolEntry = getEngine().getThreadPoolManager().createFilterProcessingUnitListenerThreadPool(this);
-        getEngine().getThreadPoolManager().startupProcessableThreadPool(filterProcessingUnitListenerThreadPoolEntry);
+        filterProcessingUnitListenerThreadPoolEntry = getThreadPoolManager().createFilterProcessingUnitListenerThreadPool(this);
+        getThreadPoolManager().startupProcessableThreadPool(filterProcessingUnitListenerThreadPoolEntry);
     }
 
     @Override
     public void doShutdown() {
-        getEngine().getThreadPoolManager().shutdownThreadPool(filterProcessingUnitListenerThreadPoolEntry, true);
+        // Wait for the end of processing of the current event (coming from the Input Queue) if any. All other events will remain
+        // in the Input Queue and will not be processed. Note that if the Input Event Queue is not persistent (as
+        // in the current implementation), those events will be lost.
+        getThreadPoolManager().shutdownThreadPool(filterProcessingUnitListenerThreadPoolEntry);
     }
 
     /**
@@ -73,7 +76,7 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
      * @param event event.
      * @return {@code true} if this event should be put in the output queue.
      */
-    protected boolean processEvent(Event event) {
+    public boolean processEvent(Event event) {
         for (AtomicReference<FilterAdapter> filterContextR : getEventProcessors(event.getName())) {
             FilterAdapter filterContext = filterContextR.get();
             try {
@@ -102,28 +105,20 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
     /**
      * Processing unit worker to be used in a thread pool.
      */
-    protected class FilterLoopWorker extends LoopWorker {
+    protected class FilterLoopWorker extends EventLoopWorker {
 
         public FilterLoopWorker(Processable processable) {
             super(processable);
         }
 
         @Override
-        public boolean runIteration() throws InterruptedException {
-            // Get an event from the input queue (blocking operation).
-            Event event = getInEvent();
+        public boolean shouldContinueLoop() {
+            return isNewOrStartingOrRunning() && !Thread.currentThread().isInterrupted();
+        }
 
-            if (event == null) {
-                return false;
-            }
-
-            // First, process the event.
-            if (processEvent(event)) {
-                // Then put the event in the output queue
-                getOutQueue().put(event);
-            }
-
-            return true;
+        @Override
+        public boolean processEvent(Event event) throws InterruptedException {
+            return DefaultFilterProcessingUnit.this.processEvent(event);
         }
     }
 

@@ -21,25 +21,23 @@ package org.openksavi.sponge.core.engine;
  */
 public final class PluginManagerConstants {
 
-    /** Configuration plugins tag. */
+    /** Plugins tag. */
     public static final String CFG_PLUGINS = "plugins";
 
-    /** Configuration plugin tag. */
+    /** Plugin tag. */
     public static final String CFG_PLUGIN = "plugin";
 
-    /** Configuration plugin name tag. */
+    /** Plugin name tag. */
     public static final String CFG_PLUGIN_NAME = "name";
 
-    /** Configuration plugin description tag. */
-    public static final String CFG_PLUGIN_DESCRIPTION = "description";
-
-    /** Configuration plugin class tag. */
+    /** Plugin class tag. */
     public static final String CFG_PLUGIN_CLASS = "class";
 
+    /** Plugin knowledge base name. */
     public static final String CFG_PLUGIN_KB_NAME = "knowledgeBaseName";
 
-    /** Configuration plugin config tag. */
-    public static final String CFG_PLUGIN_CONFIG = "config";
+    /** Plugin configuration tag. */
+    public static final String CFG_PLUGIN_CONFIGURATION = "configuration";
 
     private PluginManagerConstants() {
         //

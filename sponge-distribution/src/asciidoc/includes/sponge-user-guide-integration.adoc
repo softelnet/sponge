@@ -61,7 +61,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 The *sponge* component provides integration bridge between Apache Camel and {sponge} engine. It allows:
 
 * to route a body of a Camel message to the {sponge} engine by converting it to {sponge} event (producer endpoint),
-* to route a message from an {sponge} knowledge base to a Camel route (consumer endpoint).
+* to route a message from a {sponge} knowledge base to a Camel route (consumer endpoint).
 
 === Maven configuration
 Maven users will need to add the following dependency to their `pom.xml` for this component:
@@ -90,7 +90,7 @@ Where `engineRef` represents the name of the `Engine` implementation instance lo
 
 |`action`
 |`"CamelProducerAction"`
-|Could be used only on the producer side of the route. It will synchronously call an {sponge} action that has a name specified by the value of this option.
+|Could be used only on the producer side of the route. It will synchronously call the {sponge} action that has a name specified by the value of this option.
 
 |`managed`
 |`true`
@@ -120,7 +120,7 @@ public class SpringConfiguration extends EngineCamelConfiguration {
     }
 }
 ----
-* Implicitly when creating an {sponge} Camel endpoint.
+* Implicitly when creating a {sponge} Camel endpoint.
 * Explicitly in {sponge} XML configuration file.
 +
 .Example
@@ -228,7 +228,7 @@ Camel producer action is invoked by {sponge} synchronously when a Camel exchange
 CAUTION: To avoid misconception please note that events in the Output Event Queue are not sent to the Camel route.
 
 ===== Default Camel producer action
-The default Camel producer action is provided by a Java action `CamelProducerAction`. If the body of the Camel message is an {sponge} event or event definition, than the event is sent to the {sponge} immediately. Otherwise this action creates and sends a new event that encapsulates the body. The event is then returned, so it is placed as the body of the Camel _IN_ message. The default name of the new event is the name of the corresponding Camel route.
+The default Camel producer action is provided by a Java action `CamelProducerAction`. If the body of the Camel message is a {sponge} event or event definition, than the event is sent to the {sponge} immediately. Otherwise this action creates and sends a new event that encapsulates the body. The event is then returned, so it is placed as the body of the Camel _IN_ message. The default name of the new event is the name of the corresponding Camel route.
 
 ===== Custom Camel producer action
 You could provide a custom implementation of a Camel producer action in two ways:

@@ -37,6 +37,7 @@ import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
 import org.openksavi.sponge.event.Event;
@@ -98,22 +99,13 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
             return processable;
         }
 
-        protected Event getInEvent() throws InterruptedException {
-            while (isNewOrStartingOrRunning()) {
-                Event event = getInQueue().get(GET_ITERATION_TIMEOUT);
-                if (event != null) {
-                    return event;
-                }
-            }
-
-            return null;
-        }
-
         public abstract boolean runIteration() throws InterruptedException;
+
+        public abstract boolean shouldContinueLoop();
 
         @Override
         public final void run() {
-            while (isNewOrStartingOrRunning() && !Thread.currentThread().isInterrupted()) {
+            while (shouldContinueLoop()) {
                 try {
                     if (!runIteration()) {
                         return; // Graceful shutdown
@@ -152,6 +144,57 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
 
         private final String getMessageSource() {
             return processable.toString();
+        }
+    }
+
+    public abstract class EventLoopWorker extends LoopWorker {
+
+        private Event lastEvent;
+
+        public EventLoopWorker(Processable processable) {
+            super(processable);
+        }
+
+        protected Event getLastEvent() {
+            return lastEvent;
+        }
+
+        protected Event getInEvent() throws InterruptedException {
+            while (shouldContinueLoop()) {
+                Event event = getInQueue().get(GET_ITERATION_TIMEOUT);
+                lastEvent = event;
+
+                if (event != null) {
+                    return event;
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * Returns {@code true} if the event should be put into the out queue.
+         *
+         * @param event the event.
+         * @return {@code true} if the event should be put into the out queue.
+         * @throws InterruptedException when the current thread has been interrupted.
+         */
+        public abstract boolean processEvent(Event event) throws InterruptedException;
+
+        @Override
+        public boolean runIteration() throws InterruptedException {
+            // Get an event from the input queue (blocking operation).
+            Event event = getInEvent();
+
+            if (event == null) {
+                return false;
+            }
+
+            if (processEvent(event)) {
+                getOutQueue().put(event);
+            }
+
+            return true;
         }
     }
 
@@ -339,5 +382,9 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
 
     public void setEventProcessorRegistrationListener(EventProcessorRegistrationListener<T> eventProcessorRegistrationListener) {
         this.eventProcessorRegistrationListener = eventProcessorRegistrationListener;
+    }
+
+    protected ThreadPoolManager getThreadPoolManager() {
+        return getEngine().getThreadPoolManager();
     }
 }

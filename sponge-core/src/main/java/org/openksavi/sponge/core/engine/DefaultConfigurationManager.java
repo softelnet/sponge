@@ -93,6 +93,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** Auto-enable processors. */
     private Boolean autoEnable;
 
+    /** Executor shutdown timeout (in milliseconds). */
+    private Long executorShutdownTimeout;
+
     /** Properties map. */
     private Map<String, PropertyEntry> properties = new LinkedHashMap<>();
 
@@ -135,7 +138,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      */
     private void setupEngineParameters() {
         if (mainProcessingUnitThreadCount == null) {
-            mainProcessingUnitThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_MAIN_PROCESSING_UNIT_THREAD_COUNT,
+            mainProcessingUnitThreadCount = engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_MAIN_PROCESSING_UNIT_THREAD_COUNT,
                     getEngine().getDefaultParameters().getMainProcessingUnitThreadCount());
         }
 
@@ -145,18 +148,18 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
 
         if (eventQueueCapacity == null) {
-            eventQueueCapacity = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
+            eventQueueCapacity = engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
                     getEngine().getDefaultParameters().getEventQueueCapacity());
         }
 
         if (durationThreadCount == null) {
-            durationThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_DURATION_THREAD_COUNT,
+            durationThreadCount = engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_DURATION_THREAD_COUNT,
                     getEngine().getDefaultParameters().getDurationThreadCount());
         }
 
         if (asyncEventSetProcessorExecutorThreadCount == null) {
             asyncEventSetProcessorExecutorThreadCount =
-                    engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_ASYNC_EVENT_SET_PROCESSOR_EXECUTOR_THREAD_COUNT,
+                    engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_ASYNC_EVENT_SET_PROCESSOR_EXECUTOR_THREAD_COUNT,
                             getEngine().getDefaultParameters().getAsyncEventSetProcessorExecutorThreadCount());
         }
 
@@ -169,6 +172,11 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         if (autoEnable == null) {
             autoEnable = engineConfig.getBoolean(ConfigurationConstants.TAG_ENGINE_AUTO_ENABLE,
                     getEngine().getDefaultParameters().getAutoEnable());
+        }
+
+        if (executorShutdownTimeout == null) {
+            executorShutdownTimeout = engineConfig.getLong(ConfigurationConstants.TAG_ENGINE_EXECUTOR_SHUTDOWN_TIMEOUT,
+                    getEngine().getDefaultParameters().getExecutorShutdownTimeout());
         }
     }
 
@@ -390,6 +398,11 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         return eventClonePolicy;
     }
 
+    @Override
+    public long getExecutorShutdownTimeout() {
+        return executorShutdownTimeout;
+    }
+
     /**
      * Returns the engine home directory.
      *
@@ -413,6 +426,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                 .append("eventClonePolicy", eventClonePolicy)
                 .append("autoEnable", autoEnable)
                 .append("durationThreadCount", durationThreadCount)
+                .append("executorShutdownTimeout", executorShutdownTimeout)
                 .append("properties", properties)
                 .toString();
         //@formatter:on
@@ -458,6 +472,11 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public void setAsyncEventSetProcessorExecutorThreadCount(int asyncEventSetProcessorExecutorThreadCount) {
         this.asyncEventSetProcessorExecutorThreadCount = asyncEventSetProcessorExecutorThreadCount;
+    }
+
+    @Override
+    public void setExecutorShutdownTimeout(long executorShutdownTimeout) {
+        this.executorShutdownTimeout = executorShutdownTimeout;
     }
 
     @Override

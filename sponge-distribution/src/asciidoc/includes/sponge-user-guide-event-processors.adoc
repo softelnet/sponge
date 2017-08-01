@@ -24,30 +24,6 @@ Instances of event processors, depending on their type, may be created:
 |No
 |===
 
-== Properties and methods
-
-[[event-processor-methods]]
-.Event processor properties and methods
-[cols="1,5"]
-|===
-|Property / Method |Description
-
-|*`configure()`*
-|A configuration callback method that is invoked before creating an event processor. This method is mandatory.
-
-|`init()`
-|An initialization callback method that is invoked while creating an event processor.
-
-|`name`
-|A property that is the name of the event processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
-
-|`displayName`
-|A property that is the display name of the event processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful for a client code.
-
-|`logger`
-|A property that provides a logger. This is a shortcut for `getLogger()` method.
-|===
-
 == Filters
 Filters allow only certain events to be processed by other event processors (triggers, rules and correlators). In order to define your own filter, the class inherited from `Filter` should be created. The name of a filter is the name of the class defining this filter.
 
@@ -81,7 +57,7 @@ You could modify event attributes in filters if necessary.
 Filters are executed in the same order as the order of their registration (i.e. enabling).
 
 === Properties and methods
-In addition to the inherited <<event-processor-methods,event processor properties and methods>>, filters provide the following ones.
+In addition to the inherited <<processor-methods,processor properties and methods>>, filters provide the following ones.
 
 .Filter properties and methods
 [cols="1,5"]
@@ -201,7 +177,7 @@ Each trigger defines:
 The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages they may be simplified to substitutions `events =` and `displayName =`. The method `setEvents()` as a parameter takes an array of event names. For a trigger listening to only one event type, the function `setEvent()` (or `event =`) could be used instead.
 
 === Properties and methods
-In addition to the inherited <<event-processor-methods,event processor properties and methods>>, triggers provide the following ones.
+In addition to the inherited <<processor-methods,processor properties and methods>>, triggers provide the following ones.
 
 .Trigger properties and methods
 [cols="1,5"]
@@ -334,7 +310,7 @@ The above values should be set in the `configure` method by using methods `setEv
 A rule group is a set of instances of rules of the same type.
 
 === Properties and methods
-In addition to the inherited <<event-processor-methods,event processor properties and methods>>, rules provide the following ones.
+In addition to the inherited <<processor-methods,processor properties and methods>>, rules provide the following ones.
 
 .Rule properties and methods
 [cols="1,5"]
@@ -599,7 +575,7 @@ Each correlator defines:
 The above values should be set in the `configure` method by using methods `setEvents()` and `setDisplayName()`. Thanks to many scripting languages `setEvents()` and `setDisplayName()` setters may be simplified to substitutions, e.g. `events =`, `displayName =`.
 
 === Properties and methods
-In addition to the inherited <<event-processor-methods,event processor properties and methods>>, correlators provide the following ones.
+In addition to the inherited <<processor-methods,processor properties and methods>>, correlators provide the following ones.
 
 .Correlator properties and methods
 [cols="1,5"]

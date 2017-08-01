@@ -12,16 +12,18 @@
     </knowledgeBases>
 
     <plugins>
-        <plugin name="connectionPlugin" description="A simple plugin used as an example"
-                class="org.openksavi.sponge.examples.ConnectionPlugin">
-            <connection>
-                <name>Example connection</name>
-            </connection>
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin">
+            <configuration>
+                <connection>
+                    <name>Example connection</name>
+                </connection>
+            </configuration>
         </plugin>
-        <plugin name="echoPlugin" description="A simple plugin used as an example" 
-                class="org.openksavi.sponge.examples.EchoPlugin">
-            <echo>Echo test!</echo>
-            <count>2</count>
+        <plugin name="echoPlugin" class="org.openksavi.sponge.examples.EchoPlugin">
+            <configuration>
+                <echo>Echo test!</echo>
+                <count>2</count>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

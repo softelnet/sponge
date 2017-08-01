@@ -3,9 +3,9 @@ A knowledge base is used mainly to define and register event processors.
 
 Typically you write knowledge bases in one or more of the supported scripting languages. An alternative way of defining knowledge bases is to write them directly in Java. However, using a scripting knowledge base has advantages such as a modified script knowledge base doesn't need recompilation.
 
-There is a global namespace for all processors (i.e. event processors, actions), regardless of a knowledge base they are defined in. When there is more than one processor of the same name in the engine, only the last enabled one will be registered. However, you can't enable a processor if an another one of a different type is already enabled.
+There is a global namespace for all processors (i.e. event processors, actions), regardless of a knowledge base they are defined in. When there is more than one processor of the same name in the engine, only the last enabled one will be registered. However, you can't enable a processor if an another one that has the same name and is of a different type has already been enabled.
 
-Script knowledge base files are searched in the file system, then in the classpath and then in the {sponge} home directory. This could be changed by providing a custom implementation of `IKnowledgeBaseFileProvider`.
+Script knowledge base files are looked up: in the file system as a relative or absolute path, then in the classpath and then in the file system relative to the {sponge} home directory. This could be changed by providing a custom implementation of `KnowledgeBaseFileProvider` and passing it to the `setKnowledgeBaseFileProvider` method on the engine.
 
 The order of loading knowledge bases preserves the order specified in the configuration. Likewise the order of loading files of the same knowledge base preserves the order specified in the configuration.
 
@@ -118,67 +118,6 @@ The following predefined global variables are available in a knowledge base:
 
 For each plugin a global variable will be created. The name of this variable is the plugin name (i.e. the value configured as the plugin `name` attribute in the configuration).
 
-== Enabling processors
-Processors could be enabled:
-
-* by auto-enable (this is the default setting for script-based processors),
-* manually.
-
-=== Auto-enable
-{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a knowledge base. This is done just before invoking `onLoad` callback function in the knowledge base.
-
-CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they wouldn't be enabled automatically.
-
-Auto-enable scans only for processors defined in the scripting knowledge base. Enabling Java-based processors have to be done manually.
-
-You may turn off auto-enable by setting `autoEnable` configuration parameter to `false`. In that case you have to enable processors manually.
-
-=== Manual enabling
-In most cases enabling processors manually should be done in `onLoad` callback function.
-
-To manually enable any script-based processors in the script knowledge base you may use `EPS.enable()` to enable one processor and `EPS.enableAll()` to enable many processors.
-
-.Enabling script-based processor example
-[source,python]
-----
-def onLoad:
-    EPS.enable(TriggerA)
-----
-
-.Enabling script-based processors example
-[source,python]
-----
-def onLoad:
-    EPS.enableAll(Trigger1, Trigger3)
-----
-
-To manually enable any Java-based processors in the script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`.
-
-.Enabling Java-based processor example
-[source,python]
-----
-def onLoad():
-    EPS.enableJava(SameSourceJavaRule)
-----
-
-== Disabling processors
-Processors could be disabled only manually. To disable any script-based processors in the script knowledge base you may use `EPS.disable()` to disable one processor and `EPS.disableAll()` to disable many processors.
-
-.Disabling script-based processor example
-[source,python]
-----
-def onLoad:
-    EPS.disable(EchoAction)
-----
-
-To disable any Java-based processors in the script knowledge base you may use `EPS.disableJava()` and `EPS.disableJavaAll()`.
-
-.Disabling Java-based processor example
-[source,python]
-----
-def onLoad():
-    EPS.disableJava(SameSourceJavaRule)
-----
 
 == Loading knowledge base from an additional file
 {sponge} gives the possibility to define a knowledge base in a few files. In order to do that, in the configuration file in the `<engine>` section you may define which files should be loaded by adding `<file>` tags to `<knowledgeBase>`. Additional files could also be loaded from a knowledge base level.
@@ -243,12 +182,6 @@ There are some limitation in the interoperability between scripting knowledge ba
 
 == Useful knowledge base commands
 
-.Safely shutdown {sponge}
-[source,python]
-----
-EPS.engine.requestShutdown()
-----
-
 .Make and send a new event.
 [source,python]
 ----
@@ -277,6 +210,12 @@ print EPS.engine.ruleGroups[0].rules
 [source,python]
 ----
 print EPS.engine.correlatorGroups
+----
+
+.Shutdown using a new thread
+[source,python]
+----
+EPS.engine.requestShutdown()
 ----
 
 For more information see {sponge} JavaDoc.

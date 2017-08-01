@@ -4,7 +4,7 @@
 == {sponge}
 *{sponge} is an open-source, Apache 2.0 licensed, Java-based Event Processing System.*
 
-{sponge} provides a framework for implementing event processors, i.e. objects that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events.
+{sponge} provides a software framework for implementing event processors, i.e. objects that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events.
 
 Event processors are defined in knowledge bases. Knowledge base files may be written in several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java.
 
@@ -63,5 +63,6 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 
 == Considerations
 
+* {sponge} provides no graphical user interface (GUI).
 * Because of {sponge} doesn't introduce its own notation for knowledge bases, it provides a shorter learning curve for users that know one of the supported scripting languages. However it could lack more sophisticated features and could be less optimized for certain uses than other solutions. For example you specify event conditions by writing any code in a scripting language that is to be executed when a matching event happens. On one hand it gives you a flexibility and on the other hand it doesn't provide optimizations that could be possible if, for example, a strict temporal reasoning notation is used.
 * Currently {sponge} doesn't provide persistence out of the box.

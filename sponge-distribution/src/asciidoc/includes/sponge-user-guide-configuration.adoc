@@ -37,11 +37,12 @@ In a general form an XML configuration file is built as in the following example
 
     <!-- Plugins configuration section -->
     <plugins>
-        <plugin name="connectionPlugin" description="A simple plugin used as an example"
-                class="org.openksavi.sponge.examples.ConnectionPlugin">
-            <connection>
-                <name>Example connection</name>
-            </connection>
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin">
+            <configuration>
+                <connection>
+                    <name>Example connection</name>
+                </connection>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>
@@ -56,7 +57,7 @@ A properties configuration section (`properties`) is used for setting a configur
 
 Moreover properties could be used as Java system properties if attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
 
-Properties could also be used as an {sponge} variables for session (engine) scope. In that case you have to set attribute `variable` to `true`. Note that the type of such variables is always `String`.
+Properties could also be used as {sponge} variables for session (engine) scope. In that case you have to set attribute `variable` to `true`. Note that the type of such variables is always `String`.
 
 In the above example a property `sponge.home` has been defined and it could be used e.g. in plugins section.
 
@@ -95,6 +96,10 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`eventSetProcessorDefaultSynchronous`
 |The event set processor default synchronous flag. If this parameter is set to `true` then all rules and correlators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.
 |`false`
+
+|`executorShutdownTimeout`
+|The executor shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing. Note that shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several executors in the engine.
+|`60000`
 |===
 
 
@@ -133,10 +138,6 @@ A plugins configuration section (`<plugins>`) contains plugin definitions (`<plu
 |Attribute
 |The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used in order to access a given plugin in the knowledge base.
 
-|`description`
-|Attribute
-|The plugin description (optional).
-
 |`class`
 |Attribute
 |The name of the plugin class (Java class or a class defined in the scripting language in the script knowledge base (mandatory).
@@ -146,7 +147,7 @@ A plugins configuration section (`<plugins>`) contains plugin definitions (`<plu
 |The name of the knowledge base containing the class of the plugin (optional). If not set then the default Java-based knowledge base is used.
 |===
 
-Inside a `<plugin>` element you may provide a custom plugin configuration section that would depend on a given plugin implementation. Usually it contains a hierarchy of plugin-specific sub tags.
+You may provide a custom plugin configuration section inside a `<configuration>` element. The contents of this plugin configuration depend on a given plugin implementation. Usually it would be a hierarchy of plugin specific sub tags.
 
 [[engine-builder-api]]
 == Engine Builder API
@@ -183,11 +184,3 @@ engine.startup();
 ----
 
 Note that you may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.
-
-When an application is about to exit it is recommended to execute `engine.shutdown()` first. It instructs the engine to do some clean up, stop all managed threads, free resources, etc. Note that `shutdown` doesn't guarantee that all events sent to the engine will be processed.
-
-.Example of shutting down
-[source,java]
-----
-engine.shutdown();
-----

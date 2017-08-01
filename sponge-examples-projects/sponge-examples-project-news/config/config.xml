@@ -31,14 +31,17 @@
 
     <plugins>
         <!-- Plugin defined in Java. -->
-        <plugin name="echoPlugin" description="Multi echo plugin" class="org.openksavi.sponge.examples.project.news.MultiEchoPlugin">
-            <count>2</count>
+        <plugin name="echoPlugin" class="org.openksavi.sponge.examples.project.news.MultiEchoPlugin">
+            <configuration>
+                <count>2</count>
+            </configuration>
         </plugin>
 
-        <!-- Plugin defined in Python. -->
-        <plugin name="storagePlugin" description="Stores the last news entry" class="StoragePlugin"
-            knowledgeBaseName="main">
-            <storedValue>no news yet</storedValue>
+        <!-- Plugin defined in Python. Stores the last news entry". -->
+        <plugin name="storagePlugin" class="StoragePlugin" knowledgeBaseName="main">
+            <configuration>
+                <storedValue>no news yet</storedValue>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

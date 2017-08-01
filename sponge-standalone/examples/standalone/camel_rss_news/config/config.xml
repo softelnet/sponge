@@ -44,17 +44,20 @@
     </knowledgeBases>
 
     <plugins>
-        <!-- Plugin defined in Python. -->
-        <plugin name="storagePlugin" description="Stores the last news entry" class="StoragePlugin"
-            knowledgeBaseName="main">
-            <storedValue>no news yet</storedValue>
+        <!-- Plugin defined in Python. Stores the last news entry. -->
+        <plugin name="storagePlugin" class="StoragePlugin" knowledgeBaseName="main">
+            <configuration>
+                <storedValue>no news yet</storedValue>
+            </configuration>
         </plugin>
         <!-- Standalone plugin that configures Spring and Camel. -->
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring engineBeanName="camelRssEngine" camel="true">
-                <file>${baseDir}/config/CamelRoutes.groovy</file>
-                <file>${baseDir}/config/CamelService.groovy</file>
-            </spring>
+            <configuration>
+                <spring engineBeanName="camelRssEngine" camel="true">
+                    <file>${baseDir}/config/CamelRoutes.groovy</file>
+                    <file>${baseDir}/config/CamelService.groovy</file>
+                </spring>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>
