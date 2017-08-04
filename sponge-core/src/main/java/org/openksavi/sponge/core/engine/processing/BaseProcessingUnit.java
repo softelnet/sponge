@@ -172,6 +172,13 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
             return null;
         }
 
+        /**
+         * Returns {@code true} if the event should be put into the out queue.
+         *
+         * @param event the event.
+         * @return {@code true} if the event should be put into the out queue.
+         * @throws InterruptedException when the current thread has been interrupted.
+         */
         public abstract boolean processEvent(Event event) throws InterruptedException;
 
         @Override
@@ -183,9 +190,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
                 return false;
             }
 
-            // First, process the event.
             if (processEvent(event)) {
-                // If the event isn't listened to by any event processor then put the event in the output queue.
                 getOutQueue().put(event);
             }
 

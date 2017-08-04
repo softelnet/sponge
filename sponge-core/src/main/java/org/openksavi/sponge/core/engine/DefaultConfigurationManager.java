@@ -138,7 +138,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      */
     private void setupEngineParameters() {
         if (mainProcessingUnitThreadCount == null) {
-            mainProcessingUnitThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_MAIN_PROCESSING_UNIT_THREAD_COUNT,
+            mainProcessingUnitThreadCount = engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_MAIN_PROCESSING_UNIT_THREAD_COUNT,
                     getEngine().getDefaultParameters().getMainProcessingUnitThreadCount());
         }
 
@@ -148,18 +148,18 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
 
         if (eventQueueCapacity == null) {
-            eventQueueCapacity = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
+            eventQueueCapacity = engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_EVENT_QUEUE_CAPACITY,
                     getEngine().getDefaultParameters().getEventQueueCapacity());
         }
 
         if (durationThreadCount == null) {
-            durationThreadCount = engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_DURATION_THREAD_COUNT,
+            durationThreadCount = engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_DURATION_THREAD_COUNT,
                     getEngine().getDefaultParameters().getDurationThreadCount());
         }
 
         if (asyncEventSetProcessorExecutorThreadCount == null) {
             asyncEventSetProcessorExecutorThreadCount =
-                    engineConfig.getInt(ConfigurationConstants.TAG_ENGINE_ASYNC_EVENT_SET_PROCESSOR_EXECUTOR_THREAD_COUNT,
+                    engineConfig.getInteger(ConfigurationConstants.TAG_ENGINE_ASYNC_EVENT_SET_PROCESSOR_EXECUTOR_THREAD_COUNT,
                             getEngine().getDefaultParameters().getAsyncEventSetProcessorExecutorThreadCount());
         }
 

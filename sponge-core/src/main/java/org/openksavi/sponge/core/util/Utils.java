@@ -185,7 +185,7 @@ public abstract class Utils {
         MoreExecutors.shutdownAndAwaitTermination(executorService, engine.getDefaultParameters().getExecutorShutdownTimeout(),
                 TimeUnit.SECONDS);
         if (!executorService.isTerminated()) {
-            logger.warn("Executor for {} didn't shutdown gracefully.", named);
+            logger.warn("Executor for {} hasn't shutdown gracefully.", named);
         }
     }
 

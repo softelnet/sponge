@@ -133,10 +133,10 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
      *
      * @param event an event.
      *
-     * @return {@code true} if the event has been processed by at least one adapter.
+     * @return {@code true} if the event hasn't been processed by any adapters and should be put into the Output Queue.
      * @throws java.lang.InterruptedException if interrupted.
      */
-    protected boolean processEvent(Event event) throws InterruptedException {
+    public boolean processEvent(Event event) throws InterruptedException {
         if (event instanceof ControlEvent) {
             if (event instanceof ProcessorControlEvent) {
                 ProcessorAdapter<?> processorAdapter = ((ProcessorControlEvent) event).getProcessorAdapter();
@@ -145,14 +145,14 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                 }
             }
 
-            return true;
+            return false;
         } else {
             Set<AtomicReference<EventProcessorAdapter<?>>> adapterRs = getEventProcessors(event.getName());
             for (AtomicReference<EventProcessorAdapter<?>> adapterR : adapterRs) {
                 putIntoDecomposedQueue(new ImmutablePair<>(adapterR.get(), event));
             }
 
-            return !adapterRs.isEmpty();
+            return adapterRs.isEmpty();
         }
     }
 

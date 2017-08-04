@@ -81,11 +81,6 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             throw new SpongeException("Plugin should have a name");
         }
 
-        String pluginDescription = pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_DESCRIPTION, null);
-        if (StringUtils.isBlank(pluginDescription)) {
-            pluginDescription = null;
-        }
-
         String className = pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_CLASS, null);
         if (StringUtils.isBlank(className)) {
             throw new SpongeException("Plugin configuration should specify a class: " + pluginName);
@@ -95,8 +90,6 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
 
         Plugin plugin = createPluginStub(pluginName, knowledgeBaseName, className);
 
-        plugin.setDescription(pluginDescription);
-
         if (existsPlugin(plugin.getName())) {
             throw new SpongeException("Plugin '" + plugin.getName() + "' already exists.");
         }
@@ -105,7 +98,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             throw new SpongeException("Invalid plugin name: " + plugin.getName());
         }
 
-        plugin.setConfiguration(pluginConfig, true);
+        plugin.setConfiguration(pluginConfig.getChildConfiguration(PluginManagerConstants.CFG_PLUGIN_CONFIGURATION), true);
 
         return plugin;
     }
@@ -244,9 +237,6 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             Plugin plugin = knowledgeBase.getInterpreter().createPluginInstance(pluginStub.getPluginClassName());
             if (pluginStub.getName() != null) {
                 plugin.setName(pluginStub.getName());
-            }
-            if (pluginStub.getDescription() != null) {
-                plugin.setDescription(pluginStub.getDescription());
             }
 
             plugin.setEngine(getEngine());

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.plugin;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,34 +33,11 @@ import org.openksavi.sponge.plugin.Plugin;
  */
 public abstract class BasePlugin extends BaseEngineModule implements Plugin {
 
-    /** Plugin description. */
-    private String description;
-
     /** Plugin configuration. */
     private Configuration configuration;
 
     /** Knowledge base associated with this plugin. */
     private KnowledgeBase knowledgeBase;
-
-    /**
-     * Sets plugin description.
-     *
-     * @param description plugin description.
-     */
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Returns plugin description.
-     *
-     * @return plugin description.
-     */
-    @Override
-    public String getDescription() {
-        return description;
-    }
 
     /**
      * Sets plugin configuration.
@@ -168,7 +147,12 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
      */
     @Override
     public String toString() {
-        return "name: " + getName() + ", class: " + getClass().getName() + ", description: " + description;
+        //@formatter:off
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("name", getName())
+                .append("class", getClass().getName())
+                .toString();
+        //@formatter:on
     }
 
     /**

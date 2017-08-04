@@ -16,13 +16,19 @@
 
 package org.openksavi.sponge.core.engine.event;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
- * Null event queue that forgets all events. It can be used as event queue terminator.
+ * Null event queue that forgets all events.
  */
 public class NullEventQueue extends BaseEventQueue {
+
+    private static final Logger ignoredEventsLogger = LoggerFactory.getLogger(EngineConstants.IGNORED_EVENTS_LOGGER_NAME);
 
     /**
      * Creates a new null event queue.
@@ -36,7 +42,9 @@ public class NullEventQueue extends BaseEventQueue {
      */
     @Override
     public void put(Event event) throws QueueFullException {
-        //
+        if (ignoredEventsLogger.isInfoEnabled()) {
+            ignoredEventsLogger.info("Ignored event: {}", event);
+        }
     }
 
     /**

@@ -76,7 +76,7 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
      * @param event event.
      * @return {@code true} if this event should be put in the output queue.
      */
-    protected boolean processEvent(Event event) {
+    public boolean processEvent(Event event) {
         for (AtomicReference<FilterAdapter> filterContextR : getEventProcessors(event.getName())) {
             FilterAdapter filterContext = filterContextR.get();
             try {

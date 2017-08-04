@@ -35,7 +35,7 @@ asciidoctor:
   base_dir: :docdir
   safe: unsafe
   attributes:
-    - projectVersion=0.1.0
+    - projectVersion=${release.version}
     - imagesdir=/docs/images
     - toclevels=5
     - homepage=http://www.openksavi.org/sponge
