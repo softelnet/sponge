@@ -24,6 +24,8 @@ public final class EngineConstants {
     /** Control event name prefix. */
     public static final String CONTROL_EVENT_PREFIX = "$";
 
+    public static final String IGNORED_EVENTS_LOGGER_NAME = "sponge.event.ignored";
+
     private EngineConstants() {
         //
     }

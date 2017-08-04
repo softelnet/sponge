@@ -9,6 +9,17 @@
         <fileSet>
             <directory>${project.basedir}/src/jekyll</directory>
             <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>_config.yml</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/jekyll</directory>
+            <outputDirectory>/</outputDirectory>
+            <filtered>true</filtered>
+            <includes>
+                <include>_config.yml</include>
+            </includes>
         </fileSet>
         <fileSet>
             <directory>${project.build.directory}/generated-docs</directory>

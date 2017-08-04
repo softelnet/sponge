@@ -56,7 +56,7 @@ public interface Configuration {
     Object getVariable(String name);
 
     /**
-     * Returns a child configuration.
+     * Returns a child configuration. If such configuration doesn't exist, returns an empty configuration.
      *
      * @param key child configuration key.
      * @return child configuration.
@@ -103,7 +103,7 @@ public interface Configuration {
      * @param defaultValue default value.
      * @return integer value.
      */
-    Integer getInt(String key, Integer defaultValue);
+    Integer getInteger(String key, Integer defaultValue);
 
     /**
      * Returns long value.

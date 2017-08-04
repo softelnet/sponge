@@ -37,7 +37,7 @@ public class MultiEchoPlugin extends JavaPlugin {
 
     @Override
     public void configure(Configuration configuration) {
-        count = configuration.getInt("count", count);
+        count = configuration.getInteger("count", count);
     }
 
     @Override

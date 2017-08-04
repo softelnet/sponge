@@ -211,13 +211,8 @@ public abstract class BaseEvent implements Event {
         }
     }
 
-    /**
-     * Returns event description.
-     *
-     * @return event description.
-     */
     @Override
     public String toString() {
-        return name + ", id=" + id + ", priority=" + getPriority() + ", time=" + time + ", attributes=" + getAll();
+        return name + ", id=" + id + ", time=" + time + ", priority=" + getPriority() + ", attributes=" + getAll();
     }
 }

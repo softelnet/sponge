@@ -44,9 +44,8 @@
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="error" />
     <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
     <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="error" />
-    <logger name="kb" level="debug" />
+    <logger name="sponge.kb" level="debug" />
 
-    <logger name="jdbc.sqlonly" level="error" />
     <logger name="org.apache.commons.beanutils.FluentPropertyBeanIntrospector" level="error" />
     <logger name="org.quartz" level="error" />
     <logger name="org.apache.camel" level="error" />

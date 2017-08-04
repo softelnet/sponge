@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema targetNamespace="http://www.openksavi.org/sponge" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.openksavi.org/sponge"
     elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+                Sponge XML configuration schema. For documentation see the main project page http://www.openksavi.org/sponge.
+            ]]>
+        </xs:documentation>
+    </xs:annotation>
 
-    <xs:element name="sponge" type="Sponge" />
+    <xs:element name="sponge" type="Sponge"/>
 
     <xs:complexType name="Sponge">
         <xs:sequence>
-            <xs:element name="properties" type="Properties" minOccurs="0" />
-            <xs:element name="engine" type="Engine" minOccurs="0" />
-            <xs:element name="knowledgeBases" type="KnowledgeBases" minOccurs="0" />
-            <xs:element name="plugins" type="Plugins" minOccurs="0" />
+            <xs:element name="properties" type="Properties" minOccurs="0"/>
+            <xs:element name="engine" type="Engine" minOccurs="0"/>
+            <xs:element name="knowledgeBases" type="KnowledgeBases" minOccurs="0"/>
+            <xs:element name="plugins" type="Plugins" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -72,12 +79,17 @@
 
     <xs:complexType name="Plugin">
         <xs:sequence>
-            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="configuration" type="PluginConfiguration" minOccurs="0" />
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required" />
-        <xs:attribute name="description" type="xs:string" />
         <xs:attribute name="class" type="xs:string" use="required" />
         <xs:attribute name="knowledgeBaseName" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="PluginConfiguration">
+        <xs:sequence>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
     </xs:complexType>
 </xs:schema>
 

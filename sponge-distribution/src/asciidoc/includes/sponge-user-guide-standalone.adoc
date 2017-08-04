@@ -106,7 +106,7 @@ In an interactive mode a predefined console logger appender (configured in logba
 Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 
 == Spring
-You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. Note that the name of this plugin must be `"standalonePlugin"`.
+You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. The name of this plugin must be `"standalonePlugin"`.
 
 .Example of Spring configuration in StandalonePlugin
 [source,xml]
@@ -117,11 +117,13 @@ You may provide Spring configuration files using a command-line option or defini
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring engineBeanName="someEngine">
-                <file>spring-context-example-file-1.xml</file>
-                <file>spring-context-example-file-2.xml</file>
-                <file>SpringContextExample3.groovy</file>
-            </springConfiguration>
+            <configuration>
+                <spring engineBeanName="someEngine">
+                    <file>spring-context-example-file-1.xml</file>
+                    <file>spring-context-example-file-2.xml</file>
+                    <file>SpringContextExample3.groovy</file>
+                </spring>
+            <configuration>
         </plugin>
     </plugins>
 </sponge>
@@ -154,9 +156,11 @@ You could use Camel routes to send events to {sponge} from an external systems, 
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring camel="true">
-                <file>examples/standalone/camel_route_xml/spring-camel-xml-config-example.xml</file>
-            </springConfiguration>
+            <configuration>
+                <spring camel="true">
+                    <file>examples/standalone/camel_route_xml/spring-camel-xml-config-example.xml</file>
+                </spring>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>
@@ -193,9 +197,11 @@ You could use Camel routes to send events to {sponge} from an external systems, 
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring camel="true">
-                <file>examples/standalone/camel_route_groovy/SpringCamelGroovyConfigExample.groovy</file>
-            </springConfiguration>
+            <configuration>
+                <spring camel="true">
+                    <file>examples/standalone/camel_route_groovy/SpringCamelGroovyConfigExample.groovy</file>
+                </spring>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>

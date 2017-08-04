@@ -27,20 +27,6 @@ import org.openksavi.sponge.kb.KnowledgeBase;
 public interface Plugin extends EngineModule, Configurable {
 
     /**
-     * Sets a plugin description.
-     *
-     * @param description a plugin description.
-     */
-    void setDescription(String description);
-
-    /**
-     * Returns a plugin description.
-     *
-     * @return a plugin description.
-     */
-    String getDescription();
-
-    /**
      * Sets a plugin configuration.
      *
      * @param configuration a plugin configuration.

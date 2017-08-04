@@ -43,10 +43,13 @@ public final class KnowledgeBaseConstants {
     public static final String VAR_ENGINE_OPERATIONS = "EPS";
 
     /** Logger name prefix. */
-    public static final String LOGGER_NAME_PREFIX = "kb";
+    public static final String LOGGER_NAME_PREFIX = "sponge.kb";
 
     /** Global logger name. */
     public static final String GLOBAL_LOGGER_NAME = "global";
+
+    /** Plugin logger name. */
+    public static final String PLUGIN_LOGGER_NAME = "plugin";
 
     private KnowledgeBaseConstants() {
         //

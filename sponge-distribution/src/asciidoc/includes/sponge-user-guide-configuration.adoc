@@ -37,11 +37,12 @@ In a general form an XML configuration file is built as in the following example
 
     <!-- Plugins configuration section -->
     <plugins>
-        <plugin name="connectionPlugin" description="A simple plugin used as an example"
-                class="org.openksavi.sponge.examples.ConnectionPlugin">
-            <connection>
-                <name>Example connection</name>
-            </connection>
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin">
+            <configuration>
+                <connection>
+                    <name>Example connection</name>
+                </connection>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>
@@ -49,14 +50,14 @@ In a general form an XML configuration file is built as in the following example
 
 The precise specification of a configuration XML file is provided by a schema file {homepage}/schema/config.xsd[`config.xsd`].
 
-A configuration file is searched for using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration] (e.g. first in the file system and then in the classpath). If not found, a configuration file is searched in {sponge} home directory (may be provided as a Java system property `sponge.home`).
+A configuration file is looked up using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration] (e.g. first in the file system as a relative or absolute path and then in the classpath). If not found, the configuration file is looked up in the file system relative to the {sponge} home directory. The {sponge} home directory may be provided as a Java system property `sponge.home`.
 
 === Properties configuration
 A properties configuration section (`properties`) is used for setting a configuration properties. Configuration properties may be used in other places in a configuration file.
 
 Moreover properties could be used as Java system properties if attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
 
-Properties could also be used as an {sponge} variables for session (engine) scope. In that case you have to set attribute `variable` to `true`. Note that the type of such variables is always `String`.
+Properties could also be used as {sponge} variables for session (engine) scope. In that case you have to set attribute `variable` to `true`. The type of such variables is always `String`.
 
 In the above example a property `sponge.home` has been defined and it could be used e.g. in plugins section.
 
@@ -97,7 +98,7 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`false`
 
 |`executorShutdownTimeout`
-|The executor shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing. Note that shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several executors in the engine.
+|The executor shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing. The shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several executors in the engine.
 |`60000`
 |===
 
@@ -137,10 +138,6 @@ A plugins configuration section (`<plugins>`) contains plugin definitions (`<plu
 |Attribute
 |The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used in order to access a given plugin in the knowledge base.
 
-|`description`
-|Attribute
-|The plugin description (optional).
-
 |`class`
 |Attribute
 |The name of the plugin class (Java class or a class defined in the scripting language in the script knowledge base (mandatory).
@@ -150,7 +147,7 @@ A plugins configuration section (`<plugins>`) contains plugin definitions (`<plu
 |The name of the knowledge base containing the class of the plugin (optional). If not set then the default Java-based knowledge base is used.
 |===
 
-Inside a `<plugin>` element you may provide a custom plugin configuration section that would depend on a given plugin implementation. Usually it contains a hierarchy of plugin-specific sub tags.
+You may provide a custom plugin configuration section inside a `<configuration>` element. The contents of this plugin configuration depend on a given plugin implementation. Usually it would be a hierarchy of plugin specific sub tags.
 
 [[engine-builder-api]]
 == Engine Builder API
@@ -186,14 +183,4 @@ Engine engine = DefaultEngine.builder().config("examples/core/engine_parameters.
 engine.startup();
 ----
 
-Note that you may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.
-
-When a {sponge} instance is no longer needed it is recommended to execute `engine.shutdown()` first. It instructs the engine to do some clean up, stop all managed threads, free resources, etc. 
-
-Note that `shutdown` doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
-
-.Example of shutting down
-[source,java]
-----
-engine.shutdown();
-----
+You may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.

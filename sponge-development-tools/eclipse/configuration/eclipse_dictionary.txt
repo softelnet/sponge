@@ -31,3 +31,4 @@ interoperability
 correlator
 correlators
 guava
+lifecycle

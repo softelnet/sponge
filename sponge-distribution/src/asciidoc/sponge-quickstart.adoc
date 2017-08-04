@@ -103,14 +103,16 @@ In that case you may omit the version of the dependency.
 ==== Creating and starting the {sponge} engine
 The following example shows how to make {sponge} a part of a custom Java application.
 
-.Example of starting embedded {sponge} with the configuration file
+.Example of starting the embedded {sponge} with the configuration file
 [source,java]
 ----
 Engine engine = DefaultEngine.builder().config("examples/script/py/hello_world.xml").build(); // <1>
 engine.startup(); // <2>
 ----
-<1> Creates an {sponge} engine by using Engine Builder API providing XML configuration file.
+<1> Creates a {sponge} engine by using Engine Builder API providing XML configuration file.
 <2> Starts up the engine. After startup the engine runs in the background, i.e. using threads other than the current one.
+
+The engine runs until it is shut down explicitly. So, for example, if you place this code in the `main` method and execute it, the program will run infinitely.
 
 .Example of starting embedded {sponge} with the knowledge base file
 [source,java]
@@ -118,7 +120,8 @@ engine.startup(); // <2>
 Engine engine = DefaultEngine.builder().knowledgeBase("knowledgeBaseName", "examples/script/py/hello_world.py").build(); // <1>
 engine.startup();
 ----
-<1> Creates an {sponge} engine by using Engine Builder API providing a Python script knowledge base.
+<1> Creates a {sponge} engine by using Engine Builder API providing a Python script knowledge base.
+
 
 === Standalone command-line program
 Prerequisites:
@@ -182,7 +185,7 @@ When {sponge} process is running you may send `HUP` signal to that process in or
 ----
 kill -HUP pid
 ----
-Where `pid` is the process id of the Java executable running the {sponge}. Note that it isn't the PID of the shell script `sponge`.
+Where `pid` is the process id of the Java executable running the {sponge}. It isn't the PID of the shell script `sponge`.
 
 IMPORTANT: See User Guide for limitations of reloading knowledge bases.
 

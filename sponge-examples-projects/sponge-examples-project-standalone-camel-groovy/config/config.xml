@@ -19,9 +19,11 @@
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
-            <spring camel="true">
-                <file>config/GroovyRoute.groovy</file>
-            </spring>
+            <configuration>
+                <spring camel="true">
+                    <file>config/GroovyRoute.groovy</file>
+                </spring>
+            </configuration>
         </plugin>
     </plugins>
 </sponge>
