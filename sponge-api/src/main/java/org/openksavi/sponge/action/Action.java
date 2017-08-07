@@ -24,10 +24,10 @@ import org.openksavi.sponge.Processor;
 public interface Action extends Processor<ActionAdapter> {
 
     /**
-     * Perform an operation and return a result.
+     * A callback method that performs an operation and returns a result.
      *
      * @param args arguments for action call.
      * @return result of executing action.
      */
-    Object run(Object... args);
+    Object onCall(Object... args);
 }

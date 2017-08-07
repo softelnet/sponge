@@ -13,17 +13,17 @@ void onInit() {
 }
 
 class ClonePolicyTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
     }
-    void run(Event event) {
+    void onRun(Event event) {
         Map events = EPS.getVariable("events")
         events.get(event.name).add(event)
-    	this.logger.debug("Processing event: {}", event.name)
-    	Map map = event.get("map")
-    	this.logger.debug("map attribute (before): {}", map)
-    	map.put("a", "Value " + events.get(event.name).size())
-    	this.logger.debug("map attribute (after): {}", map)
+    	    this.logger.debug("Processing event: {}", event.name)
+    	    Map map = event.get("map")
+    	    this.logger.debug("map attribute (before): {}", map)
+    	    map.put("a", "Value " + events.get(event.name).size())
+    	    this.logger.debug("map attribute (after): {}", map)
     }
 }
 

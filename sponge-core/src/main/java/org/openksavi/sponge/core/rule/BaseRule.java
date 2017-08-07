@@ -126,6 +126,7 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
         return getAdapterImpl().getEventAliasMap();
     }
 
+    @Override
     public final List<Event> getEventSequence() {
         return getAdapterImpl().getEventSequence();
     }

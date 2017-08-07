@@ -99,7 +99,7 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
      * @return {@code true} if the filter accepts the specified event.
      */
     protected boolean runFilter(FilterAdapter filterContext, Event event) {
-        return filterContext.getProcessor().accepts(event);
+        return filterContext.getProcessor().onAccept(event);
     }
 
     /**

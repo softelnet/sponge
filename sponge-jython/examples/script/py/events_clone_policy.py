@@ -16,16 +16,16 @@ def onInit():
     EPS.setVariable("events", events)
 
 class ClonePolicyTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
-    def run(self, event):
-    	global events
+    def onRun(self, event):
+        global events
         events.get(event.name).add(event)
-    	self.logger.debug("Processing event: {}", event.name)
-    	map = event.get("map")
-    	self.logger.debug("map attribute (before): {}", map)
-    	map.put("a", "Value " + str(events.get(event.name).size()));
-    	self.logger.debug("map attribute (after): {}", map)
+        self.logger.debug("Processing event: {}", event.name)
+        map = event.get("map")
+        self.logger.debug("map attribute (before): {}", map)
+        map.put("a", "Value " + str(events.get(event.name).size()));
+        self.logger.debug("map attribute (after): {}", map)
 
 def onStartup():
     def setEventAttributes(event):

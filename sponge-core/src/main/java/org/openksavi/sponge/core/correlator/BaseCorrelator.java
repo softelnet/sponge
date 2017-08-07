@@ -39,7 +39,7 @@ public abstract class BaseCorrelator extends BaseEventSetProcessor<CorrelatorAda
     }
 
     @Override
-    public boolean acceptsAsFirst(Event event) {
+    public boolean onAcceptAsFirst(Event event) {
         return true;
     }
 

@@ -12,17 +12,17 @@ function onInit() {
 }
 
 var SampleCorrelator = Java.extend(Correlator, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["filesystemFailure", "diskFailure"];
         self.duration = Duration.ofSeconds(2);
     },
-    init: function(self) {
+    onInit: function(self) {
         self.target = new function() {
             this.eventLog = [];
         }
         EPS.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
     },
-    acceptsAsFirst: function(self, event) {
+    onAcceptAsFirst: function(self, event) {
         return EPS.getVariable("SampleCorrelator_instanceStarted").compareAndSet(false, true);
     },
     onEvent: function(self, event) {

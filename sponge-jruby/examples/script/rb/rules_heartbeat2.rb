@@ -9,11 +9,11 @@ end
 
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule < Rule
-    def configure
+    def onConfigure
         self.events = ["heartbeat h1", "heartbeat h2 :none"]
         self.duration = Duration.ofSeconds(2)
     end
-    def run(event)
+    def onRun(event)
         self.logger.info("Sound the alarm!")
         $EPS.getVariable("soundTheAlarm").set(true)
     end

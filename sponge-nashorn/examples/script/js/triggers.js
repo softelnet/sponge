@@ -14,20 +14,20 @@ function onInit() {
 }
 
 var TriggerA = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "a";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
         EPS.getVariable("receivedEventA").set(true);
     }
 });
 
 var TriggerB = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "b";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
         if (EPS.getVariable("receivedEventBCount").get() == 0) {
             self.logger.debug("Statistics: {}", EPS.statisticsSummary);

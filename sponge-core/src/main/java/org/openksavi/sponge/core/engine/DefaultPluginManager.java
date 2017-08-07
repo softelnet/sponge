@@ -276,7 +276,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             plugin.setKnowledgeBase(getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase());
         }
 
-        plugin.init();
+        plugin.onInit();
     }
 
     /**

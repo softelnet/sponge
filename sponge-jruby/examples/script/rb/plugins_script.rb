@@ -9,7 +9,7 @@ end
 
 # Example plugin defined in the knowledge base.
 class ScriptPlugin < Plugin
-    def configure(configuration)
+    def onConfigure(configuration)
         @storedValue = configuration.getString("storedValue", "default")
     end
     def init
@@ -28,15 +28,15 @@ end
 
 
 class PluginTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def run(event)
-    	valueBefore = $scriptPlugin.getStoredValue()
-    	self.logger.info("Plugin stored value: {}", valueBefore)
+    def onRun(event)
+    	    valueBefore = $scriptPlugin.getStoredValue()
+    	    self.logger.info("Plugin stored value: {}", valueBefore)
         $EPS.setVariable("valueBefore", valueBefore)
 
-    	$scriptPlugin.setStoredValue(event.get("value"))
+        $scriptPlugin.setStoredValue(event.get("value"))
         valueAfter = $scriptPlugin.getStoredValue()
         self.logger.info("New stored value: {}", valueAfter)
         $EPS.setVariable("valueAfter", valueAfter)

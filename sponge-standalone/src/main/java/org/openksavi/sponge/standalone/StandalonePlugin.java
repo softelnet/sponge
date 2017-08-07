@@ -123,7 +123,7 @@ public class StandalonePlugin extends JavaPlugin {
     }
 
     @Override
-    public void configure(Configuration configuration) {
+    public void onConfigure(Configuration configuration) {
         if (configuration.hasChildConfiguration(CONIF_SPRING_CONFIGURATION)) {
             engineBeanName = configuration.getChildConfiguration(CONIF_SPRING_CONFIGURATION)
                     .getAttribute(CONIF_SPRING_CONFIGURATION_ATTR_ENGINE_BEAN_NAME, engineBeanName);

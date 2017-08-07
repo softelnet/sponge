@@ -8,10 +8,10 @@ def onInit
 end
 
 class PluginTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Connection name is still: {}", $connectionPlugin.connectionName)
         $EPS.setVariable("connectionName", $connectionPlugin.connectionName)
     end

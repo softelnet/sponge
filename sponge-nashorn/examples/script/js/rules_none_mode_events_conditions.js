@@ -14,24 +14,24 @@ function onInit() {
 // Naming F(irst), L(ast), A(ll), N(one)
 
 var RuleFNF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :none", "e3"];
         self.setConditions("e2", function(self, event) {
             return Number(event.get("label")) > 4;
         });
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);
         correlationEventsLog.addEvents("RuleFNF", self);
     }
 });
 
 var RuleFNNFReject = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :none", "e6 :none", "e3"];
         self.setConditions("e2", this.e2LabelCondition);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);
         correlationEventsLog.addEvents("RuleFNNFReject", self);
     },

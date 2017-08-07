@@ -10,10 +10,10 @@ function onInit() {
 }
 
 var PluginTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Connection name is still: {}", connectionPlugin.connectionName);
         EPS.setVariable("connectionName", connectionPlugin.connectionName);
     }

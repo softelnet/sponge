@@ -17,26 +17,26 @@ function onInit() {
 }
 
 var ColorDeduplicationFilter = Java.extend(Filter, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    init: function(self) {
+    onInit: function(self) {
         // There is some magic required here because of the limitations in JavaScript support.
         self.target = new function() {
             this.deduplication = new Deduplication("color");
         }
         self.target.deduplication.cacheBuilder.maximumSize(1000);
     },
-    accepts: function(self, event) {
-        return self.target.deduplication.accepts(event);
+    onAccept: function(self, event) {
+        return self.target.deduplication.onAccept(event);
     }
 });
 
 var ColorTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Received event {}", event);
         EPS.getVariable("eventCounter").get(event.name + "-" + event.get("color")).incrementAndGet();
     }

@@ -23,10 +23,10 @@ function checkPageStatus(host) {
 }
 
 var HttpStatusTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "checkStatus";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         var status = checkPageStatus(event.get("host"));
         EPS.getVariable("hostStatus").put(event.get("host"), status);
     }

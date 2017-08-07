@@ -12,11 +12,11 @@ end
 # Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleFNF < Rule
-    def configure
+    def onConfigure
         self.events = ["e1", "e2 :none", "e3 :first"]
         self.setConditions("e2", self.method(:e2LabelCondition))
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         $correlationEventsLog.addEvents("RuleFNF", self)
     end
@@ -26,11 +26,11 @@ class RuleFNF < Rule
 end
 
 class RuleFNNFReject < Rule
-    def configure
+    def onConfigure
         self.events = ["e1", "e2 :none", "e6 :none", "e3 :first"]
         self.setConditions("e2", self.method(:e2LabelCondition))
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         $correlationEventsLog.addEvents("RuleFNNFReject", self)
     end

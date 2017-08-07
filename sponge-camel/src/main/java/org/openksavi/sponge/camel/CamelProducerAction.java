@@ -28,12 +28,12 @@ public class CamelProducerAction extends JavaAction {
     public static final String NAME = "CamelProducerAction";
 
     @Override
-    public void configure() {
+    public void onConfigure() {
         setName(NAME);
     }
 
     @Override
-    public Object run(Object... args) {
+    public Object onCall(Object... args) {
         CamelUtils.assertCamelProducerActionArgs(this, args);
 
         return getEps().event(CamelUtils.getOrCreateInputEvent(getEps().getEngine(), (Exchange) args[0])).send();

@@ -11,23 +11,23 @@ void onInit() {
 }
 
 class RuleFFF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e3 :first"]
         this.synchronous = true
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFF", this)
     }
 }
 
 class RuleFFL extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e3 :last"]
         this.duration = Duration.ofMillis(500)
         this.synchronous = false
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFL", this)
     }

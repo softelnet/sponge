@@ -11,11 +11,11 @@ function onInit() {
 
 // Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 var HeartbeatRule = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["heartbeat h1", "heartbeat h2 :none"];
         self.duration = Duration.ofSeconds(2);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.info("Sound the alarm!");
         EPS.getVariable("soundTheAlarm").set(true);
     }

@@ -24,14 +24,15 @@ import org.slf4j.Logger;
 public interface Processor<T extends ProcessorAdapter<?>> extends ProcessorOperations {
 
     /**
-     * Configures this processor instance.
+     * A configuration callback method that is invoked when a processor is being enabled.
      */
-    void configure();
+    void onConfigure();
 
     /**
-     * Initializes this processor instance (after configuration).
+     * An initialization callback method that is invoked after {@code onConfigure()}, each time a new working instance of the processor is
+     * created.
      */
-    void init();
+    void onInit();
 
     /**
      * Returns the adapter.

@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger
  }
 
  class AutoAction extends Action {
-     Object run(Object[] args) {
+     Object onCall(Object[] args) {
          this.logger.debug("Running")
          EPS.getVariable("counter").incrementAndGet()
          return args
@@ -19,10 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger
  }
 
  class AutoFilter extends Filter {
-     void configure() {
+     void onConfigure() {
          this.event = "e1"
      }
-     boolean accepts(Event event) {
+     boolean onAccept(Event event) {
          this.logger.debug("Received event: {}", event.name)
          EPS.getVariable("counter").incrementAndGet()
          return true
@@ -30,30 +30,30 @@ import java.util.concurrent.atomic.AtomicInteger
  }
 
 class AutoTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "e1"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
         EPS.getVariable("counter").incrementAndGet()
     }
 }
 
 class AutoRule extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2"]
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running for sequence: {}", this.eventSequence)
         EPS.getVariable("counter").incrementAndGet()
     }
 }
 
 class AutoCorrelator extends Correlator {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2"]
     }
-    boolean acceptsAsFirst(Event event) {
+    boolean onAcceptAsFirst(Event event) {
         return event.name == "e1"
     }
     void onEvent(Event event) {

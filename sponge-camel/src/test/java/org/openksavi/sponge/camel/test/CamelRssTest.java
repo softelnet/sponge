@@ -38,8 +38,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.camel.CamelUtils;
-import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.spring.SpringEngine;
 
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { CamelRssTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
@@ -55,7 +55,7 @@ public class CamelRssTest {
 
         @Bean
         public Engine spongeEngine() {
-            return DefaultEngine.builder().knowledgeBase("kb", "examples/camel/camel_rss.py").build();
+            return SpringEngine.builder().knowledgeBase("kb", "examples/camel/camel_rss.py").build();
         }
 
         @Bean

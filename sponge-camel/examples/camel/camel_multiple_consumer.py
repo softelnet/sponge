@@ -4,9 +4,9 @@ Camel integration
 """
 
 class CamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spongeProducer"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event name={}, body={}", event.name, event.body)
         message = "Hello World!"
         camel.send("direct:log", message)
@@ -17,9 +17,9 @@ class CamelTrigger(Trigger):
             consumer.send(newExchange)
 
 class CamelConsumerTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e2"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Message for e2 event: {}", event.get("message"))
         camel.send(event.get("message"))
 

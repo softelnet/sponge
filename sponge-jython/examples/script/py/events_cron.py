@@ -12,9 +12,9 @@ def onInit():
     EPS.setVariable("eventCounter", eventCounter)
 
 class CronTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "cronEvent"
-    def run(self, event):
+    def onRun(self, event):
         global eventCounter
         self.logger.debug("Received event {}: {}", eventCounter.get() + 1, event.name)
         if eventCounter.get() + 1 == 2:

@@ -32,17 +32,20 @@ public class ConnectionPlugin extends JavaPlugin {
     }
 
     @Override
-    public void configure(Configuration configuration) {
+    public void onConfigure(Configuration configuration) {
+        // The Sponge logger.
+        getLogger().info("Configuring {}", getName());
         connectionName = configuration.getString("connection.name", null);
     }
 
     @Override
-    public void init() {
-        logger.info("Initializing {}", getName());
+    public void onInit() {
+        getLogger().info("Initializing {}", getName());
     }
 
     @Override
     public void onStartup() {
+        // The standard logger.
         logger.info("Starting up {}", getName());
     }
 

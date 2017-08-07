@@ -36,12 +36,12 @@ public class MultiEchoPlugin extends JavaPlugin {
     }
 
     @Override
-    public void configure(Configuration configuration) {
+    public void onConfigure(Configuration configuration) {
         count = configuration.getInteger("count", count);
     }
 
     @Override
-    public void init() {
+    public void onInit() {
         logger.debug("Initializing {}", getName());
     }
 

@@ -15,10 +15,10 @@ def onInit():
 # Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleFNF(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2 :none", "e3"]
         self.setConditions("e2", self.e2LabelCondition)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNF", self)
@@ -26,10 +26,10 @@ class RuleFNF(Rule):
         return int(event.get("label")) > 4
 
 class RuleFNNFReject(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2 :none", "e6 :none", "e3"]
         self.setConditions("e2", self.e2LabelCondition)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNNFReject", self)

@@ -14,43 +14,43 @@ function onInit() {
 // Naming F(irst), L(ast), A(ll), N(one)
 
 var RuleFNNF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e6 :none", "e3"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);
         correlationEventsLog.addEvents("RuleFNNF", self);
     }
 });
 
 var RuleFNNNL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"];
         self.duration = Duration.ofSeconds(2);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);
         correlationEventsLog.addEvents("RuleFNNNL", self);
     }
 });
 
 var RuleFNNNLReject = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"];
         self.duration = Duration.ofSeconds(2);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);
         correlationEventsLog.addEvents("RuleFNNNLRejected", self);
     }
 });
 
 var RuleFNFNL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e2", "e7 :none", "e3 :last"];
         self.duration = Duration.ofSeconds(2);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);
         correlationEventsLog.addEvents("RuleFNFNL", self);
     }

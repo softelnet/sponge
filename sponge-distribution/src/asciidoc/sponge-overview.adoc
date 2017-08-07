@@ -4,9 +4,9 @@
 == {sponge}
 *{sponge} is an open-source, Apache 2.0 licensed, Java-based Event Processing System.*
 
-{sponge} provides a software framework for implementing event processors, i.e. objects that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events.
+{sponge} provides a software framework for implementing event processors that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events.
 
-Event processors are defined in knowledge bases. Knowledge base files may be written in several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java.
+Event processors are defined in knowledge bases. Knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java.
 
 {sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system.
 
@@ -28,13 +28,13 @@ The main features of {sponge}:
 * there is no need to learn yet another notation/DSL, however you have to learn at least the basics of the {sponge} API,
 * allows embedding in a custom Java application (using Maven) or could be used as a standalone command-line application,
 * supports connecting with a large number of external systems by integration with http://camel.apache.org[Apache Camel],
-* provides own Apache Camel component for including {sponge} engine in any Camel route,
+* provides own Apache Camel component for including {sponge} engine in a Camel route,
 * supports creation of custom plugins (e.g. built-in plugin for integration with Camel),
 * supports deployment in enterprise environments by integration with Spring framework,
-* a standalone command-line application provides management of Camel routes without the need of writing Java code (you may use any of the supported scripting languages or XML),
+* provides the standalone command-line application, that, for example, allows management of Camel routes without the need of writing Java code (you may use any of the supported scripting languages or XML),
 * supports reloading of knowledge bases on the fly (i.e. while the system is running),
 * may be used as a sandbox for learning multiple scripting languages,
-* provides comprehensive documentation and many examples.
+* provides a comprehensive documentation and many examples.
 
 == License
 {sponge} is released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license].
@@ -53,11 +53,11 @@ The main features of {sponge}:
 == Users
 The potential users of an embedded {sponge} are Java developers.
 
-The potential users of a standalone command-line {sponge} tool are:
+The potential users of a standalone command-line {sponge} application are:
 
-* system administrators,
 * Python, Ruby, Groovy or JavaScript developers,
-* Java developers (for example for prototyping).
+* Java developers (for example for prototyping),
+* system administrators.
 
 Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing JavaDoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel routes becomes important.
 

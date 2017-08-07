@@ -11,14 +11,14 @@ end
 
 class SampleCorrelator < Correlator
     @@instanceStarted = AtomicBoolean.new(false)
-    def configure
+    def onConfigure
         self.events = ["filesystemFailure", "diskFailure"]
         self.duration = Duration.ofSeconds(2)
     end
-    def init
+    def onInit
         @eventLog = []
     end
-    def acceptsAsFirst(event)
+    def onAcceptAsFirst(event)
         return @@instanceStarted.compareAndSet(false, true)
     end
     def onEvent(event)

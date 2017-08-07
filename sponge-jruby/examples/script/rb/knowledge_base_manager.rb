@@ -24,19 +24,19 @@ def verifyManager
 end
 
 class VerifyTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "verify"
     end
-    def run(event)
+    def onRun(event)
         verifyManager()
     end
 end
 
 class TriggerA < Trigger
-    def configure
+    def onConfigure
         self.event = "a"
     end
-    def run(event)
+    def onRun(event)
     end
 end
 

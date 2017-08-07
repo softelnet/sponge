@@ -10,10 +10,10 @@ def onInit():
 
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["heartbeat h1", "heartbeat h2 :none"]
         self.duration = Duration.ofSeconds(2)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.info("Sound the alarm!")
         EPS.getVariable("soundTheAlarm").set(True)
 

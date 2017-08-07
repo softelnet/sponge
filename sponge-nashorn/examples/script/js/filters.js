@@ -14,10 +14,10 @@ function onInit() {
 }
 
 var ColorFilter = Java.extend(Filter, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    accepts: function(self, event) {
+    onAccept: function(self, event) {
         self.logger.debug("Received event {}", event);
         var color = event.get("color");
         if (color == null || color != "blue") {
@@ -31,10 +31,10 @@ var ColorFilter = Java.extend(Filter, {
 });
 
 var ColorTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Received event {}", event);
         EPS.getVariable("eventCounter").get(event.get("color")).incrementAndGet();
     }

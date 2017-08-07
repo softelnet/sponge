@@ -26,19 +26,19 @@ function verifyManager() {
 }
 
 var VerifyTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "verify";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         verifyManager();
     }
 });
 
 var TriggerA = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "a";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         //
     }
 });

@@ -4,13 +4,13 @@ Multiple knowledge base files
 """
 
 class SoundTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "alarm"
-    def run(self, event):
+    def onRun(self, event):
         print "Sound the alarm (severity: " + str(event.get("severity")) + ")!"
 
 class NotifyAdministratorTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "alarm"
-    def run(self, event):
+    def onRun(self, event):
         print "Notify administrator (alarm severity: " + str(event.get("severity")) + ")!"

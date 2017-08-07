@@ -10,10 +10,10 @@ void onInit() {
 }
 
 class PluginTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "e1"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         def connectionPlugin = EPS.getPlugin("connectionPlugin")
         this.logger.debug("Connection name is still: {}", connectionPlugin.connectionName)
         EPS.setVariable("connectionName", connectionPlugin.connectionName)

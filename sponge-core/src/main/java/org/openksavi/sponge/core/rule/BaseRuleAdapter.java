@@ -61,7 +61,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     }
 
     @Override
-    public boolean acceptsAsFirst(Event event) {
+    public boolean acceptAsFirst(Event event) {
         TreeNode<Event> newNode = new TreeNode<>(event);
         eventTree.setRoot(newNode);
         // Note that this check will be performed later one more time if this event is accepted as the first. The mode for the first event
@@ -321,7 +321,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
         if (node.getLevel() == maxLevel) { // maxLevel indicates the leaf of the event tree.
             prepareEventAliasMap(node);
             // Running the rule for the calculated event sequence (there may be many such sequences for ALL mode).
-            getProcessor().run(node.getValue());
+            getProcessor().onRun(node.getValue());
 
             if (logger.isDebugEnabled()) {
                 logger.debug("Event tree: {}", eventTree);

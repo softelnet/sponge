@@ -17,9 +17,9 @@ def onInit():
     EPS.setVariable("eventCounter", eventCounter)
 
 class FilterTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.setEvents("e1", "e2", "e3")
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Processing trigger for event {}", event)
         global eventCounter
         eventCounter.get(event.name).incrementAndGet()

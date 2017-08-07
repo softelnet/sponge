@@ -11,9 +11,9 @@ def onInit():
     EPS.setVariable("message", None)
 
 class CamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spongeEvent"
-    def run(self, event):
+    def onRun(self, event):
         message = spring.context.getBean("spongeEngine").description + ": " + event.get("message")
         camel.send(message)
         EPS.setVariable("sent", True)

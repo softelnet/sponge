@@ -12,10 +12,10 @@ function onInit() {
 }
 
 var A = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "a";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         TimeUnit.SECONDS.sleep(1);
         EPS.getVariable("value").set("A1");
         TimeUnit.SECONDS.sleep(3);
@@ -24,10 +24,10 @@ var A = Java.extend(Trigger, {
 });
 
 var B = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "b";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         TimeUnit.SECONDS.sleep(2);
         EPS.getVariable("value").set("B1");
         TimeUnit.SECONDS.sleep(4);
@@ -36,10 +36,10 @@ var B = Java.extend(Trigger, {
 });
 
 var C = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "c";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         TimeUnit.SECONDS.sleep(8);
         EPS.getVariable("value").set("C1");
         TimeUnit.SECONDS.sleep(1);

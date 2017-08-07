@@ -2,11 +2,11 @@
 # Hello world
 
 class HelloWorldTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "helloEvent"
     end
 
-    def run(event)
+    def onRun(event)
         puts event.get("say")
     end
 end

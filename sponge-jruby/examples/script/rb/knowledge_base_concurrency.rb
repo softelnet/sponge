@@ -10,10 +10,10 @@ def onInit
 end
 
 class A < Trigger
-    def configure
+    def onConfigure
         self.event = "a"
     end
-    def run(event)
+    def onRun(event)
         TimeUnit::SECONDS::sleep(1)
         $EPS.getVariable("value").set("A1")
         TimeUnit::SECONDS::sleep(3)
@@ -22,10 +22,10 @@ class A < Trigger
 end
 
 class B < Trigger
-    def configure
+    def onConfigure
         self.event = "b"
     end
-    def run(event)
+    def onRun(event)
         TimeUnit::SECONDS::sleep(2)
         $EPS.getVariable("value").set("B1")
         TimeUnit::SECONDS::sleep(4)
@@ -34,10 +34,10 @@ class B < Trigger
 end
 
 class C < Trigger
-    def configure
+    def onConfigure
         self.event = "c"
     end
-    def run(event)
+    def onRun(event)
         TimeUnit::SECONDS::sleep(8)
         $EPS.getVariable("value").set("C1")
         TimeUnit::SECONDS::sleep(1)

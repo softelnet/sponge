@@ -42,20 +42,20 @@ public abstract class NashornPlugin extends org.openksavi.sponge.core.plugin.Bas
     }
 
     @Override
-    public final void configure(Configuration configuration) {
-        configure(getSelf(), configuration);
+    public final void onConfigure(Configuration configuration) {
+        onConfigure(getSelf(), configuration);
     }
 
-    public void configure(Object self, Configuration configuration) {
+    public void onConfigure(Object self, Configuration configuration) {
         //
     }
 
     @Override
-    public final void init() {
-        init(getSelf());
+    public final void onInit() {
+        onInit(getSelf());
     }
 
-    public void init(Object self) {
+    public void onInit(Object self) {
         //
     }
 

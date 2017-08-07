@@ -32,10 +32,10 @@ public class CorrelatorsTestTemplate {
 
         try {
             await().atMost(5, TimeUnit.SECONDS)
-                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() > 4
-                            && engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue() > 4);
-            assertEquals(5, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue());
-            assertEquals(5, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue());
+                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() == 4
+                            && engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue() == 4);
+            assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue());
+            assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue());
             assertEquals(1, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue());
             assertEquals(1, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaFinishCount").intValue());
         } finally {

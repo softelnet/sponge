@@ -14,10 +14,10 @@ void onInit() {
 }
 
 class ColorFilter extends Filter {
-    void configure() {
+    void onConfigure() {
         this.event = "e1"
     }
-    boolean accepts(Event event) {
+    boolean onAccept(Event event) {
         this.logger.debug("Received event {}", event)
         String color = event.get("color")
         if (color == null || color != "blue") {
@@ -31,10 +31,10 @@ class ColorFilter extends Filter {
 }
 
 class ColorTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "e1"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Received event {}", event)
         EPS.getVariable("eventCounter").get(event.get("color")).incrementAndGet()
     }

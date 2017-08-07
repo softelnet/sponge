@@ -15,14 +15,17 @@ function onInit() {
 }
 
 var SampleCorrelator = Java.extend(Correlator, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["filesystemFailure", "diskFailure"];
         self.maxInstances = 1;
     },
-    init: function(self) {
+    onInit: function(self) {
         self.target = new function() {
             this.eventLog = [];
         }
+    },
+    onAcceptAsFirst: function(self, event) {
+        return event.name == "filesystemFailure"
     },
     onEvent: function(self, event) {
         self.target.eventLog.push(event);

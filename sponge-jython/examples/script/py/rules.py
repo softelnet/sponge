@@ -14,23 +14,23 @@ def onInit():
 
 
 class FirstRule(Rule):
-    def configure(self):
+    def onConfigure(self):
         # Events specified without aliases
         self.events = ["filesystemFailure", "diskFailure"]
         self.setConditions("diskFailure", lambda rule, event:
                            Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
 
 class SameSourceAllRule(Rule):
-    def configure(self):
+    def onConfigure(self):
         # Events specified with aliases (e1 and e2)
         self.events = ["filesystemFailure e1", "diskFailure e2 :all"]
         self.setConditions("e1", self.severityCondition)
         self.setConditions("e2", self.severityCondition, self.diskFailureSourceCondition)
         self.duration = Duration.ofSeconds(8)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                                                                                           self.eventSequence)
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()

@@ -15,10 +15,10 @@ function onInit() {
 }
 
 var TriggerA = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "a";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         EPS.getVariable("receivedEventA1").set(1);
     }
 });
@@ -27,10 +27,10 @@ var TriggerA = Java.extend(Trigger, {
 EPS.enable(TriggerA);
 
 var TriggerA = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "a";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         EPS.getVariable("receivedEventA2").set(2);
     }
 });

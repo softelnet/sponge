@@ -16,8 +16,7 @@ include::includes/sponge-user-guide-configuration.adoc[leveloffset=+1]
 == Engine
 
 === Starting up
-
-To startup the engine you should invoke the `startup()` method. After startup the engine runs in the background (i.e. using threads other than the current one). Note that the engine runs until you shutdown it.
+To startup the engine you should invoke the `startup()` method. After startup, the engine runs in the background (i.e. using threads other than the current one) until you shutdown it.
 
 .Example of starting up
 [source,java]
@@ -39,34 +38,59 @@ engine.shutdown();
 .Example of shutting down in a script language
 [source,python]
 ----
-class A(Trigger):
-    def configure(self):
+class SomeTrigger(Trigger):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
-        EPS.engine.requestShutdown()
+    def onRun(self, event):
+        EPS.requestShutdown()
 ----
 
-Note that shutting down doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
+Shutting down doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
 
 include::includes/sponge-user-guide-knowledge-bases.adoc[leveloffset=+1]
 
 
 == Events
-Events are the basic element of processing in {sponge}. They have standard attributes such as id, name and time that are associated with each event instance.
-
-The name of an event is also the type of this event, so all events than have the same name are of the same type. Event names should follow Java naming conventions for variable names.
-
-These attributes could be read by invoking functions:
-
-* `getId()` - the global unique identifier of the event (String).
-* `getName()` - the name (type) of the event.
-* `getTime()` - the time of adding the event to the input queue (represented as `java.time.Instant`).
-
-Attributes `id` and `time` are automatically set when adding an event to the input queue and there is no need of setting them manually. The field `name` defines a type of the event and during processing it will be processed by event processors registered for this name.
-
-Apart from this, you could add any number of additional attributes to each event by invoking the `set(name, value)` method. Those attributes will be later available for example in event processors.
+Events are the basic element of processing in {sponge}. They have properties such as id, name and send time. The name of an event is also the type of this event. All events than have the same name belong to the same type. Event names should follow Java naming conventions for variable names. Events may have any number of attributes. These attributes will be available, for example, in event processors.
 
 {sponge} supports only point-in-time events.
+
+=== Properties and methods
+
+.Event properties and methods
+[cols="1,4"]
+|===
+|Property / Method |Description
+
+|`id`
+|A property that is a global unique identifier of an event (String). This is a shortcut for `getId()`/`setId(text)` methods.
+
+|`name`
+|A read-only property that is the name (type) of an event. This is a shortcut for the `getName()` method. A name of an event shouldn't be changed after the event has been created.
+
+|`time`
+|A property that is a send time of an event, i.e. a time of adding an event to the Input Event Queue. The time is represented as `java.time.Instant`. This is a shortcut for `getTime()`/`setTime(instant)` methods.
+
+|`set(attributeName, value)`
+|A method that allows setting an attribute of an event.
+
+|`Object get(attributeName)`
+|A method that returns a value of an attribute or `null` if it does't exist.
+
+|`Object get(attributeName, attributeClass)`
+|A method that returns a value of an attribute (assuming it is an instance of `attributeClass`) or `null` if it does't exist.
+
+|`boolean has(attributeName)`
+|A method that checks if an event has an attribute.
+
+|`all`
+|A property that returns a map of all attributes. This is a shortcut for the `getAll()` method.
+
+|`Event clone()`
+|A method that clones an event.
+|===
+
+Properties `id` and `time` are automatically set when adding an event to the Input Event Queue and there is no need for setting them manually.
 
 === Event queues
 Events that have been ignored (i.e. events that haven't been listened to by any event processor) are sent to the Output Event Queue. The default behavior in such case is to forget such events. You may see these events in the logs by setting the `sponge.event.ignored` logger to `INFO`.
@@ -82,46 +106,69 @@ In order to process an event there must be an event processor listening to event
 * Creating an event processor.
 * Enabling the event processor automatically or manually (by invoking a proper `EPS.enable*()` method).
 * Creating a new event instance and sending it to the system (e.g. `EPS.event("alarm").set("location", "Building 1").send()`.
-* The event goes directly to the Input Queue or is scheduled to be inserted to the Input Queue later. Scheduling is performed by the Event Scheduler.
-* From this queue the events are taken by the Filter Processing Unit. The list of filters defined for this event type is taken and then each of them is invoked. If all the filters accept the event, it will be put to the main queue in which it awaits to be processed by other event processors.
+* The event goes directly to the Input Event Queue or is scheduled to be inserted to the Input Event Queue later. Scheduling is performed by the Event Scheduler.
+* From this queue the events are taken by the Filter Processing Unit. The list of filters defined for this event type is taken and then each of them is invoked. If all filters accept the event, it will be put to the Main Event Queue in which it will await to be processed by other event processors.
 * Then the event is collected by the Main Processing Unit. The list of event processors listening to this type of events is selected and then each of them is given the event to process.
-* After processing by the Main Processing Unit the event goes to the output queue if and only if it hasn't been processed (i.e. listened to) by any of event processors.
+* After processing by the Main Processing Unit the event goes to the Output Event Queue if and only if it hasn't been processed (i.e. listened to) by any of event processors.
 
 === Event cloning
-The event is cloned each time when the periodically generated events are sent to the input queue.
+The event is cloned each time when the periodically generated events are sent to the Input Event Queue.
 
-The standard implementation of events allows choosing the cloning policy `shallow` or `deep`. These policies differ in the way of cloning of events attributes. When using the first of them, the references to attributes are copied - each event processor works on the same attribute instances. The policy `deep` executes the procedure of deep cloning, so each next generated event will contain individual copies of the attributes.
+The standard implementation of events allows choosing the cloning policy `shallow` or `deep`. These policies differ in the way of cloning of events attributes. When using the former, the references to attributes are copied - each event processor works on the same attribute instances. The policy `deep` executes the procedure of deep cloning, so each next generated event will contain individual copies of the attributes.
 
 === Custom events
-{sponge} allows to use custom event implementations, apart from the default implementation of `Event` type (i.e. `AttributeMapEvent` class). It requires implementation of `Event` interface.
+The default implementation of an event is the `AttributeMapEvent` class. However, {sponge} allows to use custom event implementations of the `Event` interface.
 
 === Creating and sending events
 *Creating an event means creating an instance of an event class. Sending an event means that the created event will be put into the Input Event Queue, to be processed by filters and then by triggers, rules and correlators.*
 
 Event could be created and sent:
 
-* using the EventDefinition fluent API (e.g. `EPS.event("helloEvent").set("say", "Hello World!").send()`),
-* using traditional API (e.g. `EPS.send(EPS.makeEvent("helloEvent").set("say", "Hello World!"))`).
+* Using the EventDefinition fluent API (e.g. `EPS.event("helloEvent").set("say", "Hello World!").send()`). The method `EPS.event` returns `EventDefinition`.
+* Using the traditional API (e.g. `EPS.send(EPS.makeEvent("helloEvent").set("say", "Hello World!"))`).
 
-The EventDefinition fluent API is preferred for sending events.
+The EventDefinition fluent API is the preferred option.
 
-Method `EPS.event` returns `EventDefinition`.
+An event may be to sent as:
 
-Methods of sending events allow to send events as:
+* A single instance – the event will be placed in the Input Event Queue only once.
+* Many instances periodically – new instances of an event will be placed in the Input Event Queue periodically, each of them with its own id and send time.
 
-* single instance – an event will be placed in the input queue only once,
-* many instances periodically – new instances of an event will be placed in the input queue periodically, each of them with its own identification and time of placement in the input queue.
+.`EventDefinition` methods
+[cols="1,4"]
+|===
+|Method |Description
 
-=== Methods used for sending events
-`send()`:: Sends an event immediately.
-`sendAfter(delay)`:: Sends an event after the specified time (given in milliseconds).
-`sendAfter(delay, interval)`:: Periodically sends events after the specified time (given in milliseconds) every `interval` (given in milliseconds).
-`sendAt(at)`:: Sends an event at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970).
-`sendAt(at, interval)`:: Periodically sends events starting at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970) every `interval` (given in milliseconds).
-`sendAt(crontabSpec)`:: Sends events at time stated by the Cron specification.
+|`EventDefinition set(String name, Object value)`
+|Sets the event attribute.
+
+|`EventDefinition modify(EventDefinitionModifier modifier)`
+|Modifies the underlying event.
+
+|`send()`
+|Sends an event immediately.
+
+|`sendAfter(delay)`
+|Sends an event after the specified time (given in milliseconds).
+
+|`sendAfter(delay, interval)`
+|Periodically sends events after the specified time (given in milliseconds) every `interval` (given in milliseconds).
+
+|`sendAt(at)`
+|Sends an event at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970).
+
+|`sendAt(at, interval)`
+|Periodically sends events starting at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970) every `interval` (given in milliseconds).
+
+|`sendAt(crontabSpec)`
+|Sends events at time specified by Cron compatible time entry.
+
+|`Event make()`
+|Only returns the newly created event without sending.
+|===
 
 === Control events
-Control events are used by the engine internally. The names of control events have a prefix `$`. You shouldn't give to your event a name that starts with this character.
+Control events are used by the engine internally. The names of control events have a prefix `$`. You shouldn't give to your standard event a name that starts with this character.
 
 === Examples of sending events
 Sample sending of events from the level of a knowledge base:
@@ -148,7 +195,7 @@ Sends an event with attributes `"color"` and `"severity"` immediately.
 ----
 EPS.event("alarm").sendAt("0-59 * * * * ?")
 ----
-Sends an event at the time specified by a cron notation.
+Sends an event at the time specified by Cron notation.
 
 == Processors
 Processors are the basic objects that you define in {sponge} to implement your knowledge base behavior.
@@ -163,8 +210,13 @@ Types of processors:
 *** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 * *Actions* - processors that provide functionality similar to functions. They don't listen to events.
 
+=== Creating processors
+In order to define your processor in a script knowledge base, you have to create a class extending the base class pointed by a specific alias (e.g. `Filter` for filters). In order to define your processor in a Java knowledge base, you have to create a class extending a specific class (e.g. `JavaFilter` for filters).
+
+A name of a processor is a name of a class defining this processor.
+
 === Enabling processors
-The operation of registering a processor in the engine is called enabling. Registered processors are available to the engine to perform specific tasks. For example, after enabling an event processor starts listening to the events it is interested in.
+The operation of registering a processor in the engine is called enabling. Registered processors are available to the engine to perform specific tasks. For example, after enabling an event processor starts listening to events it is interested in.
 
 Processors could be enabled:
 
@@ -172,36 +224,36 @@ Processors could be enabled:
 * manually.
 
 ==== Auto-enable
-{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a knowledge base. This is done just before invoking `onLoad` callback function in the knowledge base.
+{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base.
 
 CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they wouldn't be enabled automatically.
 
-The auto-enable feature scans only for processors defined in the scripting knowledge base. Enabling Java-based processors have to be done manually.
+As previously mentioned, the auto-enable feature scans only for processors defined in the scripting knowledge base. Enabling Java-based processors has to be done manually.
 
 You may turn off auto-enable by setting the `autoEnable` engine configuration parameter to `false` (for example in the Sponge XML configuration file). In that case you have to enable processors manually.
 
 ==== Manual enabling
-In most cases enabling processors manually should be done in `onLoad` callback function.
+In most cases enabling processors manually should be done in the `onLoad` callback function.
 
-To manually enable any script-based processors in the script knowledge base you may use `EPS.enable()` to enable one processor and `EPS.enableAll()` to enable many processors.
+To manually enable any script-based processors in a script knowledge base you may use: `EPS.enable()` to enable one processor and `EPS.enableAll()` to enable many processors.
 
-.Enabling script-based processor example
+.Example of enabling a script-based processor
 [source,python]
 ----
 def onLoad:
     EPS.enable(TriggerA)
 ----
 
-.Enabling script-based processors example
+.Example of enabling script-based processors
 [source,python]
 ----
 def onLoad:
     EPS.enableAll(Trigger1, Trigger3)
 ----
 
-To manually enable any Java-based processors in the script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`.
+To manually enable any Java-based processors in a script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`.
 
-.Enabling Java-based processor example
+.Example of enabling a Java-based processor
 [source,python]
 ----
 def onLoad():
@@ -209,18 +261,18 @@ def onLoad():
 ----
 
 === Disabling processors
-Processors could be disabled only manually. To disable any script-based processors in the script knowledge base you may use `EPS.disable()` to disable one processor and `EPS.disableAll()` to disable many processors.
+Processors could be disabled only manually. To disable any script-based processors in a script knowledge base you may use `EPS.disable()` to disable one processor and `EPS.disableAll()` to disable many processors.
 
-.Disabling script-based processor example
+.Example of disabling a script-based processor
 [source,python]
 ----
 def onLoad:
     EPS.disable(EchoAction)
 ----
 
-To disable any Java-based processors in the script knowledge base you may use `EPS.disableJava()` and `EPS.disableJavaAll()`.
+To disable any Java-based processors in a script knowledge base you may use `EPS.disableJava()` and `EPS.disableJavaAll()`.
 
-.Disabling Java-based processor example
+.Example of disabling a Java-based processor
 [source,python]
 ----
 def onLoad():
@@ -235,64 +287,68 @@ def onLoad():
 |===
 |Property / Method |Description
 
-|*`configure()`*
-|A configuration callback method that is invoked before creating a processor. This method is mandatory.
+|*`onConfigure()`*
+|The configuration callback method that will be invoked when a processor is being enabled. This method is mandatory.
 
-|`init()`
-|An initialization callback method that is invoked while creating a processor.
+|`onInit()`
+|The initialization callback method that will be invoked after `onConfigure()`, each time a new working instance of the processor is created.
 
 |`name`
-|A property that is the name of the processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
+|The property that is a name of the processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
 
 |`displayName`
-|A property that is the display name of the processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful for a client code.
+|The property that is a display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful for a client code.
 
 |`logger`
-|A read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`. Example logger names: `sponge.kb.python.kb1.EchoAction` for a python-based processor or `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.
+|The read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`, e.g. `sponge.kb.python.kb1.EchoAction` for a python-based processor, `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.
 
 |`adapter`
-|A read-only property that provides a processor adapter. This is a shortcut for `getAdapter()` method. A processor adapter is an internal object, associated with the processor, that is used by the engine. There should be no need to use this property in the client code.
+|The read-only property that provides a processor adapter. This is a shortcut for `getAdapter()` method. A processor adapter is an internal object, associated with the processor, that is used by the engine. There should be no need to use this property in the client code.
 |===
+
+Thanks to many scripting languages, properties may be accessed using dot notation rather than a direct method call. For example a display name may be set using `self.displayName = "Display name"` or `self.setDisplayName("Display name")`.
 
 include::includes/sponge-user-guide-event-processors.adoc[leveloffset=+1]
 
 
 == Actions
-Actions provide functionality that is to be used in many knowledge bases that are written in different languages.
+Actions provide functionality similar to functions. They may be used in many knowledge bases that are written in different languages.
 
-Every action should implement the abstract `run` method:
+The alias for the base class for script-based actions is `Action`. The base class for Java-based actions is `JavaAction`.
 
-[source,java]
-----
-Object run(Object... args);
-----
+=== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, actions provide the following ones.
 
-=== Important methods
-`configure()`:: A configuration callback method.
-`init()`:: An initialization callback method that is invoked while creating a new action instance after `configure`.
-`run(args)`:: A callback method invoked when the action is called, e.g.: `EPS.callAction()`.  This method is mandatory.
+.Action properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`Object onCall(args)`
+|The callback method invoked when an action is called, e.g.: `EPS.callAction()`. The argument in an array of `Object`s and the result in an `Object`. This method is mandatory.
+|===
+
+The `onConfigure` method in actions is not mandatory.
+
+Every action should implement the abstract `onCall` method.
 
 === Example in a script language
-The code presented below defines an action named `EchoAction` that simply returns all arguments.
+The code presented below defines the action named `EchoAction` that simply returns all arguments.
 
 .Action example
 [source,python]
 ----
 class EchoAction(Action): # <1>
-    def configure(self): # <2>
-        self.displayName = "Echo Action" # <3>
-    def run(self, args): # <4>
+    def onCall(self, args): # <2>
         return args
 
 def onStartup():
-    result = EPS.callAction("EchoAction", 1, "test") # <5>
+    result = EPS.callAction("EchoAction", 1, "test") # <3>
     logger.debug("Action returned: {}", result)
 ----
-<1> The definition of the action `EchoAction`. The action is represented by a class of the same name.
-<2> The action configuration callback method.
-<3> Sets `displayName`.
-<4> The action `run` callback method.
-<5> Calls the action named `"EchoAction"` passing two arguments. The result is saved in a local variable.
+<1> The definition of the action `EchoAction`. The action is represented by the class of the same name.
+<2> The action `onCall` callback method.
+<3> Calls the action named `"EchoAction"` passing two arguments.
 
 .Console output
 ----
@@ -300,7 +356,7 @@ Action returned: [1, test]
 ----
 
 === Example in Java
-The code presented below defines a Java-based action named `JavaEchoAction` that simply returns all arguments.
+The code presented below defines the Java-based action named `JavaEchoAction`.
 
 .Java action example
 [source,java]
@@ -308,13 +364,13 @@ The code presented below defines a Java-based action named `JavaEchoAction` that
 public class JavaEchoAction extends JavaAction { // <1>
 
     @Override
-    public Object run(Object... args) { // <2>
+    public Object onCall(Object... args) { // <2>
         return args;
     }
 }
 ----
-<1> The definition of the action `JavaEchoAction`. The action is represented by a Java class of the same name.
-<2> The action `run` callback method.
+<1> The definition of the action `JavaEchoAction`. The action is represented by the Java class of the same name.
+<2> The action `onCall` callback method.
 
 .Java action manual registration in the Python knowledge base
 [source,python]
@@ -324,15 +380,48 @@ EPS.enableJava(JavaEchoAction)
 
 
 == Plugins
-Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. They provide access to and from external systems.
+Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
 
-Every plugin has to implement `Plugin` interface. Java-based plugins should extend `JavaPlugin` class that extends `BasePlugin`. Script-based plugins should extend a class specific to the scripting language that in turn extends `BasePlugin`. Hopefully for all scripting languages there an alias to such class named simply `Plugin`.
+The alias for the base class for script-based plugins is `Plugin`. The base class for Java-based plugins is `JavaPlugin`.
 
-`BasePlugin` provides empty implementations of methods responsible for configuration (`configure()`), as well as callback methods being invoked during starting up (`onStartup()`), shutting down (`onShutdown()`), before and after reloading the plugin (`onBeforeReload()`, `onAfterReload()`). If the created plugin requires own configuration parameters (e.g. in the XML configuration file) the `configure()` method should be implemented.
+Each of these base classes extends the `BasePlugin` class that provides empty implementations of callback methods. If the created plugin requires own configuration parameters (e.g. in the XML configuration file) the `onConfigure` method should be implemented.
+
+Each plugin is also an engine module and that means that in inherits from the `BaseEngineModule` class.
 
 Plugins could be written in Java or in a supported scripting language as a part of a scripting knowledge base. However plugins written in a scripting language must be used only in the same scripting knowledge base they were defined in. That is because there are limitations of scripting languages interoperation. Only plugins written in Java could be used in any scripting knowledge base.
 
-TIP: When defining plugins, it should be taken into consideration that {sponge} is multi-threaded so references to a plugin should be thread-safe.
+=== Properties and methods
+
+.Plugin properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`name`
+|The property that is a name of a plugin. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of plugins are created automatically, the setter shouldn't be used in a client code.
+
+|`onConfigure(Configuration configuration)`
+|The configuration callback method that will be invoked after a plugin has been loaded. This method allows reading an XML configuration for the plugin.
+
+|`onInit()`
+|The initialization callback method that will be invoked after a configuration of a plugin.
+
+|`onStartup()`
+|The callback method that will be invoked once after the startup of the engine.
+
+|`onShutdown()`
+|The callback method that will be invoked once before the shutdown of the engine.
+
+|`onBeforeReload()`
+|The callback method that will be invoked before every reloading of a knowledge base.
+
+|`onAfterReload()`
+|The callback method that will be invoked after every reloading of a knowledge base.
+
+|`logger`
+|The read-only property that provides a plugin logger. This is a shortcut for `getLogger()` method. A plugin logger name has the following format: `sponge.kb.plugin.<pluginName>`. Example logger name: `sponge.kb.plugin.scriptPlugin`.
+|===
+
 
 === Example in Java
 
@@ -360,11 +449,11 @@ TIP: When defining plugins, it should be taken into consideration that {sponge} 
 
 This plugin definition section contains:
 
-* The unique name of the plugin. This name may be used in knowledge bases as a variable of the same name that is a reference to this plugin instance.
+* The unique name of the plugin. This name may be used in knowledge bases as a variable referencing this plugin instance.
 * The class name of the plugin. It could be a Java class name or a scripting language class name. If the plugin is defined in a scripting knowledge base than you must specify that knowledge base name as an XML tag `<knowledgeBaseName>`.
 * Custom configuration for a plugin. That section could be any XML that is understood by this plugin.
 
-The above configuration defines a plugin implemented by `org.openksavi.sponge.examples.EchoPlugin` class. This plugin may be used in the knowledge base as a global variable named `echoPlugin` (according to the `name` attribute). There are additional configuration parameters defined for this plugin. These parameters could be read in the `configure()` method of the plugin class, called before starting the plugin.
+The above configuration defines a plugin implemented by `org.openksavi.sponge.examples.EchoPlugin` class. This plugin may be used in the knowledge base as a global variable named `echoPlugin` (according to the `name` attribute). There are additional configuration parameters defined for this plugin. These parameters could be read in the `onConfigure()` method of the plugin class, called before starting the plugin.
 
 .Java plugin example
 [source,java]
@@ -381,13 +470,13 @@ public class EchoPlugin extends JavaPlugin { // <1>
     }
 
     @Override
-    public void configure(IConfiguration configuration) {  // <2>
+    public void onConfigure(IConfiguration configuration) {  // <2>
         echo = configuration.getString("echo", echo);
         count = configuration.getInteger("count", count);
     }
 
     @Override
-    public void init() {  // <3>
+    public void onInit() {  // <3>
         logger.debug("Initializing {}", getName());
     }
 
@@ -428,17 +517,17 @@ public class EchoPlugin extends JavaPlugin { // <1>
 [source,python]
 ----
 class PluginTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Echo from the plugin: {}", echoPlugin.echo) # <1>
 ----
 <1> Obtaining `echo` bean property from the plugin that is an instance of the class `EchoPlugin`.
 
-The `name` of the plugin is also its identification in knowledge bases. The access to the plugin could be achieved in two ways:
+An access to the plugin could be achieved in two ways:
 
 * directly using the name `echoPlugin` as any other scripting language variable (this is the preferred way),
-* `plugin = EPS.getPlugin("echoPlugin")`.
+* by using `EPS` API, e.g. `plugin = EPS.getPlugin("echoPlugin")`.
 
 Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two ways:
 
@@ -472,9 +561,9 @@ Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two
 [source,python]
 ----
 class ScriptPlugin(Plugin):
-    def configure(self, configuration):
+    def onConfigure(self, configuration):
         self.storedValue = configuration.getString("storedValue", "default")
-    def init(self):
+    def onInit(self):
         self.logger.debug("Initializing {}", self.name)
     def onStartup(self):
         self.logger.debug("Starting up {}", self.name)
@@ -487,17 +576,17 @@ class ScriptPlugin(Plugin):
 === Plugin life cycle
 {sponge} loads plugins when starting the system according to the steps:
 
-. Create the plugin class instance. The class must have a no-parameter constructor.
-. Configure the plugin by invoking the method `configure()`.
-. Initialize the plugin by invoking the method `init()`.
-. Invoke the callback method `onStartup()` when starting the engine.
+. Creates the plugin class instance. The class must have a no-parameter constructor.
+. Configures the plugin by invoking the method `onConfigure()`.
+. Initializes the plugin by invoking the method `onInit()`.
+. Invokes the callback method `onStartup()` when starting the engine.
 . After starting all plugins the methods `onStartup()` defined in all knowledge bases are invoked.
-. In case of reloading the knowledge base, the method `onBeforeReload()` of each plugin is invoked before the method `onBeforeReload()` of  knowledge bases. Invoking of the methods `onAfterReload()` goes in reverse (first the methods `onAfterReload()` of all knowledge bases and then the methods defined in plugins).
-. Before {sponge} shuts down, methods `onShutdown()` of all knowledge bases are invoked and then a method `onShutdown()` is invoked for each plugin.
+. In case of reloading a knowledge base, the method `onBeforeReload()` of each plugin is invoked before the method `onBeforeReload()` of knowledge bases. Invoking the methods `onAfterReload()` goes in reverse (first the methods `onAfterReload()` of all knowledge bases and then the methods defined in plugins).
+. Before {sponge} shuts down, methods `onShutdown()` of all knowledge bases are invoked and then the method `onShutdown()` is invoked for each plugin.
 
 
 == Exception handling
-{sponge} introduces its own exception defined as a Java class `SpongeException`. Exception handling in custom Java components (for example plugins) should follow standard Java conventions. Exception handling in scripting knowledge bases should follow standard conventions for corresponding scripting language (e.g. Python).
+{sponge} introduces its own runtime exception defined as a Java class `SpongeException`. Exception handling in custom Java components (for example plugins) should follow standard Java conventions. Exception handling in scripting knowledge bases should follow standard conventions for the corresponding scripting language.
 
 == Embedding {sponge} in custom applications
 {sponge} may be embedded in a custom Java application using <<engine-builder-api,Engine Builder API>>.
@@ -512,9 +601,9 @@ When developing an application using {sponge} you have to be aware of the fact t
 
 Each of these two categories has its pros and cons which makes it better for a certain use. For example scripting languages work well when flexible modification of source code is required.
 
-All libraries written in Java or supported scripting languages may be used. Make sure that they are compatible with the implementations of these languages.
+Libraries written in Java or supported scripting languages may be used, however make sure that they are compatible with the implementations of these languages.
 
-The following chapters describe best practices for some use cases.
+The following chapters describe the best practices for typical use cases.
 
 === Events
 {sponge} is used for developing applications based on event processing. That is why you should start with defining event types. Events should contain enough information (in the form of attributes) so that event processors could provide demanded logic. Moreover, if necessary, you should consider using event chaining, i.e. sending events of a more abstract level based on correlations of low level events.
@@ -524,19 +613,19 @@ If there is a need for creating an interface to an external system, the best way
 
 *In most cases a CamelPlugin, by providing access to all Camel components, should be sufficient when integrating with various systems.*
 
-If there is a need for creating a custom plugin, in most use cases we suggest creating it in Java rather than in a scripting language, because of the benefits of a Java type-safety and to separate adaptability of scripting languages from robustness of Java.
+If there is a need for creating a custom plugin, in most use cases we suggest creating it in Java rather than in a scripting language.
 
 === Processors
 When defining a processor that is not a singleton, its class implementation should provide lightweight creating of new instances.
 
 === Filters
-Filters are especially important when an application cooperates with an external system. If such system sends events, it is a good practice to check if an event contains all expected information and if event attribute values are valid. This type of selection could be done in filters. Filters may also prevent from idly processing events that should be ignored by the application logic at early phase as they can have an impact on the whole performance.
+Filters are especially important when an application cooperates with an external system. If such system sends events, it is a good practice to check if an event contains all expected information and if event attribute values are valid. This type of selection could be done in filters. Filters may also prevent from idly processing events that should be ignored by the application logic at an early phase as they can have an impact on the whole performance.
 
 === Triggers
 Triggers should be implemented in a way to support concurrent processing of many events by different threads. You should avoid class level (static) variables and restrict, if possible, to data transfered in events.
 
 === Rules
-Rules should be used when triggers functionality is not sufficient for the problem you try to solve.
+Rules should be used when triggers functionality is not sufficient.
 
 === Correlators
 Correlators should be used when filters, triggers and rules functionality is not sufficient for the problem you try to solve.
@@ -548,7 +637,7 @@ Actions should be created only when there is a need to provide some functionalit
 == Scripting languages
 
 [[supported-script-languages]]
-=== Supported languages
+=== Supported scripting languages
 .Supported knowledge base scripting languages
 [width=50%]
 |===
@@ -600,7 +689,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 === Groovy
 
 ==== Limitations
-In Groovy you cannot define a class or a function twice in the same file. If you want to reload an event processor or an action, you have to put it in a separate file and use `EPS.reloadClass()` method. That separate file could be modified and reloaded.
+In Groovy you cannot define a class or a function twice in the same file. If you want to prepare a processor to reload, you have to put it in a separate file and use `EPS.reloadClass()` method. That separate file could be modified and reloaded.
 
 .Example
 [source,groovy]
@@ -609,9 +698,9 @@ void onLoad() {
     EPS.reloadClass(TriggerA)
     EPS.enable(TriggerA)
 
-    EPS.reloadClass(FunctionAAction)
-    EPS.enable(FunctionAAction)
-    EPS.callAction("FunctionAAction")
+    EPS.reloadClass(ActionA)
+    EPS.enable(ActionA)
+    EPS.callAction("ActionA")
 }
 ----
 
@@ -633,21 +722,21 @@ Maven users will need to add the following dependency to their `pom.xml`:
 JavaScript interpreter supports https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/shell.html[shell scripting extensions in Nashorn] to provide simpler shell integration.
 
 ==== Limitations
-There is a limitation for using custom class attributes and methods in event processors written in JavaScript implementation Nashorn. In that case you should set a class field `target` in the `init()` method as in the following example. All class fields and methods that are new (i.e. not inherited from the base classes) *must be defined in `target`*.
+There is a limitation for using custom class attributes and methods in event processors written in JavaScript implementation Nashorn. In that case you should set a class field `target` in the `onInit()` method as in the following example. All class fields and methods that are new (i.e. not inherited from the base classes) *must be defined in `target`*.
 
 .JavaScript target
 [source,javascript]
 ----
 var HeartbeatFilter = Java.extend(Filter, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "heartbeat";
     },
-    init: function(self) {
+    onInit: function(self) {
         self.target = new function() { // <1>
             this.heartbeatCounter = 0;
         }
     },
-    accepts: function(self, event) {
+    onAccept: function(self, event) {
         self.target.heartbeatCounter++; // <2>
         if (self.target.heartbeatCounter > 2) {
             EPS.removeEvent(hearbeatEventEntry);
@@ -677,6 +766,19 @@ Maven users will need to add the following dependency to their `pom.xml`:
 {sponge} uses https://www.slf4j.org[SLF4J] facade for logging.
 
 Examples and standalone version use https://logback.qos.ch[Logback] as a logging implementation.
+
+Java-based processors and plugins may use:
+
+* {sponge} logging, by using the `getLogger()` method, e.g. `getLogger().info("logging")`, or
+* own loggers defined in their classes, according to the standard conventions, e.g.
++
+[source,java]
+----
+private static final Logger logger = LoggerFactory.getLogger(ConnectionPlugin.class);
+...
+    logger.info("logging");
+}
+----
 
 == Examples
 
@@ -747,18 +849,18 @@ include::{completeExamplesProject}/sponge-examples-project-news/src/main/java/or
 ==== Camel RSS News project
 This example is an enhancement over the News project example. It is placed in `sponge-examples-project-camel-rss-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-camel-rss-news[sources]).
 
-The main change here is that news are acquired as RSS feeds from news services: BBC and CNN. Reading of RSS feeds and transformation to {sponge} events is performed in a Camel route. {sponge} acts as a producer in this Camel route. This example shows {sponge} as a consumer in other Camel routes as well.
+The main change here is that news are acquired as RSS feeds from news services: BBC and CNN. Reading RSS feeds and transformation to {sponge} events is performed in a Camel route. {sponge} acts as a producer in this Camel route. This example shows {sponge} as a consumer in other Camel routes as well.
 
 This example also presents integration with Spring framework. A service provided as a Spring bean is accessed from the script knowledge base.
 
-Notice that knowledge bases `main` and `actions` that existed in the News project example are not changed. This is because the main processing is independent of the input and output interfaces, protocols or data structures. Internal events (in this case `news` events) are normalized.
+Knowledge bases `main` and `actions` that existed in the News project example are not changed. This is because the main processing is independent of the input and output interfaces, protocols or data structures. Internal events (in this case `news` events) are normalized.
 
 Event flow:
 
 * RSS feeds are read from external sources, transformed to {sponge} events and sent to the {sponge} engine. This is done in Camel routes.
-* Because of `main` knowledge base is the same as in the previous example, so are the event flow parts here.
-* After time configured as a property `durationOfReadingRss` Camel routes that read RSS feeds from external sources are stopped. It simulates lack of new news. This is done in `simulator` knowledge base.
-* When `alarm` event happens, not only `AlarmTrigger` (as described in the previous example) handles that event, but here also `ForwardAlarmTrigger` trigger, defined in `consumer` knowledge base. It sends the alarm message to:
+* The `main` knowledge base related event flow is the same as in the previous example.
+* After the time configured as a property `durationOfReadingRss` Camel routes that read RSS feeds from external sources are stopped. It simulates lack of new news. This is done in the `simulator` knowledge base.
+* When `alarm` event happens, not only `AlarmTrigger` (as described in the previous example) handles that event, but here also `ForwardAlarmTrigger` trigger, defined in the `consumer` knowledge base. It sends an alarm message to:
 ** all Camel endpoints that use the Sponge engine as a consumer in their routes,
 ** to a specific endpoint given as URI.
 
@@ -793,14 +895,12 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 ----
 
 
-=== Features examples
-The features examples shows how to use certain functionalities. See the sources in {sourcesUrl}/sponge-jython/examples[Python examples], {sourcesUrl}/sponge-jruby/examples[Ruby examples], {sourcesUrl}/sponge-groovy/examples[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples[JavaScript examples].
+=== Scripting examples
+The scripting examples show how to use certain {sponge} functionalities in script knowledge bases. See the sources in {sourcesUrl}/sponge-jython/examples/script/py[Python examples], {sourcesUrl}/sponge-jruby/examples/script/rb[Ruby examples], {sourcesUrl}/sponge-groovy/examples/script/groovy[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples/script/js[JavaScript examples].
 
-CAUTION: Not all examples will work in the standalone application because some of them require additional setup.
+Each of these examples is also used in the corresponding JUnit class as a test case with assertions. Note that not all of these examples will work in the standalone application because some of them require additional setup.
 
-Directory `examples/script` contains examples implemented in all supported script languages (i.e. example named `rules` is placed respectively in `rules.py`, `rules.rb`, `rules.groovy` and `rules.js`). Each of these examples is also a test case with assertions invoked in the corresponding JUnit class (e.g. `RulesTest.java`).
-
-.Examples of key features for all supported scripting languages
+.Scripting examples
 [cols="1,3"]
 |===
 |Name |Description
@@ -811,15 +911,15 @@ ifdef::useReferences[(link:sponge-examples.html#actions-py[py], link:sponge-exam
 
 |`correlators`
 ifdef::useReferences[(link:sponge-examples.html#correlators-py[py], link:sponge-examples.html#correlators-rb[rb], link:sponge-examples.html#correlators-groovy[groovy], link:sponge-examples.html#correlators-js[js])]
-|Shows how to use correlators. The script defined correlator creates an event log - a list of all events that it listens to.
+|Shows how to use correlators. The correlator creates an event log - a list of events that it listens to.
 
 |`correlators_duration`
 ifdef::useReferences[(link:sponge-examples.html#correlators_duration-py[py], link:sponge-examples.html#correlators_duration-rb[rb], link:sponge-examples.html#correlators_duration-groovy[groovy], link:sponge-examples.html#correlators_duration-js[js])]
-|Shows how to use correlators with duration. The script defined correlator creates an event log - a list of all events that it listens to.
+|Shows how to use correlators with duration.
 
 |`events_clone_policy`
 ifdef::useReferences[(link:sponge-examples.html#events_clone_policy-py[py], link:sponge-examples.html#events_clone_policy-rb[rb], link:sponge-examples.html#events_clone_policy-groovy[groovy], link:sponge-examples.html#events_clone_policy-js[js], link:sponge-examples.html#events_clone_policy-xml-py[XML configuration])]
-|Shows difference between event clone policies.
+|Shows event clone policies.
 
 |`events_cron`
 ifdef::useReferences[(link:sponge-examples.html#events_cron-py[py], link:sponge-examples.html#events_cron-rb[rb], link:sponge-examples.html#events_cron-groovy[groovy], link:sponge-examples.html#events_cron-js[js])]
@@ -847,11 +947,11 @@ ifdef::useReferences[(link:sponge-examples.html#hello_world-py[py], link:sponge-
 
 |`knowledge_base_callbacks`
 ifdef::useReferences[(link:sponge-examples.html#knowledge_base_callbacks-py[py], link:sponge-examples.html#knowledge_base_callbacks-rb[rb], link:sponge-examples.html#knowledge_base_callbacks-groovy[groovy], link:sponge-examples.html#knowledge_base_callbacks-js[js])]
-|Shows how to use knowledge base callback functions: `onInit`, `onStartup`, `onShutdown`, `onBeforeReload` and `onAfterReload`.
+|Shows how to use knowledge base callback functions.
 
 |`knowledge_base_load`
 ifdef::useReferences[(link:sponge-examples.html#knowledge_base_load-py[py], link:sponge-examples.html#knowledge_base_load-rb[rb], link:sponge-examples.html#knowledge_base_load-groovy[groovy], link:sponge-examples.html#knowledge_base_load-js[js])]
-|Shows how to load an additional knowledge base file by using `EPS.interpreter.load()`.
+|Shows how to load an additional knowledge base file.
 
 |`knowledge_base_manager`
 ifdef::useReferences[(link:sponge-examples.html#knowledge_base_manager-py[py], link:sponge-examples.html#knowledge_base_manager-rb[rb], link:sponge-examples.html#knowledge_base_manager-groovy[groovy], link:sponge-examples.html#knowledge_base_manager-js[js])]
@@ -863,11 +963,11 @@ ifdef::useReferences[(link:sponge-examples.html#library-py[py], link:sponge-exam
 
 |`plugins_java`
 ifdef::useReferences[(link:sponge-examples.html#plugins_java-py[py], link:sponge-examples.html#plugins_java-rb[rb], link:sponge-examples.html#plugins_java-groovy[groovy], link:sponge-examples.html#plugins_java-js[js], link:sponge-examples.html#plugins_java-xml-py[XML configuration])]
-|Shows how to define and use a Java-based plugins.
+|Shows how to define and use a Java-based plugin.
 
 |`plugins_script`
 ifdef::useReferences[(link:sponge-examples.html#plugins_script-py[py], link:sponge-examples.html#plugins_script-rb[rb], link:sponge-examples.html#plugins_script-groovy[groovy], link:sponge-examples.html#plugins_script-js[js], link:sponge-examples.html#plugins_script-xml-py[XML configuration])]
-|Shows how to define and use a script-based plugins.
+|Shows how to define and use a script-based plugin.
 
 |`rules_events`
 ifdef::useReferences[(link:sponge-examples.html#rules_events-py[py], link:sponge-examples.html#rules_events-rb[rb], link:sponge-examples.html#rules_events-groovy[groovy], link:sponge-examples.html#rules_events-js[js], link:sponge-examples.html#rules_events-xml-py[XML configuration])]
@@ -894,8 +994,10 @@ ifdef::useReferences[(link:sponge-examples.html#triggers-py[py], link:sponge-exa
 |Shows how to define and use triggers.
 |===
 
+=== Features examples
+The features examples show how to use some of {sponge} features. They are not implemented in all supported scripting languages.
 
-.Examples for specific languages
+.Features examples
 [cols="1,3"]
 |===
 |Name |Description
@@ -938,8 +1040,9 @@ ifdef::useReferences[(link:sponge-examples.html#camel_multiple_consumer-py[py], 
 |===
 
 === Standalone examples
+The standalone examples show how to use some of {sponge} features in the standalone command-line application.
 
-.Examples for standalone {sponge}
+.Standalone examples
 [cols="1,3"]
 |===
 |Name |Description
@@ -1017,16 +1120,12 @@ ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples
 |Wrappers for Operating System signals.
 
 |`org.openksavi.sponge`
-|`sponge-examples`
-|{sponge} examples.
-
-|`org.openksavi.sponge`
 |`sponge-examples-projects`
-|{sponge} examples - complete projects with embedded {sponge}: `sponge-examples-project-news`, `sponge-examples-project-camel-rss-news`.
+|Complete example projects.
 
 |`org.openksavi.sponge`
 |`sponge-distribution`
-|Contains documentation, release configuration etc.
+|Contains documentation, release configuration, project pages etc.
 
 |`org.openksavi.sponge`
 |`sponge-test`
@@ -1035,7 +1134,7 @@ ifdef::useReferences[(link:{sourcesUrl}/sponge-examples-projects/sponge-examples
 
 |`org.openksavi.sponge`
 |`sponge-integration-tests`
-|Internal integration tests.
+|{sponge} integration tests.
 |===
 
 
@@ -1087,4 +1186,4 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |Used for services and as a utilities library.
 |===
 
-The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution as well as in the source code (Maven dependencies).
+The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution.

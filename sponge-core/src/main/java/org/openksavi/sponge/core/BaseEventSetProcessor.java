@@ -33,7 +33,6 @@ public abstract class BaseEventSetProcessor<T extends EventSetProcessorAdapter<?
     @Override
     public final void setDuration(Duration duration) {
         getAdapter().setDuration(duration);
-
     }
 
     @Override

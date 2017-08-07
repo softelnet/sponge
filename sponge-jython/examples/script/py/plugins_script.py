@@ -10,9 +10,9 @@ def onInit():
 
 # Example plugin defined in the knowledge base.
 class ScriptPlugin(Plugin):
-    def configure(self, configuration):
+    def onConfigure(self, configuration):
         self.storedValue = configuration.getString("storedValue", "default")
-    def init(self):
+    def onInit(self):
         self.logger.debug("Initializing {}", self.name)
     def onStartup(self):
         self.logger.debug("Starting up {}", self.name)
@@ -23,9 +23,9 @@ class ScriptPlugin(Plugin):
 
 
 class PluginTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
     	valueBefore = scriptPlugin.getStoredValue()
     	self.logger.info("Plugin stored value: {}", valueBefore)
         EPS.setVariable("valueBefore", valueBefore)

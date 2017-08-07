@@ -48,8 +48,8 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     }
 
     @Override
-    public boolean acceptsAsFirst(Event event) {
-        return getProcessor().acceptsAsFirst(event);
+    public boolean acceptAsFirst(Event event) {
+        return getProcessor().onAcceptAsFirst(event);
     }
 
     @Override

@@ -11,11 +11,11 @@ def onInit():
     EPS.setVariable("soundTheAlarm", AtomicBoolean(False))
 
 class HeartbeatFilter(Filter):
-    def configure(self):
+    def onConfigure(self):
         self.event = "heartbeat"
-    def init(self):
+    def onInit(self):
         self.heartbeatCounter = 0
-    def accepts(self, event):
+    def onAccept(self, event):
         self.heartbeatCounter += 1
         if self.heartbeatCounter > 2:
             global hearbeatEventEntry
@@ -26,16 +26,16 @@ class HeartbeatFilter(Filter):
 
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["heartbeat h1", "heartbeat h2 :none"]
         self.duration = Duration.ofSeconds(2)
-    def run(self, event):
+    def onRun(self, event):
         EPS.event("alarm").set("severity", 1).send()
 
 class AlarmTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "alarm"
-    def run(self, event):
+    def onRun(self, event):
         print "Sound the alarm!"
         EPS.getVariable("soundTheAlarm").set(True)
 

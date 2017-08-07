@@ -21,19 +21,19 @@ import org.openksavi.sponge.event.Event;
 public class ShapeFilter extends org.openksavi.sponge.java.JavaFilter {
 
     @Override
-    public void configure() {
+    public void onConfigure() {
         setEvents("e1", "e2", "e3");
     }
 
     @Override
-    public boolean accepts(Event event) {
+    public boolean onAccept(Event event) {
         String shape = event.get("shape", String.class);
         if (shape == null) {
-            getLogger().debug("No shape for event: " + event.toString() + "; event rejected");
+            getLogger().debug("No shape for event: {}; event rejected", event);
             return false;
         }
 
-        getLogger().debug("Shape is set in event" + event.toString() + "; event accepted");
+        getLogger().debug("Shape is set in event: {}; event accepted", event);
 
         return true;
     }

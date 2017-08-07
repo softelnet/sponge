@@ -29,32 +29,32 @@ def assertState(condition, message):
         raise SpongeException(message)
 
 class Rule1(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2"]
-    def run(self, event):
+    def onRun(self, event):
         doWork(self)
 
 class Rule2(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e2", "e3"]
-    def run(self, event):
+    def onRun(self, event):
         assertState(running.get("Rule1").get(), "Rule1 should be running")
         doWork(self)
         EPS.setVariable("testStatus", "OK")
 
 class Rule3(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e4", "e5"]
-    def run(self, event):
+    def onRun(self, event):
         global running
         assertState(running.get("Rule1").get(), "Rule1 should be running")
         assertState(running.get("Rule2").get(), "Rule2 should be running")
         doWork(self)
 
 class Rule4(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e6", "e7"]
-    def run(self, event):
+    def onRun(self, event):
         global running
         assertState(running.get("Rule1").get(), "Rule1 should be running")
         assertState(running.get("Rule2").get(), "Rule2 should be running")

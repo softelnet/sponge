@@ -14,10 +14,10 @@ def onInit
 end
 
 class ColorFilter < Filter
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def accepts(event)
+    def onAccept(event)
         self.logger.debug("Received event {}", event)
         color = event.get("color")
         if (color.nil? || color != "blue")
@@ -31,10 +31,10 @@ class ColorFilter < Filter
 end
 
 class ColorTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event {}", event)
         puts event.get("color")
         $eventCounter.get(event.get("color")).incrementAndGet()

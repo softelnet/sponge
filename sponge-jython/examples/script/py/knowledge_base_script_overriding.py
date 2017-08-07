@@ -13,18 +13,18 @@ def onInit():
     EPS.setVariable("functionA2", AtomicInteger(0))
 
 class TriggerA(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "a"
-    def run(self, event):
+    def onRun(self, event):
         EPS.getVariable("receivedEventA1").set(1)
 
 # Execute immediately while loading
 EPS.enable(TriggerA)
 
 class TriggerA(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "a"
-    def run(self, event):
+    def onRun(self, event):
         EPS.getVariable("receivedEventA2").set(2)
 
 # Execute immediately while loading

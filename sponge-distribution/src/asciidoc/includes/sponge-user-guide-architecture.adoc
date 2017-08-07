@@ -11,38 +11,38 @@ The {sponge} engine consists of the following components.
 |Engine component |Description
 
 |Configuration Manager
-|A module responsible for reading of a configuration.
+|The module providing an access to a configuration.
 
 |Plugin Manager
-|A module responsible for managing plugins.
+|The module that manages plugins.
 
 |Knowledge Base Manager
-|A module responsible for managing of knowledge bases. Scripting knowledge bases are read by interpreters. For every knowledge base there is one instance of an interpreter.
+|The module that for manages knowledge bases.
 
 |Event Scheduler
-|A scheduler of future events that are to be added into the Input Event Queue.
+|The scheduler of future events that are to be added into the Input Event Queue.
 
 |Input Event Queue
-|An input queue of events that are sent to {sponge}. Events can get to this queue form different sources: plugins, Event Scheduler or knowledge bases.
+|The input queue of events that are sent to {sponge}. Events can get to this queue form different sources: plugins, Event Scheduler or knowledge bases.
 
 |Filter Processing Unit
-|Responsible for filtering events. It is also a registry of enabled filters.
+|The module providing the filtering of events. It is also a registry of enabled filters.
 
 |Main Event Queue
-|A queue of events that passed all filters and are to be processes by other event processors in the Main Processing Unit.
+|The queue of events that passed all filters and are to be processes by other event processors in the Main Processing Unit.
 
 |Main Processing Unit
-|Responsible for processing events by triggers, rules and correlators. It is also a registry of such event processors.
+|The module that manages the processing of events by triggers, rules and correlators. It is also a registry of such event processors.
 
 |Output Event Queue
-|A queue of ignored events, i.e. events that haven't been listened to by any event processor. The default behavior is to forget such events.
+|The queue of ignored events, i.e. events that haven't been listened to by any event processor. The default behavior is to forget such events.
 
 |Processor Manager
-|A module responsible for enabling and disabling processors, i.e. actions, filters, triggers, rules and correlators.
+|The module responsible for enabling and disabling processors, i.e. actions, filters, triggers, rules and correlators.
 
 |Action Manager
-|A registry of enabled actions.
+|The registry of enabled actions.
 
 |Thread Pool Manager
-|A module responsible for thread pool management.
+|The module responsible for thread pool management.
 |===

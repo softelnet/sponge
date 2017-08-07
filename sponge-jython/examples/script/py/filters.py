@@ -15,9 +15,9 @@ def onInit():
     EPS.setVariable("eventCounter", eventCounter)
 
 class ColorFilter(Filter):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def accepts(self, event):
+    def onAccept(self, event):
         self.logger.debug("Received event {}", event)
         color = event.get("color")
         if (color is None or color != "blue"):
@@ -28,9 +28,9 @@ class ColorFilter(Filter):
             return True
 
 class ColorTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event {}", event)
         global eventCounter
         eventCounter.get(event.get("color")).incrementAndGet()

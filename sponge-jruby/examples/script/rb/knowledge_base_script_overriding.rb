@@ -13,11 +13,11 @@ def onInit
 end
 
 class TriggerA < Trigger
-    def configure
+    def onConfigure
         self.event = "a"
     end
 
-    def run(event)
+    def onRun(event)
         $EPS.getVariable("receivedEventA1").set(1)
     end
 end
@@ -26,11 +26,11 @@ end
 $EPS.enable(TriggerA)
 
 class TriggerA < Trigger
-    def configure
+    def onConfigure
         self.event = "a"
     end
 
-    def run(event)
+    def onRun(event)
         $EPS.getVariable("receivedEventA2").set(2)
     end
 end

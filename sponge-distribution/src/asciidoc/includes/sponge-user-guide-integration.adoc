@@ -3,7 +3,7 @@
 == Spring framework
 {sponge} engine may be configured as a Spring bean. That configuration provides standardized access to an embedded {sponge} engine for example in J2EE environment.
 
-To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. Note that Spring plugin shouldn't be defined in {sponge} XML configuration file. See the following example.
+To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. The Spring plugin shouldn't be defined in {sponge} XML configuration file. See the following example.
 
 .Spring Java configuration example
 [source,java]
@@ -27,21 +27,21 @@ public class TestConfig {
     }
 }
 ----
-<1> {sponge} configured as a Spring bean. Note that `SpringEngine` implementation is used here in order to startup and shutdown the engine by Spring. `DefaultEngine` could also be used here but it wouldn't provide automatic startup and shutdown.
+<1> The engine configured as the Spring bean. The `SpringEngine` implementation is used here in order to startup and shutdown the engine by Spring. `DefaultEngine` could also be used here but it wouldn't provide automatic startup and shutdown.
 <2> Added `SpringPlugin`.
-<3> `SpringPlugin` configured as a Spring bean.
+<3> `SpringPlugin` configured as the Spring bean.
 
 .Python knowledge base
 [source,python]
 ----
 class SpringTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "springEvent"
-    def run(self, event):
+    def onRun(self, event):
         beanValue = spring.context.getBean("testBean") # <1>
         self.logger.debug("Bean value = {}", beanValue)
 ----
-<1> A Spring bean named `"testBean"` is acquired from the Spring `ApplicationContext` by using `SpringPlugin` instance referenced by a variable `spring`.
+<1> A Spring bean named `"testBean"` is acquired from the Spring `ApplicationContext` by using `SpringPlugin` instance referenced by the `spring` variable.
 
 === Maven configuration
 Maven users will need to add the following dependency to their `pom.xml` for this component:
@@ -58,9 +58,9 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 == Apache Camel integration
 
 === {sponge} Camel component
-The *sponge* component provides integration bridge between Apache Camel and {sponge} engine. It allows:
+The *sponge* component provides integration bridge between Apache Camel and the {sponge} engine. It allows:
 
-* to route a body of a Camel message to the {sponge} engine by converting it to {sponge} event (producer endpoint),
+* to route a body of a Camel message to the {sponge} engine by converting it to a {sponge} event (producer endpoint),
 * to route a message from a {sponge} knowledge base to a Camel route (consumer endpoint).
 
 === Maven configuration
@@ -100,9 +100,11 @@ Where `engineRef` represents the name of the `Engine` implementation instance lo
 === {sponge} support for Camel
 
 ==== CamelPlugin
-`CamelPlugin` provides an interface to the Camel context so it may be used in a knowledge base. `CamelPlugin` may be configured in three different ways.
+`CamelPlugin` provides an interface to the Camel context so it may be used in a knowledge base. 
 
-* Explicitly as a Spring bean and assigned to the engine using Engine Builder API. This is the preferred way.
+`CamelPlugin` may be configured in three different ways.
+
+* Explicitly as a Spring bean and assigned to the engine using the Engine Builder API. This is the preferred way.
 +
 .Example
 [source,python]
@@ -112,7 +114,6 @@ public class SpringConfiguration extends EngineCamelConfiguration {
 
     @Bean
     public Engine spongeEngine() {
-        // Use EngineBuilder API to create an engine with the configuration file. Also bind Spring and Camel plugins as beans manually.
         return SpringEngine.builder()
                 .config("config.xml")
                 .plugin(camelPlugin())
@@ -121,7 +122,7 @@ public class SpringConfiguration extends EngineCamelConfiguration {
 }
 ----
 * Implicitly when creating a {sponge} Camel endpoint.
-* Explicitly in {sponge} XML configuration file.
+* Explicitly in the {sponge} XML configuration file.
 +
 .Example
 [source,xml]
@@ -131,7 +132,7 @@ public class SpringConfiguration extends EngineCamelConfiguration {
     xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
 
     <plugins>
-        <!-- Note: don't change this plugin name. -->
+        <!-- Note: don't change the plugin name. -->
         <plugin name="camel" class="org.openksavi.sponge.camel.CamelPlugin" />
     </plugins>
 </sponge>
@@ -141,22 +142,36 @@ TIP: If you use an implicit configuration and you get an error stating that `cam
 
 Only one `CamelContext` may be used with one instance of {sponge} engine, bound by a single `CamelPlugin`.
 
-Important methods:
+.Important CamelPlugin properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
 
-`send(body)`:: Sends the body to all current consumers.
-`send(uri, body)`:: Sends the body to an endpoint.
-`request(body)`:: Sends the body to an endpoint returning any result output body.
-`getContext()`:: Returns a Camel context.
-`getConsumers()`:: Returns the current list of consumers.
+|`send(body)`
+|Sends the body to all current consumers.
+
+|`send(uri, body)`
+|Sends the body to an endpoint.
+
+|`request(body)`
+|Sends the body to an endpoint returning any result output body.
+
+|`getContext()`
+|Returns a Camel context.
+
+|`getConsumers()`
+|Returns the current list of consumers.
+|===
+
 
 ==== Spring-based support
-`EngineCamelConfiguration` provides base Camel and {sponge} configuration using Spring Java configuration. For example your Spring configuration could inherit from this class.
+`EngineCamelConfiguration` provides base Camel and {sponge} configuration using Spring Java configuration. Your Spring configuration could inherit from this class.
 
 Spring bean named `"spongeProducerTemplate"` allows you to configure a Camel producer template used by `CamelPlugin` to send Camel messages. If none is present in a Spring configuration, then a default will be used.
 
-Spring bean named `springPlugin` is an instance of `SpringPlugin` that could be registered in the engine and used in knowledge bases as a `spring` variable.
+Spring bean named `springPlugin` is the instance of `SpringPlugin` that could be registered in the engine and used in knowledge bases as the `spring` variable.
 
-Spring bean named `camelPlugin` is an instance of `CamelPlugin` that could be registered in the engine and used in knowledge bases as a `camel` variable.
+Spring bean named `camelPlugin` is the instance of `CamelPlugin` that could be registered in the engine and used in knowledge bases as the `camel` variable.
 
 === Producer
 Using sponge component on the producer side of the route will forward a body of a Camel message to the specified {sponge} engine.
@@ -195,20 +210,20 @@ public class ExampleConfiguration extends EngineCamelConfiguration {
 [source,python]
 ----
 class CamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spongeProducer"
-    def run(self, event):
+    def onRun(self, event):
         print event.body
 ----
 
 .Producer example - Sample code that sends a Camel message
 [source,java]
 ----
-// Starting Spring context.
+// Starting a Spring context.
 GenericApplicationContext context = new AnnotationConfigApplicationContext(ExampleConfiguration.class);
 context.start();
 
-// Sending Camel message.
+// Sending a Camel message.
 CamelContext camel = context.getBean(CamelContext.class);
 ProducerTemplate producerTemplate = camel.createProducerTemplate();
 producerTemplate.sendBody("direct:start", "Send me to the Sponge");
@@ -223,7 +238,7 @@ Send me to the Sponge
 ----
 
 ==== Camel producer action
-Camel producer action is invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. The result returned by this action is placed as the body of the Camel _IN_ message. So it may be used by the next endpoint in the route if there is any.
+Camel producer action will be invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. The result returned by this action is placed as the body of the Camel _IN_ message. So it may be used by the next endpoint in the route if there is any.
 
 CAUTION: To avoid misconception please note that events in the Output Event Queue are not sent to the Camel route.
 
@@ -240,7 +255,7 @@ You could provide a custom implementation of a Camel producer action in two ways
 [source,python]
 ----
 class CustomAction(Action):
-    def run(self, args):
+    def onCall(self, args):
         exchange = args[0]
         return "OK"
 ----
@@ -293,9 +308,9 @@ public class ExampleConfiguration extends EngineCamelConfiguration {
 [source,python]
 ----
 class CamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spongeEvent"
-    def run(self, event):
+    def onRun(self, event):
         camel.send(event.get("message"))
 
 def onStartup():

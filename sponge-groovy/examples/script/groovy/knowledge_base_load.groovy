@@ -19,22 +19,22 @@ void onInit() {
 }
 
 class Trigger1 extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.displayName = "Trigger1, file1"
         this.event = "e1"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("file1: Received event {}", event)
         EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
 
 class Trigger2 extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.displayName = "Trigger2, file1"
         this.event = "e2"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("file1: Received event {}", event)
         EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
@@ -42,10 +42,10 @@ class Trigger2 extends Trigger {
 
 
 class LoadKbFile extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "loadKbFile"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         def kbFile = event.get("kbFile")
         EPS.kb.load(kbFile)
         this.logger.info("File {} loaded", kbFile)

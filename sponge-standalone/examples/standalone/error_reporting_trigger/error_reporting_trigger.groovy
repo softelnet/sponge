@@ -4,10 +4,10 @@
  */
 
 class HelloWorldTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "helloEvent"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         whatIsThis.doSomething()
         println event.get("say")
     }

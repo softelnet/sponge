@@ -12,10 +12,10 @@ void onInit() {
 }
 
 class EchoAction extends Action {
-    void configure() {
+    void onConfigure() {
         this.displayName = "Echo Action"
     }
-    Object run(Object[] args) {
+    Object onCall(Object[] args) {
         this.logger.info("Action {} called", this.name)
         if (args != null) {
             for (arg in args) {

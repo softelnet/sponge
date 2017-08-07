@@ -13,9 +13,9 @@ def onInit():
     EPS.setVariable("allowNumber", 3)
 
 class Trigger1(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
     	global eventCounter
     	eventCounter.incrementAndGet()
         self.logger.debug("Received event {}, counter: {}", event.name, eventCounter)
@@ -23,9 +23,9 @@ class Trigger1(Trigger):
         	self.logger.debug("This line should not be displayed!")
 
 class Trigger2(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e2"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Removing entry")
         global eventEntry
         EPS.removeEvent(eventEntry)

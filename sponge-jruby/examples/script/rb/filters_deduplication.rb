@@ -18,23 +18,23 @@ def onInit
 end
 
 class ColorDeduplicationFilter < Filter
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def init
+    def onInit
         @deduplication = Deduplication.new("color")
         @deduplication.cacheBuilder.maximumSize(1000)
     end
-    def accepts(event)
-        return @deduplication.accepts(event)
+    def onAccept(event)
+        return @deduplication.onAccept(event)
     end
 end
 
 class ColorTrigger < Trigger
-    def configure
+    def onConfigure
         self.events = ["e1", "e2"]
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event {}", event)
         $eventCounter.get(event.name + "-" + event.get("color")).incrementAndGet()
     end

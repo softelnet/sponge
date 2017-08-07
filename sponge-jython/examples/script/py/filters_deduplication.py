@@ -20,18 +20,18 @@ def onInit():
     EPS.setVariable("eventCounter", eventCounter)
 
 class ColorDeduplicationFilter(Filter):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def init(self):
+    def onInit(self):
         self.deduplication = Deduplication("color")
         self.deduplication.cacheBuilder.maximumSize(1000).expireAfterWrite(5, TimeUnit.MINUTES)
-    def accepts(self, event):
-        return self.deduplication.accepts(event)
+    def onAccept(self, event):
+        return self.deduplication.onAccept(event)
 
 class ColorTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2"]
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event {}", event)
         global eventCounter
         eventCounter.get(event.name + "-" + event.get("color")).incrementAndGet()

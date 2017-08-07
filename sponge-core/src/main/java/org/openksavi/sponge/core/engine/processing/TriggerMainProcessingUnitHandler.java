@@ -36,8 +36,8 @@ public class TriggerMainProcessingUnitHandler extends BaseMainProcessingUnitHand
 
         TriggerAdapter triggerAdapter = (TriggerAdapter) adapter;
         try {
-            if (triggerAdapter.getProcessor().accepts(event)) {
-                triggerAdapter.getProcessor().run(event);
+            if (triggerAdapter.getProcessor().onAccept(event)) {
+                triggerAdapter.getProcessor().onRun(event);
             }
         } catch (Throwable e) {
             getProcessingUnit().getEngine().handleError(adapter, e);

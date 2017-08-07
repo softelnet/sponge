@@ -13,21 +13,21 @@ def onInit():
     EPS.setVariable("correlationEventsLog", correlationEventsLog)
 
 class RuleFFF(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2", "e3 :first"]
         self.synchronous = True
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFFF", self)
 
 class RuleFFL(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2", "e3 :last"]
         global defaultDuration
         self.duration = Duration.ofMillis(100)
         self.synchronous = False
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFFL", self)

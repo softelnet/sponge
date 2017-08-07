@@ -4,9 +4,9 @@ Error reporting
 """
 
 class HelloWorldTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "helloEvent"
-    def run(self, event):
+    def onRun(self, event):
         whatIsThis.doSomething()
         print event.get("say")
 

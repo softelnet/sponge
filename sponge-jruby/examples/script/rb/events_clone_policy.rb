@@ -17,16 +17,16 @@ def onInit
 end
 
 class ClonePolicyTrigger < Trigger
-    def configure
+    def onConfigure
         self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
     end
-    def run(event)
+    def onRun(event)
         $events.get(event.name).add(event)
-    	self.logger.debug("Processing event: {}", event.name)
-    	map = event.get("map")
-    	self.logger.debug("map attribute (before) {}", map)
-    	map.put("a", "Value " + $events.get(event.name).size().to_s);
-    	self.logger.debug("map attribute (after) {}", map)
+        self.logger.debug("Processing event: {}", event.name)
+        map = event.get("map")
+        self.logger.debug("map attribute (before) {}", map)
+        map.put("a", "Value " + $events.get(event.name).size().to_s);
+        self.logger.debug("map attribute (after) {}", map)
     end
 end
 

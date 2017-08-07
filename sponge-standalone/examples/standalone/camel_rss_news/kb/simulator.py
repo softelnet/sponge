@@ -4,9 +4,9 @@ Sponge Knowledge base
 
 # Trigger that executes a function passed as an event attribute.
 class ExecuteTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "execute"
-    def run(self, event):
+    def onRun(self, event):
         event.get("function")()
 
 def onStartup():

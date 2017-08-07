@@ -11,15 +11,15 @@ def onInit():
     EPS.setVariable("finishedEvents", AtomicInteger(0))
 
 class F1(Filter):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def accepts(self, event):
+    def onAccept(self, event):
         return True
 
 class T1(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
         EPS.logger.debug("Input event queue: {}, main event queue: {}, decomposed queue: {}, worker thread pool queue: {}",
               EPS.engine.eventQueueManager.inputEventQueue.size,
               EPS.engine.eventQueueManager.mainEventQueue.size, EPS.engine.processingUnitManager.mainProcessingUnit.decomposedQueue.size,

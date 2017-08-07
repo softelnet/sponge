@@ -11,7 +11,7 @@ function onInit() {
 
 // Example plugin defined in the knowledge base.
 var ScriptPlugin = Java.extend(Plugin, {
-    configure: function(self, configuration) {
+    onConfigure: function(self, configuration) {
         self.logger.debug("configuration {}", self.name);
         self.target = new function() {
             this.storedValue = configuration.getString("storedValue", "default");
@@ -23,7 +23,7 @@ var ScriptPlugin = Java.extend(Plugin, {
             };
         };
     },
-    init: function(self) {
+    onInit: function(self) {
         self.logger.debug("Initializing {}", self.name);
     },
     onStartup: function(self) {
@@ -32,10 +32,10 @@ var ScriptPlugin = Java.extend(Plugin, {
 });
 
 var PluginTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
     	valueBefore = scriptPlugin.target.getStoredValue();
     	self.logger.info("Plugin stored value: {}", valueBefore);
     	EPS.setVariable("valueBefore", valueBefore);

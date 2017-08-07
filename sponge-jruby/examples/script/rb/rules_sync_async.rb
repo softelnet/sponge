@@ -10,23 +10,23 @@ def onInit
 end
 
 class RuleFFF < Rule
-    def configure
+    def onConfigure
         self.events = ["e1", "e2", "e3 :first"]
         self.synchronous = true
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
         $correlationEventsLog.addEvents("RuleFFF", self)
     end
 end
 
 class RuleFFL < Rule
-    def configure
+    def onConfigure
         self.events = ["e1", "e2", "e3 :last"]
         self.duration = Duration.ofMillis(500)
         self.synchronous = false
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
         $correlationEventsLog.addEvents("RuleFFL", self)
     end

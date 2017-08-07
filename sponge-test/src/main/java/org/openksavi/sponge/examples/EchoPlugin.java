@@ -34,13 +34,13 @@ public class EchoPlugin extends JavaPlugin {
     }
 
     @Override
-    public void configure(Configuration configuration) {
+    public void onConfigure(Configuration configuration) {
         echo = configuration.getString("echo", echo);
         count = configuration.getInteger("count", count);
     }
 
     @Override
-    public void init() {
+    public void onInit() {
         logger.debug("Initializing {}", getName());
     }
 

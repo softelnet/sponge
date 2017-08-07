@@ -11,12 +11,12 @@ def onInit():
 
 class SampleCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
-    def configure(self):
+    def onConfigure(self):
         self.events = ["filesystemFailure", "diskFailure"]
         self.duration = Duration.ofSeconds(2)
-    def init(self):
+    def onInit(self):
         self.eventLog = []
-    def acceptsAsFirst(self, event):
+    def onAcceptAsFirst(self, event):
         return SampleCorrelator.instanceStarted.compareAndSet(False, True)
     def onEvent(self, event):
         self.eventLog.append(event)

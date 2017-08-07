@@ -37,7 +37,7 @@ Standalone command-line application doesn't support history of entered commands/
 |===
 
 == Default parameters
-Standalone command-line application sets own default values for the following parameters. You may change them in an XML configuration file.
+Standalone command-line application sets its own default values for the following engine configuration parameters. You may change them in an XML configuration file.
 
 [width=80%]
 |===
@@ -106,7 +106,7 @@ In an interactive mode a predefined console logger appender (configured in logba
 Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 
 == Spring
-You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. Note that the name of this plugin must be `"standalonePlugin"`.
+You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. The name of this plugin must be `"standalonePlugin"`.
 
 .Example of Spring configuration in StandalonePlugin
 [source,xml]
@@ -129,12 +129,12 @@ You may provide Spring configuration files using a command-line option or defini
 </sponge>
 ----
 
-This `standlonePlugin` sets up Spring configuration XML file and Spring bean name that will reference the engine instance. The attribute `engineBeanName` is optional and the default value is `spongeEngine`.
+This `standlonePlugin` sets up the Spring configuration XML file and Spring bean name that will reference the engine instance. The attribute `engineBeanName` is optional and the default value is `spongeEngine`.
 
-A Spring context is created only when there is a `spring` configuration element present. The implementation used is `GenericGroovyApplicationContext` that allows to load XML files and Groovy files as well.
+A Spring context is created only when there is a `spring` configuration element present. The implementation used is `GenericGroovyApplicationContext` that allows to load XML and Groovy configuration files.
 
 == Camel
-When using Camel you could setup a predefined Camel context configuration. In that case a Camel context will be created automatically.
+If you want to use Camel, you could setup a predefined Camel context configuration, so that a Camel context will be created automatically.
 
 Available options are:
 
@@ -241,7 +241,7 @@ beans {
 > print(camel.context.routes)
 ----
 
-== Examples
+== Running examples
 
 .News example
 [source,bash,subs="verbatim,attributes"]
@@ -263,18 +263,35 @@ beans {
 
 == Directory structure
 
-bin:: Shell scripts.
-config:: {sponge} configuration files.
-docs:: Documentation.
-examples:: Example configurations and knowledge base files.
-lib:: Libraries used by {sponge}.
-logs:: Log files.
+.Directory structure
+[cols="1,5"]
+|===
+|Directory |Description
+
+|`bin`
+|Shell scripts.
+
+|`config`
+|Configuration files.
+
+|`docs`
+|Documentation.
+
+|`examples`
+|Example configurations and knowledge base files.
+
+|`lib`
+|Libraries used by {sponge}.
+
+|`logs`
+|Log files.
+|===
 
 == Camel components and data formats available out of the box
 Besides Camel core components and data formats, {sponge} standalone command-line application provides also a selected set of other Camel components and data formats ready to use.
 
 .Camel components out of the box
-[width="50%"]
+[width="75%"]
 |===
 |Component |Description
 
@@ -328,7 +345,7 @@ Besides Camel core components and data formats, {sponge} standalone command-line
 |===
 
 .Camel data formats out of the box
-[width="50%"]
+[width="75%"]
 |===
 |Data format |Description
 

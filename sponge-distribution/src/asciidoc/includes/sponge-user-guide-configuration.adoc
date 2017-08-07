@@ -2,7 +2,7 @@
 {sponge} may be configured:
 
 * in an XML configuration file,
-* using an Engine Builder API.
+* using the Engine Builder API.
 
 == XML configuration file
 In a general form an XML configuration file is built as in the following example:
@@ -15,7 +15,6 @@ In a general form an XML configuration file is built as in the following example
     xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
 
     <!-- Properties configuration section -->
-    <!-- Here you may define any properties -->
     <properties>
         <property name="sponge.home" system="true">.</property>
         <property name="server.name">www.openksavi.org</property>
@@ -48,21 +47,17 @@ In a general form an XML configuration file is built as in the following example
 </sponge>
 ----
 
-The precise specification of a configuration XML file is provided by a schema file {homepage}/schema/config.xsd[`config.xsd`].
+The specification of a configuration XML file is provided by the schema file {homepage}/schema/config.xsd[`config.xsd`].
 
-A configuration file is searched for using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration] (e.g. first in the file system and then in the classpath). If not found, a configuration file is searched in {sponge} home directory (may be provided as a Java system property `sponge.home`).
+The configuration file is looked up using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration], e.g. first in the file system as a relative or absolute path and then in the classpath. If not found, the configuration file is looked up in the file system relative to the {sponge} home directory. The {sponge} home directory may be provided as a Java system property `sponge.home`.
 
 === Properties configuration
-A properties configuration section (`properties`) is used for setting a configuration properties. Configuration properties may be used in other places in a configuration file.
+The properties configuration section (`properties`) allows setting configuration properties. Configuration properties may be used in other places in the configuration file. Moreover the properties could be used as Java system properties if the attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
 
-Moreover properties could be used as Java system properties if attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
-
-Properties could also be used as {sponge} variables for session (engine) scope. In that case you have to set attribute `variable` to `true`. Note that the type of such variables is always `String`.
-
-In the above example a property `sponge.home` has been defined and it could be used e.g. in plugins section.
+Properties could also be used as {sponge} variables in the engine scope. In that case you have to set the attribute `variable` to `true`. The type of such variables is always `String`.
 
 === Engine configuration
-An engine configuration section (`<engine>`) contains configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
+The engine configuration section (`<engine>`) contains engine configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
 
 .Engine parameters
 [cols="2,5,1"]
@@ -74,11 +69,11 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`10`
 
 |*`asyncEventSetProcessorExecutorThreadCount`*
-|The number of threads used by an event set processor executor for asynchronous processing of events by rules and correlators. You could increase this parameter if your knowledge bases create many instances of asynchronous rules or correlators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
+|The number of threads used by an event set processor thread pool (executor) for asynchronous processing of events (by rules and correlators). You could increase this parameter if your knowledge bases create many instances of asynchronous rules or correlators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
 |`10`
 
 |*`eventQueueCapacity`*
-|The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to a reasonable value taking into account a number of events, an event size, a number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
+|The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to a reasonable value taking into account the amount and intensity of events your system needs to process, the typical event size, the number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However, when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
 |`-1`
 
 |`eventClonePolicy`
@@ -90,7 +85,7 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`true`
 
 |`durationThreadCount`
-|The number of threads used by an event set processors duration executor. The default implementation uses these threads only to send control events. In most cases there should be no need to change this parameter, because sending a new event is fast.
+|The number of threads used by the event set processors duration thread pool (executor). The default implementation uses these threads only to send control events. In most cases there should be no need to change this parameter, because sending a new event is relatively fast.
 |`2`
 
 |`eventSetProcessorDefaultSynchronous`
@@ -98,13 +93,13 @@ An engine configuration section (`<engine>`) contains configuration parameters a
 |`false`
 
 |`executorShutdownTimeout`
-|The executor shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing. Note that shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several executors in the engine.
+|The thread pool (executor) shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing when the engine is shutting down. The actual shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several thread pools in the engine.
 |`60000`
 |===
 
 
 === Knowledge bases configuration
-A knowledge bases configuration section (`<knowledgeBases>`) lists all script knowledge bases that are to be loaded into the engine.
+The knowledge bases configuration section (`<knowledgeBases>`) lists all script knowledge bases that are to be loaded into the engine.
 
 Each `<knowledgeBase>` tag contains:
 
@@ -127,7 +122,7 @@ Each `<knowledgeBase>` tag contains:
 |===
 
 === Plugins configuration
-A plugins configuration section (`<plugins>`) contains plugin definitions (`<plugin>`) built as follows:
+The plugins configuration section (`<plugins>`) contains plugin definitions (`<plugin>`) built as follows:
 
 .Plugin configuration attributes
 [cols="1,1,5"]
@@ -136,7 +131,7 @@ A plugins configuration section (`<plugins>`) contains plugin definitions (`<plu
 
 |`name`
 |Attribute
-|The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used in order to access a given plugin in the knowledge base.
+|The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used as a variable name in order to access a given plugin in the knowledge base.
 
 |`class`
 |Attribute
@@ -147,13 +142,13 @@ A plugins configuration section (`<plugins>`) contains plugin definitions (`<plu
 |The name of the knowledge base containing the class of the plugin (optional). If not set then the default Java-based knowledge base is used.
 |===
 
-You may provide a custom plugin configuration section inside a `<configuration>` element. The contents of this plugin configuration depend on a given plugin implementation. Usually it would be a hierarchy of plugin specific sub tags.
+You may provide a custom plugin configuration section inside a `<configuration>` element. The contents of this plugin configuration depend on the given plugin implementation. Usually it would be a hierarchy of plugin specific sub tags.
 
 [[engine-builder-api]]
 == Engine Builder API
-Engine Builder API is provided by `DefaultEngine.builder()` static method that returns `EngineBuilder` instance. This API follows a builder design pattern.
+The Engine Builder API is provided by `DefaultEngine.builder()` static method that returns the `EngineBuilder` instance. This API follows a builder design pattern.
 
-.Example of configuration using Engine Builder API.
+.Example configuration using the Engine Builder API
 [source,java]
 ----
 EchoPlugin plugin = new EchoPlugin();
@@ -174,13 +169,13 @@ engine.getConfigurationManager().setEventClonePolicy(EventClonePolicy.DEEP);
 engine.startup();
 ----
 
-Engine Builder API provides a method `config()` to read an XML configuration file as well.
+The Engine Builder API provides the method `config()` to read an XML configuration file as well.
 
-.Example of using an XML configuration file in Engine Builder API.
+.Example of using the XML configuration file in the Engine Builder API
 [source,java]
 ----
 Engine engine = DefaultEngine.builder().config("examples/core/engine_parameters.xml").build();
 engine.startup();
 ----
 
-Note that you may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.
+You may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.
