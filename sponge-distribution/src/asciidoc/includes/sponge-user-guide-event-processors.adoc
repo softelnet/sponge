@@ -248,7 +248,7 @@ EPS.enableJava(SampleJavaTrigger)
 ----
 
 == Rules
-Sometimes there is a need to perform certain actions when an ordered sequence of events has happened, additionally fulfilling some conditions. To handle such relationships (both temporal and logical), {sponge} provides rules. Note that events that happened first must be sent first into the engine.
+Sometimes there is a need to perform certain actions when an ordered sequence of events has happened, additionally fulfilling some conditions. To handle such relationships (both temporal and logical), {sponge} provides rules. It is important for the behavior of the rules that events that happened first must be sent first into the engine.
 
 Every rule should implement the abstract `configure` and `run` methods:
 
@@ -258,7 +258,7 @@ void configure();
 void run(Event event);
 ----
 
-The `run` method is called when a sequence of events specified by this rule has happened and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. Note that there could be many such sequences fitting the rule definition.
+The `run` method is called when a sequence of events specified by this rule has happened and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. There could be many such sequences fitting the rule definition.
 
 In many cases a rule may also implement one or more event conditions:
 
@@ -286,7 +286,7 @@ lambda rule, event: Duration.between(rule.getEvent("filesystemFailure").time, ev
 
 An event condition in Java is represented by the interface `EventCondition`.
 
-CAUTION: Note that a condition in the form of a closure or a lambda specifies two arguments: a rule instance (determined at the runtime) and an event instance. Take care not to mix up the `rule` argument with `this` (in Java) or `self` (in Python) as they are references to different objects.
+CAUTION: A condition in the form of a closure or a lambda specifies two arguments: a rule instance (determined at the runtime) and an event instance. Take care not to mix up the `rule` argument with `this` (in Java) or `self` (in Python) as they are references to different objects.
 
 The condition methods tell if an incoming event (corresponding to the sequence of events specified by the rule) should be considered suitable.
 
@@ -336,7 +336,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |A callback method invoked when a proper sequence of events happens and all the conditions have been fulfilled. In order to access the events which fulfilled the conditions and made the rule fire, the following function should be used: `getEvent(eventAlias)`. This method is mandatory.
 
 |`Event getEvent(String eventAlias)`
-|Returns the instance of the event that already happened and that has a specified alias. This method may be used inside `run` method. Note that if an event hasn't happened yet, this method throws an exception. This method may return `null` only when an event that supposed not to happen didn't occur as specified.
+|Returns the instance of the event that already happened and that has a specified alias. This method may be used inside `run` method. If an event hasn't happened yet, this method throws an exception. This method may return `null` only when an event that supposed not to happen didn't occur as specified.
 
 |`eventSequence`
 |Returns a sequence of events that happened as a list of event instances. The sequence may contain `null` values when an event that supposed not to happen didn't occur as specified. This method may be used inside `run` method. 
@@ -683,7 +683,7 @@ public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 <2> Setting a class attribute `eventLog`.
 <3> The correlator configuration callback method.
 <4> Define that the correlator is supposed to wait for events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
-<5> Set the maximum number of concurrent instances allowed for this correlator. Note that any first event matching the names will be accepted as the first event, starting the instance of this correlator.
+<5> Set the maximum number of concurrent instances allowed for this correlator. Any first event matching the names will be accepted as the first event, starting the instance of this correlator.
 <6> The correlator `onEvent` callback method.
 <7> Adds the new event to `eventLog`.
 <8> Logs the message.

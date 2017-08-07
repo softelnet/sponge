@@ -3,7 +3,7 @@
 == Spring framework
 {sponge} engine may be configured as a Spring bean. That configuration provides standardized access to an embedded {sponge} engine for example in J2EE environment.
 
-To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. Note that Spring plugin shouldn't be defined in {sponge} XML configuration file. See the following example.
+To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. The Spring plugin shouldn't be defined in {sponge} XML configuration file. See the following example.
 
 .Spring Java configuration example
 [source,java]
@@ -27,7 +27,7 @@ public class TestConfig {
     }
 }
 ----
-<1> {sponge} configured as a Spring bean. Note that `SpringEngine` implementation is used here in order to startup and shutdown the engine by Spring. `DefaultEngine` could also be used here but it wouldn't provide automatic startup and shutdown.
+<1> {sponge} configured as a Spring bean. The `SpringEngine` implementation is used here in order to startup and shutdown the engine by Spring. `DefaultEngine` could also be used here but it wouldn't provide automatic startup and shutdown.
 <2> Added `SpringPlugin`.
 <3> `SpringPlugin` configured as a Spring bean.
 

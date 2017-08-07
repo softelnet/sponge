@@ -176,6 +176,10 @@ public abstract class Utils {
         }
     }
 
+    public static String createPluginLoggerName() {
+        return KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." + KnowledgeBaseConstants.PLUGIN_LOGGER_NAME;
+    }
+
     public static String createLoggerName(KnowledgeBase knowledgeBase, String targetName) {
         return KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." + knowledgeBase.getType().getTypeCode() + "." + knowledgeBase.getName() + "."
                 + targetName;

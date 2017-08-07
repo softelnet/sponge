@@ -112,7 +112,7 @@ engine.startup(); // <2>
 <1> Creates a {sponge} engine by using Engine Builder API providing XML configuration file.
 <2> Starts up the engine. After startup the engine runs in the background, i.e. using threads other than the current one.
 
-Note that the engine runs until it is shut down explicitly. So, for example, if you place this code in the `main` method and execute it, the program will run infinitely.
+The engine runs until it is shut down explicitly. So, for example, if you place this code in the `main` method and execute it, the program will run infinitely.
 
 .Example of starting embedded {sponge} with the knowledge base file
 [source,java]
@@ -185,7 +185,7 @@ When {sponge} process is running you may send `HUP` signal to that process in or
 ----
 kill -HUP pid
 ----
-Where `pid` is the process id of the Java executable running the {sponge}. Note that it isn't the PID of the shell script `sponge`.
+Where `pid` is the process id of the Java executable running the {sponge}. It isn't the PID of the shell script `sponge`.
 
 IMPORTANT: See User Guide for limitations of reloading knowledge bases.
 

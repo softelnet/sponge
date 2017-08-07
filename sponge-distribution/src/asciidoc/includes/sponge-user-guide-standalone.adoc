@@ -106,7 +106,7 @@ In an interactive mode a predefined console logger appender (configured in logba
 Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 
 == Spring
-You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. Note that the name of this plugin must be `"standalonePlugin"`.
+You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. The name of this plugin must be `"standalonePlugin"`.
 
 .Example of Spring configuration in StandalonePlugin
 [source,xml]

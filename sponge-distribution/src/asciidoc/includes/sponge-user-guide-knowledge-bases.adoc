@@ -28,10 +28,10 @@ Generally, script knowledge base files consist of a few parts:
 |Called on the loading of the knowledge base and also every time the knowledge base is reloaded.
 
 |`onStartup()`
-|Called once after the startup of the system (after `onInit()` and initial `onLoad()`).
+|Called once after the startup of the engine (after `onInit()` and initial `onLoad()`).
 
 |`onShutdown()`
-|Called once before the shutdown of the system.
+|Called once before the shutdown of the engine.
 
 |`onBeforeReload()`
 |Called before every reloading of the knowledge base.
@@ -49,7 +49,7 @@ When {sponge} is starting, callback functions are invoked in the following order
 . `onLoad()`,
 . `onStartup()`.
 
-Note that before `onStartup()` is invoked you will not be able to send events or access plugins. That is because the engine hasn't started fully yet.
+Before `onStartup()` is invoked you will not be able to send events or access plugins. That is because the engine hasn't started fully yet.
 
 When a knowledge base is reloaded, callback functions are invoked in the following order:
 
@@ -113,7 +113,7 @@ The following predefined global variables are available in a knowledge base:
 |The knowledge base interpreter that read the script using this variable. Generally it is an implementation of `org.openksavi.sponge.kb.KnowledgeBaseInterpreter`. In the case of a scripting knowledge base it returns an implementation of `org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter`.
 
 |`EPS.logger`
-|Global logger instance. Please note, that event processors and actions have their own loggers (they are referenced as `self.logger`).
+|The logger instance associated with the knowledge base. The name of this logger has the following format: `sponge.kb.<language>.<knowledgeBaseName>.global`, e.g. `sponge.kb.python.kb1.global`. Please note, that event processors and plugins have their own loggers (they are referenced as `self.logger`).
 |===
 
 For each plugin a global variable will be created. The name of this variable is the plugin name (i.e. the value configured as the plugin `name` attribute in the configuration).

@@ -48,6 +48,9 @@ public final class KnowledgeBaseConstants {
     /** Global logger name. */
     public static final String GLOBAL_LOGGER_NAME = "global";
 
+    /** Plugin logger name. */
+    public static final String PLUGIN_LOGGER_NAME = "plugin";
+
     private KnowledgeBaseConstants() {
         //
     }

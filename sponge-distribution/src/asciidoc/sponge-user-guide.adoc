@@ -16,8 +16,7 @@ include::includes/sponge-user-guide-configuration.adoc[leveloffset=+1]
 == Engine
 
 === Starting up
-
-To startup the engine you should invoke the `startup()` method. After startup the engine runs in the background (i.e. using threads other than the current one). Note that the engine runs until you shutdown it.
+To startup the engine you should invoke the `startup()` method. After startup, the engine runs in the background (i.e. using threads other than the current one) until you shutdown it.
 
 .Example of starting up
 [source,java]
@@ -46,7 +45,7 @@ class A(Trigger):
         EPS.engine.requestShutdown()
 ----
 
-Note that shutting down doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
+Shutting down doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
 
 include::includes/sponge-user-guide-knowledge-bases.adoc[leveloffset=+1]
 
@@ -236,10 +235,10 @@ def onLoad():
 |Property / Method |Description
 
 |*`configure()`*
-|A configuration callback method that is invoked before creating a processor. This method is mandatory.
+|A configuration callback method that is invoked when a processor is being enabled. This method is mandatory.
 
 |`init()`
-|An initialization callback method that is invoked while creating a processor.
+|An initialization callback method that is invoked after `configure()` each time a new working instance of the processor is created.
 
 |`name`
 |A property that is the name of the processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
@@ -267,10 +266,19 @@ Every action should implement the abstract `run` method:
 Object run(Object... args);
 ----
 
-=== Important methods
-`configure()`:: A configuration callback method.
-`init()`:: An initialization callback method that is invoked while creating a new action instance after `configure`.
-`run(args)`:: A callback method invoked when the action is called, e.g.: `EPS.callAction()`.  This method is mandatory.
+=== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, actions provide the following ones.
+
+.Action properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`Object run(args)`
+|A callback method invoked when the action is called, e.g.: `EPS.callAction()`. The argument in an array of `Object`s and the result in an `Object`. This method is mandatory.
+|===
+
+The `configure` method in actions is not mandatory.
 
 === Example in a script language
 The code presented below defines an action named `EchoAction` that simply returns all arguments.
@@ -328,11 +336,46 @@ Plugins are used for expanding {sponge} with new functionalities and use them in
 
 Every plugin has to implement `Plugin` interface. Java-based plugins should extend `JavaPlugin` class that extends `BasePlugin`. Script-based plugins should extend a class specific to the scripting language that in turn extends `BasePlugin`. Hopefully for all scripting languages there an alias to such class named simply `Plugin`.
 
+Each plugin is also an engine module and that means that in inherits from `BaseEngineModule` class.
+
 `BasePlugin` provides empty implementations of methods responsible for configuration (`configure()`), as well as callback methods being invoked during starting up (`onStartup()`), shutting down (`onShutdown()`), before and after reloading the plugin (`onBeforeReload()`, `onAfterReload()`). If the created plugin requires own configuration parameters (e.g. in the XML configuration file) the `configure()` method should be implemented.
 
 Plugins could be written in Java or in a supported scripting language as a part of a scripting knowledge base. However plugins written in a scripting language must be used only in the same scripting knowledge base they were defined in. That is because there are limitations of scripting languages interoperation. Only plugins written in Java could be used in any scripting knowledge base.
 
 TIP: When defining plugins, it should be taken into consideration that {sponge} is multi-threaded so references to a plugin should be thread-safe.
+
+=== Properties and methods
+
+.Plugin properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`configure(Configuration configuration)`
+|A configuration callback method that is invoked after a plugin has been loaded. This method allows reading an XML configuration for the plugin.
+
+|`init()`
+|An initialization callback method that is invoked after a configuration of a plugin.
+
+|`onStartup()`
+|On startup callback method, called once after the startup of the engine.
+
+|`onShutdown()`
+|On shutdown callback method, called once before the shutdown of the engine.
+
+|`onBeforeReload()`
+|A callback method called before every reloading of the knowledge base.
+
+|`onAfterReload()`
+|A callback method called after every reloading of the knowledge base.
+
+|`name`
+|A property that is the name of the plugin. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of plugins are created automatically, the setter shouldn't be used in a client code.
+
+|`logger`
+|A read-only property that provides a plugin logger. This is a shortcut for `getLogger()` method. A plugin logger name has the following format: `sponge.kb.plugin.<pluginName>`. Example logger name: `sponge.kb.plugin.scriptPlugin`.
+|===
+
 
 === Example in Java
 
@@ -677,6 +720,19 @@ Maven users will need to add the following dependency to their `pom.xml`:
 {sponge} uses https://www.slf4j.org[SLF4J] facade for logging.
 
 Examples and standalone version use https://logback.qos.ch[Logback] as a logging implementation.
+
+Java-based processors and plugins may use:
+
+* {sponge} logging, by using the `getLogger()` method, e.g. `getLogger().info("logging");`, or
+* own loggers defined in their classes, according to the standard conventions, e.g.
++
+[source,java]
+----
+private static final Logger logger = LoggerFactory.getLogger(ConnectionPlugin.class);
+...
+    logger.info("logging");
+}
+----
 
 == Examples
 
