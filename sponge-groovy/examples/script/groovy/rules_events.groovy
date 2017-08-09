@@ -15,31 +15,31 @@ void onInit() {
 // Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1"]
     }
-    void run(Event event) {
+    void onRun(Event event) {
         EPS.getVariable("correlationEventsLog").addEvents("RuleF", this)
     }
 }
 
 // F(irst)F(irst)F(irst)
 class RuleFFF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e3 :first"]
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFF", this)
     }
 }
 
 class RuleFFFDuration extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e3 :first"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFFDuration", this)
     }
@@ -47,11 +47,11 @@ class RuleFFFDuration extends Rule {
 
 // F(irst)F(irst)L(ast)
 class RuleFFL extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e3 :last"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFL", this)
     }
@@ -59,11 +59,11 @@ class RuleFFL extends Rule {
 
 // F(irst)F(irst)A(ll)
 class RuleFFA extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e3 :all"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFA", this)
     }
@@ -71,11 +71,11 @@ class RuleFFA extends Rule {
 
 // F(irst)F(irst)N(one)
 class RuleFFN extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2", "e4 :none"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFFN", this)
     }
@@ -83,11 +83,11 @@ class RuleFFN extends Rule {
 
 // F(irst)L(ast)F(irst)
 class RuleFLF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :last", "e3 :first"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFLF", this)
     }
@@ -95,11 +95,11 @@ class RuleFLF extends Rule {
 
 // F(irst)L(ast)L(ast)
 class RuleFLL extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :last", "e3 :last"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFLL", this)
     }
@@ -107,11 +107,11 @@ class RuleFLL extends Rule {
 
 // F(irst)L(ast)A(ll)
 class RuleFLA extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :last", "e3 :all"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFLA", this)
     }
@@ -119,11 +119,11 @@ class RuleFLA extends Rule {
 
 // F(irst)L(ast)N(one)
 class RuleFLN extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :last", "e4 :none"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFLN", this)
     }
@@ -131,11 +131,11 @@ class RuleFLN extends Rule {
 
 // F(irst)A(ll)F(irst)
 class RuleFAF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :all", "e3 :first"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFAF", this)
     }
@@ -143,11 +143,11 @@ class RuleFAF extends Rule {
 
 // F(irst)A(ll)L(ast)
 class RuleFAL extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :all", "e3 :last"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFAL", this)
     }
@@ -155,11 +155,11 @@ class RuleFAL extends Rule {
 
 // F(irst)A(ll)A(ll)
 class RuleFAA extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :all", "e3 :all"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFAA", this)
     }
@@ -167,11 +167,11 @@ class RuleFAA extends Rule {
 
 // F(irst)A(ll)N(one)
 class RuleFAN extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :all", "e5 :none"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFAN", this)
     }
@@ -179,10 +179,10 @@ class RuleFAN extends Rule {
 
 // F(irst)N(one)F(irst)
 class RuleFNF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e5 :none", "e3"]
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFNF", this)
     }
@@ -190,11 +190,11 @@ class RuleFNF extends Rule {
 
 // F(irst)N(one)L(ast)
 class RuleFNL extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e5 :none", "e3 :last"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFNL", this)
     }
@@ -202,22 +202,22 @@ class RuleFNL extends Rule {
 
 // F(irst)N(one)A(ll)
 class RuleFNA extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e5 :none", "e3 :all"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFNA", this)
     }
 }
 
 class RuleFNFReject extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :none", "e3"]
         this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFNFReject", this)
     }

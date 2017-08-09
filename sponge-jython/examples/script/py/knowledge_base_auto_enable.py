@@ -10,37 +10,37 @@ def onInit():
     EPS.setVariable("counter", AtomicInteger(0))
 
 class AutoAction(Action):
-    def run(self, args):
+    def onCall(self, args):
         self.logger.debug("Running")
         EPS.getVariable("counter").incrementAndGet()
         return args
 
 class AutoFilter(Filter):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def accepts(self, event):
+    def onAccept(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.getVariable("counter").incrementAndGet()
         return True
 
 class AutoTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.getVariable("counter").incrementAndGet()
 
 class AutoRule(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2"]
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running for sequence: {}", self.eventSequence)
         EPS.getVariable("counter").incrementAndGet()
 
 class AutoCorrelator(Correlator):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2"]
-    def acceptsAsFirst(self, event):
+    def onAcceptAsFirst(self, event):
         return event.name == "e1"
     def onEvent(self, event):
         self.logger.debug("Received event: {}", event.name)

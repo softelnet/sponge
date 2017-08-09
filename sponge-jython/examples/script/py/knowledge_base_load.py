@@ -20,29 +20,29 @@ def onInit():
     EPS.setVariable("eventCounter", eventCounter)
 
 class Trigger1(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.displayName = "Trigger1, file1"
         self.event = "e1"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("file1: Received event {}", event)
         global eventCounter
         eventCounter.get(self.displayName).incrementAndGet()
 
 
 class Trigger2(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.displayName = "Trigger2, file1"
         self.event = "e2"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("file1: Received event {}", event)
         global eventCounter
         eventCounter.get(self.displayName).incrementAndGet()
 
 
 class LoadKbFile(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "loadKbFile"
-    def run(self, event):
+    def onRun(self, event):
         kbFile = event.get("kbFile")
         EPS.kb.load(kbFile)
         self.logger.info("File {} loaded", kbFile)

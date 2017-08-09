@@ -81,5 +81,5 @@ public interface EventSetProcessorAdapter<T extends EventSetProcessor<?>> extend
      * @param event the incoming event.
      * @return if the event should be accepted as the first event.
      */
-    boolean acceptsAsFirst(Event event);
+    boolean acceptAsFirst(Event event);
 }

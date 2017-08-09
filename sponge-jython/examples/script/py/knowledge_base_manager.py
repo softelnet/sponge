@@ -24,15 +24,15 @@ def verifyManager():
     EPS.getVariable("verificationDone").set(True)
 
 class VerifyTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "verify"
-    def run(self, event):
+    def onRun(self, event):
         verifyManager()
 
 class TriggerA(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "a"
-    def run(self, event):
+    def onRun(self, event):
         pass
 
 def onLoad():

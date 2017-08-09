@@ -12,23 +12,23 @@ function onInit() {
 }
 
 var RuleFFF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :first"];
         self.synchronous = true;
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);
         correlationEventsLog.addEvents("RuleFFF", self);
     }
 });
 
 var RuleFFL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :last"];
         self.duration = Duration.ofMillis(500);
         self.synchronous = false;
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);
         correlationEventsLog.addEvents("RuleFFL", self);
     }

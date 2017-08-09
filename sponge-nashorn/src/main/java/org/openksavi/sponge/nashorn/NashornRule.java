@@ -53,27 +53,27 @@ public abstract class NashornRule extends org.openksavi.sponge.core.rule.BaseRul
     }
 
     @Override
-    public final void configure() {
-        configure(getSelf());
+    public final void onConfigure() {
+        onConfigure(getSelf());
     }
 
-    public abstract void configure(Object self);
+    public abstract void onConfigure(Object self);
 
     @Override
-    public final void init() {
-        init(getSelf());
+    public final void onInit() {
+        onInit(getSelf());
     }
 
-    public void init(Object self) {
+    public void onInit(Object self) {
         //
     }
 
     @Override
-    public final void run(Event event) {
-        run(getSelf(), event);
+    public final void onRun(Event event) {
+        onRun(getSelf(), event);
     }
 
-    public abstract void run(Object self, Event event);
+    public abstract void onRun(Object self, Event event);
 
     public void setConditions(String eventAlias, ScriptObjectMirror... functions) {
         setJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, functions));

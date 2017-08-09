@@ -99,10 +99,10 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
             adapter.setProcessor(eventSetProcessor);
             adapter.setGroup(this);
 
-            // Invoke init on the event set processor instance.
-            adapter.getProcessor().init();
+            // Invoke init callback on the event set processor instance.
+            adapter.getProcessor().onInit();
 
-            if (!adapter.acceptsAsFirst(event)) {
+            if (!adapter.acceptAsFirst(event)) {
                 return;
             }
 

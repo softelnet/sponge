@@ -10,20 +10,20 @@ def onInit():
     EPS.setVariable("receivedCamelMessages", AtomicInteger(0))
 
 class RssTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "rss"
-    def run(self, event):
+    def onRun(self, event):
         # self.logger.debug("Received event name={}, body={}", event.name, event.body)
         camel.send("direct:log", event.body)
 
 class RssDecomposedTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "rssDecomposed"
-    def run(self, event):
+    def onRun(self, event):
         camel.send("direct:log", event)
 
 class CamelConsumerRssDecomposedTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "rssDecomposed"
-    def run(self, event):
+    def onRun(self, event):
         camel.send("News from " + event.get("source") + " - " + event.get("title"))

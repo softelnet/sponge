@@ -7,33 +7,33 @@ from java.util.concurrent.atomic import AtomicBoolean, AtomicInteger
 from org.openksavi.sponge.test import TestStatus
 
 class ReloadTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "reload"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.requestReload()
 
 class RuleAShouldBeRun(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2 :last"]
         self.duration = Duration.ofSeconds(3)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("ruleAFired").set(True)
 
 class RuleBShouldNotBeRun(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e3 :last"]
         self.duration = Duration.ofSeconds(3)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("ruleBFired").set(True)
 
 class RuleCShouldBeRun(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e2"]
         self.duration = Duration.ofSeconds(3)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("ruleCFired").set(True)
 

@@ -8,10 +8,10 @@ void onInit() {
 }
 
 class CronTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "cronEvent"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         int eventCounter = EPS.getVariable("eventCounter")
         this.logger.debug("Received event {}: {}", eventCounter + 1, event.name)
         if (eventCounter + 1 == 2) {

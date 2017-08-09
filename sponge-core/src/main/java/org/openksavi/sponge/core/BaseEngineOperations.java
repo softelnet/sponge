@@ -233,6 +233,16 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
+    public void shutdown() {
+        engine.shutdown();
+    }
+
+    @Override
+    public void requestShutdown() {
+        engine.requestShutdown();
+    }
+
+    @Override
     public void reload() {
         engine.reload();
     }

@@ -6,9 +6,9 @@ from java.util.concurrent.atomic import AtomicBoolean
 
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "alarm"
-    def run(self, event):
+    def onRun(self, event):
         print(camel.request("direct:template", event.get("message")))
         EPS.getVariable("alarmSounded").set(True)
 

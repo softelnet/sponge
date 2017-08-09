@@ -15,36 +15,36 @@ def onInit():
 # Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleFNNF(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e5 :none", "e6 :none", "e3"]
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNNF", self)
 
 class RuleFNNNL(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]
         self.duration = Duration.ofSeconds(2)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNNNL", self)
 
 class RuleFNNNLReject(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]
         self.duration = Duration.ofSeconds(2)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNNNLRejected", self)
 
 class RuleFNFNL(Rule):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["e1", "e5 :none", "e2", "e7 :none", "e3 :last"]
         self.duration = Duration.ofSeconds(2)
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNFNL", self)

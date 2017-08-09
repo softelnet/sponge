@@ -15,16 +15,18 @@ def onInit():
     EPS.setVariable("hardwareFailureJavaFinishCount", AtomicInteger(0))
 
 class SampleCorrelator(Correlator):
-    def configure(self):
+    def onConfigure(self):
         self.events = ["filesystemFailure", "diskFailure"]
         self.maxInstances = 1
-    def init(self):
+    def onInit(self):
         self.eventLog = []
+    def onAcceptAsFirst(self, event):
+        return event.name == "filesystemFailure"
     def onEvent(self, event):
         self.eventLog.append(event)
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
-        if len(self.eventLog) >= 4:
+        if len(self.eventLog) == 4:
             EPS.getVariable("hardwareFailureScriptFinishCount").incrementAndGet()
             self.finish()
 

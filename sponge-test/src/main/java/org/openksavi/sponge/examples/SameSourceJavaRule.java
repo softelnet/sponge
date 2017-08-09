@@ -31,7 +31,7 @@ public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
     private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaRule.class);
 
     @Override
-    public void configure() {
+    public void onConfigure() {
         setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) });
 
         setConditions("e1", "severityCondition");
@@ -46,7 +46,7 @@ public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
     }
 
     @Override
-    public void run(Event event) {
+    public void onRun(Event event) {
         logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"), getEventAliasMap());
         getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
     }

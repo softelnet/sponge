@@ -78,12 +78,12 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public static class TestFilter extends org.openksavi.sponge.java.JavaFilter {
 
         @Override
-        public void configure() {
+        public void onConfigure() {
             setEvents("e3");
         }
 
         @Override
-        public boolean accepts(Event event) {
+        public boolean onAccept(Event event) {
             return false;
         }
     }
@@ -91,12 +91,12 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public static class NotToBeRunTrigger extends org.openksavi.sponge.java.JavaTrigger {
 
         @Override
-        public void configure() {
+        public void onConfigure() {
             setEventName("e3");
         }
 
         @Override
-        public void run(Event event) {
+        public void onRun(Event event) {
             EventsLog.getInstance(getEps()).addEvent("e3", event);
             throw new SpongeException("Should not be fired!");
         }
@@ -105,12 +105,12 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public static class TestTrigger extends org.openksavi.sponge.java.JavaTrigger {
 
         @Override
-        public void configure() {
+        public void onConfigure() {
             setEventName("e1");
         }
 
         @Override
-        public void run(Event event) {
+        public void onRun(Event event) {
             getLogger().debug("Run");
             EventsLog.getInstance(getEps()).addEvent("e1", event);
         }
@@ -119,7 +119,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public static class TestLastRule extends org.openksavi.sponge.java.JavaRule {
 
         @Override
-        public void configure() {
+        public void onConfigure() {
             setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST) });
             setConditions("e2", "e2condition");
             setDuration(Duration.ofSeconds(2));
@@ -130,7 +130,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
 
         @Override
-        public void run(Event event) {
+        public void onRun(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
             EventsLog.getInstance(getEps()).addEvent("e1e2-last", event);
         }
@@ -139,13 +139,13 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public static class TestFirstRule extends org.openksavi.sponge.java.JavaRule {
 
         @Override
-        public void configure() {
+        public void onConfigure() {
             setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.FIRST) });
             setDuration(Duration.ofSeconds(2));
         }
 
         @Override
-        public void run(Event event) {
+        public void onRun(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
             EventsLog.getInstance(getEps()).addEvent("e1e2-first", event);
         }
@@ -154,13 +154,13 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     public static class TestAllRule extends org.openksavi.sponge.java.JavaRule {
 
         @Override
-        public void configure() {
+        public void onConfigure() {
             setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.ALL) });
             setDuration(Duration.ofSeconds(2));
         }
 
         @Override
-        public void run(Event event) {
+        public void onRun(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
             EventsLog.getInstance(getEps()).addEvent("e1e2-all", event);
         }

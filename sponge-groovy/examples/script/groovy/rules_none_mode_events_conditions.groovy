@@ -13,23 +13,23 @@ void onInit() {
 // Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleFNF extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :none", "e3"]
         this.setConditions("e2", { self, event -> (event.get("label") as int) > 4 })
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFNF", this)
     }
 }
 
 class RuleFNNFReject extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2 :none", "e6 :none", "e3"]
         // this.duration = Duration.ofSeconds(2)
         this.setConditions("e2", this.&e2LabelCondition)
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
         EPS.getVariable("correlationEventsLog").addEvents("RuleFNNFReject", this)
     }

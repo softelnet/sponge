@@ -4,22 +4,22 @@
  */
 
 var Trigger1 = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.displayName = "Trigger1, file3";
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("file3: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
 var Trigger3 = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.displayName = "Trigger3, file3";
         self.event = "e3";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("file3: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }

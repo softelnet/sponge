@@ -11,7 +11,7 @@ function onInit() {
 }
 
 var AutoAction = Java.extend(Action, {
-    run: function(self, args) {
+    onCall: function(self, args) {
         self.logger.debug("Running");
         EPS.getVariable("counter").incrementAndGet();
         return args;
@@ -19,10 +19,10 @@ var AutoAction = Java.extend(Action, {
 });
 
 var AutoFilter = Java.extend(Filter, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    accepts: function(self, event) {
+    onAccept: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
         EPS.getVariable("counter").incrementAndGet();
         return true;
@@ -30,30 +30,30 @@ var AutoFilter = Java.extend(Filter, {
 });
 
 var AutoTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
         EPS.getVariable("counter").incrementAndGet();
     }
 });
 
 var AutoRule = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running for sequence: {}", self.eventSequence);
         EPS.getVariable("counter").incrementAndGet();
     }
 });
 
 var AutoCorrelator = Java.extend(Correlator, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2"];
     },
-    acceptsAsFirst: function(self, event) {
+    onAcceptAsFirst: function(self, event) {
         return event.name == "e1";
     },
     onEvent: function(self, event) {

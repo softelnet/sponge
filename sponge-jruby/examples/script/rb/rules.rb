@@ -12,28 +12,28 @@ def onInit
 end
 
 class FirstRule < Rule
-    def configure
+    def onConfigure
         # Events specified without aliases
         self.events = ["filesystemFailure", "diskFailure"]
         self.setConditions("diskFailure", lambda { |rule, event|
             return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
         $EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
     end
 end
 
 class SameSourceAllRule < Rule
-    def configure
+    def onConfigure
         # Events specified with aliases (e1 and e2)
         self.events = ["filesystemFailure e1", "diskFailure e2 :all"]
         self.setConditions("e1", self.method(:severityCondition))
         self.setConditions("e2", self.method(:severityCondition), self.method(:diskFailureSourceCondition))
         self.duration = Duration.ofSeconds(8)
     end
-    def run(event)
+    def onRun(event)
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                                                                                           self.eventSequence)
         $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()

@@ -19,11 +19,11 @@ def onInit
 end
 
 class Trigger1 < Trigger
-    def configure
+    def onConfigure
         self.displayName = "Trigger1, file1"
         self.event = "e1"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("file1: Received event {}", event)
         $eventCounter.get(self.displayName).incrementAndGet()
     end
@@ -31,21 +31,21 @@ end
 
 
 class Trigger2 < Trigger
-    def configure
+    def onConfigure
         self.displayName = "Trigger2, file1"
         self.event = "e2"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("file1: Received event {}", event)
         $eventCounter.get(self.displayName).incrementAndGet()
     end
 end
 
 class LoadKbFile < Trigger
-    def configure
+    def onConfigure
         self.event = "loadKbFile"
     end
-    def run(event)
+    def onRun(event)
         kbFile = event.get("kbFile")
         $EPS.kb.load(kbFile)
         self.logger.info("File {} loaded", kbFile)

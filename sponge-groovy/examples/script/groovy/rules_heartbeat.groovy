@@ -13,10 +13,10 @@ void onInit() {
 class HeartbeatFilter extends Filter {
     int heartbeatCounter = 0
 
-    void configure() {
+    void onConfigure() {
         this.event = "heartbeat"
     }
-    boolean accepts(Event event) {
+    boolean onAccept(Event event) {
         this.heartbeatCounter += 1
         if (this.heartbeatCounter > 2) {
             EPS.removeEvent(EPS.getVariable("hearbeatEventEntry"))
@@ -29,20 +29,20 @@ class HeartbeatFilter extends Filter {
 
 // Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule extends Rule {
-    void configure() {
+    void onConfigure() {
         this.events = ["heartbeat h1", "heartbeat h2 :none"]
         this.duration = Duration.ofSeconds(2)
     }
-    void run(Event event) {
+    void onRun(Event event) {
         EPS.event("alarm").set("severity", 1).send()
     }
 }
 
 class AlarmTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "alarm"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         println "Sound the alarm!"
         EPS.getVariable("soundTheAlarm").set(true)
     }

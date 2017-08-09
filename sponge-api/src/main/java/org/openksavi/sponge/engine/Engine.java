@@ -48,7 +48,7 @@ public interface Engine extends EngineModule {
     String getName();
 
     /**
-     * Initialized the engine (before starting up).
+     * Initializes the engine (before starting up).
      */
     void init();
 

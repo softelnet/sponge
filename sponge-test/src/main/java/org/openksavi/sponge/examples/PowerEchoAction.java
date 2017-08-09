@@ -19,7 +19,7 @@ package org.openksavi.sponge.examples;
 public class PowerEchoAction extends org.openksavi.sponge.java.JavaAction {
 
     @Override
-    public Object run(Object... args) {
+    public Object onCall(Object... args) {
         getLogger().debug("PowerEchoAction called");
         if (args != null) {
             for (int i = 0; i < args.length; i++) {

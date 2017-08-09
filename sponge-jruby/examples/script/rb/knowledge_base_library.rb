@@ -28,13 +28,13 @@ def checkPageStatus(host)
 end
 
 class HttpStatusTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "checkStatus"
     end
-    def init
+    def onInit
         @mutex = Mutex.new
     end
-    def run(event)
+    def onRun(event)
         # Using synchronize block in this example because we are not sure that Net::HTTP is thread safe.
         @mutex.synchronize {
             status = checkPageStatus(event.get("host"))

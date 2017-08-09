@@ -7,10 +7,10 @@ var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 var TestStatus = org.openksavi.sponge.test.TestStatus;
 
 var ReloadTrigger = Java.extend(Trigger, {
-    configure : function(self) {
+    onConfigure : function(self) {
         self.event = "reload";
     },
-    run : function(self, event) {
+    onRun : function(self, event) {
         self.logger.debug("Received event: {}", event.name);
         // EPS.requestReload();
         EPS.reload();

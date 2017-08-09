@@ -49,7 +49,7 @@ public class Deduplication {
         return cache;
     }
 
-    public boolean accepts(Event event) {
+    public boolean onAccept(Event event) {
         Pair<String, Object> key = ImmutablePair.of(event.getName(), event.get(getAttributeName()));
 
         Cache<Pair<String, Object>, Boolean> cache = getCache();

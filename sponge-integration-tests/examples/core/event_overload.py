@@ -13,9 +13,9 @@ def onInit():
     EPS.setVariable("testStatus", None)
 
 class A(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "a"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("A start")
         index = 0
         while True:
@@ -32,9 +32,9 @@ class A(Trigger):
         self.logger.debug("A stop")
 
 class B(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "b"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received {}", event.name)
 
 def onStartup():

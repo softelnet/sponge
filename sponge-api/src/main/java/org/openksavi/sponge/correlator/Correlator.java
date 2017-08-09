@@ -25,12 +25,13 @@ import org.openksavi.sponge.event.Event;
 public interface Correlator extends EventSetProcessor<CorrelatorAdapter>, CorrelatorOperations {
 
     /**
-     * Checks if this event should be accepted as the first event of this correlator therefore starting the new instance.
+     * A callback method that checks if this event should be accepted as the first event of this correlator, therefore starting a new
+     * instance.
      *
      * @param event the incoming event.
-     * @return if this event should be accepted as the first event.
+     * @return {@code true} if this event should be accepted as the first event.
      */
-    boolean acceptsAsFirst(Event event);
+    boolean onAcceptAsFirst(Event event);
 
     /**
      * Callback invoked when an event happens.

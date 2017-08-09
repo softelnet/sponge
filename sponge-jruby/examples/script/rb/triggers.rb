@@ -13,20 +13,20 @@ def onInit
 end
 
 class TriggerA < Trigger
-    def configure
+    def onConfigure
         self.event = "a"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event: {}", event.name)
         $EPS.getVariable("receivedEventA").set(true)
     end
 end
 
 class TriggerB < Trigger
-    def configure
+    def onConfigure
         self.event = "b"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event: {}", event.name)
         if $EPS.getVariable("receivedEventBCount").get() == 0
             self.logger.debug("Statistics: {}", $EPS.statisticsSummary)

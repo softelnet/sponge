@@ -50,7 +50,7 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
         this.configuration = configuration;
 
         if (configure) {
-            configure(configuration);
+            onConfigure(configuration);
         }
     }
 
@@ -123,12 +123,12 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
     }
 
     @Override
-    public void init() {
+    public void onInit() {
         //
     }
 
     @Override
-    public void configure(Configuration configuration) {
+    public void onConfigure(Configuration configuration) {
         //
     }
 

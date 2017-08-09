@@ -10,10 +10,10 @@ def onInit
 end
 
 class CronTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "cronEvent"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event {}: {}", $eventCounter.get() + 1, event.name)
         if $eventCounter.get() + 1 == 2
             self.logger.debug("removing scheduled event")

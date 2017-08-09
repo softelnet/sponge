@@ -9,7 +9,7 @@ def onInit
 end
 
 class AutoAction < Action
-    def run(args)
+    def onCall(args)
         self.logger.debug("Running")
         $EPS.getVariable("counter").incrementAndGet()
         return args
@@ -17,10 +17,10 @@ class AutoAction < Action
 end
 
 class AutoFilter < Filter
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def accepts(event)
+    def onAccept(event)
         self.logger.debug("Received event: {}", event.name)
         $EPS.getVariable("counter").incrementAndGet()
         return true
@@ -28,30 +28,30 @@ class AutoFilter < Filter
 end
 
 class AutoTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event: {}", event.name)
         $EPS.getVariable("counter").incrementAndGet()
     end
 end
 
 class AutoRule < Rule
-    def configure
+    def onConfigure
         self.events = ["e1", "e2"]
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Running for sequence: {}", self.eventSequence)
         $EPS.getVariable("counter").incrementAndGet()
     end
 end
 
 class AutoCorrelator < Correlator
-    def configure
+    def onConfigure
         self.events = ["e1", "e2"]
     end
-    def acceptsAsFirst(event)
+    def onAcceptAsFirst(event)
         return event.name == "e1"
     end
     def onEvent(event)

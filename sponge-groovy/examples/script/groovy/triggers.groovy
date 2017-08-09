@@ -14,20 +14,20 @@ void onInit() {
 }
 
 class TriggerA extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "a"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
         EPS.getVariable("receivedEventA").set(true)
     }
 }
 
 class TriggerB extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "b"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
         def receivedEventBCount = EPS.getVariable("receivedEventBCount")
         if (receivedEventBCount.get() == 0) {

@@ -12,19 +12,19 @@ def onInit():
     EPS.setVariable("sentCamelMessage_spongeProducer", AtomicBoolean(False))
 
 class CamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "camelEvent"
-    def run(self, event):
+    def onRun(self, event):
         print event.body
         EPS.getVariable("sentCamelMessage_" + event.name).set(True)
 
 class UnusedCamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spongeProducer"
-    def run(self, event):
+    def onRun(self, event):
         print event.body
         EPS.getVariable("sentCamelMessage_" + event.name).set(True)
 
 class CamelProducerAction(Action):
-    def run(self, args):
+    def onCall(self, args):
         return EPS.event(camel.makeInputEvent("camelEvent", args[0])).send()

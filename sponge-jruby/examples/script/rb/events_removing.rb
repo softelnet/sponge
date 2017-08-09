@@ -11,10 +11,10 @@ def onInit
 end
 
 class Trigger1 < Trigger
-    def configure
+    def onConfigure
         self.event = "e1"
     end
-    def run(event)
+    def onRun(event)
     	$eventCounter.incrementAndGet
         self.logger.debug("Received event {}, counter: {}", event.name, $eventCounter)
         if $eventCounter.get() > $EPS.getVariable("allowNumber")
@@ -24,10 +24,10 @@ class Trigger1 < Trigger
 end
 
 class Trigger2 < Trigger
-    def configure
+    def onConfigure
         self.event = "e2"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Removing entry")
         $EPS.removeEvent($eventEntry)
     end

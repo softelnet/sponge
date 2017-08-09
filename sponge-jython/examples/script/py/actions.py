@@ -11,9 +11,9 @@ def onInit():
     EPS.setVariable("javaActionResult", None)
 
 class EchoAction(Action):
-    def configure(self):
+    def onConfigure(self):
         self.displayName = "Echo Action"
-    def run(self, args):
+    def onCall(self, args):
         self.logger.info("Action {} called", self.name)
         if (args is not None):
             for arg in args:

@@ -11,10 +11,10 @@ function onInit() {
 }
 
 var CronTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "cronEvent";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         eventCounter = EPS.getVariable("eventCounter")
         self.logger.debug("Received event {}: {}", eventCounter.get() + 1, event.name);
         if (eventCounter.get() + 1 == 2) {

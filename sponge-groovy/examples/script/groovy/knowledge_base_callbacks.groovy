@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.*
 import org.openksavi.sponge.test.TestStatus
 
 class ReloadTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "reload"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
         EPS.reload()
     }

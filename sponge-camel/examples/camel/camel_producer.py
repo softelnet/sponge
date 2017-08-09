@@ -10,8 +10,8 @@ def onInit():
     EPS.setVariable("sentCamelMessage", AtomicBoolean(False))
 
 class CamelTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spongeProducer"
-    def run(self, event):
+    def onRun(self, event):
         print event.body
         EPS.getVariable("sentCamelMessage").set(True)

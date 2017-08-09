@@ -26,12 +26,12 @@ public class SampleJavaTrigger extends org.openksavi.sponge.java.JavaTrigger {
     private static final Logger logger = LoggerFactory.getLogger(SampleJavaTrigger.class);
 
     @Override
-    public void configure() {
+    public void onConfigure() {
         setEventName("testJava");
     }
 
     @Override
-    public void run(Event event) {
+    public void onRun(Event event) {
         getEps().setVariable("receivedEventTestJavaCount", getEps().getVariable(Number.class, "receivedEventTestJavaCount").intValue() + 1);
         logger.debug("TRIGGER TEST from Java");
     }

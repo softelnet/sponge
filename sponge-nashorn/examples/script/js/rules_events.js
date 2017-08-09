@@ -14,31 +14,31 @@ function onInit() {
 
 // Naming F(irst), L(ast), A(ll), N(one)
 var RuleF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         correlationEventsLog.addEvents("RuleF", self)
     }
 });
 
 // F(irst)F(irst)F(irst)
 var RuleFFF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :first"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);
         correlationEventsLog.addEvents("RuleFFF", self);
     }
 });
 
 var RuleFFFDuration = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :first"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);
         correlationEventsLog.addEvents("RuleFFFDuration", self);
     }
@@ -46,11 +46,11 @@ var RuleFFFDuration = Java.extend(Rule, {
 
 // F(irst)F(irst)L(ast)
 var RuleFFL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :last"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);
         correlationEventsLog.addEvents("RuleFFL", self);
     }
@@ -58,11 +58,11 @@ var RuleFFL = Java.extend(Rule, {
 
 // F(irst)F(irst)A(ll)
 var RuleFFA = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :all"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFFA", self);
     }
@@ -70,11 +70,11 @@ var RuleFFA = Java.extend(Rule, {
 
 // F(irst)F(irst)N(one)
 var RuleFFN = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2", "e4 :none"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFFN", self);
     }
@@ -82,11 +82,11 @@ var RuleFFN = Java.extend(Rule, {
 
 // F(irst)L(ast)F(irst)
 var RuleFLF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :last", "e3 :first"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFLF", self);
     }
@@ -94,11 +94,11 @@ var RuleFLF = Java.extend(Rule, {
 
 // F(irst)L(ast)L(ast)
 var RuleFLL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :last", "e3 :last"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFLL", self);
     }
@@ -106,11 +106,11 @@ var RuleFLL = Java.extend(Rule, {
 
 // F(irst)L(ast)A(ll)
 var RuleFLA = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :last", "e3 :all"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFLA", self);
     }
@@ -118,11 +118,11 @@ var RuleFLA = Java.extend(Rule, {
 
 // F(irst)L(ast)N(one)
 var RuleFLN = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :last", "e4 :none"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFLN", self);
     }
@@ -130,11 +130,11 @@ var RuleFLN = Java.extend(Rule, {
 
 // F(irst)A(ll)F(irst)
 var RuleFAF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :all", "e3 :first"];
         self.duration = Duration.ofMillis(defaultDuration)
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFAF", self);
     }
@@ -142,11 +142,11 @@ var RuleFAF = Java.extend(Rule, {
 
 // F(irst)A(ll)L(ast)
 var RuleFAL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :all", "e3 :last"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFAL", self);
     }
@@ -154,11 +154,11 @@ var RuleFAL = Java.extend(Rule, {
 
 // F(irst)A(ll)A(ll)
 var RuleFAA = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :all", "e3 :all"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence);
         correlationEventsLog.addEvents("RuleFAA", self);
     }
@@ -166,11 +166,11 @@ var RuleFAA = Java.extend(Rule, {
 
 // F(irst)A(ll)N(one)
 var RuleFAN = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :all", "e5 :none"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFAN", self);
     }
@@ -178,10 +178,10 @@ var RuleFAN = Java.extend(Rule, {
 
 // F(irst)N(one)F(irst)
 var RuleFNF = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e3"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFNF", self);
     }
@@ -189,11 +189,11 @@ var RuleFNF = Java.extend(Rule, {
 
 // F(irst)N(one)L(ast)
 var RuleFNL = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e3 :last"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFNL", self);
     }
@@ -201,22 +201,22 @@ var RuleFNL = Java.extend(Rule, {
 
 // F(irst)N(one)A(ll)
 var RuleFNA = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e5 :none", "e3 :all"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFNA", self);
     }
 });
 
 var RuleFNFReject = Java.extend(Rule, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["e1", "e2 :none", "e3"];
         self.duration = Duration.ofMillis(defaultDuration);
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Running rule for sequence: {}", self.eventSequence);
         correlationEventsLog.addEvents("RuleFNFReject", self);
     }

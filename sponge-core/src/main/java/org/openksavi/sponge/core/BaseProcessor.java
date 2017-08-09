@@ -32,7 +32,7 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     private T adapter;
 
     @Override
-    public void init() {
+    public void onInit() {
         //
     }
 

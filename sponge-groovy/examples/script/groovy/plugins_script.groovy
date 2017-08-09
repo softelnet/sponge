@@ -12,10 +12,10 @@ void onInit() {
 // Example plugin defined in the knowledge base.
 class ScriptPlugin extends Plugin {
     String storedValue
-    void configure(Configuration configuration) {
+    void onConfigure(Configuration configuration) {
         this.storedValue = configuration.getString("storedValue", "default")
     }
-    void init() {
+    void onInit() {
         this.logger.debug("Initializing {}", this.name)
     }
     void onStartup() {
@@ -25,15 +25,15 @@ class ScriptPlugin extends Plugin {
 
 
 class PluginTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "e1"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         def scriptPlugin = EPS.getPlugin("scriptPlugin")
         def valueBefore = scriptPlugin.getStoredValue()
-    	EPS.setVariable("valueBefore", valueBefore)
-    	this.logger.info("Plugin stored value: {}", valueBefore)
-    	scriptPlugin.setStoredValue(event.get("value"))
+    	    EPS.setVariable("valueBefore", valueBefore)
+       	this.logger.info("Plugin stored value: {}", valueBefore)
+        scriptPlugin.setStoredValue(event.get("value"))
         def valueAfter = scriptPlugin.getStoredValue()
         EPS.setVariable("valueAfter", valueAfter)
         this.logger.info("New stored value: {}", valueAfter)

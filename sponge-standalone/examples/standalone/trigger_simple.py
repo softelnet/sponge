@@ -4,7 +4,7 @@ Interactive mode example
 """
 
 class AlarmTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "alarm"
-    def run(self, event):
+    def onRun(self, event):
         print "Sound the alarm!"

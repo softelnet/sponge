@@ -20,27 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.openksavi.sponge.event.Event;
 
 public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelator {
 
-    private static final Logger logger = LoggerFactory.getLogger(SampleJavaCorrelator.class);
-
     private List<Event> eventLog = new ArrayList<>();
 
     @Override
-    public void configure() {
+    public void onConfigure() {
         setEvents("filesystemFailure", "diskFailure");
         setMaxInstances(1);
     }
 
     @Override
+    public boolean onAcceptAsFirst(Event event) {
+        return event.getName().equals("filesystemFailure");
+    }
+
+    @Override
     public void onEvent(Event event) {
         eventLog.add(event);
-        logger.debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog);
+        getLogger().debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog);
         getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
         if (eventLog.size() >= 4) {
             getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaFinishCount").incrementAndGet();

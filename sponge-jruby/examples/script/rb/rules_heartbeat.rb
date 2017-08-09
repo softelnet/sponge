@@ -9,13 +9,13 @@ def onInit
 end
 
 class HeartbeatFilter < Filter
-    def configure
+    def onConfigure
         self.event = "heartbeat"
     end
-    def init
+    def onInit
         @heartbeatCounter = 0
     end
-    def accepts(event)
+    def onAccept(event)
         @heartbeatCounter += 1
         if @heartbeatCounter > 2
             $EPS.removeEvent($hearbeatEventEntry)
@@ -28,20 +28,20 @@ end
 
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule < Rule
-    def configure
+    def onConfigure
         self.events = ["heartbeat h1", "heartbeat h2 :none"]
         self.duration = Duration.ofSeconds(2)
     end
-    def run(event)
+    def onRun(event)
         $EPS.event("alarm").set("severity", 1).send()
     end
 end
 
 class AlarmTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "alarm"
     end
-    def run(event)
+    def onRun(event)
         puts "Sound the alarm!"
         $EPS.getVariable("soundTheAlarm").set(true)
     end

@@ -20,22 +20,22 @@ void onInit() {
 
 class ColorDeduplicationFilter extends Filter {
     def deduplication = new Deduplication("color")
-    void configure() {
+    void onConfigure() {
         this.event = "e1"
     }
     void init() {
         this.deduplication.cacheBuilder.maximumSize(1000).expireAfterWrite(5, TimeUnit.MINUTES)
     }
-    boolean accepts(Event event) {
-        return this.deduplication.accepts(event)
+    boolean onAccept(Event event) {
+        return this.deduplication.onAccept(event)
     }
 }
 
 class ColorTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.events = ["e1", "e2"]
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Received event {}", event)
         EPS.getVariable("eventCounter").get(event.name + "-" + event.get("color")).incrementAndGet()
     }

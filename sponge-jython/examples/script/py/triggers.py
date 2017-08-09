@@ -13,16 +13,16 @@ def onInit():
     EPS.setVariable("receivedEventTestJavaCount", AtomicInteger(0))
 
 class TriggerA(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "a"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         EPS.getVariable("receivedEventA").set(True)
 
 class TriggerB(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "b"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         receivedEventBCount = EPS.getVariable("receivedEventBCount")
         if receivedEventBCount.get() == 0:

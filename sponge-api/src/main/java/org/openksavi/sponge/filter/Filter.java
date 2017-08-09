@@ -25,10 +25,10 @@ import org.openksavi.sponge.event.Event;
 public interface Filter extends EventProcessor<FilterAdapter> {
 
     /**
-     * Informs whether the specified event is to be accepted.
+     * A callback method that informs whether the specified event is to be accepted.
      *
      * @param event event.
-     * @return whether the specified event is to be accepted.
+     * @return {@code true} if the specified event is to be accepted.
      */
-    boolean accepts(Event event);
+    boolean onAccept(Event event);
 }

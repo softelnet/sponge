@@ -23,14 +23,8 @@ import org.openksavi.sponge.trigger.TriggerAdapter;
 
 public abstract class BaseTrigger extends BaseEventProcessor<TriggerAdapter> implements Trigger {
 
-    /**
-     * Informs whether the specified event is to be accepted.
-     *
-     * @param event event.
-     * @return whether the specified event is to be accepted.
-     */
     @Override
-    public boolean accepts(Event event) {
+    public boolean onAccept(Event event) {
         return true;
     }
 

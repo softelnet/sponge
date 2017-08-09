@@ -222,12 +222,12 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     }
 
     protected void initializeProcessor(Processor processor) {
-        processor.configure();
+        processor.onConfigure();
 
         processor.getAdapter().validate();
 
         if (processor.getAdapter().getDefinition().isSingleton()) {
-            processor.init();
+            processor.onInit();
         }
     }
 

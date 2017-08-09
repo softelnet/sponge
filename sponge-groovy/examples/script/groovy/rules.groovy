@@ -14,28 +14,28 @@ void onInit() {
 }
 
 class FirstRule extends Rule {
-    void configure() {
+    void onConfigure() {
         // Events specified without aliases
         this.events = ["filesystemFailure", "diskFailure"]
         this.setConditions("diskFailure", { rule, event ->
                 return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
     }
 }
 
 class SameSourceAllRule extends Rule {
-    void configure() {
+    void onConfigure() {
         // Events specified with aliases (e1 and e2)
         this.events = ["filesystemFailure e1", "diskFailure e2 :all"]
         this.setConditions("e1", this.&severityCondition)
         this.setConditions("e2", this.&severityCondition, this.&diskFailureSourceCondition)
         this.duration = Duration.ofSeconds(8)
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                                                                                           this.eventSequence)
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()

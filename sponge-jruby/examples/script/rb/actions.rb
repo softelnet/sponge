@@ -10,10 +10,10 @@ def onInit
 end
 
 class EchoAction < Action
-    def configure
+    def onConfigure
         self.displayName = "Echo Action"
     end
-    def run(args)
+    def onCall(args)
         self.logger.info("Action {} called", self.name)
         if !args.nil?
             for arg in args

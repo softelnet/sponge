@@ -4,10 +4,10 @@
  */
 
 var HelloWorldTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "helloEvent";
     },
-    run : function(self, event) {
+    onRun : function(self, event) {
         whatIsThis.doSomething();
         print(event.get("say"));
     }

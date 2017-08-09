@@ -23,7 +23,7 @@ import org.openksavi.sponge.core.BaseProcessor;
 public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements Action {
 
     @Override
-    public void configure() {
+    public void onConfigure() {
         //
     }
 

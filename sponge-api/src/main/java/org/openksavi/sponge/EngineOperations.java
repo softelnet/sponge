@@ -47,6 +47,16 @@ public interface EngineOperations {
     Object callAction(String actionName, Object... args);
 
     /**
+     * Shuts down the engine using the current thread.
+     */
+    void shutdown();
+
+    /**
+     * Shuts down the engine using another thread.
+     */
+    void requestShutdown();
+
+    /**
      * Reloads script-based knowledge bases.
      */
     void reload();
@@ -305,7 +315,7 @@ public interface EngineOperations {
     boolean existsCorrelator(String name);
 
     /**
-     * Sets the global variable value.
+     * Sets the engine scope variable.
      *
      * @param name variable name.
      * @param value variable value.
@@ -313,7 +323,7 @@ public interface EngineOperations {
     void setVariable(String name, Object value);
 
     /**
-     * Returns the value of the global variable. Throws exception if not found.
+     * Returns the value of the engine scope variable. Throws exception if not found.
      *
      * @param name variable name.
      * @return variable value.
@@ -321,7 +331,7 @@ public interface EngineOperations {
     Object getVariable(String name);
 
     /**
-     * Returns the value of the global variable. Throws exception if not found.
+     * Returns the value of the engine scope variable. Throws exception if not found.
      *
      * @param cls variable class.
      * @param name variable name.
@@ -332,7 +342,7 @@ public interface EngineOperations {
     <T> T getVariable(Class<T> cls, String name);
 
     /**
-     * Returns the value of the global variable or {@code defaultValue} if not found.
+     * Returns the value of the engine scope variable or {@code defaultValue} if not found.
      *
      * @param name variable name.
      * @param defaultValue default value.
@@ -343,7 +353,7 @@ public interface EngineOperations {
     <T> T getVariable(String name, T defaultValue);
 
     /**
-     * Returns the value of the global variable or {@code defaultValue} if not found.
+     * Returns the value of the engine scope variable or {@code defaultValue} if not found.
      *
      * @param cls variable class.
      * @param name variable name.
@@ -355,22 +365,22 @@ public interface EngineOperations {
     <T> T getVariable(Class<T> cls, String name, T defaultValue);
 
     /**
-     * Removes a global variable.
+     * Removes the engine scope variable.
      *
      * @param name variable name.
      */
     void removeVariable(String name);
 
     /**
-     * Returns {@code true} if a global variable named {@code name} exists.
+     * Returns {@code true} if the engine scope variable named {@code name} exists.
      *
      * @param name variable name.
-     * @return {@code true} if a global variable named {@code name} exists.
+     * @return {@code true} if the engine scope variable named {@code name} exists.
      */
     boolean existsVariable(String name);
 
     /**
-     * Sets the global variable if not set already.
+     * Sets the engine scope variable if not set already.
      *
      * @param name variable name.
      * @param supplier variable value supplier.
@@ -379,7 +389,7 @@ public interface EngineOperations {
     <T> void setVariableIfNone(String name, Supplier<T> supplier);
 
     /**
-     * Updates the global variable.
+     * Updates the engine scope variable.
      *
      * @param name variable name.
      */

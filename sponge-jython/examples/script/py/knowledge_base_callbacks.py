@@ -7,9 +7,9 @@ from java.util.concurrent.atomic import AtomicBoolean, AtomicInteger
 from org.openksavi.sponge.test import TestStatus
 
 class ReloadTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "reload"
-    def run(self, event):
+    def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         # EPS.requestReload()
         EPS.reload()

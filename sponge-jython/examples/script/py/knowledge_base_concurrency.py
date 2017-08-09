@@ -11,27 +11,27 @@ def onInit():
     EPS.setVariable("value", AtomicReference(""))
 
 class A(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "a"
-    def run(self, event):
+    def onRun(self, event):
         TimeUnit.SECONDS.sleep(1)
         EPS.getVariable("value").set("A1")
         TimeUnit.SECONDS.sleep(3)
         EPS.getVariable("value").set("A2")
 
 class B(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "b"
-    def run(self, event):
+    def onRun(self, event):
         TimeUnit.SECONDS.sleep(2)
         EPS.getVariable("value").set("B1")
         TimeUnit.SECONDS.sleep(4)
         EPS.getVariable("value").set("B2")
 
 class C(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "c"
-    def run(self, event):
+    def onRun(self, event):
         TimeUnit.SECONDS.sleep(8)
         EPS.getVariable("value").set("C1")
         TimeUnit.SECONDS.sleep(1)

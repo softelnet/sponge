@@ -37,7 +37,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     KnowledgeBase getKnowledgeBase();
 
     /**
-     * Enables Java-based processor.
+     * Enables the Java-based processor.
      *
      * @param processorClass Java-based processor class.
      */
@@ -53,7 +53,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     void enableJavaAll(Class<? extends Processor>... processorClasses);
 
     /**
-     * Disables Java-based processor.
+     * Disables the Java-based processor.
      *
      * @param processorClass Java-based processor class.
      */
@@ -69,70 +69,70 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     void disableJavaAll(Class<? extends Processor>... processorClasses);
 
     /**
-     * Enables Java-based filter.
+     * Enables the Java-based filter.
      *
      * @param filterClass filter Java class.
      */
     void enableJavaFilter(Class<? extends Filter> filterClass);
 
     /**
-     * Disables Java-based filter.
+     * Disables the Java-based filter.
      *
      * @param filterClass filter Java class.
      */
     void disableJavaFilter(Class<? extends Filter> filterClass);
 
     /**
-     * Enables Java-based trigger.
+     * Enables the Java-based trigger.
      *
      * @param triggerClass trigger Java class.
      */
     void enableJavaTrigger(Class<? extends Trigger> triggerClass);
 
     /**
-     * Disables Java-based trigger.
+     * Disables the Java-based trigger.
      *
      * @param triggerClass trigger Java class.
      */
     void disableJavaTrigger(Class<? extends Trigger> triggerClass);
 
     /**
-     * Enables Java-based rule.
+     * Enables the Java-based rule.
      *
      * @param ruleClass rule Java class.
      */
     void enableJavaRule(Class<? extends Rule> ruleClass);
 
     /**
-     * Disables Java-based rule.
+     * Disables the Java-based rule.
      *
      * @param ruleClass rule Java class.
      */
     void disableJavaRule(Class<? extends Rule> ruleClass);
 
     /**
-     * Enables Java-based correlator.
+     * Enables the Java-based correlator.
      *
      * @param correlatorClass correlator Java class.
      */
     void enableJavaCorrelator(Class<? extends Correlator> correlatorClass);
 
     /**
-     * Disables Java-based correlator.
+     * Disables the Java-based correlator.
      *
      * @param correlatorClass correlator Java class.
      */
     void disableJavaCorrelator(Class<? extends Correlator> correlatorClass);
 
     /**
-     * Enables Java-based action.
+     * Enables the Java-based action.
      *
      * @param actionClass action Java class.
      */
     void enableJavaAction(Class<? extends Action> actionClass);
 
     /**
-     * Disables Java-based action.
+     * Disables the Java-based action.
      *
      * @param actionClass action Java class.
      */

@@ -12,12 +12,12 @@ function onInit() {
 }
 
 var Trigger1 = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         eventCounter = EPS.getVariable("eventCounter")
-    	eventCounter++;
+        eventCounter++;
         EPS.setVariable("eventCounter", eventCounter);
         self.logger.debug("Received event {}, counter: {}", event.name, eventCounter);
         if (eventCounter > EPS.getVariable("allowNumber")) {
@@ -27,10 +27,10 @@ var Trigger1 = Java.extend(Trigger, {
 });
 
 var Trigger2 = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "e2";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Removing entry");
         EPS.removeEvent(EPS.getVariable("eventEntry"));
     }

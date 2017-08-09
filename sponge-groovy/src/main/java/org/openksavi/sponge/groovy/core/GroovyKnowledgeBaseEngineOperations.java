@@ -41,9 +41,9 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     }
 
     /**
-     * Enables a processor.
+     * Enables the processor.
      *
-     * @param processorClass a processor class.
+     * @param processorClass the processor class.
      */
     public void enable(Class processorClass) {
         engine.getProcessorManager().enable(getKnowledgeBase(), wrapClass(processorClass));

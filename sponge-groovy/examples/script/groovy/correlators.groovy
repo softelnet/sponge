@@ -18,9 +18,12 @@ void onInit() {
 class SampleCorrelator extends Correlator {
     def eventLog = []
 
-    void configure() {
+    void onConfigure() {
         this.events = ["filesystemFailure", "diskFailure"]
         this.maxInstances = 1
+    }
+    boolean onAcceptAsFirst(Event event) {
+        return event.name == "filesystemFailure"
     }
     void onEvent(Event event) {
         this.eventLog << event

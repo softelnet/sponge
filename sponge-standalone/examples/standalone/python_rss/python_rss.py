@@ -14,9 +14,9 @@ def onInit():
     EPS.setVariable("receivedRssCount", AtomicInteger(0))
 
 class RssTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "rss"
-    def run(self, event):
+    def onRun(self, event):
         camel.send("[" + event.get("channel") + "] " + event.get("title"))
 
 class PythonRoute(ScriptRouteBuilder):

@@ -10,9 +10,9 @@ def onInit():
     EPS.setVariable("springBeanValue", None)
 
 class SpringTrigger(Trigger):
-    def configure(self):
+    def onConfigure(self):
         self.event = "spring"
-    def run(self, event):
+    def onRun(self, event):
         beanValue = spring.context.getBean("testBean")
         self.logger.debug("Bean value = {}", beanValue)
         EPS.setVariable("springBeanValue", beanValue)

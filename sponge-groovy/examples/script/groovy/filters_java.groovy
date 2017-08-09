@@ -16,10 +16,10 @@ void onInit() {
 }
 
 class FilterTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.setEvents("e1", "e2", "e3")
     }
-    void run(Event event) {
+    void onRun(Event event) {
         this.logger.debug("Processing trigger for event {}", event)
         EPS.getVariable("eventCounter").get(event.name).incrementAndGet()
     }

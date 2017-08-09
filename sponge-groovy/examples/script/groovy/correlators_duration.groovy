@@ -14,11 +14,11 @@ class SampleCorrelator extends Correlator {
     static AtomicBoolean instanceStarted = new AtomicBoolean(false)
     def eventLog = []
 
-    void configure() {
+    void onConfigure() {
         this.events = ["filesystemFailure", "diskFailure"]
         this.duration = Duration.ofSeconds(2)
     }
-    boolean acceptsAsFirst(Event event) {
+    boolean onAcceptAsFirst(Event event) {
         return instanceStarted.compareAndSet(false, true)
     }
     void onEvent(Event event) {

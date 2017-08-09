@@ -15,10 +15,10 @@ function onInit() {
 }
 
 var FilterTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.setEvents("e1", "e2", "e3");
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("Processing trigger for event {}", event);
         EPS.getVariable("eventCounter").get(event.name).incrementAndGet();
     }

@@ -27,11 +27,11 @@ import org.openksavi.sponge.event.Event;
 public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
 
     /**
-     * Runs (fires) this rule.
+     * A callback method invoked when this rule fires.
      *
      * @param event event.
      */
-    void run(Event event);
+    void onRun(Event event);
 
     /**
      * Returns an event that has a specified alias.

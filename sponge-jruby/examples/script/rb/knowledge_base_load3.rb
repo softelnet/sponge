@@ -2,22 +2,22 @@
 # Loading knowledge bases
 
 class Trigger1 < Trigger
-    def configure
+    def onConfigure
         self.displayName = "Trigger1, file3"
         self.event = "e1"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("file3: Received event {}", event)
         $eventCounter.get(self.displayName).incrementAndGet()
     end
 end
 
 class Trigger3 < Trigger
-    def configure
+    def onConfigure
         self.displayName = "Trigger3, file3"
         self.event = "e3"
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("file3: Received event {}", event)
         $eventCounter.get(self.displayName).incrementAndGet()
     end

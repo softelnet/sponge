@@ -12,10 +12,10 @@ void onInit() {
 }
 
 class HttpStatusTrigger extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "checkStatus"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         String status = checkPageStatus(event.get("host"))
         EPS.getVariable("hostStatus").put(event.get("host"), status)
     }

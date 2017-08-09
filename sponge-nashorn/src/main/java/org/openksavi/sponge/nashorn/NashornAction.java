@@ -40,27 +40,27 @@ public abstract class NashornAction extends org.openksavi.sponge.core.action.Bas
     }
 
     @Override
-    public final void configure() {
-        configure(getSelf());
+    public final void onConfigure() {
+        onConfigure(getSelf());
     }
 
-    public void configure(Object self) {
+    public void onConfigure(Object self) {
         //
     }
 
     @Override
-    public final void init() {
-        init(getSelf());
+    public final void onInit() {
+        onInit(getSelf());
     }
 
-    public void init(Object self) {
+    public void onInit(Object self) {
         //
     }
 
     @Override
-    public final Object run(Object... args) {
-        return run(getSelf(), args);
+    public final Object onCall(Object... args) {
+        return onCall(getSelf(), args);
     }
 
-    public abstract Object run(Object self, Object... args);
+    public abstract Object onCall(Object self, Object... args);
 }

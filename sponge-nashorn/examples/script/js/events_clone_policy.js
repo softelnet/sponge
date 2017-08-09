@@ -13,17 +13,17 @@ function onInit() {
 }
 
 var ClonePolicyTrigger = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"];
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         var events = EPS.getVariable("events");
         events.get(event.name).add(event);
-    	self.logger.debug("Processing event: {}", event.name);
-    	var map = event.get("map");
-    	self.logger.debug("map attribute (before): {}", map);
-    	map.put("a", "Value " + events.get(event.name).size());
-    	self.logger.debug("map attribute (after): {}", map);
+        	self.logger.debug("Processing event: {}", event.name);
+        	var map = event.get("map");
+        	self.logger.debug("map attribute (before): {}", map);
+        	map.put("a", "Value " + events.get(event.name).size());
+        	self.logger.debug("map attribute (after): {}", map);
     }
 });
 

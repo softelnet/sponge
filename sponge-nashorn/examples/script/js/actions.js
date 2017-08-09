@@ -10,10 +10,10 @@ function onInit() {
 }
 
 var EchoAction = Java.extend(Action, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.displayName = "Echo Action";
     },
-    run: function(self, args) {
+    onCall: function(self, args) {
         self.logger.info("Action {} called", self.name);
         if (args != null) {
             for each (var arg in args) {

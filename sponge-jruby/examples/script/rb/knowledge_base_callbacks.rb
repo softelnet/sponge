@@ -6,11 +6,11 @@ java_import java.util.concurrent.atomic.AtomicInteger
 java_import org.openksavi.sponge.test.TestStatus
 
 class ReloadTrigger < Trigger
-    def configure
+    def onConfigure
         self.event = "reload"
     end
 
-    def run(event)
+    def onRun(event)
         self.logger.debug("Received event: {}", event.name)
         # $EPS.requestReload()
         $EPS.reload()

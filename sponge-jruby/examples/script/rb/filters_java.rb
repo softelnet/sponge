@@ -16,10 +16,10 @@ def onInit
 end
 
 class FilterTrigger < Trigger
-    def configure
+    def onConfigure
         self.setEvents("e1", "e2", "e3")
     end
-    def run(event)
+    def onRun(event)
         self.logger.debug("Processing trigger for event {}", event)
         $eventCounter.get(event.name).incrementAndGet()
     end

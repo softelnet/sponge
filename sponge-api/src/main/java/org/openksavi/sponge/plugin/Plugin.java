@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.plugin;
 
-import org.openksavi.sponge.config.Configurable;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.engine.EngineModule;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -24,7 +23,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
 /**
  * A plugin.
  */
-public interface Plugin extends EngineModule, Configurable {
+public interface Plugin extends EngineModule {
 
     /**
      * Sets a plugin configuration.
@@ -33,6 +32,13 @@ public interface Plugin extends EngineModule, Configurable {
      * @param configure whether this configuration should be applied immediately.
      */
     void setConfiguration(Configuration configuration, boolean configure);
+
+    /**
+     * A callback method that applies a configuration.
+     *
+     * @param configuration configuration.
+     */
+    void onConfigure(Configuration configuration);
 
     /**
      * Returns a plugin configuration.
@@ -44,7 +50,7 @@ public interface Plugin extends EngineModule, Configurable {
     /**
      * Initializes the plugin.
      */
-    void init();
+    void onInit();
 
     /**
      * On startup callback method.

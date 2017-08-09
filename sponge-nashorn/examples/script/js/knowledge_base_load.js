@@ -21,32 +21,32 @@ function onInit() {
 
 }
 var Trigger1 = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.displayName = "Trigger1, file1";
         self.event = "e1";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("file1: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
 var Trigger2 = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.displayName = "Trigger2, file1";
         self.event = "e2";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         self.logger.debug("file1: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
 var LoadKbFile = Java.extend(Trigger, {
-    configure: function(self) {
+    onConfigure: function(self) {
         self.event = "loadKbFile";
     },
-    run: function(self, event) {
+    onRun: function(self, event) {
         var kbFile = event.get("kbFile");
         EPS.kb.load(kbFile);
         self.logger.info("File {} loaded", kbFile);

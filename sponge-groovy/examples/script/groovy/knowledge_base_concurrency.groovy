@@ -12,10 +12,10 @@ void onInit() {
 }
 
 class A extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "a"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         TimeUnit.SECONDS.sleep(1)
         EPS.getVariable("value").set("A1")
         TimeUnit.SECONDS.sleep(3)
@@ -24,10 +24,10 @@ class A extends Trigger {
 }
 
 class B extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "b"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         TimeUnit.SECONDS.sleep(2)
         EPS.getVariable("value").set("B1")
         TimeUnit.SECONDS.sleep(4)
@@ -36,10 +36,10 @@ class B extends Trigger {
 }
 
 class C extends Trigger {
-    void configure() {
+    void onConfigure() {
         this.event = "c"
     }
-    void run(Event event) {
+    void onRun(Event event) {
         TimeUnit.SECONDS.sleep(8)
         EPS.getVariable("value").set("C1")
         TimeUnit.SECONDS.sleep(1)
