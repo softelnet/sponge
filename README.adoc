@@ -1,5 +1,5 @@
 = Sponge
-:url: http://www.openksavi.org/sponge
+:url: http://sponge.openksavi.org
 :sponge: Sponge
 
 This is a source code repository for an open source, Apache licensed, Java based Event Processing System.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Softelnet.
+ * Copyright 2016-2017 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -246,7 +246,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
             }
         }
 
-        String header = "Run " + VersionInfo.PRODUCT + " standalone command-line application.\n\n";
+        String header = "Run the " + VersionInfo.PRODUCT + " standalone command-line application.\n\n";
         String leftPadding = StringUtils.repeat(' ', formatter.getLeftPadding());
         //@formatter:off
         String footer = new StringBuilder()
@@ -259,7 +259,8 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
                 .append(leftPadding + "./" + EXECUTABLE_NAME
                         + " -k ../examples/standalone/multiple_kb_files/event_processors.py"
                         + ",../examples/standalone/multiple_kb_files/example2.py\n")
-                .append("\nSee http://www.openksavi.org/sponge for more details.").toString();
+                .append("\nPress CTRL+C to exit the " + VersionInfo.PRODUCT + " standalone command-line application.\n")
+                .append("\nSee http://sponge.openksavi.org for more details.").toString();
         //@formatter:on
         formatter.printHelp(EXECUTABLE_NAME, header, options, footer, true);
     }

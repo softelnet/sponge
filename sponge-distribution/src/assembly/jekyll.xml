@@ -50,7 +50,7 @@
         </fileSet>
 
         <fileSet>
-            <directory>${project.build.directory}/apidocs</directory>
+            <directory>${project.build.directory}/aggregated_javadoc</directory>
             <outputDirectory>docs/javadoc</outputDirectory>
         </fileSet>
         <fileSet>
@@ -61,7 +61,7 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.build.directory}</directory>
+            <directory>${project.build.directory}/standalone</directory>
             <outputDirectory>download</outputDirectory>
             <includes>
                 <include>${standalonePackageName}-standalone.*</include>

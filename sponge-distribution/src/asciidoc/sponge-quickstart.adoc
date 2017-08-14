@@ -162,7 +162,7 @@ cd bin
 Hello World!
 ----
 +
-Press `CTRL+C` to exit the {sponge} standalone command-line application.
+The {sponge} standalone command-line application continues listening to events in an endless loop. Press `CTRL+C` to exit.
 * Run {sponge} example using the knowledge base file
 +
 [source,bash,subs="verbatim,attributes"]

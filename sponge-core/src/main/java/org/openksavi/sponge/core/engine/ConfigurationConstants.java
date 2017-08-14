@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Softelnet.
+ * Copyright 2016-2017 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package org.openksavi.sponge.core.engine;
  */
 public final class ConfigurationConstants {
 
-    public static final String CONFIG_SCHEMA = "http://www.openksavi.org/sponge/schema/config.xsd";
+    public static final String CONFIG_SCHEMA = "http://sponge.openksavi.org/schema/config.xsd";
 
     public static final String CONFIG_SCHEMA_LOCATION = "/org/openksavi/sponge/schema/config.xsd";
 

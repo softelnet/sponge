@@ -115,20 +115,20 @@
             <directory>${project.build.directory}/generated-docs</directory>
             <outputDirectory>docs</outputDirectory>
             <excludes>
-                <exclude>*.dia</exclude>
-                <exclude>*.di*</exclude>
+                <exclude>images/*.di*</exclude>
                 <exclude>*-developer-guide.*</exclude>
                 <exclude>*-quickstart.html</exclude>
                 <exclude>*-user-guide.html</exclude>
+                <exclude>includes/</exclude>
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>${project.build.directory}/apidocs</directory>
+            <directory>${project.build.directory}/aggregated_javadoc</directory>
             <outputDirectory>docs/javadoc</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>${project.build.directory}/generated-sources/license</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/lib</outputDirectory>
             <includes>
                 <include>THIRD-PARTY.txt</include>
             </includes>

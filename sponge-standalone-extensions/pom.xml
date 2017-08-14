@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sponge-standalone-extensions</artifactId>
     <name>Sponge - Standalone - Extensions</name>
+    <packaging>pom</packaging>
 
     <dependencies>
         <!-- Selected Spring components available in a standalone application out of the box: -->

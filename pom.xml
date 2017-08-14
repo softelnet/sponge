@@ -6,9 +6,10 @@
     <artifactId>sponge-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <name>Sponge - Parent</name>
-    <packaging>pom</packaging>
-    <url>http://www.openksavi.org/sponge</url>
+    <description>Event Processing System</description>
+    <url>http://sponge.openksavi.org</url>
     <inceptionYear>2016</inceptionYear>
+    <packaging>pom</packaging>
 
     <organization>
         <name>Softelnet</name>
@@ -27,18 +28,26 @@
             <name>Marcin Paś</name>
             <email>marcin.pas@softelnet.com</email>
             <organization>Softelnet</organization>
-            <url>https://www.softelnet.com</url>
-            <roles>
-                <role>Project lead</role>
-            </roles>
+            <organizationUrl>https://www.softelnet.com</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/softelnet/sponge</url>
         <connection>scm:git:git://github.com/softelnet/sponge.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/softelnet/sponge.git</developerConnection>
+        <url>https://github.com/softelnet/sponge/tree/master</url>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <issueManagement>
         <system>Github</system>
@@ -46,13 +55,13 @@
     </issueManagement>
 
     <properties>
-        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <release.version>${project.version}</release.version>
+        <release.version>0.1.0</release.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 
         <javax.inject.version>1</javax.inject.version>
         <javax.transaction.version>1.2</javax.transaction.version>
@@ -90,14 +99,14 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>bundle-sources</id>
-                        <phase>package</phase>
+                        <id>attach-sources</id>
                         <goals>
                             <goal>jar-no-fork</goal>
-                            <goal>test-jar-no-fork</goal>
+                            <!-- <goal>test-jar-no-fork</goal> -->
                         </goals>
                     </execution>
                 </executions>
@@ -153,7 +162,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.20</version>
                     <configuration>
-<!--                         <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
+                        <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -188,8 +197,17 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
-                <!--This plugin's configuration is used to store Eclipse 
-                    m2e settings only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -283,6 +301,32 @@
                                         <versionRange>[1,)</versionRange>
                                         <goals>
                                             <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-gpg-plugin</artifactId>
+                                        <versionRange>[1,)</versionRange>
+                                        <goals>
+                                            <goal>sign</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.sonatype.plugins</groupId>
+                                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                                        <versionRange>[1,)</versionRange>
+                                        <goals>
+                                            <goal>sign</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -619,13 +663,51 @@
                     <!-- <goal>report</goal> -->
                     <!-- </goals> -->
                     <!-- <configuration> -->
-                    <!-- Sets the output directory for the code coverage 
-                        report. -->
+                    <!-- Sets the output directory for the code coverage report. -->
                     <!-- <outputDirectory>target/jacoco-ut</outputDirectory> -->
                     <!-- </configuration> -->
                     <!-- </execution> -->
                     <!-- </executions> -->
                     <!-- </plugin> -->
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <keyname>${gpg.keyname}</keyname>
+                                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> <extensions>true</extensions> 
+                        <configuration> <serverId>ossrh</serverId> <nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>false</autoReleaseAfterClose> 
+                        </configuration> </plugin> -->
                 </plugins>
             </build>
         </profile>
