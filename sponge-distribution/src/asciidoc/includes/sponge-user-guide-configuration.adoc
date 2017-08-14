@@ -11,13 +11,13 @@ In a general form an XML configuration file is built as in the following example
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <!-- Properties configuration section -->
     <properties>
         <property name="sponge.home" system="true">.</property>
-        <property name="server.name">www.openksavi.org</property>
+        <property name="server.name">sponge.openksavi.org</property>
         <property name="filterThreshold" variable="true">10</property>
     </properties>
 

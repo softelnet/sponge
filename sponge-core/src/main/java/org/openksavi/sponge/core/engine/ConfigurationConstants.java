@@ -21,7 +21,7 @@ package org.openksavi.sponge.core.engine;
  */
 public final class ConfigurationConstants {
 
-    public static final String CONFIG_SCHEMA = "http://www.openksavi.org/sponge/schema/config.xsd";
+    public static final String CONFIG_SCHEMA = "http://sponge.openksavi.org/schema/config.xsd";
 
     public static final String CONFIG_SCHEMA_LOCATION = "/org/openksavi/sponge/schema/config.xsd";
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://www.openksavi.org/sponge" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.openksavi.org/sponge"
+<xs:schema targetNamespace="http://sponge.openksavi.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://sponge.openksavi.org"
     elementFormDefault="qualified">
     <xs:annotation>
         <xs:documentation>
             <![CDATA[
-                Sponge XML configuration schema. For documentation see the main project page http://www.openksavi.org/sponge.
+                Sponge XML configuration schema. For documentation see the main project page http://sponge.openksavi.org.
             ]]>
         </xs:documentation>
     </xs:annotation>

@@ -22,7 +22,7 @@
         <sourcesUrl>https://github.com/softelnet/sponge/tree/master</sourcesUrl>
         <jekyllBuildDir>${project.build.directory}/jekyll/jekyll</jekyllBuildDir>
         <logoDir>${basedir}/src/images</logoDir>
-        <homepage>http://www.openksavi.org/sponge</homepage>
+        <homepage>http://sponge.openksavi.org</homepage>
         <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
         <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
     </properties>
@@ -31,55 +31,18 @@
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-standalone</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-standalone-extensions</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!-- <addClasspath>true</addClasspath> -->
-                            <!-- <classpathPrefix>lib/</classpathPrefix> -->
-                            <mainClass>${mainClass}</mainClass>
-                            <packageName>sponge</packageName>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <!-- <executions> -->
-                <!-- <execution> -->
-                <!-- <phase>package</phase> -->
-                <!-- <goals> -->
-                <!-- <goal>jar</goal> -->
-                <!-- </goals> -->
-                <!-- </execution> -->
-                <!-- </executions> -->
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <profiles>
         <profile>
             <id>documentation</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -205,37 +168,29 @@
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>javadoc</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <includeDependencySources>true</includeDependencySources>
-                            <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
-                            <dependencySourceIncludes>
-                                <dependencySourceInclude>org.openksavi.sponge:*</dependencySourceInclude>
-                            </dependencySourceIncludes>
-                            <dependencySourceExcludes>
-                                <dependencySourceExclude>org.openksavi.sponge:sponge-distribution</dependencySourceExclude>
-                                <dependencySourceExclude>org.openksavi.sponge:sponge-standalone-extensions</dependencySourceExclude>
-                                <dependencySourceExclude>org.openksavi.sponge:sponge-examples*</dependencySourceExclude>
-                            </dependencySourceExcludes>
-                        </configuration>
                         <executions>
                             <execution>
+                                <id>aggregated-javadoc</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/aggregated_javadoc</outputDirectory>
+                                    <includeDependencySources>true</includeDependencySources>
+                                    <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
+                                    <dependencySourceIncludes>
+                                        <dependencySourceInclude>org.openksavi.sponge:*</dependencySourceInclude>
+                                    </dependencySourceIncludes>
+                                    <dependencySourceExcludes>
+                                        <dependencySourceExclude>org.openksavi.sponge:sponge-distribution</dependencySourceExclude>
+                                        <dependencySourceExclude>org.openksavi.sponge:sponge-standalone-extensions</dependencySourceExclude>
+                                        <dependencySourceExclude>org.openksavi.sponge:sponge-examples*</dependencySourceExclude>
+                                    </dependencySourceExcludes>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -244,65 +199,48 @@
         </profile>
 
         <profile>
-            <id>create-license-list</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <id>licenses</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>license-maven-plugin</artifactId>
-                        <configuration>
-                            <verbose>false</verbose>
-                            <licenseMerges>
-                                <licenseMerge>The Apache Software License, Version 2.0|Apache Software License - Version 2.0|Apache License Version 2.0|ASF 2.0|Apache 2|Apache 2.0|Apache 2.0 License|Apache License|Apache License 2.0|Apache License, Version 2.0|Apache License, version 2.0|Apache Public License 2.0|Apache License v2</licenseMerge>
-                                <licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
-                                <licenseMerge>Mozilla Public License|MPL 1.1</licenseMerge>
-                                <licenseMerge>Eclipse Public License (EPL) 1.0|Eclipse Public License v1.0|Eclipse Public License - Version 1.0|Eclipse Public License (EPL), Version 1.0</licenseMerge>
-                                <licenseMerge>The BSD License|BSD|BSD licence|BSD License|BSD style</licenseMerge>
-                                <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE|lgpl</licenseMerge>
-                                <licenseMerge>GNU Lesser General Public License Version 2.1, February 1999|LGPL 2.1</licenseMerge>
-                                <licenseMerge>Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|CDDL 1.0|CDDL License</licenseMerge>
-                                <licenseMerge>Bouncy Castle License|Bouncy Castle Licence</licenseMerge>
-                                <licenseMerge>The W3C License|The W3C Software License</licenseMerge>
-                            </licenseMerges>
-                            <sortArtifactByName>true</sortArtifactByName>
-                            <useMissingFile>false</useMissingFile>
-                            <excludedGroups>org.openksavi.sponge</excludedGroups>
-                        </configuration>
                         <executions>
                             <execution>
+                                <id>create-license-list</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>add-third-party</goal>
                                 </goals>
+                                <configuration>
+                                    <verbose>false</verbose>
+                                    <licenseMerges>
+                                        <licenseMerge>The Apache Software License, Version 2.0|Apache Software License - Version 2.0|Apache License Version 2.0|ASF 2.0|Apache 2|Apache 2.0|Apache 2.0 License|Apache License|Apache License 2.0|Apache License, Version 2.0|Apache License, version 2.0|Apache Public License 2.0|Apache License v2</licenseMerge>
+                                        <licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
+                                        <licenseMerge>Mozilla Public License|MPL 1.1</licenseMerge>
+                                        <licenseMerge>Eclipse Public License (EPL) 1.0|Eclipse Public License v1.0|Eclipse Public License - Version 1.0|Eclipse Public License (EPL), Version 1.0</licenseMerge>
+                                        <licenseMerge>The BSD License|BSD|BSD licence|BSD License|BSD style</licenseMerge>
+                                        <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE|lgpl</licenseMerge>
+                                        <licenseMerge>GNU Lesser General Public License Version 2.1, February 1999|LGPL 2.1</licenseMerge>
+                                        <licenseMerge>Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|CDDL 1.0|CDDL License</licenseMerge>
+                                        <licenseMerge>Bouncy Castle License|Bouncy Castle Licence</licenseMerge>
+                                        <licenseMerge>The W3C License|The W3C Software License</licenseMerge>
+                                    </licenseMerges>
+                                    <sortArtifactByName>true</sortArtifactByName>
+                                    <useMissingFile>false</useMissingFile>
+                                    <excludedGroups>org.openksavi.sponge</excludedGroups>
+                                </configuration>
                             </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>download-licenses</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>license-maven-plugin</artifactId>
-                        <configuration>
-                            <verbose>false</verbose>
-                            <excludedGroups>org.openksavi.sponge</excludedGroups>
-                        </configuration>
-                        <executions>
                             <execution>
+                                <id>download-licenses</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>download-licenses</goal>
                                 </goals>
+                                <configuration>
+                                    <verbose>false</verbose>
+                                    <excludedGroups>org.openksavi.sponge</excludedGroups>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -311,29 +249,28 @@
         </profile>
 
         <profile>
-            <id>assembly</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <id>standalone</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <finalName>${standalonePackageName}</finalName>
-                            <!-- <appendAssemblyId>false</appendAssemblyId> -->
-                            <descriptors>
-                                <descriptor>src/assembly/standalone.xml</descriptor>
-                            </descriptors>
-                            <tarLongFileMode>gnu</tarLongFileMode>
-                        </configuration>
                         <executions>
                             <execution>
+                                <id>standalone</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>single</goal>
                                 </goals>
+                                <configuration>
+                                    <finalName>${standalonePackageName}</finalName>
+                                    <outputDirectory>${project.build.directory}/standalone</outputDirectory>
+                                    <descriptors>
+                                        <descriptor>src/assembly/standalone.xml</descriptor>
+                                    </descriptors>
+                                    <tarLongFileMode>gnu</tarLongFileMode>
+                                    <attach>false</attach>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -343,28 +280,26 @@
 
         <profile>
             <id>jekyll</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <finalName>jekyll</finalName>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>src/assembly/jekyll.xml</descriptor>
-                            </descriptors>
-                            <tarLongFileMode>gnu</tarLongFileMode>
-                        </configuration>
                         <executions>
                             <execution>
+                                <id>jekyll</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>single</goal>
                                 </goals>
+                                <configuration>
+                                    <finalName>jekyll</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <descriptors>
+                                        <descriptor>src/assembly/jekyll.xml</descriptor>
+                                    </descriptors>
+                                    <tarLongFileMode>gnu</tarLongFileMode>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -379,7 +314,7 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <symlink link="${jekyllBuildDir}/root" resource="${rootDir}" overwrite="true"/>
+                                        <symlink link="${jekyllBuildDir}/root" resource="${rootDir}" overwrite="true" />
                                     </target>
                                 </configuration>
                             </execution>

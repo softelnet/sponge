@@ -38,7 +38,7 @@ asciidoctor:
     - projectVersion=${release.version}
     - imagesdir=/docs/images
     - toclevels=5
-    - homepage=http://www.openksavi.org/sponge
+    - homepage=http://sponge.openksavi.org
     - sectnums=true
     - sectnumlevels=5
     - icons=font

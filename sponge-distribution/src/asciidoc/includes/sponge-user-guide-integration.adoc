@@ -128,8 +128,8 @@ public class SpringConfiguration extends EngineCamelConfiguration {
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://www.openksavi.org/sponge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.openksavi.org/sponge http://www.openksavi.org/sponge/schema/config.xsd">
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
         <!-- Note: don't change the plugin name. -->
