@@ -6,9 +6,10 @@
     <artifactId>sponge-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <name>Sponge - Parent</name>
-    <packaging>pom</packaging>
+    <description>Event Processing System</description>
     <url>http://sponge.openksavi.org</url>
     <inceptionYear>2016</inceptionYear>
+    <packaging>pom</packaging>
 
     <organization>
         <name>Softelnet</name>
@@ -28,34 +29,24 @@
             <email>marcin.pas@softelnet.com</email>
             <organization>Softelnet</organization>
             <organizationUrl>https://www.softelnet.com</organizationUrl>
-            <roles>
-                <role>Project lead</role>
-            </roles>
         </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/softelnet/sponge</url>
         <connection>scm:git:git://github.com/softelnet/sponge.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/softelnet/sponge.git</developerConnection>
+        <url>https://github.com/softelnet/sponge/tree/master</url>
     </scm>
-
-    <!-- <distributionManagement> -->
-    <!-- <snapshotRepository> -->
-    <!-- <id>ossrh</id> -->
-    <!-- <url>https://oss.sonatype.org/content/repositories/snapshots</url> -->
-    <!-- </snapshotRepository> -->
-    <!-- <repository> -->
-    <!-- <id>ossrh</id> -->
-    <!-- <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> -->
-    <!-- </repository> -->
-    <!-- </distributionManagement> -->
 
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
     <issueManagement>
@@ -64,7 +55,6 @@
     </issueManagement>
 
     <properties>
-<!--         <release.version>${project.version}</release.version> -->
         <release.version>0.1.0</release.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -684,11 +674,6 @@
         </profile>
         <profile>
             <id>release</id>
-            <activation>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
