@@ -27,14 +27,12 @@
             <includes>
                 <include>*.pdf</include>
                 <include>sponge-reference.html</include>
-                <include>sponge-examples.html</include>
                 <include>asciidoctor.css</include>
                 <include>coderay-asciidoctor.css</include>
                 <include>images/</include>
             </includes>
             <excludes>
-                <exclude>*.dia</exclude>
-                <exclude>*.dia~</exclude>
+                <exclude>images/*.di*</exclude>
             </excludes>
         </fileSet>
 
