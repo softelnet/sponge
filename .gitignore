@@ -7,3 +7,4 @@ target/
 .pydevproject
 *.class
 *.log
+pom.xml.versionsBackup

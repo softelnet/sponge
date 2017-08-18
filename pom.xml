@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Sponge - Parent</name>
     <description>Event Processing System</description>
     <url>http://sponge.openksavi.org</url>
@@ -62,6 +62,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+
+        <development.tools.version>1</development.tools.version>
 
         <javax.inject.version>1</javax.inject.version>
         <javax.transaction.version>1.2</javax.transaction.version>
@@ -620,7 +622,7 @@
                             <dependency>
                                 <groupId>org.openksavi.sponge</groupId>
                                 <artifactId>sponge-development-tools</artifactId>
-                                <version>${project.version}</version>
+                                <version>${development.tools.version}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
