@@ -34,7 +34,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/softelnet/sponge.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/softelnet/sponge.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:softelnet/sponge.git</developerConnection>
         <url>https://github.com/softelnet/sponge/tree/master</url>
     </scm>
 
@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <release.version>0.1.0</release.version>
+        <release.version>1.0.0</release.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -555,27 +555,32 @@
         </dependency>
     </dependencies>
 
-    <modules>
-        <module>sponge-development-tools</module>
-        <module>sponge-api</module>
-        <module>sponge-core</module>
-        <module>sponge-test</module>
-        <module>sponge-jython</module>
-        <module>sponge-jruby</module>
-        <module>sponge-nashorn</module>
-        <module>sponge-groovy</module>
-        <module>sponge-spring</module>
-        <module>sponge-camel</module>
-        <module>sponge-signal</module>
-        <module>sponge-integration-tests</module>
-        <module>sponge-standalone</module>
-        <module>sponge-bom</module>
-        <module>sponge-examples-projects</module>
-        <module>sponge-standalone-extensions</module>
-        <module>sponge-distribution</module>
-    </modules>
-
     <profiles>
+        <profile>
+            <id>all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>sponge-development-tools</module>
+                <module>sponge-api</module>
+                <module>sponge-core</module>
+                <module>sponge-test</module>
+                <module>sponge-jython</module>
+                <module>sponge-jruby</module>
+                <module>sponge-nashorn</module>
+                <module>sponge-groovy</module>
+                <module>sponge-spring</module>
+                <module>sponge-camel</module>
+                <module>sponge-signal</module>
+                <module>sponge-integration-tests</module>
+                <module>sponge-standalone</module>
+                <module>sponge-bom</module>
+                <module>sponge-examples-projects</module>
+                <module>sponge-standalone-extensions</module>
+                <module>sponge-distribution</module>
+            </modules>
+        </profile>
         <profile>
             <id>review</id>
             <activation>
@@ -674,6 +679,20 @@
         </profile>
         <profile>
             <id>release</id>
+            <modules>
+                <module>sponge-api</module>
+                <module>sponge-core</module>
+                <module>sponge-test</module>
+                <module>sponge-jython</module>
+                <module>sponge-jruby</module>
+                <module>sponge-nashorn</module>
+                <module>sponge-groovy</module>
+                <module>sponge-spring</module>
+                <module>sponge-camel</module>
+                <module>sponge-signal</module>
+                <module>sponge-standalone</module>
+                <module>sponge-bom</module>
+            </modules>
             <build>
                 <plugins>
                     <plugin>
