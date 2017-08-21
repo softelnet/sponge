@@ -17,7 +17,7 @@
 package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -39,6 +39,7 @@ public class TriggersTestTemplate {
                     .until(() -> ((Number) engine.getOperations().getVariable("receivedEventBCount")).intValue() > 2);
             await().atMost(5, TimeUnit.SECONDS)
                     .until(() -> ((Number) engine.getOperations().getVariable("receivedEventTestJavaCount")).intValue() == 1);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -49,7 +50,7 @@ public class TriggersTestTemplate {
 
         try {
             TimeUnit.SECONDS.sleep(1);
-            assertNull(engine.getError());
+            assertFalse(engine.isError());
         } catch (InterruptedException e) {
             throw new SpongeException(e);
         } finally {

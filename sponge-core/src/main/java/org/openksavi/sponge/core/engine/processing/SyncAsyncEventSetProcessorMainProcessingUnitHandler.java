@@ -19,7 +19,7 @@ package org.openksavi.sponge.core.engine.processing;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
@@ -84,7 +84,8 @@ public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends Event
     }
 
     protected void processAsynchronously(List<T> adapters, Event event) {
-        for (List<T> partition : Lists.partition(adapters, asyncEventSetProcessorProcessingPartitionSize)) {
+        // It must be Iterables.partition here, not Lists.partition because of concurrent access to the adapters list.
+        for (List<T> partition : Iterables.partition(adapters, asyncEventSetProcessorProcessingPartitionSize)) {
             CompletableFuture.allOf(partition.stream().map(adapter -> CompletableFuture.runAsync(() -> {
                 try {
                     processAdapter(adapter, event);

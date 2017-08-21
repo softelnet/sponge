@@ -17,6 +17,7 @@
 package org.openksavi.sponge.camel.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -89,6 +90,7 @@ public class SimpleCamelNoSpringTest {
         try {
             await().atMost(10, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "receivedCamelMessage").get());
+            assertFalse(engine.isError());
         } finally {
             camel.stop();
         }

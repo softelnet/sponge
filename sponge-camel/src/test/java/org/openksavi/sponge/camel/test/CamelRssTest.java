@@ -17,6 +17,7 @@
 package org.openksavi.sponge.camel.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -114,6 +115,7 @@ public class CamelRssTest {
     public void testRoute() throws InterruptedException {
         await().atMost(10, TimeUnit.SECONDS)
                 .until(() -> engine.getOperations().getVariable(AtomicInteger.class, "receivedCamelMessages").intValue() >= 4);
+        assertFalse(engine.isError());
         TimeUnit.SECONDS.sleep(1);
     }
 }

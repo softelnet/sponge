@@ -17,6 +17,7 @@
 package org.openksavi.sponge.camel.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -73,6 +74,8 @@ public class SimpleCamelProducerTest {
             Engine engine = context.getBean(Engine.class);
             await().atMost(10, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage").get());
+
+            assertFalse(engine.isError());
             context.stop();
         }
     }

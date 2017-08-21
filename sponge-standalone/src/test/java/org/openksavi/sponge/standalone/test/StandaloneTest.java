@@ -17,6 +17,7 @@
 package org.openksavi.sponge.standalone.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
@@ -40,6 +41,7 @@ public class StandaloneTest {
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "receivedRssCount").intValue() > 1);
+            assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
         }
@@ -55,6 +57,7 @@ public class StandaloneTest {
             await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
                     && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
             TimeUnit.SECONDS.sleep(1);
+            assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
         }
@@ -71,6 +74,7 @@ public class StandaloneTest {
 
             TimeUnit.SECONDS.sleep(1);
             assertTrue(engine.getOperations().getVariable(AtomicBoolean.class, "stoppedSources").get());
+            assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
         }
@@ -86,6 +90,7 @@ public class StandaloneTest {
             await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
                     && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
             TimeUnit.SECONDS.sleep(1);
+            assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
         }

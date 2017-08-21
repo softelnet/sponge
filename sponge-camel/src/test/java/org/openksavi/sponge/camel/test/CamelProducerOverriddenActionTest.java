@@ -62,6 +62,7 @@ public class CamelProducerOverriddenActionTest {
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_camelEvent").get());
 
             assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_spongeProducer").get());
+            assertFalse(engine.isError());
         } finally {
             camel.stop();
         }

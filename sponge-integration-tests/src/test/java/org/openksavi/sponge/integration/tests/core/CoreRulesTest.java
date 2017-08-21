@@ -17,6 +17,7 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.concurrent.TimeUnit;
@@ -50,6 +51,7 @@ public class CoreRulesTest {
             evalEnableRuleWithException(interpreter, "RuleFAL");
             evalEnableRuleWithException(interpreter, "RuleFNL");
             evalEnableRuleWithException(interpreter, "RuleFAN");
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -75,7 +77,7 @@ public class CoreRulesTest {
             TestUtils.assertEventSequences(eventsLog, "RuleFAN", "1",
                     new String[][] { { "1", "2", null }, { "1", "3", null }, { "1", "5", null } });
 
-            System.out.println(eventsLog);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

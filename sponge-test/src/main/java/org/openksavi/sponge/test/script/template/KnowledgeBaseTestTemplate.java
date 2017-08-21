@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
@@ -47,6 +48,7 @@ public class KnowledgeBaseTestTemplate {
             await().atMost(2, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "onLoadCalled").intValue() == 2);
             TestStatus.onShutdownCalled = false;
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -71,6 +73,7 @@ public class KnowledgeBaseTestTemplate {
             assertTrue(TestUtils.getEventCounter(engine, "Trigger1, file3") > TestUtils.getEventCounter(engine, "Trigger1, file2"));
 
             assertEquals(0, TestUtils.getEventCounter(engine, "Trigger3, file3"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -89,6 +92,7 @@ public class KnowledgeBaseTestTemplate {
 
             assertTrue(engine.getOperations().getVariable(AtomicBoolean.class, "verifyTriggerEnabled").get());
             assertTrue(engine.getOperations().getVariable(AtomicBoolean.class, "verifyTriggerDisabled").get());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -101,6 +105,7 @@ public class KnowledgeBaseTestTemplate {
             await().atMost(5, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "counter").intValue() >= 5);
 
             assertEquals(5, engine.getOperations().getVariable(Number.class, "counter").intValue());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -120,6 +125,7 @@ public class KnowledgeBaseTestTemplate {
             await().atMost(20, TimeUnit.SECONDS).until(() -> "B2".equals(getConcurrencyTestValue(engine)));
             await().atMost(25, TimeUnit.SECONDS).until(() -> "C1".equals(getConcurrencyTestValue(engine)));
             await().atMost(30, TimeUnit.SECONDS).until(() -> "C2".equals(getConcurrencyTestValue(engine)));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -136,6 +142,7 @@ public class KnowledgeBaseTestTemplate {
             assertEquals("ERROR",
                     ((Map<String, String>) engine.getOperations().getVariable("hostStatus")).get("www.wikipedia.org.unknown"));
             assertEquals("200", ((Map<String, String>) engine.getOperations().getVariable("hostStatus")).get("www.wikipedia.org"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -155,6 +162,7 @@ public class KnowledgeBaseTestTemplate {
 
             assertEquals(0, engine.getOperations().getVariable(Number.class, "functionA1").intValue());
             assertEquals(2, engine.getOperations().getVariable(Number.class, "functionA2").intValue());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

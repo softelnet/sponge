@@ -103,5 +103,7 @@ public class CamelProducerCustomActionTest {
         assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_spongeProducer").get());
 
         logEndpoint.assertIsSatisfied();
+
+        assertFalse(engine.isError());
     }
 }

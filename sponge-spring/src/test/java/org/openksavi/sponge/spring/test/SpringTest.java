@@ -18,6 +18,7 @@ package org.openksavi.sponge.spring.test;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -64,6 +65,7 @@ public class SpringTest {
             await().atMost(5, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "springBeanValue") != null);
 
             assertEquals(BEAN_VALUE, engine.getOperations().getVariable(String.class, "springBeanValue"));
+            assertFalse(engine.isError());
         } finally {
             ctx.close();
         }

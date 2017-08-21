@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,7 @@ public class CorrelatorsTestTemplate {
             assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue());
             assertEquals(1, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue());
             assertEquals(1, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaFinishCount").intValue());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -54,6 +56,7 @@ public class CorrelatorsTestTemplate {
         try {
             await().atMost(10, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 3);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

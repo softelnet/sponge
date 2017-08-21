@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
@@ -97,6 +98,7 @@ public class ShutdownTest {
             DecomposedQueueMainProcessingUnit mainProcessingUnit =
                     (DecomposedQueueMainProcessingUnit) engine.getProcessingUnitManager().getMainProcessingUnit();
             assertEquals(0, mainProcessingUnit.getDecomposedQueue().getSize());
+            assertFalse(engine.isError());
         } catch (InterruptedException e) {
             fail(e.toString());
         } finally {

@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class RulesTestTemplate {
             assertEquals(3, ((Number) engine.getOperations().getVariable("hardwareFailureScriptCount")).intValue());
             assertEquals(1, ((Number) engine.getOperations().getVariable("sameSourceFirstFireCount")).intValue());
             assertEquals(3, ((Number) engine.getOperations().getVariable("hardwareFailureJavaCount")).intValue());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -105,6 +107,7 @@ public class RulesTestTemplate {
                     .until(() -> eventsLog.getEvents(rule, "1").size() == sequences.length));
 
             expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -125,6 +128,8 @@ public class RulesTestTemplate {
             TestUtils.assertEventSequences(eventsLog, "RuleFNNNL", "1", new String[][] { { "1", null, null, null, "7" } });
             TestUtils.assertEventSequences(eventsLog, "RuleFNNNLReject", "1", new String[][] {});
             TestUtils.assertEventSequences(eventsLog, "RuleFNFNL", "1", new String[][] { { "1", null, "2", null, "7" } });
+
+            assertFalse(engine.isError());
         } catch (InterruptedException ie) {
             throw new SpongeException(ie);
         } finally {
@@ -145,6 +150,7 @@ public class RulesTestTemplate {
 
             TestUtils.assertEventSequences(eventsLog, "RuleFNF", "1", new String[][] { { "1", null, "5" } });
             TestUtils.assertEventSequences(eventsLog, "RuleFNNFReject", "1", new String[][] {});
+            assertFalse(engine.isError());
         } catch (InterruptedException ie) {
             throw new SpongeException(ie);
         } finally {
@@ -166,6 +172,7 @@ public class RulesTestTemplate {
 
             TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "5" } });
             TestUtils.assertEventSequences(eventsLog, "RuleFFL", "1", new String[][] { { "1", "2", "7" } });
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -176,6 +183,7 @@ public class RulesTestTemplate {
 
         try {
             await().atMost(10, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -186,6 +194,7 @@ public class RulesTestTemplate {
 
         try {
             await().atMost(10, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

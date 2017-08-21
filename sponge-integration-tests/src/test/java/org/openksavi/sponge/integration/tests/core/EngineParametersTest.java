@@ -17,6 +17,7 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -38,6 +39,7 @@ public class EngineParametersTest {
                     engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
             assertEquals(EventClonePolicy.DEEP, engine.getConfigurationManager().getEventClonePolicy());
             assertEquals(false, engine.getConfigurationManager().getAutoEnable());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -59,6 +60,7 @@ public class ProcessingEventsSynchronizationTest {
 
             String testStatus = engine.getOperations().getVariable(String.class, "testStatus");
             assertEquals("OK", testStatus);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

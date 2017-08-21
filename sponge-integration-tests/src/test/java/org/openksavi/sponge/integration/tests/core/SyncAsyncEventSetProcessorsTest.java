@@ -51,6 +51,7 @@ public class SyncAsyncEventSetProcessorsTest {
 
             TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "5" } });
             TestUtils.assertEventSequences(eventsLog, "RuleFFL", "1", new String[][] { { "1", "2", "7" } });
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

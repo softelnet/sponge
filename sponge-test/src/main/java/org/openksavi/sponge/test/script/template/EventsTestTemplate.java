@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ public class EventsTestTemplate {
             assertEquals("Value " + defaultClonePolicyEvents.size(), getValue(shallowClonePolicyEvents, 0));
             assertEquals("Value " + defaultClonePolicyEvents.size(), getValue(shallowClonePolicyEvents, 1));
             assertEquals("Value " + defaultClonePolicyEvents.size(), getValue(shallowClonePolicyEvents, 2));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -71,6 +73,7 @@ public class EventsTestTemplate {
 
         try {
             await().atMost(15, TimeUnit.SECONDS).until(() -> ((Number) engine.getOperations().getVariable("eventCounter")).intValue() >= 2);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -86,6 +89,7 @@ public class EventsTestTemplate {
             TimeUnit.SECONDS.sleep(1);
             assertEquals(((Number) engine.getOperations().getVariable("allowNumber")).intValue(),
                     ((Number) engine.getOperations().getVariable("eventCounter")).intValue());
+            assertFalse(engine.isError());
         } catch (InterruptedException ie) {
             throw new SpongeException(ie);
         } finally {

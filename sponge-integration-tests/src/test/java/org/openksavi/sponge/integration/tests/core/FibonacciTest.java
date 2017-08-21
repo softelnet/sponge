@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +40,7 @@ public class FibonacciTest {
 
             Number fmax = engine.getOperations().getVariable(Number.class, "f(maxIndex)");
             assertEquals(new BigInteger("354224848179261915075"), fmax);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

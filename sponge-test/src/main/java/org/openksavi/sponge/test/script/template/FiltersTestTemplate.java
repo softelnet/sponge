@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +37,7 @@ public class FiltersTestTemplate {
                     .until(() -> TestUtils.getEventCounter(engine, "e2") >= 5 && TestUtils.getEventCounter(engine, "e3") >= 5);
 
             assertEquals(0, TestUtils.getEventCounter(engine, "e1"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -48,6 +50,7 @@ public class FiltersTestTemplate {
             await().atMost(10, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "blue") >= 1);
 
             assertEquals(0, TestUtils.getEventCounter(engine, "red"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -64,6 +67,7 @@ public class FiltersTestTemplate {
             assertEquals(1, TestUtils.getEventCounter(engine, "e1-blue"));
             assertEquals(2, TestUtils.getEventCounter(engine, "e2-red"));
             assertEquals(2, TestUtils.getEventCounter(engine, "e2-blue"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

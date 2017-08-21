@@ -17,6 +17,7 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
@@ -48,6 +49,7 @@ public class EventOverloadTest {
             await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("testStatus") != null);
 
             assertTrue(engine.getOperations().getVariable("testStatus") instanceof QueueFullException);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

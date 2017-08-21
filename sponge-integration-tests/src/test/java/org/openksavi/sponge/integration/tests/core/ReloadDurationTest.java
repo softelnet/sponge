@@ -40,6 +40,7 @@ public class ReloadDurationTest {
 
             assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "ruleAFired").get());
             assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "ruleBFired").get());
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

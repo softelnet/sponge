@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

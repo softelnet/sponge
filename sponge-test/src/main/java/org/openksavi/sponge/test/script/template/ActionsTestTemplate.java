@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +46,7 @@ public class ActionsTestTemplate {
             // Note, that different scripting engines may map numbers to different types.
             assertEquals(2, ((Number) javaResult[0]).intValue());
             assertEquals("TEST", javaResult[1]);
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

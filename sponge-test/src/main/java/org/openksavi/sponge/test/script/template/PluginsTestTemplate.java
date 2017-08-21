@@ -18,6 +18,7 @@ package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +37,7 @@ public class PluginsTestTemplate {
 
             assertEquals("Example connection", engine.getOperations().getVariable("connectionName"));
             assertEquals("Echo test! x 2", engine.getOperations().getVariable("echoConfig"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
@@ -50,6 +52,7 @@ public class PluginsTestTemplate {
 
             assertEquals("Value A", engine.getOperations().getVariable("valueBefore"));
             assertEquals("Value B", engine.getOperations().getVariable("valueAfter"));
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }
