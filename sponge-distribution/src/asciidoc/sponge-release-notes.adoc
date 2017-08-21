@@ -3,5 +3,10 @@
 A high-level view of the changes introduced in {sponge} releases.
 
 [discrete]
+== 1.0.1 (2017.08.21)
+
+* Fixed possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
+
+[discrete]
 == 1.0.0 (2017.08.18)
 The initial release.
