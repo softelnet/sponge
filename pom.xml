@@ -63,7 +63,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 
-        <development.tools.version>1.0.1</development.tools.version>
+        <development.tools.version>1</development.tools.version>
 
         <javax.inject.version>1</javax.inject.version>
         <javax.transaction.version>1.2</javax.transaction.version>
@@ -210,9 +210,8 @@
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-<!--                         <useReleaseProfile>true</useReleaseProfile> -->
+                        <pushChanges>false</pushChanges>
                         <releaseProfiles>release</releaseProfiles>
-<!--                         <goals>deploy</goals> -->
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
