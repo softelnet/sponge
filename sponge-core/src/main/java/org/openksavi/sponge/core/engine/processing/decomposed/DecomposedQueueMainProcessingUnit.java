@@ -226,11 +226,16 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                         while (true) {
                             try {
                                 // Process an event by the adapter asynchronously in a thread from a thread pool.
-                                CompletableFuture.runAsync(() -> getHandler(adapter.getType()).processEvent(adapter, event),
-                                        workerThreadPool.getExecutor()).handle((result, exception) -> {
-                                            decomposedQueue.release(entry);
-                                            return null;
-                                        });
+                                CompletableFuture.runAsync(() -> {
+                                    try {
+                                        getHandler(adapter.getType()).processEvent(adapter, event);
+                                    } catch (Throwable e) {
+                                        getEngine().handleError("WorkerThread", e);
+                                    }
+                                }, workerThreadPool.getExecutor()).handle((result, exception) -> {
+                                    decomposedQueue.release(entry);
+                                    return null;
+                                });
                                 break;
                             } catch (RejectedExecutionException e) {
                                 // If rejected because of the lack of free threads, than try again after sleep.
@@ -245,13 +250,14 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                 return false;
             } catch (InterruptedException e) {
                 throw e;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 Throwable rootCause = ExceptionUtils.getRootCause(e);
                 if (rootCause != null && rootCause instanceof InterruptedException) {
                     throw (InterruptedException) rootCause;
                 }
 
                 getEngine().handleError("runIteration", e);
+
                 return true;
             }
         }

@@ -85,9 +85,14 @@ public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends Event
 
     protected void processAsynchronously(List<T> adapters, Event event) {
         for (List<T> partition : Lists.partition(adapters, asyncEventSetProcessorProcessingPartitionSize)) {
-            CompletableFuture.allOf(partition.stream()
-                    .map(adapter -> CompletableFuture.runAsync(() -> processAdapter(adapter, event), getAsyncEventSetProcessorExecutor()))
-                    .toArray(CompletableFuture[]::new)).join();
+            CompletableFuture.allOf(partition.stream().map(adapter -> CompletableFuture.runAsync(() -> {
+                try {
+                    processAdapter(adapter, event);
+                } catch (Throwable e) {
+                    getProcessingUnit().getEngine().handleError(
+                            SyncAsyncEventSetProcessorMainProcessingUnitHandler.class.getSimpleName() + ".processAsynchronously", e);
+                }
+            }, getAsyncEventSetProcessorExecutor())).toArray(CompletableFuture[]::new)).join();
         }
     }
 }

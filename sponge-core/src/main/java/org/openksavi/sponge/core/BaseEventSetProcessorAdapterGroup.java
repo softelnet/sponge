@@ -16,12 +16,11 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,8 @@ import org.openksavi.sponge.EventSetProcessor;
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.core.event.DurationControlEvent;
+import org.openksavi.sponge.core.rule.BaseRuleAdapter;
+import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.event.ControlEvent;
@@ -45,7 +46,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     private static final Logger logger = LoggerFactory.getLogger(BaseEventSetProcessorAdapterGroup.class);
 
     /** List of event set processor adapters. */
-    private List<T> eventSetProcessorAdapters = Collections.synchronizedList(new LinkedList<>());
+    private List<T> eventSetProcessorAdapters = new CopyOnWriteArrayList<>();
 
     /** Event set processor main processing handler. */
     private EventSetProcessorMainProcessingUnitHandler<EventSetProcessorAdapterGroup<T>, T> handler;
@@ -109,7 +110,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
             eventSetProcessorAdapters.add(adapter);
             handler.addDuration(adapter);
 
-            logger.debug("{} - Adding new, hash: {}", adapter.getName(), adapter.hashCode());
+            logger.debug("{} - New instance, hash: {}, event: {}", adapter.getName(), adapter.hashCode(), event);
         } catch (Exception e) {
             throw Utils.wrapException(name, e);
         }
@@ -124,13 +125,9 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
      * Removes stopped event set processors within this group.
      */
     protected void removeStoppedEventSetProcessors() {
-        for (ListIterator<T> iterator = eventSetProcessorAdapters.listIterator(); iterator.hasNext();) {
-            T adapter = iterator.next();
-            if (!adapter.isRunning()) {
-                iterator.remove();
-                handler.removeDuration(adapter);
-            }
-        }
+        Predicate<T> filter = adapter -> !adapter.isRunning();
+        eventSetProcessorAdapters.stream().filter(filter).forEach(adapter -> handler.removeDuration(adapter));
+        eventSetProcessorAdapters.removeIf(filter);
     }
 
     public abstract boolean needNewInstance(Event event);
@@ -161,11 +158,15 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
                 return;
             }
 
+            logger.debug("Processing event: {}", event);
+
             if (needNewInstance(event)) {
                 tryAddNewEventSetProcessor(event);
             }
 
+            logEventTree("before");
             handler.processEventForEventSetProcessorAdapters(getDefinition(), eventSetProcessorAdapters, event);
+            logEventTree("after");
 
             removeStoppedEventSetProcessors();
         } finally {
@@ -201,5 +202,14 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     @Override
     public void validate() {
         //
+    }
+
+    private void logEventTree(String label) {
+        if (logger.isDebugEnabled()) {
+            if (this instanceof BaseRuleAdapterGroup) {
+                eventSetProcessorAdapters.forEach(adapter -> logger.debug("Event tree " + label + " processing ({}/{}): {}",
+                        adapter.getName(), adapter.hashCode(), ((BaseRuleAdapter) adapter).getEventTree()));
+            }
+        }
     }
 }

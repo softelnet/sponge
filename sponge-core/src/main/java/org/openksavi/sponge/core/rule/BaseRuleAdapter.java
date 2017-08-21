@@ -320,12 +320,13 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
 
         if (node.getLevel() == maxLevel) { // maxLevel indicates the leaf of the event tree.
             prepareEventAliasMap(node);
-            // Running the rule for the calculated event sequence (there may be many such sequences for ALL mode).
-            getProcessor().onRun(node.getValue());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Event tree: {}", eventTree);
+                logger.debug("Running {}. Event tree: {}", getName(), eventTree);
             }
+
+            // Running the rule for the calculated event sequence (there may be many such sequences for ALL mode).
+            getProcessor().onRun(node.getValue());
 
             EventMode eventMode = getEventMode(maxLevel);
             switch (eventMode) {
