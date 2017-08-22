@@ -35,7 +35,7 @@ class B(Trigger):
     def onConfigure(self):
         self.event = "b"
     def onRun(self, event):
-        self.logger.debug("Received {}", event.name)
+        pass
 
 def onStartup():
     EPS.event("a").send()

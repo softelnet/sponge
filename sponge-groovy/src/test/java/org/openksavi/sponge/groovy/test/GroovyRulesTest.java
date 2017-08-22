@@ -71,4 +71,10 @@ public class GroovyRulesTest extends GroovyTest implements RulesTest {
     public void testHeartbeat2() {
         RulesTestTemplate.testHeartbeat2(getType());
     }
+
+    @Override
+    @Test
+    public void testRulesInstances() {
+        RulesTestTemplate.testRulesInstances(getType());
+    }
 }

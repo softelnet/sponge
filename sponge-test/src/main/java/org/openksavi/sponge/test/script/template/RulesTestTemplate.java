@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.TestUtils;
@@ -194,6 +195,28 @@ public class RulesTestTemplate {
 
         try {
             await().atMost(10, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testRulesInstances(KnowledgeBaseType type) {
+        Engine engine = DefaultEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, type, ScriptTestUtils.getScriptKnowledgeBaseFileName(type, "rules_instances")).build();
+        engine.getDefaultParameters().setAsyncEventSetProcessorProcessingPartitionSize(10);
+
+        engine.startup();
+
+        try {
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA")
+                    .intValue() >= engine.getOperations().getVariable(Number.class, "max").intValue() - 1);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countB")
+                    .intValue() >= engine.getOperations().getVariable(Number.class, "max").intValue() - 1);
+            assertEquals(engine.getOperations().getVariable(Number.class, "max").intValue() - 1,
+                    engine.getOperations().getVariable(Number.class, "countA").intValue());
+            assertEquals(engine.getOperations().getVariable(Number.class, "max").intValue() - 1,
+                    engine.getOperations().getVariable(Number.class, "countB").intValue());
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
