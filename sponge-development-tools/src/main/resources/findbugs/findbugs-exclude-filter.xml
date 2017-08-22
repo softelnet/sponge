@@ -32,7 +32,7 @@
 
     <!-- Reason: Used only in tests -->
     <Match>
-        <Class name="org.openksavi.sponge.test.TestStatus" />
+        <Class name="org.openksavi.sponge.test.util.TestStatus" />
         <Field name="onShutdownCalled" />
         <Bug pattern="MS_CANNOT_BE_FINAL" />
     </Match>
