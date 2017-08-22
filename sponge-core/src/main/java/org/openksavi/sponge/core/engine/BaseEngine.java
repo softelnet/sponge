@@ -37,6 +37,7 @@ import org.openksavi.sponge.core.kb.DefaultKnowledgeBaseFileProvider;
 import org.openksavi.sponge.core.spi.DefaultEngineModuleProvider;
 import org.openksavi.sponge.core.spi.DefaultEventQueueProvider;
 import org.openksavi.sponge.core.spi.DefaultProcessingUnitProvider;
+import org.openksavi.sponge.core.util.RegexPatternMatcher;
 import org.openksavi.sponge.core.util.ServiceLoaderUtils;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
@@ -71,6 +72,7 @@ import org.openksavi.sponge.spi.EventQueueProvider;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
+import org.openksavi.sponge.util.PatternMatcher;
 
 /**
  * Base engine implementation.
@@ -164,6 +166,9 @@ public class BaseEngine extends BaseEngineModule implements Engine {
      * {@code QueuedEventSetProcessorDurationStrategy}.
      */
     private EventSetProcessorDurationStrategy durationStrategy = new QueuedEventSetProcessorDurationStrategy();
+
+    /** Pattern matcher. */
+    private PatternMatcher patternMatcher = new RegexPatternMatcher();
 
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
@@ -776,5 +781,15 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     @Override
     public void setEventSetProcessorDurationStrategy(EventSetProcessorDurationStrategy durationStrategy) {
         this.durationStrategy = durationStrategy;
+    }
+
+    @Override
+    public PatternMatcher getPatternMatcher() {
+        return patternMatcher;
+    }
+
+    @Override
+    public void setPatternMatcher(PatternMatcher patternMatcher) {
+        this.patternMatcher = patternMatcher;
     }
 }

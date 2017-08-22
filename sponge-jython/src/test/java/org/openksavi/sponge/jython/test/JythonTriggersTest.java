@@ -31,6 +31,12 @@ public class JythonTriggersTest extends JythonTest implements TriggersTest {
 
     @Override
     @Test
+    public void testTriggersEventPattern() {
+        TriggersTestTemplate.testTriggersEventPattern(getType());
+    }
+
+    @Override
+    @Test
     public void testHelloWorld() {
         TriggersTestTemplate.testHelloWorld(getType());
     }

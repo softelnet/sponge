@@ -4,7 +4,6 @@ Reload - impact on duration of rules.
 """
 
 from java.util.concurrent.atomic import AtomicBoolean, AtomicInteger
-from org.openksavi.sponge.test import TestStatus
 
 class ReloadTrigger(Trigger):
     def onConfigure(self):

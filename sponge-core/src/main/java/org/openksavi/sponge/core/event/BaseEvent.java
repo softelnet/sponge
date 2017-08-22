@@ -18,7 +18,6 @@ package org.openksavi.sponge.core.event;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Map;
 import java.util.Objects;
 
 import org.openksavi.sponge.SpongeException;
@@ -162,38 +161,6 @@ public abstract class BaseEvent implements Event {
         }
 
         return Objects.equals(name, event.getName()) && getAll().equals(event.getAll());
-    }
-
-    /**
-     * Matches this event to the specified template.
-     *
-     * @param template event template.
-     * @return {@code true} if this event matches the specified template.
-     */
-    @Override
-    public boolean matches(Event template) {
-        if (template == null) {
-            return false;
-        }
-
-        if (!Objects.equals(name, template.getName())) {
-            return false;
-        }
-
-        Map<String, Object> attributes = getAll();
-        Map<String, Object> templateAll = template.getAll();
-        if (templateAll != null && !templateAll.isEmpty()) {
-            for (Map.Entry<String, Object> entry : templateAll.entrySet()) {
-                if (!attributes.containsKey(entry.getKey())) {
-                    return false;
-                }
-                if (!Objects.equals(entry.getValue(), attributes.get(entry.getKey()))) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
     protected void valudateAttribute(String name, Object value) {

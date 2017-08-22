@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.test.script.util.ScriptTestUtils;
+import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class ActionsTestTemplate {
 

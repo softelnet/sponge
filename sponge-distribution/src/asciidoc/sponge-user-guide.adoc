@@ -999,6 +999,10 @@ ifdef::useReferences[({pySourcesUrl}/rules.py[py], {rbSourcesUrl}/rules.rb[rb], 
 |`triggers`
 ifdef::useReferences[({pySourcesUrl}/triggers.py[py], {rbSourcesUrl}/triggers.rb[rb], {groovySourcesUrl}/triggers.groovy[groovy], {jsSourcesUrl}/triggers.js[js], {pySourcesUrl}/triggers.xml[XML configuration])]
 |Shows how to define and use triggers.
+
+|`triggers_event_pattern`
+ifdef::useReferences[({pySourcesUrl}/triggers_event_pattern.py[py], {rbSourcesUrl}/triggers_event_pattern.rb[rb], {groovySourcesUrl}/triggers_event_pattern.groovy[groovy], {jsSourcesUrl}/triggers_event_pattern.js[js])]
+|Shows how to define and use triggers that specify events they listen to as a pattern based on a regular expression.
 |===
 
 === Features examples

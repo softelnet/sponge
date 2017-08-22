@@ -28,8 +28,8 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.test.TestUtils;
-import org.openksavi.sponge.test.script.util.ScriptTestUtils;
+import org.openksavi.sponge.test.util.ScriptTestUtils;
+import org.openksavi.sponge.test.util.TestUtils;
 
 public class EventsTestTemplate {
 

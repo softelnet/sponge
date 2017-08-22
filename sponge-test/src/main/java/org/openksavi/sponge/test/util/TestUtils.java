@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.test;
+package org.openksavi.sponge.test.util;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -34,7 +34,6 @@ import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
-import org.openksavi.sponge.test.util.CorrelationEventsLog;
 
 public class TestUtils {
 

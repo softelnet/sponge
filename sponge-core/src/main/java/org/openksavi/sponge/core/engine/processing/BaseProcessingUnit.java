@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,7 +59,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     /** Output queue. */
     private EventQueue outQueue;
 
-    /** Event map (event name, registered processor adapters). */
+    /** Event map (event pattern, registered processor adapters). */
     private Map<String, Set<AtomicReference<T>>> eventMap = Collections.synchronizedMap(new HashMap<>());
 
     /** Registered processor map (processor name, processor adapter). */
@@ -81,10 +82,6 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         super(name, engine);
         this.inQueue = inQueue;
         this.outQueue = outQueue;
-    }
-
-    protected Map<String, Set<AtomicReference<T>>> getEventMap() {
-        return eventMap;
     }
 
     public abstract class LoopWorker implements Runnable {
@@ -199,18 +196,26 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     }
 
     /**
-     * Returns an event map.
+     * Returns the processors listening for the event.
      *
-     * @param eventName an event name.
+     * @param eventName the event name.
      *
-     * @return an event map.
+     * @return the processors listening for the event.
      */
     protected Set<AtomicReference<T>> getEventProcessors(String eventName) {
         lock.lock();
         try {
-            Set<AtomicReference<T>> internalList = eventMap.get(eventName);
-            return internalList != null ? internalList// internalList.stream().map(AtomicReference::get).collect(Collectors.toList())
-                    : Collections.emptySet();
+            Set<AtomicReference<T>> result = new LinkedHashSet<>();
+
+            // TODO LoadingCache with limitations
+            eventMap.keySet().stream().filter(pattern -> getEngine().getPatternMatcher().matches(pattern, eventName)).forEach(pattern -> {
+                Set<AtomicReference<T>> internalList = eventMap.get(pattern);
+                if (internalList != null) {
+                    result.addAll(internalList);
+                }
+            });
+
+            return result;
         } finally {
             lock.unlock();
         }

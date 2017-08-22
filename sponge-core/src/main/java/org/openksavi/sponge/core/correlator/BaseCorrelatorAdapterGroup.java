@@ -18,8 +18,6 @@ package org.openksavi.sponge.core.correlator;
 
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup;
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
@@ -63,7 +61,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
      */
     @Override
     public boolean needNewInstance(Event event) {
-        return ArrayUtils.contains(getDefinition().getEventNames(), event.getName())
+        return getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher().matchesAny(getDefinition().getEventNames(),
+                event.getName())
                 && (getDefinition().isMaxInstancesUnbound() || getCorrelators().size() < getDefinition().getMaxInstances());
     }
 

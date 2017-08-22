@@ -20,5 +20,7 @@ public interface TriggersTest extends ScriptTest {
 
     void testTriggers();
 
+    void testTriggersEventPattern();
+
     void testHelloWorld();
 }

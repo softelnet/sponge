@@ -17,6 +17,7 @@
 package org.openksavi.sponge.test.script.template;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.test.script.util.ScriptTestUtils;
+import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class TriggersTestTemplate {
 
@@ -33,12 +34,27 @@ public class TriggersTestTemplate {
         Engine engine = ScriptTestUtils.startWithConfig(type, "triggers");
 
         try {
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(2, TimeUnit.SECONDS)
-                    .until(() -> ((AtomicBoolean) engine.getOperations().getVariable("receivedEventA")).get());
-            await().atMost(5, TimeUnit.SECONDS)
-                    .until(() -> ((Number) engine.getOperations().getVariable("receivedEventBCount")).intValue() > 2);
-            await().atMost(5, TimeUnit.SECONDS)
-                    .until(() -> ((Number) engine.getOperations().getVariable("receivedEventTestJavaCount")).intValue() == 1);
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "receivedEventA").get());
+            await().atMost(10, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "receivedEventBCount").intValue() > 2);
+            await().atMost(10, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "receivedEventTestJavaCount").intValue() == 1);
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testTriggersEventPattern(KnowledgeBaseType type) {
+        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "triggers_event_pattern");
+
+        try {
+            await().atMost(10, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA").intValue() >= 2);
+            await().atMost(10, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "countAPattern").intValue() >= 5);
+            assertEquals(2, engine.getOperations().getVariable(Number.class, "countA").intValue());
+            assertEquals(5, engine.getOperations().getVariable(Number.class, "countAPattern").intValue());
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
