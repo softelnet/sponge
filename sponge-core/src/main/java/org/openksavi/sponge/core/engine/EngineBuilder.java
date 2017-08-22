@@ -40,117 +40,264 @@ import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 
 /**
- * Engine builder.
+ * Engine builder. It provides the most common settings for the engine.
  */
 public class EngineBuilder<T extends BaseEngine> {
 
+    /** The engine. */
     protected T engine;
 
+    /** Plugins. */
     protected List<Plugin> plugins = new ArrayList<>();
 
+    /** Knowledge bases. */
     protected List<KnowledgeBase> knowledgeBases = new ArrayList<>();
 
+    /** Properties. */
     protected Map<String, PropertyEntry> propertyEntries = new LinkedHashMap<>();
 
+    /**
+     * Creates a new Engine Builder.
+     *
+     * @param engine the engine.
+     */
     public EngineBuilder(T engine) {
         this.engine = engine;
     }
 
+    /**
+     * Sets the engine name.
+     *
+     * @param name the engine name.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> name(String name) {
         engine.setName(name);
         return this;
     }
 
+    /**
+     * Sets the module provider.
+     *
+     * @param moduleProvider the moduleProvider to set.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> moduleProvider(EngineModuleProvider moduleProvider) {
         engine.setModuleProvider(moduleProvider);
         return this;
     }
 
+    /**
+     * Sets the knowledge base interpreter factory providers.
+     *
+     * @param knowledgeBaseInterpreterFactoryProviders the knowledge base interpreter factory providers.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBaseInterpreterFactoryProviders(
             List<KnowledgeBaseInterpreterFactoryProvider> knowledgeBaseInterpreterFactoryProviders) {
         engine.setKnowledgeBaseInterpreterFactoryProviders(knowledgeBaseInterpreterFactoryProviders);
         return this;
     }
 
+    /**
+     * Sets the event queue provider.
+     *
+     * @param eventQueueProvider the event queue provider.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> eventQueueProvider(EventQueueProvider eventQueueProvider) {
         engine.setEventQueueProvider(eventQueueProvider);
         return this;
     }
 
+    /**
+     * Sets the processing unit provider.
+     *
+     * @param processingUnitProvider the processing unit provider.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> processingUnitProvider(ProcessingUnitProvider processingUnitProvider) {
         engine.setProcessingUnitProvider(processingUnitProvider);
         return this;
     }
 
+    /**
+     * Sets the knowledge base file provider.
+     *
+     * @param knowledgeBaseFileProvider the knowledge base file provider.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBaseFileProvider(KnowledgeBaseFileProvider knowledgeBaseFileProvider) {
         engine.setKnowledgeBaseFileProvider(knowledgeBaseFileProvider);
         return this;
     }
 
+    /**
+     * Sets the configuration file name.
+     *
+     * @param configFilename the configuration file name.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> config(String configFilename) {
         engine.setConfigurationFilename(configFilename);
         return this;
     }
 
+    /**
+     * Sets the property.
+     *
+     * @param name the property name.
+     * @param value the property value.
+     * @param variable should the property be used as a variable.
+     * @param system is the property a system property.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> property(String name, Object value, boolean variable, boolean system) {
         propertyEntries.put(name, new GenericPropertyEntry(value, variable, system));
         return this;
     }
 
+    /**
+     * Sets the property (that is neither a variable nor a system property).
+     *
+     * @param name the property name.
+     * @param value the property value.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> property(String name, Object value) {
         return property(name, value, false, false);
     }
 
+    /**
+     * Sets the system property (that is not a variable).
+     *
+     * @param name the property name.
+     * @param value the property value.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> systemProperty(String name, Object value) {
         return property(name, value, false, true);
     }
 
+    /**
+     * Sets the property that is also a variable.
+     *
+     * @param name the property name.
+     * @param value the property value.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> variableProperty(String name, Object value) {
         return property(name, value, true, false);
     }
 
+    /**
+     * Sets the properties.
+     *
+     * @param simpleProperties the properties.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> properties(Map<String, Object> simpleProperties) {
         simpleProperties.forEach((name, value) -> property(name, value));
         return this;
     }
 
+    /**
+     * Sets the system properties.
+     *
+     * @param systemProperties the system properties.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> systemProperties(Map<String, String> systemProperties) {
         systemProperties.forEach((name, value) -> systemProperty(name, value));
         return this;
     }
 
+    /**
+     * Sets the variable properties.
+     *
+     * @param variableProperties the variable properties.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> variableProperties(Map<String, String> variableProperties) {
         variableProperties.forEach((name, value) -> variableProperty(name, value));
         return this;
     }
 
+    /**
+     * Adds the plugin.
+     *
+     * @param plugin the plugin.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> plugin(Plugin plugin) {
         plugins.add(plugin);
         return this;
     }
 
+    /**
+     * Adds the plugins.
+     *
+     * @param plugins the plugins.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> plugins(Plugin... plugins) {
         Stream.of(plugins).forEach(plugin -> plugin(plugin));
         return this;
     }
 
+    /**
+     * Adds the knowledge base.
+     *
+     * @param knowledgeBase the knowledge base.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBase(KnowledgeBase knowledgeBase) {
         knowledgeBases.add(knowledgeBase);
         return this;
     }
 
+    /**
+     * Adds the knowledge base.
+     *
+     * @param name the knowledge base name.
+     * @param type the knowledge base type.
+     * @param files the knowledge base files.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, String... files) {
         return knowledgeBase(name, type, Stream.of(files).map(file -> new FileKnowledgeBaseScript(file)).collect(Collectors.toList()));
     }
 
+    /**
+     * Adds the knowledge base.
+     *
+     * @param name the knowledge base name.
+     * @param files the knowledge base files.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBase(String name, String... files) {
         return knowledgeBase(name, Stream.of(files).map(file -> new FileKnowledgeBaseScript(file)).collect(Collectors.toList()));
     }
 
+    /**
+     * Adds the knowledge base.
+     *
+     * @param name the knowledge base name.
+     * @param scripts the knowledge base scripts.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBase(String name, List<KnowledgeBaseScript> scripts) {
         return knowledgeBase(name, null, scripts);
     }
 
+    /**
+     * Adds the knowledge base.
+     *
+     * @param name the knowledge base name.
+     * @param type the knowledge base type.
+     * @param scripts the knowledge base scripts.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, List<KnowledgeBaseScript> scripts) {
         ScriptKnowledgeBase knowledgeBase = new DefaultScriptKnowledgeBase(name, type);
         scripts.forEach(script -> knowledgeBase.addScript(script));
@@ -159,16 +306,31 @@ public class EngineBuilder<T extends BaseEngine> {
         return this;
     }
 
+    /**
+     * Sets the exception handler.
+     *
+     * @param exceptionHandler the new exception handler.
+     */
     public EngineBuilder<T> exceptionHandler(ExceptionHandler exceptionHandler) {
         engine.setExceptionHandler(exceptionHandler);
 
         return this;
     }
 
+    /**
+     * Returns the engine default parameters. This method allows changing the values of default parameters.
+     *
+     * @return the engine default parameters
+     */
     public EngineParameters getEngineDefaultParameters() {
         return engine.getDefaultParameters();
     }
 
+    /**
+     * Build the engine.
+     *
+     * @return the engine.
+     */
     public T build() {
         engine.init();
 
@@ -186,6 +348,11 @@ public class EngineBuilder<T extends BaseEngine> {
         return engine;
     }
 
+    /**
+     * Returns the engine description.
+     *
+     * @return the engine description.
+     */
     public String getDescription() {
         return engine.getDescription();
     }

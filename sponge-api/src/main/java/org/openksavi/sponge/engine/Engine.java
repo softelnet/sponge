@@ -53,65 +53,65 @@ public interface Engine extends EngineModule {
     void init();
 
     /**
-     * Returns Plugin Manager.
+     * Returns the Plugin Manager.
      *
-     * @return Plugin Manager.
+     * @return the Plugin Manager.
      */
     PluginManager getPluginManager();
 
     /**
-     * Returns Knowledge Base Manager.
+     * Returns the Knowledge Base Manager.
      *
-     * @return Knowledge Base Manager.
+     * @return the Knowledge Base Manager.
      */
     KnowledgeBaseManager getKnowledgeBaseManager();
 
     /**
-     * Returns Configuration Manager.
+     * Returns the Configuration Manager.
      *
-     * @return Configuration Manager.
+     * @return the Configuration Manager.
      */
     ConfigurationManager getConfigurationManager();
 
     /**
-     * Returns Processing Unit Manager.
+     * Returns the Processing Unit Manager.
      *
-     * @return Processing Unit Manager.
+     * @return the Processing Unit Manager.
      */
     ProcessingUnitManager getProcessingUnitManager();
 
     /**
-     * Returns Event Queue Manager.
+     * Returns the Event Queue Manager.
      *
-     * @return Event Queue Manager.
+     * @return the Event Queue Manager.
      */
     EventQueueManager getEventQueueManager();
 
     /**
-     * Returns Event Scheduler.
+     * Returns the Event Scheduler.
      *
-     * @return Event Scheduler.
+     * @return the Event Scheduler.
      */
     EventScheduler getEventScheduler();
 
     /**
-     * Returns thread pool manager.
+     * Returns the Thread Pool Manager.
      *
-     * @return thread pool manager.
+     * @return the Thread Pool Manager.
      */
     ThreadPoolManager getThreadPoolManager();
 
     /**
-     * Returns processor manager.
+     * Returns the Processor Manager.
      *
-     * @return processor manager.
+     * @return the Processor Manager.
      */
     ProcessorManager getProcessorManager();
 
     /**
-     * Returns Statistics Manager.
+     * Returns the Statistics Manager.
      *
-     * @return Statistics Manager.
+     * @return the Statistics Manager.
      */
     StatisticsManager getStatisticsManager();
 
@@ -151,18 +151,18 @@ public interface Engine extends EngineModule {
     List<ActionAdapter> getActions();
 
     /**
-     * Handles an error.
+     * Handles the error.
      *
-     * @param processorAdapter processor adapter.
-     * @param e exception.
+     * @param processorAdapter the processor adapter.
+     * @param e the exception.
      */
     void handleError(ProcessorAdapter<?> processorAdapter, Throwable e);
 
     /**
-     * Handles an error.
+     * Handles the error.
      *
-     * @param sourceName source name.
-     * @param e exception.
+     * @param sourceName the source name.
+     * @param e the exception.
      */
     void handleError(String sourceName, Throwable e);
 
@@ -217,23 +217,23 @@ public interface Engine extends EngineModule {
     Throwable getError();
 
     /**
-     * Returns engine operations.
+     * Returns the engine operations.
      *
-     * @return engine operations.
+     * @return the engine operations.
      */
     KnowledgeBaseEngineOperations getOperations();
 
     /**
-     * Returns a knowledge base file provider.
+     * Returns the knowledge base file provider.
      *
-     * @return a knowledge base file provider.
+     * @return the knowledge base file provider.
      */
     KnowledgeBaseFileProvider getKnowledgeBaseFileProvider();
 
     /**
-     * Adds OnStartup listener.
+     * Adds the OnStartup listener.
      *
-     * @param onStartupListener OnStartup listener.
+     * @param onStartupListener the OnStartup listener.
      */
     void addOnStartupListener(OnStartupListener onStartupListener);
 
@@ -245,17 +245,17 @@ public interface Engine extends EngineModule {
     List<OnStartupListener> getOnStartupListeners();
 
     /**
-     * Removes OnStartup listener.
+     * Removes the OnStartup listener.
      *
-     * @param onStartupListener OnStartup listener.
+     * @param onStartupListener the OnStartup listener.
      * @return {@code true} if there was such OnStartup listener.
      */
     boolean removeOnStartupListener(OnStartupListener onStartupListener);
 
     /**
-     * Adds OnShutdown listener.
+     * Adds the OnShutdown listener.
      *
-     * @param onShutdownListener OnShutdown listener.
+     * @param onShutdownListener the OnShutdown listener.
      */
     void addOnShutdownListener(OnShutdownListener onShutdownListener);
 
@@ -267,22 +267,22 @@ public interface Engine extends EngineModule {
     List<OnShutdownListener> getOnShutdownListeners();
 
     /**
-     * Removes OnShutdown listener.
+     * Removes the OnShutdown listener.
      *
-     * @param onShutdownListener OnShutdown listener.
+     * @param onShutdownListener the OnShutdown listener.
      * @return {@code true} if there was such OnShutdown listener.
      */
     boolean removeOnShutdownListener(OnShutdownListener onShutdownListener);
 
     /**
-     * Returns an exception handler.
+     * Returns the exception handler.
      *
-     * @return an exception handler.
+     * @return the exception handler.
      */
     public ExceptionHandler getExceptionHandler();
 
     /**
-     * Sets an exception handler.
+     * Sets the exception handler.
      *
      * @param exceptionHandler the new exception handler.
      */
@@ -304,59 +304,59 @@ public interface Engine extends EngineModule {
     // void setEventIdGenerator(EventIdGenerator eventIdGenerator);
 
     /**
-     * Sets a configuration file name.
+     * Sets the configuration file name.
      *
-     * @param configurationFilename a configuration file name.
+     * @param configurationFilename the configuration file name.
      */
     void setConfigurationFilename(String configurationFilename);
 
     /**
-     * Sets a processing unit provider.
+     * Sets the processing unit provider.
      *
-     * @param processingUnitProvider a processing unit provider.
+     * @param processingUnitProvider the processing unit provider.
      */
     void setProcessingUnitProvider(ProcessingUnitProvider processingUnitProvider);
 
     /**
-     * Sets a knowledge base interpreter factory providers.
+     * Sets the knowledge base interpreter factory providers.
      *
-     * @param knowledgeBaseInterpreterFactoryProviders a knowledge base interpreter factory providers.
+     * @param knowledgeBaseInterpreterFactoryProviders the knowledge base interpreter factory providers.
      */
     void setKnowledgeBaseInterpreterFactoryProviders(
             List<KnowledgeBaseInterpreterFactoryProvider> knowledgeBaseInterpreterFactoryProviders);
 
     /**
-     * Sets a module provider.
+     * Sets the module provider.
      *
-     * @param moduleProvider a module provider.
+     * @param moduleProvider the module provider.
      */
     void setModuleProvider(EngineModuleProvider moduleProvider);
 
     /**
-     * Sets an event queue provider.
+     * Sets the event queue provider.
      *
-     * @param eventQueueProvider an event queue provider.
+     * @param eventQueueProvider the event queue provider.
      */
     void setEventQueueProvider(EventQueueProvider eventQueueProvider);
 
     /**
-     * Sets a knowledge base file provider.
+     * Sets the knowledge base file provider.
      *
-     * @param knowledgeBaseFileProvider a knowledge base file provider.
+     * @param knowledgeBaseFileProvider the knowledge base file provider.
      */
     void setKnowledgeBaseFileProvider(KnowledgeBaseFileProvider knowledgeBaseFileProvider);
 
     /**
-     * Returns a strategy for handling an event set processor duration timeout.
+     * Returns the strategy for handling an event set processor duration timeout.
      *
-     * @return a duration strategy.
+     * @return the duration strategy.
      */
     EventSetProcessorDurationStrategy getEventSetProcessorDurationStrategy();
 
     /**
-     * Sets a strategy for handling an event set processor duration timeout.
+     * Sets the strategy for handling an event set processor duration timeout.
      *
-     * @param durationStrategy a duration strategy.
+     * @param durationStrategy the duration strategy.
      */
     void setEventSetProcessorDurationStrategy(EventSetProcessorDurationStrategy durationStrategy);
 }

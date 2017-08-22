@@ -182,7 +182,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     }
 
     /**
-     * Sets a module provider.
+     * Sets the module provider.
      *
      * @param moduleProvider the moduleProvider to set.
      */
@@ -201,21 +201,11 @@ public class BaseEngine extends BaseEngineModule implements Engine {
         this.knowledgeBaseInterpreterFactoryProviders = knowledgeBaseInterpreterFactoryProviders;
     }
 
-    /**
-     * Sets the event queue provider.
-     *
-     * @param eventQueueProvider the eventQueueProvider to set.
-     */
     @Override
     public void setEventQueueProvider(EventQueueProvider eventQueueProvider) {
         this.eventQueueProvider = eventQueueProvider;
     }
 
-    /**
-     * Sets the processing unit provider.
-     *
-     * @param processingUnitProvider the processingUnitProvider to set.
-     */
     @Override
     public void setProcessingUnitProvider(ProcessingUnitProvider processingUnitProvider) {
         this.processingUnitProvider = processingUnitProvider;
