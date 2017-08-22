@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.EventSetProcessor;
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
+import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.core.event.DurationControlEvent;
 import org.openksavi.sponge.core.rule.BaseRuleAdapter;
 import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
@@ -117,15 +118,15 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     }
 
     @Override
-    public boolean removeEventSetProcessorAdapter(T eventSetProcessorAdapter) {
-        return eventSetProcessorAdapters.remove(eventSetProcessorAdapter);
+    public void removeDuration(T adapter) {
+        handler.removeDuration(adapter);
     }
 
     /**
-     * Removes stopped event set processors within this group.
+     * Removes finished event set processors within this group.
      */
-    protected void removeStoppedEventSetProcessors() {
-        Predicate<T> filter = adapter -> !adapter.isRunning();
+    protected void removeFinishedEventSetProcessors() {
+        Predicate<T> filter = adapter -> adapter.getState() == EventSetProcessorState.FINISHED;
         eventSetProcessorAdapters.stream().filter(filter).forEach(adapter -> handler.removeDuration(adapter));
         eventSetProcessorAdapters.removeIf(filter);
     }
@@ -168,7 +169,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
             handler.processEventForEventSetProcessorAdapters(getDefinition(), eventSetProcessorAdapters, event);
             logEventTree("after");
 
-            removeStoppedEventSetProcessors();
+            removeFinishedEventSetProcessors();
         } finally {
             lock.unlock();
         }

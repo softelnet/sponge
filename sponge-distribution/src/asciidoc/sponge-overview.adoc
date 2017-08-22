@@ -4,7 +4,7 @@
 == {sponge}
 *{sponge} is an open-source, Apache 2.0 licensed, Java-based Event Processing System.*
 
-{sponge} provides a software framework for implementing event processors that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events.
+{sponge} provides a software framework for implementing event processors that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators.
 
 Event processors are defined in knowledge bases. Knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java.
 
@@ -40,15 +40,28 @@ The main features of {sponge}:
 {sponge} is released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license].
 
 == Applications
-{sponge} could be used as a component in such applications as:
+{sponge} could be used as a component in various types of applications. Here are some examples.
 
-* https://en.wikipedia.org/wiki/Internet_of_things[internet of things (IoT)], e.g. in https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway],
-* https://en.wikipedia.org/wiki/SCADA[supervisory control and data acquisition (SCADA)],
-* https://en.wikipedia.org/wiki/Fault_management[fault management],
-* https://en.wikipedia.org/wiki/System_monitoring[system monitoring],
-* https://en.wikipedia.org/wiki/Network_monitoring[network monitoring],
-* https://en.wikipedia.org/wiki/System_integration[system integration],
-* https://en.wikipedia.org/wiki/Data_analysis_techniques_for_fraud_detection[fraud detection].
+https://en.wikipedia.org/wiki/Internet_of_things[Internet of Things (IoT)]::
+{sponge} as a part of https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway] may locally process data provided by the devices in the field, thus only important data is sent to the central node, where data is collected, stored and manipulated by enterprise applications.
+
+https://en.wikipedia.org/wiki/Business_activity_monitoring[Business Activity Monitoring (BAM)]::
+{sponge} embedded in a Spring based application may have an access to a service layer via Spring beans. {sponge} could periodically run monitoring tasks and generate notification events if necessary.
+
+https://en.wikipedia.org/wiki/Fault_management[Fault management]::
+{sponge} may be used to process faults or events sent by the network using a protocol such as SNMP. The processing may include creating issues into https://en.wikipedia.org/wiki/Issue_tracking_system[the issue tracking system (Trouble Ticket system)]. {sponge} may use all protocols supported by Apache Camel or provided by custom plugins.
+
+https://en.wikipedia.org/wiki/Network_monitoring[Network monitoring]::
+{sponge} may be used to monitor a web server by periodically sending an HTTP request to fetch a page. It may also provide more advanced checks by running for example http://www.seleniumhq.org[Selenium] scripts to verify a web application. When a problem is detected {sponge} could send an email to the administrator.
+
+https://en.wikipedia.org/wiki/SCADA[Supervisory control and data acquisition (SCADA)]::
+{sponge} may be used as a part of Alarm handling as well as a part of a module that connects to the remote terminal units (RTUs) or the field sensors and actuators.
+
+https://en.wikipedia.org/wiki/Distributed_control_system[Distributed control system (DCS)]::
+{sponge} may be used as a part of the production control level to provide an event-driven monitoring.
+
+https://en.wikipedia.org/wiki/System_integration[System integration]::
+{sponge} may be used to provide a script-based integration using Apache Camel routes. {sponge} could be connected to https://en.wikipedia.org/wiki/Enterprise_service_bus[the Enterprise Service Bus (ESB)] as well.
 
 == Users
 The potential users of an embedded {sponge} are Java developers.

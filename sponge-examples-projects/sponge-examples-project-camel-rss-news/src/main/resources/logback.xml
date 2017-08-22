@@ -12,7 +12,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.openksavi" level="debug" />
+    <logger name="org.openksavi" level="info" />
     <logger name="org.openksavi.sponge.core.rule" level="info" />
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup" level="info" />
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="info" />

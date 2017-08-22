@@ -34,7 +34,7 @@ public interface EventSetProcessorAdapterGroup<T extends EventSetProcessorAdapte
     List<T> getEventSetProcessorAdapters();
 
     /**
-     * Processes a specified event.
+     * Processes the specified event.
      *
      * @param event event.
      */
@@ -48,11 +48,9 @@ public interface EventSetProcessorAdapterGroup<T extends EventSetProcessorAdapte
     void durationOccurred(T adapter);
 
     /**
-     * Removes the event set processor adapter from this group.
+     * Removes the event set processor duration task.
      *
-     * @param eventSetProcessorAdapter the event set processor adapter.
-     *
-     * @return {@code true} if this group contained the specified event set processor adapter.
+     * @param adapter the event set processor adapter.
      */
-    boolean removeEventSetProcessorAdapter(T eventSetProcessorAdapter);
+    void removeDuration(T adapter);
 }

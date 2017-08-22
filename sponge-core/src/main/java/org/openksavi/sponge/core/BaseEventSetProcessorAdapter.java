@@ -107,8 +107,8 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
         try {
             if (getState() != EventSetProcessorState.FINISHED) {
                 setState(EventSetProcessorState.FINISHED);
+                group.removeDuration(this);
                 clear();
-                group.removeEventSetProcessorAdapter(this);
             }
         } finally {
             lock.unlock();
