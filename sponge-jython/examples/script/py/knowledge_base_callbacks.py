@@ -4,7 +4,7 @@ Using knowledge base callbacks.
 """
 
 from java.util.concurrent.atomic import AtomicBoolean, AtomicInteger
-from org.openksavi.sponge.test import TestStatus
+from org.openksavi.sponge.test.util import TestStatus
 
 class ReloadTrigger(Trigger):
     def onConfigure(self):

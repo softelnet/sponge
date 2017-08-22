@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.test.script.util;
+package org.openksavi.sponge.test.util;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.test.TestUtils;
 
 /**
  * Script tests utility methods.
