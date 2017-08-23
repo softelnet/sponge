@@ -80,7 +80,8 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
      */
     protected boolean isEventExpected(int level, Event event) {
         String[] eventNames = getEventNames();
-        return level < eventNames.length && eventNames[level].equals(event.getName());
+        return level < eventNames.length
+                && getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher().matches(eventNames[level], event.getName());
     }
 
     /**

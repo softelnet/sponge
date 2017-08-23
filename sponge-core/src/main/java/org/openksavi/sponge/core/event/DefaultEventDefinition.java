@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.core.event;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -97,5 +100,25 @@ public class DefaultEventDefinition implements EventDefinition {
     @Override
     public Event make() {
         return event;
+    }
+
+    @Override
+    public EventSchedulerEntry sendAfter(Duration delay) {
+        return sendAfter(delay.toMillis());
+    }
+
+    @Override
+    public EventSchedulerEntry sendAfter(Duration delay, Duration interval) {
+        return sendAfter(delay.toMillis(), interval.toMillis());
+    }
+
+    @Override
+    public EventSchedulerEntry sendAt(Instant instant) {
+        return sendAt(instant.toEpochMilli());
+    }
+
+    @Override
+    public EventSchedulerEntry sendAt(Instant instant, Duration interval) {
+        return sendAt(instant.toEpochMilli(), interval.toMillis());
     }
 }

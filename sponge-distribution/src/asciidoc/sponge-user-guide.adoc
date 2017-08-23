@@ -100,7 +100,7 @@ Events are the basic element of processing in {sponge}. They have properties suc
 Properties `id` and `time` are automatically set when adding an event to the Input Event Queue and there is no need for setting them manually.
 
 === Event queues
-Events that have been ignored (i.e. events that haven't been listened to by any event processor) are sent to the Output Event Queue. The default behavior in such case is to forget such events. You may see these events in the logs by setting the `sponge.event.ignored` logger to `INFO`.
+You may see ignored events (i.e. events that go to the Output Event Queue) in the logs by setting the `sponge.event.ignored` logger to `INFO`.
 
 === Event priorities
 A priority may be assigned only to control events, that are used internally by the engine. For standard events the priority always equals to `0` and cannot be modified.
@@ -156,16 +156,16 @@ An event may be to sent as:
 |Sends an event immediately.
 
 |`sendAfter(delay)`
-|Sends an event after the specified time (given in milliseconds).
+|Sends an event after the specified time (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
 
 |`sendAfter(delay, interval)`
-|Periodically sends events after the specified time (given in milliseconds) every `interval` (given in milliseconds).
+|Periodically sends events after the specified time (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]) every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
 
 |`sendAt(at)`
-|Sends an event at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970).
+|Sends an event at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970 or as an {javaSeJavaDocUrl}/java/time/Instant.html[`Instant`]).
 
 |`sendAt(at, interval)`
-|Periodically sends events starting at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970) every `interval` (given in milliseconds).
+|Periodically sends events starting at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970 or as an {javaSeJavaDocUrl}/java/time/Instant.html[`Instant`]) every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
 
 |`sendAt(crontabSpec)`
 |Sends events at time specified by Cron compatible time entry.
@@ -182,7 +182,7 @@ Sample sending of events from the level of a knowledge base:
 
 [source,python]
 ----
-EPS.event("e1").sendAfter(1000)
+EPS.event("e1").sendAfter(Duration.ofSeconds(1))
 ----
 Sends the event named `"e1"` after `1` second from now.
 
@@ -713,6 +713,8 @@ void onLoad() {
 
 For every knowledge base file there is a new Groovy `Script` instance created. For example when reloading, a new Groovy `Script` instance is created for each knowledge base file and they are placed in a list (in a reverse order) to be used by the {sponge} Groovy interpreter internally.
 
+It seems that a Groovy-based knowledge base must have at east one function (may be empty). Otherwise you may get `org.codehaus.groovy.runtime.metaclass.MissingMethodExceptionNoStack` exception.
+
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -999,6 +1001,10 @@ ifdef::useReferences[({pySourcesUrl}/rules.py[py], {rbSourcesUrl}/rules.rb[rb], 
 |`triggers`
 ifdef::useReferences[({pySourcesUrl}/triggers.py[py], {rbSourcesUrl}/triggers.rb[rb], {groovySourcesUrl}/triggers.groovy[groovy], {jsSourcesUrl}/triggers.js[js], {pySourcesUrl}/triggers.xml[XML configuration])]
 |Shows how to define and use triggers.
+
+|`triggers_event_pattern`
+ifdef::useReferences[({pySourcesUrl}/triggers_event_pattern.py[py], {rbSourcesUrl}/triggers_event_pattern.rb[rb], {groovySourcesUrl}/triggers_event_pattern.groovy[groovy], {jsSourcesUrl}/triggers_event_pattern.js[js])]
+|Shows how to define and use triggers that specify events they listen to as a pattern based on a regular expression.
 |===
 
 === Features examples
@@ -1016,6 +1022,10 @@ ifdef::useReferences[({coreSourcesUrl}/fibonacci.py[py])]
 |`engine_parameters`
 ifdef::useReferences[({coreSourcesUrl}/engine_parameters.xml[xml])]
 |Shows how to set engine parameters in the XML configuration file.
+
+|`event_pattern`
+ifdef::useReferences[({coreSourcesUrl}/event_pattern.py[py])]
+|Shows how to use event name patterns and how to enable/disable processors manually.
 
 |`spring`
 ifdef::useReferences[({springSourcesUrl}/spring.py[py], {sourcesUrl}/sponge-spring/src/test/java/org/openksavi/sponge/spring/test/SpringTest.java[java])]

@@ -121,14 +121,6 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     boolean equalsByAttributes(Event event);
 
     /**
-     * Matches this event to the specified template.
-     *
-     * @param template event template.
-     * @return {@code true} if this event matches the specified template.
-     */
-    boolean matches(Event template);
-
-    /**
      * Clones this event. Attributes are deeply cloned.
      *
      * @return cloned event.

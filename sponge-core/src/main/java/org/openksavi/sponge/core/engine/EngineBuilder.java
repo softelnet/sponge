@@ -310,6 +310,7 @@ public class EngineBuilder<T extends BaseEngine> {
      * Sets the exception handler.
      *
      * @param exceptionHandler the new exception handler.
+     * @return this Engine Builder.
      */
     public EngineBuilder<T> exceptionHandler(ExceptionHandler exceptionHandler) {
         engine.setExceptionHandler(exceptionHandler);

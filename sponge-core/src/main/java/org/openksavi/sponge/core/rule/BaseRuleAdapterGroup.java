@@ -55,7 +55,8 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
      */
     @Override
     public boolean needNewInstance(Event event) {
-        return event.getName().equals(getDefinition().getEventName(0));
+        return getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher().matches(getDefinition().getEventName(0),
+                event.getName());
     }
 
     @Override

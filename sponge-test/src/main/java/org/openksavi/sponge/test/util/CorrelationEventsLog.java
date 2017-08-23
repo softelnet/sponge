@@ -17,12 +17,14 @@
 package org.openksavi.sponge.test.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.event.Event;
@@ -85,10 +87,23 @@ public class CorrelationEventsLog {
         lock.lock();
         try {
             if (!events.containsKey(key) || !events.get(key).containsKey(firstEventLabel)) {
-                return Collections.EMPTY_LIST;
+                return Collections.emptyList();
             }
 
             return events.get(key).get(firstEventLabel);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public List<List<Event>> getAllEvents(String key) {
+        lock.lock();
+        try {
+            if (!events.containsKey(key)) {
+                return Collections.emptyList();
+            }
+
+            return events.get(key).values().stream().flatMap(Collection::stream).collect(Collectors.toList());
         } finally {
             lock.unlock();
         }

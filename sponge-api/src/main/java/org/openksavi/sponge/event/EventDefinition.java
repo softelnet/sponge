@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.event;
 
+import java.time.Duration;
+import java.time.Instant;
+
 /**
  * An event definition providing a fluent API for creating and sending events.
  */
@@ -63,6 +66,23 @@ public interface EventDefinition {
     EventSchedulerEntry sendAfter(long delay, long interval);
 
     /**
+     * Sends the event to the Input Event Queue after a specified time.
+     *
+     * @param delay delay as Duration.
+     * @return scheduled event entry.
+     */
+    EventSchedulerEntry sendAfter(Duration delay);
+
+    /**
+     * Sends the event to the Input Event Queue periodically after a specified time.
+     *
+     * @param delay delay as Duration.
+     * @param interval interval as Duration.
+     * @return scheduled event entry.
+     */
+    EventSchedulerEntry sendAfter(Duration delay, Duration interval);
+
+    /**
      * Sends the event to the Input Event Queue at a specified time.
      *
      * @param milliseconds time in milliseconds.
@@ -78,6 +98,23 @@ public interface EventDefinition {
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(long milliseconds, long interval);
+
+    /**
+     * Sends the event to the Input Event Queue at a specified time.
+     *
+     * @param instant time as Instant.
+     * @return scheduled event entry.
+     */
+    EventSchedulerEntry sendAt(Instant instant);
+
+    /**
+     * Sends the event to the Input Event Queue at a specified time and then periodically.
+     *
+     * @param instant time as Instant.
+     * @param interval interval as Duration.
+     * @return scheduled event entry.
+     */
+    EventSchedulerEntry sendAt(Instant instant, Duration interval);
 
     /**
      * Sends the event to the Input Event Queue at a time specified by the crontab spec.

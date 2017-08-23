@@ -33,6 +33,7 @@ import org.openksavi.sponge.spi.EventQueueProvider;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
+import org.openksavi.sponge.util.PatternMatcher;
 
 /**
  * The engine. This is the main interface of the system. An instance of this interface manages all main components.
@@ -359,4 +360,18 @@ public interface Engine extends EngineModule {
      * @param durationStrategy the duration strategy.
      */
     void setEventSetProcessorDurationStrategy(EventSetProcessorDurationStrategy durationStrategy);
+
+    /**
+     * Returns the pattern matcher.
+     *
+     * @return the pattern matcher.
+     */
+    PatternMatcher getPatternMatcher();
+
+    /**
+     * Sets the pattern matcher.
+     *
+     * @param patternMatcher the pattern matcher.
+     */
+    void setPatternMatcher(PatternMatcher patternMatcher);
 }

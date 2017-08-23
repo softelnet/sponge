@@ -61,6 +61,7 @@ asciidoctor:
     - useReferences=true
     - downloadUrl=/download/{standalonePackage}.zip
     - logoDir=images
+    - javaSeJavaDocUrl=https://docs.oracle.com/javase/8/docs/api
 
 defaults:
   -

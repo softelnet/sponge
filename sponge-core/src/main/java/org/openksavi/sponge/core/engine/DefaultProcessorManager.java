@@ -126,8 +126,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
             Optional<Map.Entry<ProcessorType, RegistrationHandler>> alreadyRegistered = findAlreadyRegisteredByDifferentType(adapter);
             if (alreadyRegistered.isPresent()) {
-                Validate.isTrue(false, "% named '%' is already registered as % type", adapter.getType().getDisplayName(), adapter.getName(),
-                        alreadyRegistered.get().getKey().getDisplayName());
+                Validate.isTrue(false, "% named '%' has already been registered as % type", adapter.getType().getDisplayName(),
+                        adapter.getName(), alreadyRegistered.get().getKey().getDisplayName());
             }
 
             bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
