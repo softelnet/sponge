@@ -25,7 +25,7 @@ class RuleFFL(Rule):
     def onConfigure(self):
         self.events = ["e1", "e2", "e3 :last"]
         global defaultDuration
-        self.duration = Duration.ofMillis(100)
+        self.duration = Duration.ofMillis(1000)
         self.synchronous = False
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)

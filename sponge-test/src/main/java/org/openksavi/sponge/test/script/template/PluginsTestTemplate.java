@@ -32,7 +32,7 @@ public class PluginsTestTemplate {
         Engine engine = ScriptTestUtils.startWithConfig(type, "plugins_java");
 
         try {
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable("connectionName") != null);
 
             assertEquals("Example connection", engine.getOperations().getVariable("connectionName"));
@@ -47,7 +47,7 @@ public class PluginsTestTemplate {
         Engine engine = ScriptTestUtils.startWithConfig(type, "plugins_script");
 
         try {
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(5, TimeUnit.SECONDS)
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable("valueAfter") != null);
 
             assertEquals("Value A", engine.getOperations().getVariable("valueBefore"));

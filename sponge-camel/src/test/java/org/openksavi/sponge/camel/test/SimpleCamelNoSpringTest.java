@@ -88,7 +88,9 @@ public class SimpleCamelNoSpringTest {
         camel.start();
 
         try {
-            await().atMost(10, TimeUnit.SECONDS)
+            engine.getOperations().event("spongeEvent").set("message", "Send me to Camel").send();
+
+            await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "receivedCamelMessage").get());
             assertFalse(engine.isError());
         } finally {

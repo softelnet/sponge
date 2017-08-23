@@ -71,7 +71,10 @@ public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends Event
     }
 
     protected void processAdapter(T adapter, Event event) {
-        adapter.setState(EventSetProcessorState.RUNNING);
+        if (adapter.getState() == EventSetProcessorState.FINISHED) {
+            return;
+        }
+
         try {
             adapter.processEvent(event);
         } catch (Throwable e) {

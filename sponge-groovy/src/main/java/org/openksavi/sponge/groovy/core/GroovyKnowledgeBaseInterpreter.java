@@ -55,6 +55,7 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
@@ -137,17 +138,15 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     @Override
     public void onClear() {
         synchronized (interpteterSynchro) {
-            if (shell != null) {
-                shell.resetLoadedClasses();
-            }
+            invalidateCache();
 
             if (scripts != null) {
                 scripts.clear();
+                scripts = null;
             }
 
             shell = null;
             binding = null;
-            scripts = null;
         }
     }
 
@@ -228,11 +227,6 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     protected void addImport(ImportCustomizer importCustomizer, Class<?> clazz, String alias) {
         importCustomizer.addImport(alias, clazz.getName());
-    }
-
-    @Override
-    protected <T> T doCreateInstance(String className, Class<T> javaClass) {
-        return eval("new " + className + "()");
     }
 
     @Override
@@ -336,7 +330,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
         return new GroovyKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 
@@ -354,6 +348,8 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     @Override
     public void load(String fileName, Charset charset) {
         synchronized (interpteterSynchro) {
+            invalidateCache();
+
             Engine engine = getEngineOperations().getEngine();
             try (Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, fileName, charset)) {
                 Script script = shell.parse(reader, fileName);
@@ -390,6 +386,8 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     public Script reloadScript(String scriptName) {
         try {
+            invalidateCache();
+
             GroovyScriptEngine groovy = new GroovyScriptEngine(createClasspath(getEngineOperations().getEngine()).toArray(new String[0]),
                     shell.getClassLoader());
             Script script = groovy.createScript(scriptName, binding);
@@ -414,5 +412,12 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
             logger.debug("Auto-enabling: {}", autoEnabled);
         }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    protected <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider() {
+        return new CachedScriptClassInstancePovider<Script, T>(getEngineOperations().getEngine(), (expression) -> shell.parse(expression),
+                "new %s()", (script, javaClass) -> (T) script.run());
     }
 }

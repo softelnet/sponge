@@ -24,7 +24,7 @@ class Trigger1(Trigger):
         self.displayName = "Trigger1, file1"
         self.event = "e1"
     def onRun(self, event):
-        self.logger.debug("file1: Received event {}", event)
+        #self.logger.debug("file1: Received event {}", event)
         global eventCounter
         eventCounter.get(self.displayName).incrementAndGet()
 
@@ -34,7 +34,7 @@ class Trigger2(Trigger):
         self.displayName = "Trigger2, file1"
         self.event = "e2"
     def onRun(self, event):
-        self.logger.debug("file1: Received event {}", event)
+        #self.logger.debug("file1: Received event {}", event)
         global eventCounter
         eventCounter.get(self.displayName).incrementAndGet()
 
@@ -52,11 +52,11 @@ def onLoad():
 
 def onStartup():
     EPS.logger.debug("onStartup, file1: {}, triggers: {}", EPS.description, EPS.engine.triggers)
-    EPS.event("e1").sendAfter(0, 100)
-    EPS.event("e2").sendAfter(0, 100)
+    EPS.event("e1").sendAfter(0, 500)
+    EPS.event("e2").sendAfter(0, 500)
 
-    EPS.event("loadKbFile").set("kbFile", "examples/script/py/knowledge_base_load2.py").sendAfter(500)
-    EPS.event("loadKbFile").set("kbFile", "examples/script/py/knowledge_base_load3.py").sendAfter(1500)
+    EPS.event("loadKbFile").set("kbFile", "examples/script/py/knowledge_base_load2.py").sendAfter(2000)
+    EPS.event("loadKbFile").set("kbFile", "examples/script/py/knowledge_base_load3.py").sendAfter(5000)
 
 def onShutdown():
     EPS.logger.debug("onShutdown, file1")

@@ -16,16 +16,16 @@ var CronTrigger = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         eventCounter = EPS.getVariable("eventCounter")
-        self.logger.debug("Received event {}: {}", eventCounter.get() + 1, event.name);
-        if (eventCounter.get() + 1 == 2) {
+        eventCounter.incrementAndGet();
+        self.logger.debug("Received event {}: {}", eventCounter.get(), event.name);
+        if (eventCounter.get() == 2) {
             self.logger.debug("removing scheduled event");
             EPS.removeEvent(EPS.getVariable("scheduleEntry"));
         }
-        eventCounter.incrementAndGet();
     }
 });
 
 function onStartup() {
-    // send event every second
-    EPS.setVariable("scheduleEntry", EPS.event("cronEvent").sendAt("0/1 * * * * ?"));
+    // send event every 2 seconds
+    EPS.setVariable("scheduleEntry", EPS.event("cronEvent").sendAt("0/2 * * * * ?"));
 }

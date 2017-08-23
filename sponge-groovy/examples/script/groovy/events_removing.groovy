@@ -5,7 +5,7 @@
 
 void onInit() {
     EPS.setVariable("eventCounter", 0)
-    EPS.setVariable("allowNumber", 3)
+    EPS.setVariable("allowNumber", 2)
 }
 
 class Trigger1 extends Trigger {
@@ -34,8 +34,8 @@ class Trigger2 extends Trigger {
 }
 
 void onStartup() {
-    int start = 100
-    int interval = 500
+    int start = 500
+    int interval = 1000
     EPS.setVariable("eventEntry", EPS.event("e1").sendAfter(start, interval))
     EPS.event("e2").sendAfter(interval * EPS.getVariable("allowNumber"))
 }

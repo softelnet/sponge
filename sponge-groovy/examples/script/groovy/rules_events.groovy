@@ -6,7 +6,7 @@
 import org.openksavi.sponge.test.util.CorrelationEventsLog
 
 void onInit() {
-    EPS.setVariable("defaultDuration", 10)
+    EPS.setVariable("defaultDuration", 1000)
 
     // Variables for assertions only
     EPS.setVariable("correlationEventsLog", new CorrelationEventsLog())
@@ -224,10 +224,10 @@ class RuleFNFReject extends Rule {
 }
 
 void onStartup() {
-    EPS.event("e1").set("label", "0").sendAfter(0, 10)  // Not used in assertions, "background noise" events.
-    EPS.event("e1").set("label", "-1").sendAfter(0, 10)
-    EPS.event("e1").set("label", "-2").sendAfter(0, 10)
-    EPS.event("e1").set("label", "-3").sendAfter(0, 10)
+    EPS.event("e1").set("label", "0").sendAfter(0, 200)  // Not used in assertions, "background noise" events.
+    EPS.event("e1").set("label", "-1").sendAfter(0, 200)
+    EPS.event("e1").set("label", "-2").sendAfter(0, 200)
+    EPS.event("e1").set("label", "-3").sendAfter(0, 200)
 
     EPS.event("e1").set("label", "1").send()
     EPS.event("e2").set("label", "2").send()

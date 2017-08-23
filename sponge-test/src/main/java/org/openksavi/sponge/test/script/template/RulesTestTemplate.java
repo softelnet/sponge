@@ -46,11 +46,11 @@ public class RulesTestTemplate {
 
     public static void testRules(KnowledgeBaseType type, Engine engine) {
         try {
-            await().atMost(20, TimeUnit.SECONDS).pollDelay(5, TimeUnit.SECONDS)
+            await().atMost(60, TimeUnit.SECONDS).pollDelay(5, TimeUnit.SECONDS)
                     .until(() -> ((Number) engine.getOperations().getVariable("hardwareFailureScriptCount")).intValue() >= 3);
-            await().atMost(5, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> ((Number) engine.getOperations().getVariable("sameSourceFirstFireCount")).intValue() >= 1);
-            await().atMost(5, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> ((Number) engine.getOperations().getVariable("hardwareFailureJavaCount")).intValue() >= 2);
 
             assertEquals(3, ((Number) engine.getOperations().getVariable("hardwareFailureScriptCount")).intValue());
@@ -104,11 +104,22 @@ public class RulesTestTemplate {
             expected.put("RuleFNA", new String[][] { { "1", null, "5" }, { "1", null, "6" }, { "1", null, "7" } });
             expected.put("RuleFAN", new String[][] { { "1", "2", null }, { "1", "3", null }, { "1", "4", null } });
 
-            expected.forEach((rule, sequences) -> await().atMost(60, TimeUnit.SECONDS)
-                    .until(() -> eventsLog.getEvents(rule, "1").size() == sequences.length));
+            TimeUnit.SECONDS.sleep(8);
+
+            expected.forEach((rule, sequences) -> {
+                try {
+                    await().atMost(180, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
+                } catch (Exception e) {
+                    logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
+                    throw e;
+                }
+            });
 
             expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
+
             assertFalse(engine.isError());
+        } catch (InterruptedException ie) {
+            throw new SpongeException(ie);
         } finally {
             engine.shutdown();
         }
@@ -121,18 +132,24 @@ public class RulesTestTemplate {
             CorrelationEventsLog eventsLog =
                     engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
-            await().pollDelay(2, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
-                    .until(() -> eventsLog.getEvents("RuleFNNF", "1").size() >= 1);
-            TimeUnit.SECONDS.sleep(2);
+            Map<String, String[][]> expected = new LinkedHashMap<>();
+            expected.put("RuleFNNF", new String[][] { { "1", null, null, "5" } });
+            expected.put("RuleFNNNL", new String[][] { { "1", null, null, null, "7" } });
+            expected.put("RuleFNNNLReject", new String[][] {});
+            expected.put("RuleFNFNL", new String[][] { { "1", null, "2", null, "7" } });
 
-            TestUtils.assertEventSequences(eventsLog, "RuleFNNF", "1", new String[][] { { "1", null, null, "5" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFNNNL", "1", new String[][] { { "1", null, null, null, "7" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFNNNLReject", "1", new String[][] {});
-            TestUtils.assertEventSequences(eventsLog, "RuleFNFNL", "1", new String[][] { { "1", null, "2", null, "7" } });
+            expected.forEach((rule, sequences) -> {
+                try {
+                    await().atMost(180, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
+                } catch (Exception e) {
+                    logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
+                    throw e;
+                }
+            });
+
+            expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
 
             assertFalse(engine.isError());
-        } catch (InterruptedException ie) {
-            throw new SpongeException(ie);
         } finally {
             engine.shutdown();
         }
@@ -145,15 +162,22 @@ public class RulesTestTemplate {
             CorrelationEventsLog eventsLog =
                     engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
-            await().pollDelay(2, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
-                    .until(() -> eventsLog.getEvents("RuleFNF", "1").size() >= 1);
-            TimeUnit.SECONDS.sleep(2);
+            Map<String, String[][]> expected = new LinkedHashMap<>();
+            expected.put("RuleFNF", new String[][] { { "1", null, "5" } });
+            expected.put("RuleFNNFReject", new String[][] {});
 
-            TestUtils.assertEventSequences(eventsLog, "RuleFNF", "1", new String[][] { { "1", null, "5" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFNNFReject", "1", new String[][] {});
+            expected.forEach((rule, sequences) -> {
+                try {
+                    await().atMost(180, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
+                } catch (Exception e) {
+                    logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
+                    throw e;
+                }
+            });
+
+            expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
+
             assertFalse(engine.isError());
-        } catch (InterruptedException ie) {
-            throw new SpongeException(ie);
         } finally {
             engine.shutdown();
         }
@@ -168,11 +192,21 @@ public class RulesTestTemplate {
             CorrelationEventsLog eventsLog =
                     engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
-                    .until(() -> eventsLog.getEvents("RuleFFF", "1").size() >= 1 && eventsLog.getEvents("RuleFFL", "1").size() >= 1);
+            Map<String, String[][]> expected = new LinkedHashMap<>();
+            expected.put("RuleFFF", new String[][] { { "1", "2", "5" } });
+            expected.put("RuleFFL", new String[][] { { "1", "2", "7" } });
 
-            TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "5" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFFL", "1", new String[][] { { "1", "2", "7" } });
+            expected.forEach((rule, sequences) -> {
+                try {
+                    await().atMost(180, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
+                } catch (Exception e) {
+                    logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
+                    throw e;
+                }
+            });
+
+            expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
+
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
@@ -183,7 +217,7 @@ public class RulesTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_heartbeat");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
+            await().atMost(60, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
@@ -194,7 +228,7 @@ public class RulesTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_heartbeat2");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
+            await().atMost(60, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
@@ -209,7 +243,7 @@ public class RulesTestTemplate {
         engine.startup();
 
         try {
-            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA")
+            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA")
                     .intValue() >= engine.getOperations().getVariable(Number.class, "max").intValue() - 1);
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countB")
                     .intValue() >= engine.getOperations().getVariable(Number.class, "max").intValue() - 1);

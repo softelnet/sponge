@@ -58,7 +58,7 @@ public class CamelProducerOverriddenActionTest {
             ProducerTemplate producerTemplate = camel.createProducerTemplate();
             producerTemplate.sendBody("direct:start", "Send me to the Sponge");
 
-            await().pollDelay(2, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
+            await().pollDelay(2, TimeUnit.SECONDS).atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_camelEvent").get());
 
             assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_spongeProducer").get());

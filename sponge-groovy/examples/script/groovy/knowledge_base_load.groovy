@@ -24,7 +24,7 @@ class Trigger1 extends Trigger {
         this.event = "e1"
     }
     void onRun(Event event) {
-        this.logger.debug("file1: Received event {}", event)
+        //this.logger.debug("file1: Received event {}", event)
         EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
@@ -35,7 +35,7 @@ class Trigger2 extends Trigger {
         this.event = "e2"
     }
     void onRun(Event event) {
-        this.logger.debug("file1: Received event {}", event)
+        //this.logger.debug("file1: Received event {}", event)
         EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
@@ -58,11 +58,11 @@ void onLoad() {
 
 void onStartup() {
     EPS.logger.debug("onStartup, file1: {}, triggers: {}", EPS.description, EPS.engine.triggers)
-    EPS.event("e1").sendAfter(0, 100)
-    EPS.event("e2").sendAfter(0, 100)
+    EPS.event("e1").sendAfter(0, 500)
+    EPS.event("e2").sendAfter(0, 500)
 
-    EPS.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load2.groovy").sendAfter(500)
-    EPS.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load3.groovy").sendAfter(1500)
+    EPS.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load2.groovy").sendAfter(2000)
+    EPS.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load3.groovy").sendAfter(5000)
 }
 
 void onShutdown() {

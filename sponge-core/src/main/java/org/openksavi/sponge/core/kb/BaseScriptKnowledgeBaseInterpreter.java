@@ -23,11 +23,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.Utils;
@@ -54,6 +56,9 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     /** Synchronization processor. */
     protected Object interpteterSynchro = new Object();
 
+    @SuppressWarnings("rawtypes")
+    protected CachedScriptClassInstancePovider cachedScriptClassInstancePovider;
+
     /**
      * Creates a new knowledge base interpreter.
      *
@@ -64,12 +69,27 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         super(engineOperations, type);
 
         prepareInterpreter();
+
+        cachedScriptClassInstancePovider = createCachedScriptClassInstancePovider();
     }
 
     /**
      * Prepares the interpreter.
      */
     protected abstract void prepareInterpreter();
+
+    @SuppressWarnings("rawtypes")
+    protected abstract <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider();
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected <T> T doCreateInstance(String className, Class<T> javaClass) {
+        return (T) cachedScriptClassInstancePovider.newInstance(className, javaClass);
+    }
+
+    protected final void invalidateCache() {
+        cachedScriptClassInstancePovider.invalidate();
+    }
 
     @Override
     public void load(List<KnowledgeBaseScript> scripts) {
@@ -106,6 +126,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     @Override
     public void load(String fileName, Charset charset) {
         synchronized (interpteterSynchro) {
+            invalidateCache();
+
             Engine engine = getEngineOperations().getEngine();
             try (Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, fileName, charset)) {
                 eval(reader, fileName);
@@ -184,13 +206,13 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     public abstract <T> T eval(Reader reader, String fileName);
 
-    protected abstract ScriptKnowledgeBaseInterpreter createInstance(Engine engine, KnowledgeBase knowledgeBase);
+    protected abstract ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase);
 
     protected List<Class<?>> getStandardImportClasses() {
         //@formatter:off
         return Arrays.asList(EventMode.class, EventClonePolicy.class, Utils.class, SpongeException.class,
-                Event.class, Configuration.class,
-                Duration.class, Instant.class, ChronoUnit.class);
+                Event.class, Configuration.class, EventClonePolicy.class, EventSetProcessorState.class,
+                Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
         //@formatter:on
     }
 }

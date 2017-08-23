@@ -62,7 +62,7 @@ public class SpringTest {
         try {
             Engine engine = ctx.getBean(Engine.class);
 
-            await().atMost(5, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "springBeanValue") != null);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "springBeanValue") != null);
 
             assertEquals(BEAN_VALUE, engine.getOperations().getVariable(String.class, "springBeanValue"));
             assertFalse(engine.isError());

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.camel.test;
 
+import javax.inject.Inject;
+
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -41,6 +43,9 @@ public class CamelManyConsumersTest {
 
     @EndpointInject(uri = "mock:direct:log")
     protected MockEndpoint logEndpoint;
+
+    @Inject
+    protected Engine engine;
 
     @Configuration
     public static class TestConfig extends SingleRouteCamelConfiguration {
@@ -74,8 +79,11 @@ public class CamelManyConsumersTest {
 
     @Test
     public void testRoute() throws InterruptedException {
-        logEndpoint.expectedMessageCount(2);
+        CamelTestUtils.setResultWaitTime(60000, logEndpoint);
 
+        engine.getOperations().event("spongeEvent").set("message", "Send me to Camel").send();
+
+        logEndpoint.expectedMessageCount(2);
         logEndpoint.assertIsSatisfied();
     }
 }

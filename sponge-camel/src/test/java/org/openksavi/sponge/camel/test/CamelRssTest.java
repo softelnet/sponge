@@ -113,9 +113,9 @@ public class CamelRssTest {
 
     @Test
     public void testRoute() throws InterruptedException {
-        await().atMost(10, TimeUnit.SECONDS)
+        await().atMost(60, TimeUnit.SECONDS)
                 .until(() -> engine.getOperations().getVariable(AtomicInteger.class, "receivedCamelMessages").intValue() >= 4);
         assertFalse(engine.isError());
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(2);
     }
 }

@@ -14,7 +14,3 @@ class CamelTrigger(Trigger):
         self.event = "spongeEvent"
     def onRun(self, event):
         camel.send(event.get("message"))
-
-def onStartup():
-    # Send an event with a delay to allow starting of Camel before sending the message.
-    EPS.event("spongeEvent").set("message", "Send me to Camel").sendAfter(1000)

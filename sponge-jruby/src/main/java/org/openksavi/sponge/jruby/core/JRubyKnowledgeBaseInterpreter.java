@@ -30,6 +30,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jruby.RubyClass;
 import org.jruby.RubySymbol;
+import org.jruby.embed.EmbedEvalUnit;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
@@ -43,6 +44,7 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
@@ -114,6 +116,8 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     @Override
     public void onClear() {
         synchronized (interpteterSynchro) {
+            invalidateCache();
+
             if (container != null) {
                 container.terminate();
             }
@@ -183,11 +187,6 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     protected void addImport(Class<?> clazz, String alias) {
         eval("java_import " + clazz.getName());
         eval(alias + " = " + clazz.getName());
-    }
-
-    @Override
-    protected <T> T doCreateInstance(String className, Class<T> javaClass) {
-        return eval(className + ".new");
     }
 
     @Override
@@ -268,7 +267,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
         return new JRubyKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 
@@ -303,5 +302,12 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
             logger.debug("Auto-enabling: {}", autoEnabled);
         }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    protected <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider() {
+        return new CachedScriptClassInstancePovider<EmbedEvalUnit, T>(getEngineOperations().getEngine(),
+                (expression) -> container.parse(expression), "%s.new", (script, javaClass) -> (T) script.run().toJava(javaClass));
     }
 }

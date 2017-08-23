@@ -72,7 +72,7 @@ public class SimpleCamelProducerTest {
 
             // Waiting for the engine to process an event.
             Engine engine = context.getBean(Engine.class);
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage").get());
 
             assertFalse(engine.isError());

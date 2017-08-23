@@ -46,7 +46,7 @@ public class EventOverloadTest {
         engine.startup();
 
         try {
-            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("testStatus") != null);
+            await().atMost(120, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("testStatus") != null);
 
             assertTrue(engine.getOperations().getVariable("testStatus") instanceof QueueFullException);
             assertFalse(engine.isError());

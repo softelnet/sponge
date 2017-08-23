@@ -33,7 +33,7 @@ public class FiltersTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_java");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> TestUtils.getEventCounter(engine, "e2") >= 5 && TestUtils.getEventCounter(engine, "e3") >= 5);
 
             assertEquals(0, TestUtils.getEventCounter(engine, "e1"));
@@ -47,7 +47,7 @@ public class FiltersTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "blue") >= 1);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "blue") >= 1);
 
             assertEquals(0, TestUtils.getEventCounter(engine, "red"));
             assertFalse(engine.isError());
@@ -60,7 +60,7 @@ public class FiltersTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_deduplication");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> TestUtils.getEventCounter(engine, "e2-red") >= 2 && TestUtils.getEventCounter(engine, "e2-blue") >= 2);
 
             assertEquals(1, TestUtils.getEventCounter(engine, "e1-red"));

@@ -83,8 +83,17 @@ public class DefaultEngineParameters implements EngineParameters {
     /** The dynamic thread pool keep alive time (in milliseconds). */
     private long dynamicThreadPoolKeepAliveTime = 60000;
 
-    /** The Processing Unit event processor cache expire time (in milliseconds). */
-    private long processingUnitEventProcessorCacheExpireTime = 5 * 60 * 1000;
+    /**
+     * The Processing Unit event processor cache expire time (in milliseconds). The value {@code -1} means that the cache is turned off. The
+     * value {@code 0} means that there will be no expire time for this cache. The default value is {@code 0}.
+     */
+    private long processingUnitEventProcessorCacheExpireTime = 0;
+
+    /**
+     * The script-based class instance creation expression cache expire time (in milliseconds). The value {@code -1} means that the cache is
+     * turned off. The value {@code 0} means that there will be no expire time for this cache. The default value is {@code 0}.
+     */
+    private long scriptClassInstancePoviderCacheExpireTime = 0;
 
     @Override
     public int getMainProcessingUnitThreadCount() {
@@ -274,5 +283,15 @@ public class DefaultEngineParameters implements EngineParameters {
     @Override
     public void setProcessingUnitEventProcessorCacheExpireTime(long processingUnitEventProcessorCacheExpireTime) {
         this.processingUnitEventProcessorCacheExpireTime = processingUnitEventProcessorCacheExpireTime;
+    }
+
+    @Override
+    public long getScriptClassInstancePoviderCacheExpireTime() {
+        return scriptClassInstancePoviderCacheExpireTime;
+    }
+
+    @Override
+    public void setScriptClassInstancePoviderCacheExpireTime(long scriptClassInstancePoviderCacheExpireTime) {
+        this.scriptClassInstancePoviderCacheExpireTime = scriptClassInstancePoviderCacheExpireTime;
     }
 }

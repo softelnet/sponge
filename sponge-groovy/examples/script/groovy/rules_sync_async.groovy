@@ -24,7 +24,7 @@ class RuleFFF extends Rule {
 class RuleFFL extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2", "e3 :last"]
-        this.duration = Duration.ofMillis(500)
+        this.duration = Duration.ofSeconds(2)
         this.synchronous = false
     }
     void onRun(Event event) {

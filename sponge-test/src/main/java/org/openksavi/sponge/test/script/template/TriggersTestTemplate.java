@@ -38,11 +38,11 @@ public class TriggersTestTemplate {
         Engine engine = ScriptTestUtils.startWithConfig(type, "triggers");
 
         try {
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "receivedEventA").get());
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "receivedEventBCount").intValue() > 2);
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "receivedEventTestJavaCount").intValue() == 1);
             assertFalse(engine.isError());
         } finally {
@@ -54,8 +54,8 @@ public class TriggersTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "triggers_event_pattern");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA").intValue() >= 2);
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA").intValue() >= 2);
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "countAPattern").intValue() >= 5);
             assertEquals(2, engine.getOperations().getVariable(Number.class, "countA").intValue());
             assertEquals(5, engine.getOperations().getVariable(Number.class, "countAPattern").intValue());

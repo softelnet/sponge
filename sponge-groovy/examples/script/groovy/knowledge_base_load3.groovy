@@ -9,7 +9,7 @@ class Trigger1 extends Trigger {
         this.event = "e1"
     }
     void onRun(Event event) {
-        this.logger.debug("file3: Received event {}", event)
+        //this.logger.debug("file3: Received event {}", event)
         EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
@@ -20,7 +20,7 @@ class Trigger3 extends Trigger {
         this.event = "e3"
     }
     void onRun(Event event) {
-        this.logger.debug("file3: Received event {}", event)
+        //this.logger.debug("file3: Received event {}", event)
         EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }

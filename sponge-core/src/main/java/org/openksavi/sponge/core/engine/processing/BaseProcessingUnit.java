@@ -96,15 +96,22 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         this.inQueue = inQueue;
         this.outQueue = outQueue;
 
-        eventNameProcessorsCache = CacheBuilder.newBuilder()
-                .expireAfterAccess(engine.getDefaultParameters().getProcessingUnitEventProcessorCacheExpireTime(), TimeUnit.MILLISECONDS)
-                .build(new CacheLoader<String, Set<AtomicReference<T>>>() {
+        long cacheExpireTime = engine.getDefaultParameters().getProcessingUnitEventProcessorCacheExpireTime();
+        if (cacheExpireTime >= 0) {
+            // Turn on the cache.
+            CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
+            if (cacheExpireTime > 0) {
+                builder.expireAfterAccess(cacheExpireTime, TimeUnit.MILLISECONDS);
+            }
 
-                    @Override
-                    public Set<AtomicReference<T>> load(String eventName) throws Exception {
-                        return resolveEventProcessors(eventName);
-                    }
-                });
+            eventNameProcessorsCache = builder.build(new CacheLoader<String, Set<AtomicReference<T>>>() {
+
+                @Override
+                public Set<AtomicReference<T>> load(String eventName) throws Exception {
+                    return resolveEventProcessors(eventName);
+                }
+            });
+        }
     }
 
     public abstract class LoopWorker implements Runnable {
@@ -247,7 +254,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     protected Set<AtomicReference<T>> getEventProcessors(String eventName) {
         lock.lock();
         try {
-            return eventNameProcessorsCache.get(eventName);
+            return eventNameProcessorsCache != null ? eventNameProcessorsCache.get(eventName) : resolveEventProcessors(eventName);
         } catch (ExecutionException e) {
             throw Utils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
         } finally {
@@ -275,8 +282,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     public void addProcessor(T processor) {
         lock.lock();
         try {
-            // Invalidate the cache.
-            eventNameProcessorsCache.invalidateAll();
+            invalidateCache();
 
             AtomicReference<T> registered = registeredProcessorAdapterMap.get(processor.getName());
 
@@ -333,8 +339,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     public void removeAllProcessors() {
         lock.lock();
         try {
-            // Invalidate the cache.
-            eventNameProcessorsCache.invalidateAll();
+            invalidateCache();
 
             for (Set<AtomicReference<T>> processorList : eventPatternProcessorMap.values()) {
                 processorList.forEach(processor -> processor.get().clear());
@@ -354,8 +359,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     protected void clearUnusedEventMapping() {
         lock.lock();
         try {
-            // Invalidate the cache.
-            eventNameProcessorsCache.invalidateAll();
+            invalidateCache();
 
             eventPatternProcessorMap.entrySet().removeIf(entry -> entry.getValue().isEmpty());
         } finally {
@@ -372,8 +376,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     public void removeProcessor(String name) {
         lock.lock();
         try {
-            // Invalidate the cache.
-            eventNameProcessorsCache.invalidateAll();
+            invalidateCache();
 
             eventPatternProcessorMap.values().forEach(eventProcessors -> doRemoveProcessor(eventProcessors, name, true));
 
@@ -436,5 +439,14 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
 
     protected ThreadPoolManager getThreadPoolManager() {
         return getEngine().getThreadPoolManager();
+    }
+
+    /**
+     * Invalidate the cache.
+     */
+    public void invalidateCache() {
+        if (eventNameProcessorsCache != null) {
+            eventNameProcessorsCache.invalidateAll();
+        }
     }
 }

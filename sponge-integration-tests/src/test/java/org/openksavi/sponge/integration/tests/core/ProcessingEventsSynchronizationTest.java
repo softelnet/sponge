@@ -56,7 +56,7 @@ public class ProcessingEventsSynchronizationTest {
         engine.startup();
 
         try {
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("testStatus") != null);
+            await().atMost(120, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("testStatus") != null);
 
             String testStatus = engine.getOperations().getVariable(String.class, "testStatus");
             assertEquals("OK", testStatus);
