@@ -3,6 +3,16 @@
 A high-level view of the changes introduced in {sponge} releases.
 
 [discrete]
+== 1.0.2 (2017.08.23)
+
+* Event name patterns in event processors.
+* Removed `matches` method in `Event`.
+* `EventDefinition` `send` methods accept `Duration` and `Instant` types.
+* Fixed concurrency problem in event set processors.
+* New tests for scripting support.
+* Libraries upgrade.
+
+[discrete]
 == 1.0.1 (2017.08.21)
 
 * Fixed possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
