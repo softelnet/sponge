@@ -35,7 +35,7 @@ The {sponge} engine consists of the following components.
 |The module that manages the processing of events by triggers, rules and correlators. It is also a registry of such event processors.
 
 |Output Event Queue
-|The queue of ignored events, i.e. events that haven't been listened to by any event processor. The default behavior is to forget such events.
+|The queue of ignored events, i.e. events that haven't been listened to by any trigger, rule or correlator. Events rejected by filters don't go to the Output Event Queue. The default behavior is to log and forget ignored events.
 
 |Processor Manager
 |The module responsible for enabling and disabling processors, i.e. actions, filters, triggers, rules and correlators.

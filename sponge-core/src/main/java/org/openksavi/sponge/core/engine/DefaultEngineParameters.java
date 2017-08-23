@@ -24,64 +24,67 @@ import org.openksavi.sponge.event.EventClonePolicy;
  */
 public class DefaultEngineParameters implements EngineParameters {
 
-    /** Default number of the Main Processing Unit worker threads. */
+    /** The default number of the Main Processing Unit worker threads. */
     private int mainProcessingUnitThreadCount = 10;
 
-    /** Default number of threads used by an event set processor asynchronous executor. */
+    /** The default number of threads used by an event set processor asynchronous executor. */
     private int asyncEventSetProcessorExecutorThreadCount = 10;
 
     /**
-     * Default number of threads used by processing units to listen to an event queue concurrently. In the current implementation this
+     * The default number of threads used by processing units to listen to an event queue concurrently. In the current implementation this
      * parameter is not used.
      */
     private int processingUnitConcurrentListenerThreadCount = 1;
 
-    /** Default event queue capacity. */
+    /** The default event queue capacity. */
     private int eventQueueCapacity = -1;
 
-    /** Default duration thread count. */
+    /** The default duration thread count. */
     private int durationThreadCount = 2;
 
-    /** Default event clone policy. */
+    /** The default event clone policy. */
     private EventClonePolicy eventClonePolicy = EventClonePolicy.SHALLOW;
 
-    /** Default event set processor synchronous flag. */
+    /** The default event set processor synchronous flag. */
     private boolean eventSetProcessorDefaultSynchronous = false;
 
-    /** Auto-enable processors. */
+    /** The default value of auto-enable processors. */
     private boolean autoEnable = true;
 
-    /** Executor shutdown timeout (in milliseconds). */
+    /** The executor shutdown timeout (in milliseconds). */
     private long executorShutdownTimeout = 60000;
 
     /**
-     * A specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter - an
+     * The specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter - the
      * asynchronous processing partition size.
      */
     private int asyncEventSetProcessorProcessingPartitionSize = 1000;
 
     private int asyncEventSetProcessorProcessingThreshold = 1;
 
-    /** A flag to allow for concurrent processing of events that have the same type by event set processors. */
+    /** The flag to allow for concurrent processing of events that have the same type by event set processors. */
     private boolean allowConcurrentEventTypeProcessingByEventSetProcessors = true;
 
-    /** A main Processing Unit worker executor queue size. */
+    /** The Main Processing Unit worker executor queue size. */
     private int mainProcessingUnitWorkerExecutorQueueSize = 100;
 
-    /** An internal queue blocking put operation sleep time between retries (in milliseconds). */
+    /** The internal queue blocking put operation sleep time between retries (in milliseconds). */
     private long internalQueueBlockingPutSleep = 10;
 
-    /** A decomposed queue capacity. */
+    /** The decomposed queue capacity. */
     private int decomposedQueueCapacity = 100;
 
-    /** A Main Event Queue capacity. */
+    /** The Main Event Queue capacity. */
     private int mainEventQueueCapacity = 10;
 
-    /** A dynamic thread pool initial size ratio. */
+    /** The dynamic thread pool initial size ratio. */
     private double initialDynamicThreadPoolSizeRatio = 0.3;
 
-    /** A dynamic thread pool keep alive time (in milliseconds). */
+    /** The dynamic thread pool keep alive time (in milliseconds). */
     private long dynamicThreadPoolKeepAliveTime = 60000;
+
+    /** The Processing Unit event processor cache expire time (in milliseconds). */
+    private long processingUnitEventProcessorCacheExpireTime = 5 * 60 * 1000;
 
     @Override
     public int getMainProcessingUnitThreadCount() {
@@ -261,5 +264,15 @@ public class DefaultEngineParameters implements EngineParameters {
     @Override
     public void setDynamicThreadPoolKeepAliveTime(long dynamicThreadPoolKeepAliveTime) {
         this.dynamicThreadPoolKeepAliveTime = dynamicThreadPoolKeepAliveTime;
+    }
+
+    @Override
+    public long getProcessingUnitEventProcessorCacheExpireTime() {
+        return processingUnitEventProcessorCacheExpireTime;
+    }
+
+    @Override
+    public void setProcessingUnitEventProcessorCacheExpireTime(long processingUnitEventProcessorCacheExpireTime) {
+        this.processingUnitEventProcessorCacheExpireTime = processingUnitEventProcessorCacheExpireTime;
     }
 }

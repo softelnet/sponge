@@ -297,7 +297,7 @@ def onStartup(): # <6>
 ----
 <1> The definition of a trigger `HelloWorldTrigger`.
 <2> The trigger configuration method.
-<3> Sets up `HelloWorldTrigger` to listen to `helloEvent` events (i.e. events that have name `"helloEvent"`).
+<3> Sets up `HelloWorldTrigger` to listen to `helloEvent` events (i.e. events that have name `"helloEvent"`). The event name could be also specified as a regular expression. For example `"helloEvent.*"` would configure this trigger to listen to all events whose name starts with `"helloEvent"`.
 <4> The trigger `onRun` method will be called when an event `helloEvent` happens. The `event` argument is a reference to the event instance.
 <5> Prints the value of the event attribute `"say"`.
 <6> Knowledge base startup function `onStartup()`.

@@ -25,10 +25,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -37,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -53,14 +60,20 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
 
     public static final long GET_ITERATION_TIMEOUT = 100;
 
-    /** Input queue. */
+    /** The input queue. */
     private EventQueue inQueue;
 
-    /** Output queue. */
+    /** The output queue. */
     private EventQueue outQueue;
 
-    /** Event map (event pattern, registered processor adapters). */
-    private Map<String, Set<AtomicReference<T>>> eventMap = Collections.synchronizedMap(new HashMap<>());
+    /** The map of (event pattern, registered processor adapters listening to this event pattern). */
+    private Map<String, Set<AtomicReference<T>>> eventPatternProcessorMap = Collections.synchronizedMap(new HashMap<>());
+
+    /**
+     * The cache containing real event names (not patterns) that has occurred. Consists of (eventName -> processors listening to this
+     * eventName) pairs.
+     */
+    private LoadingCache<String, Set<AtomicReference<T>>> eventNameProcessorsCache;
 
     /** Registered processor map (processor name, processor adapter). */
     private Map<String, AtomicReference<T>> registeredProcessorAdapterMap = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -82,6 +95,16 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         super(name, engine);
         this.inQueue = inQueue;
         this.outQueue = outQueue;
+
+        eventNameProcessorsCache = CacheBuilder.newBuilder()
+                .expireAfterAccess(engine.getDefaultParameters().getProcessingUnitEventProcessorCacheExpireTime(), TimeUnit.MILLISECONDS)
+                .build(new CacheLoader<String, Set<AtomicReference<T>>>() {
+
+                    @Override
+                    public Set<AtomicReference<T>> load(String eventName) throws Exception {
+                        return resolveEventProcessors(eventName);
+                    }
+                });
     }
 
     public abstract class LoopWorker implements Runnable {
@@ -195,6 +218,25 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         }
     }
 
+    protected Set<AtomicReference<T>> resolveEventProcessors(String eventName) {
+        lock.lock();
+        try {
+            Set<AtomicReference<T>> result = new LinkedHashSet<>();
+
+            eventPatternProcessorMap.keySet().stream().filter(pattern -> getEngine().getPatternMatcher().matches(pattern, eventName))
+                    .forEach(pattern -> {
+                        Set<AtomicReference<T>> internalList = eventPatternProcessorMap.get(pattern);
+                        if (internalList != null) {
+                            result.addAll(internalList);
+                        }
+                    });
+
+            return result;
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /**
      * Returns the processors listening for the event.
      *
@@ -205,17 +247,9 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     protected Set<AtomicReference<T>> getEventProcessors(String eventName) {
         lock.lock();
         try {
-            Set<AtomicReference<T>> result = new LinkedHashSet<>();
-
-            // TODO LoadingCache with limitations
-            eventMap.keySet().stream().filter(pattern -> getEngine().getPatternMatcher().matches(pattern, eventName)).forEach(pattern -> {
-                Set<AtomicReference<T>> internalList = eventMap.get(pattern);
-                if (internalList != null) {
-                    result.addAll(internalList);
-                }
-            });
-
-            return result;
+            return eventNameProcessorsCache.get(eventName);
+        } catch (ExecutionException e) {
+            throw Utils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
         } finally {
             lock.unlock();
         }
@@ -241,6 +275,9 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     public void addProcessor(T processor) {
         lock.lock();
         try {
+            // Invalidate the cache.
+            eventNameProcessorsCache.invalidateAll();
+
             AtomicReference<T> registered = registeredProcessorAdapterMap.get(processor.getName());
 
             // Already registered with this name.
@@ -255,7 +292,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
                 List<String> processorEventNamesList = Arrays.asList(processor.getEventNames());
                 for (String oldEventName : oldProcessor.getEventNames()) {
                     if (!processorEventNamesList.contains(oldEventName)) {
-                        eventMap.get(oldEventName).remove(registered);
+                        eventPatternProcessorMap.get(oldEventName).remove(registered);
                     }
                 }
 
@@ -268,10 +305,10 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
             }
 
             for (String eventName : processor.getEventNames()) {
-                Set<AtomicReference<T>> processorList = eventMap.get(eventName);
+                Set<AtomicReference<T>> processorList = eventPatternProcessorMap.get(eventName);
                 if (processorList == null) {
                     processorList = new CopyOnWriteArraySet<>();
-                    eventMap.put(eventName, processorList);
+                    eventPatternProcessorMap.put(eventName, processorList);
                 }
 
                 processorList.add(registered);
@@ -296,11 +333,14 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     public void removeAllProcessors() {
         lock.lock();
         try {
-            for (Set<AtomicReference<T>> processorList : eventMap.values()) {
+            // Invalidate the cache.
+            eventNameProcessorsCache.invalidateAll();
+
+            for (Set<AtomicReference<T>> processorList : eventPatternProcessorMap.values()) {
                 processorList.forEach(processor -> processor.get().clear());
             }
 
-            eventMap.clear();
+            eventPatternProcessorMap.clear();
 
             registeredProcessorAdapterMap.clear();
         } finally {
@@ -314,7 +354,10 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     protected void clearUnusedEventMapping() {
         lock.lock();
         try {
-            eventMap.entrySet().removeIf(entry -> entry.getValue().isEmpty());
+            // Invalidate the cache.
+            eventNameProcessorsCache.invalidateAll();
+
+            eventPatternProcessorMap.entrySet().removeIf(entry -> entry.getValue().isEmpty());
         } finally {
             lock.unlock();
         }
@@ -327,10 +370,12 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
      */
     @Override
     public void removeProcessor(String name) {
+        lock.lock();
         try {
-            lock.lock();
+            // Invalidate the cache.
+            eventNameProcessorsCache.invalidateAll();
 
-            eventMap.values().forEach(eventProcessors -> removeProcessor(eventProcessors, name, true));
+            eventPatternProcessorMap.values().forEach(eventProcessors -> doRemoveProcessor(eventProcessors, name, true));
 
             registeredProcessorAdapterMap.remove(name);
         } finally {
@@ -339,13 +384,13 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     }
 
     /**
-     * Removes processor.
+     * Removes the processor. Warning: this method doesn't invalidate the cache.
      *
-     * @param processorList processor list.
+     * @param processorList the processor list.
      * @param removedProcessorName name of the processor to remove.
      * @param clear whether to clear the removed processor (i.e. invoke {@code clear()}).
      */
-    private void removeProcessor(Set<AtomicReference<T>> processorList, String removedProcessorName, boolean clear) {
+    private void doRemoveProcessor(Set<AtomicReference<T>> processorList, String removedProcessorName, boolean clear) {
         lock.lock();
         try {
             List<AtomicReference<T>> toRemove = processorList.stream()

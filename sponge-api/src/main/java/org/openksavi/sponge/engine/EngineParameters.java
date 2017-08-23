@@ -60,44 +60,44 @@ public interface EngineParameters {
     int getAsyncEventSetProcessorExecutorThreadCount();
 
     /**
-     * Return event clone policy.
+     * Returns the event clone policy.
      *
-     * @return eventClonePolicy
+     * @return the event clone policy..
      */
     EventClonePolicy getEventClonePolicy();
 
     /**
-     * Returns an event set processor default synchronous flag.
+     * Returns the event set processor default synchronous flag.
      *
-     * @return an event set processor default synchronous flag.
+     * @return the event set processor default synchronous flag.
      */
     boolean getEventSetProcessorDefaultSynchronous();
 
     /**
-     * Returns an executor shutdown timeout (in milliseconds).
+     * Returns the executor shutdown timeout (in milliseconds).
      *
-     * @return an executor shutdown timeout.
+     * @return the executor shutdown timeout.
      */
     long getExecutorShutdownTimeout();
 
     /**
-     * Returns a specific implementation parameter - an asynchronous event set processor processing partition size.
+     * Returns the specific implementation parameter - an asynchronous event set processor processing partition size.
      *
-     * @return a partition size.
+     * @return the partition size.
      */
     int getAsyncEventSetProcessorProcessingPartitionSize();
 
     /**
-     * Returns a specific implementation parameter - an asynchronous event set processor processing threshold.
+     * Returns the specific implementation parameter - an asynchronous event set processor processing threshold.
      *
-     * @return a threshold value.
+     * @return the threshold value.
      */
     int getAsyncEventSetProcessorProcessingThreshold();
 
     /**
-     * Returns a flag to allow for concurrent processing of events that have the same type by event set processors.
+     * Returns the flag to allow for concurrent processing of events that have the same type by event set processors.
      *
-     * @return a flag to allow for concurrent processing of events that have the same type by event set processors.
+     * @return the flag to allow for concurrent processing of events that have the same type by event set processors.
      */
     boolean getAllowConcurrentEventTypeProcessingByEventSetProcessors();
 
@@ -125,16 +125,16 @@ public interface EngineParameters {
     void setProcessingUnitConcurrentListenerThreadCount(int processingUnitConcurrentListenerThreadCount);
 
     /**
-     * Sets event queue capacity.
+     * Sets the event queue capacity.
      *
-     * @param eventQueueCapacity event queue capacity.
+     * @param eventQueueCapacity the event queue capacity.
      */
     void setEventQueueCapacity(int eventQueueCapacity);
 
     /**
-     * Sets duration executor thread count.
+     * Sets the duration executor thread count.
      *
-     * @param durationThreadCount duration executor thread count.
+     * @param durationThreadCount the duration executor thread count.
      */
     void setDurationThreadCount(int durationThreadCount);
 
@@ -146,132 +146,146 @@ public interface EngineParameters {
     void setAsyncEventSetProcessorExecutorThreadCount(int asyncEventSetProcessorExecutorThreadCount);
 
     /**
-     * Sets event clone policy.
+     * Sets the event clone policy.
      *
-     * @param eventClonePolicy event clone policy.
+     * @param eventClonePolicy the event clone policy.
      */
     void setEventClonePolicy(EventClonePolicy eventClonePolicy);
 
     /**
-     * Sets an event set processor default synchronous flag.
+     * Sets the event set processor default synchronous flag.
      *
-     * @param eventSetProcessorDefaultSynchronous an event set processor default synchronous flag.
+     * @param eventSetProcessorDefaultSynchronous the event set processor default synchronous flag.
      */
     void setEventSetProcessorDefaultSynchronous(boolean eventSetProcessorDefaultSynchronous);
 
     /**
-     * Sets an executor shutdown timeout (in milliseconds).
+     * Sets the executor shutdown timeout (in milliseconds).
      *
-     * @param executorShutdownTimeout an executor shutdown timeout.
+     * @param executorShutdownTimeout the executor shutdown timeout.
      */
     void setExecutorShutdownTimeout(long executorShutdownTimeout);
 
     /**
-     * Sets a specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter -
+     * Sets the specific {link org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler} implementation parameter -
      * an asynchronous processing partition size.
      *
-     * @param asyncEventSetProcessorProcessingPartitionSize a partition size.
+     * @param asyncEventSetProcessorProcessingPartitionSize the partition size.
      */
     void setAsyncEventSetProcessorProcessingPartitionSize(int asyncEventSetProcessorProcessingPartitionSize);
 
     void setAsyncEventSetProcessorProcessingThreshold(int asyncEventSetProcessorProcessingThreshold);
 
     /**
-     * Sets a flag to allow for concurrent processing of events that have the same type by event set processors.
+     * Sets the flag to allow for concurrent processing of events that have the same type by event set processors.
      *
-     * @param allowConcurrentEventTypeProcessingByEventSetProcessors a flag to allow for concurrent processing of events that have the same
-     *        type by event set processors.
+     * @param allowConcurrentEventTypeProcessingByEventSetProcessors the flag to allow for concurrent processing of events that have the
+     *        same type by event set processors.
      */
     void setAllowConcurrentEventTypeProcessingByEventSetProcessors(boolean allowConcurrentEventTypeProcessingByEventSetProcessors);
 
     /**
-     * Sets auto-enable of processors.
+     * Sets the auto-enable of processors.
      *
-     * @param autoEnable auto-enable of processors.
+     * @param autoEnable the auto-enable of processors.
      */
     void setAutoEnable(boolean autoEnable);
 
     /**
-     * Returns a Main Processing Unit worker executor queue size.
+     * Returns the Main Processing Unit worker executor queue size.
      *
-     * @return a Main Processing Unit worker executor queue size.
+     * @return the Main Processing Unit worker executor queue size.
      */
     int getMainProcessingUnitWorkerExecutorQueueSize();
 
     /**
-     * Sets a Main Processing Unit worker executor queue size.
+     * Sets the Main Processing Unit worker executor queue size.
      *
-     * @param mainProcessingUnitWorkerExecutorQueueSize a Main Processing Unit worker executor queue size.
+     * @param mainProcessingUnitWorkerExecutorQueueSize the Main Processing Unit worker executor queue size.
      */
     void setMainProcessingUnitWorkerExecutorQueueSize(int mainProcessingUnitWorkerExecutorQueueSize);
 
     /**
-     * Returns internal queue blocking put operation sleep time between retries (in milliseconds).
+     * Returns the internal queue blocking put operation sleep time between retries (in milliseconds).
      *
-     * @return internal queue blocking put operation sleep time between retries.
+     * @return the internal queue blocking put operation sleep time between retries.
      */
     long getInternalQueueBlockingPutSleep();
 
     /**
-     * Sets internal queue blocking put operation sleep time between retries (in milliseconds).
+     * Sets the internal queue blocking put operation sleep time between retries (in milliseconds).
      *
-     * @param internalQueueBlockingPutSleep internal queue blocking put operation sleep time between retries.
+     * @param internalQueueBlockingPutSleep the internal queue blocking put operation sleep time between retries.
      */
     void setInternalQueueBlockingPutSleep(long internalQueueBlockingPutSleep);
 
     /**
-     * Returns a decomposed queue capacity.
+     * Returns the decomposed queue capacity.
      *
-     * @return a decomposed queue capacity.
+     * @return the decomposed queue capacity.
      */
     int getDecomposedQueueCapacity();
 
     /**
-     * Sets a decomposed queue capacity.
+     * Sets the decomposed queue capacity.
      *
-     * @param decomposedQueueCapacity a decomposed queue capacity.
+     * @param decomposedQueueCapacity the decomposed queue capacity.
      */
     void setDecomposedQueueCapacity(int decomposedQueueCapacity);
 
     /**
-     * Returns a Main Event Queue capacity.
+     * Returns the Main Event Queue capacity.
      *
-     * @return a Main Event Queue capacity.
+     * @return the Main Event Queue capacity.
      */
     int getMainEventQueueCapacity();
 
     /**
-     * Sets a Main Event Queue capacity.
+     * Sets the Main Event Queue capacity.
      *
-     * @param mainEventQueueCapacity a Main Event Queue capacity.
+     * @param mainEventQueueCapacity the Main Event Queue capacity.
      */
     void setMainEventQueueCapacity(int mainEventQueueCapacity);
 
     /**
-     * Returns a dynamic thread pool initial size ratio.
+     * Returns the dynamic thread pool initial size ratio.
      *
-     * @return a dynamic thread pool initial size ratio.
+     * @return the dynamic thread pool initial size ratio.
      */
     double getInitialDynamicThreadPoolSizeRatio();
 
     /**
-     * Sets a dynamic thread pool initial size ratio.
+     * Sets the dynamic thread pool initial size ratio.
      *
-     * @param initialDynamicThreadPoolSizeRatio a dynamic thread pool initial size ratio.
+     * @param initialDynamicThreadPoolSizeRatio the dynamic thread pool initial size ratio.
      */
     void setInitialDynamicThreadPoolSizeRatio(double initialDynamicThreadPoolSizeRatio);
 
     /**
-     * Returns a dynamic thread pool keep alive time (in milliseconds).
+     * Returns the dynamic thread pool keep alive time (in milliseconds).
      *
-     * @return a dynamic thread pool keep alive time.
+     * @return the dynamic thread pool keep alive time.
      */
     long getDynamicThreadPoolKeepAliveTime();
 
     /**
-     * Sets a dynamic thread pool keep alive time (in milliseconds).
+     * Sets the dynamic thread pool keep alive time (in milliseconds).
      *
-     * @param dynamicThreadPoolKeepAliveTime a dynamic thread pool keep alive time.
+     * @param dynamicThreadPoolKeepAliveTime the dynamic thread pool keep alive time.
      */
     void setDynamicThreadPoolKeepAliveTime(long dynamicThreadPoolKeepAliveTime);
+
+    /**
+     * Returns the Processing Unit event processor cache expire time (in milliseconds).
+     *
+     * @return the Processing Unit event processor cache expire time (in milliseconds).
+     */
+    long getProcessingUnitEventProcessorCacheExpireTime();
+
+    /**
+     * Sets the Processing Unit event processor cache expire time (in milliseconds).
+     *
+     * @param processingUnitEventProcessorCacheExpireTime the Processing Unit event processor cache expire time (in milliseconds).
+     */
+    void setProcessingUnitEventProcessorCacheExpireTime(long processingUnitEventProcessorCacheExpireTime);
 }

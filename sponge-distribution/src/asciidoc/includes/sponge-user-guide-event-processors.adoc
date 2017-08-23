@@ -24,6 +24,19 @@ Instances of event processors, depending on their type, may be created:
 |No
 |===
 
+When configuring an event processor, each event name may be specified as a regular expression thus creating a pattern matching more event names. The regular expression has to be compatible with {javaSeJavaDocUrl}/java/util/regex/Pattern.html[`java.util.regex.Pattern`].
+
+.Event name pattern example
+[source,python]
+----
+class TriggerA(Trigger):
+    def onConfigure(self):
+        self.event = "a.*" # <1>
+    def onRun(self, event):
+        self.logger.debug("Received event: {}", event.name)
+----
+<1> The trigger will listen to all events whose name starts with `"a"`, as specified by the regular expression.
+
 == Filters
 Filters allow only certain events to be processed by the engine. Filters are executed in the same order as the order of their registration (i.e. enabling).
 
@@ -40,7 +53,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Property / Method |Description
 
 |*`event` or `events`*
-|These properties should be used to set the names of filtered events. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively. You may use only one of them. The property `event` allows setting one event name. The property `events` is an array of event names. This property is mandatory. It should be set in the `onConfigure` callback method.
+|These properties should be used to set the names (or name patterns) of filtered events. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively. You may use only one of them. The property `event` allows setting one event name. The property `events` is an array of event names. This property is mandatory. It should be set in the `onConfigure` callback method.
 
 |*`boolean onAccept(event)`*
 |This method checks if an incoming event should be further processed. If `onAccept` method returns `false`, then the event will be discarded. Otherwise it will be processed by the other event processors. This method is mandatory.
@@ -137,7 +150,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Property / Method |Description
 
 |*`event` or `events`*
-|These properties should be used to set the names of the events that cause this trigger to fire. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively. You may use only one of them. The property `event` allows setting one event name. The property `events` is an array of event names. This property is mandatory. It should be set in the `onConfigure` callback method.
+|These properties should be used to set the names (or name patterns) of the events that cause this trigger to fire. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively. You may use only one of them. The property `event` allows setting one event name. The property `events` is an array of event names. This property is mandatory. It should be set in the `onConfigure` callback method.
 
 |*`onRun(event)`*
 |The callback method used for processing the event, called when the specified event (or one of the events) happens. This method is mandatory.
@@ -227,7 +240,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Sets conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the condition method is irrelevant.
 
 |`duration`
-|This property may be used to set the time how long a rule lasts (represented as `java.time.Duration`). It is a shortcut for `setDuration(value)` method. The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
+|This property may be used to set the time how long a rule lasts (represented as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). It is a shortcut for `setDuration(value)` method. The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
 
 |*`onRun(event)`*
 |The callback method invoked when a sequence of events specified by this rule has happened and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. There could be many sequences of events fitting the rule definition. In order to access the events which fulfilled the conditions and caused the rule fire, the `getEvent(eventAlias)` method should be used. The `onRun` method is mandatory.
@@ -251,7 +264,7 @@ NOTE: A duration is relative to an internal clock of the engine, that is related
 === Event specification
 Event specification for the rule consists of:
 
-Event name:: A name of the event (mandatory).
+Event name:: A name (or name pattern) of the event (mandatory).
 Event alias:: An optional alias for the event. The alias is a unique (in the scope of the rule) name assigned to the event. Aliases are mandatory if there are more than one events of the same type (i.e. having the same name). When each of the events is of different type, there is no need to specify an alias. In such case aliases will be defined automatically and equal to the name of the corresponding event.
 Event mode:: Specifies which sequences of events suitable to this rule should be used for running the rule (i.e. invoking the `onRun` callback method). Event modes are defined in the `EventMode` Java enumeration.
 +
@@ -278,7 +291,7 @@ If the mode of the last (final) specified event is `last` or `none`, a duration 
 |===
 +
 
-Event specification should be formatted as text `"eventName [eventAlias [:eventMode"]]`. White characters between all elements are allowed. For example specifications `"event1 e1 :first"`, `"event1"`, `"event1 e1"` define the first event named `"event1"`.
+Event specification should be formatted as text `"eventName [eventAlias [:eventMode"]]` or `"eventNamePattern [eventAlias [:eventMode"]]`. White characters between all elements are allowed. For example the specifications `"event1 e1 :first"`, `"event1"`, `"event1 e1"` define the suitable first event named `"event1"`. The specification `"[Ee]vent.* e"` define all events which name starts with `"Event"` or `"event"`.
 
 The following examples of complete event specifications assume that the rule has a duration that spans over all incoming events listed in the second column. The integer value in the brackets is the `id` of the event. An element `null` means that the event hasn't happened. Incoming events: `e1[1]`, `e2[2]`, `e2[3]`, `e3[4]`, `e2[5]`, `e3[6]`, `e3[7]`.
 
@@ -486,13 +499,13 @@ In addition to the inherited <<processor-methods,processor properties and method
 |The configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
 
 |*`events`*
-|This property should be used to set the names of events that this correlator listens to. It may be used only as a setter. It is a shortcut for `setEvents(eventNames)` method. This mandatory property must be set in the `onConfigure` callback method.
+|This property should be used to set the names (or name patterns) of events that this correlator listens to. It may be used only as a setter. It is a shortcut for `setEvents(eventNames)` method. This mandatory property must be set in the `onConfigure` callback method.
 
 |`maxInstances`
 |This property may be used to set the maximum number of concurrent instances allowed for this correlator. It is a shortcut for `setMaxInstances(value)` method. If this value is not set, there will be no limit of concurrent instances. In that case you will probably need to implement `onAcceptAsFirst()` method.
 
 |`duration`
-|This property may be used to set the time how long a correlator lasts (represented as `java.time.Duration`). It is a shortcut for `setDuration(value)` method. The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration` callback method will be invoked.
+|This property may be used to set the time how long a correlator lasts (represented as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). It is a shortcut for `setDuration(value)` method. The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration` callback method will be invoked.
 
 |`onInit()`
 |The initialization callback method that is invoked before creating a new correlator instance. This method is optional.

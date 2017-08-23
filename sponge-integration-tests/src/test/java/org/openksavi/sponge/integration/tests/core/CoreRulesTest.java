@@ -17,6 +17,7 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -35,7 +36,7 @@ import org.openksavi.sponge.test.util.TestUtils;
 public class CoreRulesTest {
 
     @Test
-    public void testRulesImmediateNoDuration() throws InterruptedException {
+    public void testRulesImmediateNoDuration() {
         Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_no_duration.py").build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
@@ -58,7 +59,7 @@ public class CoreRulesTest {
     }
 
     @Test
-    public void testRulesImmediateDuration() throws InterruptedException {
+    public void testRulesImmediateDuration() {
         Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_duration.py").build();
         engine.startup();
 
@@ -83,11 +84,16 @@ public class CoreRulesTest {
         }
     }
 
-    private void doTestRulesImmediate(Engine engine) throws InterruptedException {
+    private void doTestRulesImmediate(Engine engine) {
         CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
         await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS).until(() -> eventsLog.getEvents("RuleFAA", "1").size() == 8);
-        TimeUnit.SECONDS.sleep(1);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            throw Utils.wrapException("doTestRulesImmediate", e);
+        }
 
         TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "4" } });
         TestUtils.assertEventSequences(eventsLog, "RuleFFA", "1",
@@ -119,5 +125,30 @@ public class CoreRulesTest {
         }
 
         assertNotNull(exception);
+    }
+
+    @Test
+    public void testRulesEventPattern() {
+        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_event_pattern.py").build();
+        engine.startup();
+
+        try {
+            CorrelationEventsLog eventsLog =
+                    engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
+
+            await().atMost(20, TimeUnit.SECONDS)
+                    .until(() -> eventsLog.getAllEvents("NameRule").size() >= 1 && eventsLog.getAllEvents("PatternRule").size() >= 3);
+
+            assertEquals(1, eventsLog.getAllEvents("NameRule").size());
+            assertEquals(3, eventsLog.getAllEvents("PatternRule").size());
+
+            TestUtils.assertEventSequences(eventsLog, "NameRule", "a1", new String[][] { { "a1", "b1" } });
+            TestUtils.assertEventSequences(eventsLog, "PatternRule", "a1", new String[][] { { "a1", "b1" }, { "a1", "b2" } });
+            TestUtils.assertEventSequences(eventsLog, "PatternRule", "a2", new String[][] { { "a2", "b2" } });
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
     }
 }

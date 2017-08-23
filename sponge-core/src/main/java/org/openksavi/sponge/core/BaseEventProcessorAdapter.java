@@ -71,8 +71,15 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
     public void validate() {
         super.validate();
 
-        if (getEventNames() == null || getEventNames().length < 1) {
+        String[] eventNames = getEventNames();
+
+        if (eventNames == null || eventNames.length < 1) {
             throw new SpongeException("Invalid " + getType().getName() + " " + getName() + ". At least one event must be specified.");
+        }
+
+        // Validate the patterns for event names.
+        for (String eventName : eventNames) {
+            getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher().validatePattern(eventName);
         }
     }
 }

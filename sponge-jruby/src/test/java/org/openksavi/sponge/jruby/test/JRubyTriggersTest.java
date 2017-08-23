@@ -37,6 +37,12 @@ public class JRubyTriggersTest extends JRubyTest implements TriggersTest {
 
     @Override
     @Test
+    public void testTriggersEventPatternIncorrect() {
+        TriggersTestTemplate.testTriggersEventPatternIncorrect(getType());
+    }
+
+    @Override
+    @Test
     public void testHelloWorld() {
         TriggersTestTemplate.testHelloWorld(getType());
     }

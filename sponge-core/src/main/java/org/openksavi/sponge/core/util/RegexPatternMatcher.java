@@ -23,6 +23,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.util.PatternMatcher;
 
 /**
@@ -34,16 +36,24 @@ public class RegexPatternMatcher implements PatternMatcher {
 
         @Override
         public Pattern load(String pattern) throws Exception {
-            return Pattern.compile(pattern);
+            return compilePattern(pattern);
         }
     });
+
+    protected Pattern compilePattern(String pattern) {
+        return Pattern.compile(pattern);
+    }
+
+    public void validatePattern(String pattern) {
+        Validate.notNull(compilePattern(pattern));
+    }
 
     @Override
     public Pattern getPattern(String pattern) {
         try {
             return compiledPatterns.get(pattern);
         } catch (ExecutionException e) {
-            throw Utils.wrapException("getPattern", e);
+            throw Utils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
         }
     }
 

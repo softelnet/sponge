@@ -24,6 +24,13 @@ import java.util.regex.Pattern;
 public interface PatternMatcher {
 
     /**
+     * Validates the pattern. Throws an exception if the pattern is invalid.
+     *
+     * @param pattern the string representation of the pattern.
+     */
+    void validatePattern(String pattern);
+
+    /**
      * Returns the pattern for its string representation.
      *
      * @param pattern the string representation of the pattern.

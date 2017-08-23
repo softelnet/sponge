@@ -17,20 +17,20 @@
 package org.openksavi.sponge;
 
 /**
- * Event processor operations.
+ * Event processor operations. Each event name may be specified as a regular expression thus creating a pattern matching more event names.
  *
  */
 public interface EventProcessorOperations extends ProcessorOperations {
 
     /**
-     * Returns event names for which this processor is registered.
+     * Returns event names (or name patterns) this processor listens to.
      *
      * @return event names.
      */
     String[] getEventNames();
 
     /**
-     * Returns an event name for the specified event index.
+     * Returns an event name (or name pattern) for the specified event index.
      *
      * @param index event index.
      *
@@ -39,14 +39,14 @@ public interface EventProcessorOperations extends ProcessorOperations {
     String getEventName(int index);
 
     /**
-     * Sets event names for which this processor is registered.
+     * Sets event names (or name patterns) this processor listens to.
      *
      * @param eventNames event names.
      */
     void setEventNames(String... eventNames);
 
     /**
-     * Sets event name for which this processor is registered.
+     * Sets event name (or name pattern) this processor listens to.
      *
      * @param eventName event name.
      */

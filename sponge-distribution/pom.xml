@@ -23,6 +23,7 @@
         <homepage>http://sponge.openksavi.org</homepage>
         <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
         <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
+        <javaSeJavaDocUrl>https://docs.oracle.com/javase/8/docs/api</javaSeJavaDocUrl>
     </properties>
 
     <dependencies>
@@ -78,6 +79,7 @@
                                 <sourcesUrl>${sourcesUrl}</sourcesUrl>
                                 <logoDir>${logoDir}</logoDir>
                                 <downloadUrl>${downloadUrl}</downloadUrl>
+                                <javaSeJavaDocUrl>${javaSeJavaDocUrl}</javaSeJavaDocUrl>
                             </attributes>
                         </configuration>
                         <executions>
