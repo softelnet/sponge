@@ -2,7 +2,7 @@
 :url: http://sponge.openksavi.org
 :sponge: Sponge
 
-image::https://travis-ci.org/softelnet/sponge.svg?branch=master[link="https://travis-ci.org/softelnet/sponge"] image::https://maven-badges.herokuapp.com/maven-central/org.openksavi.sponge/sponge-bom/badge.svg[link="https://maven-badges.herokuapp.com/maven-central/org.openksavi.sponge/sponge-bom"]
+image:https://travis-ci.org/softelnet/sponge.svg?branch=master[link="https://travis-ci.org/softelnet/sponge"] image:https://maven-badges.herokuapp.com/maven-central/org.openksavi.sponge/sponge-bom/badge.svg[link="https://maven-badges.herokuapp.com/maven-central/org.openksavi.sponge/sponge-bom"]
 
 This is a source code repository for an open source, Apache licensed, Java based Event Processing System.
 
