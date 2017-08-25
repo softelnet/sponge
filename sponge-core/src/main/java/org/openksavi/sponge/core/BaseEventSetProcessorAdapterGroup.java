@@ -111,6 +111,8 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
             eventSetProcessorAdapters.add(adapter);
             handler.addDuration(adapter);
 
+            adapter.setState(EventSetProcessorState.RUNNING);
+
             logger.debug("{} - New instance, hash: {}, event: {}", adapter.getName(), adapter.hashCode(), event);
         } catch (Exception e) {
             throw Utils.wrapException(name, e);
@@ -193,7 +195,9 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     public void durationOccurred(T adapter) {
         lock.lock();
         try {
-            adapter.durationOccurred();
+            if (adapter.getState() == EventSetProcessorState.RUNNING) {
+                adapter.durationOccurred();
+            }
             eventSetProcessorAdapters.remove(adapter);
         } finally {
             lock.unlock();

@@ -19,7 +19,7 @@ def onInit():
 def doWork(rule):
     running.get(rule.name).set(True)
     rule.logger.debug("Work start")
-    TimeUnit.SECONDS.sleep(2)
+    TimeUnit.SECONDS.sleep(10)
     rule.logger.debug("Work stop")
     running.get(rule.name).set(False)
 
@@ -62,10 +62,10 @@ class Rule4(Rule):
         doWork(self)
 
 def onStartup():
-    EPS.event("e1").sendAfter(100)
-    EPS.event("e2").sendAfter(200)
-    EPS.event("e3").sendAfter(300)
-    EPS.event("e4").sendAfter(400)
-    EPS.event("e5").sendAfter(500)
-    EPS.event("e6").sendAfter(600)
-    EPS.event("e7").sendAfter(700)
+    EPS.event("e1").sendAfter(1000)
+    EPS.event("e2").sendAfter(2000)
+    EPS.event("e3").sendAfter(3000)
+    EPS.event("e4").sendAfter(4000)
+    EPS.event("e5").sendAfter(5000)
+    EPS.event("e6").sendAfter(6000)
+    EPS.event("e7").sendAfter(7000)

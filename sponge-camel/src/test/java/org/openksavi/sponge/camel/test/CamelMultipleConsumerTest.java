@@ -100,6 +100,8 @@ public class CamelMultipleConsumerTest {
 
     @Test
     public void testRoute() throws InterruptedException {
+        CamelTestUtils.setResultWaitTime(60000, endEndpoint, errorEndpoint, logEndpoint);
+
         endEndpoint.expectedMessageCount(1);
         errorEndpoint.expectedMessageCount(0);
         logEndpoint.expectedMessageCount(1);

@@ -90,14 +90,16 @@ public class CamelProducerCustomActionTest {
 
     @Test
     public void testRoute() throws InterruptedException {
+        CamelTestUtils.setResultWaitTime(60000, logEndpoint);
+
         logEndpoint.expectedMessageCount(1);
         logEndpoint.expectedBodiesReceived("OK");
 
         String message = "Send me to the Sponge";
         testProducer.sendBody("direct:start", message);
 
-        await().atMost(10, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "calledCustomAction") != null);
-        TimeUnit.SECONDS.sleep(1);
+        await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "calledCustomAction") != null);
+        TimeUnit.SECONDS.sleep(2);
 
         assertEquals(message, engine.getOperations().getVariable(String.class, "calledCustomAction"));
         assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_spongeProducer").get());

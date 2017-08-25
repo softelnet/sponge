@@ -13,17 +13,17 @@ class CronTrigger extends Trigger {
     }
     void onRun(Event event) {
         int eventCounter = EPS.getVariable("eventCounter")
-        this.logger.debug("Received event {}: {}", eventCounter + 1, event.name)
-        if (eventCounter + 1 == 2) {
+        eventCounter += 1
+        EPS.setVariable("eventCounter", eventCounter)
+        this.logger.debug("Received event {}: {}", eventCounter, event.name)
+        if (eventCounter == 2) {
             this.logger.debug("removing scheduled event")
             EPS.removeEvent(EPS.getVariable("scheduleEntry"))
         }
-        eventCounter += 1
-        EPS.setVariable("eventCounter", eventCounter)
     }
 }
 
 void onStartup() {
-    // send event every second
-    EPS.setVariable("scheduleEntry", EPS.event("cronEvent").sendAt("0/1 * * * * ?"))
+    // send event every 2 seconds
+    EPS.setVariable("scheduleEntry", EPS.event("cronEvent").sendAt("0/2 * * * * ?"))
 }

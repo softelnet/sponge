@@ -25,7 +25,7 @@ var RuleFFF = Java.extend(Rule, {
 var RuleFFL = Java.extend(Rule, {
     onConfigure: function(self) {
         self.events = ["e1", "e2", "e3 :last"];
-        self.duration = Duration.ofMillis(500);
+        self.duration = Duration.ofSeconds(2);
         self.synchronous = false;
     },
     onRun: function(self, event) {

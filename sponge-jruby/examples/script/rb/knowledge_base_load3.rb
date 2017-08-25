@@ -7,7 +7,7 @@ class Trigger1 < Trigger
         self.event = "e1"
     end
     def onRun(event)
-        self.logger.debug("file3: Received event {}", event)
+        #self.logger.debug("file3: Received event {}", event)
         $eventCounter.get(self.displayName).incrementAndGet()
     end
 end
@@ -18,7 +18,7 @@ class Trigger3 < Trigger
         self.event = "e3"
     end
     def onRun(event)
-        self.logger.debug("file3: Received event {}", event)
+        #self.logger.debug("file3: Received event {}", event)
         $eventCounter.get(self.displayName).incrementAndGet()
     end
 end

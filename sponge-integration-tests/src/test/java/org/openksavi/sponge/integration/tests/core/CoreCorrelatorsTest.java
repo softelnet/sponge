@@ -36,7 +36,7 @@ public class CoreCorrelatorsTest {
         engine.startup();
 
         try {
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "nameCount").intValue() >= 3
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "nameCount").intValue() >= 3
                     && engine.getOperations().getVariable(Number.class, "patternCount").intValue() >= 7);
 
             assertEquals(3, engine.getOperations().getVariable(Number.class, "nameCount").intValue());

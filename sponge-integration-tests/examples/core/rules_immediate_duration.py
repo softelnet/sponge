@@ -8,7 +8,7 @@ from org.openksavi.sponge.core.event import EventId
 
 def onInit():
     global defaultDuration, correlationEventsLog
-    defaultDuration = 1
+    defaultDuration = 2
 
     # Variables for assertions only
     correlationEventsLog = CorrelationEventsLog()

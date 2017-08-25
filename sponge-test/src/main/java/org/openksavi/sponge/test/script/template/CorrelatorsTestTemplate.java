@@ -32,9 +32,9 @@ public class CorrelatorsTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators");
 
         try {
-            await().atMost(5, TimeUnit.SECONDS)
-                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() == 4
-                            && engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue() == 4);
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue() >= 1
+                            && engine.getOperations().getVariable(Number.class, "hardwareFailureJavaFinishCount").intValue() >= 1);
             assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue());
             assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureJavaCount").intValue());
             assertEquals(1, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue());
@@ -54,7 +54,7 @@ public class CorrelatorsTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators_duration");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 3);
             assertFalse(engine.isError());
         } finally {

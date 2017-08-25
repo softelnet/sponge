@@ -18,7 +18,6 @@ package org.openksavi.sponge.standalone.test;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,7 +29,9 @@ import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 public class StandaloneTest {
 
-    private static final long TIMEOUT = 20;
+    private static final long TIMEOUT = 60;
+
+    private static final long SLEEP = 1;
 
     @Test
     public void testPythonRss() {
@@ -56,7 +57,7 @@ public class StandaloneTest {
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
                     && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(SLEEP);
             assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
@@ -70,10 +71,10 @@ public class StandaloneTest {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/camel_rss_news/config/config.xml");
             Engine engine = engineMain.getEngine();
 
-            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("stoppedSources", null) != null);
+            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("stoppedSources", null) != null
+                    && engine.getOperations().getVariable(AtomicBoolean.class, "stoppedSources").get());
 
-            TimeUnit.SECONDS.sleep(1);
-            assertTrue(engine.getOperations().getVariable(AtomicBoolean.class, "stoppedSources").get());
+            TimeUnit.SECONDS.sleep(SLEEP);
             assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
@@ -89,7 +90,7 @@ public class StandaloneTest {
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
                     && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(SLEEP);
             assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);

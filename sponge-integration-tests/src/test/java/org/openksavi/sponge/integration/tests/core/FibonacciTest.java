@@ -36,7 +36,7 @@ public class FibonacciTest {
         engine.startup();
 
         try {
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("f(maxIndex)") != null);
+            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("f(maxIndex)") != null);
 
             Number fmax = engine.getOperations().getVariable(Number.class, "f(maxIndex)");
             assertEquals(new BigInteger("354224848179261915075"), fmax);

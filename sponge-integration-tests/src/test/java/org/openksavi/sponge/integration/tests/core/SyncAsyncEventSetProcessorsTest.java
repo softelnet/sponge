@@ -46,7 +46,7 @@ public class SyncAsyncEventSetProcessorsTest {
             CorrelationEventsLog eventsLog =
                     engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
                     .until(() -> eventsLog.getEvents("RuleFFF", "1").size() >= 1 && eventsLog.getEvents("RuleFFL", "1").size() >= 1);
 
             TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "5" } });

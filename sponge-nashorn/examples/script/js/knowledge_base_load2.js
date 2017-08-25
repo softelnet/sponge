@@ -9,7 +9,7 @@ var Trigger1 = Java.extend(Trigger, {
         self.event = "e1";
     },
     onRun: function(self, event) {
-        self.logger.debug("file2: Received event {}", event);
+        //self.logger.debug("file2: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
@@ -20,7 +20,7 @@ var Trigger2 = Java.extend(Trigger, {
         self.event = "e2";
     },
     onRun: function(self, event) {
-        self.logger.debug("file2: Received event {}", event);
+        //self.logger.debug("file2: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });

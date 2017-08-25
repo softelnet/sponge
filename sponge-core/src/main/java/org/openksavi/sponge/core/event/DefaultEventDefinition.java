@@ -78,8 +78,18 @@ public class DefaultEventDefinition implements EventDefinition {
     }
 
     @Override
+    public EventSchedulerEntry sendAfter(Duration delay) {
+        return sendAfter(delay.toMillis());
+    }
+
+    @Override
     public EventSchedulerEntry sendAfter(long delay, long interval) {
         return engineOperations.sendAfter(event, delay, interval);
+    }
+
+    @Override
+    public EventSchedulerEntry sendAfter(Duration delay, Duration interval) {
+        return sendAfter(delay.toMillis(), interval.toMillis());
     }
 
     @Override
@@ -88,8 +98,18 @@ public class DefaultEventDefinition implements EventDefinition {
     }
 
     @Override
+    public EventSchedulerEntry sendAt(Instant instant) {
+        return sendAt(instant.toEpochMilli());
+    }
+
+    @Override
     public EventSchedulerEntry sendAt(long milliseconds, long interval) {
         return engineOperations.sendAt(event, milliseconds, interval);
+    }
+
+    @Override
+    public EventSchedulerEntry sendAt(Instant instant, Duration interval) {
+        return sendAt(instant.toEpochMilli(), interval.toMillis());
     }
 
     @Override
@@ -100,25 +120,5 @@ public class DefaultEventDefinition implements EventDefinition {
     @Override
     public Event make() {
         return event;
-    }
-
-    @Override
-    public EventSchedulerEntry sendAfter(Duration delay) {
-        return sendAfter(delay.toMillis());
-    }
-
-    @Override
-    public EventSchedulerEntry sendAfter(Duration delay, Duration interval) {
-        return sendAfter(delay.toMillis(), interval.toMillis());
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(Instant instant) {
-        return sendAt(instant.toEpochMilli());
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(Instant instant, Duration interval) {
-        return sendAt(instant.toEpochMilli(), interval.toMillis());
     }
 }

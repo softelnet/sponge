@@ -26,7 +26,7 @@ var Trigger1 = Java.extend(Trigger, {
         self.event = "e1";
     },
     onRun: function(self, event) {
-        self.logger.debug("file1: Received event {}", event);
+        //self.logger.debug("file1: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
@@ -37,7 +37,7 @@ var Trigger2 = Java.extend(Trigger, {
         self.event = "e2";
     },
     onRun: function(self, event) {
-        self.logger.debug("file1: Received event {}", event);
+        //self.logger.debug("file1: Received event {}", event);
         EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
@@ -59,11 +59,11 @@ function onLoad() {
 
 function onStartup() {
     EPS.logger.debug("onStartup, file1: {}, triggers: {}", EPS.description, EPS.engine.triggers);
-    EPS.event("e1").sendAfter(0, 100);
-    EPS.event("e2").sendAfter(0, 100);
+    EPS.event("e1").sendAfter(0, 500);
+    EPS.event("e2").sendAfter(0, 500);
 
-    EPS.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load2.js").sendAfter(500);
-    EPS.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load3.js").sendAfter(1500);
+    EPS.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load2.js").sendAfter(2000);
+    EPS.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load3.js").sendAfter(5000);
 }
 
 function onShutdown() {

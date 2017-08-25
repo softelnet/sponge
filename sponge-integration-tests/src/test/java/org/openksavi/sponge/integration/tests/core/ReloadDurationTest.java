@@ -35,11 +35,10 @@ public class ReloadDurationTest {
         engine.startup();
 
         try {
-            await().atMost(10, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "ruleCFired").get());
-            TimeUnit.SECONDS.sleep(2);
-
-            assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "ruleAFired").get());
-            assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "ruleBFired").get());
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "ruleCFired").get()
+                            && engine.getOperations().getVariable(AtomicBoolean.class, "ruleAFired").get()
+                            && engine.getOperations().getVariable(AtomicBoolean.class, "ruleBFired").get());
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

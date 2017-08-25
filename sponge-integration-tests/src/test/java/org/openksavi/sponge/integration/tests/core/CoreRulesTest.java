@@ -21,9 +21,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultEngine;
@@ -35,6 +39,29 @@ import org.openksavi.sponge.test.util.TestUtils;
 
 public class CoreRulesTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(CoreRulesTest.class);
+
+    private Map<String, String[][]> createCommonExpectedSequences() {
+        Map<String, String[][]> expected = new LinkedHashMap<>();
+
+        expected.put("RuleFFF", new String[][] { { "1", "2", "4" } });
+        expected.put("RuleFFA", new String[][] { { "1", "2", "4" }, { "1", "2", "6" }, { "1", "2", "7" } });
+        expected.put("RuleFLF", new String[][] { { "1", "3", "4" } });
+        expected.put("RuleFLA", new String[][] { { "1", "3", "4" }, { "1", "5", "6" }, { "1", "5", "7" } });
+        expected.put("RuleFAF", new String[][] { { "1", "2", "4" }, { "1", "3", "4" } });
+        // @formatter:off
+        expected.put("RuleFAA", new String[][] {
+            { "1", "2", "4" }, { "1", "3", "4" },
+            { "1", "2", "6" }, { "1", "3", "6" }, { "1", "5", "6" },
+            { "1", "2", "7" }, { "1", "3", "7" }, { "1", "5", "7" }});
+        // @formatter:on
+        expected.put("RuleFNF", new String[][] { { "1", null, "4" } });
+        expected.put("RuleFNFReject", new String[][] {});
+        expected.put("RuleFNA", new String[][] { { "1", null, "4" }, { "1", null, "6" }, { "1", null, "7" } });
+
+        return expected;
+    }
+
     @Test
     public void testRulesImmediateNoDuration() {
         Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_no_duration.py").build();
@@ -42,7 +69,7 @@ public class CoreRulesTest {
         engine.startup();
 
         try {
-            doTestRulesImmediate(engine);
+            doTestRulesImmediate(engine, createCommonExpectedSequences());
 
             ScriptKnowledgeBaseInterpreter interpreter = Utils.getScriptInterpreter(engine, TestUtils.DEFAULT_KB);
             evalEnableRuleWithException(interpreter, "RuleFFL");
@@ -64,19 +91,17 @@ public class CoreRulesTest {
         engine.startup();
 
         try {
-            doTestRulesImmediate(engine);
+            Map<String, String[][]> expected = new LinkedHashMap<>(createCommonExpectedSequences());
 
-            CorrelationEventsLog eventsLog =
-                    engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
-            TestUtils.assertEventSequences(eventsLog, "RuleFFL", "1", new String[][] { { "1", "2", "7" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFFN", "1", new String[][] { { "1", "2", null } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFLL", "1", new String[][] { { "1", "5", "7" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFLN", "1", new String[][] { { "1", "5", null } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFAL", "1",
-                    new String[][] { { "1", "2", "7" }, { "1", "3", "7" }, { "1", "5", "7" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFNL", "1", new String[][] { { "1", null, "7" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFAN", "1",
-                    new String[][] { { "1", "2", null }, { "1", "3", null }, { "1", "5", null } });
+            expected.put("RuleFFL", new String[][] { { "1", "2", "7" } });
+            expected.put("RuleFFN", new String[][] { { "1", "2", null } });
+            expected.put("RuleFLL", new String[][] { { "1", "5", "7" } });
+            expected.put("RuleFLN", new String[][] { { "1", "5", null } });
+            expected.put("RuleFAL", new String[][] { { "1", "2", "7" }, { "1", "3", "7" }, { "1", "5", "7" } });
+            expected.put("RuleFNL", new String[][] { { "1", null, "7" } });
+            expected.put("RuleFAN", new String[][] { { "1", "2", null }, { "1", "3", null }, { "1", "5", null } });
+
+            doTestRulesImmediate(engine, expected);
 
             assertFalse(engine.isError());
         } finally {
@@ -84,35 +109,25 @@ public class CoreRulesTest {
         }
     }
 
-    private void doTestRulesImmediate(Engine engine) {
+    private void doTestRulesImmediate(Engine engine, Map<String, String[][]> expected) {
         CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
-        await().pollDelay(1, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS).until(() -> eventsLog.getEvents("RuleFAA", "1").size() == 8);
-
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             throw Utils.wrapException("doTestRulesImmediate", e);
         }
 
-        TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "4" } });
-        TestUtils.assertEventSequences(eventsLog, "RuleFFA", "1",
-                new String[][] { { "1", "2", "4" }, { "1", "2", "6" }, { "1", "2", "7" } });
-        TestUtils.assertEventSequences(eventsLog, "RuleFLF", "1", new String[][] { { "1", "3", "4" } });
-        TestUtils.assertEventSequences(eventsLog, "RuleFLA", "1",
-                new String[][] { { "1", "3", "4" }, { "1", "5", "6" }, { "1", "5", "7" } });
-        TestUtils.assertEventSequences(eventsLog, "RuleFAF", "1", new String[][] { { "1", "2", "4" }, { "1", "3", "4" } });
-        // @formatter:off
-        TestUtils.assertEventSequences(eventsLog, "RuleFAA", "1", new String[][] {
-                { "1", "2", "4" }, { "1", "3", "4" },
-                { "1", "2", "6" }, { "1", "3", "6" }, { "1", "5", "6" },
-                { "1", "2", "7" }, { "1", "3", "7" }, { "1", "5", "7" }});
-        // @formatter:on
-        TestUtils.assertEventSequences(eventsLog, "RuleFNF", "1", new String[][] { { "1", null, "4" } });
-        TestUtils.assertEventSequences(eventsLog, "RuleFNFReject", "1", new String[][] {});
-        TestUtils.assertEventSequences(eventsLog, "RuleFNA", "1",
-                new String[][] { { "1", null, "4" }, { "1", null, "6" }, { "1", null, "7" } });
+        expected.forEach((rule, sequences) -> {
+            try {
+                await().atMost(180, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
+            } catch (Exception e) {
+                logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
+                throw e;
+            }
+        });
 
+        expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
     }
 
     private static void evalEnableRuleWithException(ScriptKnowledgeBaseInterpreter interpreter, String ruleName) {

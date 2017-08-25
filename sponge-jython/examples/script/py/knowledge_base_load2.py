@@ -8,7 +8,7 @@ class Trigger1(Trigger):
         self.displayName = "Trigger1, file2"
         self.event = "e1"
     def onRun(self, event):
-        self.logger.debug("file2: Received event {}", event)
+        #self.logger.debug("file2: Received event {}", event)
         global eventCounter
         eventCounter.get(self.displayName).incrementAndGet()
 
@@ -18,7 +18,7 @@ class Trigger2(Trigger):
         self.displayName = "Trigger2, file2"
         self.event = "e2"
     def onRun(self, event):
-        self.logger.debug("file2: Received event {}", event)
+        #self.logger.debug("file2: Received event {}", event)
         global eventCounter
         eventCounter.get(self.displayName).incrementAndGet()
 

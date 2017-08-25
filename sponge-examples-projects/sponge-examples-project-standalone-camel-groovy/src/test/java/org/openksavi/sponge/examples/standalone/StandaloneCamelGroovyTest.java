@@ -36,10 +36,10 @@ public class StandaloneCamelGroovyTest {
             engineMain.startup("-c", "config/config.xml");
             Engine engine = engineMain.getEngine();
 
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("message") != null);
+            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("message") != null
+                    && engine.getOperations().getVariable(Boolean.class, "sent"));
 
             assertTrue(engine.getOperations().getVariable(String.class, "message").contains("Send me to Camel"));
-            assertTrue(engine.getOperations().getVariable(Boolean.class, "sent"));
         } finally {
             engineMain.shutdown();
         }

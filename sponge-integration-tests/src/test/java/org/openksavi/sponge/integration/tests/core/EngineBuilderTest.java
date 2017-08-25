@@ -18,7 +18,6 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -66,29 +65,31 @@ public class EngineBuilderTest {
     public void testEngineBuilder() throws InterruptedException {
         Engine engine = createAndStartupEngine();
 
-        await().pollDelay(3, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS).until(() -> getEvents(engine, "e1e2-all").size() >= 7);
+        try {
+            await().pollDelay(3, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS).until(() -> getEvents(engine, "e1e2-all").size() >= 7);
 
-        assertEquals(2, getEvents(engine, "e1").size());
-        assertEquals(2, getEvents(engine, "e1e2-first").size());
-        assertEquals(2, getEvents(engine, "e1e2-last").size());
-        assertEquals(7, getEvents(engine, "e1e2-all").size());
-        assertEquals(0, getEvents(engine, "e3").size());
+            assertEquals(2, getEvents(engine, "e1").size());
+            assertEquals(2, getEvents(engine, "e1e2-first").size());
+            assertEquals(2, getEvents(engine, "e1e2-last").size());
+            assertEquals(7, getEvents(engine, "e1e2-all").size());
+            assertEquals(0, getEvents(engine, "e3").size());
 
-        assertEquals(2, getEvents(engine, "e1e2-first").get(0).get("mark"));
-        assertEquals(4, getEvents(engine, "e1e2-first").get(1).get("mark"));
+            assertEquals(2, getEvents(engine, "e1e2-first").get(0).get("mark"));
+            assertEquals(4, getEvents(engine, "e1e2-first").get(1).get("mark"));
 
-        assertEquals(6, getEvents(engine, "e1e2-last").get(0).get("mark"));
-        assertEquals(6, getEvents(engine, "e1e2-last").get(1).get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-last").get(0).get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-last").get(1).get("mark"));
 
-        assertEquals(2, getEvents(engine, "e1e2-all").get(0).get("mark"));
-        assertEquals(4, getEvents(engine, "e1e2-all").get(1).get("mark"));
-        assertEquals(4, getEvents(engine, "e1e2-all").get(2).get("mark"));
-        assertEquals(5, getEvents(engine, "e1e2-all").get(3).get("mark"));
-        assertEquals(5, getEvents(engine, "e1e2-all").get(4).get("mark"));
-        assertEquals(6, getEvents(engine, "e1e2-all").get(5).get("mark"));
-        assertEquals(6, getEvents(engine, "e1e2-all").get(6).get("mark"));
-
-        engine.shutdown();
+            assertEquals(2, getEvents(engine, "e1e2-all").get(0).get("mark"));
+            assertEquals(4, getEvents(engine, "e1e2-all").get(1).get("mark"));
+            assertEquals(4, getEvents(engine, "e1e2-all").get(2).get("mark"));
+            assertEquals(5, getEvents(engine, "e1e2-all").get(3).get("mark"));
+            assertEquals(5, getEvents(engine, "e1e2-all").get(4).get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-all").get(5).get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-all").get(6).get("mark"));
+        } finally {
+            engine.shutdown();
+        }
         if (engine.isError()) {
             throw Utils.wrapException("testEngineBuilder", engine.getError());
         }

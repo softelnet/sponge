@@ -10,17 +10,17 @@ def onInit():
     eventEntry = None
     eventCounter = AtomicInteger(0)
     EPS.setVariable("eventCounter", eventCounter)
-    EPS.setVariable("allowNumber", 3)
+    EPS.setVariable("allowNumber", 2)
 
 class Trigger1(Trigger):
     def onConfigure(self):
         self.event = "e1"
     def onRun(self, event):
-    	global eventCounter
-    	eventCounter.incrementAndGet()
+        global eventCounter
+        eventCounter.incrementAndGet()
         self.logger.debug("Received event {}, counter: {}", event.name, eventCounter)
         if eventCounter.get() > EPS.getVariable("allowNumber"):
-        	self.logger.debug("This line should not be displayed!")
+        	   self.logger.debug("This line should not be displayed!")
 
 class Trigger2(Trigger):
     def onConfigure(self):
@@ -32,7 +32,7 @@ class Trigger2(Trigger):
 
 def onStartup():
     global eventEntry
-    start = 100
-    interval = 500
+    start = 500
+    interval = 1000
     eventEntry = EPS.event("e1").sendAfter(start, interval)
     EPS.event("e2").sendAfter(interval * EPS.getVariable("allowNumber"))

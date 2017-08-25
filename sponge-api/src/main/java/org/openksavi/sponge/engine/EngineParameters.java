@@ -276,16 +276,32 @@ public interface EngineParameters {
     void setDynamicThreadPoolKeepAliveTime(long dynamicThreadPoolKeepAliveTime);
 
     /**
-     * Returns the Processing Unit event processor cache expire time (in milliseconds).
+     * Returns the Processing Unit event processor cache expire time (in milliseconds). The value {@code -1} means that the cache is turned
+     * off. The value {@code 0} means that there will be no expire time for this cache. The default value is {@code 0}.
      *
-     * @return the Processing Unit event processor cache expire time (in milliseconds).
+     * @return the Processing Unit event processor cache expire time.
      */
     long getProcessingUnitEventProcessorCacheExpireTime();
 
     /**
      * Sets the Processing Unit event processor cache expire time (in milliseconds).
      *
-     * @param processingUnitEventProcessorCacheExpireTime the Processing Unit event processor cache expire time (in milliseconds).
+     * @param processingUnitEventProcessorCacheExpireTime the Processing Unit event processor cache expire time.
      */
     void setProcessingUnitEventProcessorCacheExpireTime(long processingUnitEventProcessorCacheExpireTime);
+
+    /**
+     * Returns the script-based class instance creation expression cache expire time (in milliseconds). The value {@code -1} means that the
+     * cache is turned off. The value {@code -1} means that there will be no expire time for this cache. The default value is {@code 0}.
+     *
+     * @return the script-based class instance creation expression cache expire time.
+     */
+    long getScriptClassInstancePoviderCacheExpireTime();
+
+    /**
+     * Sets the script-based class instance creation expression cache expire time (in milliseconds).
+     *
+     * @param scriptClassInstancePoviderCacheExpireTime the script-based class instance creation expression cache expire time.
+     */
+    void setScriptClassInstancePoviderCacheExpireTime(long scriptClassInstancePoviderCacheExpireTime);
 }

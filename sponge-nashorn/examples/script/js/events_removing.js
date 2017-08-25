@@ -8,7 +8,7 @@ var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 function onInit() {
     EPS.setVariable("eventEntry", null);
     EPS.setVariable("eventCounter", new AtomicInteger(0));
-    EPS.setVariable("allowNumber", 3);
+    EPS.setVariable("allowNumber", 2);
 }
 
 var Trigger1 = Java.extend(Trigger, {
@@ -37,8 +37,8 @@ var Trigger2 = Java.extend(Trigger, {
 });
 
 function onStartup() {
-    var start = 100;
-    var interval = 500;
+    var start = 500;
+    var interval = 1000;
     EPS.setVariable("eventEntry", EPS.event("e1").sendAfter(start, interval));
     EPS.event("e2").sendAfter(interval * EPS.getVariable("allowNumber"));
 }

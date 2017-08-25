@@ -35,7 +35,7 @@ public class NewsTest {
             example.startup();
             Engine engine = example.getEngine();
 
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
+            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
 
             TimeUnit.SECONDS.sleep(2);
 

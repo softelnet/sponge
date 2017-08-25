@@ -36,7 +36,7 @@ public class CoreFiltersTest {
         engine.startup();
 
         try {
-            await().atMost(20, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "nameCount").intValue() >= 2
                             && engine.getOperations().getVariable(Number.class, "patternCount").intValue() >= 3
                             && engine.getOperations().getVariable(Number.class, "acceptedCount").intValue() >= 5);

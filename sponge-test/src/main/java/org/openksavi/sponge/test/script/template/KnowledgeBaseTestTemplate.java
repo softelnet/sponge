@@ -39,13 +39,13 @@ public class KnowledgeBaseTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "knowledge_base_callbacks");
 
         try {
-            await().atMost(2, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onInitCalled")).get());
-            await().atMost(2, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onStartupCalled")).get());
-            await().pollDelay(4, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onInitCalled")).get());
+            await().atMost(30, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onStartupCalled")).get());
+            await().pollDelay(5, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
                     .until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onBeforeReloadCalled")).get());
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onAfterReloadCalled")).get());
-            await().atMost(2, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "onLoadCalled").intValue() == 2);
             TestStatus.onShutdownCalled = false;
             assertFalse(engine.isError());
@@ -62,15 +62,12 @@ public class KnowledgeBaseTestTemplate {
         engine.startup();
 
         try {
-            await().atMost(10, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "Trigger1, file3") >= 20);
+            await().atMost(60, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "Trigger1, file3") >= 20);
 
             assertTrue(TestUtils.getEventCounter(engine, "Trigger1, file1") > 1);
             assertTrue(TestUtils.getEventCounter(engine, "Trigger2, file1") > 1);
             assertTrue(TestUtils.getEventCounter(engine, "Trigger1, file2") > 1);
             assertTrue(TestUtils.getEventCounter(engine, "Trigger2, file2") > 1);
-
-            assertTrue(TestUtils.getEventCounter(engine, "Trigger1, file2") > TestUtils.getEventCounter(engine, "Trigger1, file1"));
-            assertTrue(TestUtils.getEventCounter(engine, "Trigger1, file3") > TestUtils.getEventCounter(engine, "Trigger1, file2"));
 
             assertEquals(0, TestUtils.getEventCounter(engine, "Trigger3, file3"));
             assertFalse(engine.isError());
@@ -87,7 +84,7 @@ public class KnowledgeBaseTestTemplate {
         engine.startup();
 
         try {
-            await().atMost(5, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "verificationDone").get());
 
             assertTrue(engine.getOperations().getVariable(AtomicBoolean.class, "verifyTriggerEnabled").get());
@@ -102,7 +99,7 @@ public class KnowledgeBaseTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "knowledge_base_auto_enable");
 
         try {
-            await().atMost(5, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "counter").intValue() >= 5);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "counter").intValue() >= 5);
 
             assertEquals(5, engine.getOperations().getVariable(Number.class, "counter").intValue());
             assertFalse(engine.isError());
@@ -119,12 +116,12 @@ public class KnowledgeBaseTestTemplate {
         Engine engine = ScriptTestUtils.startWithConfig(type, "knowledge_base_concurrency");
 
         try {
-            await().atMost(5, TimeUnit.SECONDS).until(() -> "A1".equals(getConcurrencyTestValue(engine)));
+            await().atMost(30, TimeUnit.SECONDS).until(() -> "A1".equals(getConcurrencyTestValue(engine)));
             await().atMost(10, TimeUnit.SECONDS).until(() -> "B1".equals(getConcurrencyTestValue(engine)));
-            await().atMost(15, TimeUnit.SECONDS).until(() -> "A2".equals(getConcurrencyTestValue(engine)));
-            await().atMost(20, TimeUnit.SECONDS).until(() -> "B2".equals(getConcurrencyTestValue(engine)));
-            await().atMost(25, TimeUnit.SECONDS).until(() -> "C1".equals(getConcurrencyTestValue(engine)));
-            await().atMost(30, TimeUnit.SECONDS).until(() -> "C2".equals(getConcurrencyTestValue(engine)));
+            await().atMost(10, TimeUnit.SECONDS).until(() -> "A2".equals(getConcurrencyTestValue(engine)));
+            await().atMost(10, TimeUnit.SECONDS).until(() -> "B2".equals(getConcurrencyTestValue(engine)));
+            await().atMost(10, TimeUnit.SECONDS).until(() -> "C1".equals(getConcurrencyTestValue(engine)));
+            await().atMost(10, TimeUnit.SECONDS).until(() -> "C2".equals(getConcurrencyTestValue(engine)));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
@@ -155,7 +152,7 @@ public class KnowledgeBaseTestTemplate {
         engine.startup();
 
         try {
-            await().atMost(5, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "receivedEventA2").intValue() == 2);
 
             assertEquals(0, engine.getOperations().getVariable(Number.class, "receivedEventA1").intValue());

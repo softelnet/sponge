@@ -32,8 +32,8 @@ public class ActionsTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions");
 
         try {
-            await().atMost(5, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("scriptActionResult") != null);
-            await().atMost(5, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("javaActionResult") != null);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("scriptActionResult") != null);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("javaActionResult") != null);
 
             Object[] scriptResult = (Object[]) engine.getOperations().getVariable("scriptActionResult");
             assertEquals(2, scriptResult.length);

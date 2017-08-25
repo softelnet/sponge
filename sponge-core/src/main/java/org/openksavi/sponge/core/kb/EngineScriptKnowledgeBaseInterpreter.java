@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.script.Bindings;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
 import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -50,6 +52,8 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         super(engineOperations, type);
     }
 
+    protected abstract String getScriptClassInstancePoviderFormat();
+
     /**
      * Creates scripting engine.
      *
@@ -71,6 +75,8 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     @Override
     public void onClear() {
         synchronized (interpteterSynchro) {
+            invalidateCache();
+
             scriptEngine = null;
         }
     }
@@ -200,5 +206,23 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     @Override
     public Throwable getJavaException(Throwable knowledgeBaseException) {
         return Utils.getException(knowledgeBaseException, ScriptException.class);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    protected <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider() {
+        return new CachedScriptClassInstancePovider<CompiledScript, T>(getEngineOperations().getEngine(), (expression) -> {
+            try {
+                return ((Compilable) scriptEngine).compile(expression);
+            } catch (ScriptException e) {
+                throw Utils.wrapException("createCachedScriptClassInstancePovider", e);
+            }
+        }, getScriptClassInstancePoviderFormat(), (script, javaClass) -> {
+            try {
+                return (T) script.eval();
+            } catch (ScriptException e) {
+                throw Utils.wrapException("createCachedScriptClassInstancePovider", e);
+            }
+        });
     }
 }

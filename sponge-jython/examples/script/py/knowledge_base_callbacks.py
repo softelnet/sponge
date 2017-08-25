@@ -11,7 +11,6 @@ class ReloadTrigger(Trigger):
         self.event = "reload"
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
-        # EPS.requestReload()
         EPS.reload()
 
 def onInit():

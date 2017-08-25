@@ -36,7 +36,7 @@ public class EventPatternTest {
         engine.startup();
 
         try {
-            await().pollDelay(5, TimeUnit.SECONDS).atMost(20, TimeUnit.SECONDS)
+            await().pollDelay(5, TimeUnit.SECONDS).atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "count").intValue() >= 6);
 
             assertEquals(6, engine.getOperations().getVariable(Number.class, "count").intValue());

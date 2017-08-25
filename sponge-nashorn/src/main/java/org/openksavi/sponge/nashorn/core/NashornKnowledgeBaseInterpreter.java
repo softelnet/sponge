@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -29,10 +30,10 @@ import com.google.common.collect.ImmutableMap;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
@@ -87,9 +88,8 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
         NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
         ScriptEngine result = factory.getScriptEngine("-scripting");
 
-        if (!(result instanceof Invocable)) {
-            throw new SpongeException("ScriptingEngine " + scripEngineName + " doesn't implement Invocable");
-        }
+        Validate.isInstanceOf(Compilable.class, result, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
+        Validate.isInstanceOf(Invocable.class, result, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
         PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
         addImport(result, NashornPlugin.class, Plugin.class.getSimpleName());
@@ -117,11 +117,6 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
         eval(scriptEngine, "var " + alias + " = Packages." + clazz.getName() + ";");
     }
 
-    @Override
-    protected <T> T doCreateInstance(String className, Class<T> javaClass) {
-        return eval("new " + className + "();");
-    }
-
     /**
      * Returns {@code null} if not script-based processor.
      */
@@ -135,7 +130,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
         return new NashornKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 
@@ -161,5 +156,10 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
         if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
             logger.debug("Auto-enabling: {}", autoEnabled);
         }
+    }
+
+    @Override
+    protected String getScriptClassInstancePoviderFormat() {
+        return "new %s();";
     }
 }

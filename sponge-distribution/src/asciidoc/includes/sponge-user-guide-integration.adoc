@@ -314,7 +314,8 @@ class CamelTrigger(Trigger):
         camel.send(event.get("message"))
 
 def onStartup():
-    # Send an event with a delay to allow starting of Camel before sending the message.
+    # Add a delay to allow starting of Camel, if necessary. This requirement depends on the configuration
+    # of Sponge and Camel in Spring.
     EPS.event("spongeEvent").set("message", "Send me to Camel").sendAfter(1000)
 ----
 

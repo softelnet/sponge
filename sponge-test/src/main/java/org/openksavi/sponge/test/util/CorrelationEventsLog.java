@@ -82,7 +82,6 @@ public class CorrelationEventsLog {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public List<List<Event>> getEvents(String key, String firstEventLabel) {
         lock.lock();
         try {

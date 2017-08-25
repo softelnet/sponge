@@ -42,7 +42,7 @@ public class EventsTestTemplate {
         Engine engine = ScriptTestUtils.startWithConfig(type, "events_clone_policy");
 
         try {
-            await().atMost(10, TimeUnit.SECONDS)
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> TestUtils.getEvents(engine, "defaultClonePolicy").size() >= 3
                             && TestUtils.getEvents(engine, "deepClonePolicy").size() >= 3
                             && TestUtils.getEvents(engine, "shallowClonePolicy").size() >= 3);
@@ -72,8 +72,13 @@ public class EventsTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "events_cron");
 
         try {
-            await().atMost(15, TimeUnit.SECONDS).until(() -> ((Number) engine.getOperations().getVariable("eventCounter")).intValue() >= 2);
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() >= 2);
+            TimeUnit.SECONDS.sleep(5);
+            assertEquals(2, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
+        } catch (InterruptedException ie) {
+            throw new SpongeException(ie);
         } finally {
             engine.shutdown();
         }
@@ -83,12 +88,12 @@ public class EventsTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "events_removing");
 
         try {
-            await().pollDelay(3, TimeUnit.SECONDS).atMost(5, TimeUnit.SECONDS)
-                    .until(() -> ((Number) engine.getOperations().getVariable("eventCounter"))
-                            .intValue() == ((Number) engine.getOperations().getVariable("allowNumber")).intValue());
-            TimeUnit.SECONDS.sleep(1);
-            assertEquals(((Number) engine.getOperations().getVariable("allowNumber")).intValue(),
-                    ((Number) engine.getOperations().getVariable("eventCounter")).intValue());
+            await().pollDelay(3, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() == engine.getOperations()
+                            .getVariable(Number.class, "allowNumber").intValue());
+            TimeUnit.SECONDS.sleep(2);
+            assertEquals(engine.getOperations().getVariable(Number.class, "allowNumber").intValue(),
+                    engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } catch (InterruptedException ie) {
             throw new SpongeException(ie);

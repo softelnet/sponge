@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -31,6 +32,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.python.core.Py;
 import org.python.core.PyObject;
 import org.python.core.PySystemState;
@@ -40,7 +42,6 @@ import org.python.jsr223.PyScriptEngineScope.ScopeIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
@@ -94,9 +95,8 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         String scripEngineName = SCRIPT_ENGINE_NAME;
         ScriptEngine result = new ScriptEngineManager().getEngineByName(scripEngineName);
 
-        if (!(result instanceof Invocable)) {
-            throw new SpongeException("ScriptingEngine " + scripEngineName + " doesn't implement Invocable");
-        }
+        Validate.isInstanceOf(Compilable.class, result, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
+        Validate.isInstanceOf(Invocable.class, result, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
         PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
         addImport(result, JythonPlugin.class, Plugin.class.getSimpleName());
@@ -138,11 +138,6 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         eval(scriptEngine, "from " + clazz.getPackage().getName() + " import " + clazz.getSimpleName() + " as " + alias);
     }
 
-    @Override
-    protected <T> T doCreateInstance(String className, Class<T> javaClass) {
-        return eval(className + "()");
-    }
-
     /**
      * Returns {@code null} if not script-based processor.
      */
@@ -158,7 +153,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
         return new JythonKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 
@@ -187,5 +182,10 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
             logger.debug("Auto-enabling: {}", autoEnabled);
         }
+    }
+
+    @Override
+    protected String getScriptClassInstancePoviderFormat() {
+        return "%s()";
     }
 }
