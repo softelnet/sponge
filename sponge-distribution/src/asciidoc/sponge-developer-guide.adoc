@@ -14,11 +14,11 @@
 === Prepare a release
 This step installs packages in the local Maven repository, generates documentation (AsciiDoc and JavaDoc), generates third party licenses info, creates standalone application ZIP archive and generates Jekyll source pages.
 
- mvn clean install -Pdocumentation,licenses,standalone,jekyll
+ mvn clean install -Pall,review,documentation,licenses,standalone,jekyll
 
 In order to skip tests, run:
 
- mvn clean install -DskipTests -Pdocumentation,licenses,standalone,jekyll
+ mvn clean install -Pall,review,documentation,licenses,standalone,jekyll -DskipTests
 
 === Generate documentation only
 
