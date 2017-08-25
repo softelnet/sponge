@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
@@ -62,67 +61,56 @@ public class RulesTestTemplate {
         }
     }
 
-    public static void testManyRulesEvents(KnowledgeBaseType type) {
-        int counter = 1;
-        while (true) {
-            logger.debug("Iteration {}", counter++);
-            doTestRulesEvents(type, ScriptTestUtils.startWithConfig(type, "rules_events"));
-        }
-    }
-
     public static void testRulesEvents(KnowledgeBaseType type) {
-        doTestRulesEvents(type, ScriptTestUtils.startWithKnowledgeBase(type, "rules_events"));
-    }
+        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_events");
 
-    private static void doTestRulesEvents(KnowledgeBaseType type, Engine engine) {
         try {
-            CorrelationEventsLog eventsLog =
-                    engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
-
-            Map<String, String[][]> expected = new LinkedHashMap<>();
-            expected.put("RuleF", new String[][] { { "1" } });
-            expected.put("RuleFFF", new String[][] { { "1", "2", "5" } });
-            expected.put("RuleFFFDuration", new String[][] { { "1", "2", "5" } });
-            expected.put("RuleFFL", new String[][] { { "1", "2", "7" } });
-            expected.put("RuleFFA", new String[][] { { "1", "2", "5" }, { "1", "2", "6" }, { "1", "2", "7" } });
-            expected.put("RuleFFN", new String[][] { { "1", "2", null } });
-            expected.put("RuleFLF", new String[][] { { "1", "4", "5" } });
-            expected.put("RuleFLL", new String[][] { { "1", "4", "7" } });
-            expected.put("RuleFLA", new String[][] { { "1", "4", "5" }, { "1", "4", "6" }, { "1", "4", "7" } });
-            expected.put("RuleFLN", new String[][] { { "1", "4", null } });
-            expected.put("RuleFAF", new String[][] { { "1", "2", "5" }, { "1", "3", "5" }, { "1", "4", "5" } });
-            expected.put("RuleFAL", new String[][] { { "1", "2", "7" }, { "1", "3", "7" }, { "1", "4", "7" } });
-            // @formatter:off
-            expected.put("RuleFAA", new String[][] {
-                    { "1", "2", "5" }, { "1", "3", "5" }, { "1", "4", "5" },
-                    { "1", "2", "6" }, { "1", "3", "6" }, { "1", "4", "6" },
-                    { "1", "2", "7" }, { "1", "3", "7" }, { "1", "4", "7" } });
-            // @formatter:on
-            expected.put("RuleFNF", new String[][] { { "1", null, "5" } });
-            expected.put("RuleFNFReject", new String[][] {});
-            expected.put("RuleFNL", new String[][] { { "1", null, "7" } });
-            expected.put("RuleFNA", new String[][] { { "1", null, "5" }, { "1", null, "6" }, { "1", null, "7" } });
-            expected.put("RuleFAN", new String[][] { { "1", "2", null }, { "1", "3", null }, { "1", "4", null } });
-
-            TimeUnit.SECONDS.sleep(8);
-
-            expected.forEach((rule, sequences) -> {
-                try {
-                    await().atMost(180, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
-                } catch (Exception e) {
-                    logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
-                    throw e;
-                }
-            });
-
-            expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
-
-            assertFalse(engine.isError());
-        } catch (InterruptedException ie) {
-            throw new SpongeException(ie);
+            doTestRulesEvents(type, engine, 180);
         } finally {
             engine.shutdown();
         }
+    }
+
+    public static void doTestRulesEvents(KnowledgeBaseType type, Engine engine, long timeout) {
+        CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
+
+        Map<String, String[][]> expected = new LinkedHashMap<>();
+        expected.put("RuleF", new String[][] { { "1" } });
+        expected.put("RuleFFF", new String[][] { { "1", "2", "5" } });
+        expected.put("RuleFFFDuration", new String[][] { { "1", "2", "5" } });
+        expected.put("RuleFFL", new String[][] { { "1", "2", "7" } });
+        expected.put("RuleFFA", new String[][] { { "1", "2", "5" }, { "1", "2", "6" }, { "1", "2", "7" } });
+        expected.put("RuleFFN", new String[][] { { "1", "2", null } });
+        expected.put("RuleFLF", new String[][] { { "1", "4", "5" } });
+        expected.put("RuleFLL", new String[][] { { "1", "4", "7" } });
+        expected.put("RuleFLA", new String[][] { { "1", "4", "5" }, { "1", "4", "6" }, { "1", "4", "7" } });
+        expected.put("RuleFLN", new String[][] { { "1", "4", null } });
+        expected.put("RuleFAF", new String[][] { { "1", "2", "5" }, { "1", "3", "5" }, { "1", "4", "5" } });
+        expected.put("RuleFAL", new String[][] { { "1", "2", "7" }, { "1", "3", "7" }, { "1", "4", "7" } });
+        // @formatter:off
+        expected.put("RuleFAA", new String[][] {
+                { "1", "2", "5" }, { "1", "3", "5" }, { "1", "4", "5" },
+                { "1", "2", "6" }, { "1", "3", "6" }, { "1", "4", "6" },
+                { "1", "2", "7" }, { "1", "3", "7" }, { "1", "4", "7" } });
+        // @formatter:on
+        expected.put("RuleFNF", new String[][] { { "1", null, "5" } });
+        expected.put("RuleFNFReject", new String[][] {});
+        expected.put("RuleFNL", new String[][] { { "1", null, "7" } });
+        expected.put("RuleFNA", new String[][] { { "1", null, "5" }, { "1", null, "6" }, { "1", null, "7" } });
+        expected.put("RuleFAN", new String[][] { { "1", "2", null }, { "1", "3", null }, { "1", "4", null } });
+
+        expected.forEach((rule, sequences) -> {
+            try {
+                await().atMost(timeout, TimeUnit.SECONDS).until(() -> eventsLog.getEvents(rule, "1").size() >= sequences.length);
+            } catch (Exception e) {
+                logger.error("Unsuccessful waiting for rule {} sequences {}", rule, (Object) sequences);
+                throw e;
+            }
+        });
+
+        expected.forEach((rule, sequences) -> TestUtils.assertEventSequences(eventsLog, rule, "1", sequences));
+
+        assertFalse(engine.isError());
     }
 
     public static void testRulesNoneModeEvents(KnowledgeBaseType type) {

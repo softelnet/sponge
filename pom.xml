@@ -189,6 +189,9 @@
                     <version>2.20</version>
                     <configuration>
                         <argLine>-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
+                        <excludes>
+                            <exclude>**/performance/*</exclude>
+                        </excludes>
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>
                 </plugin>
@@ -200,7 +203,14 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.4</version>
+                    <version>3.0.5</version>
+                    <configuration>
+                        <failOnError>true</failOnError>
+                        <effort>Max</effort>
+                        <threshold>Default</threshold>
+                        <xmlOutput>true</xmlOutput>
+                        <excludeFilterFile>${project.parent.basedir}/sponge-development-tools/src/main/resources/findbugs/findbugs-exclude-filter.xml</excludeFilterFile>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -243,6 +253,8 @@
                         <pushChanges>false</pushChanges>
                         <releaseProfiles>release</releaseProfiles>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
+                        <localCheckout>true</localCheckout>
+                        <pushChanges>false</pushChanges>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -642,17 +654,10 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
-                        <configuration>
-                            <failOnError>true</failOnError>
-                            <effort>Max</effort>
-                            <threshold>Default</threshold>
-                            <xmlOutput>true</xmlOutput>
-                            <excludeFilterFile>${project.parent.basedir}/sponge-development-tools/src/main/resources/findbugs/findbugs-exclude-filter.xml</excludeFilterFile>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>findbugs</id>
-                                <phase>validate</phase>
+                                <phase>compile</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>

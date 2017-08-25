@@ -16,14 +16,33 @@
 
 package org.openksavi.sponge.core.engine;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.FileUtils;
+
+import org.openksavi.sponge.EventSetProcessorAdapterGroup;
+import org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue;
+import org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueueMainProcessingUnit;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.StatisticsManager;
+import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.event.EventQueue;
+import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 
 /**
  * Statistics Manager.
  */
 public class DefaultStatisticsManager extends BaseEngineModule implements StatisticsManager {
+
+    private AtomicReference<Instant> timeMeasurementStart = new AtomicReference<>(null);
+
+    private AtomicLong timeMeasurementEventCount = new AtomicLong(0);
 
     /**
      * Creates a new Statistics Manager.
@@ -65,7 +84,57 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
     }
 
     private String getQueueSummary(EventQueue queue) {
-        return queue.getName() + "; capacity=" + queue.getCapacity() + "; size=" + queue.getSize();
+        return queue.getName() + " (capacity=" + queue.getCapacity() + "; size=" + queue.getSize() + ")";
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected String getEventSetProcessorsSummary(String label, List<? extends EventSetProcessorAdapterGroup> groups) {
+        return label + "(" + groups.size() + ")" + (groups.isEmpty() ? "" : ": ")
+                + groups.stream().map(group -> String.format("%s (%s)", group.getName(), group.getEventSetProcessorAdapters().size()))
+                        .collect(Collectors.joining(", "));
+    }
+
+    protected String getThreadPoolSummary(ThreadPool threadPool) {
+        StringBuffer sb = new StringBuffer(512);
+        sb.append(threadPool.getName());
+
+        if (threadPool.getExecutor() instanceof ThreadPoolExecutor) {
+            sb.append(" (");
+            ThreadPoolExecutor executor = (ThreadPoolExecutor) threadPool.getExecutor();
+            sb.append("max=" + executor.getMaximumPoolSize());
+            sb.append(", current=" + executor.getPoolSize());
+            sb.append(", active=" + executor.getActiveCount());
+            sb.append(", largest=" + executor.getLargestPoolSize());
+            sb.append(", core=" + executor.getCorePoolSize());
+            sb.append(", all tasks=" + executor.getTaskCount());
+            sb.append(", completed tasks=" + executor.getCompletedTaskCount());
+            sb.append(")");
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public Double getEventPerformance() {
+        Instant start = timeMeasurementStart.get();
+        long events = timeMeasurementEventCount.get();
+
+        if (start == null || events == 0) {
+            return null;
+        }
+
+        return (((double) events) / ((double) Duration.between(start, Instant.now()).toMillis())) * 1000;
+    }
+
+    public String getMemorySummary() {
+        return String.format("Memory (total=%s, used=%s)", FileUtils.byteCountToDisplaySize(Runtime.getRuntime().totalMemory()),
+                FileUtils.byteCountToDisplaySize(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+    }
+
+    @SuppressWarnings("rawtypes")
+    public String getDecomposedQueueSummary(DecomposedQueueMainProcessingUnit mainProcessingUnit) {
+        DecomposedQueue queue = ((DecomposedQueueMainProcessingUnit) mainProcessingUnit).getDecomposedQueue();
+        return String.format("Decomposed queue (capacity=%s, size=%s)", queue.getCapacity(), queue.getSize());
     }
 
     /**
@@ -79,17 +148,44 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
 
         sb.append(getQueueSummary(getEngine().getEventQueueManager().getInputEventQueue()));
         sb.append(". " + getQueueSummary(getEngine().getEventQueueManager().getMainEventQueue()));
-        sb.append("\n");
-        sb.append("Actions: " + getEngine().getActions().size());
-        sb.append(". Filters: " + getEngine().getFilters().size());
-        sb.append(". Triggers: " + getEngine().getTriggers().size());
-        sb.append(". Rules: " + getEngine().getRuleGroups().size());
-        sb.append(". Correlators: " + getEngine().getCorrelatorGroups().size());
-        sb.append("\n");
-        sb.append("Event scheduler: scheduled=" + getScheduledEventCount());
-        sb.append(". Threads: active threads=" + getActiveThreadCount());
-        sb.append(". Plugins: plugins=" + getPluginCount());
+        sb.append(". Plugins (" + getPluginCount() + ")");
+        sb.append(". Actions (" + getEngine().getActions().size() + ")");
+        sb.append(". Filters (" + getEngine().getFilters().size() + ")");
+        sb.append(". Triggers (" + getEngine().getTriggers().size() + ")");
+        sb.append(". " + getEventSetProcessorsSummary("Rules", getEngine().getRuleGroups()));
+        sb.append(". " + getEventSetProcessorsSummary("Correlators", getEngine().getCorrelatorGroups()));
+        sb.append(". Event scheduler (" + getScheduledEventCount() + ")");
+        sb.append(". Thread pools: ");
+        MainProcessingUnit mainProcessingUnit = getEngine().getProcessingUnitManager().getMainProcessingUnit();
+        sb.append(getThreadPoolSummary(mainProcessingUnit.getWorkerThreadPool()));
+        sb.append(", " + getThreadPoolSummary(mainProcessingUnit.getAsyncEventSetProcessorThreadPool()));
+        if (mainProcessingUnit instanceof DecomposedQueueMainProcessingUnit) {
+            sb.append(". " + getDecomposedQueueSummary((DecomposedQueueMainProcessingUnit) mainProcessingUnit));
+        }
+        sb.append(". " + getMemorySummary());
+        Double eventPerformance = getEventPerformance();
+        if (eventPerformance != null) {
+            sb.append(String.format(". Events performance (%.2f events/s)", eventPerformance));
+        }
+
+        sb.append(".");
 
         return sb.toString();
+    }
+
+    @Override
+    public void startTimeMeasurementIfNotStartedYet() {
+        timeMeasurementStart.compareAndSet(null, Instant.now());
+    }
+
+    @Override
+    public void incrementTimeMeasurementEventCount() {
+        timeMeasurementEventCount.incrementAndGet();
+    }
+
+    @Override
+    public void clearTimeMeasurement() {
+        timeMeasurementStart.set(null);
+        timeMeasurementEventCount.set(0);
     }
 }

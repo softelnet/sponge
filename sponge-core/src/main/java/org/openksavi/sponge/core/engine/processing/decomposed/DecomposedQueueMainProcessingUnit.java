@@ -18,7 +18,6 @@ package org.openksavi.sponge.core.engine.processing.decomposed;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,7 +33,6 @@ import org.openksavi.sponge.core.event.ProcessorControlEvent;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.ProcessorType;
-import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.event.ControlEvent;
@@ -147,24 +145,23 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
 
             return false;
         } else {
+            getEngine().getStatisticsManager().startTimeMeasurementIfNotStartedYet();
+
             Set<AtomicReference<EventProcessorAdapter<?>>> adapterRs = getEventProcessors(event.getName());
             for (AtomicReference<EventProcessorAdapter<?>> adapterR : adapterRs) {
                 putIntoDecomposedQueue(new ImmutablePair<>(adapterR.get(), event));
             }
+
+            getEngine().getStatisticsManager().incrementTimeMeasurementEventCount();
 
             return adapterRs.isEmpty();
         }
     }
 
     protected void putIntoDecomposedQueue(Pair<EventProcessorAdapter<?>, Event> entry) throws InterruptedException {
-        while (true) {
-            try {
-                decomposedQueue.put(entry);
-                break;
-            } catch (QueueFullException e) {
-                // If decomposed queue is full, than try again after sleep.
-                TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
-            }
+        while (!decomposedQueue.put(entry)) {
+            // If decomposed queue is full, than try again after sleep.
+            TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
         }
     }
 
@@ -264,11 +261,6 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
     }
 
     @Override
-    public Executor getAsyncEventSetProcessorExecutor() {
-        return asyncEventSetProcessorThreadPool.getExecutor();
-    }
-
-    @Override
     public boolean supportsConcurrentListenerThreadPool() {
         return false;
     }
@@ -277,8 +269,17 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
         return decomposedQueue;
     }
 
+    @Override
     public ThreadPool getWorkerThreadPool() {
         return workerThreadPool;
     }
 
+    @Override
+    public ThreadPool getAsyncEventSetProcessorThreadPool() {
+        return asyncEventSetProcessorThreadPool;
+    }
+
+    public ProcessableThreadPool getDecomposedQueueThreadPool() {
+        return decomposedQueueThreadPool;
+    }
 }

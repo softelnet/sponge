@@ -14,11 +14,13 @@
 === Prepare a release
 This step installs packages in the local Maven repository, generates documentation (AsciiDoc and JavaDoc), generates third party licenses info, creates standalone application ZIP archive and generates Jekyll source pages.
 
- mvn clean install -Pdocumentation,licenses,standalone,jekyll
+ mvn clean install -Pall,review,documentation,licenses,standalone,jekyll
 
 In order to skip tests, run:
 
- mvn clean install -DskipTests -Pdocumentation,licenses,standalone,jekyll
+ mvn clean install -Pall,review,documentation,licenses,standalone,jekyll -DskipTests
+
+NOTE: The assertions in some tests heavily depend on the values of timeouts, durations, etc. and the speed of the test environment, therefore running the tests on a very slow machine may cause assertion failures that (in most cases) would not indicate bugs.
 
 === Generate documentation only
 
@@ -55,6 +57,11 @@ The contents of the directory `_site` should be copied to the web server. Note: 
 
 If you get `ERROR: directory is already being watched!` message, simply ignore it. This is due to the use of symbolic link pointing to the root of the project.
 
+=== Performance tests
+Performance tests have to be invoked manually, because they require more time to finish.
+
+ cd sponge-integration-tests/
+ mvn test -Dtest=org.openksavi.sponge.integration.tests.performance.LoadTest
 
 == Code style
 Formatter and checkstyle based on Google configuration.

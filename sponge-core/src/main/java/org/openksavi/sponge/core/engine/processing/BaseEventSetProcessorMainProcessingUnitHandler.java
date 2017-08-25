@@ -19,7 +19,6 @@ package org.openksavi.sponge.core.engine.processing;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -124,8 +123,8 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
     }
 
     @Override
-    public Executor getAsyncEventSetProcessorExecutor() {
-        return getProcessingUnit().getAsyncEventSetProcessorExecutor();
+    public ThreadPool getAsyncEventSetProcessorThreadPool() {
+        return getProcessingUnit().getAsyncEventSetProcessorThreadPool();
     }
 
     public static class EventSetProcessorDurationTask<T extends EventSetProcessorAdapter<?>> implements Runnable {

@@ -78,7 +78,7 @@ public class DefaultEngineParameters implements EngineParameters {
     private int mainEventQueueCapacity = 10;
 
     /** The dynamic thread pool initial size ratio. */
-    private double initialDynamicThreadPoolSizeRatio = 0.3;
+    private double initialDynamicThreadPoolSizeRatio = 1.0;
 
     /** The dynamic thread pool keep alive time (in milliseconds). */
     private long dynamicThreadPoolKeepAliveTime = 60000;

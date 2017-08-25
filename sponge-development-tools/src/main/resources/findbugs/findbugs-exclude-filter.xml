@@ -38,7 +38,6 @@
     </Match>
     <Match>
         <Class name="org.openksavi.sponge.test.script.template.RulesTestTemplate" />
-        <Method name="doTestRulesEvents" />
         <Bug pattern="UC_USELESS_OBJECT" />
     </Match>
 </FindBugsFilter>

@@ -27,6 +27,9 @@ public class UtilsTest {
     @Test
     public void testCalculateInitialDynamicThreadPoolSize() {
         Engine engine = DefaultEngine.builder().build();
+
+        engine.getDefaultParameters().setInitialDynamicThreadPoolSizeRatio(0.3);
+
         Assert.assertEquals(3, Utils.calculateInitialDynamicThreadPoolSize(engine, 10));
         Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 3));
         Assert.assertEquals(2, Utils.calculateInitialDynamicThreadPoolSize(engine, 5));

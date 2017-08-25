@@ -37,6 +37,8 @@ class TriggerA(Trigger):
 ----
 <1> The trigger will listen to all events whose name starts with `"a"`, as specified by the regular expression.
 
+Event processors shouldn't implement infinite loops in their callback methods because it would at least disrupt the shutdown procedure. If you must create such a loop, please use for example `while EPS.engine.isRunning():` rather than `while True:`.
+
 == Filters
 Filters allow only certain events to be processed by the engine. Filters are executed in the same order as the order of their registration (i.e. enabling).
 

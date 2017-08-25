@@ -21,6 +21,7 @@ import java.util.List;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.rule.RuleAdapterGroup;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 
@@ -66,4 +67,18 @@ public interface MainProcessingUnit extends ProcessingUnit<EventProcessorAdapter
      * @return {@code true} if a processor of type {@code type} named {@code name} exists.
      */
     boolean existsProcessor(String name, ProcessorType type);
+
+    /**
+     * Returns the thread pool used by the Main Processing Unit for worker threads.
+     *
+     * @return the thread pool.
+     */
+    ThreadPool getWorkerThreadPool();
+
+    /**
+     * Returns the thread pool for applying during processing instances in event set processor group.
+     *
+     * @return the thread pool.
+     */
+    ThreadPool getAsyncEventSetProcessorThreadPool();
 }

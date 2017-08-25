@@ -1,11 +1,11 @@
 package org.openksavi.sponge.engine.processing;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.EventSetProcessorDefinition;
+import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.event.Event;
 
 /**
@@ -44,7 +44,7 @@ public interface EventSetProcessorMainProcessingUnitHandler<G extends EventSetPr
      *
      * @return thread pool.
      */
-    Executor getAsyncEventSetProcessorExecutor();
+    ThreadPool getAsyncEventSetProcessorThreadPool();
 
     /**
      * Processes the incoming event for event set processor adapters from the event set processor adapter group.

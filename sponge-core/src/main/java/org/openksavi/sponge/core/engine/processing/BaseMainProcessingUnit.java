@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -119,8 +118,6 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
 
         return handler;
     }
-
-    public abstract Executor getAsyncEventSetProcessorExecutor();
 
     public Map<ProcessorType, MainProcessingUnitHandler> getHandlers() {
         return handlers;

@@ -48,4 +48,26 @@ public interface StatisticsManager extends EngineModule {
      * @return statistics summary.
      */
     String getSummary();
+
+    /**
+     * Starts the time measurement of events to be processed by the Main Processing Unit.
+     */
+    void startTimeMeasurementIfNotStartedYet();
+
+    /**
+     * Increments event count in the time measurement of events to be processed by the Main Processing Unit.
+     */
+    void incrementTimeMeasurementEventCount();
+
+    /**
+     * Returns the event performance calculated in the current time measurement. Returns {@code null} if there is no data available.
+     * 
+     * @return the event performance as events / second.
+     */
+    Double getEventPerformance();
+
+    /**
+     * Clears the time measurement of events to be processed by the Main Processing Unit.
+     */
+    void clearTimeMeasurement();
 }
