@@ -38,23 +38,7 @@ public class SyncAsyncEventSetProcessorsTest {
 
         assertTrue(engine.getConfigurationManager().getEventSetProcessorDefaultSynchronous());
 
-        testAsyncEventSetProcessors(engine);
-    }
-
-    private void testAsyncEventSetProcessors(Engine engine) throws InterruptedException {
-        try {
-            CorrelationEventsLog eventsLog =
-                    engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
-
-            await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
-                    .until(() -> eventsLog.getEvents("RuleFFF", "1").size() >= 1 && eventsLog.getEvents("RuleFFL", "1").size() >= 1);
-
-            TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "5" } });
-            TestUtils.assertEventSequences(eventsLog, "RuleFFL", "1", new String[][] { { "1", "2", "7" } });
-            assertFalse(engine.isError());
-        } finally {
-            engine.shutdown();
-        }
+        doTestAsyncEventSetProcessors(engine);
     }
 
     @Test
@@ -64,6 +48,22 @@ public class SyncAsyncEventSetProcessorsTest {
 
         assertFalse(engine.getConfigurationManager().getEventSetProcessorDefaultSynchronous());
 
-        testAsyncEventSetProcessors(engine);
+        doTestAsyncEventSetProcessors(engine);
+    }
+
+    private void doTestAsyncEventSetProcessors(Engine engine) throws InterruptedException {
+        try {
+            CorrelationEventsLog eventsLog =
+                    engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
+
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(60, TimeUnit.SECONDS)
+                    .until(() -> eventsLog.getEvents("RuleFFF", "1").size() >= 1 && eventsLog.getEvents("RuleFFL", "1").size() >= 1);
+
+            TestUtils.assertEventSequences(eventsLog, "RuleFFF", "1", new String[][] { { "1", "2", "5" } });
+            TestUtils.assertEventSequences(eventsLog, "RuleFFL", "1", new String[][] { { "1", "2", "7" } });
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
     }
 }

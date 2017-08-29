@@ -22,6 +22,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
@@ -35,9 +36,12 @@ public class FiltersTestTemplate {
         try {
             await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> TestUtils.getEventCounter(engine, "e2") >= 5 && TestUtils.getEventCounter(engine, "e3") >= 5);
+            TimeUnit.SECONDS.sleep(1);
 
             assertEquals(0, TestUtils.getEventCounter(engine, "e1"));
             assertFalse(engine.isError());
+        } catch (InterruptedException e) {
+            throw Utils.wrapException("testJavaFilter", e);
         } finally {
             engine.shutdown();
         }
@@ -49,8 +53,12 @@ public class FiltersTestTemplate {
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "blue") >= 1);
 
+            TimeUnit.SECONDS.sleep(1);
+
             assertEquals(0, TestUtils.getEventCounter(engine, "red"));
             assertFalse(engine.isError());
+        } catch (InterruptedException e) {
+            throw Utils.wrapException("testFilter", e);
         } finally {
             engine.shutdown();
         }
@@ -61,7 +69,8 @@ public class FiltersTestTemplate {
 
         try {
             await().atMost(30, TimeUnit.SECONDS)
-                    .until(() -> TestUtils.getEventCounter(engine, "e2-red") >= 2 && TestUtils.getEventCounter(engine, "e2-blue") >= 2);
+                    .until(() -> TestUtils.getEventCounter(engine, "e1-red") >= 1 && TestUtils.getEventCounter(engine, "e1-blue") >= 1
+                            && TestUtils.getEventCounter(engine, "e2-red") >= 2 && TestUtils.getEventCounter(engine, "e2-blue") >= 2);
 
             assertEquals(1, TestUtils.getEventCounter(engine, "e1-red"));
             assertEquals(1, TestUtils.getEventCounter(engine, "e1-blue"));

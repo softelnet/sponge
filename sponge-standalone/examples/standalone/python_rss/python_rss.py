@@ -21,11 +21,6 @@ class RssTrigger(Trigger):
 
 class PythonRoute(ScriptRouteBuilder):
     def configure(self):
-        self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
-                .transform().simple("${body}") \
-                .process(lambda exchange: EPS.getVariable("receivedRssCount").incrementAndGet()) \
-                .to("stream:out")
-
         self.fromS("rss:http://rss.cnn.com/rss/edition.rss?sortEntries=false&consumer.delay=1000").to("direct:rss")
 
         self.fromS("rss:http://feeds.bbci.co.uk/news/world/rss.xml?consumer.delay=1000").to("direct:rss")
@@ -33,12 +28,18 @@ class PythonRoute(ScriptRouteBuilder):
         self.fromS("direct:rss").routeId("rss") \
             .marshal().rss() \
             .idempotentConsumer(self.xpath("/rss/channel/item/title/text()"), MemoryIdempotentRepository.memoryIdempotentRepository()) \
-            .process(lambda exchange: exchange.getIn().setBody(EPS.makeEvent("rss") \
+            .process(lambda exchange: exchange.getIn().setBody(EPS.event("rss") \
                 .set("channel", CamelUtils.xpath(exchange, "/rss/channel/title/text()")) \
                 .set("title", CamelUtils.xpath(exchange, "/rss/channel/item/title/text()")) \
                 .set("link", CamelUtils.xpath(exchange, "/rss/channel/item/link/text()")) \
-                .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()")))) \
+                .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()")) \
+                    .make())) \
             .to("sponge:spongeEngine")
+
+        self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
+            .transform().simple("${body}") \
+            .process(lambda exchange: EPS.getVariable("receivedRssCount").incrementAndGet()) \
+            .to("stream:out")
 
 def onStartup():
     camel.context.addRoutes(PythonRoute())

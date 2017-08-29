@@ -66,7 +66,9 @@ public class EngineBuilderTest {
         Engine engine = createAndStartupEngine();
 
         try {
-            await().pollDelay(3, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS).until(() -> getEvents(engine, "e1e2-all").size() >= 7);
+            await().pollDelay(3, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
+                    .until(() -> getEvents(engine, "e1").size() >= 1 && getEvents(engine, "e1e2-first").size() >= 2
+                            && getEvents(engine, "e1e2-last").size() >= 2 && getEvents(engine, "e1e2-all").size() >= 7);
 
             assertEquals(2, getEvents(engine, "e1").size());
             assertEquals(2, getEvents(engine, "e1e2-first").size());

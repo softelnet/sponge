@@ -23,7 +23,7 @@ class ColorDeduplicationFilter extends Filter {
     void onConfigure() {
         this.event = "e1"
     }
-    void init() {
+    void onInit() {
         this.deduplication.cacheBuilder.maximumSize(1000).expireAfterWrite(5, TimeUnit.MINUTES)
     }
     boolean onAccept(Event event) {

@@ -71,8 +71,10 @@ public class StandaloneTest {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/camel_rss_news/config/config.xml");
             Engine engine = engineMain.getEngine();
 
-            await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("stoppedSources", null) != null
-                    && engine.getOperations().getVariable(AtomicBoolean.class, "stoppedSources").get());
+            await().atMost(TIMEOUT, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable("stoppedSources", null) != null
+                            && engine.getOperations().getVariable(AtomicBoolean.class, "stoppedSources").get()
+                            && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
 
             TimeUnit.SECONDS.sleep(SLEEP);
             assertFalse(engine.isError());
