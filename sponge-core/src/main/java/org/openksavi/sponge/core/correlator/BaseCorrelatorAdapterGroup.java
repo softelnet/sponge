@@ -19,7 +19,6 @@ package org.openksavi.sponge.core.correlator;
 import java.util.List;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup;
-import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -38,9 +37,9 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
      * @param handler handler.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public BaseCorrelatorAdapterGroup(BaseEventSetProcessorDefinition correlatorDefinition,
+    public BaseCorrelatorAdapterGroup(BaseCorrelatorAdapter templateAdapter,
             EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter> handler) {
-        super(correlatorDefinition, (EventSetProcessorMainProcessingUnitHandler) handler);
+        super(templateAdapter, (EventSetProcessorMainProcessingUnitHandler) handler);
     }
 
     @Override
@@ -74,5 +73,10 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     @Override
     public List<CorrelatorAdapter> getCorrelators() {
         return getEventSetProcessorAdapters();
+    }
+
+    @Override
+    public BaseCorrelatorAdapter getTemplateAdapter() {
+        return (BaseCorrelatorAdapter) super.getTemplateAdapter();
     }
 }

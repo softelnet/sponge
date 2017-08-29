@@ -66,4 +66,9 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     public int getMaxInstances() {
         return getDefinition().getMaxInstances();
     }
+
+    @Override
+    public boolean isCandidateForFirstEvent(Event event) {
+        return true;
+    }
 }

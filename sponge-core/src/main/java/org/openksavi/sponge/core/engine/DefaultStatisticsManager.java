@@ -108,6 +108,8 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
             sb.append(", core=" + executor.getCorePoolSize());
             sb.append(", all tasks=" + executor.getTaskCount());
             sb.append(", completed tasks=" + executor.getCompletedTaskCount());
+            sb.append(", queue size=" + executor.getQueue().size());
+            sb.append(", queue remaining capacity=" + executor.getQueue().remainingCapacity());
             sb.append(")");
         }
 

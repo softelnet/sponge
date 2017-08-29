@@ -171,4 +171,6 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
     public void setDurationTriggered(boolean durationTriggered) {
         this.durationTriggered.set(durationTriggered);
     }
+
+    public abstract boolean isCandidateForFirstEvent(Event event);
 }

@@ -24,7 +24,7 @@ import org.openksavi.sponge.event.Event;
 
 public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelator {
 
-    private List<Event> eventLog = new ArrayList<>();
+    private List<Event> eventLog;
 
     @Override
     public void onConfigure() {
@@ -35,6 +35,11 @@ public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelat
     @Override
     public boolean onAcceptAsFirst(Event event) {
         return event.getName().equals("filesystemFailure");
+    }
+
+    @Override
+    public void onInit() {
+        eventLog = new ArrayList<>();
     }
 
     @Override

@@ -12,7 +12,7 @@ void onInit() {
 
 class SampleCorrelator extends Correlator {
     static AtomicBoolean instanceStarted = new AtomicBoolean(false)
-    def eventLog = []
+    private eventLog
 
     void onConfigure() {
         this.events = ["filesystemFailure", "diskFailure"]
@@ -21,12 +21,15 @@ class SampleCorrelator extends Correlator {
     boolean onAcceptAsFirst(Event event) {
         return instanceStarted.compareAndSet(false, true)
     }
+    void onInit() {
+        eventLog = []
+    }
     void onEvent(Event event) {
-        this.eventLog << event
+        eventLog << event
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
     }
     void onDuration() {
-        this.logger.debug("{} - event: {}, log: {}", this.hashCode(), event.name, this.eventLog)
+        this.logger.debug("{} - event: {}, log: {}", this.hashCode(), event.name, eventLog)
     }
 }
 

@@ -18,11 +18,11 @@ class SampleCorrelator < Correlator
         self.events = ["filesystemFailure", "diskFailure"]
         self.maxInstances = 1
     end
-    def onInit
-        @eventLog = []
-    end
     def onAcceptAsFirst(event)
         return event.name == "filesystemFailure"
+    end
+    def onInit
+        @eventLog = []
     end
     def onEvent(event)
         @eventLog  << event

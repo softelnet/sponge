@@ -16,7 +16,7 @@ void onInit() {
 }
 
 class SampleCorrelator extends Correlator {
-    def eventLog = []
+    private eventLog
 
     void onConfigure() {
         this.events = ["filesystemFailure", "diskFailure"]
@@ -25,12 +25,15 @@ class SampleCorrelator extends Correlator {
     boolean onAcceptAsFirst(Event event) {
         return event.name == "filesystemFailure"
     }
+    void onInit() {
+        eventLog = []
+    }
     void onEvent(Event event) {
-        this.eventLog << event
-        this.logger.debug("{} - event: {}, log: {}", this.hashCode(), event.name, this.eventLog)
+        eventLog << event
+        this.logger.debug("{} - event: {}, log: {}", this.hashCode(), event.name, eventLog)
         //hardwareFailureScriptCount.incrementAndGet()
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
-        if (this.eventLog.size() >= 4) {
+        if (eventLog.size() >= 4) {
             EPS.getVariable("hardwareFailureScriptFinishCount").incrementAndGet()
             finish()
         }

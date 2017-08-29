@@ -117,7 +117,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
         lock.lock();
 
         try {
-            // Early return.
+            // Early return if the rule has already been finished.
             if (!isRunning()) {
                 return;
             }
@@ -166,8 +166,9 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
      * @return {@code true} if the event should be added to the event tree.
      */
     protected boolean shouldAddToEventTreeForFlaModes(TreeNode<Event> newNode, Event event) {
-        // Checks if the incoming event is expected by this rule.
-        if (isEventExpected(newNode.getLevel(), event)) {
+        // Checks if the incoming event is expected by this rule. The preliminary check (for level 0) has been done in
+        // isCandidateForFirstEvent.
+        if (newNode.getLevel() == 0 || isEventExpected(newNode.getLevel(), event)) {
             // Check conditions for this event.
             if (checkConditions(newNode)) {
                 return true;
@@ -505,5 +506,10 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
         if ((lastMode == EventMode.LAST || lastMode == EventMode.NONE) && !hasDuration()) {
             throw createValidationException("If the mode of the last event in the sequence is " + lastMode + " a duration should be set.");
         }
+    }
+
+    @Override
+    public boolean isCandidateForFirstEvent(Event event) {
+        return isEventExpected(0, event);
     }
 }

@@ -18,10 +18,10 @@ class SampleCorrelator(Correlator):
     def onConfigure(self):
         self.events = ["filesystemFailure", "diskFailure"]
         self.maxInstances = 1
-    def onInit(self):
-        self.eventLog = []
     def onAcceptAsFirst(self, event):
         return event.name == "filesystemFailure"
+    def onInit(self):
+        self.eventLog = []
     def onEvent(self, event):
         self.eventLog.append(event)
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))

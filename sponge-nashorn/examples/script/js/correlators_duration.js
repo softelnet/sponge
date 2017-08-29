@@ -15,15 +15,15 @@ var SampleCorrelator = Java.extend(Correlator, {
     onConfigure: function(self) {
         self.events = ["filesystemFailure", "diskFailure"];
         self.duration = Duration.ofSeconds(2);
+        EPS.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
+    },
+    onAcceptAsFirst: function(self, event) {
+        return EPS.getVariable("SampleCorrelator_instanceStarted").compareAndSet(false, true);
     },
     onInit: function(self) {
         self.target = new function() {
             this.eventLog = [];
         }
-        EPS.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
-    },
-    onAcceptAsFirst: function(self, event) {
-        return EPS.getVariable("SampleCorrelator_instanceStarted").compareAndSet(false, true);
     },
     onEvent: function(self, event) {
         self.target.eventLog.push(event);
