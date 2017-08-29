@@ -33,8 +33,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     /**
      * Creates a new correlator group.
      *
-     * @param correlatorDefinition correlator definition.
-     * @param handler handler.
+     * @param templateAdapter the correlator template adapter.
+     * @param handler the handler.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public BaseCorrelatorAdapterGroup(BaseCorrelatorAdapter templateAdapter,

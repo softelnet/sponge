@@ -60,8 +60,8 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     /**
      * Creates a new event set processor adapter group.
      *
-     * @param processorDefinition an event set processor definition.
-     * @param handler a processing unit handler.
+     * @param templateAdapter the event set processor template adapter.
+     * @param handler the processing unit handler.
      */
     protected BaseEventSetProcessorAdapterGroup(BaseEventSetProcessorAdapter templateAdapter,
             EventSetProcessorMainProcessingUnitHandler<EventSetProcessorAdapterGroup<T>, T> handler) {

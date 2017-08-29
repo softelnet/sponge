@@ -33,8 +33,8 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
     /**
      * Creates a new rule group.
      *
-     * @param ruleDefinition rule definition.
-     * @param handler a processing unit handler.
+     * @param templateAdapter the rule template adapter.
+     * @param handler the processing unit handler.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public BaseRuleAdapterGroup(BaseRuleAdapter templateAdapter,
