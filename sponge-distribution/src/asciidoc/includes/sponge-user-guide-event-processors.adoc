@@ -37,6 +37,8 @@ class TriggerA(Trigger):
 ----
 <1> The trigger will listen to all events whose name starts with `"a"`, as specified by the regular expression.
 
+Event processors shouldn't implement infinite loops in their callback methods because it would at least disrupt the shutdown procedure. If you must create such a loop, please use for example `while EPS.engine.isRunning():` rather than `while True:`.
+
 == Filters
 Filters allow only certain events to be processed by the engine. Filters are executed in the same order as the order of their registration (i.e. enabling).
 
@@ -231,7 +233,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |The callback method that is invoked only once, when a rule is being enabled. In this method it should be established for what type of events the rule listens. Optionally event conditions for incoming events or rule duration could be set. This method is mandatory.
 
 |`onInit()`
-|The initialization callback method that is invoked before creating every new rule instance.
+|The initialization callback method that is invoked while creating every new rule instance but after `onConfigure`.
 
 |*`events`*
 |This property should be used to set the specifications of events whose sequence causes the rule to fire. It may be used only as a setter. It is a shortcut for `setEvents(eventSpecifications)` method.
@@ -507,11 +509,11 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`duration`
 |This property may be used to set the time how long a correlator lasts (represented as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). It is a shortcut for `setDuration(value)` method. The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration` callback method will be invoked.
 
-|`onInit()`
-|The initialization callback method that is invoked before creating a new correlator instance. This method is optional.
-
 |`boolean onAcceptAsFirst(Event event)`
-|Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. A method `onAcceptAsFirst` is invoked after `onInit`. This method is optional. The default implementation returns `true`.
+|Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. The method `onAcceptAsFirst` is invoked after `onConfigure`. This method is optional. The default implementation returns `true`.
+
+|`onInit()`
+|The initialization callback method that is invoked while creating a new correlator instance but after `onAcceptAsFirst` if it returns `true`. This method is optional.
 
 |*`onEvent(Event event)`*
 |The callback method invoked when an event that a correlator listens to happens. This method is mandatory.
@@ -528,7 +530,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 Every correlator may implement the `onAcceptAsFirst` method and should implement the abstract `onEvent` method. If a duration is set up, the `onDuration` callback method should be implemented as well.
 
-IMPORTANT: Because of correlators are not singletons the `onConfigure` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `onInit` method *must not* contain such configuration because it is invoked every time a new instance of the correlator is created.
+IMPORTANT: Because of correlators are not singletons the `onConfigure` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `onInit` method *must not* contain such configuration because it is invoked later, every time a new instance of the correlator is created.
 
 === Example in a script language
 The code presented below defines the correlator named `SampleCorrelator` that listens to events `"filesystemFailure"` and `"diskFailure"`.
@@ -541,10 +543,10 @@ class SampleCorrelator(Correlator): # <1>
     def onConfigure(self): # <2>
         self.events = ["filesystemFailure", "diskFailure"] # <3>
         self.maxInstances = 1 # <4>
-    def onInit(self): # <5>
-        self.eventLog = [] # <6>
-    def onAcceptAsFirst(self, event): # <7>
-        return event.name == "filesystemFailure" # <8>
+    def onAcceptAsFirst(self, event): # <5>
+        return event.name == "filesystemFailure" # <6>
+    def onInit(self): # <7>
+        self.eventLog = [] # <8>
     def onEvent(self, event): # <9>
         self.eventLog.append(event) # <10>
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))
@@ -555,10 +557,10 @@ class SampleCorrelator(Correlator): # <1>
 <2> The correlator configuration callback method.
 <3> Define that the correlator is supposed to listen to events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
 <4> Sets the maximum number of concurrent instances.
-<5> The correlator initialization callback method. It is invoked before `onAcceptAsFirst`.
-<6> Setting an initial value to the field `eventLog`.
-<7> The correlator `onAcceptAsFirst` callback method.
-<8> The correlator will accept as the first an event named `filesystemFailure`.
+<5> The correlator `onAcceptAsFirst` callback method.
+<6> The correlator will accept as the first an event named `filesystemFailure`.
+<7> The correlator initialization callback method. It is invoked after `onAcceptAsFirst`.
+<8> Setting an initial value to the field `eventLog`.
 <9> The correlator `onEvent` callback method.
 <10> Adds a new event to `eventLog`.
 <11> This correlator instance will finish when `4` fitting events are collected into `eventLog`.
@@ -573,7 +575,7 @@ The code presented below defines the correlator analogous to the one shown above
 ----
 public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 
-    private List<Event> eventLog = new ArrayList<>(); // <2>
+    private List<Event> eventLog;
 
     public void onConfigure() {
         setEvents("filesystemFailure", "diskFailure");
@@ -582,6 +584,10 @@ public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 
     public boolean onAcceptAsFirst(Event event) {
         return event.getName().equals("filesystemFailure");
+    }
+
+    public void onInit() {
+        eventLog = new ArrayList<>();
     }
 
     public void onEvent(Event event) {
@@ -594,7 +600,6 @@ public class SampleJavaCorrelator extends JavaCorrelator { // <1>
 }
 ----
 <1> The definition of the correlator `SampleJavaCorrelator`. The correlator is represented by a Java class of the same name.
-<2> Setting the class attribute `eventLog`.
 
 .Java correlator manual registration in the Python knowledge base
 [source,python]

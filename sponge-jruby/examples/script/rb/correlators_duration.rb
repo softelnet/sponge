@@ -15,11 +15,11 @@ class SampleCorrelator < Correlator
         self.events = ["filesystemFailure", "diskFailure"]
         self.duration = Duration.ofSeconds(2)
     end
-    def onInit
-        @eventLog = []
-    end
     def onAcceptAsFirst(event)
         return @@instanceStarted.compareAndSet(false, true)
+    end
+    def onInit
+        @eventLog = []
     end
     def onEvent(event)
         @eventLog  << event

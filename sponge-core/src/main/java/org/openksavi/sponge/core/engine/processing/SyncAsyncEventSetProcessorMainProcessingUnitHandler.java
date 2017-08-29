@@ -96,7 +96,7 @@ public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends Event
                     getProcessingUnit().getEngine().handleError(
                             SyncAsyncEventSetProcessorMainProcessingUnitHandler.class.getSimpleName() + ".processAsynchronously", e);
                 }
-            }, getAsyncEventSetProcessorExecutor())).toArray(CompletableFuture[]::new)).join();
+            }, getAsyncEventSetProcessorThreadPool().getExecutor())).toArray(CompletableFuture[]::new)).join();
         }
     }
 }

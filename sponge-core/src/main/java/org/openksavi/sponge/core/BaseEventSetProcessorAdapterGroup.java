@@ -55,16 +55,19 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     /** Synchronization lock. */
     private Lock lock = new ReentrantLock(true);
 
+    private BaseEventSetProcessorAdapter templateAdapter;
+
     /**
      * Creates a new event set processor adapter group.
      *
      * @param processorDefinition an event set processor definition.
      * @param handler a processing unit handler.
      */
-    protected BaseEventSetProcessorAdapterGroup(BaseEventSetProcessorDefinition processorDefinition,
+    protected BaseEventSetProcessorAdapterGroup(BaseEventSetProcessorAdapter templateAdapter,
             EventSetProcessorMainProcessingUnitHandler<EventSetProcessorAdapterGroup<T>, T> handler) {
-        super(processorDefinition);
+        super(templateAdapter.getDefinition());
         this.handler = handler;
+        this.templateAdapter = templateAdapter;
     }
 
     @Override
@@ -93,6 +96,12 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     protected void tryAddNewEventSetProcessor(Event event) {
         String name = getDefinition().getName();
         try {
+            // Check (on the template adapter) if the event could be a candidate as the first event to create a new instance of the event
+            // set processor.
+            if (!getTemplateAdapter().isCandidateForFirstEvent(event)) {
+                return;
+            }
+
             T adapter = createNewEventSetProcessorAdapter();
 
             EventSetProcessor eventSetProcessor = getKnowledgeBase().getEngineOperations().getEngine().getProcessorManager()
@@ -101,12 +110,12 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
             adapter.setProcessor(eventSetProcessor);
             adapter.setGroup(this);
 
-            // Invoke init callback on the event set processor instance.
-            adapter.getProcessor().onInit();
-
             if (!adapter.acceptAsFirst(event)) {
                 return;
             }
+
+            // Invoke init callback on the event set processor instance.
+            adapter.getProcessor().onInit();
 
             eventSetProcessorAdapters.add(adapter);
             handler.addDuration(adapter);
@@ -216,5 +225,9 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
                         adapter.getName(), adapter.hashCode(), ((BaseRuleAdapter) adapter).getEventTree()));
             }
         }
+    }
+
+    public BaseEventSetProcessorAdapter getTemplateAdapter() {
+        return templateAdapter;
     }
 }

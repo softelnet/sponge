@@ -189,6 +189,9 @@
                     <version>2.20</version>
                     <configuration>
                         <argLine>-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
+                        <excludes>
+                            <exclude>**/performance/*</exclude>
+                        </excludes>
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>
                 </plugin>
@@ -250,6 +253,8 @@
                         <pushChanges>false</pushChanges>
                         <releaseProfiles>release</releaseProfiles>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
+                        <localCheckout>true</localCheckout>
+                        <pushChanges>false</pushChanges>
                     </configuration>
                 </plugin>
                 <plugin>

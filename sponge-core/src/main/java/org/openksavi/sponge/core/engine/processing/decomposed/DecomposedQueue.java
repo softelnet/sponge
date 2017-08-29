@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.core.engine.processing.EventProcessorRegistrationListener;
-import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
 /**
@@ -78,20 +77,23 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
      * Puts a new entry (trigger adapter or event set processor group adapter, event) at the end of this decomposed queue.
      *
      * @param entry a pair (trigger adapter or event set processor group adapter).
+     * @return {@code false} if the queue is full and can't accept any new entry.
      */
-    public void put(Pair<T, Event> entry) {
+    public boolean put(Pair<T, Event> entry) {
         lock.lock();
 
         try {
             internalLock.lock();
 
             if (entries.size() >= capacity) {
-                throw new QueueFullException("Decomposed queue is full");
+                return false;
             }
 
             logger.debug("Put: {}", entry);
             entries.add(entry);
             lockCondition.signal();
+
+            return true;
         } finally {
             internalLock.unlock();
             lock.unlock();
@@ -217,6 +219,10 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
     @Override
     public void onProcessorRemoved(T eventProcessorAdapter) {
         // Nothing to do.
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 
     public int getSize() {

@@ -37,9 +37,9 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
      * @param handler a processing unit handler.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public BaseRuleAdapterGroup(BaseRuleDefinition ruleDefinition,
+    public BaseRuleAdapterGroup(BaseRuleAdapter templateAdapter,
             EventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter> handler) {
-        super(ruleDefinition, (EventSetProcessorMainProcessingUnitHandler) handler);
+        super(templateAdapter, (EventSetProcessorMainProcessingUnitHandler) handler);
     }
 
     @Override
@@ -67,5 +67,10 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
     @Override
     public List<RuleAdapter> getRules() {
         return getEventSetProcessorAdapters();
+    }
+
+    @Override
+    public BaseRuleAdapter getTemplateAdapter() {
+        return (BaseRuleAdapter) super.getTemplateAdapter();
     }
 }

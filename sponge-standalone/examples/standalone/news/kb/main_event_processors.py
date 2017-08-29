@@ -44,10 +44,10 @@ class LatestNewsCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def onConfigure(self):
         self.events = ["news"]
-    def onInit(self):
-        storagePlugin.storedValue = collections.deque(maxlen=int(EPS.getVariable("latestNewsMaxSize", 2)))
     def onAcceptAsFirst(self, event):
         return LatestNewsCorrelator.instanceStarted.compareAndSet(False, True)
+    def onInit(self):
+        storagePlugin.storedValue = collections.deque(maxlen=int(EPS.getVariable("latestNewsMaxSize", 2)))
     def onEvent(self, event):
         storagePlugin.storedValue.append(event.get("title"))
         self.logger.debug("{} - latest news: {}", self.hashCode(), str(storagePlugin.storedValue))

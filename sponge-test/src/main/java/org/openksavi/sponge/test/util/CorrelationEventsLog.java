@@ -107,4 +107,8 @@ public class CorrelationEventsLog {
             lock.unlock();
         }
     }
+
+    public void clear() {
+        events.clear();
+    }
 }

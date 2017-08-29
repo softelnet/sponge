@@ -76,14 +76,14 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
             (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), adapter.getType())),
         ProcessorType.RULE, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
-                        new BaseRuleAdapterGroup(((BaseRuleAdapter) adapter).getDefinition(),
+                        new BaseRuleAdapterGroup((BaseRuleAdapter) adapter,
                         (EventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter>) getEngine()
                                 .getMainProcessingUnit().getHandler(ProcessorType.RULE_GROUP))),
             (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),
             (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getName(), ProcessorType.RULE_GROUP)),
         ProcessorType.CORRELATOR, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
-                        new BaseCorrelatorAdapterGroup(((BaseCorrelatorAdapter) adapter).getDefinition(),
+                        new BaseCorrelatorAdapterGroup((BaseCorrelatorAdapter) adapter,
                         (EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>) getEngine()
                                 .getMainProcessingUnit().getHandler(ProcessorType.CORRELATOR_GROUP))),
             (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getName()),

@@ -14,10 +14,10 @@ class SampleCorrelator(Correlator):
     def onConfigure(self):
         self.events = ["filesystemFailure", "diskFailure"]
         self.duration = Duration.ofSeconds(2)
-    def onInit(self):
-        self.eventLog = []
     def onAcceptAsFirst(self, event):
         return SampleCorrelator.instanceStarted.compareAndSet(False, True)
+    def onInit(self):
+        self.eventLog = []
     def onEvent(self, event):
         self.eventLog.append(event)
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()

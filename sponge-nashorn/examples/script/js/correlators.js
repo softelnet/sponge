@@ -19,13 +19,13 @@ var SampleCorrelator = Java.extend(Correlator, {
         self.events = ["filesystemFailure", "diskFailure"];
         self.maxInstances = 1;
     },
+    onAcceptAsFirst: function(self, event) {
+        return event.name == "filesystemFailure"
+    },
     onInit: function(self) {
         self.target = new function() {
             this.eventLog = [];
         }
-    },
-    onAcceptAsFirst: function(self, event) {
-        return event.name == "filesystemFailure"
     },
     onEvent: function(self, event) {
         self.target.eventLog.push(event);
