@@ -3,7 +3,11 @@
     <parent>
         <groupId>org.openksavi.sponge</groupId>
         <artifactId>sponge-parent</artifactId>
+<<<<<<< HEAD
         <version>1.0.4-SNAPSHOT</version>
+=======
+        <version>1.0.3</version>
+>>>>>>> d6720e799a95eb6e3de7800b4eb85ef27b802cf9
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
