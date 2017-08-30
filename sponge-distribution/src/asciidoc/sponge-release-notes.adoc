@@ -3,6 +3,13 @@
 A high-level view of the changes introduced in {sponge} releases.
 
 [discrete]
+== 1.0.3 (2017.08.30)
+
+* Optimization of event set processors initialization.
+* Optimization of creating new instances of processors in script-based interpreters.
+* API change: `onInit` in correlators will be invoked after `onAcceptAsFirst`, not before.
+
+[discrete]
 == 1.0.2 (2017.08.23)
 
 * Event name patterns in event processors.
