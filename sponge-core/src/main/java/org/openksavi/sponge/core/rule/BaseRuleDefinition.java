@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
 import org.openksavi.sponge.rule.EventCondition;
@@ -30,6 +31,8 @@ import org.openksavi.sponge.rule.RuleDefinition;
 
 public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implements RuleDefinition {
 
+    protected boolean ordered = true;
+
     protected String[] aliases;
 
     protected EventMode[] modes;
@@ -37,6 +40,15 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     protected Map<String, List<EventCondition>> conditions = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public BaseRuleDefinition() {
+    }
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    @Override
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
     }
 
     @Override
@@ -70,21 +82,23 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     }
 
     @Override
-    public void setJavaConditions(String eventAlias, EventCondition... newConditions) {
+    public void addJavaConditions(String eventAlias, EventCondition... newConditions) {
         synchronized (conditions) {
-            List<EventCondition> eventConditions = safeGetEventConditions(eventAlias);
+            safeGetEventConditions(eventAlias).addAll(Arrays.asList(newConditions));
+        }
+    }
 
-            eventConditions.clear();
-            eventConditions.addAll(Arrays.asList(newConditions));
+    @Override
+    public void addAllJavaConditions(EventCondition... newConditions) {
+        synchronized (conditions) {
+            Stream.of(aliases).forEach(alias -> addJavaConditions(alias, newConditions));
         }
     }
 
     @Override
     public synchronized void addJavaCondition(String eventAlias, EventCondition condition) {
         synchronized (conditions) {
-            List<EventCondition> eventConditions = safeGetEventConditions(eventAlias);
-
-            eventConditions.add(condition);
+            safeGetEventConditions(eventAlias).add(condition);
         }
     }
 

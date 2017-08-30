@@ -16,7 +16,7 @@ function onInit() {
 var RuleFNF = Java.extend(Rule, {
     onConfigure: function(self) {
         self.events = ["e1", "e2 :none", "e3"];
-        self.setConditions("e2", function(self, event) {
+        self.addConditions("e2", function(self, event) {
             return Number(event.get("label")) > 4;
         });
     },
@@ -29,7 +29,7 @@ var RuleFNF = Java.extend(Rule, {
 var RuleFNNFReject = Java.extend(Rule, {
     onConfigure: function(self) {
         self.events = ["e1", "e2 :none", "e6 :none", "e3"];
-        self.setConditions("e2", this.e2LabelCondition);
+        self.addConditions("e2", this.e2LabelCondition);
     },
     onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventAliasMap);

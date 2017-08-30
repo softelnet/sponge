@@ -30,6 +30,9 @@ end
 class HeartbeatRule < Rule
     def onConfigure
         self.events = ["heartbeat h1", "heartbeat h2 :none"]
+        self.addConditions("h2", lambda { |rule, event|
+            return rule.firstEvent.get("source") == event.get("source")
+        })
         self.duration = Duration.ofSeconds(2)
     end
     def onRun(event)
@@ -48,6 +51,6 @@ class AlarmTrigger < Trigger
 end
 
 def onStartup
-    $hearbeatEventEntry = $EPS.event("heartbeat").sendAfter(100, 1000)
+    $hearbeatEventEntry = $EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000)
 end
 

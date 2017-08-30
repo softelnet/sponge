@@ -34,8 +34,8 @@ public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
     public void onConfigure() {
         setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) });
 
-        setConditions("e1", "severityCondition");
-        setConditions("e2", "severityCondition", (EventCondition) (rule, event) -> {
+        addConditions("e1", "severityCondition");
+        addConditions("e2", "severityCondition", (EventCondition) (rule, event) -> {
             // Both events have to have the same source
             Event event1 = rule.getEvent("e1");
             return event.get("source").equals(event1.get("source"))

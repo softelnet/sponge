@@ -221,8 +221,8 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     private void logEventTree(String label) {
         if (logger.isDebugEnabled()) {
             if (this instanceof BaseRuleAdapterGroup) {
-                eventSetProcessorAdapters.forEach(adapter -> logger.debug("Event tree " + label + " processing ({}/{}): {}",
-                        adapter.getName(), adapter.hashCode(), ((BaseRuleAdapter) adapter).getEventTree()));
+                eventSetProcessorAdapters.forEach(adapter -> logger.debug("({}/{}): Event tree " + label + ": {}", adapter.getName(),
+                        adapter.hashCode(), ((BaseRuleAdapter) adapter).getEventTree()));
             }
         }
     }

@@ -121,7 +121,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         @Override
         public void onConfigure() {
             setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST) });
-            setConditions("e2", "e2condition");
+            addConditions("e2", "e2condition");
             setDuration(Duration.ofSeconds(2));
         }
 

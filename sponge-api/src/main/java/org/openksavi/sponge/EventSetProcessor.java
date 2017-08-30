@@ -16,10 +16,19 @@
 
 package org.openksavi.sponge;
 
+import org.openksavi.sponge.event.Event;
+
 /**
  * Event set processor.
  */
 public interface EventSetProcessor<T extends EventSetProcessorAdapter<?>> extends EventProcessor<T>, EventSetProcessorOperations {
+
+    /**
+     * Returns the first event that has been accepted.
+     *
+     * @return the first event.
+     */
+    Event getFirstEvent();
 
     /**
      * Returns event set processor adapter group to which belong this event set processor instance.

@@ -213,7 +213,7 @@ Types of processors:
 ** *Filters* - event processors used for allowing only certain events to be later processed by other event processors.
 ** *Triggers* -  event processors that execute a specified code when an event happens.
 ** *Event set processors* - event processors that process sets of events.
-*** *Rules* - event set processors that detect ordered sequences of events.
+*** *Rules* - event set processors that detect sequences of events.
 *** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 * *Actions* - processors that provide functionality similar to functions. They don't listen to events.
 
@@ -978,6 +978,10 @@ ifdef::useReferences[({pySourcesUrl}/plugins_java.py[py], {rbSourcesUrl}/plugins
 ifdef::useReferences[({pySourcesUrl}/plugins_script.py[py], {rbSourcesUrl}/plugins_script.rb[rb], {groovySourcesUrl}/plugins_script.groovy[groovy], {jsSourcesUrl}/plugins_script.js[js], {pySourcesUrl}/plugins_script.xml[XML configuration])]
 |Shows how to define and use a script-based plugin.
 
+|`rules`
+ifdef::useReferences[({pySourcesUrl}/rules.py[py], {rbSourcesUrl}/rules.rb[rb], {groovySourcesUrl}/rules.groovy[groovy], {jsSourcesUrl}/rules.js[js])]
+|Shows how to define and use ordered rules, i.e. rules listening to ordered sequences of events. Event conditions are specified using lambda expressions as well as class methods.
+
 |`rules_events`
 ifdef::useReferences[({pySourcesUrl}/rules_events.py[py], {rbSourcesUrl}/rules_events.rb[rb], {groovySourcesUrl}/rules_events.groovy[groovy], {jsSourcesUrl}/rules_events.js[js], {pySourcesUrl}/rules_events.xml[XML configuration])]
 |Shows how to define and use rules that have different event modes, durations etc.
@@ -994,9 +998,9 @@ ifdef::useReferences[({pySourcesUrl}/rules_none_mode_events_conditions.py[py], {
 ifdef::useReferences[({pySourcesUrl}/rules_none_mode_events.py[py], {rbSourcesUrl}/rules_none_mode_events.rb[rb], {groovySourcesUrl}/rules_none_mode_events.groovy[groovy], {jsSourcesUrl}/rules_none_mode_events.js[js])]
 |Shows how to define and use rules that have `none` event mode.
 
-|`rules`
-ifdef::useReferences[({pySourcesUrl}/rules.py[py], {rbSourcesUrl}/rules.rb[rb], {groovySourcesUrl}/rules.groovy[groovy], {jsSourcesUrl}/rules.js[js])]
-|Shows how to define and use rules. Event conditions are specified using lambda expressions as well as class methods.
+|`unordered_rules`
+ifdef::useReferences[({pySourcesUrl}/unordered_rules.py[py], {rbSourcesUrl}/unordered_rules.rb[rb], {groovySourcesUrl}/unordered_rules.groovy[groovy], {jsSourcesUrl}/unordered_rules.js[js])]
+|Shows how to define and use unordered rules, i.e. rules listening to unordered sequences of events. Event conditions are specified using lambda expressions as well as class methods.
 
 |`triggers`
 ifdef::useReferences[({pySourcesUrl}/triggers.py[py], {rbSourcesUrl}/triggers.rb[rb], {groovySourcesUrl}/triggers.groovy[groovy], {jsSourcesUrl}/triggers.js[js], {pySourcesUrl}/triggers.xml[XML configuration])]

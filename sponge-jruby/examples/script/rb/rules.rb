@@ -15,7 +15,7 @@ class FirstRule < Rule
     def onConfigure
         # Events specified without aliases
         self.events = ["filesystemFailure", "diskFailure"]
-        self.setConditions("diskFailure", lambda { |rule, event|
+        self.addConditions("diskFailure", lambda { |rule, event|
             return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     end
@@ -29,8 +29,8 @@ class SameSourceAllRule < Rule
     def onConfigure
         # Events specified with aliases (e1 and e2)
         self.events = ["filesystemFailure e1", "diskFailure e2 :all"]
-        self.setConditions("e1", self.method(:severityCondition))
-        self.setConditions("e2", self.method(:severityCondition), self.method(:diskFailureSourceCondition))
+        self.addConditions("e1", self.method(:severityCondition))
+        self.addConditions("e2", self.method(:severityCondition), self.method(:diskFailureSourceCondition))
         self.duration = Duration.ofSeconds(8)
     end
     def onRun(event)

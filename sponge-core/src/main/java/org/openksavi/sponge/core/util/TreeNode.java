@@ -97,9 +97,23 @@ public class TreeNode<T> {
         }
 
         List<T> path = new ArrayList<>(node.level + 1);
-
         for (TreeNode<T> n = node; n != null; n = n.getParent()) {
             path.add(n.getValue());
+        }
+
+        Collections.reverse(path);
+
+        return path;
+    }
+
+    public List<TreeNode<T>> getPath(TreeNode<T> node) {
+        if (node == null) {
+            return Collections.emptyList();
+        }
+
+        List<TreeNode<T>> path = new ArrayList<>(node.level + 1);
+        for (TreeNode<T> n = node; n != null; n = n.getParent()) {
+            path.add(n);
         }
 
         Collections.reverse(path);

@@ -15,7 +15,7 @@ void onInit() {
 class RuleFNF extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :none", "e3"]
-        this.setConditions("e2", { self, event -> (event.get("label") as int) > 4 })
+        this.addConditions("e2", { self, event -> (event.get("label") as int) > 4 })
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
@@ -27,7 +27,7 @@ class RuleFNNFReject extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :none", "e6 :none", "e3"]
         // this.duration = Duration.ofSeconds(2)
-        this.setConditions("e2", this.&e2LabelCondition)
+        this.addConditions("e2", this.&e2LabelCondition)
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)

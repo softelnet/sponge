@@ -26,6 +26,13 @@ import org.openksavi.sponge.EventSetProcessorOperations;
 public interface RuleOperations extends EventSetProcessorOperations {
 
     /**
+     * Sets the events for this rule to be ordered or unordered.
+     *
+     * @param ordered ordered.
+     */
+    void setOrdered(boolean ordered);
+
+    /**
      * Sets event aliases.
      *
      * @param aliases event aliases.
@@ -72,12 +79,19 @@ public interface RuleOperations extends EventSetProcessorOperations {
     EventMode getEventMode(int index);
 
     /**
-     * Sets event conditions.
+     * Adds event conditions.
      *
      * @param eventAlias event alias.
      * @param conditions event conditions.
      */
-    void setJavaConditions(String eventAlias, EventCondition... conditions);
+    void addJavaConditions(String eventAlias, EventCondition... conditions);
+
+    /**
+     * Adds event conditions for all events.
+     *
+     * @param conditions event conditions.
+     */
+    void addAllJavaConditions(EventCondition... conditions);
 
     /**
      * Adds an event condition.
