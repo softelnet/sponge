@@ -17,6 +17,7 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.LinkedHashMap;
@@ -147,5 +148,25 @@ public class CoreUnorderedRulesTest {
         });
 
         assertFalse(engine.isError());
+    }
+
+    @Test
+    public void testUnorderedRulesInstances() {
+        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_instances.py").build();
+        engine.startup();
+
+        try {
+            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countAB")
+                    .intValue() >= engine.getOperations().getVariable(Number.class, "max").intValue() * 2 - 1);
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA")
+                    .intValue() >= engine.getOperations().getVariable(Number.class, "max").intValue() - 1);
+            assertEquals(engine.getOperations().getVariable(Number.class, "max").intValue() * 2 - 1,
+                    engine.getOperations().getVariable(Number.class, "countAB").intValue());
+            assertEquals(engine.getOperations().getVariable(Number.class, "max").intValue() - 1,
+                    engine.getOperations().getVariable(Number.class, "countA").intValue());
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
     }
 }
