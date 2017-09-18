@@ -75,8 +75,12 @@ public abstract class NashornRule extends org.openksavi.sponge.core.rule.BaseRul
 
     public abstract void onRun(Object self, Event event);
 
-    public void setConditions(String eventAlias, ScriptObjectMirror... functions) {
-        setJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, functions));
+    public void addConditions(String eventAlias, ScriptObjectMirror... functions) {
+        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, functions));
+    }
+
+    public void addAllConditions(ScriptObjectMirror... functions) {
+        addAllJavaConditions(new CompositeEventCondition(MAPPER, functions));
     }
 
     public void addCondition(String eventAlias, ScriptObjectMirror function) {

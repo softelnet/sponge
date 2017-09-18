@@ -37,6 +37,9 @@ var HeartbeatFilter = Java.extend(Filter, {
 var HeartbeatRule = Java.extend(Rule, {
     onConfigure: function(self) {
         self.events = ["heartbeat h1", "heartbeat h2 :none"];
+        self.addConditions("h2", function(rule, event) {
+            return rule.firstEvent.get("source") == event.get("source");
+        });
         self.duration = Duration.ofSeconds(2);
     },
     onRun: function(self, event) {
@@ -55,5 +58,5 @@ var AlarmTrigger = Java.extend(Trigger, {
 });
 
 function onStartup() {
-    hearbeatEventEntry = EPS.event("heartbeat").sendAfter(100, 1000);
+    hearbeatEventEntry = EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000);
 }

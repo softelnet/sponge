@@ -21,9 +21,20 @@ import java.time.Duration;
 import org.openksavi.sponge.EventSetProcessor;
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
+import org.openksavi.sponge.event.Event;
 
 public abstract class BaseEventSetProcessor<T extends EventSetProcessorAdapter<?>> extends BaseEventProcessor<T>
         implements EventSetProcessor<T> {
+
+    @SuppressWarnings({ "rawtypes" })
+    protected final BaseEventSetProcessorAdapter getEventSetProcessorAdapterImpl() {
+        return (BaseEventSetProcessorAdapter) super.getAdapter();
+    }
+
+    @Override
+    public final Event getFirstEvent() {
+        return getEventSetProcessorAdapterImpl().getFirstEvent();
+    }
 
     @Override
     public final boolean hasDuration() {

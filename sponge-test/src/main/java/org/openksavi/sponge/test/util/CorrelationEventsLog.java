@@ -85,6 +85,10 @@ public class CorrelationEventsLog {
     public List<List<Event>> getEvents(String key, String firstEventLabel) {
         lock.lock();
         try {
+            if (firstEventLabel == null) {
+                return getAllEvents(key);
+            }
+
             if (!events.containsKey(key) || !events.get(key).containsKey(firstEventLabel)) {
                 return Collections.emptyList();
             }

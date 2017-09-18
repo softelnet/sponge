@@ -42,8 +42,12 @@ public abstract class JythonRule extends org.openksavi.sponge.core.rule.BaseRule
         }
     };
 
-    public void setConditions(String eventAlias, PyObject... pyObjects) {
-        setJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, pyObjects));
+    public void addConditions(String eventAlias, PyObject... pyObjects) {
+        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, pyObjects));
+    }
+
+    public void addAllConditions(PyObject... pyObjects) {
+        addAllJavaConditions(new CompositeEventCondition(MAPPER, pyObjects));
     }
 
     public void addCondition(String eventAlias, PyObject pyObject) {

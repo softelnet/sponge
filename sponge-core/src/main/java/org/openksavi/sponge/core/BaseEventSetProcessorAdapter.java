@@ -173,4 +173,6 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
     }
 
     public abstract boolean isCandidateForFirstEvent(Event event);
+
+    public abstract Event getFirstEvent();
 }

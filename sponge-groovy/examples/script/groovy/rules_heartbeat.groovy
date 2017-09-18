@@ -31,6 +31,9 @@ class HeartbeatFilter extends Filter {
 class HeartbeatRule extends Rule {
     void onConfigure() {
         this.events = ["heartbeat h1", "heartbeat h2 :none"]
+        this.addConditions("h2", { rule, event ->
+                return rule.firstEvent.get("source") == event.get("source")
+        })
         this.duration = Duration.ofSeconds(2)
     }
     void onRun(Event event) {
@@ -49,5 +52,5 @@ class AlarmTrigger extends Trigger {
 }
 
 void onStartup() {
-    EPS.setVariable("hearbeatEventEntry", EPS.event("heartbeat").sendAfter(100, 1000))
+    EPS.setVariable("hearbeatEventEntry", EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000))
 }

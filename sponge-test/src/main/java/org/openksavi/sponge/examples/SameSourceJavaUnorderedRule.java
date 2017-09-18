@@ -24,30 +24,29 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
-import org.openksavi.sponge.rule.EventMode;
 
-public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
+public class SameSourceJavaUnorderedRule extends org.openksavi.sponge.java.JavaRule {
 
-    private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaRule.class);
+    private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaUnorderedRule.class);
 
     @Override
     public void onConfigure() {
-        setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) });
+        setEvents("filesystemFailure e1", "diskFailure e2 :all");
+        setOrdered(false);
 
         addConditions("e1", "severityCondition");
         addConditions("e2", "severityCondition", (EventCondition) (rule, event) -> {
             // Both events have to have the same source
-            Event event1 = rule.getEvent("e1");
-            return event.get("source").equals(event1.get("source"))
-                    && Duration.between(event1.getTime(), event.getTime()).getSeconds() <= 4;
+            return event.get("source").equals(rule.getFirstEvent().get("source"))
+                    && Duration.between(rule.getFirstEvent().getTime(), event.getTime()).getSeconds() <= 4;
         });
 
-        setDuration(Duration.ofSeconds(8));
+        setDuration(Duration.ofSeconds(5));
     }
 
     @Override
     public void onRun(Event event) {
-        logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"), getEventAliasMap());
+        logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"), getEventSequence());
         getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
     }
 

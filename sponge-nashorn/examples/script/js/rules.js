@@ -16,7 +16,7 @@ var FirstRule = Java.extend(Rule, {
     onConfigure: function(self) {
         // Events specified without aliases
         self.events = ["filesystemFailure", "diskFailure"];
-        self.setConditions("diskFailure", function(rule, event) {
+        self.addConditions("diskFailure", function(rule, event) {
             return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0;
         });
     },
@@ -30,8 +30,8 @@ var SameSourceAllRule = Java.extend(Rule, {
     onConfigure: function(self) {
         // Events specified with aliases (e1 and e2)
         self.events = ["filesystemFailure e1", "diskFailure e2 :all"];
-        self.setConditions("e1", this.severityCondition);
-        self.setConditions("e2", this.severityCondition, function(rule, event) {
+        self.addConditions("e1", this.severityCondition);
+        self.addConditions("e2", this.severityCondition, function(rule, event) {
             // Both events have to have the same source
             event1 = rule.getEvent("e1");
             return event.get("source") == event1.get("source") &&

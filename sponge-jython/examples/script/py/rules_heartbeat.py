@@ -28,6 +28,7 @@ class HeartbeatFilter(Filter):
 class HeartbeatRule(Rule):
     def onConfigure(self):
         self.events = ["heartbeat h1", "heartbeat h2 :none"]
+        self.addConditions("h2", lambda rule, event: rule.firstEvent.get("source") == event.get("source"))
         self.duration = Duration.ofSeconds(2)
     def onRun(self, event):
         EPS.event("alarm").set("severity", 1).send()
@@ -41,4 +42,4 @@ class AlarmTrigger(Trigger):
 
 def onStartup():
     global hearbeatEventEntry
-    hearbeatEventEntry = EPS.event("heartbeat").sendAfter(100, 1000)
+    hearbeatEventEntry = EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000)

@@ -35,8 +35,18 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     }
 
     @Override
-    public void setJavaConditions(String eventAlias, EventCondition... conditions) {
-        getDefinition().setJavaConditions(eventAlias, conditions);
+    public void setOrdered(boolean ordered) {
+        getDefinition().setOrdered(ordered);
+    }
+
+    @Override
+    public void addJavaConditions(String eventAlias, EventCondition... conditions) {
+        getDefinition().addJavaConditions(eventAlias, conditions);
+    }
+
+    @Override
+    public void addAllJavaConditions(EventCondition... conditions) {
+        getDefinition().addAllJavaConditions(conditions);
     }
 
     @Override

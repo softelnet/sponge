@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge;
+package org.openksavi.sponge.test.script;
 
-import org.openksavi.sponge.event.Event;
+public interface UnorderedRulesTest extends ScriptTest {
 
-/**
- * Event set processor.
- */
-public interface EventSetProcessor<T extends EventSetProcessorAdapter<?>> extends EventProcessor<T>, EventSetProcessorOperations {
-
-    /**
-     * Returns the first event that has been accepted.
-     *
-     * @return the first event.
-     */
-    Event getFirstEvent();
-
-    /**
-     * Returns event set processor adapter group to which belong this event set processor instance.
-     *
-     * @return event set processor group.
-     */
-    EventSetProcessorAdapterGroup<EventSetProcessorAdapter<?>> getGroup();
+    void testUnorderedRules();
 }

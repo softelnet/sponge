@@ -17,7 +17,7 @@ class FirstRule extends Rule {
     void onConfigure() {
         // Events specified without aliases
         this.events = ["filesystemFailure", "diskFailure"]
-        this.setConditions("diskFailure", { rule, event ->
+        this.addConditions("diskFailure", { rule, event ->
                 return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     }
@@ -31,8 +31,8 @@ class SameSourceAllRule extends Rule {
     void onConfigure() {
         // Events specified with aliases (e1 and e2)
         this.events = ["filesystemFailure e1", "diskFailure e2 :all"]
-        this.setConditions("e1", this.&severityCondition)
-        this.setConditions("e2", this.&severityCondition, this.&diskFailureSourceCondition)
+        this.addConditions("e1", this.&severityCondition)
+        this.addConditions("e2", this.&severityCondition, this.&diskFailureSourceCondition)
         this.duration = Duration.ofSeconds(8)
     }
     void onRun(Event event) {

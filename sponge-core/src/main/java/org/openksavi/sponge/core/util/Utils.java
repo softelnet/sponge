@@ -243,6 +243,11 @@ public abstract class Utils {
                 + (attributeName != null ? "/" + event.get(attributeName) : "") : "null").collect(Collectors.joining(", "));
     }
 
+    public static String toStringArrayEventSequence(Collection<Event> events, String attributeName) {
+        return "{ " + events.stream().map(event -> event != null ? "\"" + event.get(attributeName) + "\"" : "null")
+                .collect(Collectors.joining(", ")) + " }";
+    }
+
     public static String createControlEventName(Class<? extends ControlEvent> controlEventClass) {
         return EngineConstants.CONTROL_EVENT_PREFIX + StringUtils.uncapitalize(controlEventClass.getSimpleName());
     }

@@ -17,7 +17,7 @@ def onInit():
 class RuleFNF(Rule):
     def onConfigure(self):
         self.events = ["e1", "e2 :none", "e3"]
-        self.setConditions("e2", self.e2LabelCondition)
+        self.addConditions("e2", self.e2LabelCondition)
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
@@ -28,7 +28,7 @@ class RuleFNF(Rule):
 class RuleFNNFReject(Rule):
     def onConfigure(self):
         self.events = ["e1", "e2 :none", "e6 :none", "e3"]
-        self.setConditions("e2", self.e2LabelCondition)
+        self.addConditions("e2", self.e2LabelCondition)
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog

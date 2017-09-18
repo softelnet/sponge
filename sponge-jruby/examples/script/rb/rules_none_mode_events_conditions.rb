@@ -14,7 +14,7 @@ end
 class RuleFNF < Rule
     def onConfigure
         self.events = ["e1", "e2 :none", "e3 :first"]
-        self.setConditions("e2", self.method(:e2LabelCondition))
+        self.addConditions("e2", self.method(:e2LabelCondition))
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
@@ -28,7 +28,7 @@ end
 class RuleFNNFReject < Rule
     def onConfigure
         self.events = ["e1", "e2 :none", "e6 :none", "e3 :first"]
-        self.setConditions("e2", self.method(:e2LabelCondition))
+        self.addConditions("e2", self.method(:e2LabelCondition))
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)

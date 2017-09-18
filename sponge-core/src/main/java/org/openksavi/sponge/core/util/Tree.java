@@ -34,6 +34,14 @@ public class Tree<T> {
         }
     }
 
+    public List<TreeNode<T>> getPath(TreeNode<T> node) {
+        if (root == null) {
+            return Collections.emptyList();
+        } else {
+            return root.getPath(node);
+        }
+    }
+
     @Override
     public String toString() {
         if (root != null) {

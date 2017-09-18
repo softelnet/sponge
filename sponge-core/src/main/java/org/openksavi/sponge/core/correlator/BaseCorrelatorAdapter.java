@@ -28,6 +28,8 @@ import org.openksavi.sponge.event.Event;
  */
 public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlator> implements CorrelatorAdapter {
 
+    private Event firstEvent;
+
     public BaseCorrelatorAdapter(BaseEventSetProcessorDefinition definition) {
         super(definition);
     }
@@ -49,7 +51,13 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
 
     @Override
     public boolean acceptAsFirst(Event event) {
-        return getProcessor().onAcceptAsFirst(event);
+        boolean accepted = getProcessor().onAcceptAsFirst(event);
+
+        if (accepted) {
+            firstEvent = event;
+        }
+
+        return accepted;
     }
 
     @Override
@@ -70,5 +78,10 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     @Override
     public boolean isCandidateForFirstEvent(Event event) {
         return true;
+    }
+
+    @Override
+    public Event getFirstEvent() {
+        return firstEvent;
     }
 }

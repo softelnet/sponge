@@ -46,8 +46,12 @@ public abstract class JRubyRule extends org.openksavi.sponge.core.rule.BaseRule 
         super.setEvents(RubyUtils.toJavaArray(eventNames));
     }
 
-    public void setConditions(String eventAlias, RubyObject... rubyObjects) {
-        setJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, rubyObjects));
+    public void addConditions(String eventAlias, RubyObject... rubyObjects) {
+        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, rubyObjects));
+    }
+
+    public void addAllConditions(RubyObject... rubyObjects) {
+        addAllJavaConditions(new CompositeEventCondition(MAPPER, rubyObjects));
     }
 
     public void addCondition(String eventAlias, RubyObject rubyObject) {

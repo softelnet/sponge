@@ -42,8 +42,13 @@ public abstract class GroovyRule extends org.openksavi.sponge.core.rule.BaseRule
     };
 
     @SuppressWarnings("unchecked")
-    public void setConditions(String eventAlias, Closure<Boolean>... closures) {
-        setJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, closures));
+    public void addConditions(String eventAlias, Closure<Boolean>... closures) {
+        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, closures));
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addAllConditions(Closure<Boolean>... closures) {
+        addAllJavaConditions(new CompositeEventCondition(MAPPER, closures));
     }
 
     public void addCondition(String eventAlias, Closure<Boolean> closure) {
