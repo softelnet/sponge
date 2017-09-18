@@ -293,7 +293,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
     }
 
     /**
-     * Clears and sets up event alias map (event alias -> event instance).
+     * Clears and sets up event alias map (event alias - event instance).
      *
      * @param node the node for the last event.
      */
