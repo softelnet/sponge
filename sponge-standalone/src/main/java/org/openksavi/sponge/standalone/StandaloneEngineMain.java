@@ -31,6 +31,8 @@ public class StandaloneEngineMain {
 
     private static final Logger logger = LoggerFactory.getLogger(StandaloneEngineMain.class);
 
+    private StandaloneEngineBuilder builder;
+
     private StandaloneEngine engine;
 
     private boolean testMode;
@@ -53,13 +55,15 @@ public class StandaloneEngineMain {
         }
 
         try {
-            engine = StandaloneEngine.builder().commandLineArgs(args).build();
+            builder = StandaloneEngine.builder().commandLineArgs(args);
+            engine = builder.build();
 
             // If help or version option is specified.
             if (engine != null) {
                 engine.startup();
                 if (engine.getInteractiveMode() != null) {
                     engine.getInteractiveMode().loop();
+                    engine.shutdown();
                 }
             }
         } catch (Throwable e) {
@@ -85,6 +89,8 @@ public class StandaloneEngineMain {
         } else {
             if (e instanceof StandaloneInitializationException && !testMode) {
                 System.out.println(e.getMessage());
+                System.out.println("");
+                builder.printHelp();
             } else {
                 logger.error("Error", e);
             }

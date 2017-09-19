@@ -7,6 +7,7 @@ A high-level view of the changes introduced in {sponge} releases.
 
 * Implementation of unordered rules, i.e. rules that listen to unordered sequences of events.
 * API change: The `Rule` methods `setConditions` and `setAllConditions` has been renamed respectively to `addConditions` and `addJavaConditions`.
+* Fixed error in the interactive mode of the standalone application preventing exit when using `exit` or `quit` command.
 * Libraries upgrade.
 
 [discrete]

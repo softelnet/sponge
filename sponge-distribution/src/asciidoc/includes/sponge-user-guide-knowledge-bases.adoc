@@ -311,10 +311,16 @@ print EPS.engine.ruleGroups[0].rules
 print EPS.engine.correlatorGroups
 ----
 
-.Shutdown using a new thread
+.Shutdown using a new thread.
 [source,python]
 ----
 EPS.requestShutdown()
+----
+
+.Print the engine statistics summary.
+[source,python]
+----
+print EPS.engine.statisticsManager.summary
 ----
 
 For more information see {sponge} JavaDoc.

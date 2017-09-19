@@ -131,7 +131,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
             CommandLine commandLine = parser.parse(options, commandLineArgs);
 
             if (commandLine.hasOption(OPTION_HELP)) {
-                printHelp(options);
+                printHelp();
                 return null;
             }
 
@@ -232,7 +232,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         engine.getDefaultParameters().setEventQueueCapacity(StandaloneConstants.EVENT_QUEUE_CAPACITY);
     }
 
-    protected void printHelp(Options options) {
+    public void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
         formatter.setSyntaxPrefix("Usage: ");
         formatter.setOptionComparator(null);
