@@ -121,17 +121,10 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         lock.lock();
         try {
             InstanceHolder instanceHolder = createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
-
             BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
 
-            Optional<Map.Entry<ProcessorType, RegistrationHandler>> alreadyRegistered = findAlreadyRegisteredByDifferentType(adapter);
-            if (alreadyRegistered.isPresent()) {
-                Validate.isTrue(false, "% named '%' has already been registered as % type", adapter.getType().getDisplayName(),
-                        adapter.getName(), alreadyRegistered.get().getKey().getDisplayName());
-            }
-
             bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
-            initializeProcessor(instanceHolder.getProcessor());
+            initializeProcessor(instanceHolder, adapter);
             getRegistrationHandler(adapter.getType()).register(adapter);
         } finally {
             lock.unlock();
@@ -221,8 +214,17 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         processor.setName(name);
     }
 
-    protected void initializeProcessor(Processor processor) {
+    protected void initializeProcessor(InstanceHolder instanceHolder, BaseProcessorAdapter adapter) {
+        Processor processor = instanceHolder.getProcessor();
+
         processor.onConfigure();
+
+        // Must be verified after onConfigure, because onConfigure may change for example the name of the processor.
+        Optional<Map.Entry<ProcessorType, RegistrationHandler>> alreadyRegistered = findAlreadyRegisteredByDifferentType(adapter);
+        if (alreadyRegistered.isPresent()) {
+            Validate.isTrue(false, "% named '%' has already been registered as % type", adapter.getType().getDisplayName(),
+                    adapter.getName(), alreadyRegistered.get().getKey().getDisplayName());
+        }
 
         processor.getAdapter().validate();
 

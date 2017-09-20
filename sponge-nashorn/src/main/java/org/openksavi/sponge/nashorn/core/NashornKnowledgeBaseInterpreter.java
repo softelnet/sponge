@@ -147,8 +147,10 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
                 if (PROCESSOR_CLASSES.values().stream()
                         .filter(processorClass -> !cls.equals(processorClass) && ClassUtils.isAssignable(cls, processorClass)).findFirst()
                         .isPresent()) {
-                    autoEnabled.add(key);
-                    ((NashornKnowledgeBaseEngineOperations) getEngineOperations()).enable(value);
+                    if (!isProcessorAbstract(key)) {
+                        autoEnabled.add(key);
+                        ((NashornKnowledgeBaseEngineOperations) getEngineOperations()).enable(value);
+                    }
                 }
             }
         });

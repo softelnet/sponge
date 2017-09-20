@@ -7,7 +7,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="javascript">
-            <file>examples/script/js/plugins_java.js</file>
+            <file>plugins_java.js</file>
         </knowledgeBase>
     </knowledgeBases>
 

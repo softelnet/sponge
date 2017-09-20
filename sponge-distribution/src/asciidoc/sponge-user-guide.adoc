@@ -231,11 +231,25 @@ Processors could be enabled:
 * manually.
 
 ==== Auto-enable
-{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base.
+{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base. Processor classes whose names start with the `Abstract` prefix are considered abstract and will not be automatically enabled.
 
-CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they wouldn't be enabled automatically.
+CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they will not be enabled automatically.
 
 As previously mentioned, the auto-enable feature scans only for processors defined in the scripting knowledge base. Enabling Java-based processors has to be done manually.
+
+.Example of processor inheritance and auto-enable
+[source,python]
+----
+# This abstract action will not be automatically enabled.
+class AbstractCalculateAction(Action):
+    def calculateResult(self, args):
+        return 1
+
+# This action will be automatically enabled.
+class CalculateAction(AbstractCalculateAction):
+    def onCall(self, args):
+        return self.calculateResult(args) * 2
+----
 
 You may turn off auto-enable by setting the `autoEnable` engine configuration parameter to `false` (for example in the Sponge XML configuration file). In that case you have to enable processors manually.
 
@@ -258,7 +272,7 @@ def onLoad:
     EPS.enableAll(Trigger1, Trigger3)
 ----
 
-To manually enable any Java-based processors in a script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`.
+To manually enable any Java-based processors in a script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`. The default name of a Java-based processor is its full Java class name.
 
 .Example of enabling a Java-based processor
 [source,python]
@@ -440,7 +454,7 @@ Plugins could be written in Java or in a supported scripting language as a part 
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
     <knowledgeBases>
         <knowledgeBase name="sampleKnowledgeBase" type="python">
-            <file>examples/script/py/plugins_java.py</file>
+            <file>plugins_java.py</file>
         </knowledgeBase>
     </knowledgeBases>
     <plugins>
@@ -551,7 +565,7 @@ Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
     <knowledgeBases>
         <knowledgeBase name="sampleKnowledgeBase" type="python">
-            <file>examples/script/py/plugins_script.py</file>
+            <file>plugins_script.py</file>
         </knowledgeBase>
     </knowledgeBases>
     <plugins>
@@ -731,7 +745,9 @@ Maven users will need to add the following dependency to their `pom.xml`:
 JavaScript interpreter supports https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/shell.html[shell scripting extensions in Nashorn] to provide simpler shell integration.
 
 ==== Limitations
-There is a limitation for using custom class attributes and methods in event processors written in JavaScript implementation Nashorn. In that case you should set a class field `target` in the `onInit()` method as in the following example. All class fields and methods that are new (i.e. not inherited from the base classes) *must be defined in `target`*.
+
+===== Custom class attributes and methods
+There is a limitation for using custom class attributes and methods in processors written in JavaScript implementation Nashorn. In that case you should set a class field `target` in the `onInit()` method as in the following example. All class fields and methods that are new (i.e. not inherited from the base classes) *must be defined in `target`*.
 
 .JavaScript target
 [source,javascript]
@@ -758,6 +774,10 @@ var HeartbeatFilter = Java.extend(Filter, {
 ----
 <1> Setting `target` that defines an attribute `heartbeatCounter`.
 <2> Using `target` for accessing attribute `heartbeatCounter`.
+
+===== Abstract processors
+
+The support for abstract processors is not implemented for processors written in JavaScript.
 
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:

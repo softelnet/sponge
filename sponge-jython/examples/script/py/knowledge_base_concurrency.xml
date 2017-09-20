@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="python">
-            <file>examples/script/py/knowledge_base_concurrency.py</file>
+            <file>knowledge_base_concurrency.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

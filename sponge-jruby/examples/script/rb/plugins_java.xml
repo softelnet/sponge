@@ -7,7 +7,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="ruby">
-            <file>examples/script/rb/plugins_java.rb</file>
+            <file>plugins_java.rb</file>
         </knowledgeBase>
     </knowledgeBases>
 

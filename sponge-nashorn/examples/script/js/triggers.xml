@@ -12,7 +12,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="javascript">
-            <file charset="UTF-8">examples/script/js/triggers.js</file>
+            <file charset="UTF-8">triggers.js</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

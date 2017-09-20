@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="javascript">
-            <file>examples/script/js/hello_world.js</file>
+            <file>hello_world.js</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

@@ -40,13 +40,13 @@ public class StandalonePlugin extends JavaPlugin {
 
     public static final String NAME = "standalonePlugin";
 
-    public static final String CONIF_SPRING_CONFIGURATION = "spring";
+    public static final String CONFIG_SPRING_CONFIGURATION = "spring";
 
-    public static final String CONIF_SPRING_CONFIGURATION_ATTR_ENGINE_BEAN_NAME = "engineBeanName";
+    public static final String CONFIG_SPRING_CONFIGURATION_ATTR_ENGINE_BEAN_NAME = "engineBeanName";
 
-    public static final String CONIF_SPRING_CONFIGURATION_ATTR_CAMEL = "camel";
+    public static final String CONFIG_SPRING_CONFIGURATION_ATTR_CAMEL = "camel";
 
-    public static final String CONIF_SPRING_CONFIGUTARION_FILE = "file";
+    public static final String CONFIG_SPRING_CONFIGUTARION_FILE = "file";
 
     /** Spring configuration files. */
     private List<String> springConfigurationFiles;
@@ -124,15 +124,15 @@ public class StandalonePlugin extends JavaPlugin {
 
     @Override
     public void onConfigure(Configuration configuration) {
-        if (configuration.hasChildConfiguration(CONIF_SPRING_CONFIGURATION)) {
-            engineBeanName = configuration.getChildConfiguration(CONIF_SPRING_CONFIGURATION)
-                    .getAttribute(CONIF_SPRING_CONFIGURATION_ATTR_ENGINE_BEAN_NAME, engineBeanName);
+        if (configuration.hasChildConfiguration(CONFIG_SPRING_CONFIGURATION)) {
+            engineBeanName = configuration.getChildConfiguration(CONFIG_SPRING_CONFIGURATION)
+                    .getAttribute(CONFIG_SPRING_CONFIGURATION_ATTR_ENGINE_BEAN_NAME, engineBeanName);
 
-            camel = Boolean.parseBoolean(configuration.getChildConfiguration(CONIF_SPRING_CONFIGURATION)
-                    .getAttribute(CONIF_SPRING_CONFIGURATION_ATTR_CAMEL, Boolean.toString(camel)));
+            camel = configuration.getChildConfiguration(CONFIG_SPRING_CONFIGURATION)
+                    .getBooleanAttribute(CONFIG_SPRING_CONFIGURATION_ATTR_CAMEL, camel);
 
             springConfigurationFiles =
-                    Stream.of(configuration.getConfigurationsAt(CONIF_SPRING_CONFIGURATION + "." + CONIF_SPRING_CONFIGUTARION_FILE))
+                    Stream.of(configuration.getConfigurationsAt(CONFIG_SPRING_CONFIGURATION + "." + CONFIG_SPRING_CONFIGUTARION_FILE))
                             .map(conf -> conf.getValue()).filter(file -> !StringUtils.isEmpty(file)).collect(Collectors.toList());
         }
     }

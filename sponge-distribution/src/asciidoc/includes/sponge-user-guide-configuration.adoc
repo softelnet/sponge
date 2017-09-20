@@ -29,8 +29,8 @@ In a general form an XML configuration file is built as in the following example
     <!-- Knowledge bases configuration section -->
     <knowledgeBases>
         <knowledgeBase name="exampleKb" type="python">
-            <file>examples/script/py/kb_file_1.py</file>
-            <file>${sponge.home}/examples/script/py/kb_file_2.py</file>
+            <file>kb_file_1.py</file>
+            <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
         </knowledgeBase>
     </knowledgeBases>
 
@@ -118,8 +118,13 @@ Each `<knowledgeBase>` tag contains:
 
 |`file`
 |Element
-|The file name of the knowledge base. A single knowledge base may use many files but all of them have to be written in one language. The `file` element may have an optional attribute `charset`.
+|The file name of the knowledge base. A single knowledge base may use many files but all of them have to be written in one language.
 |===
+
+The `file` element may have the following optional attributes.
+
+* `charset` - sets the file encoding.
+* `required` - if set to `false`, the non existing files are ignored. The default value is `true` so when the file doesn't exist, the exception is thrown.
 
 === Plugins configuration
 The plugins configuration section (`<plugins>`) contains plugin definitions (`<plugin>`) built as follows:

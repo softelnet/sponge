@@ -21,6 +21,9 @@ package org.openksavi.sponge.kb;
  */
 public interface KnowledgeBaseScript {
 
+    /** The script file is required by default. */
+    static final boolean DEFAULT_REQUIRED = true;
+
     /**
      * Returns a knowledge base that uses this script.
      *
@@ -59,7 +62,21 @@ public interface KnowledgeBaseScript {
     /**
      * Sets the charset.
      *
-     * @param charset the charset
+     * @param charset the charset.
      */
     void setCharset(String charset);
+
+    /**
+     * Returns {@code true} if the file is required.
+     *
+     * @return {@code true} if the file is required.
+     */
+    boolean isRequired();
+
+    /**
+     * Sets if the file is required.
+     *
+     * @param required {@code true} if the file is required.
+     */
+    void setRequired(boolean required);
 }

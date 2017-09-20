@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="javascript">
-            <file>examples/script/js/rules_events.js</file>
+            <file>rules_events.js</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

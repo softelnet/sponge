@@ -23,7 +23,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import org.openksavi.sponge.core.engine.BaseEngine;
-import org.openksavi.sponge.core.engine.EngineBuilder;
 
 /**
  * A Spring aware engine. Startup and shutdown is managed by Spring.
@@ -31,6 +30,8 @@ import org.openksavi.sponge.core.engine.EngineBuilder;
 public class SpringEngine extends BaseEngine implements ApplicationContextAware, InitializingBean, DisposableBean {
 
     private ApplicationContext applicationContext;
+
+    private boolean autoStartup = true;
 
     /**
      * Creates a new engine.
@@ -44,8 +45,8 @@ public class SpringEngine extends BaseEngine implements ApplicationContextAware,
      *
      * @return builder.
      */
-    public static EngineBuilder<SpringEngine> builder() {
-        return new EngineBuilder<>(new SpringEngine());
+    public static SpringEngineBuilder builder() {
+        return new SpringEngineBuilder(new SpringEngine());
     }
 
     @Override
@@ -59,11 +60,23 @@ public class SpringEngine extends BaseEngine implements ApplicationContextAware,
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        startup();
+        if (autoStartup) {
+            startup();
+        }
     }
 
     @Override
     public void destroy() throws Exception {
-        shutdown();
+        if (autoStartup) {
+            shutdown();
+        }
+    }
+
+    public boolean isAutoStartup() {
+        return autoStartup;
+    }
+
+    public void setAutoStartup(boolean autoStartup) {
+        this.autoStartup = autoStartup;
     }
 }

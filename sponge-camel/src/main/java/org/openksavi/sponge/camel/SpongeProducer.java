@@ -18,6 +18,7 @@ package org.openksavi.sponge.camel;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 
 import org.openksavi.sponge.engine.Engine;
@@ -39,7 +40,19 @@ public class SpongeProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Object result = engine.getOperations().callAction(action != null ? action : CamelProducerAction.NAME, exchange);
+        Message in = exchange.getIn();
+
+        String actionName = in.getHeader(SpongeConstants.SPONGE_ACTION, String.class);
+        if (actionName != null) {
+            // Remove the header so it won't be propagated.
+            in.removeHeader(SpongeConstants.SPONGE_ACTION);
+        }
+
+        if (actionName == null) {
+            actionName = action != null ? action : CamelProducerAction.NAME;
+        }
+
+        Object result = engine.getOperations().callAction(actionName, exchange);
 
         exchange.getIn().setBody(result);
     }

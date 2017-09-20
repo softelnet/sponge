@@ -51,6 +51,9 @@ public final class KnowledgeBaseConstants {
     /** Plugin logger name. */
     public static final String PLUGIN_LOGGER_NAME = "plugin";
 
+    /** Abstract processor class name prefix. */
+    public static final String ABSTRACT_PROCESSOR_CLASS_NAME_PREFIX = "Abstract";
+
     private KnowledgeBaseConstants() {
         //
     }

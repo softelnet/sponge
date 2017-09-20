@@ -18,7 +18,6 @@ package org.openksavi.sponge.groovy.core;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -152,7 +151,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     private void setClasspath(Engine engine) {
         if (engine != null) {
-            String claaspath = getEngineOperations().getEngine().getConfigurationManager().resolveProperty(PROP_CLASSPATH);
+            String claaspath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);
             if (claaspath != null) {
                 Stream.of(StringUtils.split(claaspath, PROP_PATH_SEPARATOR)).forEach(path -> shell.getClassLoader().addClasspath(path));
             }
@@ -335,39 +334,28 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     @Override
-    public void reload(List<KnowledgeBaseScript> scripts) {
-        synchronized (interpteterSynchro) {
-            if (scripts != null) {
-                scripts.clear();
-            }
-
-            super.reload(scripts);
+    protected void doReload(List<KnowledgeBaseScript> scripts) {
+        if (scripts != null) {
+            scripts.clear();
         }
+
+        super.doReload(scripts);
     }
 
     @Override
-    public void load(String fileName, Charset charset) {
-        synchronized (interpteterSynchro) {
-            invalidateCache();
+    protected void doLoad(Reader reader, String fileName) {
+        Script script = shell.parse(reader, fileName);
+        script.setBinding(binding);
+        script.run();
 
-            Engine engine = getEngineOperations().getEngine();
-            try (Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, fileName, charset)) {
-                Script script = shell.parse(reader, fileName);
-                script.setBinding(binding);
-                script.run();
-
-                // Add the last script as the first.
-                scripts.add(0, script);
-            } catch (IOException e) {
-                throw Utils.wrapException("load", e);
-            }
-        }
+        // Add the last script as the first.
+        scripts.add(0, script);
     }
 
     private List<String> createClasspath(Engine engine) {
         List<String> result = new ArrayList<>();
         if (engine != null) {
-            String classpath = getEngineOperations().getEngine().getConfigurationManager().resolveProperty(PROP_CLASSPATH);
+            String classpath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);
             if (classpath != null) {
                 result.addAll(Arrays.asList(StringUtils.split(classpath, PROP_PATH_SEPARATOR)));
             }
@@ -404,8 +392,11 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         Stream.of(shell.getClassLoader().getLoadedClasses()).forEach(cls -> {
             if (PROCESSOR_CLASSES.values().stream().filter(processorClass -> ClassUtils.isAssignable(cls, processorClass)).findFirst()
                     .isPresent()) {
-                autoEnabled.add(cls.getName());
-                ((GroovyKnowledgeBaseEngineOperations) getEngineOperations()).enable(cls);
+                String name = cls.getName();
+                if (!isProcessorAbstract(name)) {
+                    autoEnabled.add(name);
+                    ((GroovyKnowledgeBaseEngineOperations) getEngineOperations()).enable(cls);
+                }
             }
         });
 

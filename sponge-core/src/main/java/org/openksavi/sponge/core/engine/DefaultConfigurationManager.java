@@ -17,6 +17,7 @@
 package org.openksavi.sponge.core.engine;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,6 +37,8 @@ import org.apache.commons.configuration2.resolver.DefaultEntityResolver;
 import org.apache.commons.configuration2.tree.MergeCombiner;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -62,6 +65,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
     /** The engine home directory. */
     private String home;
+
+    /** The configuration file URL. */
+    private URL configurationFileUrl;
 
     /** The engine name. */
     private String engineName;
@@ -118,16 +124,24 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         home = System.getProperty(ConfigurationConstants.PROP_HOME);
 
         rootConfig = createRootConfig();
+
+        // Add manually predefined properties.
+        setupPredefinedProperties();
+        // Add all system properties.
         rootConfig.setVariables(System.getProperties());
-        setupProperties();
+        // Add properties defined in the XML configuration.
+        setupXmlProperties();
+        // Apply system properties if there are any.
         applySystemProperties();
+        // Apply variable properties if there are any.
         applyVariableProperties();
+
         engineConfig = rootConfig.getChildConfiguration(ConfigurationConstants.TAG_ENGINE_CONFIG);
         engineName = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_NAME, null);
         setupEngineParameters();
 
         if (home == null) {
-            home = resolveProperty(ConfigurationConstants.PROP_HOME);
+            home = getProperty(ConfigurationConstants.PROP_HOME);
         }
 
         logger.debug(toString());
@@ -181,7 +195,19 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     /**
-     * Applies system properties to the configuration.
+     * Sets up manually predefined properties.
+     */
+    private void setupPredefinedProperties() {
+        properties.forEach((name, entry) -> {
+            Object value = entry.getValue();
+            if (value != null) {
+                rootConfig.setVariable(name, value);
+            }
+        });
+    }
+
+    /**
+     * Sets system properties defined in the configuration.
      */
     private void applySystemProperties() {
         properties.forEach((name, entry) -> {
@@ -206,7 +232,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         });
     }
 
-    private void setupProperties() {
+    private void setupXmlProperties() {
         for (Configuration configuration : rootConfig.getChildConfigurationsOf(ConfigurationConstants.TAG_PROPERTIES)) {
 
             String name = configuration.getAttribute(ConfigurationConstants.PROP_ATTRIBUTE_NAME, null);
@@ -261,7 +287,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         @Override
         public InputSource resolveEntity(final String publicId, final String systemId) throws SAXException {
             if (ConfigurationConstants.CONFIG_SCHEMA.equals(systemId)) {
-                InputStream stream = getClass().getResourceAsStream(ConfigurationConstants.CONFIG_SCHEMA_LOCATION);
+                InputStream stream = ConfigurationManager.class.getResourceAsStream(ConfigurationConstants.CONFIG_SCHEMA_LOCATION);
                 if (stream != null) {
                     InputSource source = new InputSource(stream);
                     source.setPublicId(publicId);
@@ -277,17 +303,20 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
     }
 
-    protected XMLConfiguration createXmlConfiguration(String fileName) {
+    protected Pair<XMLConfiguration, URL> createXmlConfiguration(String fileName) {
         List<Lookup> lookups = Arrays.asList(new SystemPropertiesLookup(), new HomeLookup(), new ConfigLookup());
 
         Parameters params = new Parameters();
-        FileBasedConfigurationBuilder<XMLConfiguration> builder =
-                new FileBasedConfigurationBuilder<>(XMLConfiguration.class).configure(params.xml().setDefaultLookups(lookups)
-                        .setLocationStrategy(new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home))
-                        .setFileName(fileName).setSchemaValidation(true).setEntityResolver(new ResourceSchemaResolver()));
+        FallbackBasePathLocationStrategy locationStrategy =
+                new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
+        FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
+                .configure(params.xml().setDefaultLookups(lookups).setLocationStrategy(locationStrategy).setFileName(fileName)
+                        .setSchemaValidation(true).setEntityResolver(new ResourceSchemaResolver()));
 
         try {
-            return builder.getConfiguration();
+            XMLConfiguration xmlConfiguration = builder.getConfiguration();
+
+            return new ImmutablePair<>(xmlConfiguration, locationStrategy.getLocatedUrl());
         } catch (ConfigurationException e) {
             throw new ConfigException(e);
         }
@@ -298,14 +327,18 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         combiner.addListNode(PluginManagerConstants.CFG_PLUGIN);
 
         CombinedConfiguration cc = new CombinedConfiguration(combiner);
+
         // Try to add explicit configuration
         if (configurationFilename != null) {
             logger.info("Loading configuration file {}...", configurationFilename);
-            cc.addConfiguration(createXmlConfiguration(configurationFilename));
+            Pair<XMLConfiguration, URL> configurationPair = createXmlConfiguration(configurationFilename);
+
+            cc.addConfiguration(configurationPair.getLeft());
+            configurationFileUrl = configurationPair.getRight();
         }
 
         // Add default configuration
-        cc.addConfiguration(createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG));
+        cc.addConfiguration(createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG).getLeft());
 
         // if (configurationFilename != null && logger.isDebugEnabled()) {
         // logger.debug("Initial XML configuration:\n{}", Utils.dumpConfiguration(cc));
@@ -321,11 +354,11 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      * @return {@code true} if the property should be saved to system properties.
      */
     private boolean isPropertySystem(Configuration configuration) {
-        return Boolean.valueOf(configuration.getAttribute(ConfigurationConstants.PROP_ATTRIBUTE_SYSTEM, Boolean.FALSE.toString()));
+        return configuration.getBooleanAttribute(ConfigurationConstants.PROP_ATTRIBUTE_SYSTEM, false);
     }
 
     private boolean isPropertyVariable(Configuration configuration) {
-        return Boolean.valueOf(configuration.getAttribute(ConfigurationConstants.PROP_ATTRIBUTE_VARIABLE, Boolean.FALSE.toString()));
+        return configuration.getBooleanAttribute(ConfigurationConstants.PROP_ATTRIBUTE_VARIABLE, false);
     }
 
     /**
@@ -414,10 +447,17 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
+    public URL getConfigurationFileUrl() {
+        return configurationFileUrl;
+    }
+
+    @Override
     public String toString() {
         //@formatter:off
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("home", home)
+                .append("configurationFilename", configurationFilename)
+                .append("configurationFileUrl", configurationFileUrl)
                 .append("engineName", engineName)
                 .append("mainProcessingUnitThreadCount", mainProcessingUnitThreadCount)
                 .append("asyncEventSetProcessorExecutorThreadCount", asyncEventSetProcessorExecutorThreadCount)
@@ -433,7 +473,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
-    public String resolveProperty(String name) {
+    public String getProperty(String name) {
         String systemProperty = System.getProperty(name);
         if (systemProperty != null) {
             return systemProperty;

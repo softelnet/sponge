@@ -154,9 +154,58 @@ public class CommonsConfiguration implements Configuration {
         return config.getBigInteger(key, defaultValue);
     }
 
+    private String createAttributeKey(String name) {
+        return "[@" + name + "]";
+    }
+
     @Override
     public String getAttribute(String name, String defaultValue) {
-        return config.getString("[@" + name + "]", defaultValue);
+        return config.getString(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Integer getIntegerAttribute(String name, Integer defaultValue) {
+        return config.getInteger(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Long getLongAttribute(String name, Long defaultValue) {
+        return config.getLong(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Boolean getBooleanAttribute(String name, Boolean defaultValue) {
+        return config.getBoolean(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Byte getByteAttribute(String name, Byte defaultValue) {
+        return config.getByte(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Double getDoubleAttribute(String name, Double defaultValue) {
+        return config.getDouble(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Float getFloatAttribute(String name, Float defaultValue) {
+        return config.getFloat(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public Short getShortAttribute(String name, Short defaultValue) {
+        return config.getShort(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public BigDecimal getBigDecimalAttribute(String name, BigDecimal defaultValue) {
+        return config.getBigDecimal(createAttributeKey(name), defaultValue);
+    }
+
+    @Override
+    public BigInteger getBigIntegerAttribute(String name, BigInteger defaultValue) {
+        return config.getBigInteger(createAttributeKey(name), defaultValue);
     }
 
     @Override

@@ -16,21 +16,7 @@
 
 package org.openksavi.sponge.camel.test;
 
-import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.inject.Inject;
-
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.spring.javaconfig.SingleRouteCamelConfiguration;
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.apache.camel.test.spring.MockEndpoints;
@@ -41,31 +27,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
-
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { CamelProducerCustomActionTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { CamelProducerCustomUriActionTest.TestConfig.class },
+        loader = CamelSpringDelegatingTestContextLoader.class)
 @MockEndpoints
 @DirtiesContext
-public class CamelProducerCustomActionTest {
-
-    @EndpointInject(uri = "mock:direct:log")
-    protected MockEndpoint logEndpoint;
-
-    @Produce(uri = "direct:start")
-    protected ProducerTemplate testProducer;
-
-    @Inject
-    protected Engine engine;
+public class CamelProducerCustomUriActionTest extends CamelProducerCustomActionAbstractTest {
 
     @Configuration
-    public static class TestConfig extends SingleRouteCamelConfiguration {
-
-        @Bean
-        public Engine spongeEngine() {
-            return SpringEngine.builder().knowledgeBase("kb", "examples/camel/camel_producer_custom_action.py").build();
-        }
+    public static class TestConfig extends AbstractTestConfig {
 
         @Bean
         @Override
@@ -88,24 +58,9 @@ public class CamelProducerCustomActionTest {
         }
     }
 
+    @Override
     @Test
     public void testRoute() throws InterruptedException {
-        CamelTestUtils.setResultWaitTime(60000, logEndpoint);
-
-        logEndpoint.expectedMessageCount(1);
-        logEndpoint.expectedBodiesReceived("OK");
-
-        String message = "Send me to the Sponge";
-        testProducer.sendBody("direct:start", message);
-
-        await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "calledCustomAction") != null);
-        TimeUnit.SECONDS.sleep(2);
-
-        assertEquals(message, engine.getOperations().getVariable(String.class, "calledCustomAction"));
-        assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_spongeProducer").get());
-
-        logEndpoint.assertIsSatisfied();
-
-        assertFalse(engine.isError());
+        super.testRoute();
     }
 }

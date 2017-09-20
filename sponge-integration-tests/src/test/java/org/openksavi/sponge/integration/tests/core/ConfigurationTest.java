@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -25,11 +26,11 @@ import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.EventClonePolicy;
 
-public class EngineParametersTest {
+public class ConfigurationTest {
 
     @Test
     public void testEngineParameters() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().config("examples/core/engine_parameters.xml").build();
+        Engine engine = DefaultEngine.builder().config("examples/core/configuration/engine_parameters.xml").build();
         engine.startup();
 
         try {
@@ -39,6 +40,33 @@ public class EngineParametersTest {
                     engine.getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount());
             assertEquals(EventClonePolicy.DEEP, engine.getConfigurationManager().getEventClonePolicy());
             assertEquals(false, engine.getConfigurationManager().getAutoEnable());
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testPropertySubstitution() throws InterruptedException {
+        Engine engine = DefaultEngine.builder().property("sourceProperty", "source")
+                .config("examples/core/configuration/property_substitution.xml").build();
+        engine.startup();
+
+        try {
+            assertEquals("source value", engine.getConfigurationManager().getProperty("resultProperty"));
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testRelativeFiles() throws InterruptedException {
+        Engine engine = DefaultEngine.builder().config("examples/core/configuration/relative_files.xml").build();
+        engine.startup();
+
+        try {
+            assertTrue(engine.getOperations().getVariable(Boolean.class, "loaded"));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

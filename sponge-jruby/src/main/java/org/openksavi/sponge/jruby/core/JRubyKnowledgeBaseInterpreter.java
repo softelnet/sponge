@@ -132,7 +132,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     private void setLoadPaths(Engine engine) {
         if (engine != null) {
-            String rubyPath = engine.getConfigurationManager().resolveProperty(PROP_RUBY_PATH);
+            String rubyPath = engine.getConfigurationManager().getProperty(PROP_RUBY_PATH);
             if (rubyPath != null) {
                 List<String> paths = Arrays.asList(StringUtils.split(rubyPath, PROP_PATH_SEPARATOR));
                 container.setLoadPaths(paths);
@@ -293,8 +293,10 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
                 RubyClass rubyClass = (RubyClass) symbol;
                 if (!processorRubyTypes.contains(rubyClass)
                         && CollectionUtils.containsAny(rubyClass.getAncestorList(), processorRubyTypes)) {
-                    autoEnabled.add(rubyClass);
-                    ((JRubyKnowledgeBaseEngineOperations) getEngineOperations()).enable(rubyClass);
+                    if (!isProcessorAbstract(rubyClass.getName())) {
+                        autoEnabled.add(rubyClass);
+                        ((JRubyKnowledgeBaseEngineOperations) getEngineOperations()).enable(rubyClass);
+                    }
                 }
             }
         });

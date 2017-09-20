@@ -200,4 +200,85 @@ public interface Configuration {
      * @return attribute value.
      */
     String getAttribute(String name, String defaultValue);
+
+    /**
+     * Returns integer attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return integer value.
+     */
+    Integer getIntegerAttribute(String name, Integer defaultValue);
+
+    /**
+     * Returns long attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return long value.
+     */
+    Long getLongAttribute(String name, Long defaultValue);
+
+    /**
+     * Returns boolean attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return boolean value.
+     */
+    Boolean getBooleanAttribute(String name, Boolean defaultValue);
+
+    /**
+     * Returns byte attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return byte value.
+     */
+    Byte getByteAttribute(String name, Byte defaultValue);
+
+    /**
+     * Returns double attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return double value.
+     */
+    Double getDoubleAttribute(String name, Double defaultValue);
+
+    /**
+     * Returns float attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return float value.
+     */
+    Float getFloatAttribute(String name, Float defaultValue);
+
+    /**
+     * Returns short attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return short value.
+     */
+    Short getShortAttribute(String name, Short defaultValue);
+
+    /**
+     * Returns big decimal attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return big decimal value.
+     */
+    BigDecimal getBigDecimalAttribute(String name, BigDecimal defaultValue);
+
+    /**
+     * Returns big integer attribute value.
+     *
+     * @param name attribute name.
+     * @param defaultValue default value.
+     * @return big integer value.
+     */
+    BigInteger getBigIntegerAttribute(String name, BigInteger defaultValue);
 }
