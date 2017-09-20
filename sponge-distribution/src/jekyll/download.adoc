@@ -11,7 +11,7 @@ In order to use {sponge} you may choose to:
 <a href="{downloadUrl}"><i class="fa fa-download" aria-hidden="true"></i>Download {standalonePackage}.zip</a>
 </p>
 ++++
-* Run the {sponge} standalone command-line program in a Docker[https://www.docker.com] container.
+* Run the {sponge} standalone command-line program in a https://www.docker.com[Docker] container.
 * Embed {sponge} in your Java application using Maven dependency.
 
 For information on these distributions see the link:/quickstart/[Quickstart] page.
