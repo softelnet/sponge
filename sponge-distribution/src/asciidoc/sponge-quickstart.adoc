@@ -268,6 +268,37 @@ Multi-line statements should be entered by adding a backslash (`\`) to the end o
 
 You may exit the program by entering `exit`, `quit` or pressing `CTRL-D`.
 
+=== Docker
+
+The standalone command-line program may also be installed as a Docker[https://www.docker.com] container.
+
+.Invoke bash shell in the {sponge} bin directory in a Docker container
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it openksavi/sponge:latest
+----
+
+.Print {sponge} help
+[source,bash,subs="verbatim,attributes"]
+----
+./sponge --help
+----
+
+.Exit the container
+[source,bash,subs="verbatim,attributes"]
+----
+exit
+----
+
+The Docker container provides Oracle Java 8 as well as `mc` for convenience.
+
+If you want to mount a host directory containing for example {sponge} knowledge bases or configuration files you may use Docker volumes or mount features.
+
+.Example of mounting a host directory
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it -v ~/examples:/opt/examples openksavi/sponge:latest
+----
 
 == Examples
 This chapter provides introductory examples of {sponge}. For detailed information see User Guide.

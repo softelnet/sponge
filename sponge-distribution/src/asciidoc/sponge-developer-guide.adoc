@@ -43,19 +43,34 @@ The project pages are generated using https://jekyllrb.com[Jekyll] with https://
 
 The generated source directory will be placed in target/jekyll/jekyll.
 
-==== Building project pages in Jekyll
+==== Build project pages in Jekyll
 
  cd sponge-distribution/target/jekyll/jekyll
  bundle exec jekyll build
 
 The contents of the directory `_site` should be copied to the web server. Note: Building project pages in Jekyll has not been tested on Windows.
 
-==== Testing project pages in Jekyll
+==== Test project pages in Jekyll
 
  cd sponge-distribution/target/jekyll/jekyll
  bundle exec jekyll serve --host=0.0.0.0
 
 If you get `ERROR: directory is already being watched!` message, simply ignore it. This is due to the use of symbolic link pointing to the root of the project.
+
+=== Docker
+
+==== Build Docker image
+
+ cd sponge-distribution/src/docker
+ # Edit Sponge version in Dockerfile
+ docker build -t openksavi/sponge:1.0.3 -t openksavi/sponge:latest .
+
+==== Publish Docker image
+
+After building the Docker image, execute (according to https://docs.docker.com/docker-cloud/builds/push-images/):
+
+ docker login
+ docker push openksavi/sponge
 
 === Performance tests
 Performance tests have to be invoked manually, because they require more time to finish.

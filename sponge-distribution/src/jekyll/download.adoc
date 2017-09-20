@@ -1,11 +1,17 @@
 = Download
 :page-permalink: /download/
 
+In order to use {sponge} you may choose to:
+
+* Download the {sponge} standalone command-line program and use it in your environment:
++
 [subs="attributes"]
 ++++
 <p>
 <a href="{downloadUrl}"><i class="fa fa-download" aria-hidden="true"></i>Download {standalonePackage}.zip</a>
 </p>
 ++++
+* Run the {sponge} standalone command-line program in a Docker[https://www.docker.com] container.
+* Embed {sponge} in your Java application using Maven dependency.
 
-For information on how to start using {sponge} standalone command-line program or how to embed {sponge} in your Java application using Maven dependency see link:/quickstart/[Quickstart] page.
+For information on these distributions see the link:/quickstart/[Quickstart] page.
