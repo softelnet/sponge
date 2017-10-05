@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -270,5 +271,16 @@ public abstract class Utils {
 
     public static String getPackagePath(Class<?> cls) {
         return cls.getPackage().getName().replace('.', '/');
+    }
+
+    public static String getLastSubdirectory(String dir) {
+        try {
+            List<String> subdirs =
+                    Files.list(Paths.get(dir)).map(path -> path.getFileName().toFile().getName()).sorted().collect(Collectors.toList());
+
+            return subdirs.size() > 0 ? subdirs.get(subdirs.size() - 1) : null;
+        } catch (IOException e) {
+            throw Utils.wrapException("getLastSubdirectory", e);
+        }
     }
 }
