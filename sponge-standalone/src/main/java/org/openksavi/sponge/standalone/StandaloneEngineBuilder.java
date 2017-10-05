@@ -21,8 +21,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.base.Splitter;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -41,6 +39,7 @@ import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.engine.LoggingExceptionHandler;
 import org.openksavi.sponge.core.engine.interactive.DefaultInteractiveMode;
 import org.openksavi.sponge.core.engine.interactive.InteractiveModeConstants;
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
@@ -182,7 +181,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
                     throw new StandaloneInitializationException("Empty knowledge base name.");
                 }
 
-                List<String> kbFiles = Splitter.on(KB_FILES_SEPARATOR).trimResults().omitEmptyStrings().splitToList(kbFilesString);
+                List<String> kbFiles = Utils.split(kbFilesString, KB_FILES_SEPARATOR);
                 knowledgeBase(kbName, kbFiles.toArray(new String[kbFiles.size()]));
             });
 

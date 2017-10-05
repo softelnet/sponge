@@ -1115,67 +1115,82 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |`org.openksavi.sponge`
 |`sponge-parent`
 |Yes
-|Parent project.
+|The parent project.
 
 |`org.openksavi.sponge`
 |`sponge-bom`
 |Yes
-|Bill Of Materials style pom.xml.
+|The Bill Of Materials style pom.xml.
 
 |`org.openksavi.sponge`
 |`sponge-api`
 |Yes
-|{sponge} API.
+|The {sponge} API.
 
 |`org.openksavi.sponge`
 |`sponge-core`
 |Yes
-|{sponge} core implementation. You may use this dependency if you don't need a scripting language support, for example when creating knowledge bases only in Java.
+|The {sponge} core implementation. You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
+
+|`org.openksavi.sponge`
+|`sponge-core-shaded`
+|Yes
+|The shaded version of {sponge} core implementation. You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
 
 |`org.openksavi.sponge`
 |`sponge-jython`
 |Yes
-|Support for Python-based scripting knowledge bases using Jython.
+|The support for Python-based scripting knowledge bases using Jython.
 
 |`org.openksavi.sponge`
 |`sponge-jruby`
 |Yes
-|Support for Ruby-based scripting knowledge bases using JRuby.
+|The support for Ruby-based scripting knowledge bases using JRuby.
 
 |`org.openksavi.sponge`
 |`sponge-groovy`
 |Yes
-|Support for Groovy-based scripting knowledge bases.
+|The support for Groovy-based scripting knowledge bases.
 
 |`org.openksavi.sponge`
 |`sponge-nashorn`
 |Yes
-|Support for JavaScript-based scripting knowledge bases using Nashorn.
+|The support for JavaScript-based scripting knowledge bases using Nashorn.
 
 |`org.openksavi.sponge`
 |`sponge-camel`
 |Yes
-|Apache Camel integration.
+|The Apache Camel integration.
 
 |`org.openksavi.sponge`
 |`sponge-spring`
 |Yes
-|Spring framework integration.
+|The Spring framework integration.
+
+|`org.openksavi.sponge`
+|`sponge-py4j`
+|Yes
+|The CPython integration that uses Py4J. _Experimental, early draft, not ready to be used yet._
+
+|`org.openksavi.sponge`
+|`sponge-tensorflow`
+|Yes
+|The Tensorflow integration. _Experimental, early draft, not ready to be used yet._
 
 |`org.openksavi.sponge`
 |`sponge-standalone`
 |Yes
-|Standalone distribution of {sponge}.
+|The standalone distribution of {sponge}.
 
 |`org.openksavi.sponge`
 |`sponge-signal`
 |Yes
-|Wrappers for Operating System signals.
+|The wrappers for Operating System signals.
 
 |`org.openksavi.sponge`
 |`sponge-test`
 |Yes
-|{sponge} test support.
+|The {sponge} test support.
 
 |`org.openksavi.sponge`
 |`sponge-examples-projects`

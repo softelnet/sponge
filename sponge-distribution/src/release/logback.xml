@@ -44,6 +44,7 @@
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="error" />
     <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
     <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="error" />
+    <logger name="org.openksavi.sponge.shaded" level="error" />
     <logger name="sponge.kb" level="debug" />
 
     <logger name="org.apache.commons.beanutils.FluentPropertyBeanIntrospector" level="error" />

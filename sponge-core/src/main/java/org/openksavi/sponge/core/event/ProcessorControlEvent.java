@@ -18,8 +18,6 @@ package org.openksavi.sponge.core.event;
 
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -85,6 +83,6 @@ public abstract class ProcessorControlEvent extends BaseControlEvent {
 
     @Override
     public Map<String, Object> getAll() {
-        return ImmutableMap.of(ATTR_PROCESSOR_ADAPTER, processorAdapter);
+        return Utils.immutableMapOf(ATTR_PROCESSOR_ADAPTER, processorAdapter);
     }
 }

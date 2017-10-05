@@ -28,9 +28,6 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Streams;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.python.core.Py;
@@ -45,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
@@ -75,7 +73,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
     @SuppressWarnings("rawtypes")
     //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = ImmutableMap.of(
+    protected static final Map<Class, Class> PROCESSOR_CLASSES = Utils.immutableMapOf(
             Action.class, JythonAction.class,
             Filter.class, JythonFilter.class,
             Trigger.class, JythonTrigger.class,
@@ -165,7 +163,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
                 PROCESSOR_CLASSES.values().stream().map(cls -> (PyType) Py.java2py(cls)).collect(Collectors.toList());
 
         List<Object> autoEnabled = new ArrayList<>();
-        Streams.stream(((ScopeIterator) scope.__iter__()).iterator()).forEach(element -> {
+        Utils.stream(((ScopeIterator) scope.__iter__()).iterator()).forEach(element -> {
             String name = element.toString();
             PyObject pyObject = scope.__finditem__(name);
 

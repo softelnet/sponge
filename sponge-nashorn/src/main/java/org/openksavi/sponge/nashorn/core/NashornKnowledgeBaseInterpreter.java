@@ -25,8 +25,6 @@ import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 
-import com.google.common.collect.ImmutableMap;
-
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import org.apache.commons.lang3.ClassUtils;
@@ -37,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
@@ -68,7 +67,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
 
     @SuppressWarnings("rawtypes")
     //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = ImmutableMap.of(
+    protected static final Map<Class, Class> PROCESSOR_CLASSES = Utils.immutableMapOf(
             Action.class, NashornAction.class,
             Filter.class, NashornFilter.class,
             Trigger.class, NashornTrigger.class,

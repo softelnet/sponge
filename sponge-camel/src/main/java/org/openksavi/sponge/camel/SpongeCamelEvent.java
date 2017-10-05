@@ -19,11 +19,10 @@ package org.openksavi.sponge.camel;
 import java.util.Map;
 import java.util.Objects;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.core.event.BaseEvent;
+import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.EventClonePolicy;
 
@@ -117,7 +116,7 @@ public class SpongeCamelEvent extends BaseEvent {
 
     @Override
     public Map<String, Object> getAll() {
-        return ImmutableMap.of(ATTR_ROUTE_ID, routeId, ATTR_BODY, body, ATTR_HEADERS, headers);
+        return Utils.immutableMapOf(ATTR_ROUTE_ID, routeId, ATTR_BODY, body, ATTR_HEADERS, headers);
     }
 
     public static SpongeCamelEvent create(Engine engine, String name, Exchange exchange) {

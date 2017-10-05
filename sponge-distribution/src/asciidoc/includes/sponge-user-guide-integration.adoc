@@ -55,10 +55,15 @@ public Engine spongeEngine() {
 ----
 
 === Maven configuration
-Maven users will need to add the following dependency to their `pom.xml` for this component:
+Maven users will need to add the following dependencies to their `pom.xml` for this component:
 
 [source,xml,subs="verbatim,attributes"]
 ----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-spring</artifactId>
@@ -75,10 +80,15 @@ The *sponge* component provides integration bridge between Apache Camel and the 
 * to route a message from a {sponge} knowledge base to a Camel route (consumer endpoint).
 
 === Maven configuration
-Maven users will need to add the following dependency to their `pom.xml` for this component:
+Maven users will need to add the following dependencies to their `pom.xml` for this component:
 
 [source,xml,subs="verbatim,attributes"]
 ----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-camel</artifactId>
