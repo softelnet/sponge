@@ -4,7 +4,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="rss" type="python">
-            <file>examples/standalone/python_rss/python_rss.py</file>
+            <file>python_rss.py</file>
         </knowledgeBase>
     </knowledgeBases>
 

@@ -286,6 +286,17 @@ public class EngineBuilder<T extends BaseEngine> {
      * @param scripts the knowledge base scripts.
      * @return this Engine Builder.
      */
+    public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseScript... scripts) {
+        return knowledgeBase(name, null, Stream.of(scripts).collect(Collectors.toList()));
+    }
+
+    /**
+     * Adds the knowledge base.
+     *
+     * @param name the knowledge base name.
+     * @param scripts the knowledge base scripts.
+     * @return this Engine Builder.
+     */
     public EngineBuilder<T> knowledgeBase(String name, List<KnowledgeBaseScript> scripts) {
         return knowledgeBase(name, null, scripts);
     }

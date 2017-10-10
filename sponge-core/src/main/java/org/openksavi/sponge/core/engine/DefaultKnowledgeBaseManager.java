@@ -65,6 +65,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     /** Configuration knowledge base file charset attribute name. */
     private static final String CFG_KB_FILE_ATTR_CHARSET = "charset";
 
+    /** Configuration knowledge base file required attribute name. */
+    private static final String CFG_KB_FILE_ATTR_REQUIRED = "required";
+
     /** Knowledge base interpreter factories. */
     protected Map<String, KnowledgeBaseInterpreterFactory> knowledgeBaseInterpreterFactories =
             Collections.synchronizedMap(new LinkedHashMap<>());
@@ -124,7 +127,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
                 throw new SpongeException("Knowledge base file name must not be empty");
             }
 
-            knowledgeBase.addScript(new FileKnowledgeBaseScript(fileName, fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null)));
+            knowledgeBase.addScript(new FileKnowledgeBaseScript(fileName, fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null),
+                    fileNode.getBooleanAttribute(CFG_KB_FILE_ATTR_REQUIRED, KnowledgeBaseScript.DEFAULT_REQUIRED)));
         }
 
         return knowledgeBase;

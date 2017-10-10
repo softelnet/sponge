@@ -4,7 +4,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="python">
-            <file>examples/script/py/knowledge_base_script_overriding.py</file>
+            <file>knowledge_base_script_overriding.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

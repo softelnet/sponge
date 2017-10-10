@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.engine;
 
+import java.net.URL;
 import java.util.Map;
 
 import org.openksavi.sponge.config.Configuration;
@@ -28,12 +29,12 @@ import org.openksavi.sponge.event.EventClonePolicy;
 public interface ConfigurationManager extends EngineModule {
 
     /**
-     * Resolves property value.
+     * Returns the property value.
      *
-     * @param name property name.
-     * @return property value.
+     * @param name the property name.
+     * @return the property value.
      */
-    String resolveProperty(String name);
+    String getProperty(String name);
 
     /**
      * Returns the root configuration.
@@ -55,6 +56,13 @@ public interface ConfigurationManager extends EngineModule {
      * @return the home directory for this engine.
      */
     String getHome();
+
+    /**
+     * Returns the configuration file URL. This method should be used only after reading the configuration.
+     *
+     * @return the configuration file URL or {@code null} if there is no configuration file.
+     */
+    URL getConfigurationFileUrl();
 
     /**
      * Returns the engine name.

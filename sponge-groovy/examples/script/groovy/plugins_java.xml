@@ -7,7 +7,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="groovy">
-            <file>examples/script/groovy/plugins_java.groovy</file>
+            <file>plugins_java.groovy</file>
         </knowledgeBase>
     </knowledgeBases>
 

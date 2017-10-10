@@ -55,6 +55,22 @@ public interface ScriptKnowledgeBaseInterpreter extends KnowledgeBaseInterpreter
     void load(String fileName, Charset charset);
 
     /**
+     * Loads the knowledge base from the file.
+     *
+     * @param fileName file name.
+     * @param charset charset.
+     * @param required {@code true} if the file is required.
+     */
+    void load(String fileName, Charset charset, boolean required);
+
+    /**
+     * Loads the knowledge base from the script.
+     *
+     * @param script the knowledge base script.
+     */
+    void load(KnowledgeBaseScript script);
+
+    /**
      * Reloads scripts.
      *
      * @param scripts knowledge base scripts.

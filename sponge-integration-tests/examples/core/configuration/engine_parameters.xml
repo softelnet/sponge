@@ -10,9 +10,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
-            <file>examples/core/engine_parameters.py</file>
-        </knowledgeBase>
+        <knowledgeBase name="kb" type="python" />
     </knowledgeBases>
 </sponge>
 

@@ -110,7 +110,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
     private void setPythonPath(Engine engine) {
         if (engine != null) {
-            String pythonPath = engine.getConfigurationManager().resolveProperty(PROP_PYTHON_PATH);
+            String pythonPath = engine.getConfigurationManager().getProperty(PROP_PYTHON_PATH);
             if (pythonPath != null) {
                 PySystemState engineSys = new PySystemState();
                 List<String> paths = Arrays.asList(StringUtils.split(pythonPath, PROP_PATH_SEPARATOR));
@@ -173,8 +173,10 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
                 PyType pyType = (PyType) pyObject;
                 if (processorPyTypes.stream().filter(processorClass -> !pyType.equals(processorClass) && pyType.isSubType(processorClass))
                         .findFirst().isPresent()) {
-                    autoEnabled.add(name);
-                    ((JythonKnowledgeBaseEngineOperations) getEngineOperations()).enable(pyType);
+                    if (!isProcessorAbstract(name)) {
+                        autoEnabled.add(name);
+                        ((JythonKnowledgeBaseEngineOperations) getEngineOperations()).enable(pyType);
+                    }
                 }
             }
         });

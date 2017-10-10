@@ -16,34 +16,56 @@
 
 package org.openksavi.sponge.core.kb;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
-import org.openksavi.sponge.config.ConfigException;
+import org.apache.commons.configuration2.io.FileLocatorUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
 
 /**
- * A default knowledge base file provider.
+ * A default knowledge base file provider. Search order: relative to the current directory or classpath, in the XML configuration file
+ * directory, in the Sponge home directory.
  */
 public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvider {
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultKnowledgeBaseFileProvider.class);
+
     @Override
     public Reader getReader(Engine engine, String fileName, Charset charset) throws IOException {
+        // Try to read relative to the current directory or classpath.
         Reader reader = Utils.getReader(fileName, charset);
 
+        // Try to read in the XML configuration file directory.
+        if (reader == null) {
+            URL configurationFileUrl = engine.getConfigurationManager().getConfigurationFileUrl();
+            if (configurationFileUrl != null) {
+                File configFile = FileLocatorUtils.fileFromURL(configurationFileUrl);
+                if (configFile != null) {
+                    String configDir = configFile.getParent();
+                    if (configDir != null) {
+                        reader = Utils.getReader(Paths.get(configDir, fileName).toString(), charset);
+                    }
+                } else {
+                    logger.warn("Configuration file URL {} cannot be converted to File", configurationFileUrl);
+                }
+            }
+        }
+
+        // Try to read in the Sponge home directory.
         if (reader == null) {
             String home = engine.getConfigurationManager().getHome();
             if (home != null) {
                 reader = Utils.getReader(Paths.get(home, fileName).toString(), charset);
             }
-        }
-
-        if (reader == null) {
-            throw new ConfigException(fileName + " not found");
         }
 
         return reader;

@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="python">
-            <file>examples/script/py/knowledge_base_library.py</file>
+            <file>knowledge_base_library.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

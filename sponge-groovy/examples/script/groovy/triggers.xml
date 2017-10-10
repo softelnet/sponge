@@ -12,7 +12,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="groovy">
-            <file charset="UTF-8">examples/script/groovy/triggers.groovy</file>
+            <file charset="UTF-8">triggers.groovy</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

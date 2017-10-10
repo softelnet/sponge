@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="ruby">
-            <file>examples/script/rb/knowledge_base_concurrency.rb</file>
+            <file>knowledge_base_concurrency.rb</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

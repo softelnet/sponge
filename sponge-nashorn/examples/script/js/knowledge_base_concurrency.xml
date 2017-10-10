@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="javascript">
-            <file>examples/script/js/knowledge_base_concurrency.js</file>
+            <file>knowledge_base_concurrency.js</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

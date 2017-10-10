@@ -17,13 +17,16 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
     /** A knowledge base script charset. */
     private String charset;
 
+    /** Informs if the knowledge base script file is required. */
+    private boolean required;
+
     /**
      * Creates a new knowledge base script instance.
      *
      * @param fileName file name.
      */
     public FileKnowledgeBaseScript(String fileName) {
-        this.fileName = fileName;
+        this(fileName, null);
     }
 
     /**
@@ -33,8 +36,20 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
      * @param charset charset.
      */
     public FileKnowledgeBaseScript(String fileName, String charset) {
+        this(fileName, charset, KnowledgeBaseScript.DEFAULT_REQUIRED);
+    }
+
+    /**
+     * Creates a new knowledge base script instance.
+     *
+     * @param fileName file name.
+     * @param charset charset.
+     * @param required required.
+     */
+    public FileKnowledgeBaseScript(String fileName, String charset, boolean required) {
         this.fileName = fileName;
         this.charset = charset;
+        this.required = required;
     }
 
     @Override
@@ -65,6 +80,16 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
     @Override
     public void setCharset(String charset) {
         this.charset = charset;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
+
+    @Override
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     /**

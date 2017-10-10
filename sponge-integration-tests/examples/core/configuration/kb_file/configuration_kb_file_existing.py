@@ -1,6 +1,5 @@
 """
 Sponge Knowledge base
-Engine parameters
 """
 
-# Empty
+EPS.setVariable("loaded", True)

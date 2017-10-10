@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="groovy">
-            <file>examples/script/groovy/rules_events.groovy</file>
+            <file>rules_events.groovy</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

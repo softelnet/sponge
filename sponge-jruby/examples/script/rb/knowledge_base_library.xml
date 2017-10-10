@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="ruby">
-            <file>examples/script/rb/knowledge_base_library.rb</file>
+            <file>knowledge_base_library.rb</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

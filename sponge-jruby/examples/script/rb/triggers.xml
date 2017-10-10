@@ -12,7 +12,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="ruby">
-            <file charset="UTF-8">examples/script/rb/triggers.rb</file>
+            <file charset="UTF-8">triggers.rb</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.kb;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.time.Duration;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
@@ -92,7 +94,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     }
 
     @Override
-    public void load(List<KnowledgeBaseScript> scripts) {
+    public final void load(List<KnowledgeBaseScript> scripts) {
         if (scripts.size() > 1) {
             logger.debug("Loading knowledge base '{}' from files: {}.", scripts.get(0).getKnowledgeBase().getName(),
                     scripts.stream().map(script -> script.getFileName()).collect(Collectors.joining(", ", "'", "'")));
@@ -108,7 +110,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      * @param fileName file name.
      */
     @Override
-    public void load(String fileName) {
+    public final void load(String fileName) {
         load(fileName, Charset.defaultCharset());
     }
 
@@ -119,37 +121,63 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      * @param charset charset.
      */
     @Override
-    public void load(String fileName, String charset) {
+    public final void load(String fileName, String charset) {
         load(fileName, Charset.forName(charset));
     }
 
     @Override
-    public void load(String fileName, Charset charset) {
+    public final void load(String fileName, Charset charset) {
+        load(fileName, charset, true);
+    }
+
+    @Override
+    public final void load(String fileName, Charset charset, boolean required) {
         synchronized (interpteterSynchro) {
             invalidateCache();
 
             Engine engine = getEngineOperations().getEngine();
+
             try (Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, fileName, charset)) {
-                eval(reader, fileName);
-            } catch (Throwable e) {
+                if (reader != null) {
+                    doLoad(reader, fileName);
+                } else {
+                    if (required) {
+                        throw new ConfigException("Knowledge base file " + fileName + " not found");
+                    } else {
+                        logger.warn("Knowledge base file " + fileName + " not found but is set as optional.");
+                    }
+                }
+            } catch (IOException e) {
                 throw Utils.wrapException("load", e);
             }
         }
     }
 
     @Override
-    public void reload(List<KnowledgeBaseScript> scripts) {
+    public final void load(KnowledgeBaseScript script) {
+        load(script.getFileName(), script.getCharset() != null ? Charset.forName(script.getCharset()) : Charset.defaultCharset(),
+                script.isRequired());
+    }
+
+    protected void doLoad(Reader reader, String fileName) {
+        eval(reader, fileName);
+    }
+
+    @Override
+    public final void reload(List<KnowledgeBaseScript> scripts) {
+        synchronized (interpteterSynchro) {
+            doReload(scripts);
+        }
+    }
+
+    protected void doReload(List<KnowledgeBaseScript> scripts) {
         load(scripts);
     }
 
     private void loadKnowledgeBaseScript(KnowledgeBaseScript script) {
         logger.info("Loading knowledge base '{}' file '{}'.", script.getKnowledgeBase().getName(), script.getFileName());
 
-        if (script.getCharset() != null) {
-            load(script.getFileName(), script.getCharset());
-        } else {
-            load(script.getFileName());
-        }
+        load(script);
     }
 
     @Override
@@ -214,5 +242,9 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 Event.class, Configuration.class, EventClonePolicy.class, EventSetProcessorState.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
         //@formatter:on
+    }
+
+    protected boolean isProcessorAbstract(String className) {
+        return className.startsWith(KnowledgeBaseConstants.ABSTRACT_PROCESSOR_CLASS_NAME_PREFIX);
     }
 }

@@ -3,6 +3,16 @@
 A high-level view of the changes introduced in {sponge} releases.
 
 [discrete]
+== 1.0.5 (2017.10.09)
+
+* The new attribute `required` in the knowledge base file configuration that, if set to false, allows specifying optional (non existing) knowledge base files.
+* Script knowledge base files are looked up also in the file system relative to the XML configuration file parent directory.
+* Abstract processor classes in script knowledge bases are now compatible with the auto-enable mechanism. The support for abstract processors is implemented for Python, Groovy, Ruby but not for JavaScript.
+* CamelProducerAction may be also set in the Camel In message header named CamelSpongeAction.
+* SpringEngine may be configured not to start immediately (see `SpringEngineBuilder.autoStartup` method).
+* Fixed error preventing substitution of properties defined via the EngineBuilder API in the properties section in the XML configuration files.
+
+[discrete]
 == 1.0.4 (2017.09.20)
 
 * Implementation of unordered rules, i.e. rules that listen to unordered sequences of events. Unordered rules is a new feature that should be treated as an experimental one.

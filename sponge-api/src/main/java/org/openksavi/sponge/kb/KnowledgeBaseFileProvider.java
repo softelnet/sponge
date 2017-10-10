@@ -28,7 +28,7 @@ import org.openksavi.sponge.engine.Engine;
 public interface KnowledgeBaseFileProvider {
 
     /**
-     * Returns a reader for the specified knowledge base file name.
+     * Returns a reader for the specified knowledge base file name or {@code null} if there is no such file.
      *
      * @param engine the engine.
      * @param fileName a knowledge base file name.

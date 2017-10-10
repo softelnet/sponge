@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="python">
-            <file>examples/core/sync_async_event_set_processors.py</file>
+            <file>sync_async_event_set_processors.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>
