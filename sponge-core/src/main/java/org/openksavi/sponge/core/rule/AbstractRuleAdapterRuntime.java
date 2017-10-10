@@ -221,8 +221,6 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
         return runRule(eventTree.getRoot());
     }
 
-    protected abstract boolean isLeafLevel(TreeNode<NodeValue> node);
-
     /**
      * Attempts to run (fire) this rule for the specified node in the event tree.
      *
@@ -269,6 +267,8 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
             return runRuleForNonFinalNode(node);
         }
     }
+
+    protected abstract boolean isLeafLevel(TreeNode<NodeValue> node);
 
     protected abstract boolean runRuleForNonFinalNode(TreeNode<NodeValue> node);
 

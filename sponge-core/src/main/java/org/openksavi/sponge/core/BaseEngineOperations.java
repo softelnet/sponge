@@ -48,7 +48,7 @@ public class BaseEngineOperations implements EngineOperations {
      * @param args arguments to pass to action.
      */
     @Override
-    public Object callAction(String actionName, Object... args) {
+    public Object call(String actionName, Object... args) {
         return engine.getActionManager().callAction(actionName, args);
     }
 

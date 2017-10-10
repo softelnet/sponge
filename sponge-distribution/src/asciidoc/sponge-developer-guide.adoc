@@ -78,6 +78,11 @@ Performance tests have to be invoked manually, because they require more time to
  cd sponge-integration-tests/
  mvn test -Dtest=org.openksavi.sponge.integration.tests.performance.LoadTest
 
+=== Running the standalone application in Maven
+
+ cd sponge-standalone/
+ mvn exec:java -Dexec.args="-k examples/standalone/trigger_simple.py -i"
+
 == Code style
 Formatter and checkstyle based on Google configuration.
 

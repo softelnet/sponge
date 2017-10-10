@@ -33,6 +33,6 @@ void onStartup() {
 void functionA() {
     EPS.reloadClass(FunctionAAction)
     EPS.enable(FunctionAAction)
-    EPS.callAction("FunctionAAction")
+    EPS.call("FunctionAAction")
 }
 

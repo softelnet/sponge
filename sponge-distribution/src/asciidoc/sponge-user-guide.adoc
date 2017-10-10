@@ -346,7 +346,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Property / Method |Description
 
 |`Object onCall(args)`
-|The callback method invoked when an action is called, e.g.: `EPS.callAction()`. The argument in an array of `Object`s and the result in an `Object`. This method is mandatory.
+|The callback method invoked when an action is called, e.g.: `EPS.call()`. The argument in an array of `Object`s and the result in an `Object`. This method is mandatory.
 |===
 
 The `onConfigure` method in actions is not mandatory.
@@ -364,7 +364,7 @@ class EchoAction(Action): # <1>
         return args
 
 def onStartup():
-    result = EPS.callAction("EchoAction", 1, "test") # <3>
+    result = EPS.call("EchoAction", 1, "test") # <3>
     logger.debug("Action returned: {}", result)
 ----
 <1> The definition of the action `EchoAction`. The action is represented by the class of the same name.
@@ -721,7 +721,7 @@ void onLoad() {
 
     EPS.reloadClass(ActionA)
     EPS.enable(ActionA)
-    EPS.callAction("ActionA")
+    EPS.call("ActionA")
 }
 ----
 

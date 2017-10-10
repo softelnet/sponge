@@ -234,7 +234,7 @@ Press `CTRL+C` to exit.
 IMPORTANT: When running on Windows, the {sponge} standalone command-line program doesn't support reloading of running knowledge bases by sending operating system signal to the background process.
 
 ==== Interactive mode
-The {sponge} standalone command-line program may be invoked in the very simple interactive mode, providing command-line access to the knowledge base interpreter.
+The {sponge} standalone command-line program may be invoked in the interactive mode, providing command-line access to the knowledge base interpreter.
 
 .Invoke {sponge} in the interactive mode
 [source,bash,subs="verbatim,attributes"]
@@ -248,7 +248,7 @@ The {sponge} standalone command-line program may be invoked in the very simple i
 > EPS.event("alarm").send()
 ----
 
-`EPS` is a facade to the {sponge} engine. The name `EPS` stands for Event Processing System or Event Processing Sponge if you like.
+`EPS` is a facade to the {sponge} engine. The name `EPS` stands for Event Processing System (or Event Processing Sponge if you like).
 
 TIP: Because of {sponge} may print messages and exceptions to the console concurrently, the prompt could be lost in between the lines (for example in case of an exception stack trace). In that case press `Enter` key to make a prompt visible.
 

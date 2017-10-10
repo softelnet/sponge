@@ -35,8 +35,8 @@ class AlarmTrigger(Trigger):
         self.event = "alarm"
     def onRun(self, event):
         self.logger.info("Sound the alarm! {}", event.get("message"))
-        print("Sound the alarm! {}".format(event.get("message")))
-        print("Last news was:\n{}".format(EPS.callAction("EmphasizeAction", storagePlugin.storedValue[-1])))
+        print("Sound the alarm! {}".format(event.get("message").encode('utf-8')))
+        print("Last news was:\n{}".format(EPS.call("EmphasizeAction", storagePlugin.storedValue[-1]).encode('utf-8')))
         EPS.getVariable("alarmSounded").set(True)
 
 # Start only one instance of this correlator for the system. Note that in this example data is stored in a plugin,

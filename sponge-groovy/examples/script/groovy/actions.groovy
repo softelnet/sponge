@@ -34,12 +34,12 @@ void onLoad() {
 
 void onStartup() {
     EPS.logger.debug("Calling script defined action")
-    def scriptActionResult = EPS.callAction("EchoAction", 1, "test")
+    def scriptActionResult = EPS.call("EchoAction", 1, "test")
     EPS.setVariable("scriptActionResult", scriptActionResult)
     EPS.logger.debug("Action returned: {}", scriptActionResult)
 
     EPS.logger.debug("Calling Java defined action")
-    def javaActionResult = EPS.callAction("org.openksavi.sponge.examples.PowerEchoAction", 1, "test")
+    def javaActionResult = EPS.call("org.openksavi.sponge.examples.PowerEchoAction", 1, "test")
     EPS.setVariable("javaActionResult", javaActionResult)
     EPS.logger.debug("Action returned: {}", javaActionResult)
 

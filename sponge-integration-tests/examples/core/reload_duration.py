@@ -12,7 +12,7 @@ class ReloadTrigger(Trigger):
         self.logger.debug("Received event: {}", event.name)
         EPS.requestReload()
 
-class RuleAShouldBeRun(Rule):
+class RuleAShouldNoBeRun(Rule):
     def onConfigure(self):
         self.events = ["e1", "e2 :last"]
         self.duration = Duration.ofSeconds(3)
@@ -36,20 +36,28 @@ class RuleCShouldBeRun(Rule):
         self.logger.debug("Running rule for event: {}", event.name)
         EPS.getVariable("ruleCFired").set(True)
 
+class EndTestTrigger(Trigger):
+    def onConfigure(self):
+        self.event = "endTest"
+    def onRun(self, event):
+        EPS.getVariable("endTest").set(True)
+
 def onInit():
     # Variables for assertions only
     EPS.setVariable("ruleAFired", AtomicBoolean(False))
     EPS.setVariable("ruleBFired", AtomicBoolean(False))
     EPS.setVariable("ruleCFired", AtomicBoolean(False))
+    EPS.setVariable("endTest", AtomicBoolean(False))
 
 def onStartup():
     EPS.event("reload").sendAfter(1000)
     EPS.event("e1").send()
     EPS.event("e2").send()
     EPS.event("e3").sendAfter(2000)
+    EPS.event("endTest").sendAfter(5000)
 
 def onBeforeReload():
-    LOGGER.debug("onBeforeReload")
+    EPS.logger.debug("onBeforeReload")
 
 def onAfterReload():
-    LOGGER.debug("onAfterReload")
+    EPS.logger.debug("onAfterReload")

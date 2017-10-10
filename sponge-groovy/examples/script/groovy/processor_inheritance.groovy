@@ -21,7 +21,7 @@ class EchoAction extends AbstractEchoAction {
 }
 
 void onStartup() {
-    def result = EPS.callAction("EchoAction")
+    def result = EPS.call("EchoAction")
     EPS.setVariable("result", result)
     EPS.logger.debug("Action returned: {}", result)
 }

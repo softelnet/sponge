@@ -66,7 +66,7 @@ class AutoCorrelator extends Correlator {
 }
 
 void onStartup() {
-    EPS.callAction("AutoAction")
+    EPS.call("AutoAction")
     EPS.event("e1").send()
     EPS.event("e2").send()
 }

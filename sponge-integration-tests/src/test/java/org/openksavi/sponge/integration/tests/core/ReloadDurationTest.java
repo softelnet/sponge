@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,10 +36,12 @@ public class ReloadDurationTest {
         engine.startup();
 
         try {
-            await().atMost(30, TimeUnit.SECONDS)
-                    .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "ruleAFired").get()
-                            && engine.getOperations().getVariable(AtomicBoolean.class, "ruleBFired").get()
-                            && engine.getOperations().getVariable(AtomicBoolean.class, "ruleCFired").get());
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "endTest").get());
+
+            assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "ruleAFired").get());
+            assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "ruleBFired").get());
+            assertTrue(engine.getOperations().getVariable(AtomicBoolean.class, "ruleCFired").get());
+
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

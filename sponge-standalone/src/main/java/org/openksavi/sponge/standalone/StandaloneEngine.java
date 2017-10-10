@@ -21,7 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import org.openksavi.sponge.core.engine.BaseEngine;
-import org.openksavi.sponge.core.engine.InteractiveMode;
+import org.openksavi.sponge.engine.interactive.InteractiveMode;
 
 /**
  * A standalone engine.

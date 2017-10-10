@@ -408,7 +408,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
     @Override
     public void requestShutdown() {
-        Utils.executeConcurrentlyOnce(() -> shutdown());
+        Utils.executeConcurrentlyOnce(this, () -> shutdown());
     }
 
     private void safelyShutdownModule(EngineModule module, AtomicReference<Throwable> exceptionHolder) {
@@ -600,7 +600,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
     @Override
     public void requestReload() {
-        Utils.executeConcurrentlyOnce(() -> reload());
+        Utils.executeConcurrentlyOnce(this, () -> reload());
     }
 
     /**

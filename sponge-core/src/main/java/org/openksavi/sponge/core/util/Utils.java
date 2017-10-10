@@ -162,9 +162,15 @@ public abstract class Utils {
                 .findFirst().orElse(null);
     }
 
-    public static void executeConcurrentlyOnce(Runnable runnable) {
+    public static void executeConcurrentlyOnce(Engine engine, Runnable runnable) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(runnable);
+        executor.submit(() -> {
+            try {
+                runnable.run();
+            } catch (Throwable e) {
+                engine.handleError("executeConcurrentlyOnce", e);
+            }
+        });
         executor.shutdown();
     }
 

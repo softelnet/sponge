@@ -19,7 +19,7 @@ class EchoAction < AbstractEchoAction
 end
 
 def onStartup
-    result = $EPS.callAction("EchoAction")
+    result = $EPS.call("EchoAction")
     $EPS.setVariable("result", result)
     $EPS.logger.debug("Action returned: {}", result)
 end

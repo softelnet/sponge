@@ -66,7 +66,7 @@ var AutoCorrelator = Java.extend(Correlator, {
 });
 
 function onStartup() {
-    EPS.callAction("AutoAction");
+    EPS.call("AutoAction");
     EPS.event("e1").send();
     EPS.event("e2").send();
 }

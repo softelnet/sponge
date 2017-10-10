@@ -44,7 +44,7 @@ public interface EngineOperations {
      * @param args arguments to pass to action.
      * @return result of action called for specified arguments.
      */
-    Object callAction(String actionName, Object... args);
+    Object call(String actionName, Object... args);
 
     /**
      * Shuts down the engine using the current thread.

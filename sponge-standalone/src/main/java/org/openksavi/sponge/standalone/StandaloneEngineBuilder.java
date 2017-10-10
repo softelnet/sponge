@@ -17,6 +17,7 @@
 package org.openksavi.sponge.standalone;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,15 +31,20 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
+import org.jline.reader.impl.completer.StringsCompleter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.CombinedExceptionHandler;
 import org.openksavi.sponge.core.engine.EngineBuilder;
-import org.openksavi.sponge.core.engine.InteractiveMode;
 import org.openksavi.sponge.core.engine.LoggingExceptionHandler;
+import org.openksavi.sponge.core.engine.interactive.DefaultInteractiveMode;
+import org.openksavi.sponge.core.engine.interactive.InteractiveModeConstants;
 import org.openksavi.sponge.engine.ExceptionHandler;
+import org.openksavi.sponge.engine.interactive.InteractiveMode;
+import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
+import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
 /**
  * StandaloneEngine builder.
@@ -77,12 +83,25 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
 
     private String[] commandLineArgs;
 
+    private Supplier<InteractiveModeConsole> interactiveModeConsoleSupplier = () -> {
+        JLineInteractiveModeConsole console = new JLineInteractiveModeConsole();
+
+        console.setCompleter(new StringsCompleter(InteractiveModeConstants.EXIT_COMMAND, InteractiveModeConstants.QUIT_COMMAND));
+
+        return console;
+    };
+
     public StandaloneEngineBuilder(StandaloneEngine engine) {
         super(engine);
     }
 
     public StandaloneEngineBuilder commandLineArgs(String... commandLineArgs) {
         this.commandLineArgs = commandLineArgs;
+        return this;
+    }
+
+    public StandaloneEngineBuilder interactiveModeConsoleSupplier(Supplier<InteractiveModeConsole> interactiveModeConsoleSupplier) {
+        this.interactiveModeConsoleSupplier = interactiveModeConsoleSupplier;
         return this;
     }
 
@@ -178,7 +197,8 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
             applyDefaultParameters();
 
             if (commandLine.hasOption(OPTION_INTERACTIVE)) {
-                InteractiveMode interactiveMode = new InteractiveMode(engine, commandLine.getOptionValue(OPTION_INTERACTIVE));
+                InteractiveMode interactiveMode =
+                        new DefaultInteractiveMode(engine, commandLine.getOptionValue(OPTION_INTERACTIVE), interactiveModeConsoleSupplier);
                 ExceptionHandler interactiveExceptionHandler = new SystemErrExceptionHandler();
                 interactiveMode.setExceptionHandler(interactiveExceptionHandler);
 
