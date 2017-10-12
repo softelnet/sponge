@@ -3,7 +3,7 @@
 A high-level view of the changes introduced in {sponge} releases.
 
 [discrete]
-== 1.0.5 (2017.10.09)
+== 1.0.5 (2017.10.12)
 
 * API change: The `EngineOperations` (`EPS`) method `callAction` has been renamed to `call`.
 * The new attribute `required` in the knowledge base file configuration that, if set to false, allows specifying optional (non existing) knowledge base files.
