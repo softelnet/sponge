@@ -75,15 +75,15 @@
         <commons-lang3.version>3.6</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections4.version>4.1</commons-collections4.version>
-        <commons-configuration2.version>2.1.1</commons-configuration2.version>
-        <commons-io.version>2.5</commons-io.version>
+        <commons-configuration2.version>2.2</commons-configuration2.version>
+        <commons-io.version>2.6</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
         <quartz.version>2.3.0</quartz.version>
         <guava.version>23.0</guava.version>
-        <spring.version>4.3.11.RELEASE</spring.version>
+        <spring.version>4.3.12.RELEASE</spring.version>
         <spring-integration.version>4.3.12.RELEASE</spring-integration.version>
-        <camel.version>2.19.3</camel.version>
-        <jline.version>3.3.0</jline.version>
+        <camel.version>2.20.0</camel.version>
+        <jline.version>3.5.1</jline.version>
         <py4j.version>0.10.6</py4j.version>
         <tensorflow.version>1.3.0</tensorflow.version>
 
@@ -94,7 +94,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.10.0</mockito.version>
+        <mockito.version>2.11.0</mockito.version>
         <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
@@ -158,7 +158,7 @@
                         <dependency>
                             <groupId>org.asciidoctor</groupId>
                             <artifactId>asciidoctorj-pdf</artifactId>
-                            <version>1.5.0-alpha.15</version>
+                            <version>1.5.0-alpha.16</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -194,7 +194,7 @@
                     <configuration>
                         <argLine>-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
                         <excludes>
-                            <exclude>**/performance/*</exclude>
+                            <exclude>*/sponge/integration/tests/performance/*</exclude>
                         </excludes>
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>
