@@ -21,14 +21,11 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyObject;
@@ -85,7 +82,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @SuppressWarnings("rawtypes")
     //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = ImmutableMap.of(
+    protected static final Map<Class, Class> PROCESSOR_CLASSES = Utils.immutableMapOf(
             Action.class, GroovyAction.class,
             Filter.class, GroovyFilter.class,
             Trigger.class, GroovyTrigger.class,
@@ -120,7 +117,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
         binding = createBinding();
         shell = new GroovyShell(binding, configuration);
-        scripts = Collections.synchronizedList(Lists.newArrayList());
+        scripts = Collections.synchronizedList(new ArrayList<>());
 
         setVariable(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());
 
@@ -128,7 +125,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     protected Binding createBinding() {
-        return new Binding(Collections.synchronizedMap(Maps.newHashMap()));
+        return new Binding(Collections.synchronizedMap(new HashMap<>()));
     }
 
     /**

@@ -23,8 +23,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.Processor;
@@ -61,7 +59,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
     //@formatter:off
     /** Processor registration handlers. */
-    protected Map<ProcessorType, RegistrationHandler> registrationHandlers = ImmutableMap.of(
+    protected Map<ProcessorType, RegistrationHandler> registrationHandlers = Utils.immutableMapOf(
         ProcessorType.ACTION, new RegistrationHandler(
             (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
             (adapter) -> getEngine().getActionManager().removeAction(adapter.getName()),

@@ -18,6 +18,7 @@
     <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="info" />
     <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
     <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="warn" />
+    <logger name="org.openksavi.sponge.shaded" level="warn" />
     <logger name="sponge.kb" level="debug" />
 
     <logger name="jdbc.sqlonly" level="warn" />

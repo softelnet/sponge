@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jruby.RubyClass;
@@ -75,7 +73,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     @SuppressWarnings("rawtypes")
     //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = ImmutableMap.of(
+    protected static final Map<Class, Class> PROCESSOR_CLASSES = Utils.immutableMapOf(
             Action.class, JRubyAction.class,
             Filter.class, JRubyFilter.class,
             Trigger.class, JRubyTrigger.class,

@@ -29,7 +29,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,6 +41,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import org.apache.commons.configuration2.ConfigurationUtils;
@@ -64,7 +69,8 @@ import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 
 /**
- * This class defines a set of utility methods.
+ * This class defines a set of utility methods. It also wraps some of the external dependencies like Guava to avoid version conflicts in the
+ * client code. All Sponge projects except sponge-core should use only such wrapper methods defined here.
  */
 public abstract class Utils {
 
@@ -282,5 +288,33 @@ public abstract class Utils {
         } catch (IOException e) {
             throw Utils.wrapException("getLastSubdirectory", e);
         }
+    }
+
+    public static <K, V> Map<K, V> immutableMapOf(K k1, V v1) {
+        return ImmutableMap.of(k1, v1);
+    }
+
+    public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2) {
+        return ImmutableMap.of(k1, v1, k2, v2);
+    }
+
+    public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2, K k3, V v3) {
+        return ImmutableMap.of(k1, v1, k2, v2, k3, v3);
+    }
+
+    public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+        return ImmutableMap.of(k1, v1, k2, v2, k3, v3, k4, v4);
+    }
+
+    public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+        return ImmutableMap.of(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5);
+    }
+
+    public static <T> Stream<T> stream(Iterator<T> iterator) {
+        return Streams.stream(iterator);
+    }
+
+    public static List<String> split(String text, char separator) {
+        return Splitter.on(separator).trimResults().omitEmptyStrings().splitToList(text);
     }
 }

@@ -19,6 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-core-shaded</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-signal</artifactId>
             <version>${project.version}</version>
         </dependency>
