@@ -1,1 +1,6 @@
+sudo: required
 language: java
+before_install:
+  - sudo apt-get -y install python python-pip
+  - sudo pip install -U py4j
+  - python -V
