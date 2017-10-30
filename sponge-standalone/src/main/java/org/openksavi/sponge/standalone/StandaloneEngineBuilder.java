@@ -166,7 +166,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
                 throw new StandaloneInitializationException("Only one Sponge XML configuration file may be provided.");
             }
 
-            Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(OPTION_KNOWLEDGE_BASE)).forEach(option -> {
+            Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(OPTION_KNOWLEDGE_BASE)).forEachOrdered(option -> {
                 String value = option.getValue();
                 if (value == null || StringUtils.isBlank(value)) {
                     throw new StandaloneInitializationException("Empty knowledge base specification.");

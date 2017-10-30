@@ -48,7 +48,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      * @param processorClasses processor classes.
      */
     public void enableAll(PyType... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> enable(processorClass));
     }
 
     public void disable(PyType processorClass) {
@@ -56,7 +56,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     }
 
     public void disableAll(PyType... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> disable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> disable(processorClass));
     }
 
     /**

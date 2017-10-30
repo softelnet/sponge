@@ -231,7 +231,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
             Set<AtomicReference<T>> result = new LinkedHashSet<>();
 
             eventPatternProcessorMap.keySet().stream().filter(pattern -> getEngine().getPatternMatcher().matches(pattern, eventName))
-                    .forEach(pattern -> {
+                    .forEachOrdered(pattern -> {
                         Set<AtomicReference<T>> internalList = eventPatternProcessorMap.get(pattern);
                         if (internalList != null) {
                             result.addAll(internalList);

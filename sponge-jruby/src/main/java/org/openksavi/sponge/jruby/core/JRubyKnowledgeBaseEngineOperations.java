@@ -54,7 +54,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
      * @param processorClasses processor classes.
      */
     public void enableAll(RubyClass... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> enable(processorClass));
     }
 
     public void disable(RubyClass processorClass) {
@@ -62,7 +62,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     }
 
     public void disableAll(RubyClass... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> disable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> disable(processorClass));
     }
 
     /**
@@ -196,7 +196,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     }
 
     public void enableJavaAll(RubyClass... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> enableJava(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> enableJava(processorClass));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -205,7 +205,7 @@ public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineO
     }
 
     public void disableJavaAll(RubyClass... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> disableJava(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> disableJava(processorClass));
     }
 
     /**

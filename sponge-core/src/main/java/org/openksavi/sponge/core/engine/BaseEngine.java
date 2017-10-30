@@ -351,7 +351,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     }
 
     protected void safelyShutdownIfStartupError(EngineModule... modules) {
-        Stream.of(modules).forEach(module -> {
+        Stream.of(modules).forEachOrdered(module -> {
             try {
                 if (module != null) {
                     module.shutdown();

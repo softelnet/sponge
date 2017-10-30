@@ -46,7 +46,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
      * @param processorClasses processor classes.
      */
     public void enableAll(Object... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> enable(processorClass));
     }
 
     public void disable(Object processorClass) {
@@ -54,7 +54,7 @@ public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngin
     }
 
     public void disableAll(Object... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> disable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> disable(processorClass));
     }
 
     /**

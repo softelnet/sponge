@@ -241,7 +241,7 @@ public class EngineBuilder<T extends BaseEngine> {
      * @return this Engine Builder.
      */
     public EngineBuilder<T> plugins(Plugin... plugins) {
-        Stream.of(plugins).forEach(plugin -> plugin(plugin));
+        Stream.of(plugins).forEachOrdered(plugin -> plugin(plugin));
         return this;
     }
 

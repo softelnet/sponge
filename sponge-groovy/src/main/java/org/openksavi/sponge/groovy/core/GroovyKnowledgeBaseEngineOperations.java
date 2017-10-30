@@ -55,7 +55,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      * @param processorClasses processor classes.
      */
     public void enableAll(Class... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> enable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> enable(processorClass));
     }
 
     public void disable(Class processorClass) {
@@ -63,7 +63,7 @@ public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     }
 
     public void disableAll(Class... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> disable(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> disable(processorClass));
     }
 
     /**

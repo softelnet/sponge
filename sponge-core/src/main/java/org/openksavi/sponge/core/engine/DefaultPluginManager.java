@@ -66,7 +66,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     @Override
     public void configure(Configuration configuration) {
         Stream.of(configuration.getChildConfigurationsOf(PluginManagerConstants.CFG_PLUGINS))
-                .forEach(pluginConfig -> addPlugin(createAndConfigurePlugin(pluginConfig)));
+                .forEachOrdered(pluginConfig -> addPlugin(createAndConfigurePlugin(pluginConfig)));
     }
 
     /**

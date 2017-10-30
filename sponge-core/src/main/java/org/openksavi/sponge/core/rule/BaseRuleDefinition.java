@@ -91,7 +91,7 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     @Override
     public void addAllJavaConditions(EventCondition... newConditions) {
         synchronized (conditions) {
-            Stream.of(aliases).forEach(alias -> addJavaConditions(alias, newConditions));
+            Stream.of(aliases).forEachOrdered(alias -> addJavaConditions(alias, newConditions));
         }
     }
 

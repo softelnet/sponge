@@ -150,7 +150,8 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         if (engine != null) {
             String claaspath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);
             if (claaspath != null) {
-                Stream.of(StringUtils.split(claaspath, PROP_PATH_SEPARATOR)).forEach(path -> shell.getClassLoader().addClasspath(path));
+                Stream.of(StringUtils.split(claaspath, PROP_PATH_SEPARATOR))
+                        .forEachOrdered(path -> shell.getClassLoader().addClasspath(path));
             }
         }
     }
@@ -386,7 +387,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     @Override
     public void scanToAutoEnable() {
         List<Object> autoEnabled = new ArrayList<>();
-        Stream.of(shell.getClassLoader().getLoadedClasses()).forEach(cls -> {
+        Stream.of(shell.getClassLoader().getLoadedClasses()).forEachOrdered(cls -> {
             if (PROCESSOR_CLASSES.values().stream().filter(processorClass -> ClassUtils.isAssignable(cls, processorClass)).findFirst()
                     .isPresent()) {
                 String name = cls.getName();

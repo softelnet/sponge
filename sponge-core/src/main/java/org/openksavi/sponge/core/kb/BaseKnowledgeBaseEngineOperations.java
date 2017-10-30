@@ -58,7 +58,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void enableJavaAll(Class<? extends Processor>... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> enableJava(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> enableJava(processorClass));
     }
 
     @SuppressWarnings("rawtypes")
@@ -70,7 +70,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void disableJavaAll(Class<? extends Processor>... processorClasses) {
-        Stream.of(processorClasses).forEach(processorClass -> disableJava(processorClass));
+        Stream.of(processorClasses).forEachOrdered(processorClass -> disableJava(processorClass));
     }
 
     /**

@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,30 +35,21 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 
+import py4j.ClientServer;
 import py4j.GatewayServer;
 
 public class Py4JTest {
 
     private static final Logger logger = LoggerFactory.getLogger(Py4JTest.class);
 
-    @Test
-    public void testPy4JJavaServer() throws Exception {
-        String rootDir = "examples/py4j/java_server";
-        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_java_server_sponge_hello_world.xml").build();
-        engine.startup();
+    protected Pair<Process, String> startCPython(Engine engine, String script, boolean readOutput) throws Exception {
+        ProcessBuilder pb = new ProcessBuilder(engine.getConfigurationManager().getProperty("pythonExecutable"), script);
 
-        try {
-            GatewayServer gatewayServer = new GatewayServer(engine.getOperations());
-            logger.info("Starting Py4J Gateway Server");
-            gatewayServer.start();
+        Process process = pb.start();
+        logger.debug("{}", pb.environment());
 
-            ProcessBuilder pb = new ProcessBuilder(engine.getConfigurationManager().getProperty("pythonExecutable"),
-                    rootDir + "/py4j_java_server_python_hello_world.py");
-
-            Process process = pb.start();
-            logger.debug("{}", pb.environment());
-
-            String outputText = null;
+        String outputText = null;
+        if (readOutput) {
             try (BufferedReader output = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     BufferedReader errors = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
                 outputText = output.lines().collect(Collectors.joining("\n"));
@@ -64,9 +57,29 @@ public class Py4JTest {
 
                 String errorsString = errors.lines().collect(Collectors.joining("\n"));
                 if (!errorsString.isEmpty()) {
-                    throw new SpongeException(errorsString);
+                    throw new SpongeException("Python script error: " + errorsString);
                 }
             }
+        }
+
+        return new ImmutablePair<>(process, outputText);
+    }
+
+    @Test
+    public void testPy4JJavaServer() throws Exception {
+        String rootDir = "examples/py4j/java_server";
+        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_java_server_sponge_hello_world.xml").build();
+        engine.startup();
+        GatewayServer gatewayServer = null;
+
+        try {
+            gatewayServer = new GatewayServer(engine.getOperations());
+            logger.info("Starting Py4J Gateway Server");
+            gatewayServer.start();
+
+            Pair<Process, String> scriptResult = startCPython(engine, rootDir + "/py4j_java_server_python_hello_world.py", true);
+            Process process = scriptResult.getLeft();
+            String outputText = scriptResult.getRight();
 
             process.waitFor(60, TimeUnit.SECONDS);
 
@@ -79,6 +92,44 @@ public class Py4JTest {
             assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } finally {
+            if (gatewayServer != null) {
+                gatewayServer.shutdown();
+            }
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testPy4JPythonServer() throws Exception {
+        String rootDir = "examples/py4j/python_server";
+        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
+        engine.startup();
+        ClientServer clientServer = null;
+        Process process = null;
+
+        try {
+            Pair<Process, String> scriptResult = startCPython(engine, rootDir + "/py4j_python_server_python_hello_world.py", false);
+            process = scriptResult.getLeft();
+            // Wait for the Python process to start.
+            TimeUnit.SECONDS.sleep(2);
+
+            clientServer = new ClientServer(engine.getOperations());
+
+            PythonService pythonService = (PythonService) clientServer.getPythonServerEntryPoint(new Class[] { PythonService.class });
+            engine.getOperations().setVariable("pythonService", pythonService);
+            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
+
+            assertEquals("TEST", pythonService.toUpperCase("test"));
+
+            assertFalse(engine.isError());
+        } finally {
+            if (process != null) {
+                process.destroy();
+            }
+
+            if (clientServer != null) {
+                clientServer.shutdown();
+            }
             engine.shutdown();
         }
     }

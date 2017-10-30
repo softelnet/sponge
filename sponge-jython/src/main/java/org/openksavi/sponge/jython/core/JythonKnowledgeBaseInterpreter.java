@@ -163,7 +163,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
                 PROCESSOR_CLASSES.values().stream().map(cls -> (PyType) Py.java2py(cls)).collect(Collectors.toList());
 
         List<Object> autoEnabled = new ArrayList<>();
-        Utils.stream(((ScopeIterator) scope.__iter__()).iterator()).forEach(element -> {
+        Utils.stream(((ScopeIterator) scope.__iter__()).iterator()).forEachOrdered(element -> {
             String name = element.toString();
             PyObject pyObject = scope.__finditem__(name);
 
