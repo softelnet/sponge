@@ -35,9 +35,6 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 
-import py4j.ClientServer;
-import py4j.GatewayServer;
-
 public class Py4JTest {
 
     private static final Logger logger = LoggerFactory.getLogger(Py4JTest.class);
@@ -70,13 +67,8 @@ public class Py4JTest {
         String rootDir = "examples/py4j/java_server";
         Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_java_server_sponge_hello_world.xml").build();
         engine.startup();
-        GatewayServer gatewayServer = null;
 
         try {
-            gatewayServer = new GatewayServer(engine.getOperations());
-            logger.info("Starting Py4J Gateway Server");
-            gatewayServer.start();
-
             Pair<Process, String> scriptResult = startCPython(engine, rootDir + "/py4j_java_server_python_hello_world.py", true);
             Process process = scriptResult.getLeft();
             String outputText = scriptResult.getRight();
@@ -85,16 +77,12 @@ public class Py4JTest {
 
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);
-            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.isTerminated());
 
             assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getDescription(),
                     engine.getTriggers().size(), engine.getTriggers().get(0).getName()), outputText);
             assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } finally {
-            if (gatewayServer != null) {
-                gatewayServer.shutdown();
-            }
             engine.shutdown();
         }
     }
@@ -104,7 +92,6 @@ public class Py4JTest {
         String rootDir = "examples/py4j/python_server";
         Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
         engine.startup();
-        ClientServer clientServer = null;
         Process process = null;
 
         try {
@@ -113,22 +100,11 @@ public class Py4JTest {
             // Wait for the Python process to start.
             TimeUnit.SECONDS.sleep(2);
 
-            clientServer = new ClientServer(engine.getOperations());
-
-            PythonService pythonService = (PythonService) clientServer.getPythonServerEntryPoint(new Class[] { PythonService.class });
-            engine.getOperations().setVariable("pythonService", pythonService);
             assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
-
-            assertEquals("TEST", pythonService.toUpperCase("test"));
-
             assertFalse(engine.isError());
         } finally {
             if (process != null) {
                 process.destroy();
-            }
-
-            if (clientServer != null) {
-                clientServer.shutdown();
             }
             engine.shutdown();
         }

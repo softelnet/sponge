@@ -2,7 +2,7 @@
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <properties>
-        <!-- Python must have Py4J installed, e.g. pip install py4j. You may used system properties, e.g. ${user.home}/virtualenv1/bin/python  -->
+        <!-- Python must have Py4J installed, e.g. pip install py4j. You may used system properties, e.g. ${user.home}/virtualenv1/bin/python -->
         <!-- Python 2.7 has been used for the example. -->
         <property name="pythonExecutable">python</property>
     </properties>
@@ -12,5 +12,9 @@
             <file>py4j_java_server_sponge_hello_world.py</file>
         </knowledgeBase>
     </knowledgeBases>
+
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin" />
+    </plugins>
 </sponge>
 
