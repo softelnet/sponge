@@ -8,6 +8,7 @@
 :coreSourcesUrl: {sourcesUrl}/sponge-integration-tests/examples/core/
 :springSourcesUrl: {sourcesUrl}/sponge-spring/examples/spring/
 :camelSourcesUrl: {sourcesUrl}/sponge-camel/examples/camel/
+:py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
 
 == Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
@@ -610,7 +611,71 @@ class ScriptPlugin(Plugin):
 {sponge} introduces its own runtime exception defined as a Java class `SpongeException`. Exception handling in custom Java components (for example plugins) should follow standard Java conventions. Exception handling in scripting knowledge bases should follow standard conventions for the corresponding scripting language.
 
 == Embedding {sponge} in custom applications
-{sponge} may be embedded in a custom Java application using <<engine-builder-api,Engine Builder API>>.
+{sponge} may be embedded in a custom Java application using a Maven dependency and the <<engine-builder-api,Engine Builder API>>.
+
+=== Maven dependency
+If you want to use {sponge} with, for example, Python scripting knowledge bases, add these dependencies to your `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-jython</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+There is also a Bill Of Materials style maven artifact for {sponge}. Example usage in your `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-bom</artifactId>
+            <version>{projectVersion}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+In that case you may omit the versions of the dependencies.
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-jython</artifactId>
+</dependency>
+----
+
+The `sponge-core` artifact uses external dependencies. If you experience conflicts in incompatible versions of Guava or Quartz, you should use the `sponge-core-shaded` artifact instead, e.g.:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core-shaded</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-jython</artifactId>
+</dependency>
+----
+
+You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
 
 include::includes/sponge-user-guide-integration.adoc[leveloffset=+1]
 
@@ -1078,6 +1143,18 @@ ifdef::useReferences[({camelSourcesUrl}/camel_producer_custom_action.py[py], {so
 |`camel_multiple_consumer`
 ifdef::useReferences[({camelSourcesUrl}/camel_multiple_consumer.py[py], {sourcesUrl}/sponge-camel/src/test/java/org/openksavi/sponge/camel/test/CamelMultipleConsumerTest.java[java])]
 |Shows sending Camel messages to many endpoints in a single {sponge} trigger.
+
+|`py4j_java_server`
+ifdef::useReferences[({py4jSourcesUrl}/java_server/py4j_java_server_python_hello_world.py[cpython], {py4jSourcesUrl}/java_server/py4j_java_server_sponge_hello_world.xml[xml], {py4jSourcesUrl}/java_server/py4j_java_server_sponge_hello_world.py[jython])]
+|Shows how to integrate with CPython program using Py4J - Java server.
+
+|`py4j_python_server`
+ifdef::useReferences[({py4jSourcesUrl}/python_server/py4j_python_server_python_hello_world.py[cpython], {py4jSourcesUrl}/python_server/py4j_python_server_sponge_hello_world.xml[xml], {py4jSourcesUrl}/python_server/py4j_python_server_sponge_hello_world.py[jython], {sourcesUrl}/sponge-py4j/src/test/java/org/openksavi/sponge/py4j/PythonService.java[java])]
+|Shows how to integrate with CPython program using Py4J - Python server.
+
+|`py4j_java_server_tls`
+ifdef::useReferences[({py4jSourcesUrl}/java_server_tls/py4j_java_server_tls_python_hello_world.py[cpython], {py4jSourcesUrl}/java_server_tls/py4j_java_server_tls_sponge_hello_world.xml[xml], {py4jSourcesUrl}/java_server_tls/py4j_java_server_tls_sponge_hello_world.py[jython])]
+|Shows how to integrate with CPython program using Py4J - Java server with TLS security.
 |===
 
 === Standalone examples
@@ -1260,6 +1337,18 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://github.com/google/guava[Guava]
 |Apache 2.0
 |Used for services and as a utilities library.
+
+|https://jline.github.io[JLine]
+|BSD
+|Used for handling console input in an interactive mode.
+
+|https://www.py4j.org[Py4J]
+|BSD
+|Used for integration with CPython programs.
+
+|https://www.tensorflow.org[Tensorflow]
+|Apache 2.0
+|An open-source software library for Machine Intelligence.
 |===
 
 The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution.

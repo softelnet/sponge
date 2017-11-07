@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.py4j;
 
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +28,9 @@ import py4j.GatewayServer;
 import py4j.GatewayServer.GatewayServerBuilder;
 
 /**
- * Sponge plugin that provides integration with CPython using Py4J and GatewayServer.
+ * Sponge plugin that provides integration with CPython using Py4J GatewayServer.
  */
-public class GatewayServerPy4JPlugin<T> extends Py4JPlugin<T> {
+public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayServerPy4JPlugin.class);
 
@@ -37,11 +39,20 @@ public class GatewayServerPy4JPlugin<T> extends Py4JPlugin<T> {
     @SuppressWarnings("unchecked")
     @Override
     public void onStartup() {
-        logger.info("Starting Py4J Server");
+        if (server == null) {
+            logger.info("Creating and starting the Py4J Server.");
 
-        server = new GatewayServerBuilder().entryPoint(getEngine().getOperations()).build();
+            GatewayServerBuilder builder = new GatewayServerBuilder().javaPort(getJavaPort()).entryPoint(getEngine().getOperations());
+            if (getSecurity() != null) {
+                SSLContext sslContext = createSslContext();
+                builder.serverSocketFactory(sslContext.getServerSocketFactory());
+            }
+            server = build(builder);
 
-        server.start();
+            server.start();
+        } else {
+            logger.info("Using the manually created Py4J Server. Note that the server should have already been started.");
+        }
 
         if (getFacadeInterfaceName() != null) {
             try {
@@ -50,6 +61,10 @@ public class GatewayServerPy4JPlugin<T> extends Py4JPlugin<T> {
                 throw Utils.wrapException(getClass().getName(), e);
             }
         }
+    }
+
+    protected GatewayServer build(GatewayServerBuilder builder) {
+        return builder.build();
     }
 
     @Override
@@ -61,5 +76,9 @@ public class GatewayServerPy4JPlugin<T> extends Py4JPlugin<T> {
 
     public GatewayServer getServer() {
         return server;
+    }
+
+    public void setServer(GatewayServer server) {
+        this.server = server;
     }
 }

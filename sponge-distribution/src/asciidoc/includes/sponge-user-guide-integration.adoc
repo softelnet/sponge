@@ -71,7 +71,7 @@ Maven users will need to add the following dependencies to their `pom.xml` for t
 </dependency>
 ----
 
-== Apache Camel integration
+== Apache Camel
 
 === {sponge} Camel component
 The *sponge* component provides integration bridge between Apache Camel and the {sponge} engine. It allows:
@@ -380,4 +380,162 @@ class PythonRoute(ScriptRouteBuilder):
 def onStartup():
     camel.context.addRoutes(PythonRoute())
 ----
+
+== Python (CPython)
+{sponge} may communicate with external programs written in the reference implementation of the Python programming language - https://en.wikipedia.org/wiki/CPython[CPython] using https://www.py4j.org[Py4J], and vice versa. A Python program and a {sponge} Java process communicate through network sockets.
+
+Py4J by default uses the TCP port 25333 to communicate from Python to Java and TCP port 25334 to communicate from Java to Python.
+
+There is no support for writing knowledge bases in CPython.
+
+The CPython environment must have Py4J installed, e.g.:
+
+[source,bash]
+----
+pip install py4j
+----
+
+For more information on Py4J see https://www.py4j.org/advanced_topics.html.
+
+=== Py4J plugins
+
+{sponge} provides two plugins for integration with CPython.
+
+IMPOTRANT: Local network sockets used by Py4j should be secured, for example using [https://www.py4j.org/advanced_topics.html#tls]TLS. Please be aware that all {sponge} operations are accessible in other processes that communicate with the {sponge} with Py4J enabled by a plugin. See {py4jSourcesUrl}/java_server_tls for an example of TLS security, based on Py4J examples. Note that in a production environment you should customize this simple configuration, possibly by providing your own configured instance of `GatewayServer` or `ClientServer` to the plugin.
+
+.Py4J plugin common configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
+
+|`facadeInterface`
+|`String`
+|A Java interface that is a facade to the Py4J entry point object configured on the CPython side.
+
+|`javaPort`
+|`Integer`
+|Java side server port.
+
+|`pythonPort`
+|`Integer`
+|CPython side server port.
+
+|`security/keystore`
+|`String`
+|Simple security keystore file location on the classpath.
+
+|`security/password`
+|`String`
+|Simple security keystore password.
+
+|`security/algorithm`
+|`String`
+|Simple security algorithm. The default value is `SunX509`.
+|===
+
+==== GatewayServerPy4JPlugin
+
+`GatewayServerPy4JPlugin` provides integration with CPython using Py4J `GatewayServer`.
+
+[discrete]
+===== {sponge} side example
+
+.GatewayServerPy4JPlugin XML configuration example
+[source,xml,subs="verbatim,attributes"]
+----
+<sponge>
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin" />
+    </plugins>
+</sponge>
+----
+
+[discrete]
+===== CPython side example
+
+.Sending {sponge} event in CPython
+[source,python]
+----
+from py4j.java_gateway import JavaGateway
+
+gateway = JavaGateway()
+
+# EPS in other process accessed via Py4J
+EPS = gateway.entry_point
+
+print "Connected to {}".format(EPS.getDescription())
+EPS.event("helloEvent").set("say", "Hello from Python's Py4J").send()
+----
+
+Note that a simplified bean property access is not supported here. So instead of `EPS.description` you have to invoke `EPS.getDescription()`.
+
+==== ClientServerPy4JPlugin
+
+`ClientServerPy4JPlugin` provides integration with CPython using Py4J `ClientServer`.
+
+.ClientServerPy4JPlugin plugin specific configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
+
+|`autoStartJavaServer`
+|`Boolean`
+|Auto start of Py4J JavaServer.
+|===
+
+[discrete]
+===== {sponge} side example
+
+.ClientServerPy4JPlugin XML configuration example
+[source,xml,subs="verbatim,attributes"]
+----
+<sponge>
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
+            <configuration>
+                <facadeInterface>org.openksavi.sponge.py4j.PythonService</facadeInterface>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+----
+
+.Python facade interface
+[source,java]
+----
+public interface PythonService {
+    String toUpperCase(String text);
+}
+----
+
+.ClientServerPy4JPlugin knowledge base example written in Jython
+[source,python]
+----
+# Note that this code is interpreted by Jython in Sponge, not CPython
+class PythonUpperCase(Action):
+    def onCall(self, args):
+        result = py4j.facade.toUpperCase(args[0])
+        self.logger.debug("CPython result for {} is {}", args[0], result)
+        return result
+----
+
+[discrete]
+===== CPython side example
+
+.Implementation of the facade interface in CPython
+[source,python]
+----
+from py4j.clientserver import ClientServer
+
+class PythonService(object):
+    def toUpperCase(self, text):
+        return text.upper()
+    class Java:
+        implements = ["org.openksavi.sponge.py4j.PythonService"]
+
+pythonService = PythonService()
+gateway = ClientServer(python_server_entry_point=pythonService)
+----
+
+
 

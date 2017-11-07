@@ -16,30 +16,59 @@
 
 package org.openksavi.sponge.py4j;
 
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.Utils;
 
 import py4j.ClientServer;
 import py4j.ClientServer.ClientServerBuilder;
 
 /**
- * Sponge plugin that provides integration with CPython using Py4J and ClientServer.
+ * Sponge plugin that provides integration with CPython using Py4J ClientServer.
  */
-public class ClientServerPy4JPlugin<T> extends Py4JPlugin<T> {
+public class ClientServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientServerPy4JPlugin.class);
 
+    public static final String TAG_AUTO_START_JAVA_SERVER = "autoStartJavaServer";
+
     protected ClientServer server;
+
+    protected Boolean autoStartJavaServer;
+
+    @Override
+    public void onConfigure(Configuration configuration) {
+        super.onConfigure(configuration);
+
+        autoStartJavaServer = configuration.getBoolean(TAG_AUTO_START_JAVA_SERVER, null);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
     public void onStartup() {
-        logger.info("Starting Py4J Server");
+        if (server == null) {
+            logger.info("Creating and starting the Py4J Server.");
 
-        server = new ClientServerBuilder().entryPoint(getEngine().getOperations()).build();
+            ClientServerBuilder builder =
+                    new ClientServerBuilder().javaPort(getJavaPort()).pythonPort(getPythonPort()).entryPoint(getEngine().getOperations());
+            if (getSecurity() != null) {
+                SSLContext sslContext = createSslContext();
+                builder.serverSocketFactory(sslContext.getServerSocketFactory()).socketFactory(sslContext.getSocketFactory());
+            }
+
+            if (autoStartJavaServer != null) {
+                builder.autoStartJavaServer(autoStartJavaServer);
+            }
+
+            server = build(builder);
+        } else {
+            logger.info("Using the manually created Py4J Server. Note that the server should have already been started.");
+        }
 
         if (getFacadeInterfaceName() != null) {
             try {
@@ -48,6 +77,10 @@ public class ClientServerPy4JPlugin<T> extends Py4JPlugin<T> {
                 throw Utils.wrapException(getClass().getName(), e);
             }
         }
+    }
+
+    protected ClientServer build(ClientServerBuilder builder) {
+        return builder.build();
     }
 
     @Override
@@ -59,5 +92,17 @@ public class ClientServerPy4JPlugin<T> extends Py4JPlugin<T> {
 
     public ClientServer getServer() {
         return server;
+    }
+
+    public void setServer(ClientServer server) {
+        this.server = server;
+    }
+
+    public Boolean getAutoStartJavaServer() {
+        return autoStartJavaServer;
+    }
+
+    public void setAutoStartJavaServer(Boolean autoStartJavaServer) {
+        this.autoStartJavaServer = autoStartJavaServer;
     }
 }

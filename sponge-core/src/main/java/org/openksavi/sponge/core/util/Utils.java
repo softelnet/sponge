@@ -18,7 +18,9 @@ package org.openksavi.sponge.core.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Serializable;
@@ -316,5 +318,35 @@ public abstract class Utils {
 
     public static List<String> split(String text, char separator) {
         return Splitter.on(separator).trimResults().omitEmptyStrings().splitToList(text);
+    }
+
+    public static void close(InputStream stream) {
+        try {
+            if (stream != null) {
+                stream.close();
+            }
+        } catch (IOException e) {
+            throw Utils.wrapException("closeStream", e);
+        }
+    }
+
+    public static void close(OutputStream stream) {
+        try {
+            if (stream != null) {
+                stream.close();
+            }
+        } catch (IOException e) {
+            throw Utils.wrapException("closeStream", e);
+        }
+    }
+
+    public static String getRequiredConfigurationString(Configuration configuration, String key) {
+        String value = configuration.getString(key, null);
+
+        if (value == null) {
+            throw new IllegalArgumentException("A required configuration parameter '" + key + "' is not set");
+        }
+
+        return value;
     }
 }

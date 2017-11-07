@@ -9,12 +9,21 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb" type="python">
-            <file>py4j_java_server_sponge_hello_world.py</file>
+            <file>py4j_java_server_tls_sponge_hello_world.py</file>
         </knowledgeBase>
     </knowledgeBases>
 
     <plugins>
-        <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin" />
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin">
+            <configuration>
+                <security>
+                    <!-- Using JKS file from Py4J examples: https://github.com/bartdag/py4j/blob/master/py4j-java/src/test/resources/selfsigned.jks -->
+                    <keystore>selfsigned.jks</keystore>
+                    <password>password</password>
+                    <algorithm>SunX509</algorithm>
+                </security>
+            </configuration>
+        </plugin>
     </plugins>
 </sponge>
 

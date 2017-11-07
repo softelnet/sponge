@@ -41,9 +41,15 @@ public class Py4JTest {
 
     protected Pair<Process, String> startCPython(Engine engine, String script, boolean readOutput) throws Exception {
         ProcessBuilder pb = new ProcessBuilder(engine.getConfigurationManager().getProperty("pythonExecutable"), script);
+        Process process = null;
 
-        Process process = pb.start();
-        logger.debug("{}", pb.environment());
+        try {
+            process = pb.start();
+            logger.debug("{}", pb.environment());
+        } catch (Exception e) {
+            logger.error(getClass().getSimpleName() + " tests require Python 2.7! Python must have Py4J installed, e.g. pip install py4j.");
+            throw e;
+        }
 
         String outputText = null;
         if (readOutput) {
@@ -106,6 +112,31 @@ public class Py4JTest {
             if (process != null) {
                 process.destroy();
             }
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testPy4JJavaServerTls() throws Exception {
+        String rootDir = "examples/py4j/java_server_tls";
+        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_java_server_tls_sponge_hello_world.xml").build();
+        engine.startup();
+
+        try {
+            Pair<Process, String> scriptResult = startCPython(engine, rootDir + "/py4j_java_server_tls_python_hello_world.py", true);
+            Process process = scriptResult.getLeft();
+            String outputText = scriptResult.getRight();
+
+            process.waitFor(60, TimeUnit.SECONDS);
+
+            await().atMost(60, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);
+
+            assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getDescription(),
+                    engine.getTriggers().size(), engine.getTriggers().get(0).getName()), outputText);
+            assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
+            assertFalse(engine.isError());
+        } finally {
             engine.shutdown();
         }
     }

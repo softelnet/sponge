@@ -59,7 +59,7 @@ Correlator:: If there is a correlator that listens to that event, the event will
 == Distributions
 
 === Embedded in a Java application
-{sponge} could be embedded in a Java application by adding a maven dependency.
+{sponge} could be embedded in a Java application by adding a Maven dependency.
 
 ==== Maven dependency
 If you want to use {sponge} with, for example, Python scripting knowledge bases, add these dependencies to your `pom.xml`:
@@ -77,53 +77,6 @@ If you want to use {sponge} with, for example, Python scripting knowledge bases,
     <version>{projectVersion}</version>
 </dependency>
 ----
-
-There is also a Bill Of Materials style maven artifact for {sponge}. Example usage in your `pom.xml`:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-bom</artifactId>
-            <version>{projectVersion}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-----
-
-In that case you may omit the versions of the dependencies.
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-jython</artifactId>
-</dependency>
-----
-
-The `sponge-core` artifact uses external dependencies. If you experience conflicts in incompatible versions of Guava or Quartz, you should use the `sponge-core-shaded` artifact instead, e.g.:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core-shaded</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-jython</artifactId>
-</dependency>
-----
-
-You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
 
 ==== Creating and starting the {sponge} engine
 The following example shows how to make {sponge} a part of a custom Java application.

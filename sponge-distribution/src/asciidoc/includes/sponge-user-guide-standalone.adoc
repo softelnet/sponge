@@ -98,12 +98,29 @@ cd {standaloneDir}
 set SPONGE_HOME=%cd%
 ----
 
-== Interactive mode
+== Standalone plugin configuration parameters
 
-=== Exception reporting
-In an interactive mode a predefined console logger appender (configured in logback.xml) is turned off programmatically.
+.Standalone plugin configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
 
-Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
+|`spring`
+|XML element
+|Spring configuration. A Spring context is created only when there is a `spring` configuration element present.
+
+|`engineBeanName`
+|`String`
+|The optional `engineBeanName` attribute of the `spring` element defines a Spring bean name that will reference the engine instance in the Spring context. The default value is `spongeEngine`.
+
+|`camel`
+|`Boolean`
+|The optional `camel` attribute of the `spring` element may be used to create a Camel context.
+
+|`spring/file`
+|`String`
+|Spring configuration files. The Spring context implementation used here is `GenericGroovyApplicationContext`, that allows to load XML and Groovy configuration files.
+|===
 
 == Spring
 You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. The name of this plugin must be `"standalonePlugin"`.
@@ -129,9 +146,7 @@ You may provide Spring configuration files using a command-line option or defini
 </sponge>
 ----
 
-This `standlonePlugin` sets up the Spring configuration XML file and Spring bean name that will reference the engine instance. The attribute `engineBeanName` is optional and the default value is `spongeEngine`.
-
-A Spring context is created only when there is a `spring` configuration element present. The implementation used is `GenericGroovyApplicationContext` that allows to load XML and Groovy configuration files.
+This `standlonePlugin` sets up the Spring configuration XML file and Spring bean name that will reference the engine instance.
 
 == Camel
 If you want to use Camel, you could setup a predefined Camel context configuration, so that a Camel context will be created automatically.
@@ -240,6 +255,13 @@ beans {
 > print(camel.context.removeRoute("rss"))
 > print(camel.context.routes)
 ----
+
+== Interactive mode
+
+=== Exception reporting
+In an interactive mode a predefined console logger appender (configured in logback.xml) is turned off programmatically.
+
+Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 
 == Running examples
 
