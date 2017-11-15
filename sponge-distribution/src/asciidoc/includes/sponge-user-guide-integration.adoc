@@ -401,7 +401,7 @@ For more information on Py4J see https://www.py4j.org/advanced_topics.html.
 
 {sponge} provides two plugins for integration with CPython.
 
-IMPOTRANT: Local network sockets used by Py4j should be secured, for example using [https://www.py4j.org/advanced_topics.html#tls]TLS. Please be aware that all {sponge} operations are accessible in other processes that communicate with the {sponge} with Py4J enabled by a plugin. See {py4jSourcesUrl}/java_server_tls for an example of TLS security, based on Py4J examples. Note that in a production environment you should customize this simple configuration, possibly by providing your own configured instance of `GatewayServer` or `ClientServer` to the plugin.
+CAUTION: Local network sockets used by Py4j should be secured, for example using [https://www.py4j.org/advanced_topics.html#tls]TLS. Please be aware that all {sponge} operations are accessible in other processes that communicate with the {sponge} with Py4J enabled by a plugin. See {py4jSourcesUrl}/java_server_tls for an example of TLS security, based on Py4J examples. Note that in a production environment you should customize this simple configuration, possibly by providing your own configured instance of `GatewayServer` or `ClientServer` to the plugin.
 
 .Py4J plugin common configuration parameters
 [cols="1,1,4"]
