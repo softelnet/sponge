@@ -30,12 +30,12 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+import py4j.GatewayServer;
+
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.java.JavaPlugin;
-
-import py4j.GatewayServer;
 
 /**
  * Base, abstract Sponge plugin that provides integration with CPython using Py4J.
@@ -136,8 +136,6 @@ public abstract class BasePy4JPlugin<T> extends JavaPlugin {
         InputStream fis = null;
 
         try {
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-
             char[] password = security.getPassword().toCharArray();
             KeyStore ks = KeyStore.getInstance("JKS");
 
@@ -156,6 +154,8 @@ public abstract class BasePy4JPlugin<T> extends JavaPlugin {
             // Setup the trust manager factory.
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(security.getAlgorithm());
             tmf.init(ks);
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
 
             // Setup the HTTPS context and parameters.
             sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);

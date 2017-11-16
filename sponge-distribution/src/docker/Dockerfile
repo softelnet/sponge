@@ -6,8 +6,15 @@ ENV SPONGE_VERSION 1.0.5
 
 RUN yum -y -q install unzip mc \
     && yum clean all \
-    && cd /opt \
-    && curl http://sponge.openksavi.org/download/sponge-${SPONGE_VERSION}-standalone.zip > tmp.zip && unzip -q tmp.zip && rm -f tmp.zip
+    && curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
+    && python get-pip.py \
+    && pip install py4j
+
+ADD standalone /opt
+
+RUN cd /opt \
+    && unzip -q sponge-${SPONGE_VERSION}-standalone.zip \
+    && rm -f sponge-${SPONGE_VERSION}-standalone.zip
 
 WORKDIR /opt/sponge-${SPONGE_VERSION}/bin
 

@@ -69,20 +69,20 @@
         <javax.inject.version>1</javax.inject.version>
         <javax.transaction.version>1.2</javax.transaction.version>
         <jython.version>2.7.1</jython.version>
-        <jruby.version>9.1.13.0</jruby.version>
+        <jruby.version>9.1.14.0</jruby.version>
         <groovy.version>2.4.12</groovy.version>
 
-        <commons-lang3.version>3.6</commons-lang3.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections4.version>4.1</commons-collections4.version>
         <commons-configuration2.version>2.2</commons-configuration2.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
         <quartz.version>2.3.0</quartz.version>
-        <guava.version>23.0</guava.version>
+        <guava.version>23.4-jre</guava.version>
         <spring.version>4.3.12.RELEASE</spring.version>
         <spring-integration.version>4.3.12.RELEASE</spring-integration.version>
-        <camel.version>2.20.0</camel.version>
+        <camel.version>2.20.1</camel.version>
         <jline.version>3.5.1</jline.version>
         <py4j.version>0.10.6</py4j.version>
         <tensorflow.version>1.4.0</tensorflow.version>
@@ -94,7 +94,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.11.0</mockito.version>
+        <mockito.version>2.12.0</mockito.version>
         <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
@@ -195,6 +195,7 @@
                         <argLine>-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
                         <excludes>
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
+                            <exclude>*/sponge/integration/tests/stability/*</exclude>
                         </excludes>
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>

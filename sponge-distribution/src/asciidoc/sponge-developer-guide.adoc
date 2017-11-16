@@ -14,11 +14,11 @@
 === Prepare a release
 This step installs packages in the local Maven repository, generates documentation (AsciiDoc and JavaDoc), generates third party licenses info, creates standalone application ZIP archive and generates Jekyll source pages.
 
- mvn clean install -Pall,review,documentation,licenses,standalone,jekyll
+ mvn clean install -Pall,review,documentation,licenses,standalone,docker,jekyll
 
 In order to skip tests, run:
 
- mvn clean install -Pall,review,documentation,licenses,standalone,jekyll -DskipTests
+ mvn clean install -Pall,review,documentation,licenses,standalone,docker,jekyll -DskipTests
 
 NOTE: The assertions in some tests heavily depend on the values of timeouts, durations, etc. and the speed of the test environment, therefore running the tests on a very slow machine may cause assertion failures that (in most cases) would not indicate bugs.
 
@@ -61,9 +61,18 @@ If you get `ERROR: directory is already being watched!` message, simply ignore i
 
 ==== Build Docker image
 
- cd sponge-distribution/src/docker
- # Edit Sponge version in Dockerfile
- docker build -t openksavi/sponge:1.0.3 -t openksavi/sponge:latest .
+Remember to verify the Sponge version in Dockerfile in sponge-distribution/src/docker.
+
+If necessary assembly Docker base directory.
+
+ cd sponge-distribution
+ mvn package -Pdocker
+ cd ..
+
+Build Docker image.
+
+ cd sponge-distribution/target/docker/docker
+ docker build -t openksavi/sponge:1.0.6 -t openksavi/sponge:latest .
 
 ==== Publish Docker image
 

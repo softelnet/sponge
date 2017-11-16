@@ -22,11 +22,11 @@ import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.Utils;
-
 import py4j.ClientServer;
 import py4j.ClientServer.ClientServerBuilder;
+
+import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.util.Utils;
 
 /**
  * Sponge plugin that provides integration with CPython using Py4J ClientServer.

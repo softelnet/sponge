@@ -17,6 +17,7 @@
 package org.openksavi.sponge.examples.project.camelrssnews;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
@@ -47,5 +48,7 @@ public class DefaultCamelService implements CamelService {
                 throw Utils.wrapException(getClass().getSimpleName(), e);
             }
         });
+
+        engine.getOperations().getVariable(AtomicBoolean.class, "sourceRoutesStopped").set(true);
     }
 }
