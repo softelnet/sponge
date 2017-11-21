@@ -744,6 +744,9 @@ Actions should be created only when there is a need to provide some functionalit
 
 === Python
 
+==== Limitations
+Note that Jython 2.7.1 (currently used in {sponge}) has a few bugs that could in some cases impact the stability of the system, e.g.: http://bugs.jython.org/issue2487.
+
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -1247,7 +1250,7 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |`org.openksavi.sponge`
 |`sponge-py4j`
 |Yes
-|The CPython integration that uses Py4J. _Experimental, early draft, not ready to be used yet._
+|The CPython integration that uses Py4J.
 
 |`org.openksavi.sponge`
 |`sponge-tensorflow`

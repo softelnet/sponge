@@ -30,7 +30,7 @@ import org.openksavi.sponge.engine.Variables;
  */
 public class MapVariables implements Variables {
 
-    private static final long serialVersionUID = -780271081752015672L;
+    private static final long serialVersionUID = 6240397591532960287L;
 
     private Map<String, Object> variables = Collections.synchronizedMap(new HashMap<>());
 
@@ -68,7 +68,7 @@ public class MapVariables implements Variables {
     protected Object doGet(String name, boolean required) {
         String normalizedName = normalizeName(name);
         synchronized (variables) {
-            if (required && !exists(normalizedName)) {
+            if (required && !variables.containsKey(normalizedName)) {
                 throw new IllegalArgumentException("Variable '" + normalizedName + "' not found");
             }
 

@@ -88,6 +88,7 @@ public class SpringConfiguration extends EngineCamelConfiguration {
                                 .set("link", CamelUtils.xpath(exchange, "/rss/channel/item/link/text()"))
                                 .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()"))
                                 .make()))
+                        //.filter((exchange) -> false)
                         .to("sponge:camelRssEngine");
             }
             // @formatter:on

@@ -12,3 +12,5 @@ class ForwardAlarmTrigger(Trigger):
 
         # Send the alarm message to a specific endpoint.
         camel.send("direct:log", event.get("message"))
+
+        EPS.getVariable("alarmForwarded").set(True)
