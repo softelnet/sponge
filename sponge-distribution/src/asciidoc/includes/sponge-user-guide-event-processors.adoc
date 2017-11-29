@@ -371,7 +371,7 @@ For unordered rules:
 * Every event that is relevant to the unordered rule causes a new instance of the rule to be created. This implicates that the event mode for an event that actually happens as the first is used by the engine only as a suggestion. So the actual order of events that happen has a significant impact on the behavior of unordered rules.
 * If at least one specified event has `none` mode, you probably should set a duration for such a rule to avoid superfluous instances of the rule.
 
-CAUTION: Unordered rules is a new feature that should be treated as an experimental one.
+IMPORTANT: Unordered rules is a new feature that should be treated as an experimental one.
 
 === Event conditions
 A rule may define conditions for events that have to be met to consider an incoming event as corresponding to the rule:
@@ -400,7 +400,7 @@ lambda rule, event: Duration.between(rule.getEvent("filesystemFailure").time, ev
 
 An event condition in Java is represented by the interface `EventCondition`.
 
-CAUTION: A condition in the form of a closure or a lambda specifies two arguments: a rule instance (determined at the runtime) and an event instance. Take care not to mix up the `rule` argument with `this` (in Java) or `self` (in Python) as they are references to different objects.
+IMPORTANT: A condition in the form of a closure or a lambda specifies two arguments: a rule instance (determined at the runtime) and an event instance. Take care not to mix up the `rule` argument with `this` (in Java) or `self` (in Python) as they are references to different objects.
 
 The condition methods tell if an incoming event (corresponding to the sequence of events specified by the rule) should be considered suitable.
 

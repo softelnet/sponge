@@ -42,7 +42,7 @@ public class NullEventQueue extends BaseEventQueue {
      */
     @Override
     public void put(Event event) throws QueueFullException {
-        if (ignoredEventsLogger.isInfoEnabled()) {
+        if (ignoredEventsLogger.isInfoEnabled() && !EngineConstants.PREDEFINED_EVENT_NAMES.contains(event.getName())) {
             ignoredEventsLogger.info("Ignored event: {}", event);
         }
     }

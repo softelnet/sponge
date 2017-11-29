@@ -30,7 +30,9 @@ class AcceptedTrigger(Trigger):
     def onConfigure(self):
         self.event = ".+"
     def onRun(self, event):
-        EPS.getVariable("acceptedCount").incrementAndGet()
+        self.logger.info("accepted {}", event.name)
+        if event.name != EventName.STARTUP:
+            EPS.getVariable("acceptedCount").incrementAndGet()
 
 class NotAcceptedTrigger(Trigger):
     def onConfigure(self):

@@ -42,7 +42,7 @@ Generally, script knowledge base files consist of a few parts:
 
 {sponge} follows a convention that the names of all callback functions and methods start with `on`, e.g. `onStartup` for a knowledge base or `onConfigure` for a processor.
 
-CAUTION: You shouldn't place more than one callback function that has the same name in the same knowledge base (event in different files of that knowledge base). If there is more than one callback function that has the same name in the same knowledge base *only the last loaded function will be invoked*. Furthermore it could depend on the specific scripting language.
+WARNING: You shouldn't place more than one callback function that has the same name in the same knowledge base (event in different files of that knowledge base). If there is more than one callback function that has the same name in the same knowledge base *only the last loaded function will be invoked*. Furthermore it could depend on the specific scripting language.
 
 When {sponge} is starting, callback functions are invoked in the following order:
 
@@ -242,9 +242,9 @@ When reloading the system, the configuration file is not loaded again. If the ch
 
 When the {sponge} engine is being reloaded, the previously defined processors will not be removed from the registry. When a processor definition has changed in the file being reloaded, it will be auto-enabled (i.e. registered) once more with the new definition. If auto-enable is off, then `EPS.enable` method must be invoked. In that case `EPS.enable` should be placed in the `onLoad()` callback function.
 
-WARNING: If auto-enable is on (this is the default setting), then all processors will be enabled after reloading, even processors that have been manually disabled before.
+IMPORTANT: If auto-enable is on (this is the default setting), then all processors will be enabled after reloading, even processors that have been manually disabled before.
 
-CAUTION: There is a limitation in reloading a knowledge base that defines event set processors (i.e. rules or correlators). When there are existing instances of event set processors, they will be dismissed.
+WARNING: There is a limitation in reloading a knowledge base that defines event set processors (i.e. rules or correlators). When there are existing instances of event set processors, they will be dismissed.
 
 == Use of many knowledge base files
 As mentioned before, {sponge} provides the possibility to read a knowledge base from many files. Dividing a knowledge base into a few files allows in an easy way to separate some functionalities.

@@ -261,7 +261,7 @@ Send me to the Sponge
 ==== Camel producer action
 Camel producer action will be invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. The result returned by this action is placed as the body of the Camel _IN_ message. So it may be used by the next endpoint in the route if there is any.
 
-CAUTION: To avoid misconception please note that events in the Output Event Queue are not sent to the Camel route.
+NOTE: To avoid misconception please note that events in the Output Event Queue are not sent to the Camel route.
 
 ===== Default Camel producer action
 The default Camel producer action is provided by a Java action `CamelProducerAction`. If the body of the Camel message is a {sponge} event or event definition, than the event is sent to the {sponge} immediately. Otherwise this action creates and sends a new event that encapsulates the body. The event is then returned, so it is placed as the body of the Camel In message. The default name of the new event is the name of the corresponding Camel route.
@@ -401,7 +401,7 @@ For more information on Py4J see https://www.py4j.org/advanced_topics.html.
 
 {sponge} provides two plugins for integration with CPython.
 
-CAUTION: Local network sockets used by Py4j should be secured, for example using [https://www.py4j.org/advanced_topics.html#tls]TLS. Please be aware that all {sponge} operations are accessible in other processes that communicate with the {sponge} with Py4J enabled by a plugin. See {py4jSourcesUrl}/java_server_tls for an example of TLS security, based on Py4J examples. Note that in a production environment you should customize this simple configuration, possibly by providing your own configured instance of `GatewayServer` or `ClientServer` to the plugin.
+WARNING: Local network sockets used by Py4j should be secured, for example using [https://www.py4j.org/advanced_topics.html#tls]TLS. Please be aware that all {sponge} operations are accessible in other processes that communicate with the {sponge} with Py4J enabled by a plugin. See {py4jSourcesUrl}/java_server_tls for an example of TLS security, based on Py4J examples. Note that in a production environment you should customize this simple configuration, possibly by providing your own configured instance of `GatewayServer` or `ClientServer` to the plugin.
 
 .Py4J plugin common configuration parameters
 [cols="1,1,4"]

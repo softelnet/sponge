@@ -6,9 +6,9 @@ A high-level view of the changes introduced in {sponge} releases.
 == 1.0.6 (not released yet)
 
 * The new, shaded version of sponge-core named sponge-core-shaded for an embedded use in custom applications that experience version conflicts in Guava or Quartz. Now you have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
-* Libraries upgrade.
 * Support for integration with CPython using Py4J.
-* Experimental, early draft of support for Tensorflow. It is not ready to be used yet.
+* The new startup system event.
+* Libraries upgrade.
 
 [discrete]
 == 1.0.5 (2017.10.12)

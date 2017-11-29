@@ -20,26 +20,33 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import java.math.BigInteger;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.python.google.common.collect.Lists;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.engine.Engine;
 
-public class FibonacciTest {
+public class SystemEventsTest {
 
     @Test
-    public void testFibonacci() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/fibonacci.py").build();
+    public void testSystemEvents() {
+        Engine engine = DefaultEngine.builder().config("examples/core/system_events.xml").build();
         engine.startup();
 
         try {
-            await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("f(maxIndex)") != null);
+            await().atMost(60, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "countA").intValue() >= 5
+                            && engine.getOperations().getVariable(Number.class, "countB").intValue() >= 1
+                            && engine.getOperations().getVariable(List.class, "listC").size() >= 7);
 
-            Number fmax = engine.getOperations().getVariable(Number.class, "f(maxIndex)");
-            assertEquals(new BigInteger("354224848179261915075"), fmax);
+            assertEquals(5, engine.getOperations().getVariable(Number.class, "countA").intValue());
+            assertEquals(1, engine.getOperations().getVariable(Number.class, "countB").intValue());
+            assertEquals(Lists.newArrayList("startup", "x", "e", "e", "e", "e", "e"),
+                    engine.getOperations().getVariable(List.class, "listC"));
+
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

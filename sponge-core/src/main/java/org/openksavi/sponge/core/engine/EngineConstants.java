@@ -16,6 +16,13 @@
 
 package org.openksavi.sponge.core.engine;
 
+import java.util.Collections;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
+import org.openksavi.sponge.event.EventName;
+
 /**
  * Engine constants.
  */
@@ -25,6 +32,9 @@ public final class EngineConstants {
     public static final String CONTROL_EVENT_PREFIX = "$";
 
     public static final String IGNORED_EVENTS_LOGGER_NAME = "sponge.event.ignored";
+
+    /** Predefined events names, e.g. system event names. */
+    public static final Set<String> PREDEFINED_EVENT_NAMES = Collections.unmodifiableSet(Sets.newHashSet(EventName.STARTUP));
 
     private EngineConstants() {
         //

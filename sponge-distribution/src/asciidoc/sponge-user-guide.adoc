@@ -100,14 +100,6 @@ Events are the basic element of processing in {sponge}. They have properties suc
 
 Properties `id` and `time` are automatically set when adding an event to the Input Event Queue and there is no need for setting them manually.
 
-=== Event queues
-You may see ignored events (i.e. events that go to the Output Event Queue) in the logs by setting the `sponge.event.ignored` logger to `INFO`.
-
-=== Event priorities
-A priority may be assigned only to control events, that are used internally by the engine. For standard events the priority always equals to `0` and cannot be modified.
-
-A priority defines a level of the importance of an event. Events are added to and taken from queues with respect to their priorities. Priority is a positive or negative integer and the higher the number is, the higher is the priority of an event and the event will be processed before the others.
-
 === Typical event processing
 In order to process an event there must be an event processor listening to events of that type (the types of events are recognized by their names). So this steps should be taken:
 
@@ -126,6 +118,37 @@ The standard implementation of events allows choosing the cloning policy `shallo
 
 === Custom events
 The default implementation of an event is the `AttributeMapEvent` class. However, {sponge} allows to use custom event implementations of the `Event` interface.
+
+=== System events
+System events are sent automatically by the engine. An event sent in your code shouldn't have the same name as any of the system events. Currently there is only one system event.
+
+.System events
+[cols="1,4"]
+|===
+|Event name |Description
+
+|`startup`
+|The `startup` event will be sent as the first event when the engine is starting up.
+|===
+
+==== Startup system event
+The `startup` system event could be useful to define rules or correlators that detect lack of other events since the startup of the engine.
+
+The following rule detects a situation when there is no `heartbeat` event for `5` seconds since the startup of {sponge}.
+
+.Example of startup system event
+[source,python]
+----
+class DetectLackOfHearbeat(Rule):
+    def onConfigure(self):
+        self.events = ["startup", "heartbeat :none"]
+        self.duration = Duration.ofSeconds(5)
+    def onRun(self, event):
+        print "No heartbeat!"
+----
+
+=== Control events
+Control events are used by the engine internally. The names of control events have a prefix `$`. You shouldn't give to your events a name that starts with this character.
 
 === Creating and sending events
 *Creating an event means creating an instance of an event class. Sending an event means that the created event will be put into the Input Event Queue, to be processed by filters and then by triggers, rules and correlators.*
@@ -175,9 +198,6 @@ An event may be to sent as:
 |Only returns the newly created event without sending.
 |===
 
-=== Control events
-Control events are used by the engine internally. The names of control events have a prefix `$`. You shouldn't give to your standard event a name that starts with this character.
-
 === Examples of sending events
 Sample sending of events from the level of a knowledge base:
 
@@ -204,6 +224,11 @@ Sends an event with attributes `"color"` and `"severity"` immediately.
 EPS.event("alarm").sendAt("0-59 * * * * ?")
 ----
 Sends an event at the time specified by Cron notation.
+
+=== Event priorities
+A priority may be assigned only to control events, that are used internally by the engine. For standard events the priority always equals to `0` and cannot be modified.
+
+A priority defines a level of the importance of an event. Events are added to and taken from queues with respect to their priorities. Priority is a positive or negative integer and the higher the number is, the higher is the priority of an event and the event will be processed before the others.
 
 == Processors
 Processors are the basic objects that you define in {sponge} to implement your knowledge base behavior.
@@ -233,8 +258,6 @@ Processors could be enabled:
 
 ==== Auto-enable
 {sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base. Processor classes whose names start with the `Abstract` prefix are considered abstract and will not be automatically enabled.
-
-CAUTION: Processors defined in script knowledge bases have to extend the correct base classes, otherwise they will not be enabled automatically.
 
 As previously mentioned, the auto-enable feature scans only for processors defined in the scripting knowledge base. Enabling Java-based processors has to be done manually.
 
@@ -862,7 +885,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 == Logging
 {sponge} uses https://www.slf4j.org[SLF4J] facade for logging.
 
-Examples and standalone version use https://logback.qos.ch[Logback] as a logging implementation.
+Examples and {sponge} standalone command-line application use https://logback.qos.ch[Logback] as a logging implementation.
 
 Java-based processors and plugins may use:
 
@@ -876,6 +899,8 @@ private static final Logger logger = LoggerFactory.getLogger(ConnectionPlugin.cl
     logger.info("logging");
 }
 ----
+
+TIP: You may see ignored events (i.e. events that go to the Output Event Queue) in the logs by setting the `sponge.event.ignored` logger to `INFO`.
 
 == Examples
 

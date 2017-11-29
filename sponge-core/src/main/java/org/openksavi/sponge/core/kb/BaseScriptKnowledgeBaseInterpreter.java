@@ -38,6 +38,7 @@ import org.openksavi.sponge.core.util.Utils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
+import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
@@ -239,7 +240,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     protected List<Class<?>> getStandardImportClasses() {
         //@formatter:off
         return Arrays.asList(EventMode.class, EventClonePolicy.class, Utils.class, SpongeException.class,
-                Event.class, Configuration.class, EventClonePolicy.class, EventSetProcessorState.class,
+                Event.class, Configuration.class, EventClonePolicy.class, EventSetProcessorState.class, EventName.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
         //@formatter:on
     }

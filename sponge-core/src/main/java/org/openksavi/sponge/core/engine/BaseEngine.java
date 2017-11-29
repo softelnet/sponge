@@ -62,6 +62,7 @@ import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.engine.processing.EventSetProcessorDurationStrategy;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
+import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.filter.FilterAdapter;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
@@ -320,6 +321,9 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
                 // Creates an event scheduler.
                 eventScheduler.startup();
+
+                // Sends the first event: startup.
+                operations.event(EventName.STARTUP).send();
 
                 // Read knowledge bases files and invoke onInit and onLoad for each knowledge base.
                 knowledgeBaseManager.startup();

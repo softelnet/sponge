@@ -481,6 +481,8 @@ Sound the alarm!
 
 Press `CTRL+C` to exit the {sponge} standalone command-line application.
 
+TIP: This example doesn't detect a situation when there hasn't been any `heartbeat` event since the startup of the {sponge}. To remedy that issue you could use the `startup` event. See the chapter on Startup system event in the User Guide.
+
 ==== Ruby
 
 .Ruby Heartbeat example knowledge base file
