@@ -3,7 +3,7 @@
 A high-level view of the changes introduced in {sponge} releases.
 
 [discrete]
-== 1.0.6 (not released yet)
+== 1.0.6 (2017.12.01)
 
 * The new, shaded version of sponge-core named sponge-core-shaded for an embedded use in custom applications that experience version conflicts in Guava or Quartz. Now you have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
 * Support for integration with CPython using Py4J.
