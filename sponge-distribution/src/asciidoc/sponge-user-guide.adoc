@@ -1278,11 +1278,6 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The CPython integration that uses Py4J.
 
 |`org.openksavi.sponge`
-|`sponge-tensorflow`
-|Yes
-|The Tensorflow integration. _Experimental, early draft, not ready to be used yet._
-
-|`org.openksavi.sponge`
 |`sponge-standalone`
 |Yes
 |The standalone distribution of {sponge}.

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.openksavi.sponge</groupId>
         <artifactId>sponge-parent</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -69,4 +69,30 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <dependencySourceIncludes>org.openksavi.sponge:sponge-core</dependencySourceIncludes>
+                                    <includeDependencySources>true</includeDependencySources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

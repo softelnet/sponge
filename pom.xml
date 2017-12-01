@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7-SNAPSHOT</version>
     <name>Sponge - Parent</name>
     <description>Event Processing System</description>
     <url>http://sponge.openksavi.org</url>
@@ -104,19 +104,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                            <!-- <goal>test-jar-no-fork</goal> -->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
@@ -780,13 +767,25 @@
                 <module>sponge-spring</module>
                 <module>sponge-camel</module>
                 <module>sponge-py4j</module>
-                <module>sponge-tensorflow</module>
                 <module>sponge-signal</module>
                 <module>sponge-standalone</module>
                 <module>sponge-bom</module>
             </modules>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                    <!-- <goal>test-jar-no-fork</goal> -->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
