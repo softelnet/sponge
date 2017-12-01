@@ -3,5 +3,5 @@ language: java
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get -y install python python-pip
-  - pip install -U py4j
+  - sudo pip install -U py4j
 
