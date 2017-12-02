@@ -7,4 +7,3 @@ before_install:
   - sudo pip install -U py4j
   - python -V
   - pip -V
-
