@@ -9,6 +9,7 @@
 :springSourcesUrl: {sourcesUrl}/sponge-spring/examples/spring/
 :camelSourcesUrl: {sourcesUrl}/sponge-camel/examples/camel/
 :py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
+:midiSourcesUrl: {sourcesUrl}/sponge-midi/examples/midi/
 
 == Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
@@ -1183,6 +1184,18 @@ ifdef::useReferences[({py4jSourcesUrl}/python_server/py4j_python_server_python_h
 |`py4j_java_server_tls`
 ifdef::useReferences[({py4jSourcesUrl}/java_server_tls/py4j_java_server_tls_python_hello_world.py[cpython], {py4jSourcesUrl}/java_server_tls/py4j_java_server_tls_sponge_hello_world.xml[xml], {py4jSourcesUrl}/java_server_tls/py4j_java_server_tls_sponge_hello_world.py[jython])]
 |Shows how to integrate with CPython program using Py4J - Java server with TLS security.
+
+|`midi_generate_sound`
+ifdef::useReferences[({midiSourcesUrl}/midi_generate_sound.py[py])]
+|Shows how to generate MIDI sounds in a {sponge} knowledge base.
+
+|`midi_input`
+ifdef::useReferences[({midiSourcesUrl}/midi_input.py[py])]
+|Shows how to process MIDI messages created by an external MIDI input device.
+
+|`midi_play_file`
+ifdef::useReferences[({midiSourcesUrl}/midi_play_file.py[py])]
+|Shows how MIDI messages created by a MIDI sequencer playing a MIDI file could be processed in a {sponge} knowledge base.
 |===
 
 === Standalone examples
@@ -1276,6 +1289,11 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |`sponge-py4j`
 |Yes
 |The CPython integration that uses Py4J.
+
+|`org.openksavi.sponge`
+|`sponge-midi`
+|Yes
+|The MIDI integration.
 
 |`org.openksavi.sponge`
 |`sponge-standalone`

@@ -323,4 +323,4 @@ EPS.requestShutdown()
 print EPS.engine.statisticsManager.summary
 ----
 
-For more information see {sponge} JavaDoc.
+For more information see {sponge} Javadoc.

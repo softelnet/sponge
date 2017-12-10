@@ -33,6 +33,7 @@ The main features of {sponge}:
 * supports deployment in enterprise environments by integration with Spring framework,
 * provides the standalone command-line application, that, for example, allows management of Camel routes without the need of writing Java code (you may use any of the supported scripting languages or XML),
 * supports reloading of knowledge bases on the fly (i.e. while the system is running),
+* events may represent such diverse entities as, for example, SNMP traps, RSS feeds or MIDI messages,
 * may be used as a sandbox for learning multiple scripting languages,
 * provides a comprehensive documentation and many examples.
 
@@ -72,7 +73,7 @@ The potential users of a standalone command-line {sponge} application are:
 * Java developers (for example for prototyping),
 * system administrators.
 
-Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing JavaDoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel routes becomes important.
+Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing Javadoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel routes becomes important.
 
 == Considerations
 

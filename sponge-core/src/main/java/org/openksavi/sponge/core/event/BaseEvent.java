@@ -178,8 +178,12 @@ public abstract class BaseEvent implements Event {
         }
     }
 
+    protected final String toStringBase() {
+        return name + ", id=" + id + ", time=" + time + ", priority=" + getPriority();
+    }
+
     @Override
     public String toString() {
-        return name + ", id=" + id + ", time=" + time + ", priority=" + getPriority() + ", attributes=" + getAll();
+        return toStringBase() + ", attributes=" + getAll();
     }
 }

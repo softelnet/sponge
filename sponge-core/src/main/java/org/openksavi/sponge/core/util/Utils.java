@@ -349,4 +349,22 @@ public abstract class Utils {
 
         return value;
     }
+
+    public static int toInt(Object value) {
+        return ((Number) value).intValue();
+    }
+
+    public static void registerShutdownHook(Engine engine) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                engine.shutdown();
+            } catch (Throwable e) {
+                logger.error("Shutdown hook error", e);
+            }
+        }));
+    }
+
+    protected Utils() {
+        //
+    }
 }

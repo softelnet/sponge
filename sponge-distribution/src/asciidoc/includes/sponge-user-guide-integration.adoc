@@ -3,7 +3,9 @@
 == Spring framework
 {sponge} engine may be configured as a Spring bean. That configuration provides standardized access to an embedded {sponge} engine for example in J2EE environment.
 
-To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. The Spring plugin shouldn't be defined in {sponge} XML configuration file. See the following example.
+To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. The Spring plugin shouldn't be defined in {sponge} XML configuration file.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/spring/SpringPlugin.html[`SpringPlugin` Javadoc].
 
 .Spring Java configuration example
 [source,java]
@@ -183,6 +185,8 @@ Only one `CamelContext` may be used with one instance of {sponge} engine, bound 
 |`getConsumers()`
 |Returns the current list of consumers.
 |===
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/camel/CamelPlugin.html[`CamelPlugin` Javadoc].
 
 
 ==== Spring-based support
@@ -397,6 +401,23 @@ pip install py4j
 
 For more information on Py4J see https://www.py4j.org/advanced_topics.html.
 
+=== Maven configuration
+Maven users will need to add the following dependencies to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-py4j</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
 === Py4J plugins
 
 {sponge} provides two plugins for integration with CPython.
@@ -436,6 +457,8 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 ==== GatewayServerPy4JPlugin
 
 `GatewayServerPy4JPlugin` provides integration with CPython using Py4J `GatewayServer`.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/py4j/GatewayServerPy4JPlugin.html[`GatewayServerPy4JPlugin` Javadoc].
 
 [discrete]
 ===== {sponge} side example
@@ -482,6 +505,8 @@ Note that a simplified bean property access is not supported here. So instead of
 |`Boolean`
 |Auto start of Py4J JavaServer.
 |===
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/py4j/ClientServerPy4JPlugin.html[`ClientServerPy4JPlugin` Javadoc].
 
 [discrete]
 ===== {sponge} side example
@@ -537,5 +562,85 @@ pythonService = PythonService()
 gateway = ClientServer(python_server_entry_point=pythonService)
 ----
 
+== MIDI
+The MIDI plugin (`MidiPlugin`) allows processing https://en.wikipedia.org/wiki/MIDI[MIDI] messages by the {sponge} and provides communication with MIDI devices. It wraps MIDI messages in {sponge} events. The plugin supports `ShortMessage`, `MetaMessage` and `SysexMessage` MIDI messages wrapping them respectively in `MidiShortMessageEvent`, `MidiMetaMessageEvent` and `MidiSysexMessageEvent` {sponge} events. Although the MIDI support in the {sponge} provides a set of methods that use the `javax.sound.midi` API, the goal of this plugin is not to be a complete interface to the MIDI system but a bridge between MIDI messages and {sponge} events.
 
+The default name of the MIDI plugin (which may be used in knowledge bases) is `midi`.
+
+.MIDI plugin configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
+
+|`sequencerConnectedToSynthesizer`
+|`Boolean`
+|If `true` then the default MIDI sequencer will be connected to the default synthesizer (e.g. to generate sound while playing MIDI files). The default value is `false`.
+
+|`loadAllInstruments`
+|`Boolean`
+|If `true` then all instruments in the default soundbank will be loaded at startup. The default value is `true`.
+
+|`midiShortMessageEventName`
+|`String`
+|A name of a MIDI ShortMessage {sponge} event sent by this plugin to the engine. The default value is `"midiShort"`.
+
+|`midiMetaMessageEventName`
+|`String`
+|A name of a MIDI MetaMessage {sponge} event sent by this plugin to the engine. The default value is `"midiMeta"`.
+
+|`midiSysexMessageEventName`
+|`String`
+|A name of a MIDI SysexMessage {sponge} event sent by this plugin to the engine. The default value is `"midiSysex"`.
+|===
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/camel/MidiPlugin.html[`MidiPlugin` Javadoc].
+
+.Example Python knowledge base
+[source,python]
+----
+from javax.sound.midi import ShortMessage
+from org.openksavi.sponge.midi import MidiUtils
+
+class SameSound(Trigger):
+    def onConfigure(self):
+        self.event = "midiShort" # <1>
+    def onRun(self, event):
+        midi.sound(event.message) # <2>
+
+class Log(Trigger):
+    def onConfigure(self):
+        self.event = "midiShort"
+    def onRun(self, event):
+        self.logger.info("{}Input message: {}", "[" + MidiUtils.getKeyNote(event.data1) + "] " if event.command == ShortMessage.NOTE_ON else "",
+                         event.messageString) # <3>
+
+def onStartup():
+    EPS.logger.info("This example program enables a user to play an input MIDI device (e.g. a MIDI keyboard) using the Sponge MIDI plugin.")
+    midi.connectDefaultInputDevice() # <4>
+    EPS.logger.info("Input MIDI device: {}", midi.inputDevice.deviceInfo.name)
+    EPS.logger.info("Instruments: {}", ",".join(list(map(lambda i: i.name + " (" + str(i.patch.bank) + "/" + str(i.patch.program) + ")", midi.instruments))))
+    midi.setInstrument(0, "Electric Piano 1") # <5>
+----
+<1> The trigger `SameSound` listens to all MIDI short messages.
+<2> The trigger `SameSound` sends all MIDI short messages received from the input MIDI device to the MIDI synthesizer to generate sounds. It is achieved through the use of the `sound` method in the `midi` plugin.
+<3> The trigger `Log` only logs a MIDI message info and a note for _note on_ MIDI messages.
+<4> Connects a default input MIDI device in the system (e.g. a MIDI keyboard) to the MIDI plugin in order to receive all MIDI messages generated by this device and send them to the {sponge} engine as {sponge} events.
+<5> Sets the instrument (by name) in the MIDI synthesizer for the MIDI channel `0`. Note that this example assumes that the input MIDI device will generate MIDI messages for the same channel.
+
+=== Maven configuration
+Maven users will need to add the following dependencies to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-midi</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
 

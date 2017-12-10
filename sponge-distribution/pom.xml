@@ -25,6 +25,7 @@
         <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
         <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
         <javaSeJavaDocUrl>https://docs.oracle.com/javase/8/docs/api</javaSeJavaDocUrl>
+        <spongeJavaDocUrl>${homepage}/docs/javadoc/index.html</spongeJavaDocUrl>
     </properties>
 
     <dependencies>
