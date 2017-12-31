@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.ThreadPool;
@@ -85,7 +85,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         String name = "MainProcessingUnit.AsyncEventSet";
         int maxThreadCount = getEngine().getConfigurationManager().getAsyncEventSetProcessorExecutorThreadCount();
 
-        ExecutorService executor = new ThreadPoolExecutor(Utils.calculateInitialDynamicThreadPoolSize(getEngine(), maxThreadCount),
+        ExecutorService executor = new ThreadPoolExecutor(SpongeUtils.calculateInitialDynamicThreadPoolSize(getEngine(), maxThreadCount),
                 maxThreadCount, getEngine().getDefaultParameters().getDynamicThreadPoolKeepAliveTime(), TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(), createThreadFactory(name));
 
@@ -123,7 +123,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
         }
 
         try {
-            Utils.shutdownExecutorService(getEngine(), threadPool.getName(), executor);
+            SpongeUtils.shutdownExecutorService(getEngine(), threadPool.getName(), executor);
         } finally {
             threadPool.clear();
         }

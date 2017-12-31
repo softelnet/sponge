@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import org.apache.camel.CamelContext;
 import org.springframework.stereotype.Service;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 
 @Service("camelService")
@@ -45,7 +45,7 @@ public class DefaultCamelService implements CamelService {
             try {
                 camelContext.stopRoute(source);
             } catch (Exception e) {
-                throw Utils.wrapException(getClass().getSimpleName(), e);
+                throw SpongeUtils.wrapException(e);
             }
         });
 

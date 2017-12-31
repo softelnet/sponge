@@ -24,7 +24,7 @@ import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.Service.State;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EngineModule;
 
@@ -150,7 +150,7 @@ public abstract class BaseEngineModule implements EngineModule {
             service.startAsync().awaitRunning();
         } catch (IllegalStateException e) {
             // If Guava Service startup has failed, throw only the cause exception.
-            throw isFailed() && e.getCause() != null ? Utils.wrapException("startup", e.getCause()) : e;
+            throw isFailed() && e.getCause() != null ? SpongeUtils.wrapException("startup", e.getCause()) : e;
         }
     }
 
@@ -175,7 +175,7 @@ public abstract class BaseEngineModule implements EngineModule {
                     service.stopAsync().awaitTerminated();
                 } catch (IllegalStateException e) {
                     // If Guava Service stopping has failed, throw only the cause exception.
-                    throw isFailed() && e.getCause() != null ? Utils.wrapException("shutdown", e.getCause()) : e;
+                    throw isFailed() && e.getCause() != null ? SpongeUtils.wrapException("shutdown", e.getCause()) : e;
                 }
             } else {
                 doShutdown();

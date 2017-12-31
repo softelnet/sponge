@@ -34,7 +34,7 @@ import py4j.GatewayServer;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JavaPlugin;
 
 /**
@@ -74,6 +74,10 @@ public abstract class BasePy4JPlugin<T> extends JavaPlugin {
         setName(DEFAULT_NAME);
     }
 
+    public BasePy4JPlugin(String name) {
+        super(name);
+    }
+
     public T getFacade() {
         return facade;
     }
@@ -100,8 +104,8 @@ public abstract class BasePy4JPlugin<T> extends JavaPlugin {
             Configuration securityConfiguration = configuration.getChildConfiguration(TAG_SECURITY);
 
             SecurityConfiguration newSecurity = new SecurityConfiguration();
-            newSecurity.setPassword(Utils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_PASSWORD));
-            newSecurity.setKeystore(Utils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEYSTORE));
+            newSecurity.setPassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_PASSWORD));
+            newSecurity.setKeystore(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEYSTORE));
             newSecurity.setAlgorithm(securityConfiguration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
 
             security = newSecurity;
@@ -139,7 +143,7 @@ public abstract class BasePy4JPlugin<T> extends JavaPlugin {
             char[] password = security.getPassword().toCharArray();
             KeyStore ks = KeyStore.getInstance("JKS");
 
-            URL keystoreUrl = Utils.getUrlFromClasspath(security.getKeystore());
+            URL keystoreUrl = SpongeUtils.getUrlFromClasspath(security.getKeystore());
             if (keystoreUrl == null) {
                 throw new SpongeException("Expected a '" + security.getKeystore() + "' keystore file on the classpath");
             }
@@ -163,9 +167,9 @@ public abstract class BasePy4JPlugin<T> extends JavaPlugin {
             return sslContext;
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableKeyException
                 | KeyManagementException e) {
-            throw Utils.wrapException("createSslContext", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
-            Utils.close(fis);
+            SpongeUtils.close(fis);
         }
     }
 }

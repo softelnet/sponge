@@ -18,7 +18,7 @@ def updateLog(rule):
     for event in rule.eventSequence:
         if event is not None and int(event.get("label")) < 1:
             return
-    #rule.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(rule.eventSequence, "label"))
+    #rule.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(rule.eventSequence, "label"))
     global correlationEventsLog
     correlationEventsLog.addEvents(rule.name, rule)
 

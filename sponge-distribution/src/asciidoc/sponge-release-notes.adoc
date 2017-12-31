@@ -5,7 +5,9 @@ A high-level view of the changes introduced in {sponge} releases.
 [discrete]
 == 1.0.7 (not released yet)
 
+* API change: The `Utils` class has been renamed to `SpongeUtils`.
 * MIDI support.
+* The shaded version of sponge-core (sponge-core-shaded) shades only Guava now.
 
 [discrete]
 == 1.0.6 (2017.12.01)

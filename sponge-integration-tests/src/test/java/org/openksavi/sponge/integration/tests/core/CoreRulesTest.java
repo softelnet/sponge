@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
@@ -71,7 +71,7 @@ public class CoreRulesTest {
         try {
             doTestRulesImmediate(engine, createCommonExpectedSequences());
 
-            ScriptKnowledgeBaseInterpreter interpreter = Utils.getScriptInterpreter(engine, TestUtils.DEFAULT_KB);
+            ScriptKnowledgeBaseInterpreter interpreter = SpongeUtils.getScriptInterpreter(engine, TestUtils.DEFAULT_KB);
             evalEnableRuleWithException(interpreter, "RuleFFL");
             evalEnableRuleWithException(interpreter, "RuleFFN");
             evalEnableRuleWithException(interpreter, "RuleFLL");
@@ -115,7 +115,7 @@ public class CoreRulesTest {
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
-            throw Utils.wrapException("doTestRulesImmediate", e);
+            throw SpongeUtils.wrapException(e);
         }
 
         expected.forEach((rule, sequences) -> {

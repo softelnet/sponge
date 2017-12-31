@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -256,7 +256,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         try {
             return eventNameProcessorsCache != null ? eventNameProcessorsCache.get(eventName) : resolveEventProcessors(eventName);
         } catch (ExecutionException e) {
-            throw Utils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
+            throw SpongeUtils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
         } finally {
             lock.unlock();
         }

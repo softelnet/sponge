@@ -18,7 +18,7 @@ package org.openksavi.sponge.core;
 
 import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
@@ -85,7 +85,7 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            throw Utils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, e);
         }
     }
 

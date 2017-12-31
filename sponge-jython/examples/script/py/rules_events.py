@@ -48,7 +48,7 @@ class RuleFFL(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFFL", self)
 
@@ -59,7 +59,7 @@ class RuleFFA(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFFA", self)
 
@@ -70,7 +70,7 @@ class RuleFFN(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFFN", self)
 
@@ -81,7 +81,7 @@ class RuleFLF(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFLF", self)
 
@@ -92,7 +92,7 @@ class RuleFLL(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFLL", self)
 
@@ -103,7 +103,7 @@ class RuleFLA(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFLA", self)
 
@@ -114,7 +114,7 @@ class RuleFLN(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFLN", self)
 
@@ -125,7 +125,7 @@ class RuleFAF(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFAF", self)
 
@@ -136,7 +136,7 @@ class RuleFAL(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFAL", self)
 
@@ -147,7 +147,7 @@ class RuleFAA(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFAA", self)
 
@@ -158,7 +158,7 @@ class RuleFAN(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFAN", self)
 
@@ -167,7 +167,7 @@ class RuleFNF(Rule):
     def onConfigure(self):
         self.events = ["e1", "e5 :none", "e3"]
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNF", self)
 
@@ -178,7 +178,7 @@ class RuleFNL(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNL", self)
 
@@ -189,7 +189,7 @@ class RuleFNA(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNA", self)
 
@@ -199,7 +199,7 @@ class RuleFNFReject(Rule):
         global defaultDuration
         self.duration = Duration.ofMillis(defaultDuration)
     def onRun(self, event):
-        self.logger.debug("Running rule for sequence: {}", Utils.toStringEventSequence(self.eventSequence, "label"))
+        self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleFNFReject", self)
 

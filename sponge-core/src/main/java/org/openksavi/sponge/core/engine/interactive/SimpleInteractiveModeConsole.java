@@ -21,7 +21,7 @@ import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
 
 /**
@@ -59,7 +59,7 @@ public class SimpleInteractiveModeConsole implements InteractiveModeConsole {
         try {
             reader.close();
         } catch (IOException e) {
-            throw Utils.wrapException("close", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             reader = null;
         }

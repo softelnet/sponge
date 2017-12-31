@@ -36,6 +36,10 @@ public class SpringPlugin extends JavaPlugin implements ApplicationContextAware 
         setName(NAME);
     }
 
+    public SpringPlugin(String name) {
+        super(name);
+    }
+
     /**
      * Returns a Spring application context.
      *

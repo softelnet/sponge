@@ -34,7 +34,7 @@ import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -149,7 +149,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                     }
                 }
             } catch (IOException e) {
-                throw Utils.wrapException("load", e);
+                throw SpongeUtils.wrapException("load", e);
             }
         }
     }
@@ -239,7 +239,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     protected List<Class<?>> getStandardImportClasses() {
         //@formatter:off
-        return Arrays.asList(EventMode.class, EventClonePolicy.class, Utils.class, SpongeException.class,
+        return Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
                 Event.class, Configuration.class, EventClonePolicy.class, EventSetProcessorState.class, EventName.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
         //@formatter:on

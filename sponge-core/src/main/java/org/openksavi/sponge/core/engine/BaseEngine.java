@@ -39,7 +39,7 @@ import org.openksavi.sponge.core.spi.DefaultEventQueueProvider;
 import org.openksavi.sponge.core.spi.DefaultProcessingUnitProvider;
 import org.openksavi.sponge.core.util.RegexPatternMatcher;
 import org.openksavi.sponge.core.util.ServiceLoaderUtils;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
@@ -347,7 +347,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
                 logger.info("{} is running", getDescription());
             } catch (Throwable e) {
                 safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
-                throw Utils.wrapException("startup", e);
+                throw SpongeUtils.wrapException("startup", e);
             }
         } finally {
             lock.unlock();
@@ -404,7 +404,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
             logger.info("{} is terminated", getDescription());
         } catch (Throwable e) {
-            throw Utils.wrapException("shutdown", e);
+            throw SpongeUtils.wrapException("shutdown", e);
         } finally {
             lock.unlock();
         }
@@ -412,7 +412,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
     @Override
     public void requestShutdown() {
-        Utils.executeConcurrentlyOnce(this, () -> shutdown());
+        SpongeUtils.executeConcurrentlyOnce(this, () -> shutdown());
     }
 
     private void safelyShutdownModule(EngineModule module, AtomicReference<Throwable> exceptionHolder) {
@@ -604,7 +604,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
     @Override
     public void requestReload() {
-        Utils.executeConcurrentlyOnce(this, () -> reload());
+        SpongeUtils.executeConcurrentlyOnce(this, () -> reload());
     }
 
     /**
@@ -634,7 +634,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
         tryRememberException(exception);
 
         exceptionHandler.handleException(exception,
-                new GenericExceptionContext(this, ObjectUtils.defaultIfNull(Utils.getSourceName(exception), sourceName), sourceObject));
+                new GenericExceptionContext(this, ObjectUtils.defaultIfNull(SpongeUtils.getSourceName(exception), sourceName), sourceObject));
     }
 
     /**

@@ -27,7 +27,7 @@ import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
 
@@ -42,7 +42,7 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
     @Override
     public Reader getReader(Engine engine, String fileName, Charset charset) throws IOException {
         // Try to read relative to the current directory or classpath.
-        Reader reader = Utils.getReader(fileName, charset);
+        Reader reader = SpongeUtils.getReader(fileName, charset);
 
         // Try to read in the XML configuration file directory.
         if (reader == null) {
@@ -52,7 +52,7 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
                 if (configFile != null) {
                     String configDir = configFile.getParent();
                     if (configDir != null) {
-                        reader = Utils.getReader(Paths.get(configDir, fileName).toString(), charset);
+                        reader = SpongeUtils.getReader(Paths.get(configDir, fileName).toString(), charset);
                     }
                 } else {
                     logger.warn("Configuration file URL {} cannot be converted to File", configurationFileUrl);
@@ -64,7 +64,7 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
         if (reader == null) {
             String home = engine.getConfigurationManager().getHome();
             if (home != null) {
-                reader = Utils.getReader(Paths.get(home, fileName).toString(), charset);
+                reader = SpongeUtils.getReader(Paths.get(home, fileName).toString(), charset);
             }
         }
 

@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 
@@ -45,9 +45,9 @@ public class TestUtils {
         logger.info("Testing {}", config);
 
         Engine engine = DefaultEngine.builder().config(config).build();
-        Utils.trialRunEngine(engine, timeout);
+        SpongeUtils.trialRunEngine(engine, timeout);
         if (engine.isError()) {
-            throw Utils.wrapException("testExample", engine.getError());
+            throw SpongeUtils.wrapException(engine.getError());
         }
     }
 

@@ -29,6 +29,11 @@ public class ConnectionPlugin extends JavaPlugin {
     private String connectionName = "Default connection name";
 
     public ConnectionPlugin() {
+        //
+    }
+
+    public ConnectionPlugin(String name) {
+        super(name);
     }
 
     @Override

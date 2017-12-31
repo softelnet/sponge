@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.GenericExceptionContext;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
@@ -120,7 +120,7 @@ public class DefaultInteractiveMode implements InteractiveMode {
     protected void handleException(String sourceName, Throwable e) {
         if (exceptionHandler != null) {
             exceptionHandler.handleException(e,
-                    new GenericExceptionContext(engine, ObjectUtils.defaultIfNull(Utils.getSourceName(e), sourceName)));
+                    new GenericExceptionContext(engine, ObjectUtils.defaultIfNull(SpongeUtils.getSourceName(e), sourceName)));
         } else {
             e.printStackTrace();
         }

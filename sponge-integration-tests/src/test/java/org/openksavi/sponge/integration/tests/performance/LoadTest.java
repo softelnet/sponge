@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.jython.PythonConstants;
 import org.openksavi.sponge.test.script.template.RulesTestTemplate;
@@ -71,7 +71,7 @@ public class LoadTest {
             logger.info("Event performance after {} minutes is: {}", sleepMinutes,
                     String.format("%.2f events/s", engine.getStatisticsManager().getEventPerformance()));
         } catch (InterruptedException e) {
-            throw Utils.wrapException("testTriggersLoad", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             engine.shutdown();
         }

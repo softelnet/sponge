@@ -44,6 +44,7 @@ public class RegexPatternMatcher implements PatternMatcher {
         return Pattern.compile(pattern);
     }
 
+    @Override
     public void validatePattern(String pattern) {
         Validate.notNull(compilePattern(pattern));
     }
@@ -53,7 +54,7 @@ public class RegexPatternMatcher implements PatternMatcher {
         try {
             return compiledPatterns.get(pattern);
         } catch (ExecutionException e) {
-            throw Utils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
+            throw SpongeUtils.wrapException(e.getCause() != null ? e.getCause() : e);
         }
     }
 

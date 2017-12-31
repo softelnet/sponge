@@ -27,7 +27,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
@@ -81,7 +81,7 @@ public class MidiSysexMessageEvent extends MidiMessageEvent<SysexMessage> {
         try {
             getMessage().setMessage(data, data.length);
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setData", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 

@@ -45,7 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.midi.event.MidiShortMessageEvent;
 
 /**
@@ -68,7 +68,7 @@ public abstract class MidiUtils {
             try {
                 return MidiSystem.getMidiDevice(info);
             } catch (MidiUnavailableException e) {
-                throw Utils.wrapException("getDevices", e);
+                throw SpongeUtils.wrapException(e);
             }
         }).collect(Collectors.toList());
     }
@@ -88,7 +88,7 @@ public abstract class MidiUtils {
 
             return null;
         } catch (MidiUnavailableException e) {
-            throw Utils.wrapException("getDefaultInputDevice", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -129,7 +129,7 @@ public abstract class MidiUtils {
                 result.put(info, MidiSystem.getMidiDevice(info));
             }
         } catch (MidiUnavailableException e) {
-            throw Utils.wrapException("getDeviceMap", e);
+            throw SpongeUtils.wrapException(e);
         }
 
         return result;
@@ -145,7 +145,7 @@ public abstract class MidiUtils {
             try {
                 device.open();
             } catch (MidiUnavailableException e) {
-                throw Utils.wrapException("open", e);
+                throw SpongeUtils.wrapException(e);
             }
         }
     }
@@ -209,7 +209,7 @@ public abstract class MidiUtils {
         try {
             result.setMessage(command, channel, data1, data2);
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("createShortMessage", e);
+            throw SpongeUtils.wrapException(e);
         }
 
         return result;

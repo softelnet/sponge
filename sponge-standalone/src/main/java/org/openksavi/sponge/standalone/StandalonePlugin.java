@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JavaPlugin;
 
 /**
@@ -32,9 +32,9 @@ import org.openksavi.sponge.java.JavaPlugin;
  */
 public class StandalonePlugin extends JavaPlugin {
 
-    public static final String SPRING_CONTEXT_CONFIG = Utils.getPackagePath(StandalonePlugin.class) + "/spring-context.xml";
+    public static final String SPRING_CONTEXT_CONFIG = SpongeUtils.getPackagePath(StandalonePlugin.class) + "/spring-context.xml";
 
-    public static final String CAMEL_CONTEXT_CONFIG = Utils.getPackagePath(StandalonePlugin.class) + "/camel-context.xml";
+    public static final String CAMEL_CONTEXT_CONFIG = SpongeUtils.getPackagePath(StandalonePlugin.class) + "/camel-context.xml";
 
     public static final String DEFAULT_ENGINE_BEAN_NAME = "spongeEngine";
 
@@ -59,6 +59,10 @@ public class StandalonePlugin extends JavaPlugin {
 
     public StandalonePlugin() {
         setName(NAME);
+    }
+
+    public StandalonePlugin(String name) {
+        super(name);
     }
 
     /**

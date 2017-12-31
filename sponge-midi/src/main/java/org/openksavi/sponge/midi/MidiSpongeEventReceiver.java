@@ -40,6 +40,9 @@ public class MidiSpongeEventReceiver implements Receiver {
     /** The MIDI plugin. */
     private MidiPlugin midiPlugin;
 
+    /** If {@code true} then generates the sound using the {@code sound} method in the {@code midiPlugin} before sending an event. */
+    private boolean sound = false;
+
     /**
      * Creates a new MIDI receiver.
      *
@@ -49,9 +52,26 @@ public class MidiSpongeEventReceiver implements Receiver {
         this.midiPlugin = midiPlugin;
     }
 
+    /**
+     * Creates a new MIDI receiver.
+     *
+     * @param midiPlugin the MIDI plugin.
+     * @param sound if {@code true} then generates the sound using the {@code sound} method in the {@code midiPlugin} before sending an
+     *        event.
+     */
+    public MidiSpongeEventReceiver(MidiPlugin midiPlugin, boolean sound) {
+        this(midiPlugin);
+
+        this.sound = sound;
+    }
+
     @Override
     public void send(MidiMessage message, long timeStamp) {
         try {
+            if (sound) {
+                midiPlugin.sound(message);
+            }
+
             MidiMessageEvent<?> event;
             if (message instanceof ShortMessage) {
                 event = MidiUtils.createShortMessageEvent(midiPlugin, (ShortMessage) message, timeStamp);

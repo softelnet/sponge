@@ -22,7 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 
@@ -111,7 +111,7 @@ public class AttributeMapEvent extends BaseEvent {
                 event.attributes = Collections.synchronizedMap(new LinkedHashMap<>(attributes));
                 break;
             case DEEP:
-                event.attributes = (Map<String, Object>) Utils.deepClone((Serializable) attributes);
+                event.attributes = (Map<String, Object>) SpongeUtils.deepClone((Serializable) attributes);
                 break;
             default:
                 throw new SpongeException("Unsupported value: " + clonePolicy);

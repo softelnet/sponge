@@ -26,7 +26,7 @@ import javax.sound.midi.ShortMessage;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
@@ -89,7 +89,7 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
         try {
             getMessage().setMessage(command, getChannel(), getData1(), getData2());
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setCommand", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -111,7 +111,7 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
         try {
             getMessage().setMessage(getCommand(), channel, getData1(), getData2());
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setChannel", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -133,7 +133,7 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
         try {
             getMessage().setMessage(getCommand(), getChannel(), data1, getData2());
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setData1", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -155,7 +155,7 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
         try {
             getMessage().setMessage(getCommand(), getChannel(), getData1(), data2);
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setData2", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -179,16 +179,16 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
     public MidiShortMessageEvent set(String name, Object value) {
         switch (name) {
         case ATTR_COMMAND:
-            setCommand(Utils.toInt(value));
+            setCommand(SpongeUtils.toInt(value));
             break;
         case ATTR_CHANNEL:
-            setChannel(Utils.toInt(value));
+            setChannel(SpongeUtils.toInt(value));
             break;
         case ATTR_DATA1:
-            setData1(Utils.toInt(value));
+            setData1(SpongeUtils.toInt(value));
             break;
         case ATTR_DATA2:
-            setData2(Utils.toInt(value));
+            setData2(SpongeUtils.toInt(value));
             break;
         default:
             super.set(name, value);

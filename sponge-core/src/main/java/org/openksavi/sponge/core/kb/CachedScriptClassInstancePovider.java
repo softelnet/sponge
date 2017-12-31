@@ -25,7 +25,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 
 /**
@@ -73,9 +73,9 @@ public class CachedScriptClassInstancePovider<S, T> {
         try {
             return createInstanceFunction.apply(cache != null ? cache.get(className) : createScript(className), javaClass);
         } catch (ExecutionException e) {
-            throw Utils.wrapException(getClass().getSimpleName(), e.getCause() != null ? e.getCause() : e);
+            throw SpongeUtils.wrapException(e.getCause() != null ? e.getCause() : e);
         } catch (Exception e) {
-            throw Utils.wrapException(getClass().getSimpleName(), e);
+            throw SpongeUtils.wrapException(getClass().getSimpleName(), e);
         }
     }
 

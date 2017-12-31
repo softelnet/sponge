@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
@@ -67,7 +67,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
 
     @SuppressWarnings("rawtypes")
     //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = Utils.immutableMapOf(
+    protected static final Map<Class, Class> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
             Action.class, NashornAction.class,
             Filter.class, NashornFilter.class,
             Trigger.class, NashornTrigger.class,

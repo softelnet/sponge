@@ -32,7 +32,7 @@ import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.core.event.DurationControlEvent;
 import org.openksavi.sponge.core.rule.BaseRuleAdapter;
 import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
@@ -124,7 +124,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
 
             logger.debug("{} - New instance, hash: {}, event: {}", adapter.getName(), adapter.hashCode(), event);
         } catch (Exception e) {
-            throw Utils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, e);
         }
     }
 

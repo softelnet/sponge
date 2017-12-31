@@ -19,7 +19,7 @@ package org.openksavi.sponge.core.event;
 import java.util.Map;
 
 import org.openksavi.sponge.ProcessorAdapter;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
@@ -36,7 +36,7 @@ public abstract class ProcessorControlEvent extends BaseControlEvent {
     private transient ProcessorAdapter processorAdapter;
 
     public ProcessorControlEvent(ProcessorAdapter processorAdapter) {
-        this(Utils.createControlEventName(ProcessorControlEvent.class), processorAdapter);
+        this(SpongeUtils.createControlEventName(ProcessorControlEvent.class), processorAdapter);
     }
 
     protected ProcessorControlEvent(String name, ProcessorAdapter processorAdapter) {
@@ -83,6 +83,6 @@ public abstract class ProcessorControlEvent extends BaseControlEvent {
 
     @Override
     public Map<String, Object> getAll() {
-        return Utils.immutableMapOf(ATTR_PROCESSOR_ADAPTER, processorAdapter);
+        return SpongeUtils.immutableMapOf(ATTR_PROCESSOR_ADAPTER, processorAdapter);
     }
 }

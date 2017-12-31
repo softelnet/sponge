@@ -30,13 +30,13 @@ public class UtilsTest {
 
         engine.getDefaultParameters().setInitialDynamicThreadPoolSizeRatio(0.3);
 
-        Assert.assertEquals(3, Utils.calculateInitialDynamicThreadPoolSize(engine, 10));
-        Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 3));
-        Assert.assertEquals(2, Utils.calculateInitialDynamicThreadPoolSize(engine, 5));
-        Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 2));
-        Assert.assertEquals(1, Utils.calculateInitialDynamicThreadPoolSize(engine, 1));
-        Assert.assertEquals(5, Utils.calculateInitialDynamicThreadPoolSize(engine, 15));
-        Assert.assertEquals(6, Utils.calculateInitialDynamicThreadPoolSize(engine, 20));
-        Assert.assertEquals(2, Utils.calculateInitialDynamicThreadPoolSize(engine, 8));
+        Assert.assertEquals(3, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 10));
+        Assert.assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 3));
+        Assert.assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 5));
+        Assert.assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 2));
+        Assert.assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 1));
+        Assert.assertEquals(5, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 15));
+        Assert.assertEquals(6, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 20));
+        Assert.assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 8));
     }
 }

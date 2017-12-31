@@ -31,6 +31,11 @@ public class EchoPlugin extends JavaPlugin {
     private int count = 1;
 
     public EchoPlugin() {
+        //
+    }
+
+    public EchoPlugin(String name) {
+        super(name);
     }
 
     @Override

@@ -685,7 +685,7 @@ In that case you may omit the versions of the dependencies.
 </dependency>
 ----
 
-The `sponge-core` artifact uses external dependencies. If you experience conflicts in incompatible versions of Guava or Quartz, you should use the `sponge-core-shaded` artifact instead, e.g.:
+The `sponge-core` artifact uses external dependencies. If you experience conflicts in incompatible versions of Guava, you should use the `sponge-core-shaded` artifact instead, e.g.:
 
 [source,xml,subs="verbatim,attributes"]
 ----

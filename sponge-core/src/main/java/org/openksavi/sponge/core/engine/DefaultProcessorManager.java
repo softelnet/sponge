@@ -38,7 +38,7 @@ import org.openksavi.sponge.core.correlator.BaseCorrelatorAdapterGroup;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.rule.BaseRuleAdapter;
 import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.Engine;
@@ -59,7 +59,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
     //@formatter:off
     /** Processor registration handlers. */
-    protected Map<ProcessorType, RegistrationHandler> registrationHandlers = Utils.immutableMapOf(
+    protected Map<ProcessorType, RegistrationHandler> registrationHandlers = SpongeUtils.immutableMapOf(
         ProcessorType.ACTION, new RegistrationHandler(
             (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
             (adapter) -> getEngine().getActionManager().removeAction(adapter.getName()),
@@ -156,7 +156,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
             try {
                 return (T) Class.forName(definition.getName()).newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                throw Utils.wrapException("createProcessorInstance", e);
+                throw SpongeUtils.wrapException(e);
             }
         } else {
             return definition.getKnowledgeBase().getInterpreter().createProcessorInstance(definition.getName(), cls);
@@ -181,7 +181,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
             try {
                 return new InstanceHolder((Processor) destJavaClass.newInstance(), destJavaClass.getName(), true);
             } catch (Throwable e) {
-                throw Utils.wrapException(destJavaClass.getName(), e);
+                throw SpongeUtils.wrapException(destJavaClass.getName(), e);
             }
         } else {
             throw new SpongeException("Unsupported processor class: " + processorClass);

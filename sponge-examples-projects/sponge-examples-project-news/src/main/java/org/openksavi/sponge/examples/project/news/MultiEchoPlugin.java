@@ -33,6 +33,11 @@ public class MultiEchoPlugin extends JavaPlugin {
     private int count = 1;
 
     public MultiEchoPlugin() {
+        //
+    }
+
+    public MultiEchoPlugin(String name) {
+        super(name);
     }
 
     @Override

@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -93,7 +93,7 @@ public class EngineBuilderTest {
             engine.shutdown();
         }
         if (engine.isError()) {
-            throw Utils.wrapException("testEngineBuilder", engine.getError());
+            throw SpongeUtils.wrapException(engine.getError());
         }
     }
 }

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
@@ -41,7 +41,7 @@ public class FiltersTestTemplate {
             assertEquals(0, TestUtils.getEventCounter(engine, "e1"));
             assertFalse(engine.isError());
         } catch (InterruptedException e) {
-            throw Utils.wrapException("testJavaFilter", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             engine.shutdown();
         }
@@ -58,7 +58,7 @@ public class FiltersTestTemplate {
             assertEquals(0, TestUtils.getEventCounter(engine, "red"));
             assertFalse(engine.isError());
         } catch (InterruptedException e) {
-            throw Utils.wrapException("testFilter", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             engine.shutdown();
         }

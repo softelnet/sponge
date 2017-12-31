@@ -26,7 +26,7 @@ import py4j.ClientServer;
 import py4j.ClientServer.ClientServerBuilder;
 
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
  * Sponge plugin that provides integration with CPython using Py4J ClientServer.
@@ -40,6 +40,14 @@ public class ClientServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
     protected ClientServer server;
 
     protected Boolean autoStartJavaServer;
+
+    public ClientServerPy4JPlugin() {
+        //
+    }
+
+    public ClientServerPy4JPlugin(String name) {
+        super(name);
+    }
 
     @Override
     public void onConfigure(Configuration configuration) {
@@ -74,7 +82,7 @@ public class ClientServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
             try {
                 setFacade((T) server.getPythonServerEntryPoint(new Class[] { ClassUtils.getClass(getFacadeInterfaceName()) }));
             } catch (Exception e) {
-                throw Utils.wrapException(getClass().getName(), e);
+                throw SpongeUtils.wrapException(e);
             }
         }
     }

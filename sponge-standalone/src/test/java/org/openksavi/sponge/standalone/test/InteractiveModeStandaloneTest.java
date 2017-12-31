@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import org.jline.terminal.TerminalBuilder;
 import org.junit.Test;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.standalone.StandaloneEngine;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
@@ -54,7 +54,7 @@ public class InteractiveModeStandaloneTest {
                         return console;
                     }).build();
 
-            Utils.executeConcurrentlyOnce(engine, () -> {
+            SpongeUtils.executeConcurrentlyOnce(engine, () -> {
                 engine.startup();
                 engine.getInteractiveMode().loop();
             });

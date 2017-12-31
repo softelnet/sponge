@@ -30,7 +30,7 @@ import org.jline.terminal.TerminalBuilder;
 
 import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.interactive.InteractiveModeConstants;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
 
 /**
@@ -77,7 +77,7 @@ public class JLineInteractiveModeConsole implements InteractiveModeConsole {
         try {
             terminal = (terminalBuilder != null ? terminalBuilder : TerminalBuilder.builder()).build();
         } catch (IOException e) {
-            throw Utils.wrapException("open", e);
+            throw SpongeUtils.wrapException(e);
         }
 
         LineReaderBuilder lineReaderBuilder = LineReaderBuilder.builder().appName(VersionInfo.PRODUCT).terminal(terminal).parser(parser);
@@ -99,7 +99,7 @@ public class JLineInteractiveModeConsole implements InteractiveModeConsole {
         try {
             terminal.close();
         } catch (IOException e) {
-            throw Utils.wrapException("close", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             reader = null;
         }

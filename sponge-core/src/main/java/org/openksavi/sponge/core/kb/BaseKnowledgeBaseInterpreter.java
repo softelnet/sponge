@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.rule.GenericRuleEventSpec;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
@@ -169,6 +169,6 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
     }
 
     public Logger getLogger() {
-        return LoggerFactory.getLogger(Utils.createGlobalLoggerName(getEngineOperations()));
+        return LoggerFactory.getLogger(SpongeUtils.createGlobalLoggerName(getEngineOperations()));
     }
 }

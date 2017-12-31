@@ -74,9 +74,9 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
  * This class defines a set of utility methods. It also wraps some of the external dependencies like Guava to avoid version conflicts in the
  * client code. All Sponge projects except sponge-core should use only such wrapper methods defined here.
  */
-public abstract class Utils {
+public abstract class SpongeUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpongeUtils.class);
 
     /**
      * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.
@@ -236,6 +236,20 @@ public abstract class Utils {
         }
     }
 
+    /**
+     * Wraps or creates a new Sponge exception.
+     *
+     * @param throwable source throwable.
+     * @return Sponge exception.
+     */
+    public static SpongeException wrapException(Throwable throwable) {
+        if (throwable instanceof SpongeException) {
+            return (SpongeException) throwable;
+        } else {
+            return new SpongeException(throwable);
+        }
+    }
+
     public static boolean containsException(Throwable exception, final Class<?> type) {
         return ExceptionUtils.indexOfType(exception, type) > -1;
     }
@@ -288,7 +302,7 @@ public abstract class Utils {
 
             return subdirs.size() > 0 ? subdirs.get(subdirs.size() - 1) : null;
         } catch (IOException e) {
-            throw Utils.wrapException("getLastSubdirectory", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -326,7 +340,7 @@ public abstract class Utils {
                 stream.close();
             }
         } catch (IOException e) {
-            throw Utils.wrapException("closeStream", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -336,7 +350,7 @@ public abstract class Utils {
                 stream.close();
             }
         } catch (IOException e) {
-            throw Utils.wrapException("closeStream", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -364,7 +378,7 @@ public abstract class Utils {
         }));
     }
 
-    protected Utils() {
+    protected SpongeUtils() {
         //
     }
 }

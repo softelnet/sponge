@@ -17,7 +17,7 @@
 package org.openksavi.sponge.midi;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 
 /**
@@ -29,7 +29,7 @@ public class MidiGenerateSoundMain {
         Engine engine =
                 DefaultEngine.builder().knowledgeBase("kb", "examples/midi/midi_generate_sound.py").plugin(new MidiPlugin()).build();
         engine.startup();
-        Utils.registerShutdownHook(engine);
+        SpongeUtils.registerShutdownHook(engine);
     }
 
     /**

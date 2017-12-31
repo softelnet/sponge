@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.GenericExceptionContext;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 
 /**
@@ -82,7 +82,7 @@ public class StandaloneEngineMain {
         if (engine != null) {
             if (engine.getInteractiveMode() != null) {
                 engine.getInteractiveMode().getExceptionHandler().handleException(e,
-                        new GenericExceptionContext(engine, ObjectUtils.defaultIfNull(Utils.getSourceName(e), "interactive")));
+                        new GenericExceptionContext(engine, ObjectUtils.defaultIfNull(SpongeUtils.getSourceName(e), "interactive")));
             } else {
                 engine.handleError("standalone", e);
             }
@@ -97,7 +97,7 @@ public class StandaloneEngineMain {
         }
 
         if (testMode) {
-            throw Utils.wrapException("handleError", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 

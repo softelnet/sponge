@@ -23,4 +23,11 @@ import org.openksavi.sponge.core.plugin.BasePlugin;
  */
 public abstract class JavaPlugin extends BasePlugin {
 
+    protected JavaPlugin() {
+        //
+    }
+
+    protected JavaPlugin(String name) {
+        setName(name);
+    }
 }

@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.TestUtils;
@@ -132,7 +132,7 @@ public class CoreUnorderedRulesTest {
         try {
             TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {
-            throw Utils.wrapException("sleep", e);
+            throw SpongeUtils.wrapException(e);
         }
 
         expected.forEach((rule, sequences) -> {

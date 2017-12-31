@@ -30,7 +30,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -92,7 +92,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         } catch (NoSuchMethodException e) {
             // Ignore non existing, optional function.
         } catch (ScriptException e) {
-            throw Utils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, e);
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return (T) getInvocable().invokeFunction(name, args);
         } catch (NoSuchMethodException | ScriptException e) {
-            throw Utils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, e);
         }
     }
 
@@ -111,7 +111,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return getInvocable().invokeMethod(target, name, args);
         } catch (NoSuchMethodException | ScriptException e) {
-            throw Utils.wrapException(target + "." + name, e);
+            throw SpongeUtils.wrapException(target + "." + name, e);
         }
     }
 
@@ -126,7 +126,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             scriptEngine.put(name, value);
         } catch (Throwable e) {
-            throw Utils.wrapException("setVariable", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -135,7 +135,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).containsKey(name);
         } catch (Throwable e) {
-            throw Utils.wrapException("existsVariable", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -148,7 +148,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return scriptEngine.get(name);
         } catch (Throwable e) {
-            throw Utils.wrapException("getVariable", e);
+            throw SpongeUtils.wrapException("getVariable", e);
         }
     }
 
@@ -157,7 +157,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return eval(scriptEngine, expression);
         } catch (Throwable e) {
-            throw Utils.wrapException("eval", e);
+            throw SpongeUtils.wrapException("eval", e);
         }
     }
 
@@ -166,7 +166,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return (T) scriptEngine.eval(expression);
         } catch (Throwable e) {
-            throw Utils.wrapException("eval", e);
+            throw SpongeUtils.wrapException("eval", e);
         }
     }
 
@@ -176,7 +176,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return (T) scriptEngine.eval(reader);
         } catch (Throwable e) {
-            throw Utils.wrapException(fileName, e);
+            throw SpongeUtils.wrapException(fileName, e);
         }
     }
 
@@ -200,12 +200,12 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
 
     @Override
     public boolean isKnowledgeBaseException(Throwable exception) {
-        return Utils.containsException(exception, ScriptException.class);
+        return SpongeUtils.containsException(exception, ScriptException.class);
     }
 
     @Override
     public Throwable getJavaException(Throwable knowledgeBaseException) {
-        return Utils.getException(knowledgeBaseException, ScriptException.class);
+        return SpongeUtils.getException(knowledgeBaseException, ScriptException.class);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -215,13 +215,13 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
             try {
                 return ((Compilable) scriptEngine).compile(expression);
             } catch (ScriptException e) {
-                throw Utils.wrapException("createCachedScriptClassInstancePovider", e);
+                throw SpongeUtils.wrapException(e);
             }
         }, getScriptClassInstancePoviderFormat(), (script, javaClass) -> {
             try {
                 return (T) script.eval();
             } catch (ScriptException e) {
-                throw Utils.wrapException("createCachedScriptClassInstancePovider", e);
+                throw SpongeUtils.wrapException(e);
             }
         });
     }

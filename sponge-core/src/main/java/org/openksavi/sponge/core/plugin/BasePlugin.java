@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.plugin.Plugin;
@@ -161,6 +161,6 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
      * @return logger.
      */
     public Logger getLogger() {
-        return LoggerFactory.getLogger(Utils.createPluginLoggerName() + "." + (getName() != null ? getName() : getClass().getName()));
+        return LoggerFactory.getLogger(SpongeUtils.createPluginLoggerName() + "." + (getName() != null ? getName() : getClass().getName()));
     }
 }

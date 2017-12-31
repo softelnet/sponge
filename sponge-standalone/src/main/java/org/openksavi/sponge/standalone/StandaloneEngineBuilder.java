@@ -39,7 +39,7 @@ import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.engine.LoggingExceptionHandler;
 import org.openksavi.sponge.core.engine.interactive.DefaultInteractiveMode;
 import org.openksavi.sponge.core.engine.interactive.InteractiveModeConstants;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
@@ -181,7 +181,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
                     throw new StandaloneInitializationException("Empty knowledge base name.");
                 }
 
-                List<String> kbFiles = Utils.split(kbFilesString, KB_FILES_SEPARATOR);
+                List<String> kbFiles = SpongeUtils.split(kbFilesString, KB_FILES_SEPARATOR);
                 knowledgeBase(kbName, kbFiles.toArray(new String[kbFiles.size()]));
             });
 

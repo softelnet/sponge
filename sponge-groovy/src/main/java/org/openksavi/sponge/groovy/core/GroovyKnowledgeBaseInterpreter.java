@@ -52,7 +52,7 @@ import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.filter.Filter;
@@ -82,7 +82,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @SuppressWarnings("rawtypes")
     //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = Utils.immutableMapOf(
+    protected static final Map<Class, Class> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
             Action.class, GroovyAction.class,
             Filter.class, GroovyFilter.class,
             Trigger.class, GroovyTrigger.class,
@@ -162,7 +162,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
             binding.setProperty(name, value);
             scripts.forEach(script -> script.setProperty(name, value));
         } catch (Throwable e) {
-            throw Utils.wrapException("setVariable", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -199,7 +199,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
             return variable.getValue();
         } catch (Throwable e) {
-            throw Utils.wrapException("getVariable", e);
+            throw SpongeUtils.wrapException("getVariable", e);
         }
     }
 
@@ -208,7 +208,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             return doGetVariable(name) != null;
         } catch (Throwable e) {
-            throw Utils.wrapException("existsVariable", e);
+            throw SpongeUtils.wrapException("existsVariable", e);
         }
     }
 
@@ -231,7 +231,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             doInvokeFunction(name, true, null);
         } catch (Throwable e) {
-            throw Utils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, e);
         }
     }
 
@@ -241,7 +241,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             return (T) doInvokeFunction(name, false, args);
         } catch (Throwable e) {
-            throw Utils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, e);
         }
     }
 
@@ -275,12 +275,12 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @Override
     public boolean isKnowledgeBaseException(Throwable exception) {
-        return Utils.containsException(exception, GroovyRuntimeException.class);
+        return SpongeUtils.containsException(exception, GroovyRuntimeException.class);
     }
 
     @Override
     public Throwable getJavaException(Throwable knowledgeBaseException) {
-        return Utils.getException(knowledgeBaseException, GroovyRuntimeException.class);
+        return SpongeUtils.getException(knowledgeBaseException, GroovyRuntimeException.class);
     }
 
     /**
@@ -303,7 +303,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             return (T) shell.evaluate(code);
         } catch (Throwable e) {
-            throw Utils.wrapException("eval", e);
+            throw SpongeUtils.wrapException("eval", e);
         }
     }
 
@@ -313,7 +313,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             return (T) shell.evaluate(reader, fileName);
         } catch (Throwable e) {
-            throw Utils.wrapException(fileName, e);
+            throw SpongeUtils.wrapException(fileName, e);
         }
     }
 
@@ -322,7 +322,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             return ((GroovyObject) target).invokeMethod(name, args);
         } catch (Throwable e) {
-            throw Utils.wrapException(target + "." + name, e);
+            throw SpongeUtils.wrapException(target + "." + name, e);
         }
     }
 
@@ -366,7 +366,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         try {
             shell.getClassLoader().loadClass(clazz.getName());
         } catch (ClassNotFoundException e) {
-            throw Utils.wrapException("reloadClass", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -380,7 +380,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
             script.run();
             return script;
         } catch (IOException | ResourceException | ScriptException e) {
-            throw Utils.wrapException("reloadScript", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 

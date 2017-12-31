@@ -23,7 +23,7 @@ import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
@@ -125,7 +125,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            throw Utils.wrapException(getName(), e);
+            throw SpongeUtils.wrapException(getName(), e);
         }
     }
 
@@ -172,7 +172,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
      * @return logger.
      */
     public Logger getLogger() {
-        return LoggerFactory.getLogger(Utils.createLoggerName(getKnowledgeBase(), getName()));
+        return LoggerFactory.getLogger(SpongeUtils.createLoggerName(getKnowledgeBase(), getName()));
     }
 
     /**

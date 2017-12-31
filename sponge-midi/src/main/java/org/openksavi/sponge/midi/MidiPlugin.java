@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JavaPlugin;
 import org.openksavi.sponge.midi.event.MidiMetaMessageEvent;
 import org.openksavi.sponge.midi.event.MidiShortMessageEvent;
@@ -106,6 +106,15 @@ public class MidiPlugin extends JavaPlugin {
     }
 
     /**
+     * Creates a new MIDI plugin.
+     *
+     * @param name the plugin name.
+     */
+    public MidiPlugin(String name) {
+        super(name);
+    }
+
+    /**
      * Applies the XML configuration to this plugin.
      */
     @Override
@@ -150,7 +159,7 @@ public class MidiPlugin extends JavaPlugin {
                 loadAllInstruments();
             }
         } catch (MidiUnavailableException e) {
-            throw Utils.wrapException("startup", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -183,7 +192,7 @@ public class MidiPlugin extends JavaPlugin {
                 });
             }
         } catch (MidiUnavailableException e) {
-            throw Utils.wrapException("updateSequencer", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             lock.unlock();
         }
@@ -203,7 +212,7 @@ public class MidiPlugin extends JavaPlugin {
                 synthesizerReceiver = synthesizer.getReceiver();
             }
         } catch (MidiUnavailableException e) {
-            throw Utils.wrapException("updateSynthesizer", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             lock.unlock();
         }
@@ -224,7 +233,7 @@ public class MidiPlugin extends JavaPlugin {
                 inputTransmitter.setReceiver(new MidiSpongeEventReceiver(this));
             }
         } catch (MidiUnavailableException e) {
-            throw Utils.wrapException("updateInputDevice", e);
+            throw SpongeUtils.wrapException(e);
         } finally {
             lock.unlock();
         }
@@ -525,7 +534,7 @@ public class MidiPlugin extends JavaPlugin {
         try {
             startPlay(MidiSystem.getSequence(midiFile));
         } catch (InvalidMidiDataException | IOException e) {
-            throw Utils.wrapException("startPlay", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -538,7 +547,7 @@ public class MidiPlugin extends JavaPlugin {
         try {
             startPlay(MidiSystem.getSequence(stream));
         } catch (InvalidMidiDataException | IOException e) {
-            throw Utils.wrapException("startPlay", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -551,7 +560,7 @@ public class MidiPlugin extends JavaPlugin {
         try {
             startPlay(MidiSystem.getSequence(url));
         } catch (InvalidMidiDataException | IOException e) {
-            throw Utils.wrapException("startPlay", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -564,7 +573,7 @@ public class MidiPlugin extends JavaPlugin {
         try {
             sequencer.setSequence(sequence);
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("startPlay", e);
+            throw SpongeUtils.wrapException(e);
         }
         sequencer.start();
     }

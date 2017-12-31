@@ -27,7 +27,7 @@ import org.tensorflow.Session;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class TensorflowTest {
 
@@ -56,7 +56,7 @@ public class TensorflowTest {
     // TODO @Test
     public void testLoadModel() throws Exception {
         String modelDir = "examples/tensorflow/estimator/model";
-        SavedModelBundle bundle = SavedModelBundle.load(modelDir + "/" + Utils.getLastSubdirectory(modelDir), "serve");
+        SavedModelBundle bundle = SavedModelBundle.load(modelDir + "/" + SpongeUtils.getLastSubdirectory(modelDir), "serve");
 
         try (Session s = bundle.session()/* ; Tensor output = s.runner().fetch("MyConst").run().get(0) */) {
             Tensor x = Tensor.create(new float[] { 2, 5, 8, 1 });

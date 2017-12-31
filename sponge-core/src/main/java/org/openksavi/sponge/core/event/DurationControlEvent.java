@@ -18,7 +18,7 @@ package org.openksavi.sponge.core.event;
 
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
  * A control event for handling duration timeout in event set processors.
@@ -31,7 +31,7 @@ public class DurationControlEvent extends ProcessorControlEvent {
     private transient EventSetProcessorAdapter eventSetProcessorAdapter;
 
     public DurationControlEvent(EventSetProcessorAdapter eventSetProcessorAdapter) {
-        super(Utils.createControlEventName(DurationControlEvent.class), eventSetProcessorAdapter.getGroup());
+        super(SpongeUtils.createControlEventName(DurationControlEvent.class), eventSetProcessorAdapter.getGroup());
 
         this.eventSetProcessorAdapter = eventSetProcessorAdapter;
 

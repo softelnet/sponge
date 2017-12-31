@@ -14,7 +14,7 @@ def onInit():
     EPS.setVariable("correlationEventsLog", correlationEventsLog)
 
 def run(rule):
-    rule.logger.debug("Running rule {} for sequence: {}; alias map: {}", rule.hashCode(), Utils.toStringArrayEventSequence(rule.eventSequence, "label"),
+    rule.logger.debug("Running rule {} for sequence: {}; alias map: {}", rule.hashCode(), SpongeUtils.toStringArrayEventSequence(rule.eventSequence, "label"),
                       rule.eventAliasMap)
     global correlationEventsLog
     correlationEventsLog.addEvents(rule.name, rule)

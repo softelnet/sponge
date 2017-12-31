@@ -27,7 +27,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
@@ -84,7 +84,7 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
         try {
             getMessage().setMessage(type, getData(), getData().length);
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setType", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -106,7 +106,7 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
         try {
             getMessage().setMessage(getMessageType(), data, data.length);
         } catch (InvalidMidiDataException e) {
-            throw Utils.wrapException("setData", e);
+            throw SpongeUtils.wrapException(e);
         }
     }
 
@@ -126,7 +126,7 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
     public MidiMetaMessageEvent set(String name, Object value) {
         switch (name) {
         case ATTR_MESSAGE_TYPE:
-            setMessageType(Utils.toInt(value));
+            setMessageType(SpongeUtils.toInt(value));
             break;
         case ATTR_DATA:
             setData((byte[]) value);

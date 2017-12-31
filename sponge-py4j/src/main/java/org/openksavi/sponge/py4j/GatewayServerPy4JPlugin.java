@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import py4j.GatewayServer;
 import py4j.GatewayServer.GatewayServerBuilder;
 
-import org.openksavi.sponge.core.util.Utils;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
  * Sponge plugin that provides integration with CPython using Py4J GatewayServer.
@@ -35,6 +35,14 @@ public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
     private static final Logger logger = LoggerFactory.getLogger(GatewayServerPy4JPlugin.class);
 
     protected GatewayServer server;
+
+    public GatewayServerPy4JPlugin() {
+        //
+    }
+
+    public GatewayServerPy4JPlugin(String name) {
+        super(name);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -58,7 +66,7 @@ public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
             try {
                 setFacade((T) server.getPythonServerEntryPoint(new Class[] { ClassUtils.getClass(getFacadeInterfaceName()) }));
             } catch (Exception e) {
-                throw Utils.wrapException(getClass().getName(), e);
+                throw SpongeUtils.wrapException(e);
             }
         }
     }
