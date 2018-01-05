@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +117,7 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
     /**
      * Sets the MIDI timeStamp.
      *
-     * @param message the MIDI timeStamp.
+     * @param timeStamp the MIDI timeStamp.
      */
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;

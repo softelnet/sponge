@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
     /**
      * Sets the MIDI MetaMessage type.
      *
-     * @param data the MIDI MetaMessage type.
+     * @param type the MIDI MetaMessage type.
      */
     public void setMessageType(int type) {
         try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -336,7 +336,7 @@ public abstract class MidiUtils {
      *
      * @param synthesizer the synthesizer.
      * @param channel the channel.
-     * @param instrument the instrument number.
+     * @param instrumentName the instrument name.
      * @return the new instrument.
      */
     public static Instrument setInstrument(Synthesizer synthesizer, int channel, String instrumentName) {
