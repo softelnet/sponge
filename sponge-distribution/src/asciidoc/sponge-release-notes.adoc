@@ -5,9 +5,12 @@ A high-level view of the changes introduced in {sponge} releases.
 [discrete]
 == 1.0.7 (not released yet)
 
+* Added MIDI support. The MIDI plugin allows processing MIDI messages by the {sponge} and provides communication with MIDI devices.
 * API change: The `Utils` class has been renamed to `SpongeUtils`.
-* MIDI support.
 * The shaded version of sponge-core (sponge-core-shaded) shades only Guava now.
+* Downgraded Jython to version 2.7.0 to prevent stability issues.
+* Added Sponge External group of projects in order to provide functionalities that require licenses incompatible with Apache 2.0.
+* Added MPD support (in Sponge External, because it is GNU GPL 3.0 licensed).
 
 [discrete]
 == 1.0.6 (2017.12.01)

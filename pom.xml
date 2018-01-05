@@ -68,7 +68,10 @@
 
         <javax.inject.version>1</javax.inject.version>
         <javax.transaction.version>1.2</javax.transaction.version>
-        <jython.version>2.7.1</jython.version>
+
+        <!-- The newest version of Jython (2.7.1) is not used in Sponge. As stated on the Jython home page (http://www.jython.org/downloads.html): -->
+        <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version."  -->
+        <jython.version>2.7.0</jython.version>
         <jruby.version>9.1.14.0</jruby.version>
         <groovy.version>2.4.12</groovy.version>
 
@@ -180,7 +183,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.20</version>
                     <configuration>
-                        <argLine>-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
+                        <argLine>-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
                         <excludes>
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
                             <exclude>*/sponge/integration/tests/stability/*</exclude>

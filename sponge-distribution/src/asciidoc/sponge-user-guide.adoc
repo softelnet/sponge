@@ -10,6 +10,7 @@
 :camelSourcesUrl: {sourcesUrl}/sponge-camel/examples/camel/
 :py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
 :midiSourcesUrl: {sourcesUrl}/sponge-midi/examples/midi/
+:mpdSourcesUrl: {externalSourcesUrl}/sponge-mpd/examples/mpd/
 
 == Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
@@ -769,7 +770,7 @@ Actions should be created only when there is a need to provide some functionalit
 === Python
 
 ==== Limitations
-Note that Jython 2.7.1 (currently used in {sponge}) has a few bugs that could in some cases impact the stability of the system, e.g.: http://bugs.jython.org/issue2487.
+Note that Jython 2.7.1 has a few bugs that could in some cases impact the stability of the system, e.g.: http://bugs.jython.org/issue2487.
 
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
@@ -1196,6 +1197,14 @@ ifdef::useReferences[({midiSourcesUrl}/midi_input.py[py])]
 |`midi_play_file`
 ifdef::useReferences[({midiSourcesUrl}/midi_play_file.py[py])]
 |Shows how MIDI messages created by a MIDI sequencer playing a MIDI file could be processed in a {sponge} knowledge base.
+
+|`mpd_events`
+ifdef::useReferences[({mpdSourcesUrl}/mpd_events.py[py])]
+|Shows MPD events.
+
+|`mpd_set_playlist`
+ifdef::useReferences[({mpdSourcesUrl}/mpd_set_playlist.py[py])]
+|Shows how to set an MPD playlist.
 |===
 
 === Standalone examples
@@ -1331,12 +1340,26 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |Dependencies for external libraries used by the standalone command-line application.
 |===
 
+The following artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality. Furthermore, these artifacts are not distributed in the {sponge} standalone command-line application which is released under the Apache 2.0 license.
+
+.{sponge} external Maven artifacts
+[cols="2,2,1,6"]
+|===
+|GroupId |ArtifactId |License |Central Maven Repository |Description
+
+|`org.openksavi.sponge`
+|`sponge-mpd`
+|GNU GPL 3.0
+|Yes
+|MPD (Music Player Daemon) integration.
+|===
+
 
 include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 
 
 == Third party software
-{sponge} uses third party software released under various open-source licenses.
+{sponge} uses or supports third party software released under various open-source licenses.
 
 .Key third party software
 [cols="1,1,2"]
@@ -1390,6 +1413,16 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://www.tensorflow.org[Tensorflow]
 |Apache 2.0
 |An open-source software library for Machine Intelligence.
+|===
+
+.Key third party software used by Sponge external modules
+[cols="1,1,2"]
+|===
+|Package |License |Description
+
+|https://github.com/finnyb/javampd[JavaMPD]
+|http://www.gnu.org/copyleft/gpl.html[GNU GPL Version 3]
+|Used for integration with MPD (Music Player Daemon) server. Note that this library is *GPL licensed* therefore it is not fully compatible with the Apache License, Version 2.0.
 |===
 
 The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution.

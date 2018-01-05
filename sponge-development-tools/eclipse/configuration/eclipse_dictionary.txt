@@ -39,3 +39,7 @@ tempo
 soundbank
 timestamp
 javadoc
+downgraded
+playlist
+hostname
+basename
