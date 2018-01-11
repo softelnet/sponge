@@ -29,9 +29,23 @@ public interface KnowledgeBaseType {
     String getTypeCode();
 
     /**
+     * Returns the language of the knowledge base.
+     *
+     * @return the language of the knowledge base.
+     */
+    String getLanguage();
+
+    /**
      * Returns file extension.
      *
      * @return file extension.
      */
     String getFileExtension();
+
+    /**
+     * Returns {@code true} if knowledge bases of this type are script-based.
+     *
+     * @return {@code true} if knowledge bases of this type are script-based.
+     */
+    boolean isScript();
 }

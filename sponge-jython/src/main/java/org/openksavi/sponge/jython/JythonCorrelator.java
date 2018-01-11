@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jython;
 
+import org.openksavi.sponge.core.correlator.BaseCorrelator;
+
 /**
  * Jython-specific implementation of the correlator.
  */
-public abstract class JythonCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator {
+public abstract class JythonCorrelator extends BaseCorrelator {
 
 }

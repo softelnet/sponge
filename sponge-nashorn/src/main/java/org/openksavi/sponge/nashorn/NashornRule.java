@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.nashorn.core.NashornScriptKnowledgeBaseEventCondition;
@@ -29,7 +30,7 @@ import org.openksavi.sponge.rule.EventCondition;
  * JavaScript-specific implementation of the rule.
  */
 @SuppressWarnings("restriction")
-public abstract class NashornRule extends org.openksavi.sponge.core.rule.BaseRule implements NashornScriptObject {
+public abstract class NashornRule extends BaseRule implements NashornScriptObject {
 
     private static final Function<? super ScriptObjectMirror, ? extends EventCondition> MAPPER =
             function -> new NashornScriptKnowledgeBaseEventCondition(function);

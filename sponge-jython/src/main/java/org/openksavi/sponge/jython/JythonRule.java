@@ -22,6 +22,7 @@ import org.python.core.PyFunction;
 import org.python.core.PyMethod;
 import org.python.core.PyObject;
 
+import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.jython.core.JythonFunctionEventCondition;
@@ -30,7 +31,7 @@ import org.openksavi.sponge.rule.EventCondition;
 /**
  * Jython-specific implementation of the rule.
  */
-public abstract class JythonRule extends org.openksavi.sponge.core.rule.BaseRule {
+public abstract class JythonRule extends BaseRule {
 
     private static final Function<? super PyObject, ? extends EventCondition> MAPPER = pyObject -> {
         if (pyObject instanceof PyMethod) {

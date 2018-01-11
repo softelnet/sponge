@@ -25,6 +25,8 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -43,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
@@ -52,6 +55,7 @@ import org.apache.commons.configuration2.ConfigurationUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,6 +112,23 @@ public abstract class SpongeUtils {
         } finally {
             // Shutdown the engine.
             engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T createInstance(String className, Class<T> javaClass) {
+        try {
+            return (T) Class.forName(className).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new SpongeException(e);
+        }
+    }
+
+    public static Object invokeMethod(Object target, String name, Object... args) {
+        try {
+            return MethodUtils.invokeMethod(target, name, args);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new SpongeException(e);
         }
     }
 
@@ -376,6 +397,14 @@ public abstract class SpongeUtils {
                 logger.error("Shutdown hook error", e);
             }
         }));
+    }
+
+    public static String toUpperCamelCaseFromUnderscore(String s) {
+        return s != null ? CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, s.toLowerCase()) : null;
+    }
+
+    public static boolean isAbstract(Class<?> cls) {
+        return Modifier.isAbstract(cls.getModifiers());
     }
 
     protected SpongeUtils() {

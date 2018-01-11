@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jruby;
 
+import org.openksavi.sponge.core.action.BaseAction;
+
 /**
  * JRuby-specific implementation of the action.
  */
-public abstract class JRubyAction extends org.openksavi.sponge.core.action.BaseAction {
+public abstract class JRubyAction extends BaseAction {
 
 }

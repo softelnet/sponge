@@ -18,10 +18,12 @@ package org.openksavi.sponge.jruby;
 
 import org.jruby.RubyArray;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
+
 /**
  * JRuby-specific implementation of Utils.
  */
-public abstract class RubyUtils extends org.openksavi.sponge.core.util.SpongeUtils {
+public abstract class RubyUtils extends SpongeUtils {
 
     public static String[] toJava(RubyArray scriptArray) {
         return (String[]) scriptArray.toArray(new String[scriptArray.size()]);

@@ -69,4 +69,9 @@ public interface KnowledgeBase extends KnowledgeBaseOperations {
      * @param knowledgeBaseInterpreter an interpreter associated with this knowledge base.
      */
     void setInterpreter(KnowledgeBaseInterpreter knowledgeBaseInterpreter);
+
+    /**
+     * Scans this knowledge base for processor definitions (classes) in order to auto enable.
+     */
+    void scanToAutoEnable();
 }

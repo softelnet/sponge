@@ -147,7 +147,7 @@ public class KnowledgeBaseTestTemplate {
 
     public static void testScriptOverriding(KnowledgeBaseType type) {
         Engine engine =
-                DefaultEngine.builder().config(ScriptTestUtils.getScriptConfigFileName(type, "knowledge_base_script_overriding")).build();
+                DefaultEngine.builder().config(ScriptTestUtils.getConfigFileName(type, "knowledge_base_script_overriding")).build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 

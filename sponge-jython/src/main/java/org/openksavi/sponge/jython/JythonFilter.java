@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jython;
 
+import org.openksavi.sponge.core.filter.BaseFilter;
+
 /**
  * Jython-specific implementation of the filter.
  */
-public abstract class JythonFilter extends org.openksavi.sponge.core.filter.BaseFilter {
+public abstract class JythonFilter extends BaseFilter {
 
 }

@@ -16,12 +16,13 @@
 
 package org.openksavi.sponge.nashorn;
 
+import org.openksavi.sponge.core.filter.BaseFilter;
 import org.openksavi.sponge.event.Event;
 
 /**
  * JavaScript-specific implementation of the filter.
  */
-public abstract class NashornFilter extends org.openksavi.sponge.core.filter.BaseFilter implements NashornScriptObject {
+public abstract class NashornFilter extends BaseFilter implements NashornScriptObject {
 
     /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;

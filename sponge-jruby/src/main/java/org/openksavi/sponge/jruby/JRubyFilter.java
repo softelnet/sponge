@@ -16,10 +16,12 @@
 
 package org.openksavi.sponge.jruby;
 
+import org.openksavi.sponge.core.filter.BaseFilter;
+
 /**
  * JRuby-specific implementation of the filter.
  */
-public abstract class JRubyFilter extends org.openksavi.sponge.core.filter.BaseFilter {
+public abstract class JRubyFilter extends BaseFilter {
 
     public final void setEvents(Object eventNames) {
         super.setEvents(RubyUtils.toJavaArray(eventNames));

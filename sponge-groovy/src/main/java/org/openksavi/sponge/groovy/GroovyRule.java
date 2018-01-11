@@ -22,6 +22,7 @@ import groovy.lang.Closure;
 
 import org.codehaus.groovy.runtime.MethodClosure;
 
+import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.groovy.core.GroovyClosureEventCondition;
@@ -31,7 +32,7 @@ import org.openksavi.sponge.rule.EventCondition;
 /**
  * Groovy-specific implementation of the rule.
  */
-public abstract class GroovyRule extends org.openksavi.sponge.core.rule.BaseRule {
+public abstract class GroovyRule extends BaseRule {
 
     private static final Function<? super Closure<Boolean>, ? extends EventCondition> MAPPER = closure -> {
         if (closure instanceof MethodClosure) {

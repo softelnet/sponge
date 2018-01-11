@@ -34,8 +34,10 @@ import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventName;
@@ -188,11 +190,6 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     @Override
     public void onLoad() {
-        // Scan to auto-enable processors if this functionality is turned on.
-        if (getEngineOperations().getEngine().getConfigurationManager().getAutoEnable()) {
-            scanToAutoEnable();
-        }
-
         invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_LOAD);
     }
 
@@ -240,12 +237,21 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     protected List<Class<?>> getStandardImportClasses() {
         //@formatter:off
         return Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
-                Event.class, Configuration.class, EventClonePolicy.class, EventSetProcessorState.class, EventName.class,
+                Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
         //@formatter:on
     }
 
     protected boolean isProcessorAbstract(String className) {
         return className.startsWith(KnowledgeBaseConstants.ABSTRACT_PROCESSOR_CLASS_NAME_PREFIX);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public ProcessorInstanceHolder createProcessorInstanceByProcessorClass(KnowledgeBase knowledgeBase, Object processorClass,
+            Class<?> javaClass) {
+        String name = knowledgeBase.getInterpreter().getScriptKnowledgeBaseProcessorClassName(processorClass);
+
+        return name != null ? new GenericProcessorInstanceHolder(createProcessorInstance(name, (Class) javaClass), name, false) : null;
     }
 }

@@ -24,7 +24,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class RubyConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("ruby", "rb");
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("ruby", "ruby", "rb", true);
 
     private RubyConstants() {
         //

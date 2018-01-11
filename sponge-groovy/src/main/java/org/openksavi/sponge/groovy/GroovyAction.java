@@ -16,12 +16,13 @@
 
 package org.openksavi.sponge.groovy;
 
+import org.openksavi.sponge.core.action.BaseAction;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 
 /**
  * Groovy-specific implementation of the action.
  */
-public abstract class GroovyAction extends org.openksavi.sponge.core.action.BaseAction {
+public abstract class GroovyAction extends BaseAction {
 
     /**
      * Method required for accessing EPS in Groovy-based processors.

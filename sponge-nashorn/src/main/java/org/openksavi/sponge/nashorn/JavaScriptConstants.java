@@ -24,7 +24,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class JavaScriptConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("javascript", "js");
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("javascript", "javascript", "js", true);
 
     private JavaScriptConstants() {
         //

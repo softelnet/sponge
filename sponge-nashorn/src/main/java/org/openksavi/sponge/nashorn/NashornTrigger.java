@@ -16,12 +16,13 @@
 
 package org.openksavi.sponge.nashorn;
 
+import org.openksavi.sponge.core.trigger.BaseTrigger;
 import org.openksavi.sponge.event.Event;
 
 /**
  * JavaScript-specific implementation of the trigger.
  */
-public abstract class NashornTrigger extends org.openksavi.sponge.core.trigger.BaseTrigger implements NashornScriptObject {
+public abstract class NashornTrigger extends BaseTrigger implements NashornScriptObject {
 
     /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;

@@ -16,10 +16,12 @@
 
 package org.openksavi.sponge.jruby;
 
+import org.openksavi.sponge.core.trigger.BaseTrigger;
+
 /**
  * JRuby-specific implementation of the trigger.
  */
-public abstract class JRubyTrigger extends org.openksavi.sponge.core.trigger.BaseTrigger {
+public abstract class JRubyTrigger extends BaseTrigger {
 
     public final void setEvents(Object eventNames) {
         super.setEvents(RubyUtils.toJavaArray(eventNames));

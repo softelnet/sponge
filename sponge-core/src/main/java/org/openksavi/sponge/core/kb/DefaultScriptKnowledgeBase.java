@@ -139,4 +139,9 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
     public void reload() {
         getInterpreter().reload(scripts);
     }
+
+    @Override
+    public void scanToAutoEnable() {
+        getInterpreter().scanToAutoEnable();
+    }
 }

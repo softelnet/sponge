@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,33 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.groovy;
+package org.openksavi.sponge.engine;
 
-import org.openksavi.sponge.core.correlator.BaseCorrelator;
-import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+import org.openksavi.sponge.Processor;
 
 /**
- * Groovy-specific implementation of the correlator.
+ * A processor instance holder.
  */
-public abstract class GroovyCorrelator extends BaseCorrelator {
+public interface ProcessorInstanceHolder {
 
     /**
-     * Method required for accessing EPS in Groovy-based processors.
+     * Returns the processor.
      *
-     * @return EPS.
+     * @return the processor.
      */
-    public final KnowledgeBaseEngineOperations getEPS() {
-        return getEps();
-    }
+    Processor<?> getProcessor();
+
+    /**
+     * Returns the processor name.
+     *
+     * @return the processor name.
+     */
+    String getName();
+
+    /**
+     * Returns {@code true} if the processor is Java-based.
+     *
+     * @return {@code true} if the processor is Java-based.
+     */
+    boolean isJavaDefined();
 }

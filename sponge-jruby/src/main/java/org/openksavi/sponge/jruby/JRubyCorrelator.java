@@ -16,10 +16,12 @@
 
 package org.openksavi.sponge.jruby;
 
+import org.openksavi.sponge.core.correlator.BaseCorrelator;
+
 /**
  * JRuby-specific implementation of the correlator.
  */
-public abstract class JRubyCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator {
+public abstract class JRubyCorrelator extends BaseCorrelator {
 
     public final void setEvents(Object eventNames) {
         super.setEvents(RubyUtils.toJavaArray(eventNames));

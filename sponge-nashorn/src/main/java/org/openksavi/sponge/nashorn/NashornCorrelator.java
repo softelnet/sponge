@@ -16,12 +16,13 @@
 
 package org.openksavi.sponge.nashorn;
 
+import org.openksavi.sponge.core.correlator.BaseCorrelator;
 import org.openksavi.sponge.event.Event;
 
 /**
  * JavaScript-specific implementation of the correlator.
  */
-public abstract class NashornCorrelator extends org.openksavi.sponge.core.correlator.BaseCorrelator implements NashornScriptObject {
+public abstract class NashornCorrelator extends BaseCorrelator implements NashornScriptObject {
 
     /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;

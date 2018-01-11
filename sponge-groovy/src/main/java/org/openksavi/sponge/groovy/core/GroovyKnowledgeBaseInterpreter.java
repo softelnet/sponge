@@ -386,7 +386,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @Override
     public void scanToAutoEnable() {
-        List<Object> autoEnabled = new ArrayList<>();
+        List<String> autoEnabled = new ArrayList<>();
         Stream.of(shell.getClassLoader().getLoadedClasses()).forEachOrdered(cls -> {
             if (PROCESSOR_CLASSES.values().stream().filter(processorClass -> ClassUtils.isAssignable(cls, processorClass)).findFirst()
                     .isPresent()) {

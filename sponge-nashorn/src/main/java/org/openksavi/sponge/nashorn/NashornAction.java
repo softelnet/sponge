@@ -16,10 +16,12 @@
 
 package org.openksavi.sponge.nashorn;
 
+import org.openksavi.sponge.core.action.BaseAction;
+
 /**
  * JavaScript-specific implementation of the action.
  */
-public abstract class NashornAction extends org.openksavi.sponge.core.action.BaseAction implements NashornScriptObject {
+public abstract class NashornAction extends BaseAction implements NashornScriptObject {
 
     /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Doesn't have to be thread safe. */
     private Object target;

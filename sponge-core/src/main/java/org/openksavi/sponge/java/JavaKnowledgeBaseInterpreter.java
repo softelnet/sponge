@@ -16,84 +16,54 @@
 
 package org.openksavi.sponge.java;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.reflect.MethodUtils;
-
+import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngine;
-import org.openksavi.sponge.core.kb.BaseKnowledgeBaseInterpreter;
-import org.openksavi.sponge.core.kb.GenericKnowledgeBaseType;
+import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
+import org.openksavi.sponge.core.kb.BaseNonScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.kb.KnowledgeBaseType;
 
 /**
  * Java based knowledge base interpreter.
  */
-public class JavaKnowledgeBaseInterpreter extends BaseKnowledgeBaseInterpreter {
-
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("java", "class");
-
-    protected Map<String, Object> variables = Collections.synchronizedMap(new LinkedHashMap<>());
+public class JavaKnowledgeBaseInterpreter extends BaseNonScriptKnowledgeBaseInterpreter {
 
     public JavaKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new JavaKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), TYPE);
+        super(new JavaKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), JavaConstants.TYPE);
     }
 
     @Override
     public Object invokeMethod(Object target, String name, Object... args) {
-        try {
-            return MethodUtils.invokeMethod(target, name, args);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new SpongeException(e);
-        }
+        return SpongeUtils.invokeMethod(target, name, args);
     }
 
-    @Override
-    public void setVariable(String name, Object value) {
-        variables.put(name, value);
-    }
-
-    @Override
-    public Object getVariable(String name) {
-        if (!variables.containsKey(name)) {
-            throw new SpongeException("Variable " + name + " not found");
-        }
-
-        return variables.get(name);
-    }
-
-    @Override
-    public boolean existsVariable(String name) {
-        return variables.containsKey(name);
-    }
-
-    @Override
-    public boolean isKnowledgeBaseException(Throwable exception) {
-        return false;
-    }
-
-    @Override
-    public Throwable getJavaException(Throwable knowledgeBaseException) {
-        return knowledgeBaseException;
-    }
-
-    @Override
-    public String getScriptKnowledgeBaseProcessorClassName(Object processorClass) {
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     protected <T> T doCreateInstance(String className, Class<T> javaClass) {
-        try {
-            return (T) Class.forName(className).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new SpongeException(e);
+        return SpongeUtils.createInstance(className, javaClass);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public ProcessorInstanceHolder createProcessorInstanceByProcessorClass(KnowledgeBase knowledgeBase, Object processorClass,
+            Class<?> javaClass) {
+        if (processorClass instanceof Class) {
+            // Java-based processor.
+            Class<?> destJavaClass = (Class<?>) processorClass;
+            if (!javaClass.isAssignableFrom(destJavaClass)) {
+                throw new SpongeException(
+                        "Unsupported processor specification: " + destJavaClass.getName() + " can't be used as " + javaClass.getName());
+            }
+
+            try {
+                return new GenericProcessorInstanceHolder((Processor) destJavaClass.newInstance(), destJavaClass.getName(), true);
+            } catch (Throwable e) {
+                throw SpongeUtils.wrapException(destJavaClass.getName(), e);
+            }
+        } else {
+            return null;
         }
     }
 }

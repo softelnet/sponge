@@ -17,11 +17,12 @@
 package org.openksavi.sponge.nashorn;
 
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.plugin.BasePlugin;
 
 /**
  * JavaScript-specific implementation of the plugin.
  */
-public abstract class NashornPlugin extends org.openksavi.sponge.core.plugin.BasePlugin implements NashornScriptObject {
+public abstract class NashornPlugin extends BasePlugin implements NashornScriptObject {
 
     /** JavaScript object to overcome class inheritance limitations in JavaScript and Nashorn. Must be be thread safe. */
     private Object target;

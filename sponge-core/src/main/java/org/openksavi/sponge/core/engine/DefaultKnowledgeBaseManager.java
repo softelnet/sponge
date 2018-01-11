@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.io.FilenameUtils;
@@ -33,6 +34,7 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.KnowledgeBaseManager;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -58,6 +60,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
     /** Configuration knowledge base type attribute name. */
     private static final String CFG_KNOWLEDGE_BASE_ATTR_TYPE = "type";
+
+    /** Configuration knowledge base class attribute name. */
+    private static final String CFG_KNOWLEDGE_BASE_ATTR_CLASS = "class";
 
     /** Configuration knowledge base file tag. */
     private static final String CFG_KNOWLEDGE_BASE_FILE = "file";
@@ -98,29 +103,39 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     @Override
     public void configure(Configuration configuration) {
         Configuration[] knowledgeBaseNodes = configuration.getChildConfigurationsOf(CFG_KNOWLEDGE_BASES);
-
         for (Configuration knowledgeBaseNode : knowledgeBaseNodes) {
-            DefaultScriptKnowledgeBase knowledgeBase = createScriptKnowledgeBaseFromConfiguration(knowledgeBaseNode);
-
-            addKnowledgeBase(knowledgeBase);
+            addKnowledgeBase(createKnowledgeBaseFromConfiguration(knowledgeBaseNode));
         }
     }
 
-    protected DefaultScriptKnowledgeBase createScriptKnowledgeBaseFromConfiguration(Configuration configuration) {
+    protected KnowledgeBase createKnowledgeBaseFromConfiguration(Configuration configuration) {
         String name = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_NAME, null);
         if (StringUtils.isEmpty(name)) {
-            throw new SpongeException("Knowledge Base name must not be empty");
+            throw new SpongeException("Knowledge base name must not be empty");
         }
 
         String typeCode = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_TYPE, null);
+        Configuration[] fileNodes = configuration.getConfigurationsAt(CFG_KNOWLEDGE_BASE_FILE);
+
+        String kbClass = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_CLASS, null);
+        if (kbClass == null) {
+            return createScriptKnowledgeBaseFromConfiguration(name, typeCode, fileNodes);
+        } else {
+            return createNonScriptKnowledgeBaseFromConfiguration(name, typeCode, kbClass, fileNodes);
+        }
+    }
+
+    protected DefaultScriptKnowledgeBase createScriptKnowledgeBaseFromConfiguration(String name, String typeCode,
+            Configuration[] fileNodes) {
+
         if (StringUtils.isEmpty(typeCode)) {
-            throw new SpongeException("Knowledge base type must not be empty");
+            throw new SpongeException("Knowledge base type for script knowledge bases must not be empty");
         }
 
         DefaultScriptKnowledgeBase knowledgeBase =
                 new DefaultScriptKnowledgeBase(name, getKnowledgeBaseInterpreterFactory(typeCode).getSupportedType());
 
-        for (Configuration fileNode : configuration.getConfigurationsAt(CFG_KNOWLEDGE_BASE_FILE)) {
+        for (Configuration fileNode : fileNodes) {
             String fileName = fileNode.getValue();
 
             if (StringUtils.isEmpty(fileName)) {
@@ -129,6 +144,25 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
             knowledgeBase.addScript(new FileKnowledgeBaseScript(fileName, fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null),
                     fileNode.getBooleanAttribute(CFG_KB_FILE_ATTR_REQUIRED, KnowledgeBaseScript.DEFAULT_REQUIRED)));
+        }
+
+        return knowledgeBase;
+    }
+
+    protected KnowledgeBase createNonScriptKnowledgeBaseFromConfiguration(String name, String typeCode, String kbClass,
+            Configuration[] fileNodes) {
+        KnowledgeBase knowledgeBase = SpongeUtils.createInstance(kbClass, KnowledgeBase.class);
+
+        if (typeCode != null) {
+            KnowledgeBaseType type = getKnowledgeBaseInterpreterFactory(typeCode).getSupportedType();
+            if (!Objects.equals(knowledgeBase.getType(), type)) {
+                throw new SpongeException(
+                        "The knowledge base class specifies type '" + knowledgeBase.getType() + "' but '" + type + "' is expected");
+            }
+        }
+
+        if (fileNodes.length > 0) {
+            throw new SpongeException("Knowledge base files are not allowed for a non script knowledge base");
         }
 
         return knowledgeBase;
@@ -177,6 +211,11 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
     @Override
     public void onLoad() {
+        // Before invoking onLoad callback method, scan to auto-enable processors if this functionality is turned on.
+        if (getEngine().getConfigurationManager().getAutoEnable()) {
+            knowledgeBases.values().forEach(kb -> kb.scanToAutoEnable());
+        }
+
         knowledgeBases.values().forEach(kb -> kb.onLoad());
     }
 

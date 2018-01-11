@@ -42,6 +42,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
@@ -118,7 +119,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     protected void doEnable(KnowledgeBase knowledgeBase, Object processorClass, ProcessorType requiredType) {
         lock.lock();
         try {
-            InstanceHolder instanceHolder = createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
+            ProcessorInstanceHolder instanceHolder =
+                    createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
             BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
 
             bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
@@ -138,7 +140,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         lock.lock();
         try {
             // Creating temporary instance of a processor to resolve its type.
-            InstanceHolder instanceHolder = createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
+            ProcessorInstanceHolder instanceHolder =
+                    createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
 
             BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
             bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
@@ -163,32 +166,26 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         }
     }
 
-    protected InstanceHolder createProcessorInstanceByProcessorClass(KnowledgeBase knowledgeBase, Object processorClass, Class javaClass) {
+    protected ProcessorInstanceHolder createProcessorInstanceByProcessorClass(KnowledgeBase knowledgeBase, Object processorClass,
+            Class javaClass) {
         Validate.notNull(processorClass, "Processor class cannot be null");
 
-        String name = knowledgeBase.getInterpreter().getScriptKnowledgeBaseProcessorClassName(processorClass);
-        if (name != null) {
-            // Script-based processor.
-            return new InstanceHolder(knowledgeBase.getInterpreter().createProcessorInstance(name, javaClass), name, false);
-        } else if (processorClass instanceof Class) {
-            // Java-based processor.
-            Class<?> destJavaClass = (Class<?>) processorClass;
-            if (!javaClass.isAssignableFrom(destJavaClass)) {
-                throw new SpongeException(
-                        "Unsupported processor specification: " + destJavaClass.getName() + " can't be used as " + javaClass.getName());
-            }
+        ProcessorInstanceHolder result =
+                knowledgeBase.getInterpreter().createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, javaClass);
+        if (result == null) {
+            // Try to create an instance using the default (Java-based) knowledge base interpreter.
+            result = getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
+                    .createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, javaClass);
+        }
 
-            try {
-                return new InstanceHolder((Processor) destJavaClass.newInstance(), destJavaClass.getName(), true);
-            } catch (Throwable e) {
-                throw SpongeUtils.wrapException(destJavaClass.getName(), e);
-            }
-        } else {
+        if (result == null) {
             throw new SpongeException("Unsupported processor class: " + processorClass);
         }
+
+        return result;
     }
 
-    protected BaseProcessorAdapter createAdapter(InstanceHolder instanceHolder, ProcessorType requiredType) {
+    protected BaseProcessorAdapter createAdapter(ProcessorInstanceHolder instanceHolder, ProcessorType requiredType) {
         Processor processor = instanceHolder.getProcessor();
         Validate.isInstanceOf(ProcessorAdapterFactory.class, processor, "Processor must implement %s", ProcessorAdapterFactory.class);
 
@@ -212,7 +209,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         processor.setName(name);
     }
 
-    protected void initializeProcessor(InstanceHolder instanceHolder, BaseProcessorAdapter adapter) {
+    protected void initializeProcessor(ProcessorInstanceHolder instanceHolder, BaseProcessorAdapter adapter) {
         Processor processor = instanceHolder.getProcessor();
 
         processor.onConfigure();
@@ -341,45 +338,6 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
         public boolean exists(ProcessorAdapter adapter) {
             return existence.test(adapter);
-        }
-    }
-
-    protected static class InstanceHolder {
-
-        private Processor processor;
-
-        private String name;
-
-        private boolean javaDefined;
-
-        public InstanceHolder(Processor processor, String name, boolean javaDefined) {
-            this.processor = processor;
-            this.name = name;
-            this.javaDefined = javaDefined;
-        }
-
-        public Processor getProcessor() {
-            return processor;
-        }
-
-        public void setProcessor(Processor processor) {
-            this.processor = processor;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public boolean isJavaDefined() {
-            return javaDefined;
-        }
-
-        public void setJavaDefined(boolean javaDefined) {
-            this.javaDefined = javaDefined;
         }
     }
 }

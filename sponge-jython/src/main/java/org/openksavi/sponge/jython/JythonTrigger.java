@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jython;
 
+import org.openksavi.sponge.core.trigger.BaseTrigger;
+
 /**
  * Jython-specific implementation of the trigger.
  */
-public abstract class JythonTrigger extends org.openksavi.sponge.core.trigger.BaseTrigger {
+public abstract class JythonTrigger extends BaseTrigger {
 
 }

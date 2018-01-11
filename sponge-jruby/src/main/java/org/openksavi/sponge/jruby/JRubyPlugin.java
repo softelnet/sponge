@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jruby;
 
+import org.openksavi.sponge.core.plugin.BasePlugin;
+
 /**
  * JRuby-specific implementation of the plugin.
  */
-public abstract class JRubyPlugin extends org.openksavi.sponge.core.plugin.BasePlugin {
+public abstract class JRubyPlugin extends BasePlugin {
 
 }

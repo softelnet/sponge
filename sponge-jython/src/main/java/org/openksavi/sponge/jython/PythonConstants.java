@@ -24,7 +24,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class PythonConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("python", "py");
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("python", "python", "py", true);
 
     private PythonConstants() {
         //

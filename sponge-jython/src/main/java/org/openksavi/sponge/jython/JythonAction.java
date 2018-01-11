@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jython;
 
+import org.openksavi.sponge.core.action.BaseAction;
+
 /**
  * Jython-specific implementation of the action.
  */
-public abstract class JythonAction extends org.openksavi.sponge.core.action.BaseAction {
+public abstract class JythonAction extends BaseAction {
 
 }

@@ -16,46 +16,31 @@
 
 package org.openksavi.sponge.java;
 
-import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang3.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.core.kb.BaseNonScriptKnowledgeBase;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
  * Abstract Java knowledge base.
  */
-public abstract class JavaKnowledgeBase extends BaseKnowledgeBase {
+public abstract class JavaKnowledgeBase extends BaseNonScriptKnowledgeBase {
+
+    private static final Logger logger = LoggerFactory.getLogger(JavaKnowledgeBase.class);
+
+    protected JavaKnowledgeBase(String name) {
+        super(name, JavaConstants.TYPE);
+    }
 
     protected JavaKnowledgeBase() {
-        setName("javaKb");
-        setType(JavaKnowledgeBaseInterpreter.TYPE);
-    }
-
-    @Override
-    public void onClear() {
-        //
-    }
-
-    @Override
-    public void onLoad() {
-        //
-    }
-
-    @Override
-    public void onStartup() {
-        //
-    }
-
-    @Override
-    public void onShutdown() {
-        //
-    }
-
-    @Override
-    public void onBeforeReload() {
-        //
-    }
-
-    @Override
-    public void onAfterReload() {
-        //
+        super(JavaConstants.TYPE);
     }
 
     @Override
@@ -66,5 +51,22 @@ public abstract class JavaKnowledgeBase extends BaseKnowledgeBase {
     @Override
     public JavaKnowledgeBaseEngineOperations getEps() {
         return getEngineOperations();
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public void scanToAutoEnable() {
+        List<String> autoEnabled = new ArrayList<>();
+        Arrays.stream(getClass().getDeclaredClasses()).filter(cls -> !SpongeUtils.isAbstract(cls)).forEachOrdered(cls -> {
+            if (JavaConstants.PROCESSOR_CLASSES.values().stream().filter(processorClass -> ClassUtils.isAssignable(cls, processorClass))
+                    .findFirst().isPresent()) {
+                autoEnabled.add(cls.getName());
+                getEngineOperations().enableJava((Class<? extends Processor>) cls);
+            }
+        });
+
+        if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
+            logger.debug("Auto-enabling: {}", autoEnabled);
+        }
     }
 }

@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.jython;
 
+import org.openksavi.sponge.core.plugin.BasePlugin;
+
 /**
  * Jython-specific implementation of the plugin.
  */
-public abstract class JythonPlugin extends org.openksavi.sponge.core.plugin.BasePlugin {
+public abstract class JythonPlugin extends BasePlugin {
 
 }

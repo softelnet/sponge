@@ -25,11 +25,17 @@ public class GenericKnowledgeBaseType implements KnowledgeBaseType {
 
     private String typeCode;
 
+    private String language;
+
     private String fileExtension;
 
-    public GenericKnowledgeBaseType(String typeCode, String fileExtension) {
+    private boolean isScript;
+
+    public GenericKnowledgeBaseType(String typeCode, String language, String fileExtension, boolean isScript) {
         this.typeCode = typeCode;
+        this.language = language;
         this.fileExtension = fileExtension;
+        this.isScript = isScript;
     }
 
     @Override
@@ -38,8 +44,18 @@ public class GenericKnowledgeBaseType implements KnowledgeBaseType {
     }
 
     @Override
+    public String getLanguage() {
+        return language;
+    }
+
+    @Override
     public String getFileExtension() {
         return fileExtension;
+    }
+
+    @Override
+    public boolean isScript() {
+        return isScript;
     }
 
     @Override

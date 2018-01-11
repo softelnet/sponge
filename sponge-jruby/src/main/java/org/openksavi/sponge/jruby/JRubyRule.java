@@ -22,6 +22,7 @@ import org.jruby.RubyMethod;
 import org.jruby.RubyObject;
 import org.jruby.RubyProc;
 
+import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.jruby.core.JRubyProcEventCondition;
@@ -30,7 +31,7 @@ import org.openksavi.sponge.rule.EventCondition;
 /**
  * JRuby-specific implementation of the rule.
  */
-public abstract class JRubyRule extends org.openksavi.sponge.core.rule.BaseRule {
+public abstract class JRubyRule extends BaseRule {
 
     private static final Function<? super RubyObject, ? extends EventCondition> MAPPER = rubyObject -> {
         if (rubyObject instanceof RubyMethod) {

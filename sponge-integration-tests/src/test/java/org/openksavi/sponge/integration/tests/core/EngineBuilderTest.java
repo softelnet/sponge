@@ -45,7 +45,7 @@ public class EngineBuilderTest {
                 .systemProperty("system.property", "1")
                 .property("test.property", "TEST")
                 .plugin(plugin)
-                .knowledgeBase(new TestKnowledgeBase())
+                .knowledgeBase(new TestKnowledgeBase("testJavaKb"))
                 .build();
         //@formatter:on
 

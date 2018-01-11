@@ -17,6 +17,7 @@
 package org.openksavi.sponge.kb;
 
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleEventSpec;
 
@@ -127,6 +128,16 @@ public interface KnowledgeBaseInterpreter {
      *         base processor.
      */
     String getScriptKnowledgeBaseProcessorClassName(Object processorClass);
+
+    /**
+     * Returns the processor new instance holder.
+     *
+     * @param knowledgeBase the knowledge base.
+     * @param processorClass the processor class.
+     * @param javaClass the Java class of the processor.
+     * @return the processor new instance holder or {@code null} if this interpreter doesn't support the given processor class.
+     */
+    ProcessorInstanceHolder createProcessorInstanceByProcessorClass(KnowledgeBase knowledgeBase, Object processorClass, Class<?> javaClass);
 
     /**
      * Returns engine operations associated with this knowledge base interpreter.

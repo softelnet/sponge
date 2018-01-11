@@ -23,7 +23,10 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JavaFilter;
 import org.openksavi.sponge.java.JavaKnowledgeBase;
+import org.openksavi.sponge.java.JavaRule;
+import org.openksavi.sponge.java.JavaTrigger;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.test.util.EventsLog;
 
@@ -33,6 +36,14 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
 
     private EventsLog eventsLog = new EventsLog("e1", "e1e2-first", "e1e2-last", "e1e2-all", "e3");
 
+    public TestKnowledgeBase(String name) {
+        super(name);
+    }
+
+    public TestKnowledgeBase() {
+        //
+    }
+
     @Override
     public void onInit() {
         logger.debug("onInit");
@@ -40,13 +51,9 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         getEps().setVariable(EventsLog.VARIABLE_NAME, eventsLog);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onLoad() {
         logger.debug("onLoad");
-
-        getEps().enableAll(TestFilter.class, TestTrigger.class, NotToBeRunTrigger.class, TestFirstRule.class, TestLastRule.class,
-                TestAllRule.class);
     }
 
     @Override
@@ -75,7 +82,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     /**
      * Reject all events that have name "e3".
      */
-    public static class TestFilter extends org.openksavi.sponge.java.JavaFilter {
+    public static class TestFilter extends JavaFilter {
 
         @Override
         public void onConfigure() {
@@ -102,7 +109,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestTrigger extends org.openksavi.sponge.java.JavaTrigger {
+    public static class TestTrigger extends JavaTrigger {
 
         @Override
         public void onConfigure() {
@@ -116,7 +123,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestLastRule extends org.openksavi.sponge.java.JavaRule {
+    public static class TestLastRule extends JavaRule {
 
         @Override
         public void onConfigure() {
@@ -136,7 +143,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestFirstRule extends org.openksavi.sponge.java.JavaRule {
+    public static class TestFirstRule extends JavaRule {
 
         @Override
         public void onConfigure() {
@@ -151,7 +158,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestAllRule extends org.openksavi.sponge.java.JavaRule {
+    public static class TestAllRule extends JavaRule {
 
         @Override
         public void onConfigure() {
