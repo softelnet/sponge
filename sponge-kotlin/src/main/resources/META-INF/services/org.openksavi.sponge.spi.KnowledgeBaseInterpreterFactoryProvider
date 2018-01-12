@@ -1,0 +1,2 @@
+org.openksavi.sponge.kotlin.spi.NonScriptKotlinKnowledgeBaseInterpreterFactoryProvider
+org.openksavi.sponge.kotlin.spi.ScriptKotlinKnowledgeBaseInterpreterFactoryProvider
