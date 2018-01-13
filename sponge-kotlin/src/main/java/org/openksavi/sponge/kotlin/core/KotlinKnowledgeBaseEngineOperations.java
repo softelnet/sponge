@@ -18,11 +18,12 @@ package org.openksavi.sponge.kotlin.core;
 
 import java.util.stream.Stream;
 
+import kotlin.jvm.JvmClassMappingKt;
+import kotlin.reflect.KClass;
+
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBase;
-
-import kotlin.reflect.KClass;
 
 /**
  * Kotlin-specific engine operations. They are to be used in knowledge base files.
@@ -182,5 +183,13 @@ public class KotlinKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      */
     public void disableAction(KClass<?> actionClass) {
         engine.getProcessorManager().disableAction(getKnowledgeBase(), actionClass);
+    }
+
+    public <T> T getVariable(KClass<T> cls, String name) {
+        return engine.getSession().getVariable(JvmClassMappingKt.getJavaClass(cls), name);
+    }
+
+    public <T> T getVariable(KClass<T> cls, String name, T defaultValue) {
+        return engine.getSession().getVariable(JvmClassMappingKt.getJavaClass(cls), name, defaultValue);
     }
 }

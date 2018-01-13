@@ -149,9 +149,10 @@ public class BaseEngineOperations implements EngineOperations {
      * @param name plugin name.
      * @return plugin.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public Plugin getPlugin(String name) {
-        return engine.getPluginManager().getPlugin(name);
+    public <T extends Plugin> T getPlugin(String name) {
+        return (T) engine.getPluginManager().getPlugin(name);
     }
 
     @Override
@@ -283,7 +284,7 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Object getVariable(String name) {
+    public <T> T getVariable(String name) {
         return engine.getSession().getVariable(name);
     }
 

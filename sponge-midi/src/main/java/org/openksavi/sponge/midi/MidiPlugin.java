@@ -45,14 +45,14 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.java.JavaPlugin;
+import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.midi.event.MidiMetaMessageEvent;
 import org.openksavi.sponge.midi.event.MidiShortMessageEvent;
 
 /**
  * MIDI plugin.
  */
-public class MidiPlugin extends JavaPlugin {
+public class MidiPlugin extends JPlugin {
 
     private static final Logger logger = LoggerFactory.getLogger(MidiPlugin.class);
 

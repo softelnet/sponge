@@ -23,10 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.EventMode;
 
-public class SameSourceJavaRule extends org.openksavi.sponge.java.JavaRule {
+public class SameSourceJavaRule extends JRule {
 
     private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaRule.class);
 

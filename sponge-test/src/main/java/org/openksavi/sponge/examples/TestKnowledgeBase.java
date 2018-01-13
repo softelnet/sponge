@@ -23,14 +23,14 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.event.Event;
-import org.openksavi.sponge.java.JavaFilter;
-import org.openksavi.sponge.java.JavaKnowledgeBase;
-import org.openksavi.sponge.java.JavaRule;
-import org.openksavi.sponge.java.JavaTrigger;
+import org.openksavi.sponge.java.JFilter;
+import org.openksavi.sponge.java.JKnowledgeBase;
+import org.openksavi.sponge.java.JRule;
+import org.openksavi.sponge.java.JTrigger;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.test.util.EventsLog;
 
-public class TestKnowledgeBase extends JavaKnowledgeBase {
+public class TestKnowledgeBase extends JKnowledgeBase {
 
     private static final Logger logger = LoggerFactory.getLogger(TestKnowledgeBase.class);
 
@@ -82,7 +82,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
     /**
      * Reject all events that have name "e3".
      */
-    public static class TestFilter extends JavaFilter {
+    public static class TestFilter extends JFilter {
 
         @Override
         public void onConfigure() {
@@ -95,11 +95,11 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class NotToBeRunTrigger extends org.openksavi.sponge.java.JavaTrigger {
+    public static class NotToBeRunTrigger extends JTrigger {
 
         @Override
         public void onConfigure() {
-            setEventName("e3");
+            setEvent("e3");
         }
 
         @Override
@@ -109,11 +109,11 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestTrigger extends JavaTrigger {
+    public static class TestTrigger extends JTrigger {
 
         @Override
         public void onConfigure() {
-            setEventName("e1");
+            setEvent("e1");
         }
 
         @Override
@@ -123,7 +123,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestLastRule extends JavaRule {
+    public static class TestLastRule extends JRule {
 
         @Override
         public void onConfigure() {
@@ -143,7 +143,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestFirstRule extends JavaRule {
+    public static class TestFirstRule extends JRule {
 
         @Override
         public void onConfigure() {
@@ -158,7 +158,7 @@ public class TestKnowledgeBase extends JavaKnowledgeBase {
         }
     }
 
-    public static class TestAllRule extends JavaRule {
+    public static class TestAllRule extends JRule {
 
         @Override
         public void onConfigure() {

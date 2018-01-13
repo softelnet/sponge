@@ -21,8 +21,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JCorrelator;
 
-public class SampleJavaCorrelator extends org.openksavi.sponge.java.JavaCorrelator {
+public class SampleJavaCorrelator extends JCorrelator {
 
     private List<Event> eventLog;
 

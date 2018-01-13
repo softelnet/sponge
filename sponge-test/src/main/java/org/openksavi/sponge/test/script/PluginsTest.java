@@ -20,5 +20,5 @@ public interface PluginsTest extends ScriptTest {
 
     void testJavaPlugin();
 
-    void testScriptPlugin();
+    void testKbPlugin();
 }

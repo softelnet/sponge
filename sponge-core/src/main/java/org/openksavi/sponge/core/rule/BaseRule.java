@@ -87,6 +87,11 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     @Override
+    public final Map<String, List<EventCondition>> getConditions() {
+        return getAdapter().getConditions();
+    }
+
+    @Override
     public final Event getEvent(String eventAlias) {
         return getRuleAdapterImpl().getEvent(eventAlias);
     }
@@ -105,6 +110,11 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     @Override
     public void setEvents(String... eventSpecs) {
         setEvents((Object[]) eventSpecs);
+    }
+
+    @Override
+    public boolean isOrdered() {
+        return getAdapter().isOrdered();
     }
 
     @Override

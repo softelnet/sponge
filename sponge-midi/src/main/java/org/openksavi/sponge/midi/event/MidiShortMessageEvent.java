@@ -159,20 +159,29 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
+    public <T> T get(String name) {
+        Object result;
         switch (name) {
         case ATTR_COMMAND:
-            return getCommand();
+            result = getCommand();
+            break;
         case ATTR_CHANNEL:
-            return getChannel();
+            result = getChannel();
+            break;
         case ATTR_DATA1:
-            return getData1();
+            result = getData1();
+            break;
         case ATTR_DATA2:
-            return getData2();
+            result = getData2();
+            break;
         default:
-            return super.get(name);
+            result = super.get(name);
+            break;
         }
+
+        return (T) result;
     }
 
     @Override

@@ -16,9 +16,9 @@
 
 package org.openksavi.sponge.core.kb;
 
-import org.openksavi.sponge.java.JavaKnowledgeBase;
+import org.openksavi.sponge.java.JKnowledgeBase;
 
-public final class DefaultKnowledgeBase extends JavaKnowledgeBase {
+public final class DefaultKnowledgeBase extends JKnowledgeBase {
 
     public static final String NAME = "_DEFAULT_";
 

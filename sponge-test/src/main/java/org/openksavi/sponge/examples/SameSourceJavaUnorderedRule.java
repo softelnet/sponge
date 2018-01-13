@@ -23,9 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.rule.EventCondition;
 
-public class SameSourceJavaUnorderedRule extends org.openksavi.sponge.java.JavaRule {
+public class SameSourceJavaUnorderedRule extends JRule {
 
     private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaUnorderedRule.class);
 

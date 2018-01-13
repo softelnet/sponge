@@ -76,19 +76,19 @@ public class EngineBuilderTest {
             assertEquals(7, getEvents(engine, "e1e2-all").size());
             assertEquals(0, getEvents(engine, "e3").size());
 
-            assertEquals(2, getEvents(engine, "e1e2-first").get(0).get("mark"));
-            assertEquals(4, getEvents(engine, "e1e2-first").get(1).get("mark"));
+            assertEquals(2, getEvents(engine, "e1e2-first").get(0).<Number>get("mark"));
+            assertEquals(4, getEvents(engine, "e1e2-first").get(1).<Number>get("mark"));
 
-            assertEquals(6, getEvents(engine, "e1e2-last").get(0).get("mark"));
-            assertEquals(6, getEvents(engine, "e1e2-last").get(1).get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-last").get(0).<Number>get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-last").get(1).<Number>get("mark"));
 
-            assertEquals(2, getEvents(engine, "e1e2-all").get(0).get("mark"));
-            assertEquals(4, getEvents(engine, "e1e2-all").get(1).get("mark"));
-            assertEquals(4, getEvents(engine, "e1e2-all").get(2).get("mark"));
-            assertEquals(5, getEvents(engine, "e1e2-all").get(3).get("mark"));
-            assertEquals(5, getEvents(engine, "e1e2-all").get(4).get("mark"));
-            assertEquals(6, getEvents(engine, "e1e2-all").get(5).get("mark"));
-            assertEquals(6, getEvents(engine, "e1e2-all").get(6).get("mark"));
+            assertEquals(2, getEvents(engine, "e1e2-all").get(0).<Number>get("mark"));
+            assertEquals(4, getEvents(engine, "e1e2-all").get(1).<Number>get("mark"));
+            assertEquals(4, getEvents(engine, "e1e2-all").get(2).<Number>get("mark"));
+            assertEquals(5, getEvents(engine, "e1e2-all").get(3).<Number>get("mark"));
+            assertEquals(5, getEvents(engine, "e1e2-all").get(4).<Number>get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-all").get(5).<Number>get("mark"));
+            assertEquals(6, getEvents(engine, "e1e2-all").get(6).<Number>get("mark"));
         } finally {
             engine.shutdown();
         }

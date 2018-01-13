@@ -25,12 +25,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.java.JavaPlugin;
+import org.openksavi.sponge.java.JPlugin;
 
 /**
  * A plugin for standalone command-line application.
  */
-public class StandalonePlugin extends JavaPlugin {
+public class StandalonePlugin extends JPlugin {
 
     public static final String SPRING_CONTEXT_CONFIG = SpongeUtils.getPackagePath(StandalonePlugin.class) + "/spring-context.xml";
 

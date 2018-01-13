@@ -31,7 +31,7 @@ public class JRubyPluginsTest extends JRubyTest implements PluginsTest {
 
     @Override
     @Test
-    public void testScriptPlugin() {
-        PluginsTestTemplate.testScriptPlugin(getType());
+    public void testKbPlugin() {
+        PluginsTestTemplate.testKbPlugin(getType());
     }
 }

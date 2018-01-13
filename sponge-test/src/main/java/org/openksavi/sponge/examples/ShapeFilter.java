@@ -17,8 +17,9 @@
 package org.openksavi.sponge.examples;
 
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JFilter;
 
-public class ShapeFilter extends org.openksavi.sponge.java.JavaFilter {
+public class ShapeFilter extends JFilter {
 
     @Override
     public void onConfigure() {

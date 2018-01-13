@@ -21,12 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.java.JavaPlugin;
+import org.openksavi.sponge.java.JPlugin;
 
 /**
  * Java-based plugin.
  */
-public class MultiEchoPlugin extends JavaPlugin {
+public class MultiEchoPlugin extends JPlugin {
 
     private static final Logger logger = LoggerFactory.getLogger(MultiEchoPlugin.class);
 

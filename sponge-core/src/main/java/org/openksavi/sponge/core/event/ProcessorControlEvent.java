@@ -53,13 +53,14 @@ public abstract class ProcessorControlEvent extends BaseControlEvent {
         this.processorAdapter = processorAdapter;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
+    public <T> T get(String name) {
         switch (name) {
         case ATTR_PROCESSOR_ADAPTER:
-            return processorAdapter;
+            return (T) processorAdapter;
         default:
-            throw new IllegalArgumentException("Unknown attribute " + name);
+            return null;
         }
     }
 

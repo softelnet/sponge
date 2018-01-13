@@ -18,12 +18,12 @@ package org.openksavi.sponge.camel;
 
 import org.apache.camel.Exchange;
 
-import org.openksavi.sponge.java.JavaAction;
+import org.openksavi.sponge.java.JAction;
 
 /**
  * Default producer action.
  */
-public class CamelProducerAction extends JavaAction {
+public class CamelProducerAction extends JAction {
 
     public static final String NAME = "CamelProducerAction";
 

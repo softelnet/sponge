@@ -16,7 +16,9 @@
 
 package org.openksavi.sponge.examples;
 
-public class PowerEchoAction extends org.openksavi.sponge.java.JavaAction {
+import org.openksavi.sponge.java.JAction;
+
+public class PowerEchoAction extends JAction {
 
     @Override
     public Object onCall(Object... args) {

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.kb;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
 /**
@@ -29,7 +30,7 @@ public abstract class BaseNonScriptKnowledgeBase extends BaseKnowledgeBase {
     }
 
     public BaseNonScriptKnowledgeBase(KnowledgeBaseType type) {
-        setName(getClass().getName());
+        setName(SpongeUtils.createNonScriptKnowledgeBaseName(this));
         setType(type);
     }
 

@@ -39,7 +39,7 @@ void onStartup() {
     EPS.logger.debug("Action returned: {}", scriptActionResult)
 
     EPS.logger.debug("Calling Java defined action")
-    def javaActionResult = EPS.call("org.openksavi.sponge.examples.PowerEchoAction", 1, "test")
+    def javaActionResult = EPS.call("PowerEchoAction", 1, "test")
     EPS.setVariable("javaActionResult", javaActionResult)
     EPS.logger.debug("Action returned: {}", javaActionResult)
 

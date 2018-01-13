@@ -118,4 +118,8 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     public List<EventCondition> getConditions(String eventAlias) {
         return conditions.get(eventAlias);
     }
+
+    public Map<String, List<EventCondition>> getConditions() {
+        return conditions;
+    }
 }

@@ -28,7 +28,7 @@ import org.openksavi.sponge.event.EventClonePolicy;
 /**
  * A MIDI Message wrapped in a Sponge event.
  */
-public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent {
+public abstract class MidiMessageEvent<M extends MidiMessage> extends BaseEvent {
 
     private static final long serialVersionUID = 4119731368862161071L;
 
@@ -39,7 +39,7 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
     public static final String ATTR_TIME_STAMP = "timeStamp";
 
     /** The MIDI message. */
-    private T message;
+    private M message;
 
     /** The MIDI timeStamp. */
     private Long timeStamp;
@@ -69,7 +69,7 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
      * @param message the MIDI Message.
      * @param timeStamp the MIDI timeStamp.
      */
-    public MidiMessageEvent(String name, EventClonePolicy clonePolicy, T message, Long timeStamp) {
+    public MidiMessageEvent(String name, EventClonePolicy clonePolicy, M message, Long timeStamp) {
         super(name, clonePolicy);
 
         this.message = message;
@@ -83,7 +83,7 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
      * @param clonePolicy the event clone policy.
      * @param message the MIDI ShortMessage.
      */
-    public MidiMessageEvent(String name, EventClonePolicy clonePolicy, T message) {
+    public MidiMessageEvent(String name, EventClonePolicy clonePolicy, M message) {
         this(name, clonePolicy, message, null);
     }
 
@@ -92,7 +92,7 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
      *
      * @return the MIDI message.
      */
-    public T getMessage() {
+    public M getMessage() {
         return message;
     }
 
@@ -101,7 +101,7 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
      *
      * @param message the MIDI message.
      */
-    public void setMessage(T message) {
+    public void setMessage(M message) {
         this.message = message;
     }
 
@@ -123,24 +123,30 @@ public abstract class MidiMessageEvent<T extends MidiMessage> extends BaseEvent 
         this.timeStamp = timeStamp;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
+    public <T> T get(String name) {
+        Object result;
         switch (name) {
         case ATTR_MESSAGE:
-            return message;
+            result = message;
+            break;
         case ATTR_TIME_STAMP:
-            return timeStamp;
+            result = timeStamp;
+            break;
         default:
-            throw new IllegalArgumentException("Unknown attribute " + name);
+            return null;
         }
+
+        return (T) result;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public MidiMessageEvent<T> set(String name, Object value) {
+    public MidiMessageEvent<M> set(String name, Object value) {
         switch (name) {
         case ATTR_MESSAGE:
-            message = (T) value;
+            message = (M) value;
             break;
         case ATTR_TIME_STAMP:
             timeStamp = (Long) value;

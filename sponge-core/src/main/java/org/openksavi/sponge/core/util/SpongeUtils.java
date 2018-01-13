@@ -221,6 +221,10 @@ public abstract class SpongeUtils {
                 + targetName;
     }
 
+    public static String createNonScriptKnowledgeBaseName(KnowledgeBase knowledgeBase) {
+        return knowledgeBase.getClass().getSimpleName();
+    }
+
     public static void shutdownExecutorService(Engine engine, Object named, ExecutorService executorService) {
         MoreExecutors.shutdownAndAwaitTermination(executorService, engine.getDefaultParameters().getExecutorShutdownTimeout(),
                 TimeUnit.SECONDS);

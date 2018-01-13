@@ -38,8 +38,9 @@ public interface Session extends Serializable {
      *
      * @param name variable name.
      * @return variable value.
+     * @param <T> variable.
      */
-    Object getVariable(String name);
+    <T> T getVariable(String name);
 
     /**
      * Returns the value of the session variable. Throws exception if not found.

@@ -155,10 +155,15 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     public <T extends Processor> T createProcessorInstance(ProcessorDefinition definition, Class<T> cls) {
         Validate.isInstanceOf(BaseProcessorDefinition.class, definition, "Processor definition must be or extend %s",
                 BaseProcessorDefinition.class);
-        if (((BaseProcessorDefinition) definition).isJavaDefined()) {
+        BaseProcessorDefinition baseDefinition = (BaseProcessorDefinition) definition;
+        if (baseDefinition.isJavaDefined()) {
             try {
-                return (T) Class.forName(definition.getName()).newInstance();
-            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                if (baseDefinition.getProcessorClass() == null) {
+                    throw new SpongeException("No corresponding Java class for processor: " + definition.getName());
+                }
+
+                return (T) baseDefinition.getProcessorClass().newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
                 throw SpongeUtils.wrapException(e);
             }
         } else {
@@ -194,6 +199,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
         BaseProcessorAdapter result = (BaseProcessorAdapter) adapter;
         result.getDefinition().setJavaDefined(instanceHolder.isJavaDefined());
+        result.getDefinition().setProcessorClass(processor.getClass());
 
         if (requiredType != null) {
             Validate.isTrue(adapter.getType() == requiredType, "% is % but should be %", adapter.getName(),

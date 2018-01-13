@@ -31,7 +31,7 @@ public class JythonPluginsTest extends JythonTest implements PluginsTest {
 
     @Override
     @Test
-    public void testScriptPlugin() {
-        PluginsTestTemplate.testScriptPlugin(getType());
+    public void testKbPlugin() {
+        PluginsTestTemplate.testKbPlugin(getType());
     }
 }

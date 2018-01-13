@@ -17,6 +17,7 @@
 package org.openksavi.sponge.rule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openksavi.sponge.EventSetProcessorOperations;
 
@@ -31,6 +32,13 @@ public interface RuleOperations extends EventSetProcessorOperations {
      * @param ordered ordered.
      */
     void setOrdered(boolean ordered);
+
+    /**
+     * Returns {@code true} if this rule is ordered.
+     *
+     * @return {@code true} if this rule is ordered.
+     */
+    boolean isOrdered();
 
     /**
      * Sets event aliases.
@@ -108,4 +116,11 @@ public interface RuleOperations extends EventSetProcessorOperations {
      * @return event conditions.
      */
     List<EventCondition> getConditions(String eventAlias);
+
+    /**
+     * Returns event conditions map.
+     *
+     * @return event conditions map.
+     */
+    Map<String, List<EventCondition>> getConditions();
 }

@@ -29,12 +29,12 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.java.JavaPlugin;
+import org.openksavi.sponge.java.JPlugin;
 
 /**
  * Sponge plugin that provides integration with Apache Camel.
  */
-public class CamelPlugin extends JavaPlugin implements CamelContextAware {
+public class CamelPlugin extends JPlugin implements CamelContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(CamelPlugin.class);
 

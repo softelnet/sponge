@@ -85,11 +85,12 @@ public class MidiSysexMessageEvent extends MidiMessageEvent<SysexMessage> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
+    public <T> T get(String name) {
         switch (name) {
         case ATTR_DATA:
-            return getData();
+            return (T) getData();
         default:
             return super.get(name);
         }

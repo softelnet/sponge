@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <property name="sponge.home">.</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="python">
+            <file>${sponge.home}/examples/script/py/plugins_kb.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="scriptPlugin" class="ScriptPlugin" knowledgeBaseName="kb">
+            <configuration>
+                <storedValue>Value A</storedValue>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

@@ -29,7 +29,7 @@ class SampleCorrelator extends Correlator {
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
     }
     void onDuration() {
-        this.logger.debug("{} - event: {}, log: {}", this.hashCode(), event.name, eventLog)
+        this.logger.debug("{} - log: {}", this.hashCode(), eventLog)
     }
 }
 

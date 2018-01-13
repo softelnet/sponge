@@ -22,7 +22,7 @@ class SampleCorrelator(Correlator):
         self.eventLog.append(event)
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
     def onDuration(self):
-        self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))
+        self.logger.debug("{} - log: {}", self.hashCode(), str(self.eventLog))
 
 def onStartup():
     EPS.event("filesystemFailure").set("source", "server1").send()

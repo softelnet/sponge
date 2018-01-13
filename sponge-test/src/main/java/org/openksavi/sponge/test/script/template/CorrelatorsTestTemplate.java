@@ -54,7 +54,7 @@ public class CorrelatorsTestTemplate {
         Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators_duration");
 
         try {
-            await().atMost(30, TimeUnit.SECONDS)
+            await().pollDelay(5, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue() >= 3);
             assertFalse(engine.isError());
         } finally {

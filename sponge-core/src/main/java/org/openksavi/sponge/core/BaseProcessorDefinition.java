@@ -35,6 +35,9 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** Is this processor defined in Java (not in the scripting knowledge base). */
     private boolean javaDefined = false;
 
+    /** The processor class. */
+    private Class<?> processorClass;
+
     /** Knowledge base reference. */
     private KnowledgeBase knowledgeBase;
 
@@ -125,6 +128,24 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
      */
     public boolean isJavaDefined() {
         return javaDefined;
+    }
+
+    /**
+     * Returns the optional processor class.
+     *
+     * @return the processor class or {@code null} if this processor has no corresponding Java class.
+     */
+    public Class<?> getProcessorClass() {
+        return processorClass;
+    }
+
+    /**
+     * Sets the processor class.
+     *
+     * @param processorClass the processor class.
+     */
+    public void setProcessorClass(Class<?> processorClass) {
+        this.processorClass = processorClass;
     }
 
     @Override

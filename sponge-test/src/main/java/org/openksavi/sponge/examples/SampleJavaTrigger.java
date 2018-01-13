@@ -20,8 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JTrigger;
 
-public class SampleJavaTrigger extends org.openksavi.sponge.java.JavaTrigger {
+public class SampleJavaTrigger extends JTrigger {
 
     private static final Logger logger = LoggerFactory.getLogger(SampleJavaTrigger.class);
 

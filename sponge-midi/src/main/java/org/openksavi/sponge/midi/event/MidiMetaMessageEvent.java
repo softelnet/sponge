@@ -110,16 +110,23 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
+    public <T> T get(String name) {
+        Object result;
         switch (name) {
         case ATTR_MESSAGE_TYPE:
-            return getMessageType();
+            result = getMessageType();
+            break;
         case ATTR_DATA:
-            return getData();
+            result = getData();
+            break;
         default:
-            return super.get(name);
+            result = super.get(name);
+            break;
         }
+
+        return (T) result;
     }
 
     @Override

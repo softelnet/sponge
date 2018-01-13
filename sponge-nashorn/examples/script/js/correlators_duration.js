@@ -30,7 +30,7 @@ var SampleCorrelator = Java.extend(Correlator, {
         EPS.getVariable("hardwareFailureScriptCount").incrementAndGet();
     },
     onDuration: function(self) {
-        self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, self.target.eventLog.toString());
+        self.logger.debug("{} - log: {}", self.hashCode(), self.target.eventLog.toString());
     }
 });
 

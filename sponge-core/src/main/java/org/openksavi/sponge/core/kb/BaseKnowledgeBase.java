@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.kb;
 
+import org.slf4j.Logger;
+
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
@@ -78,5 +80,9 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
     @Override
     public void setType(KnowledgeBaseType type) {
         this.type = type;
+    }
+
+    public Logger getLogger() {
+        return ((BaseKnowledgeBaseInterpreter) interpreter).getLogger();
     }
 }

@@ -29,6 +29,7 @@ import org.tensorflow.TensorFlow;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 
+@SuppressWarnings("rawtypes")
 public class TensorflowTest {
 
     private static final Logger logger = LoggerFactory.getLogger(TensorflowTest.class);

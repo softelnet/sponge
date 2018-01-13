@@ -77,9 +77,7 @@ public class KnowledgeBaseTestTemplate {
     }
 
     public static void testManager(KnowledgeBaseType type) {
-        Engine engine = DefaultEngine.builder()
-                .knowledgeBase(TestUtils.DEFAULT_KB, ScriptTestUtils.getScriptKnowledgeBaseFileName(type, "knowledge_base_manager"))
-                .build();
+        Engine engine = ScriptTestUtils.buildWithKnowledgeBase(type, "knowledge_base_manager");
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 
@@ -146,8 +144,7 @@ public class KnowledgeBaseTestTemplate {
     }
 
     public static void testScriptOverriding(KnowledgeBaseType type) {
-        Engine engine =
-                DefaultEngine.builder().config(ScriptTestUtils.getConfigFileName(type, "knowledge_base_script_overriding")).build();
+        Engine engine = DefaultEngine.builder().config(ScriptTestUtils.getConfigFileName(type, "knowledge_base_script_overriding")).build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 

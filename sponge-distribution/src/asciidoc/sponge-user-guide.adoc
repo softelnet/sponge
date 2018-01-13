@@ -591,7 +591,7 @@ Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
     <knowledgeBases>
         <knowledgeBase name="sampleKnowledgeBase" type="python">
-            <file>plugins_script.py</file>
+            <file>plugins_kb.py</file>
         </knowledgeBase>
     </knowledgeBases>
     <plugins>
@@ -1089,8 +1089,8 @@ ifdef::useReferences[({pySourcesUrl}/library.py[py], {rbSourcesUrl}/library.rb[r
 ifdef::useReferences[({pySourcesUrl}/plugins_java.py[py], {rbSourcesUrl}/plugins_java.rb[rb], {groovySourcesUrl}/plugins_java.groovy[groovy], {jsSourcesUrl}/plugins_java.js[js], {pySourcesUrl}/plugins_java.xml[XML configuration])]
 |Shows how to define and use a Java-based plugin.
 
-|`plugins_script`
-ifdef::useReferences[({pySourcesUrl}/plugins_script.py[py], {rbSourcesUrl}/plugins_script.rb[rb], {groovySourcesUrl}/plugins_script.groovy[groovy], {jsSourcesUrl}/plugins_script.js[js], {pySourcesUrl}/plugins_script.xml[XML configuration])]
+|`plugins_kb`
+ifdef::useReferences[({pySourcesUrl}/plugins_kb.py[py], {rbSourcesUrl}/plugins_kb.rb[rb], {groovySourcesUrl}/plugins_kb.groovy[groovy], {jsSourcesUrl}/plugins_kb.js[js], {pySourcesUrl}/plugins_kb.xml[XML configuration])]
 |Shows how to define and use a script-based plugin.
 
 |`rules`

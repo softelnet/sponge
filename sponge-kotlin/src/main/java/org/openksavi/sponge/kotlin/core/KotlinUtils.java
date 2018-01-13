@@ -23,8 +23,8 @@ import kotlin.reflect.KClass;
  */
 public abstract class KotlinUtils {
 
-    public static String getProcessorName(KClass<?> kclass) {
-        return kclass.getQualifiedName();
+    public static String createProcessorName(KClass<?> kclass) {
+        return kclass.getSimpleName();
     }
 
     private KotlinUtils() {

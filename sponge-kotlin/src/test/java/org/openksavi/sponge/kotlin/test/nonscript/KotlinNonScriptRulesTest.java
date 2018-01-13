@@ -35,13 +35,6 @@ public class KotlinNonScriptRulesTest extends KotlinNonScriptTest implements Rul
         RulesTestTemplate.testRulesEvents(getType());
     }
 
-    // @Test
-    // public void testRulesEventsLoop() {
-    // while (true) {
-    // RulesTestTemplate.testRulesEvents(getType());
-    // }
-    // }
-
     @Override
     @Test
     public void testRulesNoneModeEvents() {

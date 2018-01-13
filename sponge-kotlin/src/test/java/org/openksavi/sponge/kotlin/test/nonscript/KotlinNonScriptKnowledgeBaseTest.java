@@ -18,21 +18,15 @@ package org.openksavi.sponge.kotlin.test.nonscript;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.test.script.KnowledgeBaseTest;
+import org.openksavi.sponge.test.script.NonScriptKnowledgeBaseTest;
 import org.openksavi.sponge.test.script.template.KnowledgeBaseTestTemplate;
 
-public class KotlinNonScriptKnowledgeBaseTest extends KotlinNonScriptTest implements KnowledgeBaseTest {
+public class KotlinNonScriptKnowledgeBaseTest extends KotlinNonScriptTest implements NonScriptKnowledgeBaseTest {
 
     @Override
     @Test
     public void testCallbacks() {
         KnowledgeBaseTestTemplate.testCallbacks(getType());
-    }
-
-    @Override
-    @Test
-    public void testLoad() {
-        KnowledgeBaseTestTemplate.testLoad(getType());
     }
 
     @Override
@@ -57,11 +51,5 @@ public class KotlinNonScriptKnowledgeBaseTest extends KotlinNonScriptTest implem
     @Test
     public void testLibrary() {
         KnowledgeBaseTestTemplate.testLibrary(getType());
-    }
-
-    @Override
-    @Test
-    public void testScriptOverriding() {
-        KnowledgeBaseTestTemplate.testScriptOverriding(getType());
     }
 }

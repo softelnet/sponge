@@ -35,12 +35,12 @@ import py4j.GatewayServer;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.java.JavaPlugin;
+import org.openksavi.sponge.java.JPlugin;
 
 /**
  * Base, abstract Sponge plugin that provides integration with CPython using Py4J.
  */
-public abstract class BasePy4JPlugin<T> extends JavaPlugin {
+public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public static final String DEFAULT_NAME = "py4j";
 

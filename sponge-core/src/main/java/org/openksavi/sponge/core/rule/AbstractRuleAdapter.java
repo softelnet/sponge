@@ -17,6 +17,7 @@
 package org.openksavi.sponge.core.rule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
 import org.openksavi.sponge.rule.EventCondition;
@@ -32,6 +33,11 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
 
     protected AbstractRuleAdapter(BaseRuleDefinition definition) {
         super(definition);
+    }
+
+    @Override
+    public boolean isOrdered() {
+        return getDefinition().isOrdered();
     }
 
     @Override
@@ -57,6 +63,11 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     @Override
     public List<EventCondition> getConditions(String eventAlias) {
         return getDefinition().getConditions(eventAlias);
+    }
+
+    @Override
+    public final Map<String, List<EventCondition>> getConditions() {
+        return getDefinition().getConditions();
     }
 
     @Override

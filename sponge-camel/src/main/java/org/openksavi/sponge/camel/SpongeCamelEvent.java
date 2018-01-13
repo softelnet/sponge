@@ -73,18 +73,25 @@ public class SpongeCamelEvent extends BaseEvent {
         this.headers = headers;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
+    public <T> T get(String name) {
+        Object result;
         switch (name) {
         case ATTR_ROUTE_ID:
-            return routeId;
+            result = routeId;
+            break;
         case ATTR_BODY:
-            return body;
+            result = body;
+            break;
         case ATTR_HEADERS:
-            return headers;
+            result = headers;
+            break;
         default:
-            throw new IllegalArgumentException("Unknown attribute " + name);
+            return null;
         }
+
+        return (T) result;
     }
 
     @SuppressWarnings("unchecked")

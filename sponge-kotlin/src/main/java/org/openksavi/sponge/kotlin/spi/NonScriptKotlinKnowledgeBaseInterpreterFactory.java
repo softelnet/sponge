@@ -20,7 +20,7 @@ import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.kotlin.KotlinConstants;
+import org.openksavi.sponge.kotlin.core.KotlinConstants;
 import org.openksavi.sponge.kotlin.core.NonScriptKotlinKnowledgeBaseInterpreter;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactory;
 

@@ -31,7 +31,7 @@ public class KotlinNonScriptPluginsTest extends KotlinNonScriptTest implements P
 
     @Override
     @Test
-    public void testScriptPlugin() {
-        PluginsTestTemplate.testScriptPlugin(getType());
+    public void testKbPlugin() {
+        PluginsTestTemplate.testKbPlugin(getType());
     }
 }

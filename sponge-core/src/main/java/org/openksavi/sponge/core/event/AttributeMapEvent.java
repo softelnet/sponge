@@ -49,14 +49,16 @@ public class AttributeMapEvent extends BaseEvent {
     }
 
     /**
-     * Returns attribute value.
+     * Returns the attribute value or {@code null} if it does't exist.
      *
      * @param name attribute name.
      * @return attribute value.
+     * @param <T> attribute.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public Object get(String name) {
-        return attributes.get(name);
+    public <T> T get(String name) {
+        return (T) attributes.get(name);
     }
 
     /**

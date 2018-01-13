@@ -1,6 +1,6 @@
 /**
  * Sponge Knowledge base
- * Standard Python library use
+ * Library use
  */
 
 import org.springframework.http.*

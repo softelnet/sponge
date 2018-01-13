@@ -16,9 +16,11 @@
 
 package org.openksavi.sponge.core.rule;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.rule.RuleAdapterRuntime.NodeValue;
@@ -135,8 +137,16 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
             throw createValidationException("Each event should have a mode specified (explicitly or implicitly).");
         }
 
-        if (Stream.of(getEventAliases()).distinct().count() < getEventAliases().length) {
+        if (Arrays.stream(getEventAliases()).distinct().count() < getEventAliases().length) {
             throw createValidationException("Event aliases/names must be unique.");
+        }
+
+        // Validate condition event aliases.
+        Set<String> eventAliasesSet = Arrays.stream(getEventAliases()).collect(Collectors.toSet());
+        for (String alias : getConditions().keySet()) {
+            if (!eventAliasesSet.contains(alias)) {
+                throw createValidationException("Condition event alias '" + alias + "' does not exist");
+            }
         }
 
         getRuntime().validate();

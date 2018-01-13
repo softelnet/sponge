@@ -26,7 +26,7 @@ class SampleCorrelator < Correlator
         $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
     end
     def onDuration()
-        self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, @eventLog.map(&:to_s))
+        self.logger.debug("{} - log: {}", self.hashCode(), @eventLog.map(&:to_s))
     end
 end
 

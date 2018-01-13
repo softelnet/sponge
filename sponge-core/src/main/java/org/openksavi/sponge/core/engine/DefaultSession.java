@@ -42,9 +42,10 @@ public class DefaultSession implements Session {
         variables.set(name, value);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object getVariable(String name) {
-        return variables.get(name);
+    public <T> T getVariable(String name) {
+        return (T) variables.get(name);
     }
 
     @Override

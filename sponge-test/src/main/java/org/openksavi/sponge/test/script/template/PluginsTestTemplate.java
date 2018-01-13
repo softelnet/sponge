@@ -43,8 +43,8 @@ public class PluginsTestTemplate {
         }
     }
 
-    public static void testScriptPlugin(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "plugins_script");
+    public static void testKbPlugin(KnowledgeBaseType type) {
+        Engine engine = ScriptTestUtils.startWithConfig(type, "plugins_kb");
 
         try {
             await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)

@@ -36,7 +36,7 @@ function onStartup() {
     EPS.logger.debug("Action returned: {}", EPS.getVariable("scriptActionResult"));
 
     EPS.logger.debug("Calling Java defined action");
-    EPS.setVariable("javaActionResult", EPS.call("org.openksavi.sponge.examples.PowerEchoAction", 1, "test"));
+    EPS.setVariable("javaActionResult", EPS.call("PowerEchoAction", 1, "test"));
     EPS.logger.debug("Action returned: {}", EPS.getVariable("javaActionResult"));
 
     EPS.logger.debug("Disabling actions");

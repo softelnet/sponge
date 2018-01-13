@@ -66,15 +66,15 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     }
 
     @Override
-    public final KnowledgeBase getKnowledgeBase() {
+    public KnowledgeBase getKnowledgeBase() {
         return adapter.getKnowledgeBase();
     }
 
-    public final KnowledgeBaseEngineOperations getEps() {
+    public KnowledgeBaseEngineOperations getEps() {
         return getKnowledgeBase().getEngineOperations();
     }
 
-    public final KnowledgeBase getKb() {
+    public KnowledgeBase getKb() {
         return getKnowledgeBase();
     }
 

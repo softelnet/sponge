@@ -17,8 +17,8 @@
 package org.openksavi.sponge.java.spi;
 
 import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.java.JavaConstants;
-import org.openksavi.sponge.java.JavaKnowledgeBaseInterpreter;
+import org.openksavi.sponge.java.core.JavaConstants;
+import org.openksavi.sponge.java.core.JavaKnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseType;

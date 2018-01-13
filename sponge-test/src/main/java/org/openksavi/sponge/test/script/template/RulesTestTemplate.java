@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
@@ -231,8 +230,7 @@ public class RulesTestTemplate {
     }
 
     public static void testRulesInstances(KnowledgeBaseType type) {
-        Engine engine = DefaultEngine.builder()
-                .knowledgeBase(TestUtils.DEFAULT_KB, type, ScriptTestUtils.getScriptKnowledgeBaseFileName(type, "rules_instances")).build();
+        Engine engine = ScriptTestUtils.buildWithKnowledgeBase(type, "rules_instances");
         engine.getDefaultParameters().setAsyncEventSetProcessorProcessingPartitionSize(10);
 
         engine.startup();

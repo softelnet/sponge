@@ -9,7 +9,7 @@ class HelloWorld : Trigger() {
     }
 
     override fun onRun(event: Event?) {
-        println(event?.get("say"))
+        println("${event?.get<String>("say")}")
     }
 }
 

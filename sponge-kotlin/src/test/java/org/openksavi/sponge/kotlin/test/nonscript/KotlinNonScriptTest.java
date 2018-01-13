@@ -17,7 +17,7 @@
 package org.openksavi.sponge.kotlin.test.nonscript;
 
 import org.openksavi.sponge.kb.KnowledgeBaseType;
-import org.openksavi.sponge.kotlin.KotlinConstants;
+import org.openksavi.sponge.kotlin.core.KotlinConstants;
 import org.openksavi.sponge.test.script.ScriptTest;
 
 public class KotlinNonScriptTest implements ScriptTest {

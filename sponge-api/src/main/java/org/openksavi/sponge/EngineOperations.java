@@ -189,8 +189,9 @@ public interface EngineOperations {
      *
      * @param name plugin name.
      * @return plugin.
+     * @param <T> Plugin type.
      */
-    Plugin getPlugin(String name);
+    <T extends Plugin> T getPlugin(String name);
 
     /**
      * Returns the plugin that has the specified name and type or {@code null} if there is no such plugin.
@@ -327,8 +328,9 @@ public interface EngineOperations {
      *
      * @param name variable name.
      * @return variable value.
+     * @param <T> variable.
      */
-    Object getVariable(String name);
+    <T> T getVariable(String name);
 
     /**
      * Returns the value of the engine scope variable. Throws exception if not found.

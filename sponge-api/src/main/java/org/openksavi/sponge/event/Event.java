@@ -67,8 +67,9 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
      *
      * @param name attribute name.
      * @return attribute value.
+     * @param <T> attribute.
      */
-    Object get(String name);
+    <T> T get(String name);
 
     /**
      * Returns the attribute value or {@code null} if it does't exist.

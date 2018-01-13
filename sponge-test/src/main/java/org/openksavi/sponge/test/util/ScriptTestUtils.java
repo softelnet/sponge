@@ -49,7 +49,7 @@ public class ScriptTestUtils {
                 + SpongeUtils.toUpperCamelCaseFromUnderscore(knowledgeBaseSimpleClassNameUnderscore);
     }
 
-    public static Engine startWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
+    public static Engine buildWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
         EngineBuilder<DefaultEngine> builder = DefaultEngine.builder();
         if (type.isScript()) {
             builder.knowledgeBase(TestUtils.DEFAULT_KB, type, getScriptKnowledgeBaseFileName(type, knowledgeBaseFile));
@@ -57,7 +57,11 @@ public class ScriptTestUtils {
             builder.knowledgeBase(
                     SpongeUtils.createInstance(getNoScriptKnowledgeBaseClassName(type, knowledgeBaseFile), KnowledgeBase.class));
         }
-        Engine engine = builder.build();
+        return builder.build();
+    }
+
+    public static Engine startWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
+        Engine engine = buildWithKnowledgeBase(type, knowledgeBaseFile);
         engine.startup();
         return engine;
     }
