@@ -93,7 +93,7 @@ public class StandaloneErrorReportingTest {
         try {
             List<String> args = new ArrayList<>();
             args.add("-k");
-            args.add("examples/standalone/" + name + "/" + name + "." + type.getFileExtension());
+            args.add("examples/standalone/" + name + "/" + name + "." + type.getFileExtensions().get(0));
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain(args.toArray(new String[args.size()]));
 
             try {

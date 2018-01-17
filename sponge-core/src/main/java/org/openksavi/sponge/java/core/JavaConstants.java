@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.java.core;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.openksavi.sponge.action.Action;
@@ -38,7 +39,7 @@ import org.openksavi.sponge.trigger.Trigger;
 public final class JavaConstants {
 
     /** Java-based knowledge base type. */
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("java", "java", "java", false);
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("java", "java", Arrays.asList("java"), false);
 
     //@formatter:off
     public static final Map<Class<?>, Class<?>> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(

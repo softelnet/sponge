@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="ruby">
+        <knowledgeBase name="kb">
             <file charset="UTF-8">triggers.rb</file>
         </knowledgeBase>
     </knowledgeBases>

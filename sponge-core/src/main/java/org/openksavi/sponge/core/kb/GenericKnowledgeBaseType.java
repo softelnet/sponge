@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.core.kb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
 /**
@@ -27,14 +30,14 @@ public class GenericKnowledgeBaseType implements KnowledgeBaseType {
 
     private String language;
 
-    private String fileExtension;
+    private List<String> fileExtensions;
 
     private boolean isScript;
 
-    public GenericKnowledgeBaseType(String typeCode, String language, String fileExtension, boolean isScript) {
+    public GenericKnowledgeBaseType(String typeCode, String language, List<String> fileExtensions, boolean isScript) {
         this.typeCode = typeCode;
         this.language = language;
-        this.fileExtension = fileExtension;
+        this.fileExtensions = new ArrayList<>(fileExtensions);
         this.isScript = isScript;
     }
 
@@ -49,8 +52,8 @@ public class GenericKnowledgeBaseType implements KnowledgeBaseType {
     }
 
     @Override
-    public String getFileExtension() {
-        return fileExtension;
+    public List<String> getFileExtensions() {
+        return fileExtensions;
     }
 
     @Override

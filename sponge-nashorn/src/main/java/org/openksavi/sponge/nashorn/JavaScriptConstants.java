@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.nashorn;
 
+import java.util.Arrays;
+
 import org.openksavi.sponge.core.kb.GenericKnowledgeBaseType;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -24,7 +26,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class JavaScriptConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("javascript", "javascript", "js", true);
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("javascript", "javascript", Arrays.asList("js"), true);
 
     private JavaScriptConstants() {
         //

@@ -7,6 +7,9 @@ A high-level view of the changes introduced in {sponge} releases.
 
 * Added MIDI support. The MIDI plugin allows processing MIDI messages by the {sponge} and provides communication with MIDI devices.
 * API change: The `Utils` class has been renamed to `SpongeUtils`.
+* Added support for writing non script knowledge bases in Kotlin.
+* Added support for specifying non script knowledge bases in an XML configuration.
+* A type of a script knowledge base is no logger required in an XML configuration when knowledge base files are specified.
 * The shaded version of sponge-core (sponge-core-shaded) shades only Guava now.
 * Downgraded Jython to version 2.7.0 to prevent stability issues.
 * Added Sponge External group of projects in order to provide functionalities that require licenses incompatible with Apache 2.0.

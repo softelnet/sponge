@@ -49,6 +49,15 @@ public abstract class JRule extends BaseRule {
     }
 
     /**
+     * Adds event conditions for all events.
+     *
+     * @param javaObjects conditions (e.g. method names or direct EventCondition).
+     */
+    public void addAllConditions(Object... javaObjects) {
+        addAllJavaConditions(new CompositeEventCondition(MAPPER, javaObjects));
+    }
+
+    /**
      * Adds an event condition.
      *
      * @param eventAlias an event alias.

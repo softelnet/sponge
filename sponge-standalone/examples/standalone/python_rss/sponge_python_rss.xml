@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="rss" type="python">
+        <knowledgeBase name="rss">
             <file>python_rss.py</file>
         </knowledgeBase>
     </knowledgeBases>

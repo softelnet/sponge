@@ -16,12 +16,12 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="config" type="python">
+        <knowledgeBase name="config">
             <!-- Extended configuration (more complex data structures than in properties section). -->
             <file>${baseDir}/kb/config.py</file>
         </knowledgeBase>
         <!-- Main knowledge base (implemented in Python) that uses 3 files. These files will be loaded by the same interpreter. -->
-        <knowledgeBase name="main" type="python">
+        <knowledgeBase name="main">
             <!-- Plugin implemented in Python. -->
             <file>${baseDir}/kb/main_plugins.py</file>
             <!-- Main event processors. For the sake of clarity registration of event processors is placed in the next file. -->
@@ -30,15 +30,15 @@
             <file>${baseDir}/kb/main_functions.py</file>
         </knowledgeBase>
         <!-- Actions knowledge base (implemented in JavaScript). -->
-        <knowledgeBase name="actions" type="javascript">
+        <knowledgeBase name="actions">
             <file>${baseDir}/kb/actions.js</file>
         </knowledgeBase>
         <!-- A knowledge base that simulates lack of new news after a specified time by stopping corresponding Camel routes. -->
-        <knowledgeBase name="simulator" type="python">
+        <knowledgeBase name="simulator">
             <file>${baseDir}/kb/simulator.py</file>
         </knowledgeBase>
         <!-- As a consumer in Camel routes. -->
-        <knowledgeBase name="consumer" type="python">
+        <knowledgeBase name="consumer">
             <file>${baseDir}/kb/consumer.py</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file>knowledge_base_concurrency.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

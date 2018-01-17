@@ -128,13 +128,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     protected DefaultScriptKnowledgeBase createScriptKnowledgeBaseFromConfiguration(String name, String typeCode,
             Configuration[] fileNodes) {
 
-        if (StringUtils.isEmpty(typeCode)) {
-            throw new SpongeException("Knowledge base type for script knowledge bases must not be empty");
-        }
-
-        DefaultScriptKnowledgeBase knowledgeBase =
-                new DefaultScriptKnowledgeBase(name, getKnowledgeBaseInterpreterFactory(typeCode).getSupportedType());
-
+        List<KnowledgeBaseScript> scripts = new ArrayList<>();
         for (Configuration fileNode : fileNodes) {
             String fileName = fileNode.getValue();
 
@@ -142,9 +136,28 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
                 throw new SpongeException("Knowledge base file name must not be empty");
             }
 
-            knowledgeBase.addScript(new FileKnowledgeBaseScript(fileName, fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null),
+            scripts.add(new FileKnowledgeBaseScript(fileName, fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null),
                     fileNode.getBooleanAttribute(CFG_KB_FILE_ATTR_REQUIRED, KnowledgeBaseScript.DEFAULT_REQUIRED)));
         }
+
+        DefaultScriptKnowledgeBase knowledgeBase;
+        if (scripts.isEmpty()) {
+            if (StringUtils.isEmpty(typeCode)) {
+                throw new SpongeException("Knowledge base type for script knowledge bases with no files must not be empty");
+            }
+
+            knowledgeBase = new DefaultScriptKnowledgeBase(name, getKnowledgeBaseInterpreterFactory(typeCode).getSupportedType());
+        } else {
+            KnowledgeBaseType inferredKnowledgeBaseType = inferKnowledgeBaseType(name, scripts);
+            if (!StringUtils.isEmpty(typeCode) && !inferredKnowledgeBaseType.getTypeCode().equals(typeCode)) {
+                throw new SpongeException("The inferred knowledge base type '" + inferredKnowledgeBaseType.getTypeCode()
+                        + "' is different that the specified '" + typeCode + "'");
+            }
+
+            knowledgeBase = new DefaultScriptKnowledgeBase(name, inferredKnowledgeBaseType);
+        }
+
+        scripts.forEach(script -> knowledgeBase.addScript(script));
 
         return knowledgeBase;
     }
@@ -253,7 +266,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
                 ScriptKnowledgeBase scriptKnowledgeBase = (ScriptKnowledgeBase) knowledgeBase;
 
                 if (knowledgeBase.getType() == null) {
-                    knowledgeBase.setType(inferKnowledgeBaseType(scriptKnowledgeBase));
+                    knowledgeBase.setType(inferKnowledgeBaseType(scriptKnowledgeBase.getName(), scriptKnowledgeBase.getScripts()));
                 }
 
                 verifyKnowledgeBaseFileTypes(scriptKnowledgeBase);
@@ -351,33 +364,35 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         knowledgeBases.values().forEach(knowledgeBase -> knowledgeBase.getInterpreter().setVariable(name, value));
     }
 
-    public KnowledgeBaseType inferKnowledgeBaseType(ScriptKnowledgeBase scriptKnowledgeBase) {
-        List<KnowledgeBaseScript> scripts = scriptKnowledgeBase.getScripts();
+    public KnowledgeBaseType inferKnowledgeBaseType(String knowledgeBaseName, List<KnowledgeBaseScript> scripts) {// ScriptKnowledgeBase
         if (scripts.isEmpty()) {
-            throw new SpongeException("Cannot infer knowledge base '" + scriptKnowledgeBase.getName() + "' type because it has no files");
+            throw new SpongeException("Cannot infer knowledge base '" + knowledgeBaseName + "' type because it has no files");
         }
 
         String fileName = scripts.get(0).getFileName();
         String extension = FilenameUtils.getExtension(fileName);
 
         Optional<KnowledgeBaseType> typeO = knowledgeBaseInterpreterFactories.values().stream()
-                .filter(factory -> StringUtils.equalsIgnoreCase(factory.getSupportedType().getFileExtension(), extension))
+                .filter(factory -> factory.getSupportedType().getFileExtensions().stream()
+                        .filter(ext -> StringUtils.equalsIgnoreCase(ext, extension)).findFirst().isPresent())
                 .map(factory -> factory.getSupportedType()).findFirst();
 
         if (!typeO.isPresent()) {
             throw new SpongeException("Unsupported file extension '" + extension + "' for file '" + fileName + "' in knowledge base '"
-                    + scriptKnowledgeBase.getName() + "'");
+                    + knowledgeBaseName + "'");
         }
 
         return typeO.get();
     }
 
     public void verifyKnowledgeBaseFileTypes(ScriptKnowledgeBase scriptKnowledgeBase) {
-        String extension = scriptKnowledgeBase.getType().getFileExtension();
+        List<String> extensions = scriptKnowledgeBase.getType().getFileExtensions();
 
         if (!scriptKnowledgeBase.getScripts().stream()
-                .allMatch(script -> StringUtils.equalsIgnoreCase(FilenameUtils.getExtension(script.getFileName()), extension))) {
-            logger.warn("Different file extensions found for files in knowledge base '" + scriptKnowledgeBase.getName() + "'");
+                .allMatch(script -> extensions.stream()
+                        .filter(ext -> StringUtils.equalsIgnoreCase(ext, FilenameUtils.getExtension(script.getFileName()))).findFirst()
+                        .isPresent())) {
+            logger.warn("Incompatible file extensions found for files in knowledge base '" + scriptKnowledgeBase.getName() + "'");
         }
     }
 }

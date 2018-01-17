@@ -6,7 +6,7 @@
 
 {sponge} provides a software framework for implementing event processors that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators.
 
-Event processors are defined in knowledge bases. Knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java.
+Event processors are defined in knowledge bases. Knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java or Kotlin.
 
 {sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system.
 

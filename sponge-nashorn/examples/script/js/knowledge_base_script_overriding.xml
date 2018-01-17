@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="javascript">
+        <knowledgeBase name="kb">
             <file>knowledge_base_script_overriding.js</file>
         </knowledgeBase>
     </knowledgeBases>

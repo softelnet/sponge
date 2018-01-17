@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <property name="sponge.home">.</property>
+    </properties>
+
+    <engine>
+        <eventClonePolicy>deep</eventClonePolicy>
+    </engine>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>${sponge.home}/examples/script/kts/events_clone_policy.kts</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+

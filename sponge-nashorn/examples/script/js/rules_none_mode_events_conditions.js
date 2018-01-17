@@ -16,7 +16,7 @@ function onInit() {
 var RuleFNF = Java.extend(Rule, {
     onConfigure: function(self) {
         self.events = ["e1", "e2 :none", "e3"];
-        self.addConditions("e2", function(self, event) {
+        self.addConditions("e2", function(rule, event) {
             return Number(event.get("label")) > 4;
         });
     },

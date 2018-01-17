@@ -16,12 +16,8 @@
 
 package org.openksavi.sponge.kotlin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import kotlin.jvm.JvmClassMappingKt;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,19 +53,6 @@ public abstract class KKnowledgeBase extends BaseNonScriptKnowledgeBase {
 
     @Override
     public void scanToAutoEnable() {
-        List<String> autoEnabled = new ArrayList<>();
-        JvmClassMappingKt.getKotlinClass(getClass()).getNestedClasses().stream().filter(kclass -> !kclass.isAbstract())
-                .forEachOrdered(kclass -> {
-                    if (KotlinConstants.PROCESSOR_CLASSES.values().stream()
-                            .filter(processorClass -> ClassUtils.isAssignable(JvmClassMappingKt.getJavaClass(kclass), processorClass))
-                            .findFirst().isPresent()) {
-                        autoEnabled.add(KotlinUtils.createProcessorName(kclass));
-                        getEngineOperations().enable(kclass);
-                    }
-                });
-
-        if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
-            logger.debug("Auto-enabling: {}", autoEnabled);
-        }
+        KotlinUtils.scanNestedToAutoEnable(JvmClassMappingKt.getKotlinClass(getClass()), getEngineOperations(), logger);
     }
 }

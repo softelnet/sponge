@@ -75,7 +75,7 @@
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.1.14.0</jruby.version>
         <groovy.version>2.4.12</groovy.version>
-        <kotlin.version>1.2.10</kotlin.version>
+        <kotlin.version>1.2.21</kotlin.version>
 
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
@@ -195,6 +195,7 @@
                         <excludes>
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
                             <exclude>*/sponge/integration/tests/stability/*</exclude>
+                            <exclude>*/sponge/kotlin/test/script/*</exclude>
                         </excludes>
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>

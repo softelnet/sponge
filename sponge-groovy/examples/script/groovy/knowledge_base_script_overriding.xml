@@ -8,7 +8,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/groovy/knowledge_base_script_overriding.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>sync_async_event_set_processors.py</file>
         </knowledgeBase>
     </knowledgeBases>

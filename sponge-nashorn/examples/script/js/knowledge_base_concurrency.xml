@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="javascript">
+        <knowledgeBase name="kb">
             <file>knowledge_base_concurrency.js</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>hello_world.py</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file>rules_events.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

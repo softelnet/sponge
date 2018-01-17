@@ -6,7 +6,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file>plugins_java.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

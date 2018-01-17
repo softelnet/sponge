@@ -8,7 +8,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>system_events.py</file>
         </knowledgeBase>
     </knowledgeBases>

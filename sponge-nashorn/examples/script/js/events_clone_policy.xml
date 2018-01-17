@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="javascript">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/js/events_clone_policy.js</file>
         </knowledgeBase>
     </knowledgeBases>

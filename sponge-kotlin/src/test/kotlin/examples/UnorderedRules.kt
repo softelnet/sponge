@@ -46,8 +46,8 @@ class UnorderedRules : KKnowledgeBase() {
         override fun onConfigure() {
             setEvents("filesystemFailure e1", "diskFailure e2 :all")
             setOrdered(false)
-            addCondition("e1", Conditions::severityCondition)
-            addConditions("e2", Conditions::severityCondition, Conditions::diskFailureSourceCondition)
+            addCondition("e1", this::severityCondition)
+            addConditions("e2", this::severityCondition, this::diskFailureSourceCondition)
             duration = Duration.ofSeconds(5)
         }
 
@@ -57,14 +57,12 @@ class UnorderedRules : KKnowledgeBase() {
             eps.getVariable<AtomicInteger>("hardwareFailureScriptCount").incrementAndGet()
         }
 
-        companion object Conditions {
-            fun severityCondition(@Suppress("UNUSED_PARAMETER") rule: Rule, event: Event) = event.get<Int>("severity") > 5
+        fun severityCondition(event: Event) = event.get<Int>("severity") > 5
 
-            fun diskFailureSourceCondition(rule: Rule, event: Event): Boolean {
-                // Both events have to have the same source
-                return event.get<String>("source") == rule.firstEvent.get<String>("source") &&
-                        Duration.between(rule.firstEvent.time, event.time).seconds <= 4
-            }
+        fun diskFailureSourceCondition(event: Event): Boolean {
+            // Both events have to have the same source
+            return event.get<String>("source") == this.firstEvent.get<String>("source") &&
+                    Duration.between(this.firstEvent.time, event.time).seconds <= 4
         }
     }
 

@@ -3,16 +3,16 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="python_kb" type="python">
+        <knowledgeBase name="python_kb">
             <file>kb/python_kb.py</file>
         </knowledgeBase>
-        <knowledgeBase name="javascript_kb" type="javascript">
+        <knowledgeBase name="javascript_kb">
             <file>kb/javascript_kb.js</file>
         </knowledgeBase>
-        <knowledgeBase name="ruby_kb" type="ruby">
+        <knowledgeBase name="ruby_kb">
             <file>kb/ruby_kb.rb</file>
         </knowledgeBase>
-        <knowledgeBase name="groovy_kb" type="groovy">
+        <knowledgeBase name="groovy_kb">
             <file>kb/groovy_kb.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

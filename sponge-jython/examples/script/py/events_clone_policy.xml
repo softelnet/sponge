@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/py/events_clone_policy.py</file>
         </knowledgeBase>
     </knowledgeBases>

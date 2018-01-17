@@ -7,7 +7,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>knowledge_base_library.py</file>
         </knowledgeBase>
     </knowledgeBases>

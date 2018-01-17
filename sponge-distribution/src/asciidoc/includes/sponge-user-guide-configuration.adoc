@@ -28,10 +28,11 @@ In a general form an XML configuration file is built as in the following example
 
     <!-- Knowledge bases configuration section -->
     <knowledgeBases>
-        <knowledgeBase name="exampleKb" type="python">
+        <knowledgeBase name="pythonKb">
             <file>kb_file_1.py</file>
             <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
         </knowledgeBase>
+        <knowledgeBase name="kotlinKb" class="org.openksavi.sponge.kotlin.examples.HelloWorld" />
     </knowledgeBases>
 
     <!-- Plugins configuration section -->
@@ -114,7 +115,11 @@ Each `<knowledgeBase>` tag contains:
 
 |`type`
 |Attribute
-|The type of the script knowledge base corresponding to the scripting language. Allowed values: `python`, `ruby`, `groovy`, `javascript`.
+|The type of the script knowledge base corresponding to the scripting language. Allowed values: `python`, `ruby`, `groovy`, `javascript`. The type is required only for knowledge bases that specify no files so their type can't be inferred from the file extensions.
+
+|`class`
+|Attribute
+|The class of the non script knowledge base. In that case you don't have to specify a type and you must not specify files. A knowledge base class should define a non-parameterized constructor.
 
 |`file`
 |Element

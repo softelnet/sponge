@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.jython;
 
+import java.util.Arrays;
+
 import org.openksavi.sponge.core.kb.GenericKnowledgeBaseType;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -24,7 +26,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class PythonConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("python", "python", "py", true);
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("python", "python", Arrays.asList("py"), true);
 
     private PythonConstants() {
         //

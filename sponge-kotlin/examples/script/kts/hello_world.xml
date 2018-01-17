@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="kotlin">
+        <knowledgeBase name="kb">
             <file>hello_world.kts</file>
         </knowledgeBase>
     </knowledgeBases>

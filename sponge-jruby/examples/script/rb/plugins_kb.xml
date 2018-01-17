@@ -7,7 +7,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="ruby">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/rb/plugins_kb.rb</file>
         </knowledgeBase>
     </knowledgeBases>

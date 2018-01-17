@@ -1,5 +1,5 @@
 = Knowledge bases
-A knowledge base is used mainly to define processors. A knowledge base may be written in one of the supported scripting languages. An alternative way of defining knowledge bases is to write them directly in Java. However, using a scripting knowledge base has advantages such as that a modified script knowledge base doesn't need recompilation.
+A knowledge base is used mainly to define processors. A knowledge base may be written in one of the supported scripting languages. An alternative way of defining knowledge bases is to write them directly in Java or Kotlin. However, using a scripting knowledge base has advantages such as that a modified script knowledge base doesn't need recompilation.
 
 There is a global namespace for all processors, regardless of the knowledge base they are defined in. When there is more than one processor of the same name in the engine, only the last enabled one will be registered. However, you can't enable a processor if an another one that has the same name and is of a different type has already been enabled.
 
@@ -25,7 +25,7 @@ Generally, script knowledge base files consist of a few parts:
 |Called once on the initialization of the knowledge base.
 
 |`onLoad()`
-|Called on the loading of the knowledge base and also every time the knowledge base is reloaded.
+|Called on the loading of the knowledge base and also every time the knowledge base is reloaded. Before invoking the `onLoad` callback method, the engine scans to auto-enable processors (if this functionality is turned on). You may manually disable some of the auto enabled processors in this callback function if necessary.
 
 |`onStartup()`
 |Called once after the startup of the engine (after `onInit()` and initial `onLoad()`).
@@ -254,23 +254,81 @@ The order in which the files are loaded is important. The files will be loaded i
 == Synchronization of processes in a knowledge base
 {sponge} is a multi-threaded system. {sponge} engine operations are thread-safe. However, attention should be paid that processors defined in a knowledge base access any shared resources in a thread-safe way. This could be achieved in various ways using Java or scripting language mechanisms.
 
+== Non script knowledge bases
 
-== Java knowledge base
+Non script knowledge bases may be written in Java or Kotlin. Non script base processor classes follow the naming convention JAction, JTrigger, JKnowledgeBase etc for Java and KAction, KTrigger, KKnowledgeBase etc for Kotlin.
+
+=== Java knowledge bases
 
 .Example of sending events from within a Java knowledge base
 [source,java]
 ----
-public class TestKnowledgeBase extends JavaKnowledgeBase { // <1>
+public class TestKnowledgeBase extends JKnowledgeBase { // <1>
+
+    public static class TestTrigger extends JTrigger { // <2>
+
+        @Override
+        public void onConfigure() {
+            setEvent("e1");
+        }
+
+        @Override
+        public void onRun(Event event) {
+            getLogger().debug("Run");
+        }
+    }
 
     @Override
     public void onStartup() {
-        getEps().event("e1").set("mark", 1).sendAfter(1000); // <2>
+        getEps().event("e1").set("mark", 1).sendAfter(1000); // <3>
     }
 }
 ----
 <1> The definition of the Java-based knowledge base class.
-<2> Makes an event of type (name) `e1` with an attribute `mark` set to `1` and schedules it to be sent after `1` second.
+<2> The definition of the Java trigger.
+<3> Makes an event of type (name) `e1` with an attribute `mark` set to `1` and schedules it to be sent after `1` second.
 
+=== Kotlin knowledge bases
+Kotlin-based knowledge bases are currently supported only as non script knowledge bases.
+
+.Example of a Kotlin knowledge base
+[source,kotlin]
+----
+class Filters : KKnowledgeBase() {
+
+    class ColorFilter : KFilter() {
+        override fun onConfigure() = setEvent("e1")
+        override fun onAccept(event: Event): Boolean {
+            logger.debug("Received event {}", event)
+            val color: String? = event.getOrDefault("color", null)
+            if (color == null || color != "blue") {
+                logger.debug("rejected")
+                return false
+            } else {
+                logger.debug("accepted")
+                return true
+            }
+        }
+    }
+
+    class ColorTrigger : KTrigger() {
+        override fun onConfigure() = setEvent("e1")
+        override fun onRun(event: Event) {
+            logger.debug("Received event {}", event)
+        }
+    }
+
+    override fun onStartup() {
+        eps.event("e1").send()
+        eps.event("e1").set("color", "red").send()
+        eps.event("e1").set("color", "blue").send()
+    }
+}
+----
+
+In Kotlin knowledge bases there is no global variable `EPS`. Instead you have to use an `eps` property.
+
+See more examples of Kotlin-based knowledge bases in the `sponge-kotlin` project.
 
 == Scripting knowledge bases interoperability
 There are some limitation in the interoperability between scripting knowledge bases:
