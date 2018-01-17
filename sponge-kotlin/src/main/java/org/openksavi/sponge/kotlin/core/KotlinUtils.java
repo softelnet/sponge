@@ -16,7 +16,14 @@
 
 package org.openksavi.sponge.kotlin.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.KClass;
+
+import org.apache.commons.lang3.ClassUtils;
+import org.slf4j.Logger;
 
 /**
  * Kotlin utility methods.
@@ -25,6 +32,39 @@ public abstract class KotlinUtils {
 
     public static String createProcessorName(KClass<?> kclass) {
         return kclass.getSimpleName();
+    }
+
+    public static String getClassNameForScriptBinding(Class<?> cls) {
+        String className = cls.getName();
+        if (className.contains("$")) {
+            className = JvmClassMappingKt.getKotlinClass(cls).getSimpleName();
+        }
+
+        return className;
+    }
+
+    public static boolean isScriptMainClass(String className) {
+        return !className.contains("$");
+    }
+
+    public static void scanNestedToAutoEnable(KClass<?> rootKClass, KotlinKnowledgeBaseEngineOperations eps, Logger logger) {
+        List<String> autoEnabled = new ArrayList<>();
+        rootKClass.getNestedClasses().stream().forEachOrdered(kclass -> {
+            if (isAutoEnableCandidate(kclass)) {
+                autoEnabled.add(KotlinUtils.createProcessorName(kclass));
+                eps.enable(kclass);
+            }
+        });
+
+        if (logger.isDebugEnabled() && !autoEnabled.isEmpty()) {
+            logger.debug("Auto-enabling: {}", autoEnabled);
+        }
+    }
+
+    public static boolean isAutoEnableCandidate(KClass<?> kclass) {
+        return !kclass.isAbstract() && KotlinConstants.PROCESSOR_CLASSES.values().stream()
+                .filter(processorClass -> ClassUtils.isAssignable(JvmClassMappingKt.getJavaClass(kclass), processorClass)).findFirst()
+                .isPresent();
     }
 
     private KotlinUtils() {

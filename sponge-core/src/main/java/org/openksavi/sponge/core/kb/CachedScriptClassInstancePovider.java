@@ -32,9 +32,9 @@ import org.openksavi.sponge.engine.Engine;
  * The provider of script-based class instances that caches parsed expressions.
  *
  * @param <S> the type of the script.
- * @param <S> the type of the instance to provide.
+ * @param <T> the type of the instance to provide.
  */
-public class CachedScriptClassInstancePovider<S, T> {
+public class CachedScriptClassInstancePovider<S, T> implements ScriptClassInstanceProvider<T> {
 
     private Function<String, S> createScriptFunction;
 
@@ -69,6 +69,7 @@ public class CachedScriptClassInstancePovider<S, T> {
         }
     }
 
+    @Override
     public T newInstance(String className, Class<T> javaClass) {
         try {
             return createInstanceFunction.apply(cache != null ? cache.get(className) : createScript(className), javaClass);
@@ -79,7 +80,8 @@ public class CachedScriptClassInstancePovider<S, T> {
         }
     }
 
-    public void invalidate() {
+    @Override
+    public void clear() {
         if (cache != null) {
             cache.invalidateAll();
         }

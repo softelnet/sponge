@@ -62,7 +62,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     protected Object interpteterSynchro = new Object();
 
     @SuppressWarnings("rawtypes")
-    protected CachedScriptClassInstancePovider cachedScriptClassInstancePovider;
+    protected ScriptClassInstanceProvider scriptClassInstancePovider;
 
     /**
      * Creates a new knowledge base interpreter.
@@ -75,7 +75,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
         prepareInterpreter();
 
-        cachedScriptClassInstancePovider = createCachedScriptClassInstancePovider();
+        scriptClassInstancePovider = createScriptClassInstancePovider();
     }
 
     /**
@@ -83,17 +83,16 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      */
     protected abstract void prepareInterpreter();
 
-    @SuppressWarnings("rawtypes")
-    protected abstract <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider();
+    protected abstract <T> ScriptClassInstanceProvider<T> createScriptClassInstancePovider();
 
     @SuppressWarnings("unchecked")
     @Override
     protected <T> T doCreateInstance(String className, Class<T> javaClass) {
-        return (T) cachedScriptClassInstancePovider.newInstance(className, javaClass);
+        return (T) scriptClassInstancePovider.newInstance(className, javaClass);
     }
 
     protected final void invalidateCache() {
-        cachedScriptClassInstancePovider.invalidate();
+        scriptClassInstancePovider.clear();
     }
 
     @Override

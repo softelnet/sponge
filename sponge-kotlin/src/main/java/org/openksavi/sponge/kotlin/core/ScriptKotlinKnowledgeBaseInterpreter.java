@@ -16,9 +16,12 @@
 
 package org.openksavi.sponge.kotlin.core;
 
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.script.Bindings;
 import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -28,6 +31,8 @@ import javax.script.ScriptException;
 import kotlin.reflect.KClass;
 
 import org.apache.commons.lang3.Validate;
+import org.jetbrains.kotlin.cli.common.repl.CompiledClassData;
+import org.jetbrains.kotlin.cli.common.repl.KotlinJsr223JvmScriptEngineBase.CompiledKotlinScript;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +43,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
+import org.openksavi.sponge.kb.KnowledgeBaseScript;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.kotlin.KPlugin;
 import org.openksavi.sponge.plugin.Plugin;
@@ -53,10 +59,17 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
 
     public static final String SCRIPT_ENGINE_NAME = "kotlin";
 
-    protected Bindings bindings;
+    private List<CompiledKotlinScript> scripts;
 
     public ScriptKotlinKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
         super(new KotlinKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), KotlinConstants.TYPE_SCRIPT);
+    }
+
+    @Override
+    protected void prepareInterpreter() {
+        scriptEngine = createScriptEngine();
+
+        scripts = Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
@@ -79,6 +92,18 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
         return result;
     }
 
+    @Override
+    public void onClear() {
+        synchronized (interpteterSynchro) {
+            super.onClear();
+
+            if (scripts != null) {
+                scripts.clear();
+                scripts = null;
+            }
+        }
+    }
+
     /**
      * Adds import from the package.
      *
@@ -97,7 +122,8 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
         scriptEngine.put(name, value);
         try {
             if (value != null) {
-                scriptEngine.eval("val " + name + " = bindings[\"" + name + "\"] as " + value.getClass().getName());
+                scriptEngine.eval(
+                        "val " + name + " = bindings[\"" + name + "\"] as " + KotlinUtils.getClassNameForScriptBinding(value.getClass()));
             } else {
                 scriptEngine.eval("val " + name + " = bindings[\"" + name + "\"]");
             }
@@ -124,9 +150,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
     @Override
     public String getScriptKnowledgeBaseProcessorClassName(Object processorClass) {
         if (processorClass instanceof KClass) {
-            KClass ktType = (KClass) processorClass;
-
-            return ktType.getQualifiedName();
+            return KotlinUtils.createProcessorName((KClass) processorClass);
         }
 
         return null;
@@ -139,12 +163,51 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
 
     @Override
     public void scanToAutoEnable() {
-        // TODO To implement
-        // throw new UnsupportedOperationException();
+        scripts.forEach(script -> {
+            for (CompiledClassData data : script.getCompiledData().getClasses()) {
+                String component = data.component1().replaceAll(".class", "::class");
+                // If a component is a main script class, then scan it for processors.
+                if (KotlinUtils.isScriptMainClass(component)) {
+                    KotlinUtils.scanNestedToAutoEnable((KClass<?>) eval(component),
+                            (KotlinKnowledgeBaseEngineOperations) getEngineOperations(), logger);
+                }
+            }
+        });
     }
 
     @Override
     protected String getScriptClassInstancePoviderFormat() {
         return "%s()";
     }
+
+    @Override
+    protected void doReload(List<KnowledgeBaseScript> scripts) {
+        if (scripts != null) {
+            scripts.clear();
+        }
+
+        super.doReload(scripts);
+    }
+
+    @Override
+    protected void doLoad(Reader reader, String fileName) {
+        try {
+            CompiledKotlinScript script = (CompiledKotlinScript) ((Compilable) scriptEngine).compile(reader);
+            script.eval();
+
+            // Add the last script as the first.
+            scripts.add(0, script);
+        } catch (ScriptException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
+    // /**
+    // * Turns off a script class instance compiled cache.
+    // */
+    // @Override
+    // protected <T> ScriptClassInstanceProvider<T> createScriptClassInstancePovider() {
+    // // return new SimpleScriptClassInstancePovider<T>(getEngineOperations().getEngine(),
+    // // className -> eval(String.format(getScriptClassInstancePoviderFormat(), className)));
+    // }
 }

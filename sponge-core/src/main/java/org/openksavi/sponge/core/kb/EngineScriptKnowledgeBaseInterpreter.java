@@ -208,9 +208,9 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         return SpongeUtils.getException(knowledgeBaseException, ScriptException.class);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     @Override
-    protected <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider() {
+    protected <T> ScriptClassInstanceProvider<T> createScriptClassInstancePovider() {
         return new CachedScriptClassInstancePovider<CompiledScript, T>(getEngineOperations().getEngine(), (expression) -> {
             try {
                 return ((Compilable) scriptEngine).compile(expression);

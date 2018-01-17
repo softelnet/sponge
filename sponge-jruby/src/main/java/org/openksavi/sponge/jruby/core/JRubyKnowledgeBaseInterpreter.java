@@ -43,6 +43,7 @@ import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
+import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.Engine;
@@ -304,9 +305,9 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     @Override
-    protected <T> CachedScriptClassInstancePovider createCachedScriptClassInstancePovider() {
+    protected <T> ScriptClassInstanceProvider<T> createScriptClassInstancePovider() {
         return new CachedScriptClassInstancePovider<EmbedEvalUnit, T>(getEngineOperations().getEngine(),
                 (expression) -> container.parse(expression), "%s.new", (script, javaClass) -> (T) script.run().toJava(javaClass));
     }

@@ -48,11 +48,11 @@
             <artifactId>sponge-nashorn</artifactId>
             <version>${project.version}</version>
         </dependency>
-<!--         <dependency> -->
-<!--             <groupId>org.openksavi.sponge</groupId> -->
-<!--             <artifactId>sponge-kotlin</artifactId> -->
-<!--             <version>${project.version}</version> -->
-<!--         </dependency> -->
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-kotlin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-camel</artifactId>

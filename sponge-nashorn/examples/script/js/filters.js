@@ -19,7 +19,7 @@ var ColorFilter = Java.extend(Filter, {
     },
     onAccept: function(self, event) {
         self.logger.debug("Received event {}", event);
-        var color = event.get("color");
+        var color = event.getOrDefault("color", null);
         if (color == null || color != "blue") {
             self.logger.debug("rejected");
             return false;

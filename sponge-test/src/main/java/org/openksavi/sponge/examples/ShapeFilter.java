@@ -28,7 +28,7 @@ public class ShapeFilter extends JFilter {
 
     @Override
     public boolean onAccept(Event event) {
-        String shape = event.get("shape", String.class);
+        String shape = event.getOrDefault("shape", null);
         if (shape == null) {
             getLogger().debug("No shape for event: {}; event rejected", event);
             return false;

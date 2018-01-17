@@ -27,7 +27,7 @@ class Filters : KKnowledgeBase() {
         override fun onConfigure() = setEvent("e1")
         override fun onAccept(event: Event): Boolean {
             logger.debug("Received event {}", event)
-            val color: String? = event.get("color")
+            val color: String? = event.getOrDefault("color", null)
             if (color == null || color != "blue") {
                 logger.debug("rejected")
                 return false
