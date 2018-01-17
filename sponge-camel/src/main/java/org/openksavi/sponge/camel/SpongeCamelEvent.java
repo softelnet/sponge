@@ -75,7 +75,7 @@ public class SpongeCamelEvent extends BaseEvent {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name) {
+    public <T> T doGet(String name, boolean useDefault, T defaultValue) {
         Object result;
         switch (name) {
         case ATTR_ROUTE_ID:
@@ -88,7 +88,7 @@ public class SpongeCamelEvent extends BaseEvent {
             result = headers;
             break;
         default:
-            return null;
+            return getDefaultAttributeValue(name, useDefault, defaultValue);
         }
 
         return (T) result;

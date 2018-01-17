@@ -32,11 +32,3 @@ def onStartup():
     EPS.event("e1").sendAfter(100, 100)
     EPS.event("e2").set("shape", "square").sendAfter(200, 100)
     EPS.event("e3").set("shape", "circle").sendAfter(300, 100)
-
-
-
-
-
-
-
-

@@ -55,12 +55,12 @@ public abstract class ProcessorControlEvent extends BaseControlEvent {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name) {
+    public <T> T doGet(String name, boolean useDefault, T defaultValue) {
         switch (name) {
         case ATTR_PROCESSOR_ADAPTER:
             return (T) processorAdapter;
         default:
-            return null;
+            return getDefaultAttributeValue(name, useDefault, defaultValue);
         }
     }
 

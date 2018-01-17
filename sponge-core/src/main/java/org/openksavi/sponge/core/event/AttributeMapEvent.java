@@ -48,17 +48,16 @@ public class AttributeMapEvent extends BaseEvent {
         super(name, clonePolicy);
     }
 
-    /**
-     * Returns the attribute value or {@code null} if it does't exist.
-     *
-     * @param name attribute name.
-     * @return attribute value.
-     * @param <T> attribute.
-     */
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name) {
-        return (T) attributes.get(name);
+    @SuppressWarnings("unchecked")
+    protected <T> T doGet(String name, boolean useDefault, T defaultValue) {
+        synchronized (attributes) {
+            if (!has(name)) {
+                return getDefaultAttributeValue(name, useDefault, defaultValue);
+            }
+
+            return (T) attributes.get(name);
+        }
     }
 
     /**

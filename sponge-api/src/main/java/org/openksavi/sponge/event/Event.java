@@ -63,7 +63,7 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     void setId(String id);
 
     /**
-     * Returns the attribute value or {@code null} if it does't exist.
+     * Returns the attribute value or throws {@code IllegalArgumentException} if it does't exist.
      *
      * @param name attribute name.
      * @return attribute value.
@@ -72,7 +72,7 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     <T> T get(String name);
 
     /**
-     * Returns the attribute value or {@code null} if it does't exist.
+     * Returns the attribute value or throws {@code IllegalArgumentException} if it does't exist.
      *
      * @param name attribute name.
      * @param cls attribute class.
@@ -80,6 +80,16 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
      * @param <T> attribute.
      */
     <T> T get(String name, Class<T> cls);
+
+    /**
+     * Returns the attribute value or {@code defaultValue} if it does't exist.
+     *
+     * @param name attribute name.
+     * @param defaultValue the default value.
+     * @return attribute value.
+     * @param <T> attribute.
+     */
+    <T> T getOrDefault(String name, T defaultValue);
 
     /**
      * Sets attribute value.

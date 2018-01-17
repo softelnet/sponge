@@ -120,6 +120,31 @@ public abstract class BaseEvent implements Event {
         return DEFAULT_PRIORITY;
     }
 
+    protected abstract <T> T doGet(String name, boolean useDefault, T defaultValue);
+
+    protected final <T> T getDefaultAttributeValue(String name, boolean useDefault, T defaultValue) {
+        if (useDefault) {
+            return defaultValue;
+        } else {
+            throw new IllegalArgumentException("Unknown attribute " + name);
+        }
+    }
+
+    /**
+     * Returns the attribute value or throws {@code IllegalArgumentException} if it does't exist.
+     *
+     * @param name attribute name.
+     * @return attribute value.
+     * @param <T> attribute.
+     */
+    @Override
+    public final <T> T get(String name) {
+        return doGet(name, false, null);
+        // return doGet(name, () -> {
+        // throw new IllegalArgumentException("Unknown attribute " + name);
+        // });
+    }
+
     /**
      * Returns attribute value.
      *
@@ -128,9 +153,15 @@ public abstract class BaseEvent implements Event {
      * @return attribute value.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T get(String name, Class<T> cls) {
-        return (T) get(name);
+    // @SuppressWarnings("unchecked")
+    public final <T> T get(String name, Class<T> cls) {
+        return doGet(name, false, null);
+    }
+
+    @Override
+    public final <T> T getOrDefault(String name, T defaultValue) {
+        // return doGet(name, () -> defaultValue);
+        return doGet(name, true, defaultValue);
     }
 
     /**

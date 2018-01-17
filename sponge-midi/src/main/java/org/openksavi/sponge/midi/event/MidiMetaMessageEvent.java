@@ -112,7 +112,7 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name) {
+    public <T> T doGet(String name, boolean useDefault, T defaultValue) {
         Object result;
         switch (name) {
         case ATTR_MESSAGE_TYPE:
@@ -122,7 +122,7 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
             result = getData();
             break;
         default:
-            result = super.get(name);
+            result = super.doGet(name, useDefault, defaultValue);
             break;
         }
 

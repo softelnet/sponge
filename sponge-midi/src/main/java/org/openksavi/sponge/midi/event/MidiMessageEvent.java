@@ -125,7 +125,7 @@ public abstract class MidiMessageEvent<M extends MidiMessage> extends BaseEvent 
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name) {
+    public <T> T doGet(String name, boolean useDefault, T defaultValue) {
         Object result;
         switch (name) {
         case ATTR_MESSAGE:
@@ -135,7 +135,7 @@ public abstract class MidiMessageEvent<M extends MidiMessage> extends BaseEvent 
             result = timeStamp;
             break;
         default:
-            return null;
+            return getDefaultAttributeValue(name, useDefault, defaultValue);
         }
 
         return (T) result;

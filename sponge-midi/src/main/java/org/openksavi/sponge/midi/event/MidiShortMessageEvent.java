@@ -161,7 +161,7 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String name) {
+    public <T> T doGet(String name, boolean useDefault, T defaultValue) {
         Object result;
         switch (name) {
         case ATTR_COMMAND:
@@ -177,7 +177,7 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
             result = getData2();
             break;
         default:
-            result = super.get(name);
+            result = super.doGet(name, useDefault, defaultValue);
             break;
         }
 

@@ -44,6 +44,7 @@ class Rules : KKnowledgeBase() {
             setEvents("filesystemFailure e1", "diskFailure e2 :all")
             addCondition("e1", Conditions::severityCondition)
             addConditions("e2", Conditions::severityCondition, Conditions::diskFailureSourceCondition)
+            addConditions("e2", ::alwaysTrueRuleEventCondition)
             duration = Duration.ofSeconds(8)
         }
 
@@ -75,3 +76,6 @@ class Rules : KKnowledgeBase() {
         eps.event("diskFailure").set("severity", 1).set("source", "server1").send()
     }
 }
+
+@Suppress("UNUSED_PARAMETER")
+fun alwaysTrueRuleEventCondition(rule: Rule, event: Event) = true
