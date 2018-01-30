@@ -85,10 +85,13 @@ Events are the basic element of processing in {sponge}. They have properties suc
 |A method that allows setting an attribute of an event.
 
 |`Object get(attributeName)`
-|A method that returns a value of an attribute or `null` if it does't exist.
+|A method that returns a value of an attribute or throws `IllegalArgumentException` if it does't exist.
 
 |`Object get(attributeName, attributeClass)`
-|A method that returns a value of an attribute (assuming it is an instance of `attributeClass`) or `null` if it does't exist.
+|A method that returns a value of an attribute (assuming it is an instance of `attributeClass`) or throws `IllegalArgumentException` if it does't exist.
+
+|`Object getOrDefault(attributeName, defaultValue)`
+|A method that returns a value of an attribute or `defaultValue` if it does't exist.
 
 |`boolean has(attributeName)`
 |A method that checks if an event has an attribute.
@@ -262,6 +265,8 @@ Processors could be enabled:
 {sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base. Processor classes whose names start with the `Abstract` prefix are considered abstract and will not be automatically enabled.
 
 As previously mentioned, the auto-enable feature scans only for processors defined in the scripting knowledge base. Enabling Java-based processors has to be done manually.
+
+For non script knowledge bases (Java or Kotlin based) the auto-enable feature will scan only for processor classes nested in a corresponding knowledge base class. Other processors have to be enabled manually.
 
 .Example of processor inheritance and auto-enable
 [source,python]
