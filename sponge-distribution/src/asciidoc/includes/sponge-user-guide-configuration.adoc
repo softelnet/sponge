@@ -28,7 +28,7 @@ In a general form an XML configuration file is built as in the following example
 
     <!-- Knowledge bases configuration section -->
     <knowledgeBases>
-        <knowledgeBase name="pythonKb" type="python">
+        <knowledgeBase name="pythonKb">
             <file>kb_file_1.py</file>
             <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
         </knowledgeBase>
@@ -115,7 +115,7 @@ Each `<knowledgeBase>` tag contains:
 
 |`type`
 |Attribute
-|The type of the script knowledge base corresponding to the scripting language. Allowed values: `python`, `ruby`, `groovy`, `javascript`.
+|The type of the script knowledge base corresponding to the scripting language. Allowed values: `python`, `ruby`, `groovy`, `javascript`. The type is required only for knowledge bases that specify no files so their type can't be inferred from the file extensions.
 
 |`class`
 |Attribute

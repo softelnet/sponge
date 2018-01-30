@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="javascript">
+        <knowledgeBase name="kb">
             <file charset="UTF-8">triggers.js</file>
         </knowledgeBase>
     </knowledgeBases>

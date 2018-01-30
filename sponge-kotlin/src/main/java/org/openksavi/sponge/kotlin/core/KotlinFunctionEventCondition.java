@@ -18,13 +18,15 @@ package org.openksavi.sponge.kotlin.core;
 
 import kotlin.reflect.KFunction;
 
+import org.openksavi.sponge.Experimental;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
 
 /**
- * Kotlin function rule event condition.
+ * Kotlin function rule event condition. Currently not used.
  */
+@Experimental
 public class KotlinFunctionEventCondition implements EventCondition {
 
     private KFunction<Boolean> function;

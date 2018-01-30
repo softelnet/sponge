@@ -10,7 +10,7 @@
 
     <knowledgeBases>
         <!-- Main knowledge base (implemented in Python). -->
-        <knowledgeBase name="main" type="python">
+        <knowledgeBase name="main">
             <file>${baseDir}/main.py</file>
         </knowledgeBase>
     </knowledgeBases>

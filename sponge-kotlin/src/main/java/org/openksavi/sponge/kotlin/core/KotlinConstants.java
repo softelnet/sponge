@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.kotlin.core;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.openksavi.sponge.action.Action;
@@ -38,10 +39,10 @@ import org.openksavi.sponge.trigger.Trigger;
 public final class KotlinConstants {
 
     /** Script based Kotlin knowledge base type. The type code follows the convention of all supported scripting languages. */
-    public static final KnowledgeBaseType TYPE_SCRIPT = new GenericKnowledgeBaseType("kotlin", "kotlin", "kts", true);
+    public static final KnowledgeBaseType TYPE_SCRIPT = new GenericKnowledgeBaseType("kotlin", "kotlin", Arrays.asList("kts"), true);
 
     /** Non script based Kotlin knowledge base type. The type code is the same as a Kotlin source file extension. */
-    public static final KnowledgeBaseType TYPE_NON_SCRIPT = new GenericKnowledgeBaseType("kt", "kotlin", "kt", false);
+    public static final KnowledgeBaseType TYPE_NON_SCRIPT = new GenericKnowledgeBaseType("kt", "kotlin", Arrays.asList("kt"), false);
 
     //@formatter:off
     public static final Map<Class<?>, Class<?>> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(

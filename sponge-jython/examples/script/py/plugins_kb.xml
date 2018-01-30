@@ -7,7 +7,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/py/plugins_kb.py</file>
         </knowledgeBase>
     </knowledgeBases>

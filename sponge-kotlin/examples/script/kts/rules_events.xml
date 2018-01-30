@@ -7,7 +7,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="kotlin">
+        <knowledgeBase name="kb">
             <file>rules_events.kts</file>
         </knowledgeBase>
     </knowledgeBases>

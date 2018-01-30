@@ -2,7 +2,7 @@
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>midi_input.py</file>
         </knowledgeBase>
     </knowledgeBases>

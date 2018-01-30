@@ -7,7 +7,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="javascript">
+        <knowledgeBase name="kb">
             <file>knowledge_base_library.js</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -7,7 +7,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/groovy/plugins_kb.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -484,7 +484,7 @@ Plugins could be written in Java or in a supported scripting language as a part 
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
     <knowledgeBases>
-        <knowledgeBase name="sampleKnowledgeBase" type="python">
+        <knowledgeBase name="sampleKnowledgeBase">
             <file>plugins_java.py</file>
         </knowledgeBase>
     </knowledgeBases>
@@ -595,7 +595,7 @@ Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
     <knowledgeBases>
-        <knowledgeBase name="sampleKnowledgeBase" type="python">
+        <knowledgeBase name="sampleKnowledgeBase">
             <file>plugins_kb.py</file>
         </knowledgeBase>
     </knowledgeBases>

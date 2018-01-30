@@ -7,7 +7,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="kotlin">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/kts/plugins_kb.kts</file>
         </knowledgeBase>
     </knowledgeBases>

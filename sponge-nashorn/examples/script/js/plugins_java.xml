@@ -6,7 +6,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="javascript">
+        <knowledgeBase name="kb">
             <file>plugins_java.js</file>
         </knowledgeBase>
     </knowledgeBases>

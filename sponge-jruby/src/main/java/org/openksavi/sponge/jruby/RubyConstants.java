@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.jruby;
 
+import java.util.Arrays;
+
 import org.openksavi.sponge.core.kb.GenericKnowledgeBaseType;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -24,7 +26,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class RubyConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("ruby", "ruby", "rb", true);
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("ruby", "ruby", Arrays.asList("rb"), true);
 
     private RubyConstants() {
         //

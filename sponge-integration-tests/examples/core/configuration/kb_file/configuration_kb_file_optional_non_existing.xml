@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file required="false">configuration_kb_file_optional_non_existing.py</file>
         </knowledgeBase>
     </knowledgeBases>

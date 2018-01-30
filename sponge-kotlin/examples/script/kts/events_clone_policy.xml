@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="kotlin">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/kts/events_clone_policy.kts</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -6,7 +6,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="kotlin">
+        <knowledgeBase name="kb">
             <file>plugins_java.kts</file>
         </knowledgeBase>
     </knowledgeBases>

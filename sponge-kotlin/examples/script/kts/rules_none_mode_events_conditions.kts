@@ -29,7 +29,7 @@ class RuleFNF : Rule() {
         Constants.correlationEventsLog.addEvents(name, this)
     }
 
-    fun e2LabelCondition(@Suppress("UNUSED_PARAMETER") rule: Rule, event: Event) = event.get<String>("label").toInt() > 4
+    fun e2LabelCondition(event: Event) = event.get<String>("label").toInt() > 4
 }
 
 class RuleFNNFReject : Rule() {
@@ -43,7 +43,7 @@ class RuleFNNFReject : Rule() {
         Constants.correlationEventsLog.addEvents(name, this)
     }
 
-    fun e2LabelCondition(@Suppress("UNUSED_PARAMETER") rule: Rule, event: Event) = event.get<String>("label").toInt() in 2..4
+    fun e2LabelCondition(event: Event) = event.get<String>("label").toInt() in 2..4
 }
 
 fun onStartup() {

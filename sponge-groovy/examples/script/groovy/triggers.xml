@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file charset="UTF-8">triggers.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

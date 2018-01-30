@@ -30,18 +30,18 @@ public class ScriptTestUtils {
 
     public static String getConfigFileName(KnowledgeBaseType type, String config) {
         if (type.isScript()) {
-            return "examples/script/" + type.getFileExtension() + "/" + config + ".xml";
+            return "examples/script/" + type.getFileExtensions().get(0) + "/" + config + ".xml";
         } else {
             return "org/openksavi/sponge/" + type.getLanguage() + "/examples/" + config + ".xml";
         }
     }
 
     public static String getScriptKnowledgeBaseDir(KnowledgeBaseType type) {
-        return "examples/script/" + type.getFileExtension();
+        return "examples/script/" + type.getFileExtensions().get(0);
     }
 
     public static String getScriptKnowledgeBaseFileName(KnowledgeBaseType type, String knowledgeBaseFile) {
-        return getScriptKnowledgeBaseDir(type) + "/" + knowledgeBaseFile + "." + type.getFileExtension();
+        return getScriptKnowledgeBaseDir(type) + "/" + knowledgeBaseFile + "." + type.getFileExtensions().get(0);
     }
 
     public static String getNoScriptKnowledgeBaseClassName(KnowledgeBaseType type, String knowledgeBaseSimpleClassNameUnderscore) {

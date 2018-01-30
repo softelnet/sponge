@@ -8,7 +8,7 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="python">
+        <knowledgeBase name="kb">
             <file>py4j_java_server_tls_sponge_hello_world.py</file>
         </knowledgeBase>
     </knowledgeBases>

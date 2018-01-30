@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="groovy">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/groovy/events_clone_policy.groovy</file>
         </knowledgeBase>
     </knowledgeBases>

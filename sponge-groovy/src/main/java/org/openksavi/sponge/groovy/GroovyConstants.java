@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.groovy;
 
+import java.util.Arrays;
+
 import org.openksavi.sponge.core.kb.GenericKnowledgeBaseType;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -24,7 +26,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public final class GroovyConstants {
 
-    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("groovy", "groovy", "groovy", true);
+    public static final KnowledgeBaseType TYPE = new GenericKnowledgeBaseType("groovy", "groovy", Arrays.asList("groovy"), true);
 
     private GroovyConstants() {
         //

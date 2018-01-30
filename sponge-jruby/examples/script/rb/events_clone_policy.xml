@@ -11,7 +11,7 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" type="ruby">
+        <knowledgeBase name="kb">
             <file>${sponge.home}/examples/script/rb/events_clone_policy.rb</file>
         </knowledgeBase>
     </knowledgeBases>

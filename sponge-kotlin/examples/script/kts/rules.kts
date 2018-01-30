@@ -32,9 +32,8 @@ class SameSourceAllRule : Rule() {
     override fun onConfigure() {
         // Events specified with aliases (e1 and e2)
         setEvents("filesystemFailure e1", "diskFailure e2 :all")
-        addCondition("e1", Conditions::severityCondition)
-        addConditions("e2", Conditions::severityCondition, Conditions::diskFailureSourceCondition)
-        addConditions("e2", Conditions::alwaysTrueRuleEventCondition)
+        addCondition("e1", this::severityCondition)
+        addConditions("e2", this::severityCondition, this::diskFailureSourceCondition)
         duration = Duration.ofSeconds(8)
     }
 
@@ -44,17 +43,12 @@ class SameSourceAllRule : Rule() {
         eps.getVariable<AtomicInteger>("hardwareFailureScriptCount").incrementAndGet()
     }
 
-    companion object Conditions {
-        fun severityCondition(@Suppress("UNUSED_PARAMETER") rule: Rule, event: Event) = event.get<Int>("severity") > 5
+    fun severityCondition(event: Event) = event.get<Int>("severity") > 5
 
-        fun diskFailureSourceCondition(rule: Rule, event: Event): Boolean {
-            // Both events have to have the same source
-            val event1 = rule.getEvent("e1")
-            return event.get<Any>("source") == event1.get<Any>("source") && Duration.between(event1.time, event.time).seconds <= 4
-        }
-        
-        @Suppress("UNUSED_PARAMETER")
-        fun alwaysTrueRuleEventCondition(rule: Rule, event: Event) = true
+    fun diskFailureSourceCondition(event: Event): Boolean {
+        // Both events have to have the same source
+        val event1 = this.getEvent("e1")
+        return event.get<Any>("source") == event1.get<Any>("source") && Duration.between(event1.time, event.time).seconds <= 4
     }
 }
 

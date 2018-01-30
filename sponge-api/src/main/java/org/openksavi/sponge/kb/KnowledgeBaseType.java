@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.kb;
 
+import java.util.List;
+
 /**
  * Knowledge base type.
  */
@@ -36,11 +38,11 @@ public interface KnowledgeBaseType {
     String getLanguage();
 
     /**
-     * Returns file extension.
+     * Returns file extensions.
      *
-     * @return file extension.
+     * @return file extensions.
      */
-    String getFileExtension();
+    List<String> getFileExtensions();
 
     /**
      * Returns {@code true} if knowledge bases of this type are script-based.

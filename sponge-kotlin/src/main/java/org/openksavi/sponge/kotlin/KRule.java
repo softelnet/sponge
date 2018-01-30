@@ -28,7 +28,6 @@ import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ReflectionEventCondition;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.kotlin.core.KotlinFunction2EventCondition;
-import org.openksavi.sponge.kotlin.core.KotlinFunctionEventCondition;
 import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
@@ -38,10 +37,10 @@ import org.openksavi.sponge.rule.Rule;
  */
 public abstract class KRule extends BaseRule {
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private static final Function<? super Object, ? extends EventCondition> MAPPER = kotlinObject -> {
         if (kotlinObject instanceof KFunction) {
-            return new KotlinFunctionEventCondition((KFunction<Boolean>) kotlinObject);
+            return new ReflectionEventCondition(((KFunction) kotlinObject).getName());
         } else if (kotlinObject instanceof Function2) {
             return new KotlinFunction2EventCondition((Function2<Rule, Event, Boolean>) kotlinObject);
         } else if (kotlinObject instanceof BiFunction) {
