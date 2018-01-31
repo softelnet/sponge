@@ -3,7 +3,7 @@
 
 In order to use {sponge} you may choose to:
 
-* Download the {sponge} standalone command-line program and use it in your environment:
+* Download the {sponge} standalone command-line program (licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3]) and use it in your environment:
 +
 [subs="attributes"]
 ++++
@@ -11,7 +11,7 @@ In order to use {sponge} you may choose to:
 <a href="{downloadUrl}"><i class="fa fa-download" aria-hidden="true"></i>Download {standalonePackage}.zip</a>
 </p>
 ++++
-* Run the {sponge} standalone command-line program in a https://www.docker.com[Docker] container.
-* Embed {sponge} in your Java application using Maven dependency.
+* Run the {sponge} standalone command-line program (licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3]) in a Docker container.
+* Embed {sponge} (the standard {sponge} libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license] however some optional {sponge} libraries are licensed under other licenses) in your Java application using Maven dependency.
 
 For information on these distributions see the link:/quickstart/[Quickstart] page.

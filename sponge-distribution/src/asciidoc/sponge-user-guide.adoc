@@ -10,7 +10,7 @@
 :camelSourcesUrl: {sourcesUrl}/sponge-camel/examples/camel/
 :py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
 :midiSourcesUrl: {sourcesUrl}/sponge-midi/examples/midi/
-:mpdSourcesUrl: {externalSourcesUrl}/sponge-mpd/examples/mpd/
+:mpdSourcesUrl: {sourcesUrl}/sponge-external/sponge-mpd/examples/mpd/
 
 == Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
@@ -644,15 +644,10 @@ class ScriptPlugin(Plugin):
 {sponge} may be embedded in a custom Java application using a Maven dependency and the <<engine-builder-api,Engine Builder API>>.
 
 === Maven dependency
-If you want to use {sponge} with, for example, Python scripting knowledge bases, add these dependencies to your `pom.xml`:
+If you want to use {sponge} with, for example, Python scripting knowledge bases, add this dependency to your `pom.xml`:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-jython</artifactId>
@@ -683,29 +678,9 @@ In that case you may omit the versions of the dependencies.
 ----
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-jython</artifactId>
 </dependency>
 ----
-
-The `sponge-core` artifact uses external dependencies. If you experience conflicts in incompatible versions of Guava, you should use the `sponge-core-shaded` artifact instead, e.g.:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core-shaded</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-jython</artifactId>
-</dependency>
-----
-
-You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
 
 include::includes/sponge-user-guide-integration.adoc[leveloffset=+1]
 
@@ -1262,12 +1237,7 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |`org.openksavi.sponge`
 |`sponge-core`
 |Yes
-|The {sponge} core implementation. You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
-
-|`org.openksavi.sponge`
-|`sponge-core-shaded`
-|Yes
-|The shaded version of {sponge} core implementation. You have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
+|The {sponge} core implementation. This artifact includes a shaded Guava library.
 
 |`org.openksavi.sponge`
 |`sponge-jython`
@@ -1288,6 +1258,11 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |`sponge-nashorn`
 |Yes
 |The support for JavaScript-based scripting knowledge bases using Nashorn.
+
+|`org.openksavi.sponge`
+|`sponge-kotlin`
+|Yes
+|The support for Kotlin-based non scripting knowledge bases.
 
 |`org.openksavi.sponge`
 |`sponge-camel`
@@ -1345,9 +1320,9 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |Dependencies for external libraries used by the standalone command-line application.
 |===
 
-The following artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality. Furthermore, these artifacts are not distributed in the {sponge} standalone command-line application which is released under the Apache 2.0 license.
+The following optional artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality.
 
-.{sponge} external Maven artifacts
+.{sponge} optional external Maven artifacts
 [cols="2,2,1,6"]
 |===
 |GroupId |ArtifactId |License |Central Maven Repository |Description
@@ -1390,6 +1365,10 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/[Nashorn]
 |GPL with a linking exception
 |Supports writing scripting knowledge bases in JavaScript.
+
+|https://kotlinlang.org[Kotlin]
+|Apache 2.0
+|Supports writing knowledge bases in Kotlin.
 
 |http://www.quartz-scheduler.org[Quartz]
 |Apache 2.0

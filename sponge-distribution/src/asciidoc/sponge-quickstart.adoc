@@ -62,15 +62,10 @@ Correlator:: If there is a correlator that listens to that event, the event will
 {sponge} could be embedded in a Java application by adding a Maven dependency.
 
 ==== Maven dependency
-If you want to use {sponge} with, for example, Python scripting knowledge bases, add these dependencies to your `pom.xml`:
+If you want to use {sponge} with, for example, Python scripting knowledge bases, add this dependency to your `pom.xml`:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-jython</artifactId>

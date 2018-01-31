@@ -57,15 +57,10 @@ public Engine spongeEngine() {
 ----
 
 === Maven configuration
-Maven users will need to add the following dependencies to their `pom.xml` for this component:
+Maven users will need to add the following dependency to their `pom.xml` for this component:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-spring</artifactId>
@@ -82,15 +77,10 @@ The *sponge* component provides integration bridge between Apache Camel and the 
 * to route a message from a {sponge} knowledge base to a Camel route (consumer endpoint).
 
 === Maven configuration
-Maven users will need to add the following dependencies to their `pom.xml` for this component:
+Maven users will need to add the following dependency to their `pom.xml` for this component:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-camel</artifactId>
@@ -402,15 +392,10 @@ pip install py4j
 For more information on Py4J see https://www.py4j.org/advanced_topics.html.
 
 === Maven configuration
-Maven users will need to add the following dependencies to their `pom.xml`:
+Maven users will need to add the following dependency to their `pom.xml`:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-py4j</artifactId>
@@ -630,15 +615,10 @@ def onStartup():
 NOTE: An event flow in the {sponge} engine introduces an additional performance overhead that in some situations may be not acceptable when dealing with real-time physical MIDI instruments.
 
 === Maven configuration
-Maven users will need to add the following dependencies to their `pom.xml`:
+Maven users will need to add the following dependency to their `pom.xml`:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-midi</artifactId>
@@ -683,7 +663,7 @@ The default name of the MPD plugin (which may be used in knowledge bases) is `mp
 |The auto connect flag. If `true` (the default value), the plugin connects to the MPD server on startup.
 |===
 
-For more information see the {externalMpdSpongeJavaDocUrl}/org/openksavi/sponge/mpd/MpdPlugin.html[`MpdPlugin` Javadoc] and http://finnyb.github.io/javampd/[JavaMPD].
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/mpd/MpdPlugin.html[`MpdPlugin` Javadoc] and http://finnyb.github.io/javampd/[JavaMPD].
 
 The following example searches for albums in the MPD database matching the given criteria and adds them to the playlist.
 
@@ -723,15 +703,10 @@ def onStartup():
 <1> The `mpd.server` is a reference to the instance of the `MPD` class (part of JavaMPD library) which represents a connection to a MPD server.
 
 === Maven configuration
-Maven users will need to add the following dependencies to their `pom.xml`:
+Maven users will need to add the following dependency to their `pom.xml`:
 
 [source,xml,subs="verbatim,attributes"]
 ----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-core</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
 <dependency>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-mpd</artifactId>

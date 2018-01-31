@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>mpd_set_playlist.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="mpd" class="org.openksavi.sponge.mpd.MpdPlugin">
+            <configuration>
+                <hostname>localhost</hostname>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

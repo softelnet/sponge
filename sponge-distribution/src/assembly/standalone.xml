@@ -88,6 +88,13 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>../sponge-midi</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>../sponge-standalone</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
@@ -108,6 +115,13 @@
             <includes>
                 <include>config/**</include>
                 <include>kb/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-external/sponge-mpd</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -153,13 +167,6 @@
             <includes>
                 <include>README*</include>
                 <include>NOTICE*</include>
-            </includes>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.basedir}/..</directory>
-            <outputDirectory>/</outputDirectory>
-            <includes>
                 <include>LICENSE*</include>
             </includes>
         </fileSet>

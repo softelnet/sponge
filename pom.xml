@@ -706,7 +706,6 @@
                 <module>sponge-development-tools</module>
                 <module>sponge-api</module>
                 <module>sponge-core</module>
-                <module>sponge-core-shaded</module>
                 <module>sponge-test</module>
                 <module>sponge-jython</module>
                 <module>sponge-jruby</module>
@@ -721,6 +720,7 @@
                 <module>sponge-signal</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
+                <module>sponge-external</module>
                 <module>sponge-bom</module>
                 <module>sponge-examples-projects</module>
                 <module>sponge-standalone-extensions</module>
@@ -813,7 +813,6 @@
             <modules>
                 <module>sponge-api</module>
                 <module>sponge-core</module>
-                <module>sponge-core-shaded</module>
                 <module>sponge-test</module>
                 <module>sponge-jython</module>
                 <module>sponge-jruby</module>
@@ -826,6 +825,7 @@
                 <module>sponge-midi</module>
                 <module>sponge-signal</module>
                 <module>sponge-standalone</module>
+                <module>sponge-external</module>
                 <module>sponge-bom</module>
             </modules>
             <build>

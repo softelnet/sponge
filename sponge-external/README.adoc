@@ -1,0 +1,7 @@
+= Sponge
+:url: http://sponge.openksavi.org
+:sponge: Sponge
+
+External, optional Sponge modules released under various licenses.
+
+For more information on Sponge see the main project page {url}.

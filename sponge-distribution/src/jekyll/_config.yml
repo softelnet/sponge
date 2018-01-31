@@ -19,8 +19,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 show_downloads: true
 
 product_name: Sponge
-owner_name: Softelnet
-owner_url: https://www.softelnet.com
+owner_name: The Sponge authors
 
 repository: "softelnet/sponge"
 
@@ -58,13 +57,11 @@ asciidoctor:
     - standaloneDir={rootDir}/sponge-standalone
     - standalonePackage=sponge-{projectVersion}-standalone
     - sourcesUrl=https://github.com/softelnet/sponge/tree/master
-    - externalSourcesUrl=https://github.com/softelnet/sponge-external/tree/master
     - useReferences=true
     - downloadUrl=/download/{standalonePackage}.zip
     - logoDir=images
     - javaSeJavaDocUrl=https://docs.oracle.com/javase/8/docs/api
     - spongeJavaDocUrl=http://sponge.openksavi.org/docs/javadoc
-    - externalMpdSpongeJavaDocUrl=http://sponge.openksavi.org/docs/javadoc/external_mpd
 
 defaults:
   -
