@@ -23,6 +23,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 /**
  * JRuby-specific implementation of Utils.
  */
+@SuppressWarnings("rawtypes")
 public abstract class RubyUtils extends SpongeUtils {
 
     public static String[] toJava(RubyArray scriptArray) {

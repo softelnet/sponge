@@ -13,6 +13,10 @@
     <name>Sponge - Bill Of Materials</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <sponge.root>${basedir}/..</sponge.root>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>

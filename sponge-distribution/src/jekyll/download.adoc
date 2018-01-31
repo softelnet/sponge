@@ -1,6 +1,8 @@
 = Download
 :page-permalink: /download/
 
+The current {sponge} version is {projectVersion} (release date: {projectDate}).
+
 In order to use {sponge} you may choose to:
 
 * Download the {sponge} standalone command-line program (licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3]) and use it in your environment:
@@ -14,4 +16,4 @@ In order to use {sponge} you may choose to:
 * Run the {sponge} standalone command-line program (licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3]) in a Docker container.
 * Embed {sponge} (the standard {sponge} libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license] however some optional {sponge} libraries are licensed under other licenses) in your Java application using Maven dependency.
 
-For information on these distributions see the link:/quickstart/[Quickstart] page.
+For more information on these distributions see the link:/quickstart/[Quickstart] page and the link:/release-notes/[Release notes] page.

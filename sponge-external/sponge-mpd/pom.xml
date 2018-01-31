@@ -13,6 +13,8 @@
     <name>Sponge - MPD Support</name>
 
     <properties>
+        <sponge.root>${basedir}/../..</sponge.root>
+
         <javampd.version>6.0.0</javampd.version>
     </properties>
 

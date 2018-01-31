@@ -1,4 +1,5 @@
 = Release notes
+:page-permalink: /release-notes/
 
 A high-level view of the changes introduced in {sponge} releases.
 
@@ -10,10 +11,11 @@ A high-level view of the changes introduced in {sponge} releases.
 * Added support for writing non script knowledge bases in Kotlin.
 * Added support for specifying non script knowledge bases in an XML configuration.
 * A type of a script knowledge base is no logger required in an XML configuration when knowledge base files are specified.
-* The shaded version of sponge-core (sponge-core-shaded) shades only Guava now.
+* The `sponge-core` artifact now shades Guava, so the `sponge-core-shaded` artifact has been removed since it is no longer needed.
 * Downgraded Jython to version 2.7.0 to prevent stability issues.
-* Added Sponge External group of projects in order to provide functionalities that require licenses incompatible with Apache 2.0.
-* Added MPD support (in Sponge External, because it is GNU GPL 3.0 licensed).
+* Added `sponge-external` group of projects in order to provide functionalities that require licenses incompatible with Apache 2.0.
+* Added MPD support (in `sponge-external`, because it is GNU GPL 3.0 licensed).
+* Libraries upgrade.
 
 [discrete]
 == 1.0.6 (2017.12.01)

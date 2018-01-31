@@ -14,18 +14,30 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test.script;
+package org.openksavi.sponge.kotlin.script.test;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.test.script.ProcessorsTest;
-import org.openksavi.sponge.test.script.template.ProcessorsTestTemplate;
+import org.openksavi.sponge.test.script.EventsTest;
+import org.openksavi.sponge.test.script.template.EventsTestTemplate;
 
-public class KotlinScriptProcessorsTest extends KotlinScriptTest implements ProcessorsTest {
+public class KotlinScriptEventsTest extends KotlinScriptTest implements EventsTest {
 
     @Override
     @Test
-    public void testProcessorInheritance() {
-        ProcessorsTestTemplate.testProcessorInheritance(getType());
+    public void testClonePolicy() {
+        EventsTestTemplate.testClonePolicy(getType());
+    }
+
+    @Override
+    @Test
+    public void testCron() {
+        EventsTestTemplate.testCron(getType());
+    }
+
+    @Override
+    @Test
+    public void testRemovingEvent() {
+        EventsTestTemplate.testRemovingEvent(getType());
     }
 }

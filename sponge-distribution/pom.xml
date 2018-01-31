@@ -20,6 +20,7 @@
     </licenses>
 
     <properties>
+        <sponge.root>${basedir}/..</sponge.root>
         <rootDir>${basedir}/..</rootDir>
         <completeExamplesProject>${rootDir}/sponge-examples-projects</completeExamplesProject>
         <executableJar>sponge-${release.version}.jar</executableJar>
@@ -85,6 +86,7 @@
 
                                 <sponge>Sponge</sponge>
                                 <projectVersion>${release.version}</projectVersion>
+                                <projectDate>${release.date}</projectDate>
                                 <rootDir>${rootDir}</rootDir>
                                 <includesRootDir>${rootDir}</includesRootDir>
                                 <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>

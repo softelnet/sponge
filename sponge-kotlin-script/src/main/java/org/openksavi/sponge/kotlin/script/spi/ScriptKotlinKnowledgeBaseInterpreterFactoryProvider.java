@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test.script;
+package org.openksavi.sponge.kotlin.script.spi;
 
-import org.junit.Test;
+import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactory;
+import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 
-import org.openksavi.sponge.test.script.PluginsTest;
-import org.openksavi.sponge.test.script.template.PluginsTestTemplate;
+/**
+ * Provider for script Kotlin based knowledge base interpreter factory.
+ */
+public class ScriptKotlinKnowledgeBaseInterpreterFactoryProvider implements KnowledgeBaseInterpreterFactoryProvider {
 
-public class KotlinScriptPluginsTest extends KotlinScriptTest implements PluginsTest {
-
-    @Override
-    @Test
-    public void testJavaPlugin() {
-        PluginsTestTemplate.testJavaPlugin(getType());
-    }
+    private ScriptKotlinKnowledgeBaseInterpreterFactory factory = new ScriptKotlinKnowledgeBaseInterpreterFactory();
 
     @Override
-    @Test
-    public void testKbPlugin() {
-        PluginsTestTemplate.testKbPlugin(getType());
+    public KnowledgeBaseInterpreterFactory getKnowledgeBaseInterpreterFactory() {
+        return factory;
     }
 }

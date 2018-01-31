@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.core;
+package org.openksavi.sponge.kotlin.script.core;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -46,6 +46,9 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.kotlin.KPlugin;
+import org.openksavi.sponge.kotlin.core.KotlinConstants;
+import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
+import org.openksavi.sponge.kotlin.core.KotlinUtils;
 import org.openksavi.sponge.plugin.Plugin;
 
 /**

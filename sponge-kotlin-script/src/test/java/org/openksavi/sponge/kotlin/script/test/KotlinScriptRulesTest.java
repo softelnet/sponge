@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test.script;
+package org.openksavi.sponge.kotlin.script.test;
 
 import org.junit.Test;
 

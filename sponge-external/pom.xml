@@ -14,6 +14,10 @@
     <description>Event Processing System - External</description>
     <packaging>pom</packaging>
 
+    <properties>
+        <sponge.root>${basedir}/..</sponge.root>
+    </properties>
+
     <modules>
         <module>sponge-mpd</module>
     </modules>

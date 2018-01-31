@@ -14,16 +14,28 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test.script;
+package org.openksavi.sponge.kotlin.script.spi;
 
+import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kotlin.core.KotlinConstants;
-import org.openksavi.sponge.test.script.ScriptTest;
+import org.openksavi.sponge.kotlin.script.core.ScriptKotlinKnowledgeBaseInterpreter;
+import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactory;
 
-public class KotlinScriptTest implements ScriptTest {
+/**
+ * Script Kotlin based knowledge base interpreter factory.
+ */
+public class ScriptKotlinKnowledgeBaseInterpreterFactory implements KnowledgeBaseInterpreterFactory {
 
     @Override
-    public KnowledgeBaseType getType() {
+    public KnowledgeBaseType getSupportedType() {
         return KotlinConstants.TYPE_SCRIPT;
+    }
+
+    @Override
+    public KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
+        return new ScriptKotlinKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 }

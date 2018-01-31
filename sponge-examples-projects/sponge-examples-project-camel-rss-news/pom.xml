@@ -12,6 +12,10 @@
     <artifactId>sponge-examples-project-camel-rss-news</artifactId>
     <name>Sponge - Examples - Project - Camel RSS news</name>
 
+    <properties>
+        <sponge.root>${basedir}/../..</sponge.root>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>

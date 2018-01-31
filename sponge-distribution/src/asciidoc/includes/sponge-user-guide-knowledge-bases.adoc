@@ -288,6 +288,18 @@ public class TestKnowledgeBase extends JKnowledgeBase { // <1>
 <2> The definition of the Java trigger.
 <3> Makes an event of type (name) `e1` with an attribute `mark` set to `1` and schedules it to be sent after `1` second.
 
+==== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-core</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
 === Kotlin knowledge bases
 Kotlin-based knowledge bases are currently supported only as non script knowledge bases.
 
@@ -329,6 +341,18 @@ class Filters : KKnowledgeBase() {
 In Kotlin knowledge bases there is no global variable `EPS`. Instead you have to use an `eps` property.
 
 See more examples of Kotlin-based knowledge bases in the `sponge-kotlin` project.
+
+==== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-kotlin</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
 
 == Scripting knowledge bases interoperability
 There are some limitation in the interoperability between scripting knowledge bases:

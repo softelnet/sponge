@@ -40,7 +40,6 @@
             <directory>${project.basedir}/src/asciidoc</directory>
             <outputDirectory>/</outputDirectory>
             <excludes>
-                <exclude>changelog.adoc</exclude>
                 <exclude>sponge-developer-guide.adoc</exclude>
                 <exclude>sponge-reference.adoc</exclude>
                 <exclude>images/</exclude>

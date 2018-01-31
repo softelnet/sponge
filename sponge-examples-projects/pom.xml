@@ -11,6 +11,11 @@
     <artifactId>sponge-examples-projects</artifactId>
     <name>Sponge - Examples - Complete projects</name>
     <packaging>pom</packaging>
+
+    <properties>
+        <sponge.root>${basedir}/..</sponge.root>
+    </properties>
+
     <modules>
         <module>sponge-examples-project-news</module>
         <module>sponge-examples-project-camel-rss-news</module>

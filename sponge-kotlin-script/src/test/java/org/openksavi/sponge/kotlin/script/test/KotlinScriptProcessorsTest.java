@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.spi;
+package org.openksavi.sponge.kotlin.script.test;
 
-import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactory;
-import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
+import org.junit.Test;
 
-/**
- * Provider for script Kotlin based knowledge base interpreter factory.
- */
-public class ScriptKotlinKnowledgeBaseInterpreterFactoryProvider implements KnowledgeBaseInterpreterFactoryProvider {
+import org.openksavi.sponge.test.script.ProcessorsTest;
+import org.openksavi.sponge.test.script.template.ProcessorsTestTemplate;
 
-    private ScriptKotlinKnowledgeBaseInterpreterFactory factory = new ScriptKotlinKnowledgeBaseInterpreterFactory();
+public class KotlinScriptProcessorsTest extends KotlinScriptTest implements ProcessorsTest {
 
     @Override
-    public KnowledgeBaseInterpreterFactory getKnowledgeBaseInterpreterFactory() {
-        return factory;
+    @Test
+    public void testProcessorInheritance() {
+        ProcessorsTestTemplate.testProcessorInheritance(getType());
     }
 }
