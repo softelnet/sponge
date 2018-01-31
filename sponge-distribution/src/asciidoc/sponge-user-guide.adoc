@@ -10,7 +10,7 @@
 :camelSourcesUrl: {sourcesUrl}/sponge-camel/examples/camel/
 :py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
 :midiSourcesUrl: {sourcesUrl}/sponge-midi/examples/midi/
-:mpdSourcesUrl: {externalSourcesUrl}/sponge-mpd/examples/mpd/
+:mpdSourcesUrl: {sourcesUrl}/sponge-external/sponge-mpd/examples/mpd/
 
 == Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
@@ -1290,6 +1290,11 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The support for JavaScript-based scripting knowledge bases using Nashorn.
 
 |`org.openksavi.sponge`
+|`sponge-kotlin`
+|Yes
+|The support for Kotlin-based non scripting knowledge bases.
+
+|`org.openksavi.sponge`
 |`sponge-camel`
 |Yes
 |The Apache Camel integration.
@@ -1345,9 +1350,9 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |Dependencies for external libraries used by the standalone command-line application.
 |===
 
-The following artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality. Furthermore, these artifacts are not distributed in the {sponge} standalone command-line application which is released under the Apache 2.0 license.
+The following optional artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality.
 
-.{sponge} external Maven artifacts
+.{sponge} optional external Maven artifacts
 [cols="2,2,1,6"]
 |===
 |GroupId |ArtifactId |License |Central Maven Repository |Description
@@ -1390,6 +1395,10 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/[Nashorn]
 |GPL with a linking exception
 |Supports writing scripting knowledge bases in JavaScript.
+
+|https://kotlinlang.org[Kotlin]
+|Apache 2.0
+|Supports writing knowledge bases in Kotlin.
 
 |http://www.quartz-scheduler.org[Quartz]
 |Apache 2.0

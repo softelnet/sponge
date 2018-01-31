@@ -12,6 +12,13 @@
     <artifactId>sponge-distribution</artifactId>
     <name>Sponge - Distribution</name>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+        </license>
+    </licenses>
+
     <properties>
         <rootDir>${basedir}/..</rootDir>
         <completeExamplesProject>${rootDir}/sponge-examples-projects</completeExamplesProject>
@@ -19,7 +26,6 @@
         <standalonePackageName>sponge-${release.version}</standalonePackageName>
         <mainClass>org.openksavi.sponge.standalone.StandaloneEngineMain</mainClass>
         <sourcesUrl>https://github.com/softelnet/sponge/tree/master</sourcesUrl>
-        <externalSourcesUrl>https://github.com/softelnet/sponge-external/tree/master</externalSourcesUrl>
         <jekyllBuildDir>${project.build.directory}/jekyll/jekyll</jekyllBuildDir>
         <logoDir>${basedir}/src/images</logoDir>
         <homepage>http://sponge.openksavi.org</homepage>
@@ -27,7 +33,6 @@
         <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
         <javaSeJavaDocUrl>https://docs.oracle.com/javase/8/docs/api</javaSeJavaDocUrl>
         <spongeJavaDocUrl>${homepage}/docs/javadoc</spongeJavaDocUrl>
-        <externalMpdSpongeJavaDocUrl>${homepage}/docs/javadoc/external_mpd</externalMpdSpongeJavaDocUrl>
     </properties>
 
     <dependencies>
@@ -86,12 +91,10 @@
                                 <standaloneDir>${standalonePackageName}</standaloneDir>
                                 <standalonePackage>${standalonePackage}</standalonePackage>
                                 <sourcesUrl>${sourcesUrl}</sourcesUrl>
-                                <externalSourcesUrl>${externalSourcesUrl}</externalSourcesUrl>
                                 <logoDir>${logoDir}</logoDir>
                                 <downloadUrl>${downloadUrl}</downloadUrl>
                                 <javaSeJavaDocUrl>${javaSeJavaDocUrl}</javaSeJavaDocUrl>
                                 <spongeJavaDocUrl>${spongeJavaDocUrl}</spongeJavaDocUrl>
-                                <externalMpdSpongeJavaDocUrl>${externalMpdSpongeJavaDocUrl}</externalMpdSpongeJavaDocUrl>
                             </attributes>
                         </configuration>
                         <executions>

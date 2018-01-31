@@ -11,7 +11,20 @@
     <artifactId>sponge-standalone-extensions</artifactId>
     <name>Sponge - Standalone - Extensions</name>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+        </license>
+    </licenses>
+
     <dependencies>
+        <!-- Selected Sponge external artifacts available in a standalone application out of the box: -->
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-mpd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Selected Spring components available in a standalone application out of the box: -->
         <dependency>
             <groupId>org.springframework.integration</groupId>

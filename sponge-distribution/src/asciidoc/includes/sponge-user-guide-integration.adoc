@@ -683,7 +683,7 @@ The default name of the MPD plugin (which may be used in knowledge bases) is `mp
 |The auto connect flag. If `true` (the default value), the plugin connects to the MPD server on startup.
 |===
 
-For more information see the {externalMpdSpongeJavaDocUrl}/org/openksavi/sponge/mpd/MpdPlugin.html[`MpdPlugin` Javadoc] and http://finnyb.github.io/javampd/[JavaMPD].
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/mpd/MpdPlugin.html[`MpdPlugin` Javadoc] and http://finnyb.github.io/javampd/[JavaMPD].
 
 The following example searches for albums in the MPD database matching the given criteria and adds them to the playlist.
 
