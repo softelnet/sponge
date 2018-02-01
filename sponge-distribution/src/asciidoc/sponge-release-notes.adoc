@@ -1,4 +1,5 @@
 = Release notes
+:page-permalink: /release-notes/
 
 A high-level view of the changes introduced in {sponge} releases.
 
@@ -14,6 +15,7 @@ A high-level view of the changes introduced in {sponge} releases.
 * Downgraded Jython to version 2.7.0 to prevent stability issues.
 * Added `sponge-external` group of projects in order to provide functionalities that require licenses incompatible with Apache 2.0.
 * Added MPD support (in `sponge-external`, because it is GNU GPL 3.0 licensed).
+* Libraries upgrade.
 
 [discrete]
 == 1.0.6 (2017.12.01)

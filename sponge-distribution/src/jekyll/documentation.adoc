@@ -3,5 +3,3 @@
 
 * The {sponge} Reference Documentation (link:/docs/sponge-reference.pdf[PDF], link:/docs/sponge-reference.html[HTML]) is a combined Overview, Quickstart and User Guide,
 * The Javadoc API documentation (link:/docs/javadoc/index.html[HTML]).
-* The Javadoc API documentation for external modules:
-** MPD support (link:/docs/javadoc/external_mpd/index.html[HTML]).

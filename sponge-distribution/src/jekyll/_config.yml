@@ -35,6 +35,7 @@ asciidoctor:
   safe: unsafe
   attributes:
     - projectVersion=${release.version}
+    - projectDate=${release.date}
     - imagesdir=/docs/images
     - toclevels=5
     - homepage=http://sponge.openksavi.org

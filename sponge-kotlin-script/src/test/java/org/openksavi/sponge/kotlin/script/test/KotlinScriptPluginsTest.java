@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test.script;
+package org.openksavi.sponge.kotlin.script.test;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.test.script.FiltersTest;
-import org.openksavi.sponge.test.script.template.FiltersTestTemplate;
+import org.openksavi.sponge.test.script.PluginsTest;
+import org.openksavi.sponge.test.script.template.PluginsTestTemplate;
 
-public class KotlinScriptFiltersTest extends KotlinScriptTest implements FiltersTest {
+public class KotlinScriptPluginsTest extends KotlinScriptTest implements PluginsTest {
 
     @Override
     @Test
-    public void testJavaFilter() {
-        FiltersTestTemplate.testJavaFilter(getType());
+    public void testJavaPlugin() {
+        PluginsTestTemplate.testJavaPlugin(getType());
     }
 
     @Override
     @Test
-    public void testFilter() {
-        FiltersTestTemplate.testFilter(getType());
-    }
-
-    @Override
-    @Test
-    public void testDeduplication() {
-        FiltersTestTemplate.testDeduplication(getType());
+    public void testKbPlugin() {
+        PluginsTestTemplate.testKbPlugin(getType());
     }
 }

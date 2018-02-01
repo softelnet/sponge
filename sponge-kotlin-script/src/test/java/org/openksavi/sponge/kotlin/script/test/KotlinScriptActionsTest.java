@@ -14,30 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test.script;
+package org.openksavi.sponge.kotlin.script.test;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.test.script.EventsTest;
-import org.openksavi.sponge.test.script.template.EventsTestTemplate;
+import org.openksavi.sponge.test.script.ActionsTest;
+import org.openksavi.sponge.test.script.template.ActionsTestTemplate;
 
-public class KotlinScriptEventsTest extends KotlinScriptTest implements EventsTest {
-
-    @Override
-    @Test
-    public void testClonePolicy() {
-        EventsTestTemplate.testClonePolicy(getType());
-    }
+public class KotlinScriptActionsTest extends KotlinScriptTest implements ActionsTest {
 
     @Override
     @Test
-    public void testCron() {
-        EventsTestTemplate.testCron(getType());
-    }
-
-    @Override
-    @Test
-    public void testRemovingEvent() {
-        EventsTestTemplate.testRemovingEvent(getType());
+    public void testActions() {
+        ActionsTestTemplate.testActions(getType());
     }
 }

@@ -12,6 +12,10 @@
     <artifactId>sponge-examples-project-standalone-camel-xml</artifactId>
     <name>Sponge - Examples - Project - Standalone - Camel XML</name>
 
+    <properties>
+        <sponge.root>${basedir}/../..</sponge.root>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>

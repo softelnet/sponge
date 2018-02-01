@@ -13,6 +13,8 @@
     <name>Sponge - Standalone</name>
 
     <properties>
+        <sponge.root>${basedir}/..</sponge.root>
+
         <exec.mainClass>org.openksavi.sponge.standalone.StandaloneEngineMain</exec.mainClass>
     </properties>
 
@@ -65,11 +67,6 @@
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-midi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-tensorflow</artifactId>
             <version>${project.version}</version>
         </dependency>
 

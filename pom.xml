@@ -56,6 +56,7 @@
 
     <properties>
         <release.version>1.0.6</release.version>
+        <release.date>2017.12.01</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -67,14 +68,16 @@
         <development.tools.version>1</development.tools.version>
         <shade.package>org.openksavi.sponge.shaded</shade.package>
 
+        <sponge.root>${basedir}</sponge.root>
+
         <javax.inject.version>1</javax.inject.version>
         <javax.transaction.version>1.2</javax.transaction.version>
 
         <!-- The newest version of Jython (2.7.1) is not used in Sponge. As stated on the Jython home page (http://www.jython.org/downloads.html): -->
         <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
         <jython.version>2.7.0</jython.version>
-        <jruby.version>9.1.14.0</jruby.version>
-        <groovy.version>2.4.12</groovy.version>
+        <jruby.version>9.1.15.0</jruby.version>
+        <groovy.version>2.4.13</groovy.version>
         <kotlin.version>1.2.21</kotlin.version>
 
         <commons-lang3.version>3.7</commons-lang3.version>
@@ -85,14 +88,13 @@
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
-        <guava.version>23.4-jre</guava.version>
-        <spring.version>4.3.12.RELEASE</spring.version>
-        <spring-integration.version>4.3.12.RELEASE</spring-integration.version>
-        <camel.version>2.20.1</camel.version>
-        <jline.version>3.5.1</jline.version>
+        <guava.version>23.6-jre</guava.version>
+        <spring.version>4.3.14.RELEASE</spring.version>
+        <spring-integration.version>4.3.14.RELEASE</spring-integration.version>
+        <camel.version>2.20.2</camel.version>
+        <jline.version>3.5.2</jline.version>
         <py4j.version>0.10.6</py4j.version>
-        <reflection.version>0.9.11</reflection.version>
-        <tensorflow.version>1.4.0</tensorflow.version>
+        <tensorflow.version>1.5.0</tensorflow.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -101,7 +103,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.12.0</mockito.version>
+        <mockito.version>2.13.0</mockito.version>
         <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
@@ -152,7 +154,7 @@
                 <plugin>
                     <groupId>org.asciidoctor</groupId>
                     <artifactId>asciidoctor-maven-plugin</artifactId>
-                    <version>1.5.5</version>
+                    <version>1.5.6</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.asciidoctor</groupId>
@@ -164,7 +166,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -174,7 +176,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.4</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -184,18 +186,18 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>license-maven-plugin</artifactId>
-                    <version>1.13</version>
+                    <version>1.14</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.20</version>
+                    <version>2.20.1</version>
                     <configuration>
                         <argLine>-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication</argLine>
                         <excludes>
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
                             <exclude>*/sponge/integration/tests/stability/*</exclude>
-                            <exclude>*/sponge/kotlin/test/script/*</exclude>
+                            <exclude>*/sponge/kotlin/script/test/*</exclude>
                         </excludes>
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>
@@ -220,7 +222,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.17</version>
+                    <version>3.0.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
@@ -228,6 +230,15 @@
                             <version>7.6</version>
                         </dependency>
                     </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <rulesUri>file://${sponge.root}/sponge-development-tools/src/main/resources/maven/versions-maven-plugin-rules.xml</rulesUri>
+                        <allowSnapshots>false</allowSnapshots>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -271,6 +282,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
                     <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
                 </plugin>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
@@ -635,11 +661,6 @@
                 <artifactId>py4j</artifactId>
                 <version>${py4j.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.reflections</groupId>
-                <artifactId>reflections</artifactId>
-                <version>${reflection.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>junit</groupId>
@@ -712,6 +733,7 @@
                 <module>sponge-nashorn</module>
                 <module>sponge-groovy</module>
                 <module>sponge-kotlin</module>
+                <module>sponge-kotlin-script</module>
                 <module>sponge-spring</module>
                 <module>sponge-camel</module>
                 <module>sponge-py4j</module>

@@ -9,5 +9,11 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <sponge.root>${basedir}/..</sponge.root>
     </properties>
+
+    <prerequisites>
+        <maven>3.3.0</maven>
+    </prerequisites>
 </project>

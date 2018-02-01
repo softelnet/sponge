@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.kotlin.test;
+package org.openksavi.sponge.kotlin.script;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
