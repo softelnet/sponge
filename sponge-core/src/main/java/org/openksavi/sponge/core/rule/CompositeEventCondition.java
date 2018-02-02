@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.rule;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -42,11 +43,6 @@ public class CompositeEventCondition implements EventCondition {
         this.conditions = Lists.newArrayList(conditions);
     }
 
-    @SafeVarargs
-    public <T> CompositeEventCondition(Function<? super T, ? extends EventCondition> mapper, T... conditionTemplates) {
-        conditions = Lists.newArrayList(conditionTemplates).stream().map(mapper).collect(Collectors.toList());
-    }
-
     @Override
     public boolean condition(Rule rule, Event event) {
         for (EventCondition condition : conditions) {
@@ -56,5 +52,10 @@ public class CompositeEventCondition implements EventCondition {
         }
 
         return true;
+    }
+
+    @SafeVarargs
+    public static <T> CompositeEventCondition create(Function<? super T, ? extends EventCondition> mapper, T... conditionTemplates) {
+        return new CompositeEventCondition(Arrays.stream(conditionTemplates).map(mapper).collect(Collectors.toList()));
     }
 }

@@ -143,7 +143,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
 
         // Validate condition event aliases.
         Set<String> eventAliasesSet = Arrays.stream(getEventAliases()).collect(Collectors.toSet());
-        for (String alias : getConditions().keySet()) {
+        for (String alias : getEventConditions().keySet()) {
             if (!eventAliasesSet.contains(alias)) {
                 throw createValidationException("Condition event alias '" + alias + "' does not exist");
             }

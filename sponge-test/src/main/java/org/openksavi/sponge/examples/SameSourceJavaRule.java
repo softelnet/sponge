@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.java.JRule;
-import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.EventMode;
 
 public class SameSourceJavaRule extends JRule {
@@ -35,8 +34,8 @@ public class SameSourceJavaRule extends JRule {
     public void onConfigure() {
         setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) });
 
-        addConditions("e1", "severityCondition");
-        addConditions("e2", "severityCondition", (EventCondition) (rule, event) -> {
+        addAllConditions("severityCondition");
+        addEventConditions("e2", (rule, event) -> {
             // Both events have to have the same source
             Event event1 = rule.getEvent("e1");
             return event.get("source").equals(event1.get("source"))

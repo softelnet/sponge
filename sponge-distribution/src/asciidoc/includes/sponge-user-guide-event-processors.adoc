@@ -242,7 +242,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |The `boolean` property indicating that the rule should listen to ordered (ordered rule) or unordered (unordered rule) sequences of events. *The default is `true`, i.e. the rule would listen to ordered sequences of events.*  It is a shortcut for the `setOrdered(boolean)` method.
 
 |`addConditions(alias, conditions)`
-|Adds conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of the condition method is irrelevant.
+|Adds conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of a condition method is irrelevant.
 
 |`addAllConditions(conditions)`
 |Adds conditions for all events.
@@ -393,7 +393,7 @@ lambda rule, event: Duration.between(rule.getEvent("filesystemFailure").time, ev
 +
 [source,java]
 ----
-(EventCondition) (rule, event) -> {
+(rule, event) -> {
     return true;
 };
 ----
@@ -415,8 +415,8 @@ class SameSourceAllRule(Rule): # <1>
     def onConfigure(self): # <2>
         # Events specified with aliases (e1 and e2)
         self.events = ["filesystemFailure e1", "diskFailure e2 :all"] # <3>
-        self.addConditions("e1", self.severityCondition) # <4>
-        self.addConditions("e2", self.severityCondition, self.diskFailureSourceCondition) # <5>
+        self.addAllConditions(self.severityCondition) # <4>
+        self.addConditions("e2", self.diskFailureSourceCondition) # <5>
         self.duration = Duration.ofSeconds(8) # <6>
     def onRun(self, event): # <7>
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}",
@@ -431,8 +431,8 @@ class SameSourceAllRule(Rule): # <1>
 <1> The definition of the rule `SameSourceAllRule`. The rule is represented by a class of the same name.
 <2> The rule configuration callback method.
 <3> Defines that the rule is supposed to wait for sequences of events `"filesystemFailure"` (alias `"e1"`) and `"diskFailure"` (alias `"e2"`) and take into consideration the first occurrence of `"e1"` event and all occurrences of `"e2"` event.
-<4> Sets the condition checking `"e1"` event severity.
-<5> Sets conditions checking `"e2"` event severity and event source.
+<4> Sets the condition checking an event severity for all events.
+<5> Sets conditions checking `"e2"` event source.
 <6> Setting the duration of the rule. The duration must be set for this rule because the final event has `all` mode. The rule lasts for `8` seconds. So, for `8` seconds since the occurrence of the first matching `e1` a tree of event instances will be constantly built with the root containing the instance of initial `e1` event. Each matching `e2` event will cause the rule to fire immediately for the current event sequence. After reaching the duration time this rule instance will be discarded.
 <7> The `onRun` method will be called when the proper sequence of events happens and all the conditions have been fulfilled. The `event` argument specifies the last event in that sequence.
 <8> Logs message and the sequence of events.
@@ -464,8 +464,8 @@ public class SameSourceJavaRule extends JRule { // <1>
     public void onConfigure() {
         setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) }); // <2>
 
-        addConditions("e1", "severityCondition"); // <3>
-        addConditions("e2", "severityCondition", (EventCondition) (rule, event) -> { // <4>
+        addAllConditions("severityCondition"); // <3>
+        addConditions("e2", (rule, event) -> { // <4>
             Event event1 = rule.getEvent("e1");
             return event.get("source").equals(event1.get("source")) &&
                     Duration.between(event1.getTime(), event.getTime()).getSeconds() <= 4;
@@ -486,9 +486,9 @@ public class SameSourceJavaRule extends JRule { // <1>
 }
 ----
 <1> The definition of the rule `SameSourceAllRule`. The rule is represented by a Java class of the same name.
-<2>  The `makeEventSpec` method is used here to create event specifications instead of a formatted String. The same setting could be achieved by `setEvents("filesystemFailure e1", "diskFailure e2 :all")`.
-<3> Sets the condition checking `"e1"` event severity.
-<4> Sets conditions checking `"e2"` event severity (as a class method name) and event source (as a Java lambda expression).
+<2> The `makeEventSpec` method is used here to create event specifications instead of a formatted String. The same setting could be achieved by `setEvents("filesystemFailure e1", "diskFailure e2 :all")`.
+<3> Sets the condition checking an event severity for all events.
+<4> Sets conditions checking `"e2"` event source (as a Java lambda expression).
 <5> An event condition method `severityCondition`.
 
 .Java rule manual registration in the Python knowledge base

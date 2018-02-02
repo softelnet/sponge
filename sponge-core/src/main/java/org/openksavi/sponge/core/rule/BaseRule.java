@@ -19,6 +19,7 @@ package org.openksavi.sponge.core.rule;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
@@ -67,28 +68,28 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     @Override
-    public final void addJavaConditions(String eventAlias, EventCondition... conditions) {
-        getAdapter().addJavaConditions(eventAlias, conditions);
+    public final void addEventConditions(String eventAlias, EventCondition... conditions) {
+        getAdapter().addEventConditions(eventAlias, conditions);
     }
 
     @Override
-    public final void addAllJavaConditions(EventCondition... conditions) {
-        getAdapter().addAllJavaConditions(conditions);
+    public final void addAllEventConditions(EventCondition... conditions) {
+        getAdapter().addAllEventConditions(conditions);
     }
 
     @Override
-    public final void addJavaCondition(String eventAlias, EventCondition condition) {
-        getAdapter().addJavaCondition(eventAlias, condition);
+    public final void addEventCondition(String eventAlias, EventCondition condition) {
+        getAdapter().addEventCondition(eventAlias, condition);
     }
 
     @Override
-    public final List<EventCondition> getConditions(String eventAlias) {
-        return getAdapter().getConditions(eventAlias);
+    public final List<EventCondition> getEventConditions(String eventAlias) {
+        return getAdapter().getEventConditions(eventAlias);
     }
 
     @Override
-    public final Map<String, List<EventCondition>> getConditions() {
-        return getAdapter().getConditions();
+    public final Map<String, List<EventCondition>> getEventConditions() {
+        return getAdapter().getEventConditions();
     }
 
     @Override
@@ -154,5 +155,14 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     @Override
     public final RuleAdapter createAdapter() {
         return new BaseRuleAdapter(new BaseRuleDefinition());
+    }
+
+    protected final EventCondition createEventConditionForMethods(List<String> names) {
+        return new CompositeEventCondition(
+                names.stream().map(name -> createEventConditionForMethod(name)).collect(Collectors.toList()));
+    }
+
+    protected final EventCondition createEventConditionForMethod(String name) {
+        return ReflectionEventCondition.create(this, name);
     }
 }

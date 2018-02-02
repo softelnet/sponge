@@ -44,16 +44,16 @@ public abstract class GroovyRule extends BaseRule {
 
     @SuppressWarnings("unchecked")
     public void addConditions(String eventAlias, Closure<Boolean>... closures) {
-        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, closures));
+        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, closures));
     }
 
     @SuppressWarnings("unchecked")
     public void addAllConditions(Closure<Boolean>... closures) {
-        addAllJavaConditions(new CompositeEventCondition(MAPPER, closures));
+        addAllEventConditions(CompositeEventCondition.create(MAPPER, closures));
     }
 
     public void addCondition(String eventAlias, Closure<Boolean> closure) {
-        addJavaCondition(eventAlias, MAPPER.apply(closure));
+        addEventCondition(eventAlias, MAPPER.apply(closure));
     }
 
     /**

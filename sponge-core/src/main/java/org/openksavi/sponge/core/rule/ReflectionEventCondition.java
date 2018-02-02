@@ -38,8 +38,10 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
      *
      * @param methodName Java-based rule class method name.
      */
-    public ReflectionEventCondition(String methodName) {
-        super(methodName);
+    protected ReflectionEventCondition(Method method) {
+        super(method.getName());
+
+        this.method = method;
     }
 
     /**
@@ -52,9 +54,6 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
     @Override
     public synchronized boolean condition(Rule rule, Event event) {
         try {
-            if (method == null) {
-                method = MethodUtils.getMatchingMethod(rule.getClass(), getMethodName(), event.getClass());
-            }
             Object result = method.invoke(rule, new Object[] { event });
             if (!(result instanceof Boolean)) {
                 throw new IllegalArgumentException("Condition method must return boolean value");
@@ -69,5 +68,19 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
         } catch (IllegalAccessException e) {
             throw new SpongeException(e);
         }
+    }
+
+    public static ReflectionEventCondition create(Rule rule, String methodName) {
+        return new ReflectionEventCondition(resolveMethod(rule, methodName));
+    }
+
+    public static Method resolveMethod(Rule rule, String methodName) {
+        Method method = MethodUtils.getMatchingMethod(rule.getClass(), methodName, Event.class);
+
+        if (method == null) {
+            throw new IllegalArgumentException("Event condition method " + methodName + " not found in rule " + rule.getName());
+        }
+
+        return method;
     }
 }

@@ -16,11 +16,9 @@
 
 package org.openksavi.sponge.java;
 
-import java.util.function.Function;
+import java.util.Arrays;
 
 import org.openksavi.sponge.core.rule.BaseRule;
-import org.openksavi.sponge.core.rule.CompositeEventCondition;
-import org.openksavi.sponge.core.rule.ReflectionEventCondition;
 import org.openksavi.sponge.rule.EventCondition;
 
 /**
@@ -28,42 +26,61 @@ import org.openksavi.sponge.rule.EventCondition;
  */
 public abstract class JRule extends BaseRule {
 
-    private static final Function<? super Object, ? extends EventCondition> MAPPER = javaObject -> {
-        if (javaObject instanceof String) {
-            return new ReflectionEventCondition((String) javaObject);
-        } else if (javaObject instanceof EventCondition) {
-            return (EventCondition) javaObject;
-        } else {
-            throw new IllegalArgumentException("Incorrect condition type: " + javaObject.getClass());
-        }
-    };
-
     /**
      * Adds event conditions.
      *
      * @param eventAlias event alias.
-     * @param javaObjects conditions (e.g. method names or direct EventCondition).
+     * @param conditions event conditions.
      */
-    public void addConditions(String eventAlias, Object... javaObjects) {
-        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, javaObjects));
+    public void addConditions(String eventAlias, EventCondition... conditions) {
+        addEventConditions(eventAlias, conditions);
     }
 
     /**
      * Adds event conditions for all events.
      *
-     * @param javaObjects conditions (e.g. method names or direct EventCondition).
+     * @param conditions event conditions.
      */
-    public void addAllConditions(Object... javaObjects) {
-        addAllJavaConditions(new CompositeEventCondition(MAPPER, javaObjects));
+    public void addAllConditions(EventCondition... conditions) {
+        addAllEventConditions(conditions);
     }
 
     /**
      * Adds an event condition.
      *
      * @param eventAlias an event alias.
-     * @param javaObject an event condition in a general form.
+     * @param condition an event condition.
      */
-    public void addCondition(String eventAlias, Object javaObject) {
-        addJavaCondition(eventAlias, MAPPER.apply(javaObject));
+    public void addCondition(String eventAlias, EventCondition condition) {
+        addEventCondition(eventAlias, condition);
+    }
+
+    /**
+     * Adds event conditions.
+     *
+     * @param eventAlias event alias.
+     * @param methodNames event condition method names.
+     */
+    public void addConditions(String eventAlias, String... methodNames) {
+        addEventConditions(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
+    }
+
+    /**
+     * Adds event conditions for all events.
+     *
+     * @param methodNames event condition method names.
+     */
+    public void addAllConditions(String... methodNames) {
+        addAllEventConditions(createEventConditionForMethods(Arrays.asList(methodNames)));
+    }
+
+    /**
+     * Adds an event condition.
+     *
+     * @param eventAlias an event alias.
+     * @param methodName an event condition method name.
+     */
+    public void addCondition(String eventAlias, String methodName) {
+        addEventCondition(eventAlias, createEventConditionForMethod(methodName));
     }
 }
