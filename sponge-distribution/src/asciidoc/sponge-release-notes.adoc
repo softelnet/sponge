@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee full backward compatibility.
 
 [discrete]
-== 1.0.7 (not released yet)
+== 1.0.7 (2018.02.02)
 
 * Added MIDI support. The MIDI plugin allows processing MIDI messages by the {sponge} and provides communication with MIDI devices.
 * API change: The `Utils` class has been renamed to `SpongeUtils`.
