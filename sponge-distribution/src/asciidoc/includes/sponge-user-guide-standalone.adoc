@@ -256,10 +256,22 @@ beans {
 > print(camel.context.routes)
 ----
 
-== Interactive mode
+== Logging and exception reporting
 
-=== Exception reporting
-In an interactive mode a predefined console logger appender (configured in logback.xml) is turned off programmatically.
+=== Non interactive mode
+If you experience too many logs in the console while running a non-interactive standalone command-line application, you may want to change a logging configuration in `config/logback.xml`. For example to change a console threshold filter level from `INFO` to `ERROR`:
+
+.Example logging configuration
+[source,xml]
+----
+<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <level>ERROR</level>
+    </filter>
+----
+
+=== Interactive mode
+In an interactive mode a predefined console logger appender (configured in `config/logback.xml`) is turned off programmatically.
 
 Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 

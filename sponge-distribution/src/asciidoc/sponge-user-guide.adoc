@@ -366,7 +366,7 @@ include::includes/sponge-user-guide-event-processors.adoc[leveloffset=+1]
 == Actions
 Actions provide functionality similar to functions. They may be used in many knowledge bases that are written in different languages.
 
-The alias for the base class for script-based actions is `Action`. The base class for Java-based actions is `JavaAction`.
+The alias for the base class for script-based actions is `Action`. The base class for Java-based actions is `JAction`.
 
 === Properties and methods
 In addition to the inherited <<processor-methods,processor properties and methods>>, actions provide the following ones.
@@ -413,7 +413,7 @@ The code presented below defines the Java-based action named `JavaEchoAction`.
 .Java action example
 [source,java]
 ----
-public class JavaEchoAction extends JavaAction { // <1>
+public class JavaEchoAction extends JAction { // <1>
 
     @Override
     public Object onCall(Object... args) { // <2>
@@ -434,7 +434,7 @@ EPS.enableJava(JavaEchoAction)
 == Plugins
 Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
 
-The alias for the base class for script-based plugins is `Plugin`. The base class for Java-based plugins is `JavaPlugin`.
+The alias for the base class for script-based plugins is `Plugin`. The base class for Java-based plugins is `JPlugin`.
 
 Each of these base classes extends the `BasePlugin` class that provides empty implementations of callback methods. If the created plugin requires own configuration parameters (e.g. in the XML configuration file) the `onConfigure` method should be implemented.
 
@@ -510,7 +510,7 @@ The above configuration defines a plugin implemented by `org.openksavi.sponge.ex
 .Java plugin example
 [source,java]
 ----
-public class EchoPlugin extends JavaPlugin { // <1>
+public class EchoPlugin extends JPlugin { // <1>
 
     private static final Logger logger = LoggerFactory.getLogger(EchoPlugin.class);
 

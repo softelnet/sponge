@@ -10,7 +10,7 @@
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
+            <level>INFO</level>
         </filter>
         <encoder>
             <pattern>%date{ISO8601} [%thread] %level %logger - %msg%n</pattern>
@@ -45,12 +45,13 @@
     <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
     <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="error" />
     <logger name="org.openksavi.sponge.shaded" level="error" />
-    <logger name="sponge.kb" level="debug" />
+    <logger name="sponge.kb" level="info" />
 
     <logger name="org.apache.commons.beanutils.FluentPropertyBeanIntrospector" level="error" />
     <logger name="org.quartz" level="error" />
     <logger name="org.apache.camel" level="error" />
     <logger name="org.springframework" level="error" />
+    <logger name="org.bff.javampd" level="error" />
     <logger name="ch.qos.logback" level="error" />
 
     <root level="info">

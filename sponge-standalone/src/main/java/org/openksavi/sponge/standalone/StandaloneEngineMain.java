@@ -58,7 +58,7 @@ public class StandaloneEngineMain {
             builder = StandaloneEngine.builder().commandLineArgs(args);
             engine = builder.build();
 
-            // If help or version option is specified.
+            // If help or version option are not specified.
             if (engine != null) {
                 engine.startup();
                 if (engine.getInteractiveMode() != null) {

@@ -44,7 +44,7 @@ Filters allow only certain events to be processed by the engine. Filters are exe
 
 You could modify event attributes in filters if necessary.
 
-The alias for the base class for script-based filters is `Filter`. The base class for Java-based filters is `JavaFilter`.
+The alias for the base class for script-based filters is `Filter`. The base class for Java-based filters is `JFilter`.
 
 === Properties and methods
 In addition to the inherited <<processor-methods,processor properties and methods>>, filters provide the following ones.
@@ -101,7 +101,7 @@ The filter presented below checks if an event named `"e1"` or `"e2"` or `"e3"` h
 .Java filter example
 [source,java]
 ----
-public class ShapeFilter extends JavaFilter { // <1>
+public class ShapeFilter extends JFilter { // <1>
 
     @Override
     public void onConfigure() { // <2>
@@ -141,7 +141,7 @@ EPS.enableJava(ShapeFilter)
 == Triggers
 Triggers run a specified code when an event happens.
 
-The alias for the base class for script-based triggers is `Trigger`. The base class for Java-based filters is `JavaTrigger`.
+The alias for the base class for script-based triggers is `Trigger`. The base class for Java-based filters is `JTrigger`.
 
 === Properties and methods
 In addition to the inherited <<processor-methods,processor properties and methods>>, triggers provide the following ones.
@@ -189,7 +189,7 @@ The code presented below defines the trigger named `SampleJavaTrigger` listening
 .Java trigger example
 [source,java]
 ----
-public class SampleJavaTrigger extends JavaTrigger { // <1>
+public class SampleJavaTrigger extends JTrigger { // <1>
 
     @Override
     public void onConfigure() { // <2>
@@ -217,7 +217,7 @@ EPS.enableJava(SampleJavaTrigger)
 == Rules
 Sometimes there is a need to perform certain actions when a sequence of events has happened, additionally fulfilling some conditions. To handle such relationships (both temporal and logical), {sponge} provides rules. It is important for the behavior of the rules that events that happened first must be sent first into the engine.
 
-The alias for the base class for script-based rules is `Rule`. The base class for Java-based rules is `JavaRule`.
+The alias for the base class for script-based rules is `Rule`. The base class for Java-based rules is `JRule`.
 
 A rule group is a set of instances of the rule, each created automatically for every event that could be accepted as the first event of the rule.
 
@@ -456,7 +456,7 @@ The code presented below defines a rule analogous to the one shown above but def
 .Java rule example
 [source,java]
 ----
-public class SameSourceJavaRule extends JavaRule { // <1>
+public class SameSourceJavaRule extends JRule { // <1>
 
     private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaRule.class);
 
@@ -507,7 +507,7 @@ A correlator instance, when started, may be finished:
 * manually by invoking the `finish` method from inside the `onEvent` method,
 * automatically when `duration` is set and the duration timeout takes place.
 
-The alias for the base class for script-based correlators is `Correlator`. The base class for Java-based correlators is `JavaCorrelator`.
+The alias for the base class for script-based correlators is `Correlator`. The base class for Java-based correlators is `JCorrelator`.
 
 A correlator group is a set of instances of the correlator.
 
@@ -598,7 +598,7 @@ The code presented below defines the correlator analogous to the one shown above
 .Java correlator example
 [source,java]
 ----
-public class SampleJavaCorrelator extends JavaCorrelator { // <1>
+public class SampleJavaCorrelator extends JCorrelator { // <1>
 
     private List<Event> eventLog;
 
