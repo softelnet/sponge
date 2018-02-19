@@ -36,7 +36,7 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
     /**
      * Creates a new reflection rule event condition.
      *
-     * @param methodName Java-based rule class method name.
+     * @param method Java-based rule class method.
      */
     protected ReflectionEventCondition(Method method) {
         super(method.getName());
@@ -56,7 +56,7 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
         try {
             Object result = method.invoke(rule, new Object[] { event });
             if (!(result instanceof Boolean)) {
-                throw new IllegalArgumentException("Condition method must return boolean value");
+                throw new IllegalArgumentException("Condition method must return a boolean value");
             }
             return (Boolean) result;
         } catch (InvocationTargetException e) {
