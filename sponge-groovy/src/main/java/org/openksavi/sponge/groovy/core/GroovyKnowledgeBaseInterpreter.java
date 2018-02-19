@@ -227,10 +227,11 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         importCustomizer.addImport(alias, clazz.getName());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void invokeOptionalFunction(String name) {
+    public <T> T invokeOptionalFunction(String name, T defaultValue) {
         try {
-            doInvokeFunction(name, true, null);
+            return (T) doInvokeFunction(name, true, defaultValue, null);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(name, e);
         }
@@ -240,13 +241,13 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     @Override
     public <T> T invokeFunction(String name, Class<T> cls, Object... args) {
         try {
-            return (T) doInvokeFunction(name, false, args);
+            return (T) doInvokeFunction(name, false, null, args);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(name, e);
         }
     }
 
-    protected Object doInvokeFunction(String name, boolean optional, Object[] args) {
+    protected Object doInvokeFunction(String name, boolean optional, Object defaultValue, Object[] args) {
         Object result = null;
         boolean invoked = false;
 
@@ -265,7 +266,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
         if (!invoked) {
             if (optional) {
-                return null;
+                return defaultValue;
             } else {
                 throw new SpongeException("Missing function '" + name + "'");
             }

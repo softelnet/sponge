@@ -43,4 +43,3 @@ class PythonRoute(ScriptRouteBuilder):
 
 def onStartup():
     camel.context.addRoutes(PythonRoute())
-

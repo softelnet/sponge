@@ -34,6 +34,7 @@ import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Engine;
@@ -184,12 +185,12 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     @Override
     public void onInit() {
-        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_INIT);
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_INIT, null);
     }
 
     @Override
     public void onLoad() {
-        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_LOAD);
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_LOAD, null);
     }
 
     /**
@@ -197,7 +198,22 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      */
     @Override
     public void onStartup() {
-        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_STARTUP);
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_STARTUP, null);
+    }
+
+    @Override
+    public boolean onRun() {
+        Object result = invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_RUN, null);
+        if (result != null) {
+            if (result instanceof Boolean) {
+                return (Boolean) result;
+            } else {
+                throw new SpongeException(
+                        "The knowledge base onRun callback function should return a boolean value, not: " + result.getClass());
+            }
+        }
+
+        return EngineConstants.DEFAULT_ON_RUN_FUNCTION_RESULT;
     }
 
     /**
@@ -205,7 +221,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      */
     @Override
     public void onShutdown() {
-        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_SHUTDOWN);
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_SHUTDOWN, null);
     }
 
     /**
@@ -213,7 +229,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      */
     @Override
     public void onBeforeReload() {
-        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_BEFORE_RELOAD);
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_BEFORE_RELOAD, null);
     }
 
     /**
@@ -221,7 +237,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
      */
     @Override
     public void onAfterReload() {
-        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_AFTER_RELOAD);
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_AFTER_RELOAD, null);
     }
 
     @Override

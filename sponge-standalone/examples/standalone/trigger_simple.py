@@ -1,6 +1,6 @@
 """
 Sponge Knowledge base
-Interactive mode example
+Simple trigger
 """
 
 class AlarmTrigger(Trigger):

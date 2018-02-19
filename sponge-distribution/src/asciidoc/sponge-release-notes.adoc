@@ -8,6 +8,7 @@ NOTE: The current versions of {sponge} don't guarantee full backward compatibili
 [discrete]
 == 1.0.8 (not released yet)
 
+* Added a new callback function `onRun` to knowledge bases that allows a user to, for example, just run a script and stop the engine.
 * Simplified specification of rule event conditions in Java and Kotlin.
 
 [discrete]

@@ -141,16 +141,19 @@ public abstract class BaseEngineModule implements EngineModule {
      * Starts up this managed entity.
      */
     @Override
-    public final void startup() {
+    public void startup() {
         if (isStarting() || isRunning()) {
             return;
         }
 
+        lock.lock();
         try {
             service.startAsync().awaitRunning();
         } catch (IllegalStateException e) {
             // If Guava Service startup has failed, throw only the cause exception.
             throw isFailed() && e.getCause() != null ? SpongeUtils.wrapException("startup", e.getCause()) : e;
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -158,7 +161,7 @@ public abstract class BaseEngineModule implements EngineModule {
      * Shuts down this managed entity.
      */
     @Override
-    public final void shutdown() {
+    public void shutdown() {
         if (isStopping() || isTerminated()) {
             return;
         }

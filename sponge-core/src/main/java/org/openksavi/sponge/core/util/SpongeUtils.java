@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.util;
 
+import static org.awaitility.Awaitility.await;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -56,6 +59,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -409,6 +413,15 @@ public abstract class SpongeUtils {
 
     public static boolean isAbstract(Class<?> cls) {
         return Modifier.isAbstract(cls.getModifiers());
+    }
+
+    public static boolean awaitUntil(Callable<Boolean> callable, long timeout, TimeUnit unit) {
+        try {
+            await().atMost(timeout, unit).until(callable);
+            return true;
+        } catch (ConditionTimeoutException e) {
+            return false;
+        }
     }
 
     protected SpongeUtils() {

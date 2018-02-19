@@ -243,6 +243,17 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     }
 
     @Override
+    public boolean onRun() {
+        for (KnowledgeBase knowledgeBase : knowledgeBases.values()) {
+            if (!knowledgeBase.onRun()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public void onShutdown() {
         knowledgeBases.values().forEach(kb -> kb.onShutdown());
     }

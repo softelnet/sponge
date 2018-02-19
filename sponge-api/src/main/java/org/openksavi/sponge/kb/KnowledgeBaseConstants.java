@@ -30,6 +30,9 @@ public final class KnowledgeBaseConstants {
     /** On startup function name. */
     public static final String FUN_ON_STARTUP = "onStartup";
 
+    /** On run function name. */
+    public static final String FUN_ON_RUN = "onRun";
+
     /** On shutdown function name. */
     public static final String FUN_ON_SHUTDOWN = "onShutdown";
 

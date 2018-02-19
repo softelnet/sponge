@@ -627,7 +627,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 == MPD
-The MPD plugin (`MpdPlugin`) provides integration with an https://en.wikipedia.org/wiki/Music_Player_Daemon[MPD (Music Player Daemon)] server.
+The MPD plugin (`MpdPlugin`) provides an integration with an https://en.wikipedia.org/wiki/Music_Player_Daemon[MPD (Music Player Daemon)] server. The integration allows knowledge bases to manage an MPD server and gives the possibility to process MPD based events.
 
 NOTE: The plugin is located in the `sponge-mpd` {sponge} external module. The reason that the MPD support is located in the external {sponge} module is that *it is released under http://www.gnu.org/copyleft/gpl.html[GNU GPL Version 3] license* which is not compatible with the {sponge} Apache 2.0 license. This requirement is forced by the license of the underlying library https://github.com/finnyb/javampd[JavaMPD].
 
@@ -661,6 +661,10 @@ The default name of the MPD plugin (which may be used in knowledge bases) is `mp
 |`autoConnect`
 |`Boolean`
 |The auto connect flag. If `true` (the default value), the plugin connects to the MPD server on startup.
+
+|`autoStartMonitor`
+|`Boolean`
+|The auto start monitor flag. If `true` (the default value), the plugin starts the MPD monitor. The MPD monitor allows the plugin to send MPD based events to the engine.
 |===
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/mpd/MpdPlugin.html[`MpdPlugin` Javadoc] and http://finnyb.github.io/javampd/[JavaMPD].

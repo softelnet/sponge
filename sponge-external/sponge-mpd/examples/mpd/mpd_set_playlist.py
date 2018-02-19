@@ -52,7 +52,7 @@ def setAndPlayPlaylist(albums):
     for album in albums[1:]:
         mpd.server.playlist.insertAlbum(album) 
 
-def onStartup():
+def onRun():
     albums = mpd.server.musicDatabase.albumDatabase.listAllAlbums()
     EPS.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
     printAlbumsInfo(albums)
@@ -65,3 +65,4 @@ def onStartup():
         EPS.logger.info("The playlist is set, {} albums found", len(selectedAlbums))
     else:
         EPS.logger.info("No matching albums found")
+    return False # Run once mode

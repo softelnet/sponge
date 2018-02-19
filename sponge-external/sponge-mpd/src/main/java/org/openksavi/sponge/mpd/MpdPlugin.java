@@ -19,6 +19,7 @@
 
 package org.openksavi.sponge.mpd;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.mpd.event.MpdEvent;
 import org.openksavi.sponge.mpd.event.MpdEventCategory;
@@ -58,6 +60,9 @@ public class MpdPlugin extends JPlugin {
 
     /** The auto connect flag. If {@code true} (the default value), the plugin connects to the MPD server on startup. */
     private boolean autoConnect = MpdConstants.DEFAULT_AUTO_CONNECT;
+
+    /** The auto start monitor flag. If {@code true} (the default value), the plugin starts the MPD monitor. */
+    private boolean autoStartMonitor = MpdConstants.DEFAULT_AUTO_START_MONITOR;
 
     /** The representation of a connection to a MPD server. */
     private MPD server;
@@ -94,6 +99,7 @@ public class MpdPlugin extends JPlugin {
         password = configuration.getString(MpdConstants.TAG_PASSWORD, password);
         timeout = configuration.getInteger(MpdConstants.TAG_TIMEOUT, timeout);
         autoConnect = configuration.getBoolean(MpdConstants.TAG_AUTO_CONNECT, autoConnect);
+        autoStartMonitor = configuration.getBoolean(MpdConstants.TAG_AUTO_START_MONITOR, autoStartMonitor);
     }
 
     /**
@@ -115,7 +121,9 @@ public class MpdPlugin extends JPlugin {
             if (server == null) {
                 logger.info("Connecting to the MPD server hostname={}, port={}", hostname, port);
                 server = createMpd();
-                server.getMonitor().start();
+                if (autoStartMonitor) {
+                    server.getMonitor().start();
+                }
             }
         } finally {
             lock.unlock();
@@ -129,8 +137,13 @@ public class MpdPlugin extends JPlugin {
         lock.lock();
         try {
             if (server != null && !server.isClosed()) {
-                if (!server.getMonitor().isDone()) {
+                if (server.getMonitor() != null && server.getMonitor().isLoaded() && !server.getMonitor().isDone()) {
                     server.getMonitor().stop();
+
+                    if (!SpongeUtils.awaitUntil(() -> server.getMonitor().isDone(), MpdConstants.DEFAULT_MONITOR_TIMEOUT,
+                            TimeUnit.SECONDS)) {
+                        logger.warn("Timeout while stopping the MPD monitor");
+                    }
                 }
 
                 server.close();
@@ -291,6 +304,24 @@ public class MpdPlugin extends JPlugin {
      */
     public void setAutoConnect(boolean autoConnect) {
         this.autoConnect = autoConnect;
+    }
+
+    /**
+     * Returns the auto start monitor flag.
+     *
+     * @return {@code true} if the plugin is to start the MPD monitor on startup.
+     */
+    public boolean isAutoStartMonitor() {
+        return autoStartMonitor;
+    }
+
+    /**
+     * Sets the auto start monitor flag.
+     *
+     * @param autoStartMonitor {@code true} if the plugin is to start the MPD monitor on startup.
+     */
+    public void setAutoStartMonitor(boolean autoStartMonitor) {
+        this.autoStartMonitor = autoStartMonitor;
     }
 
     /**

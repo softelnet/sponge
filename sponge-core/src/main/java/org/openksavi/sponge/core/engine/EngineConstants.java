@@ -36,6 +36,8 @@ public final class EngineConstants {
     /** Predefined events names, e.g. system event names. */
     public static final Set<String> PREDEFINED_EVENT_NAMES = Collections.unmodifiableSet(Sets.newHashSet(EventName.STARTUP));
 
+    public static final Boolean DEFAULT_ON_RUN_FUNCTION_RESULT = true;
+
     private EngineConstants() {
         //
     }

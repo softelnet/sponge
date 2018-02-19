@@ -132,6 +132,22 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
         //
     }
 
+    /**
+     * Marked as final to prevent overriding in custom plugins.
+     */
+    @Override
+    public final void startup() {
+        super.startup();
+    }
+
+    /**
+     * Marked as final to prevent overriding in custom plugins.
+     */
+    @Override
+    public final void shutdown() {
+        super.shutdown();
+    }
+
     protected KnowledgeBaseEngineOperations getEngineOperations() {
         return knowledgeBase.getEngineOperations();
     }
