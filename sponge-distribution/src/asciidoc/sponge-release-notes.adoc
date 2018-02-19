@@ -6,6 +6,11 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee full backward compatibility.
 
 [discrete]
+== 1.0.8 (not released yet)
+
+* Simplified specification of rule event conditions in Java and Kotlin.
+
+[discrete]
 == 1.0.7 (2018.02.02)
 
 * Added MIDI support. The MIDI plugin allows processing MIDI messages by the {sponge} and provides communication with MIDI devices.

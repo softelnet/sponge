@@ -82,21 +82,21 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     }
 
     @Override
-    public void addJavaConditions(String eventAlias, EventCondition... newConditions) {
+    public void addEventConditions(String eventAlias, EventCondition... newConditions) {
         synchronized (conditions) {
             safeGetEventConditions(eventAlias).addAll(Arrays.asList(newConditions));
         }
     }
 
     @Override
-    public void addAllJavaConditions(EventCondition... newConditions) {
+    public void addAllEventConditions(EventCondition... newConditions) {
         synchronized (conditions) {
-            Stream.of(aliases).forEachOrdered(alias -> addJavaConditions(alias, newConditions));
+            Stream.of(aliases).forEachOrdered(alias -> addEventConditions(alias, newConditions));
         }
     }
 
     @Override
-    public synchronized void addJavaCondition(String eventAlias, EventCondition condition) {
+    public synchronized void addEventCondition(String eventAlias, EventCondition condition) {
         synchronized (conditions) {
             safeGetEventConditions(eventAlias).add(condition);
         }
@@ -115,11 +115,11 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     }
 
     @Override
-    public List<EventCondition> getConditions(String eventAlias) {
+    public List<EventCondition> getEventConditions(String eventAlias) {
         return conditions.get(eventAlias);
     }
 
-    public Map<String, List<EventCondition>> getConditions() {
+    public Map<String, List<EventCondition>> getEventConditions() {
         return conditions;
     }
 }

@@ -77,14 +77,14 @@ public abstract class NashornRule extends BaseRule implements NashornScriptObjec
     public abstract void onRun(Object self, Event event);
 
     public void addConditions(String eventAlias, ScriptObjectMirror... functions) {
-        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, functions));
+        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, functions));
     }
 
     public void addAllConditions(ScriptObjectMirror... functions) {
-        addAllJavaConditions(new CompositeEventCondition(MAPPER, functions));
+        addAllEventConditions(CompositeEventCondition.create(MAPPER, functions));
     }
 
     public void addCondition(String eventAlias, ScriptObjectMirror function) {
-        addJavaCondition(eventAlias, MAPPER.apply(function));
+        addEventCondition(eventAlias, MAPPER.apply(function));
     }
 }

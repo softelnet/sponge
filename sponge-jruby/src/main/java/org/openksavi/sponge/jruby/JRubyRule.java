@@ -48,14 +48,14 @@ public abstract class JRubyRule extends BaseRule {
     }
 
     public void addConditions(String eventAlias, RubyObject... rubyObjects) {
-        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, rubyObjects));
+        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, rubyObjects));
     }
 
     public void addAllConditions(RubyObject... rubyObjects) {
-        addAllJavaConditions(new CompositeEventCondition(MAPPER, rubyObjects));
+        addAllEventConditions(CompositeEventCondition.create(MAPPER, rubyObjects));
     }
 
     public void addCondition(String eventAlias, RubyObject rubyObject) {
-        addJavaCondition(eventAlias, MAPPER.apply(rubyObject));
+        addEventCondition(eventAlias, MAPPER.apply(rubyObject));
     }
 }

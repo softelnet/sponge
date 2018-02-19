@@ -17,10 +17,13 @@
 package org.openksavi.sponge.kotlin.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.KClass;
+import kotlin.reflect.KFunction;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
@@ -65,6 +68,15 @@ public abstract class KotlinUtils {
         return !kclass.isAbstract() && KotlinConstants.PROCESSOR_CLASSES.values().stream()
                 .filter(processorClass -> ClassUtils.isAssignable(JvmClassMappingKt.getJavaClass(kclass), processorClass)).findFirst()
                 .isPresent();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<String> createEventConditionMethodNames(KFunction<Boolean>... kotlinObjects) {
+        return Arrays.stream(kotlinObjects).map(f -> createEventConditionMethodName(f)).collect(Collectors.toList());
+    }
+
+    public static String createEventConditionMethodName(KFunction<Boolean> kotlinObject) {
+        return kotlinObject.getName();
     }
 
     private KotlinUtils() {

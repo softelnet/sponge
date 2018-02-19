@@ -43,15 +43,27 @@ public abstract class JythonRule extends BaseRule {
         }
     };
 
-    public void addConditions(String eventAlias, PyObject... pyObjects) {
-        addJavaConditions(eventAlias, new CompositeEventCondition(MAPPER, pyObjects));
+    public void addConditions(String eventAlias, PyMethod... pyObjects) {
+        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, pyObjects));
     }
 
-    public void addAllConditions(PyObject... pyObjects) {
-        addAllJavaConditions(new CompositeEventCondition(MAPPER, pyObjects));
+    public void addAllConditions(PyMethod... pyObjects) {
+        addAllEventConditions(CompositeEventCondition.create(MAPPER, pyObjects));
     }
 
-    public void addCondition(String eventAlias, PyObject pyObject) {
-        addJavaCondition(eventAlias, MAPPER.apply(pyObject));
+    public void addCondition(String eventAlias, PyMethod pyObject) {
+        addEventCondition(eventAlias, MAPPER.apply(pyObject));
+    }
+
+    public void addConditions(String eventAlias, PyFunction... pyObjects) {
+        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, pyObjects));
+    }
+
+    public void addAllConditions(PyFunction... pyObjects) {
+        addAllEventConditions(CompositeEventCondition.create(MAPPER, pyObjects));
+    }
+
+    public void addCondition(String eventAlias, PyFunction pyObject) {
+        addEventCondition(eventAlias, MAPPER.apply(pyObject));
     }
 }

@@ -46,28 +46,28 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     }
 
     @Override
-    public void addJavaConditions(String eventAlias, EventCondition... conditions) {
-        getDefinition().addJavaConditions(eventAlias, conditions);
+    public void addEventConditions(String eventAlias, EventCondition... conditions) {
+        getDefinition().addEventConditions(eventAlias, conditions);
     }
 
     @Override
-    public void addAllJavaConditions(EventCondition... conditions) {
-        getDefinition().addAllJavaConditions(conditions);
+    public void addAllEventConditions(EventCondition... conditions) {
+        getDefinition().addAllEventConditions(conditions);
     }
 
     @Override
-    public void addJavaCondition(String eventAlias, EventCondition condition) {
-        getDefinition().addJavaCondition(eventAlias, condition);
+    public void addEventCondition(String eventAlias, EventCondition condition) {
+        getDefinition().addEventCondition(eventAlias, condition);
     }
 
     @Override
-    public List<EventCondition> getConditions(String eventAlias) {
-        return getDefinition().getConditions(eventAlias);
+    public List<EventCondition> getEventConditions(String eventAlias) {
+        return getDefinition().getEventConditions(eventAlias);
     }
 
     @Override
-    public final Map<String, List<EventCondition>> getConditions() {
-        return getDefinition().getConditions();
+    public final Map<String, List<EventCondition>> getEventConditions() {
+        return getDefinition().getEventConditions();
     }
 
     @Override

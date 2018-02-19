@@ -92,14 +92,14 @@ public interface RuleOperations extends EventSetProcessorOperations {
      * @param eventAlias event alias.
      * @param conditions event conditions.
      */
-    void addJavaConditions(String eventAlias, EventCondition... conditions);
+    void addEventConditions(String eventAlias, EventCondition... conditions);
 
     /**
      * Adds event conditions for all events.
      *
      * @param conditions event conditions.
      */
-    void addAllJavaConditions(EventCondition... conditions);
+    void addAllEventConditions(EventCondition... conditions);
 
     /**
      * Adds an event condition.
@@ -107,7 +107,7 @@ public interface RuleOperations extends EventSetProcessorOperations {
      * @param eventAlias event alias.
      * @param condition event condition.
      */
-    void addJavaCondition(String eventAlias, EventCondition condition);
+    void addEventCondition(String eventAlias, EventCondition condition);
 
     /**
      * Returns event conditions for the specified event alias.
@@ -115,12 +115,12 @@ public interface RuleOperations extends EventSetProcessorOperations {
      * @param eventAlias event alias.
      * @return event conditions.
      */
-    List<EventCondition> getConditions(String eventAlias);
+    List<EventCondition> getEventConditions(String eventAlias);
 
     /**
      * Returns event conditions map.
      *
      * @return event conditions map.
      */
-    Map<String, List<EventCondition>> getConditions();
+    Map<String, List<EventCondition>> getEventConditions();
 }

@@ -59,7 +59,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
      * @return {@code true} if all conditions are met.
      */
     protected boolean checkConditions(TreeNode<NodeValue> node) {
-        List<EventCondition> conditions = adapter.getConditions(adapter.getEventAlias(getEventIndex(node)));
+        List<EventCondition> conditions = adapter.getEventConditions(adapter.getEventAlias(getEventIndex(node)));
         if (conditions == null) {
             return true;
         }
