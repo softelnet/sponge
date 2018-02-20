@@ -80,9 +80,12 @@ public interface ScriptKnowledgeBaseInterpreter extends KnowledgeBaseInterpreter
     /**
      * Invokes a knowledge base function.
      *
-     * @param name function name.
+     * @param name a function name.
+     * @param defaultValue a default value that will be returned when there is no such function.
+     * @param <T> return value type.
+     * @return a function return value.
      */
-    void invokeOptionalFunction(String name);
+    <T> T invokeOptionalFunction(String name, T defaultValue);
 
     /**
      * Invokes a knowledge base function.

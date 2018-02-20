@@ -11,6 +11,7 @@
         <plugin name="mpd" class="org.openksavi.sponge.mpd.MpdPlugin">
             <configuration>
                 <hostname>localhost</hostname>
+                <autoStartMonitor>false</autoStartMonitor>
             </configuration>
         </plugin>
     </plugins>

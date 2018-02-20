@@ -91,6 +91,11 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
         getInterpreter().onStartup();
     }
 
+    @Override
+    public final boolean onRun() {
+        return getInterpreter().onRun();
+    }
+
     /**
      * Calls onShutdown method in the knowledge base.
      */

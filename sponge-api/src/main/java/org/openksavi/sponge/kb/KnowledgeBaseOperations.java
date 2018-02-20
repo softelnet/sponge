@@ -37,6 +37,15 @@ public interface KnowledgeBaseOperations {
     void onStartup();
 
     /**
+     * Called just after onStartup. If this function returns {@code true} for every knowledge base, then the engine starts its threads and
+     * performs an endless loop in order to process events. Otherwise, the engine will invoke a shutdown without starting an event
+     * processing.
+     *
+     * @return {@code true} if the engine should start event processing.
+     */
+    boolean onRun();
+
+    /**
      * Calls onClear method in the knowledge base.
      */
     void onClear();

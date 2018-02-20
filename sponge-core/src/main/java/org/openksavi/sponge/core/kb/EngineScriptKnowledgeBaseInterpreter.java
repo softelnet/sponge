@@ -85,12 +85,14 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         return (Invocable) scriptEngine;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void invokeOptionalFunction(String name) {
+    public <T> T invokeOptionalFunction(String name, T defaultValue) {
         try {
-            getInvocable().invokeFunction(name);
+            return (T) getInvocable().invokeFunction(name);
         } catch (NoSuchMethodException e) {
             // Ignore non existing, optional function.
+            return defaultValue;
         } catch (ScriptException e) {
             throw SpongeUtils.wrapException(name, e);
         }

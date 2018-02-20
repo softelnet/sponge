@@ -98,4 +98,10 @@ public class StandaloneTest {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
         }
     }
+
+    @Test
+    public void testExecuteScript() {
+        StandaloneEngineMain engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-k", "examples/standalone/execute_script.py");
+        assertFalse(engineMain.getEngine().isError());
+    }
 }

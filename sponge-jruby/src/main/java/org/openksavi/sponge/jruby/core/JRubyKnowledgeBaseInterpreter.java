@@ -188,15 +188,16 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         eval(alias + " = " + clazz.getName());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void invokeOptionalFunction(String name) {
+    public <T> T invokeOptionalFunction(String name, T defaultValue) {
         // Return if doesn't exist.
         if (eval("defined?(" + name + ")") == null) {
-            return;
+            return defaultValue;
         }
 
         try {
-            container.callMethod(null, name, Object.class);
+            return (T) container.callMethod(null, name, Object.class);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(name, e);
         }

@@ -144,6 +144,9 @@ public class BaseEngine extends BaseEngineModule implements Engine {
 
     private AtomicBoolean initialized = new AtomicBoolean(false);
 
+    /** Endless loop mode or run once mode. */
+    private AtomicBoolean endlessLoopMode = new AtomicBoolean(true);
+
     /** Knowledge base specific engine operations. */
     private KnowledgeBaseEngineOperations operations;
 
@@ -296,6 +299,19 @@ public class BaseEngine extends BaseEngineModule implements Engine {
         }
     }
 
+    @Override
+    public synchronized void startup() {
+        // The default is endless loop mode.
+        endlessLoopMode.set(true);
+
+        super.startup();
+
+        if (!endlessLoopMode.get()) {
+            // Run once mode.
+            shutdown();
+        }
+    }
+
     /**
      * Starts up the engine.
      */
@@ -337,14 +353,20 @@ public class BaseEngine extends BaseEngineModule implements Engine {
                 // Invoke onStartup for each knowledge base.
                 knowledgeBaseManager.onStartup();
 
-                // Starts Thread Pool Manager only. Note that thread pools are not started here yet.
-                threadPoolManager.startup();
+                if (knowledgeBaseManager.onRun()) {
+                    // Starts Thread Pool Manager only. Note that thread pools are not started here yet.
+                    threadPoolManager.startup();
 
-                // Start Main Processing Unit and Filter Processing Unit thread pools. Note that the Filter Processing Unit thread
-                // will be started as the last, because it listens directly to the Input Event Queue and in fact starts all processing.
-                processingUnitManager.startup();
+                    // Start Main Processing Unit and Filter Processing Unit thread pools. Note that the Filter Processing Unit thread
+                    // will be started as the last, because it listens directly to the Input Event Queue and in fact starts all processing.
+                    processingUnitManager.startup();
 
-                logger.info("{} is running", getDescription());
+                    logger.info("Sponge is running");
+                } else {
+                    endlessLoopMode.set(false);
+
+                    logger.info("Sponge completed a run once mode");
+                }
             } catch (Throwable e) {
                 safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
                 throw SpongeUtils.wrapException("startup", e);
@@ -382,7 +404,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     public void doShutdown() {
         lock.lock();
         try {
-            logger.info("Shutting down {}", getDescription());
+            logger.info("Shutting down Sponge");
 
             AtomicReference<Throwable> exceptionHolder = new AtomicReference<>(null);
 
@@ -402,7 +424,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
                 throw exceptionHolder.get();
             }
 
-            logger.info("{} is terminated", getDescription());
+            logger.info("Sponge is terminated");
         } catch (Throwable e) {
             throw SpongeUtils.wrapException("shutdown", e);
         } finally {
@@ -633,8 +655,8 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     protected void handleError(String sourceName, Object sourceObject, Throwable exception) {
         tryRememberException(exception);
 
-        exceptionHandler.handleException(exception,
-                new GenericExceptionContext(this, ObjectUtils.defaultIfNull(SpongeUtils.getSourceName(exception), sourceName), sourceObject));
+        exceptionHandler.handleException(exception, new GenericExceptionContext(this,
+                ObjectUtils.defaultIfNull(SpongeUtils.getSourceName(exception), sourceName), sourceObject));
     }
 
     /**

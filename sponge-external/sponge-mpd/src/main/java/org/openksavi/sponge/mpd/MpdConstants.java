@@ -30,6 +30,9 @@ public final class MpdConstants {
     /** The default value of an auto connect flag. */
     public static final boolean DEFAULT_AUTO_CONNECT = true;
 
+    /** The default value of an auto start monitor flag. */
+    public static final boolean DEFAULT_AUTO_START_MONITOR = true;
+
     public static final String TAG_HOSTNAME = "hostname";
 
     public static final String TAG_PORT = "port";
@@ -39,6 +42,10 @@ public final class MpdConstants {
     public static final String TAG_TIMEOUT = "timeout";
 
     public static final String TAG_AUTO_CONNECT = "autoConnect";
+
+    public static final String TAG_AUTO_START_MONITOR = "autoStartMonitor";
+
+    public static final long DEFAULT_MONITOR_TIMEOUT = 5;
 
     private MpdConstants() {
         //

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.kb;
 
+import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -52,6 +53,11 @@ public abstract class BaseNonScriptKnowledgeBase extends BaseKnowledgeBase {
     @Override
     public void onStartup() {
         //
+    }
+
+    @Override
+    public boolean onRun() {
+        return EngineConstants.DEFAULT_ON_RUN_FUNCTION_RESULT;
     }
 
     @Override

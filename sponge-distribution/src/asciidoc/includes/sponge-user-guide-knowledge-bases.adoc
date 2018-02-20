@@ -22,13 +22,16 @@ Generally, script knowledge base files consist of a few parts:
 |Function |Description
 
 |`onInit()`
-|Called once on the initialization of the knowledge base.
+|Called once on the initialization of a knowledge base.
 
 |`onLoad()`
-|Called on the loading of the knowledge base and also every time the knowledge base is reloaded. Before invoking the `onLoad` callback method, the engine scans to auto-enable processors (if this functionality is turned on). You may manually disable some of the auto enabled processors in this callback function if necessary.
+|Called on the loading of a knowledge base and also every time a knowledge base is reloaded. Before invoking an `onLoad` callback method, the engine scans to auto-enable processors (if this functionality is turned on). You may manually disable some of the auto enabled processors in this callback function if necessary.
 
 |`onStartup()`
 |Called once after the startup of the engine (after `onInit()` and initial `onLoad()`).
+
+|`boolean onRun()`
+|Called just after an `onStartup()` callback function. If this function returns `true` for every knowledge base, then the engine will start its threads and perform an endless loop in order to process events. This is the default behavior. Otherwise, the engine will assume a run once mode and it will invoke a shutdown without starting an event processing. The latter option allows a user to, for example, just run a script and stop the engine. It may be useful when using a standalone application to perform simple, synchronized tasks. In case of scripting knowledge bases `onRun()` may return `null` which will be treated as if it returned `true`.
 
 |`onShutdown()`
 |Called once before the shutdown of the engine.
@@ -49,7 +52,8 @@ When {sponge} is starting, callback functions are invoked in the following order
 . executing all knowledge base files as scripts, i.e. executing the main body of the script files,
 . `onInit()`,
 . `onLoad()`,
-. `onStartup()`.
+. `onStartup()`,
+. `onRun()`.
 
 Before `onStartup()` is invoked you will not be able to send events or access plugins. That is because the engine hasn't started fully yet.
 
