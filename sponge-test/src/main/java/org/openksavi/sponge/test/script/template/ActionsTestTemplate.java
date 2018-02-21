@@ -22,14 +22,14 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class ActionsTestTemplate {
 
     public static void testActions(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("scriptActionResult") != null);

@@ -27,16 +27,16 @@ import org.springframework.context.annotation.Configuration;
 
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.camel.CamelUtils;
-import org.openksavi.sponge.camel.EngineCamelConfiguration;
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
+import org.openksavi.sponge.camel.SpongeCamelConfiguration;
+import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 /**
  * Spring configuration that creates the engine and Camel context.
  */
 @Configuration
 @ComponentScan
-public class SpringConfiguration extends EngineCamelConfiguration {
+public class SpringConfiguration extends SpongeCamelConfiguration {
 
     /** RSS source header name. */
     public static final String HEADER_SOURCE = "source";
@@ -47,9 +47,9 @@ public class SpringConfiguration extends EngineCamelConfiguration {
      * @return the engine.
      */
     @Bean
-    public Engine camelRssEngine() {
+    public SpongeEngine camelRssEngine() {
         // Use EngineBuilder API to create an engine with the configuration file. Also bind Spring and Camel plugins as beans manually.
-        return SpringEngine.builder().config(CamelRssConstants.CONFIG_FILE).plugins(springPlugin(), camelPlugin()).build();
+        return SpringSpongeEngine.builder().config(CamelRssConstants.CONFIG_FILE).plugins(springPlugin(), camelPlugin()).build();
     }
 
     /**

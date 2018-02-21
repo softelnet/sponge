@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
@@ -43,7 +43,7 @@ public class RulesTestTemplate {
         testRules(type, ScriptTestUtils.startWithKnowledgeBase(type, "rules"));
     }
 
-    public static void testRules(KnowledgeBaseType type, Engine engine) {
+    public static void testRules(KnowledgeBaseType type, SpongeEngine engine) {
         try {
             await().atMost(60, TimeUnit.SECONDS).pollDelay(5, TimeUnit.SECONDS)
                     .until(() -> ((Number) engine.getOperations().getVariable("hardwareFailureScriptCount")).intValue() >= 3);
@@ -62,7 +62,7 @@ public class RulesTestTemplate {
     }
 
     public static void testRulesEvents(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_events");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_events");
 
         try {
             doTestRulesEvents(type, engine, 180);
@@ -71,7 +71,7 @@ public class RulesTestTemplate {
         }
     }
 
-    public static void doTestRulesEvents(KnowledgeBaseType type, Engine engine, long timeout) {
+    public static void doTestRulesEvents(KnowledgeBaseType type, SpongeEngine engine, long timeout) {
         CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
         Map<String, String[][]> expected = new LinkedHashMap<>();
@@ -120,7 +120,7 @@ public class RulesTestTemplate {
     }
 
     public static void testRulesNoneModeEvents(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_none_mode_events");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_none_mode_events");
 
         try {
             CorrelationEventsLog eventsLog =
@@ -150,7 +150,7 @@ public class RulesTestTemplate {
     }
 
     public static void testRulesNoneModeEventsConditions(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_none_mode_events_conditions");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_none_mode_events_conditions");
 
         try {
             CorrelationEventsLog eventsLog =
@@ -181,7 +181,7 @@ public class RulesTestTemplate {
         testRulesSyncAsync(type, ScriptTestUtils.startWithKnowledgeBase(type, "rules_sync_async"));
     }
 
-    public static void testRulesSyncAsync(KnowledgeBaseType type, Engine engine) {
+    public static void testRulesSyncAsync(KnowledgeBaseType type, SpongeEngine engine) {
         try {
             CorrelationEventsLog eventsLog =
                     engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
@@ -208,7 +208,7 @@ public class RulesTestTemplate {
     }
 
     public static void testHeartbeat(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_heartbeat");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_heartbeat");
 
         try {
             await().atMost(60, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
@@ -219,7 +219,7 @@ public class RulesTestTemplate {
     }
 
     public static void testHeartbeat2(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_heartbeat2");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_heartbeat2");
 
         try {
             await().atMost(60, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("soundTheAlarm")).get());
@@ -230,7 +230,7 @@ public class RulesTestTemplate {
     }
 
     public static void testRulesInstances(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.buildWithKnowledgeBase(type, "rules_instances");
+        SpongeEngine engine = ScriptTestUtils.buildWithKnowledgeBase(type, "rules_instances");
         engine.getDefaultParameters().setAsyncEventSetProcessorProcessingPartitionSize(10);
 
         engine.startup();

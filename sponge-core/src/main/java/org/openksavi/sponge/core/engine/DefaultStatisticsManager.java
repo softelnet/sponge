@@ -29,7 +29,7 @@ import org.apache.commons.io.FileUtils;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue;
 import org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueueMainProcessingUnit;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -49,7 +49,7 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
      *
      * @param engine the engine.
      */
-    public DefaultStatisticsManager(Engine engine) {
+    public DefaultStatisticsManager(SpongeEngine engine) {
         super("StatisticsManager", engine);
     }
 

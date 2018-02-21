@@ -22,14 +22,14 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class CorrelatorsTestTemplate {
 
     public static void testCorrelators(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators");
 
         try {
             await().atMost(30, TimeUnit.SECONDS)
@@ -51,7 +51,7 @@ public class CorrelatorsTestTemplate {
     }
 
     public static void testCorrelatorsDuration(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators_duration");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators_duration");
 
         try {
             await().pollDelay(5, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)

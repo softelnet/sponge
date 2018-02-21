@@ -49,52 +49,52 @@ public abstract class KRule extends BaseRule {
         }
     };
 
-    public void addConditions(String eventAlias, KFunction<Boolean>... kotlinObjects) {
-        addEventConditions(eventAlias, createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
-    }
-
-    public void addAllConditions(KFunction<Boolean>... kotlinObjects) {
-        addAllEventConditions(createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
-    }
-
     public void addCondition(String eventAlias, KFunction<Boolean> kotlinObject) {
         addEventCondition(eventAlias, createEventConditionForMethod(KotlinUtils.createEventConditionMethodName(kotlinObject)));
-    }
-
-    public void addConditions(String eventAlias, String... methodNames) {
-        addEventConditions(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
-    }
-
-    public void addAllConditions(String... methodNames) {
-        addAllEventConditions(createEventConditionForMethods(Arrays.asList(methodNames)));
     }
 
     public void addCondition(String eventAlias, String methodName) {
         addEventCondition(eventAlias, createEventConditionForMethod(methodName));
     }
 
-    public void addConditions(String eventAlias, Function2<Rule, Event, Boolean>... kotlinObjects) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
-    }
-
-    public void addAllConditions(Function2<Rule, Event, Boolean>... kotlinObjects) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, kotlinObjects));
-    }
-
     public void addCondition(String eventAlias, Function2<Rule, Event, Boolean> kotlinObject) {
         addEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    }
+
+    public void addCondition(String eventAlias, BiFunction<Rule, Event, Boolean> kotlinObject) {
+        addEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    }
+
+    public void addConditions(String eventAlias, KFunction<Boolean>... kotlinObjects) {
+        addEventConditions(eventAlias, createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+    }
+
+    public void addConditions(String eventAlias, String... methodNames) {
+        addEventConditions(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
+    }
+
+    public void addConditions(String eventAlias, Function2<Rule, Event, Boolean>... kotlinObjects) {
+        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
     }
 
     public void addConditions(String eventAlias, BiFunction<Rule, Event, Boolean>... kotlinObjects) {
         addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
     }
 
-    public void addAllConditions(BiFunction<Rule, Event, Boolean>... kotlinObjects) {
+    public void addAllConditions(KFunction<Boolean>... kotlinObjects) {
+        addAllEventConditions(createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+    }
+
+    public void addAllConditions(String... methodNames) {
+        addAllEventConditions(createEventConditionForMethods(Arrays.asList(methodNames)));
+    }
+
+    public void addAllConditions(Function2<Rule, Event, Boolean>... kotlinObjects) {
         addAllEventConditions(CompositeEventCondition.create(MAPPER, kotlinObjects));
     }
 
-    public void addCondition(String eventAlias, BiFunction<Rule, Event, Boolean> kotlinObject) {
-        addEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    public void addAllConditions(BiFunction<Rule, Event, Boolean>... kotlinObjects) {
+        addAllEventConditions(CompositeEventCondition.create(MAPPER, kotlinObjects));
     }
 
     /**

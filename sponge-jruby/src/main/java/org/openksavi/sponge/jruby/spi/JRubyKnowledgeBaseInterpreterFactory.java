@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.jruby.spi;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.jruby.RubyConstants;
 import org.openksavi.sponge.jruby.core.JRubyKnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -35,7 +35,7 @@ public class JRubyKnowledgeBaseInterpreterFactory implements KnowledgeBaseInterp
     }
 
     @Override
-    public KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
+    public KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new JRubyKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 }

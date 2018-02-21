@@ -19,18 +19,18 @@ package org.openksavi.sponge.camel;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Sponge Camel consumer.
  */
 public class SpongeConsumer extends DefaultConsumer {
 
-    private final Engine engine;
+    private final SpongeEngine engine;
 
     private CamelConsumer camelConsumer;
 
-    public SpongeConsumer(SpongeEndpoint endpoint, Processor processor, Engine engine) {
+    public SpongeConsumer(SpongeEndpoint endpoint, Processor processor, SpongeEngine engine) {
         super(endpoint, processor);
 
         this.engine = engine;

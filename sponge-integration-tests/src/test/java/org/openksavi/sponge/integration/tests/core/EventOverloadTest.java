@@ -24,20 +24,20 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.EngineBuilder;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.QueueFullException;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class EventOverloadTest {
 
     @Test
     public void testEventOverload() {
-        EngineBuilder<DefaultEngine> builder = DefaultEngine.builder().knowledgeBase("kb", "examples/core/event_overload.py");
+        EngineBuilder<DefaultSpongeEngine> builder = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/event_overload.py");
         builder.getEngineDefaultParameters().setMainEventQueueCapacity(2);
         builder.getEngineDefaultParameters().setDecomposedQueueCapacity(2);
 
-        Engine engine = builder.build();
+        SpongeEngine engine = builder.build();
 
         // Caution: this test depends on the exact configuration values as they are specified below.
         engine.getConfigurationManager().setMainProcessingUnitThreadCount(1);

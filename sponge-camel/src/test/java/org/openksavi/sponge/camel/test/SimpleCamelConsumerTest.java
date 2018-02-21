@@ -29,19 +29,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 
-import org.openksavi.sponge.camel.EngineCamelConfiguration;
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
+import org.openksavi.sponge.camel.SpongeCamelConfiguration;
+import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class SimpleCamelConsumerTest {
 
     @Configuration
-    public static class ExampleConfiguration extends EngineCamelConfiguration {
+    public static class ExampleConfiguration extends SpongeCamelConfiguration {
 
         @Bean
-        public Engine spongeEngine() {
+        public SpongeEngine spongeEngine() {
             // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
-            return SpringEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_consumer.py")
+            return SpringSpongeEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_consumer.py")
                     .plugins(springPlugin(), camelPlugin()).build();
         }
 
@@ -69,7 +69,7 @@ public class SimpleCamelConsumerTest {
         try (GenericApplicationContext context = new AnnotationConfigApplicationContext(ExampleConfiguration.class)) {
             context.start();
 
-            Engine engine = context.getBean(Engine.class);
+            SpongeEngine engine = context.getBean(SpongeEngine.class);
             engine.getOperations().event("spongeEvent").set("message", "Send me to Camel").send();
 
             await().atMost(60, TimeUnit.SECONDS)

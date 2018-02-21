@@ -31,19 +31,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 
-import org.openksavi.sponge.camel.EngineCamelConfiguration;
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
+import org.openksavi.sponge.camel.SpongeCamelConfiguration;
+import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class SimpleCamelProducerTest {
 
     @Configuration
-    public static class ExampleConfiguration extends EngineCamelConfiguration {
+    public static class ExampleConfiguration extends SpongeCamelConfiguration {
 
         @Bean
-        public Engine spongeEngine() {
+        public SpongeEngine spongeEngine() {
             // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
-            return SpringEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_producer.py")
+            return SpringSpongeEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_producer.py")
                     .plugins(springPlugin(), camelPlugin()).build();
         }
 
@@ -71,7 +71,7 @@ public class SimpleCamelProducerTest {
             producerTemplate.sendBody("direct:start", "Send me to the Sponge");
 
             // Waiting for the engine to process an event.
-            Engine engine = context.getBean(Engine.class);
+            SpongeEngine engine = context.getBean(SpongeEngine.class);
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage").get());
 

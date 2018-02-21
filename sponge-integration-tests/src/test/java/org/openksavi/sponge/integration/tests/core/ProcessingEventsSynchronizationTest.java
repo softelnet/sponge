@@ -24,16 +24,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.EngineBuilder;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class ProcessingEventsSynchronizationTest {
 
     @Test
     public void testProcessingEventsSynchronizationDecomposedQueueNotAllowConcurrentEventTypes() {
-        EngineBuilder<DefaultEngine> builder =
-                DefaultEngine.builder().knowledgeBase("kb", "examples/core/processing_events_sync_not_allow_concurrent_event_types.py");
+        EngineBuilder<DefaultSpongeEngine> builder =
+                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/processing_events_sync_not_allow_concurrent_event_types.py");
         builder.getEngineDefaultParameters().setAllowConcurrentEventTypeProcessingByEventSetProcessors(false);
 
         doTestProcessingEventsSynchronization(builder.build());
@@ -41,12 +41,12 @@ public class ProcessingEventsSynchronizationTest {
 
     @Test
     public void testProcessingEventsSynchronizationDecomposedQueue() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/processing_events_sync.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/processing_events_sync.py").build();
 
         doTestProcessingEventsSynchronization(engine);
     }
 
-    public void doTestProcessingEventsSynchronization(Engine engine) {
+    public void doTestProcessingEventsSynchronization(SpongeEngine engine) {
         // Caution: this test depends on the exact configuration values as they are specified below.
         engine.getConfigurationManager().setMainProcessingUnitThreadCount(4);
         engine.getConfigurationManager()

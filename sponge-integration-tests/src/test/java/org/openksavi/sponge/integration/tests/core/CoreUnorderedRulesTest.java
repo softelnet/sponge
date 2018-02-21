@@ -28,9 +28,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.TestUtils;
 
@@ -40,7 +40,7 @@ public class CoreUnorderedRulesTest {
 
     @Test
     public void testUnorderedRulesEvents() {
-        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_events.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_events.py").build();
         engine.startup();
 
         try {
@@ -50,7 +50,7 @@ public class CoreUnorderedRulesTest {
         }
     }
 
-    public static void doTestUnorderedRulesEvents(Engine engine, long timeout) {
+    public static void doTestUnorderedRulesEvents(SpongeEngine engine, long timeout) {
         CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
         // Real test event sequence: a1, b1, b2, b3, c1, c2, a2, c3
@@ -152,7 +152,7 @@ public class CoreUnorderedRulesTest {
 
     @Test
     public void testUnorderedRulesInstances() {
-        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_instances.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_instances.py").build();
         engine.startup();
 
         try {

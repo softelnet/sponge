@@ -19,7 +19,7 @@ package org.openksavi.sponge.core;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.EngineOperations;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.AttributeMapEvent;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.event.Event;
@@ -30,14 +30,14 @@ import org.openksavi.sponge.plugin.Plugin;
 
 public class BaseEngineOperations implements EngineOperations {
 
-    protected BaseEngine engine;
+    protected BaseSpongeEngine engine;
 
-    public BaseEngineOperations(BaseEngine engine) {
+    public BaseEngineOperations(BaseSpongeEngine engine) {
         this.engine = engine;
     }
 
     @Override
-    public BaseEngine getEngine() {
+    public BaseSpongeEngine getEngine() {
         return engine;
     }
 

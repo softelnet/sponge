@@ -37,10 +37,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.Experimental;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
@@ -64,8 +64,8 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
 
     private List<CompiledKotlinScript> scripts;
 
-    public ScriptKotlinKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new KotlinKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), KotlinConstants.TYPE_SCRIPT);
+    public ScriptKotlinKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new KotlinKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), KotlinConstants.TYPE_SCRIPT);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new ScriptKotlinKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 

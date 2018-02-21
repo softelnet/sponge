@@ -92,9 +92,12 @@
         <spring.version>4.3.14.RELEASE</spring.version>
         <spring-integration.version>4.3.14.RELEASE</spring-integration.version>
         <camel.version>2.20.2</camel.version>
+        <awaitility.version>3.0.0</awaitility.version>
         <jline.version>3.5.2</jline.version>
         <py4j.version>0.10.6</py4j.version>
         <tensorflow.version>1.5.0</tensorflow.version>
+        <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
+        <pi4j.version>1.1</pi4j.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -104,7 +107,6 @@
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.13.0</mockito.version>
-        <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
     <prerequisites>
@@ -661,6 +663,16 @@
                 <artifactId>py4j</artifactId>
                 <version>${py4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-core</artifactId>
+                <version>${pi4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.iot.raspberry</groupId>
+                <artifactId>GrovePi-pi4j</artifactId>
+                <version>${grovepi.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>junit</groupId>
@@ -739,6 +751,8 @@
                 <module>sponge-py4j</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-midi</module>
+                <module>sponge-rpi-pi4j</module>
+                <module>sponge-rpi-grovepi</module>
                 <module>sponge-signal</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
@@ -846,6 +860,7 @@
                 <module>sponge-py4j</module>
                 <module>sponge-midi</module>
                 <module>sponge-signal</module>
+                <module>sponge-rpi-pi4j</module>
                 <module>sponge-standalone</module>
                 <module>sponge-external</module>
                 <module>sponge-bom</module>

@@ -6,12 +6,12 @@ import javax.inject.Inject
 
 import org.apache.camel.CamelContext
 
-import org.openksavi.sponge.engine.Engine
+import org.openksavi.sponge.engine.SpongeEngine
 
 public class CamelService {
 
     @Inject
-    private Engine engine;
+    private SpongeEngine engine;
 
     @Inject
     private CamelContext camelContext;

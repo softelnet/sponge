@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class CamelRssNewsTest {
 
@@ -37,7 +37,7 @@ public class CamelRssNewsTest {
         CamelRssNewsExampleMain example = new CamelRssNewsExampleMain();
         try {
             example.startup();
-            Engine engine = example.getEngine();
+            SpongeEngine engine = example.getEngine();
 
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get()

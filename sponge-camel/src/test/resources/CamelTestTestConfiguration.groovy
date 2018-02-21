@@ -3,7 +3,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.springframework.context.annotation.*
 
 import org.openksavi.sponge.core.engine.*
-import org.openksavi.sponge.engine.Engine
+import org.openksavi.sponge.engine.SpongeEngine
 import org.openksavi.sponge.jython.PythonConstants
 
 class TestRouteBuilder extends RouteBuilder {
@@ -30,7 +30,7 @@ class TestRouteBuilder extends RouteBuilder {
     }
 }
 
-class TestEngine extends DefaultEngine {
+class TestEngine extends DefaultSpongeEngine {
     TestEngine() {
         new EngineBuilder(this).knowledgeBase("kb", "examples/camel/camel_multiple_consumer.py").build()
     }

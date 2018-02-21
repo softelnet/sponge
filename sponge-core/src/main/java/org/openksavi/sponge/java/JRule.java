@@ -27,25 +27,6 @@ import org.openksavi.sponge.rule.EventCondition;
 public abstract class JRule extends BaseRule {
 
     /**
-     * Adds event conditions.
-     *
-     * @param eventAlias event alias.
-     * @param conditions event conditions.
-     */
-    public void addConditions(String eventAlias, EventCondition... conditions) {
-        addEventConditions(eventAlias, conditions);
-    }
-
-    /**
-     * Adds event conditions for all events.
-     *
-     * @param conditions event conditions.
-     */
-    public void addAllConditions(EventCondition... conditions) {
-        addAllEventConditions(conditions);
-    }
-
-    /**
      * Adds an event condition.
      *
      * @param eventAlias an event alias.
@@ -53,6 +34,26 @@ public abstract class JRule extends BaseRule {
      */
     public void addCondition(String eventAlias, EventCondition condition) {
         addEventCondition(eventAlias, condition);
+    }
+
+    /**
+     * Adds an event condition.
+     *
+     * @param eventAlias an event alias.
+     * @param methodName an event condition method name.
+     */
+    public void addCondition(String eventAlias, String methodName) {
+        addEventCondition(eventAlias, createEventConditionForMethod(methodName));
+    }
+
+    /**
+     * Adds event conditions.
+     *
+     * @param eventAlias event alias.
+     * @param conditions event conditions.
+     */
+    public void addConditions(String eventAlias, EventCondition... conditions) {
+        addEventConditions(eventAlias, conditions);
     }
 
     /**
@@ -68,19 +69,18 @@ public abstract class JRule extends BaseRule {
     /**
      * Adds event conditions for all events.
      *
+     * @param conditions event conditions.
+     */
+    public void addAllConditions(EventCondition... conditions) {
+        addAllEventConditions(conditions);
+    }
+
+    /**
+     * Adds event conditions for all events.
+     *
      * @param methodNames event condition method names.
      */
     public void addAllConditions(String... methodNames) {
         addAllEventConditions(createEventConditionForMethods(Arrays.asList(methodNames)));
-    }
-
-    /**
-     * Adds an event condition.
-     *
-     * @param eventAlias an event alias.
-     * @param methodName an event condition method name.
-     */
-    public void addCondition(String eventAlias, String methodName) {
-        addEventCondition(eventAlias, createEventConditionForMethod(methodName));
     }
 }

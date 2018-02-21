@@ -79,7 +79,7 @@ The following example shows how to make {sponge} a part of a custom Java applica
 .Example of starting the embedded {sponge} with the configuration file
 [source,java]
 ----
-Engine engine = DefaultEngine.builder().config("examples/script/py/hello_world.xml").build(); // <1>
+SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/script/py/hello_world.xml").build(); // <1>
 engine.startup(); // <2>
 ----
 <1> Creates a {sponge} engine by using Engine Builder API and providing the {sponge} XML configuration file.
@@ -90,7 +90,7 @@ The engine runs until it is shut down explicitly. So, for example, if you place 
 .Example of starting the embedded {sponge} with the knowledge base file
 [source,java]
 ----
-Engine engine = DefaultEngine.builder().knowledgeBase("knowledgeBaseName", "examples/script/py/hello_world.py").build(); // <1>
+SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("knowledgeBaseName", "examples/script/py/hello_world.py").build(); // <1>
 engine.startup();
 ----
 <1> Creates a {sponge} engine by using Engine Builder API providing a Python script knowledge base.

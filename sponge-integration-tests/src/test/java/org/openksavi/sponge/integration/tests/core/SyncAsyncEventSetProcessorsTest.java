@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.TestUtils;
 
@@ -33,7 +33,7 @@ public class SyncAsyncEventSetProcessorsTest {
 
     @Test
     public void testAsyncEventSetProcessors() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().config("examples/core/sync_async_event_set_processors.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/sync_async_event_set_processors.xml").build();
         engine.startup();
 
         assertTrue(engine.getConfigurationManager().getEventSetProcessorDefaultSynchronous());
@@ -43,7 +43,7 @@ public class SyncAsyncEventSetProcessorsTest {
 
     @Test
     public void testSyncEventSetProcessorsConfig() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/sync_async_event_set_processors.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/sync_async_event_set_processors.py").build();
         engine.startup();
 
         assertFalse(engine.getConfigurationManager().getEventSetProcessorDefaultSynchronous());
@@ -51,7 +51,7 @@ public class SyncAsyncEventSetProcessorsTest {
         doTestAsyncEventSetProcessors(engine);
     }
 
-    private void doTestAsyncEventSetProcessors(Engine engine) throws InterruptedException {
+    private void doTestAsyncEventSetProcessors(SpongeEngine engine) throws InterruptedException {
         try {
             CorrelationEventsLog eventsLog =
                     engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);

@@ -25,7 +25,7 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.engine.ActionManager;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Action manager.
@@ -35,7 +35,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     /** Registered actions map (action name, action adapter). */
     private Map<String, ActionAdapter> registeredActions = Collections.synchronizedMap(new LinkedHashMap<>());
 
-    public DefaultActionManager(Engine engine) {
+    public DefaultActionManager(SpongeEngine engine) {
         super("ActionManager", engine);
     }
 

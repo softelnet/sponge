@@ -42,12 +42,12 @@ public interface EngineModule extends Manageable {
      *
      * @param engine the engine.
      */
-    void setEngine(Engine engine);
+    void setEngine(SpongeEngine engine);
 
     /**
      * Returns the engine.
      *
      * @return the engine.
      */
-    Engine getEngine();
+    SpongeEngine getEngine();
 }

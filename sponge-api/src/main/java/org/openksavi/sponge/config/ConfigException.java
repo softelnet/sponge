@@ -42,4 +42,14 @@ public class ConfigException extends SpongeException {
     public ConfigException(Throwable e) {
         super(e);
     }
+
+    /**
+     * Creates a new exception.
+     *
+     * @param message exception message.
+     * @param throwable source throwable.
+     */
+    public ConfigException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 }

@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.BaseEngineOperations;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -39,7 +39,7 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
 
     protected KnowledgeBase knowledgeBase;
 
-    public BaseKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public BaseKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine);
         this.knowledgeBase = knowledgeBase;
     }

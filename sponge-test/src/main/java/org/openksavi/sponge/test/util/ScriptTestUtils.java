@@ -16,10 +16,10 @@
 
 package org.openksavi.sponge.test.util;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -49,8 +49,8 @@ public class ScriptTestUtils {
                 + SpongeUtils.toUpperCamelCaseFromUnderscore(knowledgeBaseSimpleClassNameUnderscore);
     }
 
-    public static Engine buildWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
-        EngineBuilder<DefaultEngine> builder = DefaultEngine.builder();
+    public static SpongeEngine buildWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
+        EngineBuilder<DefaultSpongeEngine> builder = DefaultSpongeEngine.builder();
         if (type.isScript()) {
             builder.knowledgeBase(TestUtils.DEFAULT_KB, type, getScriptKnowledgeBaseFileName(type, knowledgeBaseFile));
         } else {
@@ -60,14 +60,14 @@ public class ScriptTestUtils {
         return builder.build();
     }
 
-    public static Engine startWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
-        Engine engine = buildWithKnowledgeBase(type, knowledgeBaseFile);
+    public static SpongeEngine startWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
+        SpongeEngine engine = buildWithKnowledgeBase(type, knowledgeBaseFile);
         engine.startup();
         return engine;
     }
 
-    public static Engine startWithConfig(KnowledgeBaseType type, String config) {
-        Engine engine = DefaultEngine.builder().config(getConfigFileName(type, config)).build();
+    public static SpongeEngine startWithConfig(KnowledgeBaseType type, String config) {
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(getConfigFileName(type, config)).build();
         engine.startup();
         return engine;
     }

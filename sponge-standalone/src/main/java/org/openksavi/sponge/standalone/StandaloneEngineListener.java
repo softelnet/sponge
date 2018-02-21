@@ -48,7 +48,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
     private static List<String> SIGNALS =
             Arrays.asList(SystemSignal.SIGTERM, SystemSignal.SIGINT, SystemSignal.SIGABRT, SystemSignal.SIGHUP);
 
-    private StandaloneEngine engine;
+    private StandaloneSpongeEngine engine;
 
     /** Spring context providing Groovy and XML configurations. */
     private GenericGroovyApplicationContext context;
@@ -59,7 +59,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
     /** Should create a Camel context. */
     private boolean camel = false;
 
-    public StandaloneEngineListener(StandaloneEngine engine) {
+    public StandaloneEngineListener(StandaloneSpongeEngine engine) {
         this.engine = engine;
     }
 

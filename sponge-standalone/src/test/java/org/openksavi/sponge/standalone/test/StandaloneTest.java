@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 public class StandaloneTest {
@@ -38,7 +38,7 @@ public class StandaloneTest {
         StandaloneEngineMain engineMain = null;
         try {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/python_rss/sponge_python_rss.xml");
-            Engine engine = engineMain.getEngine();
+            SpongeEngine engine = engineMain.getEngine();
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "receivedRssCount").intValue() > 1);
@@ -53,7 +53,7 @@ public class StandaloneTest {
         StandaloneEngineMain engineMain = null;
         try {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/news/config/config.xml");
-            Engine engine = engineMain.getEngine();
+            SpongeEngine engine = engineMain.getEngine();
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
                     && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
@@ -69,7 +69,7 @@ public class StandaloneTest {
         StandaloneEngineMain engineMain = null;
         try {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/camel_rss_news/config/config.xml");
-            Engine engine = engineMain.getEngine();
+            SpongeEngine engine = engineMain.getEngine();
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable("stoppedSources", null) != null
@@ -88,7 +88,7 @@ public class StandaloneTest {
         StandaloneEngineMain engineMain = null;
         try {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/camel_template/config.xml");
-            Engine engine = engineMain.getEngine();
+            SpongeEngine engine = engineMain.getEngine();
 
             await().atMost(TIMEOUT, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("alarmSounded", null) != null
                     && engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());

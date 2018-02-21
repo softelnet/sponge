@@ -21,18 +21,18 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Sponge Camel producer.
  */
 public class SpongeProducer extends DefaultProducer {
 
-    private final Engine engine;
+    private final SpongeEngine engine;
 
     private final String action;
 
-    public SpongeProducer(Endpoint endpoint, Engine engine, String action) {
+    public SpongeProducer(Endpoint endpoint, SpongeEngine engine, String action) {
         super(endpoint);
         this.engine = engine;
         this.action = action;

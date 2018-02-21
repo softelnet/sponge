@@ -31,7 +31,7 @@ To startup the engine you should invoke the `startup()` method. After startup, t
 .Example of starting up
 [source,java]
 ----
-Engine engine = DefaultEngine.builder().config("examples/script/py/hello_world.xml").build();
+SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/script/py/hello_world.xml").build();
 engine.startup();
 ----
 
@@ -1265,6 +1265,11 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The support for Kotlin-based non scripting knowledge bases.
 
 |`org.openksavi.sponge`
+|`sponge-signal`
+|Yes
+|The wrappers for Operating System signals.
+
+|`org.openksavi.sponge`
 |`sponge-camel`
 |Yes
 |The Apache Camel integration.
@@ -1285,19 +1290,24 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The MIDI integration.
 
 |`org.openksavi.sponge`
+|`sponge-rpi-pi4j`
+|Yes
+|The Pi4J (for Raspberry Pi) library integration.
+
+|`org.openksavi.sponge`
 |`sponge-standalone`
 |Yes
 |The standalone distribution of {sponge}.
 
 |`org.openksavi.sponge`
-|`sponge-signal`
-|Yes
-|The wrappers for Operating System signals.
-
-|`org.openksavi.sponge`
 |`sponge-test`
 |Yes
 |The {sponge} test support.
+
+|`org.openksavi.sponge`
+|`sponge-rpi-grovepi`
+|No
+|The GrovePi (for Raspberry Pi) library integration.
 
 |`org.openksavi.sponge`
 |`sponge-examples-projects`
@@ -1393,6 +1403,14 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://www.py4j.org[Py4J]
 |BSD
 |Used for integration with CPython programs.
+
+|http://pi4j.com[Pi4J]
+|LGPL 3.0
+|Used for integration with Raspberry Pi hardware.
+
+|https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[GrovePi]
+|Apache 2.0
+|Used for integration with GrovePi (for Raspberry Pi) hardware.
 
 |https://www.tensorflow.org[Tensorflow]
 |Apache 2.0

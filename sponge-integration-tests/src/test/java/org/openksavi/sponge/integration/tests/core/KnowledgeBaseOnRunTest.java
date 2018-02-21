@@ -26,14 +26,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.Test;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class KnowledgeBaseOnRunTest {
 
     @Test
     public void testOnRunReturnsFalse() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_false.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_false.py").build();
         engine.startup();
 
         try {
@@ -49,7 +49,7 @@ public class KnowledgeBaseOnRunTest {
 
     @Test
     public void testOnRunReturnsTrue() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_true.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_true.py").build();
         engine.startup();
 
         try {
@@ -66,7 +66,7 @@ public class KnowledgeBaseOnRunTest {
 
     @Test
     public void testOnRunNotPresent() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_not_present.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_not_present.py").build();
         engine.startup();
 
         try {
@@ -82,7 +82,7 @@ public class KnowledgeBaseOnRunTest {
 
     @Test(expected = SpongeException.class)
     public void testOnRunIncorrectResult() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_incorrect_result.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_incorrect_result.py").build();
 
         try {
             engine.startup();

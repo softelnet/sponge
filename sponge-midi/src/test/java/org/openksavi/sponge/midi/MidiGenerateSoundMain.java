@@ -16,9 +16,9 @@
 
 package org.openksavi.sponge.midi;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * This example program generates simple MIDI sounds using the Sponge MIDI plugin.
@@ -26,8 +26,8 @@ import org.openksavi.sponge.engine.Engine;
 public class MidiGenerateSoundMain {
 
     public void run() {
-        Engine engine =
-                DefaultEngine.builder().knowledgeBase("kb", "examples/midi/midi_generate_sound.py").plugin(new MidiPlugin()).build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/midi/midi_generate_sound.py").plugin(new MidiPlugin()).build();
         engine.startup();
         SpongeUtils.registerShutdownHook(engine);
     }

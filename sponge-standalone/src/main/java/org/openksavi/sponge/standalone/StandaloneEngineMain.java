@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.GenericExceptionContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Standalone engine class implementing a {@link #main(String...)} method.
@@ -33,7 +33,7 @@ public class StandaloneEngineMain {
 
     private StandaloneEngineBuilder builder;
 
-    private StandaloneEngine engine;
+    private StandaloneSpongeEngine engine;
 
     private boolean testMode;
 
@@ -45,7 +45,7 @@ public class StandaloneEngineMain {
         this.testMode = testMode;
     }
 
-    public Engine getEngine() {
+    public SpongeEngine getEngine() {
         return engine;
     }
 
@@ -55,7 +55,7 @@ public class StandaloneEngineMain {
         }
 
         try {
-            builder = StandaloneEngine.builder().commandLineArgs(args);
+            builder = StandaloneSpongeEngine.builder().commandLineArgs(args);
             engine = builder.build();
 
             // If help or version option are not specified.

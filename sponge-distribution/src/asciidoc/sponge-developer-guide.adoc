@@ -8,6 +8,12 @@
 
 == Build project
 
+=== Prerequisites
+
+* You have to manually install the https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library] in you local Maven repository because it isn't available in the Central Maven Repository. This library is used by `sponge-rpi-grovepi`.
+
+=== Simple build
+
  cd sponge
  mvn clean install
 

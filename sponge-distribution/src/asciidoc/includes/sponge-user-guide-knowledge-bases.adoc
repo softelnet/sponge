@@ -92,7 +92,7 @@ For each plugin a global variable will be created. The name of this variable is 
 |The knowledge base interpreter that has read the script using this variable. Generally it is an implementation of `org.openksavi.sponge.kb.KnowledgeBaseInterpreter`. In the case of a scripting knowledge base it returns an implementation of `org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter`.
 
 |`engine`
-|The engine. This is the reference to the actual implementation of the `Engine` interface.
+|The engine. This is the reference to the actual implementation of the `SpongeEngine` interface.
 
 |`logger`
 |The logger instance associated with the knowledge base. The name of this logger has the following format: `sponge.kb.<language>.<knowledgeBaseName>.global`, e.g. `sponge.kb.python.kb1.global`. Please note, that event processors and plugins have their own loggers (they are referenced as `self.logger`).

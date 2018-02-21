@@ -18,12 +18,12 @@ package org.openksavi.sponge.spi;
 
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EventQueueManager;
 import org.openksavi.sponge.engine.KnowledgeBaseManager;
 import org.openksavi.sponge.engine.PluginManager;
 import org.openksavi.sponge.engine.ProcessingUnitManager;
 import org.openksavi.sponge.engine.ProcessorManager;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -41,7 +41,7 @@ public interface EngineModuleProvider {
      * @param configurationFilename configuration file name.
      * @return a new configuration manager.
      */
-    ConfigurationManager createConfigurationManager(Engine engine, String configurationFilename);
+    ConfigurationManager createConfigurationManager(SpongeEngine engine, String configurationFilename);
 
     /**
      * Creates a new plugin manager.
@@ -49,7 +49,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new plugin manager.
      */
-    PluginManager createPluginManager(Engine engine);
+    PluginManager createPluginManager(SpongeEngine engine);
 
     /**
      * Creates a new knowledge base manager.
@@ -57,7 +57,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new knowledge base manager.
      */
-    KnowledgeBaseManager createKnowledgeBaseManager(Engine engine);
+    KnowledgeBaseManager createKnowledgeBaseManager(SpongeEngine engine);
 
     /**
      * Creates a new thread pool manager.
@@ -65,7 +65,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new thread pool manager.
      */
-    ThreadPoolManager createThreadPoolManager(Engine engine);
+    ThreadPoolManager createThreadPoolManager(SpongeEngine engine);
 
     /**
      * Creates a new processors manager.
@@ -73,7 +73,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new processors manager.
      */
-    ProcessorManager createProcessorManager(Engine engine);
+    ProcessorManager createProcessorManager(SpongeEngine engine);
 
     /**
      * Creates a new action manager.
@@ -81,7 +81,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new action manager.
      */
-    ActionManager createActionManager(Engine engine);
+    ActionManager createActionManager(SpongeEngine engine);
 
     /**
      * Creates a new statistics manager.
@@ -89,7 +89,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new statistics manager.
      */
-    StatisticsManager createStatisticsManager(Engine engine);
+    StatisticsManager createStatisticsManager(SpongeEngine engine);
 
     /**
      * Creates a new processing unit manager.
@@ -97,7 +97,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new processing unit manager.
      */
-    ProcessingUnitManager createProcessingUnitManager(Engine engine);
+    ProcessingUnitManager createProcessingUnitManager(SpongeEngine engine);
 
     /**
      * Creates a new event queue manager.
@@ -105,7 +105,7 @@ public interface EngineModuleProvider {
      * @param engine the engine.
      * @return new event queue manager.
      */
-    EventQueueManager createEventQueueManager(Engine engine);
+    EventQueueManager createEventQueueManager(SpongeEngine engine);
 
     /**
      * Creates a new event scheduler.
@@ -114,5 +114,5 @@ public interface EngineModuleProvider {
      * @param queue event queue where generated events will be sent to.
      * @return new event scheduler.
      */
-    EventScheduler createEventScheduler(Engine engine, EventQueue queue);
+    EventScheduler createEventScheduler(SpongeEngine engine, EventQueue queue);
 }

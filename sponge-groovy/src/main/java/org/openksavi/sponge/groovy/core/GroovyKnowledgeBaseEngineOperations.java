@@ -18,7 +18,7 @@ package org.openksavi.sponge.groovy.core;
 
 import java.util.stream.Stream;
 
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -28,7 +28,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
 @SuppressWarnings("rawtypes")
 public class GroovyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOperations {
 
-    public GroovyKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public GroovyKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine, knowledgeBase);
     }
 

@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
@@ -45,7 +45,7 @@ public class DefaultThreadPoolManager extends BaseEngineModule implements Thread
      *
      * @param engine the engine.
      */
-    public DefaultThreadPoolManager(Engine engine) {
+    public DefaultThreadPoolManager(SpongeEngine engine) {
         super("ThreadPoolManager", engine);
     }
 

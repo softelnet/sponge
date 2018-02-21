@@ -26,14 +26,14 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import org.python.google.common.collect.Lists;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class SystemEventsTest {
 
     @Test
     public void testSystemEvents() {
-        Engine engine = DefaultEngine.builder().config("examples/core/system_events.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/system_events.xml").build();
         engine.startup();
 
         try {

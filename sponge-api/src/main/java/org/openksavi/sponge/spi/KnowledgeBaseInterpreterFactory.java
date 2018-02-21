@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.spi;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
@@ -40,5 +40,5 @@ public interface KnowledgeBaseInterpreterFactory {
      * @param knowledgeBase a knowledge base.
      * @return a new knowledge base interpreter.
      */
-    KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase);
+    KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase);
 }

@@ -25,13 +25,13 @@ import org.apache.camel.CamelContext;
 import org.springframework.stereotype.Service;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 @Service("camelService")
 public class DefaultCamelService implements CamelService {
 
     @Inject
-    private Engine engine;
+    private SpongeEngine engine;
 
     @Inject
     private CamelContext camelContext;

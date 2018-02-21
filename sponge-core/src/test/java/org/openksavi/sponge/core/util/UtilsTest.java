@@ -19,14 +19,14 @@ package org.openksavi.sponge.core.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class UtilsTest {
 
     @Test
     public void testCalculateInitialDynamicThreadPoolSize() {
-        Engine engine = DefaultEngine.builder().build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         engine.getDefaultParameters().setInitialDynamicThreadPoolSizeRatio(0.3);
 

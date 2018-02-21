@@ -25,10 +25,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueueMainProcessingUnit;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class ShutdownTest {
 
@@ -43,7 +43,7 @@ public class ShutdownTest {
     }
 
     private void testShutdown(int sizes) {
-        EngineBuilder<DefaultEngine> builder = DefaultEngine.builder().knowledgeBase("kb", "examples/core/shutdown.py");
+        EngineBuilder<DefaultSpongeEngine> builder = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/shutdown.py");
 
         // Caution: this test depends on the exact configuration values as they are specified below.
 
@@ -77,7 +77,7 @@ public class ShutdownTest {
         builder.getEngineDefaultParameters().setMainProcessingUnitThreadCount(1);
         eventsToBeProcessed += builder.getEngineDefaultParameters().getMainProcessingUnitThreadCount();
 
-        Engine engine = builder.build();
+        SpongeEngine engine = builder.build();
 
         engine.startup();
 

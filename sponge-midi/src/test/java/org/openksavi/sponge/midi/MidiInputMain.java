@@ -16,9 +16,9 @@
 
 package org.openksavi.sponge.midi;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * This example program enables a user to play an input MIDI device (e.g. a MIDI keyboard) using the Sponge MIDI plugin.
@@ -26,7 +26,7 @@ import org.openksavi.sponge.engine.Engine;
 public class MidiInputMain {
 
     public void run() {
-        Engine engine = DefaultEngine.builder().config("examples/midi/midi_input.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/midi/midi_input.xml").build();
         engine.startup();
         SpongeUtils.registerShutdownHook(engine);
     }

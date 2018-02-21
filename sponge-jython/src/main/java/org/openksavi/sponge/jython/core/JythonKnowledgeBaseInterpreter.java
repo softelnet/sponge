@@ -40,11 +40,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.jython.JythonAction;
 import org.openksavi.sponge.jython.JythonCorrelator;
@@ -82,8 +82,8 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
             );
     //@formatter:on
 
-    public JythonKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new JythonKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), PythonConstants.TYPE);
+    public JythonKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new JythonKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), PythonConstants.TYPE);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         return result;
     }
 
-    private void setPythonPath(Engine engine) {
+    private void setPythonPath(SpongeEngine engine) {
         if (engine != null) {
             String pythonPath = engine.getConfigurationManager().getProperty(PROP_PYTHON_PATH);
             if (pythonPath != null) {
@@ -151,7 +151,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new JythonKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 

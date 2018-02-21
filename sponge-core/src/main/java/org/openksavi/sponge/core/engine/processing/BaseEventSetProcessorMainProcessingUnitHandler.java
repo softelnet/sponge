@@ -28,8 +28,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.ProcessorAdapter;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.event.Event;
@@ -155,7 +155,7 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
 
         @Override
         public void run() {
-            Engine engine = adapter.getKnowledgeBase().getEngineOperations().getEngine();
+            SpongeEngine engine = adapter.getKnowledgeBase().getEngineOperations().getEngine();
 
             try {
                 engine.getEventSetProcessorDurationStrategy().durationOccurred(adapter);

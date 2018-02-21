@@ -37,8 +37,8 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventName;
@@ -138,7 +138,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         synchronized (interpteterSynchro) {
             invalidateCache();
 
-            Engine engine = getEngineOperations().getEngine();
+            SpongeEngine engine = getEngineOperations().getEngine();
 
             try (Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, fileName, charset)) {
                 if (reader != null) {
@@ -247,7 +247,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     public abstract <T> T eval(Reader reader, String fileName);
 
-    protected abstract ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase);
+    protected abstract ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase);
 
     protected List<Class<?>> getStandardImportClasses() {
         //@formatter:off

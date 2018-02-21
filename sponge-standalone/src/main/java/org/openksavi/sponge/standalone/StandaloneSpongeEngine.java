@@ -20,19 +20,19 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 
 /**
- * A standalone engine.
+ * A standalone Sponge engine.
  */
-public class StandaloneEngine extends BaseEngine implements ApplicationContextAware {
+public class StandaloneSpongeEngine extends BaseSpongeEngine implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
     private InteractiveMode interactiveMode;
 
-    public StandaloneEngine() {
+    public StandaloneSpongeEngine() {
         //
     }
 
@@ -45,7 +45,7 @@ public class StandaloneEngine extends BaseEngine implements ApplicationContextAw
     }
 
     public static StandaloneEngineBuilder builder() {
-        return new StandaloneEngineBuilder(new StandaloneEngine());
+        return new StandaloneEngineBuilder(new StandaloneSpongeEngine());
     }
 
     @Override

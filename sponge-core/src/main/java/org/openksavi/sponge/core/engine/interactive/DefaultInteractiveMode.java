@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.GenericExceptionContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ExceptionHandler;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -23,7 +23,7 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
  */
 public class DefaultInteractiveMode implements InteractiveMode {
 
-    protected Engine engine;
+    protected SpongeEngine engine;
 
     protected String kbName;
 
@@ -35,7 +35,7 @@ public class DefaultInteractiveMode implements InteractiveMode {
 
     private AtomicBoolean running = new AtomicBoolean(false);
 
-    public DefaultInteractiveMode(Engine engine, String kbName, Supplier<InteractiveModeConsole> consoleSupplier) {
+    public DefaultInteractiveMode(SpongeEngine engine, String kbName, Supplier<InteractiveModeConsole> consoleSupplier) {
         this.engine = engine;
         this.kbName = kbName;
         this.consoleSupplier = consoleSupplier;

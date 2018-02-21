@@ -19,8 +19,8 @@ package org.openksavi.sponge.examples.project.news;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Example class containing main method.
@@ -33,7 +33,7 @@ public class NewsExampleMain {
     public static final String CONFIG_FILE = "config/config.xml";
 
     /** The engine. */
-    private Engine engine;
+    private SpongeEngine engine;
 
     /**
      * Starts up an engine.
@@ -44,7 +44,7 @@ public class NewsExampleMain {
         }
 
         // Use EngineBuilder API to create an engine.
-        engine = DefaultEngine.builder().config(CONFIG_FILE).build();
+        engine = DefaultSpongeEngine.builder().config(CONFIG_FILE).build();
 
         // Start the engine.
         engine.startup();
@@ -68,7 +68,7 @@ public class NewsExampleMain {
         }
     }
 
-    public Engine getEngine() {
+    public SpongeEngine getEngine() {
         return engine;
     }
 
