@@ -10,6 +10,7 @@ NOTE: The current versions of {sponge} don't guarantee full backward compatibili
 
 * Added a new callback function `onRun` to knowledge bases that allows a user to, for example, just run a script and stop the engine.
 * Simplified specification of rule event conditions in Java and Kotlin.
+* Added a simple support for Raspberry Pi: Pi4J (`sponge-rpi-pi4j`) and GrovePi (`sponge-rpi-grovepi`).
 
 [discrete]
 == 1.0.7 (2018.02.02)

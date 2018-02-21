@@ -1,6 +1,7 @@
 = Sponge
 :url: http://sponge.openksavi.org
 :sponge: Sponge
+:github: https://github.com/softelnet/sponge
 
 // image:https://travis-ci.org/softelnet/sponge.svg?branch=master[link="https://travis-ci.org/softelnet/sponge"]
 image:https://img.shields.io/maven-central/v/org.openksavi.sponge/sponge-core.svg[link="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.openksavi.sponge%22%20AND%20a%3A%22sponge-core%22"]
@@ -8,5 +9,7 @@ image:https://img.shields.io/maven-central/v/org.openksavi.sponge/sponge-core.sv
 This is a source code repository for an open source, Java based Event Processing System.
 
 The {sponge} standard libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license]. However some optional {sponge} libraries and the {sponge} standalone command-line application are licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3] because they use optional, third-party libraries that require it.
+
+If you want to build the project, please read the {github}/blob/master/sponge-distribution/src/asciidoc/sponge-developer-guide.adoc[{sponge} Developer Guide] first.
 
 For more information on Sponge see the main project page {url}.

@@ -718,3 +718,42 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
+== Raspberry Pi - Pi4J
+The Pi4J plugin (`Pi4JPlugin`) allows using the http://pi4j.com[Pi4J] library in {sponge} knowledge bases. The Pi4J library provides a friendly object-oriented I/O API and implementation libraries to access the full I/O capabilities of the Raspberry Pi platform. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+
+The default name of the Pi4J plugin (which may be used in knowledge bases) is `pi4j`.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi-pi4j/Pi4JPlugin.html[`Pi4JPlugin` Javadoc].
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-rpi-pi4j</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+== Raspberry Pi - GrovePi
+The GrovePi plugin (`GrovePiPlugin`) allows accessing the https://www.dexterindustries.com/grovepi/[GrovePi] hardware in {sponge} knowledge bases. GrovePi is an electronics board for Raspberry Pi that may have a variety of sensors and actuators connected to. The plugin uses https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+
+The default name of the GrovePi plugin (which may be used in knowledge bases) is `grovepi`.
+
+IMPORTANT: If using this plugin in an embedded {sponge}, you have to manually install the https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library] in you local Maven repository because it isn't available in the Central Maven Repository.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi-grovepi/GrovePiPlugin.html[`GrovePiPlugin` Javadoc].
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-rpi-grovepi</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
