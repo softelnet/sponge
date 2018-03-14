@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee full backward compatibility.
 
 [discrete]
-== 1.0.8 (not released yet)
+== 1.0.8 (2018.03.14)
 
 * API change: The `Engine` interface has been renamed to `SpongeEngine`. The implementations have been renamed accordingly. The `EngineCamelConfiguration` class has been renamed to `SpongeCamelConfiguration`.
 * Added a new callback function `onRun` to knowledge bases that allows a user to, for example, just run a script and stop the engine.

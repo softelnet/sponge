@@ -2,7 +2,7 @@
 
 FROM store/oracle/serverjre:8
 
-ENV SPONGE_VERSION 1.0.7
+ENV SPONGE_VERSION 1.0.8
 
 RUN yum -y -q install unzip mc \
     && yum clean all \
