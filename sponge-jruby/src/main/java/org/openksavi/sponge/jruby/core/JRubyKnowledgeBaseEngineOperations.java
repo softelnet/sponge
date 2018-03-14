@@ -22,7 +22,7 @@ import org.jruby.RubyClass;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
@@ -35,7 +35,7 @@ import org.openksavi.sponge.trigger.Trigger;
  */
 public class JRubyKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOperations {
 
-    public JRubyKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public JRubyKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine, knowledgeBase);
     }
 

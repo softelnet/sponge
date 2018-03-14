@@ -28,12 +28,12 @@ import org.openksavi.sponge.core.engine.DefaultThreadPoolManager;
 import org.openksavi.sponge.core.engine.event.QuartzEventScheduler;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EventQueueManager;
 import org.openksavi.sponge.engine.KnowledgeBaseManager;
 import org.openksavi.sponge.engine.PluginManager;
 import org.openksavi.sponge.engine.ProcessingUnitManager;
 import org.openksavi.sponge.engine.ProcessorManager;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -46,52 +46,52 @@ import org.openksavi.sponge.spi.EngineModuleProvider;
 public class DefaultEngineModuleProvider implements EngineModuleProvider {
 
     @Override
-    public ConfigurationManager createConfigurationManager(Engine engine, String configurationFilename) {
+    public ConfigurationManager createConfigurationManager(SpongeEngine engine, String configurationFilename) {
         return new DefaultConfigurationManager(engine, configurationFilename);
     }
 
     @Override
-    public PluginManager createPluginManager(Engine engine) {
+    public PluginManager createPluginManager(SpongeEngine engine) {
         return new DefaultPluginManager(engine);
     }
 
     @Override
-    public KnowledgeBaseManager createKnowledgeBaseManager(Engine engine) {
+    public KnowledgeBaseManager createKnowledgeBaseManager(SpongeEngine engine) {
         return new DefaultKnowledgeBaseManager(engine);
     }
 
     @Override
-    public ThreadPoolManager createThreadPoolManager(Engine engine) {
+    public ThreadPoolManager createThreadPoolManager(SpongeEngine engine) {
         return new DefaultThreadPoolManager(engine);
     }
 
     @Override
-    public ProcessorManager createProcessorManager(Engine engine) {
+    public ProcessorManager createProcessorManager(SpongeEngine engine) {
         return new DefaultProcessorManager(engine);
     }
 
     @Override
-    public ActionManager createActionManager(Engine engine) {
+    public ActionManager createActionManager(SpongeEngine engine) {
         return new DefaultActionManager(engine);
     }
 
     @Override
-    public StatisticsManager createStatisticsManager(Engine engine) {
+    public StatisticsManager createStatisticsManager(SpongeEngine engine) {
         return new DefaultStatisticsManager(engine);
     }
 
     @Override
-    public ProcessingUnitManager createProcessingUnitManager(Engine engine) {
+    public ProcessingUnitManager createProcessingUnitManager(SpongeEngine engine) {
         return new DefaultProcessingUnitManager(engine);
     }
 
     @Override
-    public EventQueueManager createEventQueueManager(Engine engine) {
+    public EventQueueManager createEventQueueManager(SpongeEngine engine) {
         return new DefaultEventQueueManager(engine);
     }
 
     @Override
-    public EventScheduler createEventScheduler(Engine engine, EventQueue queue) {
+    public EventScheduler createEventScheduler(SpongeEngine engine, EventQueue queue) {
         return new QuartzEventScheduler(engine, queue);
     }
 }

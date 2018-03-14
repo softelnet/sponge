@@ -156,7 +156,7 @@ You may provide a custom plugin configuration section inside a `<configuration>`
 
 [[engine-builder-api]]
 == Engine Builder API
-The Engine Builder API is provided by `DefaultEngine.builder()` static method that returns the `EngineBuilder` instance. This API follows a builder design pattern.
+The Engine Builder API is provided by `DefaultSpongeEngine.builder()` static method that returns the `EngineBuilder` instance. This API follows a builder design pattern.
 
 .Example configuration using the Engine Builder API
 [source,java]
@@ -165,7 +165,7 @@ EchoPlugin plugin = new EchoPlugin();
 plugin.setName("testPlugin");
 plugin.setEcho("Echo text!");
 
-Engine engine = DefaultEngine.builder()
+Engine engine = DefaultSpongeEngine.builder()
         .systemProperty("sponge.home", "..")
         .property("test.property", "TEST")
         .plugin(plugin)
@@ -184,7 +184,7 @@ The Engine Builder API provides the method `config()` to read an XML configurati
 .Example of using the XML configuration file in the Engine Builder API
 [source,java]
 ----
-Engine engine = DefaultEngine.builder().config("examples/core/engine_parameters.xml").build();
+Engine engine = DefaultSpongeEngine.builder().config("examples/core/engine_parameters.xml").build();
 engine.startup();
 ----
 

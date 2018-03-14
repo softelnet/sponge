@@ -30,9 +30,9 @@ import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.core.engine.processing.BaseMainProcessingUnit;
 import org.openksavi.sponge.core.event.ProcessorControlEvent;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.ThreadPool;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.event.ControlEvent;
@@ -67,7 +67,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
      * @param inQueue input queue.
      * @param outQueue output queue.
      */
-    public DecomposedQueueMainProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
+    public DecomposedQueueMainProcessingUnit(String name, SpongeEngine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
 
         setDecomposedQueue(new DecomposedQueue<>(engine.getDefaultParameters().getDecomposedQueueCapacity(),

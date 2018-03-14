@@ -25,16 +25,16 @@ import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.Service.State;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EngineModule;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
- * Engine module.
+ * A base engine module.
  */
 public abstract class BaseEngineModule implements EngineModule {
 
     /** The engine. */
-    private Engine engine;
+    private SpongeEngine engine;
 
     /** Name. */
     private String name;
@@ -64,18 +64,18 @@ public abstract class BaseEngineModule implements EngineModule {
     private Lock lock = new ReentrantLock(true);
 
     /**
-     * Creates a new engine module.
+     * Creates a new module.
      *
      * @param name name.
      * @param engine the engine.
      */
-    protected BaseEngineModule(String name, Engine engine) {
+    protected BaseEngineModule(String name, SpongeEngine engine) {
         this.name = name;
         this.engine = engine;
     }
 
     /**
-     * Creates a new engine module.
+     * Creates a new module.
      *
      * @param name name.
      */
@@ -84,7 +84,7 @@ public abstract class BaseEngineModule implements EngineModule {
     }
 
     /**
-     * Creates a new engine module.
+     * Creates a new module.
      */
     protected BaseEngineModule() {
     }
@@ -95,7 +95,7 @@ public abstract class BaseEngineModule implements EngineModule {
      * @param engine the engine.
      */
     @Override
-    public void setEngine(Engine engine) {
+    public void setEngine(SpongeEngine engine) {
         this.engine = engine;
     }
 
@@ -105,7 +105,7 @@ public abstract class BaseEngineModule implements EngineModule {
      * @return the engine.
      */
     @Override
-    public Engine getEngine() {
+    public SpongeEngine getEngine() {
         return engine;
     }
 

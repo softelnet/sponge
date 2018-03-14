@@ -19,9 +19,9 @@
 
 package org.openksavi.sponge.mpd;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * This example program shows how to set the MPD playlist.
@@ -29,7 +29,7 @@ import org.openksavi.sponge.engine.Engine;
 public class MpdSetPlaylistMain {
 
     public void run() {
-        Engine engine = DefaultEngine.builder().config("examples/mpd/mpd_set_playlist.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/mpd/mpd_set_playlist.xml").build();
 
         try {
             engine.startup();

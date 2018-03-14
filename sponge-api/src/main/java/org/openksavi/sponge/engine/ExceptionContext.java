@@ -26,7 +26,7 @@ public interface ExceptionContext {
      *
      * @return the engine.
      */
-    Engine getEngine();
+    SpongeEngine getEngine();
 
     /**
      * Returns the source name.

@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.groovy.spi;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.groovy.GroovyConstants;
 import org.openksavi.sponge.groovy.core.GroovyKnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -35,7 +35,7 @@ public class GroovyKnowledgeBaseInterpreterFactory implements KnowledgeBaseInter
     }
 
     @Override
-    public KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
+    public KnowledgeBaseInterpreter createKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new GroovyKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 }

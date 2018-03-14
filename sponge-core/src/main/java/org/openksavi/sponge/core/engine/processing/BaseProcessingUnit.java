@@ -44,7 +44,7 @@ import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseEngineModule;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
@@ -91,7 +91,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
      * @param inQueue input queue.
      * @param outQueue output queue.
      */
-    public BaseProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
+    public BaseProcessingUnit(String name, SpongeEngine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine);
         this.inQueue = inQueue;
         this.outQueue = outQueue;

@@ -6,12 +6,12 @@ import org.apache.camel.LoggingLevel;
 
 import org.apache.camel.component.mustache.MustacheConstants;
 
-import org.openksavi.sponge.engine.Engine
+import org.openksavi.sponge.engine.SpongeEngine
 
 class TemplateRoute extends RouteBuilder {
 
     @Inject
-    Engine engine;
+    SpongeEngine engine;
 
     void configure() {
         // @formatter:off

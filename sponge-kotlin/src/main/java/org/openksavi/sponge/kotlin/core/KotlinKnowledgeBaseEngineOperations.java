@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.KClass;
 
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -30,7 +30,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  */
 public class KotlinKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOperations {
 
-    public KotlinKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public KotlinKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine, knowledgeBase);
     }
 

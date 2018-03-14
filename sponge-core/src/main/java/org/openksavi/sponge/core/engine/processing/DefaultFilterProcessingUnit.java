@@ -18,8 +18,8 @@ package org.openksavi.sponge.core.engine.processing;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
 import org.openksavi.sponge.event.Event;
@@ -42,7 +42,7 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
      * @param inQueue input event queue.
      * @param outQueue output event queue.
      */
-    public DefaultFilterProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
+    public DefaultFilterProcessingUnit(String name, SpongeEngine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
     }
 

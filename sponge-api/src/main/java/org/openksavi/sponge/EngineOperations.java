@@ -18,7 +18,7 @@ package org.openksavi.sponge;
 
 import java.util.function.Supplier;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
@@ -35,7 +35,7 @@ public interface EngineOperations {
      *
      * @return the engine.
      */
-    Engine getEngine();
+    SpongeEngine getEngine();
 
     /**
      * Calls registered action with arguments.

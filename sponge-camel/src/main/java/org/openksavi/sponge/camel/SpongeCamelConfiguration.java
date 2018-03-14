@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.openksavi.sponge.spring.SpringPlugin;
 
 @Configuration
-public abstract class EngineCamelConfiguration extends CamelConfiguration {
+public abstract class SpongeCamelConfiguration extends CamelConfiguration {
 
     /**
      * Spring plugin that may be bound to the engine.

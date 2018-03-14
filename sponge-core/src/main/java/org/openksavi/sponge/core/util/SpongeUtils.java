@@ -68,7 +68,7 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.event.EventId;
 import org.openksavi.sponge.core.rule.BaseRule;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
@@ -92,7 +92,7 @@ public abstract class SpongeUtils {
      * @param engine the engine.
      * @param timeout timeout in seconds.
      */
-    public static void trialRunEngine(Engine engine, int timeout) {
+    public static void trialRunEngine(SpongeEngine engine, int timeout) {
         final Semaphore semaphore = new Semaphore(0, true);
 
         // Startup the engine. After startup the engine runs on the threads other than the current one.
@@ -196,7 +196,7 @@ public abstract class SpongeUtils {
                 .findFirst().orElse(null);
     }
 
-    public static void executeConcurrentlyOnce(Engine engine, Runnable runnable) {
+    public static void executeConcurrentlyOnce(SpongeEngine engine, Runnable runnable) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             try {
@@ -229,7 +229,7 @@ public abstract class SpongeUtils {
         return knowledgeBase.getClass().getSimpleName();
     }
 
-    public static void shutdownExecutorService(Engine engine, Object named, ExecutorService executorService) {
+    public static void shutdownExecutorService(SpongeEngine engine, Object named, ExecutorService executorService) {
         MoreExecutors.shutdownAndAwaitTermination(executorService, engine.getDefaultParameters().getExecutorShutdownTimeout(),
                 TimeUnit.SECONDS);
         if (!executorService.isTerminated()) {
@@ -237,7 +237,7 @@ public abstract class SpongeUtils {
         }
     }
 
-    public static ScriptKnowledgeBaseInterpreter getScriptInterpreter(Engine engine, String kbName) {
+    public static ScriptKnowledgeBaseInterpreter getScriptInterpreter(SpongeEngine engine, String kbName) {
         return engine.getKnowledgeBaseManager().getScriptKnowledgeBase(kbName).getInterpreter();
     }
 
@@ -310,7 +310,7 @@ public abstract class SpongeUtils {
         return EngineConstants.CONTROL_EVENT_PREFIX + StringUtils.uncapitalize(controlEventClass.getSimpleName());
     }
 
-    public static int calculateInitialDynamicThreadPoolSize(Engine engine, int maxPoolSize) {
+    public static int calculateInitialDynamicThreadPoolSize(SpongeEngine engine, int maxPoolSize) {
         int result = (int) Math.round(engine.getDefaultParameters().getInitialDynamicThreadPoolSizeRatio() * maxPoolSize);
 
         if (result < 1) {
@@ -397,7 +397,7 @@ public abstract class SpongeUtils {
         return ((Number) value).intValue();
     }
 
-    public static void registerShutdownHook(Engine engine) {
+    public static void registerShutdownHook(SpongeEngine engine) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 engine.shutdown();

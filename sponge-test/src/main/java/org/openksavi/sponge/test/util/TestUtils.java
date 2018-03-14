@@ -30,9 +30,9 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 
 public class TestUtils {
@@ -44,7 +44,7 @@ public class TestUtils {
     public static void testExample(String config, int timeout) {
         logger.info("Testing {}", config);
 
-        Engine engine = DefaultEngine.builder().config(config).build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(config).build();
         SpongeUtils.trialRunEngine(engine, timeout);
         if (engine.isError()) {
             throw SpongeUtils.wrapException(engine.getError());
@@ -52,13 +52,13 @@ public class TestUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Event> getEvents(Engine engine, String eventName) {
+    public static List<Event> getEvents(SpongeEngine engine, String eventName) {
         Map<String, Object> events = engine.getOperations().getVariable(Map.class, "events");
         return (List<Event>) events.get(eventName);
     }
 
     @SuppressWarnings("unchecked")
-    public static int getEventCounter(Engine engine, String key) {
+    public static int getEventCounter(SpongeEngine engine, String key) {
         return ((Map<String, Number>) engine.getOperations().getVariable("eventCounter")).get(key).intValue();
     }
 

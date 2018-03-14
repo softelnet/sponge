@@ -41,10 +41,10 @@ import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.filter.FilterAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -97,7 +97,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
      *
      * @param engine the engine.
      */
-    public DefaultProcessorManager(Engine engine) {
+    public DefaultProcessorManager(SpongeEngine engine) {
         super("ProcessorManager", engine);
     }
 
@@ -107,8 +107,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
      * @return the engine.
      */
     @Override
-    public BaseEngine getEngine() {
-        return (BaseEngine) super.getEngine();
+    public BaseSpongeEngine getEngine() {
+        return (BaseSpongeEngine) super.getEngine();
     }
 
     @Override

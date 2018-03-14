@@ -43,7 +43,6 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EngineModule;
 import org.openksavi.sponge.engine.EngineParameters;
 import org.openksavi.sponge.engine.EventQueueManager;
@@ -55,6 +54,7 @@ import org.openksavi.sponge.engine.PluginManager;
 import org.openksavi.sponge.engine.ProcessingUnitManager;
 import org.openksavi.sponge.engine.ProcessorManager;
 import org.openksavi.sponge.engine.Session;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.StatisticsManager;
 import org.openksavi.sponge.engine.ThreadPoolManager;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -76,11 +76,11 @@ import org.openksavi.sponge.trigger.TriggerAdapter;
 import org.openksavi.sponge.util.PatternMatcher;
 
 /**
- * Base engine implementation.
+ * Base Sponge engine implementation.
  */
-public class BaseEngine extends BaseEngineModule implements Engine {
+public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseEngine.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseSpongeEngine.class);
 
     /** Engine module provider. */
     protected EngineModuleProvider moduleProvider;
@@ -177,7 +177,7 @@ public class BaseEngine extends BaseEngineModule implements Engine {
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
      */
-    public BaseEngine() {
+    public BaseSpongeEngine() {
         setEngine(this);
     }
 

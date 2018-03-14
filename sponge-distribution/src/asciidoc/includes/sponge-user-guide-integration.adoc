@@ -15,7 +15,7 @@ public class TestConfig {
 
     @Bean
     public Engine spongeEngine() { // <1>
-        return SpringEngine.builder().plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build(); // <2>
+        return SpringSpongeEngine.builder().plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build(); // <2>
     }
 
     @Bean
@@ -29,7 +29,7 @@ public class TestConfig {
     }
 }
 ----
-<1> The engine configured as the Spring bean. The `SpringEngine` implementation is used here in order to startup and shutdown the engine by Spring. `DefaultEngine` could also be used here but it wouldn't provide automatic startup and shutdown.
+<1> The engine configured as the Spring bean. The `SpringSpongeEngine` implementation is used here in order to startup and shutdown the engine by Spring. `DefaultSpongeEngine` could also be used here but it wouldn't provide automatic startup and shutdown.
 <2> Added `SpringPlugin`.
 <3> `SpringPlugin` configured as the Spring bean.
 
@@ -45,14 +45,14 @@ class SpringTrigger(Trigger):
 ----
 <1> A Spring bean named `"testBean"` is acquired from the Spring `ApplicationContext` by using `SpringPlugin` instance referenced by the `spring` variable.
 
-The `SpringEngine` starts up automatically (in the `afterPropertiesSet` Spring callback method) by default. However it may be configured not to start automatically by setting `autoStartup` to `false`.
+The `SpringSpongeEngine` starts up automatically (in the `afterPropertiesSet` Spring callback method) by default. However it may be configured not to start automatically by setting `autoStartup` to `false`.
 
-.SpringEngine not starting automatically example
+.SpringSpongeEngine not starting automatically example
 [source,java]
 ----
 @Bean
-public Engine spongeEngine() {
-    return SpringEngine.builder().autoStartup(false).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
+public SpongeEngine spongeEngine() {
+    return SpringSpongeEngine.builder().autoStartup(false).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
 }
 ----
 
@@ -93,7 +93,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 ----
 sponge:engineRef[?options]
 ----
-Where `engineRef` represents the name of the `Engine` implementation instance located in the Camel registry.
+Where `engineRef` represents the name of the `SpongeEngine` implementation instance located in the Camel registry.
 
 === Options
 
@@ -123,11 +123,11 @@ Where `engineRef` represents the name of the `Engine` implementation instance lo
 [source,python]
 ----
 @Configuration
-public class SpringConfiguration extends EngineCamelConfiguration {
+public class SpringConfiguration extends SpongeCamelConfiguration {
 
     @Bean
-    public Engine spongeEngine() {
-        return SpringEngine.builder()
+    public SpongeEngine spongeEngine() {
+        return SpringSpongeEngine.builder()
                 .config("config.xml")
                 .plugin(camelPlugin())
                 .build();
@@ -180,7 +180,7 @@ For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/camel/Camel
 
 
 ==== Spring-based support
-`EngineCamelConfiguration` provides base Camel and {sponge} configuration using Spring Java configuration. Your Spring configuration could inherit from this class.
+`SpongeCamelConfiguration` provides base Camel and {sponge} configuration using Spring Java configuration. Your Spring configuration could inherit from this class.
 
 Spring bean named `"spongeProducerTemplate"` allows you to configure a Camel producer template used by `CamelPlugin` to send Camel messages. If none is present in a Spring configuration, then a default will be used.
 
@@ -197,12 +197,12 @@ Using sponge component on the producer side of the route will forward a body of 
 [source,java]
 ----
 @Configuration
-public class ExampleConfiguration extends EngineCamelConfiguration {
+public class ExampleConfiguration extends SpongeCamelConfiguration {
 
     @Bean
-    public Engine spongeEngine() {
+    public SpongeEngine spongeEngine() {
         // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
-        return SpringEngine.builder()
+        return SpringSpongeEngine.builder()
                 .knowledgeBase("camelkb", "examples/camel/camel_producer.py")
                 .plugins(springPlugin(), camelPlugin())
                 .build();
@@ -301,12 +301,12 @@ Using sponge component on the consumer side of the route will forward messages s
 [source,java]
 ----
 @Configuration
-public class ExampleConfiguration extends EngineCamelConfiguration {
+public class ExampleConfiguration extends SpongeCamelConfiguration {
 
     @Bean
-    public Engine spongeEngine() {
+    public SpongeEngine spongeEngine() {
         // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
-        return SpringEngine.builder()
+        return SpringSpongeEngine.builder()
                 .knowledgeBase("camelkb", "examples/camel/camel_consumer.py")
                 .plugins(springPlugin(), camelPlugin())
                 .build();

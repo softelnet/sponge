@@ -22,15 +22,15 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 public class ConfigurationTest {
 
     @Test
     public void testEngineParameters() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().config("examples/core/configuration/engine_parameters.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/engine_parameters.xml").build();
         engine.startup();
 
         try {
@@ -48,7 +48,7 @@ public class ConfigurationTest {
 
     @Test
     public void testPropertySubstitution() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().property("sourceProperty", "source")
+        SpongeEngine engine = DefaultSpongeEngine.builder().property("sourceProperty", "source")
                 .config("examples/core/configuration/property_substitution.xml").build();
         engine.startup();
 
@@ -62,7 +62,7 @@ public class ConfigurationTest {
 
     @Test
     public void testRelativeFiles() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().config("examples/core/configuration/relative_files.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/relative_files.xml").build();
         engine.startup();
 
         try {

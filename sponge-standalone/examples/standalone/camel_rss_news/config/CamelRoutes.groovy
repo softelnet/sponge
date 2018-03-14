@@ -1,7 +1,7 @@
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.idempotent.MemoryIdempotentRepository
 
-import org.openksavi.sponge.engine.Engine
+import org.openksavi.sponge.engine.SpongeEngine
 import org.openksavi.sponge.EngineOperations
 import org.openksavi.sponge.camel.CamelUtils
 
@@ -16,7 +16,7 @@ class RssInputRoute extends RouteBuilder {
     public static final String HEADER_SOURCE = "source";
 
     @Inject
-    private Engine engine;
+    private SpongeEngine engine;
 
     void configure() {
         EngineOperations operations = engine.getOperations();

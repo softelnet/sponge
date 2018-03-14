@@ -19,7 +19,7 @@ package org.openksavi.sponge.core.kb;
 import java.util.function.Function;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * The simple provider of script-based class instances.
@@ -30,7 +30,7 @@ public class SimpleScriptClassInstancePovider<T> implements ScriptClassInstanceP
 
     private Function<String, T> createInstanceFunction;
 
-    public SimpleScriptClassInstancePovider(Engine engine, Function<String, T> createInstanceFunction) {
+    public SimpleScriptClassInstancePovider(SpongeEngine engine, Function<String, T> createInstanceFunction) {
         this.createInstanceFunction = createInstanceFunction;
     }
 

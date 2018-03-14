@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBaseFileProvider;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
 
 /**
@@ -42,7 +42,7 @@ public class SpringKnowledgeBaseFileProvider implements KnowledgeBaseFileProvide
     private KnowledgeBaseFileProvider defaultKnowledgeBaseFileProvider = new DefaultKnowledgeBaseFileProvider();
 
     @Override
-    public Reader getReader(Engine engine, String fileName, Charset charset) throws IOException {
+    public Reader getReader(SpongeEngine engine, String fileName, Charset charset) throws IOException {
         File file;
         try {
             file = ResourceUtils.getFile(fileName);

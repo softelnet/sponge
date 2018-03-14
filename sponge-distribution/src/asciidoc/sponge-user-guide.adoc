@@ -31,7 +31,7 @@ To startup the engine you should invoke the `startup()` method. After startup, t
 .Example of starting up
 [source,java]
 ----
-Engine engine = DefaultEngine.builder().config("examples/script/py/hello_world.xml").build();
+SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/script/py/hello_world.xml").build();
 engine.startup();
 ----
 

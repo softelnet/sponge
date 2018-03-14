@@ -27,7 +27,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.event.PriorityEventQueueComparator;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -36,11 +36,11 @@ public class PriorityEventQueueTest {
 
     private AtomicLongEventIdGenerator idGenerator = new AtomicLongEventIdGenerator();
 
-    private DefaultEngine engine;
+    private DefaultSpongeEngine engine;
 
     @Before
     public void beforeTest() {
-        engine = new DefaultEngine();
+        engine = new DefaultSpongeEngine();
         engine.init();
     }
 

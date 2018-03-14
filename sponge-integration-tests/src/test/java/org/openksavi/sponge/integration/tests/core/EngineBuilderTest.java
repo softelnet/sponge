@@ -24,9 +24,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.examples.EchoPlugin;
@@ -35,13 +35,13 @@ import org.openksavi.sponge.test.util.EventsLog;
 
 public class EngineBuilderTest {
 
-    private Engine createAndStartupEngine() {
+    private SpongeEngine createAndStartupEngine() {
         EchoPlugin plugin = new EchoPlugin();
         plugin.setName("testPlugin");
         plugin.setEcho("Echo text!");
 
         //@formatter:off
-        Engine engine = DefaultEngine.builder()
+        SpongeEngine engine = DefaultSpongeEngine.builder()
                 .systemProperty("system.property", "1")
                 .property("test.property", "TEST")
                 .plugin(plugin)
@@ -57,13 +57,13 @@ public class EngineBuilderTest {
         return engine;
     }
 
-    private List<Event> getEvents(Engine engine, String key) {
+    private List<Event> getEvents(SpongeEngine engine, String key) {
         return EventsLog.getInstance(engine.getOperations()).getEvents(key);
     }
 
     @Test
     public void testEngineBuilder() throws InterruptedException {
-        Engine engine = createAndStartupEngine();
+        SpongeEngine engine = createAndStartupEngine();
 
         try {
             await().pollDelay(3, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)

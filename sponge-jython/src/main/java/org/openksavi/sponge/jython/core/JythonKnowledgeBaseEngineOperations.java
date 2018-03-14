@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import org.python.core.PyType;
 
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -29,7 +29,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  */
 public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOperations {
 
-    public JythonKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public JythonKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine, knowledgeBase);
     }
 

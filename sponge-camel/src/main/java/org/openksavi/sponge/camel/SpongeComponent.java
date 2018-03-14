@@ -21,14 +21,14 @@ import java.util.Map;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Sponge Camel component.
  */
 public class SpongeComponent extends DefaultComponent {
 
-    private Engine engine;
+    private SpongeEngine engine;
 
     private String action;
 
@@ -47,7 +47,7 @@ public class SpongeComponent extends DefaultComponent {
         return endpoint;
     }
 
-    public Engine getEngine() {
+    public SpongeEngine getEngine() {
         return engine;
     }
 
@@ -56,7 +56,7 @@ public class SpongeComponent extends DefaultComponent {
      *
      * @param engine the engine.
      */
-    public void setEngine(Engine engine) {
+    public void setEngine(SpongeEngine engine) {
         this.engine = engine;
     }
 

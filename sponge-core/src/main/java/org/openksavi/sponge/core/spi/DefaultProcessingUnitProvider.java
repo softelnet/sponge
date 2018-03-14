@@ -18,7 +18,7 @@ package org.openksavi.sponge.core.spi;
 
 import org.openksavi.sponge.core.engine.processing.DefaultFilterProcessingUnit;
 import org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueueMainProcessingUnit;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
@@ -30,12 +30,12 @@ import org.openksavi.sponge.spi.ProcessingUnitProvider;
 public class DefaultProcessingUnitProvider implements ProcessingUnitProvider {
 
     @Override
-    public FilterProcessingUnit createFilterProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue) {
+    public FilterProcessingUnit createFilterProcessingUnit(SpongeEngine engine, EventQueue inQueue, EventQueue outQueue) {
         return new DefaultFilterProcessingUnit("FilterProcessingUnit", engine, inQueue, outQueue);
     }
 
     @Override
-    public MainProcessingUnit createMainProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue) {
+    public MainProcessingUnit createMainProcessingUnit(SpongeEngine engine, EventQueue inQueue, EventQueue outQueue) {
         return new DecomposedQueueMainProcessingUnit("MainProcessingUnit", engine, inQueue, outQueue);
     }
 }

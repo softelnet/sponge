@@ -36,9 +36,9 @@ import org.openksavi.sponge.trigger.TriggerAdapter;
 import org.openksavi.sponge.util.PatternMatcher;
 
 /**
- * The engine. This is the main interface of the system. An instance of this interface manages all main components.
+ * The Sponge engine. This is the main interface of the system. An instance of this interface manages all main components.
  */
-public interface Engine extends EngineModule {
+public interface SpongeEngine extends EngineModule {
 
     /**
      * Returns this engine name. May be {@code null}.

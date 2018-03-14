@@ -32,8 +32,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { CamelManyConsumersTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
@@ -45,14 +45,14 @@ public class CamelManyConsumersTest {
     protected MockEndpoint logEndpoint;
 
     @Inject
-    protected Engine engine;
+    protected SpongeEngine engine;
 
     @Configuration
     public static class TestConfig extends SingleRouteCamelConfiguration {
 
         @Bean
-        public Engine spongeEngine() {
-            return DefaultEngine.builder().knowledgeBase("kb", "examples/camel/camel_consumer.py").build();
+        public SpongeEngine spongeEngine() {
+            return DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/camel/camel_consumer.py").build();
         }
 
         @Bean

@@ -24,15 +24,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.test.util.TestUtils;
 
 public class CoreFiltersTest {
 
     @Test
     public void testFiltersEventPattern() {
-        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/filters_event_pattern.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/filters_event_pattern.py").build();
         engine.startup();
 
         try {

@@ -33,11 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
@@ -76,8 +76,8 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
             );
     //@formatter:on
 
-    public NashornKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new NashornKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), JavaScriptConstants.TYPE);
+    public NashornKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new NashornKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), JavaScriptConstants.TYPE);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new NashornKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 

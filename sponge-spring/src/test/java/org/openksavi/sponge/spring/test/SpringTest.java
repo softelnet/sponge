@@ -27,9 +27,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.spring.SpringPlugin;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class SpringTest {
 
@@ -39,8 +39,8 @@ public class SpringTest {
     public static class TestConfig {
 
         @Bean
-        public Engine spongeEngine() {
-            return SpringEngine.builder().plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
         }
 
         @Bean
@@ -60,7 +60,7 @@ public class SpringTest {
         ctx.start();
 
         try {
-            Engine engine = ctx.getBean(Engine.class);
+            SpongeEngine engine = ctx.getBean(SpongeEngine.class);
 
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "springBeanValue") != null);
 

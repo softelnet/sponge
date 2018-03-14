@@ -25,14 +25,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class FibonacciTest {
 
     @Test
     public void testFibonacci() {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/fibonacci.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/fibonacci.py").build();
         engine.startup();
 
         try {

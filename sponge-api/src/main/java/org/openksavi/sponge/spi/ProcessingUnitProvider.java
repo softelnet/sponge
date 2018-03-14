@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.spi;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
@@ -34,7 +34,7 @@ public interface ProcessingUnitProvider {
      * @param outQueue an output event queue for the returned processing unit.
      * @return a new filter processing unit.
      */
-    FilterProcessingUnit createFilterProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue);
+    FilterProcessingUnit createFilterProcessingUnit(SpongeEngine engine, EventQueue inQueue, EventQueue outQueue);
 
     /**
      * Creates a new main processing unit.
@@ -44,5 +44,5 @@ public interface ProcessingUnitProvider {
      * @param outQueue an output event queue for the returned processing unit.
      * @return a new main processing unit.
      */
-    MainProcessingUnit createMainProcessingUnit(Engine engine, EventQueue inQueue, EventQueue outQueue);
+    MainProcessingUnit createMainProcessingUnit(SpongeEngine engine, EventQueue inQueue, EventQueue outQueue);
 }

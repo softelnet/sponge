@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 public class StandaloneCamelXmlTest {
@@ -34,7 +34,7 @@ public class StandaloneCamelXmlTest {
 
         try {
             engineMain.startup("-c", "config/config.xml");
-            Engine engine = engineMain.getEngine();
+            SpongeEngine engine = engineMain.getEngine();
 
             await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("message") != null
                     && engine.getOperations().getVariable(Boolean.class, "sent"));

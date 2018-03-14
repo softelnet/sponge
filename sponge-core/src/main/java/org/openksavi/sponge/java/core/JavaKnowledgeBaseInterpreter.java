@@ -18,12 +18,12 @@ package org.openksavi.sponge.java.core;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.kb.BaseNonScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
@@ -31,8 +31,8 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  */
 public class JavaKnowledgeBaseInterpreter extends BaseNonScriptKnowledgeBaseInterpreter {
 
-    public JavaKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new JavaKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), JavaConstants.TYPE);
+    public JavaKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new JavaKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), JavaConstants.TYPE);
     }
 
     @Override

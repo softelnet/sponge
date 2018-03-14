@@ -29,15 +29,15 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class CamelProducerOverriddenActionTest {
 
     @Test
     public void testCamelProducerOverridenAction() throws Exception {
         SimpleRegistry registry = new SimpleRegistry();
-        Engine engine = DefaultEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_producer_overridden_action.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_producer_overridden_action.py").build();
         registry.put("spongeEngine", engine);
         CamelContext camel = new DefaultCamelContext(registry);
 

@@ -18,7 +18,7 @@ package org.openksavi.sponge.nashorn.core;
 
 import java.util.stream.Stream;
 
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -27,7 +27,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  */
 public class NashornKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOperations {
 
-    public NashornKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public NashornKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine, knowledgeBase);
     }
 

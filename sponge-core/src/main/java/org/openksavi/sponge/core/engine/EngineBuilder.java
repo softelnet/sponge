@@ -42,7 +42,7 @@ import org.openksavi.sponge.spi.ProcessingUnitProvider;
 /**
  * Engine builder. It provides the most common settings for the engine.
  */
-public class EngineBuilder<T extends BaseEngine> {
+public class EngineBuilder<T extends BaseSpongeEngine> {
 
     /** The engine. */
     protected T engine;

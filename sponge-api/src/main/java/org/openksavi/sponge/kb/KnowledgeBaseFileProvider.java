@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * A knowledge base file provider.
@@ -38,5 +38,5 @@ public interface KnowledgeBaseFileProvider {
      *
      * @throws IOException when IO error.
      */
-    Reader getReader(Engine engine, String fileName, Charset charset) throws IOException;
+    Reader getReader(SpongeEngine engine, String fileName, Charset charset) throws IOException;
 }

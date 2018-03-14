@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class ReloadDurationTest {
 
     @Test
     public void testReloadDuration() throws InterruptedException {
-        Engine engine = DefaultEngine.builder().knowledgeBase("kb", "examples/core/reload_duration.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/reload_duration.py").build();
         engine.startup();
 
         try {

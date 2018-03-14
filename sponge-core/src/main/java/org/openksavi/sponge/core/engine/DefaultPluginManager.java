@@ -33,8 +33,8 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.plugin.KnowledgeBasePluginStub;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.PluginManager;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.plugin.Plugin;
@@ -54,7 +54,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      *
      * @param engine the engine.
      */
-    public DefaultPluginManager(Engine engine) {
+    public DefaultPluginManager(SpongeEngine engine) {
         super("PluginManager", engine);
     }
 

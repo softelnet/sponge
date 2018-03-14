@@ -40,13 +40,13 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.jruby.JRubyAction;
 import org.openksavi.sponge.jruby.JRubyCorrelator;
@@ -86,8 +86,8 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     /** JRuby scripting container. This is the interface to JRuby used by the engine. */
     private ScriptingContainer container;
 
-    public JRubyKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new JRubyKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), RubyConstants.TYPE);
+    public JRubyKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new JRubyKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), RubyConstants.TYPE);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         eval("include Java");
     }
 
-    private void setLoadPaths(Engine engine) {
+    private void setLoadPaths(SpongeEngine engine) {
         if (engine != null) {
             String rubyPath = engine.getConfigurationManager().getProperty(PROP_RUBY_PATH);
             if (rubyPath != null) {
@@ -267,7 +267,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new JRubyKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 

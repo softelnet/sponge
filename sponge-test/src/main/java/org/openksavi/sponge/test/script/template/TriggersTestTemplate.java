@@ -28,14 +28,14 @@ import java.util.regex.PatternSyntaxException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class TriggersTestTemplate {
 
     public static void testTriggers(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "triggers");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "triggers");
 
         try {
             await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
@@ -51,7 +51,7 @@ public class TriggersTestTemplate {
     }
 
     public static void testTriggersEventPattern(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "triggers_event_pattern");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "triggers_event_pattern");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "countA").intValue() >= 2);
@@ -66,7 +66,7 @@ public class TriggersTestTemplate {
     }
 
     public static void testTriggersEventPatternIncorrect(KnowledgeBaseType type) {
-        Engine engine = null;
+        SpongeEngine engine = null;
 
         try {
             engine = ScriptTestUtils.startWithKnowledgeBase(type, "triggers_event_pattern_incorrect");
@@ -83,7 +83,7 @@ public class TriggersTestTemplate {
     }
 
     public static void testHelloWorld(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "hello_world");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "hello_world");
 
         try {
             TimeUnit.SECONDS.sleep(1);

@@ -19,9 +19,9 @@
 
 package org.openksavi.sponge.mpd;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * This example program shows MPD events.
@@ -29,7 +29,7 @@ import org.openksavi.sponge.engine.Engine;
 public class MpdEventsMain {
 
     public void run() {
-        Engine engine = DefaultEngine.builder().config("examples/mpd/mpd_events.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/mpd/mpd_events.xml").build();
 
         try {
             engine.startup();

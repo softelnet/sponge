@@ -20,7 +20,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.xml.XPathBuilder;
 
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
 
@@ -50,7 +50,7 @@ public abstract class CamelUtils {
         return null;
     }
 
-    public static Event getOrCreateInputEvent(Engine engine, Exchange exchange) {
+    public static Event getOrCreateInputEvent(SpongeEngine engine, Exchange exchange) {
         Event event = getEvent(exchange);
 
         if (event == null) {

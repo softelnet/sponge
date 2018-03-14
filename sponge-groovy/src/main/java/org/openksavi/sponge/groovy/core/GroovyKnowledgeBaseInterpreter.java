@@ -49,13 +49,13 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.groovy.GroovyAction;
 import org.openksavi.sponge.groovy.GroovyConstants;
@@ -99,8 +99,8 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     private List<Script> scripts;
 
-    public GroovyKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new GroovyKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), GroovyConstants.TYPE);
+    public GroovyKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new GroovyKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), GroovyConstants.TYPE);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         }
     }
 
-    private void setClasspath(Engine engine) {
+    private void setClasspath(SpongeEngine engine) {
         if (engine != null) {
             String claaspath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);
             if (claaspath != null) {
@@ -329,7 +329,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     @Override
-    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(Engine engine, KnowledgeBase knowledgeBase) {
+    protected ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         return new GroovyKnowledgeBaseInterpreter(engine, knowledgeBase);
     }
 
@@ -352,7 +352,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
         scripts.add(0, script);
     }
 
-    private List<String> createClasspath(Engine engine) {
+    private List<String> createClasspath(SpongeEngine engine) {
         List<String> result = new ArrayList<>();
         if (engine != null) {
             String classpath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);

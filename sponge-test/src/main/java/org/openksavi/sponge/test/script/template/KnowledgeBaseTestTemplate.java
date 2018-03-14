@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 import org.openksavi.sponge.test.util.TestStatus;
@@ -36,7 +36,7 @@ import org.openksavi.sponge.test.util.TestUtils;
 public class KnowledgeBaseTestTemplate {
 
     public static void testCallbacks(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "knowledge_base_callbacks");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "knowledge_base_callbacks");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onInitCalled")).get());
@@ -56,7 +56,7 @@ public class KnowledgeBaseTestTemplate {
     }
 
     public static void testLoad(KnowledgeBaseType type) {
-        Engine engine = DefaultEngine.builder()
+        SpongeEngine engine = DefaultSpongeEngine.builder()
                 .knowledgeBase(TestUtils.DEFAULT_KB, ScriptTestUtils.getScriptKnowledgeBaseFileName(type, "knowledge_base_load")).build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
@@ -77,7 +77,7 @@ public class KnowledgeBaseTestTemplate {
     }
 
     public static void testManager(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.buildWithKnowledgeBase(type, "knowledge_base_manager");
+        SpongeEngine engine = ScriptTestUtils.buildWithKnowledgeBase(type, "knowledge_base_manager");
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 
@@ -94,7 +94,7 @@ public class KnowledgeBaseTestTemplate {
     }
 
     public static void testAutoEnable(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "knowledge_base_auto_enable");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "knowledge_base_auto_enable");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "counter").intValue() >= 5);
@@ -106,12 +106,12 @@ public class KnowledgeBaseTestTemplate {
         }
     }
 
-    private static String getConcurrencyTestValue(Engine engine) {
+    private static String getConcurrencyTestValue(SpongeEngine engine) {
         return (String) engine.getOperations().getVariable(AtomicReference.class, "value").get();
     }
 
     public static void testConcurrency(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "knowledge_base_concurrency");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "knowledge_base_concurrency");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> "A1".equals(getConcurrencyTestValue(engine)));
@@ -128,7 +128,7 @@ public class KnowledgeBaseTestTemplate {
 
     @SuppressWarnings("unchecked")
     public static void testLibrary(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "knowledge_base_library");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "knowledge_base_library");
 
         try {
             await().pollDelay(5, TimeUnit.SECONDS).atMost(60, TimeUnit.SECONDS)
@@ -144,7 +144,8 @@ public class KnowledgeBaseTestTemplate {
     }
 
     public static void testScriptOverriding(KnowledgeBaseType type) {
-        Engine engine = DefaultEngine.builder().config(ScriptTestUtils.getConfigFileName(type, "knowledge_base_script_overriding")).build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().config(ScriptTestUtils.getConfigFileName(type, "knowledge_base_script_overriding")).build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 

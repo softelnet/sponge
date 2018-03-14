@@ -22,15 +22,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import org.openksavi.sponge.config.ConfigException;
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class ConfigurationKnowledgeBaseFileTest {
 
     private static final String DIR = "examples/core/configuration/kb_file/";
 
     private void doTestExisting(String config) {
-        Engine engine = DefaultEngine.builder().config(DIR + config).build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(DIR + config).build();
         engine.startup();
 
         try {
@@ -43,7 +43,7 @@ public class ConfigurationKnowledgeBaseFileTest {
 
     @Test
     public void testKnowledgeBaseFileOptionalNonExisting() {
-        Engine engine = DefaultEngine.builder().config(DIR + "configuration_kb_file_optional_non_existing.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(DIR + "configuration_kb_file_optional_non_existing.xml").build();
         engine.startup();
 
         try {
@@ -60,7 +60,7 @@ public class ConfigurationKnowledgeBaseFileTest {
     }
 
     private void doTestNonExistingRequired(String config) {
-        Engine engine = DefaultEngine.builder().config(DIR + config).build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(DIR + config).build();
 
         try {
             engine.startup();

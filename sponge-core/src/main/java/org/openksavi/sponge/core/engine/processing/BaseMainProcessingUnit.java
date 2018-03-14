@@ -30,8 +30,8 @@ import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
@@ -56,7 +56,7 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
      * @param inQueue input queue.
      * @param outQueue output queue.
      */
-    protected BaseMainProcessingUnit(String name, Engine engine, EventQueue inQueue, EventQueue outQueue) {
+    protected BaseMainProcessingUnit(String name, SpongeEngine engine, EventQueue inQueue, EventQueue outQueue) {
         super(name, engine, inQueue, outQueue);
 
         createHandlers();

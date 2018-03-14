@@ -19,7 +19,7 @@ package org.openksavi.sponge.examples.project.camelrssnews;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Example class containing main method.
@@ -43,8 +43,8 @@ public class CamelRssNewsExampleMain {
         context.start();
     }
 
-    public Engine getEngine() {
-        return context.getBean(Engine.class);
+    public SpongeEngine getEngine() {
+        return context.getBean(SpongeEngine.class);
     }
 
     /**

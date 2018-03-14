@@ -20,8 +20,8 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.EventQueueManager;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 
 /**
@@ -43,7 +43,7 @@ public class DefaultEventQueueManager extends BaseEngineModule implements EventQ
      *
      * @param engine the engine.
      */
-    public DefaultEventQueueManager(Engine engine) {
+    public DefaultEventQueueManager(SpongeEngine engine) {
         super("EventQueueManager", engine);
     }
 

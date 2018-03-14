@@ -17,7 +17,7 @@
 package org.openksavi.sponge.java.core;
 
 import org.openksavi.sponge.Processor;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -27,7 +27,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class JavaKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngineOperations {
 
-    public JavaKnowledgeBaseEngineOperations(BaseEngine engine, KnowledgeBase knowledgeBase) {
+    public JavaKnowledgeBaseEngineOperations(BaseSpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(engine, knowledgeBase);
     }
 

@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class NewsTest {
 
@@ -33,7 +33,7 @@ public class NewsTest {
         NewsExampleMain example = new NewsExampleMain();
         try {
             example.startup();
-            Engine engine = example.getEngine();
+            SpongeEngine engine = example.getEngine();
 
             await().atMost(60, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get());
 

@@ -48,7 +48,7 @@ import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 /**
  * StandaloneEngine builder.
  */
-public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
+public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngine> {
 
     private static final Logger logger = LoggerFactory.getLogger(StandaloneEngineBuilder.class);
 
@@ -90,7 +90,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
         return console;
     };
 
-    public StandaloneEngineBuilder(StandaloneEngine engine) {
+    public StandaloneEngineBuilder(StandaloneSpongeEngine engine) {
         super(engine);
     }
 
@@ -139,7 +139,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneEngine> {
      * Returns a new StandaloneEngine or {@code null} if help or version option is specified so the application should exit.
      */
     @Override
-    public StandaloneEngine build() {
+    public StandaloneSpongeEngine build() {
         try {
             if (commandLineArgs == null) {
                 return super.build();

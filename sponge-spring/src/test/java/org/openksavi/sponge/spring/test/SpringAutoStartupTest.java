@@ -24,9 +24,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.spring.SpringPlugin;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class SpringAutoStartupTest {
 
@@ -34,8 +34,8 @@ public class SpringAutoStartupTest {
     public static class TestConfigAutoStartupTrue {
 
         @Bean
-        public Engine spongeEngine() {
-            return SpringEngine.builder().autoStartup(true).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().autoStartup(true).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
         }
 
         @Bean
@@ -55,7 +55,7 @@ public class SpringAutoStartupTest {
         ctx.start();
 
         try {
-            Engine engine = ctx.getBean(Engine.class);
+            SpongeEngine engine = ctx.getBean(SpongeEngine.class);
 
             assertTrue(engine.isRunning());
             assertFalse(engine.isError());
@@ -68,8 +68,8 @@ public class SpringAutoStartupTest {
     public static class TestConfigAutoStartupFalse {
 
         @Bean
-        public Engine spongeEngine() {
-            return SpringEngine.builder().autoStartup(false).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py")
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().autoStartup(false).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py")
                     .build();
         }
 
@@ -85,7 +85,7 @@ public class SpringAutoStartupTest {
         ctx.start();
 
         try {
-            Engine engine = ctx.getBean(Engine.class);
+            SpongeEngine engine = ctx.getBean(SpongeEngine.class);
 
             assertFalse(engine.isRunning());
             assertFalse(engine.isError());

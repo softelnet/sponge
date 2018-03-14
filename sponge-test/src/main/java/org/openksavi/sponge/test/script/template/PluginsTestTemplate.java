@@ -22,14 +22,14 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class PluginsTestTemplate {
 
     public static void testJavaPlugin(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "plugins_java");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "plugins_java");
 
         try {
             await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
@@ -44,7 +44,7 @@ public class PluginsTestTemplate {
     }
 
     public static void testKbPlugin(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "plugins_kb");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "plugins_kb");
 
         try {
             await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)

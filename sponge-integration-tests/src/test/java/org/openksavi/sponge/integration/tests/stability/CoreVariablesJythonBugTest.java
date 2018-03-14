@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.test.util.TestUtils;
 
 public class CoreVariablesJythonBugTest {
@@ -35,7 +35,7 @@ public class CoreVariablesJythonBugTest {
      */
     @Test
     public void testGlobalVariablesJythonBug() {
-        Engine engine = DefaultEngine.builder()
+        SpongeEngine engine = DefaultSpongeEngine.builder()
                 .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/stability/global_variable_access_jython_bug.py").build();
         engine.startup();
 
@@ -51,8 +51,8 @@ public class CoreVariablesJythonBugTest {
 
     @Test
     public void testGlobalVariablesRubyNoBug() {
-        Engine engine =
-                DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/stability/global_variable_access.rb").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/stability/global_variable_access.rb").build();
         engine.startup();
 
         try {

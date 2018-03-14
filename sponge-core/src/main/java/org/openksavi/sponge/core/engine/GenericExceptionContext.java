@@ -16,32 +16,32 @@
 
 package org.openksavi.sponge.core.engine;
 
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ExceptionContext;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Exception context.
  */
 public class GenericExceptionContext implements ExceptionContext {
 
-    private Engine engine;
+    private SpongeEngine engine;
 
     private String sourceName;
 
     private Object sourceObject;
 
-    public GenericExceptionContext(Engine engine, String sourceName) {
+    public GenericExceptionContext(SpongeEngine engine, String sourceName) {
         this(engine, sourceName, null);
     }
 
-    public GenericExceptionContext(Engine engine, String sourceName, Object sourceObject) {
+    public GenericExceptionContext(SpongeEngine engine, String sourceName, Object sourceObject) {
         this.engine = engine;
         this.sourceName = sourceName;
         this.sourceObject = sourceObject;
     }
 
     @Override
-    public Engine getEngine() {
+    public SpongeEngine getEngine() {
         return engine;
     }
 

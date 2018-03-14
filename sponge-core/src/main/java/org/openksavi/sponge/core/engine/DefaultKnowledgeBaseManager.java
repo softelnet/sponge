@@ -35,8 +35,8 @@ import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.KnowledgeBaseManager;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
@@ -87,7 +87,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
      *
      * @param engine the engine.
      */
-    public DefaultKnowledgeBaseManager(Engine engine) {
+    public DefaultKnowledgeBaseManager(SpongeEngine engine) {
         super("KnowledgeBaseManager", engine);
 
         // Add default, Java-based knowledge base (mainly for plugin registration).
@@ -375,7 +375,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         knowledgeBases.values().forEach(knowledgeBase -> knowledgeBase.getInterpreter().setVariable(name, value));
     }
 
-    public KnowledgeBaseType inferKnowledgeBaseType(String knowledgeBaseName, List<KnowledgeBaseScript> scripts) {// ScriptKnowledgeBase
+    public KnowledgeBaseType inferKnowledgeBaseType(String knowledgeBaseName, List<KnowledgeBaseScript> scripts) {
         if (scripts.isEmpty()) {
             throw new SpongeException("Cannot infer knowledge base '" + knowledgeBaseName + "' type because it has no files");
         }

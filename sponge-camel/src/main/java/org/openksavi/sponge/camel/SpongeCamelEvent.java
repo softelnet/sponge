@@ -23,7 +23,7 @@ import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.core.event.BaseEvent;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
@@ -126,12 +126,12 @@ public class SpongeCamelEvent extends BaseEvent {
         return SpongeUtils.immutableMapOf(ATTR_ROUTE_ID, routeId, ATTR_BODY, body, ATTR_HEADERS, headers);
     }
 
-    public static SpongeCamelEvent create(Engine engine, String name, Exchange exchange) {
+    public static SpongeCamelEvent create(SpongeEngine engine, String name, Exchange exchange) {
         return new SpongeCamelEvent(name, engine.getConfigurationManager().getEventClonePolicy(),
                 exchange.getUnitOfWork().getRouteContext().getRoute().getId(), exchange.getIn().getBody(), exchange.getIn().getHeaders());
     }
 
-    public static SpongeCamelEvent create(Engine engine, Exchange exchange) {
+    public static SpongeCamelEvent create(SpongeEngine engine, Exchange exchange) {
         String exchangRouteId = exchange.getUnitOfWork().getRouteContext().getRoute().getId();
         return new SpongeCamelEvent(exchangRouteId, engine.getConfigurationManager().getEventClonePolicy(), exchangRouteId,
                 exchange.getIn().getBody(), exchange.getIn().getHeaders());

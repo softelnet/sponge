@@ -32,8 +32,8 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spring.javaconfig.SingleRouteCamelConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import org.openksavi.sponge.engine.Engine;
-import org.openksavi.sponge.spring.SpringEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public abstract class CamelProducerCustomActionAbstractTest {
 
@@ -44,13 +44,13 @@ public abstract class CamelProducerCustomActionAbstractTest {
     protected ProducerTemplate testProducer;
 
     @Inject
-    protected Engine engine;
+    protected SpongeEngine engine;
 
     protected static abstract class AbstractTestConfig extends SingleRouteCamelConfiguration {
 
         @Bean
-        public Engine spongeEngine() {
-            return SpringEngine.builder().knowledgeBase("kb", "examples/camel/camel_producer_custom_action.py").build();
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().knowledgeBase("kb", "examples/camel/camel_producer_custom_action.py").build();
         }
     }
 

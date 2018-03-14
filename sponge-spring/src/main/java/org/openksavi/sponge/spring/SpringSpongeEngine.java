@@ -22,12 +22,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 
 /**
- * A Spring aware engine. Startup and shutdown is managed by Spring.
+ * A Spring aware Sponge engine. Startup and shutdown is managed by Spring.
  */
-public class SpringEngine extends BaseEngine implements ApplicationContextAware, InitializingBean, DisposableBean {
+public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationContextAware, InitializingBean, DisposableBean {
 
     private ApplicationContext applicationContext;
 
@@ -36,7 +36,7 @@ public class SpringEngine extends BaseEngine implements ApplicationContextAware,
     /**
      * Creates a new engine.
      */
-    public SpringEngine() {
+    public SpringSpongeEngine() {
         //
     }
 
@@ -46,7 +46,7 @@ public class SpringEngine extends BaseEngine implements ApplicationContextAware,
      * @return builder.
      */
     public static SpringEngineBuilder builder() {
-        return new SpringEngineBuilder(new SpringEngine());
+        return new SpringEngineBuilder(new SpringSpongeEngine());
     }
 
     @Override

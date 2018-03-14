@@ -22,9 +22,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.core.engine.DefaultEngine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.jython.PythonConstants;
 import org.openksavi.sponge.test.script.template.RulesTestTemplate;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
@@ -36,7 +36,7 @@ public class LoadTest {
 
     @Test
     public void testRulesLoad() {
-        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/rules_load.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/rules_load.py").build();
         engine.startup();
 
         CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
@@ -60,7 +60,7 @@ public class LoadTest {
 
     @Test
     public void testTriggersLoad() {
-        Engine engine = DefaultEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/triggers_load.py").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/triggers_load.py").build();
         engine.startup();
 
         int sleepMinutes = 2;

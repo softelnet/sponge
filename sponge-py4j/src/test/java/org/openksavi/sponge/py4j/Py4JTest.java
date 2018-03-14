@@ -32,14 +32,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.engine.DefaultEngine;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 public class Py4JTest {
 
     private static final Logger logger = LoggerFactory.getLogger(Py4JTest.class);
 
-    protected Pair<Process, String> startCPython(Engine engine, String script, boolean readOutput) throws Exception {
+    protected Pair<Process, String> startCPython(SpongeEngine engine, String script, boolean readOutput) throws Exception {
         ProcessBuilder pb = new ProcessBuilder(engine.getConfigurationManager().getProperty("pythonExecutable"), script);
         Process process = null;
 
@@ -71,7 +71,7 @@ public class Py4JTest {
     @Test
     public void testPy4JJavaServer() throws Exception {
         String rootDir = "examples/py4j/java_server";
-        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_java_server_sponge_hello_world.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_java_server_sponge_hello_world.xml").build();
         engine.startup();
 
         try {
@@ -96,7 +96,7 @@ public class Py4JTest {
     @Test
     public void testPy4JPythonServer() throws Exception {
         String rootDir = "examples/py4j/python_server";
-        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
         engine.startup();
         Process process = null;
 
@@ -119,7 +119,7 @@ public class Py4JTest {
     @Test
     public void testPy4JJavaServerTls() throws Exception {
         String rootDir = "examples/py4j/java_server_tls";
-        Engine engine = DefaultEngine.builder().config(rootDir + "/py4j_java_server_tls_sponge_hello_world.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_java_server_tls_sponge_hello_world.xml").build();
         engine.startup();
 
         try {

@@ -50,7 +50,7 @@ import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.core.config.CommonsConfiguration;
 import org.openksavi.sponge.core.config.FallbackBasePathLocationStrategy;
 import org.openksavi.sponge.engine.ConfigurationManager;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
 
 /**
@@ -111,7 +111,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      * @param engine the engine.
      * @param configurationFilename configuration file name.
      */
-    public DefaultConfigurationManager(Engine engine, String configurationFilename) {
+    public DefaultConfigurationManager(SpongeEngine engine, String configurationFilename) {
         super("ConfigurationManager", engine);
         this.configurationFilename = configurationFilename;
     }
@@ -318,7 +318,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
             return new ImmutablePair<>(xmlConfiguration, locationStrategy.getLocatedUrl());
         } catch (ConfigurationException e) {
-            throw new ConfigException(e);
+            throw new ConfigException("Error reading configuration file " + fileName, e);
         }
     }
 

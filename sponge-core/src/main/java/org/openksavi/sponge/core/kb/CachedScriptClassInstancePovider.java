@@ -26,7 +26,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * The provider of script-based class instances that caches parsed expressions.
@@ -45,7 +45,7 @@ public class CachedScriptClassInstancePovider<S, T> implements ScriptClassInstan
     /** The cache. {@code null} if caching is turned off. */
     private LoadingCache<String, S> cache;
 
-    public CachedScriptClassInstancePovider(Engine engine, Function<String, S> createScriptFunction, String format,
+    public CachedScriptClassInstancePovider(SpongeEngine engine, Function<String, S> createScriptFunction, String format,
             BiFunction<S, Class<T>, T> createInstanceFunction) {
         this.createScriptFunction = createScriptFunction;
         this.format = format;

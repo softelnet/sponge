@@ -21,12 +21,12 @@ import kotlin.reflect.KClass;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.engine.BaseEngine;
+import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.kb.BaseNonScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
@@ -34,8 +34,8 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  */
 public class NonScriptKotlinKnowledgeBaseInterpreter extends BaseNonScriptKnowledgeBaseInterpreter {
 
-    public NonScriptKotlinKnowledgeBaseInterpreter(Engine engine, KnowledgeBase knowledgeBase) {
-        super(new KotlinKnowledgeBaseEngineOperations((BaseEngine) engine, knowledgeBase), KotlinConstants.TYPE_NON_SCRIPT);
+    public NonScriptKotlinKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
+        super(new KotlinKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), KotlinConstants.TYPE_NON_SCRIPT);
     }
 
     @Override

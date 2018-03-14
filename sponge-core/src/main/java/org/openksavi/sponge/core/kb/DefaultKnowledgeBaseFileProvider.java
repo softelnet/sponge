@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
 
 /**
@@ -40,7 +40,7 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
     private static final Logger logger = LoggerFactory.getLogger(DefaultKnowledgeBaseFileProvider.class);
 
     @Override
-    public Reader getReader(Engine engine, String fileName, Charset charset) throws IOException {
+    public Reader getReader(SpongeEngine engine, String fileName, Charset charset) throws IOException {
         // Try to read relative to the current directory or classpath.
         Reader reader = SpongeUtils.getReader(fileName, charset);
 

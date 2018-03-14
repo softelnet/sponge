@@ -29,7 +29,7 @@ import org.apache.camel.spi.UriPath;
 import org.apache.camel.util.CamelContextHelper;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
  * Sponge Camel endpoint.
@@ -39,7 +39,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
 
     public static final Boolean DEFAULT_MANAGED = true;
 
-    private Engine engine;
+    private SpongeEngine engine;
 
     @UriPath
     private String engineRef;
@@ -52,7 +52,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
 
     private boolean autoStarted = false;
 
-    public SpongeEndpoint(String endpointUri, Component component, Engine engine, String action, Boolean managed) {
+    public SpongeEndpoint(String endpointUri, Component component, SpongeEngine engine, String action, Boolean managed) {
         super(endpointUri, component);
         this.engine = engine;
         this.action = action;
@@ -100,7 +100,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
         this.engineRef = engineRef;
     }
 
-    public Engine getEngine() {
+    public SpongeEngine getEngine() {
         return engine;
     }
 
@@ -109,7 +109,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
      *
      * @param engine the engine.
      */
-    public void setEngine(Engine engine) {
+    public void setEngine(SpongeEngine engine) {
         this.engine = engine;
     }
 
@@ -134,7 +134,7 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
         super.doStart();
 
         if (engineRef != null && engine == null) {
-            engine = CamelContextHelper.mandatoryLookup(getCamelContext(), engineRef, Engine.class);
+            engine = CamelContextHelper.mandatoryLookup(getCamelContext(), engineRef, SpongeEngine.class);
         }
 
         synchronized (getComponent()) {

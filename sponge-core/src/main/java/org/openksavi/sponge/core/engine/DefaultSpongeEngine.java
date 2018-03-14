@@ -17,14 +17,14 @@
 package org.openksavi.sponge.core.engine;
 
 /**
- * A default engine.
+ * A default Sponge engine.
  */
-public class DefaultEngine extends BaseEngine {
+public class DefaultSpongeEngine extends BaseSpongeEngine {
 
     /**
      * Creates a new engine.
      */
-    public DefaultEngine() {
+    public DefaultSpongeEngine() {
         //
     }
 
@@ -33,7 +33,7 @@ public class DefaultEngine extends BaseEngine {
      *
      * @return builder.
      */
-    public static EngineBuilder<DefaultEngine> builder() {
-        return new EngineBuilder<>(new DefaultEngine());
+    public static EngineBuilder<DefaultSpongeEngine> builder() {
+        return new EngineBuilder<>(new DefaultSpongeEngine());
     }
 }

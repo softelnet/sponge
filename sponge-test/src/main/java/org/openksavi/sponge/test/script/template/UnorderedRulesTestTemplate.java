@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 
@@ -32,7 +32,7 @@ public class UnorderedRulesTestTemplate {
 
     @Test
     public static void testUnorderedRules(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "unordered_rules");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "unordered_rules");
 
         try {
             await().atMost(60, TimeUnit.SECONDS).pollDelay(5, TimeUnit.SECONDS)

@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge.core.engine;
 
-import org.openksavi.sponge.engine.Engine;
 import org.openksavi.sponge.engine.ProcessingUnitManager;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.processing.FilterProcessingUnit;
 import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 
@@ -37,7 +37,7 @@ public class DefaultProcessingUnitManager extends BaseEngineModule implements Pr
      *
      * @param engine the engine.
      */
-    public DefaultProcessingUnitManager(Engine engine) {
+    public DefaultProcessingUnitManager(SpongeEngine engine) {
         super("ProcessingUnitManager", engine);
     }
 

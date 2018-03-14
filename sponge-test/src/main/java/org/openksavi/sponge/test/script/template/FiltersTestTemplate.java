@@ -23,7 +23,7 @@ import static org.junit.Assert.assertFalse;
 import java.util.concurrent.TimeUnit;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 import org.openksavi.sponge.test.util.TestUtils;
@@ -31,7 +31,7 @@ import org.openksavi.sponge.test.util.TestUtils;
 public class FiltersTestTemplate {
 
     public static void testJavaFilter(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_java");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_java");
 
         try {
             await().atMost(30, TimeUnit.SECONDS)
@@ -48,7 +48,7 @@ public class FiltersTestTemplate {
     }
 
     public static void testFilter(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "blue") >= 1);
@@ -65,7 +65,7 @@ public class FiltersTestTemplate {
     }
 
     public static void testDeduplication(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_deduplication");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_deduplication");
 
         try {
             await().atMost(30, TimeUnit.SECONDS)

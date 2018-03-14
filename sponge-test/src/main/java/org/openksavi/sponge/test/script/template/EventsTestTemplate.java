@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
@@ -39,7 +39,7 @@ public class EventsTestTemplate {
     }
 
     public static void testClonePolicy(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithConfig(type, "events_clone_policy");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "events_clone_policy");
 
         try {
             await().atMost(30, TimeUnit.SECONDS)
@@ -69,7 +69,7 @@ public class EventsTestTemplate {
     }
 
     public static void testCron(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "events_cron");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "events_cron");
 
         try {
             await().atMost(30, TimeUnit.SECONDS)
@@ -85,7 +85,7 @@ public class EventsTestTemplate {
     }
 
     public static void testRemovingEvent(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "events_removing");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "events_removing");
 
         try {
             await().pollDelay(3, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)

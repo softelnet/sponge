@@ -22,14 +22,14 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 
 public class ProcessorsTestTemplate {
 
     public static void testProcessorInheritance(KnowledgeBaseType type) {
-        Engine engine = ScriptTestUtils.startWithKnowledgeBase(type, "processor_inheritance");
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "processor_inheritance");
 
         try {
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("result") != null);

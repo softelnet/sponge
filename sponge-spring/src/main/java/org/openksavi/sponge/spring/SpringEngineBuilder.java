@@ -21,9 +21,9 @@ import org.openksavi.sponge.core.engine.EngineBuilder;
 /**
  * SpringEngine builder.
  */
-public class SpringEngineBuilder extends EngineBuilder<SpringEngine> {
+public class SpringEngineBuilder extends EngineBuilder<SpringSpongeEngine> {
 
-    public SpringEngineBuilder(SpringEngine engine) {
+    public SpringEngineBuilder(SpringSpongeEngine engine) {
         super(engine);
     }
 

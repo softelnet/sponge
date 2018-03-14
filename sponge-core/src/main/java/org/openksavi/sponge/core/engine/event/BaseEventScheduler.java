@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.openksavi.sponge.core.engine.BaseEngineModule;
 import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
-import org.openksavi.sponge.engine.Engine;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.event.Event;
@@ -47,7 +47,7 @@ public abstract class BaseEventScheduler extends BaseEngineModule implements Eve
      * @param engine the engine.
      * @param outQueue an output event queue.
      */
-    protected BaseEventScheduler(Engine engine, EventQueue outQueue) {
+    protected BaseEventScheduler(SpongeEngine engine, EventQueue outQueue) {
         super("EventScheduler", engine);
 
         this.outQueue = outQueue;

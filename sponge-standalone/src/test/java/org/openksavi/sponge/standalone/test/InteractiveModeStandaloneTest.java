@@ -29,12 +29,12 @@ import org.jline.terminal.TerminalBuilder;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.standalone.StandaloneEngine;
+import org.openksavi.sponge.standalone.StandaloneSpongeEngine;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
 public class InteractiveModeStandaloneTest {
 
-    private StandaloneEngine engine;
+    private StandaloneSpongeEngine engine;
 
     private PipedOutputStream outIn;
 
@@ -46,7 +46,7 @@ public class InteractiveModeStandaloneTest {
             outIn = pipedOutputStream;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            engine = StandaloneEngine.builder().commandLineArgs("-k", "examples/standalone/interactive.py", "-i")
+            engine = StandaloneSpongeEngine.builder().commandLineArgs("-k", "examples/standalone/interactive.py", "-i")
                     .interactiveModeConsoleSupplier(() -> {
                         JLineInteractiveModeConsole console = new JLineInteractiveModeConsole();
                         console.setTerminalBuilder(TerminalBuilder.builder().streams(in, out));
