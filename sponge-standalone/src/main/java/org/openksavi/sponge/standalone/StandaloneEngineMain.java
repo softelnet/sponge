@@ -58,12 +58,11 @@ public class StandaloneEngineMain {
             builder = StandaloneSpongeEngine.builder().commandLineArgs(args);
             engine = builder.build();
 
-            // If help or version option are not specified.
+            // If help or version option are specified (i.e. when the engine is null), do nothing.
             if (engine != null) {
                 engine.startup();
                 if (engine.getInteractiveMode() != null) {
-                    engine.getInteractiveMode().loop();
-                    engine.shutdown();
+                    runInteractiveLoop();
                 }
             }
         } catch (Throwable e) {
@@ -75,6 +74,20 @@ public class StandaloneEngineMain {
         if (engine != null) {
             engine.shutdown();
             engine = null;
+        }
+    }
+
+    protected void runInteractiveLoop() {
+        engine.getInteractiveMode().loop();
+
+        try {
+            engine.shutdown();
+        } catch (Throwable e) {
+            handleError(e);
+        }
+
+        if (!testMode) {
+            System.exit(0);
         }
     }
 

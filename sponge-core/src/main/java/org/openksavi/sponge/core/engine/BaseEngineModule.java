@@ -181,8 +181,12 @@ public abstract class BaseEngineModule implements EngineModule {
                     throw isFailed() && e.getCause() != null ? SpongeUtils.wrapException("shutdown", e.getCause()) : e;
                 }
             } else {
-                doShutdown();
-                afterManualShutdown.set(true);
+                try {
+                    doShutdown();
+                } finally {
+                    // Shutdown only once, even if there has been an error.
+                    afterManualShutdown.set(true);
+                }
             }
         } finally {
             lock.unlock();

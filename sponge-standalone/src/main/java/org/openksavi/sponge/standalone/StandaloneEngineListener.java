@@ -79,7 +79,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
                 if (signal.isSignal(SystemSignal.SIGHUP)) {
                     engine.reload();
                 } else {
-                    engine.shutdown();
+                    // Shutdown hook will invoke the engine shutdown.
                     System.exit(0);
                 }
             } catch (Exception e) {
