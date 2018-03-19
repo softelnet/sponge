@@ -725,6 +725,55 @@ The default name of the Pi4J plugin (which may be used in knowledge bases) is `p
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi-pi4j/Pi4JPlugin.html[`Pi4JPlugin` Javadoc].
 
+The following example shows how to turn on/off a Grove LED connected to the Raspberry Pi GPIO. The hardware setup for this example includes Raspberry Pi 3, a ribbon cable, a ribbon cable socket, a breadboard, a 4-pin male jumper to Grove 4 pin conversion cable and a Grove LED. Before setting up the hardware make sure that your Raspberry Pi is not powered! The Grove LED should be connected to GPIO via a 4-pin connector: the black wire goes on PIN#14 (Ground), the red wire goes on PIN#02 (DC Power 5V), the yellow wire goes on PIN#12 (GPIO18/GPIO_GEN1), the white wire goes on PIN#06 (Ground).
+
+.Example Python knowledge base - Blinking LED
+[source,python]
+----
+from com.pi4j.io.gpio import RaspiPin, PinState
+
+state = False
+
+class LedBlink(Trigger):
+    def onConfigure(self):
+        self.event = "blink"
+    def onRun(self, event):
+        global led, state
+        state = not state
+        led.setState(state)
+
+def onStartup():
+    global led
+    led = pi.gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "led", PinState.LOW)
+    EPS.event("blink").sendAfter(0, 1000)
+
+def onShutdown():
+    off()
+
+on = lambda: led.setState(True)
+off = lambda: led.setState(False)
+----
+
+.Example XML configuration
+[source,xml]
+----
+<sponge>
+    <properties>
+        <!-- Due to the problem https://github.com/Pi4J/pi4j/issues/319, the dynamic linking option is turned on, where Pi4J is dynamically linked
+            to WiringPi rather than the default static linking. -->
+        <property name="pi4j.linking" system="true">dynamic</property>
+    </properties>
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>pi4j_led_blink.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+    <plugins>
+        <plugin name="pi" class="org.openksavi.sponge.rpi.pi4j.Pi4JPlugin" />
+    </plugins>
+</sponge>
+----
+
 === Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -783,7 +832,6 @@ def onStartup():
     </plugins>
 </sponge>
 ----
-
 
 === Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:

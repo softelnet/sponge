@@ -3,7 +3,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb">
-            <file>led_blink.py</file>
+            <file>grovepi_led_blink.py</file>
         </knowledgeBase>
     </knowledgeBases>
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <!-- Due to the problem https://github.com/Pi4J/pi4j/issues/319, the dynamic linking option is turned on, where Pi4J is dynamically linked
+            to WiringPi rather than the default static linking. -->
+        <property name="pi4j.linking" system="true">dynamic</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>pi4j_led_blink.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="pi" class="org.openksavi.sponge.rpi.pi4j.Pi4JPlugin" />
+    </plugins>
+</sponge>

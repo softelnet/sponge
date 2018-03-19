@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.rpi.grovepi;
+package org.openksavi.sponge.rpi.pi4j;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -22,14 +22,14 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.logging.LoggingUtils;
 
 /**
- * This example program shows how to turn on/off a LED connected to the GrovePi board that in turn is connected to the Raspberry Pi.
+ * This example program shows how to turn on/off a LED connected to the Raspberry Pi GPIO.
  */
-public class GrovePiBlinkLedMain {
+public class Pi4JBlinkLedMain {
 
     public void run() {
         LoggingUtils.initLoggingBridge();
 
-        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/rpi-grovepi/grovepi_led_blink.xml").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/rpi-pi4j/pi4j_led_blink.xml").build();
         engine.startup();
         SpongeUtils.registerShutdownHook(engine);
     }
@@ -40,6 +40,6 @@ public class GrovePiBlinkLedMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        new GrovePiBlinkLedMain().run();
+        new Pi4JBlinkLedMain().run();
     }
 }
