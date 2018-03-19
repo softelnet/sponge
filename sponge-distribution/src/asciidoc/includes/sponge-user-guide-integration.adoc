@@ -746,6 +746,45 @@ IMPORTANT: If using this plugin in an embedded {sponge}, you have to manually in
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi-grovepi/GrovePiPlugin.html[`GrovePiPlugin` Javadoc].
 
+The following example shows how to turn on/off a LED connected to the GrovePi board that in turn is connected to the Raspberry Pi.
+
+.Example Python knowledge base - Blinking LED
+[source,python]
+----
+# GrovePi board: Connect LED to D4
+
+state = False
+
+class LedBlink(Trigger):
+    def onConfigure(self):
+        self.event = "blink"
+    def onRun(self, event):
+        global led, state
+        state = not state
+        led.set(state)
+
+def onStartup():
+    global led
+    led = grovepi.device.getDigitalOut(4)
+    EPS.event("blink").sendAfter(0, 1000)
+----
+
+.Example XML configuration
+[source,xml]
+----
+<sponge>
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>led_blink.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+    <plugins>
+        <plugin name="grovepi" class="org.openksavi.sponge.rpi.grovepi.GrovePiPlugin" />
+    </plugins>
+</sponge>
+----
+
+
 === Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 

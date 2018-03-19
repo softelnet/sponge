@@ -43,6 +43,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
+import org.openksavi.sponge.logging.LoggingUtils;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
 /**
@@ -206,7 +207,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                 if (commandLine.hasOption(OPTION_PRINT_ALL_EXCEPTIONS)) {
                     engine.setExceptionHandler(new CombinedExceptionHandler(interactiveExceptionHandler, new LoggingExceptionHandler()));
                 } else {
-                    StandaloneUtils.logToConsole(false);
+                    LoggingUtils.logToConsole(false);
                 }
             } else {
                 if (commandLine.hasOption(OPTION_PRINT_ALL_EXCEPTIONS)) {

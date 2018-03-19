@@ -1299,6 +1299,12 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |Yes
 |The standalone distribution of {sponge}.
 
+
+|`org.openksavi.sponge`
+|`sponge-logging`
+|Yes
+|The {sponge} logging used by the standalone application.
+
 |`org.openksavi.sponge`
 |`sponge-test`
 |Yes

@@ -734,6 +734,7 @@
                 <module>sponge-development-tools</module>
                 <module>sponge-api</module>
                 <module>sponge-core</module>
+                <module>sponge-logging</module>
                 <module>sponge-test</module>
                 <module>sponge-jython</module>
                 <module>sponge-jruby</module>
@@ -844,6 +845,7 @@
             <modules>
                 <module>sponge-api</module>
                 <module>sponge-core</module>
+                <module>sponge-logging</module>
                 <module>sponge-test</module>
                 <module>sponge-jython</module>
                 <module>sponge-jruby</module>

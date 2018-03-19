@@ -30,6 +30,12 @@
         <Bug pattern="DM_DEFAULT_ENCODING" />
     </Match>
 
+    <Match>
+        <Class name="org.openksavi.sponge.standalone.StandaloneEngineMain" />
+        <Method name="runInteractiveLoop" />
+        <Bug pattern="DM_EXIT" />
+    </Match>
+
     <!-- Reason: Used only in tests -->
     <Match>
         <Class name="org.openksavi.sponge.test.util.TestStatus" />

@@ -9,8 +9,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>sponge-test</artifactId>
-    <name>Sponge - Test support</name>
+    <artifactId>sponge-logging</artifactId>
+    <name>Sponge - Logging</name>
 
     <properties>
         <sponge.root>${basedir}/..</sponge.root>
@@ -22,27 +22,22 @@
             <artifactId>sponge-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-logging</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test-spring</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
         </dependency>
     </dependencies>
 </project>

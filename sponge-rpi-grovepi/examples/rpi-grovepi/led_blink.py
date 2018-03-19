@@ -1,7 +1,7 @@
 """
 Sponge Knowledge base
-Blinking led
-GrovePi board: Connect led to D4
+Blinking LED
+GrovePi board: Connect LED to D4
 """
 
 state = False

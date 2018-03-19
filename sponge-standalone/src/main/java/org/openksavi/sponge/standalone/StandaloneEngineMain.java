@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.core.engine.GenericExceptionContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.logging.LoggingUtils;
 
 /**
  * Standalone engine class implementing a {@link #main(String...)} method.
@@ -128,6 +129,8 @@ public class StandaloneEngineMain {
      * @param args arguments.
      */
     public static void main(String... args) {
+        LoggingUtils.initLoggingBridge();
+
         new StandaloneEngineMain().startup(args);
     }
 }

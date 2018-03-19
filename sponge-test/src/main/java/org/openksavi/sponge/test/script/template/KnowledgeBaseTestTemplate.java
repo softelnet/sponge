@@ -134,9 +134,9 @@ public class KnowledgeBaseTestTemplate {
             await().pollDelay(5, TimeUnit.SECONDS).atMost(60, TimeUnit.SECONDS)
                     .until(() -> ((Map<String, String>) engine.getOperations().getVariable("hostStatus")).size() >= 2);
 
-            assertEquals("ERROR",
-                    ((Map<String, String>) engine.getOperations().getVariable("hostStatus")).get("www.wikipedia.org.unknown"));
-            assertEquals("200", ((Map<String, String>) engine.getOperations().getVariable("hostStatus")).get("www.wikipedia.org"));
+            Map<String, String> hostStatus = (Map<String, String>) engine.getOperations().getVariable("hostStatus");
+            assertEquals("ERROR", hostStatus.get("www.wikipedia.org.unknown"));
+            assertTrue(Integer.decode(hostStatus.get("www.wikipedia.org").trim()).intValue() > 0);
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

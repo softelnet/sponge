@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.standalone;
+package org.openksavi.sponge.logging;
 
 import ch.qos.logback.core.Appender;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
- * This class defines a set of utility methods.
+ * This class defines a set of logging utility methods.
  */
-public abstract class StandaloneUtils {
+public abstract class LoggingUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(StandaloneUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggingUtils.class);
 
     public static final String CONSOLE_APPENDER_NAME = "console";
 
@@ -53,5 +54,13 @@ public abstract class StandaloneUtils {
         }
 
         logger.warn("Unable to reconfigure Logback console logger (appender name '" + CONSOLE_APPENDER_NAME + "').");
+    }
+
+    public static void initLoggingBridge() {
+        // Optionally remove existing handlers attached to j.u.l root logger.
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+
+        // Add SLF4JBridgeHandler to j.u.l's root logger, should be done once during the initialization phase of your application.
+        SLF4JBridgeHandler.install();
     }
 }
