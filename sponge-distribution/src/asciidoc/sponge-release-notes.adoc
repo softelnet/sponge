@@ -3,7 +3,14 @@
 
 A high-level view of the changes introduced in {sponge} releases.
 
-NOTE: The current versions of {sponge} don't guarantee full backward compatibility.
+NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
+
+[discrete]
+== 1.0.9 (not released yet)
+
+* Fixed an error preventing closing a standalone application when there was an exception thrown in `onShutdown` callback function in a knowledge base.
+* Pi4J (`sponge-rpi-pi4j`) and GrovePi (`sponge-rpi-grovepi`) integration examples.
+* Libraries upgrade.
 
 [discrete]
 == 1.0.8 (2018.03.14)

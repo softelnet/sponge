@@ -76,9 +76,9 @@
         <!-- The newest version of Jython (2.7.1) is not used in Sponge. As stated on the Jython home page (http://www.jython.org/downloads.html): -->
         <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
         <jython.version>2.7.0</jython.version>
-        <jruby.version>9.1.15.0</jruby.version>
-        <groovy.version>2.4.13</groovy.version>
-        <kotlin.version>1.2.21</kotlin.version>
+        <jruby.version>9.1.16.0</jruby.version>
+        <groovy.version>2.4.14</groovy.version>
+        <kotlin.version>1.2.30</kotlin.version>
 
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
@@ -88,14 +88,14 @@
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
-        <guava.version>23.6-jre</guava.version>
+        <guava.version>24.1-jre</guava.version>
         <spring.version>4.3.14.RELEASE</spring.version>
         <spring-integration.version>4.3.14.RELEASE</spring-integration.version>
-        <camel.version>2.20.2</camel.version>
-        <awaitility.version>3.0.0</awaitility.version>
-        <jline.version>3.5.2</jline.version>
+        <camel.version>2.21.0</camel.version>
+        <awaitility.version>3.1.0</awaitility.version>
+        <jline.version>3.6.2</jline.version>
         <py4j.version>0.10.6</py4j.version>
-        <tensorflow.version>1.5.0</tensorflow.version>
+        <tensorflow.version>1.6.0</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.1</pi4j.version>
 
@@ -106,7 +106,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.13.0</mockito.version>
+        <mockito.version>2.16.0</mockito.version>
     </properties>
 
     <prerequisites>
