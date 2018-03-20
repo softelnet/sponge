@@ -5,6 +5,7 @@ GrovePi board: Connect LED to D4
 """
 
 state = False
+led = None
 
 class LedBlink(Trigger):
     def onConfigure(self):
@@ -20,7 +21,6 @@ def onStartup():
     EPS.event("blink").sendAfter(0, 1000)
 
 def onShutdown():
-    off()
-
-on = lambda: led.set(True)
-off = lambda: led.set(False)
+    global led
+    if led is not None:
+        led.set(False)

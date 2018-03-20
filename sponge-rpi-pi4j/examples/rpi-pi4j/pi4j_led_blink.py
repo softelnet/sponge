@@ -26,7 +26,6 @@ def onStartup():
     EPS.event("blink").sendAfter(0, 1000)
 
 def onShutdown():
-    off()
-
-on = lambda: led.setState(True)
-off = lambda: led.setState(False)
+    global led
+    if led is not None:
+        led.setState(state)
