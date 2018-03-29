@@ -13,7 +13,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Libraries upgrade.
 
 [discrete]
-== 1.0.8 (2018.03.14)
+== 1.0.8 (2018-03-14)
 
 * API change: The `Engine` interface has been renamed to `SpongeEngine`. The implementations have been renamed accordingly. The `EngineCamelConfiguration` class has been renamed to `SpongeCamelConfiguration`.
 * Added a new callback function `onRun` to knowledge bases that allows a user to, for example, just run a script and stop the engine.
@@ -21,7 +21,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Added a simple support for Raspberry Pi: Pi4J (`sponge-rpi-pi4j`) and GrovePi (`sponge-rpi-grovepi`).
 
 [discrete]
-== 1.0.7 (2018.02.02)
+== 1.0.7 (2018-02-02)
 
 * Added MIDI support. The MIDI plugin allows processing MIDI messages by the {sponge} and provides communication with MIDI devices.
 * API change: The `Utils` class has been renamed to `SpongeUtils`.
@@ -35,7 +35,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Libraries upgrade.
 
 [discrete]
-== 1.0.6 (2017.12.01)
+== 1.0.6 (2017-12-01)
 
 * The new, shaded version of sponge-core named sponge-core-shaded for an embedded use in custom applications that experience version conflicts in Guava or Quartz. Now you have to explicitly add a dependency to either sponge-core or sponge-core-shaded in your pom.xml.
 * Support for integration with CPython using Py4J.
@@ -43,7 +43,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Libraries upgrade.
 
 [discrete]
-== 1.0.5 (2017.10.12)
+== 1.0.5 (2017-10-12)
 
 * API change: The `EngineOperations` (`EPS`) method `callAction` has been renamed to `call`.
 * The new attribute `required` in the knowledge base file configuration that, if set to false, allows specifying optional (non existing) knowledge base files.
@@ -55,7 +55,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Fixed error preventing substitution of properties defined via the EngineBuilder API in the properties section in the XML configuration files.
 
 [discrete]
-== 1.0.4 (2017.09.20)
+== 1.0.4 (2017-09-20)
 
 * Implementation of unordered rules, i.e. rules that listen to unordered sequences of events. Unordered rules is a new feature that should be treated as an experimental one.
 * API change: The `Rule` methods `setConditions` and `setAllConditions` have been renamed respectively to `addConditions` and `addJavaConditions`.
@@ -64,14 +64,14 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Distribution as a Docker container.
 
 [discrete]
-== 1.0.3 (2017.08.30)
+== 1.0.3 (2017-08-30)
 
 * Optimization of event set processors initialization.
 * Optimization of creating new instances of processors in script-based interpreters.
 * API change: `onInit` in correlators will be invoked after `onAcceptAsFirst`, not before.
 
 [discrete]
-== 1.0.2 (2017.08.23)
+== 1.0.2 (2017-08-23)
 
 * Event name patterns in event processors.
 * Removed `matches` method in `Event`.
@@ -81,10 +81,10 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Libraries upgrade.
 
 [discrete]
-== 1.0.1 (2017.08.21)
+== 1.0.1 (2017-08-21)
 
 * Fixed possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
 
 [discrete]
-== 1.0.0 (2017.08.18)
+== 1.0.0 (2017-08-18)
 The initial release.

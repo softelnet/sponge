@@ -6,15 +6,15 @@
 
 This documentation applies to version {projectVersion} (release date: {projectDate}).
 
-{sponge} provides a software framework for implementing event processors that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators.
-
-Event processors are defined in knowledge bases. Knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java or Kotlin.
+{sponge} is a software framework for implementing event processors that listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators. Event processors are defined in knowledge bases. Knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java or Kotlin.
 
 {sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system.
 
 {sponge} requires Java 1.8 or above.
 
-{sponge} has been created by https://www.softelnet.com[Softelnet]. The project pages are hosted at {homepage}. The source code is hosted at https://github.com/softelnet/sponge[Github].
+The project pages are hosted at {homepage}. The source code is hosted at https://github.com/softelnet/sponge[Github].
+
+{sponge} has been created by https://www.softelnet.com[Softelnet].
 
 [quote, Oxford Dictionaries, 'https://en.oxforddictionaries.com/definition/sponge[Sponge]']
 ____
@@ -75,7 +75,7 @@ The potential users of a standalone command-line {sponge} application are:
 
 * Python, Ruby, Groovy or JavaScript developers,
 * Java developers (for example for prototyping),
-* system administrators.
+* system administrators with programming skills.
 
 Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing Javadoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel routes becomes important.
 
@@ -84,3 +84,10 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 * {sponge} provides no graphical user interface (GUI).
 * Because of {sponge} doesn't introduce its own notation for knowledge bases, it provides a shorter learning curve for users that know one of the supported scripting languages. However it could lack more sophisticated features and could be less optimized for certain uses than other solutions. For example you specify event conditions by writing any code in a scripting language that is to be executed when a matching event happens. On one hand it gives you a flexibility and on the other hand it doesn't provide optimizations that could be possible if, for example, a strict temporal reasoning notation is used.
 * Currently {sponge} doesn't provide persistence out of the box.
+
+== Author's note
+
+[quote, Marcin Paś, CTO at Softelnet]
+____
+Softelnet has for may years used Open Source Software in its commercial products. Therefore we appreciate the impact of Open Source on the development of IT world and believe that its constant development is important. In order to contribute to the Open Source community we share and maintain projects such as Sponge.
+____

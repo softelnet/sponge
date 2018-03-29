@@ -56,7 +56,7 @@
 
     <properties>
         <release.version>1.0.8</release.version>
-        <release.date>2018.03.14</release.date>
+        <release.date>2018-03-14</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -77,8 +77,8 @@
         <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.1.16.0</jruby.version>
-        <groovy.version>2.4.14</groovy.version>
-        <kotlin.version>1.2.30</kotlin.version>
+        <groovy.version>2.4.15</groovy.version>
+        <kotlin.version>1.2.31</kotlin.version>
 
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
@@ -106,7 +106,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.16.0</mockito.version>
+        <mockito.version>2.17.0</mockito.version>
     </properties>
 
     <prerequisites>
