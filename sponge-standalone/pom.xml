@@ -79,6 +79,11 @@
             <artifactId>sponge-rpi-grovepi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-reactivex</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.openksavi.sponge</groupId>

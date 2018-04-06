@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.EngineConstants;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
@@ -42,7 +43,7 @@ public class NullEventQueue extends BaseEventQueue {
      */
     @Override
     public void put(Event event) throws QueueFullException {
-        if (ignoredEventsLogger.isInfoEnabled() && !EngineConstants.PREDEFINED_EVENT_NAMES.contains(event.getName())) {
+        if (ignoredEventsLogger.isInfoEnabled() && !SpongeUtils.isSystemEvent(event)) {
             ignoredEventsLogger.info("Ignored event: {}", event);
         }
     }

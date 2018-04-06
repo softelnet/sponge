@@ -1295,6 +1295,11 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The Pi4J (for Raspberry Pi) library integration.
 
 |`org.openksavi.sponge`
+|`sponge-reactivex`
+|Yes
+|The ReactiveX integration.
+
+|`org.openksavi.sponge`
 |`sponge-standalone`
 |Yes
 |The standalone distribution of {sponge}.
@@ -1421,6 +1426,10 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://www.tensorflow.org[Tensorflow]
 |Apache 2.0
 |An open-source software library for Machine Intelligence.
+
+|https://github.com/ReactiveX/RxJava[RxJava]
+|Apache 2.0
+|RxJava is a Java VM implementation of Reactive Extensions.
 |===
 
 .Key third party software used by Sponge external modules

@@ -424,6 +424,10 @@ public abstract class SpongeUtils {
         }
     }
 
+    public static boolean isSystemEvent(Event event) {
+        return EngineConstants.PREDEFINED_EVENT_NAMES.contains(event.getName());
+    }
+
     protected SpongeUtils() {
         //
     }

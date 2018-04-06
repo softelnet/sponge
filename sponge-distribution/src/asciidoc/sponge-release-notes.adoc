@@ -8,6 +8,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 [discrete]
 == 1.0.9 (not released yet)
 
+* Support for using ReactiveX (`sponge-reactivex`) in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming.
 * Fixed an error preventing closing a standalone application when there was an exception thrown in `onShutdown` callback function in a knowledge base.
 * Pi4J (`sponge-rpi-pi4j`) and GrovePi (`sponge-rpi-grovepi`) integration examples.
 * Libraries upgrade.

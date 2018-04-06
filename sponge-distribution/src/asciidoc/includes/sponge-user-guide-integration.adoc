@@ -723,7 +723,7 @@ The Pi4J plugin (`Pi4JPlugin`) allows using the http://pi4j.com[Pi4J] library in
 
 The default name of the Pi4J plugin (which may be used in knowledge bases) is `pi4j`.
 
-For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi-pi4j/Pi4JPlugin.html[`Pi4JPlugin` Javadoc].
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi/pi4j/Pi4JPlugin.html[`Pi4JPlugin` Javadoc].
 
 The following example shows how to turn on/off a Grove LED connected to the Raspberry Pi GPIO. The hardware setup for this example includes Raspberry Pi 3, a ribbon cable, a ribbon cable socket, a breadboard, a 4-pin male jumper to Grove 4 pin conversion cable and a Grove LED. Before setting up the hardware make sure that your Raspberry Pi is not powered! The Grove LED should be connected to GPIO via a 4-pin connector: the black wire goes on PIN#14 (Ground), the red wire goes on PIN#02 (DC Power 5V), the yellow wire goes on PIN#12 (GPIO18/GPIO_GEN1), the white wire goes on PIN#06 (Ground).
 
@@ -793,7 +793,7 @@ The default name of the GrovePi plugin (which may be used in knowledge bases) is
 
 IMPORTANT: If using this plugin in an embedded {sponge}, you have to manually install the https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library] in you local Maven repository because it isn't available in the Central Maven Repository.
 
-For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi-grovepi/GrovePiPlugin.html[`GrovePiPlugin` Javadoc].
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi/grovepi/GrovePiPlugin.html[`GrovePiPlugin` Javadoc].
 
 The following example shows how to turn on/off a LED connected to the GrovePi board that in turn is connected to the Raspberry Pi.
 
@@ -844,3 +844,61 @@ Maven users will need to add the following dependency to their `pom.xml`:
     <version>{projectVersion}</version>
 </dependency>
 ----
+
+== ReactiveX
+The ReactiveX plugin (`ReactiveXPlugin`) provides support for using http://reactivex.io[ReactiveX] in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming. The plugin uses https://github.com/ReactiveX/RxJava[RxJava library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+
+The default name of the ReactiveX plugin (which may be used in knowledge bases) is `rx`.
+
+The main object provided by this plugin is an instance of a hot observable (`rx.observable`) that emits all non system {sponge} events. The plugin registers a Java-based correlator that listens to {sponge} events and sends them to the observable.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/reactivex/ReactiveXPlugin.html[`ReactiveXPlugin` Javadoc].
+
+The following example shows how to use reactive programming in a {sponge} knowledge base.
+
+.Example Python knowledge base - Reactive programming
+[source,python]
+----
+import time
+from io.reactivex.schedulers import Schedulers
+
+def onStartup():
+    EPS.event("e1").set("payload", 1).send()
+    EPS.event("e2").set("payload", 2).sendAfter(500)
+    EPS.event("e3").set("payload", 3).sendAfter(1000)
+
+    rx.observable.subscribe(lambda event: EPS.logger.info("{}", event.name))
+
+    def observer(event):
+        time.sleep(1)
+        EPS.logger.info("After sleep: {}", event.name)
+    rx.observable.observeOn(Schedulers.io()).subscribe(observer)
+----
+
+.Example XML configuration
+[source,xml]
+----
+<sponge>
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>reactivex.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+    <plugins>
+        <plugin name="rx" class="org.openksavi.sponge.reactivex.ReactiveXPlugin" />
+    </plugins>
+</sponge>
+----
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-reactivex</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+

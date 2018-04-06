@@ -39,7 +39,7 @@ The connection between the outside world and knowledge bases is provided by plug
 === Event flow
 The figure below shows the event flow in the {sponge} engine.
 
-image::engine_event_flow.svg[title="Event flow"]
+image::engine_event_flow.svg[title="Event flow",width=504,height=304]
 
 .Event flow in event processors
 ****

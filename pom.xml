@@ -95,9 +95,10 @@
         <awaitility.version>3.1.0</awaitility.version>
         <jline.version>3.6.2</jline.version>
         <py4j.version>0.10.6</py4j.version>
-        <tensorflow.version>1.6.0</tensorflow.version>
+        <tensorflow.version>1.7.0</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.1</pi4j.version>
+        <rxjava2.version>2.1.11</rxjava2.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -673,6 +674,11 @@
                 <artifactId>GrovePi-pi4j</artifactId>
                 <version>${grovepi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.reactivex.rxjava2</groupId>
+                <artifactId>rxjava</artifactId>
+                <version>${rxjava2.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>junit</groupId>
@@ -749,6 +755,7 @@
                 <module>sponge-midi</module>
                 <module>sponge-rpi-pi4j</module>
                 <module>sponge-rpi-grovepi</module>
+                <module>sponge-reactivex</module>
                 <module>sponge-signal</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
@@ -858,6 +865,7 @@
                 <module>sponge-midi</module>
                 <module>sponge-signal</module>
                 <module>sponge-rpi-pi4j</module>
+                <module>sponge-reactivex</module>
                 <module>sponge-standalone</module>
                 <module>sponge-external</module>
                 <module>sponge-bom</module>
