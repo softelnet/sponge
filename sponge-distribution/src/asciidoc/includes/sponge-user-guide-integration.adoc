@@ -336,10 +336,7 @@ class CamelTrigger(Trigger):
     def onRun(self, event):
         camel.send(event.get("message"))
 
-def onStartup():
-    # Add a delay to allow starting of Camel, if necessary. This requirement depends on the configuration
-    # of Sponge and Camel in Spring.
-    EPS.event("spongeEvent").set("message", "Send me to Camel").sendAfter(1000)
+    EPS.event("spongeEvent").set("message", "Send me to Camel")
 ----
 
 The variable `camel` is a reference to the instance of `CamelPlugin` that is associated with the Camel context.

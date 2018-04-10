@@ -19,10 +19,12 @@ package org.openksavi.sponge.camel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.Exchange;
+import org.apache.camel.ExtendedStartupListener;
 import org.apache.camel.ProducerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,7 @@ import org.openksavi.sponge.java.JPlugin;
 /**
  * Sponge plugin that provides integration with Apache Camel.
  */
-public class CamelPlugin extends JPlugin implements CamelContextAware {
+public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedStartupListener {
 
     private static final Logger logger = LoggerFactory.getLogger(CamelPlugin.class);
 
@@ -49,6 +51,15 @@ public class CamelPlugin extends JPlugin implements CamelContextAware {
     private volatile ProducerTemplate producerTemplate;
 
     private boolean producerTemplateCreatedManually = false;
+
+    /**
+     * If {@code true}, the plugin will wait for the Camel context to be fully started. The default value is {@code false}. Note that if you
+     * enable this option, you have to add this plugin to the Camel context as a startup listener, e.g.:
+     * camelContext.addStartupListener(camelPlugin()) in a Spring Camel configuration.
+     */
+    private boolean waitForContextFullyStarted = false;
+
+    private final CountDownLatch contextFullyStartedLatch = new CountDownLatch(1);
 
     public CamelPlugin(CamelContext camelContext) {
         this();
@@ -65,6 +76,19 @@ public class CamelPlugin extends JPlugin implements CamelContextAware {
 
     public CamelContext getContext() {
         return camelContext;
+    }
+
+    /**
+     * Waits for Camel context fully started.
+     */
+    public void waitForContextFullyStarted() {
+        if (waitForContextFullyStarted) {
+            try {
+                contextFullyStartedLatch.await();
+            } catch (InterruptedException e) {
+                throw SpongeUtils.wrapException(e);
+            }
+        }
     }
 
     public void setContext(CamelContext camelContext) {
@@ -98,15 +122,19 @@ public class CamelPlugin extends JPlugin implements CamelContextAware {
     public void send(Object body) {
         if (consumers.isEmpty()) {
             logger.debug("No consumer to send a message");
-        }
+        } else {
+            waitForContextFullyStarted();
 
-        consumers.forEach(consumer -> {
-            logger.debug("Sending to consumer {}", consumer);
-            consumer.send(body);
-        });
+            consumers.forEach(consumer -> {
+                logger.debug("Sending to consumer {}", consumer);
+                consumer.send(body);
+            });
+        }
     }
 
     public void send(String uri, Object body) {
+        waitForContextFullyStarted();
+
         getProducerTemplate().sendBody(uri, body);
     }
 
@@ -135,6 +163,8 @@ public class CamelPlugin extends JPlugin implements CamelContextAware {
     }
 
     public Object request(String uri, Object body) {
+        waitForContextFullyStarted();
+
         return getProducerTemplate().requestBody(uri, body);
     }
 
@@ -152,6 +182,14 @@ public class CamelPlugin extends JPlugin implements CamelContextAware {
         return camelContext;
     }
 
+    public boolean isWaitForContextFullyStarted() {
+        return waitForContextFullyStarted;
+    }
+
+    public void setWaitForContextFullyStarted(boolean waitForContextFullyStarted) {
+        this.waitForContextFullyStarted = waitForContextFullyStarted;
+    }
+
     @Override
     public void onShutdown() {
         if (producerTemplateCreatedManually && producerTemplate != null) {
@@ -161,5 +199,15 @@ public class CamelPlugin extends JPlugin implements CamelContextAware {
                 throw SpongeUtils.wrapException(e);
             }
         }
+    }
+
+    @Override
+    public void onCamelContextStarted(CamelContext context, boolean alreadyStarted) throws Exception {
+        // Ignored.
+    }
+
+    @Override
+    public void onCamelContextFullyStarted(CamelContext context, boolean alreadyStarted) throws Exception {
+        contextFullyStartedLatch.countDown();
     }
 }

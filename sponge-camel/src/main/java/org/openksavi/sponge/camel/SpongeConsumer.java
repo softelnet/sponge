@@ -36,22 +36,18 @@ public class SpongeConsumer extends DefaultConsumer {
         this.engine = engine;
     }
 
-    protected CamelPlugin getPlugin() {
-        return engine.getPluginManager().getPlugin(CamelPlugin.NAME, CamelPlugin.class);
-    }
-
     @Override
     protected void doStart() throws Exception {
         super.doStart();
 
         camelConsumer = new DefaultCamelConsumer((SpongeEndpoint) getEndpoint(), getProcessor());
 
-        getPlugin().addConsumer(camelConsumer);
+        CamelUtils.getPlugin(engine).addConsumer(camelConsumer);
     }
 
     @Override
     protected void doStop() throws Exception {
-        getPlugin().removeConsumer(camelConsumer);
+        CamelUtils.getPlugin(engine).removeConsumer(camelConsumer);
 
         camelConsumer = null;
 

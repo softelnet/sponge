@@ -165,7 +165,7 @@ EchoPlugin plugin = new EchoPlugin();
 plugin.setName("testPlugin");
 plugin.setEcho("Echo text!");
 
-Engine engine = DefaultSpongeEngine.builder()
+SpongeEngine engine = DefaultSpongeEngine.builder()
         .systemProperty("sponge.home", "..")
         .property("test.property", "TEST")
         .plugin(plugin)
@@ -184,7 +184,7 @@ The Engine Builder API provides the method `config()` to read an XML configurati
 .Example of using the XML configuration file in the Engine Builder API
 [source,java]
 ----
-Engine engine = DefaultSpongeEngine.builder().config("examples/core/engine_parameters.xml").build();
+SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/engine_parameters.xml").build();
 engine.startup();
 ----
 

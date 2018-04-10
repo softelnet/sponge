@@ -270,6 +270,11 @@
             <artifactId>camel-saxon</artifactId>
             <version>${camel.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-reactive-streams</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
 
         <!-- Selected Camel data formats available in a standalone application out of the box: -->
         <dependency>

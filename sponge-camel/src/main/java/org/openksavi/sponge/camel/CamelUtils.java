@@ -19,6 +19,7 @@ package org.openksavi.sponge.camel;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.xml.XPathBuilder;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
@@ -62,5 +63,14 @@ public abstract class CamelUtils {
 
     public static String xpath(Exchange exchange, String path) {
         return XPathBuilder.xpath(path).stringResult().evaluate(exchange, String.class);
+    }
+
+    public static CamelPlugin getPlugin(SpongeEngine engine) {
+        CamelPlugin plugin = engine.getPluginManager().getPlugin(CamelPlugin.NAME, CamelPlugin.class);
+        if (plugin == null) {
+            throw new SpongeException("Camel plugin not found");
+        }
+
+        return plugin;
     }
 }
