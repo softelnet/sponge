@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
@@ -154,10 +155,10 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     private ExceptionHandler exceptionHandler = new LoggingExceptionHandler();
 
     /** OnStartup listeners. */
-    private List<OnStartupListener> onStartupListeners = new ArrayList<>();
+    private List<OnStartupListener> onStartupListeners = new CopyOnWriteArrayList<>();
 
     /** OnShutdown listeners. */
-    private List<OnShutdownListener> onShutdownListeners = new ArrayList<>();
+    private List<OnShutdownListener> onShutdownListeners = new CopyOnWriteArrayList<>();
 
     /** Version info. */
     private VersionInfo versionInfo = new VersionInfo();

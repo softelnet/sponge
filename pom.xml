@@ -98,7 +98,7 @@
         <tensorflow.version>1.7.0</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.1</pi4j.version>
-        <rxjava2.version>2.1.11</rxjava2.version>
+        <rxjava2.version>2.1.12</rxjava2.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -107,7 +107,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.17.0</mockito.version>
+        <mockito.version>2.18.0</mockito.version>
     </properties>
 
     <prerequisites>

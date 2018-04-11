@@ -26,19 +26,19 @@ The main features of {sponge}:
 
 * provides a concurrent processing of incoming events,
 * allows generating and scheduling of events (e.g. supports cron notation),
+* events may represent such diverse entities as, for example, SNMP traps, RSS feeds or MIDI messages,
 * supports writing knowledge bases in several scripting languages,
 * no need to learn yet another notation/DSL, however you have to learn at least the basics of the {sponge} API,
 * allows embedding in a custom Java application (using Maven) or could be used as a standalone command-line application,
-* supports connecting with many types of external systems by integration with http://camel.apache.org[Apache Camel],
+* supports connecting to many types of external systems by using http://camel.apache.org[Apache Camel] integration,
 * provides own Apache Camel component for including {sponge} engine in a Camel route,
-* supports creation of custom plugins (e.g. built-in plugin for integration with Camel),
+* provides plugins for integration with Spring, Camel, CPython, MIDI, MPD and Raspberry Pi,
+* supports creation of custom plugins,
 * supports deployment in enterprise environments by integration with Spring framework,
 * provides the standalone command-line application, that, for example, allows management of Camel routes without the need of writing Java code (you may use any of the supported scripting languages or XML),
 * supports reloading of knowledge bases on the fly (i.e. while the system is running),
-* provides plugins for integration with Spring, Camel, CPython, MIDI, MPD and Raspberry Pi,
-* events may represent such diverse entities as, for example, SNMP traps, RSS feeds or MIDI messages,
+* supports processing of streams of {sponge} events by using http://reactivex.io[Reactive Extensions (ReactiveX)],
 * may be used to automate repetitive tasks (programmed in any of the supported scripting languages),
-* may be used as a sandbox for learning multiple scripting languages,
 * provides a comprehensive documentation and many examples.
 
 == License
