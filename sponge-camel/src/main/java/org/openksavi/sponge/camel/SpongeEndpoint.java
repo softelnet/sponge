@@ -138,6 +138,8 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
         }
 
         synchronized (getComponent()) {
+            configurePlugin();
+
             if (managed != null && managed) {
                 if (!(engine.isStarting() || engine.isRunning())) {
                     engine.startup();
@@ -149,13 +151,8 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
                 throw new SpongeException("Sponge engine is not starting or running");
             }
 
-            configureEngine();
+            configureAction();
         }
-    }
-
-    protected void configureEngine() {
-        configurePlugin();
-        configureAction();
     }
 
     protected void configurePlugin() {

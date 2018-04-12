@@ -17,11 +17,13 @@
 package org.openksavi.sponge.standalone.interactive;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jline.reader.Completer;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.ParsedLine;
 import org.jline.reader.Parser;
 import org.jline.reader.UserInterruptException;
 import org.jline.reader.impl.DefaultParser;
@@ -47,6 +49,8 @@ public class JLineInteractiveModeConsole implements InteractiveModeConsole {
     private LineReader reader;
 
     private Completer completer;
+
+    private AtomicBoolean isOpen = new AtomicBoolean(false);
 
     public JLineInteractiveModeConsole(boolean open) {
         if (open) {
@@ -87,11 +91,13 @@ public class JLineInteractiveModeConsole implements InteractiveModeConsole {
         }
 
         reader = lineReaderBuilder.build();
+
+        isOpen.set(true);
     }
 
     @Override
     public boolean isOpen() {
-        return reader != null;
+        return isOpen.get();
     }
 
     @Override
@@ -101,7 +107,7 @@ public class JLineInteractiveModeConsole implements InteractiveModeConsole {
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);
         } finally {
-            reader = null;
+            isOpen.set(false);
         }
     }
 
@@ -120,8 +126,10 @@ public class JLineInteractiveModeConsole implements InteractiveModeConsole {
             // Ignore the line that will be read, in order to process multiline commands in the client code.
             reader.readLine(InteractiveModeConstants.PROMPT);
 
+            ParsedLine parsedLine = reader.getParsedLine();
+
             // Return the raw line.
-            return reader.getParsedLine().line();
+            return parsedLine != null ? parsedLine.line() : null;
         } catch (UserInterruptException | EndOfFileException e) {
             return null;
         }

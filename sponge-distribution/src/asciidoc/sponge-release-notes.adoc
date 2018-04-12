@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.0.9 (not released yet)
+== 1.1.0 (2018-04-12)
 
 * Support for using ReactiveX (`sponge-reactivex`) in knowledge bases, e.g. for processing a stream of {sponge} events using reactive programming.
 * Added support for passing a knowledge base script as a String to the EngineBuilder API.
