@@ -343,8 +343,8 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     @Override
-    protected void doLoad(Reader reader, String fileName) {
-        Script script = shell.parse(reader, fileName);
+    protected void doLoad(Reader reader, String name) {
+        Script script = shell.parse(reader, name);
         script.setBinding(binding);
         script.run();
 

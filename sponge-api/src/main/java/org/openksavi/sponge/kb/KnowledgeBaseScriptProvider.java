@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,19 @@
 
 package org.openksavi.sponge.kb;
 
+import java.io.IOException;
+import java.io.Reader;
+
 /**
- * Knowledge base script.
+ * A knowledge base script provider.
  */
-public interface KnowledgeBaseScript {
+public interface KnowledgeBaseScriptProvider<T extends KnowledgeBaseScript> {
 
     /**
-     * Returns a knowledge base that uses this script.
+     * Returns the reader for the script.
      *
-     * @return a knowledge base.
+     * @return the reader for the script.
+     * @throws IOException if an exception occurred.
      */
-    ScriptKnowledgeBase getKnowledgeBase();
-
-    /**
-     * Sets a knowledge base that uses this script.
-     *
-     * @param knowledgeBase a knowledge base.
-     */
-    void setKnowledgeBase(ScriptKnowledgeBase knowledgeBase);
-
-    /**
-     * Returns the name of the script.
-     *
-     * @return the name of the script.
-     */
-    String getName();
+    Reader getReader() throws IOException;
 }

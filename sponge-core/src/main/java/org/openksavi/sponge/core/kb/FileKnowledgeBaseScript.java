@@ -1,21 +1,17 @@
 package org.openksavi.sponge.core.kb;
 
-import org.openksavi.sponge.kb.KnowledgeBaseScript;
-import org.openksavi.sponge.kb.ScriptKnowledgeBase;
+import java.nio.charset.Charset;
 
 /**
- * File knowledge base script definition.
+ * File-based knowledge base script definition.
  */
-public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
+public class FileKnowledgeBaseScript extends BaseKnowledgeBaseScript {
 
-    /** A knowledge base that uses this script. */
-    private ScriptKnowledgeBase knowledgeBase;
-
-    /** A knowledge base script file name. */
-    private String fileName;
+    /** The script file is required by default. */
+    public static final boolean DEFAULT_REQUIRED = true;
 
     /** A knowledge base script charset. */
-    private String charset;
+    private Charset charset;
 
     /** Informs if the knowledge base script file is required. */
     private boolean required;
@@ -23,10 +19,11 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName file name.
+     * @param fileName the knowledge base script file name.
      */
     public FileKnowledgeBaseScript(String fileName) {
         this(fileName, null);
+
     }
 
     /**
@@ -35,8 +32,8 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
      * @param fileName file name.
      * @param charset charset.
      */
-    public FileKnowledgeBaseScript(String fileName, String charset) {
-        this(fileName, charset, KnowledgeBaseScript.DEFAULT_REQUIRED);
+    public FileKnowledgeBaseScript(String fileName, Charset charset) {
+        this(fileName, charset, DEFAULT_REQUIRED);
     }
 
     /**
@@ -46,59 +43,50 @@ public class FileKnowledgeBaseScript implements KnowledgeBaseScript {
      * @param charset charset.
      * @param required required.
      */
-    public FileKnowledgeBaseScript(String fileName, String charset, boolean required) {
-        this.fileName = fileName;
+    public FileKnowledgeBaseScript(String fileName, Charset charset, boolean required) {
+        super(fileName);
+
         this.charset = charset;
         this.required = required;
     }
 
-    @Override
-    public ScriptKnowledgeBase getKnowledgeBase() {
-        return knowledgeBase;
-    }
-
-    @Override
-    public void setKnowledgeBase(ScriptKnowledgeBase knowledgeBase) {
-        this.knowledgeBase = knowledgeBase;
-    }
-
-    @Override
     public String getFileName() {
-        return fileName;
+        return getName();
     }
 
-    @Override
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    @Override
-    public String getCharset() {
+    /**
+     * Returns the charset.
+     *
+     * @return the charset.
+     */
+    public Charset getCharset() {
         return charset;
     }
 
-    @Override
-    public void setCharset(String charset) {
+    /**
+     * Sets the charset.
+     *
+     * @param charset the charset.
+     */
+    public void setCharset(Charset charset) {
         this.charset = charset;
     }
 
-    @Override
+    /**
+     * Returns {@code true} if the file is required.
+     *
+     * @return {@code true} if the file is required.
+     */
     public boolean isRequired() {
         return required;
     }
 
-    @Override
+    /**
+     * Sets if the file is required.
+     *
+     * @param required {@code true} if the file is required.
+     */
     public void setRequired(boolean required) {
         this.required = required;
-    }
-
-    /**
-     * Returns string representation.
-     *
-     * @return string representation.
-     */
-    @Override
-    public String toString() {
-        return fileName;
     }
 }

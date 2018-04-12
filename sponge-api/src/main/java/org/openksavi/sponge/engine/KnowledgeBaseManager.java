@@ -21,6 +21,8 @@ import java.util.List;
 import org.openksavi.sponge.config.Configurable;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseOperations;
+import org.openksavi.sponge.kb.KnowledgeBaseScript;
+import org.openksavi.sponge.kb.KnowledgeBaseScriptProvider;
 import org.openksavi.sponge.kb.ScriptKnowledgeBase;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 
@@ -100,4 +102,13 @@ public interface KnowledgeBaseManager extends Configurable, EngineModule, Knowle
      * @param value variable value.
      */
     void setInterpreterGlobalVariable(String name, Object value);
+
+    /**
+     * Returns a new instance of a knowledge base script provider for the given script.
+     *
+     * @param script the knowledge base script.
+     *
+     * @return a new instance of a knowledge base script provider.
+     */
+    KnowledgeBaseScriptProvider<KnowledgeBaseScript> getKnowledgeBaseScriptProvider(KnowledgeBaseScript script);
 }

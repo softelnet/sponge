@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
+import org.openksavi.sponge.core.kb.StringKnowledgeBaseScript;
 import org.openksavi.sponge.engine.EngineParameters;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -315,6 +316,18 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
         knowledgeBases.add(knowledgeBase);
 
         return this;
+    }
+
+    /**
+     * Adds the String-based knowledge base.
+     *
+     * @param name the knowledge base name.
+     * @param type the knowledge base type.
+     * @param body the String-based knowledge base body.
+     * @return this Engine Builder.
+     */
+    public EngineBuilder<T> knowledgeBaseString(String name, KnowledgeBaseType type, String body) {
+        return knowledgeBase(name, type, Stream.of(new StringKnowledgeBaseScript(body)).collect(Collectors.toList()));
     }
 
     /**

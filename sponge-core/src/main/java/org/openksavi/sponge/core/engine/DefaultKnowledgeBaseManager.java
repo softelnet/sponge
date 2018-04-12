@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.engine;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -34,12 +35,14 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
+import org.openksavi.sponge.core.kb.KnowledgeBaseScriptProviderMapping;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.KnowledgeBaseManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
+import org.openksavi.sponge.kb.KnowledgeBaseScriptProvider;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kb.ScriptKnowledgeBase;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactory;
@@ -82,6 +85,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
     protected KnowledgeBase defaultKnowledgeBase;
 
+    /** Knowledge base script provider mapping. */
+    protected KnowledgeBaseScriptProviderMapping knowledgeBaseScriptProviderMapping;
+
     /**
      * Creates a new knowledge base manager.
      *
@@ -93,6 +99,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         // Add default, Java-based knowledge base (mainly for plugin registration).
         defaultKnowledgeBase = new DefaultKnowledgeBase();
         knowledgeBases.put(defaultKnowledgeBase.getName(), defaultKnowledgeBase);
+
+        knowledgeBaseScriptProviderMapping = new KnowledgeBaseScriptProviderMapping(engine);
     }
 
     /**
@@ -136,8 +144,10 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
                 throw new SpongeException("Knowledge base file name must not be empty");
             }
 
-            scripts.add(new FileKnowledgeBaseScript(fileName, fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null),
-                    fileNode.getBooleanAttribute(CFG_KB_FILE_ATTR_REQUIRED, KnowledgeBaseScript.DEFAULT_REQUIRED)));
+            String charset = fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null);
+
+            scripts.add(new FileKnowledgeBaseScript(fileName, charset != null ? Charset.forName(charset) : null,
+                    fileNode.getBooleanAttribute(CFG_KB_FILE_ATTR_REQUIRED, FileKnowledgeBaseScript.DEFAULT_REQUIRED)));
         }
 
         DefaultScriptKnowledgeBase knowledgeBase;
@@ -375,12 +385,25 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         knowledgeBases.values().forEach(knowledgeBase -> knowledgeBase.getInterpreter().setVariable(name, value));
     }
 
+    @Override
+    public KnowledgeBaseScriptProvider<KnowledgeBaseScript> getKnowledgeBaseScriptProvider(KnowledgeBaseScript script) {
+        return knowledgeBaseScriptProviderMapping.getProvider(script);
+    }
+
     public KnowledgeBaseType inferKnowledgeBaseType(String knowledgeBaseName, List<KnowledgeBaseScript> scripts) {
         if (scripts.isEmpty()) {
-            throw new SpongeException("Cannot infer knowledge base '" + knowledgeBaseName + "' type because it has no files");
+            throw new SpongeException("Cannot infer knowledge base '" + knowledgeBaseName + "' type because it has no scripts");
         }
 
-        String fileName = scripts.get(0).getFileName();
+        // Find first file-based script.
+        Optional<FileKnowledgeBaseScript> firstFileKnowledgeBaseScriptO =
+                scripts.stream().filter(FileKnowledgeBaseScript.class::isInstance).map(FileKnowledgeBaseScript.class::cast).findFirst();
+
+        if (!firstFileKnowledgeBaseScriptO.isPresent()) {
+            throw new SpongeException("Cannot infer knowledge base '" + knowledgeBaseName + "' type because it has no file-based scripts");
+        }
+
+        String fileName = firstFileKnowledgeBaseScriptO.get().getFileName();
         String extension = FilenameUtils.getExtension(fileName);
 
         Optional<KnowledgeBaseType> typeO = knowledgeBaseInterpreterFactories.values().stream()
@@ -397,9 +420,15 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     }
 
     public void verifyKnowledgeBaseFileTypes(ScriptKnowledgeBase scriptKnowledgeBase) {
+        if (scriptKnowledgeBase.getScripts().isEmpty()) {
+            return;
+        }
+
         List<String> extensions = scriptKnowledgeBase.getType().getFileExtensions();
 
-        if (!scriptKnowledgeBase.getScripts().stream()
+        // Checking only for file based scripts.
+        if (!scriptKnowledgeBase.getScripts().stream().filter(FileKnowledgeBaseScript.class::isInstance)
+                .map(FileKnowledgeBaseScript.class::cast)
                 .allMatch(script -> extensions.stream()
                         .filter(ext -> StringUtils.equalsIgnoreCase(ext, FilenameUtils.getExtension(script.getFileName()))).findFirst()
                         .isPresent())) {

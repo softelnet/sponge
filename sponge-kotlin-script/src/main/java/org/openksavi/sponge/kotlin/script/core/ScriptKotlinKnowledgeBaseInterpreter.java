@@ -193,7 +193,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
     }
 
     @Override
-    protected void doLoad(Reader reader, String fileName) {
+    protected void doLoad(Reader reader, String name) {
         try {
             CompiledKotlinScript script = (CompiledKotlinScript) ((Compilable) scriptEngine).compile(reader);
             script.eval();

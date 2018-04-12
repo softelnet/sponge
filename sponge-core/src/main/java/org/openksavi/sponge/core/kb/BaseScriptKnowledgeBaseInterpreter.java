@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
@@ -99,8 +98,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     @Override
     public final void load(List<KnowledgeBaseScript> scripts) {
         if (scripts.size() > 1) {
-            logger.debug("Loading knowledge base '{}' from files: {}.", scripts.get(0).getKnowledgeBase().getName(),
-                    scripts.stream().map(script -> script.getFileName()).collect(Collectors.joining(", ", "'", "'")));
+            logger.debug("Loading knowledge base '{}' from {}.", scripts.get(0).getKnowledgeBase().getName(),
+                    scripts.stream().map(script -> script.getName()).collect(Collectors.joining(", ", "'", "'")));
         }
         synchronized (interpteterSynchro) {
             scripts.forEach(script -> loadKnowledgeBaseScript(script));
@@ -135,20 +134,19 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     @Override
     public final void load(String fileName, Charset charset, boolean required) {
+        load(new FileKnowledgeBaseScript(fileName, charset, required));
+    }
+
+    @Override
+    public final void load(KnowledgeBaseScript script) {
         synchronized (interpteterSynchro) {
             invalidateCache();
 
             SpongeEngine engine = getEngineOperations().getEngine();
 
-            try (Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, fileName, charset)) {
+            try (Reader reader = engine.getKnowledgeBaseManager().getKnowledgeBaseScriptProvider(script).getReader()) {
                 if (reader != null) {
-                    doLoad(reader, fileName);
-                } else {
-                    if (required) {
-                        throw new ConfigException("Knowledge base file " + fileName + " not found");
-                    } else {
-                        logger.warn("Knowledge base file " + fileName + " not found but is set as optional.");
-                    }
+                    doLoad(reader, script.getName());
                 }
             } catch (IOException e) {
                 throw SpongeUtils.wrapException("load", e);
@@ -156,14 +154,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         }
     }
 
-    @Override
-    public final void load(KnowledgeBaseScript script) {
-        load(script.getFileName(), script.getCharset() != null ? Charset.forName(script.getCharset()) : Charset.defaultCharset(),
-                script.isRequired());
-    }
-
-    protected void doLoad(Reader reader, String fileName) {
-        eval(reader, fileName);
+    protected void doLoad(Reader reader, String name) {
+        eval(reader, name);
     }
 
     @Override
@@ -178,7 +170,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     }
 
     private void loadKnowledgeBaseScript(KnowledgeBaseScript script) {
-        logger.info("Loading knowledge base '{}' file '{}'.", script.getKnowledgeBase().getName(), script.getFileName());
+        logger.info("Loading knowledge base '{}' from {}.", script.getKnowledgeBase().getName(), script.getName());
 
         load(script);
     }
