@@ -89,5 +89,5 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 
 [quote, Marcin Paś, CTO at Softelnet]
 ____
-Softelnet has for may years used Open Source Software in its commercial products. Therefore we appreciate the impact of Open Source on the IT industry and believe that its constant development is important. In order to contribute to the Open Source community we share and maintain projects such as Sponge.
+Softelnet has used Open Source Software in its commercial products for may years. Therefore we appreciate the impact of Open Source on the IT industry and believe that its constant development is important. In order to contribute to the Open Source community we share and maintain projects such as Sponge.
 ____
