@@ -54,6 +54,13 @@ public interface SpongeEngine extends EngineModule {
     void init();
 
     /**
+     * Returns the Action Manager.
+     *
+     * @return the Action Manager.
+     */
+    ActionManager getActionManager();
+
+    /**
      * Returns the Plugin Manager.
      *
      * @return the Plugin Manager.

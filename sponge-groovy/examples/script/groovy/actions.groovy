@@ -17,13 +17,10 @@ class EchoAction extends Action {
     }
     Object onCall(Object[] args) {
         this.logger.info("Action {} called", this.name)
-        if (args != null) {
-            for (arg in args) {
-                this.logger.debug("Arg: {} ({})", arg, arg.class)
-            }
-        } else {
-            this.logger.debug("No arguments supplied.")
+        for (arg in args) {
+            this.logger.debug("Arg: {} ({})", arg, arg.class)
         }
+
     	return args
     }
 }

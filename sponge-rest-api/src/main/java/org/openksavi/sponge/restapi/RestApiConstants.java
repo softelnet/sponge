@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.action;
-
-import org.openksavi.sponge.Processor;
+package org.openksavi.sponge.restapi;
 
 /**
- * Action.
+ * Sponge REST API constants.
  */
-public interface Action extends Processor<ActionAdapter> {
+public final class RestApiConstants {
 
-    /**
-     * A callback method that performs an operation and returns a result.
-     *
-     * @param args arguments for action call.
-     * @return result of executing action.
-     */
-    Object onCall(Object[] args);
+    public static final String APPLICATION_JSON_VALUE = "application/json";
+
+    public static final int DEFAULT_PORT = 8080;
+
+    private RestApiConstants() {
+        //
+    }
 }

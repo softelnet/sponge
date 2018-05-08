@@ -377,7 +377,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Property / Method |Description
 
 |`Object onCall(args)`
-|The callback method invoked when an action is called, e.g.: `EPS.call()`. The argument in an array of `Object`s and the result in an `Object`. This method is mandatory.
+|The callback method invoked when an action is called, e.g.: `EPS.call()`. The argument in an array of `Object's` and the result is an `Object`. This method is mandatory.
 |===
 
 The `onConfigure` method in actions is not mandatory.
@@ -416,7 +416,7 @@ The code presented below defines the Java-based action named `JavaEchoAction`.
 public class JavaEchoAction extends JAction { // <1>
 
     @Override
-    public Object onCall(Object... args) { // <2>
+    public Object onCall(Object[] args) { // <2>
         return args;
     }
 }

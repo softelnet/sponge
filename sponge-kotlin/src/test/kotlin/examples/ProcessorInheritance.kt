@@ -16,11 +16,11 @@ class ProcessorInheritance : KKnowledgeBase() {
     }
 
     abstract class AbstractEchoAction : KAction() {
-        open fun calculateResult(vararg args: Any?) = 1
+        open fun calculateResult(args: Array<Any?>) = 1
     }
 
     class EchoAction : AbstractEchoAction() {
-        override fun onCall(vararg args: Any?) = calculateResult(args) * 2
+        override fun onCall(args: Array<Any?>) = calculateResult(args) * 2
     }
 
     override fun onStartup() {

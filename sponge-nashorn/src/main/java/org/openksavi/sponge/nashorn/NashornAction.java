@@ -60,9 +60,9 @@ public abstract class NashornAction extends BaseAction implements NashornScriptO
     }
 
     @Override
-    public final Object onCall(Object... args) {
+    public final Object onCall(Object[] args) {
         return onCall(getSelf(), args);
     }
 
-    public abstract Object onCall(Object self, Object... args);
+    public abstract Object onCall(Object self, Object[] args);
 }

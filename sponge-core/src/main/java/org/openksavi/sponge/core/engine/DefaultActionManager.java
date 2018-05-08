@@ -54,13 +54,13 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     }
 
     @Override
-    public Object callAction(String actionName, Object... args) {
+    public Object callAction(String actionName, Object[] args) {
         ActionAdapter action = registeredActions.get(actionName);
         if (action == null) {
             throw new SpongeException("Action " + actionName + " is not registered");
         }
 
-        return action.getProcessor().onCall(args);
+        return action.getProcessor().onCall(args != null ? args : new Object[0]);
     }
 
     @Override

@@ -22,7 +22,7 @@ class Actions : KKnowledgeBase() {
             displayName = "Echo Action"
         }
 
-        override fun onCall(vararg args: Any?): Any? {
+        override fun onCall(args: Array<Any?>): Any? {
             logger.info("Action {} called", name)
             args.forEach { logger.debug("Arg: $it (${it?.javaClass})") }
             return args

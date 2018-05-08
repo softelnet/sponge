@@ -21,7 +21,7 @@ import org.openksavi.sponge.java.JAction;
 public class PowerEchoAction extends JAction {
 
     @Override
-    public Object onCall(Object... args) {
+    public Object onCall(Object[] args) {
         getLogger().debug("PowerEchoAction called");
         if (args != null) {
             for (int i = 0; i < args.length; i++) {

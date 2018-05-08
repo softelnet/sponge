@@ -15,11 +15,8 @@ class EchoAction(Action):
         self.displayName = "Echo Action"
     def onCall(self, args):
         self.logger.info("Action {} called", self.name)
-        if (args is not None):
-            for arg in args:
-                self.logger.debug("Arg: {} ({})", arg, type(arg))
-        else:
-            self.logger.debug("No arguments supplied.")
+        for arg in args:
+            self.logger.debug("Arg: {} ({})", arg, type(arg))
     	return args
 
 def onLoad():

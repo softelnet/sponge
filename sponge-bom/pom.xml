@@ -101,6 +101,11 @@
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-rest-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
                 <artifactId>sponge-standalone</artifactId>
                 <version>${project.version}</version>
             </dependency>

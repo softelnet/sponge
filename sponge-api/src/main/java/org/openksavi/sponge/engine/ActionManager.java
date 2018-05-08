@@ -42,11 +42,11 @@ public interface ActionManager extends EngineModule {
     /**
      * Calls the action.
      *
-     * @param actionName Name of registered action.
-     * @param args Arguments for Action.
+     * @param actionName name of registered action.
+     * @param args arguments for Action.
      * @return result of executing action.
      */
-    Object callAction(String actionName, Object... args);
+    Object callAction(String actionName, Object[] args);
 
     /**
      * Returns registered processor adapter map.

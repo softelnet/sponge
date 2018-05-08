@@ -15,12 +15,8 @@ class EchoAction < Action
     end
     def onCall(args)
         self.logger.info("Action {} called", self.name)
-        if !args.nil?
-            for arg in args
-                self.logger.debug("Arg: {} ({})", arg, arg.class.superclass)
-            end
-        else
-            self.logger.debug("No arguments supplied.")
+        for arg in args
+            self.logger.debug("Arg: {} ({})", arg, arg.class.superclass)
         end
     	return args
     end

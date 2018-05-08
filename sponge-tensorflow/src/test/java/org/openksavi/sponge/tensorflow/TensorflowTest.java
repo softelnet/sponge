@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.tensorflow.Graph;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
+import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
 
@@ -51,19 +52,6 @@ public class TensorflowTest {
                 logger.info(new String(output.bytesValue(), "UTF-8"));
                 logger.info(output.toString());
             }
-        }
-    }
-
-    // TODO @Test
-    public void testLoadModel() throws Exception {
-        String modelDir = "examples/tensorflow/estimator/model";
-        SavedModelBundle bundle = SavedModelBundle.load(modelDir + "/" + SpongeUtils.getLastSubdirectory(modelDir), "serve");
-
-        try (Session s = bundle.session()/* ; Tensor output = s.runner().fetch("MyConst").run().get(0) */) {
-            Tensor x = Tensor.create(new float[] { 2, 5, 8, 1 });
-            Tensor y = s.runner().feed("x", x).fetch("y").run().get(0);
-
-            logger.info("y = {}", y.floatValue());
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.standalone;
+package org.openksavi.sponge.restapi;
 
-import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.openksavi.sponge.camel.CamelPlugin;
-import org.openksavi.sponge.restapi.RestConfiguration;
 
 @Configuration
-@Import(RestConfiguration.class)
-public class SpringCamelConfiguration extends CamelConfiguration {
+public class RestConfiguration {
 
     @Bean
-    public CamelPlugin camel() {
-        return new CamelPlugin();
+    public RestService spongeRestService() {
+        return new RestService();
+    }
+
+    @Bean
+    public RestRouteBuilder spongeRestRouteBuilder() {
+        return new RestRouteBuilder();
     }
 }

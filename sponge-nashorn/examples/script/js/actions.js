@@ -15,12 +15,8 @@ var EchoAction = Java.extend(Action, {
     },
     onCall: function(self, args) {
         self.logger.info("Action {} called", self.name);
-        if (args != null) {
-            for each (var arg in args) {
-                self.logger.debug("Arg: {} ({})", arg, typeof arg);
-            }
-        } else {
-            self.logger.debug("No arguments supplied.");
+        for each (var arg in args) {
+            self.logger.debug("Arg: {} ({})", arg, typeof arg);
         }
     	return args;
     }

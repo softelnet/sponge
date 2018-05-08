@@ -33,7 +33,7 @@ public class CamelProducerAction extends JAction {
     }
 
     @Override
-    public Object onCall(Object... args) {
+    public Object onCall(Object[] args) {
         CamelUtils.assertCamelProducerActionArgs(this, args);
 
         return getEps().event(CamelUtils.getOrCreateInputEvent(getEps().getEngine(), (Exchange) args[0])).send();
