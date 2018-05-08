@@ -16,17 +16,17 @@
 
 package org.openksavi.sponge.restapi.model;
 
-import org.openksavi.sponge.Experimental;
-
 import io.swagger.annotations.ApiModel;
+
+import org.openksavi.sponge.Experimental;
 
 @Experimental
 @ApiModel(value = "ActionArgMetadata", description = "Represents a Sponge action argument metadata")
 public class RestActionArgMetadata {
 
-    private String description;
-
-    private String type;
+    // private String description;
+    //
+    // private String type;
 
     public RestActionArgMetadata() {
         //

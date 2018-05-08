@@ -43,7 +43,8 @@ public interface ActionManager extends EngineModule {
      * Calls the action.
      *
      * @param actionName name of registered action.
-     * @param args arguments for Action.
+     * @param args arguments for an action call. This parameter may be {@code null} and in that case it will be passed as an empty array to
+     *        the action.
      * @return result of executing action.
      */
     Object callAction(String actionName, Object[] args);

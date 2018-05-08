@@ -60,6 +60,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
             throw new SpongeException("Action " + actionName + " is not registered");
         }
 
+        // Action.onCall arguments should't be null.
         return action.getProcessor().onCall(args != null ? args : new Object[0]);
     }
 

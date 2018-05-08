@@ -26,7 +26,7 @@ public interface Action extends Processor<ActionAdapter> {
     /**
      * A callback method that performs an operation and returns a result.
      *
-     * @param args arguments for action call.
+     * @param args arguments for the action call. This parameter should not be {@code null}.
      * @return result of executing action.
      */
     Object onCall(Object[] args);

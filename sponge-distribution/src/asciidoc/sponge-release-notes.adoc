@@ -6,6 +6,13 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.2.0 (not released yet)
+
+* API change: `Action.onCall` callback method signature has been changed to `Object onCall(Object[] args)`.
+* A new Sponge REST API (`sponge-rest-api`) that uses JSON as its communication format.
+* Libraries upgrade.
+
+[discrete]
 == 1.1.0 (2018-04-12)
 
 * Support for using ReactiveX (`sponge-reactivex`) in knowledge bases, e.g. for processing a stream of {sponge} events using reactive programming.
