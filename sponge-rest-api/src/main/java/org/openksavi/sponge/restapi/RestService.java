@@ -16,13 +16,17 @@
 
 package org.openksavi.sponge.restapi;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.restapi.model.RestAction;
+import org.openksavi.sponge.restapi.model.RestActionArgMetadata;
 import org.openksavi.sponge.restapi.model.RestActionMetadata;
 import org.openksavi.sponge.restapi.model.RestActionsResult;
 import org.openksavi.sponge.restapi.model.RestCallResult;
@@ -59,10 +63,18 @@ public class RestService {
 
     public RestActionsResult getActions() {
         return new RestActionsResult(engine.getActions().stream()
-                .map(action -> new RestActionMetadata(action.getName(), action.getDisplayName())).collect(Collectors.toList()));
+                .map(action -> new RestActionMetadata(action.getName(), action.getDisplayName(), createActionArgMetadataList(action)))
+                .collect(Collectors.toList()));
     }
 
     public RestVersion getVersion() {
         return new RestVersion(engine.getVersion());
+    }
+
+    protected List<RestActionArgMetadata> createActionArgMetadataList(ActionAdapter actionAdapter) {
+        return actionAdapter.getArgsMetadata() != null
+                ? Arrays.stream(actionAdapter.getArgsMetadata())
+                        .map(meta -> new RestActionArgMetadata(meta.getName(), meta.getType().getCode())).collect(Collectors.toList())
+                : null;
     }
 }

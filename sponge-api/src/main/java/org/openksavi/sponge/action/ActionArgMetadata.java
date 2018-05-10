@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.action;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import org.openksavi.sponge.DataType;
 
-import org.openksavi.sponge.Experimental;
+/**
+ * Actions arguments metadata (name and data type).
+ */
+public class ActionArgMetadata {
 
-@Experimental
-@ApiModel(value = "ActionArgMetadata", description = "Represents a Sponge action argument metadata")
-public class RestActionArgMetadata {
-
+    /** An argument name. */
     private String name;
 
-    private String type;
+    /** An argument data type. */ 
+    private DataType type;
 
-    public RestActionArgMetadata() {
-        //
-    }
-
-    public RestActionArgMetadata(String name, String type) {
+    public ActionArgMetadata(String name, DataType type) {
         this.name = name;
         this.type = type;
     }
 
-    @ApiModelProperty(value = "The action argument name", required = true)
     public String getName() {
         return name;
     }
@@ -47,12 +42,11 @@ public class RestActionArgMetadata {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The action argument type", required = true)
-    public String getType() {
+    public DataType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(DataType type) {
         this.type = type;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,11 @@
 
 package org.openksavi.sponge.action;
 
-import org.openksavi.sponge.ProcessorDefinition;
+import org.openksavi.sponge.ProcessorOperations;
 
 /**
- * Action definition.
+ * Action operations.
  */
-public interface ActionDefinition extends ProcessorDefinition, ActionOperations {
+public interface ActionOperations extends ProcessorOperations {
 
-    /**
-     * Returns the arguments metadata or {@code null} in not specified.
-     *
-     * @return the arguments metadata.
-     */
-    ActionArgMetadata[] getArgsMetadata();
-
-    /**
-     * Sets the (optional) arguments metadata.
-     *
-     * @param argsMetadata the arguments metadata.
-     */
-    void setArgsMetadata(ActionArgMetadata... argsMetadata);
 }

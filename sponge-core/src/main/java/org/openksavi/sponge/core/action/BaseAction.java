@@ -18,7 +18,9 @@ package org.openksavi.sponge.core.action;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionArgMetadata;
 import org.openksavi.sponge.core.BaseProcessor;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements Action {
 
@@ -30,5 +32,15 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     @Override
     public final ActionAdapter createAdapter() {
         return new BaseActionAdapter(new BaseActionDefinition());
+    }
+
+    @Override
+    public void setArgsMetadata(String... argMetadataSpecs) {
+        ActionArgMetadata[] argsMetadata = new ActionArgMetadata[argMetadataSpecs.length];
+        for (int i = 0; i < argMetadataSpecs.length; i++) {
+            argsMetadata[i] = SpongeUtils.createActionArgMetadata(getName(), i, argMetadataSpecs[i]);
+        }
+
+        getAdapter().setArgsMetadata(argsMetadata);
     }
 }

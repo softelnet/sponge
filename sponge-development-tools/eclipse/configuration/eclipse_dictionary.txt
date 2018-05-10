@@ -45,3 +45,4 @@ hostname
 basename
 kotlin
 nashorn
+metadata

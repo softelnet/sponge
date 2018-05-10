@@ -12,10 +12,13 @@ def onInit():
     EPS.setVariable("eventSent", AtomicBoolean(False))
 
 class UpperCase(Action):
+    def onConfigure(self):
+        self.argsMetadata = [ "text:string" ]
+
     def onCall(self, args):
         self.logger.info("Action {} called", self.name)
         EPS.getVariable("actionCalled").set(True)
-        return [str(s).upper() for s in args]
+        return str(args[0]).upper()
 
 class PrivateAction(Action):
     def onCall(self, args):

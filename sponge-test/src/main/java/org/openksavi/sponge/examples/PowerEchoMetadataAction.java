@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,19 @@ package org.openksavi.sponge.examples;
 
 import org.openksavi.sponge.java.JAction;
 
-public class PowerEchoAction extends JAction {
+public class PowerEchoMetadataAction extends JAction {
+
+    @Override
+    public void onConfigure() {
+        setArgsMetadata("arg1:number", "arg2:string");
+    }
 
     @Override
     public Object onCall(Object[] args) {
-        getLogger().debug("PowerEchoAction called");
-        for (int i = 0; i < args.length; i++) {
-            getLogger().debug("Arg " + i + ": " + args[i] + " (" + args[i].getClass().getName() + ")");
-            if (args[i] instanceof String) {
-                args[i] = ((String) args[i]).toUpperCase();
-            } else if (args[i] instanceof Number) {
-                args[i] = Integer.valueOf(((Number) args[i]).intValue() + 1);
-            }
-        }
+        getLogger().debug("{} called", getName());
 
-        getLogger().debug("Action successfuly called with {} argument(s).", args == null ? 0 : args.length);
+        args[0] = Integer.valueOf(((Number) args[0]).intValue() + 1);
+        args[1] = ((String) args[1]).toUpperCase();
 
         return args;
     }

@@ -16,13 +16,26 @@
 
 package org.openksavi.sponge.core.action;
 
+import org.openksavi.sponge.action.ActionArgMetadata;
 import org.openksavi.sponge.action.ActionDefinition;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
 
 public class BaseActionDefinition extends BaseProcessorDefinition implements ActionDefinition {
 
+    private ActionArgMetadata[] argsMetadata;
+
     @Override
     public boolean isSingleton() {
         return true;
+    }
+
+    @Override
+    public ActionArgMetadata[] getArgsMetadata() {
+        return argsMetadata;
+    }
+
+    @Override
+    public void setArgsMetadata(ActionArgMetadata... argsMetadata) {
+        this.argsMetadata = argsMetadata;
     }
 }
