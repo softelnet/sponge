@@ -149,7 +149,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                     doLoad(reader, script.getName());
                 }
             } catch (IOException e) {
-                throw SpongeUtils.wrapException("load", e);
+                throw SpongeUtils.wrapException("load", this, e);
             }
         }
     }

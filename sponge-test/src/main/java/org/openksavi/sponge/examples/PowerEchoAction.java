@@ -32,7 +32,7 @@ public class PowerEchoAction extends JAction {
             }
         }
 
-        getLogger().debug("Action successfuly called with {} argument(s).", args == null ? 0 : args.length);
+        getLogger().debug("Action successfuly called with {} argument(s).", args.length);
 
         return args;
     }

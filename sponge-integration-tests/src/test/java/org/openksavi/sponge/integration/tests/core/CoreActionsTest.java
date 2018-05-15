@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import org.openksavi.sponge.DataType;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionArgMetadata;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -67,6 +68,24 @@ public class CoreActionsTest {
             assertEquals(DataType.NUMBER, argMetadata[0].getType());
 
             assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsCallError() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call_error.py").build();
+        engine.startup();
+
+        try {
+            engine.getOperations().call("ErrorAction");
+
+            assertFalse(engine.isError());
+        } catch (SpongeException e) {
+            // Jython-specific error message copying.
+            assertEquals(e.getCause().toString(), e.getMessage());
         } finally {
             engine.shutdown();
         }

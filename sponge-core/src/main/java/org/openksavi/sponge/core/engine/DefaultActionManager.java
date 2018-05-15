@@ -24,6 +24,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 
@@ -60,8 +61,12 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
             throw new SpongeException("Action " + actionName + " is not registered");
         }
 
-        // Action.onCall arguments should't be null.
-        return action.getProcessor().onCall(args != null ? args : new Object[0]);
+        try {
+            // Action.onCall arguments must not be null.
+            return action.getProcessor().onCall(args != null ? args : new Object[0]);
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(action.getProcessor(), e);
+        }
     }
 
     @Override

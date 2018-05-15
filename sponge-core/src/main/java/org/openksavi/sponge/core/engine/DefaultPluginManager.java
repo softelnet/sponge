@@ -37,6 +37,7 @@ import org.openksavi.sponge.engine.PluginManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
+import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.plugin.Plugin;
 
 /**
@@ -229,12 +230,15 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      * @return loaded plugin.
      */
     protected Plugin loadPlugin(KnowledgeBasePluginStub pluginStub) {
+        KnowledgeBaseInterpreter interpreter = null;
+
         try {
             KnowledgeBase knowledgeBase = pluginStub.getKnowledgeBaseName() != null
                     ? getEngine().getKnowledgeBaseManager().getKnowledgeBase(pluginStub.getKnowledgeBaseName())
                     : getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase();
 
-            Plugin plugin = knowledgeBase.getInterpreter().createPluginInstance(pluginStub.getPluginClassName());
+            interpreter = knowledgeBase.getInterpreter();
+            Plugin plugin = interpreter.createPluginInstance(pluginStub.getPluginClassName());
             if (pluginStub.getName() != null) {
                 plugin.setName(pluginStub.getName());
             }
@@ -245,7 +249,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
 
             return plugin;
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(interpreter, e);
         }
     }
 

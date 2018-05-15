@@ -94,7 +94,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
             // Ignore non existing, optional function.
             return defaultValue;
         } catch (ScriptException e) {
-            throw SpongeUtils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, this, e);
         }
     }
 
@@ -104,7 +104,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return (T) getInvocable().invokeFunction(name, args);
         } catch (NoSuchMethodException | ScriptException e) {
-            throw SpongeUtils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, this, e);
         }
     }
 
@@ -113,7 +113,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return getInvocable().invokeMethod(target, name, args);
         } catch (NoSuchMethodException | ScriptException e) {
-            throw SpongeUtils.wrapException(target + "." + name, e);
+            throw SpongeUtils.wrapException(target + "." + name, this, e);
         }
     }
 
@@ -128,7 +128,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             scriptEngine.put(name, value);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(this, e);
         }
     }
 
@@ -137,7 +137,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).containsKey(name);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(this, e);
         }
     }
 
@@ -150,7 +150,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return scriptEngine.get(name);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException("getVariable", e);
+            throw SpongeUtils.wrapException("getVariable", this, e);
         }
     }
 
@@ -159,7 +159,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return eval(scriptEngine, expression);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException("eval", e);
+            throw SpongeUtils.wrapException("eval", this, e);
         }
     }
 
@@ -168,7 +168,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return (T) scriptEngine.eval(expression);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException("eval", e);
+            throw SpongeUtils.wrapException("eval", this, e);
         }
     }
 
@@ -178,7 +178,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return (T) scriptEngine.eval(reader);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(fileName, e);
+            throw SpongeUtils.wrapException(fileName, this, e);
         }
     }
 
@@ -217,13 +217,13 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
             try {
                 return ((Compilable) scriptEngine).compile(expression);
             } catch (ScriptException e) {
-                throw SpongeUtils.wrapException(e);
+                throw SpongeUtils.wrapException(this, e);
             }
         }, getScriptClassInstancePoviderFormat(), (script, javaClass) -> {
             try {
                 return (T) script.eval();
             } catch (ScriptException e) {
-                throw SpongeUtils.wrapException(e);
+                throw SpongeUtils.wrapException(this, e);
             }
         });
     }

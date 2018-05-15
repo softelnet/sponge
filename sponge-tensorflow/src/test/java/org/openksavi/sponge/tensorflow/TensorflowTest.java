@@ -22,13 +22,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tensorflow.Graph;
-import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
-import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
-
-import org.openksavi.sponge.core.util.SpongeUtils;
 
 @SuppressWarnings("rawtypes")
 public class TensorflowTest {

@@ -65,7 +65,7 @@ public class NonScriptKotlinKnowledgeBaseInterpreter extends BaseNonScriptKnowle
                 return new GenericProcessorInstanceHolder((Processor) destJavaClass.newInstance(), KotlinUtils.createProcessorName(kclass),
                         true);
             } catch (Throwable e) {
-                throw SpongeUtils.wrapException(destJavaClass.getName(), e);
+                throw SpongeUtils.wrapException(destJavaClass.getName(), knowledgeBase.getInterpreter(), e);
             }
         }
 

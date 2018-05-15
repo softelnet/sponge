@@ -131,7 +131,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
                 scriptEngine.eval("val " + name + " = bindings[\"" + name + "\"]");
             }
         } catch (ScriptException e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(this, e);
         }
     }
 
@@ -201,7 +201,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
             // Add the last script as the first.
             scripts.add(0, script);
         } catch (ScriptException e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(this, e);
         }
     }
 

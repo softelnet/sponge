@@ -164,7 +164,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
                 return (T) baseDefinition.getProcessorClass().newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
-                throw SpongeUtils.wrapException(e);
+                throw SpongeUtils.wrapException(definition.getName(), e);
             }
         } else {
             return definition.getKnowledgeBase().getInterpreter().createProcessorInstance(definition.getName(), cls);

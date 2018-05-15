@@ -61,7 +61,7 @@ public class JavaKnowledgeBaseInterpreter extends BaseNonScriptKnowledgeBaseInte
                 return new GenericProcessorInstanceHolder((Processor) destJavaClass.newInstance(),
                         JavaUtils.createProcessorName(destJavaClass), true);
             } catch (Throwable e) {
-                throw SpongeUtils.wrapException(destJavaClass.getName(), e);
+                throw SpongeUtils.wrapException(destJavaClass.getName(), knowledgeBase.getInterpreter(), e);
             }
         } else {
             return null;

@@ -148,7 +148,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             container.put(createVariableName(name), value);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(this, e);
         }
     }
 
@@ -157,7 +157,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             return container.getProvider().getRuntime().getGlobalVariables().isDefined(createVariableName(name));
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(e);
+            throw SpongeUtils.wrapException(this, e);
         }
     }
 
@@ -170,7 +170,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             return container.get(createVariableName(name));
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException("getVariable", e);
+            throw SpongeUtils.wrapException("getVariable", this, e);
         }
     }
 
@@ -199,7 +199,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             return (T) container.callMethod(null, name, Object.class);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, this, e);
         }
     }
 
@@ -208,7 +208,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             return container.callMethod(null, name, args, cls);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(name, e);
+            throw SpongeUtils.wrapException(name, this, e);
         }
     }
 
@@ -242,7 +242,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             return (T) container.runScriptlet(expression);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException("eval", e);
+            throw SpongeUtils.wrapException("eval", this, e);
         }
     }
 
@@ -252,7 +252,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         try {
             return (T) container.runScriptlet(reader, fileName);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(fileName, e);
+            throw SpongeUtils.wrapException(fileName, this, e);
         }
     }
 
@@ -262,7 +262,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
             IRubyObject rubyObject = JavaEmbedUtils.javaToRuby(container.getProvider().getRuntime(), target);
             return container.callMethod(rubyObject, name, args);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(target + "." + name, e);
+            throw SpongeUtils.wrapException(target + "." + name, this, e);
         }
     }
 

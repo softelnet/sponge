@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -106,7 +105,6 @@ public class RestApiTest {
         return headers;
     }
 
-    @SuppressWarnings("rawtypes")
     @Test
     public void testRestCall() {
         String actionName = "UpperCase";
@@ -117,8 +115,8 @@ public class RestApiTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(actionName, response.getBody().getActionName());
-        assertTrue(response.getBody().getResult() instanceof List);
-        assertEquals(arg1.toUpperCase(), ((List) response.getBody().getResult()).get(0));
+        assertTrue(response.getBody().getResult() instanceof String);
+        assertEquals(arg1.toUpperCase(), response.getBody().getResult());
 
         await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
         assertFalse(engine.isError());

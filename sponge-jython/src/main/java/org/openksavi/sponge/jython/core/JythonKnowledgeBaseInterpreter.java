@@ -31,6 +31,7 @@ import javax.script.ScriptEngineManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.python.core.Py;
+import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PySystemState;
 import org.python.core.PyType;
@@ -187,5 +188,11 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     @Override
     protected String getScriptClassInstancePoviderFormat() {
         return "%s()";
+    }
+
+    @Override
+    public String getSpecificExceptionMessage(Throwable e) {
+        // Jython exception message may be null so toString() is returned.
+        return e instanceof PyException ? e.toString() : null;
     }
 }

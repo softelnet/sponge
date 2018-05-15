@@ -145,4 +145,12 @@ public interface KnowledgeBaseInterpreter {
      * @return engine operations associated with this knowledge base interpreter.
      */
     KnowledgeBaseEngineOperations getEngineOperations();
+
+    /**
+     * Returns the implementation-specific error message or {@code null} if no specific message is necessary.
+     *
+     * @param e the exception.
+     * @return the implementation-specific error message.
+     */
+    String getSpecificExceptionMessage(Throwable e);
 }

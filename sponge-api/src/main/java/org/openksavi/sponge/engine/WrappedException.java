@@ -28,12 +28,21 @@ public class WrappedException extends SpongeException {
     private String sourceName;
 
     public WrappedException(String sourceName, Throwable throwable) {
-        super(sourceName, throwable);
+        this(sourceName, sourceName, throwable);
+    }
+
+    public WrappedException(String sourceName, String message, Throwable throwable) {
+        super(message, throwable);
 
         this.sourceName = sourceName;
     }
 
     public String getSourceName() {
         return sourceName;
+    }
+
+    @Override
+    public String toString() {
+        return "Error in " + sourceName + (getMessage() != null ? ": " + getMessage() : "");
     }
 }

@@ -171,4 +171,9 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
     public Logger getLogger() {
         return LoggerFactory.getLogger(SpongeUtils.createGlobalLoggerName(getEngineOperations()));
     }
+
+    @Override
+    public String getSpecificExceptionMessage(Throwable e) {
+        return null;
+    }
 }
