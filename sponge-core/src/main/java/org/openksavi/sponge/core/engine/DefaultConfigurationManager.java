@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.engine;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -52,6 +53,7 @@ import org.openksavi.sponge.core.config.FallbackBasePathLocationStrategy;
 import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
+import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
  * Default configuration manager. It contains methods for accessing configuration parameters.
@@ -104,6 +106,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
     /** Properties map. */
     private Map<String, PropertyEntry> properties = new LinkedHashMap<>();
+
+    /** Additional knowledge bases. */
+    protected List<KnowledgeBase> additionalKnowledgeBases = new ArrayList<>();
 
     /**
      * Creates a new configuration manager.
@@ -577,5 +582,13 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public void setAutoEnable(boolean autoEnable) {
         this.autoEnable = autoEnable;
+    }
+
+    public List<KnowledgeBase> getAdditionalKnowledgeBases() {
+        return additionalKnowledgeBases;
+    }
+
+    public void addKnowledgeBase(KnowledgeBase knowledgeBase) {
+        additionalKnowledgeBases.add(knowledgeBase);
     }
 }

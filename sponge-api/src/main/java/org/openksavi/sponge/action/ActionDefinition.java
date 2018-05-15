@@ -23,17 +23,4 @@ import org.openksavi.sponge.ProcessorDefinition;
  */
 public interface ActionDefinition extends ProcessorDefinition, ActionOperations {
 
-    /**
-     * Returns the arguments metadata or {@code null} in not specified.
-     *
-     * @return the arguments metadata.
-     */
-    ActionArgMetadata[] getArgsMetadata();
-
-    /**
-     * Sets the (optional) arguments metadata.
-     *
-     * @param argsMetadata the arguments metadata.
-     */
-    void setArgsMetadata(ActionArgMetadata... argsMetadata);
 }

@@ -21,23 +21,26 @@ import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionMetadata", description = "Represents a Sponge action metadata")
-public class RestActionMetadata {
+@ApiModel(value = "ActionMeta", description = "Represents a Sponge action metadata")
+public class RestActionMeta {
 
     private String name;
 
     private String displayName;
 
-    private List<RestActionArgMetadata> argsMetadata;
+    private List<RestActionArgMeta> argsMeta;
 
-    public RestActionMetadata() {
+    private RestActionResultMeta resultMeta;
+
+    public RestActionMeta() {
         //
     }
 
-    public RestActionMetadata(String name, String displayName, List<RestActionArgMetadata> argsMetadata) {
+    public RestActionMeta(String name, String displayName, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
         this.name = name;
         this.displayName = displayName;
-        this.argsMetadata = argsMetadata;
+        this.argsMeta = argsMeta;
+        this.resultMeta = resultMeta;
     }
 
     @ApiModelProperty(value = "The action name", required = true)
@@ -59,11 +62,20 @@ public class RestActionMetadata {
     }
 
     @ApiModelProperty(value = "The action arguments metadata", required = false)
-    public List<RestActionArgMetadata> getArgsMetadata() {
-        return argsMetadata;
+    public List<RestActionArgMeta> getArgsMeta() {
+        return argsMeta;
     }
 
-    public void setArgsMetadata(List<RestActionArgMetadata> argsMetadata) {
-        this.argsMetadata = argsMetadata;
+    public void setArgsMetadata(List<RestActionArgMeta> argsMeta) {
+        this.argsMeta = argsMeta;
+    }
+
+    @ApiModelProperty(value = "The action result metadata", required = false)
+    public RestActionResultMeta getResultMeta() {
+        return resultMeta;
+    }
+
+    public void setResultMeta(RestActionResultMeta resultMeta) {
+        this.resultMeta = resultMeta;
     }
 }

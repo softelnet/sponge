@@ -19,13 +19,10 @@ package org.openksavi.sponge.standalone;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import org.openksavi.sponge.camel.CamelPlugin;
-import org.openksavi.sponge.restapi.RestConfiguration;
 
 @Configuration
-@Import(RestConfiguration.class)
 public class SpringCamelConfiguration extends CamelConfiguration {
 
     @Bean

@@ -16,37 +16,41 @@
 
 package org.openksavi.sponge.action;
 
-import org.openksavi.sponge.DataType;
+import org.openksavi.sponge.Type;
 
 /**
- * Actions arguments metadata (name and data type).
+ * Action result metadata (data type and display name).
  */
-public class ActionArgMetadata {
+public class ResultMeta {
 
-    /** An argument name. */
-    private String name;
+    /** An argument data type. */
+    private Type type;
 
-    /** An argument data type. */ 
-    private DataType type;
+    /** An argument display name. */
+    private String displayName;
 
-    public ActionArgMetadata(String name, DataType type) {
-        this.name = name;
+    public ResultMeta(Type type, String displayName) {
         this.type = type;
+        this.displayName = displayName;
     }
 
-    public String getName() {
-        return name;
+    public ResultMeta(Type type) {
+        this(type, null);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public DataType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(DataType type) {
+    public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

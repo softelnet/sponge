@@ -34,7 +34,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -64,10 +63,8 @@ import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.DataType;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.ActionArgMetadata;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.event.EventId;
@@ -448,26 +445,6 @@ public abstract class SpongeUtils {
 
     public static boolean isSystemEvent(Event event) {
         return EngineConstants.PREDEFINED_EVENT_NAMES.contains(event.getName());
-    }
-
-    public static ActionArgMetadata createActionArgMetadata(String actionName, int index, String actionArgMetadata) {
-        if (StringUtils.isEmpty(actionArgMetadata)) {
-            throw new SpongeException("Action '" + actionName + "' argument " + index + " has empty metadata");
-        }
-
-        List<String> list =
-                Arrays.stream(actionArgMetadata.split(":")).map(s -> s.trim()).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-        if (list.size() != 2) {
-            throw new SpongeException("Incorrect argument " + index + " metadata in action '" + actionName + "': " + actionArgMetadata);
-        }
-
-        DataType type = DataType.fromCode(list.get(1));
-        if (type == null) {
-            throw new SpongeException(
-                    "Incorrect type for argument " + index + " in action '" + actionName + "' matadata: " + actionArgMetadata);
-        }
-
-        return new ActionArgMetadata(list.get(0), type);
     }
 
     protected SpongeUtils() {

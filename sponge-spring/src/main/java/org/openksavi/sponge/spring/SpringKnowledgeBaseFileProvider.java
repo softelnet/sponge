@@ -24,8 +24,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBaseFileProvider;
@@ -37,28 +35,26 @@ import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
  */
 public class SpringKnowledgeBaseFileProvider implements KnowledgeBaseFileProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(SpringKnowledgeBaseFileProvider.class);
-
     private KnowledgeBaseFileProvider defaultKnowledgeBaseFileProvider = new DefaultKnowledgeBaseFileProvider();
 
     @Override
     public Reader getReader(SpongeEngine engine, String fileName, Charset charset) throws IOException {
-        File file;
+        File file = null;
         try {
             file = ResourceUtils.getFile(fileName);
         } catch (FileNotFoundException e) {
-            Reader reader = defaultKnowledgeBaseFileProvider.getReader(engine, fileName, charset);
-            if (reader == null) {
-                logger.warn("getReader", e);
+            // Handled hereafter.
+        }
+
+        if (file != null && file.exists()) {
+            return new InputStreamReader(new FileInputStream(file), charset);
+        } else {
+            Reader springReaolverReader = SpringUtils.getReaderFromResourcePatternResolver(fileName, charset);
+            if (springReaolverReader != null) {
+                return springReaolverReader;
             }
 
-            return reader;
+            return defaultKnowledgeBaseFileProvider.getReader(engine, fileName, charset);
         }
-
-        if (!file.exists()) {
-            return null;
-        }
-
-        return new InputStreamReader(new FileInputStream(file), charset);
     }
 }

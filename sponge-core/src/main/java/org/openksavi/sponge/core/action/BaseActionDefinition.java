@@ -16,13 +16,16 @@
 
 package org.openksavi.sponge.core.action;
 
-import org.openksavi.sponge.action.ActionArgMetadata;
 import org.openksavi.sponge.action.ActionDefinition;
+import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
 
 public class BaseActionDefinition extends BaseProcessorDefinition implements ActionDefinition {
 
-    private ActionArgMetadata[] argsMetadata;
+    private ArgMeta[] argsMeta;
+
+    private ResultMeta resultMeta;
 
     @Override
     public boolean isSingleton() {
@@ -30,12 +33,22 @@ public class BaseActionDefinition extends BaseProcessorDefinition implements Act
     }
 
     @Override
-    public ActionArgMetadata[] getArgsMetadata() {
-        return argsMetadata;
+    public ArgMeta[] getArgsMeta() {
+        return argsMeta;
     }
 
     @Override
-    public void setArgsMetadata(ActionArgMetadata... argsMetadata) {
-        this.argsMetadata = argsMetadata;
+    public void setArgsMeta(ArgMeta... argsMeta) {
+        this.argsMeta = argsMeta;
+    }
+
+    @Override
+    public ResultMeta getResultMeta() {
+        return resultMeta;
+    }
+
+    @Override
+    public void setResultMeta(ResultMeta resultMeta) {
+        this.resultMeta = resultMeta;
     }
 }

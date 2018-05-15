@@ -28,7 +28,7 @@ public class WrappedException extends SpongeException {
     private String sourceName;
 
     public WrappedException(String sourceName, Throwable throwable) {
-        this(sourceName, sourceName, throwable);
+        this(sourceName, throwable.getMessage(), throwable);
     }
 
     public WrappedException(String sourceName, String message, Throwable throwable) {
@@ -39,10 +39,5 @@ public class WrappedException extends SpongeException {
 
     public String getSourceName() {
         return sourceName;
-    }
-
-    @Override
-    public String toString() {
-        return "Error in " + sourceName + (getMessage() != null ? ": " + getMessage() : "");
     }
 }

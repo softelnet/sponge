@@ -23,4 +23,31 @@ import org.openksavi.sponge.ProcessorOperations;
  */
 public interface ActionOperations extends ProcessorOperations {
 
+    /**
+     * Returns the arguments metadata or {@code null} in not specified.
+     *
+     * @return the arguments metadata.
+     */
+    ArgMeta[] getArgsMeta();
+
+    /**
+     * Sets the (optional) arguments metadata.
+     *
+     * @param argsMeta the arguments metadata.
+     */
+    void setArgsMeta(ArgMeta... argsMeta);
+
+    /**
+     * Returns the result metadata or {@code null} in not specified.
+     *
+     * @return the result metadata.
+     */
+    ResultMeta getResultMeta();
+
+    /**
+     * Sets the (optional) result metadata.
+     *
+     * @param resultMeta the result metadata.
+     */
+    void setResultMeta(ResultMeta resultMeta);
 }

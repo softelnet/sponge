@@ -18,7 +18,9 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +33,7 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.examples.EchoPlugin;
 import org.openksavi.sponge.examples.TestKnowledgeBase;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 import org.openksavi.sponge.test.util.EventsLog;
 
 public class EngineBuilderTest {
@@ -94,6 +97,22 @@ public class EngineBuilderTest {
         }
         if (engine.isError()) {
             throw SpongeUtils.wrapException(engine.getError());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testKbFileOrder() {
+        SpongeEngine engine = SpringSpongeEngine.builder().config("examples/core/kb_file_order.xml")
+                .knowledgeBase("kb2", "examples/core/kb_file_order_2.py").build();
+        engine.startup();
+
+        try {
+            List<Integer> order = engine.getOperations().getVariable(List.class, "order");
+            assertEquals(Arrays.asList(1, 2), order);
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
         }
     }
 }

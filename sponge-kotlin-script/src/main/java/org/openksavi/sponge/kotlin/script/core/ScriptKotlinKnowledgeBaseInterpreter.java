@@ -70,7 +70,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
 
     @Override
     protected void prepareInterpreter() {
-        scriptEngine = createScriptEngine();
+        setScriptEngine(createScriptEngine());
 
         scripts = Collections.synchronizedList(new ArrayList<>());
     }
@@ -83,12 +83,14 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
         Validate.isInstanceOf(Compilable.class, result, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, result, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
-        KotlinConstants.PROCESSOR_CLASSES
-                .forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
-        addImport(result, KPlugin.class, Plugin.class.getSimpleName());
+        List<String> importExpressions = new ArrayList<>();
+        KotlinConstants.PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> importExpressions
+                .add(getAddImportExpression(scriptClass, interfaceClass.getSimpleName())));
+        importExpressions.add(getAddImportExpression(KPlugin.class, Plugin.class.getSimpleName()));
+        importExpressions.addAll(getStandardImportClasses().stream().map(cls -> getAddImportExpression(cls)).collect(Collectors.toList()));
 
         // TODO The line below performs very slow in Kotlin
-        eval(result, getStandardImportClasses().stream().map(cls -> "import " + cls.getName()).collect(Collectors.joining("\n")));
+        eval(result, importExpressions.stream().collect(Collectors.joining(";\n")));
 
         setVariable(result, KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());
 
@@ -114,11 +116,19 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
      * @param clazz class to be imported.
      */
     protected void addImport(ScriptEngine scriptEngine, Class<?> clazz) {
-        eval(scriptEngine, "import " + clazz.getName());
+        eval(scriptEngine, getAddImportExpression(clazz));
     }
 
     protected void addImport(ScriptEngine scriptEngine, Class<?> clazz, String alias) {
-        eval(scriptEngine, "import " + clazz.getName() + " as " + alias);
+        eval(scriptEngine, getAddImportExpression(clazz, alias));
+    }
+
+    protected String getAddImportExpression(Class<?> clazz) {
+        return "import " + clazz.getName();
+    }
+
+    protected String getAddImportExpression(Class<?> clazz, String alias) {
+        return "import " + clazz.getName() + " as " + alias;
     }
 
     protected void setVariable(ScriptEngine scriptEngine, String name, Object value) {
@@ -143,7 +153,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
      */
     @Override
     public void setVariable(String name, Object value) {
-        setVariable(scriptEngine, name, value);
+        setVariable(getScriptEngine(), name, value);
     }
 
     /**
@@ -195,7 +205,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
     @Override
     protected void doLoad(Reader reader, String name) {
         try {
-            CompiledKotlinScript script = (CompiledKotlinScript) ((Compilable) scriptEngine).compile(reader);
+            CompiledKotlinScript script = (CompiledKotlinScript) ((Compilable) getScriptEngine()).compile(reader);
             script.eval();
 
             // Add the last script as the first.

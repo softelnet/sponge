@@ -16,42 +16,28 @@
 
 package org.openksavi.sponge.restapi.model;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "Action", description = "Represents a Sponge action")
-public class RestAction {
+@ApiModel(value = "VersionResult", description = "Represents a Sponge version")
+public class RestVersionResult {
 
-    private String name;
+    private String version;
 
-    private List<Object> args;
-
-    public RestAction() {
+    public RestVersionResult() {
         //
     }
 
-    public RestAction(String name, List<Object> args) {
-        this.name = name;
-        this.args = args;
+    public RestVersionResult(String version) {
+        this.version = version;
     }
 
-    @ApiModelProperty(value = "The action name", required = true)
-    public String getName() {
-        return name;
+    @ApiModelProperty(value = "The Sponge version", required = true)
+    public String getVersion() {
+        return version;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @ApiModelProperty(value = "The action arguments", required = false)
-    public List<Object> getArgs() {
-        return args;
-    }
-
-    public void setArgs(List<Object> args) {
-        this.args = args;
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

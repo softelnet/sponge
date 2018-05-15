@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge;
+package org.openksavi.sponge.restapi.model;
 
-import java.util.Arrays;
+import io.swagger.annotations.ApiModel;
 
-/**
- * A data type used for example in action arguments metadata.
- */
-public enum DataType {
-    STRING("string"), NUMBER("number"), BYTES("bytes"), OBJECT("object");
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
-    private String code;
+@ApiModel(value = "ReloadResult", description = "Represents a Sponge reload result")
+public class RestReloadResult extends BaseRestResponse {
 
-    private DataType(String code) {
-        this.code = code;
+    public RestReloadResult() {
+        //
     }
 
-    public String getCode() {
-        return code;
-    }
+    public static RestReloadResult fromException(Exception e) {
+        RestReloadResult result = new RestReloadResult();
+        result.setErrorMessage(e.getMessage());
+        result.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
 
-    public static DataType fromCode(String code) {
-        return Arrays.stream(DataType.values()).filter(type -> type.getCode().equals(code)).findFirst().orElse(null);
+        return result;
     }
 }

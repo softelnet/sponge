@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.test;
+package org.openksavi.sponge.mpd;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +25,9 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.logging.LoggingUtils;
-import org.openksavi.sponge.restapi.RestApiPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
-/**
- * This example program starts Sponge REST API server.
- */
-public class RestApiSeverMain {
+public class MpdRestServerMain {
 
     private GenericApplicationContext context;
 
@@ -40,18 +36,7 @@ public class RestApiSeverMain {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("kb", "examples/rest-api/rest_api.py").build();
-        }
-
-        @Bean
-        public RestApiPlugin spongeRestApiPlugin() {
-            RestApiPlugin plugin = new RestApiPlugin();
-
-            plugin.getSettings().setRestComponentId("undertow");
-            plugin.getSettings().setPort(8080);
-
-            return plugin;
+            return SpringSpongeEngine.builder().plugin(camelPlugin()).config("examples/mpd/mpd_rest_server.xml").build();
         }
     }
 
@@ -69,6 +54,6 @@ public class RestApiSeverMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        new RestApiSeverMain().run();
+        new MpdRestServerMain().run();
     }
 }

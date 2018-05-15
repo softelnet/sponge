@@ -31,14 +31,12 @@ import javax.inject.Inject;
 
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -47,18 +45,20 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.util.SocketUtils;
 import org.springframework.web.client.RestTemplate;
 
+import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.RestConfiguration;
-import org.openksavi.sponge.restapi.model.RestAction;
+import org.openksavi.sponge.restapi.RestApiPlugin;
+import org.openksavi.sponge.restapi.model.RestActionCall;
 import org.openksavi.sponge.restapi.model.RestActionsResult;
 import org.openksavi.sponge.restapi.model.RestCallResult;
 import org.openksavi.sponge.restapi.model.RestEvent;
 import org.openksavi.sponge.restapi.model.RestSendResult;
-import org.openksavi.sponge.restapi.model.RestVersion;
+import org.openksavi.sponge.restapi.model.RestVersionResult;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
@@ -66,7 +66,9 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @DirtiesContext
 public class RestApiTest {
 
-    private static final String URL = "http://localhost:" + RestApiConstants.DEFAULT_PORT + "/sponge/";
+    private static final int PORT = SocketUtils.findAvailableTcpPort(8080);
+
+    private static final String URL = "http://localhost:" + PORT + "/sponge/";
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
@@ -75,18 +77,28 @@ public class RestApiTest {
     protected SpongeEngine engine;
 
     @Configuration
-    @Import(RestConfiguration.class)
-    public static class TestConfig extends CamelConfiguration {
+    public static class TestConfig extends SpongeCamelConfiguration {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().knowledgeBase("kb", "examples/rest-api/rest_api.py").build();
+            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
+                    .knowledgeBase("kb", "examples/rest-api/rest_api.py").build();
+        }
+
+        @Bean
+        public RestApiPlugin spongeRestApiPlugin() {
+            RestApiPlugin plugin = new RestApiPlugin();
+
+            plugin.getSettings().setRestComponentId("undertow");
+            plugin.getSettings().setPort(PORT);
+
+            return plugin;
         }
     }
 
     @Test
     public void testRestVersion() {
-        ResponseEntity<RestVersion> response = new RestTemplate().getForEntity(URL + "version", RestVersion.class);
+        ResponseEntity<RestVersionResult> response = new RestTemplate().getForEntity(URL + "version", RestVersionResult.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(engine.getVersion(), response.getBody().getVersion());
     }
@@ -94,6 +106,22 @@ public class RestApiTest {
     @Test
     public void testRestActions() {
         ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(URL + "actions", RestActionsResult.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(engine.getActions().size(), response.getBody().getActions().size());
+    }
+
+    @Test
+    public void testRestActionsParamArgMetadataRequiredTrue() {
+        ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(
+                URL + "actions?" + RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME + "=true", RestActionsResult.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(engine.getActions().size() - 1, response.getBody().getActions().size());
+    }
+
+    @Test
+    public void testRestActionsParamArgMetadataRequiredFalse() {
+        ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(
+                URL + "actions?" + RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME + "=false", RestActionsResult.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(engine.getActions().size(), response.getBody().getActions().size());
     }
@@ -111,7 +139,7 @@ public class RestApiTest {
         String arg1 = "test1";
 
         ResponseEntity<RestCallResult> response = new RestTemplate().exchange(URL + "call", HttpMethod.POST,
-                new HttpEntity<>(new RestAction(actionName, Arrays.asList(arg1)), createHeaders()), RestCallResult.class);
+                new HttpEntity<>(new RestActionCall(actionName, Arrays.asList(arg1)), createHeaders()), RestCallResult.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(actionName, response.getBody().getActionName());

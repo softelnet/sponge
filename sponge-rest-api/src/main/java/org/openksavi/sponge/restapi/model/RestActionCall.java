@@ -16,29 +16,28 @@
 
 package org.openksavi.sponge.restapi.model;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.Experimental;
-
-@Experimental
-@ApiModel(value = "ActionArgMetadata", description = "Represents a Sponge action argument metadata")
-public class RestActionArgMetadata {
+@ApiModel(value = "ActionCall", description = "Represents a Sponge action call")
+public class RestActionCall {
 
     private String name;
 
-    private String type;
+    private List<Object> args;
 
-    public RestActionArgMetadata() {
+    public RestActionCall() {
         //
     }
 
-    public RestActionArgMetadata(String name, String type) {
+    public RestActionCall(String name, List<Object> args) {
         this.name = name;
-        this.type = type;
+        this.args = args;
     }
 
-    @ApiModelProperty(value = "The action argument name", required = true)
+    @ApiModelProperty(value = "The action name", required = true)
     public String getName() {
         return name;
     }
@@ -47,12 +46,12 @@ public class RestActionArgMetadata {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The action argument type", required = true)
-    public String getType() {
-        return type;
+    @ApiModelProperty(value = "The action arguments", required = false)
+    public List<Object> getArgs() {
+        return args;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setArgs(List<Object> args) {
+        this.args = args;
     }
 }

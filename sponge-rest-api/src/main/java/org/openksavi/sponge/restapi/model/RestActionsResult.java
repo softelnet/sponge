@@ -26,22 +26,22 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @ApiModel(value = "ActionsResult", description = "Represents Sponge actions result")
 public class RestActionsResult extends BaseRestResponse {
 
-    private List<RestActionMetadata> actions;
+    private List<RestActionMeta> actions;
 
     public RestActionsResult() {
         //
     }
 
-    public RestActionsResult(List<RestActionMetadata> actions) {
+    public RestActionsResult(List<RestActionMeta> actions) {
         this.actions = actions;
     }
 
     @ApiModelProperty(value = "The Spoonge actions", required = true)
-    public List<RestActionMetadata> getActions() {
+    public List<RestActionMeta> getActions() {
         return actions;
     }
 
-    public void setActions(List<RestActionMetadata> actions) {
+    public void setActions(List<RestActionMeta> actions) {
         this.actions = actions;
     }
 

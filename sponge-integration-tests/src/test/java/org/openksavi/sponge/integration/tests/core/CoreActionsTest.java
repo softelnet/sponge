@@ -20,23 +20,20 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.DataType;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.ActionArgMetadata;
+import org.openksavi.sponge.Type;
+import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.test.util.TestUtils;
 
 public class CoreActionsTest {
 
-    @SuppressWarnings("rawtypes")
     @Test
     public void testActionsMetadata() {
         SpongeEngine engine =
@@ -47,13 +44,8 @@ public class CoreActionsTest {
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("scriptActionResult") != null);
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable("javaActionResult") != null);
 
-            Object scriptResultObject = engine.getOperations().getVariable("scriptActionResult");
-            List scriptResult = scriptResultObject instanceof List ? (List) scriptResultObject
-                    : Arrays.stream((Object[]) scriptResultObject).collect(Collectors.toList());
-            assertEquals(2, scriptResult.size());
-            // Note, that different scripting engines may map numbers to different types.
-            assertEquals("1", scriptResult.get(0));
-            assertEquals("TEST", scriptResult.get(1));
+            String scriptResult = engine.getOperations().getVariable(String.class, "scriptActionResult");
+            assertEquals("TEST", scriptResult);
 
             Object[] javaResult = (Object[]) engine.getOperations().getVariable("javaActionResult");
             assertEquals(2, javaResult.length);
@@ -61,11 +53,16 @@ public class CoreActionsTest {
             assertEquals(2, ((Number) javaResult[0]).intValue());
             assertEquals("TEST", javaResult[1]);
 
-            ActionArgMetadata[] argMetadata =
-                    engine.getActionManager().getRegisteredActionAdapterMap().get("UpperEchoAction").getArgsMetadata();
-            assertEquals(2, argMetadata.length);
-            assertEquals("arg1", argMetadata[0].getName());
-            assertEquals(DataType.NUMBER, argMetadata[0].getType());
+            ActionAdapter upperActionAdapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
+            ArgMeta[] argMeta = upperActionAdapter.getArgsMeta();
+            assertEquals(1, argMeta.length);
+            assertEquals("arg1", argMeta[0].getName());
+            assertEquals(Type.STRING, argMeta[0].getType());
+            assertEquals(true, argMeta[0].isRequired());
+            assertEquals("Argument 1", argMeta[0].getDisplayName());
+
+            assertEquals(Type.STRING, upperActionAdapter.getResultMeta().getType());
+            assertEquals("Upper case string", upperActionAdapter.getResultMeta().getDisplayName());
 
             assertFalse(engine.isError());
         } finally {
@@ -85,7 +82,7 @@ public class CoreActionsTest {
             assertFalse(engine.isError());
         } catch (SpongeException e) {
             // Jython-specific error message copying.
-            assertEquals(e.getCause().toString(), e.getMessage());
+            assertEquals("global name 'Nooone' is not defined", e.getMessage());
         } finally {
             engine.shutdown();
         }

@@ -23,7 +23,21 @@ public final class RestApiConstants {
 
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
+    public static final String DEFAULT_REST_COMPONENT_ID = "undertow";
+
     public static final int DEFAULT_PORT = 8080;
+
+    public static final String REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME = "metadataRequired";
+
+    public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = false;
+
+    public static final String TAG_REST_COMPONENT_ID = "restComponentId";
+
+    public static final String TAG_HOST = "host";
+
+    public static final String TAG_PORT = "port";
+
+    public static final String TAG_PRETTY_PRINT = "prettyPrint";
 
     private RestApiConstants() {
         //

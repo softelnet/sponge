@@ -14,30 +14,27 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.util.Arrays;
 
-@ApiModel(value = "Version", description = "Represents a Sponge version")
-public class RestVersion {
+/**
+ * A data type. Used for example in action arguments metadata.
+ */
+public enum Type {
+    STRING("string"), NUMBER("number"), BYTES("bytes"), OBJECT("object"), VOID("void");
 
-    private String version;
+    private String code;
 
-    public RestVersion() {
-        //
+    private Type(String code) {
+        this.code = code;
     }
 
-    public RestVersion(String version) {
-        this.version = version;
+    public String getCode() {
+        return code;
     }
 
-    @ApiModelProperty(value = "The Sponge version", required = true)
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public static Type fromCode(String code) {
+        return Arrays.stream(Type.values()).filter(type -> type.getCode().equals(code)).findFirst().orElse(null);
     }
 }

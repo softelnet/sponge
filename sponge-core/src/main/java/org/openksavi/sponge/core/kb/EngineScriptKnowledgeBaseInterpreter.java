@@ -40,7 +40,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
 public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterpreter {
 
     /** Script engine instance. */
-    protected ScriptEngine scriptEngine;
+    private ScriptEngine scriptEngine;
 
     /**
      * Creates a new Knowledge Interpreter.
@@ -226,5 +226,9 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
                 throw SpongeUtils.wrapException(this, e);
             }
         });
+    }
+
+    protected void setScriptEngine(ScriptEngine scriptEngine) {
+        this.scriptEngine = scriptEngine;
     }
 }

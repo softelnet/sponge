@@ -368,7 +368,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
 
         });
 
-        knowledgeBases.forEach(knowledgeBase -> engine.getKnowledgeBaseManager().addKnowledgeBase(knowledgeBase));
+        knowledgeBases.forEach(knowledgeBase -> engine.getConfigurationManager().addKnowledgeBase(knowledgeBase));
 
         return engine;
     }

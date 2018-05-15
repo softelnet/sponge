@@ -30,8 +30,11 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.Type;
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
@@ -245,6 +248,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         return Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
+                Type.class, ArgMeta.class, ResultMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
         //@formatter:on
     }

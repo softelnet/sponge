@@ -18,9 +18,9 @@ package org.openksavi.sponge.core.action;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.action.ActionArgMetadata;
+import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessor;
-import org.openksavi.sponge.core.util.SpongeUtils;
 
 public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements Action {
 
@@ -35,12 +35,22 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
-    public void setArgsMetadata(String... argMetadataSpecs) {
-        ActionArgMetadata[] argsMetadata = new ActionArgMetadata[argMetadataSpecs.length];
-        for (int i = 0; i < argMetadataSpecs.length; i++) {
-            argsMetadata[i] = SpongeUtils.createActionArgMetadata(getName(), i, argMetadataSpecs[i]);
-        }
+    public ArgMeta[] getArgsMeta() {
+        return getAdapter().getArgsMeta();
+    }
 
-        getAdapter().setArgsMetadata(argsMetadata);
+    @Override
+    public void setArgsMeta(ArgMeta... argsMeta) {
+        getAdapter().setArgsMeta(argsMeta);
+    }
+
+    @Override
+    public ResultMeta getResultMeta() {
+        return getAdapter().getResultMeta();
+    }
+
+    @Override
+    public void setResultMeta(ResultMeta resultMeta) {
+        getAdapter().setResultMeta(resultMeta);
     }
 }

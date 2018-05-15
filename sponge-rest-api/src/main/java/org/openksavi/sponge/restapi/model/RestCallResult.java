@@ -16,12 +16,12 @@
 
 package org.openksavi.sponge.restapi.model;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCallResult", description = "Represents a Sponge action call result")
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+@ApiModel(value = "CallResult", description = "Represents a Sponge action call result")
 public class RestCallResult extends BaseRestResponse {
 
     private String actionName;
@@ -58,7 +58,7 @@ public class RestCallResult extends BaseRestResponse {
     public static RestCallResult fromException(String actionName, Exception e) {
         RestCallResult result = new RestCallResult();
         result.setActionName(actionName);
-        result.setErrorMessage(ExceptionUtils.getMessage(e));
+        result.setErrorMessage(e.getMessage());
         result.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
 
         return result;

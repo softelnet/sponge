@@ -487,6 +487,10 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
         if (configurationManager.getRootConfig() != null) {
             knowledgeBaseManager.configure(configurationManager.getRootConfig());
+
+            // Add additional knowledge bases (i.e. added in the EngineBuilder) as last.
+            configurationManager.getAdditionalKnowledgeBases()
+                    .forEach(knowledgeBase -> knowledgeBaseManager.addKnowledgeBase(knowledgeBase));
         }
     }
 
@@ -724,6 +728,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         return processorManager;
     }
 
+    @Override
     public ActionManager getActionManager() {
         return actionManager;
     }

@@ -17,11 +17,13 @@
 package org.openksavi.sponge.engine;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.event.EventClonePolicy;
+import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
  * Configuration manager interface. It contains methods for accessing configuration parameters.
@@ -251,4 +253,18 @@ public interface ConfigurationManager extends EngineModule {
      * @param executorShutdownTimeout an executor shutdown timeout.
      */
     void setExecutorShutdownTimeout(long executorShutdownTimeout);
+
+    /**
+     * Returns additional knowledge bases (i.e. added in the EngineBuilder).
+     *
+     * @return the additional knowledge bases.
+     */
+    List<KnowledgeBase> getAdditionalKnowledgeBases();
+
+    /**
+     * Adds a knowledge base to the list of additional knowledge bases (i.e. added in the EngineBuilder).
+     *
+     * @param knowledgeBase a knowledge base.
+     */
+    void addKnowledgeBase(KnowledgeBase knowledgeBase);
 }

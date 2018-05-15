@@ -13,17 +13,18 @@ def onInit():
 class UpperEchoAction(Action):
     def onConfigure(self):
         self.displayName = "Echo Action"
-        self.argsMetadata = [ "arg1:number", "arg2:string" ]
+        self.argsMeta = [ ArgMeta("arg1", Type.STRING, True, "Argument 1") ]
+        self.resultMeta = ResultMeta(Type.STRING, "Upper case string")
     def onCall(self, args):
         self.logger.info("Action {} called", self.name)
-    	return [str(s).upper() for s in args]
+    	return str(args[0]).upper()
 
 def onLoad():
     EPS.enableJava(PowerEchoMetadataAction)
 
 def onStartup():
     EPS.logger.debug("Calling script defined action")
-    scriptActionResult = EPS.call("UpperEchoAction", 1, "test")
+    scriptActionResult = EPS.call("UpperEchoAction", "test")
     EPS.logger.debug("Action returned: {}", scriptActionResult)
     EPS.setVariable("scriptActionResult", scriptActionResult)
 

@@ -24,17 +24,4 @@ import org.openksavi.sponge.ProcessorAdapter;
  */
 public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperations {
 
-    /**
-     * Returns the arguments metadata or {@code null} in not specified.
-     *
-     * @return the arguments metadata.
-     */
-    ActionArgMetadata[] getArgsMetadata();
-
-    /**
-     * Sets the (optional) arguments metadata.
-     *
-     * @param argsMetadata the arguments metadata.
-     */
-    void setArgsMetadata(ActionArgMetadata... argsMetadata);
 }

@@ -24,14 +24,6 @@ import org.openksavi.sponge.Processor;
 public interface Action extends Processor<ActionAdapter>, ActionOperations {
 
     /**
-     * Sets the (optional) arguments metadata in the following format: ["argName:argType", ...]. The {@code argType} must be a DataType
-     * enumeration element code.
-     *
-     * @param argMetadataSpecs arguments metadata specifications.
-     */
-    void setArgsMetadata(String... argMetadataSpecs);
-
-    /**
      * A callback method that performs an operation and returns a result.
      *
      * @param args arguments for the action call. This parameter should not be {@code null}.

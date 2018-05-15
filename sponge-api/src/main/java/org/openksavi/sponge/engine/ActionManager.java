@@ -63,4 +63,12 @@ public interface ActionManager extends EngineModule {
      * @return {@code true} if an action named {@code name} exists.
      */
     boolean existsAction(String name);
+
+    /**
+     * Returns an action adapter or {@code null} if action named {@code actionName} doesn't exist.
+     *
+     * @param actionName action name.
+     * @return an action adapter.
+     */
+    ActionAdapter getActionAdapter(String actionName);
 }

@@ -25,11 +25,12 @@ import org.junit.Test;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
+import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class ConfigurationTest {
 
     @Test
-    public void testEngineParameters() throws InterruptedException {
+    public void testEngineParameters() {
         SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/engine_parameters.xml").build();
         engine.startup();
 
@@ -47,7 +48,7 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void testPropertySubstitution() throws InterruptedException {
+    public void testPropertySubstitution() {
         SpongeEngine engine = DefaultSpongeEngine.builder().property("sourceProperty", "source")
                 .config("examples/core/configuration/property_substitution.xml").build();
         engine.startup();
@@ -61,12 +62,24 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void testRelativeFiles() throws InterruptedException {
+    public void testRelativeFiles() {
         SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/relative_files.xml").build();
         engine.startup();
 
         try {
             assertTrue(engine.getOperations().getVariable(Boolean.class, "loaded"));
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testKbFileInClasspathInOtherArtifact() {
+        SpongeEngine engine = SpringSpongeEngine.builder().config("examples/core/configuration/kb_file_in_classpath.xml").build();
+        engine.startup();
+
+        try {
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
