@@ -45,6 +45,3 @@ class Alarm(Trigger):
     def onRun(self, event):
         self.logger.debug("Received event: {}", str(event))
         EPS.getVariable("eventSent").set(True)
-
-def onStartup():
-    restApi.start()

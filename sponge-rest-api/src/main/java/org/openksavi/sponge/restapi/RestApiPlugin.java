@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.camel.CamelContext;
 
 import org.openksavi.sponge.camel.CamelPlugin;
@@ -33,6 +35,10 @@ public class RestApiPlugin extends JPlugin {
 
     private RestApiSettings settings = new RestApiSettings();
 
+    private boolean autoStart = RestApiConstants.DEFAULT_AUTO_START;
+
+    private AtomicBoolean started = new AtomicBoolean(false);
+
     public RestApiPlugin() {
         setName(NAME);
     }
@@ -43,6 +49,15 @@ public class RestApiPlugin extends JPlugin {
         settings.setHost(configuration.getString(RestApiConstants.TAG_HOST, settings.getHost()));
         settings.setPort(configuration.getInteger(RestApiConstants.TAG_PORT, settings.getPort()));
         settings.setPrettyPrint(configuration.getBoolean(RestApiConstants.TAG_PRETTY_PRINT, settings.isPrettyPrint()));
+
+        autoStart = configuration.getBoolean(RestApiConstants.TAG_AUTO_START, isAutoStart());
+    }
+
+    @Override
+    public void onStartup() {
+        if (isAutoStart()) {
+            start();
+        }
     }
 
     public RestApiPlugin(String name) {
@@ -62,15 +77,27 @@ public class RestApiPlugin extends JPlugin {
         start(camelPlugin.getCamelContext());
     }
 
-    public void start(CamelContext camelContext) {
+    public synchronized void start(CamelContext camelContext) {
         if (camelContext == null) {
             throw new ConfigException("Camel context is not available");
         }
 
-        try {
-            camelContext.addRoutes(new RestApiRouteBuilder(getEngine(), new RestApiService(getEngine()), settings));
-        } catch (Exception e) {
-            throw SpongeUtils.wrapException(e);
+        if (!started.get()) {
+            try {
+                camelContext.addRoutes(new RestApiRouteBuilder(getEngine(), new RestApiService(getEngine()), settings));
+            } catch (Exception e) {
+                throw SpongeUtils.wrapException(e);
+            }
+
+            started.set(true);
         }
+    }
+
+    public boolean isAutoStart() {
+        return autoStart;
+    }
+
+    public void setAutoStart(boolean autoStart) {
+        this.autoStart = autoStart;
     }
 }

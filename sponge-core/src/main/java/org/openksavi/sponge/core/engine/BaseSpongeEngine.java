@@ -481,17 +481,21 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         processingUnitManager
                 .setMainProcessingUnit(processingUnitProvider.createMainProcessingUnit(this, mainProcessingQueue, outputQueue));
 
+        // Add pre-config plugins as first.
+        configurationManager.getPreConfigPlugins().forEach(plugin -> pluginManager.addPlugin(plugin));
         if (configurationManager.getRootConfig() != null) {
             pluginManager.configure(configurationManager.getRootConfig());
         }
+        // Add post-config plugins as last.
+        configurationManager.getPostConfigPlugins().forEach(plugin -> pluginManager.addPlugin(plugin));
 
+        // Add pre-config knowledge bases as first.
+        configurationManager.getPreConfigKnowledgeBases().forEach(knowledgeBase -> knowledgeBaseManager.addKnowledgeBase(knowledgeBase));
         if (configurationManager.getRootConfig() != null) {
             knowledgeBaseManager.configure(configurationManager.getRootConfig());
-
-            // Add additional knowledge bases (i.e. added in the EngineBuilder) as last.
-            configurationManager.getAdditionalKnowledgeBases()
-                    .forEach(knowledgeBase -> knowledgeBaseManager.addKnowledgeBase(knowledgeBase));
         }
+        // Add post-config knowledge bases as last.
+        configurationManager.getPostConfigKnowledgeBases().forEach(knowledgeBase -> knowledgeBaseManager.addKnowledgeBase(knowledgeBase));
     }
 
     /**

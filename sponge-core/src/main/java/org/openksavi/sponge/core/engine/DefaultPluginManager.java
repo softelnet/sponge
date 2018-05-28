@@ -17,7 +17,7 @@
 package org.openksavi.sponge.core.engine;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,7 +48,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     private static final Logger logger = LoggerFactory.getLogger(DefaultPluginManager.class);
 
     /** Plugin map indexed by name. */
-    protected Map<String, Plugin> pluginMap = Collections.synchronizedMap(new HashMap<>());
+    protected Map<String, Plugin> pluginMap = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * Creates a new Plugin Manager.
@@ -154,7 +154,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     }
 
     /**
-     * Returns plugin list.
+     * Returns the plugin list. The result is an immutable list that prevents from locking the entire plugin map for long-running operations
+     * on the list.
      *
      * @return plugin list.
      */
@@ -264,11 +265,11 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     }
 
     public void startupPlugins() {
-        pluginMap.values().forEach(Plugin::startup);
+        getPlugins().forEach(Plugin::startup);
     }
 
     protected void initPlugins() {
-        pluginMap.values().forEach(plugin -> initPlugin(plugin));
+        getPlugins().forEach(plugin -> initPlugin(plugin));
     }
 
     protected void initPlugin(Plugin plugin) {
@@ -287,7 +288,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      * Defines plugin variables.
      */
     public void definePluginVariables() {
-        pluginMap.values().forEach(plugin -> definePluginVariable(plugin.getName(), plugin));
+        getPlugins().forEach(plugin -> definePluginVariable(plugin.getName(), plugin));
     }
 
     protected void definePluginVariable(String name, Plugin plugin) {
@@ -305,7 +306,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      */
     @Override
     public void doShutdown() {
-        pluginMap.values().forEach(plugin -> plugin.shutdown());
+        getPlugins().forEach(plugin -> plugin.shutdown());
     }
 
     /**
@@ -313,7 +314,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      */
     @Override
     public void onBeforeReload() {
-        pluginMap.values().forEach(plugin -> plugin.onBeforeReload());
+        getPlugins().forEach(plugin -> plugin.onBeforeReload());
     }
 
     /**
@@ -323,6 +324,6 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     public void onAfterReload() {
         definePluginVariables();
 
-        pluginMap.values().forEach(plugin -> plugin.onAfterReload());
+        getPlugins().forEach(plugin -> plugin.onAfterReload());
     }
 }

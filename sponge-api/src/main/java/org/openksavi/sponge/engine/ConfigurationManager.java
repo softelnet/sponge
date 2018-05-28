@@ -24,6 +24,7 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.plugin.Plugin;
 
 /**
  * Configuration manager interface. It contains methods for accessing configuration parameters.
@@ -255,16 +256,58 @@ public interface ConfigurationManager extends EngineModule {
     void setExecutorShutdownTimeout(long executorShutdownTimeout);
 
     /**
-     * Returns additional knowledge bases (i.e. added in the EngineBuilder).
+     * Returns pre-config plugins added in the EngineBuilder.
      *
-     * @return the additional knowledge bases.
+     * @return the pre-config plugins.
      */
-    List<KnowledgeBase> getAdditionalKnowledgeBases();
+    List<Plugin> getPreConfigPlugins();
 
     /**
-     * Adds a knowledge base to the list of additional knowledge bases (i.e. added in the EngineBuilder).
+     * Returns post-config plugins added in the EngineBuilder.
      *
-     * @param knowledgeBase a knowledge base.
+     * @return the post-config plugins.
      */
-    void addKnowledgeBase(KnowledgeBase knowledgeBase);
+    List<Plugin> getPostConfigPlugins();
+
+    /**
+     * Adds plugins to the list of pre-config plugins.
+     *
+     * @param plugins a list of pre-config plugins.
+     */
+    void addPreConfigPlugins(List<Plugin> plugins);
+
+    /**
+     * Adds plugins to the list of post-config plugins.
+     *
+     * @param plugins a list of post-config plugins.
+     */
+    void addPostConfigPlugins(List<Plugin> plugins);
+
+    /**
+     * Returns pre-config knowledge bases added in the EngineBuilder.
+     *
+     * @return the pre-config knowledge bases.
+     */
+    List<KnowledgeBase> getPreConfigKnowledgeBases();
+
+    /**
+     * Returns post-config knowledge bases added in the EngineBuilder.
+     *
+     * @return the post-config knowledge bases.
+     */
+    List<KnowledgeBase> getPostConfigKnowledgeBases();
+
+    /**
+     * Adds knowledge bases to the list of pre-config knowledge bases.
+     *
+     * @param knowledgeBases a list of pre-config knowledge bases.
+     */
+    void addPreConfigKnowledgeBases(List<KnowledgeBase> knowledgeBases);
+
+    /**
+     * Adds knowledge bases to the list of post-config knowledge bases.
+     *
+     * @param knowledgeBases a list of post-config knowledge bases.
+     */
+    void addPostConfigKnowledgeBases(List<KnowledgeBase> knowledgeBases);
 }

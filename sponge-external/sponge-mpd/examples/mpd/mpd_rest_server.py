@@ -23,6 +23,3 @@ class Reload(Action):
         self.resultMeta = ResultMeta(Type.VOID)
     def onCall(self, args):
         EPS.reload()
-
-def onStartup():
-    restApi.start()

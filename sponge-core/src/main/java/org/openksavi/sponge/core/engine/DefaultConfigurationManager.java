@@ -54,6 +54,7 @@ import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.plugin.Plugin;
 
 /**
  * Default configuration manager. It contains methods for accessing configuration parameters.
@@ -107,8 +108,17 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** Properties map. */
     private Map<String, PropertyEntry> properties = new LinkedHashMap<>();
 
-    /** Additional knowledge bases. */
-    protected List<KnowledgeBase> additionalKnowledgeBases = new ArrayList<>();
+    /** Plugins added manually before the config file. */
+    protected List<Plugin> preConfigPlugins = new ArrayList<>();
+
+    /** Plugins added manually after the config file. */
+    protected List<Plugin> postConfigPlugins = new ArrayList<>();
+
+    /** Knowledge bases added manually before the config file. */
+    protected List<KnowledgeBase> preConfigKnowledgeBases = new ArrayList<>();
+
+    /** Knowledge bases added manually after the config file. */
+    protected List<KnowledgeBase> postConfigKnowledgeBases = new ArrayList<>();
 
     /**
      * Creates a new configuration manager.
@@ -584,11 +594,43 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         this.autoEnable = autoEnable;
     }
 
-    public List<KnowledgeBase> getAdditionalKnowledgeBases() {
-        return additionalKnowledgeBases;
+    @Override
+    public List<Plugin> getPreConfigPlugins() {
+        return preConfigPlugins;
     }
 
-    public void addKnowledgeBase(KnowledgeBase knowledgeBase) {
-        additionalKnowledgeBases.add(knowledgeBase);
+    @Override
+    public List<Plugin> getPostConfigPlugins() {
+        return postConfigPlugins;
+    }
+
+    @Override
+    public void addPreConfigPlugins(List<Plugin> plugins) {
+        preConfigPlugins.addAll(plugins);
+    }
+
+    @Override
+    public void addPostConfigPlugins(List<Plugin> plugins) {
+        postConfigPlugins.addAll(plugins);
+    }
+
+    @Override
+    public List<KnowledgeBase> getPreConfigKnowledgeBases() {
+        return preConfigKnowledgeBases;
+    }
+
+    @Override
+    public List<KnowledgeBase> getPostConfigKnowledgeBases() {
+        return postConfigKnowledgeBases;
+    }
+
+    @Override
+    public void addPreConfigKnowledgeBases(List<KnowledgeBase> knowledgeBases) {
+        preConfigKnowledgeBases.addAll(knowledgeBases);
+    }
+
+    @Override
+    public void addPostConfigKnowledgeBases(List<KnowledgeBase> knowledgeBases) {
+        postConfigKnowledgeBases.addAll(knowledgeBases);
     }
 }

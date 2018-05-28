@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,11 +49,23 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     /** The engine. */
     protected T engine;
 
-    /** Plugins. */
-    protected List<Plugin> plugins = new ArrayList<>();
+    /** Plugins added manually before the config file. */
+    protected List<Plugin> preConfigPlugins = new ArrayList<>();
 
-    /** Knowledge bases. */
-    protected List<KnowledgeBase> knowledgeBases = new ArrayList<>();
+    /** Plugins added manually after the config file. */
+    protected List<Plugin> postConfigPlugins = new ArrayList<>();
+
+    /** Additional plugins list reference - pre or post config. */
+    protected AtomicReference<List<Plugin>> additionalPlugins = new AtomicReference<>(preConfigPlugins);
+
+    /** Knowledge bases added manually before the config file. */
+    protected List<KnowledgeBase> preConfigKnowledgeBases = new ArrayList<>();
+
+    /** Knowledge bases added manually after the config file. */
+    protected List<KnowledgeBase> postConfigKnowledgeBases = new ArrayList<>();
+
+    /** Additional knowledge bases list reference - pre or post config. */
+    protected AtomicReference<List<KnowledgeBase>> additionalKnowledgeBases = new AtomicReference<>(preConfigKnowledgeBases);
 
     /** Properties. */
     protected Map<String, PropertyEntry> propertyEntries = new LinkedHashMap<>();
@@ -141,6 +154,13 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      */
     public EngineBuilder<T> config(String configFilename) {
         engine.setConfigurationFilename(configFilename);
+
+        // The rest of plugins added manually will be added after the plugins defined in the configuration file.
+        additionalPlugins.set(postConfigPlugins);
+
+        // The rest of knowledge bases added manually will be added after the knowledge bases defined in the configuration file.
+        additionalKnowledgeBases.set(postConfigKnowledgeBases);
+
         return this;
     }
 
@@ -231,7 +251,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @return this Engine Builder.
      */
     public EngineBuilder<T> plugin(Plugin plugin) {
-        plugins.add(plugin);
+        additionalPlugins.get().add(plugin);
         return this;
     }
 
@@ -253,7 +273,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @return this Engine Builder.
      */
     public EngineBuilder<T> knowledgeBase(KnowledgeBase knowledgeBase) {
-        knowledgeBases.add(knowledgeBase);
+        additionalKnowledgeBases.get().add(knowledgeBase);
         return this;
     }
 
@@ -313,7 +333,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, List<KnowledgeBaseScript> scripts) {
         ScriptKnowledgeBase knowledgeBase = new DefaultScriptKnowledgeBase(name, type);
         scripts.forEach(script -> knowledgeBase.addScript(script));
-        knowledgeBases.add(knowledgeBase);
+        knowledgeBase(knowledgeBase);
 
         return this;
     }
@@ -363,12 +383,11 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
             engine.getConfigurationManager().setPropertyEntries(propertyEntries);
         }
 
-        plugins.forEach(plugin -> {
-            engine.getPluginManager().addPlugin(plugin);
+        engine.getConfigurationManager().addPreConfigPlugins(preConfigPlugins);
+        engine.getConfigurationManager().addPostConfigPlugins(postConfigPlugins);
 
-        });
-
-        knowledgeBases.forEach(knowledgeBase -> engine.getConfigurationManager().addKnowledgeBase(knowledgeBase));
+        engine.getConfigurationManager().addPreConfigKnowledgeBases(preConfigKnowledgeBases);
+        engine.getConfigurationManager().addPostConfigKnowledgeBases(postConfigKnowledgeBases);
 
         return engine;
     }
