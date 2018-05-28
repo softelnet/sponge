@@ -2,10 +2,10 @@
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="mpd">
+        <knowledgeBase name="mpd" displayName="MPD">
             <file>classpath:org/openksavi/sponge/mpd/mpd_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="server">
+        <knowledgeBase name="tools" displayName="Tools">
             <file>mpd_rest_server.py</file>
         </knowledgeBase>
     </knowledgeBases>
@@ -20,7 +20,7 @@
         <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
             <configuration>
                 <port>8080</port>
-                <publicActions>mpd:,server:</publicActions>
+                <publicActions>mpd:,tools:</publicActions>
             </configuration>
         </plugin>
     </plugins>

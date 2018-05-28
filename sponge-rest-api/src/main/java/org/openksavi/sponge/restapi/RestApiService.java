@@ -32,6 +32,7 @@ import org.openksavi.sponge.restapi.model.RestActionResultMeta;
 import org.openksavi.sponge.restapi.model.RestActionsResult;
 import org.openksavi.sponge.restapi.model.RestCallResult;
 import org.openksavi.sponge.restapi.model.RestEvent;
+import org.openksavi.sponge.restapi.model.RestKnowledgeBase;
 import org.openksavi.sponge.restapi.model.RestReloadResult;
 import org.openksavi.sponge.restapi.model.RestSendResult;
 import org.openksavi.sponge.restapi.model.RestVersionResult;
@@ -110,8 +111,9 @@ public class RestApiService {
 
         return new RestActionsResult(engine.getActions().stream().filter(isPublicByAction).filter(isPublicBySettings)
                 .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
-                .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), createActionArgMetaList(action),
-                        createActionResultMeta(action)))
+                .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(),
+                        new RestKnowledgeBase(action.getKnowledgeBase().getName(), action.getKnowledgeBase().getDisplayName()),
+                        createActionArgMetaList(action), createActionResultMeta(action)))
                 .collect(Collectors.toList()));
     }
 

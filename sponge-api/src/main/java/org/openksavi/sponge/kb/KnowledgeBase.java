@@ -36,6 +36,20 @@ public interface KnowledgeBase extends KnowledgeBaseOperations {
     void setName(String name);
 
     /**
+     * Returns the display name of this knowledge base.
+     *
+     * @return the display name of this knowledge base.
+     */
+    String getDisplayName();
+
+    /**
+     * Sets the display name of this knowledge base.
+     *
+     * @param displayName the display name of this knowledge base.
+     */
+    void setDisplayName(String displayName);
+
+    /**
      * Returns knowledge base interpreter type.
      *
      * @return knowledge base interpreter type.

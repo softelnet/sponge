@@ -32,6 +32,8 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
 
     private String name;
 
+    private String displayName;
+
     private KnowledgeBaseType type;
 
     protected BaseKnowledgeBase() {
@@ -70,6 +72,16 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @Override
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
