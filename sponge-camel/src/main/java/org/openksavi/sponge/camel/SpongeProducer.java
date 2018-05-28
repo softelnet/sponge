@@ -42,10 +42,10 @@ public class SpongeProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         Message in = exchange.getIn();
 
-        String actionName = in.getHeader(SpongeConstants.SPONGE_ACTION, String.class);
+        String actionName = in.getHeader(SpongeCamelConstants.SPONGE_ACTION, String.class);
         if (actionName != null) {
             // Remove the header so it won't be propagated.
-            in.removeHeader(SpongeConstants.SPONGE_ACTION);
+            in.removeHeader(SpongeCamelConstants.SPONGE_ACTION);
         }
 
         if (actionName == null) {

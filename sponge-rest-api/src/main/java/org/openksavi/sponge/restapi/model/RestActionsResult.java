@@ -21,8 +21,6 @@ import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 @ApiModel(value = "ActionsResult", description = "Represents Sponge actions result")
 public class RestActionsResult extends BaseRestResponse {
 
@@ -46,10 +44,6 @@ public class RestActionsResult extends BaseRestResponse {
     }
 
     public static RestActionsResult fromException(Exception e) {
-        RestActionsResult result = new RestActionsResult();
-        result.setErrorMessage(ExceptionUtils.getMessage(e));
-        result.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
-
-        return result;
+        return fromException(new RestActionsResult(), e);
     }
 }

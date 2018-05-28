@@ -18,8 +18,10 @@ package org.openksavi.sponge.restapi;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
@@ -41,8 +43,11 @@ public class RestApiService {
 
     private SpongeEngine engine;
 
-    public RestApiService(SpongeEngine engine) {
+    public RestApiSettings settings;
+
+    public RestApiService(SpongeEngine engine, RestApiSettings settings) {
         this.engine = engine;
+        this.settings = settings;
     }
 
     public RestCallResult call(RestActionCall action) {
@@ -55,21 +60,55 @@ public class RestApiService {
         }
     }
 
+    protected boolean isEventPublic(String eventName) {
+        boolean publicBySettings = settings.getPublicEvents() != null
+                ? settings.getPublicEvents().stream().filter(name -> eventName.matches(name)).findAny().isPresent()
+                : RestApiConstants.DEFAULT_IS_EVENT_PUBLIC;
+
+        String isEventPlubliActionName = RestApiConstants.ACTION_IS_EVENT_PUBLIC;
+        boolean publicByAction = engine.getOperations().existsAction(isEventPlubliActionName)
+                ? ((Boolean) engine.getOperations().call(isEventPlubliActionName, eventName)).booleanValue()
+                : RestApiConstants.DEFAULT_IS_EVENT_PUBLIC;
+
+        return publicBySettings && publicByAction;
+    }
+
     public RestSendResult send(RestEvent event) {
-        EventDefinition definition = engine.getOperations().event(event.getName());
+        try {
+            if (!isEventPublic(event.getName())) {
+                throw new SpongeException("There is no public event '" + event.getName() + "'");
+            }
 
-        if (event.getAttributes() != null) {
-            event.getAttributes().forEach((name, value) -> definition.set(name, value));
+            EventDefinition definition = engine.getOperations().event(event.getName());
+
+            if (event.getAttributes() != null) {
+                event.getAttributes().forEach((name, value) -> definition.set(name, value));
+            }
+
+            return new RestSendResult(definition.send().getId());
+        } catch (Exception e) {
+            engine.handleError("send", e);
+            return RestSendResult.fromException(e);
         }
-
-        return new RestSendResult(definition.send().getId());
     }
 
     public RestActionsResult getActions(Boolean metadataRequired) {
         boolean actualMetadataRequired =
                 metadataRequired != null ? metadataRequired : RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
 
-        return new RestActionsResult(engine.getActions().stream()
+        String isPublicActionActionName = RestApiConstants.ACTION_IS_ACTION_PUBLIC;
+        Predicate<ActionAdapter> isPublicByAction = action -> engine.getOperations().existsAction(isPublicActionActionName)
+                ? ((Boolean) engine.getOperations().call(isPublicActionActionName, action)).booleanValue()
+                : RestApiConstants.DEFAULT_IS_ACTION_PUBLIC;
+
+        Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
+                ? settings.getPublicActions().stream()
+                        .filter(qn -> action.getKnowledgeBase().getName().matches(qn.getKnowledgeBaseName())
+                                && action.getName().matches(qn.getName()))
+                        .findAny().isPresent()
+                : RestApiConstants.DEFAULT_IS_ACTION_PUBLIC;
+
+        return new RestActionsResult(engine.getActions().stream().filter(isPublicByAction).filter(isPublicBySettings)
                 .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
                 .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), createActionArgMetaList(action),
                         createActionResultMeta(action)))

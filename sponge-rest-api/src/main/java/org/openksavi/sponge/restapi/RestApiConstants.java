@@ -21,6 +21,10 @@ package org.openksavi.sponge.restapi;
  */
 public final class RestApiConstants {
 
+    public static final int API_VERSION = 1;
+
+    public static final String URL_PREFIX = "/sponge/v";
+
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
     public static final String DEFAULT_REST_COMPONENT_ID = "undertow";
@@ -29,9 +33,17 @@ public final class RestApiConstants {
 
     public static final boolean DEFAULT_AUTO_START = true;
 
+    public static final boolean DEFAULT_IS_ACTION_PUBLIC = true;
+
+    public static final boolean DEFAULT_IS_EVENT_PUBLIC = true;
+
     public static final String REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME = "metadataRequired";
 
-    public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = false;
+    public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = true;
+
+    public static final String ACTION_IS_ACTION_PUBLIC = "RestApiIsActionPublic";
+
+    public static final String ACTION_IS_EVENT_PUBLIC = "RestApiIsEventPublic";
 
     public static final String TAG_REST_COMPONENT_ID = "restComponentId";
 
@@ -40,6 +52,10 @@ public final class RestApiConstants {
     public static final String TAG_PORT = "port";
 
     public static final String TAG_PRETTY_PRINT = "prettyPrint";
+
+    public static final String TAG_PUBLIC_ACTIONS = "publicActions";
+
+    public static final String TAG_PUBLIC_EVENTS = "publicEvents";
 
     public static final String TAG_AUTO_START = "autoStart";
 

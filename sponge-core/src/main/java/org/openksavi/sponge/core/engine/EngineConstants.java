@@ -38,6 +38,8 @@ public final class EngineConstants {
 
     public static final Boolean DEFAULT_ON_RUN_FUNCTION_RESULT = true;
 
+    public static final String MATCH_ALL_REGEXP = ".*";
+
     private EngineConstants() {
         //
     }

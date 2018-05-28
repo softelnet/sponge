@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.restapi;
 
+import java.util.List;
+
+import org.openksavi.sponge.ProcessorQualifiedName;
+
 /**
  * REST API settings.
  */
@@ -27,7 +31,13 @@ public class RestApiSettings {
 
     private int port = RestApiConstants.DEFAULT_PORT;
 
+    private int version = RestApiConstants.API_VERSION;
+
     private boolean prettyPrint = true;
+
+    private List<ProcessorQualifiedName> publicActions;
+
+    private List<String> publicEvents;
 
     public String getRestComponentId() {
         return restComponentId;
@@ -53,11 +63,35 @@ public class RestApiSettings {
         this.port = port;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     public boolean isPrettyPrint() {
         return prettyPrint;
     }
 
     public void setPrettyPrint(boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
+    }
+
+    public List<ProcessorQualifiedName> getPublicActions() {
+        return publicActions;
+    }
+
+    public void setPublicActions(List<ProcessorQualifiedName> publicActions) {
+        this.publicActions = publicActions;
+    }
+
+    public List<String> getPublicEvents() {
+        return publicEvents;
+    }
+
+    public void setPublicEvents(List<String> publicEvents) {
+        this.publicEvents = publicEvents;
     }
 }

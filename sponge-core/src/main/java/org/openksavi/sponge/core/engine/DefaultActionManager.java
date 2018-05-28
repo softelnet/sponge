@@ -18,7 +18,9 @@ package org.openksavi.sponge.core.engine;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -82,5 +84,12 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     @Override
     public ActionAdapter getActionAdapter(String actionName) {
         return registeredActions.get(actionName);
+    }
+
+    public List<ActionAdapter> getActionAdapters(String knowledgeBaseRegexp, String actionNameRegexp) {
+        return registeredActions.values().stream()
+                .filter(adapter -> (knowledgeBaseRegexp == null || adapter.getKnowledgeBase().getName().matches(knowledgeBaseRegexp))
+                        || (actionNameRegexp == null || adapter.getName().matches(actionNameRegexp)))
+                .collect(Collectors.toList());
     }
 }

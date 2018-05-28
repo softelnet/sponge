@@ -32,12 +32,26 @@ class PrivateAction(Action):
     def onCall(self, args):
         return None
 
+class NoMetadataAction(Action):
+    def onCall(self, args):
+        return None
+
 class FaultyAction(Action):
     def onConfigure(self):
         self.argsMeta = [ ArgMeta("text", Type.STRING, True) ]
         self.resultMeta = ResultMeta(Type.VOID)
     def onCall(self, args):
         raise SpongeException("Error in " + self.name)
+
+class RestApiIsActionPublic(Action):
+    def onCall(self, args):
+        actionAdapter = args[0]
+        return not (actionAdapter.name.startswith("Private") or actionAdapter.name.startswith("RestApi"))
+
+class RestApiIsEventPublic(Action):
+    def onCall(self, args):
+        eventName = args[0]
+        return True
 
 class Alarm(Trigger):
     def onConfigure(self):

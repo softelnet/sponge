@@ -18,8 +18,6 @@ package org.openksavi.sponge.restapi.model;
 
 import io.swagger.annotations.ApiModel;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 @ApiModel(value = "ReloadResult", description = "Represents a Sponge reload result")
 public class RestReloadResult extends BaseRestResponse {
 
@@ -28,10 +26,6 @@ public class RestReloadResult extends BaseRestResponse {
     }
 
     public static RestReloadResult fromException(Exception e) {
-        RestReloadResult result = new RestReloadResult();
-        result.setErrorMessage(e.getMessage());
-        result.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
-
-        return result;
+        return fromException(new RestReloadResult(), e);
     }
 }

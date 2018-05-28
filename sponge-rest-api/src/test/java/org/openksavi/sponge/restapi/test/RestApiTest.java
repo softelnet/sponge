@@ -68,7 +68,7 @@ public class RestApiTest {
 
     private static final int PORT = SocketUtils.findAvailableTcpPort(8080);
 
-    private static final String URL = "http://localhost:" + PORT + "/sponge/";
+    private static final String URL = "http://localhost:" + PORT + RestApiConstants.URL_PREFIX + "1/";
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
@@ -91,6 +91,7 @@ public class RestApiTest {
 
             plugin.getSettings().setRestComponentId("undertow");
             plugin.getSettings().setPort(PORT);
+            // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 
             return plugin;
         }
@@ -107,7 +108,7 @@ public class RestApiTest {
     public void testRestActions() {
         ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(URL + "actions", RestActionsResult.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(engine.getActions().size(), response.getBody().getActions().size());
+        assertEquals(3, response.getBody().getActions().size());
     }
 
     @Test
@@ -115,7 +116,7 @@ public class RestApiTest {
         ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(
                 URL + "actions?" + RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME + "=true", RestActionsResult.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(engine.getActions().size() - 1, response.getBody().getActions().size());
+        assertEquals(3, response.getBody().getActions().size());
     }
 
     @Test
@@ -123,7 +124,7 @@ public class RestApiTest {
         ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(
                 URL + "actions?" + RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME + "=false", RestActionsResult.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(engine.getActions().size(), response.getBody().getActions().size());
+        assertEquals(4, response.getBody().getActions().size());
     }
 
     protected HttpHeaders createHeaders() {
@@ -155,11 +156,11 @@ public class RestApiTest {
         String eventName = "alarm";
         Map<String, Object> attributes = SpongeUtils.immutableMapOf("attr1", "Test");
 
-        // TODO send as const
         ResponseEntity<RestSendResult> response = new RestTemplate().exchange(URL + "send", HttpMethod.POST,
                 new HttpEntity<>(new RestEvent(eventName, attributes), createHeaders()), RestSendResult.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(null, response.getBody().getErrorMessage());
         assertNotNull(response.getBody().getEventId());
 
         await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());

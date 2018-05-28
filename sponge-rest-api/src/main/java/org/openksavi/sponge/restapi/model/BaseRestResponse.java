@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 public class BaseRestResponse {
 
     private String errorMessage;
@@ -36,5 +38,12 @@ public class BaseRestResponse {
 
     public void setDetailedErrorMessage(String detailedErrorMessage) {
         this.detailedErrorMessage = detailedErrorMessage;
+    }
+
+    protected static <T extends BaseRestResponse> T fromException(T response, Exception e) {
+        response.setErrorMessage(e.getMessage());
+        response.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
+
+        return response;
     }
 }

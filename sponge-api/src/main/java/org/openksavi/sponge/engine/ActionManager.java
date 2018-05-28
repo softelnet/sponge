@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.engine;
 
+import java.util.List;
 import java.util.Map;
 
 import org.openksavi.sponge.action.ActionAdapter;
@@ -71,4 +72,14 @@ public interface ActionManager extends EngineModule {
      * @return an action adapter.
      */
     ActionAdapter getActionAdapter(String actionName);
+
+    /**
+     * Returns action adapters matching the knowledge base name and the action name regular expressions. A {@code null} value of the regular
+     * expression means that it will match any name.
+     *
+     * @param knowledgeBaseRegexp knowledge base name regular expression.
+     * @param actionNameRegexp action name regular expression.
+     * @return action adapters.
+     */
+    List<ActionAdapter> getActionAdapters(String knowledgeBaseRegexp, String actionNameRegexp);
 }

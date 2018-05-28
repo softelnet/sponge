@@ -19,12 +19,12 @@ package org.openksavi.sponge.camel;
 /**
  * Sponge Camel constants.
  */
-public final class SpongeConstants {
+public final class SpongeCamelConstants {
 
     /** Camel message header name for the Sponge producer action name. */
     public static final String SPONGE_ACTION = "CamelSpongeAction";
 
-    private SpongeConstants() {
+    private SpongeCamelConstants() {
         //
     }
 }

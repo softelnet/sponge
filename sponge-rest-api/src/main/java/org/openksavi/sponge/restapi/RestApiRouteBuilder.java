@@ -53,14 +53,14 @@ public class RestApiRouteBuilder extends RouteBuilder {
             .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
             .contextPath("/").port(settings.getPort())
             // Add swagger api-doc out of the box.
-            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", engine.getVersion())
+            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()))
                 .apiProperty("cors", "true");
 
         if (settings.getHost() != null) {
             restDefinition.host(settings.getHost());
         }
 
-        rest("/sponge").description("Sponge REST service")
+        rest(RestApiConstants.URL_PREFIX + settings.getVersion()).description("Sponge REST service")
             .consumes(RestApiConstants.APPLICATION_JSON_VALUE).produces(RestApiConstants.APPLICATION_JSON_VALUE)
             .get("/version").description("Sponge version").outType(RestVersionResult.class)
                 .responseMessage().code(200).message("Sponge version").endResponseMessage()

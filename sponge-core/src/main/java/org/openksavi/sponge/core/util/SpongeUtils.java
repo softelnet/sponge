@@ -34,6 +34,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -51,6 +53,7 @@ import java.util.stream.Stream;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -64,6 +67,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
@@ -445,6 +449,31 @@ public abstract class SpongeUtils {
 
     public static boolean isSystemEvent(Event event) {
         return EngineConstants.PREDEFINED_EVENT_NAMES.contains(event.getName());
+    }
+
+    // kbNameRegexp1:processorNameRegexp1,..,kbNameRegexpN:processorNameRegexpN
+    public static List<ProcessorQualifiedName> getProcessorQualifiedNameList(String processorQualifiedNamesSpec) {
+        if (processorQualifiedNamesSpec == null) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(processorQualifiedNamesSpec.split(",")).map(String::trim).map(element -> {
+            String[] spec = element.split(":");
+            String knowledgeBaseName = spec[0].trim();
+            String name = spec.length > 1 ? spec[1].trim() : "";
+
+            return new ProcessorQualifiedName(!knowledgeBaseName.isEmpty() ? knowledgeBaseName : EngineConstants.MATCH_ALL_REGEXP,
+                    !name.isEmpty() ? name : EngineConstants.MATCH_ALL_REGEXP);
+        }).collect(Collectors.toList());
+    }
+
+    // nameRegexp1,..,nameRegexpN
+    public static List<String> getNameList(String namesSpec) {
+        if (namesSpec == null) {
+            return Lists.newArrayList(EngineConstants.MATCH_ALL_REGEXP);
+        }
+
+        return Arrays.stream(namesSpec.split(",")).map(String::trim).collect(Collectors.toList());
     }
 
     protected SpongeUtils() {

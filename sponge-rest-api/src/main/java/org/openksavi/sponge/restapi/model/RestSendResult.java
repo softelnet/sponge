@@ -19,8 +19,6 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 @ApiModel(value = "SendResult", description = "Represents a Sponge event id")
 public class RestSendResult extends BaseRestResponse {
 
@@ -44,10 +42,6 @@ public class RestSendResult extends BaseRestResponse {
     }
 
     public static RestSendResult fromException(Exception e) {
-        RestSendResult result = new RestSendResult();
-        result.setErrorMessage(ExceptionUtils.getMessage(e));
-        result.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
-
-        return result;
+        return fromException(new RestSendResult(), e);
     }
 }

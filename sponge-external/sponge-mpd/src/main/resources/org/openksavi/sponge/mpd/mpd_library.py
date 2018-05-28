@@ -79,7 +79,7 @@ class MpdLibrary:
 
 class MpdSetAndPlayPlaylist(Action):
     def onConfigure(self):
-        self.displayName = "MPD - Set and play a playlist"
+        self.displayName = "Set and play a playlist"
         self.argsMeta = [
             ArgMeta("artist", Type.STRING, False, "Artist"),
             ArgMeta("album", Type.STRING, False, "Album"),

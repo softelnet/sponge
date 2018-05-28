@@ -50,6 +50,16 @@ public class RestApiPlugin extends JPlugin {
         settings.setPort(configuration.getInteger(RestApiConstants.TAG_PORT, settings.getPort()));
         settings.setPrettyPrint(configuration.getBoolean(RestApiConstants.TAG_PRETTY_PRINT, settings.isPrettyPrint()));
 
+        String publicActionsSpec = configuration.getString(RestApiConstants.TAG_PUBLIC_ACTIONS, null);
+        if (publicActionsSpec != null) {
+            settings.setPublicActions(SpongeUtils.getProcessorQualifiedNameList(publicActionsSpec));
+        }
+
+        String publicEvents = configuration.getString(RestApiConstants.TAG_PUBLIC_EVENTS, null);
+        if (publicEvents != null) {
+            settings.setPublicEvents(SpongeUtils.getNameList(publicEvents));
+        }
+
         autoStart = configuration.getBoolean(RestApiConstants.TAG_AUTO_START, isAutoStart());
     }
 
@@ -84,7 +94,7 @@ public class RestApiPlugin extends JPlugin {
 
         if (!started.get()) {
             try {
-                camelContext.addRoutes(new RestApiRouteBuilder(getEngine(), new RestApiService(getEngine()), settings));
+                camelContext.addRoutes(new RestApiRouteBuilder(getEngine(), new RestApiService(getEngine(), settings), settings));
             } catch (Exception e) {
                 throw SpongeUtils.wrapException(e);
             }
