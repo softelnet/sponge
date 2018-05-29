@@ -21,7 +21,7 @@ Standalone command-line application doesn't support history of entered commands/
 |Use given Spring configuration file. This option may be used more than once to provide many Spring configuration files.
 
 |`-m`
-|Create an Apache Camel context. Works only if one or more 'spring' options are present.
+|Create an Apache Camel context.
 
 |`-i [name]`
 |Run in an interactive mode by connecting to a knowledge base interpreter. You may provide the name of one of the loaded knowledge bases, otherwise the first loaded knowledge base will be chosen.

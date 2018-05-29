@@ -22,7 +22,6 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 
-import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.model.RestActionCall;
 import org.openksavi.sponge.restapi.model.RestActionsResult;
 import org.openksavi.sponge.restapi.model.RestCallResult;
@@ -33,14 +32,11 @@ import org.openksavi.sponge.restapi.model.RestVersionResult;
 
 public class RestApiRouteBuilder extends RouteBuilder {
 
-    private SpongeEngine engine;
-
     private RestApiService spongeRestService;
 
     private RestApiSettings settings;
 
-    public RestApiRouteBuilder(SpongeEngine engine, RestApiService spongeRestService, RestApiSettings settings) {
-        this.engine = engine;
+    public RestApiRouteBuilder(RestApiService spongeRestService, RestApiSettings settings) {
         this.spongeRestService = spongeRestService;
         this.settings = settings;
     }

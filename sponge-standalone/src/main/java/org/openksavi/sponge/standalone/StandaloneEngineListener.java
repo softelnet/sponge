@@ -171,7 +171,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
         }
 
         // Add a Camel context configuration file if needed.
-        if (!result.isEmpty() && (isCamel() || standalonePlugin != null && standalonePlugin.isCamel())) {
+        if (isCamel() || standalonePlugin != null && standalonePlugin.isCamel()) {
             result.add(StandalonePlugin.CAMEL_CONTEXT_CONFIG);
         }
 

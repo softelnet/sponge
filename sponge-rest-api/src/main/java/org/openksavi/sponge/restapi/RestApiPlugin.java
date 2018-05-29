@@ -94,7 +94,7 @@ public class RestApiPlugin extends JPlugin {
 
         if (!started.get()) {
             try {
-                camelContext.addRoutes(new RestApiRouteBuilder(getEngine(), new RestApiService(getEngine(), settings), settings));
+                camelContext.addRoutes(new RestApiRouteBuilder(new RestApiService(getEngine(), settings), settings));
             } catch (Exception e) {
                 throw SpongeUtils.wrapException(e);
             }
