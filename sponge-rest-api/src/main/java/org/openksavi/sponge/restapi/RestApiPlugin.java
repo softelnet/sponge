@@ -16,11 +16,16 @@
 
 package org.openksavi.sponge.restapi;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.impl.CompositeRegistry;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.SimpleRegistry;
 
 import org.openksavi.sponge.camel.CamelPlugin;
+import org.openksavi.sponge.camel.CamelUtils;
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -60,6 +65,11 @@ public class RestApiPlugin extends JPlugin {
             settings.setPublicEvents(SpongeUtils.getNameList(publicEvents));
         }
 
+        if (configuration.hasChildConfiguration(RestApiConstants.TAG_SECURITY)) {
+            settings.setSecurity(
+                    SpongeUtils.createSecurityConfiguration(configuration.getChildConfiguration(RestApiConstants.TAG_SECURITY)));
+        }
+
         autoStart = configuration.getBoolean(RestApiConstants.TAG_AUTO_START, isAutoStart());
     }
 
@@ -84,16 +94,29 @@ public class RestApiPlugin extends JPlugin {
             throw new ConfigException("Camel plugin is not registered but it is required by the Sponge REST API");
         }
 
-        start(camelPlugin.getCamelContext());
+        // SpringPlugin springPlugin = getEngine().getPluginManager().getPlugin(SpringPlugin.class);
+        // if (springPlugin == null) {
+        // throw new ConfigException("Spring plugin is not registered but it is required by the Sponge REST API");
+        // }
+
+        start(camelPlugin.getCamelContext()/* , springPlugin.getContext() */);
     }
 
-    public synchronized void start(CamelContext camelContext) {
+    public synchronized void start(CamelContext camelContext/* , ApplicationContext applicationContext */) {
         if (camelContext == null) {
             throw new ConfigException("Camel context is not available");
         }
 
+        // if (applicationContext == null) {
+        // throw new ConfigException("Spring context is not available");
+        // }
+
         if (!started.get()) {
             try {
+                if (settings.getSecurity() != null && settings.getSslContextParametersBeanName() != null) {
+                    setupSecurity(camelContext);
+                }
+
                 camelContext.addRoutes(new RestApiRouteBuilder(new RestApiService(getEngine(), settings), settings));
             } catch (Exception e) {
                 throw SpongeUtils.wrapException(e);
@@ -101,6 +124,14 @@ public class RestApiPlugin extends JPlugin {
 
             started.set(true);
         }
+    }
+
+    protected void setupSecurity(CamelContext camelContext) {
+        SimpleRegistry simpleRegistry = new SimpleRegistry();
+        simpleRegistry.put(settings.getSslContextParametersBeanName(), CamelUtils.createSslContextParameters(settings.getSecurity()));
+
+        // TODO Handle many invocations of this method resulting in a growing registry list.
+        ((DefaultCamelContext) camelContext).setRegistry(new CompositeRegistry(Arrays.asList(simpleRegistry, camelContext.getRegistry())));
     }
 
     public boolean isAutoStart() {

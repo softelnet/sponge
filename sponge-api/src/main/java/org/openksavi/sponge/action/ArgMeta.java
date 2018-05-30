@@ -35,11 +35,19 @@ public class ArgMeta {
     /** An argument display name. */
     private String displayName;
 
-    public ArgMeta(String name, Type type, boolean required, String displayName) {
+    /** An argument description. */
+    private String description;
+
+    public ArgMeta(String name, Type type, boolean required, String displayName, String description) {
         this.name = name;
         this.type = type;
         this.required = required;
         this.displayName = displayName;
+        this.description = description;
+    }
+
+    public ArgMeta(String name, Type type, boolean required, String displayName) {
+        this(name, type, required, displayName, null);
     }
 
     public ArgMeta(String name, Type type, boolean required) {
@@ -76,5 +84,13 @@ public class ArgMeta {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

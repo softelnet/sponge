@@ -99,6 +99,9 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             throw new SpongeException("Invalid plugin name: " + plugin.getName());
         }
 
+        plugin.setDisplayName(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_DISPLAY_NAME, null));
+        plugin.setDescription(pluginConfig.getString(PluginManagerConstants.CFG_PLUGIN_DESCRIPTION, null));
+
         plugin.setConfiguration(pluginConfig.getChildConfiguration(PluginManagerConstants.CFG_PLUGIN_CONFIGURATION), true);
 
         return plugin;
@@ -242,6 +245,14 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
             Plugin plugin = interpreter.createPluginInstance(pluginStub.getPluginClassName());
             if (pluginStub.getName() != null) {
                 plugin.setName(pluginStub.getName());
+            }
+
+            if (pluginStub.getDisplayName() != null) {
+                plugin.setDisplayName(pluginStub.getDisplayName());
+            }
+
+            if (pluginStub.getDescription() != null) {
+                plugin.setDescription(pluginStub.getDescription());
             }
 
             plugin.setEngine(getEngine());

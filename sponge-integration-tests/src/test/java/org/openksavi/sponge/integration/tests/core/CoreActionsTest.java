@@ -54,15 +54,20 @@ public class CoreActionsTest {
             assertEquals("TEST", javaResult[1]);
 
             ActionAdapter upperActionAdapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
+            assertEquals("Echo Action", upperActionAdapter.getDisplayName());
+            assertEquals("Returns the upper case string", upperActionAdapter.getDescription());
+
             ArgMeta[] argMeta = upperActionAdapter.getArgsMeta();
             assertEquals(1, argMeta.length);
             assertEquals("arg1", argMeta[0].getName());
             assertEquals(Type.STRING, argMeta[0].getType());
             assertEquals(true, argMeta[0].isRequired());
             assertEquals("Argument 1", argMeta[0].getDisplayName());
+            assertEquals("Argument 1 description", argMeta[0].getDescription());
 
             assertEquals(Type.STRING, upperActionAdapter.getResultMeta().getType());
             assertEquals("Upper case string", upperActionAdapter.getResultMeta().getDisplayName());
+            assertEquals("Result description", upperActionAdapter.getResultMeta().getDescription());
 
             assertFalse(engine.isError());
         } finally {

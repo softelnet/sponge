@@ -66,6 +66,16 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     }
 
     @Override
+    public final void setDescription(String description) {
+        adapter.setDescription(description);
+    }
+
+    @Override
+    public final String getDescription() {
+        return adapter.getDescription();
+    }
+
+    @Override
     public KnowledgeBase getKnowledgeBase() {
         return adapter.getKnowledgeBase();
     }

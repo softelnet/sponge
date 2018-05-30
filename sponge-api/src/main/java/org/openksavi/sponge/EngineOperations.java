@@ -220,11 +220,11 @@ public interface EngineOperations {
     String getVersion();
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
-    String getDescription();
+    String getInfo();
 
     /**
      * Returns the engine statistics summary.

@@ -66,9 +66,9 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @DirtiesContext
 public class RestApiTest {
 
-    private static final int PORT = SocketUtils.findAvailableTcpPort(8080);
+    private static final int PORT = SocketUtils.findAvailableTcpPort(1836);
 
-    private static final String URL = "http://localhost:" + PORT + RestApiConstants.URL_PREFIX + "1/";
+    private static final String URL = "http://localhost:" + PORT + RestApiConstants.BASE_URL + "/";
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
@@ -89,7 +89,6 @@ public class RestApiTest {
         public RestApiPlugin spongeRestApiPlugin() {
             RestApiPlugin plugin = new RestApiPlugin();
 
-            plugin.getSettings().setRestComponentId("undertow");
             plugin.getSettings().setPort(PORT);
             // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 

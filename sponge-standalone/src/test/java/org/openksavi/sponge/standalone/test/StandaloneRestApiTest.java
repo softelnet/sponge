@@ -39,9 +39,9 @@ import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 public class StandaloneRestApiTest {
 
-    private static final int PORT = 18080;
+    private static final int PORT = 11836;
 
-    private static final String REST_API_URL = "http://localhost:" + PORT + RestApiConstants.URL_PREFIX + "1/";
+    private static final String REST_API_URL = "http://localhost:" + PORT + RestApiConstants.BASE_URL + "/";
 
     @Test
     public void testRestApi() {

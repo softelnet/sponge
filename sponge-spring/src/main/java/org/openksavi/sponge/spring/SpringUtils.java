@@ -27,8 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -36,8 +34,6 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.openksavi.sponge.config.ConfigException;
 
 public abstract class SpringUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(SpringUtils.class);
 
     private static final ResourcePatternResolver RESOURCE_RESOLVER =
             new PathMatchingResourcePatternResolver(SpringKnowledgeBaseFileProvider.class.getClassLoader());

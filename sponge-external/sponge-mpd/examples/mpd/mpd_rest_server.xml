@@ -19,7 +19,12 @@
         </plugin>
         <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
             <configuration>
-                <port>8080</port>
+                <port>1836</port>
+<!--                 <security> -->
+<!--                     <keyStore>keystore/rest_api_selfsigned.jks</keyStore> -->
+<!--                     <keyStorePassword>sponge</keyStorePassword> -->
+<!--                     <keyPassword>sponge</keyPassword> -->
+<!--                 </security> -->
                 <publicActions>mpd:,tools:</publicActions>
             </configuration>
         </plugin>

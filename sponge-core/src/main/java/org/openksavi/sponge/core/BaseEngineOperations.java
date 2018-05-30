@@ -176,13 +176,13 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
     @Override
-    public String getDescription() {
-        return engine.getDescription();
+    public String getInfo() {
+        return engine.getInfo();
     }
 
     /**

@@ -57,7 +57,7 @@ def onLoad
 end
 
 def onStartup
-    $EPS.logger.debug("onStartup, file1: {}, triggers: {}", $EPS.description, $EPS.engine.triggers)
+    $EPS.logger.debug("onStartup, file1: {}, triggers: {}", $EPS.info, $EPS.engine.triggers)
     $EPS.event("e1").sendAfter(0, 500)
     $EPS.event("e2").sendAfter(0, 500)
 

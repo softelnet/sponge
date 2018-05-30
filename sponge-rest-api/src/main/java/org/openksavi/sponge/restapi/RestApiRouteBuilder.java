@@ -46,8 +46,9 @@ public class RestApiRouteBuilder extends RouteBuilder {
         // @formatter:off
         RestConfigurationDefinition restDefinition = restConfiguration().component(settings.getRestComponentId())
             .bindingMode(RestBindingMode.json)
+            .port(settings.getPort())
             .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
-            .contextPath("/").port(settings.getPort())
+            .contextPath("/")
             // Add swagger api-doc out of the box.
             .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()))
                 .apiProperty("cors", "true");
@@ -56,10 +57,19 @@ public class RestApiRouteBuilder extends RouteBuilder {
             restDefinition.host(settings.getHost());
         }
 
-        rest(RestApiConstants.URL_PREFIX + settings.getVersion()).description("Sponge REST service")
+
+        if (settings.getSecurity() != null) {
+            restDefinition.scheme("https");
+
+            if (settings.getSslContextParametersBeanName() != null) {
+                restDefinition.endpointProperty("sslContextParameters", "#" + settings.getSslContextParametersBeanName());
+            }
+        }
+
+        rest(RestApiConstants.BASE_URL).description("Sponge REST service")
             .consumes(RestApiConstants.APPLICATION_JSON_VALUE).produces(RestApiConstants.APPLICATION_JSON_VALUE)
-            .get("/version").description("Sponge version").outType(RestVersionResult.class)
-                .responseMessage().code(200).message("Sponge version").endResponseMessage()
+            .get("/version").description("Get the Sponge version").outType(RestVersionResult.class)
+                .responseMessage().code(200).message("The Sponge version").endResponseMessage()
                 .route()
                     .setBody((exchange) -> spongeRestService.getVersion())
                 .endRest()
@@ -73,20 +83,20 @@ public class RestApiRouteBuilder extends RouteBuilder {
                     .setBody((exchange) -> spongeRestService.getActions(exchange.getIn().getHeader(
                             RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME, Boolean.class)))
                 .endRest()
-            .post("/call").description("Call the action").type(RestActionCall.class).outType(RestCallResult.class)
-                .param().name("body").type(body).description("The action to call").endParam()
-                .responseMessage().code(200).message("Action result").endResponseMessage()
+            .post("/call").description("Call an action").type(RestActionCall.class).outType(RestCallResult.class)
+                .param().name("body").type(body).description("The name of the action to call").endParam()
+                .responseMessage().code(200).message("The action result").endResponseMessage()
                 .route()
                     .setBody((exchange) -> spongeRestService.call(exchange.getIn().getBody(RestActionCall.class)))
                 .endRest()
             .post("/send").description("Send a new event").type(RestEvent.class).outType(RestSendResult.class)
                 .param().name("body").type(body).description("The event to send").endParam()
-                .responseMessage().code(200).message("Event id").endResponseMessage()
+                .responseMessage().code(200).message("The event id").endResponseMessage()
                 .route()
                     .setBody((exchange) -> spongeRestService.send(exchange.getIn().getBody(RestEvent.class)))
                 .endRest()
-            .post("/reload").description("Reload Sponge knowledge bases").outType(RestReloadResult.class)
-                .responseMessage().code(200).message("Sponge knowledge bases reloaded").endResponseMessage()
+            .post("/reload").description("Reload knowledge bases").outType(RestReloadResult.class)
+                .responseMessage().code(200).message("Knowledge bases reloaded").endResponseMessage()
                 .route()
                     .setBody((exchange) -> spongeRestService.reload())
                     .endRest();

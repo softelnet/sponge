@@ -199,11 +199,11 @@ public interface SpongeEngine extends EngineModule {
     String getVersion();
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
-    String getDescription();
+    String getInfo();
 
     /**
      * Shuts down the engine using another thread.

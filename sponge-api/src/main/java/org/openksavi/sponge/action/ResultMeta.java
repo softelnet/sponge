@@ -23,15 +23,23 @@ import org.openksavi.sponge.Type;
  */
 public class ResultMeta {
 
-    /** An argument data type. */
+    /** A result data type. */
     private Type type;
 
-    /** An argument display name. */
+    /** A result display name. */
     private String displayName;
 
-    public ResultMeta(Type type, String displayName) {
+    /** A result description. */
+    private String description;
+
+    public ResultMeta(Type type, String displayName, String description) {
         this.type = type;
         this.displayName = displayName;
+        this.description = description;
+    }
+
+    public ResultMeta(Type type, String displayName) {
+        this(type, displayName, null);
     }
 
     public ResultMeta(Type type) {
@@ -52,5 +60,13 @@ public class ResultMeta {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

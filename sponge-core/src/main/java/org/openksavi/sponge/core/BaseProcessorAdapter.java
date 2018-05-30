@@ -156,6 +156,16 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
         return definition.getDisplayName();
     }
 
+    @Override
+    public void setDescription(String description) {
+        definition.setDescription(description);
+    }
+
+    @Override
+    public String getDescription() {
+        return definition.getDescription();
+    }
+
     /**
      * Returns Java-defined flag.
      *

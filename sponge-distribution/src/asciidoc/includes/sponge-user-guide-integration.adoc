@@ -468,11 +468,11 @@ gateway = JavaGateway()
 # EPS in other process accessed via Py4J
 EPS = gateway.entry_point
 
-print "Connected to {}".format(EPS.getDescription())
+print "Connected to {}".format(EPS.getInfo())
 EPS.event("helloEvent").set("say", "Hello from Python's Py4J").send()
 ----
 
-Note that a simplified bean property access is not supported here. So instead of `EPS.description` you have to invoke `EPS.getDescription()`.
+Note that a simplified bean property access is not supported here. So instead of `EPS.info` you have to invoke `EPS.getInfo()`.
 
 ==== ClientServerPy4JPlugin
 

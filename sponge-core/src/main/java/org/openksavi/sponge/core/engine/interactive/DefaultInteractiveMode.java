@@ -148,7 +148,7 @@ public class DefaultInteractiveMode implements InteractiveMode {
     }
 
     protected String getWelcomeMessage() {
-        return "Running " + engine.getDescription() + " in an interactive mode. Type \"" + InteractiveModeConstants.EXIT_COMMAND + "\", \""
+        return "Running " + engine.getInfo() + " in t interactive mode. Type \"" + InteractiveModeConstants.EXIT_COMMAND + "\", \""
                 + InteractiveModeConstants.QUIT_COMMAND + "\" or press CTRL-D to exit.\n";
     }
 

@@ -26,13 +26,16 @@ public class RestKnowledgeBase {
 
     private String displayName;
 
+    private String description;
+
     public RestKnowledgeBase() {
         //
     }
 
-    public RestKnowledgeBase(String name, String displayName) {
+    public RestKnowledgeBase(String name, String displayName, String description) {
         this.name = name;
         this.displayName = displayName;
+        this.description = description;
     }
 
     @ApiModelProperty(value = "The knowledge base name", required = true)
@@ -44,12 +47,21 @@ public class RestKnowledgeBase {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The knowledge bas display name", required = false)
+    @ApiModelProperty(value = "The knowledge base display name", required = false)
     public String getDisplayName() {
         return displayName;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    @ApiModelProperty(value = "The knowledge base description", required = false)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

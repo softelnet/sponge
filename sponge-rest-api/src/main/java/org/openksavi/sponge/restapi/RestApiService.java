@@ -111,8 +111,9 @@ public class RestApiService {
 
         return new RestActionsResult(engine.getActions().stream().filter(isPublicByAction).filter(isPublicBySettings)
                 .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
-                .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(),
-                        new RestKnowledgeBase(action.getKnowledgeBase().getName(), action.getKnowledgeBase().getDisplayName()),
+                .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
+                        new RestKnowledgeBase(action.getKnowledgeBase().getName(), action.getKnowledgeBase().getDisplayName(),
+                                action.getKnowledgeBase().getDescription()),
                         createActionArgMetaList(action), createActionResultMeta(action)))
                 .collect(Collectors.toList()));
     }
@@ -126,9 +127,10 @@ public class RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionAdapter actionAdapter) {
-        return actionAdapter.getArgsMeta() != null ? Arrays.stream(actionAdapter.getArgsMeta())
-                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType().getCode(), meta.isRequired(), meta.getDisplayName()))
-                .collect(Collectors.toList()) : null;
+        return actionAdapter.getArgsMeta() != null
+                ? Arrays.stream(actionAdapter.getArgsMeta()).map(meta -> new RestActionArgMeta(meta.getName(), meta.getType().getCode(),
+                        meta.isRequired(), meta.getDisplayName(), meta.getDescription())).collect(Collectors.toList())
+                : null;
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {

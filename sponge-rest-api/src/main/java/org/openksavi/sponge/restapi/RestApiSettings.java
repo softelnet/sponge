@@ -19,6 +19,7 @@ package org.openksavi.sponge.restapi;
 import java.util.List;
 
 import org.openksavi.sponge.ProcessorQualifiedName;
+import org.openksavi.sponge.core.util.SecurityConfiguration;
 
 /**
  * REST API settings.
@@ -38,6 +39,10 @@ public class RestApiSettings {
     private List<ProcessorQualifiedName> publicActions;
 
     private List<String> publicEvents;
+
+    private String sslContextParametersBeanName = RestApiConstants.DEFAULT_SSL_CONTEXT_PARAMETERS_BEAN_NAME;
+
+    private SecurityConfiguration security;
 
     public String getRestComponentId() {
         return restComponentId;
@@ -93,5 +98,21 @@ public class RestApiSettings {
 
     public void setPublicEvents(List<String> publicEvents) {
         this.publicEvents = publicEvents;
+    }
+
+    public String getSslContextParametersBeanName() {
+        return sslContextParametersBeanName;
+    }
+
+    public void setSslContextParametersBeanName(String sslContextParametersBeanName) {
+        this.sslContextParametersBeanName = sslContextParametersBeanName;
+    }
+
+    public SecurityConfiguration getSecurity() {
+        return security;
+    }
+
+    public void setSecurity(SecurityConfiguration security) {
+        this.security = security;
     }
 }

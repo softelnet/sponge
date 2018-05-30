@@ -70,6 +70,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     /** Configuration knowledge base class attribute name. */
     private static final String CFG_KNOWLEDGE_BASE_ATTR_CLASS = "class";
 
+    /** Configuration knowledge base description. */
+    private static final String CFG_KNOWLEDGE_BASE_DESCRIPTION = "description";
+
     /** Configuration knowledge base file tag. */
     private static final String CFG_KNOWLEDGE_BASE_FILE = "file";
 
@@ -126,8 +129,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         }
 
         String displayName = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_DISPLAY_NAME, null);
-
+        String description = configuration.getString(CFG_KNOWLEDGE_BASE_DESCRIPTION, null);
         String typeCode = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_TYPE, null);
+
         Configuration[] fileNodes = configuration.getConfigurationsAt(CFG_KNOWLEDGE_BASE_FILE);
 
         String kbClass = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_CLASS, null);
@@ -137,6 +141,10 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
         if (displayName != null) {
             knowledgeBase.setDisplayName(displayName);
+        }
+
+        if (description != null) {
+            knowledgeBase.setDescription(description);
         }
 
         return knowledgeBase;

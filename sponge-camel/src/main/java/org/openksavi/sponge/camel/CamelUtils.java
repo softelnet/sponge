@@ -18,9 +18,14 @@ package org.openksavi.sponge.camel;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.xml.XPathBuilder;
+import org.apache.camel.util.jsse.KeyManagersParameters;
+import org.apache.camel.util.jsse.KeyStoreParameters;
+import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.util.jsse.TrustManagersParameters;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.core.util.SecurityConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
@@ -72,5 +77,24 @@ public abstract class CamelUtils {
         }
 
         return plugin;
+    }
+
+    public static SSLContextParameters createSslContextParameters(SecurityConfiguration security) {
+        KeyStoreParameters keyStoreParameters = new KeyStoreParameters();
+        keyStoreParameters.setResource(security.getKeyStore());
+        keyStoreParameters.setPassword(security.getKeyStorePassword());
+
+        KeyManagersParameters keyManagersParameters = new KeyManagersParameters();
+        keyManagersParameters.setKeyStore(keyStoreParameters);
+        keyManagersParameters.setKeyPassword(security.getKeyPassword());
+
+        TrustManagersParameters trustManagersParameters = new TrustManagersParameters();
+        trustManagersParameters.setKeyStore(keyStoreParameters);
+
+        SSLContextParameters sslContextParameters = new SSLContextParameters();
+        sslContextParameters.setKeyManagers(keyManagersParameters);
+        sslContextParameters.setTrustManagers(trustManagersParameters);
+
+        return sslContextParameters;
     }
 }

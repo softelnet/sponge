@@ -39,6 +39,12 @@ public abstract class BaseEngineModule implements EngineModule {
     /** Name. */
     private String name;
 
+    /** Display name. */
+    private String displayName;
+
+    /** Description. */
+    private String description;
+
     /** Guava service. */
     private Service service = new AbstractIdleService() {
 
@@ -127,6 +133,26 @@ public abstract class BaseEngineModule implements EngineModule {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @Override
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     protected void doStartup() {

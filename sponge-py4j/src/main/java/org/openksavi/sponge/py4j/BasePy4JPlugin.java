@@ -16,24 +16,12 @@
 
 package org.openksavi.sponge.py4j;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 import py4j.GatewayServer;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.util.SecurityConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
 
@@ -51,14 +39,6 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
     public static final String TAG_PYTHON_PORT = "pythonPort";
 
     public static final String TAG_SECURITY = "security";
-
-    public static final String TAG_SECURITY_PASSWORD = "password";
-
-    public static final String TAG_SECURITY_KEYSTORE = "keystore";
-
-    public static final String TAG_SECURITY_ALGORITHM = "algorithm";
-
-    public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
     private String facadeInterfaceName;
 
@@ -101,14 +81,7 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         pythonPort = configuration.getInteger(TAG_PYTHON_PORT, pythonPort);
 
         if (configuration.hasChildConfiguration(TAG_SECURITY)) {
-            Configuration securityConfiguration = configuration.getChildConfiguration(TAG_SECURITY);
-
-            SecurityConfiguration newSecurity = new SecurityConfiguration();
-            newSecurity.setPassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_PASSWORD));
-            newSecurity.setKeystore(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEYSTORE));
-            newSecurity.setAlgorithm(securityConfiguration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
-
-            security = newSecurity;
+            security = SpongeUtils.createSecurityConfiguration(configuration.getChildConfiguration(TAG_SECURITY));
         }
     }
 
@@ -137,39 +110,6 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
     }
 
     protected SSLContext createSslContext() {
-        InputStream fis = null;
-
-        try {
-            char[] password = security.getPassword().toCharArray();
-            KeyStore ks = KeyStore.getInstance("JKS");
-
-            URL keystoreUrl = SpongeUtils.getUrlFromClasspath(security.getKeystore());
-            if (keystoreUrl == null) {
-                throw new SpongeException("Expected a '" + security.getKeystore() + "' keystore file on the classpath");
-            }
-            fis = keystoreUrl.openStream();
-
-            ks.load(fis, password);
-
-            // Setup the key manager factory.
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance(security.getAlgorithm());
-            kmf.init(ks, password);
-
-            // Setup the trust manager factory.
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(security.getAlgorithm());
-            tmf.init(ks);
-
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-
-            // Setup the HTTPS context and parameters.
-            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-
-            return sslContext;
-        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableKeyException
-                | KeyManagementException e) {
-            throw SpongeUtils.wrapException(e);
-        } finally {
-            SpongeUtils.close(fis);
-        }
+        return SpongeUtils.createSslContext(security);
     }
 }

@@ -16,26 +16,13 @@
 
 package org.openksavi.sponge.engine;
 
+import org.openksavi.sponge.util.Descriptive;
 import org.openksavi.sponge.util.Manageable;
 
 /**
  * An engine module.
  */
-public interface EngineModule extends Manageable {
-
-    /**
-     * Returns the name of this module.
-     *
-     * @return the name of this module.
-     */
-    String getName();
-
-    /**
-     * Sets the name.
-     *
-     * @param name the name.
-     */
-    void setName(String name);
+public interface EngineModule extends Manageable, Descriptive {
 
     /**
      * Sets the engine.

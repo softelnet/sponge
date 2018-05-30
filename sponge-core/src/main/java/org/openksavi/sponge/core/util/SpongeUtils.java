@@ -34,6 +34,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,6 +55,10 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
@@ -90,6 +100,16 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 public abstract class SpongeUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(SpongeUtils.class);
+
+    public static final String TAG_SECURITY_KEY_STORE_PASSWORD = "keyStorePassword";
+
+    public static final String TAG_SECURITY_KEY_PASSWORD = "keyPassword";
+
+    public static final String TAG_SECURITY_KEY_STORE = "keyStore";
+
+    public static final String TAG_SECURITY_ALGORITHM = "algorithm";
+
+    public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
     /**
      * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.
@@ -474,6 +494,52 @@ public abstract class SpongeUtils {
         }
 
         return Arrays.stream(namesSpec.split(",")).map(String::trim).collect(Collectors.toList());
+    }
+
+    public static SSLContext createSslContext(SecurityConfiguration security) {
+        InputStream fis = null;
+
+        try {
+            KeyStore ks = KeyStore.getInstance("JKS");
+
+            URL keystoreUrl = SpongeUtils.getUrlFromClasspath(security.getKeyStore());
+            if (keystoreUrl == null) {
+                throw new SpongeException("Expected a '" + security.getKeyStore() + "' keystore file on the classpath");
+            }
+            fis = keystoreUrl.openStream();
+
+            ks.load(fis, security.getKeyStorePassword().toCharArray());
+
+            // Setup the key manager factory.
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(security.getAlgorithm());
+            kmf.init(ks, security.getKeyPassword().toCharArray());
+
+            // Setup the trust manager factory.
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(security.getAlgorithm());
+            tmf.init(ks);
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+
+            // Setup the HTTPS context and parameters.
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+            return sslContext;
+        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableKeyException
+                | KeyManagementException e) {
+            throw SpongeUtils.wrapException(e);
+        } finally {
+            SpongeUtils.close(fis);
+        }
+    }
+
+    public static SecurityConfiguration createSecurityConfiguration(Configuration securityConfiguration) {
+        SecurityConfiguration security = new SecurityConfiguration();
+        security.setKeyStore(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_STORE));
+        security.setKeyStorePassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_STORE_PASSWORD));
+        security.setKeyPassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_PASSWORD));
+        security.setAlgorithm(securityConfiguration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
+
+        return security;
     }
 
     protected SpongeUtils() {

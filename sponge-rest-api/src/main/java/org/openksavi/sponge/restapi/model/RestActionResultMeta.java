@@ -26,6 +26,8 @@ public class RestActionResultMeta {
 
     private String displayName;
 
+    private String description;
+
     public RestActionResultMeta() {
         //
     }
@@ -51,5 +53,14 @@ public class RestActionResultMeta {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    @ApiModelProperty(value = "The action result description", required = false)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
