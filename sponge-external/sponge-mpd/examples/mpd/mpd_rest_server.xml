@@ -19,7 +19,7 @@
         </plugin>
         <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
             <configuration>
-                <port>8080</port>
+                <port>1836</port>
                 <publicActions>mpd:,tools:</publicActions>
             </configuration>
         </plugin>

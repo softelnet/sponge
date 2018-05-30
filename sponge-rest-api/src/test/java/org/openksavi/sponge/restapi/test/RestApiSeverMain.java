@@ -49,7 +49,7 @@ public class RestApiSeverMain {
             RestApiPlugin plugin = new RestApiPlugin();
 
             plugin.getSettings().setRestComponentId("undertow");
-            plugin.getSettings().setPort(8080);
+            plugin.getSettings().setPort(1836);
 
             return plugin;
         }

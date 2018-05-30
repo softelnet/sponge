@@ -29,7 +29,7 @@ public final class RestApiConstants {
 
     public static final String DEFAULT_REST_COMPONENT_ID = "undertow";
 
-    public static final int DEFAULT_PORT = 8080;
+    public static final int DEFAULT_PORT = 1836;
 
     public static final boolean DEFAULT_AUTO_START = true;
 

@@ -15,7 +15,7 @@
         </plugin>
         <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
             <configuration>
-                <port>18080</port>
+                <port>11836</port>
                 <autoStart>false</autoStart>
             </configuration>
         </plugin>
