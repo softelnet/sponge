@@ -258,7 +258,7 @@ public abstract class BaseEngineModule implements EngineModule {
         return service.state();
     }
 
-    public Service getService() {
+    public Service getInternalService() {
         return service;
     }
 

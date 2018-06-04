@@ -275,6 +275,13 @@ In an interactive mode a predefined console logger appender (configured in `conf
 
 Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 
+== REST API
+You may enable the {sponge} REST API in the standalone command line application but such configuration will provide no user management and a very limited security. Thus it may be used only in a secure network or for test purposes.
+
+Manual start of the REST API (`autoStart` must be turned off) is required because the REST API server must start after the Camel context has started.
+
+For more information see examples in the source code.
+
 == Running examples
 
 .News example

@@ -496,7 +496,7 @@ public abstract class SpongeUtils {
         return Arrays.stream(namesSpec.split(",")).map(String::trim).collect(Collectors.toList());
     }
 
-    public static SSLContext createSslContext(SecurityConfiguration security) {
+    public static SSLContext createSslContext(SslConfiguration security) {
         InputStream fis = null;
 
         try {
@@ -532,8 +532,8 @@ public abstract class SpongeUtils {
         }
     }
 
-    public static SecurityConfiguration createSecurityConfiguration(Configuration securityConfiguration) {
-        SecurityConfiguration security = new SecurityConfiguration();
+    public static SslConfiguration createSecurityConfiguration(Configuration securityConfiguration) {
+        SslConfiguration security = new SslConfiguration();
         security.setKeyStore(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_STORE));
         security.setKeyStorePassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_STORE_PASSWORD));
         security.setKeyPassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_PASSWORD));

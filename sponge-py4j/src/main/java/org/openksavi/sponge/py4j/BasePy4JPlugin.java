@@ -21,8 +21,8 @@ import javax.net.ssl.SSLContext;
 import py4j.GatewayServer;
 
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.SecurityConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.java.JPlugin;
 
 /**
@@ -48,7 +48,7 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     private int pythonPort = GatewayServer.DEFAULT_PYTHON_PORT;
 
-    private SecurityConfiguration security;
+    private SslConfiguration security;
 
     public BasePy4JPlugin() {
         setName(DEFAULT_NAME);
@@ -101,11 +101,11 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         this.pythonPort = pythonPort;
     }
 
-    public SecurityConfiguration getSecurity() {
+    public SslConfiguration getSecurity() {
         return security;
     }
 
-    public void setSecurity(SecurityConfiguration security) {
+    public void setSecurity(SslConfiguration security) {
         this.security = security;
     }
 

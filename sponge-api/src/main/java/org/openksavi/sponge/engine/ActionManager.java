@@ -41,7 +41,7 @@ public interface ActionManager extends EngineModule {
     void removeAction(String actionName);
 
     /**
-     * Calls the action.
+     * Calls the action. Throws {@code ProcessorNotFoundException} when such action is not registered.
      *
      * @param actionName name of registered action.
      * @param args arguments for an action call. This parameter may be {@code null} and in that case it will be passed as an empty array to

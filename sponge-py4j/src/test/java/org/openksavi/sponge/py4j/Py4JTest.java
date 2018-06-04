@@ -109,10 +109,11 @@ public class Py4JTest {
             assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
             assertFalse(engine.isError());
         } finally {
+            engine.shutdown();
+
             if (process != null) {
                 process.destroy();
             }
-            engine.shutdown();
         }
     }
 

@@ -21,30 +21,57 @@ import static org.apache.camel.model.rest.RestParamType.body;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
+import org.apache.camel.model.rest.RestDefinition;
 
-import org.openksavi.sponge.restapi.model.RestActionCall;
-import org.openksavi.sponge.restapi.model.RestActionsResult;
-import org.openksavi.sponge.restapi.model.RestCallResult;
-import org.openksavi.sponge.restapi.model.RestEvent;
-import org.openksavi.sponge.restapi.model.RestReloadResult;
-import org.openksavi.sponge.restapi.model.RestSendResult;
-import org.openksavi.sponge.restapi.model.RestVersionResult;
+import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.RestGetKnowledgeBasesRequest;
+import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.RestReloadRequest;
+import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
+import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.RestGetKnowledgeBasesResponse;
+import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
+import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
 
 public class RestApiRouteBuilder extends RouteBuilder {
 
-    private RestApiService spongeRestService;
+    private RestApiService apiService;
 
     private RestApiSettings settings;
 
-    public RestApiRouteBuilder(RestApiService spongeRestService, RestApiSettings settings) {
-        this.spongeRestService = spongeRestService;
+    public RestApiRouteBuilder() {
+        //
+    }
+
+    public RestApiService getApiService() {
+        return apiService;
+    }
+
+    public void setApiService(RestApiService apiService) {
+        this.apiService = apiService;
+    }
+
+    public RestApiSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(RestApiSettings settings) {
         this.settings = settings;
     }
 
     @Override
     public void configure() throws Exception {
+        createRestConfiguration();
+
+        createRestDefinition();
+    }
+
+    protected void createRestConfiguration() {
         // @formatter:off
-        RestConfigurationDefinition restDefinition = restConfiguration().component(settings.getRestComponentId())
+        RestConfigurationDefinition restConfiguration = restConfiguration().component(settings.getRestComponentId())
             .bindingMode(RestBindingMode.json)
             .port(settings.getPort())
             .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
@@ -52,54 +79,80 @@ public class RestApiRouteBuilder extends RouteBuilder {
             // Add swagger api-doc out of the box.
             .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()))
                 .apiProperty("cors", "true");
+        // @formatter:on
 
         if (settings.getHost() != null) {
-            restDefinition.host(settings.getHost());
+            restConfiguration.host(settings.getHost());
         }
 
+        setupRestConfiguration(restConfiguration);
+    }
 
-        if (settings.getSecurity() != null) {
-            restDefinition.scheme("https");
+    /**
+     * Could be re-implemented to provide for example custom security.
+     *
+     * @param restConfiguration the REST configuration.
+     */
+    protected void setupRestConfiguration(RestConfigurationDefinition restConfiguration) {
+        if (settings.getSslConfiguration() != null) {
+            restConfiguration.scheme("https");
 
             if (settings.getSslContextParametersBeanName() != null) {
-                restDefinition.endpointProperty("sslContextParameters", "#" + settings.getSslContextParametersBeanName());
+                restConfiguration.endpointProperty("sslContextParameters", "#" + settings.getSslContextParametersBeanName());
             }
         }
+    }
 
-        rest(RestApiConstants.BASE_URL).description("Sponge REST service")
+    protected void createRestDefinition() {
+        // @formatter:off
+        RestDefinition restDefinition = rest(RestApiConstants.BASE_URL).description("Sponge REST API")
             .consumes(RestApiConstants.APPLICATION_JSON_VALUE).produces(RestApiConstants.APPLICATION_JSON_VALUE)
-            .get("/version").description("Get the Sponge version").outType(RestVersionResult.class)
+            .post("/version").description("Get the Sponge version").type(RestGetVersionRequest.class).outType(RestGetVersionResponse.class)
+                .param().name("body").type(body).description("Get Sponge version request").endParam()
                 .responseMessage().code(200).message("The Sponge version").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> spongeRestService.getVersion())
+                    .setBody((exchange) -> apiService.getVersion(
+                            exchange.getIn().getBody(RestGetVersionRequest.class)))
                 .endRest()
-            .get("/actions").description("Get actions").outType(RestActionsResult.class)
-                .param().name(RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME).type(body)
-                    .description("Action metadata required").dataType("boolean")
-                    .defaultValue(RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT.toString())
-                    .endParam()
+            .post("/knowledgeBases").description("Get knowledge bases").type(RestGetKnowledgeBasesRequest.class)
+                    .outType(RestGetKnowledgeBasesResponse.class)
+                .param().name("body").type(body).description("Get knowledge bases request").endParam()
+                .responseMessage().code(200).message("Knowledge bases").endResponseMessage()
+                .route()
+                    .setBody((exchange) -> apiService.getKnowledgeBases(
+                            exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class)))
+                .endRest()
+            .post("/actions").description("Get actions").type(RestGetActionsRequest.class).outType(RestGetActionsResponse.class)
+                .param().name("body").type(body).description("Get actions request").endParam()
                 .responseMessage().code(200).message("Actions").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> spongeRestService.getActions(exchange.getIn().getHeader(
-                            RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME, Boolean.class)))
+                    .setBody((exchange) -> apiService.getActions(
+                            exchange.getIn().getBody(RestGetActionsRequest.class)))
                 .endRest()
-            .post("/call").description("Call an action").type(RestActionCall.class).outType(RestCallResult.class)
-                .param().name("body").type(body).description("The name of the action to call").endParam()
+            .post("/call").description("Call an action").type(RestActionCallRequest.class).outType(RestActionCallResponse.class)
+                .param().name("body").type(body).description("Call action request").endParam()
                 .responseMessage().code(200).message("The action result").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> spongeRestService.call(exchange.getIn().getBody(RestActionCall.class)))
+                    .setBody((exchange) -> apiService.call(
+                            exchange.getIn().getBody(RestActionCallRequest.class)))
                 .endRest()
-            .post("/send").description("Send a new event").type(RestEvent.class).outType(RestSendResult.class)
-                .param().name("body").type(body).description("The event to send").endParam()
+            .post("/send").description("Send a new event").type(RestSendEventRequest.class).outType(RestSendEventResponse.class)
+                .param().name("body").type(body).description("Send event request").endParam()
                 .responseMessage().code(200).message("The event id").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> spongeRestService.send(exchange.getIn().getBody(RestEvent.class)))
-                .endRest()
-            .post("/reload").description("Reload knowledge bases").outType(RestReloadResult.class)
-                .responseMessage().code(200).message("Knowledge bases reloaded").endResponseMessage()
-                .route()
-                    .setBody((exchange) -> spongeRestService.reload())
-                    .endRest();
-        // @formatter:on
+                    .setBody((exchange) -> apiService.send(
+                            exchange.getIn().getBody(RestSendEventRequest.class)))
+                .endRest();
+
+            if (settings.isPublishReload()) {
+                restDefinition.post("/reload").description("Reload knowledge bases").type(RestReloadRequest.class).outType(RestReloadResponse.class)
+                    .param().name("body").type(body).description("Reload knowledge bases request").endParam()
+                    .responseMessage().code(200).message("Knowledge bases reloaded").endResponseMessage()
+                    .route()
+                        .setBody((exchange) -> apiService.reload(
+                                exchange.getIn().getBody(RestReloadRequest.class)))
+                        .endRest();
+            }
+         // @formatter:on
     }
 }

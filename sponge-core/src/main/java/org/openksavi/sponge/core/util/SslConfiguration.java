@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.openksavi.sponge.core.util;
 /**
  * SSL security configuration.
  */
-public class SecurityConfiguration {
+public class SslConfiguration {
 
     private String keyStore;
 

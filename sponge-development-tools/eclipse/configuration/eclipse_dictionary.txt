@@ -46,3 +46,6 @@ basename
 kotlin
 nashorn
 metadata
+subtype
+regexp
+enum

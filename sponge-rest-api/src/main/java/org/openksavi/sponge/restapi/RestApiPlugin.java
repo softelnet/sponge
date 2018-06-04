@@ -18,6 +18,8 @@ package org.openksavi.sponge.restapi;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.CompositeRegistry;
@@ -40,9 +42,16 @@ public class RestApiPlugin extends JPlugin {
 
     private RestApiSettings settings = new RestApiSettings();
 
+    /** If {@code true} then the REST service will start when the plugin starts up. The default value is {@code true}. */
     private boolean autoStart = RestApiConstants.DEFAULT_AUTO_START;
 
     private AtomicBoolean started = new AtomicBoolean(false);
+
+    private RestApiRouteBuilder routeBuilder;
+
+    private RestApiService service;
+
+    private Lock lock = new ReentrantLock(true);
 
     public RestApiPlugin() {
         setName(NAME);
@@ -65,10 +74,12 @@ public class RestApiPlugin extends JPlugin {
             settings.setPublicEvents(SpongeUtils.getNameList(publicEvents));
         }
 
-        if (configuration.hasChildConfiguration(RestApiConstants.TAG_SECURITY)) {
-            settings.setSecurity(
-                    SpongeUtils.createSecurityConfiguration(configuration.getChildConfiguration(RestApiConstants.TAG_SECURITY)));
+        if (configuration.hasChildConfiguration(RestApiConstants.TAG_SSL_CONFIGURATION)) {
+            settings.setSslConfiguration(
+                    SpongeUtils.createSecurityConfiguration(configuration.getChildConfiguration(RestApiConstants.TAG_SSL_CONFIGURATION)));
         }
+
+        settings.setPublishReload(configuration.getBoolean(RestApiConstants.TAG_PUBLISH_RELOAD, settings.isPublishReload()));
 
         autoStart = configuration.getBoolean(RestApiConstants.TAG_AUTO_START, isAutoStart());
     }
@@ -94,41 +105,53 @@ public class RestApiPlugin extends JPlugin {
             throw new ConfigException("Camel plugin is not registered but it is required by the Sponge REST API");
         }
 
-        // SpringPlugin springPlugin = getEngine().getPluginManager().getPlugin(SpringPlugin.class);
-        // if (springPlugin == null) {
-        // throw new ConfigException("Spring plugin is not registered but it is required by the Sponge REST API");
-        // }
-
-        start(camelPlugin.getCamelContext()/* , springPlugin.getContext() */);
+        start(camelPlugin.getCamelContext());
     }
 
-    public synchronized void start(CamelContext camelContext/* , ApplicationContext applicationContext */) {
+    public void start(CamelContext camelContext) {
         if (camelContext == null) {
             throw new ConfigException("Camel context is not available");
         }
 
-        // if (applicationContext == null) {
-        // throw new ConfigException("Spring context is not available");
-        // }
+        lock.lock();
 
-        if (!started.get()) {
-            try {
-                if (settings.getSecurity() != null && settings.getSslContextParametersBeanName() != null) {
-                    setupSecurity(camelContext);
+        try {
+            if (!started.get()) {
+                try {
+                    if (settings.getSslConfiguration() != null && settings.getSslContextParametersBeanName() != null) {
+                        setupSecurity(camelContext);
+                    }
+
+                    if (service == null) {
+                        // Create a default.
+                        service = new DefaultRestApiService();
+                    }
+                    service.setSettings(settings);
+                    service.setEngine(getEngine());
+
+                    if (routeBuilder == null) {
+                        // Create a default.
+                        routeBuilder = new RestApiRouteBuilder();
+                    }
+                    routeBuilder.setSettings(settings);
+                    routeBuilder.setApiService(service);
+
+                    camelContext.addRoutes(routeBuilder);
+                } catch (Exception e) {
+                    throw SpongeUtils.wrapException(e);
                 }
 
-                camelContext.addRoutes(new RestApiRouteBuilder(new RestApiService(getEngine(), settings), settings));
-            } catch (Exception e) {
-                throw SpongeUtils.wrapException(e);
+                started.set(true);
             }
-
-            started.set(true);
+        } finally {
+            lock.unlock();
         }
     }
 
     protected void setupSecurity(CamelContext camelContext) {
         SimpleRegistry simpleRegistry = new SimpleRegistry();
-        simpleRegistry.put(settings.getSslContextParametersBeanName(), CamelUtils.createSslContextParameters(settings.getSecurity()));
+        simpleRegistry.put(settings.getSslContextParametersBeanName(),
+                CamelUtils.createSslContextParameters(settings.getSslConfiguration()));
 
         // TODO Handle many invocations of this method resulting in a growing registry list.
         ((DefaultCamelContext) camelContext).setRegistry(new CompositeRegistry(Arrays.asList(simpleRegistry, camelContext.getRegistry())));
@@ -140,5 +163,21 @@ public class RestApiPlugin extends JPlugin {
 
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
+    }
+
+    public RestApiRouteBuilder getRouteBuilder() {
+        return routeBuilder;
+    }
+
+    public void setRouteBuilder(RestApiRouteBuilder routeBuilder) {
+        this.routeBuilder = routeBuilder;
+    }
+
+    public RestApiService getService() {
+        return service;
+    }
+
+    public void setService(RestApiService service) {
+        this.service = service;
     }
 }

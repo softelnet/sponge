@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.request;
 
 import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "Event", description = "Represents a Sponge event")
-public class RestEvent {
+@ApiModel(value = "SendEventRequest", description = "Send event request")
+public class RestSendEventRequest extends BaseRestRequest {
 
     private String name;
 
     private Map<String, Object> attributes;
 
-    public RestEvent() {
+    public RestSendEventRequest() {
         //
     }
 
-    public RestEvent(String name, Map<String, Object> attributes) {
+    public RestSendEventRequest(String username, String password, String name, Map<String, Object> attributes) {
+        super(username, password);
         this.name = name;
         this.attributes = attributes;
+    }
+
+    public RestSendEventRequest(String name, Map<String, Object> attributes) {
+        this(null, null, name, attributes);
     }
 
     @ApiModelProperty(value = "The event name", required = true)

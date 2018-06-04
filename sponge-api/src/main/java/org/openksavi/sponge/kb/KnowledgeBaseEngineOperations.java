@@ -49,8 +49,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      *
      * @param processorClasses Java-based processor classes.
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    void enableJavaAll(Class<? extends Processor>... processorClasses);
+    void enableJavaAll(Class<?>... processorClasses);
 
     /**
      * Disables the Java-based processor.
@@ -65,8 +64,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      *
      * @param processorClasses Java-based processor classes.
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    void disableJavaAll(Class<? extends Processor>... processorClasses);
+    void disableJavaAll(Class<?>... processorClasses);
 
     /**
      * Enables the Java-based filter.

@@ -14,30 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.request;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "VersionResult", description = "Represents a Sponge version")
-public class RestVersionResult {
+@ApiModel(value = "ReloadRequest", description = "Reload request")
+public class RestReloadRequest extends BaseRestRequest {
 
-    private String version;
-
-    public RestVersionResult() {
+    public RestReloadRequest() {
         //
     }
 
-    public RestVersionResult(String version) {
-        this.version = version;
-    }
-
-    @ApiModelProperty(value = "The Sponge version", required = true)
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public RestReloadRequest(String username, String password) {
+        super(username, password);
     }
 }

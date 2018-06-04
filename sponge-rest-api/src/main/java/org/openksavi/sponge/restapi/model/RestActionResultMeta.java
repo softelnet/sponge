@@ -24,6 +24,8 @@ public class RestActionResultMeta {
 
     private String type;
 
+    private String subtype;
+
     private String displayName;
 
     private String description;
@@ -32,8 +34,9 @@ public class RestActionResultMeta {
         //
     }
 
-    public RestActionResultMeta(String type, String displayName) {
+    public RestActionResultMeta(String type, String subtype, String displayName) {
         this.type = type;
+        this.subtype = subtype;
         this.displayName = displayName;
     }
 
@@ -44,6 +47,15 @@ public class RestActionResultMeta {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @ApiModelProperty(value = "The action result subtype", required = false)
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     @ApiModelProperty(value = "The action result display name", required = true)

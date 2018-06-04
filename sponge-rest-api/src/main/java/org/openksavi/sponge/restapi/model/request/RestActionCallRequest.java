@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.request;
 
 import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCall", description = "Represents a Sponge action call")
-public class RestActionCall {
+@ApiModel(value = "ActionCallRequest", description = "Represents a Sponge action call")
+public class RestActionCallRequest extends BaseRestRequest {
 
     private String name;
 
     private List<Object> args;
 
-    public RestActionCall() {
+    public RestActionCallRequest() {
         //
     }
 
-    public RestActionCall(String name, List<Object> args) {
+    public RestActionCallRequest(String username, String password, String name, List<Object> args) {
+        super(username, password);
         this.name = name;
         this.args = args;
+    }
+
+    public RestActionCallRequest(String name, List<Object> args) {
+        this(null, null, name, args);
     }
 
     @ApiModelProperty(value = "The action name", required = true)

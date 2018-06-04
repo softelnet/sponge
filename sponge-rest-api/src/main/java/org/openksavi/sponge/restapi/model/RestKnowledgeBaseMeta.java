@@ -19,8 +19,8 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "KnowledgeBase", description = "Represents a Sponge knowledge base metadata")
-public class RestKnowledgeBase {
+@ApiModel(value = "KnowledgeBaseMeta", description = "Represents a Sponge knowledge base metadata")
+public class RestKnowledgeBaseMeta {
 
     private String name;
 
@@ -28,11 +28,11 @@ public class RestKnowledgeBase {
 
     private String description;
 
-    public RestKnowledgeBase() {
+    public RestKnowledgeBaseMeta() {
         //
     }
 
-    public RestKnowledgeBase(String name, String displayName, String description) {
+    public RestKnowledgeBaseMeta(String name, String displayName, String description) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;

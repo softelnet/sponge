@@ -41,15 +41,12 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
     }
 
     /**
-     * Builder for creating an engine. Sets {@code knowledgeBaseFileProvider} to {@code SpringKnowledgeBaseFileProvider}.
+     * Builder for creating an engine.
      *
      * @return builder.
      */
     public static SpringEngineBuilder builder() {
-        SpringEngineBuilder builder = new SpringEngineBuilder(new SpringSpongeEngine());
-        builder.knowledgeBaseFileProvider(new SpringKnowledgeBaseFileProvider());
-
-        return builder;
+        return new SpringEngineBuilder(new SpringSpongeEngine());
     }
 
     @Override

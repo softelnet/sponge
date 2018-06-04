@@ -26,6 +26,8 @@ public class RestActionArgMeta {
 
     private String type;
 
+    private String subtype;
+
     private boolean required;
 
     private String displayName;
@@ -36,9 +38,10 @@ public class RestActionArgMeta {
         //
     }
 
-    public RestActionArgMeta(String name, String type, boolean required, String displayName, String description) {
+    public RestActionArgMeta(String name, String type, String subtype, boolean required, String displayName, String description) {
         this.name = name;
         this.type = type;
+        this.subtype = subtype;
         this.required = required;
         this.displayName = displayName;
         this.description = description;
@@ -60,6 +63,15 @@ public class RestActionArgMeta {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @ApiModelProperty(value = "The action argument subtype", required = false)
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     @ApiModelProperty(value = "Is the argument required", required = true)

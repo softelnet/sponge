@@ -26,24 +26,32 @@ public class ResultMeta {
     /** A result data type. */
     private Type type;
 
+    /** An result subtype. */
+    private String subtype;
+
     /** A result display name. */
     private String displayName;
 
     /** A result description. */
     private String description;
 
-    public ResultMeta(Type type, String displayName, String description) {
-        this.type = type;
-        this.displayName = displayName;
-        this.description = description;
-    }
-
-    public ResultMeta(Type type, String displayName) {
-        this(type, displayName, null);
-    }
-
     public ResultMeta(Type type) {
-        this(type, null);
+        this.type = type;
+    }
+
+    public ResultMeta subtype(String subtype) {
+        this.subtype = subtype;
+        return this;
+    }
+
+    public ResultMeta displayName(String displayName) {
+        this.displayName = displayName;
+        return this;
+    }
+
+    public ResultMeta description(String description) {
+        this.description = description;
+        return this;
     }
 
     public Type getType() {
@@ -52,6 +60,14 @@ public class ResultMeta {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     public String getDisplayName() {

@@ -25,7 +25,7 @@ import org.apache.camel.util.jsse.TrustManagersParameters;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.util.SecurityConfiguration;
+import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
@@ -79,7 +79,7 @@ public abstract class CamelUtils {
         return plugin;
     }
 
-    public static SSLContextParameters createSslContextParameters(SecurityConfiguration security) {
+    public static SSLContextParameters createSslContextParameters(SslConfiguration security) {
         KeyStoreParameters keyStoreParameters = new KeyStoreParameters();
         keyStoreParameters.setResource(security.getKeyStore());
         keyStoreParameters.setPassword(security.getKeyStorePassword());

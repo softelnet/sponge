@@ -22,11 +22,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
-import org.openksavi.sponge.core.util.SecurityConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.logging.LoggingUtils;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.RestApiPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -49,15 +47,6 @@ public class RestApiSeverMain {
         @Bean
         public RestApiPlugin spongeRestApiPlugin() {
             RestApiPlugin plugin = new RestApiPlugin();
-
-            plugin.getSettings().setRestComponentId("jetty");
-            plugin.getSettings().setPort(RestApiConstants.DEFAULT_PORT);
-
-            SecurityConfiguration security = new SecurityConfiguration();
-            security.setKeyStore("keystore/rest_api_selfsigned.jks");
-            security.setKeyStorePassword("sponge");
-            security.setKeyPassword("sponge");
-            plugin.getSettings().setSecurity(security);
 
             return plugin;
         }

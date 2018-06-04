@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "CallResult", description = "Represents a Sponge action call result")
-public class RestCallResult extends BaseRestResponse {
+@ApiModel(value = "ActionCallResponse", description = "Action call response")
+public class RestActionCallResponse extends BaseRestResponse {
 
     private String actionName;
 
     private Object result;
 
-    public RestCallResult() {
+    public RestActionCallResponse() {
         //
     }
 
-    public RestCallResult(String actionName, Object result) {
+    public RestActionCallResponse(String actionName, Object result) {
         this.actionName = actionName;
         this.result = result;
+    }
+
+    public RestActionCallResponse(String actionName) {
+        this(actionName, null);
     }
 
     @ApiModelProperty(value = "The action name", required = true)
@@ -51,12 +55,5 @@ public class RestCallResult extends BaseRestResponse {
 
     public void setResult(Object result) {
         this.result = result;
-    }
-
-    public static RestCallResult fromException(String actionName, Exception e) {
-        RestCallResult result = new RestCallResult();
-        result.setActionName(actionName);
-
-        return fromException(result, e);
     }
 }

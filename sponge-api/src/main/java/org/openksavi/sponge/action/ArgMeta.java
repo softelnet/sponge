@@ -29,8 +29,11 @@ public class ArgMeta {
     /** An argument data type. */
     private Type type;
 
-    /** Is this argument required? */
-    private boolean required;
+    /** An argument subtype. */
+    private String subtype;
+
+    /** Tells if this argument is required. */
+    private boolean required = true;
 
     /** An argument display name. */
     private String displayName;
@@ -38,20 +41,29 @@ public class ArgMeta {
     /** An argument description. */
     private String description;
 
-    public ArgMeta(String name, Type type, boolean required, String displayName, String description) {
+    public ArgMeta(String name, Type type) {
         this.name = name;
         this.type = type;
-        this.required = required;
+    }
+
+    public ArgMeta displayName(String displayName) {
         this.displayName = displayName;
+        return this;
+    }
+
+    public ArgMeta subtype(String subtype) {
+        this.subtype = subtype;
+        return this;
+    }
+
+    public ArgMeta required(boolean required) {
+        this.required = required;
+        return this;
+    }
+
+    public ArgMeta description(String description) {
         this.description = description;
-    }
-
-    public ArgMeta(String name, Type type, boolean required, String displayName) {
-        this(name, type, required, displayName, null);
-    }
-
-    public ArgMeta(String name, Type type, boolean required) {
-        this(name, type, required, null);
+        return this;
     }
 
     public String getName() {
@@ -68,6 +80,14 @@ public class ArgMeta {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     public boolean isRequired() {

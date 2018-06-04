@@ -24,10 +24,11 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.ProcessorNotFoundException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
+import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
@@ -60,7 +61,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     public Object callAction(String actionName, Object[] args) {
         ActionAdapter action = registeredActions.get(actionName);
         if (action == null) {
-            throw new SpongeException("Action " + actionName + " is not registered");
+            throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
         }
 
         try {
@@ -86,6 +87,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
         return registeredActions.get(actionName);
     }
 
+    @Override
     public List<ActionAdapter> getActionAdapters(String knowledgeBaseRegexp, String actionNameRegexp) {
         return registeredActions.values().stream()
                 .filter(adapter -> (knowledgeBaseRegexp == null || adapter.getKnowledgeBase().getName().matches(knowledgeBaseRegexp))
