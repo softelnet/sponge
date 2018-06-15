@@ -958,6 +958,18 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 |`publishReload`
 |`boolean`
 |If `true` then the reload operation will be published. The default value is `true`.
+
+|`routeBuilderClass`
+|`String`
+|The name of the class extending `RestApiRouteBuilder` (which is the default route builder).
+
+|`apiServiceClass`
+|`String`
+|The `RestApiService` implementation class name. The default `RestApiService` implementation is `DefaultRestApiService`.
+
+|`securityServiceClass`
+|`String`
+|The `RestApiSecurityService` implementation class name. The default `RestApiSecurityService` implementation is `NoSecuritySecurityService`.
 |===
 
 .The REST API plugin XML configuration example

@@ -18,19 +18,12 @@ package org.openksavi.sponge.restapi.security;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import org.openksavi.sponge.ProcessorNotFoundException;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.restapi.RestApiConstants;
 
-public abstract class KnowledgeBaseProvidedSecurityService implements RestApiSecurityService {
-
-    @Inject
-    private Provider<SpongeEngine> engineP;
+public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSecurityService {
 
     protected KnowledgeBaseProvidedSecurityService() {
         //
@@ -44,7 +37,7 @@ public abstract class KnowledgeBaseProvidedSecurityService implements RestApiSec
     @Override
     public boolean canSendEvent(User user, String eventName) {
         try {
-            return engineP.get().getOperations().call(Boolean.class, RestApiConstants.ACTION_CAN_SEND_EVENT, eventName);
+            return getEngine().getOperations().call(Boolean.class, RestApiConstants.ACTION_CAN_SEND_EVENT, eventName);
         } catch (ProcessorNotFoundException e) {
             if (Objects.equals(e.getProcessorName(), RestApiConstants.ACTION_CAN_SEND_EVENT)) {
                 return false;
@@ -57,7 +50,7 @@ public abstract class KnowledgeBaseProvidedSecurityService implements RestApiSec
     @Override
     public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
         try {
-            return engineP.get().getOperations().call(Boolean.class, RestApiConstants.ACTION_CAN_USE_KNOWLEDGE_BASE, user,
+            return getEngine().getOperations().call(Boolean.class, RestApiConstants.ACTION_CAN_USE_KNOWLEDGE_BASE, user,
                     knowledgeBase.getName());
         } catch (ProcessorNotFoundException e) {
             if (Objects.equals(e.getProcessorName(), RestApiConstants.ACTION_CAN_USE_KNOWLEDGE_BASE)) {

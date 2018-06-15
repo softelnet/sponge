@@ -47,9 +47,8 @@ import org.openksavi.sponge.restapi.model.response.RestGetKnowledgeBasesResponse
 import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
 import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
-import org.openksavi.sponge.restapi.security.NoSecuritySecurityService;
-import org.openksavi.sponge.restapi.security.Role;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
+import org.openksavi.sponge.restapi.security.Role;
 import org.openksavi.sponge.restapi.security.User;
 
 /**
@@ -61,7 +60,7 @@ public class DefaultRestApiService implements RestApiService {
 
     private RestApiSettings settings;
 
-    private RestApiSecurityService securityService = new NoSecuritySecurityService();
+    private RestApiSecurityService securityService;
 
     private RestApiErrorResponseProvider errorResponseProvider = (response, exception) -> {
         response.setErrorMessage(exception.getMessage());
@@ -184,6 +183,10 @@ public class DefaultRestApiService implements RestApiService {
 
     @Override
     public RestGetKnowledgeBasesResponse getKnowledgeBases(RestGetKnowledgeBasesRequest request) {
+        if (request == null) {
+            request = new RestGetKnowledgeBasesRequest();
+        }
+
         try {
             User user = securityService.authenticateUser(request.getUsername(), request.getPassword());
 

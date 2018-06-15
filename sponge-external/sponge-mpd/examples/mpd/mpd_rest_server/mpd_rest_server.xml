@@ -28,6 +28,7 @@
             <configuration>
                 <port>1836</port>
                 <publicActions>mpd:,tools:</publicActions>
+                <securityServiceClass>org.openksavi.sponge.restapi.security.SimpleInMemorySecurityService</securityServiceClass>
             </configuration>
         </plugin>
     </plugins>

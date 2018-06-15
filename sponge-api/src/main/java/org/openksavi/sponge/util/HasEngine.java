@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.engine;
+package org.openksavi.sponge.util;
 
-import org.openksavi.sponge.util.Descriptive;
-import org.openksavi.sponge.util.HasEngine;
-import org.openksavi.sponge.util.Manageable;
+import org.openksavi.sponge.engine.SpongeEngine;
 
 /**
- * An engine module.
+ * Represents an entity that has an engine reference.
  */
-public interface EngineModule extends Manageable, Descriptive, HasEngine {
+public interface HasEngine {
 
+    /**
+     * Returns the engine.
+     *
+     * @return the engine.
+     */
+    SpongeEngine getEngine();
+
+    /**
+     * Sets the engine.
+     *
+     * @param engine the engine.
+     */
+    void setEngine(SpongeEngine engine);
 }

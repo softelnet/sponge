@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.security;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
-public class NoSecuritySecurityService implements RestApiSecurityService {
+public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
     private User createGuestUser() {
         User user = new User("guest", null);

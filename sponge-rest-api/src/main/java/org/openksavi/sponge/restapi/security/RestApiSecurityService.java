@@ -18,8 +18,9 @@ package org.openksavi.sponge.restapi.security;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.util.HasEngine;
 
-public interface RestApiSecurityService {
+public interface RestApiSecurityService extends HasEngine {
 
     User authenticateUser(String username, String password);
 

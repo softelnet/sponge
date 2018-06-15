@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.restapi;
 
-import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetKnowledgeBasesRequest;
@@ -30,15 +29,12 @@ import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
 import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
+import org.openksavi.sponge.util.HasEngine;
 
 /**
  * Sponge REST service.
  */
-public interface RestApiService {
-
-    SpongeEngine getEngine();
-
-    void setEngine(SpongeEngine engine);
+public interface RestApiService extends HasEngine {
 
     RestApiSettings getSettings();
 

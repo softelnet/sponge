@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.CompositeRegistry;
@@ -32,6 +33,8 @@ import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.restapi.security.NoSecuritySecurityService;
+import org.openksavi.sponge.restapi.security.RestApiSecurityService;
 
 /**
  * Sponge REST API plugin.
@@ -39,6 +42,13 @@ import org.openksavi.sponge.java.JPlugin;
 public class RestApiPlugin extends JPlugin {
 
     public static final String NAME = "restApi";
+
+    private static final Supplier<RestApiService> DEFAULT_API_SERVICE_PROVIDER = () -> new DefaultRestApiService();
+
+    private static final Supplier<RestApiSecurityService> DEFAULT_SECURITY_SERVICE_PROVIDER =
+            () -> new NoSecuritySecurityService();
+
+    private static final Supplier<RestApiRouteBuilder> DEFAULT_ROUTE_BUILDER_PROVIDER = () -> new RestApiRouteBuilder();
 
     private RestApiSettings settings = new RestApiSettings();
 
@@ -50,6 +60,8 @@ public class RestApiPlugin extends JPlugin {
     private RestApiRouteBuilder routeBuilder;
 
     private RestApiService service;
+
+    private RestApiSecurityService securityService;
 
     private Lock lock = new ReentrantLock(true);
 
@@ -82,6 +94,21 @@ public class RestApiPlugin extends JPlugin {
         settings.setPublishReload(configuration.getBoolean(RestApiConstants.TAG_PUBLISH_RELOAD, settings.isPublishReload()));
 
         autoStart = configuration.getBoolean(RestApiConstants.TAG_AUTO_START, isAutoStart());
+
+        String routeBuilderClass = configuration.getString(RestApiConstants.TAG_ROUTE_BUILDER_CLASS, null);
+        if (routeBuilderClass != null) {
+            routeBuilder = SpongeUtils.createInstance(routeBuilderClass, RestApiRouteBuilder.class);
+        }
+
+        String apiServiceClass = configuration.getString(RestApiConstants.TAG_API_SERVICE_CLASS, null);
+        if (apiServiceClass != null) {
+            service = SpongeUtils.createInstance(apiServiceClass, RestApiService.class);
+        }
+
+        String securityServiceClass = configuration.getString(RestApiConstants.TAG_SECURITY_SERVICE_CLASS, null);
+        if (securityServiceClass != null) {
+            securityService = SpongeUtils.createInstance(securityServiceClass, RestApiSecurityService.class);
+        }
     }
 
     @Override
@@ -124,14 +151,22 @@ public class RestApiPlugin extends JPlugin {
 
                     if (service == null) {
                         // Create a default.
-                        service = new DefaultRestApiService();
+                        service = DEFAULT_API_SERVICE_PROVIDER.get();
                     }
                     service.setSettings(settings);
                     service.setEngine(getEngine());
 
+                    if (securityService == null) {
+                        // Create a default.
+                        securityService = DEFAULT_SECURITY_SERVICE_PROVIDER.get();
+                    }
+
+                    securityService.setEngine(getEngine());
+                    service.setSecurityService(securityService);
+
                     if (routeBuilder == null) {
                         // Create a default.
-                        routeBuilder = new RestApiRouteBuilder();
+                        routeBuilder = DEFAULT_ROUTE_BUILDER_PROVIDER.get();
                     }
                     routeBuilder.setSettings(settings);
                     routeBuilder.setApiService(service);

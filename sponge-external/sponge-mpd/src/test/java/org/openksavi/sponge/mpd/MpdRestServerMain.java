@@ -25,11 +25,6 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.logging.LoggingUtils;
-import org.openksavi.sponge.restapi.RestApiPlugin;
-import org.openksavi.sponge.restapi.RestApiService;
-import org.openksavi.sponge.restapi.DefaultRestApiService;
-import org.openksavi.sponge.restapi.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.security.SimpleInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class MpdRestServerMain {
@@ -41,29 +36,8 @@ public class MpdRestServerMain {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin(), restApiPlugin())
+            return SpringSpongeEngine.builder().plugins(camelPlugin())
                     .config("examples/mpd/mpd_rest_server/mpd_rest_server.xml").build();
-        }
-
-        @Bean
-        public RestApiPlugin restApiPlugin() {
-            RestApiPlugin plugin = new RestApiPlugin();
-            plugin.setService(restApiService());
-
-            return plugin;
-        }
-
-        @Bean
-        public RestApiService restApiService() {
-            RestApiService service = new DefaultRestApiService();
-            service.setSecurityService(restApiSecurityService());
-
-            return service;
-        }
-
-        @Bean
-        public RestApiSecurityService restApiSecurityService() {
-            return new SimpleInMemorySecurityService();
         }
     }
 

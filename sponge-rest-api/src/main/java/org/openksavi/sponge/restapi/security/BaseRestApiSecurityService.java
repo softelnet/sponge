@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.engine;
+package org.openksavi.sponge.restapi.security;
 
-import org.openksavi.sponge.util.Descriptive;
-import org.openksavi.sponge.util.HasEngine;
-import org.openksavi.sponge.util.Manageable;
+import org.openksavi.sponge.engine.SpongeEngine;
 
-/**
- * An engine module.
- */
-public interface EngineModule extends Manageable, Descriptive, HasEngine {
+public abstract class BaseRestApiSecurityService implements RestApiSecurityService {
 
+    private SpongeEngine engine;
+
+    protected BaseRestApiSecurityService() {
+        //
+    }
+
+    @Override
+    public SpongeEngine getEngine() {
+        return engine;
+    }
+
+    @Override
+    public void setEngine(SpongeEngine engine) {
+        this.engine = engine;
+    }
 }
