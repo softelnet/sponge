@@ -17,39 +17,12 @@
 package org.openksavi.sponge;
 
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.util.Descriptive;
 
 /**
  * Processor operations.
  */
-public interface ProcessorOperations {
-
-    /**
-     * Returns this processor name.
-     *
-     * @return name.
-     */
-    String getName();
-
-    /**
-     * Sets this processor name.
-     *
-     * @param name processor name.
-     */
-    void setName(String name);
-
-    /**
-     * Sets display name.
-     *
-     * @param displayName display name.
-     */
-    void setDisplayName(String displayName);
-
-    /**
-     * Returns display name.
-     *
-     * @return display name.
-     */
-    String getDisplayName();
+public interface ProcessorOperations extends Descriptive {
 
     /**
      * Returns the knowledge base associated with this processor.

@@ -18,6 +18,8 @@ package org.openksavi.sponge.core;
 
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.AttributeMapEvent;
@@ -50,6 +52,16 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public Object call(String actionName, Object... args) {
         return engine.getActionManager().callAction(actionName, args);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T call(Class<T> resultClass, String actionName, Object... args) {
+        Object result = engine.getActionManager().callAction(actionName, args);
+
+        Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
+
+        return (T) result;
     }
 
     @Override
@@ -176,13 +188,13 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
     @Override
-    public String getDescription() {
-        return engine.getDescription();
+    public String getInfo() {
+        return engine.getInfo();
     }
 
     /**

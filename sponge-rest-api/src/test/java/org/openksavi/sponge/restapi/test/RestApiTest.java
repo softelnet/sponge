@@ -53,12 +53,14 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.RestApiPlugin;
-import org.openksavi.sponge.restapi.model.RestActionCall;
-import org.openksavi.sponge.restapi.model.RestActionsResult;
-import org.openksavi.sponge.restapi.model.RestCallResult;
-import org.openksavi.sponge.restapi.model.RestEvent;
-import org.openksavi.sponge.restapi.model.RestSendResult;
-import org.openksavi.sponge.restapi.model.RestVersionResult;
+import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
+import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
@@ -68,7 +70,7 @@ public class RestApiTest {
 
     private static final int PORT = SocketUtils.findAvailableTcpPort(1836);
 
-    private static final String URL = "http://localhost:" + PORT + RestApiConstants.URL_PREFIX + "1/";
+    private static final String URL = "http://localhost:" + PORT + RestApiConstants.BASE_URL + "/";
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
@@ -89,7 +91,6 @@ public class RestApiTest {
         public RestApiPlugin spongeRestApiPlugin() {
             RestApiPlugin plugin = new RestApiPlugin();
 
-            plugin.getSettings().setRestComponentId("undertow");
             plugin.getSettings().setPort(PORT);
             // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 
@@ -99,30 +100,40 @@ public class RestApiTest {
 
     @Test
     public void testRestVersion() {
-        ResponseEntity<RestVersionResult> response = new RestTemplate().getForEntity(URL + "version", RestVersionResult.class);
+        ResponseEntity<RestGetVersionResponse> response = new RestTemplate().exchange(URL + "version", HttpMethod.POST,
+                new HttpEntity<>(new RestGetVersionRequest(), createHeaders()), RestGetVersionResponse.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(engine.getVersion(), response.getBody().getVersion());
     }
 
     @Test
     public void testRestActions() {
-        ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(URL + "actions", RestActionsResult.class);
+        ResponseEntity<RestGetActionsResponse> response = new RestTemplate().exchange(URL + "actions", HttpMethod.POST,
+                new HttpEntity<>(new RestGetActionsRequest(), createHeaders()), RestGetActionsResponse.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(3, response.getBody().getActions().size());
     }
 
     @Test
     public void testRestActionsParamArgMetadataRequiredTrue() {
-        ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(
-                URL + "actions?" + RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME + "=true", RestActionsResult.class);
+        RestGetActionsRequest request = new RestGetActionsRequest();
+        request.setMetadataRequired(true);
+        ResponseEntity<RestGetActionsResponse> response = new RestTemplate().exchange(URL + "actions", HttpMethod.POST,
+                new HttpEntity<>(request, createHeaders()), RestGetActionsResponse.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(3, response.getBody().getActions().size());
     }
 
     @Test
     public void testRestActionsParamArgMetadataRequiredFalse() {
-        ResponseEntity<RestActionsResult> response = new RestTemplate().getForEntity(
-                URL + "actions?" + RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME + "=false", RestActionsResult.class);
+        RestGetActionsRequest request = new RestGetActionsRequest();
+        request.setMetadataRequired(false);
+        ResponseEntity<RestGetActionsResponse> response = new RestTemplate().exchange(URL + "actions", HttpMethod.POST,
+                new HttpEntity<>(request, createHeaders()), RestGetActionsResponse.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(4, response.getBody().getActions().size());
     }
@@ -139,8 +150,9 @@ public class RestApiTest {
         String actionName = "UpperCase";
         String arg1 = "test1";
 
-        ResponseEntity<RestCallResult> response = new RestTemplate().exchange(URL + "call", HttpMethod.POST,
-                new HttpEntity<>(new RestActionCall(actionName, Arrays.asList(arg1)), createHeaders()), RestCallResult.class);
+        ResponseEntity<RestActionCallResponse> response = new RestTemplate().exchange(URL + "call", HttpMethod.POST,
+                new HttpEntity<>(new RestActionCallRequest(actionName, Arrays.asList(arg1)), createHeaders()),
+                RestActionCallResponse.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(actionName, response.getBody().getActionName());
@@ -156,8 +168,8 @@ public class RestApiTest {
         String eventName = "alarm";
         Map<String, Object> attributes = SpongeUtils.immutableMapOf("attr1", "Test");
 
-        ResponseEntity<RestSendResult> response = new RestTemplate().exchange(URL + "send", HttpMethod.POST,
-                new HttpEntity<>(new RestEvent(eventName, attributes), createHeaders()), RestSendResult.class);
+        ResponseEntity<RestSendEventResponse> response = new RestTemplate().exchange(URL + "send", HttpMethod.POST,
+                new HttpEntity<>(new RestSendEventRequest(eventName, attributes), createHeaders()), RestSendEventResponse.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(null, response.getBody().getErrorMessage());

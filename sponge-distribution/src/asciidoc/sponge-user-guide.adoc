@@ -349,7 +349,10 @@ def onLoad():
 |The property that is a name of the processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
 
 |`displayName`
-|The property that is a display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful for a client code.
+|The property that is a display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful in a client code.
+
+|`description`
+|The property that is a description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but may be useful in a client code.
 
 |`logger`
 |The read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`, e.g. `sponge.kb.python.kb1.EchoAction` for a python-based processor, `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.
@@ -377,12 +380,10 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Property / Method |Description
 
 |`Object onCall(args)`
-|The callback method invoked when an action is called, e.g.: `EPS.call()`. The argument in an array of `Object's` and the result is an `Object`. This method is mandatory.
+|The callback method invoked when an action is called, e.g.: `EPS.call()`. The argument in an array of `Object's` and the result is an `Object`. This method is mandatory. Every action should implement this method.
 |===
 
 The `onConfigure` method in actions is not mandatory.
-
-Every action should implement the abstract `onCall` method.
 
 === Example in a script language
 The code presented below defines the action named `EchoAction` that simply returns all arguments.
@@ -430,6 +431,26 @@ public class JavaEchoAction extends JAction { // <1>
 EPS.enableJava(JavaEchoAction)
 ----
 
+=== Argument and result metadata
+Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and an result. Metadata are not used to verify action arguments or an result. They are useful in a client code, for example in a generic GUI that calls {sponge} actions.
+
+Metadata for argument or result types are currently limited. They support the following types (the `org.openksavi.sponge.Type` enum): STRING, NUMBER, BYTES, OBJECT and VOID. In order to provide more flexibility in a client code a type specification may be extended by a _subtype_ which is a non interpreted text.
+
+.Action metadata example
+[source,python]
+----
+class UpperCase(Action):
+    def onConfigure(self):
+        self.displayName = "Convert to upper case"
+        self.description = "Converts a string to upper case."
+        self.argsMeta = [
+            ArgMeta("text", Type.STRING).displayName("Text to upper case").description("The text that will be converted to upper case.")]
+        self.resultMeta = ResultMeta(Type.STRING).displayName("Upper case text")
+    def onCall(self, args):
+        return str(args[0]).upper()
+----
+
+For more information see `ArgMeta` and `ResultMeta`.
 
 == Plugins
 Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
@@ -635,7 +656,6 @@ class ScriptPlugin(Plugin):
 . After starting all plugins the methods `onStartup()` defined in all knowledge bases are invoked.
 . In case of reloading a knowledge base, the method `onBeforeReload()` of each plugin is invoked before the method `onBeforeReload()` of knowledge bases. Invoking the methods `onAfterReload()` goes in reverse (first the methods `onAfterReload()` of all knowledge bases and then the methods defined in plugins).
 . Before {sponge} shuts down, methods `onShutdown()` of all knowledge bases are invoked and then the method `onShutdown()` is invoked for each plugin.
-
 
 == Exception handling
 {sponge} introduces its own runtime exception defined as a Java class `SpongeException`. Exception handling in custom Java components (for example plugins) should follow standard Java conventions. Exception handling in scripting knowledge bases should follow standard conventions for the corresponding scripting language.
@@ -1300,10 +1320,14 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The ReactiveX integration.
 
 |`org.openksavi.sponge`
+|`sponge-rest-api`
+|Yes
+|The Sponge REST API.
+
+|`org.openksavi.sponge`
 |`sponge-standalone`
 |Yes
 |The standalone distribution of {sponge}.
-
 
 |`org.openksavi.sponge`
 |`sponge-logging`

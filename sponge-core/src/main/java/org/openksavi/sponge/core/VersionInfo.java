@@ -57,23 +57,23 @@ public final class VersionInfo {
     }
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
-    public String getDescription() {
+    public String getInfo() {
         return PRODUCT + " " + getVersion();
     }
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
      * @param engineName the engine name.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
-    public String getDescription(String engineName) {
-        return PRODUCT + (engineName != null ? "(" + engineName + ")" : "") + " " + getVersion();
+    public String getInfo(String engineName) {
+        return PRODUCT + (engineName != null ? " (" + engineName + ")" : "") + " " + getVersion();
     }
 
     public String getProduct() {

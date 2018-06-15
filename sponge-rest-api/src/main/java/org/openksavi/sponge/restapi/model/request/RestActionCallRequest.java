@@ -14,28 +14,35 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.request;
+
+import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "KnowledgeBase", description = "Represents a Sponge knowledge base metadata")
-public class RestKnowledgeBase {
+@ApiModel(value = "ActionCallRequest", description = "Represents a Sponge action call")
+public class RestActionCallRequest extends BaseRestRequest {
 
     private String name;
 
-    private String displayName;
+    private List<Object> args;
 
-    public RestKnowledgeBase() {
+    public RestActionCallRequest() {
         //
     }
 
-    public RestKnowledgeBase(String name, String displayName) {
+    public RestActionCallRequest(String username, String password, String name, List<Object> args) {
+        super(username, password);
         this.name = name;
-        this.displayName = displayName;
+        this.args = args;
     }
 
-    @ApiModelProperty(value = "The knowledge base name", required = true)
+    public RestActionCallRequest(String name, List<Object> args) {
+        this(null, null, name, args);
+    }
+
+    @ApiModelProperty(value = "The action name", required = true)
     public String getName() {
         return name;
     }
@@ -44,12 +51,12 @@ public class RestKnowledgeBase {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The knowledge bas display name", required = false)
-    public String getDisplayName() {
-        return displayName;
+    @ApiModelProperty(value = "The action arguments", required = false)
+    public List<Object> getArgs() {
+        return args;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setArgs(List<Object> args) {
+        this.args = args;
     }
 }

@@ -68,6 +68,12 @@ public enum ProcessorType {
     }
 
     public String getDisplayName() {
-        return name.toUpperCase();
+        if (name.isEmpty()) {
+            return name;
+        } else if (name.length() == 1) {
+            return name.toUpperCase();
+        } else {
+            return name.substring(0, 1).toUpperCase() + name.substring(1);
+        }
     }
 }

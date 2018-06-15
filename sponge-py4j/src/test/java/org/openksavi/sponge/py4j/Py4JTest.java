@@ -84,8 +84,8 @@ public class Py4JTest {
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);
 
-            assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getDescription(),
-                    engine.getTriggers().size(), engine.getTriggers().get(0).getName()), outputText);
+            assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getInfo(), engine.getTriggers().size(),
+                    engine.getTriggers().get(0).getName()), outputText);
             assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } finally {
@@ -109,10 +109,11 @@ public class Py4JTest {
             assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
             assertFalse(engine.isError());
         } finally {
+            engine.shutdown();
+
             if (process != null) {
                 process.destroy();
             }
-            engine.shutdown();
         }
     }
 
@@ -132,8 +133,8 @@ public class Py4JTest {
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);
 
-            assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getDescription(),
-                    engine.getTriggers().size(), engine.getTriggers().get(0).getName()), outputText);
+            assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getInfo(), engine.getTriggers().size(),
+                    engine.getTriggers().get(0).getName()), outputText);
             assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } finally {

@@ -155,7 +155,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
             }
 
             if (commandLine.hasOption(OPTION_VERSION)) {
-                System.out.println(getDescription());
+                System.out.println(getInfo());
                 return null;
             }
 

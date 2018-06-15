@@ -19,25 +19,42 @@ package org.openksavi.sponge.restapi;
 import java.util.List;
 
 import org.openksavi.sponge.ProcessorQualifiedName;
+import org.openksavi.sponge.core.util.SslConfiguration;
 
 /**
  * REST API settings.
  */
 public class RestApiSettings {
 
+    /** The Camel REST component id. */
     private String restComponentId = RestApiConstants.DEFAULT_REST_COMPONENT_ID;
 
+    /** The host. */
     private String host;
 
+    /** The port. */
     private int port = RestApiConstants.DEFAULT_PORT;
 
+    /** The API version. */
     private int version = RestApiConstants.API_VERSION;
 
-    private boolean prettyPrint = true;
+    /** The pretty print option. */
+    private boolean prettyPrint = RestApiConstants.DEFAULT_PRETTY_PRINT;
 
+    /** Public actions. */
     private List<ProcessorQualifiedName> publicActions;
 
+    /** Public event names. */
     private List<String> publicEvents;
+
+    /** The SSLContextParameters bean name. */
+    private String sslContextParametersBeanName = RestApiConstants.DEFAULT_SSL_CONTEXT_PARAMETERS_BEAN_NAME;
+
+    /** The SSL configuration. */
+    private SslConfiguration sslConfiguration;
+
+    /** If {@code true} then the reload operation will be published. The default value is {@code true}. */
+    private boolean publishReload = RestApiConstants.DEFAULT_PUBLISH_RELOAD;
 
     public String getRestComponentId() {
         return restComponentId;
@@ -93,5 +110,29 @@ public class RestApiSettings {
 
     public void setPublicEvents(List<String> publicEvents) {
         this.publicEvents = publicEvents;
+    }
+
+    public String getSslContextParametersBeanName() {
+        return sslContextParametersBeanName;
+    }
+
+    public void setSslContextParametersBeanName(String sslContextParametersBeanName) {
+        this.sslContextParametersBeanName = sslContextParametersBeanName;
+    }
+
+    public SslConfiguration getSslConfiguration() {
+        return sslConfiguration;
+    }
+
+    public void setSslConfiguration(SslConfiguration sslConfiguration) {
+        this.sslConfiguration = sslConfiguration;
+    }
+
+    public boolean isPublishReload() {
+        return publishReload;
+    }
+
+    public void setPublishReload(boolean publishReload) {
+        this.publishReload = publishReload;
     }
 }

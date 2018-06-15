@@ -38,13 +38,23 @@ public interface EngineOperations {
     SpongeEngine getEngine();
 
     /**
-     * Calls registered action with arguments.
+     * Calls the registered action with arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
      *
      * @param actionName actionName name of the action.
      * @param args arguments to pass to action.
      * @return result of action called for specified arguments.
      */
     Object call(String actionName, Object... args);
+
+    /**
+     * Calls the registered action with arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
+     *
+     * @param resultClass result class.
+     * @param actionName actionName name of the action.
+     * @param args arguments to pass to action.
+     * @return result of action called for specified arguments.
+     */
+    <T> T call(Class<T> resultClass, String actionName, Object... args);
 
     /**
      * Shuts down the engine using the current thread.
@@ -220,11 +230,11 @@ public interface EngineOperations {
     String getVersion();
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
-    String getDescription();
+    String getInfo();
 
     /**
      * Returns the engine statistics summary.

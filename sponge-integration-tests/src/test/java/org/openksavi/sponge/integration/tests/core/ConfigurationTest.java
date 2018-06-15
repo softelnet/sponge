@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
+import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class ConfigurationTest {
@@ -80,6 +82,33 @@ public class ConfigurationTest {
         engine.startup();
 
         try {
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testDescriptive() {
+        SpongeEngine engine = SpringSpongeEngine.builder().config("examples/core/configuration/descriptive.xml").build();
+        engine.startup();
+
+        try {
+            assertEquals("descriptiveEngine", engine.getName());
+            assertEquals("Descriptive engine", engine.getDisplayName());
+            assertEquals("Engine description", engine.getDescription());
+            assertEquals("Sponge (descriptiveEngine) " + engine.getVersion(), engine.getInfo());
+
+            KnowledgeBase kb = engine.getKnowledgeBaseManager().getKnowledgeBase("sampleKb");
+            assertEquals("sampleKb", kb.getName());
+            assertEquals("Sample knowledge base", kb.getDisplayName());
+            assertEquals("Sample knowledge base description", kb.getDescription());
+
+            Plugin plugin = engine.getPluginManager().getPlugin("echoPlugin");
+            assertEquals("echoPlugin", plugin.getName());
+            assertEquals("Echo plugin", plugin.getDisplayName());
+            assertEquals("Echo plugin description", plugin.getDescription());
+
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

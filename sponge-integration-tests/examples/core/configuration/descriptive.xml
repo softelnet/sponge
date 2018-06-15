@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <engine name="descriptiveEngine" displayName="Descriptive engine">
+        <description>Engine description</description>
+    </engine>
+
+    <knowledgeBases>
+        <knowledgeBase name="sampleKb" type="python" displayName="Sample knowledge base">
+            <description>Sample knowledge base description</description>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="echoPlugin" class="org.openksavi.sponge.examples.EchoPlugin" displayName="Echo plugin">
+            <description>Echo plugin description</description>
+            <configuration>
+                <echo>Echo test!</echo>
+                <count>2</count>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

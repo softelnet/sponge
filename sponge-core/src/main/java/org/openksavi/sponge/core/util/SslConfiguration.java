@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,43 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.py4j;
+package org.openksavi.sponge.core.util;
 
 /**
- * Py4J security configuration.
+ * SSL security configuration.
  */
-public class SecurityConfiguration {
+public class SslConfiguration {
 
-    private String password;
+    private String keyStore;
 
-    private String keystore;
+    private String keyStorePassword;
+
+    private String keyPassword;
 
     private String algorithm;
 
-    public String getPassword() {
-        return password;
+    public String getKeyStore() {
+        return keyStore;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setKeyStore(String keyStore) {
+        this.keyStore = keyStore;
     }
 
-    public String getKeystore() {
-        return keystore;
+    public String getKeyStorePassword() {
+        return keyStorePassword;
     }
 
-    public void setKeystore(String keystore) {
-        this.keystore = keystore;
+    public void setKeyStorePassword(String keyStorePassword) {
+        this.keyStorePassword = keyStorePassword;
+    }
+
+    public String getKeyPassword() {
+        return keyPassword;
+    }
+
+    public void setKeyPassword(String keyPassword) {
+        this.keyPassword = keyPassword;
     }
 
     public String getAlgorithm() {

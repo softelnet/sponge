@@ -40,7 +40,7 @@ def onLoad
 end
 
 def onStartup
-    $EPS.logger.debug("Startup {}, triggers: {}", $EPS.description, $EPS.engine.triggers)
+    $EPS.logger.debug("Startup {}, triggers: {}", $EPS.info, $EPS.engine.triggers)
     $EPS.logger.debug("Knowledge base name: {}", $EPS.kb.name)
     $EPS.event("a").send()
     $EPS.event("b").sendAfter(200, 200)

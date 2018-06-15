@@ -41,6 +41,7 @@
 
     <xs:complexType name="Engine">
         <xs:all>
+            <xs:element name="description" type="xs:string" minOccurs="0" />
             <xs:element name="mainProcessingUnitThreadCount" type="xs:string" minOccurs="0" />
             <xs:element name="asyncEventSetProcessorExecutorThreadCount" type="xs:string" minOccurs="0" />
             <xs:element name="eventSetProcessorDefaultSynchronous" type="xs:string" minOccurs="0" />
@@ -51,6 +52,7 @@
             <xs:element name="executorShutdownTimeout" type="xs:string" minOccurs="0" />
         </xs:all>
         <xs:attribute name="name" type="xs:string" use="optional" />
+        <xs:attribute name="displayName" type="xs:string" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="KnowledgeBases">
@@ -61,6 +63,7 @@
 
     <xs:complexType name="KnowledgeBase">
         <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0" />
             <xs:element name="file" type="KnowledgeBaseFile" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required" />
@@ -82,9 +85,11 @@
 
     <xs:complexType name="Plugin">
         <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0" />
             <xs:element name="configuration" type="PluginConfiguration" minOccurs="0" />
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="displayName" type="xs:string" use="optional" />
         <xs:attribute name="class" type="xs:string" use="required" />
         <xs:attribute name="knowledgeBaseName" type="xs:string" />
     </xs:complexType>

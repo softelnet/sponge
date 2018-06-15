@@ -33,15 +33,15 @@ import org.springframework.web.client.RestTemplate;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.model.RestActionCall;
-import org.openksavi.sponge.restapi.model.RestCallResult;
+import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
+import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 public class StandaloneRestApiTest {
 
     private static final int PORT = 11836;
 
-    private static final String REST_API_URL = "http://localhost:" + PORT + RestApiConstants.URL_PREFIX + "1/";
+    private static final String REST_API_URL = "http://localhost:" + PORT + RestApiConstants.BASE_URL + "/";
 
     @Test
     public void testRestApi() {
@@ -53,8 +53,8 @@ public class StandaloneRestApiTest {
             String actionName = "UpperCase";
             String arg1 = "test1";
 
-            ResponseEntity<RestCallResult> response = new RestTemplate().exchange(REST_API_URL + "call", HttpMethod.POST,
-                    new HttpEntity<>(new RestActionCall(actionName, Arrays.asList(arg1)), createHeaders()), RestCallResult.class);
+            ResponseEntity<RestActionCallResponse> response = new RestTemplate().exchange(REST_API_URL + "call", HttpMethod.POST,
+                    new HttpEntity<>(new RestActionCallRequest(actionName, Arrays.asList(arg1)), createHeaders()), RestActionCallResponse.class);
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
             assertEquals(actionName, response.getBody().getActionName());

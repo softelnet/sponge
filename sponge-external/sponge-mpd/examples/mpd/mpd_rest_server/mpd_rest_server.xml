@@ -5,8 +5,15 @@
         <knowledgeBase name="mpd" displayName="MPD">
             <file>classpath:org/openksavi/sponge/mpd/mpd_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="tools" displayName="Tools">
-            <file>mpd_rest_server.py</file>
+        <knowledgeBase name="administration" displayName="Administration">
+            <file>classpath:org/openksavi/sponge/restapi/administration_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="sample" displayName="Samples">
+            <file>mpd_rest_server_main.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" displayName="Security">
+            <file>classpath:org/openksavi/sponge/restapi/restapi_security_library.py</file>
+            <file>mpd_rest_server_security.py</file>
         </knowledgeBase>
     </knowledgeBases>
 

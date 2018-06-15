@@ -24,7 +24,7 @@ public class PowerEchoMetadataAction extends JAction {
 
     @Override
     public void onConfigure() {
-        setArgsMeta(new ArgMeta("arg1", Type.NUMBER, true, "Argument 1"), new ArgMeta("arg2", Type.STRING, true, "Argument 2"));
+        setArgsMeta(new ArgMeta("arg1", Type.NUMBER).displayName("Argument 1"), new ArgMeta("arg2", Type.STRING).displayName("Argument 2"));
     }
 
     @Override

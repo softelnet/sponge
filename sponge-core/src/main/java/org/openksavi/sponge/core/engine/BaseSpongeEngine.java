@@ -320,7 +320,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     public void doStartup() {
         lock.lock();
         try {
-            logger.info("Starting up {}", getDescription());
+            logger.info("Starting up {}", getInfo());
 
             init();
 
@@ -390,11 +390,19 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     /**
-     * Setup engine name.
+     * Setup the name, display name and description.
      */
-    protected void setupEngineName() {
+    protected void setupEngineDescriptive() {
         if (getName() == null && configurationManager.getEngineName() != null) {
             setName(configurationManager.getEngineName());
+        }
+
+        if (getDisplayName() == null && configurationManager.getEngineDisplayName() != null) {
+            setDisplayName(configurationManager.getEngineDisplayName());
+        }
+
+        if (getDescription() == null && configurationManager.getEngineDescription() != null) {
+            setDescription(configurationManager.getEngineDescription());
         }
     }
 
@@ -452,8 +460,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
      * Configures engine modules.
      */
     protected void configureEngineModules() {
-        // Setup engine name.
-        setupEngineName();
+        setupEngineDescriptive();
 
         // Register interpreter factories for scripting languages.
         knowledgeBaseManager.setKnowledgeBaseInterpreterFactoryProviders(knowledgeBaseInterpreterFactoryProviders);
@@ -689,13 +696,13 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
     @Override
-    public String getDescription() {
-        return versionInfo.getDescription(getName());
+    public String getInfo() {
+        return versionInfo.getInfo(getName());
     }
 
     /**

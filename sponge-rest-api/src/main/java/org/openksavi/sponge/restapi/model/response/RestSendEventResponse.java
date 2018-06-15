@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "SendResult", description = "Represents a Sponge event id")
-public class RestSendResult extends BaseRestResponse {
+@ApiModel(value = "SendEventResponse", description = "Send event response")
+public class RestSendEventResponse extends BaseRestResponse {
 
     private String eventId;
 
-    public RestSendResult() {
+    public RestSendEventResponse() {
         //
     }
 
-    public RestSendResult(String eventId) {
+    public RestSendEventResponse(String eventId) {
         this.eventId = eventId;
     }
 
@@ -39,9 +39,5 @@ public class RestSendResult extends BaseRestResponse {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
-    }
-
-    public static RestSendResult fromException(Exception e) {
-        return fromException(new RestSendResult(), e);
     }
 }

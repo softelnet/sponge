@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.request;
 
-import java.util.List;
+import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCall", description = "Represents a Sponge action call")
-public class RestActionCall {
+@ApiModel(value = "SendEventRequest", description = "Send event request")
+public class RestSendEventRequest extends BaseRestRequest {
 
     private String name;
 
-    private List<Object> args;
+    private Map<String, Object> attributes;
 
-    public RestActionCall() {
+    public RestSendEventRequest() {
         //
     }
 
-    public RestActionCall(String name, List<Object> args) {
+    public RestSendEventRequest(String username, String password, String name, Map<String, Object> attributes) {
+        super(username, password);
         this.name = name;
-        this.args = args;
+        this.attributes = attributes;
     }
 
-    @ApiModelProperty(value = "The action name", required = true)
+    public RestSendEventRequest(String name, Map<String, Object> attributes) {
+        this(null, null, name, attributes);
+    }
+
+    @ApiModelProperty(value = "The event name", required = true)
     public String getName() {
         return name;
     }
@@ -46,12 +51,12 @@ public class RestActionCall {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The action arguments", required = false)
-    public List<Object> getArgs() {
-        return args;
+    @ApiModelProperty(value = "The event attributes", required = false)
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
-    public void setArgs(List<Object> args) {
-        this.args = args;
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }

@@ -80,13 +80,14 @@ class MpdLibrary:
 class MpdSetAndPlayPlaylist(Action):
     def onConfigure(self):
         self.displayName = "Set and play a playlist"
+        self.description = "Sets a playlist according to the arguments and starts playing it immediately."
         self.argsMeta = [
-            ArgMeta("artist", Type.STRING, False, "Artist"),
-            ArgMeta("album", Type.STRING, False, "Album"),
-            ArgMeta("genre", Type.STRING, False, "Genre"),
-            ArgMeta("minYear", Type.NUMBER, False, "Release year (since)"),
-            ArgMeta("maxYear", Type.NUMBER, False, "Release year (to)")]
-        self.resultMeta = ResultMeta(Type.STRING, "Info")
+            ArgMeta("artist", Type.STRING).required(False).displayName("Artist").description("Artist may be specified as a regular expression."),
+            ArgMeta("album", Type.STRING).required(False).displayName("Album").description("Album may be specified as a regular expression."),
+            ArgMeta("genre", Type.STRING).required(False).displayName("Genre").description("Genre may be specified as a regular expression."),
+            ArgMeta("minYear", Type.NUMBER).required(False).displayName("Release year (since)").description("An album minimum release year."),
+            ArgMeta("maxYear", Type.NUMBER).required(False).displayName("Release year (to)").description("An album maximum release year.")]
+        self.resultMeta = ResultMeta(Type.STRING).displayName("Info").description("A short info of the status of the action call.")
     def onCall(self, args):
         EPS.logger.info("Args {}", str(args))
         (aArtist, aAlbum, aGenre, aMinYear, aMaxYear) = (args[0], args[1], args[2], args[3], args[4])

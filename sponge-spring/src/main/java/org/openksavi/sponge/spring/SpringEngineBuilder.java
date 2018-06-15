@@ -23,8 +23,15 @@ import org.openksavi.sponge.core.engine.EngineBuilder;
  */
 public class SpringEngineBuilder extends EngineBuilder<SpringSpongeEngine> {
 
+    /**
+     * Spring-aware Sponge engine builder. Sets {@code knowledgeBaseFileProvider} to {@code SpringKnowledgeBaseFileProvider}.
+     *
+     * @param engine the engine.
+     */
     public SpringEngineBuilder(SpringSpongeEngine engine) {
         super(engine);
+
+        knowledgeBaseFileProvider(new SpringKnowledgeBaseFileProvider());
     }
 
     /**

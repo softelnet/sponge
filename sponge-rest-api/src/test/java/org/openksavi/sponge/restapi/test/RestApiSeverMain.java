@@ -46,12 +46,7 @@ public class RestApiSeverMain {
 
         @Bean
         public RestApiPlugin spongeRestApiPlugin() {
-            RestApiPlugin plugin = new RestApiPlugin();
-
-            plugin.getSettings().setRestComponentId("undertow");
-            plugin.getSettings().setPort(1836);
-
-            return plugin;
+            return new RestApiPlugin();
         }
     }
 

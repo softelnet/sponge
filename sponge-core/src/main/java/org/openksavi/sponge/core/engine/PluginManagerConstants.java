@@ -30,11 +30,17 @@ public final class PluginManagerConstants {
     /** Plugin name tag. */
     public static final String CFG_PLUGIN_NAME = "name";
 
+    /** Plugin display name tag. */
+    public static final String CFG_PLUGIN_DISPLAY_NAME = "displayName";
+
     /** Plugin class tag. */
     public static final String CFG_PLUGIN_CLASS = "class";
 
     /** Plugin knowledge base name. */
     public static final String CFG_PLUGIN_KB_NAME = "knowledgeBaseName";
+
+    /** Plugin description tag. */
+    public static final String CFG_PLUGIN_DESCRIPTION = "description";
 
     /** Plugin configuration tag. */
     public static final String CFG_PLUGIN_CONFIGURATION = "configuration";

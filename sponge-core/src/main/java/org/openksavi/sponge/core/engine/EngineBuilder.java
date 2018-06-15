@@ -393,11 +393,11 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     }
 
     /**
-     * Returns the engine description.
+     * Returns the engine info.
      *
-     * @return the engine description.
+     * @return the engine info.
      */
-    public String getDescription() {
-        return engine.getDescription();
+    public String getInfo() {
+        return engine.getInfo();
     }
 }

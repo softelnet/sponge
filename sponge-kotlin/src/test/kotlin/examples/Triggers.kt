@@ -44,7 +44,7 @@ class Triggers : KKnowledgeBase() {
     override fun onLoad() = eps.enableJava(SampleJavaTrigger::class.java)
 
     override fun onStartup() {
-        logger.debug("Startup {}, triggers: {}", eps.description, eps.engine.triggers)
+        logger.debug("Startup {}, triggers: {}", eps.info, eps.engine.triggers)
         logger.debug("Knowledge base name: {}", eps.kb.name)
         eps.event("a").send()
         eps.event("b").sendAfter(200, 200)

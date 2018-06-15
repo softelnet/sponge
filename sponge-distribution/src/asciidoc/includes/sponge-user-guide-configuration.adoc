@@ -22,13 +22,15 @@ In a general form an XML configuration file is built as in the following example
     </properties>
 
     <!-- Engine configuration section -->
-    <engine name="SampleSponge">
+    <engine name="SampleSponge" displayName="Sample Sponge">
+        <description>The sample Sponge engine.</description>
         <mainProcessingUnitThreadCount>6</mainProcessingUnitThreadCount>
     </engine>
 
     <!-- Knowledge bases configuration section -->
     <knowledgeBases>
-        <knowledgeBase name="pythonKb">
+        <knowledgeBase name="pythonKb" displayName="Python-based processors">
+            <description>The Python-based knowledge base.</description>
             <file>kb_file_1.py</file>
             <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
         </knowledgeBase>
@@ -37,7 +39,8 @@ In a general form an XML configuration file is built as in the following example
 
     <!-- Plugins configuration section -->
     <plugins>
-        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin">
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin" displayName="Connection plugin">
+            <description>The connection plugin provides the connection related code.</description>
             <configuration>
                 <connection>
                     <name>Example connection</name>
@@ -113,6 +116,10 @@ Each `<knowledgeBase>` tag contains:
 |Attribute
 |The name of the knowledge base.
 
+|`displayName`
+|Attribute
+|The display name of the knowledge base.
+
 |`type`
 |Attribute
 |The type of the script knowledge base corresponding to the scripting language. Allowed values: `python`, `ruby`, `groovy`, `javascript`. The type is required only for knowledge bases that specify no files so their type can't be inferred from the file extensions.
@@ -120,6 +127,10 @@ Each `<knowledgeBase>` tag contains:
 |`class`
 |Attribute
 |The class of the non script knowledge base. In that case you don't have to specify a type and you must not specify files. A knowledge base class should define a non-parameterized constructor.
+
+|`description`
+|Element
+|The description of the knowledge base.
 
 |`file`
 |Element
@@ -143,6 +154,10 @@ The plugins configuration section (`<plugins>`) contains plugin definitions (`<p
 |Attribute
 |The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used as a variable name in order to access a given plugin in the knowledge base.
 
+|`displayName`
+|Attribute
+|The plugin display name.
+
 |`class`
 |Attribute
 |The name of the plugin class (Java class or a class defined in the scripting language in the script knowledge base (mandatory).
@@ -150,6 +165,14 @@ The plugins configuration section (`<plugins>`) contains plugin definitions (`<p
 |`knowledgeBaseName`
 |Attribute
 |The name of the knowledge base containing the class of the plugin (optional). If not set then the default Java-based knowledge base is used.
+
+|`description`
+|Element
+|The plugin description.
+
+|`configuration`
+|Element
+|The specific configuration of the plugin.
 |===
 
 You may provide a custom plugin configuration section inside a `<configuration>` element. The contents of this plugin configuration depend on the given plugin implementation. Usually it would be a hierarchy of plugin specific sub tags.
@@ -187,5 +210,7 @@ The Engine Builder API provides the method `config()` to read an XML configurati
 SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/engine_parameters.xml").build();
 engine.startup();
 ----
+
+The Engine Builder API preserves the load order of knowledge bases, including knowledge bases specified in the configuration file.
 
 You may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.

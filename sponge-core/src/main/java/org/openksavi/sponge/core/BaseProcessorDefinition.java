@@ -32,6 +32,9 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** Display name. */
     private String displayName;
 
+    /** Description. */
+    private String description;
+
     /** Is this processor defined in Java (not in the scripting knowledge base). */
     private boolean javaDefined = false;
 
@@ -110,6 +113,16 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     @Override
     public String getDisplayName() {
         return displayName;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**

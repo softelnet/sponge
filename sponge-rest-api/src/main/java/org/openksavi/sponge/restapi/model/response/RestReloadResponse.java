@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model;
+package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "ReloadResult", description = "Represents a Sponge reload result")
-public class RestReloadResult extends BaseRestResponse {
+@ApiModel(value = "ReloadResponse", description = "Reload response")
+public class RestReloadResponse extends BaseRestResponse {
 
-    public RestReloadResult() {
+    public RestReloadResponse() {
         //
-    }
-
-    public static RestReloadResult fromException(Exception e) {
-        return fromException(new RestReloadResult(), e);
     }
 }

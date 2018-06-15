@@ -28,7 +28,9 @@ public class RestActionMeta {
 
     private String displayName;
 
-    private RestKnowledgeBase knowledgeBase;
+    private String description;
+
+    private RestKnowledgeBaseMeta knowledgeBase;
 
     private List<RestActionArgMeta> argsMeta;
 
@@ -38,10 +40,11 @@ public class RestActionMeta {
         //
     }
 
-    public RestActionMeta(String name, String displayName, RestKnowledgeBase knowledgeBase, List<RestActionArgMeta> argsMeta,
-            RestActionResultMeta resultMeta) {
+    public RestActionMeta(String name, String displayName, String description, RestKnowledgeBaseMeta knowledgeBase,
+            List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
         this.name = name;
         this.displayName = displayName;
+        this.description = description;
         this.knowledgeBase = knowledgeBase;
         this.argsMeta = argsMeta;
         this.resultMeta = resultMeta;
@@ -65,12 +68,21 @@ public class RestActionMeta {
         this.displayName = displayName;
     }
 
+    @ApiModelProperty(value = "The action description", required = false)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @ApiModelProperty(value = "The action knowledge base", required = true)
-    public RestKnowledgeBase getKnowledgeBase() {
+    public RestKnowledgeBaseMeta getKnowledgeBase() {
         return knowledgeBase;
     }
 
-    public void setKnowledgeBase(RestKnowledgeBase knowledgeBase) {
+    public void setKnowledgeBase(RestKnowledgeBaseMeta knowledgeBase) {
         this.knowledgeBase = knowledgeBase;
     }
 

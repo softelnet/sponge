@@ -23,11 +23,11 @@ public final class RestApiConstants {
 
     public static final int API_VERSION = 1;
 
-    public static final String URL_PREFIX = "/sponge/v";
+    public static final String BASE_URL = String.format("sponge.json/v%d", API_VERSION);
 
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
-    public static final String DEFAULT_REST_COMPONENT_ID = "undertow";
+    public static final String DEFAULT_REST_COMPONENT_ID = "jetty";
 
     public static final int DEFAULT_PORT = 1836;
 
@@ -37,6 +37,12 @@ public final class RestApiConstants {
 
     public static final boolean DEFAULT_IS_EVENT_PUBLIC = true;
 
+    public static final String DEFAULT_SSL_CONTEXT_PARAMETERS_BEAN_NAME = "spongeRestApiSslContextParameters";
+
+    public static final boolean DEFAULT_PRETTY_PRINT = true;
+
+    public static final boolean DEFAULT_PUBLISH_RELOAD = true;
+
     public static final String REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME = "metadataRequired";
 
     public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = true;
@@ -44,6 +50,10 @@ public final class RestApiConstants {
     public static final String ACTION_IS_ACTION_PUBLIC = "RestApiIsActionPublic";
 
     public static final String ACTION_IS_EVENT_PUBLIC = "RestApiIsEventPublic";
+
+    public static final String ACTION_CAN_USE_KNOWLEDGE_BASE = "RestApiCanUseKnowledgeBase";
+
+    public static final String ACTION_CAN_SEND_EVENT = "RestApiCanSendEvent";
 
     public static final String TAG_REST_COMPONENT_ID = "restComponentId";
 
@@ -58,6 +68,12 @@ public final class RestApiConstants {
     public static final String TAG_PUBLIC_EVENTS = "publicEvents";
 
     public static final String TAG_AUTO_START = "autoStart";
+
+    public static final String TAG_SSL_CONFIGURATION = "sslConfiguration";
+
+    public static final String TAG_PUBLISH_RELOAD = "publishReload";
+
+    public static final String DEFAULT_GUEST_USERNAME = "guest";
 
     private RestApiConstants() {
         //

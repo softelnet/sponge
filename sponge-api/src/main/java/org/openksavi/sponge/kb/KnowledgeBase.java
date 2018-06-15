@@ -16,38 +16,12 @@
 
 package org.openksavi.sponge.kb;
 
+import org.openksavi.sponge.util.Descriptive;
+
 /**
  * Knowledge base.
  */
-public interface KnowledgeBase extends KnowledgeBaseOperations {
-
-    /**
-     * Returns the name of this knowledge base.
-     *
-     * @return the name of this knowledge base.
-     */
-    String getName();
-
-    /**
-     * Sets the name of this knowledge base.
-     *
-     * @param name the name of this knowledge base.
-     */
-    void setName(String name);
-
-    /**
-     * Returns the display name of this knowledge base.
-     *
-     * @return the display name of this knowledge base.
-     */
-    String getDisplayName();
-
-    /**
-     * Sets the display name of this knowledge base.
-     *
-     * @param displayName the display name of this knowledge base.
-     */
-    void setDisplayName(String displayName);
+public interface KnowledgeBase extends KnowledgeBaseOperations, Descriptive {
 
     /**
      * Returns knowledge base interpreter type.
