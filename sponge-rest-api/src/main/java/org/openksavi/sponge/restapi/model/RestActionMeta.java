@@ -17,6 +17,7 @@
 package org.openksavi.sponge.restapi.model;
 
 import java.util.List;
+import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,6 +33,8 @@ public class RestActionMeta {
 
     private RestKnowledgeBaseMeta knowledgeBase;
 
+    private Map<String, Object> meta;
+
     private List<RestActionArgMeta> argsMeta;
 
     private RestActionResultMeta resultMeta;
@@ -41,11 +44,12 @@ public class RestActionMeta {
     }
 
     public RestActionMeta(String name, String displayName, String description, RestKnowledgeBaseMeta knowledgeBase,
-            List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
+            Map<String, Object> meta, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.knowledgeBase = knowledgeBase;
+        this.meta = meta;
         this.argsMeta = argsMeta;
         this.resultMeta = resultMeta;
     }
@@ -86,12 +90,21 @@ public class RestActionMeta {
         this.knowledgeBase = knowledgeBase;
     }
 
+    @ApiModelProperty(value = "The action metadata", required = true)
+    public Map<String, Object> getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Map<String, Object> meta) {
+        this.meta = meta;
+    }
+
     @ApiModelProperty(value = "The action arguments metadata", required = false)
     public List<RestActionArgMeta> getArgsMeta() {
         return argsMeta;
     }
 
-    public void setArgsMetadata(List<RestActionArgMeta> argsMeta) {
+    public void setArgsMeta(List<RestActionArgMeta> argsMeta) {
         this.argsMeta = argsMeta;
     }
 

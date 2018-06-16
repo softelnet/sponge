@@ -75,10 +75,10 @@ public class RestApiRouteBuilder extends RouteBuilder {
             .bindingMode(RestBindingMode.json)
             .port(settings.getPort())
             .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
+            .enableCORS(true)
             .contextPath("/")
             // Add swagger api-doc out of the box.
-            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()))
-                .apiProperty("cors", "true");
+            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()));
         // @formatter:on
 
         if (settings.getHost() != null) {
@@ -144,15 +144,15 @@ public class RestApiRouteBuilder extends RouteBuilder {
                             exchange.getIn().getBody(RestSendEventRequest.class)))
                 .endRest();
 
-            if (settings.isPublishReload()) {
-                restDefinition.post("/reload").description("Reload knowledge bases").type(RestReloadRequest.class).outType(RestReloadResponse.class)
-                    .param().name("body").type(body).description("Reload knowledge bases request").endParam()
-                    .responseMessage().code(200).message("Knowledge bases reloaded").endResponseMessage()
-                    .route()
-                        .setBody((exchange) -> apiService.reload(
-                                exchange.getIn().getBody(RestReloadRequest.class)))
-                        .endRest();
-            }
-         // @formatter:on
+        if (settings.isPublishReload()) {
+            restDefinition.post("/reload").description("Reload knowledge bases").type(RestReloadRequest.class).outType(RestReloadResponse.class)
+                .param().name("body").type(body).description("Reload knowledge bases request").endParam()
+                .responseMessage().code(200).message("Knowledge bases reloaded").endResponseMessage()
+                .route()
+                    .setBody((exchange) -> apiService.reload(
+                            exchange.getIn().getBody(RestReloadRequest.class)))
+                    .endRest();
+        }
+        // @formatter:on
     }
 }

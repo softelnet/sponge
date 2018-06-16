@@ -229,7 +229,7 @@ public class DefaultRestApiService implements RestApiService {
                     .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
                     .filter(action -> securityService.canCallAction(user, action))
                     .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
-                            createRestKnowledgeBase(action.getKnowledgeBase()), createActionArgMetaList(action),
+                            createRestKnowledgeBase(action.getKnowledgeBase()), action.getMeta(), createActionArgMetaList(action),
                             createActionResultMeta(action)))
                     .collect(Collectors.toList()));
         } catch (Exception e) {

@@ -914,7 +914,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 == REST API
-The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API plugin (`RestApiPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service.
+The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API plugin (`RestApiPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service. After starting the plugin, the online API specification in the https://swagger.io[Swagger] JSON format will be available at URL `http://localhost:1836/api-doc`.
 
 The default name of the REST API plugin (which may be used in knowledge bases) is `restApi`.
 
