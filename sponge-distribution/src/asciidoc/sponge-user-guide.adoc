@@ -354,6 +354,9 @@ def onLoad():
 |`description`
 |The property that is a description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but may be useful in a client code.
 
+|`meta`
+|The property that is a metadata of a processor. This is a shortcut for `getMeta()`/`setMeta(Map<String, Object>)` methods. A processor metadata is simply a map of String to Object associated with a processor definition (not instance). It may be used to provide a custom behavior in a client code.
+
 |`logger`
 |The read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`, e.g. `sponge.kb.python.kb1.EchoAction` for a python-based processor, `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.
 

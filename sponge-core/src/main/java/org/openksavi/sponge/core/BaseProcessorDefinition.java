@@ -16,6 +16,12 @@
 
 package org.openksavi.sponge.core;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -43,6 +49,9 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
 
     /** Knowledge base reference. */
     private KnowledgeBase knowledgeBase;
+
+    /** The processor metadata. */
+    private Map<String, Object> meta = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * Creates a new processor definition.
@@ -168,5 +177,17 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
 
     public void setKnowledgeBase(BaseKnowledgeBase knowledgeBase) {
         this.knowledgeBase = knowledgeBase;
+    }
+
+    @Override
+    public Map<String, Object> getMeta() {
+        return meta;
+    }
+
+    @Override
+    public void setMeta(Map<String, Object> meta) {
+        Validate.notNull(meta, "The processor metadata cannot be null");
+
+        this.meta = Collections.synchronizedMap(new LinkedHashMap<>(meta));
     }
 }

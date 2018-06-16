@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 
 import org.openksavi.sponge.Processor;
@@ -78,6 +80,16 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     @Override
     public KnowledgeBase getKnowledgeBase() {
         return adapter.getKnowledgeBase();
+    }
+
+    @Override
+    public Map<String, Object> getMeta() {
+        return adapter.getMeta();
+    }
+
+    @Override
+    public void setMeta(Map<String, Object> meta) {
+        adapter.setMeta(meta);
     }
 
     public KnowledgeBaseEngineOperations getEps() {

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge;
 
+import java.util.Map;
+
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.util.Descriptive;
 
@@ -30,4 +32,18 @@ public interface ProcessorOperations extends Descriptive {
      * @return the knowledge base.
      */
     KnowledgeBase getKnowledgeBase();
+
+    /**
+     * Returns the processor metadata. The default value is the empty map.
+     *
+     * @return the processor metadata. Never returns {@code null}.
+     */
+    Map<String, Object> getMeta();
+
+    /**
+     * Sets the (optional) processor metadata. Must not be {@code null}.
+     *
+     * @param meta the processor metadata.
+     */
+    void setMeta(Map<String, Object> meta);
 }
