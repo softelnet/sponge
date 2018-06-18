@@ -116,6 +116,13 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>../sponge-rest-api</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>../sponge-standalone</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
