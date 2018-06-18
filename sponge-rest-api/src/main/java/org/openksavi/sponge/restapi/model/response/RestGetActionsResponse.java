@@ -36,7 +36,7 @@ public class RestGetActionsResponse extends BaseRestResponse {
         this.actions = actions;
     }
 
-    @ApiModelProperty(value = "The Spoonge actions", required = true)
+    @ApiModelProperty(value = "The Sponge actions", required = true)
     public List<RestActionMeta> getActions() {
         return actions;
     }

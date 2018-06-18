@@ -16,12 +16,26 @@
 
 package org.openksavi.sponge.restapi.model.response;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class BaseRestResponse {
+
+    private String errorCode;
 
     private String errorMessage;
 
     private String detailedErrorMessage;
 
+    @ApiModelProperty(value = "The error code", required = false)
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    @ApiModelProperty(value = "The error message", required = false)
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -30,6 +44,7 @@ public class BaseRestResponse {
         this.errorMessage = errorMessage;
     }
 
+    @ApiModelProperty(value = "The detailed error message", required = false)
     public String getDetailedErrorMessage() {
         return detailedErrorMessage;
     }

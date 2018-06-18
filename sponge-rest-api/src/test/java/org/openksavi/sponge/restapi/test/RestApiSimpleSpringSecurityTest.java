@@ -44,8 +44,6 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.RestApiPlugin;
-import org.openksavi.sponge.restapi.RestApiService;
-import org.openksavi.sponge.restapi.DefaultRestApiService;
 import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
 import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
@@ -84,16 +82,9 @@ public class RestApiSimpleSpringSecurityTest {
             RestApiPlugin plugin = new RestApiPlugin();
 
             plugin.getSettings().setPort(PORT);
-            plugin.setService(restApiService());
+            plugin.setSecurityService(restApiSecurityService());
+
             return plugin;
-        }
-
-        @Bean
-        public RestApiService restApiService() {
-            RestApiService service = new DefaultRestApiService();
-            service.setSecurityService(restApiSecurityService());
-
-            return service;
         }
 
         @Bean

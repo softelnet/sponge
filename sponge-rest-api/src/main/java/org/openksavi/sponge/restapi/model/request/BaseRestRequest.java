@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model.request;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public abstract class BaseRestRequest {
 
     private String username;
@@ -31,6 +33,7 @@ public abstract class BaseRestRequest {
         //
     }
 
+    @ApiModelProperty(value = "The user name", required = false)
     public String getUsername() {
         return username;
     }
@@ -39,6 +42,7 @@ public abstract class BaseRestRequest {
         this.username = username;
     }
 
+    @ApiModelProperty(value = "The user password", required = false)
     public String getPassword() {
         return password;
     }

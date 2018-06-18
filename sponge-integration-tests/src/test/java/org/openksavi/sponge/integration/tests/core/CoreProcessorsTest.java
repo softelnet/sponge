@@ -18,9 +18,12 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -39,8 +42,43 @@ public class CoreProcessorsTest {
                     engine.getActionManager().getActionAdapter("UpperEchoAction").getMeta());
             assertEquals(SpongeUtils.immutableMapOf("visibility", true),
                     engine.getActionManager().getActionAdapter("PowerEchoMetadataAction").getMeta());
+        } finally {
+            engine.shutdown();
+        }
+    }
 
-            assertFalse(engine.isError());
+    @Test
+    public void testEnhancedProcessorMetadata() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/processors_metadata_enhanced.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter enhActionAdapter = engine.getActionManager().getActionAdapter("EdvancedMetaAction");
+            String methodName = (String) enhActionAdapter.getMeta().get("isVisibleMethod");
+
+            assertTrue((Boolean) enhActionAdapter.getKnowledgeBase().getInterpreter().invokeMethod(enhActionAdapter.getProcessor(),
+                    methodName, "day"));
+            assertFalse((Boolean) enhActionAdapter.getKnowledgeBase().getInterpreter().invokeMethod(enhActionAdapter.getProcessor(),
+                    methodName, "night"));
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testProcessorAdditionalInterface() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/processors_interface.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter enhActionAdapter = engine.getActionManager().getActionAdapter("EdvancedMetaAction");
+            Action action = enhActionAdapter.getProcessor();
+
+            assertTrue(action instanceof TestActionVisibiliy);
+            assertTrue(((TestActionVisibiliy) action).isVisible("day"));
+            assertFalse(((TestActionVisibiliy) action).isVisible("night"));
         } finally {
             engine.shutdown();
         }

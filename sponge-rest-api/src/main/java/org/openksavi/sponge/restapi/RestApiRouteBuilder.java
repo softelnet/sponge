@@ -75,10 +75,10 @@ public class RestApiRouteBuilder extends RouteBuilder {
             .bindingMode(RestBindingMode.json)
             .port(settings.getPort())
             .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
+            .enableCORS(true)
             .contextPath("/")
             // Add swagger api-doc out of the box.
-            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()))
-                .apiProperty("cors", "true");
+            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()));
         // @formatter:on
 
         if (settings.getHost() != null) {
@@ -109,7 +109,7 @@ public class RestApiRouteBuilder extends RouteBuilder {
             .consumes(RestApiConstants.APPLICATION_JSON_VALUE).produces(RestApiConstants.APPLICATION_JSON_VALUE)
             .post("/version").description("Get the Sponge version").type(RestGetVersionRequest.class).outType(RestGetVersionResponse.class)
                 .param().name("body").type(body).description("Get Sponge version request").endParam()
-                .responseMessage().code(200).message("The Sponge version").endResponseMessage()
+                .responseMessage().code(200).message("The Sponge version response").endResponseMessage()
                 .route()
                     .setBody((exchange) -> apiService.getVersion(
                             exchange.getIn().getBody(RestGetVersionRequest.class)))
@@ -117,42 +117,42 @@ public class RestApiRouteBuilder extends RouteBuilder {
             .post("/knowledgeBases").description("Get knowledge bases").type(RestGetKnowledgeBasesRequest.class)
                     .outType(RestGetKnowledgeBasesResponse.class)
                 .param().name("body").type(body).description("Get knowledge bases request").endParam()
-                .responseMessage().code(200).message("Knowledge bases").endResponseMessage()
+                .responseMessage().code(200).message("Get knowledge bases response").endResponseMessage()
                 .route()
                     .setBody((exchange) -> apiService.getKnowledgeBases(
                             exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class)))
                 .endRest()
             .post("/actions").description("Get actions").type(RestGetActionsRequest.class).outType(RestGetActionsResponse.class)
                 .param().name("body").type(body).description("Get actions request").endParam()
-                .responseMessage().code(200).message("Actions").endResponseMessage()
+                .responseMessage().code(200).message("Get actions response").endResponseMessage()
                 .route()
                     .setBody((exchange) -> apiService.getActions(
                             exchange.getIn().getBody(RestGetActionsRequest.class)))
                 .endRest()
             .post("/call").description("Call an action").type(RestActionCallRequest.class).outType(RestActionCallResponse.class)
                 .param().name("body").type(body).description("Call action request").endParam()
-                .responseMessage().code(200).message("The action result").endResponseMessage()
+                .responseMessage().code(200).message("The action call response").endResponseMessage()
                 .route()
                     .setBody((exchange) -> apiService.call(
                             exchange.getIn().getBody(RestActionCallRequest.class)))
                 .endRest()
             .post("/send").description("Send a new event").type(RestSendEventRequest.class).outType(RestSendEventResponse.class)
                 .param().name("body").type(body).description("Send event request").endParam()
-                .responseMessage().code(200).message("The event id").endResponseMessage()
+                .responseMessage().code(200).message("The send event response").endResponseMessage()
                 .route()
                     .setBody((exchange) -> apiService.send(
                             exchange.getIn().getBody(RestSendEventRequest.class)))
                 .endRest();
 
-            if (settings.isPublishReload()) {
-                restDefinition.post("/reload").description("Reload knowledge bases").type(RestReloadRequest.class).outType(RestReloadResponse.class)
-                    .param().name("body").type(body).description("Reload knowledge bases request").endParam()
-                    .responseMessage().code(200).message("Knowledge bases reloaded").endResponseMessage()
-                    .route()
-                        .setBody((exchange) -> apiService.reload(
-                                exchange.getIn().getBody(RestReloadRequest.class)))
-                        .endRest();
-            }
-         // @formatter:on
+        if (settings.isPublishReload()) {
+            restDefinition.post("/reload").description("Reload knowledge bases").type(RestReloadRequest.class).outType(RestReloadResponse.class)
+                .param().name("body").type(body).description("Reload knowledge bases request").endParam()
+                .responseMessage().code(200).message("The reload response").endResponseMessage()
+                .route()
+                    .setBody((exchange) -> apiService.reload(
+                            exchange.getIn().getBody(RestReloadRequest.class)))
+                    .endRest();
+        }
+        // @formatter:on
     }
 }

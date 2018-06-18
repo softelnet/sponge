@@ -10,6 +10,8 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 
 * API change: `Action.onCall` callback method signature has been changed to `Object onCall(Object[] args)`.
 * A new Sponge REST API (`sponge-rest-api`) that uses JSON as its communication format.
+* Support for simple metadata (map of `String` to `Object`) for processors.
+* Support for metadata for arguments and results of actions.
 * Support for pre/post config file plugins and knowledge bases in Engine Builder.
 * Libraries upgrade.
 

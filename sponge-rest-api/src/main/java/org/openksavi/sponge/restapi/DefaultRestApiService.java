@@ -22,7 +22,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ResultMeta;
@@ -62,10 +61,7 @@ public class DefaultRestApiService implements RestApiService {
 
     private RestApiSecurityService securityService;
 
-    private RestApiErrorResponseProvider errorResponseProvider = (response, exception) -> {
-        response.setErrorMessage(exception.getMessage());
-        response.setDetailedErrorMessage(ExceptionUtils.getStackTrace(exception));
-    };
+    private RestApiErrorResponseProvider errorResponseProvider = new DefaultRestApiErrorResponseProvider();
 
     public DefaultRestApiService() {
         //
@@ -229,7 +225,7 @@ public class DefaultRestApiService implements RestApiService {
                     .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
                     .filter(action -> securityService.canCallAction(user, action))
                     .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
-                            createRestKnowledgeBase(action.getKnowledgeBase()), createActionArgMetaList(action),
+                            createRestKnowledgeBase(action.getKnowledgeBase()), action.getMeta(), createActionArgMetaList(action),
                             createActionResultMeta(action)))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
