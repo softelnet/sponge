@@ -1,0 +1,580 @@
+= Sponge REST API
+
+
+[[_swagger_overview]]
+== Overview
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1
+
+
+=== URI scheme
+[%hardbreaks]
+__Host__ : 0.0.0.0:1836
+__BasePath__ : /
+__Schemes__ : HTTP
+
+
+=== Tags
+
+* sponge.json/v1 : Sponge REST API
+
+
+
+
+[[_swagger_paths]]
+== Paths
+
+[[_swagger_route3]]
+=== Get actions
+....
+POST sponge.json/v1/actions
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|Get actions request|<<_swagger_getactionsrequest,GetActionsRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Get actions response|<<_swagger_getactionsresponse,GetActionsResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* sponge.json/v1
+
+
+[[_swagger_route4]]
+=== Call an action
+....
+POST sponge.json/v1/call
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|Call action request|<<_swagger_actioncallrequest,ActionCallRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The action call response|<<_swagger_actioncallresponse,ActionCallResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* sponge.json/v1
+
+
+[[_swagger_route2]]
+=== Get knowledge bases
+....
+POST sponge.json/v1/knowledgeBases
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|Get knowledge bases request|<<_swagger_getknowledgebasesrequest,GetKnowledgeBasesRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Get knowledge bases response|<<_swagger_getknowledgebasesresponse,GetKnowledgeBasesResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* sponge.json/v1
+
+
+[[_swagger_route6]]
+=== Reload knowledge bases
+....
+POST sponge.json/v1/reload
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|Reload knowledge bases request|<<_swagger_reloadrequest,ReloadRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The reload response|<<_swagger_reloadresponse,ReloadResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* sponge.json/v1
+
+
+[[_swagger_route5]]
+=== Send a new event
+....
+POST sponge.json/v1/send
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|Send event request|<<_swagger_sendeventrequest,SendEventRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The send event response|<<_swagger_sendeventresponse,SendEventResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* sponge.json/v1
+
+
+[[_swagger_route1]]
+=== Get the Sponge version
+....
+POST sponge.json/v1/version
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The Sponge version response|<<_swagger_getversionresponse,GetVersionResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* sponge.json/v1
+
+
+
+
+[[_swagger_definitions]]
+== Definitions
+
+[[_swagger_getactionsrequest]]
+=== GetActionsRequest
+Get actions request
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|**metadataRequired** +
+__optional__|Metadata required|boolean
+|===
+
+
+[[_swagger_knowledgebasemeta]]
+=== KnowledgeBaseMeta
+Represents a Sponge knowledge base metadata
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**name** +
+__required__|The knowledge base name|string
+|**displayName** +
+__optional__|The knowledge base display name|string
+|**description** +
+__optional__|The knowledge base description|string
+|===
+
+
+[[_swagger_actionmeta]]
+=== ActionMeta
+Represents a Sponge action metadata
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**name** +
+__required__|The action name|string
+|**displayName** +
+__optional__|The action display name|string
+|**description** +
+__optional__|The action description|string
+|**knowledgeBase** +
+__required__|The action knowledge base|<<_swagger_knowledgebasemeta,KnowledgeBaseMeta>>
+|**meta** +
+__required__|The action metadata|< string, object > map
+|**argsMeta** +
+__optional__|The action arguments metadata|< <<_swagger_actionargmeta,ActionArgMeta>> > array
+|**resultMeta** +
+__optional__|The action result metadata|<<_swagger_actionresultmeta,ActionResultMeta>>
+|===
+
+
+[[_swagger_actionargmeta]]
+=== ActionArgMeta
+Represents a Sponge action argument metadata
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**name** +
+__required__|The action argument name|string
+|**type** +
+__required__|The action argument type|string
+|**subtype** +
+__optional__|The action argument subtype|string
+|**required** +
+__required__|Is the argument required|boolean
+|**displayName** +
+__required__|The action argument display name|string
+|**description** +
+__required__|The action argument description|string
+|===
+
+
+[[_swagger_getactionsresponse]]
+=== GetActionsResponse
+Get actions response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**actions** +
+__required__|The Sponge actions|< <<_swagger_actionmeta,ActionMeta>> > array
+|===
+
+
+[[_swagger_actionresultmeta]]
+=== ActionResultMeta
+Represents a Sponge action result metadata
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**type** +
+__required__|The action result type|string
+|**subtype** +
+__optional__|The action result subtype|string
+|**displayName** +
+__required__|The action result display name|string
+|**description** +
+__optional__|The action result description|string
+|===
+
+
+[[_swagger_actioncallrequest]]
+=== ActionCallRequest
+Represents a Sponge action call
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|**name** +
+__required__|The action name|string
+|**args** +
+__optional__|The action arguments|< object > array
+|===
+
+
+[[_swagger_actioncallresponse]]
+=== ActionCallResponse
+Action call response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**actionName** +
+__required__|The action name|string
+|**result** +
+__required__|The action result|object
+|===
+
+
+[[_swagger_getknowledgebasesrequest]]
+=== GetKnowledgeBasesRequest
+Get knowledge bases request
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|===
+
+
+[[_swagger_getknowledgebasesresponse]]
+=== GetKnowledgeBasesResponse
+Get knowledge bases response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**knowledgeBases** +
+__required__|The Spoonge knowledge bases|< <<_swagger_knowledgebasemeta,KnowledgeBaseMeta>> > array
+|===
+
+
+[[_swagger_reloadrequest]]
+=== ReloadRequest
+Reload request
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|===
+
+
+[[_swagger_reloadresponse]]
+=== ReloadResponse
+Reload response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|===
+
+
+[[_swagger_sendeventrequest]]
+=== SendEventRequest
+Send event request
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|**name** +
+__required__|The event name|string
+|**attributes** +
+__optional__|The event attributes|< string, object > map
+|===
+
+
+[[_swagger_sendeventresponse]]
+=== SendEventResponse
+Send event response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**eventId** +
+__required__|The event id|string
+|===
+
+
+[[_swagger_getversionrequest]]
+=== GetVersionRequest
+Get version request
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|===
+
+
+[[_swagger_getversionresponse]]
+=== GetVersionResponse
+Get version response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**version** +
+__required__|The Sponge version|string
+|===
+
+
+
+
+

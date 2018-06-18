@@ -27,7 +27,7 @@
         <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
             <configuration>
                 <port>1836</port>
-                <publicActions>mpd:,tools:</publicActions>
+                <publicActions>mpd:,administration:,sample:</publicActions>
                 <securityServiceClass>org.openksavi.sponge.restapi.security.SimpleInMemorySecurityService</securityServiceClass>
             </configuration>
         </plugin>
