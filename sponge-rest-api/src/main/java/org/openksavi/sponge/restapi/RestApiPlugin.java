@@ -45,8 +45,7 @@ public class RestApiPlugin extends JPlugin {
 
     private static final Supplier<RestApiService> DEFAULT_API_SERVICE_PROVIDER = () -> new DefaultRestApiService();
 
-    private static final Supplier<RestApiSecurityService> DEFAULT_SECURITY_SERVICE_PROVIDER =
-            () -> new NoSecuritySecurityService();
+    private static final Supplier<RestApiSecurityService> DEFAULT_SECURITY_SERVICE_PROVIDER = () -> new NoSecuritySecurityService();
 
     private static final Supplier<RestApiRouteBuilder> DEFAULT_ROUTE_BUILDER_PROVIDER = () -> new RestApiRouteBuilder();
 
@@ -214,5 +213,13 @@ public class RestApiPlugin extends JPlugin {
 
     public void setService(RestApiService service) {
         this.service = service;
+    }
+
+    public RestApiSecurityService getSecurityService() {
+        return securityService;
+    }
+
+    public void setSecurityService(RestApiSecurityService securityService) {
+        this.securityService = securityService;
     }
 }
