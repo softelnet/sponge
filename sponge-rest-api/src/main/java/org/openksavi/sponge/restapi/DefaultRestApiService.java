@@ -146,7 +146,7 @@ public class DefaultRestApiService implements RestApiService {
 
         String isEventPlubliActionName = RestApiConstants.ACTION_IS_EVENT_PUBLIC;
         boolean publicByAction = engine.getOperations().existsAction(isEventPlubliActionName)
-                ? ((Boolean) engine.getOperations().call(isEventPlubliActionName, eventName)).booleanValue()
+                ? engine.getOperations().call(Boolean.class, isEventPlubliActionName, eventName).booleanValue()
                 : RestApiConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         return publicBySettings && publicByAction;
@@ -210,7 +210,7 @@ public class DefaultRestApiService implements RestApiService {
 
             String isPublicActionActionName = RestApiConstants.ACTION_IS_ACTION_PUBLIC;
             Predicate<ActionAdapter> isPublicByAction = action -> engine.getOperations().existsAction(isPublicActionActionName)
-                    ? ((Boolean) engine.getOperations().call(isPublicActionActionName, action)).booleanValue()
+                    ? engine.getOperations().call(Boolean.class, isPublicActionActionName, action).booleanValue()
                     : RestApiConstants.DEFAULT_IS_ACTION_PUBLIC;
 
             Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null

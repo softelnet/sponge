@@ -74,9 +74,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
             // Important casting to an array of objects.
             return interpreter.invokeMethod(action.getProcessor(), Action.ON_CALL_METHOD_NAME,
                     (Object[]) (args != null ? args : new Object[0]));
-        } catch (
-
-        Throwable e) {
+        } catch (Throwable e) {
             throw SpongeUtils.wrapException(action.getProcessor(), e);
         }
     }

@@ -54,7 +54,7 @@ public class ActionsTestTemplate {
             assertEquals("TEST", javaResult[1]);
 
             assertEquals(3,
-                    ((Number) engine.getOperations().call("ArrayArgumentAction", (Object) new Object[] { 1, 2, "text" })).intValue());
+                    engine.getOperations().call(Number.class, "ArrayArgumentAction", (Object) new Object[] { 1, 2, "text" }).intValue());
 
             assertFalse(engine.isError());
         } finally {
