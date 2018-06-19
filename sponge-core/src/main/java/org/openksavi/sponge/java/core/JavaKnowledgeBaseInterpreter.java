@@ -37,7 +37,7 @@ public class JavaKnowledgeBaseInterpreter extends BaseNonScriptKnowledgeBaseInte
 
     @Override
     public Object invokeMethod(Object target, String name, Object... args) {
-        return SpongeUtils.invokeMethod(target, name, args);
+        return SpongeUtils.invokeMethod(target, name, (Object[]) args);
     }
 
     @Override

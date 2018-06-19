@@ -111,7 +111,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     @Override
     public Object invokeMethod(Object target, String name, Object... args) {
         try {
-            return getInvocable().invokeMethod(target, name, args);
+            return getInvocable().invokeMethod(target, name, (Object[]) args);
         } catch (NoSuchMethodException | ScriptException e) {
             throw SpongeUtils.wrapException(target + "." + name, this, e);
         }

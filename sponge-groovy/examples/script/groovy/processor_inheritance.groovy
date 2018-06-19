@@ -9,14 +9,14 @@ void onInit() {
 }
 
 abstract class AbstractEchoAction extends Action {
-    Object calculateResult(Object[] args) {
+    Object calculateResult() {
         return 1
     }
 }
 
 class EchoAction extends AbstractEchoAction {
-    Object onCall(Object[] args) {
-        return calculateResult(args) * 2
+    Object onCall() {
+        return calculateResult() * 2
     }
 }
 

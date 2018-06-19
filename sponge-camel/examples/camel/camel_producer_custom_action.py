@@ -17,6 +17,6 @@ class UnusedCamelTrigger(Trigger):
         EPS.getVariable("sentCamelMessage_" + event.name).set(True)
 
 class CustomAction(Action):
-    def onCall(self, args):
-        EPS.setVariable("calledCustomAction", args[0].getIn().body)
+    def onCall(self, exchange):
+        EPS.setVariable("calledCustomAction", exchange.getIn().body)
         return "OK"

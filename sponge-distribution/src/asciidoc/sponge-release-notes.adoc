@@ -6,6 +6,11 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.3.0 (not released yet)
+
+* API change: `Action.onCall` callback method behavior has been changed to dynamic. Custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text):` in Python.
+
+[discrete]
 == 1.2.0 (2018-06-18)
 
 * API change: `Action.onCall` callback method signature has been changed to `Object onCall(Object[] args)`.

@@ -10,10 +10,10 @@ def onInit():
     EPS.setVariable("counter", AtomicInteger(0))
 
 class AutoAction(Action):
-    def onCall(self, args):
+    def onCall(self):
         self.logger.debug("Running")
         EPS.getVariable("counter").incrementAndGet()
-        return args
+        return None
 
 class AutoFilter(Filter):
     def onConfigure(self):

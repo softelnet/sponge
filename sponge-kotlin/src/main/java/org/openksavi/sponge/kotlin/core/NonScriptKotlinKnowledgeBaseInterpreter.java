@@ -40,7 +40,7 @@ public class NonScriptKotlinKnowledgeBaseInterpreter extends BaseNonScriptKnowle
 
     @Override
     public Object invokeMethod(Object target, String name, Object... args) {
-        return SpongeUtils.invokeMethod(target, name, args);
+        return SpongeUtils.invokeMethod(target, name, (Object[]) args);
     }
 
     @Override

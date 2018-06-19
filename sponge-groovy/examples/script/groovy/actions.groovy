@@ -15,13 +15,15 @@ class EchoAction extends Action {
     void onConfigure() {
         this.displayName = "Echo Action"
     }
-    Object onCall(Object[] args) {
-        this.logger.info("Action {} called", this.name)
-        for (arg in args) {
-            this.logger.debug("Arg: {} ({})", arg, arg.class)
-        }
 
-    	return args
+    Object onCall(int value, String text) {
+        return [value, text]
+    }
+}
+
+class ArrayArgumentAction extends Action {
+    Object onCall(arrayArg) {
+        return arrayArg.length
     }
 }
 

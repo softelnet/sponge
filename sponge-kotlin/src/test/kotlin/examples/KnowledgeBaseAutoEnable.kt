@@ -22,10 +22,10 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
     }
 
     class AutoAction : KAction() {
-        override fun onCall(args: Array<Any?>): Any? {
+        fun onCall(): Any? {
             logger.debug("Running")
             eps.getVariable<AtomicInteger>("counter").incrementAndGet()
-            return args
+            return null
         }
     }
 

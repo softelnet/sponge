@@ -8,12 +8,12 @@ def onInit():
     EPS.setVariable("result", None)
 
 class AbstractEchoAction(Action):
-    def calculateResult(self, args):
+    def calculateResult(self):
         return 1
 
 class EchoAction(AbstractEchoAction):
-    def onCall(self, args):
-        return self.calculateResult(args) * 2
+    def onCall(self):
+        return self.calculateResult() * 2
 
 def onStartup():
     result = EPS.call("EchoAction")

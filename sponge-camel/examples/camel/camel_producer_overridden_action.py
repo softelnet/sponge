@@ -26,5 +26,5 @@ class UnusedCamelTrigger(Trigger):
         EPS.getVariable("sentCamelMessage_" + event.name).set(True)
 
 class CamelProducerAction(Action):
-    def onCall(self, args):
-        return EPS.event(camel.makeInputEvent("camelEvent", args[0])).send()
+    def onCall(self, exchange):
+        return EPS.event(camel.makeInputEvent("camelEvent", exchange)).send()

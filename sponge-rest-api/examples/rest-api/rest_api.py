@@ -16,18 +16,18 @@ class UpperCase(Action):
     def onConfigure(self):
         self.argsMeta = [ ArgMeta("text", Type.STRING).displayName("Text to upper case") ]
         self.resultMeta = ResultMeta(Type.STRING).displayName("Upper case text")
-    def onCall(self, args):
+    def onCall(self, text):
         self.logger.info("Action {} called", self.name)
         EPS.getVariable("actionCalled").set(True)
-        return str(args[0]).upper()
+        return str(text).upper()
 
 class LowerCase(Action):
     def onConfigure(self):
         self.argsMeta = [ ArgMeta("text", Type.STRING).displayName("A text that will be changed to lower case") ]
         self.resultMeta = ResultMeta(Type.STRING).displayName("Lower case text")
-    def onCall(self, args):
+    def onCall(self, text):
         self.logger.info("Action {} called", self.name)
-        return str(args[0]).lower()
+        return str(text).lower()
 
 class PrivateAction(Action):
     def onCall(self, args):
@@ -45,13 +45,11 @@ class FaultyAction(Action):
         raise SpongeException("Error in " + self.name)
 
 class RestApiIsActionPublic(Action):
-    def onCall(self, args):
-        actionAdapter = args[0]
+    def onCall(self, actionAdapter):
         return not (actionAdapter.name.startswith("Private") or actionAdapter.name.startswith("RestApi"))
 
 class RestApiIsEventPublic(Action):
-    def onCall(self, args):
-        eventName = args[0]
+    def onCall(self, eventName):
         return True
 
 class Alarm(Trigger):

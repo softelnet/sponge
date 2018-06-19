@@ -25,11 +25,14 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.ProcessorNotFoundException;
+import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.core.BaseProcessorDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 
 /**
  * Action manager.
@@ -65,9 +68,15 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
         }
 
         try {
-            // Action.onCall arguments must not be null.
-            return action.getProcessor().onCall(args != null ? args : new Object[0]);
-        } catch (Throwable e) {
+            KnowledgeBaseInterpreter interpreter = ((BaseProcessorDefinition) action.getDefinition()).isJavaDefined()
+                    ? getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
+                    : action.getKnowledgeBase().getInterpreter();
+            // Important casting to an array of objects.
+            return interpreter.invokeMethod(action.getProcessor(), Action.ON_CALL_METHOD_NAME,
+                    (Object[]) (args != null ? args : new Object[0]));
+        } catch (
+
+        Throwable e) {
             throw SpongeUtils.wrapException(action.getProcessor(), e);
         }
     }

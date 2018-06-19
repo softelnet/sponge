@@ -7,14 +7,14 @@ def onInit
 end
 
 class AbstractEchoAction < Action
-    def calculateResult(args)
+    def calculateResult()
         return 1
     end
 end
 
 class EchoAction < AbstractEchoAction
-    def onCall(args)
-        return calculateResult(args) * 2
+    def onCall()
+        return calculateResult() * 2
     end
 end
 

@@ -13,12 +13,15 @@ class EchoAction < Action
     def onConfigure
         self.displayName = "Echo Action"
     end
-    def onCall(args)
+    def onCall(value, text)
         self.logger.info("Action {} called", self.name)
-        for arg in args
-            self.logger.debug("Arg: {} ({})", arg, arg.class.superclass)
-        end
-    	return args
+        return [value, text]
+    end
+end
+
+class ArrayArgumentAction < Action
+    def onCall(arrayArg)
+        return arrayArg.length
     end
 end
 

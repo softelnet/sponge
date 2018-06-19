@@ -264,14 +264,13 @@ The default Camel producer action is provided by a Java action `CamelProducerAct
 You could provide a custom implementation of a Camel producer action in two ways:
 
 * define your own implementation of `CamelProducerAction` in a knowledge base,
-* define an action in a knowledge base that takes an array that contains a single element of the class `Exchange` and specify it in the producer endpoint URI or in the message header, e.g.:
+* define an action in a knowledge base that takes an instance of `Exchange` as an argument and specify it in the producer endpoint URI or in the message header, e.g.:
 +
 .Python knowledge base
 [source,python]
 ----
 class CustomAction(Action):
-    def onCall(self, args):
-        exchange = args[0]
+    def onCall(self, exchange):
         return "OK"
 ----
 +
@@ -524,9 +523,9 @@ public interface PythonService {
 ----
 # Note that this code is interpreted by Jython in Sponge, not CPython
 class PythonUpperCase(Action):
-    def onCall(self, args):
-        result = py4j.facade.toUpperCase(args[0])
-        self.logger.debug("CPython result for {} is {}", args[0], result)
+    def onCall(self, text):
+        result = py4j.facade.toUpperCase(text)
+        self.logger.debug("CPython result for {} is {}", text, result)
         return result
 ----
 
@@ -1107,8 +1106,7 @@ from org.openksavi.sponge.restapi.security import Role, User
 ROLES_TO_KB = { Role.ADMIN:".*", Role.GUEST:"mpd"}
 
 class RestApiCanUseKnowledgeBase(Action):
-    def onCall(self, args):
-        (user, kbName) = (args[0], args[1])
+    def onCall(self, user, kbName):
         # Defined in the REST API predefined knowledge base library
         return restApiCanUseKnowledgeBase(ROLES_TO_KB, user, kbName)
 

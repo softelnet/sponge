@@ -9,11 +9,11 @@ fun onInit() {
 }
 
 abstract class AbstractEchoAction : Action() {
-    open fun calculateResult(args: Array<Any?>) = 1
+    open fun calculateResult() = 1
 }
 
 class EchoAction : AbstractEchoAction() {
-    override fun onCall(args: Array<Any?>) = calculateResult(args) * 2
+    fun onCall() = calculateResult() * 2
 }
 
 fun onStartup() {

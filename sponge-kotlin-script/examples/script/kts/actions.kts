@@ -16,11 +16,13 @@ class EchoAction : Action() {
         displayName = "Echo Action"
     }
 
-    override fun onCall(args: Array<Any?>): Any? {
-        logger.info("Action {} called", name)
-        args.forEach { logger.debug("Arg: $it (${it?.javaClass})") }
-        return args
+    fun onCall(value: Number, text: String): Array<Any?> {
+        return arrayOf(value, text)
     }
+}
+
+class ArrayArgumentAction : Action() {
+    fun onCall(arrayArg: Array<Any?>) = arrayArg.size;
 }
 
 fun onLoad() {

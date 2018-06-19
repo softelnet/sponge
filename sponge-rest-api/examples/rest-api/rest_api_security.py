@@ -9,8 +9,7 @@ from org.openksavi.sponge.restapi.security import Role, User
 ROLES_TO_KB = { Role.ADMIN:".*", Role.GUEST:"example"}
 
 class RestApiCanUseKnowledgeBase(Action):
-    def onCall(self, args):
-        (user, kbName) = (args[0], args[1])
+    def onCall(self, user, kbName):
         return restApiCanUseKnowledgeBase(ROLES_TO_KB, user, kbName)
 
 

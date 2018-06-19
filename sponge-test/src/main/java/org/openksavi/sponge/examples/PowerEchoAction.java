@@ -20,20 +20,7 @@ import org.openksavi.sponge.java.JAction;
 
 public class PowerEchoAction extends JAction {
 
-    @Override
-    public Object onCall(Object[] args) {
-        getLogger().debug("PowerEchoAction called");
-        for (int i = 0; i < args.length; i++) {
-            getLogger().debug("Arg " + i + ": " + args[i] + " (" + args[i].getClass().getName() + ")");
-            if (args[i] instanceof String) {
-                args[i] = ((String) args[i]).toUpperCase();
-            } else if (args[i] instanceof Number) {
-                args[i] = Integer.valueOf(((Number) args[i]).intValue() + 1);
-            }
-        }
-
-        getLogger().debug("Action successfuly called with {} argument(s).", args.length);
-
-        return args;
+    public Object onCall(Number value, String text) {
+        return new Object[] { value.intValue() + 1, text.toUpperCase() };
     }
 }

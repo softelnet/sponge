@@ -88,9 +88,7 @@ class MpdSetAndPlayPlaylist(Action):
             ArgMeta("minYear", Type.NUMBER).required(False).displayName("Release year (since)").description("An album minimum release year."),
             ArgMeta("maxYear", Type.NUMBER).required(False).displayName("Release year (to)").description("An album maximum release year.")]
         self.resultMeta = ResultMeta(Type.STRING).displayName("Info").description("A short info of the status of the action call.")
-    def onCall(self, args):
-        EPS.logger.info("Args {}", str(args))
-        (aArtist, aAlbum, aGenre, aMinYear, aMaxYear) = (args[0], args[1], args[2], args[3], args[4])
+    def onCall(self, aArtist, aAlbum, aGenre, aMinYear, aMaxYear):
         library = MpdLibrary()
 
         albums = mpd.server.musicDatabase.albumDatabase.listAllAlbums()

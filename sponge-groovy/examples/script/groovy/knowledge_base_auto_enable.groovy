@@ -11,10 +11,10 @@ import java.util.concurrent.atomic.AtomicInteger
  }
 
  class AutoAction extends Action {
-     Object onCall(Object[] args) {
+     Object onCall() {
          this.logger.debug("Running")
          EPS.getVariable("counter").incrementAndGet()
-         return args
+         return null
      }
  }
 

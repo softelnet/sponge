@@ -273,13 +273,13 @@ For non script knowledge bases (Java or Kotlin based) the auto-enable feature wi
 ----
 # This abstract action will not be automatically enabled.
 class AbstractCalculateAction(Action):
-    def calculateResult(self, args):
+    def calculateResult(self):
         return 1
 
 # This action will be automatically enabled.
 class CalculateAction(AbstractCalculateAction):
-    def onCall(self, args):
-        return self.calculateResult(args) * 2
+    def onCall(self):
+        return self.calculateResult() * 2
 ----
 
 You may turn off auto-enable by setting the `autoEnable` engine configuration parameter to `false` (for example in the Sponge XML configuration file). In that case you have to enable processors manually.
@@ -382,8 +382,8 @@ In addition to the inherited <<processor-methods,processor properties and method
 |===
 |Property / Method |Description
 
-|`Object onCall(args)`
-|The callback method invoked when an action is called, e.g.: `EPS.call()`. The argument in an array of `Object's` and the result is an `Object`. This method is mandatory. Every action should implement this method.
+|`Object onCall (_dynamic arguments_)`
+|The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `EPS.call()`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. This method is mandatory. Every action should implement at least one `onCall` method.
 |===
 
 The `onConfigure` method in actions is not mandatory.
@@ -395,20 +395,20 @@ The code presented below defines the action named `EchoAction` that simply retur
 [source,python]
 ----
 class EchoAction(Action): # <1>
-    def onCall(self, args): # <2>
-        return args
+    def onCall(self, text): # <2>
+        return text
 
 def onStartup():
-    result = EPS.call("EchoAction", 1, "test") # <3>
+    result = EPS.call("EchoAction", "test") # <3>
     logger.debug("Action returned: {}", result)
 ----
 <1> The definition of the action `EchoAction`. The action is represented by the class of the same name.
-<2> The action `onCall` callback method.
-<3> Calls the action named `"EchoAction"` passing two arguments.
+<2> The action `onCall` dynamic callback method that takes one argument `text` (in this case).
+<3> Calls the action named `"EchoAction"` passing one argument.
 
 .Console output
 ----
-Action returned: [1, test]
+Action returned: test
 ----
 
 === Example in Java
@@ -420,8 +420,8 @@ The code presented below defines the Java-based action named `JavaEchoAction`.
 public class JavaEchoAction extends JAction { // <1>
 
     @Override
-    public Object onCall(Object[] args) { // <2>
-        return args;
+    public Object onCall(String text) { // <2>
+        return text;
     }
 }
 ----
@@ -449,8 +449,8 @@ class UpperCase(Action):
         self.argsMeta = [
             ArgMeta("text", Type.STRING).displayName("Text to upper case").description("The text that will be converted to upper case.")]
         self.resultMeta = ResultMeta(Type.STRING).displayName("Upper case text")
-    def onCall(self, args):
-        return str(args[0]).upper()
+    def onCall(self, text):
+        return text.upper()
 ----
 
 For more information see `ArgMeta` and `ResultMeta`.
@@ -872,8 +872,25 @@ var HeartbeatFilter = Java.extend(Filter, {
 <2> Using `target` for accessing attribute `heartbeatCounter`.
 
 ===== Abstract processors
-
 The support for abstract processors is not implemented for processors written in JavaScript.
+
+===== Dynamic `onCall` callback methods in actions
+Dynamic `onCall` callback methods are not supported. Every JavaScript action has to implement the abstract `Object onCall(Object self, Object[] args)` method. Arguments are passed to an action only as an array.
+
+.JavaScript onCall method
+[source,javascript]
+----
+var EmphasizeAction = Java.extend(Action, {
+    onCall: function(self, args) {
+        self.logger.debug("Action {} called", self.name);
+        if (args.length > 0) {
+            return "*** " + args[0] + " ***";
+        } else {
+            return args;
+        }
+    }
+});
+----
 
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:

@@ -9,10 +9,10 @@ def onInit
 end
 
 class AutoAction < Action
-    def onCall(args)
+    def onCall()
         self.logger.debug("Running")
         $EPS.getVariable("counter").incrementAndGet()
-        return args
+        return nil
     end
 end
 

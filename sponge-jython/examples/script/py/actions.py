@@ -13,11 +13,12 @@ def onInit():
 class EchoAction(Action):
     def onConfigure(self):
         self.displayName = "Echo Action"
-    def onCall(self, args):
-        self.logger.info("Action {} called", self.name)
-        for arg in args:
-            self.logger.debug("Arg: {} ({})", arg, type(arg))
-    	return args
+    def onCall(self, value, text):
+    	return [value, text]
+
+class ArrayArgumentAction(Action):
+    def onCall(self, arrayArg):
+        return len(arrayArg)
 
 def onLoad():
     EPS.enableJava(PowerEchoAction)

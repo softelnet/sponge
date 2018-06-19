@@ -24,7 +24,6 @@ import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.camel.util.jsse.TrustManagersParameters;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
@@ -34,12 +33,6 @@ import org.openksavi.sponge.event.EventDefinition;
  * Camel integration utility methods.
  */
 public abstract class CamelUtils {
-
-    public static void assertCamelProducerActionArgs(Action action, Object... args) {
-        if (args == null || args.length != 1 || !(args[0] instanceof Exchange)) {
-            throw new IllegalArgumentException(action.getName() + " requires exactly one argument of class " + Exchange.class);
-        }
-    }
 
     public static Event getEvent(Exchange exchange) {
         if (exchange.getIn() != null) {

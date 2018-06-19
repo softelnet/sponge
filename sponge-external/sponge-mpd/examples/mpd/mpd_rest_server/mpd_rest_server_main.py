@@ -15,8 +15,8 @@ class UpperCase(Action):
             ArgMeta("text", Type.STRING).displayName("Text to upper case").description("The text that will be converted to upper case."),
             ArgMeta("suffix", Type.OBJECT).required(False).displayName("Text suffix").description("Not used")]
         self.resultMeta = ResultMeta(Type.STRING).displayName("Upper case text")
-    def onCall(self, args):
+    def onCall(self, text, optionalText = None):
         self.logger.info("Action {} called", self.name)
-        return str(args[0]).upper() + ( " " + str(args[1]).upper() if (len(args) > 1 and args[1] is not None) else "")
+        return str(text).upper() + ( " " + str(optionalText).upper() if optionalText is not None else "")
 
 

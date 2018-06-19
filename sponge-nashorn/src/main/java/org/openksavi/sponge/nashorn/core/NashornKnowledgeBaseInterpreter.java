@@ -163,4 +163,14 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
     protected String getScriptClassInstancePoviderFormat() {
         return "new %s();";
     }
+
+    @Override
+    public Object invokeMethod(Object target, String name, Object... args) {
+        // Limitation in invoking arbitrary method.
+        if (target instanceof NashornAction) {
+            return ((NashornAction) target).onCall(args != null ? args : new Object[0]);
+        } else {
+            return super.invokeMethod(target, name, (Object[]) args);
+        }
+    }
 }

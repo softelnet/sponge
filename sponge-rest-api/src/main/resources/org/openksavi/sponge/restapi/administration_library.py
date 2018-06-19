@@ -9,7 +9,7 @@ class AdministrationReload(Action):
         self.description = "Reloads Sponge knowledge bases."
         self.argsMeta = []
         self.resultMeta = ResultMeta(Type.VOID)
-    def onCall(self, args):
+    def onCall(self):
         EPS.reload()
 
 class AdministrationGetVersion(Action):
@@ -18,6 +18,6 @@ class AdministrationGetVersion(Action):
         self.description = "Shows the version of Sponge."
         self.argsMeta = []
         self.resultMeta = ResultMeta(Type.STRING).displayName("Version").description("Sponge version")
-    def onCall(self, args):
+    def onCall(self):
         return EPS.version
 

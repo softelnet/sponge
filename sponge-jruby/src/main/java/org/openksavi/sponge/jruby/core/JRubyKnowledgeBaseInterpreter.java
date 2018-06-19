@@ -260,7 +260,9 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     public Object invokeMethod(Object target, String name, Object... args) {
         try {
             IRubyObject rubyObject = JavaEmbedUtils.javaToRuby(container.getProvider().getRuntime(), target);
-            return container.callMethod(rubyObject, name, args);
+
+            // Important casting to an array of objects.
+            return container.callMethod(rubyObject, name, (Object[]) args);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(target + "." + name, this, e);
         }

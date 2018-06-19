@@ -22,6 +22,13 @@ var EchoAction = Java.extend(Action, {
     }
 });
 
+var ArrayArgumentAction = Java.extend(Action, {
+    onCall: function(self, arrayArg) {
+        // Dynamic onCall limitation for JavaScript.
+        return arrayArg[0].length;
+    }
+});
+
 function onLoad() {
     EPS.enableJava(org.openksavi.sponge.examples.PowerEchoAction.class);
 }

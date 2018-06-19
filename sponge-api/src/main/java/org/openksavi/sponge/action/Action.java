@@ -19,15 +19,11 @@ package org.openksavi.sponge.action;
 import org.openksavi.sponge.Processor;
 
 /**
- * Action.
+ * Action. Every action should implement at least one {@code onCall} method that performs an operation and returns a result. For example:
+ * Object onCall(Number value, String text).
  */
 public interface Action extends Processor<ActionAdapter>, ActionOperations {
 
-    /**
-     * A callback method that performs an operation and returns a result.
-     *
-     * @param args arguments for the action call. This parameter should not be {@code null}.
-     * @return result of executing action.
-     */
-    Object onCall(Object[] args);
+    /** The onCall method name. */
+    public static final String ON_CALL_METHOD_NAME = "onCall";
 }
