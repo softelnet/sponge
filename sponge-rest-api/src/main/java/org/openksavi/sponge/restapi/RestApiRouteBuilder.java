@@ -64,9 +64,13 @@ public class RestApiRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        createErrorHandler();
         createRestConfiguration();
-
         createRestDefinition();
+    }
+
+    protected void createErrorHandler() {
+        //
     }
 
     protected void createRestConfiguration() {
@@ -111,37 +115,32 @@ public class RestApiRouteBuilder extends RouteBuilder {
                 .param().name("body").type(body).description("Get Sponge version request").endParam()
                 .responseMessage().code(200).message("The Sponge version response").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> apiService.getVersion(
-                            exchange.getIn().getBody(RestGetVersionRequest.class)))
+                    .setBody(exchange -> apiService.getVersion(exchange.getIn().getBody(RestGetVersionRequest.class)))
                 .endRest()
             .post("/knowledgeBases").description("Get knowledge bases").type(RestGetKnowledgeBasesRequest.class)
                     .outType(RestGetKnowledgeBasesResponse.class)
                 .param().name("body").type(body).description("Get knowledge bases request").endParam()
                 .responseMessage().code(200).message("Get knowledge bases response").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> apiService.getKnowledgeBases(
-                            exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class)))
+                    .setBody(exchange -> apiService.getKnowledgeBases(exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class)))
                 .endRest()
             .post("/actions").description("Get actions").type(RestGetActionsRequest.class).outType(RestGetActionsResponse.class)
                 .param().name("body").type(body).description("Get actions request").endParam()
                 .responseMessage().code(200).message("Get actions response").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> apiService.getActions(
-                            exchange.getIn().getBody(RestGetActionsRequest.class)))
+                    .setBody(exchange -> apiService.getActions(exchange.getIn().getBody(RestGetActionsRequest.class)))
                 .endRest()
             .post("/call").description("Call an action").type(RestActionCallRequest.class).outType(RestActionCallResponse.class)
                 .param().name("body").type(body).description("Call action request").endParam()
                 .responseMessage().code(200).message("The action call response").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> apiService.call(
-                            exchange.getIn().getBody(RestActionCallRequest.class)))
+                    .setBody(exchange -> apiService.call(exchange.getIn().getBody(RestActionCallRequest.class)))
                 .endRest()
             .post("/send").description("Send a new event").type(RestSendEventRequest.class).outType(RestSendEventResponse.class)
                 .param().name("body").type(body).description("Send event request").endParam()
                 .responseMessage().code(200).message("The send event response").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> apiService.send(
-                            exchange.getIn().getBody(RestSendEventRequest.class)))
+                    .setBody(exchange -> apiService.send(exchange.getIn().getBody(RestSendEventRequest.class)))
                 .endRest();
 
         if (settings.isPublishReload()) {
@@ -149,8 +148,7 @@ public class RestApiRouteBuilder extends RouteBuilder {
                 .param().name("body").type(body).description("Reload knowledge bases request").endParam()
                 .responseMessage().code(200).message("The reload response").endResponseMessage()
                 .route()
-                    .setBody((exchange) -> apiService.reload(
-                            exchange.getIn().getBody(RestReloadRequest.class)))
+                    .setBody(exchange -> apiService.reload(exchange.getIn().getBody(RestReloadRequest.class)))
                     .endRest();
         }
         // @formatter:on

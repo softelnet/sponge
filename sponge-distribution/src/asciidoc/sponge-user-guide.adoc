@@ -455,6 +455,22 @@ class UpperCase(Action):
 
 For more information see `ArgMeta` and `ResultMeta`.
 
+=== Implementing interfaces
+Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.
+
+.Action implementing a Java interface
+[source,python]
+----
+from org.openksavi.sponge.integration.tests.core import TestActionVisibiliy
+
+class EdvancedAction(Action, TestActionVisibiliy): # <1>
+    def onCall(self, text):
+        return text.upper()
+    def isVisible(self, context):
+        return context == "day"
+----
+<1> The Java interface `TestActionVisibiliy` declares only one method `boolean isVisible(Object context)`.
+
 == Plugins
 Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
 
