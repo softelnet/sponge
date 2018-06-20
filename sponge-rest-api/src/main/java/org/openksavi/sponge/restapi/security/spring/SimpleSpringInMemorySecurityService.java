@@ -27,9 +27,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.security.BaseInMemoryKnowledgeBaseProvidedSecurityService;
-import org.openksavi.sponge.restapi.security.Role;
 import org.openksavi.sponge.restapi.security.User;
 
 public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
@@ -50,19 +48,12 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
 
     @Override
     public User authenticateUser(String username, String password) {
-        if (username == null) {
-            User user = new User(RestApiConstants.DEFAULT_GUEST_USERNAME, password);
-            user.addRoles(Role.GUEST);
-
-            return user;
-        }
-
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             User user = new User(username, password);
-            authentication.getAuthorities().stream().map(a -> Role.valueOf(a.getAuthority())).forEach(user::addRole);
+            authentication.getAuthorities().stream().map(a -> a.getAuthority()).forEach(user::addRole);
 
             return user;
         } catch (AuthenticationException e) {
@@ -78,7 +69,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
 
             if (user != null) {
                 return new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(),
-                        user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList()));
+                        user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()));
             }
 
             throw new BadCredentialsException("Incorrent username/password");

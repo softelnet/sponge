@@ -27,14 +27,14 @@ public class User {
 
     private String password;
 
-    private Set<Role> roles = Collections.synchronizedSet(new LinkedHashSet<>());
+    private Set<String> roles = Collections.synchronizedSet(new LinkedHashSet<>());
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
     }
 
-    public User(String name, String password, Role... newRoles) {
+    public User(String name, String password, String... newRoles) {
         this(name, password);
 
         addRoles(newRoles);
@@ -60,23 +60,23 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void addRoles(Role... newRoles) {
+    public void addRoles(String... newRoles) {
         Arrays.stream(newRoles).forEach(role -> addRole(role));
     }
 
-    public void addRole(Role role) {
+    public void addRole(String role) {
         roles.add(role);
     }
 
-    public void removeRole(Role role) {
+    public void removeRole(String role) {
         roles.remove(role);
     }
 
-    public boolean hasRole(Role role) {
+    public boolean hasRole(String role) {
         return roles.contains(role);
     }
 

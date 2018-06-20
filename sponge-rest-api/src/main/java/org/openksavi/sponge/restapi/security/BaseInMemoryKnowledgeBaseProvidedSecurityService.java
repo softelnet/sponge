@@ -60,8 +60,8 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
         getUser(user.getName()).copyFrom(user);
     }
 
-    protected String hashPassword(String password) {
-        return password != null ? DigestUtils.sha256Hex(HASH_SALT + password) : null;
+    protected String hashPassword(String username, String password) {
+        return password != null ? DigestUtils.sha256Hex((username != null ? username.toLowerCase() : "") + password) : null;
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
      */
     protected User verifyInMemory(String username, String password) {
         // Hash the password.
-        String hashedPassword = hashPassword(password);
+        String hashedPassword = hashPassword(username, password);
 
         return users.stream().filter(user -> Objects.equals(user.getName(), username))
                 .filter(user -> Objects.equals(user.getPassword(), hashedPassword)).findAny().orElse(null);

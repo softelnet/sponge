@@ -18,8 +18,6 @@ package org.openksavi.sponge.restapi.security;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
-
 public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
 
     public SimpleInMemorySecurityService() {
@@ -28,13 +26,6 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
 
     @Override
     public User authenticateUser(String username, String password) {
-        if (username == null) {
-            User user = new User(RestApiConstants.DEFAULT_GUEST_USERNAME, password);
-            user.addRoles(Role.GUEST);
-
-            return user;
-        }
-
         User user = verifyInMemory(username, password);
         Validate.isTrue(user != null, "Incorrent username/password");
 

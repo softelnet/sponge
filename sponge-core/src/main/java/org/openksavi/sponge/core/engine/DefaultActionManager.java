@@ -98,7 +98,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     public List<ActionAdapter> getActionAdapters(String knowledgeBaseRegexp, String actionNameRegexp) {
         return registeredActions.values().stream()
                 .filter(adapter -> (knowledgeBaseRegexp == null || adapter.getKnowledgeBase().getName().matches(knowledgeBaseRegexp))
-                        || (actionNameRegexp == null || adapter.getName().matches(actionNameRegexp)))
+                        && (actionNameRegexp == null || adapter.getName().matches(actionNameRegexp)))
                 .collect(Collectors.toList());
     }
 }

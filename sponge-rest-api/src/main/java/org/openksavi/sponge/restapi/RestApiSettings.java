@@ -56,6 +56,8 @@ public class RestApiSettings {
     /** If {@code true} then the reload operation will be published. The default value is {@code true}. */
     private boolean publishReload = RestApiConstants.DEFAULT_PUBLISH_RELOAD;
 
+    private boolean allowAnonymous = RestApiConstants.DEFAULT_ALLOW_ANONYMOUS;
+
     public String getRestComponentId() {
         return restComponentId;
     }
@@ -134,5 +136,13 @@ public class RestApiSettings {
 
     public void setPublishReload(boolean publishReload) {
         this.publishReload = publishReload;
+    }
+
+    public boolean isAllowAnonymous() {
+        return allowAnonymous;
+    }
+
+    public void setAllowAnonymous(boolean allowAnonymous) {
+        this.allowAnonymous = allowAnonymous;
     }
 }

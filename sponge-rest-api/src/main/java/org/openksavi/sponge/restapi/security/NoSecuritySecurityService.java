@@ -16,21 +16,18 @@
 
 package org.openksavi.sponge.restapi.security;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.restapi.RestApiUtils;
 
 public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
-    private User createGuestUser() {
-        User user = new User("guest", null);
-        user.addRoles(Role.ADMIN, Role.STANDARD, Role.GUEST);
-
-        return user;
-    }
-
     @Override
     public User authenticateUser(String username, String password) {
-        return createGuestUser();
+        Validate.isTrue(username == null, "Only anonymous access is allowed in this security configuration");
+        return RestApiUtils.createAnonymousUser();
     }
 
     @Override

@@ -6,6 +6,12 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.3.1 (not released yet)
+
+* Support for custom roles in the REST API. Roles are represented as String rather than an enumeration.
+* Minor bug fixes.
+
+[discrete]
 == 1.3.0 (2018-06-20)
 
 * API change: `Action.onCall` callback method behavior has been changed to dynamic. Custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text):` in Python.

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
@@ -47,7 +48,6 @@ import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
 import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.security.Role;
 import org.openksavi.sponge.restapi.security.User;
 
 /**
@@ -114,10 +114,10 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
 
+            User user = authenticateUser(request.getUsername(), request.getPassword());
+
             actionAdapter = engine.getActionManager().getActionAdapter(request.getName());
             Validate.notNull(actionAdapter, "The action %s doesn't exist", request.getName());
-
-            User user = securityService.authenticateUser(request.getUsername(), request.getPassword());
             Validate.isTrue(securityService.canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
 
             return new RestActionCallResponse(request.getName(), engine.getActionManager().callAction(request.getName(),
@@ -157,7 +157,7 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
 
-            User user = securityService.authenticateUser(request.getUsername(), request.getPassword());
+            User user = authenticateUser(request.getUsername(), request.getPassword());
             Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event %s", request.getName());
             Validate.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
 
@@ -184,7 +184,7 @@ public class DefaultRestApiService implements RestApiService {
         }
 
         try {
-            User user = securityService.authenticateUser(request.getUsername(), request.getPassword());
+            User user = authenticateUser(request.getUsername(), request.getPassword());
 
             return new RestGetKnowledgeBasesResponse(engine.getKnowledgeBaseManager().getKnowledgeBases().stream()
                     .filter(kb -> securityService.canUseKnowledgeBase(user, kb))
@@ -203,7 +203,7 @@ public class DefaultRestApiService implements RestApiService {
                 request = new RestGetActionsRequest();
             }
 
-            User user = securityService.authenticateUser(request.getUsername(), request.getPassword());
+            User user = authenticateUser(request.getUsername(), request.getPassword());
 
             boolean actualMetadataRequired = request.getMetadataRequired() != null ? request.getMetadataRequired()
                     : RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
@@ -266,9 +266,9 @@ public class DefaultRestApiService implements RestApiService {
                 request = new RestReloadRequest();
             }
 
-            User user = securityService.authenticateUser(request.getUsername(), request.getPassword());
+            User user = authenticateUser(request.getUsername(), request.getPassword());
 
-            Validate.isTrue(user.hasRole(Role.ADMIN), "No privileges to reload Sponge knowledge bases");
+            Validate.isTrue(user.hasRole(RestApiConstants.PREDEFINED_ROLE_ADMIN), "No privileges to reload Sponge knowledge bases");
 
             engine.reload();
 
@@ -277,5 +277,17 @@ public class DefaultRestApiService implements RestApiService {
             engine.handleError("REST reload", e);
             return setupErrorResponse(new RestReloadResponse(), e);
         }
+    }
+
+    protected User authenticateUser(String username, String password) {
+        if (username == null) {
+            if (settings.isAllowAnonymous()) {
+                return RestApiUtils.createAnonymousUser();
+            } else {
+                throw new SpongeException("Anonymous access is not allowed");
+            }
+        }
+
+        return securityService.authenticateUser(username.toLowerCase(), password);
     }
 }

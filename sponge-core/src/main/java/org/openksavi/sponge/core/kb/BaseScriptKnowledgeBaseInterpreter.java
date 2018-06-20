@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.kb;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.time.Duration;
@@ -30,9 +29,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.Type;
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.Type;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.config.Configuration;
@@ -151,8 +150,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 if (reader != null) {
                     doLoad(reader, script.getName());
                 }
-            } catch (IOException e) {
-                throw SpongeUtils.wrapException("load", this, e);
+            } catch (Throwable e) {
+                throw SpongeUtils.wrapException(script.getName(), this, e);
             }
         }
     }

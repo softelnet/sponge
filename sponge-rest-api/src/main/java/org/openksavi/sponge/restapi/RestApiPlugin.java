@@ -91,6 +91,7 @@ public class RestApiPlugin extends JPlugin {
         }
 
         settings.setPublishReload(configuration.getBoolean(RestApiConstants.TAG_PUBLISH_RELOAD, settings.isPublishReload()));
+        settings.setAllowAnonymous(configuration.getBoolean(RestApiConstants.TAG_ALLOW_ANONYMOUS, settings.isAllowAnonymous()));
 
         autoStart = configuration.getBoolean(RestApiConstants.TAG_AUTO_START, isAutoStart());
 

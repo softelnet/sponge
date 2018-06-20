@@ -43,6 +43,8 @@ public final class RestApiConstants {
 
     public static final boolean DEFAULT_PUBLISH_RELOAD = true;
 
+    public static final boolean DEFAULT_ALLOW_ANONYMOUS = true;
+
     public static final String REST_PARAM_ACTIONS_METADATA_REQUIRED_NAME = "metadataRequired";
 
     public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = true;
@@ -73,13 +75,19 @@ public final class RestApiConstants {
 
     public static final String TAG_PUBLISH_RELOAD = "publishReload";
 
+    public static final String TAG_ALLOW_ANONYMOUS = "allowAnonymous";
+
     public static final String TAG_ROUTE_BUILDER_CLASS = "routeBuilderClass";
 
     public static final String TAG_API_SERVICE_CLASS = "apiServiceClass";
 
     public static final String TAG_SECURITY_SERVICE_CLASS = "securityServiceClass";
 
-    public static final String DEFAULT_GUEST_USERNAME = "guest";
+    public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
+
+    public static final String PREDEFINED_ROLE_ADMIN = "admin";
+
+    public static final String PREDEFINED_ROLE_GUEST = "guest";
 
     private RestApiConstants() {
         //

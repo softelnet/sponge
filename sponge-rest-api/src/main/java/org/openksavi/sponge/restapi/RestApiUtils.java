@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi;
 
+import org.openksavi.sponge.restapi.security.User;
+
 /**
  * A set of REST API utility methods.
  */
@@ -23,5 +25,12 @@ public abstract class RestApiUtils {
 
     private RestApiUtils() {
         //
+    }
+
+    public static User createAnonymousUser() {
+        User user = new User(RestApiConstants.DEFAULT_ANONYMOUS_USERNAME, null);
+        user.addRoles(RestApiConstants.PREDEFINED_ROLE_GUEST);
+
+        return user;
     }
 }

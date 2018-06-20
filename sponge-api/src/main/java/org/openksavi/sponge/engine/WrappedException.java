@@ -40,4 +40,9 @@ public class WrappedException extends SpongeException {
     public String getSourceName() {
         return sourceName;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " in " + sourceName;
+    }
 }
