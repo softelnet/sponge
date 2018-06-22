@@ -67,10 +67,11 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
             throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
         }
 
+        KnowledgeBaseInterpreter interpreter = ((BaseProcessorDefinition) action.getDefinition()).isJavaDefined()
+                ? getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
+                : action.getKnowledgeBase().getInterpreter();
         try {
-            KnowledgeBaseInterpreter interpreter = ((BaseProcessorDefinition) action.getDefinition()).isJavaDefined()
-                    ? getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
-                    : action.getKnowledgeBase().getInterpreter();
+
             // Important casting to an array of objects.
             return interpreter.invokeMethod(action.getProcessor(), Action.ON_CALL_METHOD_NAME,
                     (Object[]) (args != null ? args : new Object[0]));

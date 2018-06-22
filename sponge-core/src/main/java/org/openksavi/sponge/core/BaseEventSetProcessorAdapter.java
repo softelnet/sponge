@@ -29,6 +29,7 @@ import org.openksavi.sponge.EventSetProcessor;
 import org.openksavi.sponge.EventSetProcessorAdapter;
 import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.EventSetProcessorState;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 
 /**
@@ -117,7 +118,11 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
 
     @Override
     public final void processEvent(Event event) {
-        onEvent(event);
+        try {
+            onEvent(event);
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(getProcessor(), e);
+        }
     }
 
     protected abstract void onEvent(Event event);

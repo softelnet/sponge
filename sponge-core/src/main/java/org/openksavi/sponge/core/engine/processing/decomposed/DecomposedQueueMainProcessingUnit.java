@@ -227,7 +227,7 @@ public class DecomposedQueueMainProcessingUnit extends BaseMainProcessingUnit {
                                     try {
                                         getHandler(adapter.getType()).processEvent(adapter, event);
                                     } catch (Throwable e) {
-                                        getEngine().handleError("WorkerThread", e);
+                                        getEngine().handleError(adapter, e);
                                     }
                                 }, workerThreadPool.getExecutor()).handle((result, exception) -> {
                                     decomposedQueue.release(entry);

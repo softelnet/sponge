@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.engine.ExceptionContext;
 import org.openksavi.sponge.engine.ExceptionHandler;
-import org.openksavi.sponge.engine.WrappedException;
 
 /**
  * Logging exception handler.
@@ -39,7 +38,7 @@ public class LoggingExceptionHandler implements ExceptionHandler {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Error" + ((context.getSourceName() != null) ? (" in " + context.getSourceName()) : "") + ":\n");
-        sb.append(Throwables.getCausalChain(exception instanceof WrappedException ? exception.getCause() : exception).stream()
+        sb.append(Throwables.getCausalChain(exception).stream()
                 .map(e -> " * " + e.toString()).collect(Collectors.joining("\n")));
 
         sb.append("\nStack trace:\n" + Throwables.getStackTraceAsString(exception));

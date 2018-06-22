@@ -77,6 +77,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.ProcessorOperations;
 import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
@@ -311,7 +312,7 @@ public abstract class SpongeUtils {
     }
 
     public static SpongeException wrapException(Processor<?> processor, Throwable throwable) {
-        return doWrapException(processor.getName(), processor.getKnowledgeBase().getInterpreter(), throwable);
+        return doWrapException(getProcessorQualifiedName(processor).toString(), processor.getKnowledgeBase().getInterpreter(), throwable);
     }
 
     public static SpongeException wrapException(KnowledgeBaseInterpreter interpreter, Throwable throwable) {
@@ -319,6 +320,13 @@ public abstract class SpongeUtils {
     }
 
     public static SpongeException wrapException(String sourceName, KnowledgeBaseInterpreter interpreter, Throwable throwable) {
+        return doWrapException(sourceName, interpreter, throwable);
+    }
+
+    public static SpongeException wrapInvokeException(Object target, String method, KnowledgeBaseInterpreter interpreter,
+            Throwable throwable) {
+        String sourceName =
+                (target instanceof ProcessorOperations ? getProcessorQualifiedName((ProcessorOperations) target) : target) + "." + method;
         return doWrapException(sourceName, interpreter, throwable);
     }
 
@@ -540,6 +548,12 @@ public abstract class SpongeUtils {
         security.setAlgorithm(securityConfiguration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
 
         return security;
+    }
+
+    public static ProcessorQualifiedName getProcessorQualifiedName(ProcessorOperations processorOperations) {
+        return new ProcessorQualifiedName(
+                processorOperations.getKnowledgeBase() != null ? processorOperations.getKnowledgeBase().getName() : null,
+                processorOperations.getName());
     }
 
     protected SpongeUtils() {

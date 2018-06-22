@@ -653,8 +653,8 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
      */
     @Override
     public void handleError(ProcessorAdapter<?> processorAdapter, Throwable e) {
-        handleError((processorAdapter != null && processorAdapter.getName() != null) ? processorAdapter.getName() : "unknown",
-                processorAdapter, e);
+        handleError((processorAdapter != null && processorAdapter.getName() != null)
+                ? SpongeUtils.getProcessorQualifiedName(processorAdapter).toString() : "unknown", processorAdapter, e);
     }
 
     /**

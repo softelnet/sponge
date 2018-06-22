@@ -17,6 +17,7 @@
 package org.openksavi.sponge.core.engine.processing;
 
 import org.openksavi.sponge.ProcessorAdapter;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
@@ -40,7 +41,7 @@ public class TriggerMainProcessingUnitHandler extends BaseMainProcessingUnitHand
                 triggerAdapter.getProcessor().onRun(event);
             }
         } catch (Throwable e) {
-            getProcessingUnit().getEngine().handleError(adapter, e);
+            throw SpongeUtils.wrapException(triggerAdapter.getProcessor(), e);
         }
     }
 }

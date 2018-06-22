@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.engine.processing;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessableThreadPool;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
@@ -99,7 +100,11 @@ public class DefaultFilterProcessingUnit extends BaseProcessingUnit<FilterAdapte
      * @return {@code true} if the filter accepts the specified event.
      */
     protected boolean runFilter(FilterAdapter filterContext, Event event) {
-        return filterContext.getProcessor().onAccept(event);
+        try {
+            return filterContext.getProcessor().onAccept(event);
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(filterContext.getProcessor(), e);
+        }
     }
 
     /**

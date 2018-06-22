@@ -113,7 +113,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
         try {
             return getInvocable().invokeMethod(target, name, (Object[]) args);
         } catch (NoSuchMethodException | ScriptException e) {
-            throw SpongeUtils.wrapException(target + "." + name, this, e);
+            throw SpongeUtils.wrapInvokeException(target, name, this, e);
         }
     }
 
