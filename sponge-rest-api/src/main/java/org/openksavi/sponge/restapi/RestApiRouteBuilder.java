@@ -77,13 +77,16 @@ public class RestApiRouteBuilder extends RouteBuilder {
         // @formatter:off
         RestConfigurationDefinition restConfiguration = restConfiguration().component(settings.getRestComponentId())
             .bindingMode(RestBindingMode.json)
-            .port(settings.getPort())
             .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
             .enableCORS(true)
             .contextPath("/")
             // Add swagger api-doc out of the box.
             .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()));
         // @formatter:on
+
+        if (settings.getPort() != null) {
+            restConfiguration.port(settings.getPort());
+        }
 
         if (settings.getHost() != null) {
             restConfiguration.host(settings.getHost());

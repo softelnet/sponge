@@ -116,25 +116,33 @@ public class DefaultRestApiService implements RestApiService {
 
             User user = authenticateUser(request.getUsername(), request.getPassword());
 
-            actionAdapter = engine.getActionManager().getActionAdapter(request.getName());
+            actionAdapter = getEngine().getActionManager().getActionAdapter(request.getName());
             Validate.notNull(actionAdapter, "The action %s doesn't exist", request.getName());
-            Validate.isTrue(securityService.canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
+            Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
 
-            return new RestActionCallResponse(request.getName(), engine.getActionManager().callAction(request.getName(),
+            return new RestActionCallResponse(request.getName(), getEngine().getActionManager().callAction(request.getName(),
                     request.getArgs() != null ? request.getArgs().toArray() : null));
         } catch (Exception e) {
             if (actionAdapter != null) {
-                engine.handleError(actionAdapter, e);
+                getEngine().handleError(actionAdapter, e);
             } else {
-                engine.handleError("REST call", e);
+                getEngine().handleError("REST call", e);
             }
 
             return setupErrorResponse(new RestActionCallResponse(request.getName()), e);
         }
     }
 
+    protected boolean canCallAction(User user, ActionAdapter actionAdapter) {
+        if (RestApiUtils.isActionPrivate(actionAdapter.getName())) {
+            return false;
+        }
+
+        return securityService.canCallAction(user, actionAdapter);
+    }
+
     protected <T extends BaseRestResponse> T setupErrorResponse(T response, Throwable exception) {
-        errorResponseProvider.applyException(response, exception);
+        errorResponseProvider.applyException(this, response, exception);
 
         return response;
     }
@@ -145,8 +153,8 @@ public class DefaultRestApiService implements RestApiService {
                 : RestApiConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         String isEventPlubliActionName = RestApiConstants.ACTION_IS_EVENT_PUBLIC;
-        boolean publicByAction = engine.getOperations().existsAction(isEventPlubliActionName)
-                ? engine.getOperations().call(Boolean.class, isEventPlubliActionName, eventName).booleanValue()
+        boolean publicByAction = getEngine().getOperations().existsAction(isEventPlubliActionName)
+                ? getEngine().getOperations().call(Boolean.class, isEventPlubliActionName, eventName).booleanValue()
                 : RestApiConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         return publicBySettings && publicByAction;
@@ -158,17 +166,18 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(request, "The request must not be null");
 
             User user = authenticateUser(request.getUsername(), request.getPassword());
-            Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event %s", request.getName());
+            Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event named '%s'",
+                    request.getName());
             Validate.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
 
-            EventDefinition definition = engine.getOperations().event(request.getName());
+            EventDefinition definition = getEngine().getOperations().event(request.getName());
             if (request.getAttributes() != null) {
                 request.getAttributes().forEach((name, value) -> definition.set(name, value));
             }
 
             return new RestSendEventResponse(definition.send().getId());
         } catch (Exception e) {
-            engine.handleError("REST send", e);
+            getEngine().handleError("REST send", e);
             return setupErrorResponse(new RestSendEventResponse(), e);
         }
     }
@@ -186,12 +195,12 @@ public class DefaultRestApiService implements RestApiService {
         try {
             User user = authenticateUser(request.getUsername(), request.getPassword());
 
-            return new RestGetKnowledgeBasesResponse(engine.getKnowledgeBaseManager().getKnowledgeBases().stream()
+            return new RestGetKnowledgeBasesResponse(getEngine().getKnowledgeBaseManager().getKnowledgeBases().stream()
                     .filter(kb -> securityService.canUseKnowledgeBase(user, kb))
                     .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRestKnowledgeBase(kb))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
-            engine.handleError("REST getKnowledgeBases", e);
+            getEngine().handleError("REST getKnowledgeBases", e);
             return setupErrorResponse(new RestGetKnowledgeBasesResponse(), e);
         }
     }
@@ -209,8 +218,8 @@ public class DefaultRestApiService implements RestApiService {
                     : RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
 
             String isPublicActionActionName = RestApiConstants.ACTION_IS_ACTION_PUBLIC;
-            Predicate<ActionAdapter> isPublicByAction = action -> engine.getOperations().existsAction(isPublicActionActionName)
-                    ? engine.getOperations().call(Boolean.class, isPublicActionActionName, action).booleanValue()
+            Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().existsAction(isPublicActionActionName)
+                    ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, action).booleanValue()
                     : RestApiConstants.DEFAULT_IS_ACTION_PUBLIC;
 
             Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
@@ -220,16 +229,16 @@ public class DefaultRestApiService implements RestApiService {
                             .findAny().isPresent()
                     : RestApiConstants.DEFAULT_IS_ACTION_PUBLIC;
 
-            return new RestGetActionsResponse(engine.getActions().stream().filter(isPublicByAction).filter(isPublicBySettings)
+            return new RestGetActionsResponse(getEngine().getActions().stream().filter(isPublicByAction).filter(isPublicBySettings)
                     .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
                     .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                    .filter(action -> securityService.canCallAction(user, action))
+                    .filter(action -> canCallAction(user, action))
                     .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
                             createRestKnowledgeBase(action.getKnowledgeBase()), action.getMeta(), createActionArgMetaList(action),
                             createActionResultMeta(action)))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
-            engine.handleError("REST getActions", e);
+            getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new RestGetActionsResponse(), e);
         }
     }
@@ -239,9 +248,9 @@ public class DefaultRestApiService implements RestApiService {
         try {
             // Privileges not checked here.
 
-            return new RestGetVersionResponse(engine.getVersion());
+            return new RestGetVersionResponse(getEngine().getVersion());
         } catch (Exception e) {
-            engine.handleError("REST getVersion", e);
+            getEngine().handleError("REST getVersion", e);
             return setupErrorResponse(new RestGetVersionResponse(), e);
         }
     }
@@ -268,13 +277,13 @@ public class DefaultRestApiService implements RestApiService {
 
             User user = authenticateUser(request.getUsername(), request.getPassword());
 
-            Validate.isTrue(user.hasRole(RestApiConstants.PREDEFINED_ROLE_ADMIN), "No privileges to reload Sponge knowledge bases");
+            Validate.isTrue(user.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
 
-            engine.reload();
+            getEngine().reload();
 
             return new RestReloadResponse();
         } catch (Exception e) {
-            engine.handleError("REST reload", e);
+            getEngine().handleError("REST reload", e);
             return setupErrorResponse(new RestReloadResponse(), e);
         }
     }

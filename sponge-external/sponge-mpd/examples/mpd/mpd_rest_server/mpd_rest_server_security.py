@@ -5,12 +5,12 @@ MPD / REST API
 
 from org.openksavi.sponge.restapi.security import User
 
-# Simple access configuration role -> knowledge base name regexp.
-ROLES_TO_KB = { "admin":".*", "guest":"mpd"}
+# Simple access configuration: role -> knowledge base names regexps.
+ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):
-        return restApiCanUseKnowledgeBase(ROLES_TO_KB, user, kbName)
+        return restApi.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
 
 def onStartup():
     # Set up users.

@@ -24,5 +24,5 @@ import org.openksavi.sponge.restapi.model.response.BaseRestResponse;
 @FunctionalInterface
 public interface RestApiErrorResponseProvider {
 
-    void applyException(BaseRestResponse response, Throwable exception);
+    void applyException(RestApiService service, BaseRestResponse response, Throwable exception);
 }

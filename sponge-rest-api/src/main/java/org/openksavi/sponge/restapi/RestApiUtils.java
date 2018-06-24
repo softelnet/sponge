@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.restapi;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+
 import org.openksavi.sponge.restapi.security.User;
 
 /**
@@ -32,5 +36,26 @@ public abstract class RestApiUtils {
         user.addRoles(RestApiConstants.PREDEFINED_ROLE_GUEST);
 
         return user;
+    }
+
+    public static boolean isActionPrivate(String actionName) {
+        return actionName.startsWith(RestApiConstants.PRIVATE_ACTION_NAME_PREFIX);
+    }
+
+    /**
+     * Verifies if a user can use a knowledge base.
+     *
+     * @param roleToKnowledgeBases the map of (role name -> knowledge base names regexps).
+     * @param user the user.
+     * @param kbName the knowledge base name.
+     * @return {@code true} if this user can use the knowledge base.
+     */
+    public static boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {
+        if (roleToKnowledgeBases == null) {
+            return false;
+        }
+
+        return user.getRoles().stream().filter(role -> roleToKnowledgeBases.containsKey(role)).anyMatch(
+                role -> roleToKnowledgeBases.get(role).stream().filter(Objects::nonNull).anyMatch(kbRegexp -> kbName.matches(kbRegexp)));
     }
 }

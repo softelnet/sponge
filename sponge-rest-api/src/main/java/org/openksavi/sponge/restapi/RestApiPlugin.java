@@ -17,6 +17,8 @@
 package org.openksavi.sponge.restapi;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -35,6 +37,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.restapi.security.NoSecuritySecurityService;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
+import org.openksavi.sponge.restapi.security.User;
 
 /**
  * Sponge REST API plugin.
@@ -222,5 +225,9 @@ public class RestApiPlugin extends JPlugin {
 
     public void setSecurityService(RestApiSecurityService securityService) {
         this.securityService = securityService;
+    }
+
+    public boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {
+        return RestApiUtils.canUseKnowledgeBase(roleToKnowledgeBases, user, kbName);
     }
 }

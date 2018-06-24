@@ -315,6 +315,18 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Adds the knowledge base.
      *
      * @param name the knowledge base name.
+     * @param type the knowledge base type.
+     * @param scripts the knowledge base scripts.
+     * @return this Engine Builder.
+     */
+    public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, KnowledgeBaseScript... scripts) {
+        return knowledgeBase(name, type, Stream.of(scripts).collect(Collectors.toList()));
+    }
+
+    /**
+     * Adds the knowledge base.
+     *
+     * @param name the knowledge base name.
      * @param scripts the knowledge base scripts.
      * @return this Engine Builder.
      */

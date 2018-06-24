@@ -33,7 +33,7 @@ public class RestApiSettings {
     private String host;
 
     /** The port. */
-    private int port = RestApiConstants.DEFAULT_PORT;
+    private Integer port = RestApiConstants.DEFAULT_PORT;
 
     /** The API version. */
     private int version = RestApiConstants.API_VERSION;
@@ -58,6 +58,10 @@ public class RestApiSettings {
 
     private boolean allowAnonymous = RestApiConstants.DEFAULT_ALLOW_ANONYMOUS;
 
+    private String adminRole = RestApiConstants.DEFAULT_ROLE_ADMIN;
+
+    private boolean includeDetailedErrorMessage = RestApiConstants.DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE;
+
     public String getRestComponentId() {
         return restComponentId;
     }
@@ -74,11 +78,11 @@ public class RestApiSettings {
         this.host = host;
     }
 
-    public int getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 
@@ -144,5 +148,21 @@ public class RestApiSettings {
 
     public void setAllowAnonymous(boolean allowAnonymous) {
         this.allowAnonymous = allowAnonymous;
+    }
+
+    public String getAdminRole() {
+        return adminRole;
+    }
+
+    public void setAdminRole(String adminRole) {
+        this.adminRole = adminRole;
+    }
+
+    public boolean isIncludeDetailedErrorMessage() {
+        return includeDetailedErrorMessage;
+    }
+
+    public void setIncludeDetailedErrorMessage(boolean includeDetailedErrorMessage) {
+        this.includeDetailedErrorMessage = includeDetailedErrorMessage;
     }
 }

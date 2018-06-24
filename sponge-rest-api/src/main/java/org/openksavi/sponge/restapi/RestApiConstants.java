@@ -49,13 +49,15 @@ public final class RestApiConstants {
 
     public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = true;
 
-    public static final String ACTION_IS_ACTION_PUBLIC = "RestApiIsActionPublic";
+    public static final String PRIVATE_ACTION_NAME_PREFIX = "RestApi";
 
-    public static final String ACTION_IS_EVENT_PUBLIC = "RestApiIsEventPublic";
+    public static final String ACTION_IS_ACTION_PUBLIC = PRIVATE_ACTION_NAME_PREFIX + "IsActionPublic";
 
-    public static final String ACTION_CAN_USE_KNOWLEDGE_BASE = "RestApiCanUseKnowledgeBase";
+    public static final String ACTION_IS_EVENT_PUBLIC = PRIVATE_ACTION_NAME_PREFIX + "IsEventPublic";
 
-    public static final String ACTION_CAN_SEND_EVENT = "RestApiCanSendEvent";
+    public static final String ACTION_CAN_USE_KNOWLEDGE_BASE = PRIVATE_ACTION_NAME_PREFIX + "CanUseKnowledgeBase";
+
+    public static final String ACTION_CAN_SEND_EVENT = PRIVATE_ACTION_NAME_PREFIX + "CanSendEvent";
 
     public static final String TAG_REST_COMPONENT_ID = "restComponentId";
 
@@ -85,7 +87,9 @@ public final class RestApiConstants {
 
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
 
-    public static final String PREDEFINED_ROLE_ADMIN = "admin";
+    public static final String DEFAULT_ROLE_ADMIN = "admin";
+
+    public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = true;
 
     public static final String PREDEFINED_ROLE_GUEST = "guest";
 

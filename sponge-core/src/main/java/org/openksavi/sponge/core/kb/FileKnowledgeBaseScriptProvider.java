@@ -46,7 +46,7 @@ public class FileKnowledgeBaseScriptProvider extends BaseKnowledgeBaseScriptProv
             if (script.isRequired()) {
                 throw new ConfigException("Knowledge base file " + script.getFileName() + " not found");
             } else {
-                logger.warn("Knowledge base file " + script.getFileName() + " not found but is set as optional.");
+                logger.warn("The optional knowledge base file " + script.getFileName() + " not found.");
             }
         }
 

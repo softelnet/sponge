@@ -1001,17 +1001,9 @@ public static class Config extends SpongeCamelConfiguration {
     @Bean
     public RestApiPlugin restApiPlugin() {
         RestApiPlugin plugin = new RestApiPlugin();
-        plugin.setService(restApiService());
+        plugin.setSecurityService(restApiSecurityService());
 
         return plugin;
-    }
-
-    @Bean
-    public RestApiService restApiService() {
-        RestApiService service = new DefaultRestApiService();
-        service.setSecurityService(restApiSecurityService());
-
-        return service;
     }
 
     @Bean
@@ -1029,7 +1021,7 @@ The REST API plugin provides a simple predefined knowledge base library.
 [source,xml]
 ----
 <knowledgeBase name="security" displayName="Security">
-    <file>classpath:org/openksavi/sponge/restapi/restapi_security_library.py</file>
+    <file>classpath:org/openksavi/sponge/restapi/administration_library.py</file>
 </knowledgeBase>
 ----
 
@@ -1085,7 +1077,7 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"username":"john","password":"password"}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1","test2", 4]}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
 ----
@@ -1102,13 +1094,12 @@ The simple security strategy uses in-memory user data. User privileges and acces
 ----
 from org.openksavi.sponge.restapi.security import User
 
-# Simple access configuration role -> knowledge base name regexp.
-ROLES_TO_KB = { "admin":".*", "guest":"mpd"}
+# Simple access configuration: role -> knowledge base names regexps.
+ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):
-        # Defined in the REST API predefined knowledge base library
-        return restApiCanUseKnowledgeBase(ROLES_TO_KB, user, kbName)
+        return restApi.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
 
 def onStartup():
     # Set up users. To hash a password use (on Mac): echo -n <username><password> | shasum -a 256 | awk '{ print $1 }'

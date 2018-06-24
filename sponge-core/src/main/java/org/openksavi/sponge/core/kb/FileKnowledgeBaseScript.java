@@ -40,6 +40,16 @@ public class FileKnowledgeBaseScript extends BaseKnowledgeBaseScript {
      * Creates a new knowledge base script instance.
      *
      * @param fileName file name.
+     * @param required required.
+     */
+    public FileKnowledgeBaseScript(String fileName, boolean required) {
+        this(fileName, null, required);
+    }
+
+    /**
+     * Creates a new knowledge base script instance.
+     *
+     * @param fileName file name.
      * @param charset charset.
      * @param required required.
      */

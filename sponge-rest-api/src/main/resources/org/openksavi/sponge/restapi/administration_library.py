@@ -15,7 +15,7 @@ class AdministrationReload(Action):
 class AdministrationGetVersion(Action):
     def onConfigure(self):
         self.displayName = "Sponge version"
-        self.description = "Shows the version of Sponge."
+        self.description = "Shows the Sponge version."
         self.argsMeta = []
         self.resultMeta = ResultMeta(Type.STRING).displayName("Version").description("Sponge version")
     def onCall(self):

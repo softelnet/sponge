@@ -29,9 +29,12 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
     protected static final String DEFAULT_ERROR_CODE = "SPONGE001";
 
     @Override
-    public void applyException(BaseRestResponse response, Throwable exception) {
+    public void applyException(RestApiService service, BaseRestResponse response, Throwable exception) {
         response.setErrorCode(DEFAULT_ERROR_CODE);
         response.setErrorMessage(exception.getMessage());
-        response.setDetailedErrorMessage(ExceptionUtils.getStackTrace(exception));
+
+        if (service.getSettings().isIncludeDetailedErrorMessage()) {
+            response.setDetailedErrorMessage(ExceptionUtils.getStackTrace(exception));
+        }
     }
 }

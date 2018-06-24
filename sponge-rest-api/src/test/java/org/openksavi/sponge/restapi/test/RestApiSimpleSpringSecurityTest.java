@@ -72,9 +72,8 @@ public class RestApiSimpleSpringSecurityTest {
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
                     .knowledgeBase("admin", "classpath:org/openksavi/sponge/restapi/administration_library.py")
-                    .knowledgeBase("example", "examples/rest-api/rest_api.py").knowledgeBase("security",
-                            "classpath:org/openksavi/sponge/restapi/restapi_security_library.py", "examples/rest-api/rest_api_security.py")
-                    .build();
+                    .knowledgeBase("example", "examples/rest-api/rest_api.py")
+                    .knowledgeBase("security", "examples/rest-api/rest_api_security.py").build();
         }
 
         @Bean

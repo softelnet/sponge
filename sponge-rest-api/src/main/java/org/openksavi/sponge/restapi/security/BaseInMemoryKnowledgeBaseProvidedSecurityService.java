@@ -28,8 +28,6 @@ import org.apache.commons.lang3.Validate;
 
 public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends KnowledgeBaseProvidedSecurityService {
 
-    private static final String HASH_SALT = "sponge";
-
     protected Set<User> users = Collections.synchronizedSet(new LinkedHashSet<>());
 
     protected BaseInMemoryKnowledgeBaseProvidedSecurityService() {
