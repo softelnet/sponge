@@ -26,6 +26,8 @@ public class BaseRestResponse {
 
     private String detailedErrorMessage;
 
+    private String id;
+
     @ApiModelProperty(value = "The error code", required = false)
     public String getErrorCode() {
         return errorCode;
@@ -51,5 +53,14 @@ public class BaseRestResponse {
 
     public void setDetailedErrorMessage(String detailedErrorMessage) {
         this.detailedErrorMessage = detailedErrorMessage;
+    }
+
+    @ApiModelProperty(value = "The corresponding request id", required = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

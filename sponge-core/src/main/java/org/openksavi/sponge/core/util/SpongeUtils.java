@@ -68,11 +68,14 @@ import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import org.apache.commons.configuration2.ConfigurationUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.awaitility.core.ConditionTimeoutException;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +96,10 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.type.ListType;
+import org.openksavi.sponge.type.MapType;
+import org.openksavi.sponge.type.ObjectType;
+import org.openksavi.sponge.type.Type;
 
 /**
  * This class defines a set of utility methods. It also wraps some of the external dependencies like Guava to avoid version conflicts in the
@@ -111,6 +118,8 @@ public abstract class SpongeUtils {
     public static final String TAG_SECURITY_ALGORITHM = "algorithm";
 
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
+
+    protected static final Reflections TYPE_REFLECTIONS = new Reflections(Type.class.getPackage().getName());
 
     /**
      * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.
@@ -554,6 +563,46 @@ public abstract class SpongeUtils {
         return new ProcessorQualifiedName(
                 processorOperations.getKnowledgeBase() != null ? processorOperations.getKnowledgeBase().getName() : null,
                 processorOperations.getName());
+    }
+
+    public static Class<?> getClass(String className) {
+        try {
+            return ClassUtils.getClass(className);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    public static void doInWrappedException(KnowledgeBase knowledgeBase, Runnable runnable, String sourceName) {
+        try {
+            runnable.run();
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(sourceName, knowledgeBase.getInterpreter(), e);
+        }
+    }
+
+    public static void validateType(Type type, String valueName) {
+        switch (type.getKind()) {
+        case OBJECT:
+            String className = ((ObjectType) type).getClassName();
+            Validate.notNull(className, "Missing class name in the %s", valueName);
+            Validate.notNull(getClass(className), "The class %s used in the %s not found", className, valueName);
+            break;
+        case LIST:
+            validateType(Validate.notNull(((ListType) type).getElementType(), "List element type not specified in the %s", valueName),
+                    valueName);
+            break;
+        case MAP:
+            validateType(Validate.notNull(((MapType) type).getKeyType(), "Map key type not specified in the %s", valueName), valueName);
+            validateType(Validate.notNull(((MapType) type).getValueType(), "Map value type not specified in the %s", valueName), valueName);
+            break;
+        default:
+            break;
+        }
+    }
+
+    public static List<Class<? extends Type>> getSupportedTypes() {
+        return new ArrayList<>(TYPE_REFLECTIONS.getSubTypesOf(Type.class));
     }
 
     protected SpongeUtils() {

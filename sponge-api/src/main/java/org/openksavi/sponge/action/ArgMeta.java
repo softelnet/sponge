@@ -16,21 +16,18 @@
 
 package org.openksavi.sponge.action;
 
-import org.openksavi.sponge.Type;
+import org.openksavi.sponge.type.Type;
 
 /**
  * Action argument metadata (name, data type and display name).
  */
-public class ArgMeta {
+public class ArgMeta<T extends Type> {
 
     /** An argument name. */
     private String name;
 
     /** An argument data type. */
-    private Type type;
-
-    /** An argument subtype. */
-    private String subtype;
+    private T type;
 
     /** Tells if this argument is required. */
     private boolean required = true;
@@ -41,27 +38,22 @@ public class ArgMeta {
     /** An argument description. */
     private String description;
 
-    public ArgMeta(String name, Type type) {
+    public ArgMeta(String name, T type) {
         this.name = name;
         this.type = type;
     }
 
-    public ArgMeta displayName(String displayName) {
+    public ArgMeta<T> displayName(String displayName) {
         this.displayName = displayName;
         return this;
     }
 
-    public ArgMeta subtype(String subtype) {
-        this.subtype = subtype;
-        return this;
-    }
-
-    public ArgMeta required(boolean required) {
+    public ArgMeta<T> required(boolean required) {
         this.required = required;
         return this;
     }
 
-    public ArgMeta description(String description) {
+    public ArgMeta<T> description(String description) {
         this.description = description;
         return this;
     }
@@ -74,20 +66,12 @@ public class ArgMeta {
         this.name = name;
     }
 
-    public Type getType() {
+    public T getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(T type) {
         this.type = type;
-    }
-
-    public String getSubtype() {
-        return subtype;
-    }
-
-    public void setSubtype(String subtype) {
-        this.subtype = subtype;
     }
 
     public boolean isRequired() {

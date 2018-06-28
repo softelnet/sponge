@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge;
-
-import java.util.Arrays;
+package org.openksavi.sponge.restapi.security;
 
 /**
- * A data type. Used for example in action arguments metadata.
+ * An authentication mode.
  */
-public enum Type {
-    STRING("string"), NUMBER("number"), BYTES("bytes"), OBJECT("object"), VOID("void");
+public enum RestApiAuthenticationMode {
+    /** Every request has to contain a username and a password. */
+    USERNAME_PASSWORD,
 
-    private String code;
-
-    private Type(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public static Type fromCode(String code) {
-        return Arrays.stream(Type.values()).filter(type -> type.getCode().equals(code)).findFirst().orElse(null);
-    }
+    /** Every request has to contain an authentication token, returned by a login operation. */
+    AUTH_TOKEN
 }

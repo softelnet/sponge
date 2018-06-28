@@ -32,14 +32,9 @@ public class RestSendEventRequest extends BaseRestRequest {
         //
     }
 
-    public RestSendEventRequest(String username, String password, String name, Map<String, Object> attributes) {
-        super(username, password);
+    public RestSendEventRequest(String name, Map<String, Object> attributes) {
         this.name = name;
         this.attributes = attributes;
-    }
-
-    public RestSendEventRequest(String name, Map<String, Object> attributes) {
-        this(null, null, name, attributes);
     }
 
     @ApiModelProperty(value = "The event name", required = true)

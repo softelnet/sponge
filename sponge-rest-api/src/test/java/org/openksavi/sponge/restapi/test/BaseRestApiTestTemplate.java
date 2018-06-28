@@ -38,12 +38,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.SocketUtils;
 import org.springframework.web.client.RestTemplate;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
@@ -52,10 +54,13 @@ import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
+import org.openksavi.sponge.restapi.model.util.RestApiUtils;
+import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.TypeKind;
 
 public abstract class BaseRestApiTestTemplate {
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(1836);
+    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
@@ -71,6 +76,12 @@ public abstract class BaseRestApiTestTemplate {
 
     protected abstract RestTemplate createRestTemplate();
 
+    protected RestTemplate setupRestTemplate(RestTemplate restTemplate) {
+        restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(RestApiUtils.createObjectMapper())));
+
+        return restTemplate;
+    }
+
     @Test
     public void testRestVersion() {
         ResponseEntity<RestGetVersionResponse> response = createRestTemplate().exchange(getUrl() + "version", HttpMethod.POST,
@@ -78,6 +89,18 @@ public abstract class BaseRestApiTestTemplate {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(engine.getVersion(), response.getBody().getVersion());
+    }
+
+    @Test
+    public void testRestVersionWithId() {
+        RestGetVersionRequest request = new RestGetVersionRequest();
+        request.setId("5");
+        ResponseEntity<RestGetVersionResponse> response = createRestTemplate().exchange(getUrl() + "version", HttpMethod.POST,
+                new HttpEntity<>(request, createHeaders()), RestGetVersionResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(engine.getVersion(), response.getBody().getVersion());
+        assertEquals(response.getBody().getId(), request.getId());
     }
 
     @Test
@@ -104,11 +127,16 @@ public abstract class BaseRestApiTestTemplate {
     public void testRestActionsParamArgMetadataRequiredFalse() {
         RestGetActionsRequest request = new RestGetActionsRequest();
         request.setMetadataRequired(false);
+
         ResponseEntity<RestGetActionsResponse> response = createRestTemplate().exchange(getUrl() + "actions", HttpMethod.POST,
                 new HttpEntity<>(request, createHeaders()), RestGetActionsResponse.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(4, response.getBody().getActions().size());
+        RestActionMeta meta =
+                response.getBody().getActions().stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
+        assertEquals(TypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
+        assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
     }
 
     protected HttpHeaders createHeaders() {

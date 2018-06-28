@@ -35,22 +35,22 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
-    public ArgMeta[] getArgsMeta() {
+    public ArgMeta<?>[] getArgsMeta() {
         return getAdapter().getArgsMeta();
     }
 
     @Override
-    public void setArgsMeta(ArgMeta... argsMeta) {
+    public void setArgsMeta(ArgMeta<?>... argsMeta) {
         getAdapter().setArgsMeta(argsMeta);
     }
 
     @Override
-    public ResultMeta getResultMeta() {
+    public ResultMeta<?> getResultMeta() {
         return getAdapter().getResultMeta();
     }
 
     @Override
-    public void setResultMeta(ResultMeta resultMeta) {
+    public void setResultMeta(ResultMeta<?> resultMeta) {
         getAdapter().setResultMeta(resultMeta);
     }
 }

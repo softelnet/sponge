@@ -82,12 +82,12 @@ class MpdSetAndPlayPlaylist(Action):
         self.displayName = "Set and play a playlist"
         self.description = "Sets a playlist according to the arguments and starts playing it immediately."
         self.argsMeta = [
-            ArgMeta("artist", Type.STRING).required(False).displayName("Artist").description("Artist may be specified as a regular expression."),
-            ArgMeta("album", Type.STRING).required(False).displayName("Album").description("Album may be specified as a regular expression."),
-            ArgMeta("genre", Type.STRING).required(False).displayName("Genre").description("Genre may be specified as a regular expression."),
-            ArgMeta("minYear", Type.NUMBER).required(False).displayName("Release year (since)").description("An album minimum release year."),
-            ArgMeta("maxYear", Type.NUMBER).required(False).displayName("Release year (to)").description("An album maximum release year.")]
-        self.resultMeta = ResultMeta(Type.STRING).displayName("Info").description("A short info of the status of the action call.")
+            ArgMeta("artist", StringType()).required(False).displayName("Artist").description("Artist may be specified as a regular expression."),
+            ArgMeta("album", StringType()).required(False).displayName("Album").description("Album may be specified as a regular expression."),
+            ArgMeta("genre", StringType()).required(False).displayName("Genre").description("Genre may be specified as a regular expression."),
+            ArgMeta("minYear", IntegerType()).required(False).displayName("Release year (since)").description("An album minimum release year."),
+            ArgMeta("maxYear", IntegerType()).required(False).displayName("Release year (to)").description("An album maximum release year.")]
+        self.resultMeta = ResultMeta(StringType()).displayName("Info").description("A short info of the status of the action call.")
     def onCall(self, aArtist, aAlbum, aGenre, aMinYear, aMaxYear):
         library = MpdLibrary()
 

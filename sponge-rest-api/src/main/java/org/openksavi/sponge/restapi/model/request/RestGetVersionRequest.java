@@ -24,8 +24,4 @@ public class RestGetVersionRequest extends BaseRestRequest {
     public RestGetVersionRequest() {
         //
     }
-
-    public RestGetVersionRequest(String username, String password) {
-        super(username, password);
-    }
 }

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.security;
 
+import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 
 public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
@@ -25,7 +26,7 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
+    public User authenticateUser(String username, String password, Exchange exchange) {
         User user = verifyInMemory(username, password);
         Validate.isTrue(user != null, "Incorrent username/password");
 

@@ -3,7 +3,6 @@ Sponge Knowledge base
 REST API
 """
 from org.openksavi.sponge import SpongeException
-from org.openksavi.sponge.restapi import RestApiUtils
 
 from java.util.concurrent.atomic import AtomicBoolean
 
@@ -14,8 +13,8 @@ def onInit():
 
 class UpperCase(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("text", Type.STRING).displayName("Text to upper case") ]
-        self.resultMeta = ResultMeta(Type.STRING).displayName("Upper case text")
+        self.argsMeta = [ ArgMeta("text", StringType().maxLength(256)).displayName("Text to upper case") ]
+        self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
         EPS.getVariable("actionCalled").set(True)
@@ -23,8 +22,8 @@ class UpperCase(Action):
 
 class LowerCase(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("text", Type.STRING).displayName("A text that will be changed to lower case") ]
-        self.resultMeta = ResultMeta(Type.STRING).displayName("Lower case text")
+        self.argsMeta = [ ArgMeta("text", StringType()).displayName("A text that will be changed to lower case") ]
+        self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
         return str(text).lower()
@@ -39,8 +38,8 @@ class NoMetadataAction(Action):
 
 class FaultyAction(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("text", Type.STRING) ]
-        self.resultMeta = ResultMeta(Type.VOID)
+        self.argsMeta = [ ArgMeta("text", StringType()) ]
+        self.resultMeta = ResultMeta(VoidType())
     def onCall(self, args):
         raise SpongeException("Error in " + self.name)
 

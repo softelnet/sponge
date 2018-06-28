@@ -81,7 +81,7 @@ public class HttpsRestApiTest extends BaseRestApiTestTemplate {
     @Override
     protected RestTemplate createRestTemplate() {
         try {
-            final TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            final X509TrustManager trustAllCerts = new X509TrustManager() {
 
                 @Override
                 public X509Certificate[] getAcceptedIssuers() {
@@ -95,14 +95,14 @@ public class HttpsRestApiTest extends BaseRestApiTestTemplate {
                 @Override
                 public void checkClientTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
                 }
-            } };
+            };
 
             SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            sslContext.init(null, new TrustManager[] { trustAllCerts }, new java.security.SecureRandom());
 
-            return new RestTemplate(
-                    new OkHttp3ClientHttpRequestFactory(new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory())
-                            .hostnameVerifier((String hostname, SSLSession session) -> true).build()));
+            return setupRestTemplate(new RestTemplate(new OkHttp3ClientHttpRequestFactory(
+                    new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), trustAllCerts)
+                            .hostnameVerifier((String hostname, SSLSession session) -> true).build())));
         } catch (Exception e) {
             throw SpongeUtils.wrapException(e);
         }

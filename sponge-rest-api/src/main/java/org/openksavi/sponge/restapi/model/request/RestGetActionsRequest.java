@@ -28,10 +28,6 @@ public class RestGetActionsRequest extends BaseRestRequest {
         //
     }
 
-    public RestGetActionsRequest(String username, String password) {
-        super(username, password);
-    }
-
     @ApiModelProperty(value = "Metadata required", required = false)
     public Boolean getMetadataRequired() {
         return metadataRequired;

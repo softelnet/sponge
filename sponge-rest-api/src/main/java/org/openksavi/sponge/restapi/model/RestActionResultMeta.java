@@ -19,10 +19,12 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.type.Type;
+
 @ApiModel(value = "ActionResultMeta", description = "Represents a Sponge action result metadata")
 public class RestActionResultMeta {
 
-    private String type;
+    private Type type;
 
     private String subtype;
 
@@ -34,18 +36,18 @@ public class RestActionResultMeta {
         //
     }
 
-    public RestActionResultMeta(String type, String subtype, String displayName) {
+    public RestActionResultMeta(Type type, String subtype, String displayName) {
         this.type = type;
         this.subtype = subtype;
         this.displayName = displayName;
     }
 
     @ApiModelProperty(value = "The action result type", required = true)
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

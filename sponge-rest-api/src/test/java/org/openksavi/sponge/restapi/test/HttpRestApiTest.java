@@ -31,9 +31,9 @@ import org.openksavi.sponge.restapi.RestApiPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { RestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { HttpRestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class RestApiTest extends BaseRestApiTestTemplate {
+public class HttpRestApiTest extends BaseRestApiTestTemplate {
 
     @Configuration
     public static class TestConfig extends SpongeCamelConfiguration {
@@ -62,6 +62,6 @@ public class RestApiTest extends BaseRestApiTestTemplate {
 
     @Override
     protected RestTemplate createRestTemplate() {
-        return new RestTemplate();
+        return setupRestTemplate(new RestTemplate());
     }
 }

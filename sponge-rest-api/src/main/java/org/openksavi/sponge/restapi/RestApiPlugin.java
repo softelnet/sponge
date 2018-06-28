@@ -35,6 +35,7 @@ import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.restapi.model.util.RestApiUtils;
 import org.openksavi.sponge.restapi.security.NoSecuritySecurityService;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.security.User;
@@ -64,6 +65,8 @@ public class RestApiPlugin extends JPlugin {
     private RestApiService service;
 
     private RestApiSecurityService securityService;
+
+    private CamelContext camelContext;
 
     private Lock lock = new ReentrantLock(true);
 
@@ -130,12 +133,18 @@ public class RestApiPlugin extends JPlugin {
     }
 
     public void start() {
-        CamelPlugin camelPlugin = getEngine().getPluginManager().getPlugin(CamelPlugin.class);
-        if (camelPlugin == null) {
-            throw new ConfigException("Camel plugin is not registered but it is required by the Sponge REST API");
+        CamelContext finalCamelContext = camelContext;
+        if (finalCamelContext == null) {
+            CamelPlugin camelPlugin = getEngine().getPluginManager().getPlugin(CamelPlugin.class);
+            if (camelPlugin == null) {
+                throw new ConfigException(
+                        "Camel plugin is not registered but it is required by the Sponge REST API if no Camel context is set");
+            }
+
+            finalCamelContext = camelPlugin.getCamelContext();
         }
 
-        start(camelPlugin.getCamelContext());
+        start(finalCamelContext);
     }
 
     public void start(CamelContext camelContext) {
@@ -229,5 +238,13 @@ public class RestApiPlugin extends JPlugin {
 
     public boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {
         return RestApiUtils.canUseKnowledgeBase(roleToKnowledgeBases, user, kbName);
+    }
+
+    public CamelContext getCamelContext() {
+        return camelContext;
+    }
+
+    public void setCamelContext(CamelContext camelContext) {
+        this.camelContext = camelContext;
     }
 }

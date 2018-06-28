@@ -16,15 +16,15 @@
 
 package org.openksavi.sponge.action;
 
-import org.openksavi.sponge.Type;
+import org.openksavi.sponge.type.Type;
 
 /**
  * Action result metadata (data type and display name).
  */
-public class ResultMeta {
+public class ResultMeta<T extends Type> {
 
     /** A result data type. */
-    private Type type;
+    private T type;
 
     /** An result subtype. */
     private String subtype;
@@ -35,30 +35,30 @@ public class ResultMeta {
     /** A result description. */
     private String description;
 
-    public ResultMeta(Type type) {
+    public ResultMeta(T type) {
         this.type = type;
     }
 
-    public ResultMeta subtype(String subtype) {
+    public ResultMeta<T> subtype(String subtype) {
         this.subtype = subtype;
         return this;
     }
 
-    public ResultMeta displayName(String displayName) {
+    public ResultMeta<T> displayName(String displayName) {
         this.displayName = displayName;
         return this;
     }
 
-    public ResultMeta description(String description) {
+    public ResultMeta<T> description(String description) {
         this.description = description;
         return this;
     }
 
-    public Type getType() {
+    public T getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(T type) {
         this.type = type;
     }
 

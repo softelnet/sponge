@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.Type;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.config.Configuration;
@@ -244,12 +244,17 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     protected abstract ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase);
 
     protected List<Class<?>> getStandardImportClasses() {
+        List<Class<?>> classes = new ArrayList<>();
         //@formatter:off
-        return Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
+        classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                Type.class, ArgMeta.class, ResultMeta.class,
-                Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class);
+                ArgMeta.class, ResultMeta.class,
+                Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class));
         //@formatter:on
+
+        classes.addAll(SpongeUtils.getSupportedTypes());
+
+        return classes;
     }
 
     protected boolean isProcessorAbstract(String className) {

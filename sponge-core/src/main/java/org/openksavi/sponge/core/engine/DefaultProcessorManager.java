@@ -119,13 +119,15 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     protected void doEnable(KnowledgeBase knowledgeBase, Object processorClass, ProcessorType requiredType) {
         lock.lock();
         try {
-            ProcessorInstanceHolder instanceHolder =
-                    createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
-            BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
+            SpongeUtils.doInWrappedException(knowledgeBase, () -> {
+                ProcessorInstanceHolder instanceHolder =
+                        createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
+                BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
 
-            bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
-            initializeProcessor(instanceHolder, adapter);
-            getRegistrationHandler(adapter.getType()).register(adapter);
+                bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
+                initializeProcessor(instanceHolder, adapter);
+                getRegistrationHandler(adapter.getType()).register(adapter);
+            }, "enable");
         } finally {
             lock.unlock();
         }
@@ -218,7 +220,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     protected void initializeProcessor(ProcessorInstanceHolder instanceHolder, BaseProcessorAdapter adapter) {
         Processor processor = instanceHolder.getProcessor();
 
-        processor.onConfigure();
+        SpongeUtils.doInWrappedException(adapter.getKnowledgeBase(), () -> processor.onConfigure(),
+                SpongeUtils.getProcessorQualifiedName(adapter) + ".onConfigure");
 
         // Must be verified after onConfigure, because onConfigure may change for example the name of the processor.
         Optional<Map.Entry<ProcessorType, RegistrationHandler>> alreadyRegistered = findAlreadyRegisteredByDifferentType(adapter);
@@ -227,10 +230,12 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
                     adapter.getName(), alreadyRegistered.get().getKey().getDisplayName());
         }
 
-        processor.getAdapter().validate();
+        SpongeUtils.doInWrappedException(adapter.getKnowledgeBase(), () -> processor.getAdapter().validate(),
+                SpongeUtils.getProcessorQualifiedName(adapter).toString());
 
         if (processor.getAdapter().getDefinition().isSingleton()) {
-            processor.onInit();
+            SpongeUtils.doInWrappedException(adapter.getKnowledgeBase(), () -> processor.onInit(),
+                    SpongeUtils.getProcessorQualifiedName(adapter) + ".onInit");
         }
     }
 

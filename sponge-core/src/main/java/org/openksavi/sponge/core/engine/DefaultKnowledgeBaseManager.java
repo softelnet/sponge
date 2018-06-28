@@ -218,7 +218,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         // Reload script knowledge bases.
         knowledgeBases.values().forEach(knowledgeBase -> {
             if (knowledgeBase instanceof ScriptKnowledgeBase) {
-                ((ScriptKnowledgeBase) knowledgeBase).reload();
+                SpongeUtils.doInWrappedException(knowledgeBase, () -> ((ScriptKnowledgeBase) knowledgeBase).reload(), "reload");
             }
         });
 
@@ -253,27 +253,32 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     public void onLoad() {
         // Before invoking onLoad callback method, scan to auto-enable processors if this functionality is turned on.
         if (getEngine().getConfigurationManager().getAutoEnable()) {
-            knowledgeBases.values().forEach(kb -> kb.scanToAutoEnable());
+            knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.scanToAutoEnable(), "scanToAutoEnable"));
         }
 
-        knowledgeBases.values().forEach(kb -> kb.onLoad());
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onLoad(), "onLoad"));
+
     }
 
     @Override
     public void onClear() {
-        knowledgeBases.values().forEach(kb -> kb.onClear());
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onClear(), "onClear"));
     }
 
     @Override
     public void onStartup() {
-        knowledgeBases.values().forEach(kb -> kb.onStartup());
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onStartup(), "onStartup"));
     }
 
     @Override
     public boolean onRun() {
         for (KnowledgeBase knowledgeBase : knowledgeBases.values()) {
-            if (!knowledgeBase.onRun()) {
-                return false;
+            try {
+                if (!knowledgeBase.onRun()) {
+                    return false;
+                }
+            } catch (Throwable e) {
+                throw SpongeUtils.wrapException("onRun", knowledgeBase.getInterpreter(), e);
             }
         }
 
@@ -282,17 +287,17 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
     @Override
     public void onShutdown() {
-        knowledgeBases.values().forEach(kb -> kb.onShutdown());
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onShutdown(), "onShutdown"));
     }
 
     @Override
     public void onBeforeReload() {
-        knowledgeBases.values().forEach(kb -> kb.onBeforeReload());
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onBeforeReload(), "onBeforeReload"));
     }
 
     @Override
     public void onAfterReload() {
-        knowledgeBases.values().forEach(kb -> kb.onAfterReload());
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onAfterReload(), "onAfterReload"));
     }
 
     /**
@@ -315,10 +320,10 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             }
 
             if (knowledgeBase instanceof ScriptKnowledgeBase) {
-                ((ScriptKnowledgeBase) knowledgeBase).load();
+                SpongeUtils.doInWrappedException(knowledgeBase, () -> ((ScriptKnowledgeBase) knowledgeBase).load(), "load");
             }
 
-            knowledgeBase.onInit();
+            SpongeUtils.doInWrappedException(knowledgeBase, () -> knowledgeBase.onInit(), "onInit");
         }
     }
 

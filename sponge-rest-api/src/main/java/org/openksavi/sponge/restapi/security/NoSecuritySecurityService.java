@@ -16,18 +16,20 @@
 
 package org.openksavi.sponge.restapi.security;
 
+import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.restapi.RestApiUtils;
+import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.model.util.RestApiUtils;
 
 public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
     @Override
-    public User authenticateUser(String username, String password) {
-        Validate.isTrue(username == null, "Only anonymous access is allowed in this security configuration");
-        return RestApiUtils.createAnonymousUser();
+    public User authenticateUser(String username, String password, Exchange exchange) {
+        Validate.isTrue(username == null && password == null, "Only anonymous access is allowed in the no-security configuration");
+        return RestApiUtils.createAnonymousUser(RestApiConstants.DEFAULT_ROLE_GUEST);
     }
 
     @Override

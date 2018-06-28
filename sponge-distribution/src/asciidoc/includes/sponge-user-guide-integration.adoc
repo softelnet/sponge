@@ -1037,6 +1037,8 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
+Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
+
 === Operations summary
 The following table contains a summary of the REST API operations. For a complete list of operations see the <<_swagger_overview, specification>> generated using Swagger and http://swagger2markup.github.io/swagger2markup/1.3.3/[Swagger2Markup].
 
@@ -1049,13 +1051,21 @@ The following table contains a summary of the REST API operations. For a complet
 |`version`
 |Returns the Sponge version.
 
+|Login
+|`login`
+|User login. Used in a token-based authentication scenario.
+
+|Logout
+|`logout`
+|User logout. Used in a token-based authentication scenario.
+
 |Get knowledge bases
 |`knowledgeBases`
-|Returns the knowledge bases.
+|Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge basses).
 
 |Get actions
 |`actions`
-|Returns the actions.
+|Returns the metadata of actions that are available to the user and those that have argument and result metadata specified in their configuration (this may be changed by setting the request property `metadataRequired` to `false`).
 
 |Call an action
 |`call`
@@ -1067,7 +1077,37 @@ The following table contains a summary of the REST API operations. For a complet
 
 |Reload knowledge bases
 |`reload`
-|Reloads all knowledge bases. This operation may not be published.
+|Reloads all knowledge bases. This operation may not be published. It should be available only to administrators.
+|===
+
+=== JSON/Java mapping
+The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.
+
+The default Jackson configuration for the REST API sets the ISO8601 format for dates.
+
+=== Requests and responses
+Each request may contain base properties.
+
+.Base request properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`id`
+|No
+|A request identifier. If it is present, the response will contain the same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
+
+|`username`
+|No
+|A user name. May be used in a user/password authentication scenario. In that case, if there is no user name present, the _guest_ user is assumed.
+
+|`password`
+|No
+|A user password. May be used in a user/password authentication scenario.
+
+|`authToken`
+|No
+|An authentication token. May be used in a token-based authentication scenario.
 |===
 
 .Examples of REST API requests
@@ -1083,10 +1123,26 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 ----
 
 === Security
-The REST API provides only simple security and only if turned on. All requests allow passing a user name and a password. If the user name is not set, a _guest_ user is assumed. There are three roles: `STANDARD`, `ADMIN` and `GUEST`.
+The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, a _guest_ user is assumed. A user may have roles.
 
-You may set a security strategy by providing an implementation of the `RestApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file.
+You may set a security strategy by providing an implementation of the `RestApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
 
+==== Authentication mode
+Only a username/password authentication mode is currently supported by the default REST API service implementation.
+
+.Authentication modes
+[cols="1,4"]
+|===
+|Name |Description
+
+|Username/password
+|Every request has to contain a username and a password. The `login` operation shouldn't be invoked.
+
+|Authentication token
+|Every request has to contain an authentication token, returned by a `login` operation.
+|===
+
+==== Simple security strategy
 The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RestApiIsActionPublic`, `RestApiIsEventPublic`, `RestApiCanUseKnowledgeBase`, `RestApiCanSendEvent`). Passwords are stored as SHA-256 hashes.
 
 .Example of the REST API simple security

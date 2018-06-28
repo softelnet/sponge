@@ -33,7 +33,6 @@ public class RestActionCallRequest extends BaseRestRequest {
     }
 
     public RestActionCallRequest(String username, String password, String name, List<Object> args) {
-        super(username, password);
         this.name = name;
         this.args = args;
     }

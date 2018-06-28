@@ -89,9 +89,18 @@ public final class RestApiConstants {
 
     public static final String DEFAULT_ROLE_ADMIN = "admin";
 
+    public static final String DEFAULT_ROLE_GUEST = "guest";
+
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = true;
 
-    public static final String PREDEFINED_ROLE_GUEST = "guest";
+    public static final String JSON_REQUEST_PASSWORD_REGEXP = "\"password\":\".*?\"";
+
+    public static final String JSON_REQUEST_PASSWORD_REPLACE = "\"password\":\"***\"";
+
+    /** A generic error code. */
+    public static final String DEFAULT_ERROR_CODE = "SPONGE001";
+
+    public static final String ERROR_CODE_INVALID_AUTH_TOKEN = "SPONGE002";
 
     private RestApiConstants() {
         //

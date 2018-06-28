@@ -16,16 +16,22 @@
 
 package org.openksavi.sponge.restapi;
 
+import org.apache.camel.Exchange;
+
 import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.RestLoginRequest;
+import org.openksavi.sponge.restapi.model.request.RestLogoutRequest;
 import org.openksavi.sponge.restapi.model.request.RestReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
 import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.RestLoginResponse;
+import org.openksavi.sponge.restapi.model.response.RestLogoutResponse;
 import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
 import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
 import org.openksavi.sponge.restapi.security.RestApiSecurityService;
@@ -48,15 +54,19 @@ public interface RestApiService extends HasEngine {
 
     void setErrorResponseProvider(RestApiErrorResponseProvider errorResponseProvider);
 
-    RestActionCallResponse call(RestActionCallRequest request);
+    RestLoginResponse login(RestLoginRequest request, Exchange exchange);
 
-    RestSendEventResponse send(RestSendEventRequest request);
+    RestLogoutResponse logout(RestLogoutRequest request, Exchange exchange);
 
-    RestGetKnowledgeBasesResponse getKnowledgeBases(RestGetKnowledgeBasesRequest request);
+    RestActionCallResponse call(RestActionCallRequest request, Exchange exchange);
 
-    RestGetActionsResponse getActions(RestGetActionsRequest request);
+    RestSendEventResponse send(RestSendEventRequest request, Exchange exchange);
 
-    RestGetVersionResponse getVersion(RestGetVersionRequest request);
+    RestGetKnowledgeBasesResponse getKnowledgeBases(RestGetKnowledgeBasesRequest request, Exchange exchange);
 
-    RestReloadResponse reload(RestReloadRequest request);
+    RestGetActionsResponse getActions(RestGetActionsRequest request, Exchange exchange);
+
+    RestGetVersionResponse getVersion(RestGetVersionRequest request, Exchange exchange);
+
+    RestReloadResponse reload(RestReloadRequest request, Exchange exchange);
 }

@@ -28,26 +28,26 @@ public interface ActionOperations extends ProcessorOperations {
      *
      * @return the arguments metadata.
      */
-    ArgMeta[] getArgsMeta();
+    ArgMeta<?>[] getArgsMeta();
 
     /**
      * Sets the (optional) arguments metadata.
      *
      * @param argsMeta the arguments metadata.
      */
-    void setArgsMeta(ArgMeta... argsMeta);
+    void setArgsMeta(ArgMeta<?>... argsMeta);
 
     /**
      * Returns the result metadata or {@code null} in not specified.
      *
      * @return the result metadata.
      */
-    ResultMeta getResultMeta();
+    ResultMeta<?> getResultMeta();
 
     /**
      * Sets the (optional) result metadata.
      *
      * @param resultMeta the result metadata.
      */
-    void setResultMeta(ResultMeta resultMeta);
+    void setResultMeta(ResultMeta<?> resultMeta);
 }

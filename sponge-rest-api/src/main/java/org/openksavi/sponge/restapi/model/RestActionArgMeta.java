@@ -19,14 +19,14 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.type.Type;
+
 @ApiModel(value = "ActionArgMeta", description = "Represents a Sponge action argument metadata")
 public class RestActionArgMeta {
 
     private String name;
 
-    private String type;
-
-    private String subtype;
+    private Type type;
 
     private boolean required;
 
@@ -38,10 +38,9 @@ public class RestActionArgMeta {
         //
     }
 
-    public RestActionArgMeta(String name, String type, String subtype, boolean required, String displayName, String description) {
+    public RestActionArgMeta(String name, Type type, boolean required, String displayName, String description) {
         this.name = name;
         this.type = type;
-        this.subtype = subtype;
         this.required = required;
         this.displayName = displayName;
         this.description = description;
@@ -57,21 +56,12 @@ public class RestActionArgMeta {
     }
 
     @ApiModelProperty(value = "The action argument type", required = true)
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
-    }
-
-    @ApiModelProperty(value = "The action argument subtype", required = false)
-    public String getSubtype() {
-        return subtype;
-    }
-
-    public void setSubtype(String subtype) {
-        this.subtype = subtype;
     }
 
     @ApiModelProperty(value = "Is the argument required", required = true)

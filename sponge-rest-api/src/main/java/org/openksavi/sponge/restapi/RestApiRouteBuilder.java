@@ -27,12 +27,16 @@ import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.RestLoginRequest;
+import org.openksavi.sponge.restapi.model.request.RestLogoutRequest;
 import org.openksavi.sponge.restapi.model.request.RestReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
 import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.RestLoginResponse;
+import org.openksavi.sponge.restapi.model.response.RestLogoutResponse;
 import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
 import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
 
@@ -118,32 +122,44 @@ public class RestApiRouteBuilder extends RouteBuilder {
                 .param().name("body").type(body).description("Get Sponge version request").endParam()
                 .responseMessage().code(200).message("The Sponge version response").endResponseMessage()
                 .route()
-                    .setBody(exchange -> apiService.getVersion(exchange.getIn().getBody(RestGetVersionRequest.class)))
+                    .setBody(exchange -> apiService.getVersion(exchange.getIn().getBody(RestGetVersionRequest.class), exchange))
+                .endRest()
+            .post("/login").description("Login").type(RestLoginRequest.class).outType(RestLoginResponse.class)
+                .param().name("body").type(body).description("Login request").endParam()
+                .responseMessage().code(200).message("The login response").endResponseMessage()
+                .route()
+                    .setBody(exchange -> apiService.login(exchange.getIn().getBody(RestLoginRequest.class), exchange))
+                .endRest()
+            .post("/logout").description("Logout").type(RestLogoutRequest.class).outType(RestLogoutResponse.class)
+                .param().name("body").type(body).description("Logout request").endParam()
+                .responseMessage().code(200).message("The logout response").endResponseMessage()
+                .route()
+                    .setBody(exchange -> apiService.logout(exchange.getIn().getBody(RestLogoutRequest.class), exchange))
                 .endRest()
             .post("/knowledgeBases").description("Get knowledge bases").type(RestGetKnowledgeBasesRequest.class)
                     .outType(RestGetKnowledgeBasesResponse.class)
                 .param().name("body").type(body).description("Get knowledge bases request").endParam()
-                .responseMessage().code(200).message("Get knowledge bases response").endResponseMessage()
+                .responseMessage().code(200).message("The get knowledge bases response").endResponseMessage()
                 .route()
-                    .setBody(exchange -> apiService.getKnowledgeBases(exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class)))
+                    .setBody(exchange -> apiService.getKnowledgeBases(exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class), exchange))
                 .endRest()
             .post("/actions").description("Get actions").type(RestGetActionsRequest.class).outType(RestGetActionsResponse.class)
                 .param().name("body").type(body).description("Get actions request").endParam()
-                .responseMessage().code(200).message("Get actions response").endResponseMessage()
+                .responseMessage().code(200).message("The get actions response").endResponseMessage()
                 .route()
-                    .setBody(exchange -> apiService.getActions(exchange.getIn().getBody(RestGetActionsRequest.class)))
+                    .setBody(exchange -> apiService.getActions(exchange.getIn().getBody(RestGetActionsRequest.class), exchange))
                 .endRest()
             .post("/call").description("Call an action").type(RestActionCallRequest.class).outType(RestActionCallResponse.class)
                 .param().name("body").type(body).description("Call action request").endParam()
                 .responseMessage().code(200).message("The action call response").endResponseMessage()
                 .route()
-                    .setBody(exchange -> apiService.call(exchange.getIn().getBody(RestActionCallRequest.class)))
+                    .setBody(exchange -> apiService.call(exchange.getIn().getBody(RestActionCallRequest.class), exchange))
                 .endRest()
             .post("/send").description("Send a new event").type(RestSendEventRequest.class).outType(RestSendEventResponse.class)
                 .param().name("body").type(body).description("Send event request").endParam()
                 .responseMessage().code(200).message("The send event response").endResponseMessage()
                 .route()
-                    .setBody(exchange -> apiService.send(exchange.getIn().getBody(RestSendEventRequest.class)))
+                    .setBody(exchange -> apiService.send(exchange.getIn().getBody(RestSendEventRequest.class), exchange))
                 .endRest();
 
         if (settings.isPublishReload()) {
@@ -151,7 +167,7 @@ public class RestApiRouteBuilder extends RouteBuilder {
                 .param().name("body").type(body).description("Reload knowledge bases request").endParam()
                 .responseMessage().code(200).message("The reload response").endResponseMessage()
                 .route()
-                    .setBody(exchange -> apiService.reload(exchange.getIn().getBody(RestReloadRequest.class)))
+                    .setBody(exchange -> apiService.reload(exchange.getIn().getBody(RestReloadRequest.class), exchange))
                     .endRest();
         }
         // @formatter:on

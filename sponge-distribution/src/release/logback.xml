@@ -54,6 +54,7 @@
     <logger name="org.bff.javampd" level="error" />
     <logger name="org.iot.raspberry.grovepi" level="error" />
     <logger name="GrovePi" level="error" />
+    <logger name="org.reflections" level="error" />
     <logger name="ch.qos.logback" level="error" />
 
     <root level="info">

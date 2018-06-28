@@ -24,8 +24,4 @@ public class RestGetKnowledgeBasesRequest extends BaseRestRequest {
     public RestGetKnowledgeBasesRequest() {
         //
     }
-
-    public RestGetKnowledgeBasesRequest(String username, String password) {
-        super(username, password);
-    }
 }

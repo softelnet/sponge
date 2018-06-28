@@ -23,9 +23,9 @@ import org.openksavi.sponge.core.BaseProcessorDefinition;
 
 public class BaseActionDefinition extends BaseProcessorDefinition implements ActionDefinition {
 
-    private ArgMeta[] argsMeta;
+    private ArgMeta<?>[] argsMeta;
 
-    private ResultMeta resultMeta;
+    private ResultMeta<?> resultMeta;
 
     @Override
     public boolean isSingleton() {
@@ -33,22 +33,22 @@ public class BaseActionDefinition extends BaseProcessorDefinition implements Act
     }
 
     @Override
-    public ArgMeta[] getArgsMeta() {
+    public ArgMeta<?>[] getArgsMeta() {
         return argsMeta;
     }
 
     @Override
-    public void setArgsMeta(ArgMeta... argsMeta) {
+    public void setArgsMeta(ArgMeta<?>... argsMeta) {
         this.argsMeta = argsMeta;
     }
 
     @Override
-    public ResultMeta getResultMeta() {
+    public ResultMeta<?> getResultMeta() {
         return resultMeta;
     }
 
     @Override
-    public void setResultMeta(ResultMeta resultMeta) {
+    public void setResultMeta(ResultMeta<?> resultMeta) {
         this.resultMeta = resultMeta;
     }
 }

@@ -16,11 +16,16 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 
 /**
@@ -48,22 +53,40 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public ArgMeta[] getArgsMeta() {
+    public ArgMeta<?>[] getArgsMeta() {
         return getDefinition().getArgsMeta();
     }
 
     @Override
-    public void setArgsMeta(ArgMeta... argsMeta) {
+    public void setArgsMeta(ArgMeta<?>... argsMeta) {
         getDefinition().setArgsMeta(argsMeta);
     }
 
     @Override
-    public ResultMeta getResultMeta() {
+    public ResultMeta<?> getResultMeta() {
         return getDefinition().getResultMeta();
     }
 
     @Override
-    public void setResultMeta(ResultMeta resultMeta) {
+    public void setResultMeta(ResultMeta<?> resultMeta) {
         getDefinition().setResultMeta(resultMeta);
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+
+        Validate.isTrue(getArgsMeta() != null && getResultMeta() != null || getArgsMeta() == null && getResultMeta() == null,
+                "Both argument metadata and result metadata must be set or not");
+
+        if (getArgsMeta() != null) {
+            Arrays.stream(getArgsMeta()).filter(argMeta -> argMeta != null && argMeta.getType() != null)
+                    .forEach(argMeta -> SpongeUtils.validateType(argMeta.getType(), String.format("argument %s in the action %s",
+                            argMeta.getName() != null ? argMeta.getName() : "unnamed", getName())));
+        }
+
+        if (getResultMeta() != null) {
+            SpongeUtils.validateType(getResultMeta().getType(), String.format("result of the action %s", getName()));
+        }
     }
 }

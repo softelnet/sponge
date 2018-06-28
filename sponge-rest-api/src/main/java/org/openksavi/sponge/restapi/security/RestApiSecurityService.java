@@ -16,13 +16,15 @@
 
 package org.openksavi.sponge.restapi.security;
 
+import org.apache.camel.Exchange;
+
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.util.HasEngine;
 
 public interface RestApiSecurityService extends HasEngine {
 
-    User authenticateUser(String username, String password);
+    User authenticateUser(String username, String password, Exchange exchange);
 
     boolean canCallAction(User user, ActionAdapter actionAdapter);
 

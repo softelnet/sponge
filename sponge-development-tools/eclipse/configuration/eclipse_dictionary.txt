@@ -49,3 +49,8 @@ metadata
 subtype
 regexp
 enum
+jackson
+servlet
+jetty
+deserialization
+username

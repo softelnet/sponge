@@ -60,6 +60,8 @@ public class RestApiSettings {
 
     private String adminRole = RestApiConstants.DEFAULT_ROLE_ADMIN;
 
+    private String guestRole = RestApiConstants.DEFAULT_ROLE_GUEST;
+
     private boolean includeDetailedErrorMessage = RestApiConstants.DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE;
 
     public String getRestComponentId() {
@@ -156,6 +158,14 @@ public class RestApiSettings {
 
     public void setAdminRole(String adminRole) {
         this.adminRole = adminRole;
+    }
+
+    public String getGuestRole() {
+        return guestRole;
+    }
+
+    public void setGuestRole(String guestRole) {
+        this.guestRole = guestRole;
     }
 
     public boolean isIncludeDetailedErrorMessage() {

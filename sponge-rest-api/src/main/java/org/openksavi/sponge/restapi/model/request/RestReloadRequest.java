@@ -24,8 +24,4 @@ public class RestReloadRequest extends BaseRestRequest {
     public RestReloadRequest() {
         //
     }
-
-    public RestReloadRequest(String username, String password) {
-        super(username, password);
-    }
 }

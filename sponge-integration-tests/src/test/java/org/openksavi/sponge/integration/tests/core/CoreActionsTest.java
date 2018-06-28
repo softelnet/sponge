@@ -21,17 +21,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.Type;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.examples.TestCompoundComplexObject;
 import org.openksavi.sponge.test.util.TestUtils;
+import org.openksavi.sponge.type.AnyType;
+import org.openksavi.sponge.type.BinaryType;
+import org.openksavi.sponge.type.IntegerType;
+import org.openksavi.sponge.type.ListType;
+import org.openksavi.sponge.type.ObjectType;
+import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.TypeKind;
 
 public class CoreActionsTest {
 
@@ -58,15 +68,15 @@ public class CoreActionsTest {
             assertEquals("Echo Action", upperActionAdapter.getDisplayName());
             assertEquals("Returns the upper case string", upperActionAdapter.getDescription());
 
-            ArgMeta[] argMeta = upperActionAdapter.getArgsMeta();
+            ArgMeta<?>[] argMeta = upperActionAdapter.getArgsMeta();
             assertEquals(1, argMeta.length);
-            assertEquals("arg1", argMeta[0].getName());
-            assertEquals(Type.STRING, argMeta[0].getType());
+            assertEquals("text", argMeta[0].getName());
+            assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
             assertEquals(true, argMeta[0].isRequired());
             assertEquals("Argument 1", argMeta[0].getDisplayName());
             assertEquals("Argument 1 description", argMeta[0].getDescription());
 
-            assertEquals(Type.STRING, upperActionAdapter.getResultMeta().getType());
+            assertEquals(TypeKind.STRING, upperActionAdapter.getResultMeta().getType().getKind());
             assertEquals("Upper case string", upperActionAdapter.getResultMeta().getDisplayName());
             assertEquals("Result description", upperActionAdapter.getResultMeta().getDescription());
 
@@ -89,6 +99,73 @@ public class CoreActionsTest {
         } catch (SpongeException e) {
             // Jython-specific error message copying.
             assertTrue(e.getMessage().contains("global name 'Nooone' is not defined"));
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsMetadataTypes() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("MultipleArgumentsAction");
+            assertEquals("Multiple arguments action", adapter.getDisplayName());
+            assertEquals("Multiple arguments action.", adapter.getDescription());
+
+            ArgMeta<?>[] argMeta = adapter.getArgsMeta();
+            assertEquals(9, argMeta.length);
+
+            assertEquals("stringArg", argMeta[0].getName());
+            assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
+            assertEquals(10, ((StringType) argMeta[0].getType()).getMaxLength().intValue());
+            assertEquals(true, argMeta[0].isRequired());
+            assertEquals(null, argMeta[0].getDisplayName());
+            assertEquals(null, argMeta[0].getDescription());
+
+            assertEquals("integerArg", argMeta[1].getName());
+            assertEquals(TypeKind.INTEGER, argMeta[1].getType().getKind());
+            assertEquals(1, ((IntegerType) argMeta[1].getType()).getMinValue().intValue());
+            assertEquals(100, ((IntegerType) argMeta[1].getType()).getMaxValue().intValue());
+
+            assertEquals("anyArg", argMeta[2].getName());
+            assertEquals(TypeKind.ANY, argMeta[2].getType().getKind());
+            assertTrue(argMeta[2].getType() instanceof AnyType);
+
+            assertEquals("stringListArg", argMeta[3].getName());
+            assertEquals(TypeKind.LIST, argMeta[3].getType().getKind());
+            assertEquals(TypeKind.STRING, ((ListType) argMeta[3].getType()).getElementType().getKind());
+
+            assertEquals("decimalListArg", argMeta[4].getName());
+            assertEquals(TypeKind.LIST, argMeta[4].getType().getKind());
+            Type elementType4 = ((ListType) argMeta[4].getType()).getElementType();
+            assertEquals(TypeKind.OBJECT, elementType4.getKind());
+            assertEquals(BigDecimal.class.getName(), ((ObjectType) elementType4).getClassName());
+
+            assertEquals("stringArrayArg", argMeta[5].getName());
+            assertEquals(TypeKind.OBJECT, argMeta[5].getType().getKind());
+            assertEquals(String[].class, SpongeUtils.getClass(((ObjectType) argMeta[5].getType()).getClassName()));
+
+            assertEquals("javaClassArg", argMeta[6].getName());
+            assertEquals(TypeKind.OBJECT, argMeta[6].getType().getKind());
+            assertEquals(TestCompoundComplexObject.class.getName(), ((ObjectType) argMeta[6].getType()).getClassName());
+
+            assertEquals("javaClassListArg", argMeta[7].getName());
+            assertEquals(TypeKind.LIST, argMeta[7].getType().getKind());
+            Type elementType7 = ((ListType) argMeta[7].getType()).getElementType();
+            assertEquals(TypeKind.OBJECT, elementType7.getKind());
+            assertEquals(TestCompoundComplexObject.class.getName(), ((ObjectType) elementType7).getClassName());
+
+            assertEquals("binaryArg", argMeta[8].getName());
+            assertEquals(TypeKind.BINARY, argMeta[8].getType().getKind());
+            assertEquals("jpg", ((BinaryType) argMeta[8].getType()).getFormat());
+
+            assertEquals(TypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
+            assertEquals("Boolean result", adapter.getResultMeta().getDisplayName());
+
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

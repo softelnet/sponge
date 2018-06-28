@@ -20,17 +20,25 @@ import io.swagger.annotations.ApiModelProperty;
 
 public abstract class BaseRestRequest {
 
+    private String id;
+
     private String username;
 
     private String password;
 
-    protected BaseRestRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+    private String authToken;
 
     protected BaseRestRequest() {
         //
+    }
+
+    @ApiModelProperty(value = "The request id", required = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @ApiModelProperty(value = "The user name", required = false)
@@ -49,5 +57,14 @@ public abstract class BaseRestRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @ApiModelProperty(value = "The authentication token", required = false)
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }
