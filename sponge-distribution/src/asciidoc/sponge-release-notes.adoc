@@ -8,8 +8,11 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 [discrete]
 == 1.3.1 (not released yet)
 
+* Java-based processors may be enabled and disabled by scanning Java packages (`EPS.enableJavaByScan`).
 * Support for custom roles in the REST API. Roles are represented as String rather than an enumeration.
+* Support for complex data types in the REST API.
 * Minor bug fixes.
+* Libraries upgrade.
 
 [discrete]
 == 1.3.0 (2018-06-20)

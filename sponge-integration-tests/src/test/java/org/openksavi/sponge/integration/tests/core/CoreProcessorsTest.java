@@ -27,6 +27,7 @@ import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.integration.tests.core.scanning.ScannedAction1;
 import org.openksavi.sponge.test.util.TestUtils;
 
 public class CoreProcessorsTest {
@@ -79,6 +80,33 @@ public class CoreProcessorsTest {
             assertTrue(action instanceof TestActionVisibiliy);
             assertTrue(((TestActionVisibiliy) action).isVisible("day"));
             assertFalse(((TestActionVisibiliy) action).isVisible("night"));
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testEnableJavaProcessorsByScan() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/processors_scan_java_packages.py").build();
+        engine.startup();
+
+        try {
+            assertEquals(2, engine.getActions().size());
+            assertEquals(2, engine.getTriggers().size());
+            assertTrue(engine.getOperations().existsAction("ScannedAction1"));
+            assertTrue(engine.getOperations().existsAction("ScannedAction2"));
+            assertTrue(engine.getOperations().existsTrigger("ScannedTrigger1"));
+            assertTrue(engine.getOperations().existsTrigger("ScannedTrigger2"));
+
+            engine.getOperations().disableJavaByScan(ScannedAction1.class.getPackage().getName());
+
+            assertEquals(0, engine.getActions().size());
+            assertEquals(0, engine.getTriggers().size());
+            assertFalse(engine.getOperations().existsAction("ScannedAction1"));
+            assertFalse(engine.getOperations().existsAction("ScannedAction2"));
+            assertFalse(engine.getOperations().existsTrigger("ScannedTrigger1"));
+            assertFalse(engine.getOperations().existsTrigger("ScannedTrigger2"));
         } finally {
             engine.shutdown();
         }

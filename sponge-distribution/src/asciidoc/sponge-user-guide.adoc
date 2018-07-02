@@ -303,13 +303,29 @@ def onLoad:
     EPS.enableAll(Trigger1, Trigger3)
 ----
 
-To manually enable any Java-based processors in a script knowledge base you may use `EPS.enableJava()` and `EPS.enableJavaAll()`. The default name of a Java-based processor is its full Java class name.
+To manually enable any Java-based processors in a script knowledge base you may use `EPS.enableJava()`, `EPS.enableJavaAll()` or `EPS.enableJavaByScan()`. The default name of a Java-based processor is its full Java class name. 
 
-.Example of enabling a Java-based processor
+The `enableJavaByScan` method enables Java-based processors by scanning a given packages in search of all non abstract processor classes. The scanning is performed by the https://github.com/ronmamo/reflections[Reflections] library. The method parameters are compatible with the http://ronmamo.github.io/reflections/index.html?org/reflections/Reflections.html[`Reflections(Object...)`] constructor.
+
+.Example of enabling one Java-based processor
 [source,python]
 ----
 def onLoad():
     EPS.enableJava(SameSourceJavaRule)
+----
+
+.Example of enabling many Java-based processors
+[source,python]
+----
+def onLoad():
+    EPS.enableJavaAll(SameSourceJavaRule, SameSourceJavaRule2, SameSourceJavaRule3)
+----
+
+.Example of enabling Java-based processors by scanning Java packages
+[source,python]
+----
+def onLoad():
+    EPS.enableJavaByScan("org.openksavi.sponge.integration.tests.core.scanning")
 ----
 
 === Disabling processors
@@ -322,7 +338,7 @@ def onLoad:
     EPS.disable(EchoAction)
 ----
 
-To disable any Java-based processors in a script knowledge base you may use `EPS.disableJava()` and `EPS.disableJavaAll()`.
+To disable any Java-based processors in a script knowledge base you may use `EPS.disableJava()`, `EPS.disableJavaAll()` or `EPS.disableJavaByScan()`.
 
 .Example of disabling a Java-based processor
 [source,python]

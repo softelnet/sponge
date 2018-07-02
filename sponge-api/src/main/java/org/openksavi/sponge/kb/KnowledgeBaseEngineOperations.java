@@ -52,6 +52,13 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     void enableJavaAll(Class<?>... processorClasses);
 
     /**
+     * Enables Java-based processors by scanning the given packages in search of all non abstract processor classes.
+     *
+     * @param params the parameters compatible with the org.reflections.Reflections(Object...) constructor.
+     */
+    void enableJavaByScan(final Object... params);
+
+    /**
      * Disables the Java-based processor.
      *
      * @param processorClass Java-based processor class.
@@ -65,6 +72,13 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      * @param processorClasses Java-based processor classes.
      */
     void disableJavaAll(Class<?>... processorClasses);
+
+    /**
+     * Disables Java-based processors by scanning the given packages in search of all non abstract processor classes.
+     *
+     * @param params the parameters compatible with the org.reflections.Reflections(Object...) constructor.
+     */
+    void disableJavaByScan(final Object... params);
 
     /**
      * Enables the Java-based filter.

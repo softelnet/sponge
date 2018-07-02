@@ -18,12 +18,14 @@ package org.openksavi.sponge.core.kb;
 
 import java.util.stream.Stream;
 
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.BaseEngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -61,6 +63,13 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
         Stream.of(processorClasses).forEachOrdered(processorClass -> enableJava((Class<? extends Processor>) processorClass));
     }
 
+    @Override
+    public void enableJavaByScan(final Object... params) {
+        Reflections reflections = new Reflections(params);
+        reflections.getSubTypesOf(Processor.class).stream().filter(cls -> !SpongeUtils.isAbstract(cls))
+                .forEachOrdered(processorClass -> enableJava(processorClass));
+    }
+
     @SuppressWarnings("rawtypes")
     @Override
     public void disableJava(Class<? extends Processor> processorClass) {
@@ -71,6 +80,13 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     @Override
     public void disableJavaAll(Class<?>... processorClasses) {
         Stream.of(processorClasses).forEachOrdered(processorClass -> disableJava((Class<? extends Processor>) processorClass));
+    }
+
+    @Override
+    public void disableJavaByScan(final Object... params) {
+        Reflections reflections = new Reflections(params);
+        reflections.getSubTypesOf(Processor.class).stream().filter(cls -> !SpongeUtils.isAbstract(cls))
+                .forEachOrdered(processorClass -> disableJava(processorClass));
     }
 
     /**
