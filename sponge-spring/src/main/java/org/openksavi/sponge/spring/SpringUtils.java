@@ -17,13 +17,9 @@
 package org.openksavi.sponge.spring;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,27 +28,23 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import org.openksavi.sponge.config.ConfigException;
+import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 public abstract class SpringUtils {
 
     private static final ResourcePatternResolver RESOURCE_RESOLVER =
             new PathMatchingResourcePatternResolver(SpringKnowledgeBaseFileProvider.class.getClassLoader());
 
-    public static Reader getReaderFromResourcePatternResolver(String fileName, Charset charset) throws IOException {
-        Resource[] resources = RESOURCE_RESOLVER.getResources(fileName);
-        List<InputStream> inputStreams = Arrays.stream(resources).filter(Resource::exists).map(resource -> {
+    public static List<KnowledgeBaseReaderHolder> getReadersFromResourcePatternResolver(String fileName, Charset charset)
+            throws IOException {
+        return Arrays.stream(RESOURCE_RESOLVER.getResources(fileName)).filter(Resource::exists).map(resource -> {
             try {
-                return resource.getInputStream();
+                return new KnowledgeBaseReaderHolder(new InputStreamReader(resource.getInputStream()),
+                        resource.getURL() != null ? resource.getURL().toString() : resource.toString());
             } catch (IOException e) {
                 throw new ConfigException("Error reading " + resource, e);
             }
         }).collect(Collectors.toList());
-
-        if (!inputStreams.isEmpty()) {
-            return new InputStreamReader(new SequenceInputStream(Collections.enumeration(inputStreams)), charset);
-        }
-
-        return null;
     }
 
     protected SpringUtils() {

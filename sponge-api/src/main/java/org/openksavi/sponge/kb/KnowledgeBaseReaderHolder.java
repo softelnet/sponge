@@ -16,19 +16,35 @@
 
 package org.openksavi.sponge.kb;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.Reader;
 
 /**
- * A knowledge base script provider.
+ * Knowledge base reader holder. Holds an open reader and a knowledge base file name.
  */
-public interface KnowledgeBaseScriptProvider<T extends KnowledgeBaseScript> {
+public class KnowledgeBaseReaderHolder {
 
-    /**
-     * Returns reader holders for the script.
-     *
-     * @return reader holders for the script.
-     * @throws IOException if an exception occurred.
-     */
-    List<KnowledgeBaseReaderHolder> getReaders() throws IOException;
+    private Reader reader;
+
+    private String fileName;
+
+    public KnowledgeBaseReaderHolder(Reader reader, String fileName) {
+        this.reader = reader;
+        this.fileName = fileName;
+    }
+
+    public Reader getReader() {
+        return reader;
+    }
+
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 }

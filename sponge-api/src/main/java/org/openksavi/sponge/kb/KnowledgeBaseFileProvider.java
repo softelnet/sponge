@@ -16,9 +16,8 @@
 
 package org.openksavi.sponge.kb;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 
@@ -28,15 +27,13 @@ import org.openksavi.sponge.engine.SpongeEngine;
 public interface KnowledgeBaseFileProvider {
 
     /**
-     * Returns a reader for the specified knowledge base file name or {@code null} if there is no such file.
+     * Returns readers for the specified knowledge base file name (or wildcard). Returns an empty list if none found.
      *
      * @param engine the engine.
      * @param fileName a knowledge base file name.
      * @param charset a knowledge base file charset.
      *
-     * @return a reader for the specified knowledge base file name.
-     *
-     * @throws IOException when IO error.
+     * @return readers for the specified knowledge base file name.
      */
-    Reader getReader(SpongeEngine engine, String fileName, Charset charset) throws IOException;
+    List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String fileName, Charset charset);
 }

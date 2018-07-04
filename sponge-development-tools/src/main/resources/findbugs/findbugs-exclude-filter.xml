@@ -22,6 +22,17 @@
         <Bug pattern="EI_EXPOSE_REP" />
     </Match>
     <Match>
+        <Class name="org.openksavi.sponge.core.kb.DefaultKnowledgeBaseFileProvider" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.core.util.SpongeUtils" />
+        <Or>
+            <Method name="validateType" />
+        </Or>
+        <Bug pattern="BC_UNCONFIRMED_CAST" />
+    </Match>
+    <Match>
         <Class name="org.openksavi.sponge.core.rule.BaseRuleDefinition" />
         <Or>
             <Method name="getEventAliases" />
@@ -52,5 +63,9 @@
     <Match>
         <Class name="org.openksavi.sponge.test.script.template.RulesTestTemplate" />
         <Bug pattern="UC_USELESS_OBJECT" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.examples.TestComplexObject" />
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
     </Match>
 </FindBugsFilter>

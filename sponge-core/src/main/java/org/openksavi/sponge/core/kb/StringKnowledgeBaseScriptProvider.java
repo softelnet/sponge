@@ -17,10 +17,12 @@
 package org.openksavi.sponge.core.kb;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 /**
  * A String-based knowledge base script provider.
@@ -32,7 +34,7 @@ public class StringKnowledgeBaseScriptProvider extends BaseKnowledgeBaseScriptPr
     }
 
     @Override
-    public Reader getReader() throws IOException {
-        return new StringReader(script.getBody().toString());
+    public List<KnowledgeBaseReaderHolder> getReaders() throws IOException {
+        return Arrays.asList(new KnowledgeBaseReaderHolder(new StringReader(script.getBody().toString()), script.getName()));
     }
 }

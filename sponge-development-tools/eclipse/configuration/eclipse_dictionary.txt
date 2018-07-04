@@ -54,3 +54,6 @@ servlet
 jetty
 deserialization
 username
+wildcard
+wildcards
+glob

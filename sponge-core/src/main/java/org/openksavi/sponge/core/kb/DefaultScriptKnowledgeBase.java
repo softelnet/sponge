@@ -53,7 +53,7 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
     @Override
     public void addScript(KnowledgeBaseScript script) {
         if (script.getKnowledgeBase() != null && !Objects.equals(script.getKnowledgeBase(), this)) {
-            throw new SpongeException("A different knowledge base is already assigned to this script instance");
+            throw new SpongeException("A different knowledge base has already been assigned to this script instance");
         }
 
         script.setKnowledgeBase(this);

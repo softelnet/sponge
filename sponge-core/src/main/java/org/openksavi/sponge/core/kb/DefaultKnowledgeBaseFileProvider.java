@@ -16,58 +16,110 @@
 
 package org.openksavi.sponge.core.kb;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.io.FileLocatorUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
+import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 /**
  * A default knowledge base file provider. Search order: relative to the current directory or classpath, in the XML configuration file
- * directory, in the Sponge home directory.
+ * directory, in the Sponge home directory. Supports wildcards in file names (not directories) according to the glob pattern
+ * {@link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob}.
  */
 public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultKnowledgeBaseFileProvider.class);
-
     @Override
-    public Reader getReader(SpongeEngine engine, String fileName, Charset charset) throws IOException {
-        // Try to read relative to the current directory or classpath.
-        Reader reader = SpongeUtils.getReader(fileName, charset);
+    public List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String fileName, Charset charset) {
+        Validate.notBlank(fileName, "A file name or pattern cannot be empty");
+        Path filePath = Validate.notNull(Paths.get(fileName), "A file path is null");
+        Validate.notBlank(filePath.getFileName() != null ? filePath.getFileName().toString() : null,
+                "A file name or pattern cannot be empty");
+        // Absolute path won't be looked in the config directory or the Sponge home (handled below) for wildcards.
+        boolean isAbsolutePath = filePath.getParent() != null && filePath.getParent().isAbsolute();
 
-        // Try to read in the XML configuration file directory.
-        if (reader == null) {
-            URL configurationFileUrl = engine.getConfigurationManager().getConfigurationFileUrl();
-            if (configurationFileUrl != null) {
-                File configFile = FileLocatorUtils.fileFromURL(configurationFileUrl);
-                if (configFile != null) {
-                    String configDir = configFile.getParent();
-                    if (configDir != null) {
-                        reader = SpongeUtils.getReader(Paths.get(configDir, fileName).toString(), charset);
-                    }
-                } else {
-                    logger.warn("Configuration file URL {} cannot be converted to File", configurationFileUrl);
-                }
+        List<KnowledgeBaseReaderHolder> readers = null;
+
+        // 1. Try to read relative to the current directory or classpath.
+        // 1.1. As a non wildcard.
+        if (!(readers = getNonWildcardReaders(null, fileName, charset)).isEmpty()) {
+            return readers;
+        }
+
+        // 1.2. As a wildcard.
+        if (!(readers = getWildcardReaders(filePath.getParent(), fileName, charset)).isEmpty()) {
+            return readers;
+        }
+
+        // 2. Try to read in the XML configuration file directory.
+        String configDir = SpongeUtils.getConfigurationFileDir(engine);
+        if (configDir != null) {
+            // 2.1. As a non wildcard.
+            if (!(readers = getNonWildcardReaders(configDir, fileName, charset)).isEmpty()) {
+                return readers;
+            }
+
+            // 2.2. As a wildcard.
+            if (!isAbsolutePath && !(readers = getWildcardReaders(
+                    filePath.getParent() != null ? Paths.get(configDir, filePath.getParent().toString()) : Paths.get(configDir), fileName,
+                    charset)).isEmpty()) {
+                return readers;
             }
         }
 
-        // Try to read in the Sponge home directory.
-        if (reader == null) {
-            String home = engine.getConfigurationManager().getHome();
-            if (home != null) {
-                reader = SpongeUtils.getReader(Paths.get(home, fileName).toString(), charset);
+        // 3. Try to read in the Sponge home directory.
+        String home = engine.getConfigurationManager().getHome();
+        if (home != null) {
+            // 3.1. As a non wildcard.
+            if (!(readers = getNonWildcardReaders(home, fileName, charset)).isEmpty()) {
+                return readers;
+            }
+
+            // 3.2. As a wildcard.
+            if (!isAbsolutePath && !(readers = getWildcardReaders(
+                    filePath.getParent() != null ? Paths.get(home, filePath.getParent().toString()) : Paths.get(home), fileName, charset))
+                            .isEmpty()) {
+                return readers;
             }
         }
 
-        return reader;
+        return Collections.emptyList();
+    }
+
+    protected List<KnowledgeBaseReaderHolder> getNonWildcardReaders(String dir, String fileName, Charset charset) {
+        String fullFileName = dir != null ? Paths.get(dir, fileName).toString() : fileName;
+        Reader reader = SpongeUtils.getReader(fullFileName, charset);
+
+        return reader != null ? Arrays.asList(new KnowledgeBaseReaderHolder(reader, fullFileName)) : Collections.emptyList();
+    }
+
+    protected List<KnowledgeBaseReaderHolder> getWildcardReaders(Path dir, String fileName, Charset charset) {
+        Path finalDir = dir != null ? dir : Paths.get(".");
+        String fileNamePattern = Paths.get(fileName).getFileName().toString();
+        List<Path> files = new ArrayList<>();
+
+        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(finalDir, fileNamePattern)) {
+            dirStream.forEach(files::add);
+        } catch (IOException e) {
+            throw new SpongeException("Error searching files in " + finalDir, e);
+        }
+
+        return files.stream().map(path -> new KnowledgeBaseReaderHolder(SpongeUtils.getReader(path.toString(), charset), path.toString()))
+                .collect(Collectors.toList());
     }
 }

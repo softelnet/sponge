@@ -19,6 +19,7 @@ package org.openksavi.sponge.core.util;
 import static org.awaitility.Awaitility.await;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,6 +69,7 @@ import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import org.apache.commons.configuration2.ConfigurationUtils;
+import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -175,24 +177,26 @@ public abstract class SpongeUtils {
         return SerializationUtils.clone(source);
     }
 
-    public static Reader getReader(String fileName) throws IOException {
+    public static Reader getReader(String fileName) {
         return getReader(fileName, Charset.defaultCharset());
     }
 
-    public static Reader getReader(String fileName, Charset charset) throws IOException {
-        Path path = Paths.get(fileName);
+    public static Reader getReader(String fileName, Charset charset) {
+        try {
+            if (Files.isRegularFile(Paths.get(fileName))) {
+                return Files.newBufferedReader(Paths.get(fileName), charset);
+            }
 
-        if (Files.isRegularFile(path)) {
-            return Files.newBufferedReader(Paths.get(fileName), charset);
+            URL url = getUrlFromClasspath(fileName);
+
+            if (url != null) {
+                return new BufferedReader(new InputStreamReader(url.openStream(), charset));
+            }
+
+            return null;
+        } catch (IOException e) {
+            throw new SpongeException("Error reading " + fileName, e);
         }
-
-        URL url = getUrlFromClasspath(fileName);
-
-        if (url != null) {
-            return new BufferedReader(new InputStreamReader(url.openStream(), charset));
-        }
-
-        return null;
     }
 
     public static URL getUrlFromClasspath(String resourceName) {
@@ -443,6 +447,16 @@ public abstract class SpongeUtils {
         }
     }
 
+    public static void closeQuietly(Reader reader) {
+        try {
+            if (reader != null) {
+                reader.close();
+            }
+        } catch (Throwable e) {
+            logger.warn("Error closing a reader", e);
+        }
+    }
+
     public static String getRequiredConfigurationString(Configuration configuration, String key) {
         String value = configuration.getString(key, null);
 
@@ -584,15 +598,18 @@ public abstract class SpongeUtils {
     public static void validateType(Type type, String valueName) {
         switch (type.getKind()) {
         case OBJECT:
+            Validate.isInstanceOf(ObjectType.class, type, "The type should be an instance of %s", ObjectType.class);
             String className = ((ObjectType) type).getClassName();
             Validate.notNull(className, "Missing class name in the %s", valueName);
             Validate.notNull(getClass(className), "The class %s used in the %s not found", className, valueName);
             break;
         case LIST:
+            Validate.isInstanceOf(ListType.class, type, "The type should be an instance of %s", ListType.class);
             validateType(Validate.notNull(((ListType) type).getElementType(), "List element type not specified in the %s", valueName),
                     valueName);
             break;
         case MAP:
+            Validate.isInstanceOf(MapType.class, type, "The type should be an instance of %s", MapType.class);
             validateType(Validate.notNull(((MapType) type).getKeyType(), "Map key type not specified in the %s", valueName), valueName);
             validateType(Validate.notNull(((MapType) type).getValueType(), "Map value type not specified in the %s", valueName), valueName);
             break;
@@ -603,6 +620,26 @@ public abstract class SpongeUtils {
 
     public static List<Class<? extends Type>> getSupportedTypes() {
         return new ArrayList<>(TYPE_REFLECTIONS.getSubTypesOf(Type.class));
+    }
+
+    /**
+     * Returns the configuration file directory or {@code null} if the configuration file is not present.
+     *
+     * @param engine the engine.
+     * @return the configuration file directory.
+     */
+    public static String getConfigurationFileDir(SpongeEngine engine) {
+        URL configurationFileUrl = engine.getConfigurationManager().getConfigurationFileUrl();
+        if (configurationFileUrl != null) {
+            File configFile = FileLocatorUtils.fileFromURL(configurationFileUrl);
+            if (configFile != null) {
+                return configFile.getParent();
+            } else {
+                logger.warn("Configuration file URL {} cannot be converted to File", configurationFileUrl);
+            }
+        }
+
+        return null;
     }
 
     protected SpongeUtils() {

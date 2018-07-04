@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +45,7 @@ import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
@@ -99,10 +99,6 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     @Override
     public final void load(List<KnowledgeBaseScript> scripts) {
-        if (scripts.size() > 1) {
-            logger.debug("Loading knowledge base '{}' from {}.", scripts.get(0).getKnowledgeBase().getName(),
-                    scripts.stream().map(script -> script.getName()).collect(Collectors.joining(", ", "'", "'")));
-        }
         synchronized (interpteterSynchro) {
             scripts.forEach(script -> loadKnowledgeBaseScript(script));
         }
@@ -146,12 +142,28 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
             SpongeEngine engine = getEngineOperations().getEngine();
 
-            try (Reader reader = engine.getKnowledgeBaseManager().getKnowledgeBaseScriptProvider(script).getReader()) {
-                if (reader != null) {
-                    doLoad(reader, script.getName());
-                }
+            List<KnowledgeBaseReaderHolder> readers = null;
+            try {
+                readers = engine.getKnowledgeBaseManager().getKnowledgeBaseScriptProvider(script).getReaders();
+                readers.forEach(reader -> {
+                    if (script != null && script.getKnowledgeBase() != null) {
+                        logger.info("Loading '{}' knowledge base file: {}.", script.getKnowledgeBase().getName(), reader.getFileName());
+                    } else {
+                        logger.info("Loading knowledge base file: {}.", reader.getFileName());
+                    }
+
+                    try {
+                        doLoad(reader.getReader(), reader.getFileName());
+                    } catch (Throwable e) {
+                        throw SpongeUtils.wrapException(reader.getFileName(), this, e);
+                    }
+                });
             } catch (Throwable e) {
                 throw SpongeUtils.wrapException(script.getName(), this, e);
+            } finally {
+                if (readers != null) {
+                    readers.forEach(reader -> SpongeUtils.closeQuietly(reader.getReader()));
+                }
             }
         }
     }
@@ -172,8 +184,6 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     }
 
     private void loadKnowledgeBaseScript(KnowledgeBaseScript script) {
-        logger.info("Loading knowledge base '{}' from {}.", script.getKnowledgeBase().getName(), script.getName());
-
         load(script);
     }
 

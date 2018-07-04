@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <property name="sponge.home">.</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>examples/core/wildcards/relative_to_home/knowledge_base_file_wildcards_*.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+

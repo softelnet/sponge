@@ -17,14 +17,15 @@
 package org.openksavi.sponge.core.kb;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 /**
  * A file-based knowledge base script provider.
@@ -38,18 +39,18 @@ public class FileKnowledgeBaseScriptProvider extends BaseKnowledgeBaseScriptProv
     }
 
     @Override
-    public Reader getReader() throws IOException {
+    public List<KnowledgeBaseReaderHolder> getReaders() throws IOException {
         Charset charset = script.getCharset() != null ? script.getCharset() : Charset.defaultCharset();
-        Reader reader = engine.getKnowledgeBaseFileProvider().getReader(engine, script.getFileName(), charset);
+        List<KnowledgeBaseReaderHolder> readers = engine.getKnowledgeBaseFileProvider().getReaders(engine, script.getFileName(), charset);
 
-        if (reader == null) {
+        if (readers.isEmpty()) {
             if (script.isRequired()) {
-                throw new ConfigException("Knowledge base file " + script.getFileName() + " not found");
+                throw new ConfigException("Knowledge base file(s) " + script.getFileName() + " not found");
             } else {
-                logger.warn("The optional knowledge base file " + script.getFileName() + " not found.");
+                logger.info("The optional knowledge base file(s) " + script.getFileName() + " not found.");
             }
         }
 
-        return reader;
+        return readers;
     }
 }
