@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.3.1 (not released yet)
+== 1.3.1 (2018-07-04)
 
 * Java-based processors may be enabled and disabled by scanning Java packages (`EPS.enableJavaByScan`).
 * Knowledge base files may be specified using wildcards.

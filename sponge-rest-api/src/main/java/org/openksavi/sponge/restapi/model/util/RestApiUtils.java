@@ -69,7 +69,7 @@ public abstract class RestApiUtils {
     /**
      * Verifies if a user can use a knowledge base.
      *
-     * @param roleToKnowledgeBases the map of (role name -> knowledge base names regexps).
+     * @param roleToKnowledgeBases the map of (role name to knowledge base names regexps).
      * @param user the user.
      * @param kbName the knowledge base name.
      * @return {@code true} if this user can use the knowledge base.

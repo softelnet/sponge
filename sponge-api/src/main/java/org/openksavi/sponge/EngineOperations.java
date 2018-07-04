@@ -52,6 +52,7 @@ public interface EngineOperations {
      * @param resultClass result class.
      * @param actionName actionName name of the action.
      * @param args arguments to pass to action.
+     * @param <T> result type.
      * @return result of action called for specified arguments.
      */
     <T> T call(Class<T> resultClass, String actionName, Object... args);

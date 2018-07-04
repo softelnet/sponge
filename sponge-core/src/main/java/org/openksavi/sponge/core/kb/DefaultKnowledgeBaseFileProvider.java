@@ -39,8 +39,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 /**
  * A default knowledge base file provider. Search order: relative to the current directory or classpath, in the XML configuration file
- * directory, in the Sponge home directory. Supports wildcards in file names (not directories) according to the glob pattern
- * {@link https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob}.
+ * directory, in the Sponge home directory. Supports wildcards in file names (not directories) according to the glob pattern.
  */
 public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvider {
 
