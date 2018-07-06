@@ -6,6 +6,12 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.3.2 (not released yet)
+
+* Fixed the error in loading optional knowledge base files using the `SpringKnowledgeBaseFileProvider`.
+* Libraries upgrade.
+
+[discrete]
 == 1.3.1 (2018-07-04)
 
 * Java-based processors may be enabled and disabled by scanning Java packages (`EPS.enableJavaByScan`).
@@ -35,7 +41,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 
 * Support for using ReactiveX (`sponge-reactivex`) in knowledge bases, e.g. for processing a stream of {sponge} events using reactive programming.
 * Added support for passing a knowledge base script as a String to the EngineBuilder API.
-* Fixed an error preventing closing a standalone application when there was an exception thrown in `onShutdown` callback function in a knowledge base.
+* Fixed the error preventing closing a standalone application when there was an exception thrown in `onShutdown` callback function in a knowledge base.
 * Pi4J (`sponge-rpi-pi4j`) and GrovePi (`sponge-rpi-grovepi`) integration examples.
 * Libraries upgrade.
 
@@ -79,14 +85,14 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * CamelProducerAction may be also set in the Camel In message header named CamelSpongeAction.
 * SpringEngine may be configured not to start immediately (see `SpringEngineBuilder.autoStartup` method).
 * Improvements in the interactive mode of the standalone command-line application (now JLine is used, supporting for example a command history).
-* Fixed error preventing substitution of properties defined via the EngineBuilder API in the properties section in the XML configuration files.
+* Fixed the error preventing substitution of properties defined via the EngineBuilder API in the properties section in the XML configuration files.
 
 [discrete]
 == 1.0.4 (2017-09-20)
 
 * Implementation of unordered rules, i.e. rules that listen to unordered sequences of events. Unordered rules is a new feature that should be treated as an experimental one.
 * API change: The `Rule` methods `setConditions` and `setAllConditions` have been renamed respectively to `addConditions` and `addJavaConditions`.
-* Fixed error in the interactive mode of the standalone application preventing exit when using `exit` or `quit` command.
+* Fixed the error in the interactive mode of the standalone application preventing exit when using `exit` or `quit` command.
 * Libraries upgrade.
 * Distribution as a Docker container.
 
@@ -103,14 +109,14 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 * Event name patterns in event processors.
 * Removed `matches` method in `Event`.
 * `EventDefinition` `send` methods accept `Duration` and `Instant` types.
-* Fixed concurrency problem in event set processors.
+* Fixed the concurrency problem in event set processors.
 * New tests for scripting support.
 * Libraries upgrade.
 
 [discrete]
 == 1.0.1 (2017-08-21)
 
-* Fixed possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
+* Fixed the possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
 
 [discrete]
 == 1.0.0 (2017-08-18)

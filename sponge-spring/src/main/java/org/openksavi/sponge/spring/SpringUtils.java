@@ -16,10 +16,12 @@
 
 package org.openksavi.sponge.spring;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,15 @@ public abstract class SpringUtils {
 
     public static List<KnowledgeBaseReaderHolder> getReadersFromResourcePatternResolver(String fileName, Charset charset)
             throws IOException {
-        return Arrays.stream(RESOURCE_RESOLVER.getResources(fileName)).filter(Resource::exists).map(resource -> {
+        Resource[] resources = null;
+
+        try {
+            resources = RESOURCE_RESOLVER.getResources(fileName);
+        } catch (FileNotFoundException e) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.stream(resources).filter(Resource::exists).map(resource -> {
             try {
                 return new KnowledgeBaseReaderHolder(new InputStreamReader(resource.getInputStream()),
                         resource.getURL() != null ? resource.getURL().toString() : resource.toString());

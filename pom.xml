@@ -78,7 +78,7 @@
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.1.17.0</jruby.version>
         <groovy.version>2.5.0</groovy.version>
-        <kotlin.version>1.2.50</kotlin.version>
+        <kotlin.version>1.2.51</kotlin.version>
 
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>

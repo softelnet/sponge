@@ -19,14 +19,18 @@ package org.openksavi.sponge.spring.test;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.spring.SpringPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -54,6 +58,44 @@ public class SpringTest {
         }
     }
 
+    @Configuration
+    public static class ExistingKnowledgeBaseFileWildcardTestConfig {
+
+        @Bean
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring*.py").build();
+        }
+
+        @Bean
+        public SpringPlugin springPlugin() {
+            return new SpringPlugin();
+        }
+
+        @Bean
+        public String testBean() {
+            return BEAN_VALUE;
+        }
+    }
+
+    @Configuration
+    public static class NonExistingKnowledgeBaseFileWildcardTestConfig {
+
+        @Bean
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().plugin(springPlugin()).knowledgeBase("kb", "examples/spring/non_existing*.py").build();
+        }
+
+        @Bean
+        public SpringPlugin springPlugin() {
+            return new SpringPlugin();
+        }
+
+        @Bean
+        public String testBean() {
+            return BEAN_VALUE;
+        }
+    }
+
     @Test
     public void testSpring() throws InterruptedException {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(TestConfig.class);
@@ -68,6 +110,41 @@ public class SpringTest {
             assertFalse(engine.isError());
         } finally {
             ctx.close();
+        }
+    }
+
+    @Test
+    public void testSpringKnowledgeBaseWildcardExisting() {
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ExistingKnowledgeBaseFileWildcardTestConfig.class);
+        ctx.start();
+
+        try {
+            SpongeEngine engine = ctx.getBean(SpongeEngine.class);
+
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(String.class, "springBeanValue") != null);
+
+            assertEquals(BEAN_VALUE, engine.getOperations().getVariable(String.class, "springBeanValue"));
+            assertFalse(engine.isError());
+        } finally {
+            ctx.close();
+        }
+    }
+
+    @Test
+    public void testSpringKnowledgeBaseWildcardNonExisting() {
+        AnnotationConfigApplicationContext ctx = null;
+
+        try {
+            ctx = new AnnotationConfigApplicationContext(NonExistingKnowledgeBaseFileWildcardTestConfig.class);
+
+            ctx.start();
+            fail("Exception expected");
+        } catch (BeanCreationException e) {
+            assertTrue(e.getCause() instanceof ConfigException);
+        } finally {
+            if (ctx != null) {
+                ctx.close();
+            }
         }
     }
 }
