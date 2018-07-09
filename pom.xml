@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <version>1.3.2</version>
     <name>Sponge - Parent</name>
     <description>Event Processing System</description>
     <url>http://sponge.openksavi.org</url>
@@ -55,8 +55,8 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.3.1</release.version>
-        <release.date>2018-07-04</release.date>
+        <release.version>1.3.2</release.version>
+        <release.date>2018-07-06</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -89,10 +89,10 @@
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
         <guava.version>25.1-jre</guava.version>
-        <spring.version>4.3.18.RELEASE</spring.version>
-        <spring-integration.version>4.3.17.RELEASE</spring-integration.version>
-        <spring-security.version>4.2.7.RELEASE</spring-security.version>
-        <camel.version>2.21.1</camel.version>
+        <spring.version>5.0.7.RELEASE</spring.version>
+        <spring-integration.version>5.0.6.RELEASE</spring-integration.version>
+        <spring-security.version>5.0.6.RELEASE</spring-security.version>
+        <camel.version>2.22.0</camel.version>
         <awaitility.version>3.1.1</awaitility.version>
         <jline.version>3.8.0</jline.version>
         <py4j.version>0.10.7</py4j.version>

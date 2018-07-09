@@ -33,7 +33,6 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
