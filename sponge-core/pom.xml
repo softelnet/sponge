@@ -104,12 +104,17 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.google.guava:guava</include>
+                                    <include>org.reflections:reflections</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>com.google</pattern>
                                     <shadedPattern>${shade.package}.com.google</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.reflections</pattern>
+                                    <shadedPattern>${shade.package}.org.reflections</shadedPattern>
                                 </relocation>
                             </relocations>
                             <transformers>

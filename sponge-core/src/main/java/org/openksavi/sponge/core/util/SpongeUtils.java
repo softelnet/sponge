@@ -76,7 +76,6 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.awaitility.core.ConditionTimeoutException;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,10 +96,17 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.type.AnyType;
+import org.openksavi.sponge.type.BinaryType;
+import org.openksavi.sponge.type.BooleanType;
+import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
+import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
+import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.VoidType;
 
 /**
  * This class defines a set of utility methods. It also wraps some of the external dependencies like Guava to avoid version conflicts in the
@@ -120,7 +126,8 @@ public abstract class SpongeUtils {
 
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
-    protected static final Reflections TYPE_REFLECTIONS = new Reflections(Type.class.getPackage().getName());
+    public static final List<Class<? extends Type>> SUPPORTED_TYPES = Arrays.asList(AnyType.class, BinaryType.class, BooleanType.class,
+            IntegerType.class, ListType.class, MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
 
     /**
      * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.
@@ -618,7 +625,7 @@ public abstract class SpongeUtils {
     }
 
     public static List<Class<? extends Type>> getSupportedTypes() {
-        return new ArrayList<>(TYPE_REFLECTIONS.getSubTypesOf(Type.class));
+        return SUPPORTED_TYPES;
     }
 
     /**
