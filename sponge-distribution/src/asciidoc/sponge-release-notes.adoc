@@ -6,9 +6,14 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.3.3 (not released yet)
+
+* Fixed the error that may happen while loading optional knowledge base files if a directory doesnt't exist.
+
+[discrete]
 == 1.3.2 (2018-07-06)
 
-* Fixed the error in loading optional knowledge base files using the `SpringKnowledgeBaseFileProvider`.
+* Fixed the error that may happen while loading optional knowledge base files using the `SpringKnowledgeBaseFileProvider`.
 * Libraries upgrade (most notably Spring to version 5).
 
 [discrete]

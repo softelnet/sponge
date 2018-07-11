@@ -22,13 +22,16 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
 import org.openksavi.sponge.engine.SpongeEngine;
 
-public class KnowledgeBaseFileWildcardsTest {
+public class ConfigurationKnowledgeBaseFileWildcardsTest {
 
     @Test
-    public void testKnowledgeBaseFileWildcardBuilder1() {
+    public void testKnowledgeBaseFileWildcardBuilderSelected() {
         SpongeEngine engine =
                 DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/wildcards/knowledge_base_file_wildcards_*.py").build();
         engine.startup();
@@ -47,7 +50,7 @@ public class KnowledgeBaseFileWildcardsTest {
     }
 
     @Test
-    public void testKnowledgeBaseFileWildcardBuilder2() {
+    public void testKnowledgeBaseFileWildcardBuilderAll() {
         SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/wildcards/*.py").build();
         engine.startup();
 
@@ -57,6 +60,68 @@ public class KnowledgeBaseFileWildcardsTest {
             assertTrue(engine.getOperations().existsAction("Action2"));
             assertTrue(engine.getOperations().existsAction("Action3"));
             assertTrue(engine.getOperations().existsAction("Action0"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testKnowledgeBaseFileWildcardBuilderOptionalNonExistingDirectory() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", new FileKnowledgeBaseScript("examples/core/wildcards/*.py"),
+                new FileKnowledgeBaseScript("examples/core/wildcards_nonexisting/*.py", false)).build();
+        engine.startup();
+
+        try {
+            assertEquals(4, engine.getActions().size());
+            assertTrue(engine.getOperations().existsAction("Action1"));
+            assertTrue(engine.getOperations().existsAction("Action2"));
+            assertTrue(engine.getOperations().existsAction("Action3"));
+            assertTrue(engine.getOperations().existsAction("Action0"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test(expected = ConfigException.class)
+    public void testKnowledgeBaseFileWildcardBuilderNonOptionalNonExistingFile() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/wildcards/nonexisting_*.py").build();
+
+        try {
+            engine.startup();
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testKnowledgeBaseFileWildcardBuilderOptionalNonExistingFile() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase("kb", new FileKnowledgeBaseScript("examples/core/wildcards/nonexisting_*.py", false)).build();
+
+        try {
+            engine.startup();
+
+            assertEquals(0, engine.getActions().size());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test(expected = SpongeException.class)
+    public void testKnowledgeBaseFileWildcardBuilderOptionalNonExistingFileUnsupportedExtension() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase("kb", new FileKnowledgeBaseScript("examples/core/wildcards/nonexisting_*.*", false)).build();
+
+        try {
+            engine.startup();
 
             assertFalse(engine.isError());
         } finally {
@@ -100,4 +165,5 @@ public class KnowledgeBaseFileWildcardsTest {
             engine.shutdown();
         }
     }
+
 }

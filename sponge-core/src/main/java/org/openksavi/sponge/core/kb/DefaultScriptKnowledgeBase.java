@@ -80,7 +80,9 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
      */
     @Override
     public final void onClear() {
-        getInterpreter().onClear();
+        if (getInterpreter() != null) {
+            getInterpreter().onClear();
+        }
     }
 
     /**
@@ -101,7 +103,9 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
      */
     @Override
     public final void onShutdown() {
-        getInterpreter().onShutdown();
+        if (getInterpreter() != null) {
+            getInterpreter().onShutdown();
+        }
     }
 
     /**

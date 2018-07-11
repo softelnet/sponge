@@ -21,6 +21,8 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -114,6 +116,9 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
 
         try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(finalDir, fileNamePattern)) {
             dirStream.forEach(files::add);
+        } catch (NotDirectoryException | NoSuchFileException e) {
+            // Not directory or non-existing directory.
+            return Collections.emptyList();
         } catch (IOException e) {
             throw new SpongeException("Error searching files in " + finalDir, e);
         }
