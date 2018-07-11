@@ -22,6 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -34,6 +35,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.examples.TestCompoundComplexObject;
 import org.openksavi.sponge.test.util.TestUtils;
+import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.IntegerType;
@@ -164,6 +166,33 @@ public class CoreActionsTest {
 
             assertEquals(TypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
             assertEquals("Boolean result", adapter.getResultMeta().getDisplayName());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testActionsActionType() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_action_type.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter actionTypeAction = engine.getActionManager().getActionAdapter("ActionTypeAction");
+            assertEquals(1, actionTypeAction.getArgsMeta().length);
+            assertTrue(actionTypeAction.getArgsMeta()[0].getType() instanceof ActionType);
+            ArgMeta<ActionType> sensorNameArgMeta = (ArgMeta<ActionType>) actionTypeAction.getArgsMeta()[0];
+            ActionAdapter getAvailableSensorNamesAction =
+                    engine.getActionManager().getActionAdapter(sensorNameArgMeta.getType().getActionName());
+            assertTrue(getAvailableSensorNamesAction.getResultMeta().getType() instanceof ListType);
+            assertTrue(((ListType) getAvailableSensorNamesAction.getResultMeta().getType()).getElementType() instanceof StringType);
+
+            List<String> availableSensors = engine.getOperations().call(List.class, sensorNameArgMeta.getType().getActionName());
+
+            assertTrue(engine.getOperations().call(Boolean.class, "ActionTypeAction", availableSensors.get(0)));
 
             assertFalse(engine.isError());
         } finally {

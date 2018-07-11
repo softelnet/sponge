@@ -1405,6 +1405,10 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://github.com/ReactiveX/RxJava[RxJava]
 |Apache 2.0
 |RxJava is a Java VM implementation of Reactive Extensions.
+
+|https://github.com/ronmamo/reflections[Reflections]
+|https://github.com/ronmamo/reflections/blob/master/COPYING.txt[WTFPL]
+|Reflections is a Java runtime metadata analysis library.
 |===
 
 .Key third party software used by Sponge external modules

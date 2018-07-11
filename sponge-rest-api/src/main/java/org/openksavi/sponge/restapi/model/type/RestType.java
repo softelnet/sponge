@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -33,11 +34,12 @@ import org.openksavi.sponge.type.TypeKind;
 import org.openksavi.sponge.type.VoidType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "kind")
-@JsonSubTypes({ @Type(value = AnyType.class, name = TypeKind.CODE_ANY), @Type(value = BinaryType.class, name = TypeKind.CODE_BINARY),
-        @Type(value = BooleanType.class, name = TypeKind.CODE_BOOLEAN), @Type(value = IntegerType.class, name = TypeKind.CODE_INTEGER),
-        @Type(value = ListType.class, name = TypeKind.CODE_LIST), @Type(value = MapType.class, name = TypeKind.CODE_MAP),
-        @Type(value = NumberType.class, name = TypeKind.CODE_NUMBER), @Type(value = ObjectType.class, name = TypeKind.CODE_OBJECT),
-        @Type(value = StringType.class, name = TypeKind.CODE_STRING), @Type(value = VoidType.class, name = TypeKind.CODE_VOID) })
+@JsonSubTypes({ @Type(value = ActionType.class, name = TypeKind.CODE_ACTION), @Type(value = AnyType.class, name = TypeKind.CODE_ANY),
+        @Type(value = BinaryType.class, name = TypeKind.CODE_BINARY), @Type(value = BooleanType.class, name = TypeKind.CODE_BOOLEAN),
+        @Type(value = IntegerType.class, name = TypeKind.CODE_INTEGER), @Type(value = ListType.class, name = TypeKind.CODE_LIST),
+        @Type(value = MapType.class, name = TypeKind.CODE_MAP), @Type(value = NumberType.class, name = TypeKind.CODE_NUMBER),
+        @Type(value = ObjectType.class, name = TypeKind.CODE_OBJECT), @Type(value = StringType.class, name = TypeKind.CODE_STRING),
+        @Type(value = VoidType.class, name = TypeKind.CODE_VOID) })
 public abstract class RestType {
 
 }

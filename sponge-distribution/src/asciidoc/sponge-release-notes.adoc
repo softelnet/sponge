@@ -9,8 +9,9 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 == 1.3.3 (not released yet)
 
 * Added a new attribute to the REST API `actions` operation that allows specifying an action name or a regular expression.
+* Added a new `ActionType` type that allows using a result of one action to be a type for another action argument or result.
 * Fixed the error that may happen while loading optional knowledge base files if a directory doesnt't exist.
-* The `sponge-core` artifact now shades Reflections.
+* The `sponge-core` artifact now shades the Reflections artifact (that use Guava).
 
 [discrete]
 == 1.3.2 (2018-07-06)

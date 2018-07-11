@@ -96,6 +96,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -126,8 +127,9 @@ public abstract class SpongeUtils {
 
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
-    public static final List<Class<? extends Type>> SUPPORTED_TYPES = Arrays.asList(AnyType.class, BinaryType.class, BooleanType.class,
-            IntegerType.class, ListType.class, MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
+    public static final List<Class<? extends Type>> SUPPORTED_TYPES =
+            Arrays.asList(ActionType.class, AnyType.class, BinaryType.class, BooleanType.class, IntegerType.class, ListType.class,
+                    MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
 
     /**
      * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.

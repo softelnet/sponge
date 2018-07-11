@@ -26,9 +26,6 @@ public class ResultMeta<T extends Type> {
     /** A result data type. */
     private T type;
 
-    /** An result subtype. */
-    private String subtype;
-
     /** A result display name. */
     private String displayName;
 
@@ -37,11 +34,6 @@ public class ResultMeta<T extends Type> {
 
     public ResultMeta(T type) {
         this.type = type;
-    }
-
-    public ResultMeta<T> subtype(String subtype) {
-        this.subtype = subtype;
-        return this;
     }
 
     public ResultMeta<T> displayName(String displayName) {
@@ -60,14 +52,6 @@ public class ResultMeta<T extends Type> {
 
     public void setType(T type) {
         this.type = type;
-    }
-
-    public String getSubtype() {
-        return subtype;
-    }
-
-    public void setSubtype(String subtype) {
-        this.subtype = subtype;
     }
 
     public String getDisplayName() {

@@ -268,8 +268,8 @@ public class DefaultRestApiService implements RestApiService {
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {
         ResultMeta<?> resultMeta = actionAdapter.getResultMeta();
-        return resultMeta != null ? new RestActionResultMeta(resultMeta.getType() != null ? resultMeta.getType() : null,
-                resultMeta.getSubtype(), resultMeta.getDisplayName()) : null;
+        return resultMeta != null
+                ? new RestActionResultMeta(resultMeta.getType() != null ? resultMeta.getType() : null, resultMeta.getDisplayName()) : null;
     }
 
     protected User authenticateUser(BaseRestRequest request, Exchange exchange) {

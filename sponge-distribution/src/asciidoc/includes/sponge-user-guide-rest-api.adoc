@@ -26,7 +26,7 @@ __Schemes__ : HTTP
 [[_swagger_paths]]
 == Paths
 
-[[_swagger_route5]]
+[[_swagger_actions]]
 === Get actions
 ....
 POST sponge.json/v1/actions
@@ -67,7 +67,7 @@ __required__|Get actions request|<<_swagger_getactionsrequest,GetActionsRequest>
 * sponge.json/v1
 
 
-[[_swagger_route6]]
+[[_swagger_call]]
 === Call an action
 ....
 POST sponge.json/v1/call
@@ -108,7 +108,7 @@ __required__|Call action request|<<_swagger_actioncallrequest,ActionCallRequest>
 * sponge.json/v1
 
 
-[[_swagger_route4]]
+[[_swagger_knowledgebases]]
 === Get knowledge bases
 ....
 POST sponge.json/v1/knowledgeBases
@@ -149,7 +149,7 @@ __required__|Get knowledge bases request|<<_swagger_getknowledgebasesrequest,Get
 * sponge.json/v1
 
 
-[[_swagger_route2]]
+[[_swagger_login]]
 === Login
 ....
 POST sponge.json/v1/login
@@ -190,7 +190,7 @@ __required__|Login request|<<_swagger_loginrequest,LoginRequest>>
 * sponge.json/v1
 
 
-[[_swagger_route3]]
+[[_swagger_logout]]
 === Logout
 ....
 POST sponge.json/v1/logout
@@ -231,7 +231,7 @@ __required__|Logout request|<<_swagger_logoutrequest,LogoutRequest>>
 * sponge.json/v1
 
 
-[[_swagger_route8]]
+[[_swagger_reload]]
 === Reload knowledge bases
 ....
 POST sponge.json/v1/reload
@@ -272,7 +272,7 @@ __required__|Reload knowledge bases request|<<_swagger_reloadrequest,ReloadReque
 * sponge.json/v1
 
 
-[[_swagger_route7]]
+[[_swagger_send]]
 === Send a new event
 ....
 POST sponge.json/v1/send
@@ -313,7 +313,7 @@ __required__|Send event request|<<_swagger_sendeventrequest,SendEventRequest>>
 * sponge.json/v1
 
 
-[[_swagger_route1]]
+[[_swagger_version]]
 === Get the Sponge version
 ....
 POST sponge.json/v1/version
@@ -389,7 +389,7 @@ __optional__|The action name or the regular expression (compatible with https://
 |===
 |Name|Schema
 |**kind** +
-__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP)
+__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ACTION)
 |**format** +
 __optional__|string
 |===
@@ -489,8 +489,6 @@ Represents a Sponge action result metadata
 |Name|Description|Schema
 |**type** +
 __required__|The action result type|<<_swagger_type,Type>>
-|**subtype** +
-__optional__|The action result subtype|string
 |**displayName** +
 __required__|The action result display name|string
 |**description** +

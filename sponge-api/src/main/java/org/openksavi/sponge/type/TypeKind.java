@@ -29,7 +29,8 @@ public enum TypeKind {
     VOID(VoidType.class),
     OBJECT(ObjectType.class),
     LIST(ListType.class),
-    MAP(MapType.class);
+    MAP(MapType.class),
+    ACTION(ActionType.class),;
 
     public static final String CODE_STRING = "STRING";
 
@@ -50,6 +51,8 @@ public enum TypeKind {
     public static final String CODE_LIST = "LIST";
 
     public static final String CODE_MAP = "MAP";
+
+    public static final String CODE_ACTION = "ACTION";
 
     private Class<? extends Type> typeClass;
 

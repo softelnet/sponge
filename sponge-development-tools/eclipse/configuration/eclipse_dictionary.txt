@@ -57,3 +57,4 @@ username
 wildcard
 wildcards
 glob
+multi
