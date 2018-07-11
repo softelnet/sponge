@@ -153,6 +153,7 @@ public class DefaultRestApiService implements RestApiService {
 
             boolean actualMetadataRequired = request.getMetadataRequired() != null ? request.getMetadataRequired()
                     : RestApiConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
+            String actionNameRegExp = request.getNameRegExp();
 
             String isPublicActionActionName = RestApiConstants.ACTION_IS_ACTION_PUBLIC;
             Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().existsAction(isPublicActionActionName)
@@ -166,8 +167,11 @@ public class DefaultRestApiService implements RestApiService {
                             .findAny().isPresent()
                     : RestApiConstants.DEFAULT_IS_ACTION_PUBLIC;
 
-            return setupSuccessResponse(new RestGetActionsResponse(getEngine().getActions().stream().filter(isPublicByAction)
-                    .filter(isPublicBySettings)
+            Predicate<ActionAdapter> isSelectedByNameRegExp =
+                    action -> actionNameRegExp != null ? action.getName().matches(actionNameRegExp) : true;
+
+            return setupSuccessResponse(new RestGetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp)
+                    .filter(isPublicByAction).filter(isPublicBySettings)
                     .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
                     .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
                     .filter(action -> canCallAction(user, action))

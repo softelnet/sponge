@@ -377,6 +377,8 @@ __optional__|The user password|string
 __optional__|The authentication token|string
 |**metadataRequired** +
 __optional__|Metadata required|boolean
+|**nameRegExp** +
+__optional__|The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
 |===
 
 

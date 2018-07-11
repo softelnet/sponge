@@ -139,6 +139,32 @@ public abstract class BaseRestApiTestTemplate {
         assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
     }
 
+    @Test
+    public void testRestActionsNameRegExp() {
+        RestGetActionsRequest request = new RestGetActionsRequest();
+        request.setNameRegExp(".*Case");
+
+        ResponseEntity<RestGetActionsResponse> response = createRestTemplate().exchange(getUrl() + "actions", HttpMethod.POST,
+                new HttpEntity<>(request, createHeaders()), RestGetActionsResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().getActions().size());
+        assertTrue(response.getBody().getActions().stream().allMatch(action -> action.getName().matches(request.getNameRegExp())));
+    }
+
+    @Test
+    public void testRestActionsNameExact() {
+        RestGetActionsRequest request = new RestGetActionsRequest();
+        request.setNameRegExp("UpperCase");
+
+        ResponseEntity<RestGetActionsResponse> response = createRestTemplate().exchange(getUrl() + "actions", HttpMethod.POST,
+                new HttpEntity<>(request, createHeaders()), RestGetActionsResponse.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().getActions().size());
+        assertEquals(response.getBody().getActions().get(0).getName(), request.getNameRegExp());
+    }
+
     protected HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

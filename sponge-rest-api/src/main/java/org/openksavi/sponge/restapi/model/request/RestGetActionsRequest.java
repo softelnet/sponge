@@ -24,6 +24,8 @@ public class RestGetActionsRequest extends BaseRestRequest {
 
     private Boolean metadataRequired;
 
+    private String nameRegExp;
+
     public RestGetActionsRequest() {
         //
     }
@@ -36,4 +38,16 @@ public class RestGetActionsRequest extends BaseRestRequest {
     public void setMetadataRequired(Boolean metadataRequired) {
         this.metadataRequired = metadataRequired;
     }
+
+    @ApiModelProperty(
+            value = "The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
+            required = false)
+    public String getNameRegExp() {
+        return nameRegExp;
+    }
+
+    public void setNameRegExp(String nameRegExp) {
+        this.nameRegExp = nameRegExp;
+    }
+
 }
