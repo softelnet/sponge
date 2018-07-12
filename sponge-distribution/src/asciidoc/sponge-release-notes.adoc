@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.3.3 (not released yet)
+== 1.3.3 (2018-07-12)
 
 * Added a new attribute to the REST API `actions` operation that allows specifying an action name or a regular expression.
 * Added a new `ActionType` type that allows using a result of one action to be a type for another action argument or result.

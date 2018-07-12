@@ -127,7 +127,7 @@ public abstract class SpongeUtils {
 
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
-    public static final List<Class<? extends Type>> SUPPORTED_TYPES =
+    private static final List<Class<? extends Type>> SUPPORTED_TYPES =
             Arrays.asList(ActionType.class, AnyType.class, BinaryType.class, BooleanType.class, IntegerType.class, ListType.class,
                     MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
 
