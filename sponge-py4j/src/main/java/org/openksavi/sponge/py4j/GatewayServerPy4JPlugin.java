@@ -47,6 +47,10 @@ public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
     @SuppressWarnings("unchecked")
     @Override
     public void onStartup() {
+        if (isPythonScriptBeforeStartup()) {
+            executePythonScript();
+        }
+
         if (server == null) {
             logger.info("Creating and starting the Py4J Server.");
 
@@ -69,6 +73,10 @@ public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
                 throw SpongeUtils.wrapException(e);
             }
         }
+
+        if (!isPythonScriptBeforeStartup()) {
+            executePythonScript();
+        }
     }
 
     protected GatewayServer build(GatewayServerBuilder builder) {
@@ -77,8 +85,17 @@ public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
 
     @Override
     public void onShutdown() {
+        // Reversed order of killing the script process.
+        if (!isPythonScriptBeforeStartup()) {
+            killPythonScript();
+        }
+
         if (server != null) {
             server.shutdown();
+        }
+
+        if (isPythonScriptBeforeStartup()) {
+            killPythonScript();
         }
     }
 

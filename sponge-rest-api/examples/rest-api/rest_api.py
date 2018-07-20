@@ -2,7 +2,6 @@
 Sponge Knowledge base
 REST API
 """
-from org.openksavi.sponge import SpongeException
 
 from java.util.concurrent.atomic import AtomicBoolean
 

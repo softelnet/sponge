@@ -69,6 +69,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 import org.apache.commons.configuration2.ConfigurationUtils;
 import org.apache.commons.configuration2.io.FileLocatorUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -571,14 +572,14 @@ public abstract class SpongeUtils {
         }
     }
 
-    public static SslConfiguration createSecurityConfiguration(Configuration securityConfiguration) {
-        SslConfiguration security = new SslConfiguration();
-        security.setKeyStore(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_STORE));
-        security.setKeyStorePassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_STORE_PASSWORD));
-        security.setKeyPassword(SpongeUtils.getRequiredConfigurationString(securityConfiguration, TAG_SECURITY_KEY_PASSWORD));
-        security.setAlgorithm(securityConfiguration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
+    public static SslConfiguration createSslConfiguration(Configuration configuration) {
+        SslConfiguration sslConfiguration = new SslConfiguration();
+        sslConfiguration.setKeyStore(SpongeUtils.getRequiredConfigurationString(configuration, TAG_SECURITY_KEY_STORE));
+        sslConfiguration.setKeyStorePassword(SpongeUtils.getRequiredConfigurationString(configuration, TAG_SECURITY_KEY_STORE_PASSWORD));
+        sslConfiguration.setKeyPassword(SpongeUtils.getRequiredConfigurationString(configuration, TAG_SECURITY_KEY_PASSWORD));
+        sslConfiguration.setAlgorithm(configuration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
 
-        return security;
+        return sslConfiguration;
     }
 
     public static ProcessorQualifiedName getProcessorQualifiedName(ProcessorOperations processorOperations) {
@@ -648,6 +649,10 @@ public abstract class SpongeUtils {
         }
 
         return null;
+    }
+
+    public static File getFileDirAsFile(String filePath) {
+        return FileUtils.getFile(filePath).getParentFile();
     }
 
     protected SpongeUtils() {

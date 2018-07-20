@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
-    <properties>
-        <!-- Python must have Py4J installed, e.g. pip install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
-        <!-- Python 3 has been used for the example. -->
-        <property name="pythonExecutable">python3</property>
-    </properties>
-
     <knowledgeBases>
         <knowledgeBase name="kb">
             <file>py4j_java_server_tls_sponge_hello_world.py</file>
@@ -16,6 +10,15 @@
     <plugins>
         <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin">
             <configuration>
+                <!-- Python must have Py4J installed, e.g. pip install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
+                <!-- Python 3 has been used for the example. -->
+                <pythonScript>
+                    <executable>/usr/local/bin/python3</executable>
+                    <argument>examples/py4j/java_server_tls/py4j_java_server_tls_python_hello_world.py</argument>
+                    <waitSeconds>60</waitSeconds>
+                    <redirectType>STRING</redirectType>
+                </pythonScript>
+                <pythonScriptBeforeStartup>false</pythonScriptBeforeStartup>
                 <security>
                     <!-- Using JKS file from Py4J examples: https://github.com/bartdag/py4j/blob/master/py4j-java/src/test/resources/selfsigned.jks -->
                     <keyStore>selfsigned.jks</keyStore>

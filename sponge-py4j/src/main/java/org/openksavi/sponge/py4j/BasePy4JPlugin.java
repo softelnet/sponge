@@ -18,9 +18,15 @@ package org.openksavi.sponge.py4j;
 
 import javax.net.ssl.SSLContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import py4j.GatewayServer;
 
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.util.ProcessConfiguration;
+import org.openksavi.sponge.core.util.ProcessInstance;
+import org.openksavi.sponge.core.util.ProcessUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.java.JPlugin;
@@ -29,6 +35,8 @@ import org.openksavi.sponge.java.JPlugin;
  * Base, abstract Sponge plugin that provides integration with CPython using Py4J.
  */
 public abstract class BasePy4JPlugin<T> extends JPlugin {
+
+    private static final Logger logger = LoggerFactory.getLogger(BasePy4JPlugin.class);
 
     public static final String DEFAULT_NAME = "py4j";
 
@@ -40,6 +48,10 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public static final String TAG_SECURITY = "security";
 
+    public static final String TAG_PYTHON_SCRIPT = "pythonScript";
+
+    public static final String TAG_PYTHON_SCRIPT_BEFORE_STARTUP = "pythonScriptBeforeStartup";
+
     private String facadeInterfaceName;
 
     private T facade;
@@ -50,12 +62,55 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     private SslConfiguration security;
 
+    private ProcessConfiguration pythonScriptConfiguration;
+
+    private boolean pythonScriptBeforeStartup = true;
+
+    private ProcessInstance scriptProcess;
+
     public BasePy4JPlugin() {
         setName(DEFAULT_NAME);
     }
 
     public BasePy4JPlugin(String name) {
         super(name);
+    }
+
+    protected void executePythonScript() {
+        if (pythonScriptConfiguration != null) {
+            scriptProcess = ProcessUtils.startProcess(getEngine(), pythonScriptConfiguration);
+            if (scriptProcess.tryWaitFor() && scriptProcess.getOutput() != null) {
+                logger.info("Python script output: {}", scriptProcess.getOutput());
+            }
+        }
+    }
+
+    public void killPythonScript() {
+        if (scriptProcess != null) {
+            scriptProcess.getProcess().destroy();
+        }
+    }
+
+    public ProcessInstance getScriptProcess() {
+        return scriptProcess;
+    }
+
+    @Override
+    public void onConfigure(Configuration configuration) {
+        facadeInterfaceName = configuration.getString(TAG_FACADE_INTERFACE, facadeInterfaceName);
+        javaPort = configuration.getInteger(TAG_JAVA_PORT, javaPort);
+        pythonPort = configuration.getInteger(TAG_PYTHON_PORT, pythonPort);
+
+        if (configuration.hasChildConfiguration(TAG_SECURITY)) {
+            security = SpongeUtils.createSslConfiguration(configuration.getChildConfiguration(TAG_SECURITY));
+        }
+
+        if (configuration.hasChildConfiguration(TAG_PYTHON_SCRIPT)) {
+            pythonScriptConfiguration =
+                    ProcessUtils.createProcessConfiguration(configuration.getChildConfiguration(TAG_PYTHON_SCRIPT)).name("Python script");
+        }
+
+        pythonScriptBeforeStartup = configuration.getBoolean(TAG_PYTHON_SCRIPT_BEFORE_STARTUP, pythonScriptBeforeStartup);
     }
 
     public T getFacade() {
@@ -74,15 +129,20 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         this.facadeInterfaceName = facadeInterfaceName;
     }
 
-    @Override
-    public void onConfigure(Configuration configuration) {
-        facadeInterfaceName = configuration.getString(TAG_FACADE_INTERFACE, facadeInterfaceName);
-        javaPort = configuration.getInteger(TAG_JAVA_PORT, javaPort);
-        pythonPort = configuration.getInteger(TAG_PYTHON_PORT, pythonPort);
+    public ProcessConfiguration getPythonScriptConfiguration() {
+        return pythonScriptConfiguration;
+    }
 
-        if (configuration.hasChildConfiguration(TAG_SECURITY)) {
-            security = SpongeUtils.createSecurityConfiguration(configuration.getChildConfiguration(TAG_SECURITY));
-        }
+    public void setPythonScriptConfiguration(ProcessConfiguration pythonScriptConfiguration) {
+        this.pythonScriptConfiguration = pythonScriptConfiguration;
+    }
+
+    public boolean isPythonScriptBeforeStartup() {
+        return pythonScriptBeforeStartup;
+    }
+
+    public void setPythonScriptBeforeStartup(boolean pythonScriptBeforeStartup) {
+        this.pythonScriptBeforeStartup = pythonScriptBeforeStartup;
     }
 
     public Integer getJavaPort() {

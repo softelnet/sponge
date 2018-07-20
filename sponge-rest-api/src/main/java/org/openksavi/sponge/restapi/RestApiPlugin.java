@@ -93,7 +93,7 @@ public class RestApiPlugin extends JPlugin {
 
         if (configuration.hasChildConfiguration(RestApiConstants.TAG_SSL_CONFIGURATION)) {
             settings.setSslConfiguration(
-                    SpongeUtils.createSecurityConfiguration(configuration.getChildConfiguration(RestApiConstants.TAG_SSL_CONFIGURATION)));
+                    SpongeUtils.createSslConfiguration(configuration.getChildConfiguration(RestApiConstants.TAG_SSL_CONFIGURATION)));
         }
 
         settings.setPublishReload(configuration.getBoolean(RestApiConstants.TAG_PUBLISH_RELOAD, settings.isPublishReload()));

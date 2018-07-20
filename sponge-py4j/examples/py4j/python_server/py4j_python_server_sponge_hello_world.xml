@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
-    <properties>
-        <!-- Python must have Py4J installed, e.g. pip install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
-        <!-- Python 3 has been used for the example. -->
-        <property name="pythonExecutable">python3</property>
-    </properties>
-
     <knowledgeBases>
         <knowledgeBase name="kb">
             <file>py4j_python_server_sponge_hello_world.py</file>
@@ -17,6 +11,14 @@
         <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
             <configuration>
                 <facadeInterface>org.openksavi.sponge.py4j.PythonService</facadeInterface>
+                <!-- Python must have Py4J installed, e.g. pip install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
+                <!-- Python 3 has been used for the example. -->
+                <pythonScript>
+                    <executable>/usr/local/bin/python3</executable>
+                    <argument>examples/py4j/python_server/py4j_python_server_python_hello_world.py</argument>
+                    <redirectType>INHERIT</redirectType>
+                    <waitSeconds>5</waitSeconds>
+                </pythonScript>
             </configuration>
         </plugin>
     </plugins>
