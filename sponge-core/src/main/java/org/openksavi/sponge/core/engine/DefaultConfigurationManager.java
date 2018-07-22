@@ -19,20 +19,15 @@ package org.openksavi.sponge.core.engine;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.interpol.Lookup;
-import org.apache.commons.configuration2.interpol.SystemPropertiesLookup;
 import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.configuration2.resolver.DefaultEntityResolver;
 import org.apache.commons.configuration2.tree.MergeCombiner;
@@ -50,6 +45,7 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.config.PropertyEntry;
 import org.openksavi.sponge.core.config.CommonsConfiguration;
 import org.openksavi.sponge.core.config.FallbackBasePathLocationStrategy;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -144,7 +140,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     public void doStartup() {
         home = System.getProperty(ConfigurationConstants.PROP_HOME);
 
-        rootConfig = createRootConfig();
+        setupRootConfig();
 
         // Add manually predefined properties.
         setupPredefinedProperties();
@@ -275,33 +271,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
     }
 
-    public class ConfigLookup implements Lookup {
-
-        @Override
-        public Object lookup(String variable) {
-            PropertyEntry entry = properties.get(variable);
-            if (entry != null) {
-                return entry.getValue();
-            }
-
-            return null;
-        }
-    }
-
-    public class HomeLookup implements Lookup {
-
-        private Map<String, Supplier<String>> defaults = new HashMap<>();
-
-        HomeLookup() {
-            defaults.put(ConfigurationConstants.PROP_HOME, () -> getHome());
-        }
-
-        @Override
-        public String lookup(String variable) {
-            return defaults.containsKey(variable) ? defaults.get(variable).get() : null;
-        }
-    }
-
     /**
      * Resolves XSD file during XML configuration validation.
      */
@@ -327,14 +296,11 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     protected Pair<XMLConfiguration, URL> createXmlConfiguration(String fileName) {
-        List<Lookup> lookups = Arrays.asList(new SystemPropertiesLookup(), new HomeLookup(), new ConfigLookup());
-
-        Parameters params = new Parameters();
         FallbackBasePathLocationStrategy locationStrategy =
                 new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
         FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
-                .configure(params.xml().setDefaultLookups(lookups).setLocationStrategy(locationStrategy).setFileName(fileName)
-                        .setSchemaValidation(true).setEntityResolver(new ResourceSchemaResolver()));
+                .configure(new Parameters().xml().setLocationStrategy(locationStrategy).setFileName(fileName).setSchemaValidation(true)
+                        .setEntityResolver(new ResourceSchemaResolver()));
 
         try {
             XMLConfiguration xmlConfiguration = builder.getConfiguration();
@@ -345,7 +311,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
     }
 
-    protected CommonsConfiguration createRootConfig() {
+    protected void setupRootConfig() {
         MergeCombiner combiner = new MergeCombiner();
         combiner.addListNode(PluginManagerConstants.CFG_PLUGIN);
 
@@ -356,18 +322,21 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
             logger.info("Loading configuration file {}...", configurationFilename);
             Pair<XMLConfiguration, URL> configurationPair = createXmlConfiguration(configurationFilename);
 
-            cc.addConfiguration(configurationPair.getLeft());
+            XMLConfiguration fileConfiguration = configurationPair.getLeft();
             configurationFileUrl = configurationPair.getRight();
+
+            cc.addConfiguration(fileConfiguration);
+            fileConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, SpongeUtils.getFileDir(configurationFileUrl));
         }
 
         // Add default configuration
         cc.addConfiguration(createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG).getLeft());
 
-        // if (configurationFilename != null && logger.isDebugEnabled()) {
-        // logger.debug("Initial XML configuration:\n{}", Utils.dumpConfiguration(cc));
-        // }
+        if (configurationFilename != null && logger.isDebugEnabled()) {
+            logger.debug("Initial XML configuration:\n{}", SpongeUtils.dumpConfiguration(cc));
+        }
 
-        return new CommonsConfiguration(cc);
+        rootConfig = new CommonsConfiguration(cc);
     }
 
     /**

@@ -30,8 +30,8 @@ public final class ConfigurationConstants {
     /** Home property name. */
     public static final String PROP_HOME = "sponge.home";
 
-    /** Configuration directory. */
-    public static final String CONFIG_DIR = "config";
+    /** Configuration file directory property name (read only). */
+    public static final String PROP_CONFIG_DIR = "sponge.configDir";
 
     public static final String TAG_ROOT = "sponge";
 

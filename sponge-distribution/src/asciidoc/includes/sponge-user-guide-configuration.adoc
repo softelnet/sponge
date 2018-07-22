@@ -33,6 +33,7 @@ In a general form an XML configuration file is built as in the following example
             <description>The Python-based knowledge base.</description>
             <file>kb_file_1.py</file>
             <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
+            <file>${sponge.configDir}/kb_file_3.py</file>
         </knowledgeBase>
         <knowledgeBase name="kotlinKb" class="org.openksavi.sponge.kotlin.examples.HelloWorld" />
     </knowledgeBases>
@@ -53,12 +54,24 @@ In a general form an XML configuration file is built as in the following example
 
 The specification of a configuration XML file is provided by the schema file {homepage}/schema/config.xsd[`config.xsd`].
 
-The configuration file is looked up using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration], e.g. first in the file system as a relative or absolute path and then in the classpath. If not found, the configuration file is looked up in the file system relative to the {sponge} home directory. The {sponge} home directory may be provided as a Java system property `sponge.home`.
+The configuration file is looked up using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration], e.g. first in the file system as a relative or absolute path and then in the classpath. If not found, the configuration file is looked up in the file system relative to the {sponge} home directory.
 
 === Properties configuration
 The properties configuration section (`properties`) allows setting configuration properties. Configuration properties may be used in other places in the configuration file. Moreover the properties could be used as Java system properties if the attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
 
 Properties could also be used as {sponge} variables in the engine scope. In that case you have to set the attribute `variable` to `true`. The type of such variables is always `String`.
+
+.Predefined properties
+[cols="1,4"]
+|===
+|Property |Description
+
+|`sponge.home`
+|The {sponge} home directory. The {sponge} home directory may also be provided as a Java system property `sponge.home`.
+
+|`sponge.configDir`
+|The configuration file directory. This property is read only. It may be `null` if there is no {sponge} configuration file.
+|===
 
 === Engine configuration
 The engine configuration section (`<engine>`) contains engine configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.

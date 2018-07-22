@@ -507,6 +507,15 @@ public abstract class SpongeUtils {
         }
     }
 
+    public static boolean awaitUntil(Callable<Boolean> callable) {
+        try {
+            await().atMost(org.awaitility.Duration.FOREVER).until(callable);
+            return true;
+        } catch (ConditionTimeoutException e) {
+            return false;
+        }
+    }
+
     public static boolean isSystemEvent(Event event) {
         return EngineConstants.PREDEFINED_EVENT_NAMES.contains(event.getName());
     }
@@ -638,13 +647,16 @@ public abstract class SpongeUtils {
      * @return the configuration file directory.
      */
     public static String getConfigurationFileDir(SpongeEngine engine) {
-        URL configurationFileUrl = engine.getConfigurationManager().getConfigurationFileUrl();
-        if (configurationFileUrl != null) {
-            File configFile = FileLocatorUtils.fileFromURL(configurationFileUrl);
+        return getFileDir(engine.getConfigurationManager().getConfigurationFileUrl());
+    }
+
+    public static String getFileDir(URL fileUrl) {
+        if (fileUrl != null) {
+            File configFile = FileLocatorUtils.fileFromURL(fileUrl);
             if (configFile != null) {
                 return configFile.getParent();
             } else {
-                logger.warn("Configuration file URL {} cannot be converted to File", configurationFileUrl);
+                logger.warn("URL {} cannot be converted to File", fileUrl);
             }
         }
 
@@ -653,6 +665,10 @@ public abstract class SpongeUtils {
 
     public static File getFileDirAsFile(String filePath) {
         return FileUtils.getFile(filePath).getParentFile();
+    }
+
+    public static ProcessInstance startProcess(SpongeEngine engine, ProcessConfiguration processConfiguration) {
+        return ProcessUtils.startProcess(engine, processConfiguration);
     }
 
     protected SpongeUtils() {

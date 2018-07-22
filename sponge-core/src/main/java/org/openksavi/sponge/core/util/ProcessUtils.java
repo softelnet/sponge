@@ -21,11 +21,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +59,10 @@ public abstract class ProcessUtils {
 
     public static final String TAG_PROCESS_CHARSET = "charset";
 
+    public static final String TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_REGEXP = "waitForOutputLineRegexp";
+
+    public static final String TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT = "waitForOutputLineTimeout";
+
     public static ProcessConfiguration createProcessConfiguration(Configuration configuration) {
         ProcessConfiguration processConfiguration = new ProcessConfiguration();
 
@@ -69,10 +79,61 @@ public abstract class ProcessUtils {
         String charsetString = configuration.getString(TAG_PROCESS_CHARSET, null);
         processConfiguration.charset(charsetString != null ? Charset.forName(charsetString) : processConfiguration.getCharset());
 
+        processConfiguration.waitForOutputLineRegexp(
+                configuration.getString(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_REGEXP, processConfiguration.getWaitForOutputLineRegexp()));
+        processConfiguration.waitForOutputLineTimeout(
+                configuration.getLong(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT, processConfiguration.getWaitForOutputLineTimeout()));
+
         return processConfiguration;
     }
 
     public static ProcessInstance startProcess(SpongeEngine engine, ProcessConfiguration processConfiguration) {
+        if (processConfiguration.getWaitForOutputLineRegexp() != null) {
+            return startProcessAndWaitForOutputLine(engine, processConfiguration);
+        } else {
+            return startProcessWithOutputLineConsumer(engine, processConfiguration, null);
+        }
+    }
+
+    public static ProcessInstance startProcessAndWaitForOutputLine(SpongeEngine engine, ProcessConfiguration processConfiguration) {
+        final Semaphore semaphore = new Semaphore(0);
+
+        ProcessInstance processInstance = startProcessWithOutputLineConsumer(engine, processConfiguration, (line) -> {
+            if (line.matches(processConfiguration.getWaitForOutputLineRegexp())) {
+                semaphore.release();
+            }
+        });
+
+        try {
+            if (processConfiguration.getWaitForOutputLineTimeout() != null) {
+                Validate.isTrue(semaphore.tryAcquire(processConfiguration.getWaitForOutputLineTimeout(), TimeUnit.SECONDS),
+                        "Process wait timeout exceeded");
+            } else {
+                semaphore.acquire();
+            }
+        } catch (InterruptedException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+
+        return processInstance;
+    }
+
+    /**
+     * Starts a new process. Waits the specified time if necessary.
+     *
+     * @param engine the engine.
+     * @param processConfiguration the process configuration,
+     * @param outputConsumer the process output consumer. May be {@code null}. Applicable only if the redirect type is LOGGER.
+     * @return a new process instance.
+     */
+    public static ProcessInstance startProcessWithOutputLineConsumer(SpongeEngine engine, ProcessConfiguration processConfiguration,
+            Consumer<String> outputConsumer) {
+        if (outputConsumer != null) {
+            Validate.isTrue(processConfiguration.getRedirectType() == RedirectType.LOGGER,
+                    "If the output consumer is provided, the redirect type must be LOGGER");
+        }
+
+        // Configure the process.
         List<String> commands = new ArrayList<>();
         commands.add(processConfiguration.getExecutable());
         commands.addAll(processConfiguration.getArguments());
@@ -86,27 +147,38 @@ public abstract class ProcessUtils {
             builder.directory(new File(processConfiguration.getWorkingDir()));
         }
 
-        Process process = null;
+        // Start the process.
+        ProcessInstance processInstance = null;
         try {
-            process = builder.start();
+            logger.debug("Process environment: {}", builder.environment());
+
+            processInstance = new ProcessInstance(builder.start(), processConfiguration);
 
             if (processConfiguration.getRedirectType() == RedirectType.LOGGER) {
-                SpongeUtils.executeConcurrentlyOnce(engine, new InputStreamLineConsumerRunnable(process.getInputStream(), logger::info));
-                SpongeUtils.executeConcurrentlyOnce(engine, new InputStreamLineConsumerRunnable(process.getErrorStream(), logger::warn));
-            }
+                SpongeUtils.executeConcurrentlyOnce(engine,
+                        new InputStreamLineConsumerRunnable(processInstance.getProcess().getInputStream(), (line) -> {
+                            logger.info(line);
 
-            logger.debug("{}", builder.environment());
+                            if (outputConsumer != null) {
+                                outputConsumer.accept(line);
+                            }
+                        }));
+                SpongeUtils.executeConcurrentlyOnce(engine,
+                        new InputStreamLineConsumerRunnable(processInstance.getProcess().getErrorStream(), logger::warn));
+            }
         } catch (IOException e) {
             throw SpongeUtils.wrapException(processConfiguration.getName(), e);
         }
 
-        String outputString = null;
+        // If specified, set the output string.
         if (processConfiguration.getRedirectType() == RedirectType.STRING) {
             Charset finalCharset = processConfiguration.getCharset() != null ? processConfiguration.getCharset() : Charset.defaultCharset();
-            try (BufferedReader output = new BufferedReader(new InputStreamReader(process.getInputStream(), finalCharset));
-                    BufferedReader errors = new BufferedReader(new InputStreamReader(process.getErrorStream(), finalCharset))) {
-                outputString = output.lines().collect(Collectors.joining("\n"));
-                logger.info("{} output:\n{}", processConfiguration.getName(), outputString);
+            try (BufferedReader output =
+                    new BufferedReader(new InputStreamReader(processInstance.getProcess().getInputStream(), finalCharset));
+                    BufferedReader errors =
+                            new BufferedReader(new InputStreamReader(processInstance.getProcess().getErrorStream(), finalCharset))) {
+                processInstance.setOutput(output.lines().collect(Collectors.joining("\n")));
+                logger.info("{} output:\n{}", processConfiguration.getName(), processInstance.getOutput());
 
                 String errorsString = errors.lines().collect(Collectors.joining("\n"));
                 if (!errorsString.isEmpty()) {
@@ -117,7 +189,18 @@ public abstract class ProcessUtils {
             }
         }
 
-        return new ProcessInstance(process, processConfiguration, outputString);
+        // If specified, wait for the process.
+        long elapsedSeconds = Duration.between(processInstance.getStartTime(), Instant.now()).getSeconds();
+        if (processConfiguration.getWaitSeconds() != null && processConfiguration.getWaitSeconds() > elapsedSeconds) {
+            try {
+                processInstance.setFinished(
+                        processInstance.getProcess().waitFor(processConfiguration.getWaitSeconds() - elapsedSeconds, TimeUnit.SECONDS));
+            } catch (InterruptedException e) {
+                throw SpongeUtils.wrapException(e);
+            }
+        }
+
+        return processInstance;
     }
 
     protected ProcessUtils() {

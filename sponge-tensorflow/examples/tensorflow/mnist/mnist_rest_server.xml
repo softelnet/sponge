@@ -13,10 +13,9 @@
                 <facadeInterface>org.openksavi.sponge.tensorflow.MnistService</facadeInterface>
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
-                    <workingDir>examples/tensorflow/mnist</workingDir>
                     <argument>mnist_service.py</argument>
-                    <!-- Wait for Tensorflow to load the model. -->
-                    <waitSeconds>10</waitSeconds>
+                    <workingDir>${sponge.configDir}</workingDir>
+                    <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
                     <redirectType>LOGGER</redirectType>
                 </pythonScript>
             </configuration>

@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.core.util;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Instant;
 
 /**
  * A process instance.
@@ -25,37 +25,49 @@ public class ProcessInstance {
 
     private Process process;
 
-    private ProcessConfiguration processConfiguration;
+    private ProcessConfiguration configuration;
 
     private String output;
 
-    public ProcessInstance(Process process, ProcessConfiguration processConfiguration, String output) {
+    private Instant startTime;
+
+    private boolean finished = false;
+
+    public ProcessInstance(Process process, ProcessConfiguration configuration) {
         this.process = process;
-        this.processConfiguration = processConfiguration;
-        this.output = output;
+        this.configuration = configuration;
+        startTime = Instant.now();
     }
 
     public Process getProcess() {
         return process;
     }
 
-    public ProcessConfiguration getProcessConfiguration() {
-        return processConfiguration;
+    public ProcessConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
     }
 
     public String getOutput() {
         return output;
     }
 
-    public boolean tryWaitFor() {
-        if (processConfiguration.getWaitSeconds() > 0) {
-            try {
-                return process.waitFor(processConfiguration.getWaitSeconds(), TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                throw SpongeUtils.wrapException(e);
-            }
-        }
+    public Instant getStartTime() {
+        return startTime;
+    }
 
-        return false;
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

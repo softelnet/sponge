@@ -11,11 +11,10 @@
         <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
             <configuration>
                 <facadeInterface>org.openksavi.sponge.py4j.PythonService</facadeInterface>
-                <!-- Python must have Py4J installed, e.g. pip install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
-                <!-- Python 3 has been used for the example. -->
+                <!-- Python must have Py4J installed, e.g. pip3 install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
                 <pythonScript>
-                    <executable>/usr/local/bin/python3</executable>
-                    <argument>examples/py4j/python_server/py4j_python_server_python_hello_world.py</argument>
+                    <executable>python3</executable>
+                    <argument>${sponge.configDir}/py4j_python_server_python_hello_world.py</argument>
                     <redirectType>INHERIT</redirectType>
                     <waitSeconds>5</waitSeconds>
                 </pythonScript>

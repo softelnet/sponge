@@ -11,11 +11,10 @@
     <plugins>
         <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin">
             <configuration>
-                <!-- Python must have Py4J installed, e.g. pip install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
-                <!-- Python 3 has been used for the example. -->
+                <!-- Python must have Py4J installed, e.g. pip3 install py4j. You may use system properties, e.g. ${user.home}/virtualenv1/bin/python -->
                 <pythonScript>
-                    <executable>/usr/local/bin/python3</executable>
-                    <argument>examples/py4j/java_server/py4j_java_server_python_hello_world.py</argument>
+                    <executable>python3</executable>
+                    <argument>${sponge.configDir}/py4j_java_server_python_hello_world.py</argument>
                     <waitSeconds>60</waitSeconds>
                     <redirectType>STRING</redirectType>
                 </pythonScript>

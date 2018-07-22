@@ -23,4 +23,5 @@ class CallPredict(Trigger):
         EPS.logger.info("Prediction for {} is: {}, all predictions: {}", file, prediction, predictions)
 
 def onStartup():
-    EPS.event("predict").set("file", "examples/tensorflow/mnist/data/7_0.png").sendAfter(Duration.ofSeconds(5))
+    SpongeUtils.awaitUntil(lambda: py4j.facade.isReady())
+    EPS.event("predict").set("file", "examples/tensorflow/mnist/data/7_0.png").send()

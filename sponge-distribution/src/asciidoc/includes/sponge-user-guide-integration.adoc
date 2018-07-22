@@ -371,6 +371,71 @@ def onStartup():
     camel.context.addRoutes(PythonRoute())
 ----
 
+[[integration-external-subprocess]]
+== Run an external executable as a subprocess
+{sponge} provides a way to run an external executable as a subprocess of the {sponge} Java process. This feature is used by some of the plugins, for example by the Py4J integration plugin to execute an external Python script.
+
+.Subprocess configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
+
+|`name`
+|`String`
+|The process display name.
+
+|`executable`
+|`String`
+|The process executable.
+
+|`argument`
+|`String`
+|Zero or more process arguments.
+
+|`workingDir`
+|`String`
+|The process working directory. If `null` (the default value) then the current directory will be used.
+
+|`waitSeconds`
+|`Long`
+|The maximum number of seconds to wait after the start of the process. The thread that started the process will be blocked until the time elapses or the subprocess exits. May be `null` (the default value) if the thread shouldn't wait.
+
+|`redirectType`
+|`RedirectType`
+|The redirect type (see the following table). The default value is `INHERIT`.
+
+|`charset`
+|`String`
+|The charset the subprocess output stream used if the `redirectType` is `STRING`.
+
+|`waitForOutputLineRegexp`
+|`String`
+|The Java regular expression of a line from the process output stream. The thread that started the process will wait (blocking) for such line. May be `null` if the thread shouldn't wait for a specific line.
+
+|`waitForOutputLineTimeout`
+|`Long`
+|The timeout for waiting for a specific line from the process output stream (in seconds). If `null`, the thread could wait indefinitely. If the timeout is exceeded, the exception will be thrown.
+|===
+
+.Redirect type
+[cols="1,5"]
+|===
+|Value |Description
+
+|`LOGGER`
+|Logs the subprocess standard output (as INFO) and error output (as WARN) to the logger.
+
+|`INHERIT`
+|Sets the source and destination for subprocess standard I/O to be the same as those of the current Java process.
+
+|`STRING`
+|Writes all subprocess standard output and error output to a {@code ProcessInstance.output} string. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`NONE`
+|No redirection will be set.
+|===
+
+
 == Python (CPython)
 {sponge} may communicate with external programs written in the reference implementation of the Python programming language - https://en.wikipedia.org/wiki/CPython[CPython] using https://www.py4j.org[Py4J], and vice versa. A Python program and a {sponge} Java process communicate through network sockets.
 
@@ -378,11 +443,13 @@ Py4J by default uses the TCP port 25333 to communicate from Python to Java and T
 
 There is no support for writing knowledge bases in CPython.
 
+In the following examples Python 3 will be used.
+
 The CPython environment must have Py4J installed, e.g.:
 
 [source,bash]
 ----
-pip install py4j
+pip3 install py4j
 ----
 
 For more information on Py4J see https://www.py4j.org/advanced_topics.html.
@@ -400,7 +467,6 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 === Py4J plugins
-
 {sponge} provides two plugins for integration with CPython.
 
 WARNING: Local network sockets used by Py4j should be secured, for example using [https://www.py4j.org/advanced_topics.html#tls]TLS. Please be aware that all {sponge} operations are accessible in other processes that communicate with the {sponge} with Py4J enabled by a plugin. See {py4jSourcesUrl}/java_server_tls for an example of TLS security, based on Py4J examples. Note that in a production environment you should customize this simple configuration, possibly by providing your own configured instance of `GatewayServer` or `ClientServer` to the plugin.
@@ -422,6 +488,10 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 |`Integer`
 |CPython side server port.
 
+|`security`
+|XML element/`SslConfiguration`
+|The simple SSL security configuration.
+
 |`security/keyStore`
 |`String`
 |Simple security keystore file location on the classpath.
@@ -437,6 +507,14 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 |`security/algorithm`
 |`String`
 |Simple security algorithm. The default value is `SunX509`.
+
+|`pythonScript`
+|<<integration-external-subprocess,XML element/ProcessConfiguration>>
+|The configuration of the CPython script that may be run as a subprocess of the {sponge} Java process when the plugin is starting up.
+
+|`pythonScriptBeforeStartup`
+|`Boolean`
+|If `true`, the CPython script will be started before this plugin startup (the default value), otherwise it will be started after this plugin startup.
 |===
 
 ==== GatewayServerPy4JPlugin
@@ -545,6 +623,28 @@ class PythonService(object):
 
 pythonService = PythonService()
 gateway = ClientServer(python_server_entry_point=pythonService)
+----
+
+=== Executing an external Python script
+The plugin may run a CPython script as a subprocess.
+
+.Example of an XML configuration for executing an external Python script
+[source,xml]
+----
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.GatewayServerPy4JPlugin">
+            <configuration>
+                <pythonScript>
+                    <executable>python3</executable>
+                    <argument>${sponge.configDir}/cpython_script.py</argument>
+                    <waitSeconds>60</waitSeconds>
+                    <waitForOutputLineRegexp>The CPython service has started.</waitForOutputLineRegexp>
+                    <redirectType>LOGGER</redirectType>
+                </pythonScript>
+                <pythonScriptBeforeStartup>false</pythonScriptBeforeStartup>
+            </configuration>
+        </plugin>
+    </plugins>
 ----
 
 == MIDI

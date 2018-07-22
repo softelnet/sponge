@@ -23,5 +23,7 @@ import java.util.List;
  */
 public interface MnistService {
 
+    boolean isReady();
+
     List<Double> predict(byte[] image);
 }

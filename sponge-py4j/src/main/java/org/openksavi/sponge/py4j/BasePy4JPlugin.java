@@ -52,6 +52,8 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public static final String TAG_PYTHON_SCRIPT_BEFORE_STARTUP = "pythonScriptBeforeStartup";
 
+    public static final String DEFAULT_PYTHON_EXECUTABLE = "python";
+
     private String facadeInterfaceName;
 
     private T facade;
@@ -64,6 +66,10 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     private ProcessConfiguration pythonScriptConfiguration;
 
+    /**
+     * If {@code true}, the Python script will be started before this plugin startup (the default value), otherwise it will be started after
+     * this plugin startup.
+     */
     private boolean pythonScriptBeforeStartup = true;
 
     private ProcessInstance scriptProcess;
@@ -79,7 +85,7 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
     protected void executePythonScript() {
         if (pythonScriptConfiguration != null) {
             scriptProcess = ProcessUtils.startProcess(getEngine(), pythonScriptConfiguration);
-            if (scriptProcess.tryWaitFor() && scriptProcess.getOutput() != null) {
+            if (scriptProcess.getOutput() != null) {
                 logger.info("Python script output: {}", scriptProcess.getOutput());
             }
         }
@@ -108,6 +114,9 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         if (configuration.hasChildConfiguration(TAG_PYTHON_SCRIPT)) {
             pythonScriptConfiguration =
                     ProcessUtils.createProcessConfiguration(configuration.getChildConfiguration(TAG_PYTHON_SCRIPT)).name("Python script");
+            if (pythonScriptConfiguration.getExecutable() == null) {
+                pythonScriptConfiguration.setExecutable(DEFAULT_PYTHON_EXECUTABLE);
+            }
         }
 
         pythonScriptBeforeStartup = configuration.getBoolean(TAG_PYTHON_SCRIPT_BEFORE_STARTUP, pythonScriptBeforeStartup);

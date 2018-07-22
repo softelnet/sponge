@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <property name="configDirectoryText">Config directory text: ${sponge.configDir}</property>
+        <property name="nonExistingProperty" variable="true">${nonExistingPropertyValue}</property>
+        <property name="javaHome" variable="true">${java.home}</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="python" />
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="echoPlugin1" class="org.openksavi.sponge.examples.EchoPlugin">
+            <configuration>
+                <echo>Config directory: ${sponge.configDir}</echo>
+            </configuration>
+        </plugin>
+        <plugin name="echoPlugin2" class="org.openksavi.sponge.examples.EchoPlugin">
+            <configuration>
+                <echo>Home directory: ${sponge.home}</echo>
+            </configuration>
+        </plugin>
+        <plugin name="echoPlugin3" class="org.openksavi.sponge.examples.EchoPlugin">
+            <configuration>
+                <echo>${configDirectoryText}</echo>
+            </configuration>
+        </plugin>
+        <plugin name="echoPlugin4" class="org.openksavi.sponge.examples.EchoPlugin">
+            <configuration>
+                <echo>${nonExistingProperty}</echo>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

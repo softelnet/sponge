@@ -18,13 +18,17 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventClonePolicy;
+import org.openksavi.sponge.examples.EchoPlugin;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -109,6 +113,38 @@ public class ConfigurationTest {
             assertEquals("Echo plugin", plugin.getDisplayName());
             assertEquals("Echo plugin description", plugin.getDescription());
 
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testConfigFileProperties() {
+        String home = ".";
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/config_file_properties.xml")
+                .property(ConfigurationConstants.PROP_HOME, home).build();
+        engine.startup();
+
+        try {
+            String configurationFileDir = SpongeUtils.getFileDir(engine.getConfigurationManager().getConfigurationFileUrl());
+            assertNotNull(configurationFileDir);
+            assertEquals("Config directory: " + configurationFileDir,
+                    engine.getOperations().getPlugin("echoPlugin1", EchoPlugin.class).getEcho());
+
+            assertEquals("Config directory text: " + configurationFileDir,
+                    engine.getConfigurationManager().getProperty("configDirectoryText"));
+
+            assertEquals("Home directory: " + home, engine.getOperations().getPlugin("echoPlugin2", EchoPlugin.class).getEcho());
+
+            assertEquals("Config directory text: " + configurationFileDir,
+                    engine.getOperations().getPlugin("echoPlugin3", EchoPlugin.class).getEcho());
+
+            assertEquals("${nonExistingPropertyValue}", engine.getOperations().getPlugin("echoPlugin4", EchoPlugin.class).getEcho());
+
+            assertEquals("${nonExistingPropertyValue}", engine.getOperations().getVariable("nonExistingProperty"));
+
+            assertEquals(System.getProperty("java.home"), engine.getOperations().getVariable("javaHome"));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
