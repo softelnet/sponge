@@ -30,6 +30,16 @@ public class ObjectType extends Type {
         this.className = className;
     }
 
+    @Override
+    public ObjectType format(String format) {
+        return (ObjectType) super.format(format);
+    }
+
+    @Override
+    public ObjectType tags(String... tags) {
+        return (ObjectType) super.tags(tags);
+    }
+
     public String getClassName() {
         return className;
     }

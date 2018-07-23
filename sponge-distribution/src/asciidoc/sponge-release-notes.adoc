@@ -6,6 +6,13 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.3.4 (not released yet)
+
+* Enhancements in Py4J plugin configuration for running external Python scripts as subprocesses.
+* A type for a metadata may specify a list of tags.
+* Libraries upgrade.
+
+[discrete]
 == 1.3.3 (2018-07-12)
 
 * Added a new attribute to the REST API `actions` operation that allows specifying an action name or a regular expression.

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="mnist" displayName="MNIST">
+            <file>mnist_rest_server.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
+            <configuration>
+                <facadeInterface>org.openksavi.sponge.tensorflow.MnistService</facadeInterface>
+                <pythonScript>
+                    <executable>${user.home}/tensorflow/bin/python3</executable>
+                    <argument>mnist_service.py</argument>
+                    <workingDir>${sponge.configDir}</workingDir>
+                    <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
+                    <redirectType>LOGGER</redirectType>
+                </pythonScript>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

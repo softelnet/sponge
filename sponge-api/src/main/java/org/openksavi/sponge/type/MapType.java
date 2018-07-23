@@ -33,6 +33,16 @@ public class MapType extends Type {
         this.valueType = valueType;
     }
 
+    @Override
+    public MapType format(String format) {
+        return (MapType) super.format(format);
+    }
+
+    @Override
+    public MapType tags(String... tags) {
+        return (MapType) super.tags(tags);
+    }
+
     public Type getKeyType() {
         return keyType;
     }

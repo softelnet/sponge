@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -38,6 +39,14 @@ public abstract class MnistUtils {
                 // FileUtils.writeByteArrayToFile(new File("test.png"), out.toByteArray());
                 return out.toByteArray();
             }
+        } catch (IOException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
+    public static void writeImageBytes(byte[] imageBytes, String fileName) {
+        try {
+            FileUtils.writeByteArrayToFile(new File(fileName), imageBytes != null ? imageBytes : new byte[0]);
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);
         }

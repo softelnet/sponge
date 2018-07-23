@@ -21,4 +21,14 @@ public class VoidType extends Type {
     public VoidType() {
         super(TypeKind.VOID);
     }
+
+    @Override
+    public VoidType format(String format) {
+        return (VoidType) super.format(format);
+    }
+
+    @Override
+    public VoidType tags(String... tags) {
+        return (VoidType) super.tags(tags);
+    }
 }

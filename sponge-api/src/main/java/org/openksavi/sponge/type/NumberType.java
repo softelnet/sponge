@@ -35,6 +35,11 @@ public class NumberType extends Type {
         return (NumberType) super.format(format);
     }
 
+    @Override
+    public NumberType tags(String... tags) {
+        return (NumberType) super.tags(tags);
+    }
+
     public NumberType minValue(Number minValue) {
         setMinValue(minValue);
         return this;

@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 public class BinaryType extends Type {
 
+    private String mimeType;
+
     public BinaryType() {
         super(TypeKind.BINARY);
     }
@@ -25,5 +27,23 @@ public class BinaryType extends Type {
     @Override
     public BinaryType format(String format) {
         return (BinaryType) super.format(format);
+    }
+
+    @Override
+    public BinaryType tags(String... tags) {
+        return (BinaryType) super.tags(tags);
+    }
+
+    public BinaryType mimeType(String mimeType) {
+        this.mimeType = mimeType;
+        return this;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

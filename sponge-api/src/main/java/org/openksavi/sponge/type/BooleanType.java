@@ -26,4 +26,9 @@ public class BooleanType extends Type {
     public BooleanType format(String format) {
         return (BooleanType) super.format(format);
     }
+
+    @Override
+    public BooleanType tags(String... tags) {
+        return (BooleanType) super.tags(tags);
+    }
 }

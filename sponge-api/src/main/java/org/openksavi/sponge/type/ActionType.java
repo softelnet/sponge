@@ -34,6 +34,16 @@ public class ActionType extends Type {
         this.actionName = actionName;
     }
 
+    @Override
+    public ActionType format(String format) {
+        return (ActionType) super.format(format);
+    }
+
+    @Override
+    public ActionType tags(String... tags) {
+        return (ActionType) super.tags(tags);
+    }
+
     public String getActionName() {
         return actionName;
     }

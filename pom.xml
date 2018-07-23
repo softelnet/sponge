@@ -99,7 +99,7 @@
         <tensorflow.version>1.9.0</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.1</pi4j.version>
-        <rxjava2.version>2.1.16</rxjava2.version>
+        <rxjava2.version>2.1.17</rxjava2.version>
         <okhttp.version>3.11.0</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.6</jackson.version>

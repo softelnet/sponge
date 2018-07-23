@@ -35,6 +35,11 @@ public class IntegerType extends Type {
         return (IntegerType) super.format(format);
     }
 
+    @Override
+    public IntegerType tags(String... tags) {
+        return (IntegerType) super.tags(tags);
+    }
+
     public IntegerType minValue(Long minValue) {
         setMinValue(minValue);
         return this;

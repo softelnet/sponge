@@ -133,6 +133,8 @@ public abstract class RestApiUtils {
 
         // Note that metadata not null checks have been performed while enabling the action.
         switch (type.getKind()) {
+        case BINARY:
+            return mapper.convertValue(jsonValue, byte[].class);
         case OBJECT:
             return mapper.convertValue(jsonValue, SpongeUtils.getClass(((ObjectType) type).getClassName()));
         case LIST:

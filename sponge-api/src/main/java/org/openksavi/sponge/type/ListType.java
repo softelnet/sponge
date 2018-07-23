@@ -35,6 +35,11 @@ public class ListType extends Type {
         return (ListType) super.format(format);
     }
 
+    @Override
+    public ListType tags(String... tags) {
+        return (ListType) super.tags(tags);
+    }
+
     public Type getElementType() {
         return elementType;
     }

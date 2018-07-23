@@ -26,4 +26,9 @@ public class AnyType extends Type {
     public AnyType format(String format) {
         return (AnyType) super.format(format);
     }
+
+    @Override
+    public AnyType tags(String... tags) {
+        return (AnyType) super.tags(tags);
+    }
 }

@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * A data type. Used for example in action arguments metadata.
  */
@@ -24,6 +28,8 @@ public class Type {
     private TypeKind kind;
 
     private String format;
+
+    private List<String> tags = new ArrayList<>();
 
     @SuppressWarnings("unused")
     private Type() {
@@ -39,6 +45,11 @@ public class Type {
         return this;
     }
 
+    protected Type tags(String... tags) {
+        setTags(Arrays.asList(tags));
+        return this;
+    }
+
     public TypeKind getKind() {
         return kind;
     }
@@ -49,5 +60,13 @@ public class Type {
 
     public void setFormat(String format) {
         this.format = format;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }
