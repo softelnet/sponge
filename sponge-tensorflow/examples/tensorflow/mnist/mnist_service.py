@@ -3,13 +3,16 @@ from __future__ import print_function
 import keras
 from keras import layers
 from keras import models
+from keras import preprocessing
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras import backend as K
 
+import tensorflow as tf
+
 import numpy as np
-from PIL import Image
+#from PIL import Image
 from io import BytesIO
 
 import os.path
@@ -86,20 +89,20 @@ class MnistModel:
 
     def load(self):
         if os.path.exists(self.model_file):
+            print('Loading model')
             self.model = models.load_model(self.model_file)
         else:
+            print('Creating and training model')
             self.model = self.__create_model_and_train()
 
         # Hack https://github.com/keras-team/keras/issues/6462
         self.model._make_predict_function()
 
-    # Uses PIL image loading
     def __preprocess_image_to_predict(self, image_data):
-        image = Image.open(BytesIO(image_data))
-        data = image.tobytes()
-
-        img = np.array(list(data)).astype('float32') / 255
-        x = img.reshape(1, self.img_rows, self.img_cols, 1)
+        image = preprocessing.image.load_img(BytesIO(image_data), grayscale=True, target_size=(self.img_rows, self.img_cols))
+        x = preprocessing.image.img_to_array(image)
+        x /= 255.0
+        x = np.expand_dims(x, axis=0)
         return (x, image)
 
     def predict(self, image_data):
@@ -109,7 +112,7 @@ class MnistModel:
         prediction = np.argmax(predictionTensor)
         predictionProb = np.amax(predictionTensor)
 
-        print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(predictionTensor)))
+        print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(predictionTensor)), flush=True)
 
         return predictionTensor
 
@@ -137,4 +140,4 @@ mnistService = MnistService()
 gateway = ClientServer(python_server_entry_point=mnistService)
 mnistService.startup()
 
-print("MNIST service has started.")
+print("MNIST service has started.", flush=True)

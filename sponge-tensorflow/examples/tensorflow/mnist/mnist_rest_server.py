@@ -7,6 +7,7 @@ from org.openksavi.sponge.tensorflow import MnistUtils
 
 class MnistPredict(Action):
     def onConfigure(self):
+        self.displayName = "Predict a handwritten digit"
         self.argsMeta = [ ArgMeta("image", BinaryType().format("png")).displayName("PNG 28x28 image of a digit") ]
         self.resultMeta = ResultMeta(ListType(NumberType())).displayName("Digit probabilities")
     def onCall(self, image):
