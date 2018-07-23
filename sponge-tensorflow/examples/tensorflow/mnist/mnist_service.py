@@ -114,7 +114,6 @@ class MnistModel:
 
         if predictionProb < self.predictionThreshold:
             print('WARNING: The prediction probability', predictionProb, 'is too low so it could be incorrect!')
-
         print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(predictionTensor)), flush=True)
 
         return predictionTensor
