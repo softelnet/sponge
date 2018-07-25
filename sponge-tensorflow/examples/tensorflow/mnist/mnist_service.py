@@ -95,7 +95,7 @@ class MnistModel:
             print('Creating and training model')
             self.model = self.__create_model_and_train()
 
-        # Hack https://github.com/keras-team/keras/issues/6462
+        # Have to initialize before threading (https://stackoverflow.com/questions/40850089/is-keras-thread-safe)
         self.model._make_predict_function()
 
     def __preprocess_image_to_predict(self, image_data):
