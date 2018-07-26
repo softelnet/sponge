@@ -19,6 +19,7 @@ package org.openksavi.sponge.core.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.function.Consumer;
 
 /**
@@ -30,13 +31,16 @@ public class InputStreamLineConsumerRunnable implements Runnable {
 
     private Consumer<String> lineConsumer;
 
-    public InputStreamLineConsumerRunnable(InputStream inputStream, Consumer<String> lineConsumer) {
+    private Charset charset;
+
+    public InputStreamLineConsumerRunnable(InputStream inputStream, Consumer<String> lineConsumer, Charset charset) {
         this.inputStream = inputStream;
         this.lineConsumer = lineConsumer;
+        this.charset = charset;
     }
 
     @Override
     public void run() {
-        new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(lineConsumer);
+        new BufferedReader(new InputStreamReader(inputStream, charset)).lines().forEach(lineConsumer);
     }
 }

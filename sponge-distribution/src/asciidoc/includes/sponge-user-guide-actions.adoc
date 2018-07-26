@@ -66,7 +66,7 @@ EPS.enableJava(JavaEchoAction)
 == Argument and result metadata
 Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and an result. Metadata are not used to verify action arguments or an result. They are useful in a client code, for example in a generic GUI that calls {sponge} actions.
 
-Metadata for argument and result types support types that are represented by classes in the `org.openksavi.sponge.type` package. In order to provide more flexibility in a client code a type specification may be extended by a _format_ and _tags_ which are texts not interpreted by the {sponge} engine but could be interpreted by a client code.
+Metadata for argument and result types support types that are represented by classes in the `org.openksavi.sponge.type` package. In order to provide more flexibility in a client code a type specification may be extended by a _format_ and _tag_ (or _tags_) which are texts not interpreted by the {sponge} engine but could be interpreted by a client code.
 
 .Supported argument and result metadata types
 [cols="1,5"]
@@ -134,9 +134,9 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringListArg", ListType(StringType())),
             ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
-            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject")),
+            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject").tag("complex")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))),
-            ArgMeta("binaryArg", BinaryType().mimeType("image/png").format("28x28").tags("drawing")),
+            ArgMeta("binaryArg", BinaryType().mimeType("image/png").format("28x28").tags("drawing", "handwritten")),
         ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):

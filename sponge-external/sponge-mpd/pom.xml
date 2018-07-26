@@ -51,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api</artifactId>
+            <artifactId>sponge-rest-api-server</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

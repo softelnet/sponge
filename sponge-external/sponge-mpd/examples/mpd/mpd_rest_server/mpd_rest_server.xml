@@ -6,7 +6,7 @@
             <file>classpath:org/openksavi/sponge/mpd/mpd_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="administration" displayName="Administration">
-            <file>classpath:org/openksavi/sponge/restapi/administration_library.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="sample" displayName="Samples">
             <file>mpd_rest_server_main.py</file>
@@ -23,11 +23,11 @@
                 <autoStartMonitor>false</autoStartMonitor>
             </configuration>
         </plugin>
-        <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
             <configuration>
                 <port>1836</port>
                 <publicActions>mpd:,administration:,sample:</publicActions>
-                <securityServiceClass>org.openksavi.sponge.restapi.security.SimpleInMemorySecurityService</securityServiceClass>
+                <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
             </configuration>
         </plugin>
     </plugins>

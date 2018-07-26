@@ -40,14 +40,18 @@ public class Type {
         this.kind = kind;
     }
 
-    protected Type format(String format) {
+    public Type format(String format) {
         setFormat(format);
         return this;
     }
 
-    protected Type tags(String... tags) {
+    public Type tags(String... tags) {
         setTags(Arrays.asList(tags));
         return this;
+    }
+
+    public Type tag(String tag) {
+        return tags(tag);
     }
 
     public TypeKind getKind() {

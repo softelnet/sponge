@@ -40,6 +40,11 @@ public class NumberType extends Type {
         return (NumberType) super.tags(tags);
     }
 
+    @Override
+    public NumberType tag(String tag) {
+        return (NumberType) super.tag(tag);
+    }
+
     public NumberType minValue(Number minValue) {
         setMinValue(minValue);
         return this;

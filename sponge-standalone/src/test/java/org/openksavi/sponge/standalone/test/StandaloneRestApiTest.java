@@ -20,28 +20,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-
 import org.junit.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
-import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 public class StandaloneRestApiTest {
 
     private static final int PORT = 11836;
-
-    private static final String REST_API_URL = "http://localhost:" + PORT + RestApiConstants.BASE_URL + "/";
 
     @Test
     public void testRestApi() {
@@ -50,27 +39,18 @@ public class StandaloneRestApiTest {
             engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-c", "examples/standalone/rest_api/standalone_rest_api.xml");
             SpongeEngine engine = engineMain.getEngine();
 
-            String actionName = "UpperCase";
             String arg1 = "test1";
 
-            ResponseEntity<RestActionCallResponse> response = new RestTemplate().exchange(REST_API_URL + "call", HttpMethod.POST,
-                    new HttpEntity<>(new RestActionCallRequest(actionName, Arrays.asList(arg1)), createHeaders()), RestActionCallResponse.class);
+            SpongeRestApiClient client =
+                    new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build());
+            Object result = client.call("UpperCase", arg1);
 
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals(actionName, response.getBody().getActionName());
-            assertTrue(response.getBody().getResult() instanceof String);
-            assertEquals(arg1.toUpperCase(), response.getBody().getResult());
+            assertTrue(result instanceof String);
+            assertEquals(arg1.toUpperCase(), result);
 
             assertFalse(engine.isError());
         } finally {
             StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
         }
-    }
-
-    protected HttpHeaders createHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return headers;
     }
 }

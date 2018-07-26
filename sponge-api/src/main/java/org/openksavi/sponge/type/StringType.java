@@ -36,6 +36,11 @@ public class StringType extends Type {
         return (StringType) super.tags(tags);
     }
 
+    @Override
+    public StringType tag(String tag) {
+        return (StringType) super.tag(tag);
+    }
+
     public StringType minLength(Integer minLength) {
         setMinLength(minLength);
         return this;

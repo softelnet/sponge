@@ -86,7 +86,12 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api</artifactId>
+            <artifactId>sponge-rest-api-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-rest-api-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

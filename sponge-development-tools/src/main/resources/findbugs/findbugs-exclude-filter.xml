@@ -40,6 +40,13 @@
         </Or>
         <Bug pattern="EI_EXPOSE_REP" />
     </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.restapi.util.RestApiUtils" />
+        <Or>
+            <Method name="unmarshalValue" />
+        </Or>
+        <Bug pattern="BC_UNCONFIRMED_CAST" />
+    </Match>
 
     <!-- Reason: Platform dependent encoding is sufficient for an interactive mode -->
     <Match>

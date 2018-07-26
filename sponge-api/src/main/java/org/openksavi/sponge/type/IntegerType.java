@@ -40,6 +40,11 @@ public class IntegerType extends Type {
         return (IntegerType) super.tags(tags);
     }
 
+    @Override
+    public IntegerType tag(String tag) {
+        return (IntegerType) super.tag(tag);
+    }
+
     public IntegerType minValue(Long minValue) {
         setMinValue(minValue);
         return this;

@@ -40,6 +40,11 @@ public class ListType extends Type {
         return (ListType) super.tags(tags);
     }
 
+    @Override
+    public ListType tag(String tag) {
+        return (ListType) super.tag(tag);
+    }
+
     public Type getElementType() {
         return elementType;
     }

@@ -103,6 +103,7 @@
         <okhttp.version>3.11.0</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.6</jackson.version>
+        <swagger.version>1.5.20</swagger.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -773,6 +774,11 @@
             </dependency>
 
             <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.webjars</groupId>
                 <artifactId>swagger-ui</artifactId>
                 <version>${swagger-ui.version}</version>
@@ -854,13 +860,15 @@
                 <module>sponge-spring</module>
                 <module>sponge-camel</module>
                 <module>sponge-py4j</module>
-                <module>sponge-tensorflow</module>
                 <module>sponge-midi</module>
                 <module>sponge-rpi-pi4j</module>
                 <module>sponge-rpi-grovepi</module>
                 <module>sponge-reactivex</module>
                 <module>sponge-signal</module>
-                <module>sponge-rest-api</module>
+                <module>sponge-rest-api-common</module>
+                <module>sponge-rest-api-client</module>
+                <module>sponge-rest-api-server</module>
+                <module>sponge-tensorflow</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
                 <module>sponge-external</module>
@@ -970,7 +978,10 @@
                 <module>sponge-signal</module>
                 <module>sponge-rpi-pi4j</module>
                 <module>sponge-reactivex</module>
-                <module>sponge-rest-api</module>
+                <module>sponge-rest-api-common</module>
+                <module>sponge-rest-api-client</module>
+                <module>sponge-rest-api-server</module>
+                <module>sponge-tensorflow</module>
                 <module>sponge-standalone</module>
                 <module>sponge-external</module>
                 <module>sponge-bom</module>

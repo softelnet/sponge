@@ -43,6 +43,11 @@ public class MapType extends Type {
         return (MapType) super.tags(tags);
     }
 
+    @Override
+    public MapType tag(String tag) {
+        return (MapType) super.tag(tag);
+    }
+
     public Type getKeyType() {
         return keyType;
     }

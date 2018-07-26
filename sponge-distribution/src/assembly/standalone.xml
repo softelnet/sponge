@@ -116,7 +116,21 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../sponge-rest-api</directory>
+            <directory>../sponge-rest-api-client</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-rest-api-server</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-tensorflow</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>examples/**</include>

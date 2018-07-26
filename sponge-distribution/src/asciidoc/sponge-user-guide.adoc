@@ -1271,9 +1271,19 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |The ReactiveX integration.
 
 |`org.openksavi.sponge`
-|`sponge-rest-api`
+|`sponge-rest-api-client`
 |Yes
-|The Sponge REST API.
+|The Sponge REST API client.
+
+|`org.openksavi.sponge`
+|`sponge-rest-api-server`
+|Yes
+|The Sponge REST API server.
+
+|`org.openksavi.sponge`
+|`sponge-tensorflow`
+|Yes
+|The Tensorflow integration.
 
 |`org.openksavi.sponge`
 |`sponge-standalone`

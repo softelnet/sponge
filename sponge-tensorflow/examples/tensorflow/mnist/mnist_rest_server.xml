@@ -20,7 +20,7 @@
                 </pythonScript>
             </configuration>
         </plugin>
-        <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
             <configuration>
             </configuration>
         </plugin>

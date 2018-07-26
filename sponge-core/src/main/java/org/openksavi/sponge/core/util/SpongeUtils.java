@@ -306,10 +306,10 @@ public abstract class SpongeUtils {
         String specificErrorMessage = interpreter != null ? interpreter.getSpecificExceptionMessage(throwable) : null;
         if (sourceName == null) {
             return specificErrorMessage == null ? new SpongeException(throwable) : new SpongeException(specificErrorMessage, throwable);
+        } else {
+            return specificErrorMessage == null ? new WrappedException(sourceName, throwable)
+                    : new WrappedException(sourceName, specificErrorMessage, throwable);
         }
-
-        return specificErrorMessage == null ? new WrappedException(sourceName, throwable)
-                : new WrappedException(sourceName, specificErrorMessage, throwable);
     }
 
     /**
@@ -597,6 +597,12 @@ public abstract class SpongeUtils {
                 processorOperations.getName());
     }
 
+    /**
+     * Finds a class by the name.
+     *
+     * @param className the class name.
+     * @return the class or {@code null} if not found.
+     */
     public static Class<?> getClass(String className) {
         try {
             return ClassUtils.getClass(className);

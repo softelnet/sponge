@@ -34,6 +34,11 @@ public class BinaryType extends Type {
         return (BinaryType) super.tags(tags);
     }
 
+    @Override
+    public BinaryType tag(String tag) {
+        return (BinaryType) super.tag(tag);
+    }
+
     public BinaryType mimeType(String mimeType) {
         this.mimeType = mimeType;
         return this;

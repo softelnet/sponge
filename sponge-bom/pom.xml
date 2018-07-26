@@ -81,11 +81,6 @@
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-tensorflow</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openksavi.sponge</groupId>
                 <artifactId>sponge-midi</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -101,7 +96,22 @@
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-rest-api</artifactId>
+                <artifactId>sponge-rest-api-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-rest-api-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-rest-api-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-tensorflow</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

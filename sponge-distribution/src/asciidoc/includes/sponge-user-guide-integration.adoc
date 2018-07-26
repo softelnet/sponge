@@ -371,6 +371,293 @@ def onStartup():
     camel.context.addRoutes(PythonRoute())
 ----
 
+== {sponge} REST API server
+The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API server plugin (`RestApiServerPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service. After starting the plugin, the online API specification in the https://swagger.io[Swagger] JSON format will be available at URL `http://localhost:1836/api-doc`.
+
+The default name of the REST API plugin (which may be used in knowledge bases) is `restApiServer`.
+
+.Key REST API plugin configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
+
+|`autoStart`
+|`boolean`
+|If `true` then the REST service will start when the plugin starts up. The default value is `true`.
+
+|`restComponentId`
+|`String`
+|The Camel REST component id. The default value is `"jetty"`.
+
+|`host`
+|`String`
+|The REST API host.
+
+|`port`
+|`int`
+|The REST API port. The default REST API port is `1836`.
+
+|`prettyPrint`
+|`boolean`
+|The pretty print option.
+
+|`publicActions`
+|`List<ProcessorQualifiedName>`
+|Public actions.
+
+|`publicEvents`
+|`List<String>`
+|Public event names.
+
+|`sslConfiguration`
+|`SslConfiguration`
+|The SSL configuration.
+
+|`publishReload`
+|`boolean`
+|If `true` then the reload operation will be published. The default value is `true`.
+
+|`routeBuilderClass`
+|`String`
+|The name of the class extending `RestApiRouteBuilder` (which is the default route builder).
+
+|`apiServiceClass`
+|`String`
+|The `RestApiService` implementation class name. The default `RestApiService` implementation is `DefaultRestApiService`.
+
+|`securityServiceClass`
+|`String`
+|The `RestApiSecurityService` implementation class name. The default `RestApiSecurityService` implementation is `NoSecuritySecurityService`.
+|===
+
+.The REST API server plugin XML configuration example
+[source,xml,subs="verbatim,attributes"]
+----
+<sponge>
+    <plugins>
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
+            <configuration>
+                <port>1836</port>
+                <autoStart>false</autoStart>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+----
+
+.The REST API server plugin Java configuration example
+[source,java]
+----
+@Configuration
+public static class Config extends SpongeCamelConfiguration {
+
+    @Bean
+    public SpongeEngine spongeEngine() {
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), restApiPlugin())
+                .config("sponge_config.xml").build();
+    }
+
+    @Bean
+    public RestApiServerPlugin restApiPlugin() {
+        RestApiServerPlugin plugin = new RestApiServerPlugin();
+        plugin.setSecurityService(restApiSecurityService());
+
+        return plugin;
+    }
+
+    @Bean
+    public RestApiSecurityService restApiSecurityService() {
+        return new SimpleInMemorySecurityService();
+    }
+}
+----
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/server/RestApiServerPlugin.html[`RestApiServerPlugin` Javadoc].
+
+The REST API plugin provides a simple predefined knowledge base library.
+
+.Example use of the REST API predefined knowledge base library
+[source,xml]
+----
+<knowledgeBase name="security" displayName="Security">
+    <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+</knowledgeBase>
+----
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-rest-api-server</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
+
+=== Operations summary
+The following table contains a summary of the REST API operations. For a complete list of operations see the <<_swagger_overview, specification>> generated using Swagger and http://swagger2markup.github.io/swagger2markup/1.3.3/[Swagger2Markup].
+
+.The REST API operations summary
+[cols="2,1,4"]
+|===
+|Name |URI |Description
+
+|Get the Sponge version
+|`version`
+|Returns the Sponge version.
+
+|Login
+|`login`
+|User login. Used in a token-based authentication scenario.
+
+|Logout
+|`logout`
+|User logout. Used in a token-based authentication scenario.
+
+|Get knowledge bases
+|`knowledgeBases`
+|Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge basses).
+
+|Get actions
+|`actions`
+|Returns the metadata of actions that are available to the user and those that have argument and result metadata specified in their configuration (this may be changed by setting the request property `metadataRequired` to `false`).
+
+|Call an action
+|`call`
+|Calls an action.
+
+|Send a new event
+|`send`
+|Sends a new event.
+
+|Reload knowledge bases
+|`reload`
+|Reloads all knowledge bases. This operation may not be published. It should be available only to administrators.
+|===
+
+=== JSON/Java mapping
+The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.
+
+The default Jackson configuration for the REST API sets the ISO8601 format for dates.
+
+=== Requests and responses
+Each request may contain base properties.
+
+.Base request properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`id`
+|No
+|A request identifier. If it is present, the response will contain the same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
+
+|`username`
+|No
+|A user name. May be used in a user/password authentication scenario. In that case, if there is no user name present, the _guest_ user is assumed.
+
+|`password`
+|No
+|A user password. May be used in a user/password authentication scenario.
+
+|`authToken`
+|No
+|An authentication token. May be used in a token-based authentication scenario.
+|===
+
+.Examples of REST API requests
+[source,bash]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/version
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"username":"john","password":"password"}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"nameRegExp":".*Case"}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
+----
+
+=== Security
+The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, a _guest_ user is assumed. A user may have roles.
+
+You may set a security strategy by providing an implementation of the `RestApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
+
+==== Authentication mode
+Only a username/password authentication mode is currently supported by the default REST API service implementation.
+
+.Authentication modes
+[cols="1,4"]
+|===
+|Name |Description
+
+|Username/password
+|Every request has to contain a username and a password. The `login` operation shouldn't be invoked.
+
+|Authentication token
+|Every request has to contain an authentication token, returned by a `login` operation.
+|===
+
+==== Simple security strategy
+The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RestApiIsActionPublic`, `RestApiIsEventPublic`, `RestApiCanUseKnowledgeBase`, `RestApiCanSendEvent`). Passwords are stored as SHA-256 hashes.
+
+.Example of the REST API simple security
+[source,python]
+----
+from org.openksavi.sponge.restapi.server.security import User
+
+# Simple access configuration: role -> knowledge base names regexps.
+ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"]}
+
+class RestApiCanUseKnowledgeBase(Action):
+    def onCall(self, user, kbName):
+        return restApiServer.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
+
+def onStartup():
+    # Set up users. To hash a password use (on Mac): echo -n <username><password> | shasum -a 256 | awk '{ print $1 }'
+    # Note that the user name must be lower case.
+    securityService = restApiServer.service.securityService
+    securityService.addUser(User("john", "4ae0aa2783d6e8a939b0a3ce8146400001ef6b9840958aea136b416c58a2f9b8", ["admin"]))
+    securityService.addUser(User("joe", "e52abe94e1e06f794a3654e02bfbe71565025ea6ce2898d1ad459182f3bc147b", ["guest"]))
+----
+
+For more information see examples in the source code.
+
+=== HTTPS
+In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords may be sent in plain text over the network as a part of the REST API JSON requests.
+
+include::sponge-user-guide-rest-api.adoc[leveloffset=+2]
+
+== {sponge} REST API client
+The {sponge} REST API client simplifies connecting to a remote {sponge} REST API server from applications written in Java.
+
+.REST API client example
+[source,java]
+----
+SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build()); // <1>
+String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
+----
+<1> Create a new REST API client.
+<2> Call the remote action.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/SpongeRestApiClient.html[`SpongeRestApiClient` Javadoc] and examples in the source code.
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-rest-api-client</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
 [[integration-external-subprocess]]
 == Run an external executable as a subprocess
 {sponge} provides a way to run an external executable as a subprocess of the {sponge} Java process. This feature is used by some of the plugins, for example by the Py4J integration plugin to execute an external Python script.
@@ -645,6 +932,63 @@ The plugin may run a CPython script as a subprocess.
             </configuration>
         </plugin>
     </plugins>
+----
+
+== ReactiveX
+The ReactiveX plugin (`ReactiveXPlugin`) provides support for using http://reactivex.io[ReactiveX] in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming. The plugin uses https://github.com/ReactiveX/RxJava[RxJava library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+
+The default name of the ReactiveX plugin (which may be used in knowledge bases) is `rx`.
+
+The main object provided by this plugin is an instance of a hot observable (`rx.observable`) that emits all non system {sponge} events. The plugin registers a Java-based correlator that listens to {sponge} events and sends them to the observable.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/reactivex/ReactiveXPlugin.html[`ReactiveXPlugin` Javadoc].
+
+The following example shows how to use reactive programming in a {sponge} knowledge base.
+
+.Example Python knowledge base - Reactive programming
+[source,python]
+----
+import time
+from io.reactivex.schedulers import Schedulers
+
+def onStartup():
+    EPS.event("e1").set("payload", 1).send()
+    EPS.event("e2").set("payload", 2).sendAfter(500)
+    EPS.event("e3").set("payload", 3).sendAfter(1000)
+
+    rx.observable.subscribe(lambda event: EPS.logger.info("{}", event.name))
+
+    def observer(event):
+        time.sleep(1)
+        EPS.logger.info("After sleep: {}", event.name)
+    rx.observable.observeOn(Schedulers.io()).subscribe(observer)
+----
+
+.Example XML configuration
+[source,xml]
+----
+<sponge>
+    <knowledgeBases>
+        <knowledgeBase name="kb">
+            <file>reactivex.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+    <plugins>
+        <plugin name="rx" class="org.openksavi.sponge.reactivex.ReactiveXPlugin" />
+    </plugins>
+</sponge>
+----
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-reactivex</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
 ----
 
 == MIDI
@@ -955,320 +1299,3 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
-== ReactiveX
-The ReactiveX plugin (`ReactiveXPlugin`) provides support for using http://reactivex.io[ReactiveX] in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming. The plugin uses https://github.com/ReactiveX/RxJava[RxJava library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
-
-The default name of the ReactiveX plugin (which may be used in knowledge bases) is `rx`.
-
-The main object provided by this plugin is an instance of a hot observable (`rx.observable`) that emits all non system {sponge} events. The plugin registers a Java-based correlator that listens to {sponge} events and sends them to the observable.
-
-For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/reactivex/ReactiveXPlugin.html[`ReactiveXPlugin` Javadoc].
-
-The following example shows how to use reactive programming in a {sponge} knowledge base.
-
-.Example Python knowledge base - Reactive programming
-[source,python]
-----
-import time
-from io.reactivex.schedulers import Schedulers
-
-def onStartup():
-    EPS.event("e1").set("payload", 1).send()
-    EPS.event("e2").set("payload", 2).sendAfter(500)
-    EPS.event("e3").set("payload", 3).sendAfter(1000)
-
-    rx.observable.subscribe(lambda event: EPS.logger.info("{}", event.name))
-
-    def observer(event):
-        time.sleep(1)
-        EPS.logger.info("After sleep: {}", event.name)
-    rx.observable.observeOn(Schedulers.io()).subscribe(observer)
-----
-
-.Example XML configuration
-[source,xml]
-----
-<sponge>
-    <knowledgeBases>
-        <knowledgeBase name="kb">
-            <file>reactivex.py</file>
-        </knowledgeBase>
-    </knowledgeBases>
-    <plugins>
-        <plugin name="rx" class="org.openksavi.sponge.reactivex.ReactiveXPlugin" />
-    </plugins>
-</sponge>
-----
-
-=== Maven configuration
-Maven users will need to add the following dependency to their `pom.xml`:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-reactivex</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
-----
-
-== REST API
-The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API plugin (`RestApiPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service. After starting the plugin, the online API specification in the https://swagger.io[Swagger] JSON format will be available at URL `http://localhost:1836/api-doc`.
-
-The default name of the REST API plugin (which may be used in knowledge bases) is `restApi`.
-
-.Key REST API plugin configuration parameters
-[cols="1,1,4"]
-|===
-|Name |Type |Description
-
-|`autoStart`
-|`boolean`
-|If `true` then the REST service will start when the plugin starts up. The default value is `true`.
-
-|`restComponentId`
-|`String`
-|The Camel REST component id. The default value is `"jetty"`.
-
-|`host`
-|`String`
-|The REST API host.
-
-|`port`
-|`int`
-|The REST API port. The default REST API port is `1836`.
-
-|`prettyPrint`
-|`boolean`
-|The pretty print option.
-
-|`publicActions`
-|`List<ProcessorQualifiedName>`
-|Public actions.
-
-|`publicEvents`
-|`List<String>`
-|Public event names.
-
-|`sslConfiguration`
-|`SslConfiguration`
-|The SSL configuration.
-
-|`publishReload`
-|`boolean`
-|If `true` then the reload operation will be published. The default value is `true`.
-
-|`routeBuilderClass`
-|`String`
-|The name of the class extending `RestApiRouteBuilder` (which is the default route builder).
-
-|`apiServiceClass`
-|`String`
-|The `RestApiService` implementation class name. The default `RestApiService` implementation is `DefaultRestApiService`.
-
-|`securityServiceClass`
-|`String`
-|The `RestApiSecurityService` implementation class name. The default `RestApiSecurityService` implementation is `NoSecuritySecurityService`.
-|===
-
-.The REST API plugin XML configuration example
-[source,xml,subs="verbatim,attributes"]
-----
-<sponge>
-    <plugins>
-        <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
-            <configuration>
-                <port>1836</port>
-                <autoStart>false</autoStart>
-            </configuration>
-        </plugin>
-    </plugins>
-</sponge>
-----
-
-.The REST API plugin Java configuration example
-[source,java]
-----
-@Configuration
-public static class Config extends SpongeCamelConfiguration {
-
-    @Bean
-    public SpongeEngine spongeEngine() {
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), restApiPlugin())
-                .config("sponge_config.xml").build();
-    }
-
-    @Bean
-    public RestApiPlugin restApiPlugin() {
-        RestApiPlugin plugin = new RestApiPlugin();
-        plugin.setSecurityService(restApiSecurityService());
-
-        return plugin;
-    }
-
-    @Bean
-    public RestApiSecurityService restApiSecurityService() {
-        return new SimpleInMemorySecurityService();
-    }
-}
-----
-
-For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/RestApiPlugin.html[`RestApiPlugin` Javadoc].
-
-The REST API plugin provides a simple predefined knowledge base library.
-
-.Example use of the REST API predefined knowledge base library
-[source,xml]
-----
-<knowledgeBase name="security" displayName="Security">
-    <file>classpath:org/openksavi/sponge/restapi/administration_library.py</file>
-</knowledgeBase>
-----
-
-=== Maven configuration
-Maven users will need to add the following dependency to their `pom.xml`:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-rest-api</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
-----
-
-Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
-
-=== Operations summary
-The following table contains a summary of the REST API operations. For a complete list of operations see the <<_swagger_overview, specification>> generated using Swagger and http://swagger2markup.github.io/swagger2markup/1.3.3/[Swagger2Markup].
-
-.The REST API operations summary
-[cols="2,1,4"]
-|===
-|Name |URI |Description
-
-|Get the Sponge version
-|`version`
-|Returns the Sponge version.
-
-|Login
-|`login`
-|User login. Used in a token-based authentication scenario.
-
-|Logout
-|`logout`
-|User logout. Used in a token-based authentication scenario.
-
-|Get knowledge bases
-|`knowledgeBases`
-|Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge basses).
-
-|Get actions
-|`actions`
-|Returns the metadata of actions that are available to the user and those that have argument and result metadata specified in their configuration (this may be changed by setting the request property `metadataRequired` to `false`).
-
-|Call an action
-|`call`
-|Calls an action.
-
-|Send a new event
-|`send`
-|Sends a new event.
-
-|Reload knowledge bases
-|`reload`
-|Reloads all knowledge bases. This operation may not be published. It should be available only to administrators.
-|===
-
-=== JSON/Java mapping
-The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.
-
-The default Jackson configuration for the REST API sets the ISO8601 format for dates.
-
-=== Requests and responses
-Each request may contain base properties.
-
-.Base request properties
-[cols="2,1,4"]
-|===
-|Name |Required |Description
-
-|`id`
-|No
-|A request identifier. If it is present, the response will contain the same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
-
-|`username`
-|No
-|A user name. May be used in a user/password authentication scenario. In that case, if there is no user name present, the _guest_ user is assumed.
-
-|`password`
-|No
-|A user password. May be used in a user/password authentication scenario.
-
-|`authToken`
-|No
-|An authentication token. May be used in a token-based authentication scenario.
-|===
-
-.Examples of REST API requests
-[source,bash]
-----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/version
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"username":"john","password":"password"}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"nameRegExp":".*Case"}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
-----
-
-=== Security
-The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, a _guest_ user is assumed. A user may have roles.
-
-You may set a security strategy by providing an implementation of the `RestApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
-
-==== Authentication mode
-Only a username/password authentication mode is currently supported by the default REST API service implementation.
-
-.Authentication modes
-[cols="1,4"]
-|===
-|Name |Description
-
-|Username/password
-|Every request has to contain a username and a password. The `login` operation shouldn't be invoked.
-
-|Authentication token
-|Every request has to contain an authentication token, returned by a `login` operation.
-|===
-
-==== Simple security strategy
-The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RestApiIsActionPublic`, `RestApiIsEventPublic`, `RestApiCanUseKnowledgeBase`, `RestApiCanSendEvent`). Passwords are stored as SHA-256 hashes.
-
-.Example of the REST API simple security
-[source,python]
-----
-from org.openksavi.sponge.restapi.security import User
-
-# Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"]}
-
-class RestApiCanUseKnowledgeBase(Action):
-    def onCall(self, user, kbName):
-        return restApi.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
-
-def onStartup():
-    # Set up users. To hash a password use (on Mac): echo -n <username><password> | shasum -a 256 | awk '{ print $1 }'
-    # Note that the user name must be lower case.
-    securityService = restApi.service.securityService
-    securityService.addUser(User("john", "4ae0aa2783d6e8a939b0a3ce8146400001ef6b9840958aea136b416c58a2f9b8", ["admin"]))
-    securityService.addUser(User("joe", "e52abe94e1e06f794a3654e02bfbe71565025ea6ce2898d1ad459182f3bc147b", ["guest"]))
-----
-
-For more information see examples in the source code.
-
-=== HTTPS
-In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords may be sent in plain text over the network as a part of the REST API JSON requests.
-
-include::sponge-user-guide-rest-api.adoc[leveloffset=+2]

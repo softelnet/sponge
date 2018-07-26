@@ -44,6 +44,11 @@ public class ActionType extends Type {
         return (ActionType) super.tags(tags);
     }
 
+    @Override
+    public ActionType tag(String tag) {
+        return (ActionType) super.tag(tag);
+    }
+
     public String getActionName() {
         return actionName;
     }

@@ -13,4 +13,4 @@ class UpperCase(Action):
 
 def onStartup():
     # Manual start of the REST API (autoStart is turned off) because the REST API server must start after the Camel context has started.
-    restApi.start()
+    restApiServer.start()

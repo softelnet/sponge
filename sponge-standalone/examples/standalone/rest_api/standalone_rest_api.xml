@@ -13,7 +13,7 @@
                 <spring camel="true"/>
             </configuration>
         </plugin>
-        <plugin name="restApi" class="org.openksavi.sponge.restapi.RestApiPlugin">
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
             <configuration>
                 <port>11836</port>
                 <autoStart>false</autoStart>

@@ -147,6 +147,8 @@ public abstract class ProcessUtils {
             builder.directory(new File(processConfiguration.getWorkingDir()));
         }
 
+        Charset finalCharset = processConfiguration.getCharset() != null ? processConfiguration.getCharset() : Charset.defaultCharset();
+
         // Start the process.
         ProcessInstance processInstance = null;
         try {
@@ -162,9 +164,9 @@ public abstract class ProcessUtils {
                             if (outputConsumer != null) {
                                 outputConsumer.accept(line);
                             }
-                        }));
+                        }, finalCharset));
                 SpongeUtils.executeConcurrentlyOnce(engine,
-                        new InputStreamLineConsumerRunnable(processInstance.getProcess().getErrorStream(), logger::warn));
+                        new InputStreamLineConsumerRunnable(processInstance.getProcess().getErrorStream(), logger::warn, finalCharset));
             }
         } catch (IOException e) {
             throw SpongeUtils.wrapException(processConfiguration.getName(), e);
@@ -172,7 +174,6 @@ public abstract class ProcessUtils {
 
         // If specified, set the output string.
         if (processConfiguration.getRedirectType() == RedirectType.STRING) {
-            Charset finalCharset = processConfiguration.getCharset() != null ? processConfiguration.getCharset() : Charset.defaultCharset();
             try (BufferedReader output =
                     new BufferedReader(new InputStreamReader(processInstance.getProcess().getInputStream(), finalCharset));
                     BufferedReader errors =

@@ -31,4 +31,9 @@ public class VoidType extends Type {
     public VoidType tags(String... tags) {
         return (VoidType) super.tags(tags);
     }
+
+    @Override
+    public VoidType tag(String tag) {
+        return (VoidType) super.tag(tag);
+    }
 }

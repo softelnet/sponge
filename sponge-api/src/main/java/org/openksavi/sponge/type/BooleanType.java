@@ -31,4 +31,9 @@ public class BooleanType extends Type {
     public BooleanType tags(String... tags) {
         return (BooleanType) super.tags(tags);
     }
+
+    @Override
+    public BooleanType tag(String tag) {
+        return (BooleanType) super.tag(tag);
+    }
 }

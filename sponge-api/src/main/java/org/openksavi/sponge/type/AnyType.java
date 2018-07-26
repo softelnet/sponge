@@ -31,4 +31,9 @@ public class AnyType extends Type {
     public AnyType tags(String... tags) {
         return (AnyType) super.tags(tags);
     }
+
+    @Override
+    public AnyType tag(String tag) {
+        return (AnyType) super.tag(tag);
+    }
 }

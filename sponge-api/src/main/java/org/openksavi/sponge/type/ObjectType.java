@@ -40,6 +40,11 @@ public class ObjectType extends Type {
         return (ObjectType) super.tags(tags);
     }
 
+    @Override
+    public ObjectType tag(String tag) {
+        return (ObjectType) super.tag(tag);
+    }
+
     public String getClassName() {
         return className;
     }

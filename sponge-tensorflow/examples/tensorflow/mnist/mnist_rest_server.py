@@ -10,7 +10,7 @@ PREDICTION_THRESHOLD = 0.75
 class MnistPredict(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit"
-        self.argsMeta = [ ArgMeta("image", BinaryType().mimeType("image/png").format("28x28").tags("drawing")).displayName("Image of a digit") ]
+        self.argsMeta = [ ArgMeta("image", BinaryType().mimeType("image/png").format("28x28").tag("drawing")).displayName("Image of a digit") ]
         self.resultMeta = ResultMeta(IntegerType()).displayName("Recognized digit")
     def onCall(self, image):
         self.logger.info("Action {} called", self.name)
@@ -21,7 +21,7 @@ class MnistPredict(Action):
 class MnistPredictDetailed(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit (detailed)"
-        self.argsMeta = [ ArgMeta("image", BinaryType().mimeType("image/png").format("28x28").tags("drawing")).displayName("Image of a digit") ]
+        self.argsMeta = [ ArgMeta("image", BinaryType().mimeType("image/png").format("28x28").tag("drawing")).displayName("Image of a digit") ]
         self.resultMeta = ResultMeta(ListType(NumberType())).displayName("Digit probabilities")
     def onCall(self, image):
         self.logger.info("Action {} called", self.name)
