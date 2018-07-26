@@ -14,14 +14,30 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.request;
+package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "LogoutRequest", description = "Logout request")
-public class RestLogoutRequest extends BaseRestRequest {
+@ApiModel(value = "ActionCallResponse", description = "Action call response")
+public class ActionCallResponse extends BaseResponse {
 
-    public RestLogoutRequest() {
+    private Object result;
+
+    public ActionCallResponse() {
         //
+    }
+
+    public ActionCallResponse(Object result) {
+        this.result = result;
+    }
+
+    @ApiModelProperty(value = "The action result", required = true)
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
     }
 }

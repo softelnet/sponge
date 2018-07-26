@@ -9,6 +9,7 @@ def onInit():
     # Variables for assertions only
     EPS.setVariable("actionCalled", AtomicBoolean(False))
     EPS.setVariable("eventSent", AtomicBoolean(False))
+    EPS.setVariable("reloaded", AtomicBoolean(False))
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -57,3 +58,5 @@ class Alarm(Trigger):
         self.logger.debug("Received event: {}", str(event))
         EPS.getVariable("eventSent").set(True)
 
+def onAfterReload():
+    EPS.getVariable("reloaded").set(True)

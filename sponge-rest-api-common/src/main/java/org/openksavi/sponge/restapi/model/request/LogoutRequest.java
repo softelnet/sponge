@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.security;
+package org.openksavi.sponge.restapi.model.request;
 
-import org.apache.camel.Exchange;
+import io.swagger.annotations.ApiModel;
 
-import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.util.HasEngine;
+@ApiModel(value = "LogoutRequest", description = "Logout request")
+public class LogoutRequest extends BaseRequest {
 
-public interface RestApiSecurityService extends HasEngine {
-
-    User authenticateUser(String username, String password, Exchange exchange);
-
-    User getUser(String username);
-
-    boolean canCallAction(User user, ActionAdapter actionAdapter);
-
-    boolean canSendEvent(User user, String eventName);
-
-    boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase);
+    public LogoutRequest() {
+        //
+    }
 }

@@ -16,28 +16,32 @@
 
 package org.openksavi.sponge.restapi.model.response;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "LoginResponse", description = "Login response")
-public class RestLoginResponse extends BaseRestResponse {
+import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 
-    private String authToken;
+@ApiModel(value = "GetKnowledgeBasesResponse", description = "Get knowledge bases response")
+public class GetKnowledgeBasesResponse extends BaseResponse {
 
-    public RestLoginResponse() {
+    private List<RestKnowledgeBaseMeta> knowledgeBases;
+
+    public GetKnowledgeBasesResponse() {
         //
     }
 
-    public RestLoginResponse(String authToken) {
-        this.authToken = authToken;
+    public GetKnowledgeBasesResponse(List<RestKnowledgeBaseMeta> knowledgeBases) {
+        this.knowledgeBases = knowledgeBases;
     }
 
-    @ApiModelProperty(value = "The authentication token", required = true)
-    public String getAuthToken() {
-        return authToken;
+    @ApiModelProperty(value = "The Spoonge knowledge bases", required = true)
+    public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
+        return knowledgeBases;
     }
 
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    public void setKnowledgeBases(List<RestKnowledgeBaseMeta> knowledgeBases) {
+        this.knowledgeBases = knowledgeBases;
     }
 }

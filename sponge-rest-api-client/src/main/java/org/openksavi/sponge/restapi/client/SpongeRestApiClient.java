@@ -21,14 +21,23 @@ import java.util.Map;
 
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
-import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
-import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
-import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
-import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
+import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
+import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
+import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.LoginRequest;
+import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ReloadRequest;
+import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
+import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.LoginResponse;
+import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ReloadResponse;
+import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 
 /**
  * A Sponge REST API client.
@@ -37,11 +46,23 @@ public interface SpongeRestApiClient {
 
     RestApiClientConfiguration getConfiguration();
 
-    RestGetVersionResponse getVersion(RestGetVersionRequest request);
+    GetVersionResponse getVersion(GetVersionRequest request);
 
     String getVersion();
 
-    RestGetActionsResponse getActions(RestGetActionsRequest request);
+    LoginResponse login(LoginRequest request);
+
+    String login();
+
+    LogoutResponse logout(LogoutRequest request);
+
+    void logout();
+
+    GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request);
+
+    List<RestKnowledgeBaseMeta> getKnowledgeBases();
+
+    GetActionsResponse getActions(GetActionsRequest request);
 
     List<RestActionMeta> getActions(Boolean metadataRequired, String nameRegExp);
 
@@ -52,14 +73,15 @@ public interface SpongeRestApiClient {
     /**
      * Calls the action.
      *
-     * Fetches the action result metadata from the server every call. Unmarshals the result using best effort strategy, i.e. when the result
-     * metadata is present. If you want to disable fetching metadata and unmarshalling the result, use {@code callWithMeta(request, null)}.
+     * Fetches the action result metadata from the server every call. Unmarshals the result using a best effort strategy, i.e. when a result
+     * metadata is defined for this action (on the server side). If you want to disable fetching metadata and unmarshalling the result, use
+     * {@code callWithMeta(request, null)}.
      *
      * @param request the request.
      *
      * @return the response.
      */
-    RestActionCallResponse call(RestActionCallRequest request);
+    ActionCallResponse call(ActionCallRequest request);
 
     Object call(String actionName, Object... args);
 
@@ -73,13 +95,17 @@ public interface SpongeRestApiClient {
      *
      * @return the response.
      */
-    RestActionCallResponse callWithMeta(RestActionCallRequest request, ResultMeta<?> resultMeta);
+    ActionCallResponse callWithMeta(ActionCallRequest request, ResultMeta<?> resultMeta);
 
     Object callWithMeta(ResultMeta<?> resultMeta, String actionName, Object... args);
 
     <T> T callWithMeta(ResultMeta<?> resultMeta, Class<T> resultClass, String actionName, Object... args);
 
-    RestSendEventResponse send(RestSendEventRequest request);
+    SendEventResponse send(SendEventRequest request);
 
     String send(String eventName, Map<String, Object> attributes);
+
+    ReloadResponse reload(ReloadRequest request);
+
+    void reload();
 }

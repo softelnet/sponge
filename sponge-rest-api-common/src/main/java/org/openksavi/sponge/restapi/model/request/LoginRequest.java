@@ -14,30 +14,19 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.response;
+package org.openksavi.sponge.restapi.model.request;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "SendEventResponse", description = "Send event response")
-public class RestSendEventResponse extends BaseRestResponse {
+@ApiModel(value = "LoginRequest", description = "Login request")
+public class LoginRequest extends BaseRequest {
 
-    private String eventId;
-
-    public RestSendEventResponse() {
+    public LoginRequest() {
         //
     }
 
-    public RestSendEventResponse(String eventId) {
-        this.eventId = eventId;
-    }
-
-    @ApiModelProperty(value = "The event id", required = true)
-    public String getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public LoginRequest(String username, String password) {
+        setUsername(username);
+        setPassword(password);
     }
 }

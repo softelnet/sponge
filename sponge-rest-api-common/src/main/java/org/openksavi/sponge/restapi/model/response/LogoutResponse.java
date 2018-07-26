@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.request;
+package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "LoginRequest", description = "Login request")
-public class RestLoginRequest extends BaseRestRequest {
+@ApiModel(value = "LogoutResponse", description = "Logout response")
+public class LogoutResponse extends BaseResponse {
 
-    public RestLoginRequest() {
+    public LogoutResponse() {
         //
-    }
-
-    public RestLoginRequest(String username, String password) {
-        setUsername(username);
-        setPassword(password);
     }
 }

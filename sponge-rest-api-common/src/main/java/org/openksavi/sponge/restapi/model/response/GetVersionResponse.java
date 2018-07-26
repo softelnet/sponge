@@ -16,32 +16,28 @@
 
 package org.openksavi.sponge.restapi.model.response;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
+@ApiModel(value = "GetVersionResponse", description = "Get version response")
+public class GetVersionResponse extends BaseResponse {
 
-@ApiModel(value = "GetKnowledgeBasesResponse", description = "Get knowledge bases response")
-public class RestGetKnowledgeBasesResponse extends BaseRestResponse {
+    private String version;
 
-    private List<RestKnowledgeBaseMeta> knowledgeBases;
-
-    public RestGetKnowledgeBasesResponse() {
+    public GetVersionResponse() {
         //
     }
 
-    public RestGetKnowledgeBasesResponse(List<RestKnowledgeBaseMeta> knowledgeBases) {
-        this.knowledgeBases = knowledgeBases;
+    public GetVersionResponse(String version) {
+        this.version = version;
     }
 
-    @ApiModelProperty(value = "The Spoonge knowledge bases", required = true)
-    public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
-        return knowledgeBases;
+    @ApiModelProperty(value = "The Sponge version", required = true)
+    public String getVersion() {
+        return version;
     }
 
-    public void setKnowledgeBases(List<RestKnowledgeBaseMeta> knowledgeBases) {
-        this.knowledgeBases = knowledgeBases;
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

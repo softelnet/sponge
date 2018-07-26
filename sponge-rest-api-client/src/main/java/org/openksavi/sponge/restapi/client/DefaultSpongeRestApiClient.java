@@ -42,19 +42,29 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import org.openksavi.sponge.action.ResultMeta;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestActionResultMeta;
-import org.openksavi.sponge.restapi.model.request.BaseRestRequest;
-import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
-import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
-import org.openksavi.sponge.restapi.model.response.BaseRestResponse;
-import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
-import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
+import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
+import org.openksavi.sponge.restapi.model.request.BaseRequest;
+import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
+import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.LoginRequest;
+import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ReloadRequest;
+import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.response.BaseResponse;
+import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
+import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.LoginResponse;
+import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ReloadResponse;
+import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 import okhttp3.OkHttpClient;
@@ -134,7 +144,7 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
         return headers;
     }
 
-    protected <T extends BaseRestRequest> T prepareRequest(T request) {
+    protected <T extends BaseRequest> T prepareRequest(T request) {
         if (configuration.isUseRequestId()) {
             request.setId(String.valueOf(requestId.incrementAndGet()));
         }
@@ -156,7 +166,7 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
         return request;
     }
 
-    protected <T extends BaseRestResponse> T retrieveResponse(ResponseEntity<T> response) {
+    protected <T extends BaseResponse> T retrieveResponse(ResponseEntity<T> response) {
         T result = response.getBody();
 
         Validate.isTrue(!response.getStatusCode().isError(), "Error HTTP status code %s", response.getStatusCode());
@@ -172,26 +182,59 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
         return result;
     }
 
+    protected <T extends BaseRequest, R extends BaseResponse> R execute(String operation, T request, Class<R> responseClass) {
+        return retrieveResponse(getRestTemplate().exchange(getUrl() + operation, HttpMethod.POST,
+                new HttpEntity<>(prepareRequest(request), createHeaders()), responseClass));
+    }
+
     @Override
-    public RestGetVersionResponse getVersion(RestGetVersionRequest request) {
-        return retrieveResponse(getRestTemplate().exchange(getUrl() + "version", HttpMethod.POST,
-                new HttpEntity<>(prepareRequest(request), createHeaders()), RestGetVersionResponse.class));
+    public GetVersionResponse getVersion(GetVersionRequest request) {
+        return execute(RestApiConstants.OPERATION_VERSION, request, GetVersionResponse.class);
     }
 
     @Override
     public String getVersion() {
-        return getVersion(new RestGetVersionRequest()).getVersion();
+        return getVersion(new GetVersionRequest()).getVersion();
     }
 
     @Override
-    public RestGetActionsResponse getActions(RestGetActionsRequest request) {
-        return retrieveResponse(getRestTemplate().exchange(getUrl() + "actions", HttpMethod.POST,
-                new HttpEntity<>(prepareRequest(request), createHeaders()), RestGetActionsResponse.class));
+    public LoginResponse login(LoginRequest request) {
+        return execute(RestApiConstants.OPERATION_LOGIN, request, LoginResponse.class);
+    }
+
+    @Override
+    public String login() {
+        return login(new LoginRequest(configuration.getUsername(), configuration.getPassword())).getAuthToken();
+    }
+
+    @Override
+    public LogoutResponse logout(LogoutRequest request) {
+        return execute(RestApiConstants.OPERATION_LOGOUT, request, LogoutResponse.class);
+    }
+
+    @Override
+    public void logout() {
+        logout(new LogoutRequest());
+    }
+
+    @Override
+    public GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request) {
+        return execute(RestApiConstants.OPERATION_KNOWLEDGE_BASES, request, GetKnowledgeBasesResponse.class);
+    }
+
+    @Override
+    public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
+        return getKnowledgeBases(new GetKnowledgeBasesRequest()).getKnowledgeBases();
+    }
+
+    @Override
+    public GetActionsResponse getActions(GetActionsRequest request) {
+        return execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
     }
 
     @Override
     public List<RestActionMeta> getActions(Boolean metadataRequired, String nameRegExp) {
-        RestGetActionsRequest request = new RestGetActionsRequest();
+        GetActionsRequest request = new GetActionsRequest();
         request.setMetadataRequired(metadataRequired);
         request.setNameRegExp(nameRegExp);
 
@@ -200,7 +243,7 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public List<RestActionMeta> getActions() {
-        return getActions(new RestGetActionsRequest()).getActions();
+        return getActions(new GetActionsRequest()).getActions();
     }
 
     protected ResultMeta<?> retrieveResultMeta(RestActionResultMeta restResultMeta) {
@@ -220,13 +263,13 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public RestActionCallResponse call(RestActionCallRequest request) {
+    public ActionCallResponse call(ActionCallRequest request) {
         return callWithMeta(request, getActionResultMeta(request.getName()));
     }
 
     @Override
     public Object call(String actionName, Object... args) {
-        return call(new RestActionCallRequest(actionName, Arrays.asList((Object[]) args))).getResult();
+        return call(new ActionCallRequest(actionName, Arrays.asList((Object[]) args))).getResult();
     }
 
     @Override
@@ -236,9 +279,8 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public RestActionCallResponse callWithMeta(RestActionCallRequest request, ResultMeta<?> resultMeta) {
-        RestActionCallResponse response = retrieveResponse(getRestTemplate().exchange(getUrl() + "call", HttpMethod.POST,
-                new HttpEntity<>(prepareRequest(request), createHeaders()), RestActionCallResponse.class));
+    public ActionCallResponse callWithMeta(ActionCallRequest request, ResultMeta<?> resultMeta) {
+        ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class);
 
         if (resultMeta != null) {
             response.setResult(RestApiUtils.unmarshalActionResult(objectMapper, resultMeta, response.getResult()));
@@ -249,7 +291,7 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public Object callWithMeta(ResultMeta<?> resultMeta, String actionName, Object... args) {
-        return callWithMeta(new RestActionCallRequest(actionName, Arrays.asList((Object[]) args)), resultMeta).getResult();
+        return callWithMeta(new ActionCallRequest(actionName, Arrays.asList((Object[]) args)), resultMeta).getResult();
     }
 
     @Override
@@ -259,13 +301,22 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public RestSendEventResponse send(RestSendEventRequest request) {
-        return retrieveResponse(getRestTemplate().exchange(getUrl() + "send", HttpMethod.POST,
-                new HttpEntity<>(prepareRequest(request), createHeaders()), RestSendEventResponse.class));
+    public SendEventResponse send(SendEventRequest request) {
+        return execute(RestApiConstants.OPERATION_SEND, request, SendEventResponse.class);
     }
 
     @Override
     public String send(String eventName, Map<String, Object> attributes) {
-        return send(new RestSendEventRequest(eventName, attributes)).getEventId();
+        return send(new SendEventRequest(eventName, attributes)).getEventId();
+    }
+
+    @Override
+    public ReloadResponse reload(ReloadRequest request) {
+        return execute(RestApiConstants.OPERATION_RELOAD, request, ReloadResponse.class);
+    }
+
+    @Override
+    public void reload() {
+        reload(new ReloadRequest());
     }
 }

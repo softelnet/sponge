@@ -16,12 +16,32 @@
 
 package org.openksavi.sponge.restapi.model.response;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "LogoutResponse", description = "Logout response")
-public class RestLogoutResponse extends BaseRestResponse {
+import org.openksavi.sponge.restapi.model.RestActionMeta;
 
-    public RestLogoutResponse() {
+@ApiModel(value = "GetActionsResponse", description = "Get actions response")
+public class GetActionsResponse extends BaseResponse {
+
+    private List<RestActionMeta> actions;
+
+    public GetActionsResponse() {
         //
+    }
+
+    public GetActionsResponse(List<RestActionMeta> actions) {
+        this.actions = actions;
+    }
+
+    @ApiModelProperty(value = "The Sponge actions", required = true)
+    public List<RestActionMeta> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<RestActionMeta> actions) {
+        this.actions = actions;
     }
 }

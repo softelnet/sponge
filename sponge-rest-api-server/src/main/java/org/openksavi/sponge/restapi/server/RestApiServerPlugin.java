@@ -36,6 +36,7 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.restapi.server.security.NoSecuritySecurityService;
+import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
@@ -65,6 +66,8 @@ public class RestApiServerPlugin extends JPlugin {
     private RestApiService service;
 
     private RestApiSecurityService securityService;
+
+    private RestApiAuthTokenService authTokenService;
 
     private CamelContext camelContext;
 
@@ -114,6 +117,11 @@ public class RestApiServerPlugin extends JPlugin {
         String securityServiceClass = configuration.getString(RestApiServerConstants.TAG_SECURITY_SERVICE_CLASS, null);
         if (securityServiceClass != null) {
             securityService = SpongeUtils.createInstance(securityServiceClass, RestApiSecurityService.class);
+        }
+
+        String authTokenServiceClass = configuration.getString(RestApiServerConstants.TAG_AUTH_TOKEN_SERVICE_CLASS, null);
+        if (authTokenServiceClass != null) {
+            authTokenService = SpongeUtils.createInstance(authTokenServiceClass, RestApiAuthTokenService.class);
         }
     }
 
@@ -176,6 +184,12 @@ public class RestApiServerPlugin extends JPlugin {
                     securityService.setEngine(getEngine());
                     service.setSecurityService(securityService);
 
+                    // No default auth token service is used, only null.
+                    if (authTokenService != null) {
+                        authTokenService.setEngine(getEngine());
+                        service.setAuthTokenService(authTokenService);
+                    }
+
                     if (routeBuilder == null) {
                         // Create a default.
                         routeBuilder = DEFAULT_ROUTE_BUILDER_PROVIDER.get();
@@ -234,6 +248,14 @@ public class RestApiServerPlugin extends JPlugin {
 
     public void setSecurityService(RestApiSecurityService securityService) {
         this.securityService = securityService;
+    }
+
+    public RestApiAuthTokenService getAuthTokenService() {
+        return authTokenService;
+    }
+
+    public void setAuthTokenService(RestApiAuthTokenService authTokenService) {
+        this.authTokenService = authTokenService;
     }
 
     public boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {

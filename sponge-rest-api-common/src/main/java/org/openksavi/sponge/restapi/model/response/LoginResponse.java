@@ -17,11 +17,27 @@
 package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ReloadResponse", description = "Reload response")
-public class RestReloadResponse extends BaseRestResponse {
+@ApiModel(value = "LoginResponse", description = "Login response")
+public class LoginResponse extends BaseResponse {
 
-    public RestReloadResponse() {
+    private String authToken;
+
+    public LoginResponse() {
         //
+    }
+
+    public LoginResponse(String authToken) {
+        this.authToken = authToken;
+    }
+
+    @ApiModelProperty(value = "The authentication token", required = true)
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }

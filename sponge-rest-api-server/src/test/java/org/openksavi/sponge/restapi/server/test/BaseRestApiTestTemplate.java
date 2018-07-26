@@ -36,8 +36,8 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
-import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
-import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
+import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeKind;
 
@@ -60,8 +60,8 @@ public abstract class BaseRestApiTestTemplate {
         SpongeRestApiClient client = createRestApiClient();
         client.getConfiguration().setUseRequestId(true);
 
-        RestGetVersionRequest request = new RestGetVersionRequest();
-        RestGetVersionResponse response = client.getVersion(request);
+        GetVersionRequest request = new GetVersionRequest();
+        GetVersionResponse response = client.getVersion(request);
 
         assertEquals(null, response.getErrorCode());
         assertEquals(null, response.getErrorMessage());
@@ -128,5 +128,10 @@ public abstract class BaseRestApiTestTemplate {
 
         await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());
         assertFalse(engine.isError());
+    }
+
+    @Test
+    public void testKnowledgeBases() {
+        assertEquals(1, createRestApiClient().getKnowledgeBases().size());
     }
 }

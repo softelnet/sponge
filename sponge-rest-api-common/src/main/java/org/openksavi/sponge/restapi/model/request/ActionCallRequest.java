@@ -22,22 +22,22 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "ActionCallRequest", description = "Represents a Sponge action call")
-public class RestActionCallRequest extends BaseRestRequest {
+public class ActionCallRequest extends BaseRequest {
 
     private String name;
 
     private List<Object> args;
 
-    public RestActionCallRequest() {
+    public ActionCallRequest() {
         //
     }
 
-    public RestActionCallRequest(String username, String password, String name, List<Object> args) {
+    public ActionCallRequest(String username, String password, String name, List<Object> args) {
         this.name = name;
         this.args = args;
     }
 
-    public RestActionCallRequest(String name, List<Object> args) {
+    public ActionCallRequest(String name, List<Object> args) {
         this(null, null, name, args);
     }
 

@@ -14,30 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.response;
+package org.openksavi.sponge.restapi.model.request;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCallResponse", description = "Action call response")
-public class RestActionCallResponse extends BaseRestResponse {
+@ApiModel(value = "GetVersionRequest", description = "Get version request")
+public class GetVersionRequest extends BaseRequest {
 
-    private Object result;
-
-    public RestActionCallResponse() {
+    public GetVersionRequest() {
         //
-    }
-
-    public RestActionCallResponse(Object result) {
-        this.result = result;
-    }
-
-    @ApiModelProperty(value = "The action result", required = true)
-    public Object getResult() {
-        return result;
-    }
-
-    public void setResult(Object result) {
-        this.result = result;
     }
 }

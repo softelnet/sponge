@@ -93,7 +93,7 @@
         <spring-integration.version>5.0.6.RELEASE</spring-integration.version>
         <spring-security.version>5.0.6.RELEASE</spring-security.version>
         <camel.version>2.22.0</camel.version>
-        <awaitility.version>3.1.1</awaitility.version>
+        <awaitility.version>3.1.2</awaitility.version>
         <jline.version>3.9.0</jline.version>
         <py4j.version>0.10.7</py4j.version>
         <tensorflow.version>1.9.0</tensorflow.version>
@@ -104,6 +104,7 @@
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.6</jackson.version>
         <swagger.version>1.5.20</swagger.version>
+        <jjwt.version>0.9.1</jjwt.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -115,7 +116,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.19.1</mockito.version>
+        <mockito.version>2.20.0</mockito.version>
     </properties>
 
     <prerequisites>
@@ -772,7 +773,11 @@
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>

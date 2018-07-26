@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
-import org.openksavi.sponge.restapi.model.response.BaseRestResponse;
+import org.openksavi.sponge.restapi.model.response.BaseResponse;
 
 /**
  * Error response provider.
@@ -24,5 +24,5 @@ import org.openksavi.sponge.restapi.model.response.BaseRestResponse;
 @FunctionalInterface
 public interface RestApiErrorResponseProvider {
 
-    void applyException(RestApiService service, BaseRestResponse response, Throwable exception);
+    void applyException(RestApiService service, BaseResponse response, Throwable exception);
 }

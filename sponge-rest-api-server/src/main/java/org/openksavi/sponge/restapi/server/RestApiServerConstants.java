@@ -75,6 +75,8 @@ public final class RestApiServerConstants {
 
     public static final String TAG_SECURITY_SERVICE_CLASS = "securityServiceClass";
 
+    public static final String TAG_AUTH_TOKEN_SERVICE_CLASS = "authTokenServiceClass";
+
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
 
     public static final String DEFAULT_ROLE_ADMIN = "admin";

@@ -16,32 +16,12 @@
 
 package org.openksavi.sponge.restapi.model.response;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.restapi.model.RestActionMeta;
+@ApiModel(value = "ReloadResponse", description = "Reload response")
+public class ReloadResponse extends BaseResponse {
 
-@ApiModel(value = "GetActionsResponse", description = "Get actions response")
-public class RestGetActionsResponse extends BaseRestResponse {
-
-    private List<RestActionMeta> actions;
-
-    public RestGetActionsResponse() {
+    public ReloadResponse() {
         //
-    }
-
-    public RestGetActionsResponse(List<RestActionMeta> actions) {
-        this.actions = actions;
-    }
-
-    @ApiModelProperty(value = "The Sponge actions", required = true)
-    public List<RestActionMeta> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<RestActionMeta> actions) {
-        this.actions = actions;
     }
 }

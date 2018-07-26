@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.response;
+package org.openksavi.sponge.restapi.server.security;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import org.openksavi.sponge.engine.SpongeEngine;
 
-@ApiModel(value = "GetVersionResponse", description = "Get version response")
-public class RestGetVersionResponse extends BaseRestResponse {
+public abstract class BaseRestApiAuthTokenService implements RestApiAuthTokenService {
 
-    private String version;
+    private SpongeEngine engine;
 
-    public RestGetVersionResponse() {
+    protected BaseRestApiAuthTokenService() {
         //
     }
 
-    public RestGetVersionResponse(String version) {
-        this.version = version;
+    @Override
+    public SpongeEngine getEngine() {
+        return engine;
     }
 
-    @ApiModelProperty(value = "The Sponge version", required = true)
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    @Override
+    public void setEngine(SpongeEngine engine) {
+        this.engine = engine;
     }
 }
