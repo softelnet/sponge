@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.response;
+package org.openksavi.sponge.restapi.server.security;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import org.openksavi.sponge.restapi.server.RestApiService;
 
-@ApiModel(value = "SendEventResponse", description = "Send event response")
-public class RestSendEventResponse extends BaseRestResponse {
+public abstract class BaseRestApiAuthTokenService implements RestApiAuthTokenService {
 
-    private String eventId;
+    private RestApiService restApiService;
 
-    public RestSendEventResponse() {
+    protected BaseRestApiAuthTokenService() {
         //
     }
 
-    public RestSendEventResponse(String eventId) {
-        this.eventId = eventId;
+    @Override
+    public RestApiService getRestApiService() {
+        return restApiService;
     }
 
-    @ApiModelProperty(value = "The event id", required = true)
-    public String getEventId() {
-        return eventId;
+    @Override
+    public void setRestApiService(RestApiService restApiService) {
+        this.restApiService = restApiService;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    @Override
+    public void init() {
+        //
+    }
+
+    @Override
+    public void destroy() {
+        //
     }
 }

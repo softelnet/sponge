@@ -19,25 +19,25 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCallResponse", description = "Action call response")
-public class RestActionCallResponse extends BaseRestResponse {
+@ApiModel(value = "LoginResponse", description = "Login response")
+public class LoginResponse extends BaseResponse {
 
-    private Object result;
+    private String authToken;
 
-    public RestActionCallResponse() {
+    public LoginResponse() {
         //
     }
 
-    public RestActionCallResponse(Object result) {
-        this.result = result;
+    public LoginResponse(String authToken) {
+        this.authToken = authToken;
     }
 
-    @ApiModelProperty(value = "The action result", required = true)
-    public Object getResult() {
-        return result;
+    @ApiModelProperty(value = "The authentication token", required = true)
+    public String getAuthToken() {
+        return authToken;
     }
 
-    public void setResult(Object result) {
-        this.result = result;
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }

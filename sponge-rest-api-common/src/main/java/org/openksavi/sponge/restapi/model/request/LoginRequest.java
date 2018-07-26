@@ -19,13 +19,13 @@ package org.openksavi.sponge.restapi.model.request;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "LoginRequest", description = "Login request")
-public class RestLoginRequest extends BaseRestRequest {
+public class LoginRequest extends BaseRequest {
 
-    public RestLoginRequest() {
+    public LoginRequest() {
         //
     }
 
-    public RestLoginRequest(String username, String password) {
+    public LoginRequest(String username, String password) {
         setUsername(username);
         setPassword(password);
     }

@@ -392,6 +392,8 @@ __optional__|The action name or the regular expression (compatible with https://
 __optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ACTION)
 |**format** +
 __optional__|string
+|**tags** +
+__optional__|< string > array
 |===
 
 
@@ -535,8 +537,6 @@ __optional__|The error message|string
 __optional__|The detailed error message|string
 |**id** +
 __optional__|The corresponding request id|string
-|**actionName** +
-__required__|The action name|string
 |**result** +
 __required__|The action result|object
 |===

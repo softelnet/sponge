@@ -37,7 +37,7 @@ public class RestApiClientConfiguration {
 
     private boolean useRequestId = false;
 
-    private String authToken;
+    private boolean relogin = true;
 
     public RestApiClientConfiguration(String host, int port, String baseUrl, boolean ssl) {
         this.host = host;
@@ -118,12 +118,12 @@ public class RestApiClientConfiguration {
         this.useRequestId = useRequestId;
     }
 
-    public String getAuthToken() {
-        return authToken;
+    public boolean isRelogin() {
+        return relogin;
     }
 
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    public void setRelogin(boolean relogin) {
+        this.relogin = relogin;
     }
 
     public void setUsernameAndPassword(String username, String password) {
@@ -181,8 +181,8 @@ public class RestApiClientConfiguration {
             return this;
         }
 
-        public Builder authToken(String authToken) {
-            configuration.setAuthToken(authToken);
+        public Builder relogin(boolean relogin) {
+            configuration.setRelogin(relogin);
             return this;
         }
     }

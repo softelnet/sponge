@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.response;
+package org.openksavi.sponge.restapi.server;
 
-import io.swagger.annotations.ApiModel;
+public interface HasRestApiService {
 
-@ApiModel(value = "ReloadResponse", description = "Reload response")
-public class RestReloadResponse extends BaseRestResponse {
+    /**
+     * Returns the REST API service.
+     *
+     * @return the REST API service.
+     */
+    RestApiService getRestApiService();
 
-    public RestReloadResponse() {
-        //
-    }
+    /**
+     * Sets the REST API service.
+     *
+     * @param restApiService the REST API service.
+     */
+    void setRestApiService(RestApiService restApiService);
 }

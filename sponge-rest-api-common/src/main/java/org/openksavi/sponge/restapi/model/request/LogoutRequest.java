@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server;
+package org.openksavi.sponge.restapi.model.request;
 
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
+import io.swagger.annotations.ApiModel;
 
-/**
- * Error response provider.
- */
-@FunctionalInterface
-public interface RestApiErrorResponseProvider {
+@ApiModel(value = "LogoutRequest", description = "Logout request")
+public class LogoutRequest extends BaseRequest {
 
-    void applyException(RestApiService service, BaseResponse response, Throwable exception);
+    public LogoutRequest() {
+        //
+    }
 }

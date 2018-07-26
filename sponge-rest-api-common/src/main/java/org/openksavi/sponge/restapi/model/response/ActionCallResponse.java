@@ -19,25 +19,25 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetVersionResponse", description = "Get version response")
-public class RestGetVersionResponse extends BaseRestResponse {
+@ApiModel(value = "ActionCallResponse", description = "Action call response")
+public class ActionCallResponse extends BaseResponse {
 
-    private String version;
+    private Object result;
 
-    public RestGetVersionResponse() {
+    public ActionCallResponse() {
         //
     }
 
-    public RestGetVersionResponse(String version) {
-        this.version = version;
+    public ActionCallResponse(Object result) {
+        this.result = result;
     }
 
-    @ApiModelProperty(value = "The Sponge version", required = true)
-    public String getVersion() {
-        return version;
+    @ApiModelProperty(value = "The action result", required = true)
+    public Object getResult() {
+        return result;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setResult(Object result) {
+        this.result = result;
     }
 }

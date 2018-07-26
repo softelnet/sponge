@@ -14,14 +14,30 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.request;
+package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetVersionRequest", description = "Get version request")
-public class RestGetVersionRequest extends BaseRestRequest {
+@ApiModel(value = "SendEventResponse", description = "Send event response")
+public class SendEventResponse extends BaseResponse {
 
-    public RestGetVersionRequest() {
+    private String eventId;
+
+    public SendEventResponse() {
         //
+    }
+
+    public SendEventResponse(String eventId) {
+        this.eventId = eventId;
+    }
+
+    @ApiModelProperty(value = "The event id", required = true)
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 }

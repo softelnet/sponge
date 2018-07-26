@@ -1419,6 +1419,10 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |https://github.com/ronmamo/reflections[Reflections]
 |https://github.com/ronmamo/reflections/blob/master/COPYING.txt[WTFPL]
 |Reflections is a Java runtime metadata analysis library.
+
+|https://github.com/jwtk/jjwt[JJWT]
+|Apache 2.0
+|JSON Web Token for Java.
 |===
 
 .Key third party software used by Sponge external modules

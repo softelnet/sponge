@@ -26,10 +26,14 @@ import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
 
 public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
+    private User createAnonymousUser() {
+        return RestApServeriUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_GUEST);
+    }
+
     @Override
     public User authenticateUser(String username, String password, Exchange exchange) {
         Validate.isTrue(username == null && password == null, "Only anonymous access is allowed in the no-security configuration");
-        return RestApServeriUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_GUEST);
+        return createAnonymousUser();
     }
 
     @Override
@@ -45,5 +49,10 @@ public class NoSecuritySecurityService extends BaseRestApiSecurityService {
     @Override
     public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
         return true;
+    }
+
+    @Override
+    public User getUser(String username) {
+        return createAnonymousUser();
     }
 }

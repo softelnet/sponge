@@ -22,17 +22,17 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "SendEventRequest", description = "Send event request")
-public class RestSendEventRequest extends BaseRestRequest {
+public class SendEventRequest extends BaseRequest {
 
     private String name;
 
     private Map<String, Object> attributes;
 
-    public RestSendEventRequest() {
+    public SendEventRequest() {
         //
     }
 
-    public RestSendEventRequest(String name, Map<String, Object> attributes) {
+    public SendEventRequest(String name, Map<String, Object> attributes) {
         this.name = name;
         this.attributes = attributes;
     }

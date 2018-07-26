@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server;
+package org.openksavi.sponge.restapi.model.request;
 
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
+import io.swagger.annotations.ApiModel;
 
-/**
- * Error response provider.
- */
-@FunctionalInterface
-public interface RestApiErrorResponseProvider {
+@ApiModel(value = "GetKnowledgeBasesRequest", description = "Get knowledge bases request")
+public class GetKnowledgeBasesRequest extends BaseRequest {
 
-    void applyException(RestApiService service, BaseResponse response, Throwable exception);
+    public GetKnowledgeBasesRequest() {
+        //
+    }
 }

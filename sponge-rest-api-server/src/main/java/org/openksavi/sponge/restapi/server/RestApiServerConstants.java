@@ -75,13 +75,17 @@ public final class RestApiServerConstants {
 
     public static final String TAG_SECURITY_SERVICE_CLASS = "securityServiceClass";
 
+    public static final String TAG_AUTH_TOKEN_SERVICE_CLASS = "authTokenServiceClass";
+
+    public static final String TAG_AUTH_TOKEN_EXPIRATION_DURATION_SECONDS = "authTokenExpirationDurationSeconds";
+
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
 
     public static final String DEFAULT_ROLE_ADMIN = "admin";
 
     public static final String DEFAULT_ROLE_GUEST = "guest";
 
-    public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = true;
+    public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 
     public static final String JSON_REQUEST_PASSWORD_REGEXP = "\"password\":\".*?\"";
 

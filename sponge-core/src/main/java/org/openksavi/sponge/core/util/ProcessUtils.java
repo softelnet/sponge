@@ -63,28 +63,27 @@ public abstract class ProcessUtils {
 
     public static final String TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT = "waitForOutputLineTimeout";
 
-    public static ProcessConfiguration createProcessConfiguration(Configuration configuration) {
-        ProcessConfiguration processConfiguration = new ProcessConfiguration();
-
-        processConfiguration.executable(configuration.getString(TAG_PROCESS_EXECUTABLE, processConfiguration.getExecutable()));
-        processConfiguration.arguments(Arrays.stream(configuration.getConfigurationsAt(TAG_PROCESS_ARGUMENT)).map(Configuration::getValue)
-                .collect(Collectors.toList()));
-        processConfiguration.workingDir(configuration.getString(TAG_PROCESS_WORKING_DIR, processConfiguration.getWorkingDir()));
-        processConfiguration.waitSeconds(configuration.getLong(TAG_PROCESS_WAIT_SECONDS, processConfiguration.getWaitSeconds()));
+    public static ProcessConfiguration.Builder createProcessConfigurationBuilder(Configuration configuration) {
+        ProcessConfiguration.Builder builder = ProcessConfiguration.builder(configuration.getString(TAG_PROCESS_EXECUTABLE, null))
+                .arguments(Arrays.stream(configuration.getConfigurationsAt(TAG_PROCESS_ARGUMENT)).map(Configuration::getValue)
+                        .collect(Collectors.toList()))
+                .workingDir(configuration.getString(TAG_PROCESS_WORKING_DIR, null))
+                .waitSeconds(configuration.getLong(TAG_PROCESS_WAIT_SECONDS, null));
 
         String redirectTypeString = configuration.getString(TAG_PROCESS_REDIRECT_TYPE, null);
-        processConfiguration.redirectType(
-                redirectTypeString != null ? RedirectType.valueOf(redirectTypeString) : processConfiguration.getRedirectType());
+        if (redirectTypeString != null) {
+            builder.redirectType(RedirectType.valueOf(redirectTypeString));
+        }
 
         String charsetString = configuration.getString(TAG_PROCESS_CHARSET, null);
-        processConfiguration.charset(charsetString != null ? Charset.forName(charsetString) : processConfiguration.getCharset());
+        if (charsetString != null) {
+            builder.charset(Charset.forName(charsetString));
+        }
 
-        processConfiguration.waitForOutputLineRegexp(
-                configuration.getString(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_REGEXP, processConfiguration.getWaitForOutputLineRegexp()));
-        processConfiguration.waitForOutputLineTimeout(
-                configuration.getLong(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT, processConfiguration.getWaitForOutputLineTimeout()));
+        builder.waitForOutputLineRegexp(configuration.getString(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_REGEXP, null))
+                .waitForOutputLineTimeout(configuration.getLong(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT, null));
 
-        return processConfiguration;
+        return builder;
     }
 
     public static ProcessInstance startProcess(SpongeEngine engine, ProcessConfiguration processConfiguration) {
@@ -179,7 +178,7 @@ public abstract class ProcessUtils {
                     BufferedReader errors =
                             new BufferedReader(new InputStreamReader(processInstance.getProcess().getErrorStream(), finalCharset))) {
                 processInstance.setOutput(output.lines().collect(Collectors.joining("\n")));
-                logger.info("{} output:\n{}", processConfiguration.getName(), processInstance.getOutput());
+                logger.debug("{} output: {}", processConfiguration.getName(), processInstance.getOutput());
 
                 String errorsString = errors.lines().collect(Collectors.joining("\n"));
                 if (!errorsString.isEmpty()) {

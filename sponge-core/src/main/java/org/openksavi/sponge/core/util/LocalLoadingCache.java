@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.request;
+package org.openksavi.sponge.core.util;
 
-import io.swagger.annotations.ApiModel;
+import java.util.Map;
 
-@ApiModel(value = "LogoutRequest", description = "Logout request")
-public class RestLogoutRequest extends BaseRestRequest {
+/**
+ * A local loading cache.
+ */
+public interface LocalLoadingCache<K, V> extends LocalCache<K, V> {
 
-    public RestLogoutRequest() {
-        //
-    }
+    V get(K key);
+
+    Map<K, V> getAll(Iterable<? extends K> keys);
+
+    void refresh(K key);
 }

@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi;
+package org.openksavi.sponge.restapi.model.response;
 
-import org.openksavi.sponge.SpongeException;
+import io.swagger.annotations.ApiModel;
 
-public class RestApiInvalidAuthTokenException extends SpongeException {
+@ApiModel(value = "ReloadResponse", description = "Reload response")
+public class ReloadResponse extends BaseResponse {
 
-    private static final long serialVersionUID = -9070276571660804800L;
-
-    public RestApiInvalidAuthTokenException(String message) {
-        super(message);
+    public ReloadResponse() {
+        //
     }
 }

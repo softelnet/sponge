@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -35,7 +36,9 @@ import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.restapi.server.security.JwtRestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.NoSecuritySecurityService;
+import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
@@ -51,6 +54,8 @@ public class RestApiServerPlugin extends JPlugin {
 
     private static final Supplier<RestApiSecurityService> DEFAULT_SECURITY_SERVICE_PROVIDER = () -> new NoSecuritySecurityService();
 
+    private static final Supplier<RestApiAuthTokenService> DEFAULT_AUTH_TOKEN_SERVICE_PROVIDER = () -> new JwtRestApiAuthTokenService();
+
     private static final Supplier<RestApiRouteBuilder> DEFAULT_ROUTE_BUILDER_PROVIDER = () -> new RestApiRouteBuilder();
 
     private RestApiSettings settings = new RestApiSettings();
@@ -65,6 +70,8 @@ public class RestApiServerPlugin extends JPlugin {
     private RestApiService service;
 
     private RestApiSecurityService securityService;
+
+    private RestApiAuthTokenService authTokenService;
 
     private CamelContext camelContext;
 
@@ -114,6 +121,17 @@ public class RestApiServerPlugin extends JPlugin {
         String securityServiceClass = configuration.getString(RestApiServerConstants.TAG_SECURITY_SERVICE_CLASS, null);
         if (securityServiceClass != null) {
             securityService = SpongeUtils.createInstance(securityServiceClass, RestApiSecurityService.class);
+        }
+
+        String authTokenServiceClass = configuration.getString(RestApiServerConstants.TAG_AUTH_TOKEN_SERVICE_CLASS, null);
+        if (authTokenServiceClass != null) {
+            authTokenService = SpongeUtils.createInstance(authTokenServiceClass, RestApiAuthTokenService.class);
+        }
+
+        Long authTokenExpirationDurationSeconds =
+                configuration.getLong(RestApiServerConstants.TAG_AUTH_TOKEN_EXPIRATION_DURATION_SECONDS, null);
+        if (authTokenExpirationDurationSeconds != null) {
+            settings.setAuthTokenExpirationDuration(Duration.ofSeconds(authTokenExpirationDurationSeconds));
         }
     }
 
@@ -173,15 +191,26 @@ public class RestApiServerPlugin extends JPlugin {
                         securityService = DEFAULT_SECURITY_SERVICE_PROVIDER.get();
                     }
 
-                    securityService.setEngine(getEngine());
+                    securityService.setRestApiService(service);
                     service.setSecurityService(securityService);
+
+                    if (authTokenService == null) {
+                        // Create a default.
+                        authTokenService = DEFAULT_AUTH_TOKEN_SERVICE_PROVIDER.get();
+                    }
+                    authTokenService.setRestApiService(service);
+                    service.setAuthTokenService(authTokenService);
 
                     if (routeBuilder == null) {
                         // Create a default.
                         routeBuilder = DEFAULT_ROUTE_BUILDER_PROVIDER.get();
                     }
-                    routeBuilder.setSettings(settings);
-                    routeBuilder.setApiService(service);
+                    routeBuilder.setRestApiService(service);
+
+                    // Init services.
+                    securityService.init();
+                    authTokenService.init();
+                    service.init();
 
                     camelContext.addRoutes(routeBuilder);
                 } catch (Exception e) {
@@ -234,6 +263,14 @@ public class RestApiServerPlugin extends JPlugin {
 
     public void setSecurityService(RestApiSecurityService securityService) {
         this.securityService = securityService;
+    }
+
+    public RestApiAuthTokenService getAuthTokenService() {
+        return authTokenService;
+    }
+
+    public void setAuthTokenService(RestApiAuthTokenService authTokenService) {
+        this.authTokenService = authTokenService;
     }
 
     public boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {

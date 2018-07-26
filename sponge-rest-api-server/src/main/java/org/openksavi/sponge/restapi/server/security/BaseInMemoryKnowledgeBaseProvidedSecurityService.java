@@ -46,6 +46,7 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
         users.removeAll(users.stream().filter(user -> Objects.equals(user.getName(), username)).collect(Collectors.toSet()));
     }
 
+    @Override
     public User getUser(String username) {
         Optional<User> userO = users.stream().filter(user -> Objects.equals(user.getName(), username)).findFirst();
 

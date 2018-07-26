@@ -18,7 +18,7 @@ package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class BaseRestResponse {
+public class BaseResponse {
 
     private String errorCode;
 

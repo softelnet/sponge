@@ -20,13 +20,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "GetActionsRequest", description = "Get actions request")
-public class RestGetActionsRequest extends BaseRestRequest {
+public class GetActionsRequest extends BaseRequest {
 
     private Boolean metadataRequired;
 
     private String nameRegExp;
 
-    public RestGetActionsRequest() {
+    public GetActionsRequest() {
         //
     }
 

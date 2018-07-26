@@ -19,8 +19,7 @@ package org.openksavi.sponge.restapi.server;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.RestApiInvalidAuthTokenException;
-import org.openksavi.sponge.restapi.model.response.BaseRestResponse;
+import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
 
 /**
@@ -29,7 +28,7 @@ import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
 public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponseProvider {
 
     @Override
-    public void applyException(RestApiService service, BaseRestResponse response, Throwable exception) {
+    public void applyException(RestApiService service, BaseResponse response, Throwable exception) {
         response.setErrorCode(RestApiConstants.DEFAULT_ERROR_CODE);
 
         // There is a possibility that exceptions thrown in Camel would contain a full request with a password, so it must be hidden
@@ -44,8 +43,8 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
         applySpecificErrorCodes(service, response, exception);
     }
 
-    protected void applySpecificErrorCodes(RestApiService service, BaseRestResponse response, Throwable exception) {
-        if (exception instanceof RestApiInvalidAuthTokenException) {
+    protected void applySpecificErrorCodes(RestApiService service, BaseResponse response, Throwable exception) {
+        if (exception instanceof RestApiInvalidAuthTokenServerException) {
             response.setErrorCode(RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
         }
     }

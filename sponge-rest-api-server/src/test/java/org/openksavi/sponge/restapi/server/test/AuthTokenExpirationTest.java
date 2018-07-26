@@ -16,18 +16,15 @@
 
 package org.openksavi.sponge.restapi.server.test;
 
-import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.util.List;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.junit.Test;
@@ -41,19 +38,18 @@ import org.springframework.util.SocketUtils;
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.ResponseErrorSpongeException;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
+import org.openksavi.sponge.restapi.client.RestApiInvalidAuthTokenClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
-import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { RestApiSimpleSpringSecurityTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { AuthTokenExpirationTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class RestApiSimpleSpringSecurityTest {
+public class AuthTokenExpirationTest {
 
     private static final int PORT = SocketUtils.findAvailableTcpPort(1836);
 
@@ -77,6 +73,8 @@ public class RestApiSimpleSpringSecurityTest {
 
             plugin.getSettings().setPort(PORT);
             plugin.getSettings().setAllowAnonymous(false);
+            plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
+
             plugin.setSecurityService(restApiSecurityService());
 
             return plugin;
@@ -93,69 +91,32 @@ public class RestApiSimpleSpringSecurityTest {
                 RestApiClientConfiguration.builder().host("localhost").port(PORT).username(username).password(password).build());
     }
 
-    protected void doTestRestActions(String username, String password, int actionCount) {
-        List<RestActionMeta> actions = createRestApiClient(username, password).getActions();
-
-        assertNotNull(actions);
-        assertEquals(actionCount, actions.size());
-    }
-
     @Test
-    public void testRestActionsUser1() {
-        doTestRestActions("john", "password", 5);
-    }
-
-    @Test
-    public void testRestActionsUser2() {
-        doTestRestActions("joe", "password", 3);
-    }
-
-    @Test
-    public void testLogin() {
-        // Tests auth token authentication.
+    public void testAuthTokeExpirationRelogin() throws InterruptedException {
         SpongeRestApiClient client = createRestApiClient("john", "password");
+        client.getConfiguration().setRelogin(true);
         assertNotNull(client.login());
         assertEquals(5, client.getActions().size());
 
-        client.getConfiguration().setUsername(null);
-        client.getConfiguration().setPassword(null);
+        TimeUnit.SECONDS.sleep(3);
+
+        assertEquals(5, client.getActions().size());
+    }
+
+    @Test
+    public void testAuthTokeExpirationNoRelogin() throws InterruptedException {
+        SpongeRestApiClient client = createRestApiClient("john", "password");
+        client.getConfiguration().setRelogin(false);
+        assertNotNull(client.login());
         assertEquals(5, client.getActions().size());
 
-        client.logout();
+        TimeUnit.SECONDS.sleep(3);
 
         try {
             client.getActions();
             fail("Exception expected");
-        } catch (ResponseErrorSpongeException e) {
+        } catch (RestApiInvalidAuthTokenClientException e) {
             // This is OK.
         }
-    }
-
-    @Test
-    public void testLogout() {
-        // Auth token disabled.
-        createRestApiClient("john", "password").logout();
-    }
-
-    @Test
-    public void testKnowledgeBasesUser1() {
-        assertEquals(3, createRestApiClient("john", "password").getKnowledgeBases().size());
-    }
-
-    @Test
-    public void testKnowledgeBasesUser2() {
-        assertEquals(1, createRestApiClient("joe", "password").getKnowledgeBases().size());
-    }
-
-    @Test
-    public void testReloadUser1() {
-        createRestApiClient("john", "password").reload();
-
-        await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "reloaded").get());
-    }
-
-    @Test(expected = ResponseErrorSpongeException.class)
-    public void testReloadUser2() {
-        createRestApiClient("joe", "password").reload();
     }
 }

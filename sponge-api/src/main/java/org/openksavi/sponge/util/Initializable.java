@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server;
-
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
+package org.openksavi.sponge.util;
 
 /**
- * Error response provider.
+ * An entity that may be initialized and destroyed.
  */
-@FunctionalInterface
-public interface RestApiErrorResponseProvider {
+public interface Initializable {
 
-    void applyException(RestApiService service, BaseResponse response, Throwable exception);
+    void init();
+
+    void destroy();
 }

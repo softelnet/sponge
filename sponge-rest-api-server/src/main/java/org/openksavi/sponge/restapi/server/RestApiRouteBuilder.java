@@ -24,47 +24,43 @@ import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestDefinition;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.model.request.RestActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetActionsRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetKnowledgeBasesRequest;
-import org.openksavi.sponge.restapi.model.request.RestGetVersionRequest;
-import org.openksavi.sponge.restapi.model.request.RestLoginRequest;
-import org.openksavi.sponge.restapi.model.request.RestLogoutRequest;
-import org.openksavi.sponge.restapi.model.request.RestReloadRequest;
-import org.openksavi.sponge.restapi.model.request.RestSendEventRequest;
-import org.openksavi.sponge.restapi.model.response.RestActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetActionsResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetKnowledgeBasesResponse;
-import org.openksavi.sponge.restapi.model.response.RestGetVersionResponse;
-import org.openksavi.sponge.restapi.model.response.RestLoginResponse;
-import org.openksavi.sponge.restapi.model.response.RestLogoutResponse;
-import org.openksavi.sponge.restapi.model.response.RestReloadResponse;
-import org.openksavi.sponge.restapi.model.response.RestSendEventResponse;
+import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
+import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.LoginRequest;
+import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ReloadRequest;
+import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
+import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.LoginResponse;
+import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ReloadResponse;
+import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 
-public class RestApiRouteBuilder extends RouteBuilder {
+public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiService {
 
     private RestApiService apiService;
-
-    private RestApiSettings settings;
 
     public RestApiRouteBuilder() {
         //
     }
 
-    public RestApiService getApiService() {
+    @Override
+    public RestApiService getRestApiService() {
         return apiService;
     }
 
-    public void setApiService(RestApiService apiService) {
+    @Override
+    public void setRestApiService(RestApiService apiService) {
         this.apiService = apiService;
     }
 
     public RestApiSettings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(RestApiSettings settings) {
-        this.settings = settings;
+        return apiService.getSettings();
     }
 
     @Override
@@ -80,21 +76,22 @@ public class RestApiRouteBuilder extends RouteBuilder {
 
     protected void createRestConfiguration() {
         // @formatter:off
-        RestConfigurationDefinition restConfiguration = restConfiguration().component(settings.getRestComponentId())
+        RestConfigurationDefinition restConfiguration = restConfiguration().component(getSettings().getRestComponentId())
             .bindingMode(RestBindingMode.json)
-            .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
+            .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
             .enableCORS(true)
             .contextPath("/")
             // Add swagger api-doc out of the box.
-            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()));
+            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API")
+                .apiProperty("api.version", String.valueOf(getSettings().getVersion()));
         // @formatter:on
 
-        if (settings.getPort() != null) {
-            restConfiguration.port(settings.getPort());
+        if (getSettings().getPort() != null) {
+            restConfiguration.port(getSettings().getPort());
         }
 
-        if (settings.getHost() != null) {
-            restConfiguration.host(settings.getHost());
+        if (getSettings().getHost() != null) {
+            restConfiguration.host(getSettings().getHost());
         }
 
         setupRestConfiguration(restConfiguration);
@@ -106,11 +103,11 @@ public class RestApiRouteBuilder extends RouteBuilder {
      * @param restConfiguration the REST configuration.
      */
     protected void setupRestConfiguration(RestConfigurationDefinition restConfiguration) {
-        if (settings.getSslConfiguration() != null) {
+        if (getSettings().getSslConfiguration() != null) {
             restConfiguration.scheme("https");
 
-            if (settings.getSslContextParametersBeanName() != null) {
-                restConfiguration.endpointProperty("sslContextParameters", "#" + settings.getSslContextParametersBeanName());
+            if (getSettings().getSslContextParametersBeanName() != null) {
+                restConfiguration.endpointProperty("sslContextParameters", "#" + getSettings().getSslContextParametersBeanName());
             }
         }
     }
@@ -119,56 +116,58 @@ public class RestApiRouteBuilder extends RouteBuilder {
         // @formatter:off
         RestDefinition restDefinition = rest(RestApiConstants.BASE_URL).description("Sponge REST API")
             .consumes(RestApiConstants.APPLICATION_JSON_VALUE).produces(RestApiConstants.APPLICATION_JSON_VALUE)
-            .post("/version").description("Get the Sponge version").type(RestGetVersionRequest.class).outType(RestGetVersionResponse.class)
+            .post(RestApiConstants.OPERATION_VERSION).description("Get the Sponge version").type(GetVersionRequest.class)
+                    .outType(GetVersionResponse.class)
                 .param().name("body").type(body).description("Get Sponge version request").endParam()
                 .responseMessage().code(200).message("The Sponge version response").endResponseMessage()
                 .route().id("version")
-                    .setBody(exchange -> apiService.getVersion(exchange.getIn().getBody(RestGetVersionRequest.class), exchange))
+                    .setBody(exchange -> apiService.getVersion(exchange.getIn().getBody(GetVersionRequest.class), exchange))
                 .endRest()
-            .post("/login").description("Login").type(RestLoginRequest.class).outType(RestLoginResponse.class)
+            .post(RestApiConstants.OPERATION_LOGIN).description("Login").type(LoginRequest.class).outType(LoginResponse.class)
                 .param().name("body").type(body).description("Login request").endParam()
                 .responseMessage().code(200).message("The login response").endResponseMessage()
                 .route().id("login")
-                    .setBody(exchange -> apiService.login(exchange.getIn().getBody(RestLoginRequest.class), exchange))
+                    .setBody(exchange -> apiService.login(exchange.getIn().getBody(LoginRequest.class), exchange))
                 .endRest()
-            .post("/logout").description("Logout").type(RestLogoutRequest.class).outType(RestLogoutResponse.class)
+            .post(RestApiConstants.OPERATION_LOGOUT).description("Logout").type(LogoutRequest.class).outType(LogoutResponse.class)
                 .param().name("body").type(body).description("Logout request").endParam()
                 .responseMessage().code(200).message("The logout response").endResponseMessage()
                 .route().id("logout")
-                    .setBody(exchange -> apiService.logout(exchange.getIn().getBody(RestLogoutRequest.class), exchange))
+                    .setBody(exchange -> apiService.logout(exchange.getIn().getBody(LogoutRequest.class), exchange))
                 .endRest()
-            .post("/knowledgeBases").description("Get knowledge bases").type(RestGetKnowledgeBasesRequest.class)
-                    .outType(RestGetKnowledgeBasesResponse.class)
+            .post(RestApiConstants.OPERATION_KNOWLEDGE_BASES).description("Get knowledge bases").type(GetKnowledgeBasesRequest.class)
+                    .outType(GetKnowledgeBasesResponse.class)
                 .param().name("body").type(body).description("Get knowledge bases request").endParam()
                 .responseMessage().code(200).message("The get knowledge bases response").endResponseMessage()
                 .route().id("knowledgeBases")
-                    .setBody(exchange -> apiService.getKnowledgeBases(exchange.getIn().getBody(RestGetKnowledgeBasesRequest.class), exchange))
+                    .setBody(exchange -> apiService.getKnowledgeBases(exchange.getIn().getBody(GetKnowledgeBasesRequest.class), exchange))
                 .endRest()
-            .post("/actions").description("Get actions").type(RestGetActionsRequest.class).outType(RestGetActionsResponse.class)
+            .post(RestApiConstants.OPERATION_ACTIONS).description("Get actions").type(GetActionsRequest.class).outType(GetActionsResponse.class)
                 .param().name("body").type(body).description("Get actions request").endParam()
                 .responseMessage().code(200).message("The get actions response").endResponseMessage()
                 .route().id("actions")
-                    .setBody(exchange -> apiService.getActions(exchange.getIn().getBody(RestGetActionsRequest.class), exchange))
+                    .setBody(exchange -> apiService.getActions(exchange.getIn().getBody(GetActionsRequest.class), exchange))
                 .endRest()
-            .post("/call").description("Call an action").type(RestActionCallRequest.class).outType(RestActionCallResponse.class)
+            .post(RestApiConstants.OPERATION_CALL).description("Call an action").type(ActionCallRequest.class).outType(ActionCallResponse.class)
                 .param().name("body").type(body).description("Call action request").endParam()
                 .responseMessage().code(200).message("The action call response").endResponseMessage()
                 .route().id("call")
-                    .setBody(exchange -> apiService.call(exchange.getIn().getBody(RestActionCallRequest.class), exchange))
+                    .setBody(exchange -> apiService.call(exchange.getIn().getBody(ActionCallRequest.class), exchange))
                 .endRest()
-            .post("/send").description("Send a new event").type(RestSendEventRequest.class).outType(RestSendEventResponse.class)
+            .post(RestApiConstants.OPERATION_SEND).description("Send a new event").type(SendEventRequest.class).outType(SendEventResponse.class)
                 .param().name("body").type(body).description("Send event request").endParam()
                 .responseMessage().code(200).message("The send event response").endResponseMessage()
                 .route().id("send")
-                    .setBody(exchange -> apiService.send(exchange.getIn().getBody(RestSendEventRequest.class), exchange))
+                    .setBody(exchange -> apiService.send(exchange.getIn().getBody(SendEventRequest.class), exchange))
                 .endRest();
 
-        if (settings.isPublishReload()) {
-            restDefinition.post("/reload").description("Reload knowledge bases").type(RestReloadRequest.class).outType(RestReloadResponse.class)
+        if (getSettings().isPublishReload()) {
+            restDefinition.post(RestApiConstants.OPERATION_RELOAD).description("Reload knowledge bases")
+                    .type(ReloadRequest.class).outType(ReloadResponse.class)
                 .param().name("body").type(body).description("Reload knowledge bases request").endParam()
                 .responseMessage().code(200).message("The reload response").endResponseMessage()
                 .route().id("reload")
-                    .setBody(exchange -> apiService.reload(exchange.getIn().getBody(RestReloadRequest.class), exchange))
+                    .setBody(exchange -> apiService.reload(exchange.getIn().getBody(ReloadRequest.class), exchange))
                     .endRest();
         }
         // @formatter:on

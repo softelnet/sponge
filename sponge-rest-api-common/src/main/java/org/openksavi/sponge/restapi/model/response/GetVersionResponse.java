@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.security;
+package org.openksavi.sponge.restapi.model.response;
 
-import org.openksavi.sponge.restapi.server.RestApiService;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-public abstract class BaseRestApiSecurityService implements RestApiSecurityService {
+@ApiModel(value = "GetVersionResponse", description = "Get version response")
+public class GetVersionResponse extends BaseResponse {
 
-    private RestApiService restApiService;
+    private String version;
 
-    protected BaseRestApiSecurityService() {
+    public GetVersionResponse() {
         //
     }
 
-    @Override
-    public RestApiService getRestApiService() {
-        return restApiService;
+    public GetVersionResponse(String version) {
+        this.version = version;
     }
 
-    @Override
-    public void setRestApiService(RestApiService restApiService) {
-        this.restApiService = restApiService;
+    @ApiModelProperty(value = "The Sponge version", required = true)
+    public String getVersion() {
+        return version;
     }
 
-    @Override
-    public void init() {
-        //
-    }
-
-    @Override
-    public void destroy() {
-        //
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

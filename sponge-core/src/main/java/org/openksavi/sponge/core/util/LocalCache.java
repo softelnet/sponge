@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.request;
+package org.openksavi.sponge.core.util;
 
-import io.swagger.annotations.ApiModel;
+import java.util.concurrent.Callable;
 
-@ApiModel(value = "ReloadRequest", description = "Reload request")
-public class RestReloadRequest extends BaseRestRequest {
+/**
+ * A local cache.
+ */
+public interface LocalCache<K, V> {
 
-    public RestReloadRequest() {
-        //
-    }
+    void put(K key, V value);
+
+    V get(K key, Callable<? extends V> loader);
+
+    V getIfPresent(K key);
+
+    void invalidate(K key);
+
+    void invalidateAll();
+
+    void invalidate(Iterable<?> keys);
+
+    long size();
+
+    void cleanUp();
 }

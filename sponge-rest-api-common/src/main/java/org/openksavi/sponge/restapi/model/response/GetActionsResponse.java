@@ -21,27 +21,27 @@ import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
+import org.openksavi.sponge.restapi.model.RestActionMeta;
 
-@ApiModel(value = "GetKnowledgeBasesResponse", description = "Get knowledge bases response")
-public class RestGetKnowledgeBasesResponse extends BaseRestResponse {
+@ApiModel(value = "GetActionsResponse", description = "Get actions response")
+public class GetActionsResponse extends BaseResponse {
 
-    private List<RestKnowledgeBaseMeta> knowledgeBases;
+    private List<RestActionMeta> actions;
 
-    public RestGetKnowledgeBasesResponse() {
+    public GetActionsResponse() {
         //
     }
 
-    public RestGetKnowledgeBasesResponse(List<RestKnowledgeBaseMeta> knowledgeBases) {
-        this.knowledgeBases = knowledgeBases;
+    public GetActionsResponse(List<RestActionMeta> actions) {
+        this.actions = actions;
     }
 
-    @ApiModelProperty(value = "The Spoonge knowledge bases", required = true)
-    public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
-        return knowledgeBases;
+    @ApiModelProperty(value = "The Sponge actions", required = true)
+    public List<RestActionMeta> getActions() {
+        return actions;
     }
 
-    public void setKnowledgeBases(List<RestKnowledgeBaseMeta> knowledgeBases) {
-        this.knowledgeBases = knowledgeBases;
+    public void setActions(List<RestActionMeta> actions) {
+        this.actions = actions;
     }
 }

@@ -423,11 +423,19 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`apiServiceClass`
 |`String`
-|The `RestApiService` implementation class name. The default `RestApiService` implementation is `DefaultRestApiService`.
+|The `RestApiService` implementation class name. The default implementation is `DefaultRestApiService`.
 
 |`securityServiceClass`
 |`String`
-|The `RestApiSecurityService` implementation class name. The default `RestApiSecurityService` implementation is `NoSecuritySecurityService`.
+|The `RestApiSecurityService` implementation class name. The default implementation is `NoSecuritySecurityService`.
+
+|`authTokenServiceClass`
+|`String`
+|The `RestApiAuthTokenService` implementation class name. The default implementation is `JwtRestApiAuthTokenService` that uses JSON Web Token (JWT) for Java https://github.com/jwtk/jjwt[JJWT] library.
+
+|`authTokenExpirationDurationSeconds`
+|`Long`
+|The duration (in seconds) after which an authentication token will expire. The default value is `null` which means infinity.
 |===
 
 .The REST API server plugin XML configuration example
@@ -558,15 +566,15 @@ Each request may contain base properties.
 
 |`username`
 |No
-|A user name. May be used in a user/password authentication scenario. In that case, if there is no user name present, the _guest_ user is assumed.
+|A user name. May be used in a user/password authentication mode. In that case, if there is no user name present, the _anonumous_ user is assumed.
 
 |`password`
 |No
-|A user password. May be used in a user/password authentication scenario.
+|A user password. May be used in a user/password authentication mode.
 
 |`authToken`
 |No
-|An authentication token. May be used in a token-based authentication scenario.
+|An authentication token. May be used in a token-based authentication mode.
 |===
 
 .Examples of REST API requests
@@ -583,7 +591,7 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 ----
 
 === Security
-The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, a _guest_ user is assumed. A user may have roles.
+The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed. A user may have roles.
 
 You may set a security strategy by providing an implementation of the `RestApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
 
@@ -596,10 +604,10 @@ Only a username/password authentication mode is currently supported by the defau
 |Name |Description
 
 |Username/password
-|Every request has to contain a username and a password. The `login` operation shouldn't be invoked.
+|Every request has to contain a username and a password. Invoking the `login` operation switches to the authentication token mode.
 
 |Authentication token
-|Every request has to contain an authentication token, returned by a `login` operation.
+|Every request has to contain an authentication token, returned by the `login` operation. It may not contain neither username nor password.
 |===
 
 ==== Simple security strategy
@@ -635,7 +643,7 @@ include::sponge-user-guide-rest-api.adoc[leveloffset=+2]
 == {sponge} REST API client
 The {sponge} REST API client simplifies connecting to a remote {sponge} REST API server from applications written in Java.
 
-.REST API client example
+.REST API client for an anonymous user example
 [source,java]
 ----
 SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build()); // <1>
@@ -643,6 +651,13 @@ String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
 ----
 <1> Create a new REST API client.
 <2> Call the remote action.
+
+.REST API client for a named user example
+[source,java]
+----
+SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT)
+        .username(username).password(password).build());
+----
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/SpongeRestApiClient.html[`SpongeRestApiClient` Javadoc] and examples in the source code.
 
@@ -722,6 +737,13 @@ Maven users will need to add the following dependency to their `pom.xml`:
 |No redirection will be set.
 |===
 
+.Example of running an external executable
+[source,java]
+----
+ProcessInstance processInstance = SpongeUtils.startProcess(engine,
+        ProcessConfiguration.builder("echo").arguments("TEST").redirectType(RedirectType.STRING).build());
+String output = processInstance.getOutput();
+----
 
 == Python (CPython)
 {sponge} may communicate with external programs written in the reference implementation of the Python programming language - https://en.wikipedia.org/wiki/CPython[CPython] using https://www.py4j.org[Py4J], and vice versa. A Python program and a {sponge} Java process communicate through network sockets.

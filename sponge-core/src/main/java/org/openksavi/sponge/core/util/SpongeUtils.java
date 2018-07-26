@@ -677,6 +677,10 @@ public abstract class SpongeUtils {
         return ProcessUtils.startProcess(engine, processConfiguration);
     }
 
+    public static LocalCacheBuilder cacheBuilder() {
+        return new LocalCacheBuilder();
+    }
+
     protected SpongeUtils() {
         //
     }
