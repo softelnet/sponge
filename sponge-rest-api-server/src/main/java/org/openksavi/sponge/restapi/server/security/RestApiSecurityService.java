@@ -20,9 +20,10 @@ import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.util.HasEngine;
+import org.openksavi.sponge.restapi.server.HasRestApiService;
+import org.openksavi.sponge.util.Initializable;
 
-public interface RestApiSecurityService extends HasEngine {
+public interface RestApiSecurityService extends HasRestApiService, Initializable {
 
     User authenticateUser(String username, String password, Exchange exchange);
 

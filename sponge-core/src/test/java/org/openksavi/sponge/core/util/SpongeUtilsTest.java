@@ -16,13 +16,14 @@
 
 package org.openksavi.sponge.core.util;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 
-public class UtilsTest {
+public class SpongeUtilsTest {
 
     @Test
     public void testCalculateInitialDynamicThreadPoolSize() {
@@ -30,13 +31,13 @@ public class UtilsTest {
 
         engine.getDefaultParameters().setInitialDynamicThreadPoolSizeRatio(0.3);
 
-        Assert.assertEquals(3, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 10));
-        Assert.assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 3));
-        Assert.assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 5));
-        Assert.assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 2));
-        Assert.assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 1));
-        Assert.assertEquals(5, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 15));
-        Assert.assertEquals(6, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 20));
-        Assert.assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 8));
+        assertEquals(3, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 10));
+        assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 3));
+        assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 5));
+        assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 2));
+        assertEquals(1, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 1));
+        assertEquals(5, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 15));
+        assertEquals(6, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 20));
+        assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 8));
     }
 }

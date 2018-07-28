@@ -17,59 +17,110 @@
 package org.openksavi.sponge.restapi.server.security;
 
 import java.security.Key;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.concurrent.atomic.AtomicLong;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
 import org.apache.camel.Exchange;
 
-import org.openksavi.sponge.Experimental;
-import org.openksavi.sponge.restapi.RestApiInvalidAuthTokenException;
+import org.openksavi.sponge.core.util.LocalCache;
+import org.openksavi.sponge.core.util.LocalCacheBuilder;
+import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.restapi.server.RestApiInvalidAuthTokenServerException;
 
 /**
  * AN auth token service that uses JSON Web Token (JWT).
  */
-@Experimental
 public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
 
-    protected static final String CLAIM_USERNAME = "username";
+    protected static final String CLAIM_AUTH_SESSION_ID = "authSessionId";
 
-    // TODO cache keys for each session?
     private Key key = MacProvider.generateKey();
 
-    private Set<String> authTokens = new HashSet<>();
+    private LocalCache<Long, AuthTokenSession> authTokenSessions;
+
+    private AtomicLong currentAuthSessionId = new AtomicLong(0);
+
+    protected static class AuthTokenSession {
+
+        private String username;
+
+        private Instant creationTime;
+
+        public AuthTokenSession(String username) {
+            this.username = username;
+            creationTime = Instant.now();
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public Instant getCreationTime() {
+            return creationTime;
+        }
+    }
+
+    @Override
+    public void init() {
+        super.init();
+
+        Duration expirationDuration = getRestApiService().getSettings().getAuthTokenExpirationDuration();
+
+        LocalCacheBuilder cacheBuilder = SpongeUtils.cacheBuilder();
+        if (expirationDuration != null) {
+            cacheBuilder.expireAfterAccess(expirationDuration);
+        }
+        authTokenSessions = cacheBuilder.build();
+    }
 
     @Override
     public String createAuthToken(User user, Exchange exchange) {
-        String token = Jwts.builder().setSubject(getEngine().getInfo()).claim(CLAIM_USERNAME, user.getName())
-                .signWith(SignatureAlgorithm.HS512, key).compressWith(CompressionCodecs.DEFLATE).compact();
-        authTokens.add(token);
+        Long authSessionId = currentAuthSessionId.incrementAndGet();
+
+        JwtBuilder builder = Jwts.builder();
+        builder.setSubject(user.getName()).claim(CLAIM_AUTH_SESSION_ID, authSessionId).signWith(SignatureAlgorithm.HS512, key)
+                .compressWith(CompressionCodecs.DEFLATE);
+        String token = builder.compact();
+
+        authTokenSessions.put(authSessionId, new AuthTokenSession(user.getName()));
 
         return token;
     }
 
     @Override
     public String validateAuthToken(String authToken, Exchange exchange) {
-        if (!authTokens.contains(authToken)) {
-            throw new RestApiInvalidAuthTokenException("Unknown auth token");
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+            String username = claims.getBody().getSubject();
+            Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
+
+            if (authSessionId == null || authTokenSessions.getIfPresent(authSessionId) == null) {
+                throw new RestApiInvalidAuthTokenServerException("Invalid or expired authentication token");
+            }
+
+            return username;
+        } catch (JwtException e) {
+            throw new RestApiInvalidAuthTokenServerException(e.getMessage(), e);
         }
-
-        Jws<Claims> claims = Jwts.parser().setSigningKey(key).requireSubject(getEngine().getInfo()).parseClaimsJws(authToken);
-        String username = claims.getBody().get(CLAIM_USERNAME, String.class);
-
-        // TODO Verify expiration claims.getBody().getExpiration()
-
-        return username;
     }
 
     @Override
     public void removeAuthToken(String authToken, Exchange exchange) {
-        authTokens.remove(authToken);
+        Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+        Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
+
+        if (authSessionId != null) {
+            authTokenSessions.invalidate(authSessionId);
+        }
     }
 }

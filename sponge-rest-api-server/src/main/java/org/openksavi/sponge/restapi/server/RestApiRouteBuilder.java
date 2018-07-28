@@ -41,30 +41,26 @@ import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 
-public class RestApiRouteBuilder extends RouteBuilder {
+public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiService {
 
     private RestApiService apiService;
-
-    private RestApiSettings settings;
 
     public RestApiRouteBuilder() {
         //
     }
 
-    public RestApiService getApiService() {
+    @Override
+    public RestApiService getRestApiService() {
         return apiService;
     }
 
-    public void setApiService(RestApiService apiService) {
+    @Override
+    public void setRestApiService(RestApiService apiService) {
         this.apiService = apiService;
     }
 
     public RestApiSettings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(RestApiSettings settings) {
-        this.settings = settings;
+        return apiService.getSettings();
     }
 
     @Override
@@ -80,21 +76,22 @@ public class RestApiRouteBuilder extends RouteBuilder {
 
     protected void createRestConfiguration() {
         // @formatter:off
-        RestConfigurationDefinition restConfiguration = restConfiguration().component(settings.getRestComponentId())
+        RestConfigurationDefinition restConfiguration = restConfiguration().component(getSettings().getRestComponentId())
             .bindingMode(RestBindingMode.json)
-            .dataFormatProperty("prettyPrint", Boolean.toString(settings.isPrettyPrint()))
+            .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
             .enableCORS(true)
             .contextPath("/")
             // Add swagger api-doc out of the box.
-            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API").apiProperty("api.version", String.valueOf(settings.getVersion()));
+            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API")
+                .apiProperty("api.version", String.valueOf(getSettings().getVersion()));
         // @formatter:on
 
-        if (settings.getPort() != null) {
-            restConfiguration.port(settings.getPort());
+        if (getSettings().getPort() != null) {
+            restConfiguration.port(getSettings().getPort());
         }
 
-        if (settings.getHost() != null) {
-            restConfiguration.host(settings.getHost());
+        if (getSettings().getHost() != null) {
+            restConfiguration.host(getSettings().getHost());
         }
 
         setupRestConfiguration(restConfiguration);
@@ -106,11 +103,11 @@ public class RestApiRouteBuilder extends RouteBuilder {
      * @param restConfiguration the REST configuration.
      */
     protected void setupRestConfiguration(RestConfigurationDefinition restConfiguration) {
-        if (settings.getSslConfiguration() != null) {
+        if (getSettings().getSslConfiguration() != null) {
             restConfiguration.scheme("https");
 
-            if (settings.getSslContextParametersBeanName() != null) {
-                restConfiguration.endpointProperty("sslContextParameters", "#" + settings.getSslContextParametersBeanName());
+            if (getSettings().getSslContextParametersBeanName() != null) {
+                restConfiguration.endpointProperty("sslContextParameters", "#" + getSettings().getSslContextParametersBeanName());
             }
         }
     }
@@ -164,7 +161,7 @@ public class RestApiRouteBuilder extends RouteBuilder {
                     .setBody(exchange -> apiService.send(exchange.getIn().getBody(SendEventRequest.class), exchange))
                 .endRest();
 
-        if (settings.isPublishReload()) {
+        if (getSettings().isPublishReload()) {
             restDefinition.post(RestApiConstants.OPERATION_RELOAD).description("Reload knowledge bases")
                     .type(ReloadRequest.class).outType(ReloadResponse.class)
                 .param().name("body").type(body).description("Reload knowledge bases request").endParam()

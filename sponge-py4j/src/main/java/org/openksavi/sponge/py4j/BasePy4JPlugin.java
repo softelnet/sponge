@@ -84,7 +84,7 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     protected void executePythonScript() {
         if (pythonScriptConfiguration != null) {
-            scriptProcess = ProcessUtils.startProcess(getEngine(), pythonScriptConfiguration);
+            scriptProcess = SpongeUtils.startProcess(getEngine(), pythonScriptConfiguration);
             if (scriptProcess.getOutput() != null) {
                 logger.info("Python script output: {}", scriptProcess.getOutput());
             }
@@ -113,7 +113,8 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
         if (configuration.hasChildConfiguration(TAG_PYTHON_SCRIPT)) {
             pythonScriptConfiguration =
-                    ProcessUtils.createProcessConfiguration(configuration.getChildConfiguration(TAG_PYTHON_SCRIPT)).name("Python script");
+                    ProcessUtils.createProcessConfigurationBuilder(configuration.getChildConfiguration(TAG_PYTHON_SCRIPT))
+                            .name("Python script").build();
             if (pythonScriptConfiguration.getExecutable() == null) {
                 pythonScriptConfiguration.setExecutable(DEFAULT_PYTHON_EXECUTABLE);
             }

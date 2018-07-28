@@ -86,6 +86,9 @@ public class DefaultRestApiService implements RestApiService {
     public GetVersionResponse getVersion(GetVersionRequest request, Exchange exchange) {
         try {
             // Privileges not checked here.
+            if (request != null) {
+                authenticateRequest(request, exchange);
+            }
 
             return setupSuccessResponse(new GetVersionResponse(getEngine().getVersion()), request);
         } catch (Exception e) {
@@ -101,7 +104,6 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(request.getUsername(), "The username must not be null");
 
             User user = authenticateUser(request.getUsername(), request.getPassword(), exchange);
-
             String authToken = authTokenService != null ? authTokenService.createAuthToken(user, exchange) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
@@ -294,7 +296,6 @@ public class DefaultRestApiService implements RestApiService {
             Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
             Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
 
-            // This user may have only username and password set.
             String username = getSafeAuthTokenService().validateAuthToken(request.getAuthToken(), exchange);
             return securityService.getUser(username);
         } else {
@@ -355,6 +356,16 @@ public class DefaultRestApiService implements RestApiService {
 
     protected RestKnowledgeBaseMeta createRestKnowledgeBase(KnowledgeBase kb) {
         return new RestKnowledgeBaseMeta(kb.getName(), kb.getDisplayName(), kb.getDescription());
+    }
+
+    @Override
+    public void init() {
+        //
+    }
+
+    @Override
+    public void destroy() {
+        //
     }
 
     @Override

@@ -21,8 +21,12 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -47,8 +51,8 @@ import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestActionResultMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
-import org.openksavi.sponge.restapi.model.request.BaseRequest;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.BaseRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
@@ -56,8 +60,8 @@ import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -79,6 +83,10 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     private AtomicLong requestId = new AtomicLong(0);
 
     private ObjectMapper objectMapper = RestApiUtils.createObjectMapper();
+
+    private AtomicReference<String> currentAuthToken = new AtomicReference<>();
+
+    private Lock lock = new ReentrantLock(true);
 
     public DefaultSpongeRestApiClient(RestApiClientConfiguration configuration) {
         this.configuration = configuration;
@@ -149,9 +157,11 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
             request.setId(String.valueOf(requestId.incrementAndGet()));
         }
 
-        if (configuration.getAuthToken() != null) {
+        // Must be thread-safe.
+        String authToken = currentAuthToken.get();
+        if (authToken != null) {
             if (request.getAuthToken() == null) {
-                request.setAuthToken(configuration.getAuthToken());
+                request.setAuthToken(authToken);
             }
         } else {
             if (configuration.getUsername() != null && request.getUsername() == null) {
@@ -170,9 +180,17 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
         T result = response.getBody();
 
         Validate.isTrue(!response.getStatusCode().isError(), "Error HTTP status code %s", response.getStatusCode());
+
         if (result.getErrorCode() != null || result.getErrorMessage() != null) {
-            ResponseErrorSpongeException exception = new ResponseErrorSpongeException(
-                    result.getErrorMessage() != null ? result.getErrorMessage() : String.format("Error code: %s", result.getErrorCode()));
+            String message =
+                    result.getErrorMessage() != null ? result.getErrorMessage() : String.format("Error code: %s", result.getErrorCode());
+
+            ResponseErrorSpongeException exception;
+            if (Objects.equals(result.getErrorCode(), RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN)) {
+                exception = new RestApiInvalidAuthTokenClientException(message);
+            } else {
+                exception = new ResponseErrorSpongeException(message);
+            }
             exception.setErrorCode(result.getErrorCode());
             exception.setDetailedErrorMessage(result.getDetailedErrorMessage());
 
@@ -183,6 +201,24 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     protected <T extends BaseRequest, R extends BaseResponse> R execute(String operation, T request, Class<R> responseClass) {
+        try {
+            return doExecute(operation, request, responseClass);
+        } catch (RestApiInvalidAuthTokenClientException e) {
+            // Relogin if set up and necessary.
+            if (currentAuthToken.get() != null && configuration.isRelogin()) {
+                login();
+
+                // Clear the request auth token.
+                request.setAuthToken(null);
+
+                return doExecute(operation, request, responseClass);
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
         return retrieveResponse(getRestTemplate().exchange(getUrl() + operation, HttpMethod.POST,
                 new HttpEntity<>(prepareRequest(request), createHeaders()), responseClass));
     }
@@ -199,7 +235,18 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        return execute(RestApiConstants.OPERATION_LOGIN, request, LoginResponse.class);
+        LoginResponse response;
+        lock.lock();
+
+        try {
+            currentAuthToken.set(null);
+            response = execute(RestApiConstants.OPERATION_LOGIN, request, LoginResponse.class);
+            currentAuthToken.set(response.getAuthToken());
+        } finally {
+            lock.unlock();
+        }
+
+        return response;
     }
 
     @Override
@@ -209,7 +256,17 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public LogoutResponse logout(LogoutRequest request) {
-        return execute(RestApiConstants.OPERATION_LOGOUT, request, LogoutResponse.class);
+        LogoutResponse response;
+        lock.lock();
+
+        try {
+            response = execute(RestApiConstants.OPERATION_LOGOUT, request, LogoutResponse.class);
+            currentAuthToken.set(null);
+        } finally {
+            lock.unlock();
+        }
+
+        return response;
     }
 
     @Override

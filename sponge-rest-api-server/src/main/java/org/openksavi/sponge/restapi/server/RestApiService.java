@@ -37,11 +37,12 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.util.HasEngine;
+import org.openksavi.sponge.util.Initializable;
 
 /**
- * Sponge REST service.
+ * Sponge REST API service.
  */
-public interface RestApiService extends HasEngine {
+public interface RestApiService extends HasEngine, Initializable {
 
     RestApiSettings getSettings();
 

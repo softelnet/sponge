@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openksavi.sponge.ProcessorQualifiedName;
@@ -64,6 +65,9 @@ public class RestApiSettings {
     private String guestRole = RestApiServerConstants.DEFAULT_ROLE_GUEST;
 
     private boolean includeDetailedErrorMessage = RestApiServerConstants.DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE;
+
+    /** The duration after which an authentication token will expire. The default value is {@code null} which means infinity. */
+    private Duration authTokenExpirationDuration;
 
     public String getRestComponentId() {
         return restComponentId;
@@ -175,5 +179,13 @@ public class RestApiSettings {
 
     public void setIncludeDetailedErrorMessage(boolean includeDetailedErrorMessage) {
         this.includeDetailedErrorMessage = includeDetailedErrorMessage;
+    }
+
+    public Duration getAuthTokenExpirationDuration() {
+        return authTokenExpirationDuration;
+    }
+
+    public void setAuthTokenExpirationDuration(Duration authTokenExpirationDuration) {
+        this.authTokenExpirationDuration = authTokenExpirationDuration;
     }
 }

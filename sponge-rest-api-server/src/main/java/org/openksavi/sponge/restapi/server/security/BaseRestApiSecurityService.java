@@ -16,23 +16,33 @@
 
 package org.openksavi.sponge.restapi.server.security;
 
-import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.restapi.server.RestApiService;
 
 public abstract class BaseRestApiSecurityService implements RestApiSecurityService {
 
-    private SpongeEngine engine;
+    private RestApiService restApiService;
 
     protected BaseRestApiSecurityService() {
         //
     }
 
     @Override
-    public SpongeEngine getEngine() {
-        return engine;
+    public RestApiService getRestApiService() {
+        return restApiService;
     }
 
     @Override
-    public void setEngine(SpongeEngine engine) {
-        this.engine = engine;
+    public void setRestApiService(RestApiService restApiService) {
+        this.restApiService = restApiService;
+    }
+
+    @Override
+    public void init() {
+        //
+    }
+
+    @Override
+    public void destroy() {
+        //
     }
 }

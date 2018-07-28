@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A process configuration.
+ */
 public class ProcessConfiguration {
 
     private String name = "Process";
@@ -60,117 +63,8 @@ public class ProcessConfiguration {
         NONE
     }
 
-    /**
-     * Sets the process display name.
-     *
-     * @param name the process display name.
-     * @return this configuration.
-     */
-    public ProcessConfiguration name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
-     * Sets the process executable.
-     *
-     * @param executable the process executable.
-     * @return this configuration.
-     */
-    public ProcessConfiguration executable(String executable) {
+    public ProcessConfiguration(String executable) {
         this.executable = executable;
-        return this;
-    }
-
-    /**
-     * Sets the process arguments.
-     *
-     * @param arguments the process arguments.
-     * @return this configuration.
-     */
-    public ProcessConfiguration arguments(String... arguments) {
-        this.arguments = Arrays.asList(arguments);
-        return this;
-    }
-
-    /**
-     * Sets the process arguments.
-     *
-     * @param arguments the process arguments.
-     * @return this configuration.
-     */
-    public ProcessConfiguration arguments(List<String> arguments) {
-        this.arguments = new ArrayList<>(arguments);
-        return this;
-    }
-
-    /**
-     * Sets the process working directory.
-     *
-     * @param workingDir the process working directory. If {@code null} (the default value) then the current directory will be used.
-     * @return this configuration.
-     */
-    public ProcessConfiguration workingDir(String workingDir) {
-        this.workingDir = workingDir;
-        return this;
-    }
-
-    /**
-     * Sets the maximum number of seconds to wait after the start of the process. The thread that started the process will be blocked until
-     * the time elapses or the subprocess exits.
-     *
-     * @param waitSeconds the maximum number of seconds to wait or {@code null} (the default value) if the thread shouldn't wait.
-     * @return this configuration.
-     */
-    public ProcessConfiguration waitSeconds(Long waitSeconds) {
-        this.waitSeconds = waitSeconds;
-        return this;
-    }
-
-    /**
-     * Sets the redirect type. The default value is {@code RedirectType.INHERIT}.
-     *
-     * @param redirectType the redirect type.
-     * @return this configuration.
-     */
-    public ProcessConfiguration redirectType(RedirectType redirectType) {
-        this.redirectType = redirectType;
-        return this;
-    }
-
-    /**
-     * Sets the charset of the subprocess output stream used if the {@code redirectType} is {@code RedirectType.STRING}.
-     *
-     * @param charset the charset.
-     * @return this configuration.
-     */
-    public ProcessConfiguration charset(Charset charset) {
-        this.charset = charset;
-        return this;
-    }
-
-    /**
-     * Sets the Java regular expression of a line from the process output stream. The thread that started the process will wait (blocking)
-     * for such line.
-     *
-     * @param waitForOutputLineRegexp the Java regular expression or {@code null} if the thread shouldn't wait for a specific line.
-     * @return this configuration.
-     */
-    public ProcessConfiguration waitForOutputLineRegexp(String waitForOutputLineRegexp) {
-        this.waitForOutputLineRegexp = waitForOutputLineRegexp;
-        return this;
-    }
-
-    /**
-     * Sets the timeout for waiting for a specific line from the process output stream (in seconds). If the timeout is exceeded, the
-     * exception will be thrown.
-     *
-     * @param waitForOutputLineTimeout the timeout for waiting for a specific line or {@code null} if the thread could wait indefinitely.
-     * @return this configuration.
-     */
-    public ProcessConfiguration waitForOutputLineTimeout(Long waitForOutputLineTimeout) {
-        this.waitForOutputLineTimeout = waitForOutputLineTimeout;
-        return this;
     }
 
     public String getName() {
@@ -243,5 +137,128 @@ public class ProcessConfiguration {
 
     public void setWaitForOutputLineTimeout(Long waitForOutputLineTimeout) {
         this.waitForOutputLineTimeout = waitForOutputLineTimeout;
+    }
+
+    /**
+     * A process configuration builder.
+     */
+    public static Builder builder(String executable) {
+        return new Builder(executable);
+    }
+
+    public static class Builder {
+
+        private ProcessConfiguration configuration;
+
+        public Builder(String executable) {
+            configuration = new ProcessConfiguration(executable);
+        }
+
+        public ProcessConfiguration build() {
+            return configuration;
+        }
+
+        /**
+         * Sets the process display name.
+         *
+         * @param name the process display name.
+         * @return this builder.
+         */
+        public Builder name(String name) {
+            configuration.setName(name);
+            return this;
+        }
+
+        /**
+         * Sets the process arguments.
+         *
+         * @param arguments the process arguments.
+         * @return this builder.
+         */
+        public Builder arguments(String... arguments) {
+            configuration.setArguments(Arrays.asList(arguments));
+            return this;
+        }
+
+        /**
+         * Sets the process arguments.
+         *
+         * @param arguments the process arguments.
+         * @return this builder.
+         */
+        public Builder arguments(List<String> arguments) {
+            configuration.setArguments(new ArrayList<>(arguments));
+            return this;
+        }
+
+        /**
+         * Sets the process working directory.
+         *
+         * @param workingDir the process working directory. If {@code null} (the default value) then the current directory will be used.
+         * @return this builder.
+         */
+        public Builder workingDir(String workingDir) {
+            configuration.setWorkingDir(workingDir);
+            return this;
+        }
+
+        /**
+         * Sets the maximum number of seconds to wait after the start of the process. The thread that started the process will be blocked
+         * until the time elapses or the subprocess exits.
+         *
+         * @param waitSeconds the maximum number of seconds to wait or {@code null} (the default value) if the thread shouldn't wait.
+         * @return this builder.
+         */
+        public Builder waitSeconds(Long waitSeconds) {
+            configuration.setWaitSeconds(waitSeconds);
+            return this;
+        }
+
+        /**
+         * Sets the redirect type. The default value is {@code RedirectType.INHERIT}.
+         *
+         * @param redirectType the redirect type.
+         * @return this builder.
+         */
+        public Builder redirectType(RedirectType redirectType) {
+            configuration.setRedirectType(redirectType);
+            return this;
+        }
+
+        /**
+         * Sets the charset of the subprocess output stream used if the {@code redirectType} is {@code RedirectType.STRING}.
+         *
+         * @param charset the charset.
+         * @return this builder.
+         */
+        public Builder charset(Charset charset) {
+            configuration.setCharset(charset);
+            return this;
+        }
+
+        /**
+         * Sets the Java regular expression of a line from the process output stream. The thread that started the process will wait
+         * (blocking) for such line.
+         *
+         * @param waitForOutputLineRegexp the Java regular expression or {@code null} if the thread shouldn't wait for a specific line.
+         * @return this builder.
+         */
+        public Builder waitForOutputLineRegexp(String waitForOutputLineRegexp) {
+            configuration.setWaitForOutputLineRegexp(waitForOutputLineRegexp);
+            return this;
+        }
+
+        /**
+         * Sets the timeout for waiting for a specific line from the process output stream (in seconds). If the timeout is exceeded, the
+         * exception will be thrown.
+         *
+         * @param waitForOutputLineTimeout the timeout for waiting for a specific line or {@code null} if the thread could wait
+         *        indefinitely.
+         * @return this builder.
+         */
+        public Builder waitForOutputLineTimeout(Long waitForOutputLineTimeout) {
+            configuration.setWaitForOutputLineTimeout(waitForOutputLineTimeout);
+            return this;
+        }
     }
 }

@@ -18,12 +18,27 @@ package org.openksavi.sponge.restapi.server.security;
 
 import org.apache.camel.Exchange;
 
-import org.openksavi.sponge.util.HasEngine;
+import org.openksavi.sponge.restapi.server.HasRestApiService;
+import org.openksavi.sponge.util.Initializable;
 
-public interface RestApiAuthTokenService extends HasEngine {
+public interface RestApiAuthTokenService extends HasRestApiService, Initializable {
 
+    /**
+     * Creates a new auth token.
+     *
+     * @param user the user.
+     * @param exchange the exchange.
+     * @return the auth token.
+     */
     String createAuthToken(User user, Exchange exchange);
 
+    /**
+     * Validates the auth token. Throws exception if it is invalid.
+     *
+     * @param authToken the auth token,
+     * @param exchange the exchange.
+     * @return the authenticated user name.
+     */
     String validateAuthToken(String authToken, Exchange exchange);
 
     void removeAuthToken(String authToken, Exchange exchange);

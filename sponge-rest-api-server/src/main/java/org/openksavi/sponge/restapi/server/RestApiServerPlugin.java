@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.restapi.server.security.JwtRestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.NoSecuritySecurityService;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -51,6 +53,8 @@ public class RestApiServerPlugin extends JPlugin {
     private static final Supplier<RestApiService> DEFAULT_API_SERVICE_PROVIDER = () -> new DefaultRestApiService();
 
     private static final Supplier<RestApiSecurityService> DEFAULT_SECURITY_SERVICE_PROVIDER = () -> new NoSecuritySecurityService();
+
+    private static final Supplier<RestApiAuthTokenService> DEFAULT_AUTH_TOKEN_SERVICE_PROVIDER = () -> new JwtRestApiAuthTokenService();
 
     private static final Supplier<RestApiRouteBuilder> DEFAULT_ROUTE_BUILDER_PROVIDER = () -> new RestApiRouteBuilder();
 
@@ -123,6 +127,12 @@ public class RestApiServerPlugin extends JPlugin {
         if (authTokenServiceClass != null) {
             authTokenService = SpongeUtils.createInstance(authTokenServiceClass, RestApiAuthTokenService.class);
         }
+
+        Long authTokenExpirationDurationSeconds =
+                configuration.getLong(RestApiServerConstants.TAG_AUTH_TOKEN_EXPIRATION_DURATION_SECONDS, null);
+        if (authTokenExpirationDurationSeconds != null) {
+            settings.setAuthTokenExpirationDuration(Duration.ofSeconds(authTokenExpirationDurationSeconds));
+        }
     }
 
     @Override
@@ -181,21 +191,26 @@ public class RestApiServerPlugin extends JPlugin {
                         securityService = DEFAULT_SECURITY_SERVICE_PROVIDER.get();
                     }
 
-                    securityService.setEngine(getEngine());
+                    securityService.setRestApiService(service);
                     service.setSecurityService(securityService);
 
-                    // No default auth token service is used, only null.
-                    if (authTokenService != null) {
-                        authTokenService.setEngine(getEngine());
-                        service.setAuthTokenService(authTokenService);
+                    if (authTokenService == null) {
+                        // Create a default.
+                        authTokenService = DEFAULT_AUTH_TOKEN_SERVICE_PROVIDER.get();
                     }
+                    authTokenService.setRestApiService(service);
+                    service.setAuthTokenService(authTokenService);
 
                     if (routeBuilder == null) {
                         // Create a default.
                         routeBuilder = DEFAULT_ROUTE_BUILDER_PROVIDER.get();
                     }
-                    routeBuilder.setSettings(settings);
-                    routeBuilder.setApiService(service);
+                    routeBuilder.setRestApiService(service);
+
+                    // Init services.
+                    securityService.init();
+                    authTokenService.init();
+                    service.init();
 
                     camelContext.addRoutes(routeBuilder);
                 } catch (Exception e) {

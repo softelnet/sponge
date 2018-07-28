@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi;
+package org.openksavi.sponge.restapi.server;
 
-import org.openksavi.sponge.SpongeException;
+public interface HasRestApiService {
 
-public class RestApiInvalidAuthTokenException extends SpongeException {
+    /**
+     * Returns the REST API service.
+     *
+     * @return the REST API service.
+     */
+    RestApiService getRestApiService();
 
-    private static final long serialVersionUID = -9070276571660804800L;
-
-    public RestApiInvalidAuthTokenException(String message) {
-        super(message);
-    }
+    /**
+     * Sets the REST API service.
+     *
+     * @param restApiService the REST API service.
+     */
+    void setRestApiService(RestApiService restApiService);
 }

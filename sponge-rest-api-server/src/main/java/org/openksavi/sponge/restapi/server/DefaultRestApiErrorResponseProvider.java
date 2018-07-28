@@ -19,7 +19,6 @@ package org.openksavi.sponge.restapi.server;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.RestApiInvalidAuthTokenException;
 import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
 
@@ -45,7 +44,7 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
     }
 
     protected void applySpecificErrorCodes(RestApiService service, BaseResponse response, Throwable exception) {
-        if (exception instanceof RestApiInvalidAuthTokenException) {
+        if (exception instanceof RestApiInvalidAuthTokenServerException) {
             response.setErrorCode(RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
         }
     }

@@ -64,3 +64,4 @@ tensorflow
 localhost
 unmarshal
 auth
+relogin
