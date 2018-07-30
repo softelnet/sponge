@@ -133,6 +133,8 @@ public class RestApiClientConfiguration {
 
     /**
      * A Sponge REST API configuration builder.
+     *
+     * @return the builder.
      */
     public static Builder builder() {
         return new Builder();

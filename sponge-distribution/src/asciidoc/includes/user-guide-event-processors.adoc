@@ -1,0 +1,633 @@
+= Event processors
+Event processors are processors that perform specified operations using events they listen to.
+
+Instances of event processors, depending on their type, may be created:
+
+* only once, while enabling, so they are treated as singletons,
+* many times.
+
+.Event processors
+[width="50%"]
+|===
+|Event processor |Singleton
+
+|Filter
+|Yes
+
+|Trigger
+|Yes
+
+|Rule
+|No
+
+|Correlator
+|No
+|===
+
+When configuring an event processor, each event name may be specified as a regular expression thus creating a pattern matching more event names. The regular expression has to be compatible with {javaSeJavaDocUrl}/java/util/regex/Pattern.html[`java.util.regex.Pattern`].
+
+.Event name pattern example
+[source,python]
+----
+class TriggerA(Trigger):
+    def onConfigure(self):
+        self.event = "a.*" # <1>
+    def onRun(self, event):
+        self.logger.debug("Received event: {}", event.name)
+----
+<1> The trigger will listen to all events whose name starts with `"a"`, as specified by the regular expression.
+
+Event processors shouldn't implement infinite loops in their callback methods because it would at least disrupt the shutdown procedure. If you must create such a loop, please use for example `while EPS.engine.isRunning():` rather than `while True:`.
+
+== Filters
+Filters allow only certain events to be processed by the engine. Filters are executed in the same order as the order of their registration (i.e. enabling).
+
+You could modify event attributes in filters if necessary.
+
+The alias for the base class for script-based filters is `Filter`. The base class for Java-based filters is `JFilter`.
+
+=== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, filters provide the following ones.
+
+.Filter properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`event` or `events`*
+|These properties should be used to set the names (or name patterns) of filtered events. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively. You may use only one of them. The property `event` allows setting one event name. The property `events` is an array of event names. This property is mandatory. It should be set in the `onConfigure` callback method.
+
+|*`boolean onAccept(event)`*
+|This method checks if an incoming event should be further processed. If `onAccept` method returns `false`, then the event will be discarded. Otherwise it will be processed by the other event processors. This method is mandatory.
+|===
+
+Every filter should implement abstract `onConfigure` and `onAccept` methods.
+
+=== Example in a script language
+The code presented below creates a filter which filters only events whose name is `"e1"`. Other events are not processed by this filter. Events `e1` successfully pass through the filter only if they have an attribute `"color"` set to the value `"blue"`. The others are rejected.
+
+TIP: Class methods defined in a Python class have an instance object (`self`) as the first parameter.
+
+.Filter example
+[source,python]
+----
+class ColorFilter(Filter): # <1>
+    def onConfigure(self): # <2>
+        self.event = "e1" # <3>
+    def onAccept(self, event): # <4>
+        self.logger.debug("Received event {}", event) # <5>
+        color = event.getOrDefault("color", None) # <6>
+        if (color is None or color != "blue"): # <7>
+            self.logger.debug("rejected")
+            return False
+        else: # <8>
+            self.logger.debug("accepted")
+            return True
+----
+<1> The definition of the filter `ColorFilter`. The filter is represented by the class of the same name.
+<2> The filter configuration callback method.
+<3> Sets up `ColorFilter` to listen to `e1` events (i.e. events named `"e1"`).
+<4> The filter `onAccept` method will be called when an event `e1` happens. The `event` argument specifies that event instance.
+<5> Logs the event.
+<6> Assigns the value of the event attribute `"color"` to the local variable `color`.
+<7> If `color` is not set or is not `"blue"` then rejects that event by returning `false`.
+<8> Otherwise accepts the event by returning `true`.
+
+The filter `ColorFilter` will be enabled automatically. The enabling creates one instance of `ColorFilter` class and invokes `ColorFilter.onConfigure` method to set it up. Since that moment the filter listens to the specified events.
+
+=== Example in Java
+The filter presented below checks if an event named `"e1"` or `"e2"` or `"e3"` has an attribute `"shape"` set. If not, an event is ignored and will not be processed further.
+
+.Java filter example
+[source,java]
+----
+public class ShapeFilter extends JFilter { // <1>
+
+    @Override
+    public void onConfigure() { // <2>
+        setEvents("e1", "e2", "e3"); // <3>
+    }
+
+    @Override
+    public boolean onAccept(Event event) { // <4>
+        String shape = event.get("shape", String.class); // <5>
+        if (shape == null) {
+            getLogger().debug("No shape for event: {}; event rejected", event);
+            return false; // <6>
+        }
+
+        getLogger().debug("Shape is set in event {}; event accepted", event);
+
+        return true; // <7>
+    }
+}
+----
+<1> The definition of the filter `ShapeFilter`. The filter is represented by the Java class of the same name.
+<2> The filter configuration callback method.
+<3> Sets up `ShapeFilter` to listen to `e1`, `e2` and `e3` events.
+<4> The filter `onAccept` method will be called when any of these events happen. The `event` argument specifies that event instance.
+<5> Assigns a value of an event attribute `"shape"` to the local variable `shape`.
+<6> If `shape` is not set then rejects that event by returning `false`.
+<7> Otherwise accepts the event by returning `true`.
+
+This Java-based filter may be enabled only manually, for example in a script knowledge base e.g.:
+
+.Enabling a Java-based filter
+[source,python]
+----
+EPS.enableJava(ShapeFilter)
+----
+
+== Triggers
+Triggers run a specified code when an event happens.
+
+The alias for the base class for script-based triggers is `Trigger`. The base class for Java-based filters is `JTrigger`.
+
+=== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, triggers provide the following ones.
+
+.Trigger properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`event` or `events`*
+|These properties should be used to set the names (or name patterns) of the events that cause this trigger to fire. They may be used only as setters. They are shortcuts for `setEvent(eventName)` and `setEvents(eventNames)` methods respectively. You may use only one of them. The property `event` allows setting one event name. The property `events` is an array of event names. This property is mandatory. It should be set in the `onConfigure` callback method.
+
+|*`onRun(event)`*
+|The callback method used for processing the event, called when the specified event (or one of the events) happens. This method is mandatory.
+
+|`boolean onAccept(event)`
+|This optional callback method checks if an incoming event should processed by this trigger. The default implementation returns `true`.
+|===
+
+Every trigger should implement abstract `onConfigure` and `onRun` methods.
+
+=== Example in a script language
+The code presented below defines the trigger named `TriggerA` listening to events named `"a"`.
+
+.Trigger example
+[source,python]
+----
+class TriggerA(Trigger): # <1>
+    def onConfigure(self): # <2>
+        self.event = "a" # <3>
+    def onRun(self, event): # <4>
+        self.logger.debug("Received event: {}", event.name) # <5>
+----
+<1> The definition of the trigger `TriggerA`. The trigger is represented by a class of the same name.
+<2> The trigger configuration callback method.
+<3> Sets up `TriggerA` to listen to `a` events (i.e. events that have name `"a"`).
+<4> The trigger `onRun` method will be called when an event `a` happens. The `event` argument specifies that event instance.
+<5> Logs the event.
+
+The trigger `TriggerA` will be enabled automatically. The enabling creates an instance of `TriggerA` class and invokes `TriggerA.onConfigure` method to set it up. Since that moment the trigger listens to the specified events.
+
+=== Example in Java
+The code presented below defines the trigger named `SampleJavaTrigger` listening to events named `"e1"`.
+
+.Java trigger example
+[source,java]
+----
+public class SampleJavaTrigger extends JTrigger { // <1>
+
+    @Override
+    public void onConfigure() { // <2>
+        setEvent("e1"); // <3>
+    }
+
+    @Override
+    public void onRun(Event event) { // <4>
+        getLogger().debug("Received event {}", event); // <5>
+    }
+}
+----
+<1> The definition of the trigger `SampleJavaTrigger`. The trigger is represented by a Java class of the same name.
+<2> The trigger configuration callback method.
+<3> Sets up `SampleJavaTrigger` to listen to `e1` events (i.e. events that have name `"e1"`).
+<4> The trigger `onRun` method will be called when an event `e1` happen. The `event` argument specifies that event instance.
+<5> Logs the event.
+
+.Java trigger manual registration in the script knowledge base
+[source,python]
+----
+EPS.enableJava(SampleJavaTrigger)
+----
+
+== Rules
+Sometimes there is a need to perform certain actions when a sequence of events has happened, additionally fulfilling some conditions. To handle such relationships (both temporal and logical), {sponge} provides rules. It is important for the behavior of the rules that events that happened first must be sent first into the engine.
+
+The alias for the base class for script-based rules is `Rule`. The base class for Java-based rules is `JRule`.
+
+A rule group is a set of instances of the rule, each created automatically for every event that could be accepted as the first event of the rule.
+
+=== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, rules provide the following ones.
+
+.Rule properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`onConfigure()`*
+|The callback method that is invoked only once, when a rule is being enabled. In this method it should be established for what type of events the rule listens. Optionally event conditions for incoming events or rule duration could be set. This method is mandatory.
+
+|`onInit()`
+|The initialization callback method that is invoked while creating every new rule instance but after `onConfigure`.
+
+|*`events`*
+|This property should be used to set the specifications of events whose sequence causes the rule to fire. It may be used only as a setter. It is a shortcut for the `setEvents(eventSpecifications)` method.
+
+|`ordered`
+|The `boolean` property indicating that the rule should listen to ordered (ordered rule) or unordered (unordered rule) sequences of events. *The default is `true`, i.e. the rule would listen to ordered sequences of events.*  It is a shortcut for the `setOrdered(boolean)` method.
+
+|`addConditions(alias, conditions)`
+|Adds conditions for an event specified by an alias (or event name if aliases are not used). A condition is a method of this class or a closure/lambda that is invoked to verify that a new incoming event corresponds to this rule. The name of a condition method is irrelevant.
+
+|`addAllConditions(conditions)`
+|Adds conditions for all events.
+
+|`duration`
+|This property may be used to set the time how long a rule lasts (represented as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). It is a shortcut for the `setDuration(value)` method. The instance of a rule will be active only for a given period of time since the arrival of the first event. Until that time the instance of the rule will fire for each suitable event sequence that happens.
+
+|*`onRun(event)`*
+|The callback method invoked when a sequence of events specified by this rule has happened and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. There could be many sequences of events fitting the rule definition. In order to access the events which fulfilled the conditions and caused the rule fire, the `getEvent(eventAlias)` method should be used. The `onRun` method is mandatory.
+
+|`Event getEvent(String eventAlias)`
+|Returns the instance of the event that already happened and that has a specified alias. This method may be used inside `onRun` method. If an event hasn't happened yet, this method throws an exception. This method may return `null` only when an event that supposed not to happen didn't occur as specified.
+
+|`firstEvent`
+|This property is a reference to the first event that has been accepted by this rule. It is a shortcut for the `Event getFirstEvent()` method. It could be used for example in event condition methods (including the one for the first event itself).
+
+|`eventSequence`
+|Returns a sequence of events that happened, as a list of event instances. The sequence may contain `null` values when an event that supposed not to happen didn't occur as specified. This method may be used inside `onRun` method. 
+
+|`synchronous`
+|This property may be used to set a boolean _synchronous flag_ for a rule. It is a shortcut for the `setSynchronous(synchronous)` method. If a rule is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this rule. If a rule is asynchronous then an event will be processed by the instances of this rule concurrently (in many threads). If the _synchronous flag_ is not set then the default value as specified by `eventSetProcessorDefaultSynchronous` configuration parameter will be used. In most cases there should be no need to change this flag.
+|===
+
+Every rule should implement the abstract `onConfigure` and `onRun` methods.
+
+IMPORTANT: Because of rules are not singletons the `onConfigure()` method is invoked *only once*, while enabling the rule. So it should contain only basic configuration as stated before. The `onInit()` method *must not* contain such configuration because it is invoked every time the new instance of the rule is created.
+
+NOTE: A duration is relative to an internal clock of the engine, that is related to the time of events. When a duration timeout occurs, the engine sends a control event (`DurationControlEvent`) to the Input Event Queue so that the control event, before finishing the rule, goes the same route as all events. This is to ensure that no events will be skipped by a rule if the system is highly loaded. Note that this may cause the rule to last longer in terms of an external clock.
+
+=== Event specification
+Event specification for the rule consists of:
+
+Event name:: A name (or name pattern) of the event (mandatory).
+Event alias:: An optional alias for the event. The alias is a unique (in the scope of the rule) name assigned to the event. Aliases are mandatory if there is more than one event of the same type (i.e. having the same name). When each of the events is of different type, there is no need to specify an alias. In such case aliases will be defined automatically and equal to the name of the corresponding event.
+Event mode:: Specifies which sequences of events suitable to this rule should be used for running the rule (i.e. invoking the `onRun` callback method). Event modes are defined in the `EventMode` Java enumeration.
++
+.Rule event modes
+[cols="1,4"]
+|===
+|Event mode |Description
+
+|`first`
+|The first suitable event. This is the default event mode when none is specified for an event.
+
+|`last`
+|The last suitable event for the duration of the rule.
+
+|`all`
+|All suitable events for the duration of the rule.
+
+|`none`
+|An event that cannot happen in the sequence.
+|===
++
+
+Event specification should be formatted as text `"eventName [eventAlias [:eventMode"]]` or `"eventNamePattern [eventAlias [:eventMode"]]`. White characters between all elements are allowed. For example the specifications `"event1 e1 :first"`, `"event1"`, `"event1 e1"` define the suitable first event named `"event1"`. The specification `"[Ee]vent.* e"` define all events which name starts with `"Event"` or `"event"`.
+
+=== Ordered rules
+
+For ordered rules:
+
+* The first event in the sequence, i.e. the event that would initiate the rule, must always have the mode `first`.
+* If the mode of the last (final) specified event is `last` or `none`, a duration must be set. Otherwise the rule would never fire.
+
+The following examples of complete event specifications assume that the ordered rule has a duration that spans over all incoming events listed in the second column. The integer value in the brackets is the `id` of the event. An element `null` means that the event hasn't happened. Incoming events: `e1[1]`, `e2[2]`, `e2[3]`, `e3[4]`, `e2[5]`, `e3[6]`, `e3[7]`.
+
+.Examples of ordered event specifications
+[cols="1,3"]
+|===
+|Events specification |Event sequences
+
+|`["e1", "e2 :all", "e3 :all"]`
+|`[e1[1], e2[2], e3[4]], [e1[1], e2[3], e3[4]], [e1[1], e2[2], e3[6]], [e1[1], e2[3], e3[6]], [e1[1], e2[5], e3[6]], [e1[1], e2[2], e3[7]], [e1[1], e2[3], e3[7]], [e1[1], e2[5], e3[7]]`
+
+|`["e1", "e2 :all", "e3"]`
+|`[e1[1], e2[2], e3[4]], [e1[1], e2[3], e3[4]]`
+
+|`["e1", "e2 :all", "e3 :last"]`
+|`[e1[1], e2[2], e3[7]], [e1[1], e2[3], e3[7]], [e1[1], e2[5], e3[7]]`
+
+|`["e1", "e2 :all", "e4 :none"]`
+|`[e1[1], e2[2], null], [e1[1], e2[3], null], [e1[1], e2[5], null]`
+
+|`["e1", "e2", "e3 :all"]`
+|`[e1[1], e2[2], e3[4], [e1[1], e2[2], e3[6]], [e1[1], e2[2], e3[7]]`
+
+|`["e1", "e2", "e3"]`
+|`[e1[1], e2[2], e3[4]]`
+
+|`["e1", "e2", "e3 :last"]`
+|`[e1[1], e2[2], e3[7]]`
+
+|`["e1", "e2", "e4 :none"]`
+|`[e1[1], e2[2], null]`
+
+|`["e1", "e2 :last", "e3 :all"]`
+|`[e1[1], e2[3], e3[4]], [e1[1], e2[5], e3[6]], [e1[1], e2[5], e3[7]]`
+
+|`["e1", "e2 :last", "e3"]`
+|`[e1[1], e2[3], e3[4]]`
+
+|`["e1", "e2 :last", "e3 :last"]`
+|`[e1[1], e2[5], e3[7]]`
+
+|`["e1", "e2 :last", "e4 :none"]`
+|`[e1[1], e2[5], null]`
+
+|`["e1", "e4 :none", "e3 :all"]`
+|`[e1[1], null, e3[4]], [e1[1], null, e3[6]], [e1[1], null, e3[7]]`
+
+|`["e1", "e4 :none", "e3"]`
+|`[e1[1], null, e3[4]]`
+
+|`["e1", "e4 :none", "e3 :last"]`
+|`[e1[1], null, e3[7]]`
+
+|`["e1", "e2", "e3 :none"]`
+|_This rule hasn't been fired because the event_ `e3` _wasn't supposed to happen._
+|===
+
+=== Unordered rules
+
+For unordered rules:
+
+* The matching of unordered events is done starting from the left in the list of events the unordered rule listens to.
+* Every event that is relevant to the unordered rule causes a new instance of the rule to be created. This implicates that the event mode for an event that actually happens as the first is used by the engine only as a suggestion. So the actual order of events that happen has a significant impact on the behavior of unordered rules.
+* If at least one specified event has `none` mode, you probably should set a duration for such a rule to avoid superfluous instances of the rule.
+
+IMPORTANT: Unordered rules is a new feature that should be treated as an experimental one.
+
+=== Event conditions
+A rule may define conditions for events that have to be met to consider an incoming event as corresponding to the rule:
+
+* of the form of a any class method that takes one argument (`Event`) and returns `boolean`, e.g.:
++
+[source,java]
+----
+boolean conditionA(Event event);
+boolean check1(Event event);
+----
+* as a closure or a lambda (depending on the language) that takes two arguments (`Rule`, `Event`) and returns `boolean`, e.g.:
++
+[source,python]
+----
+lambda rule, event: Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds > 2
+----
+* as an instance of an implementation of the interface `EventCondition` (takes two arguments (`Rule`, `Event`) and returns `boolean`), e.g. as a Java lambda expression:
++
+[source,java]
+----
+(rule, event) -> {
+    return true;
+};
+----
+
+An event condition in Java is represented by the interface `EventCondition`.
+
+IMPORTANT: A condition in the form of a closure or a lambda specifies two arguments: a rule instance (determined at the runtime) and an event instance. Take care not to mix up the `rule` argument with `this` (in Java) or `self` (in Python) as they are references to different objects.
+
+The condition methods tell if an incoming event (corresponding to the sequence of events specified by the rule) should be considered suitable.
+
+=== Example in a script language
+The code presented below defines a rule named `SameSourceAllRule` listening to an ordered sequence of events (`"filesystemFailure"`, `"diskFailure"`).
+The two events have to have `severity` greater than `5` and the same `source`. Moreover the second event has to happen not later than after `4` seconds since the first one. The method `onRun()` will be invoked for every sequence of events that match this definition.
+
+.Rule example
+[source,python]
+----
+class SameSourceAllRule(Rule): # <1>
+    def onConfigure(self): # <2>
+        # Events specified with aliases (e1 and e2)
+        self.events = ["filesystemFailure e1", "diskFailure e2 :all"] # <3>
+        self.addAllConditions(self.severityCondition) # <4>
+        self.addConditions("e2", self.diskFailureSourceCondition) # <5>
+        self.duration = Duration.ofSeconds(8) # <6>
+    def onRun(self, event): # <7>
+        self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}",
+            event.time, event.get("source"), self.eventSequence) # <8>
+    def severityCondition(self, event): # <9>
+        return int(event.get("severity")) > 5 # <10>
+    def diskFailureSourceCondition(self, event): # <11>
+        event1 = self.getEvent("e1") # <12>
+        return event.get("source") == event1.get("source") and \
+            Duration.between(event1.time, event.time).seconds <= 4 # <13>
+----
+<1> The definition of the rule `SameSourceAllRule`. The rule is represented by a class of the same name.
+<2> The rule configuration callback method.
+<3> Defines that the rule is supposed to wait for sequences of events `"filesystemFailure"` (alias `"e1"`) and `"diskFailure"` (alias `"e2"`) and take into consideration the first occurrence of `"e1"` event and all occurrences of `"e2"` event.
+<4> Sets the condition checking an event severity for all events.
+<5> Sets conditions checking `"e2"` event source.
+<6> Setting the duration of the rule. The duration must be set for this rule because the final event has `all` mode. The rule lasts for `8` seconds. So, for `8` seconds since the occurrence of the first matching `e1` a tree of event instances will be constantly built with the root containing the instance of initial `e1` event. Each matching `e2` event will cause the rule to fire immediately for the current event sequence. After reaching the duration time this rule instance will be discarded.
+<7> The `onRun` method will be called when the proper sequence of events happens and all the conditions have been fulfilled. The `event` argument specifies the last event in that sequence.
+<8> Logs message and the sequence of events.
+<9> An event condition method `severityCondition`.
+<10> Accept only events that have `severity` greater than `5`.
+<11> An event condition method `diskFailureSourceCondition`.
+<12> Assigns the first event (`e1`) to the local variable `event1`.
+<13> Accept `e2` events that have the same `source` as the first event `e1` and that happened not later than after `4` seconds since the corresponding `e1` event.
+
+The rule will be enabled automatically. Then, in case of occurrence of `e1` event that has `severity` greater than `5`, a new instance of a rule `SameSourceAllRule` will be created.
+
+A condition could be expressed as a lambda function, for example:
+[source,python]
+----
+self.addConditions("e1", lambda rule, event: int(event.get("severity")) > 5)
+----
+
+=== Example in Java
+The code presented below defines a rule analogous to the one shown above but defined as a Java class.
+
+.Java rule example
+[source,java]
+----
+public class SameSourceJavaRule extends JRule { // <1>
+
+    private static final Logger logger = LoggerFactory.getLogger(SameSourceJavaRule.class);
+
+    @Override
+    public void onConfigure() {
+        setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) }); // <2>
+
+        addAllConditions("severityCondition"); // <3>
+        addConditions("e2", (rule, event) -> { // <4>
+            Event event1 = rule.getEvent("e1");
+            return event.get("source").equals(event1.get("source")) &&
+                    Duration.between(event1.getTime(), event.getTime()).getSeconds() <= 4;
+        });
+
+        setDuration(Duration.ofSeconds(8)));
+    }
+
+    @Override
+    public void onRun(Event event) {
+        logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"),
+                getEventAliasMap());
+    }
+
+    public boolean severityCondition(Event event) { // <5>
+        return event.get("severity", Number.class).intValue() > 5;
+    }
+}
+----
+<1> The definition of the rule `SameSourceAllRule`. The rule is represented by a Java class of the same name.
+<2> The `makeEventSpec` method is used here to create event specifications instead of a formatted String. The same setting could be achieved by `setEvents("filesystemFailure e1", "diskFailure e2 :all")`.
+<3> Sets the condition checking an event severity for all events.
+<4> Sets conditions checking `"e2"` event source (as a Java lambda expression).
+<5> An event condition method `severityCondition`.
+
+.Java rule manual registration in the Python knowledge base
+[source,python]
+----
+EPS.enableJava(SameSourceJavaRule)
+----
+
+== Correlators
+Correlators could be viewed as a generalized form of rules. They detect correlations between events and could be used for implementing any complex event processing that isn't provided by filters, triggers or rules.
+
+Correlators listen to the specified events regardless of their order and provide manual processing of each such event. It means that they require more programming than the other processors, however provide more customized behavior. For example they need explicit stopping by calling the `finish` method. An instance of a correlator is created when the correlator accepts an incoming event as its first event.
+
+A correlator instance, when started, may be finished:
+
+* manually by invoking the `finish` method from inside the `onEvent` method,
+* automatically when `duration` is set and the duration timeout takes place.
+
+The alias for the base class for script-based correlators is `Correlator`. The base class for Java-based correlators is `JCorrelator`.
+
+A correlator group is a set of instances of the correlator.
+
+=== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, correlators provide the following ones.
+
+.Correlator properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|*`onConfigure()`*
+|The configuration callback method that is invoked when the correlator is being enabled. In this method it should be established for what type of events this correlator listens. Optionally a correlator duration could be set. This method is mandatory.
+
+|*`events`*
+|This property should be used to set the names (or name patterns) of events that this correlator listens to. It may be used only as a setter. It is a shortcut for `setEvents(eventNames)` method. This mandatory property must be set in the `onConfigure` callback method.
+
+|`maxInstances`
+|This property may be used to set the maximum number of concurrent instances allowed for this correlator. It is a shortcut for `setMaxInstances(value)` method. If this value is not set, there will be no limit of concurrent instances. In that case you will probably need to implement `onAcceptAsFirst()` method.
+
+|`duration`
+|This property may be used to set the time how long a correlator lasts (represented as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). It is a shortcut for `setDuration(value)` method. The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration` callback method will be invoked.
+
+|`boolean onAcceptAsFirst(Event event)`
+|Checks if the event should be accepted as the first event of a correlator, therefore starting a new working instance. The method `onAcceptAsFirst` is invoked after `onConfigure`. This method is optional. The default implementation returns `true`.
+
+|`onInit()`
+|The initialization callback method that is invoked while creating a new correlator instance but after `onAcceptAsFirst` if it returns `true`. This method is optional.
+
+|*`onEvent(Event event)`*
+|The callback method invoked when an event that a correlator listens to happens. This method is mandatory.
+
+|`firstEvent`
+|This property is a reference to the first event that has been accepted by this correlator. It is a shortcut for the `Event getFirstEvent()` method. It could be used for example in the `onEvent` callback method.
+
+|`onDuration()`
+|The callback method invoked when the duration timeout occurs. This method should be implemented if a duration timeout is set. After invoking this callback method, `finish` is invoked automatically.
+
+|`finish()`
+|The final method that should be invoked in `onEvent(Event event)` method when the correlator has done its work. Only by invoking `finish` this instance of the correlator is closed and its resources are released.
+
+|`synchronous`
+|This property may be used to set a boolean _synchronous flag_ for a correlator. For details see a description of this flag for rules.
+|===
+
+Every correlator may implement the `onAcceptAsFirst` method and should implement the abstract `onEvent` method. If a duration is set up, the `onDuration` callback method should be implemented as well.
+
+IMPORTANT: Because of correlators are not singletons the `onConfigure` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `onInit` method *must not* contain such configuration because it is invoked later, every time a new instance of the correlator is created.
+
+=== Example in a script language
+The code presented below defines the correlator named `SampleCorrelator` that listens to events `"filesystemFailure"` and `"diskFailure"`.
+The maximum number of concurrent instances allowed for this correlator is set to `1`. A `filesystemFailure` event will be accepted as the first event only when there is no instance of this correlator already running. When the `filesystemFailure` event is accepted as the first, a new instance of this correlator will be created. Each instance of this correlator adds to its internal event log list `eventLog` any suitable event. When `4` fitting events are collected the correlator instance will finish.
+
+.Correlator example
+[source,python]
+----
+class SampleCorrelator(Correlator): # <1>
+    def onConfigure(self): # <2>
+        self.events = ["filesystemFailure", "diskFailure"] # <3>
+        self.maxInstances = 1 # <4>
+    def onAcceptAsFirst(self, event): # <5>
+        return event.name == "filesystemFailure" # <6>
+    def onInit(self): # <7>
+        self.eventLog = [] # <8>
+    def onEvent(self, event): # <9>
+        self.eventLog.append(event) # <10>
+        self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, str(self.eventLog))
+        if len(self.eventLog) == 4:
+            self.finish() # <11>
+----
+<1> The definition of the correlator `SampleCorrelator`. The correlator is represented by a class of the same name.
+<2> The correlator configuration callback method.
+<3> Define that the correlator is supposed to listen to events `"filesystemFailure"` and `"diskFailure"` (in no particular order).
+<4> Sets the maximum number of concurrent instances.
+<5> The correlator `onAcceptAsFirst` callback method.
+<6> The correlator will accept as the first an event named `filesystemFailure`.
+<7> The correlator initialization callback method. It is invoked after `onAcceptAsFirst`.
+<8> Setting an initial value to the field `eventLog`.
+<9> The correlator `onEvent` callback method.
+<10> Adds a new event to `eventLog`.
+<11> This correlator instance will finish when `4` fitting events are collected into `eventLog`.
+
+The correlator will be enabled automatically. Then, in case of acceptance of an event, a new instance of a correlator `SampleCorrelator` will be created.
+
+=== Example in Java
+The code presented below defines the correlator analogous to the one shown above but defined as a Java class.
+
+.Java correlator example
+[source,java]
+----
+public class SampleJavaCorrelator extends JCorrelator { // <1>
+
+    private List<Event> eventLog;
+
+    public void onConfigure() {
+        setEvents("filesystemFailure", "diskFailure");
+        setMaxInstances(1);
+    }
+
+    public boolean onAcceptAsFirst(Event event) {
+        return event.getName().equals("filesystemFailure");
+    }
+
+    public void onInit() {
+        eventLog = new ArrayList<>();
+    }
+
+    public void onEvent(Event event) {
+        eventLog.add(event);
+        getLogger().debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog);
+        if (eventLog.size() >= 4) {
+            finish();
+        }
+    }
+}
+----
+<1> The definition of the correlator `SampleJavaCorrelator`. The correlator is represented by a Java class of the same name.
+
+.Java correlator manual registration in the Python knowledge base
+[source,python]
+----
+EPS.enableJava(SampleJavaCorrelator)
+----

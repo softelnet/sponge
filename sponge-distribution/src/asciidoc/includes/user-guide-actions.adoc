@@ -1,0 +1,163 @@
+= Actions
+Actions provide functionality similar to functions. They may be used in many knowledge bases that are written in different languages.
+
+The alias for the base class for script-based actions is `Action`. The base class for Java-based actions is `JAction`.
+
+== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, actions provide the following ones.
+
+.Action properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`Object onCall (_dynamic arguments_)`
+|The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `EPS.call()`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. This method is mandatory. Every action should implement at least one `onCall` method.
+|===
+
+The `onConfigure` method in actions is not mandatory.
+
+== Example in a script language
+The code presented below defines the action named `EchoAction` that simply returns all arguments.
+
+.Action example
+[source,python]
+----
+class EchoAction(Action): # <1>
+    def onCall(self, text): # <2>
+        return text
+
+def onStartup():
+    result = EPS.call("EchoAction", "test") # <3>
+    logger.debug("Action returned: {}", result)
+----
+<1> The definition of the action `EchoAction`. The action is represented by the class of the same name.
+<2> The action `onCall` dynamic callback method that takes one argument `text` (in this case).
+<3> Calls the action named `"EchoAction"` passing one argument.
+
+.Console output
+----
+Action returned: test
+----
+
+== Example in Java
+The code presented below defines the Java-based action named `JavaEchoAction`.
+
+.Java action example
+[source,java]
+----
+public class JavaEchoAction extends JAction { // <1>
+
+    @Override
+    public Object onCall(String text) { // <2>
+        return text;
+    }
+}
+----
+<1> The definition of the action `JavaEchoAction`. The action is represented by the Java class of the same name.
+<2> The action `onCall` callback method.
+
+.Java action manual registration in the Python knowledge base
+[source,python]
+----
+EPS.enableJava(JavaEchoAction)
+----
+
+== Argument and result metadata
+Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and an result. Metadata are not used to verify action arguments or an result. They are useful in a client code, for example in a generic GUI that calls {sponge} actions.
+
+Metadata for argument and result types support types that are represented by classes in the `org.openksavi.sponge.type` package. In order to provide more flexibility in a client code a type specification may be extended by a _format_ and _tag_ (or _tags_) which are texts not interpreted by the {sponge} engine but could be interpreted by a client code.
+
+.Supported argument and result metadata types
+[cols="1,5"]
+|===
+|Type |Description
+
+|`StringType`
+|A string type. Provides optional properties `minLength` and `maxLength`, e.g.: `StringType().maxLength(10)`.
+
+|`NumberType`
+|A number type, that include both integer and floating-point numbers. Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `NumberType()`.
+
+|`IntegerType`
+|An integer type (commonly used integer type or long). Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `IntegerType().minValue(1).minValue(100)`.
+
+|`BooleanType`
+|A boolean type.
+
+|`BinaryType`
+|A binary (byte array) type. Provides an optional property `mimeType`.
+
+|`AnyType`
+|Any type. It may be used in situations when type is not important.
+
+|`VoidType`
+|A void type that may be used to specify that an action returns no meaningful result.
+
+|`ObjectType`
+|A Java object. This type requires a Java class name as a constructor parameter. For example: `ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject")`. It also supports an array notation: `ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject[]")`.
+
+|`ListType`
+|A list type. This type requires a `Type` parameter, which is is a type of list elements. For example: `ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))`.
+
+|`MapType`
+|A map type. This type requires two `Type` parameters: a type of keys and a type of values in the map. For example: `MapType(Type.STRING, ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))`.
+
+|`ActionType`
+|A type that allows using a result of one action to be a type for another action argument or result. For example, assuming that the result type of the action  `GetAvailableSensorNames` is a list of strings and the action returns `["sensor1", "sensor2"]`, `ActionType("GetAvailableSensorNames")` means that a value of this type may be `"sensor1"` or `"sensor2"`. You may customize this behavior in your application by setting an arbitrary format string for this `ActionType`, for example for allowing multi or single choice. The handling of `ActionType` (e.g. calling `GetAvailableSensorNames` action) must be implemented in a client code.
+|===
+
+.Action metadata example
+[source,python]
+----
+class UpperCase(Action):
+    def onConfigure(self):
+        self.displayName = "Convert to upper case"
+        self.description = "Converts a string to upper case."
+        self.argsMeta = [
+            ArgMeta("text", StringType()).displayName("Text to upper case").description("The text that will be converted to upper case.")]
+        self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
+    def onCall(self, text):
+        return text.upper()
+----
+
+.Action metadata example with multiple arguments
+[source,python]
+----
+class MultipleArgumentsAction(Action):
+    def onConfigure(self):
+        self.displayName = "Multiple arguments action"
+        self.argsMeta = [
+            ArgMeta("stringArg", StringType().maxLength(10)),
+            ArgMeta("integerArg", IntegerType().minValue(1).maxValue(100)),
+            ArgMeta("anyArg", AnyType()),
+            ArgMeta("stringListArg", ListType(StringType())),
+            ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
+            ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
+            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject").tag("complex")),
+            ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))),
+            ArgMeta("binaryArg", BinaryType().mimeType("image/png").format("28x28").tags("drawing", "handwritten")),
+        ]
+        self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
+    def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):
+        return True
+----
+
+For more information see `ArgMeta` and `ResultMeta`.
+
+== Implementing interfaces
+Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.
+
+.Action implementing a Java interface
+[source,python]
+----
+from org.openksavi.sponge.integration.tests.core import TestActionVisibiliy
+
+class EdvancedAction(Action, TestActionVisibiliy): # <1>
+    def onCall(self, text):
+        return text.upper()
+    def isVisible(self, context):
+        return context == "day"
+----
+<1> The Java interface `TestActionVisibiliy` declares only one method `boolean isVisible(Object context)`.
+

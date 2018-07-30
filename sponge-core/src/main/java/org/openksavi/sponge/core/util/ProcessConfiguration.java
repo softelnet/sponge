@@ -141,6 +141,9 @@ public class ProcessConfiguration {
 
     /**
      * A process configuration builder.
+     *
+     * @param executable the executable file name.
+     * @return the builder.
      */
     public static Builder builder(String executable) {
         return new Builder(executable);

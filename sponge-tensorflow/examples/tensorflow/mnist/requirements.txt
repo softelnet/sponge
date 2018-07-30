@@ -1,0 +1,5 @@
+numpy
+tensorflow
+keras
+pillow
+py4j

@@ -11,6 +11,7 @@
 :py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
 :midiSourcesUrl: {sourcesUrl}/sponge-midi/examples/midi/
 :mpdSourcesUrl: {sourcesUrl}/sponge-external/sponge-mpd/examples/mpd/
+:tensorflowSourcesUrl: {sourcesUrl}/sponge-tensorflow/examples/tensorflow/
 
 == Introduction
 {sponge} is a polyglot system that allows creating knowledge bases in several scripting languages.
@@ -18,10 +19,10 @@
 For the purpose of clarity, examples in this chapter are written in Python (http://www.jython.org[Jython]) as one of the supported scripting languages and in Java. All examples written in Python may have equivalent ones written in any of the other <<supported-script-languages,supported script languages>>.
 
 
-include::includes/sponge-user-guide-architecture.adoc[leveloffset=+1]
+include::includes/user-guide-architecture.adoc[leveloffset=+1]
 
 
-include::includes/sponge-user-guide-configuration.adoc[leveloffset=+1]
+include::includes/user-guide-configuration.adoc[leveloffset=+1]
 
 == Engine
 
@@ -57,7 +58,7 @@ class SomeTrigger(Trigger):
 
 Shutting down doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
 
-include::includes/sponge-user-guide-knowledge-bases.adoc[leveloffset=+1]
+include::includes/user-guide-knowledge-bases.adoc[leveloffset=+1]
 
 
 == Events
@@ -382,9 +383,9 @@ def onLoad():
 
 Thanks to many scripting languages, properties may be accessed using dot notation rather than a direct method call. For example a display name may be set using `self.displayName = "Display name"` or `self.setDisplayName("Display name")`.
 
-include::includes/sponge-user-guide-event-processors.adoc[leveloffset=+1]
+include::includes/user-guide-event-processors.adoc[leveloffset=+1]
 
-include::includes/sponge-user-guide-actions.adoc[leveloffset=+1]
+include::includes/user-guide-actions.adoc[leveloffset=+1]
 
 == Plugins
 Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
@@ -636,7 +637,7 @@ In that case you may omit the versions of the dependencies.
 </dependency>
 ----
 
-include::includes/sponge-user-guide-integration.adoc[leveloffset=+1]
+include::includes/user-guide-integration.adoc[leveloffset=+1]
 
 == Best practices
 When developing an application using {sponge} you have to be aware of the fact that knowledge bases could be created in two categories of programming languages:
@@ -1184,143 +1185,117 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 |===
 
 == Maven artifacts
+The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 
 .{sponge} Maven artifacts
-[cols="2,2,1,6"]
+[cols="2,1,5"]
 |===
-|GroupId |ArtifactId |Central Maven Repository |Description
+|ArtifactId |Central Maven Repository |Description
 
-|`org.openksavi.sponge`
 |`sponge-parent`
 |Yes
 |The parent project.
 
-|`org.openksavi.sponge`
 |`sponge-bom`
 |Yes
 |The Bill Of Materials style pom.xml.
 
-|`org.openksavi.sponge`
 |`sponge-api`
 |Yes
 |The {sponge} API.
 
-|`org.openksavi.sponge`
 |`sponge-core`
 |Yes
 |The {sponge} core implementation. This artifact includes a shaded Guava library.
 
-|`org.openksavi.sponge`
 |`sponge-jython`
 |Yes
 |The support for Python-based scripting knowledge bases using Jython.
 
-|`org.openksavi.sponge`
 |`sponge-jruby`
 |Yes
 |The support for Ruby-based scripting knowledge bases using JRuby.
 
-|`org.openksavi.sponge`
 |`sponge-groovy`
 |Yes
 |The support for Groovy-based scripting knowledge bases.
 
-|`org.openksavi.sponge`
 |`sponge-nashorn`
 |Yes
 |The support for JavaScript-based scripting knowledge bases using Nashorn.
 
-|`org.openksavi.sponge`
 |`sponge-kotlin`
 |Yes
 |The support for Kotlin-based non scripting knowledge bases.
 
-|`org.openksavi.sponge`
 |`sponge-signal`
 |Yes
 |The wrappers for Operating System signals.
 
-|`org.openksavi.sponge`
 |`sponge-camel`
 |Yes
 |The Apache Camel integration.
 
-|`org.openksavi.sponge`
 |`sponge-spring`
 |Yes
 |The Spring framework integration.
 
-|`org.openksavi.sponge`
 |`sponge-py4j`
 |Yes
 |The CPython integration that uses Py4J.
 
-|`org.openksavi.sponge`
 |`sponge-midi`
 |Yes
 |The MIDI integration.
 
-|`org.openksavi.sponge`
 |`sponge-rpi-pi4j`
 |Yes
 |The Pi4J (for Raspberry Pi) library integration.
 
-|`org.openksavi.sponge`
 |`sponge-reactivex`
 |Yes
 |The ReactiveX integration.
 
-|`org.openksavi.sponge`
 |`sponge-rest-api-client`
 |Yes
 |The Sponge REST API client.
 
-|`org.openksavi.sponge`
 |`sponge-rest-api-server`
 |Yes
 |The Sponge REST API server.
 
-|`org.openksavi.sponge`
 |`sponge-tensorflow`
 |Yes
-|The Tensorflow integration.
+|The TensorFlow integration.
 
-|`org.openksavi.sponge`
 |`sponge-standalone`
 |Yes
 |The standalone distribution of {sponge}.
 
-|`org.openksavi.sponge`
 |`sponge-logging`
 |Yes
 |The {sponge} logging used by the standalone application.
 
-|`org.openksavi.sponge`
 |`sponge-test`
 |Yes
 |The {sponge} test support.
 
-|`org.openksavi.sponge`
 |`sponge-rpi-grovepi`
 |No
 |The GrovePi (for Raspberry Pi) library integration.
 
-|`org.openksavi.sponge`
 |`sponge-examples-projects`
 |No
 |Complete example projects.
 
-|`org.openksavi.sponge`
 |`sponge-distribution`
 |No
 |Contains documentation, release configuration, project pages etc.
 
-|`org.openksavi.sponge`
 |`sponge-integration-tests`
 |No
 |{sponge} integration tests.
 
-|`org.openksavi.sponge`
 |`sponge-standalone-extensions`
 |No
 |Dependencies for external libraries used by the standalone command-line application.
@@ -1329,11 +1304,10 @@ ifdef::useReferences[({sourcesUrl}/sponge-examples-projects/sponge-examples-proj
 The following optional artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality.
 
 .{sponge} optional external Maven artifacts
-[cols="2,2,1,6"]
+[cols="2,2,1,5"]
 |===
-|GroupId |ArtifactId |License |Central Maven Repository |Description
+|ArtifactId |License |Central Maven Repository |Description
 
-|`org.openksavi.sponge`
 |`sponge-mpd`
 |GNU GPL 3.0
 |Yes
@@ -1341,7 +1315,7 @@ The following optional artifacts are not part of the standard {sponge} distribut
 |===
 
 
-include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
+include::includes/user-guide-standalone.adoc[leveloffset=+1]
 
 
 == Third party software
@@ -1408,9 +1382,9 @@ include::includes/sponge-user-guide-standalone.adoc[leveloffset=+1]
 |Apache 2.0
 |Used for integration with GrovePi (for Raspberry Pi) hardware.
 
-|https://www.tensorflow.org[Tensorflow]
+|https://www.tensorflow.org[TensorFlow]
 |Apache 2.0
-|An open-source software library for Machine Intelligence.
+|An open source machine learning framework.
 
 |https://github.com/ReactiveX/RxJava[RxJava]
 |Apache 2.0

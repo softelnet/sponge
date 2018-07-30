@@ -26,23 +26,24 @@ ____
 == Features
 The main features of {sponge}:
 
-* provides a concurrent processing of incoming events,
-* allows generating and scheduling of events (e.g. supports cron notation),
-* events may represent such diverse entities as, for example, SNMP traps, RSS feeds or MIDI messages,
-* supports writing knowledge bases in several scripting languages,
-* no need to learn yet another notation/DSL, however you have to learn at least the basics of the {sponge} API,
-* allows embedding in a custom Java application (using Maven) or could be used as a standalone command-line application,
-* supports connecting to many types of external systems by using http://camel.apache.org[Apache Camel] integration,
-* provides own Apache Camel component for including {sponge} engine in a Camel route,
-* provides plugins for integration with Spring, Camel, CPython, MIDI, MPD and Raspberry Pi,
-* supports creation of custom plugins,
-* supports deployment in enterprise environments by integration with Spring framework,
-* provides the standalone command-line application, that, for example, allows management of Camel routes without the need of writing Java code (you may use any of the supported scripting languages or XML),
-* supports reloading of knowledge bases on the fly (i.e. while the system is running),
-* supports processing of streams of {sponge} events by using http://reactivex.io[Reactive Extensions (ReactiveX)],
-* may be used to automate repetitive tasks (programmed in any of the supported scripting languages),
-* allows publishing a custom REST API of your Java application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly,
-* provides a comprehensive documentation and many examples.
+* Provides a concurrent processing of incoming events.
+* Allows generating and scheduling of events (e.g. supports cron notation).
+* Events may represent such diverse entities as, for example, SNMP traps, RSS feeds or MIDI messages.
+* Supports writing knowledge bases in several scripting languages.
+* No need to learn yet another notation/DSL, however you have to learn at least the basics of the {sponge} API.
+* Allows embedding in a custom Java application (using Maven) or could be used as a standalone command-line application.
+* Supports connecting to many types of external systems by using http://camel.apache.org[Apache Camel] integration.
+* Provides own Apache Camel component for including {sponge} engine in a Camel route.
+* Provides plugins for integration with Spring, Camel, CPython, MIDI, MPD and Raspberry Pi.
+* Supports creation of custom plugins.
+* Supports deployment in enterprise environments by integration with Spring framework.
+* Provides the standalone command-line application, that, for example, allows management of Camel routes without the need of writing Java code (you may use any of the supported scripting languages or XML).
+* Supports reloading of knowledge bases on the fly (i.e. while the system is running).
+* Supports processing of streams of {sponge} events by using http://reactivex.io[Reactive Extensions (ReactiveX)].
+* Allows publishing a custom REST API of your Java application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly.
+* Provides integration with TensorFlow, an open source machine learning framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
+* May be used to automate repetitive tasks (programmed in any of the supported scripting languages).
+* Provides a comprehensive documentation and many examples.
 
 == License
 The {sponge} standard libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license]. However some optional {sponge} libraries and the {sponge} standalone command-line application are licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3] because they use optional, third-party libraries that require it.

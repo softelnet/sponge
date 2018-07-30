@@ -23,7 +23,7 @@ class MnistModel:
         self.model = None
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
-        self.model_file = 'mnist_model.h5'
+        self.model_file = 'data/mnist_model.h5'
         self.predictionThreshold = 0.75
 
     def __create_model_and_train(self):
@@ -43,8 +43,6 @@ class MnistModel:
             x_test = x_test.reshape(x_test.shape[0], self.img_rows, self.img_cols, 1)
             input_shape = (self.img_rows, self.img_cols, 1)
 
-        #x_train = x_train[:1000] # Test only
-        #y_train = y_train[:1000] # Test only
         x_train = x_train.astype('float32')
         x_test = x_test.astype('float32')
         x_train /= 255.0

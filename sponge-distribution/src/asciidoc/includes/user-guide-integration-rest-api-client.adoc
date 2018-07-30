@@ -1,0 +1,32 @@
+= {sponge} REST API client
+The {sponge} REST API client simplifies connecting to a remote {sponge} REST API server from applications written in Java.
+
+.REST API client for an anonymous user example
+[source,java]
+----
+SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build()); // <1>
+String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
+----
+<1> Create a new REST API client.
+<2> Call the remote action.
+
+.REST API client for a named user example
+[source,java]
+----
+SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT)
+        .username(username).password(password).build());
+----
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/SpongeRestApiClient.html[`SpongeRestApiClient` Javadoc] and examples in the source code.
+
+== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-rest-api-client</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----

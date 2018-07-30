@@ -89,9 +89,9 @@
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
         <guava.version>25.1-jre</guava.version>
-        <spring.version>5.0.7.RELEASE</spring.version>
-        <spring-integration.version>5.0.6.RELEASE</spring-integration.version>
-        <spring-security.version>5.0.6.RELEASE</spring-security.version>
+        <spring.version>5.0.8.RELEASE</spring.version>
+        <spring-integration.version>5.0.7.RELEASE</spring-integration.version>
+        <spring-security.version>5.0.7.RELEASE</spring-security.version>
         <camel.version>2.22.0</camel.version>
         <awaitility.version>3.1.2</awaitility.version>
         <jline.version>3.9.0</jline.version>
@@ -116,7 +116,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.20.0</mockito.version>
+        <mockito.version>2.20.1</mockito.version>
     </properties>
 
     <prerequisites>

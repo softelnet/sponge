@@ -10,6 +10,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 
 * A new REST API client artifact `sponge-rest-api-client`. The existing REST API server artifact has been renamed to `sponge-rest-api-server`.
 * Optional auth-token based authentication in the REST API.
+* A new artifact for TensorFlow integration `sponge-tensorflow` along with a complete example.
 * Enhancements in Py4J plugin configuration for running external Python scripts as subprocesses.
 * A type for an action argument or result metadata may specify one or more tags.
 * Libraries upgrade.

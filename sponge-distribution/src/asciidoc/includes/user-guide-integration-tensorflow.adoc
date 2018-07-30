@@ -1,0 +1,60 @@
+= TensorFlow
+{sponge} provides integration with https://www.tensorflow.org[TensorFlow]. TensorFlow could be used for machine learning applications such as neural networks. The machine learning is a subset of Artificial Intelligence.
+
+Although there could be many ways of using TensorFlow from Java, this integration uses the https://www.py4j.org[Py4J] library wrapped in the Py4J plugin to communicate between a {sponge} Java process and a Python program running TensorFlow. The TensorFlow Python API has been chosen over the Java API, because, at the time of writing, the TensorFlow APIs in languages other than Python were not covered by the API stability promises. For use cases that require low latency times, the usage of Py4J may be insufficient.
+
+== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-tensorflow</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+== The MNIST REST API service example
+This example shows how to expose the TensorFlow machine learning model trained for the https://en.wikipedia.org/wiki/MNIST_database[MNIST database] as a REST API service to recognize handwritten digits. For the complete source code see {sourcesUrl}/sponge-tensorflow. Please note that the Python language is used both in the {sponge} knowledge base (Jython version 2.7) and in the script running TensorFlow (CPython version 3).
+
+.CPython prerequisites
+[source,bash,subs="verbatim,attributes"]
+----
+# Install TensorFlow by following the guide https://www.tensorflow.org/install/, for example with Virtualenv and Python 3.
+# Only the most important steps are presented hereunder.
+
+virtualenv --system-site-packages -p python3 ~/tensorflow
+cd ~/tensorflow
+source ./bin/activate
+
+# Change directory to the Sponge source code main directory and install Python dependencies.
+(tensorflow)$ pip3 install -r sponge-tensorflow/examples/tensorflow/mnist/requirements.txt
+(tensorflow)$ deactivate
+----
+
+.The main components of the MNIST REST service example
+[cols="1,4"]
+|===
+|File name |Description
+
+|{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/test/java/org/openksavi/sponge/tensorflow/MnistRestServerMain.java[`MnistRestServerMain.java`]
+|The main Java class, that starts up {sponge}.
+
+|{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/test/java/org/openksavi/sponge/tensorflow/MnistService.java[`MnistService.java`]
+|The Java interface of the MNIST Python service. This interface is used by Py4J to expose Python functionality to a Java process.
+
+|{tensorflowSourcesUrl}/mnist/mnist_rest_server.xml[`mnist_rest_server.xml`]
+|The {sponge} configuration file that instructs {sponge} to create the Py4J plugin, execute the Python script file that will load a TensorFlow model and start REST API server.
+
+|{tensorflowSourcesUrl}/mnist/mnist_rest_server.py[`mnist_rest_server.py`]
+|The {sponge} knowledge base file (compatible with Jython) that contains definitions of actions that will be exposed in the {sponge} REST API service. The `MnistPredict` action takes a binary representation of a PNG file and passes it to the running Python script file by invoking `MnistService.predict(byte[] image)` method. This method will be invoked on the remote object running in the Python process.
+
+|{tensorflowSourcesUrl}/mnist/mnist_rest_server.py[`mnist_rest_server.py`]
+|The Python script file (compatible with CPython) that loads the https://en.wikipedia.org/wiki/Convolutional_neural_network[ConvNet] model trained on the MNIST database to recognize handwritten digits. If the model file `data/mnist_model.h5` exists, it will be loaded. Otherwise a new model will be trained and saved. This example uses https://keras.io[Keras] neural networks API that runs on top of TensorFlow. This model is then used by the Python-bases `MnistService` implementation that is exposed by the Python-side Py4J gateway.
+
+|{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/test/java/org/openksavi/sponge/tensorflow/MnistRestClientMain.java[`MnistRestClientMain.java`]
+|The main Java class for the simple client that invokes the remote `MnistPredict` action using the REST API to recognize the sample digit image. It should print the text: `Recognized digit for image file examples/tensorflow/mnist/data/1_0.png is 1.`
+|===
+
+NOTE: The {sponge} REST API configuration used for this example is not secure. In the production environment you should use HTTPS as well as user authentication.

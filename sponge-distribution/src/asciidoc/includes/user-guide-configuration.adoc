@@ -1,0 +1,229 @@
+= Configuration
+{sponge} may be configured:
+
+* in an XML configuration file,
+* using the Engine Builder API.
+
+== XML configuration file
+In a general form an XML configuration file is built as in the following example:
+
+.Example XML configuration file
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <!-- Properties configuration section -->
+    <properties>
+        <property name="sponge.home" system="true">.</property>
+        <property name="server.name">sponge.openksavi.org</property>
+        <property name="filterThreshold" variable="true">10</property>
+    </properties>
+
+    <!-- Engine configuration section -->
+    <engine name="SampleSponge" displayName="Sample Sponge">
+        <description>The sample Sponge engine.</description>
+        <mainProcessingUnitThreadCount>6</mainProcessingUnitThreadCount>
+    </engine>
+
+    <!-- Knowledge bases configuration section -->
+    <knowledgeBases>
+        <knowledgeBase name="pythonKb" displayName="Python-based processors">
+            <description>The Python-based knowledge base.</description>
+            <file>kb_file_1.py</file>
+            <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
+            <file>${sponge.configDir}/kb_file_3.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="kotlinKb" class="org.openksavi.sponge.kotlin.examples.HelloWorld" />
+    </knowledgeBases>
+
+    <!-- Plugins configuration section -->
+    <plugins>
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin" displayName="Connection plugin">
+            <description>The connection plugin provides the connection related code.</description>
+            <configuration>
+                <connection>
+                    <name>Example connection</name>
+                </connection>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+----
+
+The specification of a configuration XML file is provided by the schema file {homepage}/schema/config.xsd[`config.xsd`].
+
+The configuration file is looked up using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration], e.g. first in the file system as a relative or absolute path and then in the classpath. If not found, the configuration file is looked up in the file system relative to the {sponge} home directory.
+
+=== Properties configuration
+The properties configuration section (`properties`) allows setting configuration properties. Configuration properties may be used in other places in the configuration file. Moreover the properties could be used as Java system properties if the attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
+
+Properties could also be used as {sponge} variables in the engine scope. In that case you have to set the attribute `variable` to `true`. The type of such variables is always `String`.
+
+.Predefined properties
+[cols="1,4"]
+|===
+|Property |Description
+
+|`sponge.home`
+|The {sponge} home directory. The {sponge} home directory may also be provided as a Java system property `sponge.home`.
+
+|`sponge.configDir`
+|The configuration file directory. This property is read only. It may be `null` if there is no {sponge} configuration file.
+|===
+
+=== Engine configuration
+The engine configuration section (`<engine>`) contains engine configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
+
+.Engine parameters
+[cols="2,5,1"]
+|===
+|Parameter |Description |Default value
+
+|*`mainProcessingUnitThreadCount`*
+|The number of Main Processing Unit worker threads. You could increase this parameter if your knowledge bases require concurrent processing of many events by triggers, rules or correlators.
+|`10`
+
+|*`asyncEventSetProcessorExecutorThreadCount`*
+|The number of threads used by an event set processor thread pool (executor) for asynchronous processing of events (by rules and correlators). You could increase this parameter if your knowledge bases create many instances of asynchronous rules or correlators. In such case, for better performance, this parameter should be equal to or greater than `mainProcessingUnitThreadCount`.
+|`10`
+
+|*`eventQueueCapacity`*
+|The capacity (i.e. maximum size) of the Input Event Queue. Value `-1` means infinity. You should set `eventQueueCapacity` to a reasonable value taking into account the amount and intensity of events your system needs to process, the typical event size, the number of threads in thread pools, etc. When the system is overloaded with events and this parameter is set to the value other than infinity, every attempt to send a new event will throw `QueueFullException`. However, when the system is overloaded and this parameter is to too high or infinite, you risk `OutOfMemoryError`.
+|`-1`
+
+|`eventClonePolicy`
+|Event clone policy (`shallow` or `deep`).
+|`shallow`
+
+|`autoEnable`
+|Auto-enable script-based processors.
+|`true`
+
+|`durationThreadCount`
+|The number of threads used by the event set processors duration thread pool (executor). The default implementation uses these threads only to send control events. In most cases there should be no need to change this parameter, because sending a new event is relatively fast.
+|`2`
+
+|`eventSetProcessorDefaultSynchronous`
+|The event set processor default synchronous flag. If this parameter is set to `true` then all rules and correlators that have no `synchronous` flag specified in their configuration would be assumed as synchronous. If an event set processor is synchronous it means that an event will be processed sequentially (in one thread) for all instances of this event set processor. If an event set processor is asynchronous then an event will be processed by the instances of this event set processor concurrently (in many threads). The default behavior is asynchronous. In most cases you wouldn't need to change this parameter.
+|`false`
+
+|`executorShutdownTimeout`
+|The thread pool (executor) shutdown timeout (in milliseconds). You could, for example, increase this parameter to guarantee a graceful shutdown if event processors need more time to finish processing when the engine is shutting down. The actual shutting down of the entire engine may take longer than `executorShutdownTimeout` because this parameter is applied separately to several thread pools in the engine.
+|`60000`
+|===
+
+
+=== Knowledge bases configuration
+The knowledge bases configuration section (`<knowledgeBases>`) lists all script knowledge bases that are to be loaded into the engine.
+
+Each `<knowledgeBase>` tag contains:
+
+.Knowledge base configuration
+[cols="1,1,5"]
+|===
+|Tag |Type |Description
+
+|`name`
+|Attribute
+|The name of the knowledge base.
+
+|`displayName`
+|Attribute
+|The display name of the knowledge base.
+
+|`type`
+|Attribute
+|The type of the script knowledge base corresponding to the scripting language. Allowed values: `python`, `ruby`, `groovy`, `javascript`. The type is required only for knowledge bases that specify no files so their type can't be inferred from the file extensions.
+
+|`class`
+|Attribute
+|The class of the non script knowledge base. In that case you don't have to specify a type and you must not specify files. A knowledge base class should define a non-parameterized constructor.
+
+|`description`
+|Element
+|The description of the knowledge base.
+
+|`file`
+|Element
+|The file name of the knowledge base. A single knowledge base may use many files but all of them have to be written in one language.
+|===
+
+The `file` element may have the following optional attributes.
+
+* `charset` - sets the file encoding.
+* `required` - if set to `false`, the non existing files are ignored. The default value is `true` so when the file doesn't exist, the exception is thrown.
+
+=== Plugins configuration
+The plugins configuration section (`<plugins>`) contains plugin definitions (`<plugin>`) built as follows:
+
+.Plugin configuration attributes
+[cols="1,1,5"]
+|===
+|Tag |Type |Description
+
+|`name`
+|Attribute
+|The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used as a variable name in order to access a given plugin in the knowledge base.
+
+|`displayName`
+|Attribute
+|The plugin display name.
+
+|`class`
+|Attribute
+|The name of the plugin class (Java class or a class defined in the scripting language in the script knowledge base (mandatory).
+
+|`knowledgeBaseName`
+|Attribute
+|The name of the knowledge base containing the class of the plugin (optional). If not set then the default Java-based knowledge base is used.
+
+|`description`
+|Element
+|The plugin description.
+
+|`configuration`
+|Element
+|The specific configuration of the plugin.
+|===
+
+You may provide a custom plugin configuration section inside a `<configuration>` element. The contents of this plugin configuration depend on the given plugin implementation. Usually it would be a hierarchy of plugin specific sub tags.
+
+[[engine-builder-api]]
+== Engine Builder API
+The Engine Builder API is provided by `DefaultSpongeEngine.builder()` static method that returns the `EngineBuilder` instance. This API follows a builder design pattern.
+
+.Example configuration using the Engine Builder API
+[source,java]
+----
+EchoPlugin plugin = new EchoPlugin();
+plugin.setName("testPlugin");
+plugin.setEcho("Echo text!");
+
+SpongeEngine engine = DefaultSpongeEngine.builder()
+        .systemProperty("sponge.home", "..")
+        .property("test.property", "TEST")
+        .plugin(plugin)
+        .knowledgeBase("helloWorldKb", "examples/script/py/hello_world.py")
+        .knowledgeBase(new TestKnowledgeBase())
+        .build();
+
+engine.getConfigurationManager().setMainProcessingUnitThreadCount(25);
+engine.getConfigurationManager().setEventClonePolicy(EventClonePolicy.DEEP);
+
+engine.startup();
+----
+
+The Engine Builder API provides the method `config()` to read an XML configuration file as well.
+
+.Example of using the XML configuration file in the Engine Builder API
+[source,java]
+----
+SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/engine_parameters.xml").build();
+engine.startup();
+----
+
+The Engine Builder API preserves the load order of knowledge bases, including knowledge bases specified in the configuration file.
+
+You may set engine parameters via `ConfigurationManager` but only after invoking `build()` and before starting up the engine.

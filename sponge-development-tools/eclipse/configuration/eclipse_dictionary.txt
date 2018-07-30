@@ -65,3 +65,7 @@ localhost
 unmarshal
 auth
 relogin
+keras
+virtualenv
+hereunder
+maven
