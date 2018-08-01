@@ -71,6 +71,6 @@ public class EchoPlugin extends JPlugin {
     }
 
     public void sendEchoEvent() {
-        getEps().event("echoEvent").set("echo", getEcho()).send();
+        getSponge().event("echoEvent").set("echo", getEcho()).send();
     }
 }

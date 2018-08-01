@@ -6,17 +6,17 @@
 import java.util.concurrent.atomic.AtomicInteger
 
 fun onInit() {
-    EPS.setVariable("eventCounter", AtomicInteger(0))
-    EPS.setVariable("allowNumber", 2)
+    sponge.setVariable("eventCounter", AtomicInteger(0))
+    sponge.setVariable("allowNumber", 2)
 }
 
 class Trigger1 : Trigger() {
     override fun onConfigure() = setEvent("e1")
     override fun onRun(event: Event) {
-        var eventCounter: AtomicInteger = eps.getVariable("eventCounter")
+        var eventCounter: AtomicInteger = sponge.getVariable("eventCounter")
         eventCounter.incrementAndGet()
         logger.debug("Received event {}, counter: {}", event.name, eventCounter)
-        if (eventCounter.get() > eps.getVariable<Int>("allowNumber")) {
+        if (eventCounter.get() > sponge.getVariable<Int>("allowNumber")) {
             logger.debug("This line should not be displayed!")
         }
     }
@@ -26,13 +26,13 @@ class Trigger2 : Trigger() {
     override fun onConfigure() = setEvent("e2")
     override fun onRun(event: Event) {
         logger.debug("Removing entry")
-        eps.removeEvent(eps.getVariable("eventEntry"))
+        sponge.removeEvent(sponge.getVariable("eventEntry"))
     }
 }
 
 fun onStartup() {
     val start = 500L
     val interval = 1000L
-    EPS.setVariable("eventEntry", EPS.event("e1").sendAfter(start, interval))
-    EPS.event("e2").sendAfter(interval * EPS.getVariable<Int>("allowNumber"))
+    sponge.setVariable("eventEntry", sponge.event("e1").sendAfter(start, interval))
+    sponge.event("e2").sendAfter(interval * sponge.getVariable<Int>("allowNumber"))
 }

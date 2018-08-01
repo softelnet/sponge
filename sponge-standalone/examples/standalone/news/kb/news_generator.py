@@ -4,7 +4,7 @@ Sponge Knowledge base
 
 # Utility function.
 def sendNewsEvent(source, title, delay):
-    EPS.event("news").set("source", source).set("title", title).sendAfter(delay)
+    sponge.event("news").set("source", source).set("title", title).sendAfter(delay)
 
 # Send sample events carrying news on startup.
 def onStartup():

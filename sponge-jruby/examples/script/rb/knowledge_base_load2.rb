@@ -24,8 +24,8 @@ class Trigger2 < Trigger
 end
 
 # Execute immediately while loading
-$EPS.enableAll(Trigger1, Trigger2)
+$sponge.enableAll(Trigger1, Trigger2)
 
 def onShutdown
-    $EPS.logger.debug("onShutdown, file2")
+    $sponge.logger.debug("onShutdown, file2")
 end

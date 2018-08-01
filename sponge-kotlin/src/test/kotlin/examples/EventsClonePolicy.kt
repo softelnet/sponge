@@ -19,14 +19,14 @@ class EventsClonePolicy : KKnowledgeBase() {
         events.put("defaultClonePolicy", ArrayList())
         events.put("deepClonePolicy", ArrayList())
         events.put("shallowClonePolicy", ArrayList())
-        eps.setVariable("events", events)
+        sponge.setVariable("events", events)
     }
 
     class ClonePolicyTrigger : KTrigger() {
         override fun onConfigure() = setEvents("defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy")
 
         override fun onRun(event: Event) {
-            var events: Map<String, MutableList<Event>> = eps.getVariable("events")
+            var events: Map<String, MutableList<Event>> = sponge.getVariable("events")
 
             events.get(event.name)!!.add(event)
             logger.debug("Processing event: {}", event.name)
@@ -46,8 +46,8 @@ class EventsClonePolicy : KKnowledgeBase() {
             event.set("integer", Integer(10))
         }
 
-        eps.event("defaultClonePolicy").modify(::setEventAttributes).sendAfter(100, 1000)
-        eps.event("deepClonePolicy", EventClonePolicy.DEEP).modify(::setEventAttributes).sendAfter(200, 1000)
-        eps.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(::setEventAttributes).sendAfter(400, 1000)
+        sponge.event("defaultClonePolicy").modify(::setEventAttributes).sendAfter(100, 1000)
+        sponge.event("deepClonePolicy", EventClonePolicy.DEEP).modify(::setEventAttributes).sendAfter(200, 1000)
+        sponge.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(::setEventAttributes).sendAfter(400, 1000)
     }
 }

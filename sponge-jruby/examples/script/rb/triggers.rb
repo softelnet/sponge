@@ -7,9 +7,9 @@ java_import org.openksavi.sponge.examples.SampleJavaTrigger
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("receivedEventA", AtomicBoolean.new(false))
-    $EPS.setVariable("receivedEventBCount", AtomicInteger.new(0))
-    $EPS.setVariable("receivedEventTestJavaCount", AtomicInteger.new(0))
+    $sponge.setVariable("receivedEventA", AtomicBoolean.new(false))
+    $sponge.setVariable("receivedEventBCount", AtomicInteger.new(0))
+    $sponge.setVariable("receivedEventTestJavaCount", AtomicInteger.new(0))
 end
 
 class TriggerA < Trigger
@@ -18,7 +18,7 @@ class TriggerA < Trigger
     end
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)
-        $EPS.getVariable("receivedEventA").set(true)
+        $sponge.getVariable("receivedEventA").set(true)
     end
 end
 
@@ -28,25 +28,25 @@ class TriggerB < Trigger
     end
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)
-        if $EPS.getVariable("receivedEventBCount").get() == 0
-            self.logger.debug("Statistics: {}", $EPS.statisticsSummary)
+        if $sponge.getVariable("receivedEventBCount").get() == 0
+            self.logger.debug("Statistics: {}", $sponge.statisticsSummary)
         end
-        $EPS.getVariable("receivedEventBCount").incrementAndGet
+        $sponge.getVariable("receivedEventBCount").incrementAndGet
     end
 end
 
 def onLoad
-    $EPS.enableJava(SampleJavaTrigger)
+    $sponge.enableJava(SampleJavaTrigger)
 end
 
 def onStartup
-    $EPS.logger.debug("Startup {}, triggers: {}", $EPS.info, $EPS.engine.triggers)
-    $EPS.logger.debug("Knowledge base name: {}", $EPS.kb.name)
-    $EPS.event("a").send()
-    $EPS.event("b").sendAfter(200, 200)
-    $EPS.event("testJava").send()
+    $sponge.logger.debug("Startup {}, triggers: {}", $sponge.info, $sponge.engine.triggers)
+    $sponge.logger.debug("Knowledge base name: {}", $sponge.kb.name)
+    $sponge.event("a").send()
+    $sponge.event("b").sendAfter(200, 200)
+    $sponge.event("testJava").send()
 end
 
 def onShutdown
-    $EPS.logger.debug("Shutting down")
+    $sponge.logger.debug("Shutting down")
 end

@@ -5,7 +5,7 @@ java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
     $hearbeatEventEntry = nil
-    $EPS.setVariable("soundTheAlarm", AtomicBoolean.new(false))
+    $sponge.setVariable("soundTheAlarm", AtomicBoolean.new(false))
 end
 
 class HeartbeatFilter < Filter
@@ -18,7 +18,7 @@ class HeartbeatFilter < Filter
     def onAccept(event)
         @heartbeatCounter += 1
         if @heartbeatCounter > 2
-            $EPS.removeEvent($hearbeatEventEntry)
+            $sponge.removeEvent($hearbeatEventEntry)
             return false
         else
             return true
@@ -36,7 +36,7 @@ class HeartbeatRule < Rule
         self.duration = Duration.ofSeconds(2)
     end
     def onRun(event)
-        $EPS.event("alarm").set("severity", 1).send()
+        $sponge.event("alarm").set("severity", 1).send()
     end
 end
 
@@ -46,11 +46,11 @@ class AlarmTrigger < Trigger
     end
     def onRun(event)
         puts "Sound the alarm!"
-        $EPS.getVariable("soundTheAlarm").set(true)
+        $sponge.getVariable("soundTheAlarm").set(true)
     end
 end
 
 def onStartup
-    $hearbeatEventEntry = $EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000)
+    $hearbeatEventEntry = $sponge.event("heartbeat").set("source", "Host1").sendAfter(100, 1000)
 end
 

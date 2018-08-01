@@ -1,5 +1,5 @@
 = Actions
-Actions provide functionality similar to functions. They may be used in many knowledge bases that are written in different languages.
+Actions provide functionality similar to synchronous functions. They may be used in many knowledge bases that are written in different languages.
 
 The alias for the base class for script-based actions is `Action`. The base class for Java-based actions is `JAction`.
 
@@ -12,7 +12,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Property / Method |Description
 
 |`Object onCall (_dynamic arguments_)`
-|The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `EPS.call()`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. This method is mandatory. Every action should implement at least one `onCall` method.
+|The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `sponge.call()`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. This method is mandatory. Every action should implement at least one `onCall` method.
 |===
 
 The `onConfigure` method in actions is not mandatory.
@@ -28,7 +28,7 @@ class EchoAction(Action): # <1>
         return text
 
 def onStartup():
-    result = EPS.call("EchoAction", "test") # <3>
+    result = sponge.call("EchoAction", "test") # <3>
     logger.debug("Action returned: {}", result)
 ----
 <1> The definition of the action `EchoAction`. The action is represented by the class of the same name.
@@ -60,7 +60,7 @@ public class JavaEchoAction extends JAction { // <1>
 .Java action manual registration in the Python knowledge base
 [source,python]
 ----
-EPS.enableJava(JavaEchoAction)
+sponge.enableJava(JavaEchoAction)
 ----
 
 == Argument and result metadata

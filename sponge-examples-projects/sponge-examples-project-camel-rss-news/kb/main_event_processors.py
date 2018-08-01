@@ -12,7 +12,7 @@ class NewsFilter(Filter):
     def onAccept(self, event):
         title = event.get("title")
         words = len(re.findall("\w+", title))
-        return title is not None and words >= int(EPS.getVariable("newsFilterWordThreshold"))
+        return title is not None and words >= int(sponge.getVariable("newsFilterWordThreshold"))
 
 # Log every news.
 class LogNewsTrigger(Trigger):
@@ -27,7 +27,7 @@ class NoNewNewsAlarmRule(Rule):
         self.events = ["news n1", "news n2 :none"]
         self.duration = Duration.ofSeconds(3)
     def onRun(self, event):
-        EPS.event("alarm").set("severity", 1).set("message", "No new news for " + str(self.duration.seconds) + "s.").send()
+        sponge.event("alarm").set("severity", 1).set("message", "No new news for " + str(self.duration.seconds) + "s.").send()
 
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
@@ -36,8 +36,8 @@ class AlarmTrigger(Trigger):
     def onRun(self, event):
         self.logger.info("Sound the alarm! {}", event.get("message"))
         self.logger.info("Last news was (repeat {} time(s)):\n{}", echoPlugin.count,
-                         EPS.call("EmphasizeAction", echoPlugin.echo(storagePlugin.storedValue[-1])))
-        EPS.getVariable("alarmSounded").set(True)
+                         sponge.call("EmphasizeAction", echoPlugin.echo(storagePlugin.storedValue[-1])))
+        sponge.getVariable("alarmSounded").set(True)
 
 # Start only one instance of this correlator for the system. Note that in this example data is stored in a plugin,
 # not in this correlator.
@@ -46,7 +46,7 @@ class LatestNewsCorrelator(Correlator):
         self.events = ["news"]
         self.maxInstances = 1
     def onInit(self):
-        storagePlugin.storedValue = collections.deque(maxlen=int(EPS.getVariable("latestNewsMaxSize", 2)))
+        storagePlugin.storedValue = collections.deque(maxlen=int(sponge.getVariable("latestNewsMaxSize", 2)))
     def onEvent(self, event):
         storagePlugin.storedValue.append(event.get("title"))
         self.logger.debug("{} - latest news: {}", self.hashCode(), str(storagePlugin.storedValue))

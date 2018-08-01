@@ -22,7 +22,7 @@ class RulesEvents : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("correlationEventsLog", correlationEventsLog)
+        sponge.setVariable("correlationEventsLog", correlationEventsLog)
     }
 
     // Naming F(irst), L(ast), A(ll), N(one)
@@ -30,7 +30,7 @@ class RulesEvents : KKnowledgeBase() {
     class RuleF : KRule() {
         override fun onConfigure() = setEvents("e1")
         override fun onRun(event: Event?) {
-            //eps.getVariable<CorrelationEventsLog>("correlationEventsLog").addEvents(name, this)
+            //sponge.getVariable<CorrelationEventsLog>("correlationEventsLog").addEvents(name, this)
             correlationEventsLog.addEvents(name, this)
         }
     }
@@ -135,17 +135,17 @@ class RulesEvents : KKnowledgeBase() {
     }
 
     override fun onStartup() {
-        eps.event("e1").set("label", "0").sendAfter(0, 200)  // Not used in assertions, "background noise" events.
-        eps.event("e1").set("label", "-1").sendAfter(0, 200)
-        eps.event("e1").set("label", "-2").sendAfter(0, 200)
-        eps.event("e1").set("label", "-3").sendAfter(0, 200)
+        sponge.event("e1").set("label", "0").sendAfter(0, 200)  // Not used in assertions, "background noise" events.
+        sponge.event("e1").set("label", "-1").sendAfter(0, 200)
+        sponge.event("e1").set("label", "-2").sendAfter(0, 200)
+        sponge.event("e1").set("label", "-3").sendAfter(0, 200)
 
-        eps.event("e1").set("label", "1").send()
-        eps.event("e2").set("label", "2").send()
-        eps.event("e2").set("label", "3").send()
-        eps.event("e2").set("label", "4").send()
-        eps.event("e3").set("label", "5").send()
-        eps.event("e3").set("label", "6").send()
-        eps.event("e3").set("label", "7").send()
+        sponge.event("e1").set("label", "1").send()
+        sponge.event("e2").set("label", "2").send()
+        sponge.event("e2").set("label", "3").send()
+        sponge.event("e2").set("label", "4").send()
+        sponge.event("e3").set("label", "5").send()
+        sponge.event("e3").set("label", "6").send()
+        sponge.event("e3").set("label", "7").send()
     }
 }

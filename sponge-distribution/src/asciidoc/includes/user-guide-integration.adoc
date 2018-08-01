@@ -335,7 +335,7 @@ class CamelTrigger(Trigger):
     def onRun(self, event):
         camel.send(event.get("message"))
 
-    EPS.event("spongeEvent").set("message", "Send me to Camel")
+    sponge.event("spongeEvent").set("message", "Send me to Camel")
 ----
 
 The variable `camel` is a reference to the instance of `CamelPlugin` that is associated with the Camel context.
@@ -364,7 +364,7 @@ class PythonRoute(ScriptRouteBuilder):
     def configure(self):
         self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
                 .transform().simple("${body}") \
-                .process(lambda exchange: EPS.getVariable("receivedRssCount").incrementAndGet()) \
+                .process(lambda exchange: sponge.getVariable("receivedRssCount").incrementAndGet()) \
                 .to("stream:out")
 
 def onStartup():
@@ -557,14 +557,14 @@ from py4j.java_gateway import JavaGateway
 
 gateway = JavaGateway()
 
-# EPS in other process accessed via Py4J
-EPS = gateway.entry_point
+# The Sponge in other process accessed via Py4J
+sponge = gateway.entry_point
 
-print "Connected to {}".format(EPS.getInfo())
-EPS.event("helloEvent").set("say", "Hello from Python's Py4J").send()
+print "Connected to {}".format(sponge.getInfo())
+sponge.event("helloEvent").set("say", "Hello from Python's Py4J").send()
 ----
 
-Note that a simplified bean property access is not supported here. So instead of `EPS.info` you have to invoke `EPS.getInfo()`.
+Note that a simplified bean property access is not supported here. So instead of `sponge.info` you have to invoke `sponge.getInfo()`.
 
 ==== ClientServerPy4JPlugin
 
@@ -676,15 +676,15 @@ import time
 from io.reactivex.schedulers import Schedulers
 
 def onStartup():
-    EPS.event("e1").set("payload", 1).send()
-    EPS.event("e2").set("payload", 2).sendAfter(500)
-    EPS.event("e3").set("payload", 3).sendAfter(1000)
+    sponge.event("e1").set("payload", 1).send()
+    sponge.event("e2").set("payload", 2).sendAfter(500)
+    sponge.event("e3").set("payload", 3).sendAfter(1000)
 
-    rx.observable.subscribe(lambda event: EPS.logger.info("{}", event.name))
+    rx.observable.subscribe(lambda event: sponge.logger.info("{}", event.name))
 
     def observer(event):
         time.sleep(1)
-        EPS.logger.info("After sleep: {}", event.name)
+        sponge.logger.info("After sleep: {}", event.name)
     rx.observable.observeOn(Schedulers.io()).subscribe(observer)
 ----
 
@@ -768,10 +768,10 @@ class Log(Trigger):
                          event.messageString) # <3>
 
 def onStartup():
-    EPS.logger.info("This example program enables a user to play an input MIDI device (e.g. a MIDI keyboard) using the Sponge MIDI plugin.")
+    sponge.logger.info("This example program enables a user to play an input MIDI device (e.g. a MIDI keyboard) using the Sponge MIDI plugin.")
     midi.connectDefaultInputDevice() # <4>
-    EPS.logger.info("Input MIDI device: {}", midi.inputDevice.deviceInfo.name)
-    EPS.logger.info("Instruments: {}", ",".join(list(map(lambda i: i.name + " (" + str(i.patch.bank) + "/" + str(i.patch.program) + ")", midi.instruments))))
+    sponge.logger.info("Input MIDI device: {}", midi.inputDevice.deviceInfo.name)
+    sponge.logger.info("Instruments: {}", ",".join(list(map(lambda i: i.name + " (" + str(i.patch.bank) + "/" + str(i.patch.program) + ")", midi.instruments))))
     midi.setInstrument(0, "Electric Piano 1") # <5>
 ----
 <1> The trigger `SameSound` listens to all MIDI short messages.
@@ -871,16 +871,16 @@ def setAndPlayPlaylist(albums):
 
 def onStartup():
     albums = mpd.server.musicDatabase.albumDatabase.listAllAlbums()
-    EPS.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
+    sponge.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
 
-    EPS.logger.info("Setting the playlist...")
+    sponge.logger.info("Setting the playlist...")
     # Set the playlist to rock albums released since 1970 
     selectedAlbums = selectAlbums(albums, 1970, 2018, ".*(Rock).*")
     if len(selectedAlbums) > 0:
         setAndPlayPlaylist(selectedAlbums)
-        EPS.logger.info("The playlist is set, {} albums found", len(selectedAlbums))
+        sponge.logger.info("The playlist is set, {} albums found", len(selectedAlbums))
     else:
-        EPS.logger.info("No matching albums found")
+        sponge.logger.info("No matching albums found")
 ----
 <1> The `mpd.server` is a reference to the instance of the `MPD` class (part of JavaMPD library) which represents a connection to a MPD server.
 
@@ -923,7 +923,7 @@ class LedBlink(Trigger):
 def onStartup():
     global led
     led = pi.gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "led", PinState.LOW)
-    EPS.event("blink").sendAfter(0, 1000)
+    sponge.event("blink").sendAfter(0, 1000)
 
 def onShutdown():
     off()
@@ -993,7 +993,7 @@ class LedBlink(Trigger):
 def onStartup():
     global led
     led = grovepi.device.getDigitalOut(4)
-    EPS.event("blink").sendAfter(0, 1000)
+    sponge.event("blink").sendAfter(0, 1000)
 ----
 
 .Example XML configuration

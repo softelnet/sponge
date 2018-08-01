@@ -48,7 +48,7 @@ public class SameSourceJavaRule extends JRule {
     @Override
     public void onRun(Event event) {
         logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"), getEventAliasMap());
-        getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
+        getSponge().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
     }
 
     public boolean severityCondition(Event event) {

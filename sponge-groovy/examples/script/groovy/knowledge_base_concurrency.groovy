@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.*
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("value", new AtomicReference(""))
+    sponge.setVariable("value", new AtomicReference(""))
 }
 
 class A extends Trigger {
@@ -17,9 +17,9 @@ class A extends Trigger {
     }
     void onRun(Event event) {
         TimeUnit.SECONDS.sleep(1)
-        EPS.getVariable("value").set("A1")
+        sponge.getVariable("value").set("A1")
         TimeUnit.SECONDS.sleep(3)
-        EPS.getVariable("value").set("A2")
+        sponge.getVariable("value").set("A2")
     }
 }
 
@@ -29,9 +29,9 @@ class B extends Trigger {
     }
     void onRun(Event event) {
         TimeUnit.SECONDS.sleep(2)
-        EPS.getVariable("value").set("B1")
+        sponge.getVariable("value").set("B1")
         TimeUnit.SECONDS.sleep(4)
-        EPS.getVariable("value").set("B2")
+        sponge.getVariable("value").set("B2")
     }
 }
 
@@ -41,15 +41,15 @@ class C extends Trigger {
     }
     void onRun(Event event) {
         TimeUnit.SECONDS.sleep(8)
-        EPS.getVariable("value").set("C1")
+        sponge.getVariable("value").set("C1")
         TimeUnit.SECONDS.sleep(1)
-        EPS.getVariable("value").set("C2")
+        sponge.getVariable("value").set("C2")
     }
 }
 
 void onStartup() {
-    EPS.event("a").send()
-    EPS.event("b").send()
-    EPS.event("c").send()
+    sponge.event("a").send()
+    sponge.event("b").send()
+    sponge.event("c").send()
 }
 

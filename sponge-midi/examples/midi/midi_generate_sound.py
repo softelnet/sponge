@@ -23,13 +23,13 @@ class Stop(Trigger):
     def onConfigure(self):
         self.event = "exit"
     def onRun(self, event):
-        EPS.requestShutdown()
+        sponge.requestShutdown()
 
 def onStartup():
-    EPS.logger.info("This example program generates simple MIDI sounds using the Sponge MIDI plugin.")
+    sponge.logger.info("This example program generates simple MIDI sounds using the Sponge MIDI plugin.")
     midi.setInstrument(0, "Violin")
     max = 10
     for i in range(max):
-        EPS.event(midi.createShortMessageEvent(midi.createShortMessage(ShortMessage.NOTE_ON, 0, 60 + i, 80))).sendAfter(Duration.ofSeconds(i))
-        EPS.event(midi.createShortMessageEvent(midi.createShortMessage(ShortMessage.NOTE_OFF, 0, 60 + i, 80))).sendAfter(Duration.ofSeconds(i+1))
-    EPS.event("exit").sendAfter(Duration.ofSeconds(max + 1))
+        sponge.event(midi.createShortMessageEvent(midi.createShortMessage(ShortMessage.NOTE_ON, 0, 60 + i, 80))).sendAfter(Duration.ofSeconds(i))
+        sponge.event(midi.createShortMessageEvent(midi.createShortMessage(ShortMessage.NOTE_OFF, 0, 60 + i, 80))).sendAfter(Duration.ofSeconds(i+1))
+    sponge.event("exit").sendAfter(Duration.ofSeconds(max + 1))

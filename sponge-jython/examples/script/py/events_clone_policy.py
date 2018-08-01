@@ -13,7 +13,7 @@ def onInit():
     events.put("defaultClonePolicy", ArrayList())
     events.put("deepClonePolicy", ArrayList())
     events.put("shallowClonePolicy", ArrayList())
-    EPS.setVariable("events", events)
+    sponge.setVariable("events", events)
 
 class ClonePolicyTrigger(Trigger):
     def onConfigure(self):
@@ -35,6 +35,6 @@ def onStartup():
         event.set("map", hash)
         event.set("integer", Integer(10))
 
-    EPS.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000)
-    EPS.event("deepClonePolicy", EventClonePolicy.DEEP).modify(setEventAttributes).sendAfter(200, 1000)
-    EPS.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(setEventAttributes).sendAfter(400, 1000)
+    sponge.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000)
+    sponge.event("deepClonePolicy", EventClonePolicy.DEEP).modify(setEventAttributes).sendAfter(200, 1000)
+    sponge.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(setEventAttributes).sendAfter(400, 1000)

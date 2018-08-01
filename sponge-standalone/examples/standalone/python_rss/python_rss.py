@@ -11,7 +11,7 @@ from java.util.concurrent.atomic import AtomicInteger
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("receivedRssCount", AtomicInteger(0))
+    sponge.setVariable("receivedRssCount", AtomicInteger(0))
 
 class RssTrigger(Trigger):
     def onConfigure(self):
@@ -28,7 +28,7 @@ class PythonRoute(ScriptRouteBuilder):
         self.fromS("direct:rss").routeId("rss") \
             .marshal().rss() \
             .idempotentConsumer(self.xpath("/rss/channel/item/title/text()"), MemoryIdempotentRepository.memoryIdempotentRepository()) \
-            .process(lambda exchange: exchange.getIn().setBody(EPS.event("rss") \
+            .process(lambda exchange: exchange.getIn().setBody(sponge.event("rss") \
                 .set("channel", CamelUtils.xpath(exchange, "/rss/channel/title/text()")) \
                 .set("title", CamelUtils.xpath(exchange, "/rss/channel/item/title/text()")) \
                 .set("link", CamelUtils.xpath(exchange, "/rss/channel/item/link/text()")) \
@@ -38,7 +38,7 @@ class PythonRoute(ScriptRouteBuilder):
 
         self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
             .transform().simple("${body}") \
-            .process(lambda exchange: EPS.getVariable("receivedRssCount").incrementAndGet()) \
+            .process(lambda exchange: sponge.getVariable("receivedRssCount").incrementAndGet()) \
             .to("stream:out")
 
 def onStartup():

@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sponge-external</artifactId>
     <name>Sponge - External</name>
-    <description>Event Processing System - External</description>
+    <description>Sponge - External</description>
     <packaging>pom</packaging>
 
     <properties>

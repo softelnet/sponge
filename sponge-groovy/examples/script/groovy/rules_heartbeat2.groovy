@@ -6,7 +6,7 @@
 import java.util.concurrent.atomic.AtomicBoolean
 
 void onInit() {
-    EPS.setVariable("soundTheAlarm", new AtomicBoolean(false))
+    sponge.setVariable("soundTheAlarm", new AtomicBoolean(false))
 }
 
 // Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
@@ -17,11 +17,11 @@ class HeartbeatRule extends Rule {
     }
     void onRun(Event event) {
         this.logger.info("Sound the alarm!")
-        EPS.getVariable("soundTheAlarm").set(true)
+        sponge.getVariable("soundTheAlarm").set(true)
     }
 }
 
 void onStartup() {
-    EPS.event("heartbeat").send()
-    EPS.event("heartbeat").sendAfter(1000)
+    sponge.event("heartbeat").send()
+    sponge.event("heartbeat").sendAfter(1000)
 }

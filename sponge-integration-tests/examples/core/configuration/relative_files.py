@@ -4,4 +4,4 @@ Relative files
 """
 
 def onStartup():
-    EPS.setVariable("loaded", True)
+    sponge.setVariable("loaded", True)

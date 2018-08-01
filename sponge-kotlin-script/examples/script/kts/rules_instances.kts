@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 fun onInit() {
     // Variables for assertions only
-    EPS.setVariable("countA", AtomicInteger(0))
-    EPS.setVariable("countB", AtomicInteger(0))
-    EPS.setVariable("max", 100)
+    sponge.setVariable("countA", AtomicInteger(0))
+    sponge.setVariable("countB", AtomicInteger(0))
+    sponge.setVariable("max", 100)
 }
 
 class RuleA : Rule() {
@@ -18,7 +18,7 @@ class RuleA : Rule() {
     }
 
     override fun onRun(event: Event?) {
-        eps.getVariable<AtomicInteger>("countA").incrementAndGet()
+        sponge.getVariable<AtomicInteger>("countA").incrementAndGet()
     }
 }
 
@@ -28,13 +28,13 @@ class RuleB : Rule() {
     }
 
     override fun onRun(event: Event?) {
-        eps.getVariable<AtomicInteger>("countB").incrementAndGet()
+        sponge.getVariable<AtomicInteger>("countB").incrementAndGet()
     }
 }
 
 fun onStartup() {
-    for (i in 1..EPS.getVariable<Int>("max")) {
-        EPS.event("a").send()
-        EPS.event("b").send()
+    for (i in 1..sponge.getVariable<Int>("max")) {
+        sponge.event("a").send()
+        sponge.event("b").send()
     }
 }

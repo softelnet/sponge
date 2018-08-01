@@ -33,6 +33,6 @@ public class CamelProducerAction extends JAction {
     }
 
     public Object onCall(Exchange exchange) {
-        return getEps().event(CamelUtils.getOrCreateInputEvent(getEps().getEngine(), exchange)).send();
+        return getSponge().event(CamelUtils.getOrCreateInputEvent(getSponge().getEngine(), exchange)).send();
     }
 }

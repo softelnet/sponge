@@ -8,10 +8,10 @@ var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 
 function onInit() {
     //Variables for assertions only
-    EPS.setVariable("receivedEventA1", new AtomicInteger(0));
-    EPS.setVariable("receivedEventA2", new AtomicInteger(0));
-    EPS.setVariable("functionA1", new AtomicInteger(0));
-    EPS.setVariable("functionA2", new AtomicInteger(0));
+    sponge.setVariable("receivedEventA1", new AtomicInteger(0));
+    sponge.setVariable("receivedEventA2", new AtomicInteger(0));
+    sponge.setVariable("functionA1", new AtomicInteger(0));
+    sponge.setVariable("functionA2", new AtomicInteger(0));
 }
 
 var TriggerA = Java.extend(Trigger, {
@@ -19,35 +19,35 @@ var TriggerA = Java.extend(Trigger, {
         self.event = "a";
     },
     onRun: function(self, event) {
-        EPS.getVariable("receivedEventA1").set(1);
+        sponge.getVariable("receivedEventA1").set(1);
     }
 });
 
 // Execute immediately while loading
-EPS.enable(TriggerA);
+sponge.enable(TriggerA);
 
 var TriggerA = Java.extend(Trigger, {
     onConfigure: function(self) {
         self.event = "a";
     },
     onRun: function(self, event) {
-        EPS.getVariable("receivedEventA2").set(2);
+        sponge.getVariable("receivedEventA2").set(2);
     }
 });
 
 // Execute immediately while loading
-EPS.enable(TriggerA);
+sponge.enable(TriggerA);
 
 function onStartup() {
-    EPS.event("a").send();
+    sponge.event("a").send();
     functionA();
 }
 
 function functionA() {
-    EPS.getVariable("functionA1").set(1);
+    sponge.getVariable("functionA1").set(1);
 }
 
 function functionA() {
-    EPS.getVariable("functionA2").set(2);
+    sponge.getVariable("functionA2").set(2);
 }
 

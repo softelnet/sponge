@@ -5,8 +5,8 @@ Defining plugins in knowledge base.
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("valueBefore", None)
-    EPS.setVariable("valueAfter", None)
+    sponge.setVariable("valueBefore", None)
+    sponge.setVariable("valueAfter", None)
 
 # Example plugin defined in the knowledge base.
 class ScriptPlugin(Plugin):
@@ -28,11 +28,11 @@ class PluginTrigger(Trigger):
     def onRun(self, event):
     	valueBefore = scriptPlugin.getStoredValue()
     	self.logger.info("Plugin stored value: {}", valueBefore)
-        EPS.setVariable("valueBefore", valueBefore)
+        sponge.setVariable("valueBefore", valueBefore)
     	scriptPlugin.setStoredValue(event.get("value"))
         valueAfter = scriptPlugin.getStoredValue()
         self.logger.info("New stored value: {}", valueAfter)
-        EPS.setVariable("valueAfter", valueAfter)
+        sponge.setVariable("valueAfter", valueAfter)
 
 def onStartup():
-    EPS.event("e1").set("value", "Value B").send()
+    sponge.event("e1").set("value", "Value B").send()

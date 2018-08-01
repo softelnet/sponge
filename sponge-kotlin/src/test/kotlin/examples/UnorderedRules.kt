@@ -21,9 +21,9 @@ class UnorderedRules : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
-        eps.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
-        eps.setVariable("sameSourceFirstFireCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
+        sponge.setVariable("sameSourceFirstFireCount", AtomicInteger(0))
     }
 
     class FirstRule : KRule() {
@@ -37,8 +37,8 @@ class UnorderedRules : KKnowledgeBase() {
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventSequence)
-            eps.getVariable<AtomicInteger>("sameSourceFirstFireCount").incrementAndGet()
-            eps.event("alarm").set("source", firstEvent.get("source")).send()
+            sponge.getVariable<AtomicInteger>("sameSourceFirstFireCount").incrementAndGet()
+            sponge.event("alarm").set("source", firstEvent.get("source")).send()
         }
     }
 
@@ -54,7 +54,7 @@ class UnorderedRules : KKnowledgeBase() {
         override fun onRun(event: Event?) {
             logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event?.time, event?.get("source"),
                     eventSequence)
-            eps.getVariable<AtomicInteger>("hardwareFailureScriptCount").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("hardwareFailureScriptCount").incrementAndGet()
         }
 
         fun severityCondition(event: Event) = event.get<Int>("severity") > 5
@@ -81,15 +81,15 @@ class UnorderedRules : KKnowledgeBase() {
         override fun onRun(event: Event) = logger.debug("Received alarm from {}", event.get<String>("source"))
     }
 
-    override fun onLoad() = eps.enableJava(SameSourceJavaUnorderedRule::class.java)
+    override fun onLoad() = sponge.enableJava(SameSourceJavaUnorderedRule::class.java)
 
     override fun onStartup() {
-        eps.event("diskFailure").set("severity", 10).set("source", "server1").send()
-        eps.event("diskFailure").set("severity", 10).set("source", "server2").send()
-        eps.event("diskFailure").set("severity", 8).set("source", "server1").send()
-        eps.event("diskFailure").set("severity", 8).set("source", "server1").send()
-        eps.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
-        eps.event("filesystemFailure").set("severity", 6).set("source", "server1").send()
-        eps.event("diskFailure").set("severity", 6).set("source", "server1").send()
+        sponge.event("diskFailure").set("severity", 10).set("source", "server1").send()
+        sponge.event("diskFailure").set("severity", 10).set("source", "server2").send()
+        sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+        sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+        sponge.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+        sponge.event("filesystemFailure").set("severity", 6).set("source", "server1").send()
+        sponge.event("diskFailure").set("severity", 6).set("source", "server1").send()
     }
 }

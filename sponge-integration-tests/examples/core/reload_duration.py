@@ -10,7 +10,7 @@ class ReloadTrigger(Trigger):
         self.event = "reload"
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
-        EPS.requestReload()
+        sponge.requestReload()
 
 class RuleAShouldNoBeRun(Rule):
     def onConfigure(self):
@@ -18,7 +18,7 @@ class RuleAShouldNoBeRun(Rule):
         self.duration = Duration.ofSeconds(3)
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("ruleAFired").set(True)
+        sponge.getVariable("ruleAFired").set(True)
 
 class RuleBShouldNotBeRun(Rule):
     def onConfigure(self):
@@ -26,7 +26,7 @@ class RuleBShouldNotBeRun(Rule):
         self.duration = Duration.ofSeconds(3)
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("ruleBFired").set(True)
+        sponge.getVariable("ruleBFired").set(True)
 
 class RuleCShouldBeRun(Rule):
     def onConfigure(self):
@@ -34,30 +34,30 @@ class RuleCShouldBeRun(Rule):
         self.duration = Duration.ofSeconds(3)
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("ruleCFired").set(True)
+        sponge.getVariable("ruleCFired").set(True)
 
 class EndTestTrigger(Trigger):
     def onConfigure(self):
         self.event = "endTest"
     def onRun(self, event):
-        EPS.getVariable("endTest").set(True)
+        sponge.getVariable("endTest").set(True)
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("ruleAFired", AtomicBoolean(False))
-    EPS.setVariable("ruleBFired", AtomicBoolean(False))
-    EPS.setVariable("ruleCFired", AtomicBoolean(False))
-    EPS.setVariable("endTest", AtomicBoolean(False))
+    sponge.setVariable("ruleAFired", AtomicBoolean(False))
+    sponge.setVariable("ruleBFired", AtomicBoolean(False))
+    sponge.setVariable("ruleCFired", AtomicBoolean(False))
+    sponge.setVariable("endTest", AtomicBoolean(False))
 
 def onStartup():
-    EPS.event("reload").sendAfter(1000)
-    EPS.event("e1").send()
-    EPS.event("e2").send()
-    EPS.event("e3").sendAfter(2000)
-    EPS.event("endTest").sendAfter(5000)
+    sponge.event("reload").sendAfter(1000)
+    sponge.event("e1").send()
+    sponge.event("e2").send()
+    sponge.event("e3").sendAfter(2000)
+    sponge.event("endTest").sendAfter(5000)
 
 def onBeforeReload():
-    EPS.logger.debug("onBeforeReload")
+    sponge.logger.debug("onBeforeReload")
 
 def onAfterReload():
-    EPS.logger.debug("onAfterReload")
+    sponge.logger.debug("onAfterReload")

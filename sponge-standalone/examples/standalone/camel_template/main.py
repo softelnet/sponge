@@ -10,12 +10,12 @@ class AlarmTrigger(Trigger):
         self.event = "alarm"
     def onRun(self, event):
         print(camel.request("direct:template", event.get("message")))
-        EPS.getVariable("alarmSounded").set(True)
+        sponge.getVariable("alarmSounded").set(True)
 
 
 # Set initial values for variables.
 def onInit():
-    EPS.setVariable("alarmSounded", AtomicBoolean(False))
+    sponge.setVariable("alarmSounded", AtomicBoolean(False))
 
 def onStartup():
-    EPS.event("alarm").set("message", "Fire in Building A").send()
+    sponge.event("alarm").set("message", "Fire in Building A").send()

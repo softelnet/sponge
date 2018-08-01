@@ -10,7 +10,7 @@ def onInit
     $eventCounter = Collections.synchronizedMap(HashMap.new)
     $eventCounter.put("blue", AtomicInteger.new(0))
     $eventCounter.put("red", AtomicInteger.new(0))
-    $EPS.setVariable("eventCounter", $eventCounter)
+    $sponge.setVariable("eventCounter", $eventCounter)
 end
 
 class ColorFilter < Filter
@@ -42,8 +42,8 @@ class ColorTrigger < Trigger
 end
 
 def onStartup
-    $EPS.event("e1").send()
-    $EPS.event("e1").set("color", "red").send()
-    $EPS.event("e1").set("color", "blue").send()
+    $sponge.event("e1").send()
+    $sponge.event("e1").set("color", "red").send()
+    $sponge.event("e1").set("color", "blue").send()
 end
 

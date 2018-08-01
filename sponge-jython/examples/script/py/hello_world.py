@@ -10,4 +10,4 @@ class HelloWorldTrigger(Trigger):
         print event.get("say")
 
 def onStartup():
-    EPS.event("helloEvent").set("say", "Hello World!").send()
+    sponge.event("helloEvent").set("say", "Hello World!").send()

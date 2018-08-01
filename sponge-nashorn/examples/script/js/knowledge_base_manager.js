@@ -8,21 +8,21 @@ var AtomicBoolean = java.util.concurrent.atomic.AtomicBoolean;
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("verifyTriggerEnabled", new AtomicBoolean(false));
-    EPS.setVariable("verifyTriggerDisabled", new AtomicBoolean(false));
-    EPS.setVariable("verificationDone", new AtomicBoolean(false));
+    sponge.setVariable("verifyTriggerEnabled", new AtomicBoolean(false));
+    sponge.setVariable("verifyTriggerDisabled", new AtomicBoolean(false));
+    sponge.setVariable("verificationDone", new AtomicBoolean(false));
 }
 
 function verifyManager() {
-    var triggerCount = EPS.engine.triggers.size();
-    EPS.enable(TriggerA);
-    EPS.enable(TriggerA);
-    EPS.getVariable("verifyTriggerEnabled").set(EPS.engine.triggers.size() == triggerCount + 1);
-    triggerCount = EPS.engine.triggers.size();
-    EPS.disable(TriggerA);
-    EPS.disable(TriggerA);
-    EPS.getVariable("verifyTriggerDisabled").set(EPS.engine.triggers.size() == triggerCount - 1);
-    EPS.getVariable("verificationDone").set(true);
+    var triggerCount = sponge.engine.triggers.size();
+    sponge.enable(TriggerA);
+    sponge.enable(TriggerA);
+    sponge.getVariable("verifyTriggerEnabled").set(sponge.engine.triggers.size() == triggerCount + 1);
+    triggerCount = sponge.engine.triggers.size();
+    sponge.disable(TriggerA);
+    sponge.disable(TriggerA);
+    sponge.getVariable("verifyTriggerDisabled").set(sponge.engine.triggers.size() == triggerCount - 1);
+    sponge.getVariable("verificationDone").set(true);
 }
 
 var VerifyTrigger = Java.extend(Trigger, {
@@ -44,9 +44,9 @@ var TriggerA = Java.extend(Trigger, {
 });
 
 function onLoad() {
-    EPS.enable(VerifyTrigger);
+    sponge.enable(VerifyTrigger);
 }
 
 function onStartup() {
-    EPS.event("verify").send();
+    sponge.event("verify").send();
 }

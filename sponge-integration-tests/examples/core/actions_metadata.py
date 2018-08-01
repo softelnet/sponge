@@ -7,8 +7,8 @@ from org.openksavi.sponge.examples import PowerEchoMetadataAction
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("scriptActionResult", None)
-    EPS.setVariable("javaActionResult", None)
+    sponge.setVariable("scriptActionResult", None)
+    sponge.setVariable("javaActionResult", None)
 
 class UpperEchoAction(Action):
     def onConfigure(self):
@@ -21,16 +21,16 @@ class UpperEchoAction(Action):
     	return str(text).upper()
 
 def onLoad():
-    EPS.enableJava(PowerEchoMetadataAction)
+    sponge.enableJava(PowerEchoMetadataAction)
 
 def onStartup():
-    EPS.logger.debug("Calling script defined action")
-    scriptActionResult = EPS.call("UpperEchoAction", "test")
-    EPS.logger.debug("Action returned: {}", scriptActionResult)
-    EPS.setVariable("scriptActionResult", scriptActionResult)
+    sponge.logger.debug("Calling script defined action")
+    scriptActionResult = sponge.call("UpperEchoAction", "test")
+    sponge.logger.debug("Action returned: {}", scriptActionResult)
+    sponge.setVariable("scriptActionResult", scriptActionResult)
 
-    EPS.logger.debug("Calling Java defined action")
-    javaActionResult = EPS.call("PowerEchoMetadataAction", 1, "test")
-    EPS.logger.debug("Action returned: {}", javaActionResult)
-    EPS.setVariable("javaActionResult", javaActionResult)
+    sponge.logger.debug("Calling Java defined action")
+    javaActionResult = sponge.call("PowerEchoMetadataAction", 1, "test")
+    sponge.logger.debug("Action returned: {}", javaActionResult)
+    sponge.setVariable("javaActionResult", javaActionResult)
 

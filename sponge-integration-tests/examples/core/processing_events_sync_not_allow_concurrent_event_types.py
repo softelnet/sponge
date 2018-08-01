@@ -14,7 +14,7 @@ def onInit():
     running.put("Rule2", AtomicBoolean(False))
     running.put("Rule3", AtomicBoolean(False))
     running.put("Rule4", AtomicBoolean(False))
-    EPS.setVariable("testStatus", None)
+    sponge.setVariable("testStatus", None)
 
 def doWork(rule):
     running.get(rule.name).set(True)
@@ -25,7 +25,7 @@ def doWork(rule):
 
 def assertState(condition, message):
     if not condition:
-        EPS.setVariable("testStatus", message)
+        sponge.setVariable("testStatus", message)
         raise SpongeException(message)
 
 class Rule1(Rule):
@@ -40,7 +40,7 @@ class Rule2(Rule):
     def onRun(self, event):
         assertState(not running.get("Rule1").get(), "Rule1 should be finished by now")
         doWork(self)
-        EPS.setVariable("testStatus", "OK")
+        sponge.setVariable("testStatus", "OK")
 
 class Rule3(Rule):
     def onConfigure(self):
@@ -62,10 +62,10 @@ class Rule4(Rule):
         doWork(self)
 
 def onStartup():
-    EPS.event("e1").sendAfter(1000)
-    EPS.event("e2").sendAfter(2000)
-    EPS.event("e3").sendAfter(3000)
-    EPS.event("e4").sendAfter(4000)
-    EPS.event("e5").sendAfter(5000)
-    EPS.event("e6").sendAfter(6000)
-    EPS.event("e7").sendAfter(7000)
+    sponge.event("e1").sendAfter(1000)
+    sponge.event("e2").sendAfter(2000)
+    sponge.event("e3").sendAfter(3000)
+    sponge.event("e4").sendAfter(4000)
+    sponge.event("e5").sendAfter(5000)
+    sponge.event("e6").sendAfter(6000)
+    sponge.event("e7").sendAfter(7000)

@@ -16,9 +16,9 @@ class KnowledgeBaseManager : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("verifyTriggerEnabled", AtomicBoolean(false))
-        eps.setVariable("verifyTriggerDisabled", AtomicBoolean(false))
-        eps.setVariable("verificationDone", AtomicBoolean(false))
+        sponge.setVariable("verifyTriggerEnabled", AtomicBoolean(false))
+        sponge.setVariable("verifyTriggerDisabled", AtomicBoolean(false))
+        sponge.setVariable("verificationDone", AtomicBoolean(false))
     }
 
     class VerifyTrigger : KTrigger() {
@@ -27,15 +27,15 @@ class KnowledgeBaseManager : KKnowledgeBase() {
         override fun onRun(event: Event) = verifyManager()
 
         fun verifyManager() {
-            var triggerCount = eps.engine.triggers.size
-            eps.enable(TriggerA::class)
-            eps.enable(TriggerA::class)
-            eps.getVariable<AtomicBoolean>("verifyTriggerEnabled").set(eps.engine.triggers.size == triggerCount + 1)
-            triggerCount = eps.engine.triggers.size
-            eps.disable(TriggerA::class)
-            eps.disable(TriggerA::class)
-            eps.getVariable<AtomicBoolean>("verifyTriggerDisabled").set(eps.engine.triggers.size == triggerCount - 1)
-            eps.getVariable<AtomicBoolean>("verificationDone").set(true)
+            var triggerCount = sponge.engine.triggers.size
+            sponge.enable(TriggerA::class)
+            sponge.enable(TriggerA::class)
+            sponge.getVariable<AtomicBoolean>("verifyTriggerEnabled").set(sponge.engine.triggers.size == triggerCount + 1)
+            triggerCount = sponge.engine.triggers.size
+            sponge.disable(TriggerA::class)
+            sponge.disable(TriggerA::class)
+            sponge.getVariable<AtomicBoolean>("verifyTriggerDisabled").set(sponge.engine.triggers.size == triggerCount - 1)
+            sponge.getVariable<AtomicBoolean>("verificationDone").set(true)
         }
     }
 
@@ -46,10 +46,10 @@ class KnowledgeBaseManager : KKnowledgeBase() {
     }
 
     override fun onLoad() {
-        eps.enable(VerifyTrigger::class)
+        sponge.enable(VerifyTrigger::class)
     }
 
     override fun onStartup() {
-        eps.event("verify").send()
+        sponge.event("verify").send()
     }
 }

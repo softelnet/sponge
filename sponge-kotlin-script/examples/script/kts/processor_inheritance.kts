@@ -5,7 +5,7 @@
 
 fun onInit() {
     // Variables for assertions only
-    EPS.setVariable("result", null)
+    sponge.setVariable("result", null)
 }
 
 abstract class AbstractEchoAction : Action() {
@@ -17,7 +17,7 @@ class EchoAction : AbstractEchoAction() {
 }
 
 fun onStartup() {
-    var result = EPS.call("EchoAction")
-    EPS.setVariable("result", result)
-    EPS.logger.debug("Action returned: {}", result)
+    var result = sponge.call("EchoAction")
+    sponge.setVariable("result", result)
+    sponge.logger.debug("Action returned: {}", result)
 }

@@ -12,7 +12,7 @@ class ProcessorInheritance : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("result", null)
+        sponge.setVariable("result", null)
     }
 
     abstract class AbstractEchoAction : KAction() {
@@ -24,8 +24,8 @@ class ProcessorInheritance : KKnowledgeBase() {
     }
 
     override fun onStartup() {
-        var result = eps.call("EchoAction")
-        eps.setVariable("result", result)
+        var result = sponge.call("EchoAction")
+        sponge.setVariable("result", result)
         logger.debug("Action returned: {}", result)
     }
 }

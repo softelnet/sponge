@@ -6,6 +6,6 @@ from java.util.concurrent.atomic import AtomicInteger, AtomicBoolean
 
 # Set initial values for variables.
 def onInit():
-    EPS.setVariable("alarmSounded", AtomicBoolean(False))
-    EPS.setVariable("alarmForwarded", AtomicBoolean(False))
-    EPS.setVariable("sourceRoutesStopped", AtomicBoolean(False))
+    sponge.setVariable("alarmSounded", AtomicBoolean(False))
+    sponge.setVariable("alarmForwarded", AtomicBoolean(False))
+    sponge.setVariable("sourceRoutesStopped", AtomicBoolean(False))

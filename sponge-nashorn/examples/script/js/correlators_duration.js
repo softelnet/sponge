@@ -8,17 +8,17 @@ var AtomicBoolean = java.util.concurrent.atomic.AtomicBoolean;
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("hardwareFailureScriptCount", new AtomicInteger(0));
+    sponge.setVariable("hardwareFailureScriptCount", new AtomicInteger(0));
 }
 
 var SampleCorrelator = Java.extend(Correlator, {
     onConfigure: function(self) {
         self.events = ["filesystemFailure", "diskFailure"];
         self.duration = Duration.ofSeconds(2);
-        EPS.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
+        sponge.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
     },
     onAcceptAsFirst: function(self, event) {
-        return EPS.getVariable("SampleCorrelator_instanceStarted").compareAndSet(false, true);
+        return sponge.getVariable("SampleCorrelator_instanceStarted").compareAndSet(false, true);
     },
     onInit: function(self) {
         self.target = new function() {
@@ -27,7 +27,7 @@ var SampleCorrelator = Java.extend(Correlator, {
     },
     onEvent: function(self, event) {
         self.target.eventLog.push(event);
-        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet();
+        sponge.getVariable("hardwareFailureScriptCount").incrementAndGet();
     },
     onDuration: function(self) {
         self.logger.debug("{} - log: {}", self.hashCode(), self.target.eventLog.toString());
@@ -35,7 +35,7 @@ var SampleCorrelator = Java.extend(Correlator, {
 });
 
 function onStartup() {
-    EPS.event("filesystemFailure").set("source", "server1").send();
-    EPS.event("diskFailure").set("source", "server1").sendAfter(200, 100);
-    EPS.event("diskFailure").set("source", "server2").sendAfter(200, 100);
+    sponge.event("filesystemFailure").set("source", "server1").send();
+    sponge.event("diskFailure").set("source", "server1").sendAfter(200, 100);
+    sponge.event("diskFailure").set("source", "server2").sendAfter(200, 100);
 }

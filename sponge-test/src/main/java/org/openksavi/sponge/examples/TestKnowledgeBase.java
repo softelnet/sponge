@@ -48,7 +48,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
     public void onInit() {
         logger.debug("onInit");
 
-        getEps().setVariable(EventsLog.VARIABLE_NAME, eventsLog);
+        getSponge().setVariable(EventsLog.VARIABLE_NAME, eventsLog);
     }
 
     @Override
@@ -60,13 +60,13 @@ public class TestKnowledgeBase extends JKnowledgeBase {
     public void onStartup() {
         logger.debug("onStartup");
 
-        getEps().event("e1").set("mark", 1).sendAfter(100);
-        getEps().event("e2").set("mark", 2).sendAfter(200);
-        getEps().event("e1").set("mark", 3).sendAfter(300);
-        getEps().event("e2").set("mark", 4).sendAfter(400);
-        getEps().event("e2").set("mark", 5).sendAfter(500);
-        getEps().event("e2").set("mark", 6).sendAfter(600);
-        getEps().event("e3").sendAfter(1000, 100);
+        getSponge().event("e1").set("mark", 1).sendAfter(100);
+        getSponge().event("e2").set("mark", 2).sendAfter(200);
+        getSponge().event("e1").set("mark", 3).sendAfter(300);
+        getSponge().event("e2").set("mark", 4).sendAfter(400);
+        getSponge().event("e2").set("mark", 5).sendAfter(500);
+        getSponge().event("e2").set("mark", 6).sendAfter(600);
+        getSponge().event("e3").sendAfter(1000, 100);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onRun(Event event) {
-            EventsLog.getInstance(getEps()).addEvent("e3", event);
+            EventsLog.getInstance(getSponge()).addEvent("e3", event);
             throw new SpongeException("Should not be fired!");
         }
     }
@@ -119,7 +119,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
         @Override
         public void onRun(Event event) {
             getLogger().debug("Run");
-            EventsLog.getInstance(getEps()).addEvent("e1", event);
+            EventsLog.getInstance(getSponge()).addEvent("e1", event);
         }
     }
 
@@ -139,7 +139,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
         @Override
         public void onRun(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
-            EventsLog.getInstance(getEps()).addEvent("e1e2-last", event);
+            EventsLog.getInstance(getSponge()).addEvent("e1e2-last", event);
         }
     }
 
@@ -154,7 +154,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
         @Override
         public void onRun(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
-            EventsLog.getInstance(getEps()).addEvent("e1e2-first", event);
+            EventsLog.getInstance(getSponge()).addEvent("e1e2-first", event);
         }
     }
 
@@ -169,7 +169,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
         @Override
         public void onRun(Event event) {
             getLogger().debug("{}-RUN: initial event={}; second event={}", hashCode(), getEvent("e1"), event);
-            EventsLog.getInstance(getEps()).addEvent("e1e2-all", event);
+            EventsLog.getInstance(getSponge()).addEvent("e1e2-all", event);
         }
     }
 }

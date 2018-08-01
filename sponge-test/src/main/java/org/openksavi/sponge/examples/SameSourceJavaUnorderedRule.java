@@ -47,7 +47,7 @@ public class SameSourceJavaUnorderedRule extends JRule {
     @Override
     public void onRun(Event event) {
         logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.getTime(), event.get("source"), getEventSequence());
-        getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
+        getSponge().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
     }
 
     public boolean severityCondition(Event event) {

@@ -8,9 +8,9 @@ var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("receivedEventA", new AtomicBoolean(false));
-    EPS.setVariable("receivedEventBCount", new AtomicInteger(0));
-    EPS.setVariable("receivedEventTestJavaCount", new AtomicInteger(0));
+    sponge.setVariable("receivedEventA", new AtomicBoolean(false));
+    sponge.setVariable("receivedEventBCount", new AtomicInteger(0));
+    sponge.setVariable("receivedEventTestJavaCount", new AtomicInteger(0));
 }
 
 var TriggerA = Java.extend(Trigger, {
@@ -19,7 +19,7 @@ var TriggerA = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
-        EPS.getVariable("receivedEventA").set(true);
+        sponge.getVariable("receivedEventA").set(true);
     }
 });
 
@@ -29,25 +29,25 @@ var TriggerB = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
-        if (EPS.getVariable("receivedEventBCount").get() == 0) {
-            self.logger.debug("Statistics: {}", EPS.statisticsSummary);
+        if (sponge.getVariable("receivedEventBCount").get() == 0) {
+            self.logger.debug("Statistics: {}", sponge.statisticsSummary);
         }
-        EPS.getVariable("receivedEventBCount").incrementAndGet();
+        sponge.getVariable("receivedEventBCount").incrementAndGet();
     }
 });
 
 function onLoad() {
-    EPS.enableJava(org.openksavi.sponge.examples.SampleJavaTrigger.class);
+    sponge.enableJava(org.openksavi.sponge.examples.SampleJavaTrigger.class);
 }
 
 function onStartup() {
-    EPS.logger.debug("Startup {}, triggers: {}", EPS.info, EPS.engine.triggers);
-    EPS.logger.debug("Knowledge base name: {}", EPS.kb.name);
-    EPS.event("a").send();
-    EPS.event("b").sendAfter(200, 200);
-    EPS.event("testJava").send();
+    sponge.logger.debug("Startup {}, triggers: {}", sponge.info, sponge.engine.triggers);
+    sponge.logger.debug("Knowledge base name: {}", sponge.kb.name);
+    sponge.event("a").send();
+    sponge.event("b").sendAfter(200, 200);
+    sponge.event("testJava").send();
 }
 
 function onShutdown() {
-    EPS.logger.debug("Shutting down");
+    sponge.logger.debug("Shutting down");
 }

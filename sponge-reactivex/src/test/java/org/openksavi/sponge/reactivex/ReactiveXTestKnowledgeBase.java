@@ -42,19 +42,19 @@ public class ReactiveXTestKnowledgeBase extends JKnowledgeBase {
 
     @Override
     public void onInit() {
-        getEps().setVariable("eventCounter", new AtomicInteger(0));
+        getSponge().setVariable("eventCounter", new AtomicInteger(0));
     }
 
     @Override
     public void onStartup() {
         logger.info("onStartup begin");
-        rx = getEps().getPlugin(ReactiveXPlugin.class);
+        rx = getSponge().getPlugin(ReactiveXPlugin.class);
 
         rx.getObservable().subscribe(event -> logger.info("{}", event.getName()));
         rx.getObservable().observeOn(Schedulers.computation()).subscribe(event -> {
             TimeUnit.SECONDS.sleep(2);
             logger.info("After sleep: {}", event.getName());
-            getEps().getVariable(AtomicInteger.class, "eventCounter").incrementAndGet();
+            getSponge().getVariable(AtomicInteger.class, "eventCounter").incrementAndGet();
         });
 
         logger.info("onStartup end");

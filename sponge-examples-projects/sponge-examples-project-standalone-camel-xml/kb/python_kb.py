@@ -7,8 +7,8 @@ from org.openksavi.sponge.camel import ScriptRouteBuilder
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("sent", False)
-    EPS.setVariable("message", None)
+    sponge.setVariable("sent", False)
+    sponge.setVariable("message", None)
 
 class CamelTrigger(Trigger):
     def onConfigure(self):
@@ -16,15 +16,15 @@ class CamelTrigger(Trigger):
     def onRun(self, event):
         message = spring.context.getBean("spongeEngine").info + ": " + event.get("message")
         camel.send(message)
-        EPS.setVariable("sent", True)
+        sponge.setVariable("sent", True)
 
 class PythonRoute(ScriptRouteBuilder):
     def configure(self):
         self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
                 .transform().simple("Python route - Received message: ${body}") \
-                .process(lambda exchange: EPS.setVariable("message", exchange.getIn().getBody())) \
+                .process(lambda exchange: sponge.setVariable("message", exchange.getIn().getBody())) \
                 .to("stream:out")
 
 def onStartup():
     camel.context.addRoutes(PythonRoute())
-    EPS.event("spongeEvent").set("message", "Send me to Camel").send()
+    sponge.event("spongeEvent").set("message", "Send me to Camel").send()

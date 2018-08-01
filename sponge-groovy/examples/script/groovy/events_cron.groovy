@@ -4,7 +4,7 @@
  */
 
 void onInit() {
-    EPS.setVariable("eventCounter", 0)
+    sponge.setVariable("eventCounter", 0)
 }
 
 class CronTrigger extends Trigger {
@@ -12,18 +12,18 @@ class CronTrigger extends Trigger {
         this.event = "cronEvent"
     }
     void onRun(Event event) {
-        int eventCounter = EPS.getVariable("eventCounter")
+        int eventCounter = sponge.getVariable("eventCounter")
         eventCounter += 1
-        EPS.setVariable("eventCounter", eventCounter)
+        sponge.setVariable("eventCounter", eventCounter)
         this.logger.debug("Received event {}: {}", eventCounter, event.name)
         if (eventCounter == 2) {
             this.logger.debug("removing scheduled event")
-            EPS.removeEvent(EPS.getVariable("scheduleEntry"))
+            sponge.removeEvent(sponge.getVariable("scheduleEntry"))
         }
     }
 }
 
 void onStartup() {
     // send event every 2 seconds
-    EPS.setVariable("scheduleEntry", EPS.event("cronEvent").sendAt("0/2 * * * * ?"))
+    sponge.setVariable("scheduleEntry", sponge.event("cronEvent").sendAt("0/2 * * * * ?"))
 }

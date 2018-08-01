@@ -14,7 +14,7 @@ def onInit
     $eventCounter.put("e1-red", AtomicInteger.new(0))
     $eventCounter.put("e2-blue", AtomicInteger.new(0))
     $eventCounter.put("e2-red", AtomicInteger.new(0))
-    $EPS.setVariable("eventCounter", $eventCounter)
+    $sponge.setVariable("eventCounter", $eventCounter)
 end
 
 class ColorDeduplicationFilter < Filter
@@ -41,14 +41,14 @@ class ColorTrigger < Trigger
 end
 
 def onStartup
-    $EPS.event("e1").set("color", "red").send()
-    $EPS.event("e1").set("color", "blue").send()
-    $EPS.event("e2").set("color", "red").send()
-    $EPS.event("e2").set("color", "blue").send()
+    $sponge.event("e1").set("color", "red").send()
+    $sponge.event("e1").set("color", "blue").send()
+    $sponge.event("e2").set("color", "red").send()
+    $sponge.event("e2").set("color", "blue").send()
 
-    $EPS.event("e1").set("color", "red").send()
-    $EPS.event("e1").set("color", "blue").send()
-    $EPS.event("e2").set("color", "red").send()
-    $EPS.event("e2").set("color", "blue").send()
+    $sponge.event("e1").set("color", "red").send()
+    $sponge.event("e1").set("color", "blue").send()
+    $sponge.event("e2").set("color", "red").send()
+    $sponge.event("e2").set("color", "blue").send()
 end
 

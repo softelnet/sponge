@@ -8,7 +8,7 @@ If you need to generate Fibonacci numbers you should use a simpler method.
 maxIndex = 100
 
 def onInit():
-    EPS.setVariable("f(maxIndex)", None)
+    sponge.setVariable("f(maxIndex)", None)
 
 class FibonacciRule(Rule):
     def onConfigure(self):
@@ -21,9 +21,9 @@ class FibonacciRule(Rule):
         value = f1.get("value") + f2.get("value")
         global maxIndex
         if index <= maxIndex:
-            EPS.event("f").set("index", index).set("value", value).send()
+            sponge.event("f").set("index", index).set("value", value).send()
         if index == maxIndex:
-            EPS.setVariable("f(maxIndex)", value)
+            sponge.setVariable("f(maxIndex)", value)
 
 class LogTrigger(Trigger):
     def onConfigure(self):
@@ -32,5 +32,5 @@ class LogTrigger(Trigger):
         self.logger.debug("f({}) = {}", event.get("index"), event.get("value"))
 
 def onStartup():
-    EPS.event("f").set("index", 0).set("value", 0).send()
-    EPS.event("f").set("index", 1).set("value", 1).send()
+    sponge.event("f").set("index", 0).set("value", 0).send()
+    sponge.event("f").set("index", 1).set("value", 1).send()

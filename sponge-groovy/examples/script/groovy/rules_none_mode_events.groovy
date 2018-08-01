@@ -7,7 +7,7 @@ import org.openksavi.sponge.test.util.CorrelationEventsLog
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("correlationEventsLog", new CorrelationEventsLog())
+    sponge.setVariable("correlationEventsLog", new CorrelationEventsLog())
 }
 
 
@@ -19,7 +19,7 @@ class RuleFNNF extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNNF", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNNF", this)
     }
 }
 
@@ -30,7 +30,7 @@ class RuleFNNNL extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNNNL", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNNNL", this)
     }
 }
 
@@ -41,7 +41,7 @@ class RuleFNNNLReject extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNNNLRejected", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNNNLRejected", this)
     }
 }
 
@@ -52,16 +52,16 @@ class RuleFNFNL extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNFNL", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNFNL", this)
     }
 }
 
 void onStartup() {
-    EPS.event("e1").set("label", "1").send()
-    EPS.event("e2").set("label", "2").send()
-    EPS.event("e2").set("label", "3").send()
-    EPS.event("e2").set("label", "4").send()
-    EPS.event("e3").set("label", "5").send()
-    EPS.event("e3").set("label", "6").send()
-    EPS.event("e3").set("label", "7").send()
+    sponge.event("e1").set("label", "1").send()
+    sponge.event("e2").set("label", "2").send()
+    sponge.event("e2").set("label", "3").send()
+    sponge.event("e2").set("label", "4").send()
+    sponge.event("e3").set("label", "5").send()
+    sponge.event("e3").set("label", "6").send()
+    sponge.event("e3").set("label", "7").send()
 }

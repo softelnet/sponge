@@ -6,14 +6,14 @@ Test - onRun
 from java.util.concurrent.atomic import AtomicBoolean
 
 def onInit():
-    EPS.setVariable("trigger", AtomicBoolean(False))
+    sponge.setVariable("trigger", AtomicBoolean(False))
 
 class AssertTrigger(Trigger):
     def onConfigure(self):
         self.event = "e"
     def onRun(self, event):
-        EPS.getVariable("trigger").set(True)
+        sponge.getVariable("trigger").set(True)
 
 def onStartup():
-    EPS.event("e").send()
+    sponge.event("e").send()
 

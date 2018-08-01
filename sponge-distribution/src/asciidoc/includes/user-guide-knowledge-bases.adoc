@@ -65,15 +65,15 @@ When a knowledge base is reloaded, the callback functions are invoked in the fol
 . `onAfterReload()` executed in the new version of the reloaded knowledge base.
 
 == Global variables
-The following predefined global variables are available in all knowledge bases:
+The following predefined global variables are available in all knowledge bases.
 
 .Global variables
 [cols="1,5"]
 |===
 |Global variable |Description
 
-|`EPS`
-|The facade to the {sponge} engine operations that provides methods to send events, manually enable or disable event processors etc. This variable represents an instance of a Java class implementing `org.openksavi.sponge.kb.KnowledgeBaseEngineOperations`. The name `EPS` stands for Event Processing System or Event Processing Sponge.
+|`sponge`
+|The facade to the {sponge} engine operations that provides methods to send events, manually enable or disable event processors etc. This variable represents an instance of a Java class implementing `org.openksavi.sponge.kb.KnowledgeBaseEngineOperations`.
 |===
 
 For each plugin a global variable will be created. The name of this variable is the plugin name (i.e. the value configured as the plugin `name` attribute in the configuration).
@@ -206,8 +206,8 @@ The engine scope variables could be accessed in any knowledge base.
 .The engine scope variable examples
 [source,python]
 ----
-EPS.setVariable("soundTheAlarm", AtomicBoolean(False))
-EPS.getVariable("soundTheAlarm").set(True)
+sponge.setVariable("soundTheAlarm", AtomicBoolean(False))
+sponge.getVariable("soundTheAlarm").set(True)
 ----
 
 TIP: The engine scope is the same as a {sponge} internal session scope. This is because currently there is only one session per a single {sponge} engine instance.
@@ -222,7 +222,7 @@ hearbeatEventEntry = None
 
 def onStartup():
     global hearbeatEventEntry
-    hearbeatEventEntry = EPS.event("heartbeat").sendAfter(100, 1000)
+    hearbeatEventEntry = sponge.event("heartbeat").sendAfter(100, 1000)
 ----
 
 == Loading knowledge base from an additional file
@@ -230,7 +230,7 @@ def onStartup():
 
 [source,python]
 ----
-EPS.kb.load("triggers.py")
+sponge.kb.load("triggers.py")
 ----
 
 ****
@@ -244,7 +244,7 @@ When variables are used in a knowledge base and you don't want them to be change
 
 When reloading the system, the configuration file is not loaded again. If the changes in this file (e.g. registering a new plugin) are to be visible in the system, the only way is to restart.
 
-When the {sponge} engine is being reloaded, the previously defined processors will not be removed from the registry. When a processor definition has changed in the file being reloaded, it will be auto-enabled (i.e. registered) once more with the new definition. If auto-enable is off, then `EPS.enable` method must be invoked. In that case `EPS.enable` should be placed in the `onLoad()` callback function.
+When the {sponge} engine is being reloaded, the previously defined processors will not be removed from the registry. When a processor definition has changed in the file being reloaded, it will be auto-enabled (i.e. registered) once more with the new definition. If auto-enable is off, then `sponge.enable` method must be invoked. In that case `sponge.enable` should be placed in the `onLoad()` callback function.
 
 If auto-enable is on (this is the default setting), then all processors will be enabled after reloading, even processors that have been manually disabled before.
 
@@ -286,7 +286,7 @@ public class TestKnowledgeBase extends JKnowledgeBase { // <1>
 
     @Override
     public void onStartup() {
-        getEps().event("e1").set("mark", 1).sendAfter(1000); // <3>
+        getSponge().event("e1").set("mark", 1).sendAfter(1000); // <3>
     }
 }
 ----
@@ -337,14 +337,14 @@ class Filters : KKnowledgeBase() {
     }
 
     override fun onStartup() {
-        eps.event("e1").send()
-        eps.event("e1").set("color", "red").send()
-        eps.event("e1").set("color", "blue").send()
+        sponge.event("e1").send()
+        sponge.event("e1").set("color", "red").send()
+        sponge.event("e1").set("color", "blue").send()
     }
 }
 ----
 
-In Kotlin knowledge bases there is no global variable `EPS`. Instead you have to use an `eps` property.
+In Kotlin knowledge bases there is no global variable `sponge`. Instead you have to use the `sponge` property.
 
 See more examples of Kotlin-based knowledge bases in the `sponge-kotlin` project.
 
@@ -372,43 +372,43 @@ There are some limitation in the interoperability between scripting knowledge ba
 .Make and send a new event.
 [source,python]
 ----
-EPS.event("alarm").set("severity", 10).send()
+sponge.event("alarm").set("severity", 10).send()
 ----
 
 .Print registered (i.e. enabled) triggers.
 [source,python]
 ----
-print EPS.engine.triggers
+print sponge.engine.triggers
 ----
 
 .Print registered rule groups.
 [source,python]
 ----
-print EPS.engine.ruleGroups
+print sponge.engine.ruleGroups
 ----
 
 .Print instances of the first rule group.
 [source,python]
 ----
-print EPS.engine.ruleGroups[0].rules
+print sponge.engine.ruleGroups[0].rules
 ----
 
 .Print registered correlator groups.
 [source,python]
 ----
-print EPS.engine.correlatorGroups
+print sponge.engine.correlatorGroups
 ----
 
 .Shutdown using a new thread.
 [source,python]
 ----
-EPS.requestShutdown()
+sponge.requestShutdown()
 ----
 
 .Print the engine statistics summary.
 [source,python]
 ----
-print EPS.engine.statisticsManager.summary
+print sponge.engine.statisticsManager.summary
 ----
 
 For more information see {sponge} Javadoc.

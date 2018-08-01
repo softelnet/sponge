@@ -1,5 +1,5 @@
 = Event processors
-Event processors are processors that perform specified operations using events they listen to.
+Event processors are processors that perform asynchronous operations using events they listen to.
 
 Instances of event processors, depending on their type, may be created:
 
@@ -37,7 +37,7 @@ class TriggerA(Trigger):
 ----
 <1> The trigger will listen to all events whose name starts with `"a"`, as specified by the regular expression.
 
-Event processors shouldn't implement infinite loops in their callback methods because it would at least disrupt the shutdown procedure. If you must create such a loop, please use for example `while EPS.engine.isRunning():` rather than `while True:`.
+Event processors shouldn't implement infinite loops in their callback methods because it would at least disrupt the shutdown procedure. If you must create such a loop, please use for example `while sponge.engine.isRunning():` rather than `while True:`.
 
 == Filters
 Filters allow only certain events to be processed by the engine. Filters are executed in the same order as the order of their registration (i.e. enabling).
@@ -135,7 +135,7 @@ This Java-based filter may be enabled only manually, for example in a script kno
 .Enabling a Java-based filter
 [source,python]
 ----
-EPS.enableJava(ShapeFilter)
+sponge.enableJava(ShapeFilter)
 ----
 
 == Triggers
@@ -211,7 +211,7 @@ public class SampleJavaTrigger extends JTrigger { // <1>
 .Java trigger manual registration in the script knowledge base
 [source,python]
 ----
-EPS.enableJava(SampleJavaTrigger)
+sponge.enableJava(SampleJavaTrigger)
 ----
 
 == Rules
@@ -494,7 +494,7 @@ public class SameSourceJavaRule extends JRule { // <1>
 .Java rule manual registration in the Python knowledge base
 [source,python]
 ----
-EPS.enableJava(SameSourceJavaRule)
+sponge.enableJava(SameSourceJavaRule)
 ----
 
 == Correlators
@@ -629,5 +629,5 @@ public class SampleJavaCorrelator extends JCorrelator { // <1>
 .Java correlator manual registration in the Python knowledge base
 [source,python]
 ----
-EPS.enableJava(SampleJavaCorrelator)
+sponge.enableJava(SampleJavaCorrelator)
 ----

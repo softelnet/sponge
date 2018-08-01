@@ -152,7 +152,7 @@ public abstract class BasePlugin extends BaseEngineModule implements Plugin {
         return knowledgeBase.getEngineOperations();
     }
 
-    public KnowledgeBaseEngineOperations getEps() {
+    public KnowledgeBaseEngineOperations getSponge() {
         return getEngineOperations();
     }
 

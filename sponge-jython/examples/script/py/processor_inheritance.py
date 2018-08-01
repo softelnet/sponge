@@ -5,7 +5,7 @@ Processor inheritance
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("result", None)
+    sponge.setVariable("result", None)
 
 class AbstractEchoAction(Action):
     def calculateResult(self):
@@ -16,6 +16,6 @@ class EchoAction(AbstractEchoAction):
         return self.calculateResult() * 2
 
 def onStartup():
-    result = EPS.call("EchoAction")
-    EPS.setVariable("result", result)
-    EPS.logger.debug("Action returned: {}", result)
+    result = sponge.call("EchoAction")
+    sponge.setVariable("result", result)
+    sponge.logger.debug("Action returned: {}", result)

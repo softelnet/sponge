@@ -14,7 +14,7 @@ def onInit():
     eventCounter.put("e1", AtomicInteger(0))
     eventCounter.put("e2", AtomicInteger(0))
     eventCounter.put("e3", AtomicInteger(0))
-    EPS.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("eventCounter", eventCounter)
 
 class FilterTrigger(Trigger):
     def onConfigure(self):
@@ -25,10 +25,10 @@ class FilterTrigger(Trigger):
         eventCounter.get(event.name).incrementAndGet()
 
 def onLoad():
-    EPS.enableJava(ShapeFilter)
+    sponge.enableJava(ShapeFilter)
 
 
 def onStartup():
-    EPS.event("e1").sendAfter(100, 100)
-    EPS.event("e2").set("shape", "square").sendAfter(200, 100)
-    EPS.event("e3").set("shape", "circle").sendAfter(300, 100)
+    sponge.event("e1").sendAfter(100, 100)
+    sponge.event("e2").set("shape", "square").sendAfter(200, 100)
+    sponge.event("e3").set("shape", "circle").sendAfter(300, 100)

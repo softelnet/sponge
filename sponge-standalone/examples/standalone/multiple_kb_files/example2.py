@@ -4,4 +4,4 @@ Multiple knowledge base files
 """
 
 def onStartup():
-    EPS.event("alarm").set("severity", 10).send()
+    sponge.event("alarm").set("severity", 10).send()

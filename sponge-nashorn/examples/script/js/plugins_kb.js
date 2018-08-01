@@ -5,8 +5,8 @@
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("valueBefore", null);
-    EPS.setVariable("valueAfter", null);
+    sponge.setVariable("valueBefore", null);
+    sponge.setVariable("valueAfter", null);
 }
 
 // Example plugin defined in the knowledge base.
@@ -38,14 +38,14 @@ var PluginTrigger = Java.extend(Trigger, {
     onRun: function(self, event) {
     	valueBefore = scriptPlugin.target.getStoredValue();
     	self.logger.info("Plugin stored value: {}", valueBefore);
-    	EPS.setVariable("valueBefore", valueBefore);
+    	sponge.setVariable("valueBefore", valueBefore);
     	scriptPlugin.target.setStoredValue(event.get("value"));
     	valueAfter = scriptPlugin.target.getStoredValue();
         self.logger.info("New stored value: {}", valueAfter);
-        EPS.setVariable("valueAfter", valueAfter);
+        sponge.setVariable("valueAfter", valueAfter);
     }
 });
 
 function onStartup() {
-    EPS.event("e1").set("value", "Value B").send();
+    sponge.event("e1").set("value", "Value B").send();
 }

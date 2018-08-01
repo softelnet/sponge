@@ -7,13 +7,13 @@ var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("counter", new AtomicInteger(0));
+    sponge.setVariable("counter", new AtomicInteger(0));
 }
 
 var AutoAction = Java.extend(Action, {
     onCall: function(self, args) {
         self.logger.debug("Running");
-        EPS.getVariable("counter").incrementAndGet();
+        sponge.getVariable("counter").incrementAndGet();
         return args;
     }
 });
@@ -24,7 +24,7 @@ var AutoFilter = Java.extend(Filter, {
     },
     onAccept: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
-        EPS.getVariable("counter").incrementAndGet();
+        sponge.getVariable("counter").incrementAndGet();
         return true;
     }
 });
@@ -35,7 +35,7 @@ var AutoTrigger = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
-        EPS.getVariable("counter").incrementAndGet();
+        sponge.getVariable("counter").incrementAndGet();
     }
 });
 
@@ -45,7 +45,7 @@ var AutoRule = Java.extend(Rule, {
     },
     onRun: function(self, event) {
         self.logger.debug("Running for sequence: {}", self.eventSequence);
-        EPS.getVariable("counter").incrementAndGet();
+        sponge.getVariable("counter").incrementAndGet();
     }
 });
 
@@ -59,14 +59,14 @@ var AutoCorrelator = Java.extend(Correlator, {
     onEvent: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
         if (event.name == "e2") {
-                EPS.getVariable("counter").incrementAndGet();
+                sponge.getVariable("counter").incrementAndGet();
                 self.finish();
         }
     }
 });
 
 function onStartup() {
-    EPS.call("AutoAction");
-    EPS.event("e1").send();
-    EPS.event("e2").send();
+    sponge.call("AutoAction");
+    sponge.event("e1").send();
+    sponge.event("e2").send();
 }

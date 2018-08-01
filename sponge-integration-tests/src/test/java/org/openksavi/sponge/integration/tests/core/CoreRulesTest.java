@@ -64,7 +64,8 @@ public class CoreRulesTest {
 
     @Test
     public void testRulesImmediateNoDuration() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_no_duration.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_no_duration.py").build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 
@@ -87,7 +88,8 @@ public class CoreRulesTest {
 
     @Test
     public void testRulesImmediateDuration() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_duration.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_immediate_duration.py").build();
         engine.startup();
 
         try {
@@ -134,7 +136,7 @@ public class CoreRulesTest {
         SpongeException exception = null;
 
         try {
-            interpreter.eval("EPS.enable(" + ruleName + ")");
+            interpreter.eval("sponge.enable(" + ruleName + ")");
         } catch (SpongeException e) {
             exception = e;
         }
@@ -144,7 +146,8 @@ public class CoreRulesTest {
 
     @Test
     public void testRulesEventPattern() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_event_pattern.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/rules_event_pattern.py").build();
         engine.startup();
 
         try {

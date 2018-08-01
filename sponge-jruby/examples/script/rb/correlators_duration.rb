@@ -6,7 +6,7 @@ java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
 end
 
 class SampleCorrelator < Correlator
@@ -23,7 +23,7 @@ class SampleCorrelator < Correlator
     end
     def onEvent(event)
         @eventLog  << event
-        $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        $sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
     end
     def onDuration()
         self.logger.debug("{} - log: {}", self.hashCode(), @eventLog.map(&:to_s))
@@ -31,7 +31,7 @@ class SampleCorrelator < Correlator
 end
 
 def onStartup
-    $EPS.event("filesystemFailure").set("source", "server1").send()
-    $EPS.event("diskFailure").set("source", "server1").sendAfter(200, 100)
-    $EPS.event("diskFailure").set("source", "server2").sendAfter(200, 100)
+    $sponge.event("filesystemFailure").set("source", "server1").send()
+    $sponge.event("diskFailure").set("source", "server1").sendAfter(200, 100)
+    $sponge.event("diskFailure").set("source", "server2").sendAfter(200, 100)
 end

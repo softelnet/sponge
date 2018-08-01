@@ -10,7 +10,7 @@ var Trigger1 = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         //self.logger.debug("file3: Received event {}", event);
-        EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
@@ -21,13 +21,13 @@ var Trigger3 = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         //self.logger.debug("file3: Received event {}", event);
-        EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
 // Execute immediately while loading
-EPS.enableAll(Trigger1, Trigger3);
+sponge.enableAll(Trigger1, Trigger3);
 
 function onShutdown() {
-    EPS.logger.debug("onShutdown, file3");
+    sponge.logger.debug("onShutdown, file3");
 }

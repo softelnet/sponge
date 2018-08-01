@@ -25,13 +25,13 @@ class Stats(Trigger):
     def onConfigure(self):
         self.event = "stats"
     def onRun(self, event):
-        self.logger.debug("Statistics: {}", EPS.engine.statisticsManager.summary)
+        self.logger.debug("Statistics: {}", sponge.engine.statisticsManager.summary)
 
 def onStartup():
-    EPS.event("stats").sendAfter(1000, 10000)
+    sponge.event("stats").sendAfter(1000, 10000)
     interval = 1
 
     for i in range(10):
-        EPS.event("a").sendAfter(0, interval)
-        EPS.event("b").sendAfter(0, interval)
-        EPS.event("c").sendAfter(0, interval)
+        sponge.event("a").sendAfter(0, interval)
+        sponge.event("b").sendAfter(0, interval)
+        sponge.event("c").sendAfter(0, interval)

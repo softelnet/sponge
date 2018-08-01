@@ -4,7 +4,7 @@ MPD / REST API
 """
 
 def onStartup():
-    EPS.logger.info("Starting...")
+    sponge.logger.info("Starting...")
 
 class UpperCase(Action):
     def onConfigure(self):

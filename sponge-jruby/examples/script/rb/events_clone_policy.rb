@@ -13,7 +13,7 @@ def onInit
     $events.put("defaultClonePolicy", ArrayList.new)
     $events.put("deepClonePolicy", ArrayList.new)
     $events.put("shallowClonePolicy", ArrayList.new)
-    $EPS.setVariable("events", $events)
+    $sponge.setVariable("events", $events)
 end
 
 class ClonePolicyTrigger < Trigger
@@ -39,7 +39,7 @@ def onStartup
         event.set("integer", Integer.new(10))
     }
 
-    $EPS.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000)
-    $EPS.event("deepClonePolicy", EventClonePolicy::DEEP).modify(setEventAttributes).sendAfter(200, 1000)
-    $EPS.event("shallowClonePolicy", EventClonePolicy::SHALLOW).modify(setEventAttributes).sendAfter(400, 1000)
+    $sponge.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000)
+    $sponge.event("deepClonePolicy", EventClonePolicy::DEEP).modify(setEventAttributes).sendAfter(200, 1000)
+    $sponge.event("shallowClonePolicy", EventClonePolicy::SHALLOW).modify(setEventAttributes).sendAfter(400, 1000)
 end

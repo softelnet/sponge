@@ -17,19 +17,10 @@
 package org.openksavi.sponge.groovy;
 
 import org.openksavi.sponge.core.plugin.BasePlugin;
-import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 
 /**
  * Groovy-specific implementation of the plugin.
  */
 public abstract class GroovyPlugin extends BasePlugin {
 
-    /**
-     * Method required for accessing EPS in Groovy-based plugins.
-     *
-     * @return EPS.
-     */
-    public final KnowledgeBaseEngineOperations getEPS() {
-        return getEps();
-    }
 }

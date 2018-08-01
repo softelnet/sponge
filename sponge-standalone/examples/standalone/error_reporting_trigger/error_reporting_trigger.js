@@ -14,5 +14,5 @@ var HelloWorldTrigger = Java.extend(Trigger, {
 });
 
 function onStartup() {
-    EPS.event("helloEvent").set("say", "Hello World!").send();
+    sponge.event("helloEvent").set("say", "Hello World!").send();
 }

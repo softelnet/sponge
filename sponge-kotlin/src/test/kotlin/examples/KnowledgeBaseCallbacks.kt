@@ -18,31 +18,31 @@ class KnowledgeBaseCallbacks : KKnowledgeBase() {
         override fun onConfigure() = setEvent("reload")
         override fun onRun(event: Event) {
             logger.debug("Received event: {}", event.name)
-            eps.reload()
+            sponge.reload()
         }
     }
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("onInitCalled", AtomicBoolean(false))
-        eps.setVariable("onLoadCalled", AtomicInteger(0))
-        eps.setVariable("onStartupCalled", AtomicBoolean(false))
-        eps.setVariable("onBeforeReloadCalled", AtomicBoolean(false))
-        eps.setVariable("onAfterReloadCalled", AtomicBoolean(false))
+        sponge.setVariable("onInitCalled", AtomicBoolean(false))
+        sponge.setVariable("onLoadCalled", AtomicInteger(0))
+        sponge.setVariable("onStartupCalled", AtomicBoolean(false))
+        sponge.setVariable("onBeforeReloadCalled", AtomicBoolean(false))
+        sponge.setVariable("onAfterReloadCalled", AtomicBoolean(false))
 
         logger.debug("onInit")
-        eps.getVariable<AtomicBoolean>("onInitCalled").set(true)
+        sponge.getVariable<AtomicBoolean>("onInitCalled").set(true)
     }
 
     override fun onLoad() {
         logger.debug("onLoad")
-        eps.getVariable<AtomicInteger>("onLoadCalled").incrementAndGet()
+        sponge.getVariable<AtomicInteger>("onLoadCalled").incrementAndGet()
     }
 
     override fun onStartup() {
         logger.debug("onStartup")
-        eps.getVariable<AtomicBoolean>("onStartupCalled").set(true)
-        eps.event("reload").sendAfter(1000)
+        sponge.getVariable<AtomicBoolean>("onStartupCalled").set(true)
+        sponge.event("reload").sendAfter(1000)
     }
 
     override fun onShutdown() {
@@ -53,11 +53,11 @@ class KnowledgeBaseCallbacks : KKnowledgeBase() {
 
     override fun onBeforeReload() {
         logger.debug("onBeforeReload")
-        eps.getVariable<AtomicBoolean>("onBeforeReloadCalled").set(true)
+        sponge.getVariable<AtomicBoolean>("onBeforeReloadCalled").set(true)
     }
 
     override fun onAfterReload() {
         logger.debug("onAfterReload")
-        eps.getVariable<AtomicBoolean>("onAfterReloadCalled").set(true)
+        sponge.getVariable<AtomicBoolean>("onAfterReloadCalled").set(true)
     }
 }

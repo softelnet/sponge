@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class CorrelatorsDuration : KKnowledgeBase() {
 
     override fun onInit() {
-        eps.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
     }
 
     class SampleCorrelator : KCorrelator() {
@@ -34,7 +34,7 @@ class CorrelatorsDuration : KKnowledgeBase() {
 
         override fun onEvent(event: Event) {
             eventLog.add(event)
-            eps.getVariable(AtomicInteger::class, "hardwareFailureScriptCount").incrementAndGet()
+            sponge.getVariable(AtomicInteger::class, "hardwareFailureScriptCount").incrementAndGet()
         }
 
         override fun onDuration() {
@@ -43,8 +43,8 @@ class CorrelatorsDuration : KKnowledgeBase() {
     }
 
     override fun onStartup() {
-        eps.event("filesystemFailure").set("source", "server1").send()
-        eps.event("diskFailure").set("source", "server1").sendAfter(200, 100)
-        eps.event("diskFailure").set("source", "server2").sendAfter(200, 100)
+        sponge.event("filesystemFailure").set("source", "server1").send()
+        sponge.event("diskFailure").set("source", "server1").sendAfter(200, 100)
+        sponge.event("diskFailure").set("source", "server2").sendAfter(200, 100)
     }
 }

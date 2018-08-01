@@ -8,20 +8,20 @@ from java.util.concurrent.atomic import AtomicBoolean
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("verifyTriggerEnabled", AtomicBoolean(False))
-    EPS.setVariable("verifyTriggerDisabled", AtomicBoolean(False))
-    EPS.setVariable("verificationDone", AtomicBoolean(False))
+    sponge.setVariable("verifyTriggerEnabled", AtomicBoolean(False))
+    sponge.setVariable("verifyTriggerDisabled", AtomicBoolean(False))
+    sponge.setVariable("verificationDone", AtomicBoolean(False))
 
 def verifyManager():
-    triggerCount = EPS.engine.triggers.size()
-    EPS.enable(TriggerA)
-    EPS.enable(TriggerA)
-    EPS.getVariable("verifyTriggerEnabled").set(EPS.engine.triggers.size() == triggerCount + 1)
-    triggerCount = EPS.engine.triggers.size()
-    EPS.disable(TriggerA)
-    EPS.disable(TriggerA)
-    EPS.getVariable("verifyTriggerDisabled").set(EPS.engine.triggers.size() == triggerCount - 1)
-    EPS.getVariable("verificationDone").set(True)
+    triggerCount = sponge.engine.triggers.size()
+    sponge.enable(TriggerA)
+    sponge.enable(TriggerA)
+    sponge.getVariable("verifyTriggerEnabled").set(sponge.engine.triggers.size() == triggerCount + 1)
+    triggerCount = sponge.engine.triggers.size()
+    sponge.disable(TriggerA)
+    sponge.disable(TriggerA)
+    sponge.getVariable("verifyTriggerDisabled").set(sponge.engine.triggers.size() == triggerCount - 1)
+    sponge.getVariable("verificationDone").set(True)
 
 class VerifyTrigger(Trigger):
     def onConfigure(self):
@@ -36,7 +36,7 @@ class TriggerA(Trigger):
         pass
 
 def onLoad():
-    EPS.enable(VerifyTrigger)
+    sponge.enable(VerifyTrigger)
 
 def onStartup():
-    EPS.event("verify").send()
+    sponge.event("verify").send()

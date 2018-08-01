@@ -10,7 +10,7 @@ class Trigger1 extends Trigger {
     }
     void onRun(Event event) {
         //this.logger.debug("file3: Received event {}", event)
-        EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
 
@@ -21,12 +21,12 @@ class Trigger3 extends Trigger {
     }
     void onRun(Event event) {
         //this.logger.debug("file3: Received event {}", event)
-        EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
 
-EPS.enableAll(Trigger1, Trigger3)
+sponge.enableAll(Trigger1, Trigger3)
 
 void onShutdown() {
-    EPS.logger.debug("onShutdown, file3")
+    sponge.logger.debug("onShutdown, file3")
 }

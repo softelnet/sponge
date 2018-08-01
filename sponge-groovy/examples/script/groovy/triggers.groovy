@@ -8,9 +8,9 @@ import org.openksavi.sponge.examples.SampleJavaTrigger
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("receivedEventA", new AtomicBoolean(false))
-    EPS.setVariable("receivedEventBCount", new AtomicInteger(0))
-    EPS.setVariable("receivedEventTestJavaCount", new AtomicInteger(0))
+    sponge.setVariable("receivedEventA", new AtomicBoolean(false))
+    sponge.setVariable("receivedEventBCount", new AtomicInteger(0))
+    sponge.setVariable("receivedEventTestJavaCount", new AtomicInteger(0))
 }
 
 class TriggerA extends Trigger {
@@ -19,7 +19,7 @@ class TriggerA extends Trigger {
     }
     void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
-        EPS.getVariable("receivedEventA").set(true)
+        sponge.getVariable("receivedEventA").set(true)
     }
 }
 
@@ -29,26 +29,26 @@ class TriggerB extends Trigger {
     }
     void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
-        def receivedEventBCount = EPS.getVariable("receivedEventBCount")
+        def receivedEventBCount = sponge.getVariable("receivedEventBCount")
         if (receivedEventBCount.get() == 0) {
-            this.logger.debug("Statistics: {}", EPS.statisticsSummary)
+            this.logger.debug("Statistics: {}", sponge.statisticsSummary)
         }
         receivedEventBCount.incrementAndGet()
     }
 }
 
 void onLoad() {
-    EPS.enableJava(SampleJavaTrigger)
+    sponge.enableJava(SampleJavaTrigger)
 }
 
 void onStartup() {
-    EPS.logger.debug("Startup {}, triggers: {}", EPS.info, EPS.engine.triggers)
-    EPS.logger.debug("Knowledge base name: {}", EPS.kb.name)
-    EPS.event("a").send()
-    EPS.event("b").sendAfter(200, 200)
-    EPS.event("testJava").send()
+    sponge.logger.debug("Startup {}, triggers: {}", sponge.info, sponge.engine.triggers)
+    sponge.logger.debug("Knowledge base name: {}", sponge.kb.name)
+    sponge.event("a").send()
+    sponge.event("b").sendAfter(200, 200)
+    sponge.event("testJava").send()
 }
 
 void onShutdown() {
-    EPS.logger.debug("Shutting down")
+    sponge.logger.debug("Shutting down")
 }

@@ -12,7 +12,7 @@ def onInit():
 
     # Variables for assertions only
     correlationEventsLog = CorrelationEventsLog()
-    EPS.setVariable("correlationEventsLog", correlationEventsLog)
+    sponge.setVariable("correlationEventsLog", correlationEventsLog)
 
 def updateLog(rule):
     for event in rule.eventSequence:
@@ -182,7 +182,7 @@ class Stats(Trigger):
     def onConfigure(self):
         self.event = "stats"
     def onRun(self, event):
-        self.logger.debug("Statistics: {}", EPS.engine.statisticsManager.summary)
+        self.logger.debug("Statistics: {}", sponge.engine.statisticsManager.summary)
 
 class RuleA(Rule):
     def onConfigure(self):
@@ -213,28 +213,28 @@ class SendEvents(Trigger):
         self.event = "sendEvents"
     def onRun(self, event):
         for event in ["a1", "a2", "b1", "b2", "c1", "c2"]:
-            EPS.event(event).send()
-        EPS.event("e1").set("label", "1").send()
-        EPS.event("e2").set("label", "2").send()
-        EPS.event("e2").set("label", "3").send()
-        EPS.event("e2").set("label", "4").send()
-        EPS.event("e3").set("label", "5").send()
-        EPS.event("e3").set("label", "6").send()
-        EPS.event("e3").set("label", "7").send()
+            sponge.event(event).send()
+        sponge.event("e1").set("label", "1").send()
+        sponge.event("e2").set("label", "2").send()
+        sponge.event("e2").set("label", "3").send()
+        sponge.event("e2").set("label", "4").send()
+        sponge.event("e3").set("label", "5").send()
+        sponge.event("e3").set("label", "6").send()
+        sponge.event("e3").set("label", "7").send()
 
 class SendNoise(Trigger):
     def onConfigure(self):
         self.event = "sendNoise"
     def onRun(self, event):
-        while EPS.engine.isRunning():
-            if EPS.engine.getEventQueueManager().getInputEventQueue().getSize() < 100:
+        while sponge.engine.isRunning():
+            if sponge.engine.getEventQueueManager().getInputEventQueue().getSize() < 100:
                 # Not used in assertions, "background noise" events.
-                EPS.event("e1").set("label", "0").send()
-                EPS.event("e1").set("label", "-1").send()
-                EPS.event("e1").set("label", "-2").send()
-                EPS.event("e1").set("label", "-3").send()
+                sponge.event("e1").set("label", "0").send()
+                sponge.event("e1").set("label", "-1").send()
+                sponge.event("e1").set("label", "-2").send()
+                sponge.event("e1").set("label", "-3").send()
             time.sleep(.10)
 
 def onStartup():
-    EPS.event("stats").sendAfter(0, 10000)
-    EPS.event("sendNoise").send()
+    sponge.event("stats").sendAfter(0, 10000)
+    sponge.event("sendNoise").send()

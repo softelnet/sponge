@@ -6,10 +6,10 @@
 import org.openksavi.sponge.test.util.CorrelationEventsLog
 
 void onInit() {
-    EPS.setVariable("defaultDuration", 1000)
+    sponge.setVariable("defaultDuration", 1000)
 
     // Variables for assertions only
-    EPS.setVariable("correlationEventsLog", new CorrelationEventsLog())
+    sponge.setVariable("correlationEventsLog", new CorrelationEventsLog())
 }
 
 // Naming F(irst), L(ast), A(ll), N(one)
@@ -19,7 +19,7 @@ class RuleF extends Rule {
         this.events = ["e1"]
     }
     void onRun(Event event) {
-        EPS.getVariable("correlationEventsLog").addEvents("RuleF", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleF", this)
     }
 }
 
@@ -30,18 +30,18 @@ class RuleFFF extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFFF", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFFF", this)
     }
 }
 
 class RuleFFFDuration extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2", "e3 :first"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFFFDuration", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFFFDuration", this)
     }
 }
 
@@ -49,11 +49,11 @@ class RuleFFFDuration extends Rule {
 class RuleFFL extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2", "e3 :last"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFFL", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFFL", this)
     }
 }
 
@@ -61,11 +61,11 @@ class RuleFFL extends Rule {
 class RuleFFA extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2", "e3 :all"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFFA", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFFA", this)
     }
 }
 
@@ -73,11 +73,11 @@ class RuleFFA extends Rule {
 class RuleFFN extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2", "e4 :none"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFFN", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFFN", this)
     }
 }
 
@@ -85,11 +85,11 @@ class RuleFFN extends Rule {
 class RuleFLF extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :last", "e3 :first"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFLF", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFLF", this)
     }
 }
 
@@ -97,11 +97,11 @@ class RuleFLF extends Rule {
 class RuleFLL extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :last", "e3 :last"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFLL", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFLL", this)
     }
 }
 
@@ -109,11 +109,11 @@ class RuleFLL extends Rule {
 class RuleFLA extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :last", "e3 :all"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFLA", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFLA", this)
     }
 }
 
@@ -121,11 +121,11 @@ class RuleFLA extends Rule {
 class RuleFLN extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :last", "e4 :none"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFLN", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFLN", this)
     }
 }
 
@@ -133,11 +133,11 @@ class RuleFLN extends Rule {
 class RuleFAF extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :all", "e3 :first"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFAF", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFAF", this)
     }
 }
 
@@ -145,11 +145,11 @@ class RuleFAF extends Rule {
 class RuleFAL extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :all", "e3 :last"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFAL", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFAL", this)
     }
 }
 
@@ -157,11 +157,11 @@ class RuleFAL extends Rule {
 class RuleFAA extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :all", "e3 :all"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFAA", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFAA", this)
     }
 }
 
@@ -169,11 +169,11 @@ class RuleFAA extends Rule {
 class RuleFAN extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :all", "e5 :none"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFAN", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFAN", this)
     }
 }
 
@@ -184,7 +184,7 @@ class RuleFNF extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNF", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNF", this)
     }
 }
 
@@ -192,11 +192,11 @@ class RuleFNF extends Rule {
 class RuleFNL extends Rule {
     void onConfigure() {
         this.events = ["e1", "e5 :none", "e3 :last"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNL", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNL", this)
     }
 }
 
@@ -204,36 +204,36 @@ class RuleFNL extends Rule {
 class RuleFNA extends Rule {
     void onConfigure() {
         this.events = ["e1", "e5 :none", "e3 :all"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNA", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNA", this)
     }
 }
 
 class RuleFNFReject extends Rule {
     void onConfigure() {
         this.events = ["e1", "e2 :none", "e3"]
-        this.duration = Duration.ofMillis(EPS.getVariable("defaultDuration"))
+        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
-        EPS.getVariable("correlationEventsLog").addEvents("RuleFNFReject", this)
+        sponge.getVariable("correlationEventsLog").addEvents("RuleFNFReject", this)
     }
 }
 
 void onStartup() {
-    EPS.event("e1").set("label", "0").sendAfter(0, 200)  // Not used in assertions, "background noise" events.
-    EPS.event("e1").set("label", "-1").sendAfter(0, 200)
-    EPS.event("e1").set("label", "-2").sendAfter(0, 200)
-    EPS.event("e1").set("label", "-3").sendAfter(0, 200)
+    sponge.event("e1").set("label", "0").sendAfter(0, 200)  // Not used in assertions, "background noise" events.
+    sponge.event("e1").set("label", "-1").sendAfter(0, 200)
+    sponge.event("e1").set("label", "-2").sendAfter(0, 200)
+    sponge.event("e1").set("label", "-3").sendAfter(0, 200)
 
-    EPS.event("e1").set("label", "1").send()
-    EPS.event("e2").set("label", "2").send()
-    EPS.event("e2").set("label", "3").send()
-    EPS.event("e2").set("label", "4").send()
-    EPS.event("e3").set("label", "5").send()
-    EPS.event("e3").set("label", "6").send()
-    EPS.event("e3").set("label", "7").send()
+    sponge.event("e1").set("label", "1").send()
+    sponge.event("e2").set("label", "2").send()
+    sponge.event("e2").set("label", "3").send()
+    sponge.event("e2").set("label", "4").send()
+    sponge.event("e3").set("label", "5").send()
+    sponge.event("e3").set("label", "6").send()
+    sponge.event("e3").set("label", "7").send()
 }

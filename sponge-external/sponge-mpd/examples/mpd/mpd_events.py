@@ -61,7 +61,7 @@ class MpdTrackPositionChangeListener(Trigger):
         self.logger.info("[{}] Track position changed: {}", event.source.getClass().simpleName, event.source.elapsedTime)
 
 def onStartup():
-    EPS.logger.info("MPD server version: {}", mpd.server.version)
+    sponge.logger.info("MPD server version: {}", mpd.server.version)
     #mpd.registerAllListeners()
     mpd.registerListeners(MpdEventCategory.CHANGE, MpdEventCategory.ERROR, MpdEventCategory.PLAYER_CHANGE, MpdEventCategory.PLAYLIST_CHANGE,
                           MpdEventCategory.VOLUME_CHANGE)

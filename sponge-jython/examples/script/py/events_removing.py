@@ -9,8 +9,8 @@ def onInit():
     global eventEntry, eventCounter
     eventEntry = None
     eventCounter = AtomicInteger(0)
-    EPS.setVariable("eventCounter", eventCounter)
-    EPS.setVariable("allowNumber", 2)
+    sponge.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("allowNumber", 2)
 
 class Trigger1(Trigger):
     def onConfigure(self):
@@ -19,7 +19,7 @@ class Trigger1(Trigger):
         global eventCounter
         eventCounter.incrementAndGet()
         self.logger.debug("Received event {}, counter: {}", event.name, eventCounter)
-        if eventCounter.get() > EPS.getVariable("allowNumber"):
+        if eventCounter.get() > sponge.getVariable("allowNumber"):
         	   self.logger.debug("This line should not be displayed!")
 
 class Trigger2(Trigger):
@@ -28,11 +28,11 @@ class Trigger2(Trigger):
     def onRun(self, event):
         self.logger.debug("Removing entry")
         global eventEntry
-        EPS.removeEvent(eventEntry)
+        sponge.removeEvent(eventEntry)
 
 def onStartup():
     global eventEntry
     start = 500
     interval = 1000
-    eventEntry = EPS.event("e1").sendAfter(start, interval)
-    EPS.event("e2").sendAfter(interval * EPS.getVariable("allowNumber"))
+    eventEntry = sponge.event("e1").sendAfter(start, interval)
+    sponge.event("e2").sendAfter(interval * sponge.getVariable("allowNumber"))

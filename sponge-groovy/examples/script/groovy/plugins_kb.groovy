@@ -5,8 +5,8 @@
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("valueBefore", null)
-    EPS.setVariable("valueAfter", null)
+    sponge.setVariable("valueBefore", null)
+    sponge.setVariable("valueAfter", null)
 }
 
 // Example plugin defined in the knowledge base.
@@ -29,17 +29,17 @@ class PluginTrigger extends Trigger {
         this.event = "e1"
     }
     void onRun(Event event) {
-        def scriptPlugin = EPS.getPlugin("scriptPlugin")
+        def scriptPlugin = sponge.getPlugin("scriptPlugin")
         def valueBefore = scriptPlugin.getStoredValue()
-    	    EPS.setVariable("valueBefore", valueBefore)
+    	    sponge.setVariable("valueBefore", valueBefore)
        	this.logger.info("Plugin stored value: {}", valueBefore)
         scriptPlugin.setStoredValue(event.get("value"))
         def valueAfter = scriptPlugin.getStoredValue()
-        EPS.setVariable("valueAfter", valueAfter)
+        sponge.setVariable("valueAfter", valueAfter)
         this.logger.info("New stored value: {}", valueAfter)
     }
 }
 
 void onStartup() {
-    EPS.event("e1").set("value", "Value B").send()
+    sponge.event("e1").set("value", "Value B").send()
 }

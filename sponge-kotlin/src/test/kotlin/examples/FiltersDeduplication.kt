@@ -23,7 +23,7 @@ class FiltersDeduplication : KKnowledgeBase() {
         eventCounter.put("e1-red", AtomicInteger(0))
         eventCounter.put("e2-blue", AtomicInteger(0))
         eventCounter.put("e2-red", AtomicInteger(0))
-        eps.setVariable("eventCounter", eventCounter)
+        sponge.setVariable("eventCounter", eventCounter)
     }
 
 
@@ -46,19 +46,19 @@ class FiltersDeduplication : KKnowledgeBase() {
 
         override fun onRun(event: Event) {
             logger.debug("Received event {}", event)
-            eps.getVariable<Map<String, AtomicInteger>>("eventCounter").get(event.name + "-" + event.get<String>("color"))!!.incrementAndGet()
+            sponge.getVariable<Map<String, AtomicInteger>>("eventCounter").get(event.name + "-" + event.get<String>("color"))!!.incrementAndGet()
         }
     }
 
     override fun onStartup() {
-        eps.event("e1").set("color", "red").send()
-        eps.event("e1").set("color", "blue").send()
-        eps.event("e2").set("color", "red").send()
-        eps.event("e2").set("color", "blue").send()
+        sponge.event("e1").set("color", "red").send()
+        sponge.event("e1").set("color", "blue").send()
+        sponge.event("e2").set("color", "red").send()
+        sponge.event("e2").set("color", "blue").send()
 
-        eps.event("e1").set("color", "red").send()
-        eps.event("e1").set("color", "blue").send()
-        eps.event("e2").set("color", "red").send()
-        eps.event("e2").set("color", "blue").send()
+        sponge.event("e1").set("color", "red").send()
+        sponge.event("e1").set("color", "blue").send()
+        sponge.event("e2").set("color", "red").send()
+        sponge.event("e2").set("color", "blue").send()
     }
 }

@@ -9,7 +9,7 @@ void onInit() {
     events.put("defaultClonePolicy", new ArrayList())
     events.put("deepClonePolicy", new ArrayList())
     events.put("shallowClonePolicy", new ArrayList())
-    EPS.setVariable("events", events)
+    sponge.setVariable("events", events)
 }
 
 class ClonePolicyTrigger extends Trigger {
@@ -17,7 +17,7 @@ class ClonePolicyTrigger extends Trigger {
         this.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
     }
     void onRun(Event event) {
-        Map events = EPS.getVariable("events")
+        Map events = sponge.getVariable("events")
         events.get(event.name).add(event)
     	    this.logger.debug("Processing event: {}", event.name)
     	    Map map = event.get("map")
@@ -36,7 +36,7 @@ void onStartup() {
         event.set("integer", new Integer(10))
     }
 
-    EPS.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000)
-    EPS.event("deepClonePolicy", EventClonePolicy.DEEP).modify(setEventAttributes).sendAfter(200, 1000)
-    EPS.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(setEventAttributes).sendAfter(400, 1000)
+    sponge.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000)
+    sponge.event("deepClonePolicy", EventClonePolicy.DEEP).modify(setEventAttributes).sendAfter(200, 1000)
+    sponge.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(setEventAttributes).sendAfter(400, 1000)
 }

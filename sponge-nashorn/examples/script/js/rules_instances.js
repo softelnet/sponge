@@ -7,9 +7,9 @@ var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("countA", new AtomicInteger(0));
-    EPS.setVariable("countB", new AtomicInteger(0));
-    EPS.setVariable("max", 100);
+    sponge.setVariable("countA", new AtomicInteger(0));
+    sponge.setVariable("countB", new AtomicInteger(0));
+    sponge.setVariable("max", 100);
 }
 
 var RuleA = Java.extend(Rule, {
@@ -17,7 +17,7 @@ var RuleA = Java.extend(Rule, {
         self.events = ["a a1", "a a2"];
     },
     onRun: function(self, event) {
-        EPS.getVariable("countA").incrementAndGet();
+        sponge.getVariable("countA").incrementAndGet();
     }
 });
 
@@ -26,15 +26,15 @@ var RuleB = Java.extend(Rule, {
         self.events = ["b b1", "b b2"];
     },
     onRun: function(self, event) {
-        EPS.getVariable("countB").incrementAndGet();
+        sponge.getVariable("countB").incrementAndGet();
     }
 });
 
 
 function onStartup() {
-    for (i = 0; i < EPS.getVariable("max"); i++) { 
-        EPS.event("a").send();
-        EPS.event("b").send();
+    for (i = 0; i < sponge.getVariable("max"); i++) { 
+        sponge.event("a").send();
+        sponge.event("b").send();
     }
 }
 

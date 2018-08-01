@@ -10,7 +10,7 @@ import random
 import string
 
 def onInit():
-    EPS.setVariable("testStatus", None)
+    sponge.setVariable("testStatus", None)
 
 class A(Trigger):
     def onConfigure(self):
@@ -20,12 +20,12 @@ class A(Trigger):
         index = 0
         while True:
             if index % 5 == 0:
-                self.logger.debug("Statistics {}", EPS.engine.statisticsManager.summary)
+                self.logger.debug("Statistics {}", sponge.engine.statisticsManager.summary)
             try:
-                EPS.event("b").set("payload", ''.join(['*' for i in xrange(0, 1000)])).send()
+                sponge.event("b").set("payload", ''.join(['*' for i in xrange(0, 1000)])).send()
             except QueueFullException as e:
-                self.logger.debug("Statistics {}", EPS.engine.statisticsManager.summary)
-                EPS.setVariable("testStatus", e)
+                self.logger.debug("Statistics {}", sponge.engine.statisticsManager.summary)
+                sponge.setVariable("testStatus", e)
                 self.logger.debug("Expected exception message: {}", e.message)
                 break;
             index += 1
@@ -38,4 +38,4 @@ class B(Trigger):
         pass
 
 def onStartup():
-    EPS.event("a").send()
+    sponge.event("a").send()

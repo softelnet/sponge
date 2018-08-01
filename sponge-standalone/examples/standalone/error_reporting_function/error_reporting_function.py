@@ -11,4 +11,4 @@ class HelloWorldTrigger(Trigger):
 
 def onStartup():
     whatIsThis.doSomething()
-    EPS.event("helloEvent").set("say", "Hello World!").send()
+    sponge.event("helloEvent").set("say", "Hello World!").send()

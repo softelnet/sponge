@@ -12,14 +12,14 @@ fun onInit() {
     events.put("defaultClonePolicy", ArrayList())
     events.put("deepClonePolicy", ArrayList())
     events.put("shallowClonePolicy", ArrayList())
-    EPS.setVariable("events", events)
+    sponge.setVariable("events", events)
 }
 
 class ClonePolicyTrigger : Trigger() {
     override fun onConfigure() = setEvents("defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy")
 
     override fun onRun(event: Event) {
-        var events: Map<String, MutableList<Event>> = eps.getVariable("events")
+        var events: Map<String, MutableList<Event>> = sponge.getVariable("events")
 
         events.get(event.name)!!.add(event)
         logger.debug("Processing event: {}", event.name)
@@ -39,7 +39,7 @@ fun onStartup() {
         event.set("integer", Integer(10))
     }
 
-    EPS.event("defaultClonePolicy").modify(::setEventAttributes).sendAfter(100, 1000)
-    EPS.event("deepClonePolicy", EventClonePolicy.DEEP).modify(::setEventAttributes).sendAfter(200, 1000)
-    EPS.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(::setEventAttributes).sendAfter(400, 1000)
+    sponge.event("defaultClonePolicy").modify(::setEventAttributes).sendAfter(100, 1000)
+    sponge.event("deepClonePolicy", EventClonePolicy.DEEP).modify(::setEventAttributes).sendAfter(200, 1000)
+    sponge.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(::setEventAttributes).sendAfter(400, 1000)
 }

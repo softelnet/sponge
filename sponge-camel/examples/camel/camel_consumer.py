@@ -7,7 +7,7 @@ from java.util.concurrent.atomic import AtomicBoolean
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("receivedCamelMessage", AtomicBoolean(False))
+    sponge.setVariable("receivedCamelMessage", AtomicBoolean(False))
 
 class CamelTrigger(Trigger):
     def onConfigure(self):

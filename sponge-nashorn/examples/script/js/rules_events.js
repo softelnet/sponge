@@ -9,7 +9,7 @@ var correlationEventsLog;
 function onInit() {
     // Variables for assertions only
     correlationEventsLog = new org.openksavi.sponge.test.util.CorrelationEventsLog();
-    EPS.setVariable("correlationEventsLog", correlationEventsLog);
+    sponge.setVariable("correlationEventsLog", correlationEventsLog);
 }
 
 // Naming F(irst), L(ast), A(ll), N(one)
@@ -223,16 +223,16 @@ var RuleFNFReject = Java.extend(Rule, {
 });
 
 function onStartup() {
-    EPS.event("e1").set("label", "0").sendAfter(0, 200);  // Not used in assertions, "background noise" events.
-    EPS.event("e1").set("label", "-1").sendAfter(0, 200);
-    EPS.event("e1").set("label", "-2").sendAfter(0, 200);
-    EPS.event("e1").set("label", "-3").sendAfter(0, 200);
+    sponge.event("e1").set("label", "0").sendAfter(0, 200);  // Not used in assertions, "background noise" events.
+    sponge.event("e1").set("label", "-1").sendAfter(0, 200);
+    sponge.event("e1").set("label", "-2").sendAfter(0, 200);
+    sponge.event("e1").set("label", "-3").sendAfter(0, 200);
 
-    EPS.event("e1").set("label", "1").send();
-    EPS.event("e2").set("label", "2").send();
-    EPS.event("e2").set("label", "3").send();
-    EPS.event("e2").set("label", "4").send();
-    EPS.event("e3").set("label", "5").send();
-    EPS.event("e3").set("label", "6").send();
-    EPS.event("e3").set("label", "7").send();
+    sponge.event("e1").set("label", "1").send();
+    sponge.event("e2").set("label", "2").send();
+    sponge.event("e2").set("label", "3").send();
+    sponge.event("e2").set("label", "4").send();
+    sponge.event("e3").set("label", "5").send();
+    sponge.event("e3").set("label", "6").send();
+    sponge.event("e3").set("label", "7").send();
 }

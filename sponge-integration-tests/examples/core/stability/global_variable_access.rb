@@ -6,9 +6,9 @@ java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("test1", AtomicBoolean.new(false))
-    $EPS.setVariable("test2", AtomicBoolean.new(false))
-    $EPS.setVariable("stopped", AtomicBoolean.new(false))
+    $sponge.setVariable("test1", AtomicBoolean.new(false))
+    $sponge.setVariable("test2", AtomicBoolean.new(false))
+    $sponge.setVariable("stopped", AtomicBoolean.new(false))
 end
 
 class E1 < Trigger
@@ -16,8 +16,8 @@ class E1 < Trigger
         self.event = "e"
     end
     def onRun(event)
-        $EPS.getVariable("test1").set(true)
-        $EPS.getVariable("test2").set(true)
+        $sponge.getVariable("test1").set(true)
+        $sponge.getVariable("test2").set(true)
     end
 end
 
@@ -26,8 +26,8 @@ class E2 < Trigger
         self.event = "e"
     end
     def onRun(event)
-        $EPS.getVariable("test1").set(false)
-        $EPS.getVariable("test2").set(false)
+        $sponge.getVariable("test1").set(false)
+        $sponge.getVariable("test2").set(false)
     end
 end
 
@@ -36,8 +36,8 @@ class E3 < Trigger
         self.event = "e"
     end
     def onRun(event)
-        $EPS.getVariable("test1").set(true)
-        $EPS.getVariable("test2").set(true)
+        $sponge.getVariable("test1").set(true)
+        $sponge.getVariable("test2").set(true)
     end
 end
 
@@ -46,8 +46,8 @@ class E4 < Trigger
         self.event = "e"
     end
     def onRun(event)
-        $EPS.getVariable("test1").set(false)
-        $EPS.getVariable("test2").set(false)
+        $sponge.getVariable("test1").set(false)
+        $sponge.getVariable("test2").set(false)
     end
 end
 
@@ -56,11 +56,11 @@ class Stop < Trigger
         self.event = "stop"
     end
     def onRun(event)
-        $EPS.getVariable("stopped").set(true)
+        $sponge.getVariable("stopped").set(true)
     end
 end
 
 def onStartup
-    $EPS.event("e").sendAfter(0, 1)
-    $EPS.event("stop").sendAfter(Duration.ofMinutes(15))
+    $sponge.event("e").sendAfter(0, 1)
+    $sponge.event("stop").sendAfter(Duration.ofMinutes(15))
 end

@@ -18,7 +18,7 @@ class LedBlink(Trigger):
 def onStartup():
     global led
     led = grovepi.device.getDigitalOut(4)
-    EPS.event("blink").sendAfter(0, 1000)
+    sponge.event("blink").sendAfter(0, 1000)
 
 def onShutdown():
     global led

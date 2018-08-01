@@ -9,7 +9,7 @@ def onInit():
     # Variables for assertions only
     global correlationEventsLog
     correlationEventsLog = CorrelationEventsLog()
-    EPS.setVariable("correlationEventsLog", correlationEventsLog)
+    sponge.setVariable("correlationEventsLog", correlationEventsLog)
 
 class NameRule(Rule):
     def onConfigure(self):
@@ -28,4 +28,4 @@ class PatternRule(Rule):
 
 def onStartup():
     for name in ["a1", "b1", "a2", "b2", "a", "b", "a1", "b2"]:
-        EPS.event(name).set("label", name).send()
+        sponge.event(name).set("label", name).send()

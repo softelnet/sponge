@@ -15,7 +15,7 @@ void onInit() {
     eventCounter.put("Trigger2, file2", new AtomicInteger(0))
     eventCounter.put("Trigger1, file3", new AtomicInteger(0))
     eventCounter.put("Trigger3, file3", new AtomicInteger(0))
-    EPS.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("eventCounter", eventCounter)
 }
 
 class Trigger1 extends Trigger {
@@ -25,7 +25,7 @@ class Trigger1 extends Trigger {
     }
     void onRun(Event event) {
         //this.logger.debug("file1: Received event {}", event)
-        EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
 
@@ -36,7 +36,7 @@ class Trigger2 extends Trigger {
     }
     void onRun(Event event) {
         //this.logger.debug("file1: Received event {}", event)
-        EPS.getVariable("eventCounter").get(this.displayName).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.displayName).incrementAndGet()
     }
 }
 
@@ -47,24 +47,24 @@ class LoadKbFile extends Trigger {
     }
     void onRun(Event event) {
         def kbFile = event.get("kbFile")
-        EPS.kb.load(kbFile)
+        sponge.kb.load(kbFile)
         this.logger.info("File {} loaded", kbFile)
     }
 }
 
 void onLoad() {
-    EPS.enableAll(Trigger1, Trigger2, LoadKbFile)
+    sponge.enableAll(Trigger1, Trigger2, LoadKbFile)
 }
 
 void onStartup() {
-    EPS.logger.debug("onStartup, file1: {}, triggers: {}", EPS.info, EPS.engine.triggers)
-    EPS.event("e1").sendAfter(0, 500)
-    EPS.event("e2").sendAfter(0, 500)
+    sponge.logger.debug("onStartup, file1: {}, triggers: {}", sponge.info, sponge.engine.triggers)
+    sponge.event("e1").sendAfter(0, 500)
+    sponge.event("e2").sendAfter(0, 500)
 
-    EPS.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load2.groovy").sendAfter(2000)
-    EPS.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load3.groovy").sendAfter(5000)
+    sponge.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load2.groovy").sendAfter(2000)
+    sponge.event("loadKbFile").set("kbFile", "examples/script/groovy/knowledge_base_load3.groovy").sendAfter(5000)
 }
 
 void onShutdown() {
-    EPS.logger.debug("onShutdown, file1")
+    sponge.logger.debug("onShutdown, file1")
 }

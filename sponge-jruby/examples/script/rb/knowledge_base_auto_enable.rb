@@ -5,13 +5,13 @@ java_import java.util.concurrent.atomic.AtomicInteger
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("counter", AtomicInteger.new(0))
+    $sponge.setVariable("counter", AtomicInteger.new(0))
 end
 
 class AutoAction < Action
     def onCall()
         self.logger.debug("Running")
-        $EPS.getVariable("counter").incrementAndGet()
+        $sponge.getVariable("counter").incrementAndGet()
         return nil
     end
 end
@@ -22,7 +22,7 @@ class AutoFilter < Filter
     end
     def onAccept(event)
         self.logger.debug("Received event: {}", event.name)
-        $EPS.getVariable("counter").incrementAndGet()
+        $sponge.getVariable("counter").incrementAndGet()
         return true
     end
 end
@@ -33,7 +33,7 @@ class AutoTrigger < Trigger
     end
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)
-        $EPS.getVariable("counter").incrementAndGet()
+        $sponge.getVariable("counter").incrementAndGet()
     end
 end
 
@@ -43,7 +43,7 @@ class AutoRule < Rule
     end
     def onRun(event)
         self.logger.debug("Running for sequence: {}", self.eventSequence)
-        $EPS.getVariable("counter").incrementAndGet()
+        $sponge.getVariable("counter").incrementAndGet()
     end
 end
 
@@ -57,14 +57,14 @@ class AutoCorrelator < Correlator
     def onEvent(event)
         self.logger.debug("Received event: {}", event.name)
         if event.name == "e2"
-            $EPS.getVariable("counter").incrementAndGet()
+            $sponge.getVariable("counter").incrementAndGet()
             self.finish()
         end
     end
 end
 
 def onStartup
-    $EPS.call("AutoAction")
-    $EPS.event("e1").send()
-    $EPS.event("e2").send()
+    $sponge.call("AutoAction")
+    $sponge.event("e1").send()
+    $sponge.event("e2").send()
 end

@@ -15,27 +15,27 @@ class PluginsJava : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("connectionName", null)
-        eps.setVariable("echoConfig", null)
+        sponge.setVariable("connectionName", null)
+        sponge.setVariable("echoConfig", null)
     }
 
     class PluginTrigger : KTrigger() {
         override fun onConfigure() = setEvent("e1")
         override fun onRun(event: Event) {
-            val connectionPlugin = eps.getPlugin(ConnectionPlugin::class.java)
+            val connectionPlugin = sponge.getPlugin(ConnectionPlugin::class.java)
             logger.debug("Connection name is still: {}", connectionPlugin.connectionName)
-            eps.setVariable("connectionName", connectionPlugin.connectionName)
+            sponge.setVariable("connectionName", connectionPlugin.connectionName)
         }
     }
 
     override fun onStartup() {
-        val connectionPlugin = eps.getPlugin(ConnectionPlugin::class.java)
+        val connectionPlugin = sponge.getPlugin(ConnectionPlugin::class.java)
         logger.debug("Connection name: {}", connectionPlugin.connectionName)
-        eps.event("e1").send()
+        sponge.event("e1").send()
 
-        val echoPlugin = eps.getPlugin(EchoPlugin::class.java)
+        val echoPlugin = sponge.getPlugin(EchoPlugin::class.java)
         logger.info("Echo plugin config: {}", echoPlugin.echoConfig)
-        eps.setVariable("echoConfig", echoPlugin.echoConfig)
+        sponge.setVariable("echoConfig", echoPlugin.echoConfig)
         for (i in 1 until echoPlugin.count) {
             logger.info("\tEcho from echo plugin: {}", echoPlugin.echo)
         }

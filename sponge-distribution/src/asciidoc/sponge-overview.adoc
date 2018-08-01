@@ -2,15 +2,15 @@
 :page-permalink: index.html
 
 == {sponge}
-*{sponge} is an open-source, Java-based Event Processing System.*
+*{sponge} is an open-source, Java-based Action and Event Processing System.*
 
 This documentation applies to version {projectVersion} (release date: {projectDate}).
 
-{sponge} is a software library for implementing event processors that listen to certain events and asynchronously perform specified operations when some conditions are met. Events are usually sent by external systems. The Event Processing System allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators. Moreover {sponge} allows creating synchronous actions. 
+{sponge} is a software library for implementing synchronous actions and asynchronous event processors. Event processors listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. {sponge} allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators.
 
-Event processors and actions are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java or Kotlin.
+Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java or Kotlin.
 
-{sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system.
+{sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system, in some aspects.
 
 {sponge} requires Java 1.8 or above.
 
@@ -26,7 +26,7 @@ ____
 == Features
 The main features of {sponge}:
 
-* Provides a concurrent processing of incoming events.
+* Provides a concurrent processing of actions and incoming events.
 * Allows generating and scheduling of events (e.g. supports cron notation).
 * Events may represent such diverse entities as, for example, SNMP traps, RSS feeds or MIDI messages.
 * Supports writing knowledge bases in several scripting languages.
@@ -87,7 +87,7 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 
 * {sponge} provides no graphical user interface (GUI).
 * Because of {sponge} doesn't introduce its own notation for knowledge bases, it provides a shorter learning curve for users that know one of the supported scripting languages. However it could lack more sophisticated features and could be less optimized for certain uses than other solutions. For example you specify event conditions by writing any code in a scripting language that is to be executed when a matching event happens. On one hand it gives you a flexibility and on the other hand it doesn't provide optimizations that could be possible if, for example, a strict temporal reasoning notation is used.
-* Currently {sponge} doesn't provide persistence out of the box.
+* Currently {sponge} doesn't provide persistence of events out of the box.
 
 == Author's note
 

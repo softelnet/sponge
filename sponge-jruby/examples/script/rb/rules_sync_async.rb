@@ -6,7 +6,7 @@ java_import org.openksavi.sponge.test.util.CorrelationEventsLog
 def onInit
     # Variables for assertions only
     $correlationEventsLog = CorrelationEventsLog.new
-    $EPS.setVariable("correlationEventsLog", $correlationEventsLog)
+    $sponge.setVariable("correlationEventsLog", $correlationEventsLog)
 end
 
 class RuleFFF < Rule
@@ -33,11 +33,11 @@ class RuleFFL < Rule
 end
 
 def onStartup
-    $EPS.event("e1").set("label", "1").send()
-    $EPS.event("e2").set("label", "2").send()
-    $EPS.event("e2").set("label", "3").send()
-    $EPS.event("e2").set("label", "4").send()
-    $EPS.event("e3").set("label", "5").send()
-    $EPS.event("e3").set("label", "6").send()
-    $EPS.event("e3").set("label", "7").send()
+    $sponge.event("e1").set("label", "1").send()
+    $sponge.event("e2").set("label", "2").send()
+    $sponge.event("e2").set("label", "3").send()
+    $sponge.event("e2").set("label", "4").send()
+    $sponge.event("e3").set("label", "5").send()
+    $sponge.event("e3").set("label", "6").send()
+    $sponge.event("e3").set("label", "7").send()
 end

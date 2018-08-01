@@ -4,8 +4,8 @@
  */
 
 void onInit() {
-    EPS.setVariable("eventCounter", 0)
-    EPS.setVariable("allowNumber", 2)
+    sponge.setVariable("eventCounter", 0)
+    sponge.setVariable("allowNumber", 2)
 }
 
 class Trigger1 extends Trigger {
@@ -13,11 +13,11 @@ class Trigger1 extends Trigger {
         this.event = "e1"
     }
     void onRun(Event event) {
-    	int eventCounter = EPS.getVariable("eventCounter")
+    	int eventCounter = sponge.getVariable("eventCounter")
     	eventCounter += 1
-        EPS.setVariable("eventCounter", eventCounter)
+        sponge.setVariable("eventCounter", eventCounter)
         this.logger.debug("Received event {}, counter: {}", event.name, eventCounter)
-        if (eventCounter > EPS.getVariable("allowNumber")) {
+        if (eventCounter > sponge.getVariable("allowNumber")) {
         	this.logger.debug("This line should not be displayed!")
         }
     }
@@ -29,13 +29,13 @@ class Trigger2 extends Trigger {
     }
     void onRun(Event event) {
         this.logger.debug("Removing entry")
-        EPS.removeEvent(EPS.getVariable("eventEntry"))
+        sponge.removeEvent(sponge.getVariable("eventEntry"))
     }
 }
 
 void onStartup() {
     int start = 500
     int interval = 1000
-    EPS.setVariable("eventEntry", EPS.event("e1").sendAfter(start, interval))
-    EPS.event("e2").sendAfter(interval * EPS.getVariable("allowNumber"))
+    sponge.setVariable("eventEntry", sponge.event("e1").sendAfter(start, interval))
+    sponge.event("e2").sendAfter(interval * sponge.getVariable("allowNumber"))
 }

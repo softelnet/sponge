@@ -41,12 +41,12 @@ class Log(Trigger):
                          event.messageString)
 
 def onStartup():
-    EPS.logger.info("This example program enables a user to play an input MIDI device (e.g. a MIDI keyboard) using the Sponge MIDI plugin.")
+    sponge.logger.info("This example program enables a user to play an input MIDI device (e.g. a MIDI keyboard) using the Sponge MIDI plugin.")
     midi.connectDefaultInputDevice()
-    EPS.logger.info("Input MIDI device: {}", midi.inputDevice.deviceInfo.name)
-    EPS.logger.info("Instruments: {}", ",".join(list(map(lambda i: i.name + " (" + str(i.patch.bank) + "/" + str(i.patch.program) + ")", midi.instruments))))
+    sponge.logger.info("Input MIDI device: {}", midi.inputDevice.deviceInfo.name)
+    sponge.logger.info("Instruments: {}", ",".join(list(map(lambda i: i.name + " (" + str(i.patch.bank) + "/" + str(i.patch.program) + ")", midi.instruments))))
     midi.setInstrument(0, "Electric Piano 1")
 
     # Uncomment the following lines to disable additional sound effects.
-    #EPS.disable(EffectSound)
-    #EPS.disable(MultiSound)
+    #sponge.disable(EffectSound)
+    #sponge.disable(MultiSound)

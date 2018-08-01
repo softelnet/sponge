@@ -14,5 +14,5 @@ class HelloWorld : Trigger() {
 }
 
 fun onStartup() {
-    EPS.event("helloEvent").set("say", "Hello World!").send()
+    sponge.event("helloEvent").set("say", "Hello World!").send()
 }

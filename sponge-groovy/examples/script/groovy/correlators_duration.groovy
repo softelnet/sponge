@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.*
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
+    sponge.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
 }
 
 class SampleCorrelator extends Correlator {
@@ -26,7 +26,7 @@ class SampleCorrelator extends Correlator {
     }
     void onEvent(Event event) {
         eventLog << event
-        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
     }
     void onDuration() {
         this.logger.debug("{} - log: {}", this.hashCode(), eventLog)
@@ -34,7 +34,7 @@ class SampleCorrelator extends Correlator {
 }
 
 void onStartup() {
-    EPS.event("filesystemFailure").set("source", "server1").send()
-    EPS.event("diskFailure").set("source", "server1").send()
-    EPS.event("diskFailure").set("source", "server2").send()
+    sponge.event("filesystemFailure").set("source", "server1").send()
+    sponge.event("diskFailure").set("source", "server1").send()
+    sponge.event("diskFailure").set("source", "server2").send()
 }

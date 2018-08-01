@@ -5,8 +5,8 @@
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("scriptActionResult", null);
-    EPS.setVariable("javaActionResult",  null);
+    sponge.setVariable("scriptActionResult", null);
+    sponge.setVariable("javaActionResult",  null);
 }
 
 var EchoAction = Java.extend(Action, {
@@ -30,20 +30,20 @@ var ArrayArgumentAction = Java.extend(Action, {
 });
 
 function onLoad() {
-    EPS.enableJava(org.openksavi.sponge.examples.PowerEchoAction.class);
+    sponge.enableJava(org.openksavi.sponge.examples.PowerEchoAction.class);
 }
 
 function onStartup() {
-    EPS.logger.debug("Calling script defined action");
-    EPS.setVariable("scriptActionResult", EPS.call("EchoAction", 1, "test"));
-    EPS.logger.debug("Action returned: {}", EPS.getVariable("scriptActionResult"));
+    sponge.logger.debug("Calling script defined action");
+    sponge.setVariable("scriptActionResult", sponge.call("EchoAction", 1, "test"));
+    sponge.logger.debug("Action returned: {}", sponge.getVariable("scriptActionResult"));
 
-    EPS.logger.debug("Calling Java defined action");
-    EPS.setVariable("javaActionResult", EPS.call("PowerEchoAction", 1, "test"));
-    EPS.logger.debug("Action returned: {}", EPS.getVariable("javaActionResult"));
+    sponge.logger.debug("Calling Java defined action");
+    sponge.setVariable("javaActionResult", sponge.call("PowerEchoAction", 1, "test"));
+    sponge.logger.debug("Action returned: {}", sponge.getVariable("javaActionResult"));
 
-    EPS.logger.debug("Disabling actions");
-    EPS.disable(EchoAction);
-    EPS.disableJava(org.openksavi.sponge.examples.PowerEchoAction.class);
+    sponge.logger.debug("Disabling actions");
+    sponge.disable(EchoAction);
+    sponge.disableJava(org.openksavi.sponge.examples.PowerEchoAction.class);
 }
 

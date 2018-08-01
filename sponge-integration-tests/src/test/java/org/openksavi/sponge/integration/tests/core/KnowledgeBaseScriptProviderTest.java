@@ -35,8 +35,8 @@ public class KnowledgeBaseScriptProviderTest {
         String startingVariableName = "starting";
 
         String kbScriptBody = String.format(
-                "def onAfterReload():\n\tEPS.setVariable('%s', True)"
-                        + "\ndef onStartup():\n\tEPS.logger.debug('Starting')\n\tEPS.setVariable('%s', True)",
+                "def onAfterReload():\n\tsponge.setVariable('%s', True)"
+                        + "\ndef onStartup():\n\tsponge.logger.debug('Starting')\n\tsponge.setVariable('%s', True)",
                 reloadingVariableName, startingVariableName);
         SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBaseString("stringKb", PythonConstants.TYPE, kbScriptBody).build();
         engine.startup();

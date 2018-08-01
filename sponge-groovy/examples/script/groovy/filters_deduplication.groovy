@@ -15,7 +15,7 @@ void onInit() {
     eventCounter.put("e1-red", new AtomicInteger(0))
     eventCounter.put("e2-blue", new AtomicInteger(0))
     eventCounter.put("e2-red", new AtomicInteger(0))
-    EPS.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("eventCounter", eventCounter)
 }
 
 class ColorDeduplicationFilter extends Filter {
@@ -37,18 +37,18 @@ class ColorTrigger extends Trigger {
     }
     void onRun(Event event) {
         this.logger.debug("Received event {}", event)
-        EPS.getVariable("eventCounter").get(event.name + "-" + event.get("color")).incrementAndGet()
+        sponge.getVariable("eventCounter").get(event.name + "-" + event.get("color")).incrementAndGet()
     }
 }
 
 void onStartup() {
-    EPS.event("e1").set("color", "red").send()
-    EPS.event("e1").set("color", "blue").send()
-    EPS.event("e2").set("color", "red").send()
-    EPS.event("e2").set("color", "blue").send()
+    sponge.event("e1").set("color", "red").send()
+    sponge.event("e1").set("color", "blue").send()
+    sponge.event("e2").set("color", "red").send()
+    sponge.event("e2").set("color", "blue").send()
 
-    EPS.event("e1").set("color", "red").send()
-    EPS.event("e1").set("color", "blue").send()
-    EPS.event("e2").set("color", "red").send()
-    EPS.event("e2").set("color", "blue").send()
+    sponge.event("e1").set("color", "red").send()
+    sponge.event("e1").set("color", "blue").send()
+    sponge.event("e2").set("color", "red").send()
+    sponge.event("e2").set("color", "blue").send()
 }

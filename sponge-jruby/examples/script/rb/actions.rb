@@ -5,8 +5,8 @@ java_import org.openksavi.sponge.examples.PowerEchoAction
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("scriptActionResult", nil)
-    $EPS.setVariable("javaActionResult", nil)
+    $sponge.setVariable("scriptActionResult", nil)
+    $sponge.setVariable("javaActionResult", nil)
 end
 
 class EchoAction < Action
@@ -26,21 +26,21 @@ class ArrayArgumentAction < Action
 end
 
 def onLoad
-    $EPS.enableJava(PowerEchoAction)
+    $sponge.enableJava(PowerEchoAction)
 end
 
 def onStartup
-    $EPS.logger.debug("Calling script defined action")
-    scriptActionResult = $EPS.call("EchoAction", 1, "test")
-    $EPS.logger.debug("Action returned: {}", scriptActionResult)
-    $EPS.setVariable("scriptActionResult", scriptActionResult)
+    $sponge.logger.debug("Calling script defined action")
+    scriptActionResult = $sponge.call("EchoAction", 1, "test")
+    $sponge.logger.debug("Action returned: {}", scriptActionResult)
+    $sponge.setVariable("scriptActionResult", scriptActionResult)
 
-    $EPS.logger.debug("Calling Java defined action")
-    javaActionResult = $EPS.call("PowerEchoAction", 1, "test")
-    $EPS.logger.debug("Action returned: {}", javaActionResult)
-    $EPS.setVariable("javaActionResult", javaActionResult)
+    $sponge.logger.debug("Calling Java defined action")
+    javaActionResult = $sponge.call("PowerEchoAction", 1, "test")
+    $sponge.logger.debug("Action returned: {}", javaActionResult)
+    $sponge.setVariable("javaActionResult", javaActionResult)
 
-    $EPS.logger.debug("Disabling actions")
-    $EPS.disable(EchoAction)
-    $EPS.disableJava(PowerEchoAction)
+    $sponge.logger.debug("Disabling actions")
+    $sponge.disable(EchoAction)
+    $sponge.disableJava(PowerEchoAction)
 end

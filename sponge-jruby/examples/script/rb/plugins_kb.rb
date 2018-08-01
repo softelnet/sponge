@@ -3,8 +3,8 @@
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("valueBefore", nil)
-    $EPS.setVariable("valueAfter", nil)
+    $sponge.setVariable("valueBefore", nil)
+    $sponge.setVariable("valueAfter", nil)
 end
 
 # Example plugin defined in the knowledge base.
@@ -34,15 +34,15 @@ class PluginTrigger < Trigger
     def onRun(event)
     	    valueBefore = $scriptPlugin.getStoredValue()
     	    self.logger.info("Plugin stored value: {}", valueBefore)
-        $EPS.setVariable("valueBefore", valueBefore)
+        $sponge.setVariable("valueBefore", valueBefore)
 
         $scriptPlugin.setStoredValue(event.get("value"))
         valueAfter = $scriptPlugin.getStoredValue()
         self.logger.info("New stored value: {}", valueAfter)
-        $EPS.setVariable("valueAfter", valueAfter)
+        $sponge.setVariable("valueAfter", valueAfter)
     end
 end
 
 def onStartup
-    $EPS.event("e1").set("value", "Value B").send()
+    $sponge.event("e1").set("value", "Value B").send()
 end

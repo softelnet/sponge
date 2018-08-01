@@ -14,16 +14,16 @@ class RulesInstances : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("countA", AtomicInteger(0))
-        eps.setVariable("countB", AtomicInteger(0))
-        eps.setVariable("max", 100)
+        sponge.setVariable("countA", AtomicInteger(0))
+        sponge.setVariable("countB", AtomicInteger(0))
+        sponge.setVariable("max", 100)
     }
 
     class RuleA : KRule() {
         override fun onConfigure() = setEvents("a a1", "a a2")
 
         override fun onRun(event: Event?) {
-            eps.getVariable<AtomicInteger>("countA").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("countA").incrementAndGet()
         }
     }
 
@@ -31,14 +31,14 @@ class RulesInstances : KKnowledgeBase() {
         override fun onConfigure() = setEvents("b b1", "b b2")
 
         override fun onRun(event: Event?) {
-            eps.getVariable<AtomicInteger>("countB").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("countB").incrementAndGet()
         }
     }
 
     override fun onStartup() {
-        for (i in 1..eps.getVariable<Int>("max")) {
-            eps.event("a").send()
-            eps.event("b").send()
+        for (i in 1..sponge.getVariable<Int>("max")) {
+            sponge.event("a").send()
+            sponge.event("b").send()
         }
     }
 }

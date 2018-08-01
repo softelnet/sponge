@@ -7,7 +7,7 @@ from java.util import ArrayList
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("order", ArrayList())
+    sponge.setVariable("order", ArrayList())
 
 def onStartup():
-    EPS.getVariable("order").add(1)
+    sponge.getVariable("order").add(1)

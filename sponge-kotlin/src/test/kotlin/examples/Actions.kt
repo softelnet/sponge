@@ -13,8 +13,8 @@ class Actions : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("scriptActionResult", null)
-        eps.setVariable("javaActionResult", null)
+        sponge.setVariable("scriptActionResult", null)
+        sponge.setVariable("javaActionResult", null)
     }
 
     class EchoAction : KAction() {
@@ -32,23 +32,23 @@ class Actions : KKnowledgeBase() {
     }
 
     override fun onLoad() {
-        eps.enableJava(PowerEchoAction::class.java)
+        sponge.enableJava(PowerEchoAction::class.java)
     }
 
     override fun onStartup() {
-        eps.logger.debug("Calling script defined action")
-        val scriptActionResult = eps.call("EchoAction", 1, "test")
-        eps.logger.debug("Action returned: {}", scriptActionResult)
-        eps.setVariable("scriptActionResult", scriptActionResult)
+        sponge.logger.debug("Calling script defined action")
+        val scriptActionResult = sponge.call("EchoAction", 1, "test")
+        sponge.logger.debug("Action returned: {}", scriptActionResult)
+        sponge.setVariable("scriptActionResult", scriptActionResult)
 
-        eps.logger.debug("Calling Java defined action")
-        val javaActionResult = eps.call("PowerEchoAction", 1, "test")
-        eps.logger.debug("Action returned: {}", javaActionResult)
-        eps.setVariable("javaActionResult", javaActionResult)
+        sponge.logger.debug("Calling Java defined action")
+        val javaActionResult = sponge.call("PowerEchoAction", 1, "test")
+        sponge.logger.debug("Action returned: {}", javaActionResult)
+        sponge.setVariable("javaActionResult", javaActionResult)
 
-        eps.logger.debug("Disabling actions")
-        eps.disable(EchoAction::class)
-        eps.disableJava(PowerEchoAction::class.java)
+        sponge.logger.debug("Disabling actions")
+        sponge.disable(EchoAction::class)
+        sponge.disableJava(PowerEchoAction::class.java)
     }
 }
 

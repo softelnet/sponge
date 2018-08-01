@@ -25,12 +25,12 @@ import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
 public abstract class KTrigger extends BaseTrigger {
 
     /**
-     * Method required for accessing EPS in Kotlin-based processors.
+     * Method required for accessing the engine operations in Kotlin-based processors.
      *
-     * @return EPS.
+     * @return the engine operations.
      */
     @Override
-    public final KotlinKnowledgeBaseEngineOperations getEps() {
-        return (KotlinKnowledgeBaseEngineOperations) super.getEps();
+    public final KotlinKnowledgeBaseEngineOperations getSponge() {
+        return (KotlinKnowledgeBaseEngineOperations) super.getSponge();
     }
 }

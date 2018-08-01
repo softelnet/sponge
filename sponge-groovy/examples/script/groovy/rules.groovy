@@ -8,9 +8,9 @@ import org.openksavi.sponge.examples.SameSourceJavaRule
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("hardwareFailureJavaCount", new AtomicInteger(0))
-    EPS.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
-    EPS.setVariable("sameSourceFirstFireCount", new AtomicInteger(0))
+    sponge.setVariable("hardwareFailureJavaCount", new AtomicInteger(0))
+    sponge.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
+    sponge.setVariable("sameSourceFirstFireCount", new AtomicInteger(0))
 }
 
 class FirstRule extends Rule {
@@ -23,7 +23,7 @@ class FirstRule extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
-        EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
+        sponge.getVariable("sameSourceFirstFireCount").incrementAndGet()
     }
 }
 
@@ -38,7 +38,7 @@ class SameSourceAllRule extends Rule {
     void onRun(Event event) {
         this.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                                                                                           this.eventSequence)
-        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
     }
     boolean severityCondition(event) {
         return (event.get("severity") as int) > 5
@@ -51,14 +51,14 @@ class SameSourceAllRule extends Rule {
 }
 
 void onLoad() {
-    EPS.enableJava(SameSourceJavaRule)
+    sponge.enableJava(SameSourceJavaRule)
 }
 
 void onStartup() {
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send()
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 1).set("source", "server1").send()
+    sponge.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 10).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 10).set("source", "server2").send()
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 1).set("source", "server1").send()
 }

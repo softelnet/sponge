@@ -6,21 +6,21 @@ java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("verifyTriggerEnabled", AtomicBoolean.new(false))
-    $EPS.setVariable("verifyTriggerDisabled", AtomicBoolean.new(false))
-    $EPS.setVariable("verificationDone", AtomicBoolean.new(false))
+    $sponge.setVariable("verifyTriggerEnabled", AtomicBoolean.new(false))
+    $sponge.setVariable("verifyTriggerDisabled", AtomicBoolean.new(false))
+    $sponge.setVariable("verificationDone", AtomicBoolean.new(false))
 end
 
 def verifyManager
-    triggerCount = $EPS.engine.triggers.size()
-    $EPS.enable(TriggerA)
-    $EPS.enable(TriggerA)
-    $EPS.getVariable("verifyTriggerEnabled").set($EPS.engine.triggers.size() == triggerCount + 1)
-    triggerCount = $EPS.engine.triggers.size()
-    $EPS.disable(TriggerA)
-    $EPS.disable(TriggerA)
-    $EPS.getVariable("verifyTriggerDisabled").set($EPS.engine.triggers.size() == triggerCount - 1)
-    $EPS.getVariable("verificationDone").set(true)
+    triggerCount = $sponge.engine.triggers.size()
+    $sponge.enable(TriggerA)
+    $sponge.enable(TriggerA)
+    $sponge.getVariable("verifyTriggerEnabled").set($sponge.engine.triggers.size() == triggerCount + 1)
+    triggerCount = $sponge.engine.triggers.size()
+    $sponge.disable(TriggerA)
+    $sponge.disable(TriggerA)
+    $sponge.getVariable("verifyTriggerDisabled").set($sponge.engine.triggers.size() == triggerCount - 1)
+    $sponge.getVariable("verificationDone").set(true)
 end
 
 class VerifyTrigger < Trigger
@@ -41,9 +41,9 @@ class TriggerA < Trigger
 end
 
 def onLoad
-    $EPS.enable(VerifyTrigger)
+    $sponge.enable(VerifyTrigger)
 end
 
 def onStartup
-    $EPS.event("verify").send()
+    $sponge.event("verify").send()
 end

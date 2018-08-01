@@ -7,13 +7,13 @@ import java.util.concurrent.atomic.AtomicInteger
 
  void onInit() {
      // Variables for assertions only
-     EPS.setVariable("counter", new AtomicInteger(0))
+     sponge.setVariable("counter", new AtomicInteger(0))
  }
 
  class AutoAction extends Action {
      Object onCall() {
          this.logger.debug("Running")
-         EPS.getVariable("counter").incrementAndGet()
+         sponge.getVariable("counter").incrementAndGet()
          return null
      }
  }
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger
      }
      boolean onAccept(Event event) {
          this.logger.debug("Received event: {}", event.name)
-         EPS.getVariable("counter").incrementAndGet()
+         sponge.getVariable("counter").incrementAndGet()
          return true
      }
  }
@@ -35,7 +35,7 @@ class AutoTrigger extends Trigger {
     }
     void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
-        EPS.getVariable("counter").incrementAndGet()
+        sponge.getVariable("counter").incrementAndGet()
     }
 }
 
@@ -45,7 +45,7 @@ class AutoRule extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running for sequence: {}", this.eventSequence)
-        EPS.getVariable("counter").incrementAndGet()
+        sponge.getVariable("counter").incrementAndGet()
     }
 }
 
@@ -59,14 +59,14 @@ class AutoCorrelator extends Correlator {
     void onEvent(Event event) {
         this.logger.debug("Received event: {}", event.name)
         if (event.name == "e2") {
-            EPS.getVariable("counter").incrementAndGet()
+            sponge.getVariable("counter").incrementAndGet()
             this.finish()
         }
     }
 }
 
 void onStartup() {
-    EPS.call("AutoAction")
-    EPS.event("e1").send()
-    EPS.event("e2").send()
+    sponge.call("AutoAction")
+    sponge.event("e1").send()
+    sponge.event("e2").send()
 }

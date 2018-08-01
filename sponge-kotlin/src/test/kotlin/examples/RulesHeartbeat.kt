@@ -19,7 +19,7 @@ class RulesHeartbeat : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("soundTheAlarm", AtomicBoolean(false))
+        sponge.setVariable("soundTheAlarm", AtomicBoolean(false))
     }
 
     class HeartbeatFilter : KFilter() {
@@ -28,7 +28,7 @@ class RulesHeartbeat : KKnowledgeBase() {
         override fun onAccept(event: Event): Boolean {
             heartbeatCounter++
             if (heartbeatCounter > 2) {
-                eps.removeEvent(eps.getVariable("hearbeatEventEntry"))
+                sponge.removeEvent(sponge.getVariable("hearbeatEventEntry"))
                 return false
             } else {
                 return true
@@ -45,7 +45,7 @@ class RulesHeartbeat : KKnowledgeBase() {
         }
 
         override fun onRun(event: Event?) {
-            eps.event("alarm").set("severity", 1).send()
+            sponge.event("alarm").set("severity", 1).send()
         }
     }
 
@@ -53,11 +53,11 @@ class RulesHeartbeat : KKnowledgeBase() {
         override fun onConfigure() = setEvent("alarm")
         override fun onRun(event: Event) {
             println("Sound the alarm!")
-            eps.getVariable<AtomicBoolean>("soundTheAlarm").set(true)
+            sponge.getVariable<AtomicBoolean>("soundTheAlarm").set(true)
         }
     }
 
     override fun onStartup() {
-        eps.setVariable("hearbeatEventEntry",  eps.event("heartbeat").set("source", "Host1").sendAfter(100, 1000))
+        sponge.setVariable("hearbeatEventEntry",  sponge.event("heartbeat").set("source", "Host1").sendAfter(100, 1000))
     }
 }

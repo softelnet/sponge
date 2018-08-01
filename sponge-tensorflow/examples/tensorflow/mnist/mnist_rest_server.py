@@ -32,10 +32,10 @@ class CallPredict(Trigger):
         self.event = "predict"
     def onRun(self, event):
         file = event.get("file")
-        predictions = EPS.call("MnistPredictDetailed", MnistUtils.getImageBytes(file))
+        predictions = sponge.call("MnistPredictDetailed", MnistUtils.getImageBytes(file))
         prediction = predictions.index(max(predictions))
-        EPS.logger.info("Prediction for {} is: {}, all predictions: {}", file, prediction, predictions)
+        sponge.logger.info("Prediction for {} is: {}, all predictions: {}", file, prediction, predictions)
 
 def onStartup():
     SpongeUtils.awaitUntil(lambda: py4j.facade.isReady())
-    EPS.event("predict").set("file", "examples/tensorflow/mnist/data/7_0.png").send()
+    sponge.event("predict").set("file", "examples/tensorflow/mnist/data/7_0.png").send()

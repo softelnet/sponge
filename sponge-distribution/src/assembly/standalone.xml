@@ -135,6 +135,9 @@
             <includes>
                 <include>examples/**</include>
             </includes>
+            <excludes>
+                <exclude>%regex[.*\.h5]</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>../sponge-standalone</directory>

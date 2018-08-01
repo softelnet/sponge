@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 fun onInit() {
     // Variables for assertions only
-    EPS.setVariable("soundTheAlarm", AtomicBoolean(false))
+    sponge.setVariable("soundTheAlarm", AtomicBoolean(false))
 }
 
 class HeartbeatFilter : Filter() {
@@ -16,7 +16,7 @@ class HeartbeatFilter : Filter() {
     override fun onAccept(event: Event): Boolean {
         heartbeatCounter++
         if (heartbeatCounter > 2) {
-            eps.removeEvent(eps.getVariable("hearbeatEventEntry"))
+            sponge.removeEvent(sponge.getVariable("hearbeatEventEntry"))
             return false
         } else {
             return true
@@ -33,7 +33,7 @@ class HeartbeatRule : Rule() {
     }
 
     override fun onRun(event: Event?) {
-        eps.event("alarm").set("severity", 1).send()
+        sponge.event("alarm").set("severity", 1).send()
     }
 }
 
@@ -41,10 +41,10 @@ class AlarmTrigger : Trigger() {
     override fun onConfigure() = setEvent("alarm")
     override fun onRun(event: Event) {
         println("Sound the alarm!")
-        eps.getVariable<AtomicBoolean>("soundTheAlarm").set(true)
+        sponge.getVariable<AtomicBoolean>("soundTheAlarm").set(true)
     }
 }
 
 fun onStartup() {
-    EPS.setVariable("hearbeatEventEntry", EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000))
+    sponge.setVariable("hearbeatEventEntry", sponge.event("heartbeat").set("source", "Host1").sendAfter(100, 1000))
 }

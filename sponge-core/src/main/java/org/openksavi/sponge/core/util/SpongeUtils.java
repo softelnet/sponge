@@ -289,7 +289,7 @@ public abstract class SpongeUtils {
         return engine.getKnowledgeBaseManager().getScriptKnowledgeBase(kbName).getInterpreter();
     }
 
-    public static KnowledgeBaseEngineOperations getEps(KnowledgeBaseInterpreter interpreter) {
+    public static KnowledgeBaseEngineOperations getSponge(KnowledgeBaseInterpreter interpreter) {
         return interpreter.getVariable(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, KnowledgeBaseEngineOperations.class);
     }
 

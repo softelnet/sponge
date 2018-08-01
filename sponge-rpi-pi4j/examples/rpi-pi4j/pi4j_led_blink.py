@@ -23,7 +23,7 @@ class LedBlink(Trigger):
 def onStartup():
     global led
     led = pi.gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "led", PinState.LOW)
-    EPS.event("blink").sendAfter(0, 1000)
+    sponge.event("blink").sendAfter(0, 1000)
 
 def onShutdown():
     global led

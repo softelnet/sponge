@@ -50,12 +50,12 @@ public abstract class KotlinUtils {
         return !className.contains("$");
     }
 
-    public static void scanNestedToAutoEnable(KClass<?> rootKClass, KotlinKnowledgeBaseEngineOperations eps, Logger logger) {
+    public static void scanNestedToAutoEnable(KClass<?> rootKClass, KotlinKnowledgeBaseEngineOperations sponge, Logger logger) {
         List<String> autoEnabled = new ArrayList<>();
         rootKClass.getNestedClasses().stream().forEachOrdered(kclass -> {
             if (isAutoEnableCandidate(kclass)) {
                 autoEnabled.add(KotlinUtils.createProcessorName(kclass));
-                eps.enable(kclass);
+                sponge.enable(kclass);
             }
         });
 

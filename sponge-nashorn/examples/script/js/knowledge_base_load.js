@@ -17,7 +17,7 @@ function onInit() {
     eventCounter.put("Trigger2, file2", new AtomicInteger(0));
     eventCounter.put("Trigger1, file3", new AtomicInteger(0));
     eventCounter.put("Trigger3, file3", new AtomicInteger(0));
-    EPS.setVariable("eventCounter", eventCounter);
+    sponge.setVariable("eventCounter", eventCounter);
 
 }
 var Trigger1 = Java.extend(Trigger, {
@@ -27,7 +27,7 @@ var Trigger1 = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         //self.logger.debug("file1: Received event {}", event);
-        EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
@@ -38,7 +38,7 @@ var Trigger2 = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         //self.logger.debug("file1: Received event {}", event);
-        EPS.getVariable("eventCounter").get(self.displayName).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.displayName).incrementAndGet();
     }
 });
 
@@ -48,24 +48,24 @@ var LoadKbFile = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         var kbFile = event.get("kbFile");
-        EPS.kb.load(kbFile);
+        sponge.kb.load(kbFile);
         self.logger.info("File {} loaded", kbFile);
     }
 });
 
 function onLoad() {
-    EPS.enableAll(Trigger1, Trigger2, LoadKbFile);
+    sponge.enableAll(Trigger1, Trigger2, LoadKbFile);
 }
 
 function onStartup() {
-    EPS.logger.debug("onStartup, file1: {}, triggers: {}", EPS.info, EPS.engine.triggers);
-    EPS.event("e1").sendAfter(0, 500);
-    EPS.event("e2").sendAfter(0, 500);
+    sponge.logger.debug("onStartup, file1: {}, triggers: {}", sponge.info, sponge.engine.triggers);
+    sponge.event("e1").sendAfter(0, 500);
+    sponge.event("e2").sendAfter(0, 500);
 
-    EPS.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load2.js").sendAfter(2000);
-    EPS.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load3.js").sendAfter(5000);
+    sponge.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load2.js").sendAfter(2000);
+    sponge.event("loadKbFile").set("kbFile", "examples/script/js/knowledge_base_load3.js").sendAfter(5000);
 }
 
 function onShutdown() {
-    EPS.logger.debug("onShutdown, file1");
+    sponge.logger.debug("onShutdown, file1");
 }

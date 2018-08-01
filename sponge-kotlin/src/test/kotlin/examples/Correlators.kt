@@ -16,10 +16,10 @@ class Correlators : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
-        eps.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
-        eps.setVariable("hardwareFailureScriptFinishCount", AtomicInteger(0))
-        eps.setVariable("hardwareFailureJavaFinishCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureScriptFinishCount", AtomicInteger(0))
+        sponge.setVariable("hardwareFailureJavaFinishCount", AtomicInteger(0))
     }
 
     class SampleCorrelator : KCorrelator() {
@@ -35,20 +35,20 @@ class Correlators : KKnowledgeBase() {
         override fun onEvent(event: Event) {
             eventLog.add(event)
             logger.debug("{} - event: {}, log: {}", hashCode(), event.name, eventLog)
-            eps.getVariable(AtomicInteger::class, "hardwareFailureScriptCount").incrementAndGet()
+            sponge.getVariable(AtomicInteger::class, "hardwareFailureScriptCount").incrementAndGet()
             if (eventLog.size == 4) {
-                eps.getVariable(AtomicInteger::class, "hardwareFailureScriptFinishCount").incrementAndGet()
+                sponge.getVariable(AtomicInteger::class, "hardwareFailureScriptFinishCount").incrementAndGet()
                 finish()
             }
         }
     }
 
     override fun onLoad() {
-        eps.enableJava(SampleJavaCorrelator::class.java)
+        sponge.enableJava(SampleJavaCorrelator::class.java)
     }
 
     override fun onStartup() {
-        with(eps) {
+        with(sponge) {
             event("filesystemFailure").set("source", "server1").send()
             event("diskFailure").set("source", "server1").send()
             event("diskFailure").set("source", "server2").send()

@@ -6,7 +6,7 @@ java_import java.util.concurrent.TimeUnit
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("value", AtomicReference.new(""))
+    $sponge.setVariable("value", AtomicReference.new(""))
 end
 
 class A < Trigger
@@ -15,9 +15,9 @@ class A < Trigger
     end
     def onRun(event)
         TimeUnit::SECONDS::sleep(1)
-        $EPS.getVariable("value").set("A1")
+        $sponge.getVariable("value").set("A1")
         TimeUnit::SECONDS::sleep(3)
-        $EPS.getVariable("value").set("A2")
+        $sponge.getVariable("value").set("A2")
     end
 end
 
@@ -27,9 +27,9 @@ class B < Trigger
     end
     def onRun(event)
         TimeUnit::SECONDS::sleep(2)
-        $EPS.getVariable("value").set("B1")
+        $sponge.getVariable("value").set("B1")
         TimeUnit::SECONDS::sleep(4)
-        $EPS.getVariable("value").set("B2")
+        $sponge.getVariable("value").set("B2")
     end
 end
 
@@ -39,14 +39,14 @@ class C < Trigger
     end
     def onRun(event)
         TimeUnit::SECONDS::sleep(8)
-        $EPS.getVariable("value").set("C1")
+        $sponge.getVariable("value").set("C1")
         TimeUnit::SECONDS::sleep(1)
-        $EPS.getVariable("value").set("C2")
+        $sponge.getVariable("value").set("C2")
     end
 end
 
 def onStartup
-    $EPS.event("a").send()
-    $EPS.event("b").send()
-    $EPS.event("c").send()
+    $sponge.event("a").send()
+    $sponge.event("b").send()
+    $sponge.event("c").send()
 end

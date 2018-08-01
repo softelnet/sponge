@@ -92,10 +92,10 @@ class MpdSetAndPlayPlaylist(Action):
         library = MpdLibrary()
 
         albums = mpd.server.musicDatabase.albumDatabase.listAllAlbums()
-        EPS.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
-        EPS.logger.info("{}", library.getAlbumsInfo(albums))
+        sponge.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
+        sponge.logger.info("{}", library.getAlbumsInfo(albums))
 
-        EPS.logger.info("Setting the playlist...")
+        sponge.logger.info("Setting the playlist...")
         # Set the playlist
         selectedAlbums = library.selectAlbums(albums, aArtist, aAlbum, aGenre, aMinYear, aMaxYear, useSimpleRegexp = True)
         if len(selectedAlbums) > 0:

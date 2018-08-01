@@ -7,10 +7,10 @@ java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
-    $EPS.setVariable("hardwareFailureJavaCount", AtomicInteger.new(0))
-    $EPS.setVariable("hardwareFailureScriptFinishCount", AtomicInteger.new(0))
-    $EPS.setVariable("hardwareFailureJavaFinishCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureJavaCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureScriptFinishCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureJavaFinishCount", AtomicInteger.new(0))
 end
 
 class SampleCorrelator < Correlator
@@ -27,22 +27,22 @@ class SampleCorrelator < Correlator
     def onEvent(event)
         @eventLog  << event
         self.logger.debug("{} - event: {}, log: {}", self.hashCode(), event.name, @eventLog.map(&:to_s))
-        $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        $sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
         if @eventLog.length >= 4
-            $EPS.getVariable("hardwareFailureScriptFinishCount").incrementAndGet()
+            $sponge.getVariable("hardwareFailureScriptFinishCount").incrementAndGet()
             self.finish()
         end
     end
 end
 
 def onLoad
-    $EPS.enableJava(SampleJavaCorrelator)
+    $sponge.enableJava(SampleJavaCorrelator)
 end
 
 def onStartup
-    $EPS.event("filesystemFailure").set("source", "server1").send()
-    $EPS.event("diskFailure").set("source", "server1").send()
-    $EPS.event("diskFailure").set("source", "server2").send()
-    $EPS.event("diskFailure").set("source", "server1").send()
-    $EPS.event("diskFailure").set("source", "server2").send()
+    $sponge.event("filesystemFailure").set("source", "server1").send()
+    $sponge.event("diskFailure").set("source", "server1").send()
+    $sponge.event("diskFailure").set("source", "server2").send()
+    $sponge.event("diskFailure").set("source", "server1").send()
+    $sponge.event("diskFailure").set("source", "server2").send()
 end

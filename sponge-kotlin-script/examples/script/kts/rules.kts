@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 fun onInit() {
     // Variables for assertions only
-    EPS.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
-    EPS.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
-    EPS.setVariable("sameSourceFirstFireCount", AtomicInteger(0))
+    sponge.setVariable("hardwareFailureJavaCount", AtomicInteger(0))
+    sponge.setVariable("hardwareFailureScriptCount", AtomicInteger(0))
+    sponge.setVariable("sameSourceFirstFireCount", AtomicInteger(0))
 }
 
 class FirstRule : Rule() {
@@ -24,7 +24,7 @@ class FirstRule : Rule() {
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for event: {}", event?.name)
-        eps.getVariable<AtomicInteger>("sameSourceFirstFireCount").incrementAndGet()
+        sponge.getVariable<AtomicInteger>("sameSourceFirstFireCount").incrementAndGet()
     }
 }
 
@@ -40,7 +40,7 @@ class SameSourceAllRule : Rule() {
     override fun onRun(event: Event?) {
         logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event?.time, event?.get("source"),
                 eventSequence)
-        eps.getVariable<AtomicInteger>("hardwareFailureScriptCount").incrementAndGet()
+        sponge.getVariable<AtomicInteger>("hardwareFailureScriptCount").incrementAndGet()
     }
 
     fun severityCondition(event: Event) = event.get<Int>("severity") > 5
@@ -52,13 +52,13 @@ class SameSourceAllRule : Rule() {
     }
 }
 
-fun onLoad() = EPS.enableJava(SameSourceJavaRule::class.java)
+fun onLoad() = sponge.enableJava(SameSourceJavaRule::class.java)
 
 fun onStartup() {
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send()
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 1).set("source", "server1").send()
+    sponge.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 10).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 10).set("source", "server2").send()
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 1).set("source", "server1").send()
 }

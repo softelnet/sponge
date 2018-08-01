@@ -6,9 +6,9 @@ java_import org.openksavi.sponge.examples.SameSourceJavaRule
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("hardwareFailureJavaCount", AtomicInteger.new(0))
-    $EPS.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
-    $EPS.setVariable("sameSourceFirstFireCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureJavaCount", AtomicInteger.new(0))
+    $sponge.setVariable("hardwareFailureScriptCount", AtomicInteger.new(0))
+    $sponge.setVariable("sameSourceFirstFireCount", AtomicInteger.new(0))
 end
 
 class FirstRule < Rule
@@ -21,7 +21,7 @@ class FirstRule < Rule
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
-        $EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
+        $sponge.getVariable("sameSourceFirstFireCount").incrementAndGet()
     end
 end
 
@@ -36,7 +36,7 @@ class SameSourceAllRule < Rule
     def onRun(event)
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                                                                                           self.eventSequence)
-        $EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        $sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
     end
     def severityCondition(event)
         return Integer(event.get("severity")) > 5
@@ -49,14 +49,14 @@ class SameSourceAllRule < Rule
 end
 
 def onLoad
-    $EPS.enableJava(SameSourceJavaRule)
+    $sponge.enableJava(SameSourceJavaRule)
 end
 
 def onStartup
-    $EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
-    $EPS.event("diskFailure").set("severity", 10).set("source", "server1").send()
-    $EPS.event("diskFailure").set("severity", 10).set("source", "server2").send()
-    $EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    $EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    $EPS.event("diskFailure").set("severity", 1).set("source", "server1").send()
+    $sponge.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+    $sponge.event("diskFailure").set("severity", 10).set("source", "server1").send()
+    $sponge.event("diskFailure").set("severity", 10).set("source", "server2").send()
+    $sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    $sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    $sponge.event("diskFailure").set("severity", 1).set("source", "server1").send()
 end

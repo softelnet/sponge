@@ -4,8 +4,8 @@
 == Concepts
 This chapter describes basic concepts behind {sponge}. For more information see User Guide.
 
-=== Processors and event processors
-Processors are the basic objects that you define in {sponge} to implement your knowledge base behavior. The most important processors are event processors, that listen to certain events and perform specified operations when some conditions are met. {sponge} allows to introduce temporal and logical conditions to processed events.
+=== Processors, actions and event processors
+Processors are the basic objects that you define in {sponge} to implement your knowledge base behavior. Actions provide a synchronous behavior. Event processors listen to certain events and perform specified operations when some conditions are met. {sponge} allows to introduce temporal and logical conditions to processed events.
 
 .Event processors
 ****
@@ -218,10 +218,10 @@ The {sponge} standalone command-line program may be invoked in the interactive m
 .Send a new event from the console
 [source,bash,subs="verbatim,attributes"]
 ----
-> EPS.event("alarm").send()
+> sponge.event("alarm").send()
 ----
 
-`EPS` is a facade to the {sponge} engine. The name `EPS` stands for Event Processing System (or Event Processing Sponge if you like).
+The `sponge` variable is a facade to the {sponge} engine.
 
 TIP: Because of {sponge} may print messages and exceptions to the console concurrently, the prompt could be lost in between the lines (for example in case of an exception stack trace). In that case press `Enter` key to make a prompt visible.
 
@@ -290,7 +290,7 @@ This chapter provides introductory examples of {sponge}. For detailed informatio
 
 The shell commands that execute the examples require installation of the {sponge} standalone command-line application and are specific to Linux/MacOS/Unix. For more information how to run the examples see the next chapter.
 
-=== Hello World example
+=== Hello World trigger example
 Let's start with the time-honored Hello World example. In this case the text `"Hello World!"` will be printed when an event `helloEvent` fires a trigger `HelloWorldTrigger`.
 
 ==== Python
@@ -307,7 +307,7 @@ class HelloWorldTrigger(Trigger): # <1>
 
 # Startup section.
 def onStartup(): # <6>
-    EPS.event("helloEvent").set("say", "Hello World!").send() # <7>
+    sponge.event("helloEvent").set("say", "Hello World!").send() # <7>
 ----
 <1> The definition of a trigger `HelloWorldTrigger`.
 <2> The trigger configuration method.
@@ -353,7 +353,7 @@ class HelloWorldTrigger < Trigger # <1>
 end
 
 def onStartup # <6>
-    $EPS.event("helloEvent").set("say", "Hello World!").send() # <7>
+    $sponge.event("helloEvent").set("say", "Hello World!").send() # <7>
 end
 ----
 
@@ -382,7 +382,7 @@ class HelloWorldTrigger extends Trigger { // <1>
 }
 
 void onStartup() { // <6>
-    EPS.event("helloEvent").set("say", "Hello World!").send() // <7>
+    sponge.event("helloEvent").set("say", "Hello World!").send() // <7>
 }
 ----
 
@@ -411,7 +411,7 @@ var HelloWorldTrigger = Java.extend(Trigger, { // <1>
 });
 
 function onStartup() { // <6>
-    EPS.event("helloEvent").set("say", "Hello World!").send(); // <7>
+    sponge.event("helloEvent").set("say", "Hello World!").send(); // <7>
 }
 ----
 
@@ -425,7 +425,7 @@ The full source code of this example can be found in the file `hello_world.js`
 
 Press `CTRL+C` to exit.
 
-=== Heartbeat example
+=== Heartbeat rule example
 This example presents a more realistic use case of {sponge}.
 
 The rule `HeartbeatRule` will fire (i.e. execute its `onRun` method) when it detects a time gap between `heartbeat` events that is longer than `2` seconds. This scenario could be used in a monitoring system to verify that a particular service is running.
@@ -442,7 +442,7 @@ class HeartbeatRule(Rule): # <1>
         self.addConditions("h2", lambda rule, event: rule.firstEvent.get("source") == event.get("source")) # <4>
         self.duration = Duration.ofSeconds(2) # <5>
     def onRun(self, event): # <6>
-        EPS.event("alarm").set("severity", 1).send() # <7>
+        sponge.event("alarm").set("severity", 1).send() # <7>
 
 class AlarmTrigger(Trigger): # <8>
     def onConfigure(self):
@@ -493,7 +493,7 @@ class HeartbeatRule < Rule # <1>
         self.duration = Duration.ofSeconds(2) # <5>
     end
     def onRun(event) # <6>
-        $EPS.event("alarm").set("severity", 1).send() # <7>
+        $sponge.event("alarm").set("severity", 1).send() # <7>
     end
 end
 
@@ -538,7 +538,7 @@ class HeartbeatRule extends Rule { // <1>
         this.duration = Duration.ofSeconds(2) // <5>
     }
     void onRun(Event event) { // <6>
-        EPS.event("alarm").set("severity", 1).send() // <7>
+        sponge.event("alarm").set("severity", 1).send() // <7>
     }
 }
 
@@ -583,7 +583,7 @@ var HeartbeatRule = Java.extend(Rule, { // <1>
         self.duration = Duration.ofSeconds(2); // <5>
     },
     onRun: function(self, event) { // <6>
-        EPS.event("alarm").set("severity", 1).send(); // <7>
+        sponge.event("alarm").set("severity", 1).send(); // <7>
     }
 });
 

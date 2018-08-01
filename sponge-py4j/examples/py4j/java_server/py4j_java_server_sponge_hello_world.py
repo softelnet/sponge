@@ -7,11 +7,11 @@ from java.util.concurrent.atomic import AtomicInteger
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("eventCounter", AtomicInteger(0))
+    sponge.setVariable("eventCounter", AtomicInteger(0))
 
 class HelloWorldTrigger(Trigger):
     def onConfigure(self):
         self.event = "helloEvent"
     def onRun(self, event):
         self.logger.info("Say: {}", event.get("say"))
-        EPS.getVariable("eventCounter").incrementAndGet()
+        sponge.getVariable("eventCounter").incrementAndGet()

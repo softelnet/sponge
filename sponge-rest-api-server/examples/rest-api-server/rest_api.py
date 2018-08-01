@@ -7,9 +7,9 @@ from java.util.concurrent.atomic import AtomicBoolean
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("actionCalled", AtomicBoolean(False))
-    EPS.setVariable("eventSent", AtomicBoolean(False))
-    EPS.setVariable("reloaded", AtomicBoolean(False))
+    sponge.setVariable("actionCalled", AtomicBoolean(False))
+    sponge.setVariable("eventSent", AtomicBoolean(False))
+    sponge.setVariable("reloaded", AtomicBoolean(False))
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -17,7 +17,7 @@ class UpperCase(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
-        EPS.getVariable("actionCalled").set(True)
+        sponge.getVariable("actionCalled").set(True)
         return str(text).upper()
 
 class LowerCase(Action):
@@ -56,7 +56,7 @@ class Alarm(Trigger):
         self.event = "alarm"
     def onRun(self, event):
         self.logger.debug("Received event: {}", str(event))
-        EPS.getVariable("eventSent").set(True)
+        sponge.getVariable("eventSent").set(True)
 
 def onAfterReload():
-    EPS.getVariable("reloaded").set(True)
+    sponge.getVariable("reloaded").set(True)

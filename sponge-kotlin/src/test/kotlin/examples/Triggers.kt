@@ -16,16 +16,16 @@ class Triggers : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("receivedEventA", AtomicBoolean(false))
-        eps.setVariable("receivedEventBCount", AtomicInteger(0))
-        eps.setVariable("receivedEventTestJavaCount", AtomicInteger(0))
+        sponge.setVariable("receivedEventA", AtomicBoolean(false))
+        sponge.setVariable("receivedEventBCount", AtomicInteger(0))
+        sponge.setVariable("receivedEventTestJavaCount", AtomicInteger(0))
     }
 
     class TriggerA : KTrigger() {
         override fun onConfigure() = setEvent("a")
         override fun onRun(event: Event) {
             logger.debug("Received event {}", event)
-            eps.getVariable<AtomicBoolean>("receivedEventA").set(true)
+            sponge.getVariable<AtomicBoolean>("receivedEventA").set(true)
         }
     }
 
@@ -33,22 +33,22 @@ class Triggers : KKnowledgeBase() {
         override fun onConfigure() = setEvent("b")
         override fun onRun(event: Event) {
             logger.debug("Received event {}", event)
-            val receivedEventBCount = eps.getVariable<AtomicInteger>("receivedEventBCount")
+            val receivedEventBCount = sponge.getVariable<AtomicInteger>("receivedEventBCount")
             if (receivedEventBCount.get() == 0) {
-                logger.debug("Statistics: {}", eps.statisticsSummary)
+                logger.debug("Statistics: {}", sponge.statisticsSummary)
             }
             receivedEventBCount.incrementAndGet()
         }
     }
 
-    override fun onLoad() = eps.enableJava(SampleJavaTrigger::class.java)
+    override fun onLoad() = sponge.enableJava(SampleJavaTrigger::class.java)
 
     override fun onStartup() {
-        logger.debug("Startup {}, triggers: {}", eps.info, eps.engine.triggers)
-        logger.debug("Knowledge base name: {}", eps.kb.name)
-        eps.event("a").send()
-        eps.event("b").sendAfter(200, 200)
-        eps.event("testJava").send()
+        logger.debug("Startup {}, triggers: {}", sponge.info, sponge.engine.triggers)
+        logger.debug("Knowledge base name: {}", sponge.kb.name)
+        sponge.event("a").send()
+        sponge.event("b").sendAfter(200, 200)
+        sponge.event("testJava").send()
     }
 
     override fun onShutdown() {

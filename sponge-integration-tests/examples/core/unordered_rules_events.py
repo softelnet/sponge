@@ -11,7 +11,7 @@ def onInit():
 
     # Variables for assertions only
     correlationEventsLog = CorrelationEventsLog()
-    EPS.setVariable("correlationEventsLog", correlationEventsLog)
+    sponge.setVariable("correlationEventsLog", correlationEventsLog)
 
 def run(rule):
     rule.logger.debug("Running rule {} for sequence: {}; alias map: {}", rule.hashCode(), SpongeUtils.toStringArrayEventSequence(rule.eventSequence, "label"),
@@ -332,12 +332,12 @@ class RuleNNAReject(Rule):
         run(self)
 
 def onStartup():
-    EPS.event("a").set("label", "a1").send()
-    EPS.event("b").set("label", "b1").send()
-    EPS.event("b").set("label", "b2").send()
-    EPS.event("b").set("label", "b3").send()
-    EPS.event("c").set("label", "c1").send()
-    EPS.event("c").set("label", "c2").send()
-    EPS.event("a").set("label", "a2").send()
-    EPS.event("c").set("label", "c3").send()
+    sponge.event("a").set("label", "a1").send()
+    sponge.event("b").set("label", "b1").send()
+    sponge.event("b").set("label", "b2").send()
+    sponge.event("b").set("label", "b3").send()
+    sponge.event("c").set("label", "c1").send()
+    sponge.event("c").set("label", "c2").send()
+    sponge.event("a").set("label", "a2").send()
+    sponge.event("c").set("label", "c3").send()
 

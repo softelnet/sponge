@@ -51,7 +51,7 @@ public abstract class JKnowledgeBase extends BaseNonScriptKnowledgeBase {
     }
 
     @Override
-    public JavaKnowledgeBaseEngineOperations getEps() {
+    public JavaKnowledgeBaseEngineOperations getSponge() {
         return getEngineOperations();
     }
 

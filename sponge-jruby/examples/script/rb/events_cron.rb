@@ -6,7 +6,7 @@ java_import java.util.concurrent.atomic.AtomicInteger
 def onInit
     $scheduleEntry = nil
     $eventCounter = AtomicInteger.new(0)
-    $EPS.setVariable("eventCounter", $eventCounter)
+    $sponge.setVariable("eventCounter", $eventCounter)
 end
 
 class CronTrigger < Trigger
@@ -18,13 +18,13 @@ class CronTrigger < Trigger
         self.logger.debug("Received event {}: {}", $eventCounter.get(), event.name)
         if $eventCounter.get() == 2
             self.logger.debug("removing scheduled event")
-            $EPS.removeEvent($scheduleEntry)
+            $sponge.removeEvent($scheduleEntry)
         end
     end
 end
 
 def onStartup
     # send event every 2 seconds
-    $scheduleEntry = $EPS.event("cronEvent").sendAt("0/2 * * * * ?")
+    $scheduleEntry = $sponge.event("cronEvent").sendAt("0/2 * * * * ?")
 end
 

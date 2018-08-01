@@ -43,7 +43,7 @@ public final class KnowledgeBaseConstants {
     public static final String FUN_ON_AFTER_RELOAD = "onAfterReload";
 
     /** The engine operations variable name. */
-    public static final String VAR_ENGINE_OPERATIONS = "EPS";
+    public static final String VAR_ENGINE_OPERATIONS = "sponge";
 
     /** Logger name prefix. */
     public static final String LOGGER_NAME_PREFIX = "sponge.kb";

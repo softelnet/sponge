@@ -12,4 +12,4 @@ class UpperEchoAction(Action):
     	return None
 
 def onLoad():
-    EPS.enableJava(PowerEchoMetadataAction)
+    sponge.enableJava(PowerEchoMetadataAction)

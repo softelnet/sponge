@@ -92,7 +92,7 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         adapter.setMeta(meta);
     }
 
-    public KnowledgeBaseEngineOperations getEps() {
+    public KnowledgeBaseEngineOperations getSponge() {
         return getKnowledgeBase().getEngineOperations();
     }
 

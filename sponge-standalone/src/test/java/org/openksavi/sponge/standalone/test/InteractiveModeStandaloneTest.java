@@ -66,7 +66,7 @@ public class InteractiveModeStandaloneTest {
             write("print 'Starting interactive mode tests.'");
 
             // Send the alarm.
-            write("EPS.event(\"alarm\").send()");
+            write("sponge.event(\"alarm\").send()");
             await().atMost(10, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "alarms").intValue() >= 1);
 
             // Create trigger and send event.
@@ -74,11 +74,11 @@ public class InteractiveModeStandaloneTest {
             writeMulti("    def onConfigure(self):\\");
             writeMulti("        self.event = \"notification\"\\");
             writeMulti("    def onRun(self, event):\\");
-            writeMulti("        EPS.getVariable(\"notifications\").incrementAndGet()\\");
+            writeMulti("        sponge.getVariable(\"notifications\").incrementAndGet()\\");
             writeMulti("        print \"Received the notification!\"");
             write("");
-            write("EPS.enable(T)");
-            write("EPS.event(\"notification\").send()");
+            write("sponge.enable(T)");
+            write("sponge.event(\"notification\").send()");
             await().atMost(10, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "notifications").intValue() >= 1);
 

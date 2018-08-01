@@ -54,15 +54,15 @@ def setAndPlayPlaylist(albums):
 
 def onRun():
     albums = mpd.server.musicDatabase.albumDatabase.listAllAlbums()
-    EPS.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
+    sponge.logger.info("MPD server version: {}. All album count: {}", mpd.server.version, len(albums))
     printAlbumsInfo(albums)
 
-    EPS.logger.info("Setting the playlist...")
+    sponge.logger.info("Setting the playlist...")
     # Set the playlist to rock albums released since 1970 
     selectedAlbums = selectAlbums(albums, 1970, 2018, ".*(Rock).*")
     if len(selectedAlbums) > 0:
         setAndPlayPlaylist(selectedAlbums)
-        EPS.logger.info("The playlist is set, {} albums found", len(selectedAlbums))
+        sponge.logger.info("The playlist is set, {} albums found", len(selectedAlbums))
     else:
-        EPS.logger.info("No matching albums found")
+        sponge.logger.info("No matching albums found")
     return False # Run once mode

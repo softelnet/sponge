@@ -8,7 +8,7 @@ import org.springframework.web.client.*
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("hostStatus", Collections.synchronizedMap(new HashMap()))
+    sponge.setVariable("hostStatus", Collections.synchronizedMap(new HashMap()))
 }
 
 class HttpStatusTrigger extends Trigger {
@@ -17,7 +17,7 @@ class HttpStatusTrigger extends Trigger {
     }
     void onRun(Event event) {
         String status = checkPageStatus(event.get("host"))
-        EPS.getVariable("hostStatus").put(event.get("host"), status)
+        sponge.getVariable("hostStatus").put(event.get("host"), status)
     }
     String checkPageStatus(String host) {
         try {
@@ -36,6 +36,6 @@ class HttpStatusTrigger extends Trigger {
 }
 
 void onStartup() {
-    EPS.event("checkStatus").set("host", "www.wikipedia.org.unknown").send()
-    EPS.event("checkStatus").set("host", "www.wikipedia.org").send()
+    sponge.event("checkStatus").set("host", "www.wikipedia.org.unknown").send()
+    sponge.event("checkStatus").set("host", "www.wikipedia.org").send()
 }

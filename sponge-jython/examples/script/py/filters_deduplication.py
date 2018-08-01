@@ -17,7 +17,7 @@ def onInit():
     eventCounter.put("e1-red", AtomicInteger(0))
     eventCounter.put("e2-blue", AtomicInteger(0))
     eventCounter.put("e2-red", AtomicInteger(0))
-    EPS.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("eventCounter", eventCounter)
 
 class ColorDeduplicationFilter(Filter):
     def onConfigure(self):
@@ -37,12 +37,12 @@ class ColorTrigger(Trigger):
         eventCounter.get(event.name + "-" + event.get("color")).incrementAndGet()
 
 def onStartup():
-    EPS.event("e1").set("color", "red").send()
-    EPS.event("e1").set("color", "blue").send()
-    EPS.event("e2").set("color", "red").send()
-    EPS.event("e2").set("color", "blue").send()
+    sponge.event("e1").set("color", "red").send()
+    sponge.event("e1").set("color", "blue").send()
+    sponge.event("e2").set("color", "red").send()
+    sponge.event("e2").set("color", "blue").send()
 
-    EPS.event("e1").set("color", "red").send()
-    EPS.event("e1").set("color", "blue").send()
-    EPS.event("e2").set("color", "red").send()
-    EPS.event("e2").set("color", "blue").send()
+    sponge.event("e1").set("color", "red").send()
+    sponge.event("e1").set("color", "blue").send()
+    sponge.event("e2").set("color", "red").send()
+    sponge.event("e2").set("color", "blue").send()

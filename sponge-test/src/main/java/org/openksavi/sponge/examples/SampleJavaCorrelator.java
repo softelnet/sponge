@@ -47,9 +47,9 @@ public class SampleJavaCorrelator extends JCorrelator {
     public void onEvent(Event event) {
         eventLog.add(event);
         getLogger().debug("{} - event: {}, log: {}", hashCode(), event.getName(), eventLog);
-        getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
+        getSponge().getVariable(AtomicInteger.class, "hardwareFailureJavaCount").incrementAndGet();
         if (eventLog.size() >= 4) {
-            getEps().getVariable(AtomicInteger.class, "hardwareFailureJavaFinishCount").incrementAndGet();
+            getSponge().getVariable(AtomicInteger.class, "hardwareFailureJavaFinishCount").incrementAndGet();
             finish();
         }
     }

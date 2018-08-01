@@ -5,9 +5,9 @@ java_import java.util.concurrent.atomic.AtomicInteger
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("countA", AtomicInteger.new(0))
-    $EPS.setVariable("countB", AtomicInteger.new(0))
-    $EPS.setVariable("max", 100)
+    $sponge.setVariable("countA", AtomicInteger.new(0))
+    $sponge.setVariable("countB", AtomicInteger.new(0))
+    $sponge.setVariable("max", 100)
 end
 
 class RuleA < Rule
@@ -15,7 +15,7 @@ class RuleA < Rule
         self.events = ["a a1", "a a2"]
     end
     def onRun(event)
-        $EPS.getVariable("countA").incrementAndGet()
+        $sponge.getVariable("countA").incrementAndGet()
     end
 end
 
@@ -24,13 +24,13 @@ class RuleB < Rule
         self.events = ["b b1", "b b2"]
     end
     def onRun(event)
-        $EPS.getVariable("countB").incrementAndGet()
+        $sponge.getVariable("countB").incrementAndGet()
     end
 end
 
 def onStartup
-    for i in (0...$EPS.getVariable("max"))
-        $EPS.event("a").send()
-        $EPS.event("b").send()
+    for i in (0...$sponge.getVariable("max"))
+        $sponge.event("a").send()
+        $sponge.event("b").send()
     end
 end

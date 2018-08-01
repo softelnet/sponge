@@ -9,9 +9,9 @@ import org.openksavi.sponge.core.library.Deduplication
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("hardwareFailureJavaCount", new AtomicInteger(0))
-    EPS.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
-    EPS.setVariable("sameSourceFirstFireCount", new AtomicInteger(0))
+    sponge.setVariable("hardwareFailureJavaCount", new AtomicInteger(0))
+    sponge.setVariable("hardwareFailureScriptCount", new AtomicInteger(0))
+    sponge.setVariable("sameSourceFirstFireCount", new AtomicInteger(0))
 }
 
 class FirstRule extends Rule {
@@ -23,8 +23,8 @@ class FirstRule extends Rule {
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventSequence)
-        EPS.getVariable("sameSourceFirstFireCount").incrementAndGet()
-        EPS.event("alarm").set("source", this.firstEvent.get("source")).send()
+        sponge.getVariable("sameSourceFirstFireCount").incrementAndGet()
+        sponge.event("alarm").set("source", this.firstEvent.get("source")).send()
     }
 }
 
@@ -38,7 +38,7 @@ class SameSourceAllRule extends Rule {
     void onRun(Event event) {
         this.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                          this.eventSequence)
-        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet()
+        sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
     }
     boolean severityCondition(event) {
         return (event.get("severity") as int) > 5
@@ -71,15 +71,15 @@ class Alarm extends Trigger {
 }
 
 void onLoad() {
-    EPS.enableJava(SameSourceJavaUnorderedRule)
+    sponge.enableJava(SameSourceJavaUnorderedRule)
 }
 
 void onStartup() {
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send()
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
-    EPS.event("filesystemFailure").set("severity", 6).set("source", "server1").send()
-    EPS.event("diskFailure").set("severity", 6).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 10).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 10).set("source", "server2").send()
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("filesystemFailure").set("severity", 8).set("source", "server1").send()
+    sponge.event("filesystemFailure").set("severity", 6).set("source", "server1").send()
+    sponge.event("diskFailure").set("severity", 6).set("source", "server1").send()
 }

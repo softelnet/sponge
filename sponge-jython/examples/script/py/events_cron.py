@@ -9,7 +9,7 @@ def onInit():
     global scheduleEntry, eventCounter
     scheduleEntry = None
     eventCounter = AtomicInteger(0)
-    EPS.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("eventCounter", eventCounter)
 
 class CronTrigger(Trigger):
     def onConfigure(self):
@@ -20,9 +20,9 @@ class CronTrigger(Trigger):
         self.logger.debug("Received event {}: {}", eventCounter.get(), event.name)
         if eventCounter.get() == 2:
             self.logger.debug("removing scheduled event")
-            EPS.removeEvent(scheduleEntry)
+            sponge.removeEvent(scheduleEntry)
 
 def onStartup():
     global scheduleEntry
     # send event every 2 seconds
-    scheduleEntry = EPS.event("cronEvent").sendAt("0/2 * * * * ?")
+    scheduleEntry = sponge.event("cronEvent").sendAt("0/2 * * * * ?")

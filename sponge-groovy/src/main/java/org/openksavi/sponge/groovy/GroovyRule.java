@@ -26,7 +26,6 @@ import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ScriptKnowledgeBaseEventCondition;
 import org.openksavi.sponge.groovy.core.GroovyClosureEventCondition;
-import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.rule.EventCondition;
 
 /**
@@ -54,14 +53,5 @@ public abstract class GroovyRule extends BaseRule {
 
     public void addCondition(String eventAlias, Closure<Boolean> closure) {
         addEventCondition(eventAlias, MAPPER.apply(closure));
-    }
-
-    /**
-     * Method required for accessing EPS in Groovy-based processors.
-     *
-     * @return EPS.
-     */
-    public final KnowledgeBaseEngineOperations getEPS() {
-        return getEps();
     }
 }

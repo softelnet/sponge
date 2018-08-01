@@ -4,4 +4,4 @@ Scanning Java-based processors
 """
 
 def onLoad():
-    EPS.enableJavaByScan("org.openksavi.sponge.integration.tests.core.scanning")
+    sponge.enableJavaByScan("org.openksavi.sponge.integration.tests.core.scanning")

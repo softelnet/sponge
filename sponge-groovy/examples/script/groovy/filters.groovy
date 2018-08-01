@@ -10,7 +10,7 @@ void onInit() {
     eventCounter = Collections.synchronizedMap(new HashMap())
     eventCounter.put("blue", new AtomicInteger(0))
     eventCounter.put("red", new AtomicInteger(0))
-    EPS.setVariable("eventCounter", eventCounter)
+    sponge.setVariable("eventCounter", eventCounter)
 }
 
 class ColorFilter extends Filter {
@@ -36,12 +36,12 @@ class ColorTrigger extends Trigger {
     }
     void onRun(Event event) {
         this.logger.debug("Received event {}", event)
-        EPS.getVariable("eventCounter").get(event.get("color")).incrementAndGet()
+        sponge.getVariable("eventCounter").get(event.get("color")).incrementAndGet()
     }
 }
 
 void onStartup() {
-    EPS.event("e1").send()
-    EPS.event("e1").set("color", "red").send()
-    EPS.event("e1").set("color", "blue").send()
+    sponge.event("e1").send()
+    sponge.event("e1").set("color", "red").send()
+    sponge.event("e1").set("color", "blue").send()
 }

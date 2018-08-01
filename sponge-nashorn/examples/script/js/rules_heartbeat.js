@@ -9,7 +9,7 @@ var hearbeatEventEntry;
 
 function onInit() {
     hearbeatEventEntry = null;
-    EPS.setVariable("soundTheAlarm", new AtomicBoolean(false));
+    sponge.setVariable("soundTheAlarm", new AtomicBoolean(false));
 }
 
 var HeartbeatFilter = Java.extend(Filter, {
@@ -24,7 +24,7 @@ var HeartbeatFilter = Java.extend(Filter, {
     onAccept: function(self, event) {
         self.target.heartbeatCounter++;
         if (self.target.heartbeatCounter > 2) {
-            EPS.removeEvent(hearbeatEventEntry);
+            sponge.removeEvent(hearbeatEventEntry);
             return false;
         } else {
             return true;
@@ -43,7 +43,7 @@ var HeartbeatRule = Java.extend(Rule, {
         self.duration = Duration.ofSeconds(2);
     },
     onRun: function(self, event) {
-        EPS.event("alarm").set("severity", 1).send();
+        sponge.event("alarm").set("severity", 1).send();
     }
 });
 
@@ -53,10 +53,10 @@ var AlarmTrigger = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         print("Sound the alarm!");
-        EPS.getVariable("soundTheAlarm").set(true);
+        sponge.getVariable("soundTheAlarm").set(true);
     }
 });
 
 function onStartup() {
-    hearbeatEventEntry = EPS.event("heartbeat").set("source", "Host1").sendAfter(100, 1000);
+    hearbeatEventEntry = sponge.event("heartbeat").set("source", "Host1").sendAfter(100, 1000);
 }

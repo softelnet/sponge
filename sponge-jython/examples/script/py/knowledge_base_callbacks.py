@@ -11,37 +11,37 @@ class ReloadTrigger(Trigger):
         self.event = "reload"
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
-        EPS.reload()
+        sponge.reload()
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("onInitCalled", AtomicBoolean(False))
-    EPS.setVariable("onLoadCalled", AtomicInteger(0))
-    EPS.setVariable("onStartupCalled", AtomicBoolean(False))
-    EPS.setVariable("onBeforeReloadCalled", AtomicBoolean(False))
-    EPS.setVariable("onAfterReloadCalled", AtomicBoolean(False))
+    sponge.setVariable("onInitCalled", AtomicBoolean(False))
+    sponge.setVariable("onLoadCalled", AtomicInteger(0))
+    sponge.setVariable("onStartupCalled", AtomicBoolean(False))
+    sponge.setVariable("onBeforeReloadCalled", AtomicBoolean(False))
+    sponge.setVariable("onAfterReloadCalled", AtomicBoolean(False))
 
-    EPS.logger.debug("onInit")
-    EPS.getVariable("onInitCalled").set(True)
+    sponge.logger.debug("onInit")
+    sponge.getVariable("onInitCalled").set(True)
 
 def onLoad():
-    EPS.logger.debug("onLoad")
-    EPS.getVariable("onLoadCalled").incrementAndGet()
+    sponge.logger.debug("onLoad")
+    sponge.getVariable("onLoadCalled").incrementAndGet()
 
 def onStartup():
-    EPS.logger.debug("onStartup")
-    EPS.getVariable("onStartupCalled").set(True)
-    EPS.event("reload").sendAfter(1000)
+    sponge.logger.debug("onStartup")
+    sponge.getVariable("onStartupCalled").set(True)
+    sponge.event("reload").sendAfter(1000)
 
 def onShutdown():
-    EPS.logger.debug("onShutdown")
+    sponge.logger.debug("onShutdown")
     # Using Java static field because all variables will be lost after shutdown.
     TestStatus.onShutdownCalled = True
 
 def onBeforeReload():
-    EPS.logger.debug("onBeforeReload")
-    EPS.getVariable("onBeforeReloadCalled").set(True)
+    sponge.logger.debug("onBeforeReload")
+    sponge.getVariable("onBeforeReloadCalled").set(True)
 
 def onAfterReload():
-    EPS.logger.debug("onAfterReload")
-    EPS.getVariable("onAfterReloadCalled").set(True)
+    sponge.logger.debug("onAfterReload")
+    sponge.getVariable("onAfterReloadCalled").set(True)

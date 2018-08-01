@@ -19,7 +19,7 @@ class RulesHeartbeat2 : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("soundTheAlarm", AtomicBoolean(false))
+        sponge.setVariable("soundTheAlarm", AtomicBoolean(false))
     }
 
     /** Sounds the alarm when heartbeat event stops occurring at most every 2 seconds. */
@@ -31,13 +31,13 @@ class RulesHeartbeat2 : KKnowledgeBase() {
 
         override fun onRun(event: Event?) {
             logger.info("Sound the alarm!")
-            eps.getVariable<AtomicBoolean>("soundTheAlarm").set(true)
+            sponge.getVariable<AtomicBoolean>("soundTheAlarm").set(true)
         }
     }
 
 
     override fun onStartup() {
-        eps.event("heartbeat").send()
-        eps.event("heartbeat").sendAfter(1000)
+        sponge.event("heartbeat").send()
+        sponge.event("heartbeat").sendAfter(1000)
     }
 }

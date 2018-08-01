@@ -7,7 +7,7 @@ from java.util.concurrent.atomic import AtomicBoolean
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("springBeanValue", None)
+    sponge.setVariable("springBeanValue", None)
 
 class SpringTrigger(Trigger):
     def onConfigure(self):
@@ -15,8 +15,8 @@ class SpringTrigger(Trigger):
     def onRun(self, event):
         beanValue = spring.context.getBean("testBean")
         self.logger.debug("Bean value = {}", beanValue)
-        EPS.setVariable("springBeanValue", beanValue)
+        sponge.setVariable("springBeanValue", beanValue)
 
 def onStartup():
-    EPS.event("spring").send()
+    sponge.event("spring").send()
 

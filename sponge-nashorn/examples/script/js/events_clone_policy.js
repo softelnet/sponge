@@ -9,7 +9,7 @@ function onInit() {
     events.put("defaultClonePolicy", new java.util.ArrayList());
     events.put("deepClonePolicy", new java.util.ArrayList());
     events.put("shallowClonePolicy", new java.util.ArrayList());
-    EPS.setVariable("events", events);
+    sponge.setVariable("events", events);
 }
 
 var ClonePolicyTrigger = Java.extend(Trigger, {
@@ -17,7 +17,7 @@ var ClonePolicyTrigger = Java.extend(Trigger, {
         self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"];
     },
     onRun: function(self, event) {
-        var events = EPS.getVariable("events");
+        var events = sponge.getVariable("events");
         events.get(event.name).add(event);
         	self.logger.debug("Processing event: {}", event.name);
         	var map = event.get("map");
@@ -36,7 +36,7 @@ function setEventAttributes(event) {
 }
 
 function onStartup() {
-    EPS.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000);
-    EPS.event("deepClonePolicy", EventClonePolicy.DEEP).modify(setEventAttributes).sendAfter(200, 1000);
-    EPS.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(setEventAttributes).sendAfter(400, 1000);
+    sponge.event("defaultClonePolicy").modify(setEventAttributes).sendAfter(100, 1000);
+    sponge.event("deepClonePolicy", EventClonePolicy.DEEP).modify(setEventAttributes).sendAfter(200, 1000);
+    sponge.event("shallowClonePolicy", EventClonePolicy.SHALLOW).modify(setEventAttributes).sendAfter(400, 1000);
 }

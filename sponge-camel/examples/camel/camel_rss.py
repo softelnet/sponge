@@ -7,7 +7,7 @@ from java.util.concurrent.atomic import AtomicInteger
 
 def onInit():
     # Variables for assertions only
-    EPS.setVariable("receivedCamelMessages", AtomicInteger(0))
+    sponge.setVariable("receivedCamelMessages", AtomicInteger(0))
 
 class RssTrigger(Trigger):
     def onConfigure(self):

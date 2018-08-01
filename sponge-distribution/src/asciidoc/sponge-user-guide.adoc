@@ -53,7 +53,7 @@ class SomeTrigger(Trigger):
     def onConfigure(self):
         self.event = "e1"
     def onRun(self, event):
-        EPS.requestShutdown()
+        sponge.requestShutdown()
 ----
 
 Shutting down doesn't guarantee that all events sent to the engine will be processed. However, all events that have already been read from the Input Event Queue (by the Filter Processing Unit) will be fully processed by the engine, if the processing doesn't exceed shutdown timeouts (specified by the `executorShutdownTimeout` configuration parameter). All newer events remaining in the Input Event Queue will not be processed at all.
@@ -110,8 +110,8 @@ Properties `id` and `time` are automatically set when adding an event to the Inp
 In order to process an event there must be an event processor listening to events of that type (the types of events are recognized by their names). So this steps should be taken:
 
 * Creating an event processor.
-* Enabling the event processor automatically or manually (by invoking a proper `EPS.enable*()` method).
-* Creating a new event instance and sending it to the system (e.g. `EPS.event("alarm").set("location", "Building 1").send()`.
+* Enabling the event processor automatically or manually (by invoking a proper `sponge.enable*()` method).
+* Creating a new event instance and sending it to the system (e.g. `sponge.event("alarm").set("location", "Building 1").send()`.
 * The event goes directly to the Input Event Queue or is scheduled to be inserted to the Input Event Queue later. Scheduling is performed by the Event Scheduler.
 * From this queue the events are taken by the Filter Processing Unit. The list of filters defined for this event type is taken and then each of them is invoked. If all filters accept the event, it will be put to the Main Event Queue in which it will await to be processed by other event processors.
 * Then the event is collected by the Main Processing Unit. The list of event processors listening to this type of events is selected and then each of them is given the event to process.
@@ -161,8 +161,8 @@ Control events are used by the engine internally. The names of control events ha
 
 Event could be created and sent:
 
-* Using the EventDefinition fluent API (e.g. `EPS.event("helloEvent").set("say", "Hello World!").send()`). The method `EPS.event` returns `EventDefinition`.
-* Using the traditional API (e.g. `EPS.send(EPS.makeEvent("helloEvent").set("say", "Hello World!"))`).
+* Using the EventDefinition fluent API (e.g. `sponge.event("helloEvent").set("say", "Hello World!").send()`). The method `sponge.event` returns `EventDefinition`.
+* Using the traditional API (e.g. `sponge.send(sponge.makeEvent("helloEvent").set("say", "Hello World!"))`).
 
 The EventDefinition fluent API is the preferred option.
 
@@ -209,25 +209,25 @@ Sample sending of events from the level of a knowledge base:
 
 [source,python]
 ----
-EPS.event("e1").sendAfter(Duration.ofSeconds(1))
+sponge.event("e1").sendAfter(Duration.ofSeconds(1))
 ----
 Sends the event named `"e1"` after `1` second from now.
 
 [source,python]
 ----
-EPS.event("e2").sendAfter(2000, 1000)
+sponge.event("e2").sendAfter(2000, 1000)
 ----
 Sends the event named `"e2"` after `2` seconds from now. New events will be periodically generated and sent every second.
 
 [source,python]
 ----
-EPS.event("e2").set("color", "red").set("severity", 5).send()
+sponge.event("e2").set("color", "red").set("severity", 5).send()
 ----
 Sends an event with attributes `"color"` and `"severity"` immediately.
 
 [source,python]
 ----
-EPS.event("alarm").sendAt("0-59 * * * * ?")
+sponge.event("alarm").sendAt("0-59 * * * * ?")
 ----
 Sends an event at the time specified by Cron notation.
 
@@ -241,13 +241,13 @@ Processors are the basic objects that you define in {sponge} to implement your k
 
 Types of processors:
 
+* *Actions* - processors that provide functionality similar to functions. They don't listen to events.
 * *Event processors* - processors that perform specified operations using events they listen to.
 ** *Filters* - event processors used for allowing only certain events to be later processed by other event processors.
 ** *Triggers* -  event processors that execute a specified code when an event happens.
 ** *Event set processors* - event processors that process sets of events.
 *** *Rules* - event set processors that detect sequences of events.
 *** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
-* *Actions* - processors that provide functionality similar to functions. They don't listen to events.
 
 === Creating processors
 In order to define your processor in a script knowledge base, you have to create a class extending the base class pointed by a specific alias (e.g. `Filter` for filters). In order to define your processor in a Java knowledge base, you have to create a class extending a specific class (e.g. `JavaFilter` for filters).
@@ -288,23 +288,23 @@ You may turn off auto-enable by setting the `autoEnable` engine configuration pa
 ==== Manual enabling
 In most cases enabling processors manually should be done in the `onLoad` callback function.
 
-To manually enable any script-based processors in a script knowledge base you may use: `EPS.enable()` to enable one processor and `EPS.enableAll()` to enable many processors.
+To manually enable any script-based processors in a script knowledge base you may use: `sponge.enable()` to enable one processor and `sponge.enableAll()` to enable many processors.
 
 .Example of enabling a script-based processor
 [source,python]
 ----
 def onLoad:
-    EPS.enable(TriggerA)
+    sponge.enable(TriggerA)
 ----
 
 .Example of enabling script-based processors
 [source,python]
 ----
 def onLoad:
-    EPS.enableAll(Trigger1, Trigger3)
+    sponge.enableAll(Trigger1, Trigger3)
 ----
 
-To manually enable any Java-based processors in a script knowledge base you may use `EPS.enableJava()`, `EPS.enableJavaAll()` or `EPS.enableJavaByScan()`. The default name of a Java-based processor is its full Java class name. 
+To manually enable any Java-based processors in a script knowledge base you may use `sponge.enableJava()`, `sponge.enableJavaAll()` or `sponge.enableJavaByScan()`. The default name of a Java-based processor is its full Java class name. 
 
 The `enableJavaByScan` method enables Java-based processors by scanning a given packages in search of all non abstract processor classes. The scanning is performed by the https://github.com/ronmamo/reflections[Reflections] library. The method parameters are compatible with the http://ronmamo.github.io/reflections/index.html?org/reflections/Reflections.html[`Reflections(Object...)`] constructor.
 
@@ -312,40 +312,40 @@ The `enableJavaByScan` method enables Java-based processors by scanning a given 
 [source,python]
 ----
 def onLoad():
-    EPS.enableJava(SameSourceJavaRule)
+    sponge.enableJava(SameSourceJavaRule)
 ----
 
 .Example of enabling many Java-based processors
 [source,python]
 ----
 def onLoad():
-    EPS.enableJavaAll(SameSourceJavaRule, SameSourceJavaRule2, SameSourceJavaRule3)
+    sponge.enableJavaAll(SameSourceJavaRule, SameSourceJavaRule2, SameSourceJavaRule3)
 ----
 
 .Example of enabling Java-based processors by scanning Java packages
 [source,python]
 ----
 def onLoad():
-    EPS.enableJavaByScan("org.openksavi.sponge.integration.tests.core.scanning")
+    sponge.enableJavaByScan("org.openksavi.sponge.integration.tests.core.scanning")
 ----
 
 === Disabling processors
-Processors could be disabled only manually. To disable any script-based processors in a script knowledge base you may use `EPS.disable()` to disable one processor and `EPS.disableAll()` to disable many processors.
+Processors could be disabled only manually. To disable any script-based processors in a script knowledge base you may use `sponge.disable()` to disable one processor and `sponge.disableAll()` to disable many processors.
 
 .Example of disabling a script-based processor
 [source,python]
 ----
 def onLoad:
-    EPS.disable(EchoAction)
+    sponge.disable(EchoAction)
 ----
 
-To disable any Java-based processors in a script knowledge base you may use `EPS.disableJava()`, `EPS.disableJavaAll()` or `EPS.disableJavaByScan()`.
+To disable any Java-based processors in a script knowledge base you may use `sponge.disableJava()`, `sponge.disableJavaAll()` or `sponge.disableJavaByScan()`.
 
 .Example of disabling a Java-based processor
 [source,python]
 ----
 def onLoad():
-    EPS.disableJava(SameSourceJavaRule)
+    sponge.disableJava(SameSourceJavaRule)
 ----
 
 === Properties and methods
@@ -383,9 +383,9 @@ def onLoad():
 
 Thanks to many scripting languages, properties may be accessed using dot notation rather than a direct method call. For example a display name may be set using `self.displayName = "Display name"` or `self.setDisplayName("Display name")`.
 
-include::includes/user-guide-event-processors.adoc[leveloffset=+1]
-
 include::includes/user-guide-actions.adoc[leveloffset=+1]
+
+include::includes/user-guide-event-processors.adoc[leveloffset=+1]
 
 == Plugins
 Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
@@ -510,7 +510,7 @@ public class EchoPlugin extends JPlugin { // <1>
     }
 
     public void sendEchoEvent() {
-        getEps().event("echoEvent").set("echo", getEcho()).send();
+        getSponge().event("echoEvent").set("echo", getEcho()).send();
     }
 }
 ----
@@ -535,11 +535,11 @@ class PluginTrigger(Trigger):
 An access to the plugin could be achieved in two ways:
 
 * directly using the name `echoPlugin` as any other scripting language variable (this is the preferred way),
-* by using `EPS` API, e.g. `plugin = EPS.getPlugin("echoPlugin")`.
+* by using the `sponge` API, e.g. `plugin = sponge.getPlugin("echoPlugin")`.
 
 Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two ways:
 
-* `EPS.getPlugin("echoPlugin").echo`
+* `sponge.getPlugin("echoPlugin").echo`
 * `echoPlugin.echo`
 
 === Example in a script language
@@ -738,18 +738,18 @@ Maven users will need to add the following dependency to their `pom.xml`:
 === Groovy
 
 ==== Limitations
-In Groovy you cannot define a class or a function twice in the same file. If you want to prepare a processor to reload, you have to put it in a separate file and use `EPS.reloadClass()` method. That separate file could be modified and reloaded.
+In Groovy you cannot define a class or a function twice in the same file. If you want to prepare a processor to reload, you have to put it in a separate file and use `sponge.reloadClass()` method. That separate file could be modified and reloaded.
 
 .Example
 [source,groovy]
 ----
 void onLoad() {
-    EPS.reloadClass(TriggerA)
-    EPS.enable(TriggerA)
+    sponge.reloadClass(TriggerA)
+    sponge.enable(TriggerA)
 
-    EPS.reloadClass(ActionA)
-    EPS.enable(ActionA)
-    EPS.call("ActionA")
+    sponge.reloadClass(ActionA)
+    sponge.enable(ActionA)
+    sponge.call("ActionA")
 }
 ----
 
@@ -792,7 +792,7 @@ var HeartbeatFilter = Java.extend(Filter, {
     onAccept: function(self, event) {
         self.target.heartbeatCounter++; // <2>
         if (self.target.heartbeatCounter > 2) {
-            EPS.removeEvent(hearbeatEventEntry);
+            sponge.removeEvent(hearbeatEventEntry);
             return false;
         } else {
             return true;

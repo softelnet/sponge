@@ -6,6 +6,6 @@ class TriggerA extends Trigger {
         this.event = "a"
     }
     void onRun(Event event) {
-        EPS.getVariable("receivedEventA2").set(2)
+        sponge.getVariable("receivedEventA2").set(2)
     }
 }

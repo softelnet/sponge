@@ -33,7 +33,7 @@ public class SampleJavaTrigger extends JTrigger {
 
     @Override
     public void onRun(Event event) {
-        getEps().setVariable("receivedEventTestJavaCount", getEps().getVariable(Number.class, "receivedEventTestJavaCount").intValue() + 1);
+        getSponge().setVariable("receivedEventTestJavaCount", getSponge().getVariable(Number.class, "receivedEventTestJavaCount").intValue() + 1);
         logger.debug("TRIGGER TEST from Java");
     }
 }

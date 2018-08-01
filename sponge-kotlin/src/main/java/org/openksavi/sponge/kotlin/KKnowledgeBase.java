@@ -46,8 +46,13 @@ public abstract class KKnowledgeBase extends BaseNonScriptKnowledgeBase {
         return (KotlinKnowledgeBaseEngineOperations) super.getEngineOperations();
     }
 
+    /**
+     * Method required for accessing the engine operations in Kotlin-based processors.
+     *
+     * @return the engine operations.
+     */
     @Override
-    public KotlinKnowledgeBaseEngineOperations getEps() {
+    public final KotlinKnowledgeBaseEngineOperations getSponge() {
         return getEngineOperations();
     }
 

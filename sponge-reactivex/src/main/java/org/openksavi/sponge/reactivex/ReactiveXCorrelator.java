@@ -34,7 +34,7 @@ public class ReactiveXCorrelator extends JCorrelator {
     @Override
     public void onInit() {
         // There should be only one ReactiveXPlugin plugin defined.
-        plugin = getEps().getPlugin(ReactiveXPlugin.class);
+        plugin = getSponge().getPlugin(ReactiveXPlugin.class);
     }
 
     @Override

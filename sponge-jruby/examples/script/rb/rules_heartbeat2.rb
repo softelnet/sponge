@@ -4,7 +4,7 @@
 java_import java.util.concurrent.atomic.AtomicBoolean
 
 def onInit
-    $EPS.setVariable("soundTheAlarm", AtomicBoolean.new(false))
+    $sponge.setVariable("soundTheAlarm", AtomicBoolean.new(false))
 end
 
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
@@ -15,11 +15,11 @@ class HeartbeatRule < Rule
     end
     def onRun(event)
         self.logger.info("Sound the alarm!")
-        $EPS.getVariable("soundTheAlarm").set(true)
+        $sponge.getVariable("soundTheAlarm").set(true)
     end
 end
 
 def onStartup
-    $EPS.event("heartbeat").send()
-    $EPS.event("heartbeat").sendAfter(1000)
+    $sponge.event("heartbeat").send()
+    $sponge.event("heartbeat").sendAfter(1000)
 end

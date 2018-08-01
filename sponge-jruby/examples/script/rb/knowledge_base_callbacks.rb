@@ -12,46 +12,46 @@ class ReloadTrigger < Trigger
 
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)
-        # $EPS.requestReload()
-        $EPS.reload()
+        # $sponge.requestReload()
+        $sponge.reload()
     end
 end
 
 def onInit
     # Variables for assertions only
-    $EPS.setVariable("onInitCalled", AtomicBoolean.new(false))
-    $EPS.setVariable("onLoadCalled", AtomicInteger.new(0))
-    $EPS.setVariable("onStartupCalled", AtomicBoolean.new(false))
-    $EPS.setVariable("onBeforeReloadCalled", AtomicBoolean.new(false))
-    $EPS.setVariable("onAfterReloadCalled", AtomicBoolean.new(false))
+    $sponge.setVariable("onInitCalled", AtomicBoolean.new(false))
+    $sponge.setVariable("onLoadCalled", AtomicInteger.new(0))
+    $sponge.setVariable("onStartupCalled", AtomicBoolean.new(false))
+    $sponge.setVariable("onBeforeReloadCalled", AtomicBoolean.new(false))
+    $sponge.setVariable("onAfterReloadCalled", AtomicBoolean.new(false))
 
-    $EPS.logger.debug("onInit")
-    $EPS.getVariable("onInitCalled").set(true)
+    $sponge.logger.debug("onInit")
+    $sponge.getVariable("onInitCalled").set(true)
 end
 
 def onLoad
-    $EPS.logger.debug("onLoad")
-    $EPS.getVariable("onLoadCalled").incrementAndGet()
+    $sponge.logger.debug("onLoad")
+    $sponge.getVariable("onLoadCalled").incrementAndGet()
 end
 
 def onStartup
-    $EPS.logger.debug("onStartup")
-    $EPS.getVariable("onStartupCalled").set(true)
-    $EPS.event("reload").sendAfter(1000)
+    $sponge.logger.debug("onStartup")
+    $sponge.getVariable("onStartupCalled").set(true)
+    $sponge.event("reload").sendAfter(1000)
 end
 
 def onShutdown
-    $EPS.logger.debug("onShutdown")
+    $sponge.logger.debug("onShutdown")
     # Using Java static field because all variables will be lost after shutdown .
     TestStatus.onShutdownCalled = true
 end
 
 def onBeforeReload
-    $EPS.logger.debug("onBeforeReload")
-    $EPS.getVariable("onBeforeReloadCalled").set(true)
+    $sponge.logger.debug("onBeforeReload")
+    $sponge.getVariable("onBeforeReloadCalled").set(true)
 end
 
 def onAfterReload
-    $EPS.logger.debug("onAfterReload")
-    $EPS.getVariable("onAfterReloadCalled").set(true)
+    $sponge.logger.debug("onAfterReload")
+    $sponge.getVariable("onAfterReloadCalled").set(true)
 end

@@ -18,13 +18,13 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("counter", AtomicInteger(0))
+        sponge.setVariable("counter", AtomicInteger(0))
     }
 
     class AutoAction : KAction() {
         fun onCall(): Any? {
             logger.debug("Running")
-            eps.getVariable<AtomicInteger>("counter").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
             return null
         }
     }
@@ -33,7 +33,7 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
         override fun onConfigure() = setEvent("e1")
         override fun onAccept(event: Event): Boolean {
             logger.debug("Received event: {}", event.name)
-            eps.getVariable<AtomicInteger>("counter").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
             return true
         }
     }
@@ -42,7 +42,7 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
         override fun onConfigure() = setEvent("e1")
         override fun onRun(event: Event) {
             logger.debug("Received event: {}", event.name)
-            eps.getVariable<AtomicInteger>("counter").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
         }
     }
 
@@ -50,7 +50,7 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
         override fun onConfigure() = setEvents("e1", "e2")
         override fun onRun(event: Event) {
             logger.debug("Running for sequence: {}", eventSequence)
-            eps.getVariable<AtomicInteger>("counter").incrementAndGet()
+            sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
         }
     }
 
@@ -62,15 +62,15 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
         override fun onEvent(event: Event) {
             logger.debug("Received event: {}", event.name)
             if (event.name == "e2") {
-                eps.getVariable<AtomicInteger>("counter").incrementAndGet()
+                sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
                 finish()
             }
         }
     }
 
     override fun onStartup() {
-        eps.call("AutoAction")
-        eps.event("e1").send()
-        eps.event("e2").send()
+        sponge.call("AutoAction")
+        sponge.event("e1").send()
+        sponge.event("e2").send()
     }
 }

@@ -13,7 +13,7 @@ class Constants {
 
 fun onInit() {
     // Variables for assertions only
-    EPS.setVariable("correlationEventsLog", Constants.correlationEventsLog)
+    sponge.setVariable("correlationEventsLog", Constants.correlationEventsLog)
 }
 
 // Naming F(irst), L(ast), A(ll), N(one)
@@ -64,11 +64,11 @@ class RuleFNFNL : Rule() {
 }
 
 fun onStartup() {
-    EPS.event("e1").set("label", "1").send()
-    EPS.event("e2").set("label", "2").send()
-    EPS.event("e2").set("label", "3").send()
-    EPS.event("e2").set("label", "4").send()
-    EPS.event("e3").set("label", "5").send()
-    EPS.event("e3").set("label", "6").send()
-    EPS.event("e3").set("label", "7").send()
+    sponge.event("e1").set("label", "1").send()
+    sponge.event("e2").set("label", "2").send()
+    sponge.event("e2").set("label", "3").send()
+    sponge.event("e2").set("label", "4").send()
+    sponge.event("e3").set("label", "5").send()
+    sponge.event("e3").set("label", "6").send()
+    sponge.event("e3").set("label", "7").send()
 }

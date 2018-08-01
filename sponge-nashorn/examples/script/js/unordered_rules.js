@@ -8,9 +8,9 @@ var Deduplication = org.openksavi.sponge.core.library.Deduplication;
 
 function onInit() {
     // Variables for assertions only
-    EPS.setVariable("hardwareFailureJavaCount", new AtomicInteger(0));
-    EPS.setVariable("hardwareFailureScriptCount", new AtomicInteger(0));
-    EPS.setVariable("sameSourceFirstFireCount", new AtomicInteger(0));
+    sponge.setVariable("hardwareFailureJavaCount", new AtomicInteger(0));
+    sponge.setVariable("hardwareFailureScriptCount", new AtomicInteger(0));
+    sponge.setVariable("sameSourceFirstFireCount", new AtomicInteger(0));
 }
 
 var FirstRule = Java.extend(Rule, {
@@ -24,8 +24,8 @@ var FirstRule = Java.extend(Rule, {
     },
     onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventSequence);
-        EPS.getVariable("sameSourceFirstFireCount").incrementAndGet();
-        EPS.event("alarm").set("source", self.firstEvent.get("source")).send();
+        sponge.getVariable("sameSourceFirstFireCount").incrementAndGet();
+        sponge.event("alarm").set("source", self.firstEvent.get("source")).send();
     }
 });
 
@@ -43,7 +43,7 @@ var SameSourceAllRule = Java.extend(Rule, {
     onRun: function(self, event) {
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                 self.eventSequence);
-        EPS.getVariable("hardwareFailureScriptCount").incrementAndGet();
+        sponge.getVariable("hardwareFailureScriptCount").incrementAndGet();
     },
     severityCondition: function(self, event) {
         return parseInt(event.get("severity")) > 5;
@@ -76,15 +76,15 @@ var Alarm = Java.extend(Trigger, {
 });
 
 function onLoad() {
-    EPS.enableJava(org.openksavi.sponge.examples.SameSourceJavaUnorderedRule.class);
+    sponge.enableJava(org.openksavi.sponge.examples.SameSourceJavaUnorderedRule.class);
 }
 
 function onStartup() {
-    EPS.event("diskFailure").set("severity", 10).set("source", "server1").send();
-    EPS.event("diskFailure").set("severity", 10).set("source", "server2").send();
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send();
-    EPS.event("diskFailure").set("severity", 8).set("source", "server1").send();
-    EPS.event("filesystemFailure").set("severity", 8).set("source", "server1").send();
-    EPS.event("filesystemFailure").set("severity", 6).set("source", "server1").send();
-    EPS.event("diskFailure").set("severity", 6).set("source", "server1").send();
+    sponge.event("diskFailure").set("severity", 10).set("source", "server1").send();
+    sponge.event("diskFailure").set("severity", 10).set("source", "server2").send();
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send();
+    sponge.event("diskFailure").set("severity", 8).set("source", "server1").send();
+    sponge.event("filesystemFailure").set("severity", 8).set("source", "server1").send();
+    sponge.event("filesystemFailure").set("severity", 6).set("source", "server1").send();
+    sponge.event("diskFailure").set("severity", 6).set("source", "server1").send();
 }

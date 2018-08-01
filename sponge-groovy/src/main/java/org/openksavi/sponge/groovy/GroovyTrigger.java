@@ -17,19 +17,10 @@
 package org.openksavi.sponge.groovy;
 
 import org.openksavi.sponge.core.trigger.BaseTrigger;
-import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 
 /**
  * Groovy-specific implementation of the trigger.
  */
 public abstract class GroovyTrigger extends BaseTrigger {
 
-    /**
-     * Method required for accessing EPS in Groovy-based processors.
-     *
-     * @return EPS.
-     */
-    public final KnowledgeBaseEngineOperations getEPS() {
-        return getEps();
-    }
 }

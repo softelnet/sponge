@@ -6,9 +6,9 @@
 var AtomicInteger = java.util.concurrent.atomic.AtomicInteger;
 
 function onInit() {
-    EPS.setVariable("eventEntry", null);
-    EPS.setVariable("eventCounter", new AtomicInteger(0));
-    EPS.setVariable("allowNumber", 2);
+    sponge.setVariable("eventEntry", null);
+    sponge.setVariable("eventCounter", new AtomicInteger(0));
+    sponge.setVariable("allowNumber", 2);
 }
 
 var Trigger1 = Java.extend(Trigger, {
@@ -16,11 +16,11 @@ var Trigger1 = Java.extend(Trigger, {
         self.event = "e1";
     },
     onRun: function(self, event) {
-        eventCounter = EPS.getVariable("eventCounter")
+        eventCounter = sponge.getVariable("eventCounter")
         eventCounter++;
-        EPS.setVariable("eventCounter", eventCounter);
+        sponge.setVariable("eventCounter", eventCounter);
         self.logger.debug("Received event {}, counter: {}", event.name, eventCounter);
-        if (eventCounter > EPS.getVariable("allowNumber")) {
+        if (eventCounter > sponge.getVariable("allowNumber")) {
         	self.logger.debug("This line should not be displayed!");
         }
     }
@@ -32,13 +32,13 @@ var Trigger2 = Java.extend(Trigger, {
     },
     onRun: function(self, event) {
         self.logger.debug("Removing entry");
-        EPS.removeEvent(EPS.getVariable("eventEntry"));
+        sponge.removeEvent(sponge.getVariable("eventEntry"));
     }
 });
 
 function onStartup() {
     var start = 500;
     var interval = 1000;
-    EPS.setVariable("eventEntry", EPS.event("e1").sendAfter(start, interval));
-    EPS.event("e2").sendAfter(interval * EPS.getVariable("allowNumber"));
+    sponge.setVariable("eventEntry", sponge.event("e1").sendAfter(start, interval));
+    sponge.event("e2").sendAfter(interval * sponge.getVariable("allowNumber"));
 }

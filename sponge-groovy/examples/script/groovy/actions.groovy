@@ -7,8 +7,8 @@ import org.openksavi.sponge.examples.PowerEchoAction
 
 void onInit() {
     // Variables for assertions only
-    EPS.setVariable("scriptActionResult", null)
-    EPS.setVariable("javaActionResult", null)
+    sponge.setVariable("scriptActionResult", null)
+    sponge.setVariable("javaActionResult", null)
 }
 
 class EchoAction extends Action {
@@ -28,21 +28,21 @@ class ArrayArgumentAction extends Action {
 }
 
 void onLoad() {
-    EPS.enableJava(PowerEchoAction)
+    sponge.enableJava(PowerEchoAction)
 }
 
 void onStartup() {
-    EPS.logger.debug("Calling script defined action")
-    def scriptActionResult = EPS.call("EchoAction", 1, "test")
-    EPS.setVariable("scriptActionResult", scriptActionResult)
-    EPS.logger.debug("Action returned: {}", scriptActionResult)
+    sponge.logger.debug("Calling script defined action")
+    def scriptActionResult = sponge.call("EchoAction", 1, "test")
+    sponge.setVariable("scriptActionResult", scriptActionResult)
+    sponge.logger.debug("Action returned: {}", scriptActionResult)
 
-    EPS.logger.debug("Calling Java defined action")
-    def javaActionResult = EPS.call("PowerEchoAction", 1, "test")
-    EPS.setVariable("javaActionResult", javaActionResult)
-    EPS.logger.debug("Action returned: {}", javaActionResult)
+    sponge.logger.debug("Calling Java defined action")
+    def javaActionResult = sponge.call("PowerEchoAction", 1, "test")
+    sponge.setVariable("javaActionResult", javaActionResult)
+    sponge.logger.debug("Action returned: {}", javaActionResult)
 
-    EPS.logger.debug("Disabling actions")
-    EPS.disable(EchoAction)
-    EPS.disableJava(PowerEchoAction)
+    sponge.logger.debug("Disabling actions")
+    sponge.disable(EchoAction)
+    sponge.disableJava(PowerEchoAction)
 }

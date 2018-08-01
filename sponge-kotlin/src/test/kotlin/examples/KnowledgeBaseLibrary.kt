@@ -17,7 +17,7 @@ class KnowledgeBaseLibrary : KKnowledgeBase() {
 
     override fun onInit() {
         // Variables for assertions only
-        eps.setVariable("hostStatus", Collections.synchronizedMap(HashMap<String, String>()))
+        sponge.setVariable("hostStatus", Collections.synchronizedMap(HashMap<String, String>()))
     }
 
     companion object {
@@ -43,12 +43,12 @@ class KnowledgeBaseLibrary : KKnowledgeBase() {
 
         override fun onRun(event: Event) {
             val status = checkPageStatus(event.get<String>("host"))
-            eps.getVariable<MutableMap<String, String>>("hostStatus").put(event.get<String>("host"), status)
+            sponge.getVariable<MutableMap<String, String>>("hostStatus").put(event.get<String>("host"), status)
         }
     }
 
     override fun onStartup() {
-        eps.event("checkStatus").set("host", "www.wikipedia.org.unknown").send()
-        eps.event("checkStatus").set("host", "www.wikipedia.org").send()
+        sponge.event("checkStatus").set("host", "www.wikipedia.org.unknown").send()
+        sponge.event("checkStatus").set("host", "www.wikipedia.org").send()
     }
 }

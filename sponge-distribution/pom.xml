@@ -69,14 +69,8 @@
                                 <icons>font</icons>
                                 <prewrap>false</prewrap>
                                 <linkattrs>true</linkattrs>
-                                <description>Sponge - open source,
-                                    Java-based Event Processing
-                                    System</description>
-                                <keywords>Sponge,CEP,Complex Event
-                                    Processing,Java,Open
-                                    Source,Ruby,Groovy,JavaScript,IoT,Internet
-                                    of
-                                    things,Apache license,Apache Camel</keywords>
+                                <description>Sponge is an open-source, Java-based Action and Event Processing System</description>
+                                <keywords>Sponge,Event Processing System,CEP,Complex Event Processing,Java,Open Source,Ruby,Groovy,JavaScript,IoT,Internet of things,Apache license,Apache Camel</keywords>
                                 <linkcss>true</linkcss>
 
                                 <sponge>Sponge</sponge>
