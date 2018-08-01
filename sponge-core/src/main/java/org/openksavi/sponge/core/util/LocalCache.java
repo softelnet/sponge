@@ -31,9 +31,9 @@ public interface LocalCache<K, V> {
 
     void invalidate(K key);
 
-    void invalidateAll();
+    void invalidateAll(Iterable<?> keys);
 
-    void invalidate(Iterable<?> keys);
+    void invalidateAll();
 
     long size();
 

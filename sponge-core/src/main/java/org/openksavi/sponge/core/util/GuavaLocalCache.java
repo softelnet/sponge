@@ -57,13 +57,13 @@ public class GuavaLocalCache<K, V> implements LocalCache<K, V> {
     }
 
     @Override
-    public void invalidateAll() {
-        cache.invalidateAll();
+    public void invalidateAll(Iterable<?> keys) {
+        cache.invalidateAll(keys);
     }
 
     @Override
-    public void invalidate(Iterable<?> keys) {
-        cache.invalidateAll(keys);
+    public void invalidateAll() {
+        cache.invalidateAll();
     }
 
     @Override

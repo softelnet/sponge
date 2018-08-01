@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.4.0 (not released yet)
+== 1.4.0 (2018-08-01)
 
 * API change: the `EPS` global variable for the engine operations has been renamed to `sponge`.
 * A new REST API client artifact `sponge-rest-api-client`. The existing REST API server artifact has been renamed to `sponge-rest-api-server`.
