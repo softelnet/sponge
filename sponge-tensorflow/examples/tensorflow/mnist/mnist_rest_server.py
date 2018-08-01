@@ -3,7 +3,7 @@ Sponge Knowledge base
 MNIST REST server
 """
 
-from org.openksavi.sponge.tensorflow import MnistUtils
+from org.openksavi.sponge.tensorflow.util import ImageUtils
 
 PREDICTION_THRESHOLD = 0.75
 
@@ -32,7 +32,7 @@ class CallPredict(Trigger):
         self.event = "predict"
     def onRun(self, event):
         file = event.get("file")
-        predictions = sponge.call("MnistPredictDetailed", MnistUtils.getImageBytes(file))
+        predictions = sponge.call("MnistPredictDetailed", ImageUtils.getImageBytes(file))
         prediction = predictions.index(max(predictions))
         sponge.logger.info("Prediction for {} is: {}, all predictions: {}", file, prediction, predictions)
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.tensorflow;
+package org.openksavi.sponge.tensorflow.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,9 +28,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
- * A set of MNIST utility methods.
+ * A set of image utility methods.
  */
-public abstract class MnistUtils {
+public abstract class ImageUtils {
 
     public static byte[] getImageBytes(String fileName) {
         try {
@@ -52,7 +52,7 @@ public abstract class MnistUtils {
         }
     }
 
-    private MnistUtils() {
+    private ImageUtils() {
         //
     }
 }

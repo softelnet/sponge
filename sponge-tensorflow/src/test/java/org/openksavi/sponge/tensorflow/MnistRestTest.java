@@ -44,6 +44,7 @@ import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
+import org.openksavi.sponge.tensorflow.util.ImageUtils;
 
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { MnistRestTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
@@ -80,7 +81,7 @@ public class MnistRestTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testRestCallPredict() {
-        byte[] imageData = MnistUtils.getImageBytes("examples/tensorflow/mnist/data/5_0.png");
+        byte[] imageData = ImageUtils.getImageBytes("examples/tensorflow/mnist/data/5_0.png");
 
         List<Number> result = createRestApiClient().call(List.class, "MnistPredictDetailed", imageData);
         List<Double> predictions = result.stream().map(e -> e.doubleValue()).collect(Collectors.toList());
