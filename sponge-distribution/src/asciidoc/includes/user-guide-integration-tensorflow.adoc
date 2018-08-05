@@ -50,11 +50,17 @@ source ./bin/activate
 |{tensorflowSourcesUrl}/mnist/mnist_rest_server.py[`mnist_rest_server.py`]
 |The {sponge} knowledge base file (compatible with Jython) that contains definitions of actions that will be exposed in the {sponge} REST API service. The `MnistPredict` action takes a binary representation of a PNG file and passes it to the running Python script file by invoking `MnistService.predict(byte[] image)` method. This method will be invoked on the remote object running in the Python process.
 
-|{tensorflowSourcesUrl}/mnist/mnist_rest_server.py[`mnist_rest_server.py`]
-|The Python script file (compatible with CPython) that loads the https://en.wikipedia.org/wiki/Convolutional_neural_network[ConvNet] model trained on the MNIST database to recognize handwritten digits. If the model file `data/mnist_model.h5` exists, it will be loaded. Otherwise a new model will be trained and saved. This example uses https://keras.io[Keras] neural networks API that runs on top of TensorFlow. This model is then used by the Python-bases `MnistService` implementation that is exposed by the Python-side Py4J gateway.
+|{tensorflowSourcesUrl}/mnist/python/mnist_model.py[`python/mnist_model.py`]
+|The Python script file (compatible with CPython) that defines the https://en.wikipedia.org/wiki/Convolutional_neural_network[ConvNet] model trained on the MNIST database to recognize handwritten digits. This example uses https://keras.io[Keras] neural networks API that runs on top of TensorFlow.
+
+|{tensorflowSourcesUrl}/mnist/python/mnist_service.py[`python/mnist_service.py`]
+|The Python script file (compatible with CPython) that loads the model. If the model file `data/mnist_model.h5` exists, it will be loaded. Otherwise a new model will be trained and saved. This model is then used by the Python-based `MnistService` implementation that is exposed by the Python-side Py4J gateway.
 
 |{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/test/java/org/openksavi/sponge/tensorflow/MnistRestClientMain.java[`MnistRestClientMain.java`]
 |The main Java class for the simple client that invokes the remote `MnistPredict` action using the REST API to recognize the sample digit image. It should print the text: `Recognized digit for image file examples/tensorflow/mnist/data/1_0.png is 1.`
+
+|{tensorflowSourcesUrl}/mnist/python/mnist_model_create.py[`python/mnist_model_create.py`]
+|The auxiliary Python script file (compatible with CPython) that manually creates, trains and saves the model. It overrides the model file. Additionally the script plots the training and validation loss side by side, as well as the training and validation accuracy.
 |===
 
 NOTE: The {sponge} REST API configuration used for this example is not secure. In the production environment you should use HTTPS as well as user authentication.

@@ -14,7 +14,7 @@
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
                     <argument>mnist_service.py</argument>
-                    <workingDir>${sponge.configDir}</workingDir>
+                    <workingDir>${sponge.configDir}/python</workingDir>
                     <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
                     <redirectType>LOGGER</redirectType>
                 </pythonScript>

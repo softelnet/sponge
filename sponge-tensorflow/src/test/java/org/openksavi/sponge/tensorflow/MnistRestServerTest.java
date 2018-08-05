@@ -47,9 +47,9 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 import org.openksavi.sponge.tensorflow.util.ImageUtils;
 
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { MnistRestTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { MnistRestServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class MnistRestTest {
+public class MnistRestServerTest {
 
     protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
 

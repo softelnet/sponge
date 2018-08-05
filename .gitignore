@@ -9,3 +9,4 @@ target/
 *.log
 pom.xml.versionsBackup
 dependency-reduced-pom.xml
+__pycache__/

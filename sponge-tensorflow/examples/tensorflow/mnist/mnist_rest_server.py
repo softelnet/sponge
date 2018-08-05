@@ -5,7 +5,7 @@ MNIST REST server
 
 from org.openksavi.sponge.tensorflow.util import ImageUtils
 
-PREDICTION_THRESHOLD = 0.75
+PREDICTION_THRESHOLD = 0.55
 
 class MnistPredict(Action):
     def onConfigure(self):
