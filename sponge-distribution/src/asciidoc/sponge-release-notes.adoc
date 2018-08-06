@@ -6,6 +6,11 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.4.1 (not released yet)
+
+* A type for an action argument or result metadata may specify one or more features.
+
+[discrete]
 == 1.4.0 (2018-08-01)
 
 * API change: the `EPS` global variable for the engine operations has been renamed to `sponge`.

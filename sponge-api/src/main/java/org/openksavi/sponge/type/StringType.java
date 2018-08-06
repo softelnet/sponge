@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class StringType extends Type {
 
     private Integer minLength;
@@ -39,6 +41,16 @@ public class StringType extends Type {
     @Override
     public StringType tag(String tag) {
         return (StringType) super.tag(tag);
+    }
+
+    @Override
+    public StringType features(Map<String, String> features) {
+        return (StringType) super.features(features);
+    }
+
+    @Override
+    public StringType feature(String name, String value) {
+        return (StringType) super.feature(name, value);
     }
 
     public StringType minLength(Integer minLength) {

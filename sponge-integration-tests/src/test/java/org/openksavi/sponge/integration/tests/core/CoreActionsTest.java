@@ -19,6 +19,7 @@ package org.openksavi.sponge.integration.tests.core;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
@@ -37,7 +38,6 @@ import org.openksavi.sponge.examples.TestCompoundComplexObject;
 import org.openksavi.sponge.test.util.TestUtils;
 import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
-import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
@@ -123,6 +123,7 @@ public class CoreActionsTest {
             assertEquals("stringArg", argMeta[0].getName());
             assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
             assertEquals(10, ((StringType) argMeta[0].getType()).getMaxLength().intValue());
+            assertEquals("ipAddress", argMeta[0].getType().getFormat());
             assertEquals(true, argMeta[0].isRequired());
             assertEquals(null, argMeta[0].getDisplayName());
             assertEquals(null, argMeta[0].getDescription());
@@ -162,7 +163,12 @@ public class CoreActionsTest {
 
             assertEquals("binaryArg", argMeta[8].getName());
             assertEquals(TypeKind.BINARY, argMeta[8].getType().getKind());
-            assertEquals("jpg", ((BinaryType) argMeta[8].getType()).getFormat());
+            assertNull(argMeta[8].getType().getFormat());
+            assertEquals(4, argMeta[8].getType().getFeatures().size());
+            assertEquals(28, Integer.valueOf(argMeta[8].getType().getFeatures().get("width")).intValue());
+            assertEquals(28, Integer.valueOf(argMeta[8].getType().getFeatures().get("height")).intValue());
+            assertEquals("black", argMeta[8].getType().getFeatures().get("background"));
+            assertEquals("white", argMeta[8].getType().getFeatures().get("color"));
 
             assertEquals(TypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
             assertEquals("Boolean result", adapter.getResultMeta().getDisplayName());

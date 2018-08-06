@@ -5,6 +5,9 @@
         <knowledgeBase name="mnist" displayName="MNIST">
             <file>mnist_rest_server.py</file>
         </knowledgeBase>
+        <knowledgeBase name="administration" displayName="Administration">
+            <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+        </knowledgeBase>
     </knowledgeBases>
 
     <plugins>

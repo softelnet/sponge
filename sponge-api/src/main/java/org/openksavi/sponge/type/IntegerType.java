@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class IntegerType extends Type {
 
     private Long minValue;
@@ -43,6 +45,16 @@ public class IntegerType extends Type {
     @Override
     public IntegerType tag(String tag) {
         return (IntegerType) super.tag(tag);
+    }
+
+    @Override
+    public IntegerType features(Map<String, String> features) {
+        return (IntegerType) super.features(features);
+    }
+
+    @Override
+    public IntegerType feature(String name, String value) {
+        return (IntegerType) super.feature(name, value);
     }
 
     public IntegerType minValue(Long minValue) {

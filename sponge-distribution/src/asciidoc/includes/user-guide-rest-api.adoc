@@ -394,6 +394,8 @@ __optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, 
 __optional__|string
 |**tags** +
 __optional__|< string > array
+|**features** +
+__optional__|< string, string > map
 |===
 
 

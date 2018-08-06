@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class BinaryType extends Type {
 
     private String mimeType;
@@ -37,6 +39,16 @@ public class BinaryType extends Type {
     @Override
     public BinaryType tag(String tag) {
         return (BinaryType) super.tag(tag);
+    }
+
+    @Override
+    public BinaryType features(Map<String, String> features) {
+        return (BinaryType) super.features(features);
+    }
+
+    @Override
+    public BinaryType feature(String name, String value) {
+        return (BinaryType) super.feature(name, value);
     }
 
     public BinaryType mimeType(String mimeType) {
