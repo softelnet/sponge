@@ -36,7 +36,6 @@ public abstract class ImageUtils {
         try {
             try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
                 ImageIO.write(ImageIO.read(new File(fileName)), FilenameUtils.getExtension(fileName), out);
-                // FileUtils.writeByteArrayToFile(new File("test.png"), out.toByteArray());
                 return out.toByteArray();
             }
         } catch (IOException e) {

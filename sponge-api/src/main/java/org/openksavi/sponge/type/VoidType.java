@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class VoidType extends Type {
 
     public VoidType() {
@@ -35,5 +37,15 @@ public class VoidType extends Type {
     @Override
     public VoidType tag(String tag) {
         return (VoidType) super.tag(tag);
+    }
+
+    @Override
+    public VoidType features(Map<String, String> features) {
+        return (VoidType) super.features(features);
+    }
+
+    @Override
+    public VoidType feature(String name, String value) {
+        return (VoidType) super.feature(name, value);
     }
 }

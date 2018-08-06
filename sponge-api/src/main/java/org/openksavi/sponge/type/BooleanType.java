@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class BooleanType extends Type {
 
     public BooleanType() {
@@ -35,5 +37,15 @@ public class BooleanType extends Type {
     @Override
     public BooleanType tag(String tag) {
         return (BooleanType) super.tag(tag);
+    }
+
+    @Override
+    public BooleanType features(Map<String, String> features) {
+        return (BooleanType) super.features(features);
+    }
+
+    @Override
+    public BooleanType feature(String name, String value) {
+        return (BooleanType) super.feature(name, value);
     }
 }

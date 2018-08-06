@@ -15,10 +15,11 @@ import numpy as np
 from io import BytesIO
 import os.path
 
-import matplotlib.pyplot as plt
-
 # The model is based on https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py
 # and http://nbviewer.jupyter.org/github/fchollet/deep-learning-with-python-notebooks/blob/master/5.1-introduction-to-convnets.ipynb.
+# Test loss: 0.0215
+# Test accuracy: 0.9932
+# This model is used only for the purpose of showing how to invoke machine learning prediction via a Sponge action.
 class MnistModel:
     def __init__(self):
         self.model = None
@@ -118,38 +119,4 @@ class MnistModel:
         print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(predictionTensor)), flush=True)
 
         return predictionTensor
-
-    def plot_loss(self):
-        loss = self.history.history['loss']
-        val_loss = self.history.history['val_loss']
-
-        epochs = range(1, len(loss) + 1)
-
-        plt.figure()
-        # "bo" is for "blue dot"
-        plt.plot(epochs, loss, 'bo', label='Training loss')
-        # b is for "solid blue line"
-        plt.plot(epochs, val_loss, 'b', label='Validation loss')
-        plt.title('Training and validation loss')
-        plt.xlabel('Epochs')
-        plt.ylabel('Loss')
-        plt.legend()
-
-        plt.show(block=False)
-
-    def plot_acc(self):
-        acc = self.history.history['acc']
-        val_acc = self.history.history['val_acc']
-
-        epochs = range(1, len(acc) + 1)
-
-        plt.figure()
-        plt.plot(epochs, acc, 'bo', label='Training acc')
-        plt.plot(epochs, val_acc, 'b', label='Validation acc')
-        plt.title('Training and validation accuracy')
-        plt.xlabel('Epochs')
-        plt.ylabel('Loss')
-        plt.legend()
-
-        plt.show(block=False)
 

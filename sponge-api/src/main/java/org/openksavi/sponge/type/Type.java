@@ -18,7 +18,9 @@ package org.openksavi.sponge.type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A data type. Used for example in action arguments metadata.
@@ -30,6 +32,8 @@ public class Type {
     private String format;
 
     private List<String> tags = new ArrayList<>();
+
+    private Map<String, String> features = new LinkedHashMap<>();
 
     @SuppressWarnings("unused")
     private Type() {
@@ -46,12 +50,22 @@ public class Type {
     }
 
     public Type tags(String... tags) {
-        setTags(Arrays.asList(tags));
+        this.tags.addAll(Arrays.asList(tags));
         return this;
     }
 
     public Type tag(String tag) {
         return tags(tag);
+    }
+
+    public Type features(Map<String, String> features) {
+        this.features.putAll(features);
+        return this;
+    }
+
+    public Type feature(String name, String value) {
+        features.put(name, value);
+        return this;
     }
 
     public TypeKind getKind() {
@@ -72,5 +86,13 @@ public class Type {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public Map<String, String> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, String> features) {
+        this.features = features;
     }
 }

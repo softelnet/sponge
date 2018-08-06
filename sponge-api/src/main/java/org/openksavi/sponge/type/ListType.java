@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class ListType extends Type {
 
     private Type elementType;
@@ -43,6 +45,16 @@ public class ListType extends Type {
     @Override
     public ListType tag(String tag) {
         return (ListType) super.tag(tag);
+    }
+
+    @Override
+    public ListType features(Map<String, String> features) {
+        return (ListType) super.features(features);
+    }
+
+    @Override
+    public ListType feature(String name, String value) {
+        return (ListType) super.feature(name, value);
     }
 
     public Type getElementType() {

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 public class MapType extends Type {
 
     private Type keyType;
@@ -46,6 +48,16 @@ public class MapType extends Type {
     @Override
     public MapType tag(String tag) {
         return (MapType) super.tag(tag);
+    }
+
+    @Override
+    public MapType features(Map<String, String> features) {
+        return (MapType) super.features(features);
+    }
+
+    @Override
+    public MapType feature(String name, String value) {
+        return (MapType) super.feature(name, value);
     }
 
     public Type getKeyType() {

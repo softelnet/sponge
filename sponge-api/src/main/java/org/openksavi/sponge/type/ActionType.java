@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Map;
+
 /**
  * A type that is a result of the given action, e.g. a list of string values. It allows using a result of one action to be a type for
  * another action argument or result.
@@ -47,6 +49,16 @@ public class ActionType extends Type {
     @Override
     public ActionType tag(String tag) {
         return (ActionType) super.tag(tag);
+    }
+
+    @Override
+    public ActionType features(Map<String, String> features) {
+        return (ActionType) super.features(features);
+    }
+
+    @Override
+    public ActionType feature(String name, String value) {
+        return (ActionType) super.feature(name, value);
     }
 
     public String getActionName() {
