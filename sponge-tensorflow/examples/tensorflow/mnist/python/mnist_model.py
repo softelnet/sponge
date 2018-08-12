@@ -24,16 +24,15 @@ class MnistModel:
     def __init__(self):
         self.model = None
         self.history = None
+        self.batch_size = 128
+        self.num_classes = 10
+        self.epochs = 12
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
         self.model_file = '../data/mnist_model.h5'
-        self.predictionThreshold = 0.55
+        self.prediction_threshold = 0.55
 
-    def __create_model_and_train(self):
-        batch_size = 128
-        num_classes = 10
-        epochs = 12
-
+    def __load_mnist_data(self):
         # the data, split between train and test sets
         (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
@@ -55,11 +54,14 @@ class MnistModel:
         print(x_test.shape[0], 'test samples')
 
         # convert class vectors to binary class matrices
-        y_train = keras.utils.to_categorical(y_train, num_classes)
-        y_test = keras.utils.to_categorical(y_test, num_classes)
+        y_train = keras.utils.to_categorical(y_train, self.num_classes)
+        y_test = keras.utils.to_categorical(y_test, self.num_classes)
+        
+        return (x_train, y_train, x_test, y_test, input_shape)
 
+    def __create_model_and_train(self):
         model = Sequential()
-        model.add(Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
+        model.add(Conv2D(32, (3, 3), activation='relu', input_shape=self.input_shape))
         model.add(MaxPooling2D((2, 2)))
         model.add(Conv2D(64, (3, 3), activation='relu'))
         model.add(MaxPooling2D((2, 2)))
@@ -67,40 +69,47 @@ class MnistModel:
         model.add(Flatten())
         model.add(Dropout(0.5))
         model.add(Dense(64, activation='relu'))
-        model.add(Dense(num_classes, activation='softmax'))
+        model.add(Dense(self.num_classes, activation='softmax'))
 
         model.compile(loss=keras.losses.categorical_crossentropy,
                       optimizer=keras.optimizers.Adadelta(),
                       metrics=['accuracy'])
 
-        history = model.fit(x_train, y_train,
-                  batch_size=batch_size,
-                  epochs=epochs,
+        history = model.fit(self.x_train, self.y_train,
+                  batch_size=self.batch_size,
+                  epochs=self.epochs,
                   verbose=1,
-                  validation_data=(x_test, y_test))
-        score = model.evaluate(x_test, y_test, verbose=0)
-
+                  validation_data=(self.x_test, self.y_test))
         model.save(self.model_file)
 
-        model.summary()
+        self.model = model
+        self.history = history
 
+    def evaluate(self, model, x_test, y_test):
+        score = model.evaluate(x_test, y_test, verbose=0)
         print('Test loss:', score[0])
         print('Test accuracy:', score[1])
-
-        return (model, history)
+        model.summary()
 
     def load(self, create_new = False):
+        (self.x_train, self.y_train, self.x_test, self.y_test, self.input_shape) = self.__load_mnist_data()
+
+        # Keras hack [https://github.com/tensorflow/tensorflow/issues/14356]
+        K.clear_session()
+
         if not create_new and os.path.exists(self.model_file):
             print('Loading model')
             self.model = models.load_model(self.model_file)
         else:
             print('Creating and training model')
-            (self.model, self.history) = self.__create_model_and_train()
+            self.__create_model_and_train()
 
         # Have to initialize before threading (https://stackoverflow.com/questions/40850089/is-keras-thread-safe)
         self.model._make_predict_function()
 
-    def __preprocess_image_to_predict(self, image_data):
+        self.evaluate(self.model, self.x_test, self.y_test)
+
+    def __preprocess_image_data(self, image_data):
         image = preprocessing.image.load_img(BytesIO(image_data), grayscale=True, target_size=(self.img_rows, self.img_cols))
         x = preprocessing.image.img_to_array(image)
         x /= 255.0
@@ -108,15 +117,30 @@ class MnistModel:
         return (x, image)
 
     def predict(self, image_data):
-        x, image = self.__preprocess_image_to_predict(image_data)
+        x, image = self.__preprocess_image_data(image_data)
 
-        predictionTensor = self.model.predict(x)[0]
-        prediction = np.argmax(predictionTensor)
-        predictionProb = np.amax(predictionTensor)
+        prediction_tensor = self.model.predict(x)[0]
+        prediction = np.argmax(prediction_tensor)
+        prediction_prob = np.amax(prediction_tensor)
 
-        if predictionProb < self.predictionThreshold:
-            print('WARNING: The prediction probability', predictionProb, 'is too low so it could be incorrect!')
-        print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(predictionTensor)), flush=True)
+        if prediction_prob < self.prediction_threshold:
+            print('WARNING: The prediction probability', prediction_prob, 'is too low so it could be incorrect!')
+        print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(prediction_tensor)), flush=True)
 
-        return predictionTensor
+        return prediction_tensor
 
+    def learn(self, image_data, digit):
+        x, image = self.__preprocess_image_data(image_data)
+
+        datagen = preprocessing.image.ImageDataGenerator(
+            featurewise_center=True,
+            featurewise_std_normalization=True,
+            rotation_range=20,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            horizontal_flip=True)
+        datagen.fit(x)
+        self.model.fit_generator(datagen.flow(x, keras.utils.to_categorical([digit], self.num_classes), batch_size=1),
+                    epochs=self.epochs, verbose=0)
+        # Simple version commented
+        #self.model.fit(x, keras.utils.to_categorical([digit], self.num_classes), epochs=self.epochs, verbose=0)
