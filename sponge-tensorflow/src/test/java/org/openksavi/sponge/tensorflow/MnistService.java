@@ -26,4 +26,8 @@ public interface MnistService {
     boolean isReady();
 
     List<Double> predict(byte[] image);
+
+    void learn(byte[] image, int digit);
+
+    void reset();
 }

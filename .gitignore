@@ -10,3 +10,4 @@ target/
 pom.xml.versionsBackup
 dependency-reduced-pom.xml
 __pycache__/
+_tmp_/

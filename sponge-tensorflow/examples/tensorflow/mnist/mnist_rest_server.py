@@ -5,7 +5,10 @@ MNIST REST server
 
 from org.openksavi.sponge.tensorflow.util import ImageUtils
 
-PREDICTION_THRESHOLD = 0.55
+PREDICTION_THRESHOLD = 0.75
+
+IMAGE_ARG_META = ArgMeta("image", BinaryType().mimeType("image/png")
+                    .features({"source":"drawing", "width":"28", "height":"28", "background":"black", "color":"white", "strokeWidth":"2"})).displayName("Image of a digit")
 
 IMAGE_ARG_META = ArgMeta("image", BinaryType().mimeType("image/png").tag("drawing")
                     .features({"width":"28", "height":"28", "background":"black", "color":"white", "strokeWidth":"2"})).displayName("Image of a digit")
@@ -16,8 +19,6 @@ class MnistPredict(Action):
         self.argsMeta = [IMAGE_ARG_META]
         self.resultMeta = ResultMeta(IntegerType()).displayName("Recognized digit")
     def onCall(self, image):
-        self.logger.info("Action {} called", self.name)
-        #ImageUtils.writeImageBytes(image, "test.png")
         predictions = py4j.facade.predict(image)
         prediction = predictions.index(max(predictions))
         return prediction if predictions[prediction] >= PREDICTION_THRESHOLD else None
@@ -28,8 +29,26 @@ class MnistPredictDetailed(Action):
         self.argsMeta = [IMAGE_ARG_META]
         self.resultMeta = ResultMeta(ListType(NumberType())).displayName("Digit probabilities")
     def onCall(self, image):
-        self.logger.info("Action {} called", self.name)
         return py4j.facade.predict(image)
+
+class MnistLearn(Action):
+    def onConfigure(self):
+        self.displayName = "Learn a digit"
+        self.argsMeta = [IMAGE_ARG_META, ArgMeta("digit", IntegerType()).displayName("Digit")]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, image, digit):
+        py4j.facade.learn(image, digit)
+        return None
+
+class MnistResetModel(Action):
+    def onConfigure(self):
+        self.displayName = "Reset model"
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self):
+        # TODO Client sends wrong type String
+        py4j.facade.reset()
+        return None
 
 class CallPredict(Trigger): 
     def onConfigure(self): 
