@@ -40,12 +40,12 @@ public class VoidType extends Type {
     }
 
     @Override
-    public VoidType features(Map<String, String> features) {
+    public VoidType features(Map<String, Object> features) {
         return (VoidType) super.features(features);
     }
 
     @Override
-    public VoidType feature(String name, String value) {
+    public VoidType feature(String name, Object value) {
         return (VoidType) super.feature(name, value);
     }
 }

@@ -83,13 +83,13 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     }
 
     @Override
-    public Map<String, Object> getMeta() {
-        return adapter.getMeta();
+    public Map<String, Object> getFeatures() {
+        return adapter.getFeatures();
     }
 
     @Override
-    public void setMeta(Map<String, Object> meta) {
-        adapter.setMeta(meta);
+    public void setFeatures(Map<String, Object> features) {
+        adapter.setFeatures(features);
     }
 
     public KnowledgeBaseEngineOperations getSponge() {

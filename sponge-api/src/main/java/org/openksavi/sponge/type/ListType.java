@@ -48,12 +48,12 @@ public class ListType extends Type {
     }
 
     @Override
-    public ListType features(Map<String, String> features) {
+    public ListType features(Map<String, Object> features) {
         return (ListType) super.features(features);
     }
 
     @Override
-    public ListType feature(String name, String value) {
+    public ListType feature(String name, Object value) {
         return (ListType) super.feature(name, value);
     }
 

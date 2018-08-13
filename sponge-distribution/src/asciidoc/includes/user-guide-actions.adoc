@@ -80,7 +80,7 @@ Metadata for argument and result types support types that are represented by cla
 |Optional tags (text labels).
 
 |`features` (or `feature`)
-|Optional features as a map (a name, a text value).
+|Optional features as a map of names to values (as the `Object` type).
 |===
 
 .Supported argument and result metadata types
@@ -129,6 +129,7 @@ class UpperCase(Action):
     def onConfigure(self):
         self.displayName = "Convert to upper case"
         self.description = "Converts a string to upper case."
+        self.features = {"visibility":True}
         self.argsMeta = [
             ArgMeta("text", StringType()).displayName("Text to upper case").description("The text that will be converted to upper case.")]
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
@@ -151,7 +152,7 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
             ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject").tag("complex")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))),
-            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags("drawing", "handwritten").features({"width":"28", "height":"28"})),
+            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags("drawing", "handwritten").features({"width":28, "height":28, "color":"white"})),
         ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):

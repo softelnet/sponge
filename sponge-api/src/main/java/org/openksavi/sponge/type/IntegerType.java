@@ -48,12 +48,12 @@ public class IntegerType extends Type {
     }
 
     @Override
-    public IntegerType features(Map<String, String> features) {
+    public IntegerType features(Map<String, Object> features) {
         return (IntegerType) super.features(features);
     }
 
     @Override
-    public IntegerType feature(String name, String value) {
+    public IntegerType feature(String name, Object value) {
         return (IntegerType) super.feature(name, value);
     }
 

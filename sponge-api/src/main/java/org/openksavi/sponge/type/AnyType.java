@@ -40,12 +40,12 @@ public class AnyType extends Type {
     }
 
     @Override
-    public AnyType features(Map<String, String> features) {
+    public AnyType features(Map<String, Object> features) {
         return (AnyType) super.features(features);
     }
 
     @Override
-    public AnyType feature(String name, String value) {
+    public AnyType feature(String name, Object value) {
         return (AnyType) super.feature(name, value);
     }
 }

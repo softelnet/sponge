@@ -40,12 +40,12 @@ public class BooleanType extends Type {
     }
 
     @Override
-    public BooleanType features(Map<String, String> features) {
+    public BooleanType features(Map<String, Object> features) {
         return (BooleanType) super.features(features);
     }
 
     @Override
-    public BooleanType feature(String name, String value) {
+    public BooleanType feature(String name, Object value) {
         return (BooleanType) super.feature(name, value);
     }
 }

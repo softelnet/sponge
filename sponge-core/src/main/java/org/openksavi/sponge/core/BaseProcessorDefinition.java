@@ -50,8 +50,8 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** Knowledge base reference. */
     private KnowledgeBase knowledgeBase;
 
-    /** The processor metadata. */
-    private Map<String, Object> meta = Collections.synchronizedMap(new LinkedHashMap<>());
+    /** The processor features. */
+    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * Creates a new processor definition.
@@ -180,14 +180,14 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     }
 
     @Override
-    public Map<String, Object> getMeta() {
-        return meta;
+    public Map<String, Object> getFeatures() {
+        return features;
     }
 
     @Override
-    public void setMeta(Map<String, Object> meta) {
-        Validate.notNull(meta, "The processor metadata cannot be null");
+    public void setFeatures(Map<String, Object> features) {
+        Validate.notNull(features, "The processor features cannot be null");
 
-        this.meta = Collections.synchronizedMap(new LinkedHashMap<>(meta));
+        this.features = Collections.synchronizedMap(new LinkedHashMap<>(features));
     }
 }

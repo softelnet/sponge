@@ -5,7 +5,7 @@ Processors enhanced metadata
 
 class EdvancedMetaAction(Action):
     def onConfigure(self):
-        self.meta = {"isVisibleMethod":"isVisible"}
+        self.features = {"isVisibleMethod":"isVisible"}
     def onCall(self, text):
         return text.upper()
     def isVisible(self, context):

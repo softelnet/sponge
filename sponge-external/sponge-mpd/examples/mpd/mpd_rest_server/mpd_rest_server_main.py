@@ -10,7 +10,6 @@ class UpperCase(Action):
     def onConfigure(self):
         self.displayName = "Convert to upper case"
         self.description = "Converts a string to upper case."
-        self.meta = {"status":"test"}
         self.argsMeta = [
             ArgMeta("text", StringType()).displayName("Text to upper case").description("The text that will be converted to upper case."),
             ArgMeta("suffix", AnyType()).required(False).displayName("Text suffix").description("Not used")

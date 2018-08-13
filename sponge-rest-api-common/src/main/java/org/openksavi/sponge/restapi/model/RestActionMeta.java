@@ -33,7 +33,7 @@ public class RestActionMeta {
 
     private RestKnowledgeBaseMeta knowledgeBase;
 
-    private Map<String, Object> meta;
+    private Map<String, Object> features;
 
     private List<RestActionArgMeta> argsMeta;
 
@@ -44,12 +44,12 @@ public class RestActionMeta {
     }
 
     public RestActionMeta(String name, String displayName, String description, RestKnowledgeBaseMeta knowledgeBase,
-            Map<String, Object> meta, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
+            Map<String, Object> features, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.knowledgeBase = knowledgeBase;
-        this.meta = meta;
+        this.features = features;
         this.argsMeta = argsMeta;
         this.resultMeta = resultMeta;
     }
@@ -90,13 +90,13 @@ public class RestActionMeta {
         this.knowledgeBase = knowledgeBase;
     }
 
-    @ApiModelProperty(value = "The action metadata", required = true)
-    public Map<String, Object> getMeta() {
-        return meta;
+    @ApiModelProperty(value = "The action features", required = true)
+    public Map<String, Object> getFeatures() {
+        return features;
     }
 
-    public void setMeta(Map<String, Object> meta) {
-        this.meta = meta;
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 
     @ApiModelProperty(value = "The action arguments metadata", required = false)

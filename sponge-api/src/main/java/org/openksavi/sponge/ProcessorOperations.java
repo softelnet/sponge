@@ -34,16 +34,16 @@ public interface ProcessorOperations extends Descriptive {
     KnowledgeBase getKnowledgeBase();
 
     /**
-     * Returns the processor metadata. The default value is the empty map.
+     * Returns the processor features. The default value is the empty map.
      *
-     * @return the processor metadata. Never returns {@code null}.
+     * @return the processor features. Never returns {@code null}.
      */
-    Map<String, Object> getMeta();
+    Map<String, Object> getFeatures();
 
     /**
-     * Sets the (optional) processor metadata. Must not be {@code null}.
+     * Sets the (optional) processor features. Must not be {@code null}.
      *
-     * @param meta the processor metadata.
+     * @param features the processor features.
      */
-    void setMeta(Map<String, Object> meta);
+    void setFeatures(Map<String, Object> features);
 }

@@ -48,12 +48,12 @@ public class NumberType extends Type {
     }
 
     @Override
-    public NumberType features(Map<String, String> features) {
+    public NumberType features(Map<String, Object> features) {
         return (NumberType) super.features(features);
     }
 
     @Override
-    public NumberType feature(String name, String value) {
+    public NumberType feature(String name, Object value) {
         return (NumberType) super.feature(name, value);
     }
 

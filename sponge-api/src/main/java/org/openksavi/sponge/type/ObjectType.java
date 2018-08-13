@@ -48,12 +48,12 @@ public class ObjectType extends Type {
     }
 
     @Override
-    public ObjectType features(Map<String, String> features) {
+    public ObjectType features(Map<String, Object> features) {
         return (ObjectType) super.features(features);
     }
 
     @Override
-    public ObjectType feature(String name, String value) {
+    public ObjectType feature(String name, Object value) {
         return (ObjectType) super.feature(name, value);
     }
 

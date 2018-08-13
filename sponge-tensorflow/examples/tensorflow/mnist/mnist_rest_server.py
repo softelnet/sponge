@@ -8,7 +8,8 @@ from org.openksavi.sponge.tensorflow.util import ImageUtils
 PREDICTION_THRESHOLD = 0.75
 
 IMAGE_ARG_META = ArgMeta("image", BinaryType().mimeType("image/png")
-                    .features({"source":"drawing", "width":"28", "height":"28", "background":"black", "color":"white", "strokeWidth":"2"})).displayName("Image of a digit")
+        .features({"source":"drawing", "width":28, "height":28, "background":"black", "color":"white", "strokeWidth":2}))\
+            .displayName("Image of a digit")
 
 class MnistPredict(Action):
     def onConfigure(self):

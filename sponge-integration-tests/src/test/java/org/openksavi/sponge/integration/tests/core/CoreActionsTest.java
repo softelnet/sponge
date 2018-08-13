@@ -165,8 +165,8 @@ public class CoreActionsTest {
             assertEquals(TypeKind.BINARY, argMeta[8].getType().getKind());
             assertNull(argMeta[8].getType().getFormat());
             assertEquals(4, argMeta[8].getType().getFeatures().size());
-            assertEquals(28, Integer.valueOf(argMeta[8].getType().getFeatures().get("width")).intValue());
-            assertEquals(28, Integer.valueOf(argMeta[8].getType().getFeatures().get("height")).intValue());
+            assertEquals(28, ((Number) argMeta[8].getType().getFeatures().get("width")).intValue());
+            assertEquals(28, ((Number) argMeta[8].getType().getFeatures().get("height")).intValue());
             assertEquals("black", argMeta[8].getType().getFeatures().get("background"));
             assertEquals("white", argMeta[8].getType().getFeatures().get("color"));
 

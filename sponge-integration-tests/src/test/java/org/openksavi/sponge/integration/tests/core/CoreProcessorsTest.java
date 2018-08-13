@@ -40,9 +40,9 @@ public class CoreProcessorsTest {
 
         try {
             assertEquals(SpongeUtils.immutableMapOf("visibility", false),
-                    engine.getActionManager().getActionAdapter("UpperEchoAction").getMeta());
+                    engine.getActionManager().getActionAdapter("UpperEchoAction").getFeatures());
             assertEquals(SpongeUtils.immutableMapOf("visibility", true),
-                    engine.getActionManager().getActionAdapter("PowerEchoMetadataAction").getMeta());
+                    engine.getActionManager().getActionAdapter("PowerEchoMetadataAction").getFeatures());
         } finally {
             engine.shutdown();
         }
@@ -56,7 +56,7 @@ public class CoreProcessorsTest {
 
         try {
             ActionAdapter enhActionAdapter = engine.getActionManager().getActionAdapter("EdvancedMetaAction");
-            String methodName = (String) enhActionAdapter.getMeta().get("isVisibleMethod");
+            String methodName = (String) enhActionAdapter.getFeatures().get("isVisibleMethod");
 
             assertTrue((Boolean) enhActionAdapter.getKnowledgeBase().getInterpreter().invokeMethod(enhActionAdapter.getProcessor(),
                     methodName, "day"));

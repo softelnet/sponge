@@ -51,12 +51,12 @@ public class MapType extends Type {
     }
 
     @Override
-    public MapType features(Map<String, String> features) {
+    public MapType features(Map<String, Object> features) {
         return (MapType) super.features(features);
     }
 
     @Override
-    public MapType feature(String name, String value) {
+    public MapType feature(String name, Object value) {
         return (MapType) super.feature(name, value);
     }
 

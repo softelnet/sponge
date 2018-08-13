@@ -7,7 +7,7 @@ from org.openksavi.sponge.examples import PowerEchoMetadataAction
 
 class UpperEchoAction(Action):
     def onConfigure(self):
-        self.meta = {"visibility":False}
+        self.features = {"visibility":False}
     def onCall(self, text):
     	return None
 

@@ -33,7 +33,7 @@ public class Type {
 
     private List<String> tags = new ArrayList<>();
 
-    private Map<String, String> features = new LinkedHashMap<>();
+    private Map<String, Object> features = new LinkedHashMap<>();
 
     @SuppressWarnings("unused")
     private Type() {
@@ -58,12 +58,12 @@ public class Type {
         return tags(tag);
     }
 
-    public Type features(Map<String, String> features) {
+    public Type features(Map<String, Object> features) {
         this.features.putAll(features);
         return this;
     }
 
-    public Type feature(String name, String value) {
+    public Type feature(String name, Object value) {
         features.put(name, value);
         return this;
     }
@@ -88,11 +88,11 @@ public class Type {
         this.tags = tags;
     }
 
-    public Map<String, String> getFeatures() {
+    public Map<String, Object> getFeatures() {
         return features;
     }
 
-    public void setFeatures(Map<String, String> features) {
+    public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }
 }

@@ -357,22 +357,22 @@ def onLoad():
 |Property / Method |Description
 
 |*`onConfigure()`*
-|The configuration callback method that will be invoked when a processor is being enabled. This method is mandatory.
+|A configuration callback method that will be invoked when a processor is being enabled. This method is mandatory.
 
 |`onInit()`
-|The initialization callback method that will be invoked after `onConfigure()`, each time a new working instance of the processor is created.
+|An initialization callback method that will be invoked after `onConfigure()`, each time a new working instance of the processor is created.
 
 |`name`
-|The property that is a name of the processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
+|A name of a processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
 
 |`displayName`
-|The property that is a display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful in a client code.
+|A display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful in a client code.
 
 |`description`
-|The property that is a description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but may be useful in a client code.
+|A description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but may be useful in a client code.
 
-|`meta`
-|The property that is a metadata of a processor. This is a shortcut for `getMeta()`/`setMeta(Map<String, Object>)` methods. A processor metadata is simply a map of String to Object associated with a processor definition (not instance). It may be used to provide a custom behavior in a client code.
+|`features`
+|Features of a processor. This is a shortcut for `getFeatures()`/`setFeatures(Map<String, Object>)` methods. The processor features property is simply a map of String to Object associated with a processor definition (not instance). It may be used to provide a custom behavior in a client code.
 
 |`logger`
 |The read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`, e.g. `sponge.kb.python.kb1.EchoAction` for a python-based processor, `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.

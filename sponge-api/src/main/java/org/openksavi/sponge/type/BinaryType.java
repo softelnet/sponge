@@ -42,12 +42,12 @@ public class BinaryType extends Type {
     }
 
     @Override
-    public BinaryType features(Map<String, String> features) {
+    public BinaryType features(Map<String, Object> features) {
         return (BinaryType) super.features(features);
     }
 
     @Override
-    public BinaryType feature(String name, String value) {
+    public BinaryType feature(String name, Object value) {
         return (BinaryType) super.feature(name, value);
     }
 

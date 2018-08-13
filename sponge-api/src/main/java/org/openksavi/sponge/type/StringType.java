@@ -44,12 +44,12 @@ public class StringType extends Type {
     }
 
     @Override
-    public StringType features(Map<String, String> features) {
+    public StringType features(Map<String, Object> features) {
         return (StringType) super.features(features);
     }
 
     @Override
-    public StringType feature(String name, String value) {
+    public StringType feature(String name, Object value) {
         return (StringType) super.feature(name, value);
     }
 

@@ -178,15 +178,18 @@ public class DefaultRestApiService implements RestApiService {
             Predicate<ActionAdapter> isSelectedByNameRegExp =
                     action -> actionNameRegExp != null ? action.getName().matches(actionNameRegExp) : true;
 
-            return setupSuccessResponse(new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp)
-                    .filter(isPublicByAction).filter(isPublicBySettings)
-                    .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
-                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                    .filter(action -> canCallAction(user, action))
-                    .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
-                            createRestKnowledgeBase(action.getKnowledgeBase()), action.getMeta(), createActionArgMetaList(action),
-                            createActionResultMeta(action)))
-                    .collect(Collectors.toList())), request);
+            return setupSuccessResponse(
+                    new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
+                            .filter(isPublicBySettings)
+                            .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null
+                                    : true)
+                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                            .filter(action -> canCallAction(user, action))
+                            .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
+                                    createRestKnowledgeBase(action.getKnowledgeBase()), action.getFeatures(),
+                                    createActionArgMetaList(action), createActionResultMeta(action)))
+                            .collect(Collectors.toList())),
+                    request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new GetActionsResponse(), request, e);

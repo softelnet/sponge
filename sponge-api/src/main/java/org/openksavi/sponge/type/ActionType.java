@@ -52,12 +52,12 @@ public class ActionType extends Type {
     }
 
     @Override
-    public ActionType features(Map<String, String> features) {
+    public ActionType features(Map<String, Object> features) {
         return (ActionType) super.features(features);
     }
 
     @Override
-    public ActionType feature(String name, String value) {
+    public ActionType feature(String name, Object value) {
         return (ActionType) super.feature(name, value);
     }
 
