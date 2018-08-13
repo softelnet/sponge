@@ -18,6 +18,7 @@ package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -209,6 +210,12 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(actionAdapter, "The action %s doesn't exist", request.getName());
             Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
 
+            if (request.getVersion() != null && !Objects.equals(request.getVersion(), actionAdapter.getKnowledgeBase().getVersion())) {
+                throw new RestApiIncorrectKnowledgeBaseVersionServerException(
+                        String.format("The expected knowledge base version %d differs from the actual %d", request.getVersion(),
+                                actionAdapter.getKnowledgeBase().getVersion()));
+            }
+
             return setupSuccessResponse(
                     new ActionCallResponse(
                             getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request))),
@@ -358,7 +365,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected RestKnowledgeBaseMeta createRestKnowledgeBase(KnowledgeBase kb) {
-        return new RestKnowledgeBaseMeta(kb.getName(), kb.getDisplayName(), kb.getDescription());
+        return new RestKnowledgeBaseMeta(kb.getName(), kb.getDisplayName(), kb.getDescription(), kb.getVersion());
     }
 
     @Override

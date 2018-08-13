@@ -28,14 +28,17 @@ public class RestKnowledgeBaseMeta {
 
     private String description;
 
+    private Integer version;
+
     public RestKnowledgeBaseMeta() {
         //
     }
 
-    public RestKnowledgeBaseMeta(String name, String displayName, String description) {
+    public RestKnowledgeBaseMeta(String name, String displayName, String description, Integer version) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
+        this.version = version;
     }
 
     @ApiModelProperty(value = "The knowledge base name", required = true)
@@ -63,5 +66,14 @@ public class RestKnowledgeBaseMeta {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @ApiModelProperty(value = "The knowledge base version", required = false)
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

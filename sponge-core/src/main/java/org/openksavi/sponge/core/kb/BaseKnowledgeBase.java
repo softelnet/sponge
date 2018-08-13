@@ -38,6 +38,8 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
 
     private KnowledgeBaseType type;
 
+    private Integer version;
+
     protected BaseKnowledgeBase() {
         //
     }
@@ -104,6 +106,16 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
     @Override
     public void setType(KnowledgeBaseType type) {
         this.type = type;
+    }
+
+    @Override
+    public Integer getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Logger getLogger() {

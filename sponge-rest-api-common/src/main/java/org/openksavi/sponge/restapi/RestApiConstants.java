@@ -50,6 +50,8 @@ public final class RestApiConstants {
 
     public static final String ERROR_CODE_INVALID_AUTH_TOKEN = "SPONGE002";
 
+    public static final String ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION = "SPONGE003";
+
     private RestApiConstants() {
         //
     }

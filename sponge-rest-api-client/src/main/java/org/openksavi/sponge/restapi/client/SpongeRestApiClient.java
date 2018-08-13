@@ -19,7 +19,6 @@ package org.openksavi.sponge.restapi.client;
 import java.util.List;
 import java.util.Map;
 
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -64,18 +63,20 @@ public interface SpongeRestApiClient {
 
     GetActionsResponse getActions(GetActionsRequest request);
 
-    List<RestActionMeta> getActions(Boolean metadataRequired, String nameRegExp);
+    List<RestActionMeta> getActions(String nameRegExp, Boolean metadataRequired);
+
+    List<RestActionMeta> getActions(String nameRegExp);
 
     List<RestActionMeta> getActions();
 
-    ResultMeta<?> getActionResultMeta(String actionName);
+    RestActionMeta getActionMeta(String actionName);
 
     /**
      * Calls the action.
      *
      * Fetches the action result metadata from the server every call. Unmarshals the result using a best effort strategy, i.e. when a result
      * metadata is defined for this action (on the server side). If you want to disable fetching metadata and unmarshalling the result, use
-     * {@code callWithMeta(request, null)}.
+     * {@code callWithNoMeta}.
      *
      * @param request the request.
      *
@@ -88,18 +89,22 @@ public interface SpongeRestApiClient {
     <T> T call(Class<T> resultClass, String actionName, Object... args);
 
     /**
-     * Calls the action. Unmarshals the result if {@code resultMeta} is not {@code null}.
+     * Calls the action. Unmarshals the result if {@code actionMeta} is not {@code null}.
      *
+     * @param actionMeta the action metadata.
      * @param request the request.
-     * @param resultMeta the result metadata.
      *
      * @return the response.
      */
-    ActionCallResponse callWithMeta(ActionCallRequest request, ResultMeta<?> resultMeta);
+    ActionCallResponse callWithMeta(RestActionMeta actionMeta, ActionCallRequest request);
 
-    Object callWithMeta(ResultMeta<?> resultMeta, String actionName, Object... args);
+    Object callWithMeta(RestActionMeta actionMeta, Object... args);
 
-    <T> T callWithMeta(ResultMeta<?> resultMeta, Class<T> resultClass, String actionName, Object... args);
+    <T> T callWithMeta(Class<T> resultClass, RestActionMeta actionMeta, Object... args);
+
+    Object callWithNoMeta(String actionName, Object... args);
+
+    <T> T callWithNoMeta(Class<T> resultClass, String actionName, Object... args);
 
     SendEventResponse send(SendEventRequest request);
 

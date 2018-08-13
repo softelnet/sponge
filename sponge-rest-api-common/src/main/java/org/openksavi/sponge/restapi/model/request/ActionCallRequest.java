@@ -28,17 +28,20 @@ public class ActionCallRequest extends BaseRequest {
 
     private List<Object> args;
 
+    private Integer version;
+
     public ActionCallRequest() {
         //
     }
 
-    public ActionCallRequest(String username, String password, String name, List<Object> args) {
+    public ActionCallRequest(String name, List<Object> args, Integer version) {
         this.name = name;
         this.args = args;
+        this.version = version;
     }
 
     public ActionCallRequest(String name, List<Object> args) {
-        this(null, null, name, args);
+        this(name, args, null);
     }
 
     @ApiModelProperty(value = "The action name", required = true)
@@ -57,5 +60,14 @@ public class ActionCallRequest extends BaseRequest {
 
     public void setArgs(List<Object> args) {
         this.args = args;
+    }
+
+    @ApiModelProperty(value = "The expected knowledge base version", required = false)
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
@@ -188,6 +187,8 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
             ResponseErrorSpongeException exception;
             if (Objects.equals(result.getErrorCode(), RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN)) {
                 exception = new RestApiInvalidAuthTokenClientException(message);
+            } else if (Objects.equals(result.getErrorCode(), RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION)) {
+                exception = new RestApiIncorrectKnowledgeBaseVersionClientException(message);
             } else {
                 exception = new ResponseErrorSpongeException(message);
             }
@@ -290,7 +291,12 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public List<RestActionMeta> getActions(Boolean metadataRequired, String nameRegExp) {
+    public List<RestActionMeta> getActions(String nameRegExp) {
+        return getActions(nameRegExp, null);
+    }
+
+    @Override
+    public List<RestActionMeta> getActions(String nameRegExp, Boolean metadataRequired) {
         GetActionsRequest request = new GetActionsRequest();
         request.setMetadataRequired(metadataRequired);
         request.setNameRegExp(nameRegExp);
@@ -303,7 +309,7 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
         return getActions(new GetActionsRequest()).getActions();
     }
 
-    protected ResultMeta<?> retrieveResultMeta(RestActionResultMeta restResultMeta) {
+    protected ResultMeta<?> convertResultMeta(RestActionResultMeta restResultMeta) {
         if (restResultMeta == null) {
             return null;
         }
@@ -313,15 +319,48 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public ResultMeta<?> getActionResultMeta(String actionName) {
-        Optional<RestActionMeta> meta = getActions(true, actionName).stream().findFirst();
+    public RestActionMeta getActionMeta(String actionName) {
+        return getActions(actionName, true).stream().findFirst().orElse(null);
+    }
 
-        return retrieveResultMeta(meta.isPresent() ? meta.get().getResultMeta() : null);
+    protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request) {
+        if (actionMeta != null && request.getVersion() == null) {
+            request.setVersion(actionMeta.getKnowledgeBase().getVersion());
+        }
+
+        Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), request.getName()),
+                "Action name '%s' in the metadata doesn't match the action name '%s' in the request", actionMeta.getName(),
+                request.getName());
+
+        ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class);
+
+        if (actionMeta != null && actionMeta.getResultMeta() != null) {
+            response.setResult(
+                    RestApiUtils.unmarshalActionResult(objectMapper, convertResultMeta(actionMeta.getResultMeta()), response.getResult()));
+        }
+
+        return response;
+    }
+
+    @Override
+    public ActionCallResponse callWithMeta(RestActionMeta actionMeta, ActionCallRequest request) {
+        return doCall(actionMeta, request);
+    }
+
+    @Override
+    public Object callWithMeta(RestActionMeta actionMeta, Object... args) {
+        return callWithMeta(actionMeta, new ActionCallRequest(actionMeta.getName(), Arrays.asList((Object[]) args))).getResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T callWithMeta(Class<T> resultClass, RestActionMeta actionMeta, Object... args) {
+        return (T) callWithMeta(actionMeta, args);
     }
 
     @Override
     public ActionCallResponse call(ActionCallRequest request) {
-        return callWithMeta(request, getActionResultMeta(request.getName()));
+        return callWithMeta(getActionMeta(request.getName()), request);
     }
 
     @Override
@@ -336,25 +375,14 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public ActionCallResponse callWithMeta(ActionCallRequest request, ResultMeta<?> resultMeta) {
-        ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class);
-
-        if (resultMeta != null) {
-            response.setResult(RestApiUtils.unmarshalActionResult(objectMapper, resultMeta, response.getResult()));
-        }
-
-        return response;
+    public Object callWithNoMeta(String actionName, Object... args) {
+        return doCall(null, new ActionCallRequest(actionName, Arrays.asList((Object[]) args))).getResult();
     }
 
-    @Override
-    public Object callWithMeta(ResultMeta<?> resultMeta, String actionName, Object... args) {
-        return callWithMeta(new ActionCallRequest(actionName, Arrays.asList((Object[]) args)), resultMeta).getResult();
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
-    public <T> T callWithMeta(ResultMeta<?> resultMeta, Class<T> resultClass, String actionName, Object... args) {
-        return (T) callWithMeta(resultMeta, actionName, (Object[]) args);
+    @Override
+    public <T> T callWithNoMeta(Class<T> resultClass, String actionName, Object... args) {
+        return (T) callWithNoMeta(actionName, (Object[]) args);
     }
 
     @Override

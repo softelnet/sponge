@@ -34,6 +34,7 @@ import org.springframework.util.SocketUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.client.RestApiIncorrectKnowledgeBaseVersionClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
@@ -78,12 +79,12 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testActionsParamArgMetadataRequiredTrue() {
-        assertEquals(3, createRestApiClient().getActions(true, null).size());
+        assertEquals(3, createRestApiClient().getActions(null, true).size());
     }
 
     @Test
     public void testActionsParamArgMetadataRequiredFalse() {
-        List<RestActionMeta> actions = createRestApiClient().getActions(false, null);
+        List<RestActionMeta> actions = createRestApiClient().getActions(null, false);
 
         assertEquals(4, actions.size());
         RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
@@ -94,7 +95,7 @@ public abstract class BaseRestApiTestTemplate {
     @Test
     public void testActionsNameRegExp() {
         String nameRegExp = ".*Case";
-        List<RestActionMeta> actions = createRestApiClient().getActions(null, nameRegExp);
+        List<RestActionMeta> actions = createRestApiClient().getActions(nameRegExp);
 
         assertEquals(2, actions.size());
         assertTrue(actions.stream().allMatch(action -> action.getName().matches(nameRegExp)));
@@ -103,7 +104,7 @@ public abstract class BaseRestApiTestTemplate {
     @Test
     public void testActionsNameExact() {
         String nameRegExp = "UpperCase";
-        List<RestActionMeta> actions = createRestApiClient().getActions(null, nameRegExp);
+        List<RestActionMeta> actions = createRestApiClient().getActions(nameRegExp);
 
         assertEquals(1, actions.size());
         assertEquals(actions.get(0).getName(), nameRegExp);
@@ -120,6 +121,35 @@ public abstract class BaseRestApiTestTemplate {
 
         await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
         assertFalse(engine.isError());
+    }
+
+    @Test
+    public void testCallWithExpectedKnowledgeBaseVersion() {
+        String arg1 = "test1";
+
+        SpongeRestApiClient client = createRestApiClient();
+
+        Object result = client.callWithMeta(client.getActions("UpperCase").get(0), arg1);
+
+        assertTrue(result instanceof String);
+        assertEquals(arg1.toUpperCase(), result);
+
+        await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
+        assertFalse(engine.isError());
+    }
+
+    @Test(expected = RestApiIncorrectKnowledgeBaseVersionClientException.class)
+    public void testCallWithWrongExpectedKnowledgeBaseVersion() {
+        String arg1 = "test1";
+
+        SpongeRestApiClient client = createRestApiClient();
+
+        RestActionMeta actionMeta = client.getActions("UpperCase").get(0);
+        actionMeta.getKnowledgeBase().setVersion(2);
+
+        Object result = client.callWithMeta(actionMeta, arg1);
+
+        assertTrue(result instanceof String);
     }
 
     @Test

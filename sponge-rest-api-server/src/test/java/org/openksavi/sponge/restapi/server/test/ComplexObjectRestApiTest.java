@@ -134,7 +134,7 @@ public class ComplexObjectRestApiTest {
         String actionName = "ComplexObjectAction";
         TestCompoundComplexObject compoundObject = createTestCompoundComplexObject();
 
-        Object value = createRestApiClient().callWithMeta(null, actionName, compoundObject);
+        Object value = createRestApiClient().callWithNoMeta(actionName, compoundObject);
 
         assertTrue(value instanceof Map);
 

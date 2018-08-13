@@ -11,6 +11,9 @@ def onInit():
     sponge.setVariable("eventSent", AtomicBoolean(False))
     sponge.setVariable("reloaded", AtomicBoolean(False))
 
+def onLoad():
+    sponge.kb.version = 1
+
 class UpperCase(Action):
     def onConfigure(self):
         self.argsMeta = [ ArgMeta("text", StringType().maxLength(256)).displayName("Text to upper case") ]
