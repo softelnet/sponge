@@ -10,12 +10,10 @@ PREDICTION_THRESHOLD = 0.75
 IMAGE_ARG_META = ArgMeta("image", BinaryType().mimeType("image/png")
                     .features({"source":"drawing", "width":"28", "height":"28", "background":"black", "color":"white", "strokeWidth":"2"})).displayName("Image of a digit")
 
-IMAGE_ARG_META = ArgMeta("image", BinaryType().mimeType("image/png").tag("drawing")
-                    .features({"width":"28", "height":"28", "background":"black", "color":"white", "strokeWidth":"2"})).displayName("Image of a digit")
-
 class MnistPredict(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit"
+        self.description = "Tries to recognize a handwritten digit"
         self.argsMeta = [IMAGE_ARG_META]
         self.resultMeta = ResultMeta(IntegerType()).displayName("Recognized digit")
     def onCall(self, image):
@@ -25,7 +23,8 @@ class MnistPredict(Action):
 
 class MnistPredictDetailed(Action):
     def onConfigure(self):
-        self.displayName = "Recognize a digit (detailed)"
+        self.displayName = "Recognize a digit (probabilities)"
+        self.description = "Tries to recognize a handwritten digit returning a probabilities list"
         self.argsMeta = [IMAGE_ARG_META]
         self.resultMeta = ResultMeta(ListType(NumberType())).displayName("Digit probabilities")
     def onCall(self, image):
@@ -34,6 +33,7 @@ class MnistPredictDetailed(Action):
 class MnistLearn(Action):
     def onConfigure(self):
         self.displayName = "Learn a digit"
+        self.description = "Manually learns the model to recognize a digit"
         self.argsMeta = [IMAGE_ARG_META, ArgMeta("digit", IntegerType()).displayName("Digit")]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):
@@ -42,11 +42,11 @@ class MnistLearn(Action):
 
 class MnistResetModel(Action):
     def onConfigure(self):
-        self.displayName = "Reset model"
+        self.displayName = "Reset the model"
+        self.description = "Resets the model by loading the state before manual learning"
         self.argsMeta = []
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self):
-        # TODO Client sends wrong type String
         py4j.facade.reset()
         return None
 
