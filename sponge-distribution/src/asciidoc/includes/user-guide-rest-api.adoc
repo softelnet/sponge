@@ -395,7 +395,7 @@ __optional__|string
 |**tags** +
 __optional__|< string > array
 |**features** +
-__optional__|< string, string > map
+__optional__|< string, object > map
 |===
 
 
@@ -413,6 +413,8 @@ __required__|The knowledge base name|string
 __optional__|The knowledge base display name|string
 |**description** +
 __optional__|The knowledge base description|string
+|**version** +
+__optional__|The knowledge base version|integer (int32)
 |===
 
 
@@ -432,8 +434,8 @@ __optional__|The action display name|string
 __optional__|The action description|string
 |**knowledgeBase** +
 __required__|The action knowledge base|<<_swagger_knowledgebasemeta,KnowledgeBaseMeta>>
-|**meta** +
-__required__|The action metadata|< string, object > map
+|**features** +
+__required__|The action features|< string, object > map
 |**argsMeta** +
 __optional__|The action arguments metadata|< <<_swagger_actionargmeta,ActionArgMeta>> > array
 |**resultMeta** +
@@ -520,6 +522,8 @@ __optional__|The authentication token|string
 __required__|The action name|string
 |**args** +
 __optional__|The action arguments|< object > array
+|**version** +
+__optional__|The expected knowledge base version|integer (int32)
 |===
 
 

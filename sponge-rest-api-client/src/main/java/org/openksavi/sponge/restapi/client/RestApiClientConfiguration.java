@@ -39,6 +39,8 @@ public class RestApiClientConfiguration {
 
     private boolean relogin = true;
 
+    private boolean verifyKnowledgeBaseVersion = true;
+
     public RestApiClientConfiguration(String host, int port, String baseUrl, boolean ssl) {
         this.host = host;
         this.port = port;
@@ -131,6 +133,14 @@ public class RestApiClientConfiguration {
         setPassword(password);
     }
 
+    public boolean isVerifyKnowledgeBaseVersion() {
+        return verifyKnowledgeBaseVersion;
+    }
+
+    public void setVerifyKnowledgeBaseVersion(boolean verifyKnowledgeBaseVersion) {
+        this.verifyKnowledgeBaseVersion = verifyKnowledgeBaseVersion;
+    }
+
     /**
      * A Sponge REST API configuration builder.
      *
@@ -185,6 +195,11 @@ public class RestApiClientConfiguration {
 
         public Builder relogin(boolean relogin) {
             configuration.setRelogin(relogin);
+            return this;
+        }
+
+        public Builder verifyKnowledgeBaseVersion(boolean verifyKnowledgeBaseVersion) {
+            configuration.setVerifyKnowledgeBaseVersion(verifyKnowledgeBaseVersion);
             return this;
         }
     }

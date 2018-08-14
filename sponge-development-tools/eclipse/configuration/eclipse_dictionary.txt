@@ -68,3 +68,4 @@ keras
 virtualenv
 hereunder
 maven
+versioning

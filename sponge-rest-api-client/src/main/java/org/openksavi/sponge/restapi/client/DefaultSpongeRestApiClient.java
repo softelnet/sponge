@@ -324,13 +324,14 @@ public class DefaultSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request) {
-        if (actionMeta != null && request.getVersion() == null) {
+        // Conditionally set the verification of the knowledge base version on the server side.
+        if (configuration.isVerifyKnowledgeBaseVersion() && actionMeta != null && request.getVersion() == null) {
             request.setVersion(actionMeta.getKnowledgeBase().getVersion());
         }
 
         Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), request.getName()),
-                "Action name '%s' in the metadata doesn't match the action name '%s' in the request", actionMeta.getName(),
-                request.getName());
+                "Action name '%s' in the metadata doesn't match the action name '%s' in the request",
+                actionMeta != null ? actionMeta.getName() : null, request.getName());
 
         ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class);
 

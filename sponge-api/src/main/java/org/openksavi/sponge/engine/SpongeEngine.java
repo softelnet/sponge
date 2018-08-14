@@ -225,6 +225,11 @@ public interface SpongeEngine extends EngineModule {
     Throwable getError();
 
     /**
+     * Clears the error that occurred during engine processing.
+     */
+    void clearError();
+
+    /**
      * Returns the engine operations.
      *
      * @return the engine operations.

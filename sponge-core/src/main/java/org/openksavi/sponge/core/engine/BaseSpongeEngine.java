@@ -763,6 +763,11 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     @Override
+    public void clearError() {
+        clearRememberedException();
+    }
+
+    @Override
     public KnowledgeBaseEngineOperations getOperations() {
         return operations;
     }

@@ -415,3 +415,13 @@ For more information see {sponge} Javadoc.
 
 == Predefined knowledge base libraries
 {sponge} provides a few predefined script files that may be used as one of files in your compatible (i.e. written in the same language) knowledge bases. For example you may use the Jython library in your XML configuration file: `<file>classpath*:org/openksavi/sponge/jython/jython_library.py</file>`. The `classpath*` notation is available only for Spring aware engines and allows to use Ant style (`*`) specifications for directories and files.
+
+== Knowledge base versioning
+You may specify a version number for a knowledge base as an integer. It could be useful for example to enforce version checking when calling actions via the REST API. You should set the version in the `onLoad` callback function. After editing the knowledge base file and before reloading the engine, you could increase the version number.
+
+.Example of setting the knowledge base version.
+[source,python]
+----
+def onLoad():
+    sponge.kb.version = 1
+----

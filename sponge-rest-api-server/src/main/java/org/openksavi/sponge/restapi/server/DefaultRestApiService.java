@@ -212,7 +212,7 @@ public class DefaultRestApiService implements RestApiService {
 
             if (request.getVersion() != null && !Objects.equals(request.getVersion(), actionAdapter.getKnowledgeBase().getVersion())) {
                 throw new RestApiIncorrectKnowledgeBaseVersionServerException(
-                        String.format("The expected knowledge base version %d differs from the actual %d", request.getVersion(),
+                        String.format("The expected knowledge base version (%d) differs from the actual (%d)", request.getVersion(),
                                 actionAdapter.getKnowledgeBase().getVersion()));
             }
 
@@ -227,7 +227,7 @@ public class DefaultRestApiService implements RestApiService {
                 getEngine().handleError("REST call", e);
             }
 
-            return setupErrorResponse(new ActionCallResponse(request.getName()), request, e);
+            return setupErrorResponse(new ActionCallResponse(), request, e);
         }
     }
 

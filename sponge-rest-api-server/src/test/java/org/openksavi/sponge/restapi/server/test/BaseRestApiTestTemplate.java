@@ -20,6 +20,7 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -147,9 +148,13 @@ public abstract class BaseRestApiTestTemplate {
         RestActionMeta actionMeta = client.getActions("UpperCase").get(0);
         actionMeta.getKnowledgeBase().setVersion(2);
 
-        Object result = client.callWithMeta(actionMeta, arg1);
+        try {
+            Object result = client.callWithMeta(actionMeta, arg1);
+            assertNull(result);
+        } finally {
+            engine.clearError();
+        }
 
-        assertTrue(result instanceof String);
     }
 
     @Test
