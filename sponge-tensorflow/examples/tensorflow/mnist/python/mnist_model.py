@@ -30,7 +30,7 @@ class MnistModel:
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
         self.model_file = '../data/mnist_model.h5'
-        self.prediction_threshold = 0.55
+        self.prediction_threshold = 0.9
 
     def __load_mnist_data(self):
         # the data, split between train and test sets
