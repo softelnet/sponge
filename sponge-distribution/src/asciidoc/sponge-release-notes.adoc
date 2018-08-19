@@ -9,8 +9,9 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 == 1.4.1 (not released yet)
 
 * API change: A processor `meta` property has been renamed to `features`.
-* Knowledge base versioning.
+* Optional knowledge base versioning.
 * A type for an action argument or result metadata may specify one or more features.
+* Libraries upgrade.
 
 [discrete]
 == 1.4.0 (2018-08-01)

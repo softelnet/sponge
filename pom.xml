@@ -77,18 +77,18 @@
         <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.1.17.0</jruby.version>
-        <groovy.version>2.5.1</groovy.version>
-        <kotlin.version>1.2.51</kotlin.version>
+        <groovy.version>2.5.2</groovy.version>
+        <kotlin.version>1.2.61</kotlin.version>
 
-        <commons-lang3.version>3.7</commons-lang3.version>
+        <commons-lang3.version>3.8</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections4.version>4.2</commons-collections4.version>
-        <commons-configuration2.version>2.2</commons-configuration2.version>
+        <commons-configuration2.version>2.3</commons-configuration2.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
-        <guava.version>25.1-jre</guava.version>
+        <guava.version>26.0-jre</guava.version>
         <spring.version>5.0.8.RELEASE</spring.version>
         <spring-integration.version>5.0.7.RELEASE</spring-integration.version>
         <spring-security.version>5.0.7.RELEASE</spring-security.version>
@@ -96,27 +96,27 @@
         <awaitility.version>3.1.2</awaitility.version>
         <jline.version>3.9.0</jline.version>
         <py4j.version>0.10.7</py4j.version>
-        <tensorflow.version>1.9.0</tensorflow.version>
+        <tensorflow.version>1.10.0</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.1</pi4j.version>
-        <rxjava2.version>2.1.17</rxjava2.version>
+        <rxjava2.version>2.2.0</rxjava2.version>
         <okhttp.version>3.11.0</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.6</jackson.version>
-        <swagger.version>1.5.20</swagger.version>
+        <swagger.version>1.5.21</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <swagger-ui.version>3.17.4</swagger-ui.version>
+        <swagger-ui.version>3.17.6</swagger-ui.version>
         <webjars-locator.version>0.34</webjars-locator.version>
 
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.20.1</mockito.version>
+        <mockito.version>2.21.0</mockito.version>
     </properties>
 
     <prerequisites>

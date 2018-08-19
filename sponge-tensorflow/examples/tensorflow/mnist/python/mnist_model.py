@@ -1,19 +1,15 @@
 from __future__ import print_function
 
-import keras
-from keras import layers
-from keras import models
-from keras import preprocessing
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
-from keras import backend as K
-
 import tensorflow as tf
-
+from tensorflow import keras
+from tensorflow.keras import layers, models, datasets, preprocessing
+from tensorflow.keras import backend as K
 import numpy as np
 from io import BytesIO
 import os.path
+
+print("TensorFlow version", tf.__version__)
+print("Keras version", keras.__version__)
 
 # The model is based on https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py
 # and http://nbviewer.jupyter.org/github/fchollet/deep-learning-with-python-notebooks/blob/master/5.1-introduction-to-convnets.ipynb.
@@ -34,7 +30,7 @@ class MnistModel:
 
     def __load_mnist_data(self):
         # the data, split between train and test sets
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        (x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
 
         if K.image_data_format() == 'channels_first':
             x_train = x_train.reshape(x_train.shape[0], 1, self.img_rows, self.img_cols)
@@ -60,16 +56,16 @@ class MnistModel:
         return (x_train, y_train, x_test, y_test, input_shape)
 
     def __create_model_and_train(self):
-        model = Sequential()
-        model.add(Conv2D(32, (3, 3), activation='relu', input_shape=self.input_shape))
-        model.add(MaxPooling2D((2, 2)))
-        model.add(Conv2D(64, (3, 3), activation='relu'))
-        model.add(MaxPooling2D((2, 2)))
-        model.add(Conv2D(64, (3, 3), activation='relu'))
-        model.add(Flatten())
-        model.add(Dropout(0.5))
-        model.add(Dense(64, activation='relu'))
-        model.add(Dense(self.num_classes, activation='softmax'))
+        model = models.Sequential()
+        model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=self.input_shape))
+        model.add(layers.MaxPooling2D((2, 2)))
+        model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+        model.add(layers.MaxPooling2D((2, 2)))
+        model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+        model.add(layers.Flatten())
+        model.add(layers.Dropout(0.5))
+        model.add(layers.Dense(64, activation='relu'))
+        model.add(layers.Dense(self.num_classes, activation='softmax'))
 
         model.compile(loss=keras.losses.categorical_crossentropy,
                       optimizer=keras.optimizers.Adadelta(),
@@ -131,7 +127,11 @@ class MnistModel:
 
     def learn(self, image_data, digit):
         x, image = self.__preprocess_image_data(image_data)
+        
+        self.model.fit(x, keras.utils.to_categorical([digit], self.num_classes), epochs=self.epochs, verbose=0)
 
+        """
+        # Generator-based version commented
         datagen = preprocessing.image.ImageDataGenerator(
             featurewise_center=True,
             featurewise_std_normalization=True,
@@ -142,5 +142,4 @@ class MnistModel:
         datagen.fit(x)
         self.model.fit_generator(datagen.flow(x, keras.utils.to_categorical([digit], self.num_classes), batch_size=1),
                     epochs=self.epochs, verbose=0)
-        # Simple version commented
-        #self.model.fit(x, keras.utils.to_categorical([digit], self.num_classes), epochs=self.epochs, verbose=0)
+        """
