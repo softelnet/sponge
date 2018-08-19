@@ -2,10 +2,10 @@
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="mnist" displayName="MNIST">
+        <knowledgeBase name="digits" displayName="Digits">
             <file>mnist_rest_server.py</file>
         </knowledgeBase>
-        <knowledgeBase name="administration" displayName="Administration">
+        <knowledgeBase name="admin" displayName="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -16,9 +16,7 @@
 
 package org.openksavi.sponge.restapi.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -30,8 +28,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.restapi.model.RestType;
 import org.openksavi.sponge.type.ListType;
@@ -89,37 +85,6 @@ public abstract class RestApiUtils {
         default:
             return jsonValue;
         }
-    }
-
-    public static Object[] unmarshalActionArgs(ObjectMapper mapper, ActionAdapter actionAdapter, List<Object> jsonArgs) {
-        // No arguments provided. No type checking.
-        if (jsonArgs == null) {
-            return null;
-        }
-
-        // Argument metadata not defined for this action. No type checking, returning raw values.
-        if (actionAdapter.getArgsMeta() == null) {
-            return jsonArgs.toArray();
-        }
-
-        List<Object> finalArgs = new ArrayList<>();
-        int index = 0;
-        for (Object jsonArg : jsonArgs) {
-            Object finalArg = jsonArg;
-            // Unmarshal only those who have metadata. Others are returned as raw values.
-            if (jsonArg != null && index < actionAdapter.getArgsMeta().length) {
-                ArgMeta<?> argMeta = actionAdapter.getArgsMeta()[index];
-                if (argMeta != null && argMeta.getType() != null) {
-                    finalArg = RestApiUtils.unmarshalValue(mapper, argMeta.getType(), jsonArg, String.format("argument %s in the action %s",
-                            argMeta.getName() != null ? argMeta.getName() : index, actionAdapter.getName()));
-                }
-            }
-
-            finalArgs.add(finalArg);
-            index++;
-        }
-
-        return finalArgs.toArray();
     }
 
     public static Object unmarshalActionResult(ObjectMapper mapper, ResultMeta<?> resultMeta, Object jsonResult) {

@@ -41,7 +41,7 @@ import org.openksavi.sponge.restapi.server.security.NoSecuritySecurityService;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
-import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
+import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
 /**
  * Sponge REST API server plugin.
@@ -274,7 +274,7 @@ public class RestApiServerPlugin extends JPlugin {
     }
 
     public boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {
-        return RestApServeriUtils.canUseKnowledgeBase(roleToKnowledgeBases, user, kbName);
+        return RestApiServerUtils.canUseKnowledgeBase(roleToKnowledgeBases, user, kbName);
     }
 
     public CamelContext getCamelContext() {

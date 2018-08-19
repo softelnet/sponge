@@ -59,7 +59,7 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
-import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
+import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
@@ -216,9 +216,8 @@ public class DefaultRestApiService implements RestApiService {
                                 actionAdapter.getKnowledgeBase().getVersion()));
             }
 
-            return setupSuccessResponse(
-                    new ActionCallResponse(
-                            getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request))),
+            return setupSuccessResponse(new ActionCallResponse(
+                    getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange))),
                     request);
         } catch (Exception e) {
             if (actionAdapter != null) {
@@ -231,8 +230,8 @@ public class DefaultRestApiService implements RestApiService {
         }
     }
 
-    protected Object[] unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request) {
-        return RestApiUtils.unmarshalActionArgs(mapper, actionAdapter, request.getArgs());
+    protected Object[] unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request, Exchange exchange) {
+        return RestApiServerUtils.unmarshalActionArgs(mapper, actionAdapter, request.getArgs(), exchange);
     }
 
     @Override
@@ -311,7 +310,7 @@ public class DefaultRestApiService implements RestApiService {
         } else {
             if (request.getUsername() == null) {
                 if (settings.isAllowAnonymous()) {
-                    return RestApServeriUtils.createAnonymousUser(settings.getGuestRole());
+                    return RestApiServerUtils.createAnonymousUser(settings.getGuestRole());
                 } else {
                     throw new SpongeException("Anonymous access is not allowed");
                 }
@@ -339,7 +338,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected boolean canCallAction(User user, ActionAdapter actionAdapter) {
-        if (RestApServeriUtils.isActionPrivate(actionAdapter.getName())) {
+        if (RestApiServerUtils.isActionPrivate(actionAdapter.getName())) {
             return false;
         }
 

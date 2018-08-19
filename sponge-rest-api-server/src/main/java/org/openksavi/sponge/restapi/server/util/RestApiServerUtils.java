@@ -16,23 +16,32 @@
 
 package org.openksavi.sponge.restapi.server.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.camel.Exchange;
+
+import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.core.util.PatternStringReplacer;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
  * A set of REST API server utility methods.
  */
-public abstract class RestApServeriUtils {
+public abstract class RestApiServerUtils {
 
-    private static final PatternStringReplacer PASSWORD_REPLACER =
-            new PatternStringReplacer(RestApiServerConstants.JSON_REQUEST_PASSWORD_REGEXP, RestApiServerConstants.JSON_REQUEST_PASSWORD_REPLACE);
+    private static final PatternStringReplacer PASSWORD_REPLACER = new PatternStringReplacer(
+            RestApiServerConstants.JSON_REQUEST_PASSWORD_REGEXP, RestApiServerConstants.JSON_REQUEST_PASSWORD_REPLACE);
 
-    private RestApServeriUtils() {
+    private RestApiServerUtils() {
         //
     }
 
@@ -66,5 +75,36 @@ public abstract class RestApServeriUtils {
 
     public static String hidePassword(String text) {
         return PASSWORD_REPLACER.replaceAll(text);
+    }
+
+    public static Object[] unmarshalActionArgs(ObjectMapper mapper, ActionAdapter actionAdapter, List<Object> jsonArgs, Exchange exchange) {
+        // No arguments provided. No type checking.
+        if (jsonArgs == null) {
+            return null;
+        }
+
+        // Argument metadata not defined for this action. No type checking, returning raw values.
+        if (actionAdapter.getArgsMeta() == null) {
+            return jsonArgs.toArray();
+        }
+
+        List<Object> finalArgs = new ArrayList<>();
+        int index = 0;
+        for (Object jsonArg : jsonArgs) {
+            Object finalArg = jsonArg;
+            // Unmarshal only those who have metadata. Others are returned as raw values.
+            if (jsonArg != null && index < actionAdapter.getArgsMeta().length) {
+                ArgMeta<?> argMeta = actionAdapter.getArgsMeta()[index];
+                if (argMeta != null && argMeta.getType() != null) {
+                    finalArg = RestApiUtils.unmarshalValue(mapper, argMeta.getType(), jsonArg, String.format("argument %s in the action %s",
+                            argMeta.getName() != null ? argMeta.getName() : index, actionAdapter.getName()));
+                }
+            }
+
+            finalArgs.add(finalArg);
+            index++;
+        }
+
+        return finalArgs.toArray();
     }
 }

@@ -20,7 +20,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.response.BaseResponse;
-import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
+import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
 /**
  * A default error response provider.
@@ -33,10 +33,10 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
 
         // There is a possibility that exceptions thrown in Camel would contain a full request with a password, so it must be hidden
         // here because it could be sent to a client.
-        response.setErrorMessage(RestApServeriUtils.hidePassword(exception.getMessage()));
+        response.setErrorMessage(RestApiServerUtils.hidePassword(exception.getMessage()));
 
         if (service.getSettings().isIncludeDetailedErrorMessage()) {
-            response.setDetailedErrorMessage(RestApServeriUtils.hidePassword(ExceptionUtils.getStackTrace(exception)));
+            response.setDetailedErrorMessage(RestApiServerUtils.hidePassword(ExceptionUtils.getStackTrace(exception)));
         }
 
         // Specific error codes.

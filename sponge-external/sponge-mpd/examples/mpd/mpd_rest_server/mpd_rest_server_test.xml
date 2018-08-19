@@ -23,12 +23,6 @@
                 <autoStartMonitor>false</autoStartMonitor>
             </configuration>
         </plugin>
-        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
-            <configuration>
-                <publicActions>mpd:,administration:,sample:</publicActions>
-                <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
-            </configuration>
-        </plugin>
     </plugins>
 </sponge>
 

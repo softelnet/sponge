@@ -22,12 +22,12 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
-import org.openksavi.sponge.restapi.server.util.RestApServeriUtils;
+import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
 public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
     private User createAnonymousUser() {
-        return RestApServeriUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_GUEST);
+        return RestApiServerUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_GUEST);
     }
 
     @Override
