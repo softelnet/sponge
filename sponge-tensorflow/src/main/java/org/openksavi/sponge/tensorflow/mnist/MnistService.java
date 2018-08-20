@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.tensorflow;
+package org.openksavi.sponge.tensorflow.mnist;
 
 import java.util.List;
 

@@ -21,5 +21,6 @@
         <module>sponge-examples-project-camel-rss-news</module>
         <module>sponge-examples-project-standalone-camel-xml</module>
         <module>sponge-examples-project-standalone-camel-groovy</module>
+        <module>sponge-examples-project-demo-service</module>
     </modules>
  </project>

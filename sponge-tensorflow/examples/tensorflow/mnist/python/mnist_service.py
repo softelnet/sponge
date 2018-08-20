@@ -68,7 +68,7 @@ class MnistService(object):
             shutil.move(file_name, self.archive_dir)
 
     class Java:
-        implements = ["org.openksavi.sponge.tensorflow.MnistService"]
+        implements = ["org.openksavi.sponge.tensorflow.mnist.MnistService"]
 
 mnistService = MnistService()
 gateway = ClientServer(python_server_entry_point=mnistService)

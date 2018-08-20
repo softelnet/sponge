@@ -3,6 +3,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="mnist" displayName="MNIST">
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library.py</file>
             <file>mnist_rest_server.py</file>
         </knowledgeBase>
     </knowledgeBases>
@@ -10,7 +11,7 @@
     <plugins>
         <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
             <configuration>
-                <facadeInterface>org.openksavi.sponge.tensorflow.MnistService</facadeInterface>
+                <facadeInterface>org.openksavi.sponge.tensorflow.mnist.MnistService</facadeInterface>
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
                     <argument>mnist_service.py</argument>

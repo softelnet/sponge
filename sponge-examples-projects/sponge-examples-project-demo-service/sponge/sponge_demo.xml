@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
+    <properties>
+        <!-- TODO Don't use external scripts! -->
+        <property name="mnistDir">../../sponge-tensorflow/examples/tensorflow/mnist</property>
+    </properties>
+
     <knowledgeBases>
+        <knowledgeBase name="demo" displayName="Demo">
+            <file>sponge_demo.py</file>
+        </knowledgeBase>
         <knowledgeBase name="digits" displayName="Digits">
             <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library.py</file>
-            <file>mnist_rest_server.py</file>
+            <file>mnist_demo.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
@@ -18,14 +26,10 @@
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
                     <argument>mnist_service.py</argument>
-                    <workingDir>${sponge.configDir}/python</workingDir>
+                    <workingDir>${mnistDir}/python</workingDir>
                     <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
                     <redirectType>LOGGER</redirectType>
                 </pythonScript>
-            </configuration>
-        </plugin>
-        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
-            <configuration>
             </configuration>
         </plugin>
     </plugins>
