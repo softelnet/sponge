@@ -28,6 +28,7 @@ import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.test.util.TestUtils;
 
+@net.jcip.annotations.NotThreadSafe
 public class CoreVariablesJythonBugTest {
 
     /**
@@ -51,8 +52,8 @@ public class CoreVariablesJythonBugTest {
 
     @Test
     public void testGlobalVariablesRubyNoBug() {
-        SpongeEngine engine =
-                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/stability/global_variable_access.rb").build();
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/stability/global_variable_access.rb").build();
         engine.startup();
 
         try {

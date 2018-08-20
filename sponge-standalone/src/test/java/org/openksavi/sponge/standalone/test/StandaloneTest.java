@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
+@net.jcip.annotations.NotThreadSafe
 public class StandaloneTest {
 
     private static final long TIMEOUT = 60;

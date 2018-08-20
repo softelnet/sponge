@@ -49,6 +49,7 @@ import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
+@net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { RestApiSimpleSpringSecurityTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext

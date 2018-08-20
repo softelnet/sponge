@@ -85,8 +85,9 @@ public class QuartzEventScheduler extends BaseEventScheduler {
     public void doStartup() {
         try {
             Properties props = new Properties();
-            props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, getName());
-            props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, getName());
+            String name = getName() + "-" + SpongeUtils.getRandomUuidString();
+            props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, name);
+            props.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_ID, name);
             props.put(StdSchedulerFactory.PROP_THREAD_POOL_CLASS, SimpleThreadPool.class.getName());
 
             // There should be only one thread here to ensure the proper order of scheduled events.

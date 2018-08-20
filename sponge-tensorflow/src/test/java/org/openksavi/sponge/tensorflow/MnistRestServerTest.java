@@ -46,6 +46,7 @@ import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 import org.openksavi.sponge.tensorflow.util.ImageUtils;
 
+@net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { MnistRestServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext

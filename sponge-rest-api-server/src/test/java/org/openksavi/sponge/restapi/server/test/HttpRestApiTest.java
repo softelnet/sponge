@@ -32,6 +32,7 @@ import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
+@net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { HttpRestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext

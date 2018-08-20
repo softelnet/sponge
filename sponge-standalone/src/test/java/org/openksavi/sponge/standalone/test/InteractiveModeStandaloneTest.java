@@ -32,6 +32,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.standalone.StandaloneSpongeEngine;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
+@net.jcip.annotations.NotThreadSafe
 public class InteractiveModeStandaloneTest {
 
     private StandaloneSpongeEngine engine;

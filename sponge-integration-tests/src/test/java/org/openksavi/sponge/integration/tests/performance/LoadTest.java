@@ -30,13 +30,15 @@ import org.openksavi.sponge.test.script.template.RulesTestTemplate;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.TestUtils;
 
+@net.jcip.annotations.NotThreadSafe
 public class LoadTest {
 
     private static final Logger logger = LoggerFactory.getLogger(LoadTest.class);
 
     @Test
     public void testRulesLoad() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/rules_load.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/rules_load.py").build();
         engine.startup();
 
         CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
@@ -60,7 +62,8 @@ public class LoadTest {
 
     @Test
     public void testTriggersLoad() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/triggers_load.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/performance/triggers_load.py").build();
         engine.startup();
 
         int sleepMinutes = 2;

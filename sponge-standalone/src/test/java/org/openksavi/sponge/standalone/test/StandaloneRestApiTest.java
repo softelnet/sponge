@@ -28,6 +28,7 @@ import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
+@net.jcip.annotations.NotThreadSafe
 public class StandaloneRestApiTest {
 
     private static final int PORT = 11836;

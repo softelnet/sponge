@@ -34,6 +34,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.nashorn.JavaScriptConstants;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
+@net.jcip.annotations.NotThreadSafe
 public class StandaloneErrorReportingTest {
 
     @BeforeClass

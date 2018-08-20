@@ -28,6 +28,7 @@ import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.ProcessInstance;
 import org.openksavi.sponge.engine.SpongeEngine;
 
+@net.jcip.annotations.NotThreadSafe
 public class Py4JTest {
 
     @Test
