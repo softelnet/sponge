@@ -20,6 +20,7 @@ import javax.net.ssl.SSLContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.SocketUtils;
 
 import py4j.GatewayServer;
 
@@ -56,6 +57,8 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public static final String TAG_AUTH_TOKEN = "authToken";
 
+    public static final String TAG_RANDOM_PORTS = "randomPorts";
+
     public static final String DEFAULT_PYTHON_EXECUTABLE = "python";
 
     public static final String ENV_PY4J_JAVA_PORT = "PY4J_JAVA_PORT";
@@ -82,11 +85,14 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
      */
     private boolean pythonScriptBeforeStartup = true;
 
-    /** If {@code true}, the plugin will generate the Py4J auth token (for both sides). */
+    /** If {@code true}, the plugin will generate the Py4J auth token (for both sides). The default value is {@code false}. */
     private boolean generateAuthToken = false;
 
     /** The manual or generated Py4J auth token (for both sides). */
     private String authToken;
+
+    /** If {@code true}, the plugin will use random ports (for both sides). The default value is {@code false}. */
+    private boolean randomPorts = false;
 
     private ProcessInstance scriptProcess;
 
@@ -98,15 +104,28 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         super(name);
     }
 
+    @Override
+    public void onStartup() {
+        if (generateAuthToken) {
+            authToken = SpongeUtils.getRandomUuidString();
+        }
+
+        if (randomPorts) {
+            javaPort = SocketUtils.findAvailableTcpPort(GatewayServer.DEFAULT_PORT);
+            pythonPort = SocketUtils.findAvailableTcpPort(GatewayServer.DEFAULT_PYTHON_PORT);
+        }
+
+        logger.info("Using port {} for Java, {} for Python. The auth token is {}.", javaPort, pythonPort, authToken);
+    }
+
     protected void executePythonScript() {
         if (pythonScriptConfiguration != null) {
             ProcessConfiguration finalConfiguration = pythonScriptConfiguration.clone();
             finalConfiguration.getEnv().put(ENV_PY4J_JAVA_PORT, String.valueOf(javaPort));
             finalConfiguration.getEnv().put(ENV_PY4J_PYTHON_PORT, String.valueOf(pythonPort));
 
-            String finalAuthToken = resolveAuthToken();
-            if (finalAuthToken != null) {
-                finalConfiguration.getEnv().put(ENV_PY4J_AUTH_TOKEN, finalAuthToken);
+            if (authToken != null) {
+                finalConfiguration.getEnv().put(ENV_PY4J_AUTH_TOKEN, authToken);
             }
 
             scriptProcess = SpongeUtils.startProcess(getEngine(), finalConfiguration);
@@ -120,15 +139,6 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         if (scriptProcess != null) {
             scriptProcess.getProcess().destroy();
         }
-    }
-
-    private String resolveAuthToken() {
-        if (generateAuthToken) {
-            authToken = SpongeUtils.getRandomUuidString();
-            logger.info("Generated Py4J auth token: {}", authToken);
-        }
-
-        return authToken;
     }
 
     public ProcessInstance getScriptProcess() {
@@ -158,6 +168,8 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
         generateAuthToken = configuration.getBoolean(TAG_GENERATE_AUTH_TOKEN, generateAuthToken);
         authToken = configuration.getString(TAG_AUTH_TOKEN, authToken);
+
+        randomPorts = configuration.getBoolean(TAG_RANDOM_PORTS, randomPorts);
     }
 
     public T getFacade() {
@@ -234,5 +246,13 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    public boolean isRandomPorts() {
+        return randomPorts;
+    }
+
+    public void setRandomPorts(boolean randomPorts) {
+        this.randomPorts = randomPorts;
     }
 }

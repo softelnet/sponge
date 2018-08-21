@@ -59,6 +59,8 @@ public class ClientServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
     @SuppressWarnings("unchecked")
     @Override
     public void onStartup() {
+        super.onStartup();
+
         if (isPythonScriptBeforeStartup()) {
             executePythonScript();
         }

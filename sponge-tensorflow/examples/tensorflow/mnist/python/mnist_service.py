@@ -87,7 +87,7 @@ PY4J_JAVA_PORT = int(os.getenv("PY4J_JAVA_PORT", -1))
 PY4J_PYTHON_PORT = int(os.getenv("PY4J_PYTHON_PORT", -1))
 PY4J_AUTH_TOKEN = os.getenv("PY4J_AUTH_TOKEN")
 
-print("Using ports {:d} for Python, {:d} for Java (-1 means the default port).".format(PY4J_JAVA_PORT,
+print("Using ports {:d} for Java, {:d} for Python (-1 means the default port).".format(PY4J_JAVA_PORT,
         PY4J_PYTHON_PORT), flush=True)
 
 gateway = ClientServer(python_server_entry_point=mnistService,

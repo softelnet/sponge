@@ -540,11 +540,15 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 
 |`generateAuthToken`
 |`boolean`
-|If `true`, the plugin will generate the Py4J auth token (for both sides). The default value is `false`.
+|If `true`, the plugin will generate the Py4J auth token (for both sides). The default value is `false`. This option is useful when combined with the `pythonScript`.
 
 |`authToken`
 |`String`
 |The manual or generated Py4J auth token (for both sides).
+
+|`randomPorts`
+|`boolean`
+|If `true`, the plugin will use random ports (for both sides). The default value is `false`. This option is useful when combined with the `pythonScript`.
 |===
 
 ==== GatewayServerPy4JPlugin

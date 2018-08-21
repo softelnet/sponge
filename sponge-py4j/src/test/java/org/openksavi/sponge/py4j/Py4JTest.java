@@ -54,25 +54,6 @@ public class Py4JTest {
     }
 
     @Test
-    public void testPy4JPythonServer() throws Exception {
-        String rootDir = "examples/py4j/python_server";
-        SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
-        engine.startup();
-        Process process = null;
-
-        try {
-            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
-            assertFalse(engine.isError());
-        } finally {
-            engine.shutdown();
-
-            if (process != null) {
-                process.destroy();
-            }
-        }
-    }
-
-    @Test
     public void testPy4JJavaServerTls() throws Exception {
         String rootDir = "examples/py4j/java_server_tls";
         SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_java_server_tls_sponge_hello_world.xml").build();
@@ -92,4 +73,43 @@ public class Py4JTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testPy4JPythonServer() throws Exception {
+        String rootDir = "examples/py4j/python_server";
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
+        engine.startup();
+        Process process = null;
+
+        try {
+            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+
+            if (process != null) {
+                process.destroy();
+            }
+        }
+    }
+
+    @Test
+    public void testPy4JPythonServerConfiguration() throws Exception {
+        String rootDir = "examples/py4j/python_server_configuration";
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(rootDir + "/py4j_python_server_sponge_hello_world.xml").build();
+        engine.startup();
+        Process process = null;
+
+        try {
+            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+
+            if (process != null) {
+                process.destroy();
+            }
+        }
+    }
+
 }

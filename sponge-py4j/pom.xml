@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-core</artifactId>
+            <artifactId>sponge-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
