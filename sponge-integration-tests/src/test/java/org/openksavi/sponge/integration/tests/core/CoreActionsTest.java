@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -169,6 +170,7 @@ public class CoreActionsTest {
             assertEquals(28, ((Number) argMeta[8].getType().getFeatures().get("height")).intValue());
             assertEquals("black", argMeta[8].getType().getFeatures().get("background"));
             assertEquals("white", argMeta[8].getType().getFeatures().get("color"));
+            assertEquals(Arrays.asList("drawing", "handwritten"), argMeta[8].getType().getTags());
 
             assertEquals(TypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
             assertEquals("Boolean result", adapter.getResultMeta().getDisplayName());

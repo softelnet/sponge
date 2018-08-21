@@ -16,7 +16,7 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
             ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))),
-            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags("drawing", "handwritten")
+            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags(["drawing", "handwritten"])
                 .features({"width":28, "height":28, "background":"black", "color":"white"})),
         ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")

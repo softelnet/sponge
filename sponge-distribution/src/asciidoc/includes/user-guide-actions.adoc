@@ -152,7 +152,7 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
             ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject").tag("complex")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))),
-            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags("drawing", "handwritten").features({"width":28, "height":28, "color":"white"})),
+            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags(["drawing", "handwritten"]).features({"width":28, "height":28, "color":"white"})),
         ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):

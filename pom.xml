@@ -218,8 +218,8 @@
                             <exclude>*/sponge/integration/tests/stability/*</exclude>
                             <exclude>*/sponge/kotlin/script/test/*</exclude>
                         </excludes>
-                        <parallel>all</parallel>
-                        <threadCount>10</threadCount>
+                        <parallel>classesAndMethods</parallel>
+                        <threadCount>5</threadCount>
 <!--                         <useUnlimitedThreads>true</useUnlimitedThreads> -->
                         <!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
                     </configuration>
