@@ -19,20 +19,26 @@ package org.openksavi.sponge.core.util;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.openksavi.sponge.SpongeException;
 
 /**
  * A process configuration.
  */
-public class ProcessConfiguration {
+public class ProcessConfiguration implements Cloneable {
 
     private String name = "Process";
 
     private String executable;
 
-    private List<String> arguments;
+    private List<String> arguments = new ArrayList<>();
 
     private String workingDir;
+
+    private Map<String, String> env = new LinkedHashMap<>();
 
     private Long waitSeconds;
 
@@ -99,6 +105,14 @@ public class ProcessConfiguration {
         this.workingDir = workingDir;
     }
 
+    public Map<String, String> getEnv() {
+        return env;
+    }
+
+    public void setEnv(Map<String, String> env) {
+        this.env = env;
+    }
+
     public Long getWaitSeconds() {
         return waitSeconds;
     }
@@ -139,6 +153,20 @@ public class ProcessConfiguration {
         this.waitForOutputLineTimeout = waitForOutputLineTimeout;
     }
 
+    @Override
+    public ProcessConfiguration clone() {
+        try {
+            ProcessConfiguration result = (ProcessConfiguration) super.clone();
+
+            result.setArguments(new ArrayList<>(arguments));
+            result.setEnv(new LinkedHashMap<>(env));
+
+            return result;
+        } catch (CloneNotSupportedException e) {
+            throw new SpongeException(e);
+        }
+    }
+
     /**
      * A process configuration builder.
      *
@@ -173,24 +201,24 @@ public class ProcessConfiguration {
         }
 
         /**
-         * Sets the process arguments.
+         * Adds the process arguments.
          *
          * @param arguments the process arguments.
          * @return this builder.
          */
         public Builder arguments(String... arguments) {
-            configuration.setArguments(Arrays.asList(arguments));
+            configuration.getArguments().addAll(Arrays.asList(arguments));
             return this;
         }
 
         /**
-         * Sets the process arguments.
+         * Add the process arguments.
          *
          * @param arguments the process arguments.
          * @return this builder.
          */
         public Builder arguments(List<String> arguments) {
-            configuration.setArguments(new ArrayList<>(arguments));
+            configuration.getArguments().addAll(arguments);
             return this;
         }
 
@@ -202,6 +230,29 @@ public class ProcessConfiguration {
          */
         public Builder workingDir(String workingDir) {
             configuration.setWorkingDir(workingDir);
+            return this;
+        }
+
+        /**
+         * Adds the environment variable.
+         *
+         * @param name the environment variable name.
+         * @param value the environment variable value.
+         * @return this builder.
+         */
+        public Builder env(String name, String value) {
+            configuration.getEnv().put(name, value);
+            return this;
+        }
+
+        /**
+         * Adds the environment variables.
+         *
+         * @param env the environment variables.
+         * @return this builder.
+         */
+        public Builder env(Map<String, String> env) {
+            configuration.getEnv().putAll(env);
             return this;
         }
 

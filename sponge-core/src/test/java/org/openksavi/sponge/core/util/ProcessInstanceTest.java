@@ -27,11 +27,20 @@ import org.openksavi.sponge.engine.SpongeEngine;
 public class ProcessInstanceTest {
 
     @Test
-    public void testProcess() {
+    public void testProcessEcho() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         ProcessInstance processInstance = SpongeUtils.startProcess(engine,
                 ProcessConfiguration.builder("echo").arguments("TEST").redirectType(RedirectType.STRING).build());
+        assertEquals("TEST", processInstance.getOutput());
+    }
+
+    @Test
+    public void testProcessEnv() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        ProcessInstance processInstance = SpongeUtils.startProcess(engine, ProcessConfiguration.builder("printenv")
+                .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").redirectType(RedirectType.STRING).build());
         assertEquals("TEST", processInstance.getOutput());
     }
 }

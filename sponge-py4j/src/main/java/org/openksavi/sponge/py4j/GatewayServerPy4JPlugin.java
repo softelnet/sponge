@@ -59,6 +59,11 @@ public class GatewayServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
                 SSLContext sslContext = createSslContext();
                 builder.serverSocketFactory(sslContext.getServerSocketFactory());
             }
+
+            if (getAuthToken() != null) {
+                builder.authToken(getAuthToken());
+            }
+
             server = build(builder);
 
             server.start();

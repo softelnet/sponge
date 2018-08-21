@@ -38,17 +38,20 @@ source ./bin/activate
 |===
 |File name |Description
 
+|{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/main/java/org/openksavi/sponge/tensorflow/mnist/MnistService.java[`MnistService.java`]
+|The Java interface of the MNIST Python service. This interface is used by Py4J to expose Python functionality to a Java process.
+
+|{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/main/resources/org/openksavi/sponge/tensorflow/mnist/mnist_library.py[`mnist_library.py`]
+|The predefined {sponge} knowledge base library (compatible with Jython) for the MNIST example that contains definitions of actions that will be exposed in the {sponge} REST API service. The `MnistPredict` action takes a binary representation of a PNG file and passes it to the running Python script file by invoking `MnistService.predict(byte[] image)` method. This method will be invoked on the remote object running in the Python process.
+
 |{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/test/java/org/openksavi/sponge/tensorflow/MnistRestServerMain.java[`MnistRestServerMain.java`]
 |The main Java class, that starts up {sponge}.
-
-|{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/test/java/org/openksavi/sponge/tensorflow/MnistService.java[`MnistService.java`]
-|The Java interface of the MNIST Python service. This interface is used by Py4J to expose Python functionality to a Java process.
 
 |{tensorflowSourcesUrl}/mnist/mnist_rest_server.xml[`mnist_rest_server.xml`]
 |The {sponge} configuration file that instructs {sponge} to create the Py4J plugin, execute the Python script file that will load a TensorFlow model and start REST API server.
 
 |{tensorflowSourcesUrl}/mnist/mnist_rest_server.py[`mnist_rest_server.py`]
-|The {sponge} knowledge base file (compatible with Jython) that contains definitions of actions that will be exposed in the {sponge} REST API service. The `MnistPredict` action takes a binary representation of a PNG file and passes it to the running Python script file by invoking `MnistService.predict(byte[] image)` method. This method will be invoked on the remote object running in the Python process.
+|The main {sponge} knowledge base file (compatible with Jython) for that example.
 
 |{tensorflowSourcesUrl}/mnist/python/mnist_model.py[`python/mnist_model.py`]
 |The Python script file (compatible with CPython) that defines the https://en.wikipedia.org/wiki/Convolutional_neural_network[ConvNet] model trained on the MNIST database to recognize handwritten digits. This example uses https://keras.io[Keras] neural networks API that runs on top of TensorFlow.

@@ -52,7 +52,17 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public static final String TAG_PYTHON_SCRIPT_BEFORE_STARTUP = "pythonScriptBeforeStartup";
 
+    public static final String TAG_GENERATE_AUTH_TOKEN = "generateAuthToken";
+
+    public static final String TAG_AUTH_TOKEN = "authToken";
+
     public static final String DEFAULT_PYTHON_EXECUTABLE = "python";
+
+    public static final String ENV_PY4J_JAVA_PORT = "PY4J_JAVA_PORT";
+
+    public static final String ENV_PY4J_PYTHON_PORT = "PY4J_PYTHON_PORT";
+
+    public static final String ENV_PY4J_AUTH_TOKEN = "PY4J_AUTH_TOKEN";
 
     private String facadeInterfaceName;
 
@@ -72,6 +82,12 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
      */
     private boolean pythonScriptBeforeStartup = true;
 
+    /** If {@code true}, the plugin will generate the Py4J auth token (for both sides). */
+    private boolean generateAuthToken = false;
+
+    /** The manual or generated Py4J auth token (for both sides). */
+    private String authToken;
+
     private ProcessInstance scriptProcess;
 
     public BasePy4JPlugin() {
@@ -84,7 +100,16 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     protected void executePythonScript() {
         if (pythonScriptConfiguration != null) {
-            scriptProcess = SpongeUtils.startProcess(getEngine(), pythonScriptConfiguration);
+            ProcessConfiguration finalConfiguration = pythonScriptConfiguration.clone();
+            finalConfiguration.getEnv().put(ENV_PY4J_JAVA_PORT, String.valueOf(javaPort));
+            finalConfiguration.getEnv().put(ENV_PY4J_PYTHON_PORT, String.valueOf(pythonPort));
+
+            String finalAuthToken = resolveAuthToken();
+            if (finalAuthToken != null) {
+                finalConfiguration.getEnv().put(ENV_PY4J_AUTH_TOKEN, finalAuthToken);
+            }
+
+            scriptProcess = SpongeUtils.startProcess(getEngine(), finalConfiguration);
             if (scriptProcess.getOutput() != null) {
                 logger.info("Python script output: {}", scriptProcess.getOutput());
             }
@@ -95,6 +120,15 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         if (scriptProcess != null) {
             scriptProcess.getProcess().destroy();
         }
+    }
+
+    private String resolveAuthToken() {
+        if (generateAuthToken) {
+            authToken = SpongeUtils.getRandomUuidString();
+            logger.info("Generated Py4J auth token: {}", authToken);
+        }
+
+        return authToken;
     }
 
     public ProcessInstance getScriptProcess() {
@@ -121,6 +155,9 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         }
 
         pythonScriptBeforeStartup = configuration.getBoolean(TAG_PYTHON_SCRIPT_BEFORE_STARTUP, pythonScriptBeforeStartup);
+
+        generateAuthToken = configuration.getBoolean(TAG_GENERATE_AUTH_TOKEN, generateAuthToken);
+        authToken = configuration.getString(TAG_AUTH_TOKEN, authToken);
     }
 
     public T getFacade() {
@@ -155,19 +192,19 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
         this.pythonScriptBeforeStartup = pythonScriptBeforeStartup;
     }
 
-    public Integer getJavaPort() {
+    public int getJavaPort() {
         return javaPort;
     }
 
-    public void setJavaPort(Integer javaPort) {
+    public void setJavaPort(int javaPort) {
         this.javaPort = javaPort;
     }
 
-    public Integer getPythonPort() {
+    public int getPythonPort() {
         return pythonPort;
     }
 
-    public void setPythonPort(Integer pythonPort) {
+    public void setPythonPort(int pythonPort) {
         this.pythonPort = pythonPort;
     }
 
@@ -181,5 +218,21 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     protected SSLContext createSslContext() {
         return SpongeUtils.createSslContext(security);
+    }
+
+    public boolean isGenerateAuthToken() {
+        return generateAuthToken;
+    }
+
+    public void setGenerateAuthToken(boolean generateAuthToken) {
+        this.generateAuthToken = generateAuthToken;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }

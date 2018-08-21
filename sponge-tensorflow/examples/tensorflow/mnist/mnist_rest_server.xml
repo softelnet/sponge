@@ -18,10 +18,12 @@
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
                     <argument>mnist_service.py</argument>
+                    <argument>--tempdir=${sponge.configDir}/_tmp_</argument>
                     <workingDir>${sponge.configDir}/python</workingDir>
                     <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
                     <redirectType>LOGGER</redirectType>
                 </pythonScript>
+                <generateAuthToken>true</generateAuthToken>
             </configuration>
         </plugin>
         <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">

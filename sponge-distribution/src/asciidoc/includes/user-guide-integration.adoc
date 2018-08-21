@@ -400,6 +400,10 @@ include::user-guide-integration-rest-api-client.adoc[leveloffset=+1]
 |`String`
 |The process working directory. If `null` (the default value) then the current directory will be used.
 
+|`env`
+|name, value
+|Zero or more additional environment variables for the subprocess.
+
 |`waitSeconds`
 |`Long`
 |The maximum number of seconds to wait after the start of the process. The thread that started the process will be blocked until the time elapses or the subprocess exits. May be `null` (the default value) if the thread shouldn't wait.
@@ -439,12 +443,19 @@ include::user-guide-integration-rest-api-client.adoc[leveloffset=+1]
 |No redirection will be set.
 |===
 
-.Example of running an external executable
+.Example of running an external executable with arguments
 [source,java]
 ----
 ProcessInstance processInstance = SpongeUtils.startProcess(engine,
         ProcessConfiguration.builder("echo").arguments("TEST").redirectType(RedirectType.STRING).build());
 String output = processInstance.getOutput();
+----
+
+.Example of running an external executable with an additional environment
+[source,java]
+----
+ProcessInstance processInstance = SpongeUtils.startProcess(engine, ProcessConfiguration.builder("printenv")
+        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").redirectType(RedirectType.STRING).build());
 ----
 
 == Python (CPython) / Py4J
@@ -492,11 +503,11 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 |A Java interface that is a facade to the Py4J entry point object configured on the CPython side.
 
 |`javaPort`
-|`Integer`
+|`int`
 |Java side server port.
 
 |`pythonPort`
-|`Integer`
+|`int`
 |CPython side server port.
 
 |`security`
@@ -521,11 +532,19 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 
 |`pythonScript`
 |<<integration-external-subprocess,XML element/ProcessConfiguration>>
-|The configuration of the CPython script that may be run as a subprocess of the {sponge} Java process when the plugin is starting up.
+|The configuration of the CPython script that may be run as a subprocess of the {sponge} Java process when the plugin is starting up. Typically such script would init the Py4J connection on the CPython side. The plugin automatically adds to the environment variables for the subprocess: `PY4J_JAVA_PORT`, `PY4J_PYTHON_PORT` and optionally `PY4J_AUTH_TOKEN`.
 
 |`pythonScriptBeforeStartup`
-|`Boolean`
+|`boolean`
 |If `true`, the CPython script will be started before this plugin startup (the default value), otherwise it will be started after this plugin startup.
+
+|`generateAuthToken`
+|`boolean`
+|If `true`, the plugin will generate the Py4J auth token (for both sides). The default value is `false`.
+
+|`authToken`
+|`String`
+|The manual or generated Py4J auth token (for both sides).
 |===
 
 ==== GatewayServerPy4JPlugin

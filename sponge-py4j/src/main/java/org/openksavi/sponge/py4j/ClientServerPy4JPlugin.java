@@ -77,6 +77,10 @@ public class ClientServerPy4JPlugin<T> extends BasePy4JPlugin<T> {
                 builder.autoStartJavaServer(autoStartJavaServer);
             }
 
+            if (getAuthToken() != null) {
+                builder.authToken(getAuthToken());
+            }
+
             server = build(builder);
         } else {
             logger.info("Using the manually created Py4J Server. Note that the server should have already been started.");

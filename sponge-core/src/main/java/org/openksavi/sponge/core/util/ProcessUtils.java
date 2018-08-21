@@ -25,7 +25,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -53,6 +55,8 @@ public abstract class ProcessUtils {
 
     public static final String TAG_PROCESS_WORKING_DIR = "workingDir";
 
+    public static final String TAG_PROCESS_ENV = "env";
+
     public static final String TAG_PROCESS_WAIT_SECONDS = "waitSeconds";
 
     public static final String TAG_PROCESS_REDIRECT_TYPE = "redirectType";
@@ -63,11 +67,19 @@ public abstract class ProcessUtils {
 
     public static final String TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT = "waitForOutputLineTimeout";
 
+    public static final String ATTR_PROCESS_ENV_NAME = "name";
+
     public static ProcessConfiguration.Builder createProcessConfigurationBuilder(Configuration configuration) {
+        Map<String, String> env = new LinkedHashMap<>();
+        Arrays.stream(configuration.getConfigurationsAt(TAG_PROCESS_ENV)).forEach(c -> {
+            env.put(Validate.notNull(c.getAttribute(ATTR_PROCESS_ENV_NAME, null), "The environment variable must have a name"),
+                    c.getValue());
+        });
+
         ProcessConfiguration.Builder builder = ProcessConfiguration.builder(configuration.getString(TAG_PROCESS_EXECUTABLE, null))
                 .arguments(Arrays.stream(configuration.getConfigurationsAt(TAG_PROCESS_ARGUMENT)).map(Configuration::getValue)
                         .collect(Collectors.toList()))
-                .workingDir(configuration.getString(TAG_PROCESS_WORKING_DIR, null))
+                .workingDir(configuration.getString(TAG_PROCESS_WORKING_DIR, null)).env(env)
                 .waitSeconds(configuration.getLong(TAG_PROCESS_WAIT_SECONDS, null));
 
         String redirectTypeString = configuration.getString(TAG_PROCESS_REDIRECT_TYPE, null);
@@ -146,13 +158,18 @@ public abstract class ProcessUtils {
             builder.directory(new File(processConfiguration.getWorkingDir()));
         }
 
+        builder.environment().putAll(processConfiguration.getEnv());
+
+        logger.debug("Starting a new subprocess: {} {}", processConfiguration.getExecutable(), processConfiguration.getArguments());
+        if (!processConfiguration.getEnv().isEmpty()) {
+            logger.debug("The subprocess additional environment: {}", processConfiguration.getEnv());
+        }
+
         Charset finalCharset = processConfiguration.getCharset() != null ? processConfiguration.getCharset() : Charset.defaultCharset();
 
         // Start the process.
         ProcessInstance processInstance = null;
         try {
-            logger.debug("Process environment: {}", builder.environment());
-
             processInstance = new ProcessInstance(builder.start(), processConfiguration);
 
             if (processConfiguration.getRedirectType() == RedirectType.LOGGER) {
