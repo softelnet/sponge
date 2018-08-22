@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.4.1 (not released yet)
+== 1.4.1 (2018-08-22)
 
 * API change: A processor `meta` property has been renamed to `features`.
 * Optional knowledge base versioning.
