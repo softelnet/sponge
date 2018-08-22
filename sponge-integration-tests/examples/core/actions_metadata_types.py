@@ -23,3 +23,9 @@ class MultipleArgumentsAction(Action):
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):
         return True
 
+class ActionReturningMap(Action):
+    def onConfigure(self):
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(MapType(StringType(), IntegerType())).displayName("Map result")
+    def onCall(self):
+        return {"a":1, "b":2, "c":3}

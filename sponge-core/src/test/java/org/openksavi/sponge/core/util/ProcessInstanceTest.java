@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.ProcessConfiguration.RedirectType;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -42,5 +43,18 @@ public class ProcessInstanceTest {
         ProcessInstance processInstance = SpongeUtils.startProcess(engine, ProcessConfiguration.builder("printenv")
                 .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").redirectType(RedirectType.STRING).build());
         assertEquals("TEST", processInstance.getOutput());
+    }
+
+    @Test(expected = SpongeException.class)
+    public void testProcessErrorOutput() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        try {
+            SpongeUtils.startProcess(engine, ProcessConfiguration.builder("echo").arguments("ERROR").redirectType(RedirectType.LOGGER)
+                    .waitForErrorOutputLineRegexp(".*ERROR.*").build());
+        } catch (SpongeException e) {
+            assertEquals("Error in the subprocess: ERROR", e.getMessage());
+            throw e;
+        }
     }
 }

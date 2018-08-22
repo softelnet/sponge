@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,8 @@ public abstract class ProcessUtils {
 
     public static final String TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_REGEXP = "waitForOutputLineRegexp";
 
+    public static final String TAG_PROCESS_WAIT_FOR_ERROR_OUTPUT_LINE_REGEXP = "waitForErrorOutputLineRegexp";
+
     public static final String TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT = "waitForOutputLineTimeout";
 
     public static final String ATTR_PROCESS_ENV_NAME = "name";
@@ -93,13 +96,14 @@ public abstract class ProcessUtils {
         }
 
         builder.waitForOutputLineRegexp(configuration.getString(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_REGEXP, null))
+                .waitForErrorOutputLineRegexp(configuration.getString(TAG_PROCESS_WAIT_FOR_ERROR_OUTPUT_LINE_REGEXP, null))
                 .waitForOutputLineTimeout(configuration.getLong(TAG_PROCESS_WAIT_FOR_OUTPUT_LINE_TIMEOUT, null));
 
         return builder;
     }
 
     public static ProcessInstance startProcess(SpongeEngine engine, ProcessConfiguration processConfiguration) {
-        if (processConfiguration.getWaitForOutputLineRegexp() != null) {
+        if (processConfiguration.getWaitForOutputLineRegexp() != null || processConfiguration.getWaitForErrorOutputLineRegexp() != null) {
             return startProcessAndWaitForOutputLine(engine, processConfiguration);
         } else {
             return startProcessWithOutputLineConsumer(engine, processConfiguration, null);
@@ -108,9 +112,15 @@ public abstract class ProcessUtils {
 
     public static ProcessInstance startProcessAndWaitForOutputLine(SpongeEngine engine, ProcessConfiguration processConfiguration) {
         final Semaphore semaphore = new Semaphore(0);
+        final AtomicReference<String> errorLine = new AtomicReference<>(null);
 
         ProcessInstance processInstance = startProcessWithOutputLineConsumer(engine, processConfiguration, (line) -> {
-            if (line.matches(processConfiguration.getWaitForOutputLineRegexp())) {
+            if (processConfiguration.getWaitForOutputLineRegexp() != null
+                    && line.matches(processConfiguration.getWaitForOutputLineRegexp())) {
+                semaphore.release();
+            } else if (processConfiguration.getWaitForErrorOutputLineRegexp() != null
+                    && line.matches(processConfiguration.getWaitForErrorOutputLineRegexp())) {
+                errorLine.set(line);
                 semaphore.release();
             }
         });
@@ -124,6 +134,15 @@ public abstract class ProcessUtils {
             }
         } catch (InterruptedException e) {
             throw SpongeUtils.wrapException(e);
+        }
+
+        if (errorLine.get() != null) {
+            // Kill the subprocess.
+            if (processInstance.getProcess().isAlive()) {
+                processInstance.getProcess().destroy();
+            }
+
+            throw new SpongeException("Error in the subprocess: " + errorLine.get());
         }
 
         return processInstance;

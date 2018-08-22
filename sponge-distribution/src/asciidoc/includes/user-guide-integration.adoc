@@ -418,7 +418,11 @@ include::user-guide-integration-rest-api-client.adoc[leveloffset=+1]
 
 |`waitForOutputLineRegexp`
 |`String`
-|The Java regular expression of a line from the process output stream. The thread that started the process will wait (blocking) for such line. May be `null` if the thread shouldn't wait for a specific line.
+|The Java regular expression of a line from the process output stream. The thread that started the process will wait (blocking) for such line. May be `null` if the thread shouldn't wait for a specific line (or `waitForErrorOutputLineRegexp` if set).
+
+|`waitForErrorOutputLineRegexp`
+|`String`
+|Sets the Java regular expression of a line from the process output stream that signals an error and should cause throwing an exception.
 
 |`waitForOutputLineTimeout`
 |`Long`

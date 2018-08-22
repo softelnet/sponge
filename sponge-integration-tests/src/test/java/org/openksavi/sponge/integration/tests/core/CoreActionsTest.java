@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -207,4 +208,26 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testActionsMetadataTypesMap() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types.py").build();
+        engine.startup();
+
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> map = engine.getOperations().call(Map.class, "ActionReturningMap");
+
+            assertEquals(3, map.size());
+            assertEquals(1, map.get("a"));
+            assertEquals(2, map.get("b"));
+            assertEquals(3, map.get("c"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
 }

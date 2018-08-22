@@ -48,6 +48,8 @@ public class ProcessConfiguration implements Cloneable {
 
     private String waitForOutputLineRegexp;
 
+    private String waitForErrorOutputLineRegexp;
+
     private Long waitForOutputLineTimeout;
 
     /** The subprocess redirect type. */
@@ -143,6 +145,14 @@ public class ProcessConfiguration implements Cloneable {
 
     public void setWaitForOutputLineRegexp(String waitForOutputLineRegexp) {
         this.waitForOutputLineRegexp = waitForOutputLineRegexp;
+    }
+
+    public String getWaitForErrorOutputLineRegexp() {
+        return waitForErrorOutputLineRegexp;
+    }
+
+    public void setWaitForErrorOutputLineRegexp(String waitForErrorOutputLineRegexp) {
+        this.waitForErrorOutputLineRegexp = waitForErrorOutputLineRegexp;
     }
 
     public Long getWaitForOutputLineTimeout() {
@@ -292,13 +302,26 @@ public class ProcessConfiguration implements Cloneable {
 
         /**
          * Sets the Java regular expression of a line from the process output stream. The thread that started the process will wait
-         * (blocking) for such line.
+         * (blocking) for such line (or {@code waitForErrorOutputLineRegexp} if set).
          *
          * @param waitForOutputLineRegexp the Java regular expression or {@code null} if the thread shouldn't wait for a specific line.
          * @return this builder.
          */
         public Builder waitForOutputLineRegexp(String waitForOutputLineRegexp) {
             configuration.setWaitForOutputLineRegexp(waitForOutputLineRegexp);
+            return this;
+        }
+
+        /**
+         * Sets the Java regular expression of a line from the process output stream that signals an error and should cause throwing an
+         * exception.
+         *
+         * @param waitForErrorOutputLineRegexp the Java regular expression or {@code null} if the thread shouldn't look for a specific error
+         *        line.
+         * @return this builder.
+         */
+        public Builder waitForErrorOutputLineRegexp(String waitForErrorOutputLineRegexp) {
+            configuration.setWaitForErrorOutputLineRegexp(waitForErrorOutputLineRegexp);
             return this;
         }
 
