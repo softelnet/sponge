@@ -179,7 +179,7 @@ public abstract class ProcessUtils {
 
         builder.environment().putAll(processConfiguration.getEnv());
 
-        logger.debug("Starting a new subprocess: {} {}", processConfiguration.getExecutable(), processConfiguration.getArguments());
+        logger.info("Starting a new subprocess: {} {}", processConfiguration.getExecutable(), processConfiguration.getArguments());
         if (!processConfiguration.getEnv().isEmpty()) {
             logger.debug("The subprocess additional environment: {}", processConfiguration.getEnv());
         }

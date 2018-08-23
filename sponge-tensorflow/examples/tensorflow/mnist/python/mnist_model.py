@@ -17,7 +17,7 @@ print("Keras version", keras.__version__)
 # Test accuracy: 0.9932
 # This model is used only for the purpose of showing how to invoke machine learning prediction via a Sponge action.
 class MnistModel:
-    def __init__(self):
+    def __init__(self, model_file):
         self.model = None
         self.history = None
         self.batch_size = 128
@@ -25,7 +25,7 @@ class MnistModel:
         self.epochs = 12
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
-        self.model_file = '../data/mnist_model.h5'
+        self.model_file = model_file
         self.prediction_threshold = 0.9
 
     def __load_mnist_data(self):
@@ -97,7 +97,7 @@ class MnistModel:
             print('Loading model')
             self.model = models.load_model(self.model_file)
         else:
-            print('Creating and training model')
+            print('Creating and training a new model')
             self.__create_model_and_train()
 
         # Have to initialize before threading (https://stackoverflow.com/questions/40850089/is-keras-thread-safe)

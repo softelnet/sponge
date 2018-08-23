@@ -10,27 +10,23 @@ import traceback
 import sys
 import shutil
 import getopt
+import signal
 
 import mnist_model as model
 
-MNIST_TEMP_DIR = None
-
-# Read the arguments.
-opts, args = getopt.getopt(sys.argv[1:], "d:", ["tempdir="])
-for opt, arg in opts:
-    if opt in ("-d", "--tempdir"):
-        MNIST_TEMP_DIR = arg
-
 class MnistService:
-    def __init__(self, tmp_dir = None):
+    def __init__(self, model_file, tmp_dir = None):
+        self.model_file = model_file
         self.tmp_dir = tmp_dir if tmp_dir else "_tmp_"
         self.ready = False
         self.learn_dir = self.tmp_dir + "/learn"
         self.archive_dir = self.tmp_dir + "/archive"
         print("Using temp dir {:s}".format(self.tmp_dir), flush=True)
+        self.gateway = None
 
-    def startup(self):
-        self.model = model.MnistModel()
+    def startup(self, gateway):
+        self.gateway = gateway
+        self.model = model.MnistModel(self.model_file)
         self.model.load()
         self.__relearn__()
         self.ready = True
@@ -52,7 +48,7 @@ class MnistService:
 
     def predict(self, image_data):
         predictions = self.model.predict(image_data).tolist()
-        result = gateway.jvm.java.util.ArrayList()
+        result = self.gateway.jvm.java.util.ArrayList()
         for prediction in predictions:
             result.add(prediction)
         return result
@@ -81,29 +77,57 @@ class MnistService:
     class Java:
         implements = ["org.openksavi.sponge.tensorflow.mnist.MnistService"]
 
-mnistService = MnistService(MNIST_TEMP_DIR)
+def main():
+    gateway = None
+    try:
+        mnist_model_file = None
+        mnist_temp_dir = None
+        
+        # Read the arguments.
+        opts, args = getopt.getopt(sys.argv[1:], "m:d:", ["modelfile=", "tempdir="])
+        for opt, arg in opts:
+            if opt in ("-m", "--modelfile"):
+                mnist_model_file = arg
+            elif opt in ("-d", "--tempdir"):
+                mnist_temp_dir = arg
+        
+        if mnist_model_file is None:
+            raise Exception("Model file not provided")
+        
+        print("Using model file: {}, temporary directory: {}.".format(mnist_model_file,
+                mnist_temp_dir), flush=True)
+        
+        def sigterm_handler(_signo, _stack_frame):
+            if gateway:
+                gateway.shutdown()
+            sys.exit(0)
 
-PY4J_JAVA_PORT = int(os.getenv("PY4J_JAVA_PORT", -1))
-PY4J_PYTHON_PORT = int(os.getenv("PY4J_PYTHON_PORT", -1))
-PY4J_AUTH_TOKEN = os.getenv("PY4J_AUTH_TOKEN")
+        signal.signal(signal.SIGTERM, sigterm_handler)
+        
+        mnistService = MnistService(mnist_model_file, mnist_temp_dir)
+        
+        py4j_java_port = int(os.getenv("PY4J_JAVA_PORT", -1))
+        py4j_python_port = int(os.getenv("PY4J_PYTHON_PORT", -1))
+        py4j_auth_token = os.getenv("PY4J_AUTH_TOKEN")
+        
+        print("Using ports {:d} for Java, {:d} for Python (-1 means the default port).".format(py4j_java_port,
+                py4j_python_port), flush=True)
+        
+        gateway = ClientServer(python_server_entry_point=mnistService,
+            java_parameters=JavaParameters(
+                port=py4j_java_port if py4j_java_port > -1 else DEFAULT_PORT, auth_token=py4j_auth_token),
+            python_parameters=PythonParameters(
+                port=py4j_python_port if py4j_python_port > -1 else DEFAULT_PYTHON_PROXY_PORT, auth_token=py4j_auth_token))
+    
+        mnistService.startup(gateway)
+        print("MNIST service has started.", flush=True)
+    except:
+        print("MNIST service error.")
+        traceback.print_exc(file=sys.stdout)
+        print("MNIST service has failed to start.", flush=True)
+    finally:
+        sys.stdout.flush()
+        sys.stderr.flush()
 
-print("Using ports {:d} for Java, {:d} for Python (-1 means the default port).".format(PY4J_JAVA_PORT,
-        PY4J_PYTHON_PORT), flush=True)
-
-gateway = ClientServer(python_server_entry_point=mnistService,
-    java_parameters=JavaParameters(
-        port=PY4J_JAVA_PORT if PY4J_JAVA_PORT > -1 else DEFAULT_PORT, auth_token=PY4J_AUTH_TOKEN),
-    python_parameters=PythonParameters(
-        port=PY4J_PYTHON_PORT if PY4J_PYTHON_PORT > -1 else DEFAULT_PYTHON_PROXY_PORT, auth_token=PY4J_AUTH_TOKEN))
-
-try:
-    mnistService.startup()
-except:
-    print("MNIST service error:")
-    traceback.print_exc(file=sys.stdout)
-    raise
-finally:
-    sys.stdout.flush()
-    sys.stderr.flush()
-
-print("MNIST service has started.", flush=True)
+if __name__ == '__main__':
+    main()

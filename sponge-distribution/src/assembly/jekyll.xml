@@ -8,14 +8,14 @@
     <fileSets>
         <fileSet>
             <directory>${project.basedir}/src/jekyll</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
             <excludes>
                 <exclude>_config.yml</exclude>
             </excludes>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/src/jekyll</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
             <filtered>true</filtered>
             <includes>
                 <include>_config.yml</include>
@@ -38,7 +38,7 @@
 
         <fileSet>
             <directory>${project.basedir}/src/asciidoc</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
             <excludes>
                 <exclude>sponge-developer-guide.adoc</exclude>
                 <exclude>sponge-reference.adoc</exclude>

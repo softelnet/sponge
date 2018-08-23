@@ -88,6 +88,12 @@
                     <httpConnector>
                         <port>8080</port>
                     </httpConnector>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>mnist.home</name>
+                            <value>../../sponge-tensorflow/examples/tensorflow/mnist</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -96,6 +102,30 @@
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scripts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>sponge</finalName>
+<!--                             <appendAssemblyId>false</appendAssemblyId> -->
+<!--                             <outputDirectory>${project.build.directory}/scripts</outputDirectory> -->
+                            <descriptors>
+                                <descriptor>src/assembly/scripts.xml</descriptor>
+                            </descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
+                            <attach>false</attach>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
