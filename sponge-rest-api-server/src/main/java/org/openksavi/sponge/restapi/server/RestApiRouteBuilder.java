@@ -114,7 +114,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
     protected void createRestDefinition() {
         // @formatter:off
-        RestDefinition restDefinition = rest(RestApiConstants.BASE_URL).description("Sponge REST API")
+        RestDefinition restDefinition = rest(RestApiConstants.DEFAULT_PATH).description("Sponge REST API")
             .consumes(RestApiConstants.APPLICATION_JSON_VALUE).produces(RestApiConstants.APPLICATION_JSON_VALUE)
             .post(RestApiConstants.OPERATION_VERSION).description("Get the Sponge version").type(GetVersionRequest.class)
                     .outType(GetVersionResponse.class)

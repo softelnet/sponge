@@ -23,11 +23,11 @@ public final class RestApiConstants {
 
     public static final int API_VERSION = 1;
 
-    public static final String BASE_URL = String.format("sponge.json/v%d", API_VERSION);
-
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
     public static final int DEFAULT_PORT = 1836;
+
+    public static final String DEFAULT_PATH = String.format("sponge.json/v%d", API_VERSION);
 
     public static final String OPERATION_VERSION = "version";
 

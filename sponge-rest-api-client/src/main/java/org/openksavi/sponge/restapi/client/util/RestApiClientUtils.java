@@ -16,8 +16,18 @@
 
 package org.openksavi.sponge.restapi.client.util;
 
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.restapi.client.ClientSpongeException;
+
+import okhttp3.OkHttpClient;
 
 /**
  * A set of REST API client utility methods.
@@ -30,5 +40,41 @@ public abstract class RestApiClientUtils {
 
     public static SpongeException wrapException(Throwable e) {
         return e instanceof SpongeException ? (SpongeException) e : new ClientSpongeException(e);
+    }
+
+    public static X509TrustManager createTrustAllTrustManager() {
+        return new X509TrustManager() {
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+
+            @Override
+            public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+            }
+
+            @Override
+            public void checkClientTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+            }
+        };
+    }
+
+    public static SSLContext createTrustAllSSLContext() {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, new TrustManager[] { createTrustAllTrustManager() }, new java.security.SecureRandom());
+
+            return sslContext;
+        } catch (Exception e) {
+            throw RestApiClientUtils.wrapException(e);
+        }
+    }
+
+    public static OkHttpClient createOkHttpClient() {
+        SSLContext sslContext = RestApiClientUtils.createTrustAllSSLContext();
+
+        return new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestApiClientUtils.createTrustAllTrustManager())
+                .hostnameVerifier((String hostname, SSLSession session) -> true).build();
     }
 }

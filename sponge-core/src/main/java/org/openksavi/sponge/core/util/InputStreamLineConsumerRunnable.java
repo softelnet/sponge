@@ -45,10 +45,12 @@ public class InputStreamLineConsumerRunnable implements Runnable {
 
     @Override
     public void run() {
-        new BufferedReader(new InputStreamReader(inputStream, charset)).lines().forEach(lineConsumer);
-
-        if (onEndOfStream != null) {
-            onEndOfStream.run();
+        try {
+            new BufferedReader(new InputStreamReader(inputStream, charset)).lines().forEach(lineConsumer);
+        } finally {
+            if (onEndOfStream != null) {
+                onEndOfStream.run();
+            }
         }
     }
 }

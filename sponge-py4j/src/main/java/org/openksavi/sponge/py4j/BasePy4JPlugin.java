@@ -137,7 +137,7 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
     public void killPythonScript() {
         if (scriptProcess != null) {
-            scriptProcess.getProcess().destroy();
+            scriptProcess.destroy();
         }
     }
 

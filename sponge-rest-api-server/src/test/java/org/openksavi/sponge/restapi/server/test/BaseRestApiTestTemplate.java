@@ -28,13 +28,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.junit.Test;
-import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.RestApiIncorrectKnowledgeBaseVersionClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -45,10 +44,12 @@ import org.openksavi.sponge.type.TypeKind;
 
 public abstract class BaseRestApiTestTemplate {
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
-
     @Inject
     protected SpongeEngine engine;
+
+    @Inject
+    @Named(PortTestConfig.PORT_BEAN_NAME)
+    protected Integer port;
 
     protected abstract SpongeRestApiClient createRestApiClient();
 

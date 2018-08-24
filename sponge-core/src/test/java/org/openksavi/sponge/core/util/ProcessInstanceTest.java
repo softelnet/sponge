@@ -45,6 +45,37 @@ public class ProcessInstanceTest {
         assertEquals("TEST", processInstance.getOutput());
     }
 
+    @Test
+    public void testProcessWaitForOutput() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        SpongeUtils.startProcess(engine, ProcessConfiguration.builder("echo").arguments("MSG").redirectType(RedirectType.LOGGER)
+                .waitForOutputLineRegexp(".*MSG.*").waitForErrorOutputLineRegexp(".*ERROR.*").build());
+    }
+
+    @Test
+    public void testInfiniteProcessWaitForOutputPython() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        ProcessInstance instance = SpongeUtils.startProcess(engine,
+                ProcessConfiguration.builder("python").arguments("src/test/resources/test_infinite_process_wait_for_output.py")
+                        .redirectType(RedirectType.LOGGER).waitForOutputLineRegexp(".*STARTED.*").waitForErrorOutputLineRegexp(".*ERROR.*")
+                        .build());
+
+        instance.destroy();
+    }
+
+    @Test
+    public void testInfiniteProcessWaitForOutputBash() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        ProcessInstance instance = SpongeUtils.startProcess(engine,
+                ProcessConfiguration.builder("bash").arguments("-c").arguments("echo STARTED; sleep 600").redirectType(RedirectType.LOGGER)
+                        .waitForOutputLineRegexp(".*STARTED.*").waitForErrorOutputLineRegexp(".*ERROR.*").build());
+
+        instance.destroy();
+    }
+
     @Test(expected = SpongeException.class)
     public void testProcessWaitForErrorOutput() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();

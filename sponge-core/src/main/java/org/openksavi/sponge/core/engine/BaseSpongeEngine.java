@@ -443,7 +443,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     @Override
     public void requestShutdown() {
-        SpongeUtils.executeConcurrentlyOnce(this, () -> shutdown());
+        SpongeUtils.executeConcurrentlyOnce(this, () -> shutdown(), "shutdown");
     }
 
     private void safelyShutdownModule(EngineModule module, AtomicReference<Throwable> exceptionHolder) {
@@ -642,7 +642,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     @Override
     public void requestReload() {
-        SpongeUtils.executeConcurrentlyOnce(this, () -> reload());
+        SpongeUtils.executeConcurrentlyOnce(this, () -> reload(), "reload");
     }
 
     /**

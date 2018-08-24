@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
@@ -33,14 +34,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.util.SocketUtils;
 
-import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.RestApiInvalidAuthTokenClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
@@ -52,13 +52,15 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @DirtiesContext
 public class AuthTokenExpirationTest {
 
-    private static final int PORT = SocketUtils.findAvailableTcpPort(1836);
-
     @Inject
     protected SpongeEngine engine;
 
+    @Inject
+    @Named(PortTestConfig.PORT_BEAN_NAME)
+    protected Integer port;
+
     @Configuration
-    public static class TestConfig extends SpongeCamelConfiguration {
+    public static class TestConfig extends PortTestConfig {
 
         @Bean
         public SpongeEngine spongeEngine() {
@@ -72,7 +74,7 @@ public class AuthTokenExpirationTest {
         public RestApiServerPlugin spongeRestApiPlugin() {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
 
-            plugin.getSettings().setPort(PORT);
+            plugin.getSettings().setPort(spongeRestApiPort());
             plugin.getSettings().setAllowAnonymous(false);
             plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 
@@ -88,8 +90,9 @@ public class AuthTokenExpirationTest {
     }
 
     protected SpongeRestApiClient createRestApiClient(String username, String password) {
-        return new DefaultSpongeRestApiClient(
-                RestApiClientConfiguration.builder().host("localhost").port(PORT).username(username).password(password).build());
+        return new SpringSpongeRestApiClient(
+                RestApiClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+                        .username(username).password(password).build());
     }
 
     @Test

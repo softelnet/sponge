@@ -25,7 +25,11 @@ import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -60,7 +64,9 @@ public class ProcessInstanceRuntime {
 
     private AtomicReference<String> errorLine = new AtomicReference<>(null);
 
-    private List<InputStreamLineConsumerRunnable> inputStreamLineConsumerRunnables = new ArrayList<>();
+    private List<Future<?>> inputStreamLineConsumerRunnableFutures = new ArrayList<>();
+
+    private ExecutorService executor;
 
     public ProcessInstanceRuntime(SpongeEngine engine, ProcessConfiguration configuration) {
         this.engine = engine;
@@ -94,7 +100,8 @@ public class ProcessInstanceRuntime {
     protected void initState() {
         semaphore.drainPermits();
         errorLine.set(null);
-        inputStreamLineConsumerRunnables.clear();
+        inputStreamLineConsumerRunnableFutures.clear();
+        executor = null;
     }
 
     protected ProcessBuilder createAndConfigureProcessBuilder() {
@@ -146,17 +153,17 @@ public class ProcessInstanceRuntime {
     }
 
     protected int getRequiredFullSemaphorePermits() {
-        return inputStreamLineConsumerRunnables.size();
+        return inputStreamLineConsumerRunnableFutures.size();
     }
 
     protected void optionallySetOutputLogger() {
         if (configuration.getRedirectType() == RedirectType.LOGGER) {
-            inputStreamLineConsumerRunnables
-                    .add(createInputStreamLineConsumerRunnable(instance.getProcess().getInputStream(), logger::info));
-            inputStreamLineConsumerRunnables
-                    .add(createInputStreamLineConsumerRunnable(instance.getProcess().getErrorStream(), logger::warn));
+            List<InputStreamLineConsumerRunnable> runnables =
+                    Arrays.asList(createInputStreamLineConsumerRunnable(instance.getProcess().getInputStream(), logger::info),
+                            createInputStreamLineConsumerRunnable(instance.getProcess().getErrorStream(), logger::warn));
 
-            inputStreamLineConsumerRunnables.forEach(runnable -> SpongeUtils.executeConcurrentlyOnce(engine, runnable));
+            executor = Executors.newFixedThreadPool(runnables.size());
+            runnables.forEach(runnable -> inputStreamLineConsumerRunnableFutures.add(executor.submit(runnable)));
         }
     }
 
@@ -221,7 +228,7 @@ public class ProcessInstanceRuntime {
         }
 
         try {
-            instance = new ProcessInstance(builder.start(), configuration);
+            instance = new ProcessInstance(builder.start(), configuration, this);
         } catch (IOException e) {
             throw SpongeUtils.wrapException(configuration.getName(), e);
         }
@@ -254,5 +261,16 @@ public class ProcessInstanceRuntime {
         optionallyWaitForTheProcessToEnd();
 
         return getInstance();
+    }
+
+    public void destroy() {
+        instance.getProcess().destroyForcibly();
+
+        // Stop thread(s) reading the standard output and the error output.
+        inputStreamLineConsumerRunnableFutures.forEach(future -> future.cancel(true));
+
+        if (executor != null) {
+            SpongeUtils.shutdownExecutorService(engine, "ProcessInstanceRuntime", executor);
+        }
     }
 }

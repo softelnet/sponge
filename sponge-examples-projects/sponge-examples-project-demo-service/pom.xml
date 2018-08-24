@@ -76,7 +76,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>sponge-demo-api</finalName>
         <plugins>
             <!-- Allows running this example with mvn jetty:run. -->
             <!-- Test: curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/version -->

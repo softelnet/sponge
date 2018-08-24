@@ -1,11 +1,11 @@
 # Sponge Knowledge base
-# Standard Ruby library use
-
-require 'net/http'
-require 'openssl'
+# Library use
 
 java_import java.util.Collections
 java_import java.util.HashMap
+java_import java.net.HttpURLConnection
+java_import java.net.URL
+java_import java.util.Collections
 
 def onInit
     # Variables for assertions only
@@ -15,13 +15,12 @@ end
 def checkPageStatus(host)
     begin
         $sponge.logger.debug("Trying {}...", host)
-        uri = URI("https://" + host)
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-        response = http.request(Net::HTTP::Get.new(uri.request_uri))
-        $sponge.logger.debug("Host {} status: {}", host, response.code)
-        return response.code
-    rescue SocketError => e
+        connection = URL.new("https://" + host).openConnection()
+        connection.requestMethod = "GET"
+        connection.connect()
+        $sponge.logger.info("Host {} status: {}", host, connection.responseCode);
+        return connection.responseCode.to_s
+    rescue Exception => e
         $sponge.logger.debug("Host {} error: {}", host, e)
         return "ERROR"
     end
@@ -35,7 +34,7 @@ class HttpStatusTrigger < Trigger
         @mutex = Mutex.new
     end
     def onRun(event)
-        # Using synchronize block in this example because we are not sure that Net::HTTP is thread safe.
+        # Using synchronize block.
         @mutex.synchronize {
             status = checkPageStatus(event.get("host"))
             $sponge.getVariable("hostStatus").put(event.get("host"), status)

@@ -104,4 +104,8 @@ public abstract class RestApiUtils {
             return null;
         }
     }
+
+    public static boolean isHttpSuccess(int code) {
+        return 200 <= code && code <= 299;
+    }
 }
