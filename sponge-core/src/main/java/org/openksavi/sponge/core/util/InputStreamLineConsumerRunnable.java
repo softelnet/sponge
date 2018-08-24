@@ -31,16 +31,24 @@ public class InputStreamLineConsumerRunnable implements Runnable {
 
     private Consumer<String> lineConsumer;
 
+    private Runnable onEndOfStream;
+
     private Charset charset;
 
-    public InputStreamLineConsumerRunnable(InputStream inputStream, Consumer<String> lineConsumer, Charset charset) {
+    public InputStreamLineConsumerRunnable(InputStream inputStream, Consumer<String> lineConsumer, Runnable onEndOfStream,
+            Charset charset) {
         this.inputStream = inputStream;
         this.lineConsumer = lineConsumer;
+        this.onEndOfStream = onEndOfStream;
         this.charset = charset;
     }
 
     @Override
     public void run() {
         new BufferedReader(new InputStreamReader(inputStream, charset)).lines().forEach(lineConsumer);
+
+        if (onEndOfStream != null) {
+            onEndOfStream.run();
+        }
     }
 }

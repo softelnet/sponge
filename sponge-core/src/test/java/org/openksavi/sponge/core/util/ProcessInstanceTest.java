@@ -46,7 +46,7 @@ public class ProcessInstanceTest {
     }
 
     @Test(expected = SpongeException.class)
-    public void testProcessErrorOutput() {
+    public void testProcessWaitForErrorOutput() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         try {
@@ -56,5 +56,13 @@ public class ProcessInstanceTest {
             assertEquals("Error in the subprocess: ERROR", e.getMessage());
             throw e;
         }
+    }
+
+    @Test
+    public void testProcessWaitForNonexistingOutputEarlyExit() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        SpongeUtils.startProcess(engine, ProcessConfiguration.builder("echo").arguments("OK").redirectType(RedirectType.LOGGER)
+                .waitForOutputLineRegexp(".*NONEXISTING.*").build());
     }
 }
