@@ -22,9 +22,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jruby.RubyClass;
 import org.jruby.RubySymbol;
@@ -289,8 +290,15 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
                 .collect(Collectors.toList());
 
         List<Object> autoEnabled = new ArrayList<>();
-        ((Collection) evalResult).forEach(element -> {
-            Object symbol = eval(((RubySymbol) element).asJavaString());
+        ((Collection) evalResult).stream().filter(Objects::nonNull).forEachOrdered(element -> {
+            String symbolString = ((RubySymbol) element).asJavaString();
+            Object symbol = null;
+            try {
+                symbol = eval(symbolString);
+            } catch (Throwable e) {
+                logger.debug("JRuby eval(" + symbolString + ") exception", e);
+            }
+
             if (symbol != null && symbol instanceof RubyClass) {
                 RubyClass rubyClass = (RubyClass) symbol;
                 if (!processorRubyTypes.contains(rubyClass)
@@ -308,7 +316,6 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
         }
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
     protected <T> ScriptClassInstanceProvider<T> createScriptClassInstancePovider() {
         return new CachedScriptClassInstancePovider<EmbedEvalUnit, T>(getEngineOperations().getEngine(),

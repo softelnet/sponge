@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,16 +40,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.util.SocketUtils;
 
-import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.examples.TestComplexObject;
 import org.openksavi.sponge.examples.TestCompoundComplexObject;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -59,13 +58,15 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @DirtiesContext
 public class ComplexObjectRestApiTest {
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
-
     @Inject
     private SpongeEngine engine;
 
+    @Inject
+    @Named(PortTestConfig.PORT_BEAN_NAME)
+    protected Integer port;
+
     @Configuration
-    public static class TestConfig extends SpongeCamelConfiguration {
+    public static class TestConfig extends PortTestConfig {
 
         @Bean
         public SpongeEngine spongeEngine() {
@@ -76,14 +77,15 @@ public class ComplexObjectRestApiTest {
         @Bean
         public RestApiServerPlugin spongeRestApiPlugin() {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
-            plugin.getSettings().setPort(PORT);
+            plugin.getSettings().setPort(spongeRestApiPort());
 
             return plugin;
         }
     }
 
     protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build());
+        return new SpringSpongeRestApiClient(RestApiClientConfiguration.builder()
+                .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
     }
 
     protected TestCompoundComplexObject createTestCompoundComplexObject() {

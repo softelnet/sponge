@@ -16,7 +16,11 @@
 
 package org.openksavi.sponge.core.util;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 
@@ -39,5 +43,17 @@ public class SpongeUtilsTest {
         assertEquals(5, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 15));
         assertEquals(6, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 20));
         assertEquals(2, SpongeUtils.calculateInitialDynamicThreadPoolSize(engine, 8));
+    }
+
+    @Test
+    public void testExecuteConcurrentlyOnce() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+        AtomicBoolean value = new AtomicBoolean(false);
+
+        SpongeUtils.executeConcurrentlyOnce(engine, () -> {
+            value.set(true);
+        }, "test");
+
+        await().atMost(10, TimeUnit.SECONDS).until(() -> value.get());
     }
 }

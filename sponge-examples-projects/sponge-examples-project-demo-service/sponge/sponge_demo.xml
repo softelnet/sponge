@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <properties>
-        <!-- TODO Don't use external scripts! -->
-        <property name="mnistDir">../../sponge-tensorflow/examples/tensorflow/mnist</property>
+        <!-- Set the mnist.home property via the system property in a servlet container environment! -->
+        <!-- <property name="mnist.home">mnist</property> -->
     </properties>
 
     <knowledgeBases>
@@ -26,8 +27,12 @@
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
                     <argument>mnist_service.py</argument>
-                    <workingDir>${mnistDir}/python</workingDir>
+                    <!-- The model file and the temporary directory are specified relative to the Python workingDir. -->
+                    <argument>--modelfile=../data/mnist_model.h5</argument>
+                    <argument>--tempdir=../_tmp_</argument>
+                    <workingDir>${mnist.home}/python</workingDir>
                     <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
+                    <waitForErrorOutputLineRegexp>MNIST service has failed to start.</waitForErrorOutputLineRegexp>
                     <redirectType>LOGGER</redirectType>
                 </pythonScript>
             </configuration>

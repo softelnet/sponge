@@ -76,7 +76,8 @@ public class MnistRestServerTest {
     }
 
     protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build());
+        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+                .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
     }
 
     @SuppressWarnings("unchecked")

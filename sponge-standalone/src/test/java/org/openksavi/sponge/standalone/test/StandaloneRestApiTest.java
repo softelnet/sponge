@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
@@ -42,8 +43,8 @@ public class StandaloneRestApiTest {
 
             String arg1 = "test1";
 
-            SpongeRestApiClient client =
-                    new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).build());
+            SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+                    .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
             Object result = client.call("UpperCase", arg1);
 
             assertTrue(result instanceof String);

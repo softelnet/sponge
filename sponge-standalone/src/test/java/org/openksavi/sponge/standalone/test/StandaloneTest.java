@@ -30,7 +30,7 @@ import org.openksavi.sponge.standalone.StandaloneEngineMain;
 @net.jcip.annotations.NotThreadSafe
 public class StandaloneTest {
 
-    private static final long TIMEOUT = 120;
+    private static final long TIMEOUT = 180;
 
     private static final long SLEEP = 1;
 

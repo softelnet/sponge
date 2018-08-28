@@ -58,7 +58,7 @@ public class InteractiveModeStandaloneTest {
             SpongeUtils.executeConcurrentlyOnce(engine, () -> {
                 engine.startup();
                 engine.getInteractiveMode().loop();
-            });
+            }, "test");
 
             await().atMost(10, TimeUnit.SECONDS)
                     .until(() -> engine != null && engine.isRunning() && engine.getInteractiveMode().isRunning());

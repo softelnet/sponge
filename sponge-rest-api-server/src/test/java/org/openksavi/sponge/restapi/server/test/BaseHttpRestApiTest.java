@@ -24,22 +24,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import org.openksavi.sponge.camel.SpongeCamelConfiguration;
-import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
-@net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { HttpsRestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { BaseHttpRestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class HttpsRestApiTest extends BaseRestApiTestTemplate {
+public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
 
     @Configuration
-    public static class TestConfig extends SpongeCamelConfiguration {
+    public static class TestConfig extends PortTestConfig {
 
         @Bean
         public SpongeEngine spongeEngine() {
@@ -51,20 +46,10 @@ public class HttpsRestApiTest extends BaseRestApiTestTemplate {
         public RestApiServerPlugin spongeRestApiPlugin() {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
 
-            plugin.getSettings().setPort(PORT);
-
-            SslConfiguration sslConfiguration = new SslConfiguration();
-            sslConfiguration.setKeyStore("keystore/rest_api_selfsigned.jks");
-            sslConfiguration.setKeyStorePassword("sponge");
-            sslConfiguration.setKeyPassword("sponge");
-            plugin.getSettings().setSslConfiguration(sslConfiguration);
+            plugin.getSettings().setPort(spongeRestApiPort());
+            // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 
             return plugin;
         }
-    }
-
-    @Override
-    protected DefaultSpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().host("localhost").port(PORT).ssl(true).build());
     }
 }

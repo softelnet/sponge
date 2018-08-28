@@ -18,9 +18,11 @@
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
                     <argument>mnist_service.py</argument>
+                    <argument>--modelfile=${sponge.configDir}/data/mnist_model.h5</argument>
                     <argument>--tempdir=${sponge.configDir}/_tmp_</argument>
                     <workingDir>${sponge.configDir}/python</workingDir>
                     <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
+                    <waitForErrorOutputLineRegexp>MNIST service has failed to start.</waitForErrorOutputLineRegexp>
                     <redirectType>LOGGER</redirectType>
                 </pythonScript>
                 <generateAuthToken>true</generateAuthToken>

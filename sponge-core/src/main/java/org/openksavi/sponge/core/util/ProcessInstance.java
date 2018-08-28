@@ -33,9 +33,12 @@ public class ProcessInstance {
 
     private boolean finished = false;
 
-    public ProcessInstance(Process process, ProcessConfiguration configuration) {
+    private ProcessInstanceRuntime runtime;
+
+    public ProcessInstance(Process process, ProcessConfiguration configuration, ProcessInstanceRuntime runtime) {
         this.process = process;
         this.configuration = configuration;
+        this.runtime = runtime;
         startTime = Instant.now();
     }
 
@@ -69,5 +72,15 @@ public class ProcessInstance {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public ProcessInstanceRuntime getRuntime() {
+        return runtime;
+    }
+
+    public void destroy() {
+        if (runtime != null) {
+            runtime.destroy();
+        }
     }
 }

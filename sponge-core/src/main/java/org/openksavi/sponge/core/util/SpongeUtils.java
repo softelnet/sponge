@@ -245,16 +245,11 @@ public abstract class SpongeUtils {
                 .findFirst().orElse(null);
     }
 
-    public static void executeConcurrentlyOnce(SpongeEngine engine, Runnable runnable) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            try {
-                runnable.run();
-            } catch (Throwable e) {
-                engine.handleError("executeConcurrentlyOnce", e);
-            }
-        });
-        executor.shutdown();
+    public static Thread executeConcurrentlyOnce(SpongeEngine engine, Runnable runnable, String name) {
+        Thread thread = new Thread(runnable, "executeConcurrentlyOnce-" + name);
+        thread.start();
+
+        return thread;
     }
 
     public static String createGlobalLoggerName(KnowledgeBaseEngineOperations knowledgeBaseEngineOperations) {
@@ -278,12 +273,15 @@ public abstract class SpongeUtils {
         return knowledgeBase.getClass().getSimpleName();
     }
 
-    public static void shutdownExecutorService(SpongeEngine engine, Object named, ExecutorService executorService) {
-        MoreExecutors.shutdownAndAwaitTermination(executorService, engine.getDefaultParameters().getExecutorShutdownTimeout(),
-                TimeUnit.SECONDS);
+    public static void shutdownExecutorService(SpongeEngine engine, Object named, ExecutorService executorService, long timeout) {
+        MoreExecutors.shutdownAndAwaitTermination(executorService, timeout, TimeUnit.MILLISECONDS);
         if (!executorService.isTerminated()) {
             logger.warn("Executor for {} hasn't shutdown gracefully.", named);
         }
+    }
+
+    public static void shutdownExecutorService(SpongeEngine engine, Object named, ExecutorService executorService) {
+        shutdownExecutorService(engine, named, executorService, engine.getDefaultParameters().getExecutorShutdownTimeout());
     }
 
     public static ScriptKnowledgeBaseInterpreter getScriptInterpreter(SpongeEngine engine, String kbName) {
