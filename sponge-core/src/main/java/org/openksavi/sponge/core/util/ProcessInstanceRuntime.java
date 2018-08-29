@@ -36,6 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,18 +193,27 @@ public class ProcessInstanceRuntime {
         }
     }
 
-    protected void optionallySetOutputString() {
-        if (configuration.getRedirectType() == RedirectType.STRING) {
-            try (BufferedReader output = new BufferedReader(new InputStreamReader(instance.getProcess().getInputStream(), getCharset()));
-                    BufferedReader errors =
-                            new BufferedReader(new InputStreamReader(instance.getProcess().getErrorStream(), getCharset()))) {
-                instance.setOutput(output.lines().collect(Collectors.joining("\n")));
-                logger.debug("{} output: {}", configuration.getName(), instance.getOutput());
-
+    protected void optionallySetOutputData() {
+        if (configuration.getRedirectType() == RedirectType.STRING || configuration.getRedirectType() == RedirectType.BINARY) {
+            try (BufferedReader errors = new BufferedReader(new InputStreamReader(instance.getProcess().getErrorStream(), getCharset()))) {
                 String errorsString = errors.lines().collect(Collectors.joining("\n"));
                 if (!errorsString.isEmpty()) {
                     throw new SpongeException(configuration.getName() + " error: " + errorsString);
                 }
+            } catch (IOException e) {
+                throw SpongeUtils.wrapException(configuration.getName(), e);
+            }
+        }
+
+        if (configuration.getRedirectType() == RedirectType.STRING) {
+            try (BufferedReader output = new BufferedReader(new InputStreamReader(instance.getProcess().getInputStream(), getCharset()))) {
+                instance.setOutputString(output.lines().collect(Collectors.joining("\n")));
+            } catch (IOException e) {
+                throw SpongeUtils.wrapException(configuration.getName(), e);
+            }
+        } else if (configuration.getRedirectType() == RedirectType.BINARY) {
+            try {
+                instance.setOutputBinary(IOUtils.toByteArray(instance.getProcess().getInputStream()));
             } catch (IOException e) {
                 throw SpongeUtils.wrapException(configuration.getName(), e);
             }
@@ -254,8 +264,8 @@ public class ProcessInstanceRuntime {
 
         optionallyWaitForOutputLine();
 
-        // If specified, set the output string.
-        optionallySetOutputString();
+        // If specified, set the output string or binary.
+        optionallySetOutputData();
 
         // If specified, wait for the process.
         optionallyWaitForTheProcessToEnd();

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.util;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -31,18 +32,18 @@ public class ProcessInstanceTest {
     public void testProcessEcho() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance processInstance = SpongeUtils.startProcess(engine,
+        ProcessInstance process = SpongeUtils.startProcess(engine,
                 ProcessConfiguration.builder("echo").arguments("TEST").redirectType(RedirectType.STRING).build());
-        assertEquals("TEST", processInstance.getOutput());
+        assertEquals("TEST", process.getOutputString());
     }
 
     @Test
     public void testProcessEnv() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance processInstance = SpongeUtils.startProcess(engine, ProcessConfiguration.builder("printenv")
-                .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").redirectType(RedirectType.STRING).build());
-        assertEquals("TEST", processInstance.getOutput());
+        ProcessInstance process = SpongeUtils.startProcess(engine, ProcessConfiguration.builder("printenv").arguments("TEST_VARIABLE")
+                .env("TEST_VARIABLE", "TEST").redirectType(RedirectType.STRING).build());
+        assertEquals("TEST", process.getOutputString());
     }
 
     @Test
@@ -57,23 +58,23 @@ public class ProcessInstanceTest {
     public void testInfiniteProcessWaitForOutputPython() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance instance = SpongeUtils.startProcess(engine,
+        ProcessInstance process = SpongeUtils.startProcess(engine,
                 ProcessConfiguration.builder("python").arguments("src/test/resources/test_infinite_process_wait_for_output.py")
                         .redirectType(RedirectType.LOGGER).waitForOutputLineRegexp(".*STARTED.*").waitForErrorOutputLineRegexp(".*ERROR.*")
                         .build());
 
-        instance.destroy();
+        process.destroy();
     }
 
     @Test
     public void testInfiniteProcessWaitForOutputBash() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance instance = SpongeUtils.startProcess(engine,
+        ProcessInstance process = SpongeUtils.startProcess(engine,
                 ProcessConfiguration.builder("bash").arguments("-c").arguments("echo STARTED; sleep 600").redirectType(RedirectType.LOGGER)
                         .waitForOutputLineRegexp(".*STARTED.*").waitForErrorOutputLineRegexp(".*ERROR.*").build());
 
-        instance.destroy();
+        process.destroy();
     }
 
     @Test(expected = SpongeException.class)
@@ -95,5 +96,14 @@ public class ProcessInstanceTest {
 
         SpongeUtils.startProcess(engine, ProcessConfiguration.builder("echo").arguments("OK").redirectType(RedirectType.LOGGER)
                 .waitForOutputLineRegexp(".*NONEXISTING.*").build());
+    }
+
+    @Test
+    public void testProcessRedirectToBinary() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+
+        ProcessInstance process = SpongeUtils.startProcess(engine,
+                ProcessConfiguration.builder("echo").arguments("-n").arguments("MSG").redirectType(RedirectType.BINARY).build());
+        assertArrayEquals(new byte[] { 'M', 'S', 'G' }, process.getOutputBinary());
     }
 }

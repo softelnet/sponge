@@ -27,7 +27,9 @@ public class ProcessInstance {
 
     private ProcessConfiguration configuration;
 
-    private String output;
+    private String outputString;
+
+    private byte[] outputBinary;
 
     private Instant startTime;
 
@@ -50,12 +52,20 @@ public class ProcessInstance {
         return configuration;
     }
 
-    public void setOutput(String output) {
-        this.output = output;
+    public String getOutputString() {
+        return outputString;
     }
 
-    public String getOutput() {
-        return output;
+    public void setOutputString(String outputString) {
+        this.outputString = outputString;
+    }
+
+    public byte[] getOutputBinary() {
+        return outputBinary;
+    }
+
+    public void setOutputBinary(byte[] outputBinary) {
+        this.outputBinary = outputBinary;
     }
 
     public Instant getStartTime() {

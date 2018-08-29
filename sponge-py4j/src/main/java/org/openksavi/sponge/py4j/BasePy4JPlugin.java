@@ -129,8 +129,8 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
             }
 
             scriptProcess = SpongeUtils.startProcess(getEngine(), finalConfiguration);
-            if (scriptProcess.getOutput() != null) {
-                logger.info("Python script output: {}", scriptProcess.getOutput());
+            if (scriptProcess.getOutputString() != null) {
+                logger.info("Python script output: {}", scriptProcess.getOutputString());
             }
         }
     }

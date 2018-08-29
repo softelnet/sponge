@@ -6,6 +6,13 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.4.2 (not released yet)
+
+* Changes in the REST API Java client, e.g. a full URL instead of hostname/port in a configuration, support a the OkHttp-based client (default) and for a Spring-based client (optional).
+* Enhancements in running external executable as a subprocess, e.g. binary redirect type, waiting for an error line from the subprocess text output.
+* Libraries upgrade.
+
+[discrete]
 == 1.4.1 (2018-08-22)
 
 * API change: A processor `meta` property has been renamed to `features`.

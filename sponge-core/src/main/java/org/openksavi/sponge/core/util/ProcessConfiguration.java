@@ -62,10 +62,16 @@ public class ProcessConfiguration implements Cloneable {
         INHERIT,
 
         /**
-         * Writes all subprocess standard output and error output to a {@code ProcessInstance.output} string. The thread that started the
-         * subprocess will wait for the subprocess to exit.
+         * Writes all subprocess standard output and error output to the {@code ProcessInstance.outputString} string. The thread that
+         * started the subprocess will wait for the subprocess to exit.
          */
         STRING,
+
+        /**
+         * Writes all subprocess standard output and error output to the {@code ProcessInstance.outputBinary} byte array. The thread that
+         * started the subprocess will wait for the subprocess to exit.
+         */
+        BINARY,
 
         /** No redirection will be set. */
         NONE

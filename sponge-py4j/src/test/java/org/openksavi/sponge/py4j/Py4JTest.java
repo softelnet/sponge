@@ -45,7 +45,7 @@ public class Py4JTest {
 
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getInfo(),
-                            engine.getTriggers().size(), engine.getTriggers().get(0).getName()).equals(processInstance.getOutput()));
+                            engine.getTriggers().size(), engine.getTriggers().get(0).getName()).equals(processInstance.getOutputString()));
             assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } finally {
@@ -66,7 +66,7 @@ public class Py4JTest {
                     .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);
 
             assertEquals(String.format("Connected to %s\nTriggers count: %d, first: %s", engine.getInfo(), engine.getTriggers().size(),
-                    engine.getTriggers().get(0).getName()), processInstance.getOutput());
+                    engine.getTriggers().get(0).getName()), processInstance.getOutputString());
             assertEquals(1, engine.getOperations().getVariable(Number.class, "eventCounter").intValue());
             assertFalse(engine.isError());
         } finally {
