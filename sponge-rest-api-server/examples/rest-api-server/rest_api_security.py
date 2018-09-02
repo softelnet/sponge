@@ -6,7 +6,7 @@ REST API security
 from org.openksavi.sponge.restapi.server.security import User
 
 # Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "guest":["example"]}
+ROLES_TO_KB = { "admin":[".*"], "guest":["example"], "anonymous":["example"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):
@@ -14,9 +14,6 @@ class RestApiCanUseKnowledgeBase(Action):
 
 
 def onStartup():
-    # Set up users.
-    securityService = restApiServer.service.securityService
-    
     # Set up users. To hash a password use (on Mac): echo -n <username><password> | shasum -a 256 | awk '{ print $1 }'
     # Note that the user name must be lower case.
     securityService = restApiServer.service.securityService

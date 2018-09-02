@@ -16,30 +16,60 @@
 
 package org.openksavi.sponge.examples.project.demoservice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertEquals;
 
+import java.nio.file.Paths;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.util.SocketUtils;
+
+import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.tensorflow.util.ImageUtils;
+
+@net.jcip.annotations.NotThreadSafe
 public class DemoServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(DemoServiceTest.class);
+    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
 
-    // @Test
-    // public void testCamelRssNews() throws InterruptedException {
-    // CamelRssNewsExampleMain example = new CamelRssNewsExampleMain();
-    // try {
-    // example.startup();
-    // SpongeEngine engine = example.getEngine();
-    //
-    // await().atMost(60, TimeUnit.SECONDS)
-    // .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "alarmSounded").get()
-    // && engine.getOperations().getVariable(AtomicBoolean.class, "alarmForwarded").get()
-    // && engine.getOperations().getVariable(AtomicBoolean.class, "sourceRoutesStopped").get());
-    //
-    // if (engine.isError()) {
-    // Assert.fail(engine.getError().toString());
-    // }
-    // } finally {
-    // example.shutdown();
-    // }
-    // }
+    protected static final DemoServiceTestEnvironment environment = new DemoServiceTestEnvironment();
+
+    @BeforeClass
+    public static void beforeClass() {
+        environment.init();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        environment.clear();
+    }
+
+    @Before
+    public void start() {
+        environment.start(PORT);
+    }
+
+    @After
+    public void stop() {
+        environment.stop();
+    }
+
+    protected SpongeRestApiClient createRestApiClient() {
+        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+                .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
+    }
+
+    @Test
+    public void testRestCallPredict() {
+        byte[] imageData = ImageUtils
+                .getImageBytes(Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
+
+        assertEquals(5, createRestApiClient().call(Number.class, "MnistPredict", imageData));
+    }
 }

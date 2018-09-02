@@ -310,7 +310,7 @@ public class DefaultRestApiService implements RestApiService {
         } else {
             if (request.getUsername() == null) {
                 if (settings.isAllowAnonymous()) {
-                    return RestApiServerUtils.createAnonymousUser(settings.getGuestRole());
+                    return RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole());
                 } else {
                     throw new SpongeException("Anonymous access is not allowed");
                 }

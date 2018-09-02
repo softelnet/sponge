@@ -67,13 +67,14 @@ class MpdLibrary:
                 selectedAlbums.append(album)
         return selectedAlbums
 
-    def setAndPlayPlaylist(self, albums):
+    def setAndPlayPlaylist(self, albums, autoPlay):
         if len(albums) == 0:
             return
         mpd.server.playlist.clearPlaylist()
         mpd.server.playlist.insertAlbum(albums[0])
-        # Play immediately after inserting the first album
-        mpd.server.player.play()
+        if autoPlay:
+            # Play immediately after inserting the first album
+            mpd.server.player.play()
         for album in albums[1:]:
             mpd.server.playlist.insertAlbum(album) 
 
@@ -86,9 +87,11 @@ class MpdSetAndPlayPlaylist(Action):
             ArgMeta("album", StringType()).required(False).displayName("Album").description("Album may be specified as a regular expression."),
             ArgMeta("genre", StringType()).required(False).displayName("Genre").description("Genre may be specified as a regular expression."),
             ArgMeta("minYear", IntegerType()).required(False).displayName("Release year (since)").description("An album minimum release year."),
-            ArgMeta("maxYear", IntegerType()).required(False).displayName("Release year (to)").description("An album maximum release year.")]
+            ArgMeta("maxYear", IntegerType()).required(False).displayName("Release year (to)").description("An album maximum release year."),
+            ArgMeta("autoPlay", BooleanType()).required(False).displayName("Auto play").description("Plays the playlist automatically."),
+        ]
         self.resultMeta = ResultMeta(StringType()).displayName("Info").description("A short info of the status of the action call.")
-    def onCall(self, aArtist, aAlbum, aGenre, aMinYear, aMaxYear):
+    def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         library = MpdLibrary()
 
         albums = mpd.server.musicDatabase.albumDatabase.listAllAlbums()
@@ -97,9 +100,9 @@ class MpdSetAndPlayPlaylist(Action):
 
         sponge.logger.info("Setting the playlist...")
         # Set the playlist
-        selectedAlbums = library.selectAlbums(albums, aArtist, aAlbum, aGenre, aMinYear, aMaxYear, useSimpleRegexp = True)
+        selectedAlbums = library.selectAlbums(albums, artist, album, genre, minYear, maxYear, useSimpleRegexp = True)
         if len(selectedAlbums) > 0:
-            library.setAndPlayPlaylist(selectedAlbums)
+            library.setAndPlayPlaylist(selectedAlbums, autoPlay)
             return "The playlist is set, {} albums found".format(len(selectedAlbums))
         else:
             return "No matching albums found"

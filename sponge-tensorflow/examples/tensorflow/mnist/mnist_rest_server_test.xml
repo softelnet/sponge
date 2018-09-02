@@ -3,7 +3,9 @@
 
     <knowledgeBases>
         <knowledgeBase name="mnist" displayName="MNIST">
-            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library.py</file>
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_predict.py</file>
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_admin.py</file>
             <file>mnist_rest_server.py</file>
         </knowledgeBase>
     </knowledgeBases>

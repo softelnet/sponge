@@ -27,7 +27,7 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
     private User createAnonymousUser() {
-        return RestApiServerUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_GUEST);
+        return RestApiServerUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_ANONYMOUS);
     }
 
     @Override

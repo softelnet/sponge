@@ -62,7 +62,7 @@ public class RestApiSettings {
 
     private String adminRole = RestApiServerConstants.DEFAULT_ROLE_ADMIN;
 
-    private String guestRole = RestApiServerConstants.DEFAULT_ROLE_GUEST;
+    private String anonymousRole = RestApiServerConstants.DEFAULT_ROLE_ANONYMOUS;
 
     private boolean includeDetailedErrorMessage = RestApiServerConstants.DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE;
 
@@ -165,12 +165,12 @@ public class RestApiSettings {
         this.adminRole = adminRole;
     }
 
-    public String getGuestRole() {
-        return guestRole;
+    public String getAnonymousRole() {
+        return anonymousRole;
     }
 
-    public void setGuestRole(String guestRole) {
-        this.guestRole = guestRole;
+    public void setAnonymousRole(String anonymousRole) {
+        this.anonymousRole = anonymousRole;
     }
 
     public boolean isIncludeDetailedErrorMessage() {

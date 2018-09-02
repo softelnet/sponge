@@ -83,7 +83,7 @@ public final class RestApiServerConstants {
 
     public static final String DEFAULT_ROLE_ADMIN = "admin";
 
-    public static final String DEFAULT_ROLE_GUEST = "guest";
+    public static final String DEFAULT_ROLE_ANONYMOUS = "anonymous";
 
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 

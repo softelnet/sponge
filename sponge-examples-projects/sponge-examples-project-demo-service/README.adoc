@@ -1,0 +1,5 @@
+= Sponge Demo service
+
+This is a source code for the Sponge Demo service.
+
+The example file `password.txt` contains the hashed password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. It should be used only for development and tests.

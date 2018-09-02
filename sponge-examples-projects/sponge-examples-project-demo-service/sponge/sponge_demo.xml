@@ -3,8 +3,9 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <properties>
-        <!-- Set the mnist.home property via the system property in a servlet container environment! -->
+        <!-- Set these properties via system properties in a servlet container environment! -->
         <!-- <property name="mnist.home">mnist</property> -->
+        <!-- <property name="password.file">password.txt</property> -->
     </properties>
 
     <knowledgeBases>
@@ -12,11 +13,19 @@
             <file>sponge_demo.py</file>
         </knowledgeBase>
         <knowledgeBase name="digits" displayName="Digits">
-            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library.py</file>
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_predict.py</file>
             <file>mnist_demo.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="digitsAdmin" displayName="Digits admin">
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
+            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_admin.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" displayName="Security">
+            <file>rest_api_security.py</file>
         </knowledgeBase>
     </knowledgeBases>
 

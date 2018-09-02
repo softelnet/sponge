@@ -246,7 +246,7 @@ The simple security strategy uses in-memory user data. User privileges and acces
 from org.openksavi.sponge.restapi.server.security import User
 
 # Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"]}
+ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"], "anonymous":["mpd"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):

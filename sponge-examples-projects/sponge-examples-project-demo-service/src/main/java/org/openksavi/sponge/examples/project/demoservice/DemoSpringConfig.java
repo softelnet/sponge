@@ -27,6 +27,8 @@ import org.springframework.context.annotation.Configuration;
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
+import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
+import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @Configuration
@@ -44,14 +46,21 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
     public RestApiServerPlugin spongeRestApiPlugin() {
         RestApiServerPlugin plugin = new RestApiServerPlugin();
 
-        // Use the web application port.
-        plugin.getSettings().setPort(null);
+        // Use the servlet configuration.
         plugin.getSettings().setRestComponentId("servlet");
+
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
 
         plugin.setCamelContext(camelContext.get());
 
+        plugin.setSecurityService(restApiSecurityService());
+
         return plugin;
+    }
+
+    @Bean
+    public RestApiSecurityService restApiSecurityService() {
+        return new SimpleSpringInMemorySecurityService();
     }
 }
