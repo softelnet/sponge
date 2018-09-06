@@ -18,8 +18,6 @@ package org.openksavi.sponge.core.action;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang3.Validate;
-
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
@@ -76,7 +74,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     public void validate() {
         super.validate();
 
-        Validate.isTrue(getArgsMeta() != null && getResultMeta() != null || getArgsMeta() == null && getResultMeta() == null,
+        SpongeUtils.isTrue(getArgsMeta() != null && getResultMeta() != null || getArgsMeta() == null && getResultMeta() == null,
                 "Both argument metadata and result metadata must be set or not");
 
         if (getArgsMeta() != null) {

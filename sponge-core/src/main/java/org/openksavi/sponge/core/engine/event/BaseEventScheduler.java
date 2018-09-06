@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.openksavi.sponge.core.engine.BaseEngineModule;
 import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
@@ -60,6 +61,8 @@ public abstract class BaseEventScheduler extends BaseEngineModule implements Eve
      */
     @Override
     public void scheduleNow(Event event) {
+        SpongeUtils.isTrue(event.getId() == null && event.getTime() == null, "The event with id %s has already been sent", event.getId());
+
         event.setId(eventIdGenerator.getNext());
         event.setTime(Instant.now());
 

@@ -18,12 +18,11 @@ package org.openksavi.sponge.core;
 
 import java.util.function.Supplier;
 
-import org.apache.commons.lang3.Validate;
-
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.AttributeMapEvent;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
@@ -59,7 +58,8 @@ public class BaseEngineOperations implements EngineOperations {
     public <T> T call(Class<T> resultClass, String actionName, Object... args) {
         Object result = engine.getActionManager().callAction(actionName, args);
 
-        Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
+        SpongeUtils.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s",
+                resultClass);
 
         return (T) result;
     }

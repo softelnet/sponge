@@ -204,7 +204,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         result.getDefinition().setProcessorClass(processor.getClass());
 
         if (requiredType != null) {
-            Validate.isTrue(adapter.getType() == requiredType, "% is % but should be %", adapter.getName(),
+            SpongeUtils.isTrue(adapter.getType() == requiredType, "% is % but should be %", adapter.getName(),
                     adapter.getType().getDisplayName(), requiredType.getDisplayName());
         }
 
@@ -226,7 +226,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         // Must be verified after onConfigure, because onConfigure may change for example the name of the processor.
         Optional<Map.Entry<ProcessorType, RegistrationHandler>> alreadyRegistered = findAlreadyRegisteredByDifferentType(adapter);
         if (alreadyRegistered.isPresent()) {
-            Validate.isTrue(false, "% named '%' has already been registered as % type", adapter.getType().getDisplayName(),
+            SpongeUtils.isTrue(false, "% named '%' has already been registered as % type", adapter.getType().getDisplayName(),
                     adapter.getName(), alreadyRegistered.get().getKey().getDisplayName());
         }
 

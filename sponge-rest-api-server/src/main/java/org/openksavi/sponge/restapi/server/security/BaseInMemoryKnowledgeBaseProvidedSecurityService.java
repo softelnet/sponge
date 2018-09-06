@@ -24,7 +24,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.Validate;
+
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends KnowledgeBaseProvidedSecurityService {
 
@@ -39,7 +40,7 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     }
 
     public void addUser(User user) {
-        Validate.isTrue(users.add(user), "User %s already exists", user.getName());
+        SpongeUtils.isTrue(users.add(user), "User %s already exists", user.getName());
     }
 
     public void removeUser(String username) {
@@ -50,7 +51,7 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     public User getUser(String username) {
         Optional<User> userO = users.stream().filter(user -> Objects.equals(user.getName(), username)).findFirst();
 
-        Validate.isTrue(userO.isPresent(), "User %s not found", username);
+        SpongeUtils.isTrue(userO.isPresent(), "User %s not found", username);
 
         return userO.get();
     }

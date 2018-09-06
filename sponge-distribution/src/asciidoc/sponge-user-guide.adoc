@@ -186,10 +186,10 @@ An event may be to sent as:
 |Sends an event immediately.
 
 |`sendAfter(delay)`
-|Sends an event after the specified time (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
+|Sends an event after a specified time (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). Note that the order of inserting events to the Input Event Queue may be different than the order of invocations of `sendAfter`, even with the same `delay`. It depends on the internal implementation of the Quartz library.
 
 |`sendAfter(delay, interval)`
-|Periodically sends events after the specified time (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]) every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
+|Periodically sends events after a specified time (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]) every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
 
 |`sendAt(at)`
 |Sends an event at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970 or as an {javaSeJavaDocUrl}/java/time/Instant.html[`Instant`]).

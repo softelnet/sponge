@@ -70,6 +70,14 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
                 .forEachOrdered(pluginConfig -> addPlugin(createAndConfigurePlugin(pluginConfig)));
     }
 
+    protected boolean isValidPluginName(String name) {
+        if (name == null) {
+            return true;
+        }
+
+        return StringUtils.isAlphanumeric(name) && !name.equals(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS);
+    }
+
     /**
      * Creates and configures a plugin.
      *
@@ -91,13 +99,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
 
         Plugin plugin = createPluginStub(pluginName, knowledgeBaseName, className);
 
-        if (existsPlugin(plugin.getName())) {
-            throw new SpongeException("Plugin '" + plugin.getName() + "' already exists.");
-        }
-
-        if (plugin.getName() != null && plugin.getName().equals(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS)) {
-            throw new SpongeException("Invalid plugin name: " + plugin.getName());
-        }
+        SpongeUtils.isTrue(!existsPlugin(plugin.getName()), "Plugin '%' already exists.", plugin.getName());
+        SpongeUtils.isTrue(isValidPluginName(plugin.getName()), "Invalid plugin name '%'", plugin.getName());
 
         plugin.setDisplayName(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_DISPLAY_NAME, null));
         plugin.setDescription(pluginConfig.getString(PluginManagerConstants.CFG_PLUGIN_DESCRIPTION, null));

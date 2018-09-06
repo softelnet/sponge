@@ -684,6 +684,12 @@ public abstract class SpongeUtils {
         return UUID.randomUUID().toString();
     }
 
+    public static void isTrue(final boolean expression, final String message, final Object... values) {
+        if (!expression) {
+            throw new SpongeException(String.format(message, values));
+        }
+    }
+
     protected SpongeUtils() {
         //
     }

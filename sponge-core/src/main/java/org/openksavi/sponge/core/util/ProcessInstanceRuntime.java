@@ -37,7 +37,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,10 +90,10 @@ public class ProcessInstanceRuntime {
     }
 
     protected void validate() {
-        Validate.isTrue(outputConsumer == null || configuration.getRedirectType() == RedirectType.LOGGER,
+        SpongeUtils.isTrue(outputConsumer == null || configuration.getRedirectType() == RedirectType.LOGGER,
                 "If the output consumer is provided, the redirect type must be LOGGER");
 
-        Validate.isTrue(!shouldWaitForOutputLine() || configuration.getRedirectType() == RedirectType.LOGGER,
+        SpongeUtils.isTrue(!shouldWaitForOutputLine() || configuration.getRedirectType() == RedirectType.LOGGER,
                 "If the waiting for an output line is set, the redirect type must be LOGGER");
     }
 
@@ -175,7 +174,7 @@ public class ProcessInstanceRuntime {
                 if (configuration.getWaitForOutputLineTimeout() == null) {
                     semaphore.acquire(getRequiredFullSemaphorePermits());
                 } else {
-                    Validate.isTrue(semaphore.tryAcquire(getRequiredFullSemaphorePermits(), configuration.getWaitForOutputLineTimeout(),
+                    SpongeUtils.isTrue(semaphore.tryAcquire(getRequiredFullSemaphorePermits(), configuration.getWaitForOutputLineTimeout(),
                             TimeUnit.SECONDS), "Process wait timeout exceeded");
                 }
             } catch (InterruptedException e) {
@@ -250,7 +249,7 @@ public class ProcessInstanceRuntime {
      * @return a new process instance.
      */
     public ProcessInstance start() {
-        Validate.isTrue(instance == null, "The process has already started");
+        SpongeUtils.isTrue(instance == null, "The process has already started");
 
         validate();
 
