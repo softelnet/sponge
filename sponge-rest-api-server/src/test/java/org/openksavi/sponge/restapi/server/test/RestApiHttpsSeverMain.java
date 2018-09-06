@@ -55,6 +55,8 @@ public class RestApiHttpsSeverMain {
             sslConfiguration.setKeyPassword("sponge");
             plugin.getSettings().setSslConfiguration(sslConfiguration);
 
+            plugin.getSettings().setPublishReload(true);
+
             return plugin;
         }
     }

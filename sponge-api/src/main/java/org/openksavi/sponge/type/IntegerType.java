@@ -18,7 +18,10 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class IntegerType extends Type {
+/**
+ * An integer type that supports long as well (internally uses {@code Number}).
+ */
+public class IntegerType extends Type<Number> {
 
     private Long minValue;
 
@@ -55,6 +58,11 @@ public class IntegerType extends Type {
     @Override
     public IntegerType feature(String name, Object value) {
         return (IntegerType) super.feature(name, value);
+    }
+
+    @Override
+    public IntegerType defaultValue(Number value) {
+        return (IntegerType) super.defaultValue(value);
     }
 
     public IntegerType minValue(Long minValue) {

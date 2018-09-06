@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * A data type. Used for example in action arguments metadata.
  */
-public class Type {
+public class Type<T> {
 
     private TypeKind kind;
 
@@ -34,6 +34,8 @@ public class Type {
     private List<String> tags = new ArrayList<>();
 
     private Map<String, Object> features = new LinkedHashMap<>();
+
+    private T defaultValue;
 
     @SuppressWarnings("unused")
     private Type() {
@@ -44,27 +46,32 @@ public class Type {
         this.kind = kind;
     }
 
-    public Type format(String format) {
+    public Type<T> format(String format) {
         setFormat(format);
         return this;
     }
 
-    public Type tags(String... tags) {
+    public Type<T> tags(String... tags) {
         this.tags.addAll(Arrays.asList(tags));
         return this;
     }
 
-    public Type tag(String tag) {
+    public Type<T> tag(String tag) {
         return tags(tag);
     }
 
-    public Type features(Map<String, Object> features) {
+    public Type<T> features(Map<String, Object> features) {
         this.features.putAll(features);
         return this;
     }
 
-    public Type feature(String name, Object value) {
+    public Type<T> feature(String name, Object value) {
         features.put(name, value);
+        return this;
+    }
+
+    public Type<T> defaultValue(T value) {
+        setDefaultValue(value);
         return this;
     }
 
@@ -94,5 +101,13 @@ public class Type {
 
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
+    }
+
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(T defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }

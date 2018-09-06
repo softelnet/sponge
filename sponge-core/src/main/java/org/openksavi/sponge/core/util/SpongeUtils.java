@@ -129,6 +129,7 @@ public abstract class SpongeUtils {
 
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
+    @SuppressWarnings("rawtypes")
     private static final List<Class<? extends Type>> SUPPORTED_TYPES =
             Arrays.asList(ActionType.class, AnyType.class, BinaryType.class, BooleanType.class, IntegerType.class, ListType.class,
                     MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
@@ -618,6 +619,7 @@ public abstract class SpongeUtils {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void validateType(Type type, String valueName) {
         switch (type.getKind()) {
         case OBJECT:
@@ -641,6 +643,7 @@ public abstract class SpongeUtils {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static List<Class<? extends Type>> getSupportedTypes() {
         return SUPPORTED_TYPES;
     }

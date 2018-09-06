@@ -9,7 +9,7 @@ class MultipleArgumentsAction(Action):
         self.description = "Multiple arguments action."
         self.argsMeta = [
             ArgMeta("stringArg", StringType().maxLength(10).format("ipAddress")),
-            ArgMeta("integerArg", IntegerType().minValue(1).maxValue(100)),
+            ArgMeta("integerArg", IntegerType().minValue(1).maxValue(100).defaultValue(50)),
             ArgMeta("anyArg", AnyType()),
             ArgMeta("stringListArg", ListType(StringType())),
             ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),

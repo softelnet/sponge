@@ -18,7 +18,7 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class NumberType extends Type {
+public class NumberType extends Type<Number> {
 
     private Number minValue;
 
@@ -55,6 +55,11 @@ public class NumberType extends Type {
     @Override
     public NumberType feature(String name, Object value) {
         return (NumberType) super.feature(name, value);
+    }
+
+    @Override
+    public NumberType defaultValue(Number value) {
+        return (NumberType) super.defaultValue(value);
     }
 
     public NumberType minValue(Number minValue) {

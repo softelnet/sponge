@@ -51,7 +51,9 @@ public class RestApiSeverMain {
 
         @Bean
         public RestApiServerPlugin spongeRestApiPlugin() {
-            return new RestApiServerPlugin();
+            RestApiServerPlugin plugin = new RestApiServerPlugin();
+            plugin.getSettings().setPublishReload(true);
+            return plugin;
         }
     }
 

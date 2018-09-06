@@ -76,6 +76,9 @@ Metadata for argument and result types support types that are represented by cla
 |`format`
 |An optional format.
 
+|`defaultValue`
+|An optional default value.
+
 |`tags` (or `tag`)
 |Optional tags (text labels).
 
@@ -145,7 +148,7 @@ class MultipleArgumentsAction(Action):
         self.displayName = "Multiple arguments action"
         self.argsMeta = [
             ArgMeta("stringArg", StringType().maxLength(10).format("ipAddress")),
-            ArgMeta("integerArg", IntegerType().minValue(1).maxValue(100)),
+            ArgMeta("integerArg", IntegerType().minValue(1).maxValue(100).defaultValue(50)),
             ArgMeta("anyArg", AnyType()),
             ArgMeta("stringListArg", ListType(StringType())),
             ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),

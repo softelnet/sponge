@@ -108,6 +108,7 @@ public class CoreActionsTest {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void testActionsMetadataTypes() {
         SpongeEngine engine =
@@ -129,11 +130,13 @@ public class CoreActionsTest {
             assertEquals(true, argMeta[0].isRequired());
             assertEquals(null, argMeta[0].getDisplayName());
             assertEquals(null, argMeta[0].getDescription());
+            assertNull(argMeta[0].getType().getDefaultValue());
 
             assertEquals("integerArg", argMeta[1].getName());
             assertEquals(TypeKind.INTEGER, argMeta[1].getType().getKind());
             assertEquals(1, ((IntegerType) argMeta[1].getType()).getMinValue().intValue());
             assertEquals(100, ((IntegerType) argMeta[1].getType()).getMaxValue().intValue());
+            assertEquals(50, argMeta[1].getType().getDefaultValue());
 
             assertEquals("anyArg", argMeta[2].getName());
             assertEquals(TypeKind.ANY, argMeta[2].getType().getKind());
@@ -182,7 +185,7 @@ public class CoreActionsTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testActionsActionType() {
         SpongeEngine engine =

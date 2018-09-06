@@ -18,53 +18,60 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class MapType extends Type {
+@SuppressWarnings("unchecked")
+public class MapType<K, V> extends Type<Map<K, V>> {
 
-    private Type keyType;
+    private Type<?> keyType;
 
-    private Type valueType;
+    private Type<?> valueType;
 
     public MapType() {
-        this(new AnyType(), new AnyType());
+        super(TypeKind.MAP);
+        this.keyType = new AnyType();
+        this.valueType = new AnyType();
     }
 
-    public MapType(Type keyType, Type valueType) {
+    public MapType(Type<K> keyType, Type<V> valueType) {
         super(TypeKind.MAP);
-
         this.keyType = keyType;
         this.valueType = valueType;
     }
 
     @Override
-    public MapType format(String format) {
-        return (MapType) super.format(format);
+    public MapType<K, V> format(String format) {
+        return (MapType<K, V>) super.format(format);
     }
 
     @Override
-    public MapType tags(String... tags) {
-        return (MapType) super.tags(tags);
+    public MapType<K, V> tags(String... tags) {
+        return (MapType<K, V>) super.tags(tags);
     }
 
     @Override
-    public MapType tag(String tag) {
-        return (MapType) super.tag(tag);
+    public MapType<K, V> tag(String tag) {
+        return (MapType<K, V>) super.tag(tag);
     }
 
     @Override
-    public MapType features(Map<String, Object> features) {
-        return (MapType) super.features(features);
+    public MapType<K, V> features(Map<String, Object> features) {
+        return (MapType<K, V>) super.features(features);
     }
 
     @Override
-    public MapType feature(String name, Object value) {
-        return (MapType) super.feature(name, value);
+    public MapType<K, V> feature(String name, Object value) {
+        return (MapType<K, V>) super.feature(name, value);
     }
 
-    public Type getKeyType() {
-        return keyType;
+    @Override
+    public MapType<K, V> defaultValue(Map<K, V> value) {
+        return (MapType<K, V>) super.defaultValue(value);
     }
 
-    public Type getValueType() {
-        return valueType;
+    public Type<K> getKeyType() {
+        return (Type<K>) keyType;
+    }
+
+    public Type<V> getValueType() {
+        return (Type<V>) valueType;
     }
 }

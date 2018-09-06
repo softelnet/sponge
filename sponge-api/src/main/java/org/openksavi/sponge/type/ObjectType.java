@@ -18,7 +18,7 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class ObjectType extends Type {
+public class ObjectType<T> extends Type<T> {
 
     private String className;
 
@@ -33,28 +33,33 @@ public class ObjectType extends Type {
     }
 
     @Override
-    public ObjectType format(String format) {
-        return (ObjectType) super.format(format);
+    public ObjectType<T> format(String format) {
+        return (ObjectType<T>) super.format(format);
     }
 
     @Override
-    public ObjectType tags(String... tags) {
-        return (ObjectType) super.tags(tags);
+    public ObjectType<T> tags(String... tags) {
+        return (ObjectType<T>) super.tags(tags);
     }
 
     @Override
-    public ObjectType tag(String tag) {
-        return (ObjectType) super.tag(tag);
+    public ObjectType<T> tag(String tag) {
+        return (ObjectType<T>) super.tag(tag);
     }
 
     @Override
-    public ObjectType features(Map<String, Object> features) {
-        return (ObjectType) super.features(features);
+    public ObjectType<T> features(Map<String, Object> features) {
+        return (ObjectType<T>) super.features(features);
     }
 
     @Override
-    public ObjectType feature(String name, Object value) {
-        return (ObjectType) super.feature(name, value);
+    public ObjectType<T> feature(String name, Object value) {
+        return (ObjectType<T>) super.feature(name, value);
+    }
+
+    @Override
+    public ObjectType<T> defaultValue(T value) {
+        return (ObjectType<T>) super.defaultValue(value);
     }
 
     public String getClassName() {

@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.openksavi.sponge.type.Type;
 
 @ApiModel(value = "ActionResultMeta", description = "Represents a Sponge action result metadata")
+@SuppressWarnings("rawtypes")
 public class RestActionResultMeta {
 
     private Type type;

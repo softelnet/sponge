@@ -19,6 +19,7 @@ package org.openksavi.sponge.type;
 /**
  * Data type kind.
  */
+@SuppressWarnings("rawtypes")
 public enum TypeKind {
     STRING(StringType.class),
     NUMBER(NumberType.class),

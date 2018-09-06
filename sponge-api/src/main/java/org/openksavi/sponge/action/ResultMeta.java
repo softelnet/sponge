@@ -21,6 +21,7 @@ import org.openksavi.sponge.type.Type;
 /**
  * Action result metadata (data type and display name).
  */
+@SuppressWarnings("rawtypes")
 public class ResultMeta<T extends Type> {
 
     /** A result data type. */

@@ -22,7 +22,7 @@ import java.util.Map;
  * A type that is a result of the given action, e.g. a list of string values. It allows using a result of one action to be a type for
  * another action argument or result.
  */
-public class ActionType extends Type {
+public class ActionType extends Type<Object> {
 
     private String actionName;
 
@@ -59,6 +59,11 @@ public class ActionType extends Type {
     @Override
     public ActionType feature(String name, Object value) {
         return (ActionType) super.feature(name, value);
+    }
+
+    @Override
+    public ActionType defaultValue(Object value) {
+        return (ActionType) super.defaultValue(value);
     }
 
     public String getActionName() {

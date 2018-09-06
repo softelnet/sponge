@@ -18,7 +18,7 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class BinaryType extends Type {
+public class BinaryType extends Type<byte[]> {
 
     private String mimeType;
 
@@ -49,6 +49,11 @@ public class BinaryType extends Type {
     @Override
     public BinaryType feature(String name, Object value) {
         return (BinaryType) super.feature(name, value);
+    }
+
+    @Override
+    public BinaryType defaultValue(byte[] value) {
+        return (BinaryType) super.defaultValue(value);
     }
 
     public BinaryType mimeType(String mimeType) {

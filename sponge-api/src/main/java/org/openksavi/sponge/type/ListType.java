@@ -16,48 +16,55 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.List;
 import java.util.Map;
 
-public class ListType extends Type {
+public class ListType<E> extends Type<List<E>> {
 
-    private Type elementType;
+    private Type<?> elementType;
 
     public ListType() {
-        this(new AnyType());
+        super(TypeKind.LIST);
+        this.elementType = new AnyType();
     }
 
-    public ListType(Type elementType) {
+    public ListType(Type<E> elementType) {
         super(TypeKind.LIST);
-
         this.elementType = elementType;
     }
 
     @Override
-    public ListType format(String format) {
-        return (ListType) super.format(format);
+    public ListType<E> format(String format) {
+        return (ListType<E>) super.format(format);
     }
 
     @Override
-    public ListType tags(String... tags) {
-        return (ListType) super.tags(tags);
+    public ListType<E> tags(String... tags) {
+        return (ListType<E>) super.tags(tags);
     }
 
     @Override
-    public ListType tag(String tag) {
-        return (ListType) super.tag(tag);
+    public ListType<E> tag(String tag) {
+        return (ListType<E>) super.tag(tag);
     }
 
     @Override
-    public ListType features(Map<String, Object> features) {
-        return (ListType) super.features(features);
+    public ListType<E> features(Map<String, Object> features) {
+        return (ListType<E>) super.features(features);
     }
 
     @Override
-    public ListType feature(String name, Object value) {
-        return (ListType) super.feature(name, value);
+    public ListType<E> feature(String name, Object value) {
+        return (ListType<E>) super.feature(name, value);
     }
 
-    public Type getElementType() {
-        return elementType;
+    @Override
+    public ListType<E> defaultValue(List<E> value) {
+        return (ListType<E>) super.defaultValue(value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Type<E> getElementType() {
+        return (Type<E>) elementType;
     }
 }

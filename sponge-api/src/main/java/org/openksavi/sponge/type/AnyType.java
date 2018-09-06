@@ -18,7 +18,7 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class AnyType extends Type {
+public class AnyType extends Type<Object> {
 
     public AnyType() {
         super(TypeKind.ANY);
@@ -47,5 +47,10 @@ public class AnyType extends Type {
     @Override
     public AnyType feature(String name, Object value) {
         return (AnyType) super.feature(name, value);
+    }
+
+    @Override
+    public AnyType defaultValue(Object value) {
+        return (AnyType) super.defaultValue(value);
     }
 }

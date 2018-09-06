@@ -21,6 +21,7 @@ import org.openksavi.sponge.type.Type;
 /**
  * Action argument metadata (name, data type and display name).
  */
+@SuppressWarnings("rawtypes")
 public class ArgMeta<T extends Type> {
 
     /** An argument name. */
