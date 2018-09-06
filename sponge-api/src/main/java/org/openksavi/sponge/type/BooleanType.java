@@ -53,4 +53,9 @@ public class BooleanType extends Type<Boolean> {
     public BooleanType defaultValue(Boolean value) {
         return (BooleanType) super.defaultValue(value);
     }
+
+    @Override
+    public BooleanType nullable(boolean nullable) {
+        return (BooleanType) super.nullable(nullable);
+    }
 }

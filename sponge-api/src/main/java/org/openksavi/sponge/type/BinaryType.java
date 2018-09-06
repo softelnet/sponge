@@ -56,6 +56,11 @@ public class BinaryType extends Type<byte[]> {
         return (BinaryType) super.defaultValue(value);
     }
 
+    @Override
+    public BinaryType nullable(boolean nullable) {
+        return (BinaryType) super.nullable(nullable);
+    }
+
     public BinaryType mimeType(String mimeType) {
         this.mimeType = mimeType;
         return this;

@@ -29,8 +29,6 @@ public class RestActionArgMeta {
 
     private Type type;
 
-    private boolean required;
-
     private String displayName;
 
     private String description;
@@ -39,10 +37,9 @@ public class RestActionArgMeta {
         //
     }
 
-    public RestActionArgMeta(String name, Type type, boolean required, String displayName, String description) {
+    public RestActionArgMeta(String name, Type type, String displayName, String description) {
         this.name = name;
         this.type = type;
-        this.required = required;
         this.displayName = displayName;
         this.description = description;
     }
@@ -63,15 +60,6 @@ public class RestActionArgMeta {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    @ApiModelProperty(value = "Is the argument required", required = true)
-    public boolean isRequired() {
-        return required;
-    }
-
-    public void setRequired(boolean required) {
-        this.required = required;
     }
 
     @ApiModelProperty(value = "The action argument display name", required = true)

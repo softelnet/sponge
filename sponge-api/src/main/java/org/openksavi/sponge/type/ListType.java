@@ -63,6 +63,11 @@ public class ListType<E> extends Type<List<E>> {
         return (ListType<E>) super.defaultValue(value);
     }
 
+    @Override
+    public ListType<E> nullable(boolean nullable) {
+        return (ListType<E>) super.nullable(nullable);
+    }
+
     @SuppressWarnings("unchecked")
     public Type<E> getElementType() {
         return (Type<E>) elementType;

@@ -76,7 +76,7 @@ public class CoreActionsTest {
             assertEquals(1, argMeta.length);
             assertEquals("text", argMeta[0].getName());
             assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
-            assertEquals(true, argMeta[0].isRequired());
+            assertEquals(false, argMeta[0].getType().isNullable());
             assertEquals("Argument 1", argMeta[0].getDisplayName());
             assertEquals("Argument 1 description", argMeta[0].getDescription());
 
@@ -127,7 +127,7 @@ public class CoreActionsTest {
             assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
             assertEquals(10, ((StringType) argMeta[0].getType()).getMaxLength().intValue());
             assertEquals("ipAddress", argMeta[0].getType().getFormat());
-            assertEquals(true, argMeta[0].isRequired());
+            assertEquals(false, argMeta[0].getType().isNullable());
             assertEquals(null, argMeta[0].getDisplayName());
             assertEquals(null, argMeta[0].getDescription());
             assertNull(argMeta[0].getType().getDefaultValue());
@@ -141,6 +141,7 @@ public class CoreActionsTest {
             assertEquals("anyArg", argMeta[2].getName());
             assertEquals(TypeKind.ANY, argMeta[2].getType().getKind());
             assertTrue(argMeta[2].getType() instanceof AnyType);
+            assertEquals(true, argMeta[2].getType().isNullable());
 
             assertEquals("stringListArg", argMeta[3].getName());
             assertEquals(TypeKind.LIST, argMeta[3].getType().getKind());

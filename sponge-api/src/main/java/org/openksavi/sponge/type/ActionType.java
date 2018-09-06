@@ -66,6 +66,11 @@ public class ActionType extends Type<Object> {
         return (ActionType) super.defaultValue(value);
     }
 
+    @Override
+    public ActionType nullable(boolean nullable) {
+        return (ActionType) super.nullable(nullable);
+    }
+
     public String getActionName() {
         return actionName;
     }

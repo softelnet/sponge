@@ -67,6 +67,11 @@ public class MapType<K, V> extends Type<Map<K, V>> {
         return (MapType<K, V>) super.defaultValue(value);
     }
 
+    @Override
+    public MapType<K, V> nullable(boolean nullable) {
+        return (MapType<K, V>) super.nullable(nullable);
+    }
+
     public Type<K> getKeyType() {
         return (Type<K>) keyType;
     }

@@ -62,6 +62,11 @@ public class ObjectType<T> extends Type<T> {
         return (ObjectType<T>) super.defaultValue(value);
     }
 
+    @Override
+    public ObjectType<T> nullable(boolean nullable) {
+        return (ObjectType<T>) super.nullable(nullable);
+    }
+
     public String getClassName() {
         return className;
     }

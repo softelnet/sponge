@@ -53,4 +53,9 @@ public class AnyType extends Type<Object> {
     public AnyType defaultValue(Object value) {
         return (AnyType) super.defaultValue(value);
     }
+
+    @Override
+    public AnyType nullable(boolean nullable) {
+        return (AnyType) super.nullable(nullable);
+    }
 }

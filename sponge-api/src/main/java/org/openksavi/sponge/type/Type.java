@@ -37,6 +37,9 @@ public class Type<T> {
 
     private T defaultValue;
 
+    /** Tells if a value of this type may be null. The default is that a value must not be null, i.e. it is <b>not nullable</b>. */
+    private boolean nullable = false;
+
     @SuppressWarnings("unused")
     private Type() {
         //
@@ -75,6 +78,11 @@ public class Type<T> {
         return this;
     }
 
+    public Type<T> nullable(boolean nullable) {
+        setNullable(nullable);
+        return this;
+    }
+
     public TypeKind getKind() {
         return kind;
     }
@@ -109,5 +117,13 @@ public class Type<T> {
 
     public void setDefaultValue(T defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
     }
 }

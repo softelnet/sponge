@@ -53,4 +53,9 @@ public class VoidType extends Type<Object> {
     public VoidType defaultValue(Object value) {
         return (VoidType) super.defaultValue(value);
     }
+
+    @Override
+    public VoidType nullable(boolean nullable) {
+        return (VoidType) super.nullable(nullable);
+    }
 }

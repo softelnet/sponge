@@ -83,12 +83,12 @@ class MpdSetAndPlayPlaylist(Action):
         self.displayName = "Set and play a playlist"
         self.description = "Sets a playlist according to the arguments and starts playing it immediately."
         self.argsMeta = [
-            ArgMeta("artist", StringType()).required(False).displayName("Artist").description("Artist may be specified as a regular expression."),
-            ArgMeta("album", StringType()).required(False).displayName("Album").description("Album may be specified as a regular expression."),
-            ArgMeta("genre", StringType()).required(False).displayName("Genre").description("Genre may be specified as a regular expression."),
-            ArgMeta("minYear", IntegerType()).required(False).displayName("Release year (since)").description("An album minimum release year."),
-            ArgMeta("maxYear", IntegerType()).required(False).displayName("Release year (to)").description("An album maximum release year."),
-            ArgMeta("autoPlay", BooleanType()).required(False).displayName("Auto play").description("Plays the playlist automatically."),
+            ArgMeta("artist", StringType().nullable(True)).displayName("Artist").description("Artist may be specified as a regular expression."),
+            ArgMeta("album", StringType().nullable(True)).displayName("Album").description("Album may be specified as a regular expression."),
+            ArgMeta("genre", StringType().nullable(True)).displayName("Genre").description("Genre may be specified as a regular expression."),
+            ArgMeta("minYear", IntegerType().nullable(True)).displayName("Release year (since)").description("An album minimum release year."),
+            ArgMeta("maxYear", IntegerType().nullable(True)).displayName("Release year (to)").description("An album maximum release year."),
+            ArgMeta("autoPlay", BooleanType().defaultValue(True)).displayName("Auto play").description("Plays the playlist automatically."),
         ]
         self.resultMeta = ResultMeta(StringType()).displayName("Info").description("A short info of the status of the action call.")
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):

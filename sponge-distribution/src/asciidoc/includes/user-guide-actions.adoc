@@ -73,6 +73,9 @@ Metadata for argument and result types support types that are represented by cla
 |===
 |Property |Description
 
+|`nullable`
+|Tells if a value of this type may be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
+
 |`format`
 |An optional format.
 
@@ -149,7 +152,7 @@ class MultipleArgumentsAction(Action):
         self.argsMeta = [
             ArgMeta("stringArg", StringType().maxLength(10).format("ipAddress")),
             ArgMeta("integerArg", IntegerType().minValue(1).maxValue(100).defaultValue(50)),
-            ArgMeta("anyArg", AnyType()),
+            ArgMeta("anyArg", AnyType().nullable(True)),
             ArgMeta("stringListArg", ListType(StringType())),
             ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
