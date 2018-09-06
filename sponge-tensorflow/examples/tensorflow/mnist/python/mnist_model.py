@@ -26,7 +26,6 @@ class MnistModel:
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
         self.model_file = model_file
-        self.prediction_threshold = 0.9
 
     def __load_mnist_data(self):
         # the data, split between train and test sets
@@ -119,9 +118,7 @@ class MnistModel:
         prediction = np.argmax(prediction_tensor)
         prediction_prob = np.amax(prediction_tensor)
 
-        if prediction_prob < self.prediction_threshold:
-            print('WARNING: The prediction probability', prediction_prob, 'is too low so it could be incorrect!')
-        print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(prediction_tensor)), flush=True)
+        #print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(prediction_tensor)), flush=True)
 
         return prediction_tensor
 

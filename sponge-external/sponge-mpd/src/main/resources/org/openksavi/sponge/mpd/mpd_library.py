@@ -103,6 +103,6 @@ class MpdSetAndPlayPlaylist(Action):
         selectedAlbums = library.selectAlbums(albums, artist, album, genre, minYear, maxYear, useSimpleRegexp = True)
         if len(selectedAlbums) > 0:
             library.setAndPlayPlaylist(selectedAlbums, autoPlay)
-            return "The playlist is set, {} albums found".format(len(selectedAlbums))
+            return "The playlist is set, {} album(s) found".format(len(selectedAlbums))
         else:
             return "No matching albums found"

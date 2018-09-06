@@ -42,7 +42,7 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`publishReload`
 |`boolean`
-|If `true` then the reload operation will be published. The default value is `true`.
+|If `true` then the reload operation will be published. The default value is `false`.
 
 |`routeBuilderClass`
 |`String`
@@ -237,6 +237,7 @@ Only a username/password authentication mode is currently supported by the defau
 |Every request has to contain an authentication token, returned by the `login` operation. It may not contain neither username nor password.
 |===
 
+[[rest-api-server-simple-security-strategy]]
 === Simple security strategy
 The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RestApiIsActionPublic`, `RestApiIsEventPublic`, `RestApiCanUseKnowledgeBase`, `RestApiCanSendEvent`). Passwords are stored as SHA-256 hashes.
 
@@ -266,3 +267,11 @@ For more information see examples in the source code.
 In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords may be sent in plain text over the network as a part of the REST API JSON requests.
 
 include::user-guide-rest-api.adoc[leveloffset=+2]
+
+== Environment
+
+=== Standalone
+This is the default configuration that uses the embedded Jetty server.
+
+=== Servlet container
+The {sponge} REST API service may also be deployed into a servlet container (e.g. https://tomcat.apache.org[Tomcat]) as a web application. See the <<rest-api-demo-service,REST API Demo Service>> example.

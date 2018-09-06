@@ -5,8 +5,6 @@ MNIST library
 
 from org.openksavi.sponge.tensorflow.util import ImageUtils
 
-PREDICTION_THRESHOLD = 0.9
-
 class MnistPredict(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit"
@@ -16,7 +14,16 @@ class MnistPredict(Action):
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
         prediction = predictions.index(max(predictions))
-        return prediction if predictions[prediction] >= PREDICTION_THRESHOLD else None
+        probability = predictions[prediction]
+
+        # Handle the optional predictionThreshold Sponge variable.
+        predictionThreshold = sponge.getVariable("predictionThreshold", None)
+        if predictionThreshold and probability < float(predictionThreshold):
+            self.logger.debug("The prediction {} probability {} is lower than the threshold {}.", prediction, probability, predictionThreshold)
+            return None
+        else:
+            self.logger.debug("Prediction: {}, probability: {}", prediction, probability)
+            return prediction
 
 class MnistPredictDetailed(Action):
     def onConfigure(self):

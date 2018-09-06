@@ -6,6 +6,9 @@
         <!-- Set these properties via system properties in a servlet container environment! -->
         <!-- <property name="mnist.home">mnist</property> -->
         <!-- <property name="password.file">password.txt</property> -->
+
+        <!-- The optional prediction probability threshold. -->
+        <property name="predictionThreshold" variable="true">0.6</property>
     </properties>
 
     <knowledgeBases>

@@ -970,6 +970,58 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/consumer.py[lines=5..-1]
 ----
 
+[[rest-api-demo-service]]
+==== REST API Demo Service
+The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] example shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+
+[discrete]
+===== Running
+First, you have to create the web application and {sponge} scripts.
+[source,bash,subs="verbatim,attributes"]
+----
+cd sponge-examples-projects/sponge-examples-project-demo-service
+mvn clean install -Pall
+----
+
+The resulting archive `target/sponge-demo-api.war` is the web application providing the Demo REST API service. The archive `target/sponge-scripts.zip` contains Sponge script files and the MNIST example files (see the TensorFlow integration chapter) that will be accessed by the web application.
+
+Assuming that Tomcat is installed in `/opt/tomcat` and the Sponge script files and the MNIST example files are extracted into the `/opt/tomcat/sponge` directory, you should add the following properties to the `catalina.properties` file:
+----
+sponge.home=/opt/tomcat/sponge
+mnist.home=/opt/tomcat/sponge
+password.file=/opt/tomcat/sponge/password.txt
+----
+
+The sample file `password.txt` contains the hashed, insecure password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. This simple password may be used only for development and tests. In the case of publishing the service, this file should contain the hashed, secret and strong password.
+
+[source,bash]
+----
+# Create the password file.
+sudo echo -n <username><password> | shasum -a 256 | awk '{ print $1 }' > /opt/tomcat/sponge/password.txt
+
+# Setup privileges.
+cd /opt/tomcat
+sudo chown -R tomcat:tomcat sponge
+
+# Restart Tomcat.
+sudo systemctl restart tomcat.service
+----
+
+Deploy the web application as `sponge-demo-api` using the Tomcat Web Application Manager. Then test the service.
+
+[source,bash]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/sponge-demo-api/sponge.json/v1/version
+----
+
+You may also run this example using the Jetty server started by the maven command:
+
+.Example of the REST API servlet
+[source,bash,subs="verbatim,attributes"]
+----
+cd sponge-examples-projects/sponge-examples-project-demo-service
+mvn jetty:run
+----
 
 === Scripting examples
 The scripting examples show how to use certain {sponge} functionalities in script knowledge bases. See the sources in {sourcesUrl}/sponge-jython/examples/script/py[Python examples], {sourcesUrl}/sponge-jruby/examples/script/rb[Ruby examples], {sourcesUrl}/sponge-groovy/examples/script/groovy[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples/script/js[JavaScript examples].

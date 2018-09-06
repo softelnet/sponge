@@ -33,7 +33,7 @@ public final class RestApiServerConstants {
 
     public static final boolean DEFAULT_PRETTY_PRINT = true;
 
-    public static final boolean DEFAULT_PUBLISH_RELOAD = true;
+    public static final boolean DEFAULT_PUBLISH_RELOAD = false;
 
     public static final boolean DEFAULT_ALLOW_ANONYMOUS = true;
 
