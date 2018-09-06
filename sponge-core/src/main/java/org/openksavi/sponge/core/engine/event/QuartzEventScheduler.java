@@ -110,7 +110,8 @@ public class QuartzEventScheduler extends BaseEventScheduler {
     public void doShutdown() {
         if (scheduler != null) {
             try {
-                scheduler.shutdown();
+                scheduler.clear();
+                scheduler.shutdown(true);
             } catch (SchedulerException e) {
                 throw SpongeUtils.wrapException(getName(), e);
             }

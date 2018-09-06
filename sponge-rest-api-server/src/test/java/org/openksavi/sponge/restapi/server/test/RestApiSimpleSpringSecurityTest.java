@@ -79,6 +79,7 @@ public class RestApiSimpleSpringSecurityTest {
 
             plugin.getSettings().setPort(spongeRestApiPort());
             plugin.getSettings().setAllowAnonymous(false);
+            plugin.getSettings().setPublishReload(true);
             plugin.setSecurityService(restApiSecurityService());
 
             return plugin;
