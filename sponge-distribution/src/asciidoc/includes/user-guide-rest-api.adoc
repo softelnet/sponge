@@ -398,6 +398,8 @@ __optional__|< string > array
 __optional__|< string, object > map
 |**defaultValue** +
 __optional__|object
+|**nullable** +
+__optional__|boolean
 |===
 
 
@@ -457,8 +459,6 @@ Represents a Sponge action argument metadata
 __required__|The action argument name|string
 |**type** +
 __required__|The action argument type|<<_swagger_type,Type>>
-|**required** +
-__required__|Is the argument required|boolean
 |**displayName** +
 __required__|The action argument display name|string
 |**description** +
