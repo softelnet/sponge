@@ -334,4 +334,14 @@ public class BaseEngineOperations implements EngineOperations {
     public void updateVariable(String name) {
         engine.getSession().updateVariable(name);
     }
+
+    @Override
+    public String getProperty(String name) {
+        return engine.getConfigurationManager().getProperty(name);
+    }
+
+    @Override
+    public String getHome() {
+        return engine.getConfigurationManager().getHome();
+    }
 }

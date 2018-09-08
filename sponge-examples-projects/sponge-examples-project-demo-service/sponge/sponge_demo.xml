@@ -9,11 +9,16 @@
 
         <!-- The optional prediction probability threshold. -->
         <property name="predictionThreshold" variable="true">0.6</property>
+
+        <property name="doodlesDir">${sponge.home}/data/doodles</property>
     </properties>
 
     <knowledgeBases>
         <knowledgeBase name="demo" displayName="Demo">
             <file>sponge_demo.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoAdmin" displayName="Demo admin">
+            <file>sponge_demo_admin.py</file>
         </knowledgeBase>
         <knowledgeBase name="digits" displayName="Digits">
             <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>

@@ -78,7 +78,7 @@
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.2.0.0</jruby.version>
         <groovy.version>2.5.2</groovy.version>
-        <kotlin.version>1.2.61</kotlin.version>
+        <kotlin.version>1.2.70</kotlin.version>
 
         <commons-lang3.version>3.8</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
@@ -89,9 +89,9 @@
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
         <guava.version>26.0-jre</guava.version>
-        <spring.version>5.0.8.RELEASE</spring.version>
-        <spring-integration.version>5.0.7.RELEASE</spring-integration.version>
-        <spring-security.version>5.0.7.RELEASE</spring-security.version>
+        <spring.version>5.0.9.RELEASE</spring.version>
+        <spring-integration.version>5.0.8.RELEASE</spring-integration.version>
+        <spring-security.version>5.0.8.RELEASE</spring-security.version>
         <camel.version>2.22.1</camel.version>
         <awaitility.version>3.1.2</awaitility.version>
         <jline.version>3.9.0</jline.version>
@@ -117,7 +117,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.21.0</mockito.version>
+        <mockito.version>2.22.0</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
 

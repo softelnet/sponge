@@ -19,6 +19,7 @@ package org.openksavi.sponge.examples.project.demoservice;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class DemoServiceTestEnvironment {
@@ -30,6 +31,7 @@ public class DemoServiceTestEnvironment {
     protected Server server;
 
     public void init() {
+        System.setProperty(ConfigurationConstants.PROP_HOME, ".");
         System.setProperty(PROPERTY_MNIST_HOME, "../../sponge-tensorflow/examples/tensorflow/mnist");
         System.setProperty(PROPERTY_PASSWORD_FILE, "password.txt");
     }

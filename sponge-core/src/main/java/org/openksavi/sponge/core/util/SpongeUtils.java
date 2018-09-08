@@ -693,6 +693,22 @@ public abstract class SpongeUtils {
         }
     }
 
+    public static byte[] readFileToByteArray(String fileName) {
+        try {
+            return FileUtils.readFileToByteArray(new File(fileName));
+        } catch (IOException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
+    public static void writeByteArrayToFile(byte[] bytes, String fileName) {
+        try {
+            FileUtils.writeByteArrayToFile(new File(fileName), bytes != null ? bytes : new byte[0]);
+        } catch (IOException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
     protected SpongeUtils() {
         //
     }

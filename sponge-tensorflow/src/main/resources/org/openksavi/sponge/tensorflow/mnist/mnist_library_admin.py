@@ -17,6 +17,7 @@ class MnistResetModel(Action):
     def onConfigure(self):
         self.displayName = "Reset the model"
         self.description = "Resets the model by loading the state before manual learning"
+        self.features = {"confirmation":True}
         self.argsMeta = []
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self):

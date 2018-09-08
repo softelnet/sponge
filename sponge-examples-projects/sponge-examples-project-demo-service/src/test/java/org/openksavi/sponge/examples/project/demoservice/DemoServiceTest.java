@@ -27,11 +27,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.util.SocketUtils;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
-import org.openksavi.sponge.tensorflow.util.ImageUtils;
 
 @net.jcip.annotations.NotThreadSafe
 public class DemoServiceTest {
@@ -67,8 +67,8 @@ public class DemoServiceTest {
 
     @Test
     public void testRestCallPredict() {
-        byte[] imageData = ImageUtils
-                .getImageBytes(Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
+        byte[] imageData = SpongeUtils.readFileToByteArray(
+                Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
 
         assertEquals(5, createRestApiClient().call(Number.class, "MnistPredict", imageData));
     }

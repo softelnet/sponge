@@ -3,8 +3,6 @@ Sponge Knowledge base
 MNIST library
 """
 
-from org.openksavi.sponge.tensorflow.util import ImageUtils
-
 class MnistPredict(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit"

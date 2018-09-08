@@ -8,7 +8,7 @@ class CallPredict(Trigger):
         self.event = "predict"
     def onRun(self, event):
         file = event.get("file")
-        predictions = sponge.call("MnistPredictDetailed", ImageUtils.getImageBytes(file))
+        predictions = sponge.call("MnistPredictDetailed", SpongeUtils.readFileToByteArray(file))
         prediction = predictions.index(max(predictions))
         sponge.logger.info("Prediction for {} is: {}, all predictions: {}", file, prediction, predictions)
 

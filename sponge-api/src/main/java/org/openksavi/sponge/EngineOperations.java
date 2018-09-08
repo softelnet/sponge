@@ -407,4 +407,19 @@ public interface EngineOperations {
      * @param name variable name.
      */
     void updateVariable(String name);
+
+    /**
+     * Returns the configuration property value.
+     *
+     * @param name the configuration property name.
+     * @return the configuration property value.
+     */
+    String getProperty(String name);
+
+    /**
+     * Returns the home directory for the engine.
+     *
+     * @return the home directory for the engine.
+     */
+    String getHome();
 }
