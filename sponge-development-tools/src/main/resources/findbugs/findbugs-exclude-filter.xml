@@ -33,6 +33,13 @@
         <Bug pattern="BC_UNCONFIRMED_CAST" />
     </Match>
     <Match>
+        <Class name="org.openksavi.sponge.core.util.ProcessInstance" />
+        <Or>
+            <Method name="getOutputBinary" />
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+    <Match>
         <Class name="org.openksavi.sponge.core.rule.BaseRuleDefinition" />
         <Or>
             <Method name="getEventAliases" />

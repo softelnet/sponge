@@ -65,7 +65,7 @@ public class ProcessInstance {
     }
 
     public void setOutputBinary(byte[] outputBinary) {
-        this.outputBinary = outputBinary;
+        this.outputBinary = outputBinary != null ? outputBinary.clone() : null;
     }
 
     public Instant getStartTime() {

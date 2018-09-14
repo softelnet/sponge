@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.4.2 (not released yet)
+== 1.4.2 (2018-09-14)
 
 * API change: `ArgMeta.required` in the REST API has been replaced by `Type.nullable`.
 * Changes in the REST API Java client, e.g. a full URL instead of hostname/port in a configuration, support a the OkHttp-based client (default) and for a Spring-based client (optional).
