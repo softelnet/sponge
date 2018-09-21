@@ -17,8 +17,8 @@
         <knowledgeBase name="demo" displayName="Demo">
             <file>sponge_demo.py</file>
         </knowledgeBase>
-        <knowledgeBase name="demoAdmin" displayName="Demo admin">
-            <file>sponge_demo_admin.py</file>
+        <knowledgeBase name="demoPlus" displayName="Demo plus">
+            <file>sponge_demo_plus.py</file>
         </knowledgeBase>
         <knowledgeBase name="digits" displayName="Digits">
             <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
