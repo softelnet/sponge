@@ -39,7 +39,7 @@ def plot_acc(history):
 
     plt.show(block=False)
 
-model = m.MnistModel()
+model = m.MnistModel("../data/mnist_model.h5")
 model.load(True)
 plot_acc(model.history)
 plot_loss(model.history)
