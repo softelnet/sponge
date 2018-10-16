@@ -6,6 +6,12 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
+== 1.4.3 (Not released yet)
+
+* Action metadata cache in the REST API Java client.
+* Libraries upgrade.
+
+[discrete]
 == 1.4.2 (2018-09-14)
 
 * API change: `ArgMeta.required` in the REST API has been replaced by `Type.nullable`.

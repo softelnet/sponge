@@ -155,7 +155,6 @@ public abstract class BaseRestApiTestTemplate {
         } finally {
             engine.clearError();
         }
-
     }
 
     @Test

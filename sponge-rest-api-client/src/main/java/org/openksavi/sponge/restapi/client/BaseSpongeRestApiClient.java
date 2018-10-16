@@ -20,12 +20,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
@@ -69,8 +72,10 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     private Lock lock = new ReentrantLock(true);
 
+    private LoadingCache<String, RestActionMeta> actionMetaCache;
+
     public BaseSpongeRestApiClient(RestApiClientConfiguration configuration) {
-        this.configuration = configuration;
+        setConfiguration(configuration);
     }
 
     @Override
@@ -80,6 +85,51 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     public void setConfiguration(RestApiClientConfiguration configuration) {
         this.configuration = configuration;
+
+        initActionMetaCache();
+    }
+
+    private void initActionMetaCache() {
+        lock.lock();
+        try {
+            if (configuration != null && !configuration.isUseActionMetaCache()) {
+                actionMetaCache = null;
+            } else {
+                Caffeine<Object, Object> builder = Caffeine.newBuilder();
+                if (configuration != null) {
+                    if (configuration.getActionMetaCacheMaxSize() > -1) {
+                        builder.maximumSize(configuration.getActionMetaCacheMaxSize());
+                    }
+                    if (configuration.getActionMetaCacheExpireSeconds() > -1) {
+                        builder.expireAfterWrite(configuration.getActionMetaCacheExpireSeconds(), TimeUnit.SECONDS);
+                    }
+                }
+
+                actionMetaCache = builder.build(actionName -> fetchActionMeta(actionName));
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void clearCache() {
+        lock.lock();
+        try {
+            if (actionMetaCache != null) {
+                actionMetaCache.invalidateAll();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public LoadingCache<String, RestActionMeta> getActionMetaCache() {
+        return actionMetaCache;
+    }
+
+    public void setActionMetaCache(LoadingCache<String, RestActionMeta> actionMetaCache) {
+        this.actionMetaCache = actionMetaCache;
     }
 
     public ObjectMapper getObjectMapper() {
@@ -128,13 +178,17 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
                     : String.format("Error code: %s", response.getErrorCode());
 
             ResponseErrorSpongeException exception;
-            if (Objects.equals(response.getErrorCode(), RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN)) {
+            switch (response.getErrorCode()) {
+            case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
                 exception = new RestApiInvalidAuthTokenClientException(message);
-            } else if (Objects.equals(response.getErrorCode(), RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION)) {
+                break;
+            case RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION:
                 exception = new RestApiIncorrectKnowledgeBaseVersionClientException(message);
-            } else {
+                break;
+            default:
                 exception = new ResponseErrorSpongeException(message);
             }
+
             exception.setErrorCode(response.getErrorCode());
             exception.setDetailedErrorMessage(response.getDetailedErrorMessage());
 
@@ -225,7 +279,18 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public GetActionsResponse getActions(GetActionsRequest request) {
-        return execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
+        return doGetActions(request, true);
+    }
+
+    protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache) {
+        GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
+
+        // Populate the cache.
+        if (populateCache && configuration != null && configuration.isUseActionMetaCache() && actionMetaCache != null) {
+            response.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
+        }
+
+        return response;
     }
 
     @Override
@@ -256,9 +321,21 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
                 .description(restResultMeta.getDescription());
     }
 
+    protected RestActionMeta fetchActionMeta(String actionName) {
+        GetActionsRequest request = new GetActionsRequest();
+        request.setMetadataRequired(true);
+        request.setNameRegExp(actionName);
+
+        return doGetActions(request, false).getActions().stream().findFirst().orElse(null);
+    }
+
     @Override
     public RestActionMeta getActionMeta(String actionName) {
-        return getActions(actionName, true).stream().findFirst().orElse(null);
+        if (configuration != null && configuration.isUseActionMetaCache() && actionMetaCache != null) {
+            return actionMetaCache.get(actionName);
+        } else {
+            return fetchActionMeta(actionName);
+        }
     }
 
     protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request) {

@@ -89,6 +89,7 @@
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
         <guava.version>26.0-jre</guava.version>
+        <caffeine.version>2.6.2</caffeine.version>
         <spring.version>5.1.1.RELEASE</spring.version>
         <spring-integration.version>5.0.9.RELEASE</spring-integration.version>
         <spring-security.version>5.1.1.RELEASE</spring-security.version>
@@ -617,6 +618,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>

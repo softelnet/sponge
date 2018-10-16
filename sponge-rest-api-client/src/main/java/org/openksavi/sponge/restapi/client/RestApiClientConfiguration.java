@@ -35,9 +35,11 @@ public class RestApiClientConfiguration {
 
     private boolean verifyKnowledgeBaseVersion = true;
 
-    public String getUsername() {
-        return username;
-    }
+    private boolean useActionMetaCache = true;
+
+    private int actionMetaCacheMaxSize = -1;
+
+    private long actionMetaCacheExpireSeconds = -1;
 
     public void setUrl(String url) {
         this.url = url;
@@ -45,6 +47,10 @@ public class RestApiClientConfiguration {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {
@@ -92,6 +98,30 @@ public class RestApiClientConfiguration {
         return url != null && url.toLowerCase().startsWith("https");
     }
 
+    public boolean isUseActionMetaCache() {
+        return useActionMetaCache;
+    }
+
+    public void setUseActionMetaCache(boolean useActionMetaCache) {
+        this.useActionMetaCache = useActionMetaCache;
+    }
+
+    public int getActionMetaCacheMaxSize() {
+        return actionMetaCacheMaxSize;
+    }
+
+    public void setActionMetaCacheMaxSize(int actionMetaCacheMaxSize) {
+        this.actionMetaCacheMaxSize = actionMetaCacheMaxSize;
+    }
+
+    public long getActionMetaCacheExpireSeconds() {
+        return actionMetaCacheExpireSeconds;
+    }
+
+    public void setActionMetaCacheExpireSeconds(long actionMetaCacheExpireSeconds) {
+        this.actionMetaCacheExpireSeconds = actionMetaCacheExpireSeconds;
+    }
+
     /**
      * A Sponge REST API configuration builder.
      *
@@ -105,37 +135,111 @@ public class RestApiClientConfiguration {
 
         private RestApiClientConfiguration configuration = new RestApiClientConfiguration();
 
+        /**
+         * Builds the client.
+         *
+         * @return the client.
+         */
         public RestApiClientConfiguration build() {
             return configuration;
         }
 
+        /**
+         * Sets the service URL.
+         *
+         * @param url the service URL.
+         * @return the builder.
+         */
         public Builder url(String url) {
             configuration.setUrl(url);
             return this;
         }
 
+        /**
+         * Sets the username.
+         *
+         * @param username the username.
+         * @return the builder.
+         */
         public Builder username(String username) {
             configuration.setUsername(username);
             return this;
         }
 
+        /**
+         * Sets the password.
+         *
+         * @param password the password.
+         * @return the builder.
+         */
         public Builder password(String password) {
             configuration.setPassword(password);
             return this;
         }
 
+        /**
+         * Sets the flag to use a request ID. The default value is {@code false}.
+         *
+         * @param useRequestId the flag to use a request ID.
+         * @return the builder.
+         */
         public Builder useRequestId(boolean useRequestId) {
             configuration.setUseRequestId(useRequestId);
             return this;
         }
 
+        /**
+         * Sets the flag to automatically relogin when an auth token expires. The default value is {@code true}.
+         *
+         * @param relogin the flag to automatically relogin when an auth token expires.
+         * @return the builder.
+         */
         public Builder relogin(boolean relogin) {
             configuration.setRelogin(relogin);
             return this;
         }
 
+        /**
+         * Sets the flag to verify a knowledge base version on the server. The default value is {@code true}.
+         *
+         * @param verifyKnowledgeBaseVersion the flag to verify a knowledge base version on the server.
+         * @return the builder.
+         */
         public Builder verifyKnowledgeBaseVersion(boolean verifyKnowledgeBaseVersion) {
             configuration.setVerifyKnowledgeBaseVersion(verifyKnowledgeBaseVersion);
+            return this;
+        }
+
+        /**
+         * Sets the flag to use the action meta cache. The default value is {@code true}.
+         *
+         * @param useActionMetaCache the flag to use the action meta cache.
+         * @return the builder.
+         */
+        public Builder useActionMetaCache(boolean useActionMetaCache) {
+            configuration.setUseActionMetaCache(useActionMetaCache);
+            return this;
+        }
+
+        /**
+         * Sets the maximum size of the action meta cache. The default value ({@code -1}) implies that there is no maximum size.
+         *
+         * @param actionMetaCacheMaxSize the maximum size of the action meta cache.
+         * @return the builder.
+         */
+        public Builder actionMetaCacheMaxSize(int actionMetaCacheMaxSize) {
+            configuration.setActionMetaCacheMaxSize(actionMetaCacheMaxSize);
+            return this;
+        }
+
+        /**
+         * Sets the expire time (in seconds) of the action meta cache. The default value ({@code -1}) implies that there is no expire time.
+         *
+         * @param actionMetaCacheExpireSeconds the expire time (in seconds) of the action meta cache.
+         * @return the builder.
+         */
+        public Builder actionMetaCacheExpireSeconds(long actionMetaCacheExpireSeconds) {
+            configuration.setActionMetaCacheExpireSeconds(actionMetaCacheExpireSeconds);
             return this;
         }
     }
