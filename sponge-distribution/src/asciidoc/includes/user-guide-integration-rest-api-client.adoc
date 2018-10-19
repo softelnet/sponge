@@ -22,6 +22,8 @@ SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfigu
         .build());
 ----
 
+`DefaultSpongeRestApiClient` performs best when you create a single `DefaultSpongeRestApiClient` instance and reuse it for all of your REST API calls.
+
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/DefaultSpongeRestApiClient.html[`DefaultSpongeRestApiClient` Javadoc] and examples in the source code.
 
 There is also the implementation that uses the Spring (version 5) RestTemplate: `SpringSpongeRestApiClient`.

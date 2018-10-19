@@ -88,7 +88,7 @@
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.11</commons-codec.version>
         <quartz.version>2.3.0</quartz.version>
-        <guava.version>26.0-jre</guava.version>
+        <guava.version>27.0-jre</guava.version>
         <caffeine.version>2.6.2</caffeine.version>
         <spring.version>5.1.1.RELEASE</spring.version>
         <spring-integration.version>5.0.9.RELEASE</spring-integration.version>
@@ -218,6 +218,7 @@
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
                             <exclude>*/sponge/integration/tests/stability/*</exclude>
                             <exclude>*/sponge/kotlin/script/test/*</exclude>
+                            <exclude>*/sponge/examples/project/demoservice/test/stability/*</exclude>
                         </excludes>
                         <parallel>classesAndMethods</parallel>
                         <threadCount>2</threadCount>

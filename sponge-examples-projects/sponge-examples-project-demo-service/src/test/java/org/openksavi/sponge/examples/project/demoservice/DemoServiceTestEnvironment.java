@@ -24,9 +24,9 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class DemoServiceTestEnvironment {
 
-    protected static final String PROPERTY_MNIST_HOME = "mnist.home";
+    public static final String PROPERTY_MNIST_HOME = "mnist.home";
 
-    protected static final String PROPERTY_PASSWORD_FILE = "password.file";
+    public static final String PROPERTY_PASSWORD_FILE = "password.file";
 
     protected Server server;
 

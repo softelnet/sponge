@@ -33,23 +33,37 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * A Sponge REST API client that uses OkHttp.
+ * A Sponge REST API client that uses OkHttp. OkHttpSpongeRestApiClient performs best when you create a single OkHttpSpongeRestApiClient
+ * instance and reuse it for all of your REST API calls.
  */
 public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
+
+    private OkHttpClient okHttpClient;
 
     public OkHttpSpongeRestApiClient(RestApiClientConfiguration configuration) {
         super(configuration);
     }
 
+    public void setOkHttpClient(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+    }
+
+    protected synchronized OkHttpClient getOrCreateOkHttpClient() {
+        if (okHttpClient == null) {
+            okHttpClient = RestApiClientUtils.createOkHttpClient();
+        }
+
+        return okHttpClient;
+    }
+
     @Override
     protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
-        OkHttpClient client = RestApiClientUtils.createOkHttpClient();
         String jsonContectType = "application/json";
         Headers headers = new Headers.Builder().add("Content-Type", jsonContectType).build();
 
         try {
             String requestBody = getObjectMapper().writeValueAsString(request);
-            Response response = client.newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
+            Response response = getOrCreateOkHttpClient().newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
                     .post(RequestBody.create(MediaType.get(jsonContectType), requestBody)).build()).execute();
 
             Validate.isTrue(RestApiUtils.isHttpSuccess(response.code()), "Error HTTP status code %s", response.code());

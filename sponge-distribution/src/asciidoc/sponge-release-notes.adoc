@@ -9,6 +9,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 == 1.4.3 (Not released yet)
 
 * Action metadata cache in the REST API Java client.
+* Fixed usage of OkHttpClient in the REST API Java client.
 * Libraries upgrade.
 
 [discrete]

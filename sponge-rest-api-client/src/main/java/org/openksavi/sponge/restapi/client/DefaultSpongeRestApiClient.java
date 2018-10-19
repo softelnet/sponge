@@ -19,7 +19,8 @@ package org.openksavi.sponge.restapi.client;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestApiClient;
 
 /**
- * A default Sponge REST API client that uses HttpOk.
+ * A default Sponge REST API client that uses HttpOk. DefaultSpongeRestApiClient performs best when you create a single
+ * DefaultSpongeRestApiClient instance and reuse it for all of your REST API calls.
  */
 public class DefaultSpongeRestApiClient extends OkHttpSpongeRestApiClient {
 

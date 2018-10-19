@@ -39,35 +39,33 @@ import org.openksavi.sponge.restapi.model.response.BaseResponse;
  */
 public class SpringSpongeRestApiClient extends BaseSpongeRestApiClient {
 
+    private RestTemplate restTemplate;
+
     public SpringSpongeRestApiClient(RestApiClientConfiguration configuration) {
         super(configuration);
     }
 
-    @Override
-    protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
-        ResponseEntity<R> responseEntity =
-                getRestTemplate().exchange(getUrl(operation), HttpMethod.POST, new HttpEntity<>(request, createHeaders()), responseClass);
-        Validate.isTrue(!responseEntity.getStatusCode().isError(), "Error HTTP status code %s", responseEntity.getStatusCode());
-
-        return responseEntity.getBody();
-    }
-
-    protected RestTemplate setupRestTemplate(RestTemplate restTemplate) {
-        restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
+    protected synchronized RestTemplate getOrCreateRestTemplate() {
+        if (restTemplate == null) {
+            restTemplate = getConfiguration().isSsl()
+                    ? new RestTemplate(new OkHttp3ClientHttpRequestFactory(RestApiClientUtils.createOkHttpClient())) : new RestTemplate();
+            restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
+        }
 
         return restTemplate;
     }
 
-    protected RestTemplate getRestTemplate() {
-        return setupRestTemplate(getConfiguration().isSsl() ? createHttpsRestTemplate() : new RestTemplate());
+    protected void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
-    protected RestTemplate createHttpsRestTemplate() {
-        try {
-            return new RestTemplate(new OkHttp3ClientHttpRequestFactory(RestApiClientUtils.createOkHttpClient()));
-        } catch (Exception e) {
-            throw RestApiClientUtils.wrapException(e);
-        }
+    @Override
+    protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
+        ResponseEntity<R> responseEntity = getOrCreateRestTemplate().exchange(getUrl(operation), HttpMethod.POST,
+                new HttpEntity<>(request, createHeaders()), responseClass);
+        Validate.isTrue(!responseEntity.getStatusCode().isError(), "Error HTTP status code %s", responseEntity.getStatusCode());
+
+        return responseEntity.getBody();
     }
 
     protected HttpHeaders createHeaders() {
