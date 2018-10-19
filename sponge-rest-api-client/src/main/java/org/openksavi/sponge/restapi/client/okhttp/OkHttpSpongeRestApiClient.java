@@ -16,6 +16,16 @@
 
 package org.openksavi.sponge.restapi.client.okhttp;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.restapi.client.BaseSpongeRestApiClient;
@@ -25,20 +35,17 @@ import org.openksavi.sponge.restapi.model.request.BaseRequest;
 import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 /**
  * A Sponge REST API client that uses OkHttp. OkHttpSpongeRestApiClient performs best when you create a single OkHttpSpongeRestApiClient
  * instance and reuse it for all of your REST API calls.
  */
 public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
 
+    /** The OkHttp client. */
     private OkHttpClient okHttpClient;
+
+    /** The lock. */
+    private Lock lock = new ReentrantLock(true);
 
     public OkHttpSpongeRestApiClient(RestApiClientConfiguration configuration) {
         super(configuration);
@@ -48,9 +55,17 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
         this.okHttpClient = okHttpClient;
     }
 
-    protected synchronized OkHttpClient getOrCreateOkHttpClient() {
+    protected OkHttpClient getOrCreateOkHttpClient() {
         if (okHttpClient == null) {
-            okHttpClient = RestApiClientUtils.createOkHttpClient();
+            // Initialize in a thread-safe manner.
+            lock.lock();
+            try {
+                if (okHttpClient == null) {
+                    okHttpClient = RestApiClientUtils.createOkHttpClient();
+                }
+            } finally {
+                lock.unlock();
+            }
         }
 
         return okHttpClient;

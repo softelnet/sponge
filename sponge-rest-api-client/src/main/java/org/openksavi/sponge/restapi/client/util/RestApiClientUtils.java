@@ -24,10 +24,10 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.OkHttpClient;
+
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.restapi.client.ClientSpongeException;
-
-import okhttp3.OkHttpClient;
 
 /**
  * A set of REST API client utility methods.
@@ -60,7 +60,7 @@ public abstract class RestApiClientUtils {
         };
     }
 
-    public static SSLContext createTrustAllSSLContext() {
+    public static SSLContext createTrustAllSslContext() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, new TrustManager[] { createTrustAllTrustManager() }, new java.security.SecureRandom());
@@ -72,7 +72,7 @@ public abstract class RestApiClientUtils {
     }
 
     public static OkHttpClient createOkHttpClient() {
-        SSLContext sslContext = RestApiClientUtils.createTrustAllSSLContext();
+        SSLContext sslContext = RestApiClientUtils.createTrustAllSslContext();
 
         return new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestApiClientUtils.createTrustAllTrustManager())
                 .hostnameVerifier((String hostname, SSLSession session) -> true).build();

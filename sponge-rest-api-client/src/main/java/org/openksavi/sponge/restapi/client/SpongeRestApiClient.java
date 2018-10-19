@@ -152,8 +152,8 @@ public interface SpongeRestApiClient {
      * Calls the action. This method may use action metadata cache if configured or fetch the action result metadata from the server every
      * call.
      *
-     * Unmarshals the result using a best effort strategy, i.e. when a result metadata is defined for this action (on the server side). If
-     * you want to disable fetching metadata and unmarshalling the result, use action metadata cache or {@code callWithNoMeta}.
+     * <p>Unmarshals the result using a best effort strategy, i.e. when a result metadata is defined for this action (on the server side).
+     * If you want to disable fetching metadata and unmarshalling the result, use action metadata cache or {@code callWithNoMeta}.
      *
      * @param request the request.
      *
@@ -179,6 +179,7 @@ public interface SpongeRestApiClient {
      * @param args the action arguments.
      *
      * @return the action result.
+     * @param <T> the result type.
      */
     <T> T call(Class<T> resultClass, String actionName, Object... args);
 
@@ -210,6 +211,7 @@ public interface SpongeRestApiClient {
      * @param args the action arguments.
      *
      * @return the action result.
+     * @param <T> the result type.
      */
     <T> T callWithMeta(Class<T> resultClass, RestActionMeta actionMeta, Object... args);
 
@@ -231,6 +233,7 @@ public interface SpongeRestApiClient {
      * @param args the action arguments.
      *
      * @return the action result.
+     * @param <T> the result type.
      */
     <T> T callWithNoMeta(Class<T> resultClass, String actionName, Object... args);
 
@@ -261,8 +264,6 @@ public interface SpongeRestApiClient {
 
     /**
      * Sends the {@code reload} request to the server.
-     *
-     * @return the {@code reload} response.
      */
     void reload();
 

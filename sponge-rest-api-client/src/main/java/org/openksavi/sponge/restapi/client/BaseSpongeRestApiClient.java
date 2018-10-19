@@ -277,11 +277,6 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         return getKnowledgeBases(new GetKnowledgeBasesRequest()).getKnowledgeBases();
     }
 
-    @Override
-    public GetActionsResponse getActions(GetActionsRequest request) {
-        return doGetActions(request, true);
-    }
-
     protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache) {
         GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
 
@@ -291,6 +286,11 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         }
 
         return response;
+    }
+
+    @Override
+    public GetActionsResponse getActions(GetActionsRequest request) {
+        return doGetActions(request, true);
     }
 
     @Override

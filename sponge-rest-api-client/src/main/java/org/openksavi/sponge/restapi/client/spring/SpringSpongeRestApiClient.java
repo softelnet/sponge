@@ -17,6 +17,8 @@
 package org.openksavi.sponge.restapi.client.spring;
 
 import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.Validate;
 import org.springframework.http.HttpEntity;
@@ -39,17 +41,30 @@ import org.openksavi.sponge.restapi.model.response.BaseResponse;
  */
 public class SpringSpongeRestApiClient extends BaseSpongeRestApiClient {
 
+    /** The Spring REST template. */
     private RestTemplate restTemplate;
+
+    /** The lock. */
+    private Lock lock = new ReentrantLock(true);
 
     public SpringSpongeRestApiClient(RestApiClientConfiguration configuration) {
         super(configuration);
     }
 
-    protected synchronized RestTemplate getOrCreateRestTemplate() {
+    protected RestTemplate getOrCreateRestTemplate() {
         if (restTemplate == null) {
-            restTemplate = getConfiguration().isSsl()
-                    ? new RestTemplate(new OkHttp3ClientHttpRequestFactory(RestApiClientUtils.createOkHttpClient())) : new RestTemplate();
-            restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
+            // Initialize in a thread-safe manner.
+            lock.lock();
+            try {
+                if (restTemplate == null) {
+                    restTemplate = getConfiguration().isSsl()
+                            ? new RestTemplate(new OkHttp3ClientHttpRequestFactory(RestApiClientUtils.createOkHttpClient()))
+                            : new RestTemplate();
+                    restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
+                }
+            } finally {
+                lock.unlock();
+            }
         }
 
         return restTemplate;
