@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import okhttp3.OkHttpClient;
+
 import org.apache.commons.lang3.Validate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,8 +32,8 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import org.openksavi.sponge.restapi.client.BaseSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
+import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
 import org.openksavi.sponge.restapi.model.request.BaseRequest;
 import org.openksavi.sponge.restapi.model.response.BaseResponse;
@@ -39,7 +41,7 @@ import org.openksavi.sponge.restapi.model.response.BaseResponse;
 /**
  * A Sponge REST API client that uses Spring (version 5) and OkHttp.
  */
-public class SpringSpongeRestApiClient extends BaseSpongeRestApiClient {
+public class SpringSpongeRestApiClient extends OkHttpSpongeRestApiClient {
 
     /** The Spring REST template. */
     private RestTemplate restTemplate;
@@ -57,10 +59,11 @@ public class SpringSpongeRestApiClient extends BaseSpongeRestApiClient {
             lock.lock();
             try {
                 if (restTemplate == null) {
-                    restTemplate = getConfiguration().isSsl()
-                            ? new RestTemplate(new OkHttp3ClientHttpRequestFactory(RestApiClientUtils.createOkHttpClient()))
-                            : new RestTemplate();
+                    OkHttpClient client = RestApiClientUtils.createOkHttpClient();
+                    restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(client));
                     restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
+
+                    setOkHttpClient(client);
                 }
             } finally {
                 lock.unlock();

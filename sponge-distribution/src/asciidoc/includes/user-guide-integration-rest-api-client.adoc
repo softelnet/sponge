@@ -4,10 +4,11 @@ The {sponge} REST API client simplifies connecting to a remote {sponge} REST API
 .REST API client for an anonymous user example
 [source,java]
 ----
-SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
         .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH))
-        .build()); // <1>
-String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
+        .build())) { // <1>
+    String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
+}
 ----
 <1> Create a new REST API client.
 <2> Call the remote action.

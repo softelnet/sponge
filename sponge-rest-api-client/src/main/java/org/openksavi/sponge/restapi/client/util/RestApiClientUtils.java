@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.client.util;
 
+import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -76,5 +77,28 @@ public abstract class RestApiClientUtils {
 
         return new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestApiClientUtils.createTrustAllTrustManager())
                 .hostnameVerifier((String hostname, SSLSession session) -> true).build();
+    }
+
+    /**
+     * Closes aggressively a OkHttpClient according to the OkHttpClient documentation.
+     *
+     * @param okHttpClient the OkHttpClient.
+     */
+    public static void closeOkHttpClient(OkHttpClient okHttpClient) {
+        if (okHttpClient.dispatcher() != null && okHttpClient.dispatcher().executorService() != null) {
+            okHttpClient.dispatcher().executorService().shutdown();
+        }
+
+        if (okHttpClient.connectionPool() != null) {
+            okHttpClient.connectionPool().evictAll();
+        }
+
+        if (okHttpClient.cache() != null) {
+            try {
+                okHttpClient.cache().close();
+            } catch (IOException e) {
+                throw new SpongeException(e);
+            }
+        }
     }
 }

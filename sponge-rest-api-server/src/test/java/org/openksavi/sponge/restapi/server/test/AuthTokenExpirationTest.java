@@ -37,10 +37,10 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.RestApiInvalidAuthTokenClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
@@ -90,7 +90,7 @@ public class AuthTokenExpirationTest {
     }
 
     protected SpongeRestApiClient createRestApiClient(String username, String password) {
-        return new SpringSpongeRestApiClient(
+        return new DefaultSpongeRestApiClient(
                 RestApiClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
                         .username(username).password(password).build());
     }

@@ -45,9 +45,9 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.examples.TestComplexObject;
 import org.openksavi.sponge.examples.TestCompoundComplexObject;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -84,7 +84,7 @@ public class ComplexObjectRestApiTest {
     }
 
     protected SpongeRestApiClient createRestApiClient() {
-        return new SpringSpongeRestApiClient(RestApiClientConfiguration.builder()
+        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
                 .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
     }
 

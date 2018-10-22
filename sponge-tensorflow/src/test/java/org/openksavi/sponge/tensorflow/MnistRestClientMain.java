@@ -29,12 +29,13 @@ public class MnistRestClientMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().build());
+        try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().build())) {
 
-        String imageFile = "examples/tensorflow/mnist/data/1_0.png";
+            String imageFile = "examples/tensorflow/mnist/data/1_0.png";
 
-        Number recognizedDigit = client.call(Number.class, "MnistPredict", SpongeUtils.readFileToByteArray(imageFile));
+            Number recognizedDigit = client.call(Number.class, "MnistPredict", SpongeUtils.readFileToByteArray(imageFile));
 
-        System.out.println(String.format("Recognized digit for image file %s is %s.", imageFile, recognizedDigit));
+            System.out.println(String.format("Recognized digit for image file %s is %s.", imageFile, recognizedDigit));
+        }
     }
 }

@@ -55,118 +55,137 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testVersion() {
-        assertEquals(engine.getVersion(), createRestApiClient().getVersion());
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            assertEquals(engine.getVersion(), client.getVersion());
+        }
     }
 
     @Test
     public void testVersionWithId() {
-        SpongeRestApiClient client = createRestApiClient();
-        client.getConfiguration().setUseRequestId(true);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            client.getConfiguration().setUseRequestId(true);
 
-        GetVersionRequest request = new GetVersionRequest();
-        GetVersionResponse response = client.getVersion(request);
+            GetVersionRequest request = new GetVersionRequest();
+            GetVersionResponse response = client.getVersion(request);
 
-        assertEquals(null, response.getErrorCode());
-        assertEquals(null, response.getErrorMessage());
-        assertEquals(null, response.getDetailedErrorMessage());
-        assertEquals(engine.getVersion(), response.getVersion());
-        assertEquals("1", response.getId());
-        assertEquals(response.getId(), request.getId());
+            assertEquals(null, response.getErrorCode());
+            assertEquals(null, response.getErrorMessage());
+            assertEquals(null, response.getDetailedErrorMessage());
+            assertEquals(engine.getVersion(), response.getVersion());
+            assertEquals("1", response.getId());
+            assertEquals(response.getId(), request.getId());
+        }
     }
 
     @Test
     public void testActions() {
-        assertEquals(3, createRestApiClient().getActions().size());
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            assertEquals(3, client.getActions().size());
+        }
     }
 
     @Test
     public void testActionsParamArgMetadataRequiredTrue() {
-        assertEquals(3, createRestApiClient().getActions(null, true).size());
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            assertEquals(3, client.getActions(null, true).size());
+        }
     }
 
     @Test
     public void testActionsParamArgMetadataRequiredFalse() {
-        List<RestActionMeta> actions = createRestApiClient().getActions(null, false);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            List<RestActionMeta> actions = client.getActions(null, false);
 
-        assertEquals(4, actions.size());
-        RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
-        assertEquals(TypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
-        assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
+            assertEquals(4, actions.size());
+            RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
+            assertEquals(TypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
+            assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
+        }
     }
 
     @Test
     public void testActionsNameRegExp() {
-        String nameRegExp = ".*Case";
-        List<RestActionMeta> actions = createRestApiClient().getActions(nameRegExp);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            String nameRegExp = ".*Case";
+            List<RestActionMeta> actions = client.getActions(nameRegExp);
 
-        assertEquals(2, actions.size());
-        assertTrue(actions.stream().allMatch(action -> action.getName().matches(nameRegExp)));
+            assertEquals(2, actions.size());
+            assertTrue(actions.stream().allMatch(action -> action.getName().matches(nameRegExp)));
+        }
     }
 
     @Test
     public void testActionsNameExact() {
-        String nameRegExp = "UpperCase";
-        List<RestActionMeta> actions = createRestApiClient().getActions(nameRegExp);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            String nameRegExp = "UpperCase";
+            List<RestActionMeta> actions = client.getActions(nameRegExp);
 
-        assertEquals(1, actions.size());
-        assertEquals(actions.get(0).getName(), nameRegExp);
+            assertEquals(1, actions.size());
+            assertEquals(actions.get(0).getName(), nameRegExp);
+        }
     }
 
     @Test
     public void testCall() {
-        String arg1 = "test1";
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            String arg1 = "test1";
 
-        Object result = createRestApiClient().call("UpperCase", arg1);
+            Object result = client.call("UpperCase", arg1);
 
-        assertTrue(result instanceof String);
-        assertEquals(arg1.toUpperCase(), result);
+            assertTrue(result instanceof String);
+            assertEquals(arg1.toUpperCase(), result);
 
-        await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
-        assertFalse(engine.isError());
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
+            assertFalse(engine.isError());
+        }
     }
 
     @Test
     public void testCallWithExpectedKnowledgeBaseVersion() {
-        String arg1 = "test1";
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            String arg1 = "test1";
 
-        SpongeRestApiClient client = createRestApiClient();
+            Object result = client.callWithMeta(client.getActions("UpperCase").get(0), arg1);
 
-        Object result = client.callWithMeta(client.getActions("UpperCase").get(0), arg1);
+            assertTrue(result instanceof String);
+            assertEquals(arg1.toUpperCase(), result);
 
-        assertTrue(result instanceof String);
-        assertEquals(arg1.toUpperCase(), result);
-
-        await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
-        assertFalse(engine.isError());
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
+            assertFalse(engine.isError());
+        }
     }
 
     @Test(expected = RestApiIncorrectKnowledgeBaseVersionClientException.class)
     public void testCallWithWrongExpectedKnowledgeBaseVersion() {
-        String arg1 = "test1";
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            String arg1 = "test1";
 
-        SpongeRestApiClient client = createRestApiClient();
+            RestActionMeta actionMeta = client.getActions("UpperCase").get(0);
+            actionMeta.getKnowledgeBase().setVersion(2);
 
-        RestActionMeta actionMeta = client.getActions("UpperCase").get(0);
-        actionMeta.getKnowledgeBase().setVersion(2);
-
-        try {
-            Object result = client.callWithMeta(actionMeta, arg1);
-            assertNull(result);
-        } finally {
-            engine.clearError();
+            try {
+                Object result = client.callWithMeta(actionMeta, arg1);
+                assertNull(result);
+            } finally {
+                engine.clearError();
+            }
         }
     }
 
     @Test
     public void testSend() {
-        assertNotNull(createRestApiClient().send("alarm", SpongeUtils.immutableMapOf("attr1", "Test")));
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            assertNotNull(client.send("alarm", SpongeUtils.immutableMapOf("attr1", "Test")));
 
-        await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());
-        assertFalse(engine.isError());
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());
+            assertFalse(engine.isError());
+        }
     }
 
     @Test
     public void testKnowledgeBases() {
-        assertEquals(1, createRestApiClient().getKnowledgeBases().size());
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            assertEquals(1, client.getKnowledgeBases().size());
+        }
     }
 }

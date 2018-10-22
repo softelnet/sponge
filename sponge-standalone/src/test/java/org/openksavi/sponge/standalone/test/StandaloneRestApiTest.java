@@ -43,12 +43,13 @@ public class StandaloneRestApiTest {
 
             String arg1 = "test1";
 
-            SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
-                    .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
-            Object result = client.call("UpperCase", arg1);
+            try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+                    .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build())) {
+                Object result = client.call("UpperCase", arg1);
 
-            assertTrue(result instanceof String);
-            assertEquals(arg1.toUpperCase(), result);
+                assertTrue(result instanceof String);
+                assertEquals(arg1.toUpperCase(), result);
+            }
 
             assertFalse(engine.isError());
         } finally {

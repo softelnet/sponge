@@ -47,12 +47,19 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
     /** The lock. */
     private Lock lock = new ReentrantLock(true);
 
+    /** If {@code true}, the underlying OkHttpClient will be closed aggressively. */
+    private boolean closeAggressively = false;
+
     public OkHttpSpongeRestApiClient(RestApiClientConfiguration configuration) {
         super(configuration);
     }
 
     public void setOkHttpClient(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
+    }
+
+    protected OkHttpClient getOkHttpClient() {
+        return okHttpClient;
     }
 
     protected OkHttpClient getOrCreateOkHttpClient() {
@@ -71,6 +78,14 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
         return okHttpClient;
     }
 
+    protected boolean isCloseAggressively() {
+        return closeAggressively;
+    }
+
+    protected void setCloseAggressively(boolean closeAggressively) {
+        this.closeAggressively = closeAggressively;
+    }
+
     @Override
     protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
         String jsonContectType = "application/json";
@@ -86,6 +101,24 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
             return response.body() != null ? getObjectMapper().readValue(response.body().string(), responseClass) : null;
         } catch (Throwable e) {
             throw RestApiClientUtils.wrapException(e);
+        }
+    }
+
+    /**
+     * Closes aggressively the underlying OkHttpClient according to the OkHttpClient documentation.
+     */
+    @Override
+    public void close() {
+        if (closeAggressively && okHttpClient != null) {
+            // Close in a thread-safe manner.
+            lock.lock();
+            try {
+                if (okHttpClient != null) {
+                    RestApiClientUtils.closeOkHttpClient(okHttpClient);
+                }
+            } finally {
+                lock.unlock();
+            }
         }
     }
 }

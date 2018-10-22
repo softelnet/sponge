@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.client;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 /**
  * A Sponge REST API client.
  */
-public interface SpongeRestApiClient {
+public interface SpongeRestApiClient extends Closeable {
 
     /**
      * Returns the client configuration.
@@ -271,4 +272,10 @@ public interface SpongeRestApiClient {
      * Clears the action metadata cache.
      */
     void clearCache();
+
+    /**
+     * Closes the client.
+     */
+    @Override
+    void close();
 }
