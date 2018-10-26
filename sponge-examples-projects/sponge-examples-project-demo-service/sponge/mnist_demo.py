@@ -1,6 +1,6 @@
 """
 Sponge Knowledge base
-Mnist Demo
+MNIST Demo
 """
 
 def onStartup():

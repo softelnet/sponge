@@ -58,7 +58,7 @@ public abstract class RestApiUtils {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static Object unmarshalValue(ObjectMapper mapper, Type type, Object jsonValue, String valueName) {
         if (jsonValue == null || type == null) {
-            return null;
+            return jsonValue;
         }
 
         // Note that metadata not null checks have been performed while enabling the action.

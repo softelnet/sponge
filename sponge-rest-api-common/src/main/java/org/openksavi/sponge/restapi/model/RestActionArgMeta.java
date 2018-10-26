@@ -62,7 +62,7 @@ public class RestActionArgMeta {
         this.type = type;
     }
 
-    @ApiModelProperty(value = "The action argument display name", required = true)
+    @ApiModelProperty(value = "The action argument display name", required = false)
     public String getDisplayName() {
         return displayName;
     }
@@ -71,7 +71,7 @@ public class RestActionArgMeta {
         this.displayName = displayName;
     }
 
-    @ApiModelProperty(value = "The action argument description", required = true)
+    @ApiModelProperty(value = "The action argument description", required = false)
     public String getDescription() {
         return description;
     }

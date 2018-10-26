@@ -34,6 +34,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestActionResultMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
@@ -64,7 +65,7 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     private RestApiClientConfiguration configuration;
 
-    private AtomicLong requestId = new AtomicLong(0);
+    private AtomicLong currentRequestId = new AtomicLong(0);
 
     private ObjectMapper objectMapper = RestApiUtils.createObjectMapper();
 
@@ -92,17 +93,15 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     private void initActionMetaCache() {
         lock.lock();
         try {
-            if (configuration != null && !configuration.isUseActionMetaCache()) {
+            if (!configuration.isUseActionMetaCache()) {
                 actionMetaCache = null;
             } else {
                 Caffeine<Object, Object> builder = Caffeine.newBuilder();
-                if (configuration != null) {
-                    if (configuration.getActionMetaCacheMaxSize() > -1) {
-                        builder.maximumSize(configuration.getActionMetaCacheMaxSize());
-                    }
-                    if (configuration.getActionMetaCacheExpireSeconds() > -1) {
-                        builder.expireAfterWrite(configuration.getActionMetaCacheExpireSeconds(), TimeUnit.SECONDS);
-                    }
+                if (configuration.getActionMetaCacheMaxSize() > -1) {
+                    builder.maximumSize(configuration.getActionMetaCacheMaxSize());
+                }
+                if (configuration.getActionMetaCacheExpireSeconds() > -1) {
+                    builder.expireAfterWrite(configuration.getActionMetaCacheExpireSeconds(), TimeUnit.SECONDS);
                 }
 
                 actionMetaCache = builder.build(actionName -> fetchActionMeta(actionName));
@@ -150,7 +149,7 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     protected <T extends BaseRequest> T prepareRequest(T request) {
         if (configuration.isUseRequestId()) {
-            request.setId(String.valueOf(requestId.incrementAndGet()));
+            request.setId(String.valueOf(currentRequestId.incrementAndGet()));
         }
 
         // Must be thread-safe.
@@ -281,7 +280,7 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
 
         // Populate the cache.
-        if (populateCache && configuration != null && configuration.isUseActionMetaCache() && actionMetaCache != null) {
+        if (populateCache && configuration.isUseActionMetaCache() && actionMetaCache != null) {
             response.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
         }
 
@@ -331,7 +330,7 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public RestActionMeta getActionMeta(String actionName) {
-        if (configuration != null && configuration.isUseActionMetaCache() && actionMetaCache != null) {
+        if (configuration.isUseActionMetaCache() && actionMetaCache != null) {
             return actionMetaCache.get(actionName);
         } else {
             return fetchActionMeta(actionName);
@@ -348,6 +347,8 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
                 "Action name '%s' in the metadata doesn't match the action name '%s' in the request",
                 actionMeta != null ? actionMeta.getName() : null, request.getName());
 
+        validateCallArgs(actionMeta, request.getArgs());
+
         ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class);
 
         if (actionMeta != null && actionMeta.getResultMeta() != null) {
@@ -356,6 +357,25 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         }
 
         return response;
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected void validateCallArgs(RestActionMeta actionMeta, List args) {
+        // Validate arguments.
+        if (actionMeta == null || actionMeta.getArgsMeta() == null) {
+            return;
+        }
+
+        int actualArgsLength = args != null ? args.size() : 0;
+        Validate.isTrue(actionMeta.getArgsMeta().size() == actualArgsLength, "Incorrect number of arguments. Expected %d but got %d",
+                actionMeta.getArgsMeta().size(), actualArgsLength);
+
+        // Validate non-nullable arguments.
+        for (int i = 0; i < actionMeta.getArgsMeta().size(); i++) {
+            RestActionArgMeta meta = actionMeta.getArgsMeta().get(i);
+            Validate.isTrue(meta.getType().isNullable() || args.get(i) != null, "Action argument '%s' is not set",
+                    meta.getDisplayName() != null ? meta.getDisplayName() : meta.getName());
+        }
     }
 
     @Override

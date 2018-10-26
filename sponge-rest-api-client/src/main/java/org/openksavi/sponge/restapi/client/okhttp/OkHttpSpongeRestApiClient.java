@@ -28,6 +28,7 @@ import okhttp3.Response;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
@@ -88,15 +89,16 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
 
     @Override
     protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
-        String jsonContectType = "application/json";
-        Headers headers = new Headers.Builder().add("Content-Type", jsonContectType).build();
+        Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.APPLICATION_JSON_VALUE).build();
 
         try {
             String requestBody = getObjectMapper().writeValueAsString(request);
-            Response response = getOrCreateOkHttpClient().newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
-                    .post(RequestBody.create(MediaType.get(jsonContectType), requestBody)).build()).execute();
+            Response response = getOrCreateOkHttpClient()
+                    .newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
+                            .post(RequestBody.create(MediaType.get(RestApiConstants.APPLICATION_JSON_VALUE), requestBody)).build())
+                    .execute();
 
-            Validate.isTrue(RestApiUtils.isHttpSuccess(response.code()), "Error HTTP status code %s", response.code());
+            Validate.isTrue(RestApiUtils.isHttpSuccess(response.code()), "HTTP status code is %s", response.code());
 
             return response.body() != null ? getObjectMapper().readValue(response.body().string(), responseClass) : null;
         } catch (Throwable e) {

@@ -49,7 +49,7 @@ public class RestActionResultMeta {
         this.type = type;
     }
 
-    @ApiModelProperty(value = "The action result display name", required = true)
+    @ApiModelProperty(value = "The action result display name", required = false)
     public String getDisplayName() {
         return displayName;
     }
