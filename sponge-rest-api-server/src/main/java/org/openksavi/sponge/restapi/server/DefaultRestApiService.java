@@ -64,6 +64,7 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.Type;
 
 /**
  * Default Sponge REST service.
@@ -184,22 +185,38 @@ public class DefaultRestApiService implements RestApiService {
             Predicate<ActionAdapter> isSelectedByNameRegExp =
                     action -> actionNameRegExp != null ? action.getName().matches(actionNameRegExp) : true;
 
-            return setupSuccessResponse(
-                    new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
-                            .filter(isPublicBySettings)
-                            .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null
-                                    : true)
-                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                            .filter(action -> canCallAction(user, action))
-                            .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
-                                    createRestKnowledgeBase(action.getKnowledgeBase()), action.getFeatures(),
-                                    createActionArgMetaList(action), createActionResultMeta(action)))
-                            .collect(Collectors.toList())),
-                    request);
+            return setupSuccessResponse(new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp)
+                    .filter(isPublicByAction).filter(isPublicBySettings)
+                    .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
+                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                    .filter(action -> canCallAction(user, action))
+                    .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
+                            createRestKnowledgeBase(action.getKnowledgeBase()), action.getFeatures(), createActionArgMetaList(action),
+                            createActionResultMeta(action)))
+                    .map(action -> marshalActionMeta(action)).collect(Collectors.toList())), request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new GetActionsResponse(), request, e);
         }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
+        if (actionMeta != null) {
+            if (actionMeta.getArgsMeta() != null) {
+                actionMeta.getArgsMeta().forEach(argMeta -> {
+                    Type type = argMeta.getType();
+                    type.setDefaultValue(typeConverter.marshal(type, type.getDefaultValue()));
+                });
+            }
+
+            if (actionMeta.getResultMeta() != null) {
+                Type type = actionMeta.getResultMeta().getType();
+                type.setDefaultValue(typeConverter.marshal(type, type.getDefaultValue()));
+            }
+        }
+
+        return actionMeta;
     }
 
     @Override

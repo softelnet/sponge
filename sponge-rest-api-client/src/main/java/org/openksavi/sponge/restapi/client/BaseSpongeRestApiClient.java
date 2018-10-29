@@ -58,6 +58,7 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.Type;
 
 /**
  * A base Sponge REST API client.
@@ -286,12 +287,31 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache) {
         GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
 
+        response.getActions().forEach(actionMeta -> unmarshalActionMeta(actionMeta));
+
         // Populate the cache.
         if (populateCache && configuration.isUseActionMetaCache() && actionMetaCache != null) {
             response.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
         }
 
         return response;
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected void unmarshalActionMeta(RestActionMeta actionMeta) {
+        if (actionMeta != null) {
+            if (actionMeta.getArgsMeta() != null) {
+                actionMeta.getArgsMeta().forEach(argMeta -> {
+                    Type type = argMeta.getType();
+                    type.setDefaultValue(typeConverter.unmarshal(type, argMeta.getType().getDefaultValue()));
+                });
+            }
+
+            if (actionMeta.getResultMeta() != null) {
+                Type type = actionMeta.getResultMeta().getType();
+                type.setDefaultValue(typeConverter.unmarshal(type, type.getDefaultValue()));
+            }
+        }
     }
 
     @Override
