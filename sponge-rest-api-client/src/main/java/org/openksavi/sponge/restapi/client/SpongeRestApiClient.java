@@ -142,19 +142,28 @@ public interface SpongeRestApiClient extends Closeable {
     List<RestActionMeta> getActions();
 
     /**
-     * Returns the metadata for a specified action. This method may use action metadata cache if configured.
+     * Returns the metadata for a specified action. This method may fetch the metadata from the server or use the action metadata cache if
+     * configured.
      *
      * @param actionName the action name.
+     *
      * @return the action metadata or {@code null} if there is no such action or that action has no metadata.
      */
     RestActionMeta getActionMeta(String actionName);
 
     /**
-     * Calls the action. This method may use action metadata cache if configured or fetch the action result metadata from the server every
-     * call.
+     * Returns the metadata for a specified action. This method may use the action metadata cache if configured.
      *
-     * <p>Unmarshals the result using a best effort strategy, i.e. when a result metadata is defined for this action (on the server side).
-     * If you want to disable fetching metadata and unmarshalling the result, use action metadata cache or {@code callWithNoMeta}.
+     * @param actionName the action name.
+     * @param allowFetchMetadata if {@code true} (the default value), the action metadata may be fetched from the server.
+     *
+     * @return the action metadata or {@code null} if there is no such action or that action has no metadata.
+     */
+    RestActionMeta getActionMeta(String actionName, boolean allowFetchMetadata);
+
+    /**
+     * Calls the action. Allows fetching the action metadata. For more information see
+     * {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
      *
      * @param request the request.
      *
@@ -163,7 +172,33 @@ public interface SpongeRestApiClient extends Closeable {
     ActionCallResponse call(ActionCallRequest request);
 
     /**
-     * Calls the action. For more information see {@link #call(ActionCallRequest) call}.
+     * Calls the action. Allows fetching the action metadata. For more information see
+     * {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
+     *
+     * @param request the request.
+     * @param actionMeta the action metadata.
+     *
+     * @return the response.
+     */
+    ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta);
+
+    /**
+     * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined (on
+     * the server side).
+     *
+     * @param request the request.
+     * @param actionMeta the action metadata that will be used for marshaling and unmarshaling. If the value is {@code null}, this method
+     *        may fetch the action metadata from the server if the action metadata cache is turned off or is not populated.
+     * @param allowFetchMetadata if {@code true} (the default value), the action metadata (if {@code null}) may be fetched from the server
+     *        by sending an additional request. If {@code false} and the action metadata is {@code null} or is not in the cache, the
+     *        marshaling of arguments and unmarshaling of the result will be suppressed.
+     *
+     * @return the response.
+     */
+    ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta, boolean allowFetchMetadata);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
      *
      * @param actionName the action name.
      * @param args the action arguments.
@@ -173,7 +208,7 @@ public interface SpongeRestApiClient extends Closeable {
     Object call(String actionName, Object... args);
 
     /**
-     * Calls the action. For more information see {@link #call(ActionCallRequest) call}.
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
      *
      * @param resultClass the result class.
      * @param actionName the action name.
@@ -183,60 +218,6 @@ public interface SpongeRestApiClient extends Closeable {
      * @param <T> the result type.
      */
     <T> T call(Class<T> resultClass, String actionName, Object... args);
-
-    /**
-     * Calls the action. Unmarshals the result according to the action result type if {@code actionMeta} is not {@code null}.
-     *
-     * @param actionMeta the action metadata.
-     * @param request the request.
-     *
-     * @return the response.
-     */
-    ActionCallResponse callWithMeta(RestActionMeta actionMeta, ActionCallRequest request);
-
-    /**
-     * Calls the action. Unmarshals the result according to the action result type if {@code actionMeta} is not {@code null}.
-     *
-     * @param actionMeta the action metadata.
-     * @param args the action arguments.
-     *
-     * @return the action result.
-     */
-    Object callWithMeta(RestActionMeta actionMeta, Object... args);
-
-    /**
-     * Calls the action. Unmarshals the result according to the action result type if {@code actionMeta} is not {@code null}.
-     *
-     * @param resultClass the result class.
-     * @param actionMeta the action metadata.
-     * @param args the action arguments.
-     *
-     * @return the action result.
-     * @param <T> the result type.
-     */
-    <T> T callWithMeta(Class<T> resultClass, RestActionMeta actionMeta, Object... args);
-
-    /**
-     * Calls the action with no metadata.
-     *
-     * @param actionName the action name.
-     * @param args the action arguments.
-     *
-     * @return the action result.
-     */
-    Object callWithNoMeta(String actionName, Object... args);
-
-    /**
-     * Calls the action with no metadata.
-     *
-     * @param resultClass the result class.
-     * @param actionName the action name.
-     * @param args the action arguments.
-     *
-     * @return the action result.
-     * @param <T> the result type.
-     */
-    <T> T callWithNoMeta(Class<T> resultClass, String actionName, Object... args);
 
     /**
      * Send the event to the server.

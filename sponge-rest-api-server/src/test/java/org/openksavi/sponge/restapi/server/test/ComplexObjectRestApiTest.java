@@ -48,6 +48,7 @@ import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -139,7 +140,8 @@ public class ComplexObjectRestApiTest {
         String actionName = "ComplexObjectAction";
         TestCompoundComplexObject compoundObject = createTestCompoundComplexObject();
 
-        Object value = createRestApiClient().callWithNoMeta(actionName, compoundObject);
+        Object value =
+                createRestApiClient().call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getResult();
 
         assertTrue(value instanceof Map);
 

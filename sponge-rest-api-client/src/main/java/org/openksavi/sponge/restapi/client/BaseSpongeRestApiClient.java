@@ -33,11 +33,9 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
-import org.openksavi.sponge.restapi.model.RestActionResultMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.BaseRequest;
@@ -65,6 +63,8 @@ import org.openksavi.sponge.restapi.util.RestApiUtils;
  * A base Sponge REST API client.
  */
 public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
+
+    protected static final boolean DEFAULT_ALLOW_FETCH_METADATA = true;
 
     private RestApiClientConfiguration configuration;
 
@@ -318,15 +318,6 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         return getActions(new GetActionsRequest()).getActions();
     }
 
-    protected ResultMeta<?> convertResultMeta(RestActionResultMeta restResultMeta) {
-        if (restResultMeta == null) {
-            return null;
-        }
-
-        return new ResultMeta<>(restResultMeta.getType()).displayName(restResultMeta.getDisplayName())
-                .description(restResultMeta.getDescription());
-    }
-
     protected RestActionMeta fetchActionMeta(String actionName) {
         GetActionsRequest request = new GetActionsRequest();
         request.setMetadataRequired(true);
@@ -337,10 +328,20 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     @Override
     public RestActionMeta getActionMeta(String actionName) {
+        return getActionMeta(actionName, DEFAULT_ALLOW_FETCH_METADATA);
+    }
+
+    @Override
+    public RestActionMeta getActionMeta(String actionName, boolean allowFetchMetadata) {
         if (configuration.isUseActionMetaCache() && actionMetaCache != null) {
-            return actionMetaCache.get(actionName);
+            RestActionMeta actionMeta = actionMetaCache.getIfPresent(actionName);
+            if (actionMeta != null) {
+                return actionMeta;
+            }
+
+            return allowFetchMetadata ? actionMetaCache.get(actionName) : null;
         } else {
-            return fetchActionMeta(actionName);
+            return allowFetchMetadata ? fetchActionMeta(actionName) : null;
         }
     }
 
@@ -406,24 +407,18 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public ActionCallResponse callWithMeta(RestActionMeta actionMeta, ActionCallRequest request) {
-        return doCall(actionMeta, request);
-    }
-
-    @Override
-    public Object callWithMeta(RestActionMeta actionMeta, Object... args) {
-        return callWithMeta(actionMeta, new ActionCallRequest(actionMeta.getName(), Arrays.asList((Object[]) args))).getResult();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T callWithMeta(Class<T> resultClass, RestActionMeta actionMeta, Object... args) {
-        return (T) callWithMeta(actionMeta, args);
-    }
-
-    @Override
     public ActionCallResponse call(ActionCallRequest request) {
-        return callWithMeta(getActionMeta(request.getName()), request);
+        return call(request, null);
+    }
+
+    @Override
+    public ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta) {
+        return call(request, actionMeta, true);
+    }
+
+    @Override
+    public ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta, boolean allowFetchMetadata) {
+        return doCall(actionMeta != null ? actionMeta : getActionMeta(request.getName(), allowFetchMetadata), request);
     }
 
     @Override
@@ -435,17 +430,6 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     @SuppressWarnings("unchecked")
     public <T> T call(Class<T> resultClass, String actionName, Object... args) {
         return (T) call(actionName, (Object[]) args);
-    }
-
-    @Override
-    public Object callWithNoMeta(String actionName, Object... args) {
-        return doCall(null, new ActionCallRequest(actionName, Arrays.asList((Object[]) args))).getResult();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T callWithNoMeta(Class<T> resultClass, String actionName, Object... args) {
-        return (T) callWithNoMeta(actionName, (Object[]) args);
     }
 
     @Override

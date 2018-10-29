@@ -58,7 +58,6 @@ wildcards
 glob
 multi
 unmarshals
-unmarshalling
 tensorflow
 localhost
 unmarshal
@@ -73,3 +72,4 @@ tomcat
 nullable
 doodle
 doodles
+unmarshaling

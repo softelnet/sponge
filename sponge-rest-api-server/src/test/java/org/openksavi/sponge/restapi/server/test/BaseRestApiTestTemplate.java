@@ -145,7 +145,7 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestApiClient client = createRestApiClient()) {
             String arg1 = "test1";
 
-            Object result = client.callWithMeta(client.getActions("UpperCase").get(0), arg1);
+            Object result = client.call("UpperCase", arg1);
 
             assertTrue(result instanceof String);
             assertEquals(arg1.toUpperCase(), result);
@@ -164,7 +164,7 @@ public abstract class BaseRestApiTestTemplate {
             actionMeta.getKnowledgeBase().setVersion(2);
 
             try {
-                Object result = client.callWithMeta(actionMeta, arg1);
+                Object result = client.call("UpperCase", arg1);
                 assertNull(result);
             } finally {
                 engine.clearError();
