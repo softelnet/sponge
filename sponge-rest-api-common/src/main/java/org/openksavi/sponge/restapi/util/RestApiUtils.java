@@ -16,23 +16,14 @@
 
 package org.openksavi.sponge.restapi.util;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.restapi.model.RestType;
-import org.openksavi.sponge.type.ListType;
-import org.openksavi.sponge.type.MapType;
-import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.Type;
 
 /**
@@ -53,42 +44,6 @@ public abstract class RestApiUtils {
         mapper.addMixIn(Type.class, RestType.class);
 
         return mapper;
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static Object unmarshalValue(ObjectMapper mapper, Type type, Object jsonValue, String valueName) {
-        if (jsonValue == null || type == null) {
-            return jsonValue;
-        }
-
-        // Note that metadata not null checks have been performed while enabling the action.
-        switch (type.getKind()) {
-        case BINARY:
-            return mapper.convertValue(jsonValue, byte[].class);
-        case OBJECT:
-            Validate.isInstanceOf(ObjectType.class, type, "Object type %s doesn't match %s", type.getClass(), ObjectType.class);
-            String className = ((ObjectType) type).getClassName();
-            return mapper.convertValue(jsonValue, Validate.notNull(getClass(className), "Class % not found", className));
-        case LIST:
-            Validate.isInstanceOf(Collection.class, jsonValue, "Non list type in the %s: %s", valueName, jsonValue.getClass());
-
-            return ((Collection) jsonValue).stream()
-                    .map((Object jsonElem) -> unmarshalValue(mapper, ((ListType) type).getElementType(), jsonElem, valueName))
-                    .collect(Collectors.toList());
-        case MAP:
-            Validate.isInstanceOf(Map.class, jsonValue, "Non map type in the %s: %s", valueName, jsonValue.getClass());
-
-            return ((Map) jsonValue).entrySet().stream()
-                    .collect(Collectors.toMap(
-                            (Map.Entry entry) -> unmarshalValue(mapper, ((MapType) type).getKeyType(), entry.getKey(), valueName),
-                            (Map.Entry entry) -> unmarshalValue(mapper, ((MapType) type).getValueType(), entry.getValue(), valueName)));
-        default:
-            return jsonValue;
-        }
-    }
-
-    public static Object unmarshalActionResult(ObjectMapper mapper, ResultMeta<?> resultMeta, Object jsonResult) {
-        return unmarshalValue(mapper, resultMeta.getType(), jsonResult, String.format("result of the action"));
     }
 
     /**

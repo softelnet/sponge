@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,8 @@ import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
@@ -67,9 +70,9 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     private AtomicLong currentRequestId = new AtomicLong(0);
 
-    private ObjectMapper objectMapper = RestApiUtils.createObjectMapper();
-
     private AtomicReference<String> currentAuthToken = new AtomicReference<>();
+
+    private TypeConverter typeConverter = new DefaultTypeConverter(RestApiUtils.createObjectMapper());
 
     private Lock lock = new ReentrantLock(true);
 
@@ -84,10 +87,18 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         return configuration;
     }
 
-    public void setConfiguration(RestApiClientConfiguration configuration) {
+    protected void setConfiguration(RestApiClientConfiguration configuration) {
         this.configuration = configuration;
 
         initActionMetaCache();
+    }
+
+    public TypeConverter getTypeConverter() {
+        return typeConverter;
+    }
+
+    public void setTypeConverter(TypeConverter typeConverter) {
+        this.typeConverter = typeConverter;
     }
 
     private void initActionMetaCache() {
@@ -132,15 +143,11 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     public ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    protected final String getUrl() {
-        return configuration.getUrl();
+        return typeConverter.getObjectMapper();
     }
 
     protected final String getUrl(String operation) {
-        String baseUrl = getUrl();
+        String baseUrl = configuration.getUrl();
 
         return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + operation;
     }
@@ -349,12 +356,11 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
         validateCallArgs(actionMeta, request.getArgs());
 
+        request.setArgs(marshalCallArgs(actionMeta, request.getArgs()));
+
         ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class);
 
-        if (actionMeta != null && actionMeta.getResultMeta() != null) {
-            response.setResult(
-                    RestApiUtils.unmarshalActionResult(objectMapper, convertResultMeta(actionMeta.getResultMeta()), response.getResult()));
-        }
+        unmarshalCallResult(actionMeta, response);
 
         return response;
     }
@@ -376,6 +382,27 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
             Validate.isTrue(meta.getType().isNullable() || args.get(i) != null, "Action argument '%s' is not set",
                     meta.getDisplayName() != null ? meta.getDisplayName() : meta.getName());
         }
+    }
+
+    protected List<Object> marshalCallArgs(RestActionMeta actionMeta, List<Object> args) {
+        if (args == null || actionMeta == null || actionMeta.getArgsMeta() == null) {
+            return args;
+        }
+
+        List<Object> result = new ArrayList<>(args.size());
+        for (int i = 0; i < args.size(); i++) {
+            result.add(typeConverter.marshal(actionMeta.getArgsMeta().get(i).getType(), args.get(i)));
+        }
+
+        return result;
+    }
+
+    protected void unmarshalCallResult(RestActionMeta actionMeta, ActionCallResponse response) {
+        if (actionMeta == null || actionMeta.getResultMeta() == null || response.getResult() == null) {
+            return;
+        }
+
+        response.setResult(typeConverter.unmarshal(actionMeta.getResultMeta().getType(), response.getResult()));
     }
 
     @Override

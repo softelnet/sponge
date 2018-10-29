@@ -61,6 +61,8 @@ import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
+import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
@@ -79,6 +81,8 @@ public class DefaultRestApiService implements RestApiService {
     private RestApiErrorResponseProvider errorResponseProvider = new DefaultRestApiErrorResponseProvider();
 
     private ObjectMapper mapper = RestApiUtils.createObjectMapper();
+
+    private TypeConverter typeConverter = new DefaultTypeConverter(mapper);
 
     public DefaultRestApiService() {
         //
@@ -217,9 +221,11 @@ public class DefaultRestApiService implements RestApiService {
                                 actionAdapter.getKnowledgeBase().getVersion()));
             }
 
-            return setupSuccessResponse(new ActionCallResponse(
-                    getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange))),
-                    request);
+            Object result = marshalActionResult(actionAdapter,
+                    getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange)),
+                    exchange);
+
+            return setupSuccessResponse(new ActionCallResponse(result), request);
         } catch (Exception e) {
             if (actionAdapter != null) {
                 getEngine().handleError(actionAdapter, e);
@@ -232,7 +238,11 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected Object[] unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request, Exchange exchange) {
-        return RestApiServerUtils.unmarshalActionArgs(mapper, actionAdapter, request.getArgs(), exchange);
+        return RestApiServerUtils.unmarshalActionArgs(typeConverter, actionAdapter, request.getArgs(), exchange);
+    }
+
+    protected Object marshalActionResult(ActionAdapter actionAdapter, Object result, Exchange exchange) {
+        return RestApiServerUtils.marshalActionResult(typeConverter, actionAdapter, result, exchange);
     }
 
     @Override
@@ -396,6 +406,14 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public void setSettings(RestApiSettings settings) {
         this.settings = settings;
+    }
+
+    public TypeConverter getTypeConverter() {
+        return typeConverter;
+    }
+
+    public void setTypeConverter(TypeConverter typeConverter) {
+        this.typeConverter = typeConverter;
     }
 
     @Override

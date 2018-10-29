@@ -22,16 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.core.util.PatternStringReplacer;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
-import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 
 /**
  * A set of REST API server utility methods.
@@ -77,7 +76,8 @@ public abstract class RestApiServerUtils {
         return PASSWORD_REPLACER.replaceAll(text);
     }
 
-    public static Object[] unmarshalActionArgs(ObjectMapper mapper, ActionAdapter actionAdapter, List<Object> jsonArgs, Exchange exchange) {
+    public static Object[] unmarshalActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
+            Exchange exchange) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {
             return null;
@@ -96,8 +96,12 @@ public abstract class RestApiServerUtils {
             if (jsonArg != null && index < actionAdapter.getArgsMeta().length) {
                 ArgMeta<?> argMeta = actionAdapter.getArgsMeta()[index];
                 if (argMeta != null && argMeta.getType() != null) {
-                    finalArg = RestApiUtils.unmarshalValue(mapper, argMeta.getType(), jsonArg, String.format("argument %s in the action %s",
-                            argMeta.getName() != null ? argMeta.getName() : index, actionAdapter.getName()));
+                    try {
+                        finalArg = typeConverter.unmarshal(argMeta.getType(), jsonArg);
+                    } catch (Exception e) {
+                        throw SpongeUtils.wrapException(String.format("Unmarshal argument %s in the %s action",
+                                argMeta.getName() != null ? argMeta.getName() : index, actionAdapter.getName()), e);
+                    }
                 }
             }
 
@@ -106,5 +110,13 @@ public abstract class RestApiServerUtils {
         }
 
         return finalArgs.toArray();
+    }
+
+    public static Object marshalActionResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result, Exchange exchange) {
+        if (result == null || actionAdapter.getResultMeta() == null) {
+            return result;
+        }
+
+        return typeConverter.marshal(actionAdapter.getResultMeta().getType(), result);
     }
 }

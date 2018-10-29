@@ -16,14 +16,14 @@
 
 package org.openksavi.sponge.restapi.client;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
+import org.apache.commons.lang3.Validate;
 
 /**
  * A Sponge REST API configuration.
  */
 public class RestApiClientConfiguration {
 
-    private String url = String.format("http://localhost:%d/%s", RestApiConstants.DEFAULT_PORT, RestApiConstants.DEFAULT_PATH);
+    private String url;
 
     private String username;
 
@@ -141,6 +141,8 @@ public class RestApiClientConfiguration {
          * @return the client.
          */
         public RestApiClientConfiguration build() {
+            Validate.notNull(configuration.getUrl(), "URL not set");
+
             return configuration;
         }
 

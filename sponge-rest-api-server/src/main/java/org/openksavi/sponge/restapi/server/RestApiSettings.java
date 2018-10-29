@@ -37,6 +37,9 @@ public class RestApiSettings {
     /** The port. */
     private Integer port = RestApiConstants.DEFAULT_PORT;
 
+    /** The URL path. */
+    private String path = RestApiConstants.DEFAULT_PATH;
+
     /** The API version. */
     private int version = RestApiConstants.API_VERSION;
 
@@ -91,6 +94,14 @@ public class RestApiSettings {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    protected String getPath() {
+        return path;
+    }
+
+    protected void setPath(String path) {
+        this.path = path;
     }
 
     public int getVersion() {

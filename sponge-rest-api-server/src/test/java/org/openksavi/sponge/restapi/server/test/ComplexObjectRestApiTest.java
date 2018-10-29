@@ -49,6 +49,8 @@ import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
+import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -161,10 +163,11 @@ public class ComplexObjectRestApiTest {
 
         assertTrue(returnValue instanceof List);
 
+        TypeConverter typeConverter = new DefaultTypeConverter(new ObjectMapper());
         @SuppressWarnings("unchecked")
-        List<TestCompoundComplexObject> resultList =
-                (List<TestCompoundComplexObject>) RestApiUtils.unmarshalActionResult(new ObjectMapper(),
-                        engine.getActionManager().getActionAdapter(actionName).getResultMeta(), returnValue);
+        List<TestCompoundComplexObject> resultList = (List<TestCompoundComplexObject>) typeConverter
+                .unmarshal(engine.getActionManager().getActionAdapter(actionName).getResultMeta().getType(), returnValue);// RestApiUtils.unmarshalActionResult(new
+                                                                                                                          // DefaultTypeConverter(new
         assertEquals(1, resultList.size());
         TestCompoundComplexObject result = resultList.get(0);
         assertEquals(compoundObject.getId() + 1, result.getId().longValue());
