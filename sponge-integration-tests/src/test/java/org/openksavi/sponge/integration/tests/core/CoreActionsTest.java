@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.examples.TestCompoundComplexObject;
 import org.openksavi.sponge.test.util.TestUtils;
 import org.openksavi.sponge.type.ActionType;
@@ -234,4 +236,20 @@ public class CoreActionsTest {
         }
     }
 
+    @Test
+    public void testActionsOnConfigureError() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_on_configure_error.py").build();
+
+        try {
+            engine.startup();
+
+            fail("Exception not thrown");
+        } catch (WrappedException e) {
+            assertEquals("kb.TestAction.onConfigure", e.getSourceName());
+            assertEquals("'org.openksavi.sponge.action.ResultMeta' object has no attribute 'displayName_error'", e.getMessage());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }
