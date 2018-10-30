@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.examples.project.demoservice;
+package org.openksavi.sponge.examples.project.restapitestservice;
 
 import static org.junit.Assert.assertEquals;
-
-import java.nio.file.Paths;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,18 +25,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.util.SocketUtils;
 
-import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 
 @net.jcip.annotations.NotThreadSafe
-public class DemoServiceTest {
+public class RestApiClientTestServiceTest {
 
     protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
 
-    protected static final DemoServiceTestEnvironment environment = new DemoServiceTestEnvironment();
+    protected static final RestApioTestClientServiceTestEnvironment environment = new RestApioTestClientServiceTestEnvironment();
 
     @BeforeClass
     public static void beforeClass() {
@@ -66,12 +63,9 @@ public class DemoServiceTest {
     }
 
     @Test
-    public void testRestCallPredict() {
-        byte[] imageData = SpongeUtils.readFileToByteArray(
-                Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
-
+    public void testActionUppercase() {
         try (SpongeRestApiClient client = createRestApiClient()) {
-            assertEquals(5, createRestApiClient().call(Number.class, "MnistPredict", imageData));
+            assertEquals("TEXT TO UPPERCASE", client.call("UpperCase", "Text to uppercase"));
         }
     }
 }

@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.type.Type;
 
-@ApiModel(value = "ActionArgMeta", description = "Represents a Sponge action argument metadata")
+@ApiModel(value = "ActionArgMeta", description = "Represents an action argument metadata")
 @SuppressWarnings("rawtypes")
 public class RestActionArgMeta {
 
@@ -33,15 +33,18 @@ public class RestActionArgMeta {
 
     private String description;
 
+    private boolean optional;
+
     public RestActionArgMeta() {
         //
     }
 
-    public RestActionArgMeta(String name, Type type, String displayName, String description) {
+    public RestActionArgMeta(String name, Type type, String displayName, String description, boolean optional) {
         this.name = name;
         this.type = type;
         this.displayName = displayName;
         this.description = description;
+        this.optional = optional;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -78,5 +81,14 @@ public class RestActionArgMeta {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @ApiModelProperty(value = "Optional argument", required = false)
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 }

@@ -18,6 +18,8 @@ package org.openksavi.sponge.core.action;
 
 import java.util.Arrays;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
@@ -78,13 +80,36 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 "Both argument metadata and result metadata must be set or not");
 
         if (getArgsMeta() != null) {
-            Arrays.stream(getArgsMeta()).filter(argMeta -> argMeta != null && argMeta.getType() != null)
-                    .forEach(argMeta -> SpongeUtils.validateType(argMeta.getType(), String.format("argument %s in the action %s",
-                            argMeta.getName() != null ? argMeta.getName() : "unnamed", getName())));
+            boolean foundFirstOptionalArg = false;
+            for (ArgMeta<?> argMeta : Arrays.asList(getArgsMeta())) {
+                validateArgMeta(argMeta);
+
+                // Optional arguments may be specified only as last in the argument list.
+                Validate.isTrue(!foundFirstOptionalArg || argMeta.isOptional(), "Only last arguments may be optional");
+                if (argMeta.isOptional()) {
+                    foundFirstOptionalArg = true;
+                }
+            }
         }
 
         if (getResultMeta() != null) {
-            SpongeUtils.validateType(getResultMeta().getType(), String.format("result of the action %s", getName()));
+            validateResultMeta(getResultMeta());
         }
+    }
+
+    private void validateArgMeta(ArgMeta<?> argMeta) {
+        Validate.notNull(argMeta, "Null argument metadata in the %s action", getName());
+
+        String errorSource =
+                String.format("argument %s in the action %s", argMeta.getName() != null ? argMeta.getName() : "unnamed", getName());
+        Validate.notNull(argMeta.getName(), "Null name of the %s", errorSource);
+        Validate.notNull(argMeta.getType(), "Null type of the %s", errorSource);
+        SpongeUtils.validateType(argMeta.getType(), errorSource);
+    }
+
+    private void validateResultMeta(ResultMeta<?> resultMeta) {
+        String errorSource = String.format("result of the action %s", getName());
+        Validate.notNull(resultMeta.getType(), "Null type of the %s", errorSource);
+        SpongeUtils.validateType(resultMeta.getType(), errorSource);
     }
 }

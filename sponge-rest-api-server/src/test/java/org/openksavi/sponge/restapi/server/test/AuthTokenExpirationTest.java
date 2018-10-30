@@ -97,30 +97,32 @@ public class AuthTokenExpirationTest {
 
     @Test
     public void testAuthTokeExpirationRelogin() throws InterruptedException {
-        SpongeRestApiClient client = createRestApiClient("john", "password");
-        client.getConfiguration().setRelogin(true);
-        assertNotNull(client.login());
-        assertEquals(5, client.getActions().size());
+        try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
+            client.getConfiguration().setRelogin(true);
+            assertNotNull(client.login());
+            assertEquals(5, client.getActions().size());
 
-        TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
 
-        assertEquals(5, client.getActions().size());
+            assertEquals(5, client.getActions().size());
+        }
     }
 
     @Test
     public void testAuthTokeExpirationNoRelogin() throws InterruptedException {
-        SpongeRestApiClient client = createRestApiClient("john", "password");
-        client.getConfiguration().setRelogin(false);
-        assertNotNull(client.login());
-        assertEquals(5, client.getActions().size());
+        try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
+            client.getConfiguration().setRelogin(false);
+            assertNotNull(client.login());
+            assertEquals(5, client.getActions().size());
 
-        TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
 
-        try {
-            client.getActions();
-            fail("Exception expected");
-        } catch (RestApiInvalidAuthTokenClientException e) {
-            // This is OK.
+            try {
+                client.getActions();
+                fail("Exception expected");
+            } catch (RestApiInvalidAuthTokenClientException e) {
+                // This is OK.
+            }
         }
     }
 }

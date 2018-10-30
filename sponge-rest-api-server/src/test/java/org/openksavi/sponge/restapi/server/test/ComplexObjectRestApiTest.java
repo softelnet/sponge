@@ -110,29 +110,32 @@ public class ComplexObjectRestApiTest {
     public void testRestCallComplexObject() {
         TestCompoundComplexObject compoundObject = createTestCompoundComplexObject();
 
-        TestCompoundComplexObject result =
-                createRestApiClient().call(TestCompoundComplexObject.class, "ComplexObjectAction", compoundObject);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            TestCompoundComplexObject result = client.call(TestCompoundComplexObject.class, "ComplexObjectAction", compoundObject);
 
-        assertEquals(compoundObject.getId() + 1, result.getId().longValue());
-        assertEquals(compoundObject.getName(), result.getName());
-        assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
-        assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
-        assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
-        assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+            assertEquals(compoundObject.getId() + 1, result.getId().longValue());
+            assertEquals(compoundObject.getName(), result.getName());
+            assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
+            assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
+            assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
+            assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+        }
     }
 
     @Test
     public void testRestCallComplexObjectNoClass() {
         TestCompoundComplexObject compoundObject = createTestCompoundComplexObject();
 
-        TestCompoundComplexObject result = (TestCompoundComplexObject) createRestApiClient().call("ComplexObjectAction", compoundObject);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            TestCompoundComplexObject result = (TestCompoundComplexObject) client.call("ComplexObjectAction", compoundObject);
 
-        assertEquals(compoundObject.getId() + 1, result.getId().longValue());
-        assertEquals(compoundObject.getName(), result.getName());
-        assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
-        assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
-        assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
-        assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+            assertEquals(compoundObject.getId() + 1, result.getId().longValue());
+            assertEquals(compoundObject.getName(), result.getName());
+            assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
+            assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
+            assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
+            assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+        }
     }
 
     @Test
@@ -140,20 +143,21 @@ public class ComplexObjectRestApiTest {
         String actionName = "ComplexObjectAction";
         TestCompoundComplexObject compoundObject = createTestCompoundComplexObject();
 
-        Object value =
-                createRestApiClient().call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getResult();
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            Object value = client.call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getResult();
 
-        assertTrue(value instanceof Map);
+            assertTrue(value instanceof Map);
 
-        ObjectMapper mapper = RestApiUtils.createObjectMapper();
-        TestCompoundComplexObject result = mapper.convertValue(value, TestCompoundComplexObject.class);
+            ObjectMapper mapper = RestApiUtils.createObjectMapper();
+            TestCompoundComplexObject result = mapper.convertValue(value, TestCompoundComplexObject.class);
 
-        assertEquals(compoundObject.getId() + 1, result.getId().longValue());
-        assertEquals(compoundObject.getName(), result.getName());
-        assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
-        assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
-        assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
-        assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+            assertEquals(compoundObject.getId() + 1, result.getId().longValue());
+            assertEquals(compoundObject.getName(), result.getName());
+            assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
+            assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
+            assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
+            assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+        }
     }
 
     @Test
@@ -161,23 +165,25 @@ public class ComplexObjectRestApiTest {
         String actionName = "ComplexObjectListAction";
         TestCompoundComplexObject compoundObject = createTestCompoundComplexObject();
 
-        Object returnValue = createRestApiClient().call(actionName, Arrays.asList(compoundObject));
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            Object returnValue = client.call(actionName, Arrays.asList(compoundObject));
 
-        assertTrue(returnValue instanceof List);
+            assertTrue(returnValue instanceof List);
 
-        TypeConverter typeConverter = new DefaultTypeConverter(new ObjectMapper());
-        @SuppressWarnings("unchecked")
-        List<TestCompoundComplexObject> resultList = (List<TestCompoundComplexObject>) typeConverter
-                .unmarshal(engine.getActionManager().getActionAdapter(actionName).getResultMeta().getType(), returnValue);// RestApiUtils.unmarshalActionResult(new
-                                                                                                                          // DefaultTypeConverter(new
-        assertEquals(1, resultList.size());
-        TestCompoundComplexObject result = resultList.get(0);
-        assertEquals(compoundObject.getId() + 1, result.getId().longValue());
-        assertEquals(compoundObject.getName(), result.getName());
-        assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
-        assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
-        assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
-        assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+            TypeConverter typeConverter = new DefaultTypeConverter(new ObjectMapper());
+            @SuppressWarnings("unchecked")
+            List<TestCompoundComplexObject> resultList = (List<TestCompoundComplexObject>) typeConverter
+                    .unmarshal(engine.getActionManager().getActionAdapter(actionName).getResultMeta().getType(), returnValue);// RestApiUtils.unmarshalActionResult(new
+                                                                                                                              // DefaultTypeConverter(new
+            assertEquals(1, resultList.size());
+            TestCompoundComplexObject result = resultList.get(0);
+            assertEquals(compoundObject.getId() + 1, result.getId().longValue());
+            assertEquals(compoundObject.getName(), result.getName());
+            assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
+            assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
+            assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
+            assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
+        }
     }
 
     @Test
@@ -185,9 +191,11 @@ public class ComplexObjectRestApiTest {
         Map<String, TestCompoundComplexObject> map = new HashMap<>();
         map.put("first", createTestCompoundComplexObject());
 
-        Object returnValue = createRestApiClient().call("ComplexObjectHierarchyAction", "String", new Integer(100),
-                Arrays.asList("a", "b", "c"), Arrays.asList(new BigDecimal("1.25"), new BigDecimal("5.5")), new String[] { "A", "B" }, map);
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            Object returnValue = client.call("ComplexObjectHierarchyAction", "String", new Integer(100), Arrays.asList("a", "b", "c"),
+                    Arrays.asList(new BigDecimal("1.25"), new BigDecimal("5.5")), new String[] { "A", "B" }, map);
 
-        assertTrue(returnValue instanceof List);
+            assertTrue(returnValue instanceof List);
+        }
     }
 }

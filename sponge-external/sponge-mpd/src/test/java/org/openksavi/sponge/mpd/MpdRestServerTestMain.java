@@ -70,10 +70,12 @@ public class MpdRestServerTestMain {
         try {
             SpongeEngine engine = ctx.getBean(SpongeEngine.class);
 
-            String info = createRestApiClient().call(String.class, "MpdSetAndPlayPlaylist", null, null, "rock", null, null, false);
+            try (SpongeRestApiClient client = createRestApiClient()) {
+                String info = client.call(String.class, "MpdSetAndPlayPlaylist", null, null, "rock", null, null, false);
 
-            assertNotNull(info);
-            assertFalse(engine.isError());
+                assertNotNull(info);
+                assertFalse(engine.isError());
+            }
         } finally {
             ctx.close();
         }

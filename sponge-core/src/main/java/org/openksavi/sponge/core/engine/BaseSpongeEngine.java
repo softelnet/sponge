@@ -362,11 +362,11 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
                     // will be started as the last, because it listens directly to the Input Event Queue and in fact starts all processing.
                     processingUnitManager.startup();
 
-                    logger.info("Sponge is running");
+                    logger.debug("Sponge is running");
                 } else {
                     endlessLoopMode.set(false);
 
-                    logger.info("Sponge completed a run once mode");
+                    logger.debug("Sponge completed a run once mode");
                 }
             } catch (Throwable e) {
                 safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
@@ -433,7 +433,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
                 throw exceptionHolder.get();
             }
 
-            logger.info("Sponge is terminated");
+            logger.debug("Sponge is terminated");
         } catch (Throwable e) {
             throw SpongeUtils.wrapException("shutdown", e);
         } finally {

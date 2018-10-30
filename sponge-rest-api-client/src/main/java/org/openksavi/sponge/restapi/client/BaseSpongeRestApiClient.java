@@ -393,14 +393,23 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
             return;
         }
 
-        int actualArgsLength = args != null ? args.size() : 0;
-        Validate.isTrue(actionMeta.getArgsMeta().size() == actualArgsLength, "Incorrect number of arguments. Expected %d but got %d",
-                actionMeta.getArgsMeta().size(), actualArgsLength);
+        int expectedAllArgCount = actionMeta.getArgsMeta().size();
+        int expectedNonOptionalArgCount = (int) actionMeta.getArgsMeta().stream().filter(argMeta -> !argMeta.isOptional()).count();
+        int actualArgCount = args != null ? args.size() : 0;
+
+        if (expectedNonOptionalArgCount == expectedAllArgCount) {
+            Validate.isTrue(expectedAllArgCount == actualArgCount, "Incorrect number of arguments. Expected %d but got %d",
+                    expectedAllArgCount, actualArgCount);
+        } else {
+            Validate.isTrue(expectedNonOptionalArgCount <= actualArgCount && actualArgCount <= expectedAllArgCount,
+                    "Incorrect number of arguments. Expected between %d and %d but got %d", expectedNonOptionalArgCount,
+                    expectedAllArgCount, actualArgCount);
+        }
 
         // Validate non-nullable arguments.
         for (int i = 0; i < actionMeta.getArgsMeta().size(); i++) {
             RestActionArgMeta meta = actionMeta.getArgsMeta().get(i);
-            Validate.isTrue(meta.getType().isNullable() || args.get(i) != null, "Action argument '%s' is not set",
+            Validate.isTrue(meta.isOptional() || meta.getType().isNullable() || args.get(i) != null, "Action argument '%s' is not set",
                     meta.getDisplayName() != null ? meta.getDisplayName() : meta.getName());
         }
     }

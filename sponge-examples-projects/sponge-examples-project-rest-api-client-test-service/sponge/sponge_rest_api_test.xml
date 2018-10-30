@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <!-- Set these properties via system properties in a servlet container environment! -->
+        <!-- <property name="password.file">password.txt</property> -->
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="test" displayName="Test">
+            <file>sponge_test.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="testPlus" displayName="Test plus">
+            <file>sponge_test_plus.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="admin" displayName="Admin">
+            <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" displayName="Security">
+            <file>rest_api_security.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+

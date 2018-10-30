@@ -22,5 +22,6 @@
         <module>sponge-examples-project-standalone-camel-xml</module>
         <module>sponge-examples-project-standalone-camel-groovy</module>
         <module>sponge-examples-project-demo-service</module>
+        <module>sponge-examples-project-rest-api-client-test-service</module>
     </modules>
  </project>

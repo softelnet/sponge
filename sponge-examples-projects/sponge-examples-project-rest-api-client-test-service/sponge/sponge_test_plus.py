@@ -1,4 +1,4 @@
 """
 Sponge Knowledge base
-Demo
+Demo Plus
 """

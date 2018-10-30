@@ -252,4 +252,32 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testActionsMetadataOptionalArg() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_optional_arg.py").build();
+        engine.startup();
+
+        try {
+            String actionName = "OptionalArgAction";
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter(actionName);
+            ArgMeta<?>[] argMeta = actionAdapter.getArgsMeta();
+            assertEquals(2, argMeta.length);
+            assertEquals("mandatoryText", argMeta[0].getName());
+            assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
+            assertFalse(argMeta[0].isOptional());
+
+            assertEquals("optionalText", argMeta[1].getName());
+            assertEquals(TypeKind.STRING, argMeta[1].getType().getKind());
+            assertTrue(argMeta[1].isOptional());
+
+            assertEquals("text1", engine.getOperations().call(String.class, actionName, "text1"));
+            assertEquals("text1text2", engine.getOperations().call(String.class, actionName, "text1", "text2"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

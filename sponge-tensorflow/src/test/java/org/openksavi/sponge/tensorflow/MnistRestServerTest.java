@@ -85,11 +85,13 @@ public class MnistRestServerTest {
     public void testRestCallPredict() {
         byte[] imageData = SpongeUtils.readFileToByteArray("examples/tensorflow/mnist/data/5_0.png");
 
-        List<Number> result = createRestApiClient().call(List.class, "MnistPredictDetailed", imageData);
-        List<Double> predictions = result.stream().map(e -> e.doubleValue()).collect(Collectors.toList());
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            List<Number> result = client.call(List.class, "MnistPredictDetailed", imageData);
+            List<Double> predictions = result.stream().map(e -> e.doubleValue()).collect(Collectors.toList());
 
-        int prediction = IntStream.range(0, predictions.size()).boxed().max(Comparator.comparingDouble(predictions::get)).get();
-        assertEquals(5, prediction);
-        assertFalse(engine.isError());
+            int prediction = IntStream.range(0, predictions.size()).boxed().max(Comparator.comparingDouble(predictions::get)).get();
+            assertEquals(5, prediction);
+            assertFalse(engine.isError());
+        }
     }
 }

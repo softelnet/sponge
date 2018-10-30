@@ -1,0 +1,3 @@
+= Sponge REST API client test service
+
+This project is used for testing Sponge REST API clients.

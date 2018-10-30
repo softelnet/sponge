@@ -364,7 +364,7 @@ __optional__|boolean
 
 [[_swagger_knowledgebasemeta]]
 === KnowledgeBaseMeta
-Represents a Sponge knowledge base metadata
+Represents a knowledge base metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -383,7 +383,7 @@ __optional__|The knowledge base version|integer (int32)
 
 [[_swagger_actionmeta]]
 === ActionMeta
-Represents a Sponge action metadata
+Represents an action metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -408,7 +408,7 @@ __optional__|The action result metadata|<<_swagger_actionresultmeta,ActionResult
 
 [[_swagger_actionargmeta]]
 === ActionArgMeta
-Represents a Sponge action argument metadata
+Represents an action argument metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -422,6 +422,8 @@ __required__|The action argument type|<<_swagger_type,Type>>
 __optional__|The action argument display name|string
 |**description** +
 __optional__|The action argument description|string
+|**optional** +
+__optional__|Optional argument|boolean
 |===
 
 
@@ -448,7 +450,7 @@ __required__|The Sponge actions|< <<_swagger_actionmeta,ActionMeta>> > array
 
 [[_swagger_actionresultmeta]]
 === ActionResultMeta
-Represents a Sponge action result metadata
+Represents an action result metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]

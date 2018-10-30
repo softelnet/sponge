@@ -106,20 +106,20 @@ public class DemoServiceLoadTest {
         List<Pair<Integer, byte[]>> images =
                 Arrays.asList(1, 5, 7).stream().map(digit -> new ImmutablePair<>(digit, getImageData(digit))).collect(Collectors.toList());
 
-        SpongeRestApiClient client = createRestApiClient();
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
+            List<? extends Callable<Void>> tasks = IntStream.rangeClosed(1, THREAD_COUNT)
+                    .mapToObj(threadNo -> createTestCallable(threadNo, images, client)).collect(Collectors.toList());
 
-        ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
-        List<? extends Callable<Void>> tasks = IntStream.rangeClosed(1, THREAD_COUNT)
-                .mapToObj(threadNo -> createTestCallable(threadNo, images, client)).collect(Collectors.toList());
+            executor.invokeAll(tasks).stream().forEach(future -> {
+                try {
+                    future.get();
+                } catch (Exception e) {
+                    throw new SpongeException(e);
+                }
+            });
 
-        executor.invokeAll(tasks).stream().forEach(future -> {
-            try {
-                future.get();
-            } catch (Exception e) {
-                throw new SpongeException(e);
-            }
-        });
-
-        executor.shutdownNow();
+            executor.shutdownNow();
+        }
     }
 }

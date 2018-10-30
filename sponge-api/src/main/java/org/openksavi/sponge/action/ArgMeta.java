@@ -36,6 +36,9 @@ public class ArgMeta<T extends Type> {
     /** An argument description. */
     private String description;
 
+    /** A flag specifying if this argument is optional. */
+    private boolean optional = false;
+
     public ArgMeta(String name, T type) {
         this.name = name;
         this.type = type;
@@ -48,6 +51,11 @@ public class ArgMeta<T extends Type> {
 
     public ArgMeta<T> description(String description) {
         this.description = description;
+        return this;
+    }
+
+    public ArgMeta<T> optional() {
+        this.optional = true;
         return this;
     }
 
@@ -81,5 +89,13 @@ public class ArgMeta<T extends Type> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 }
