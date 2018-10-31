@@ -10,3 +10,9 @@ class EdvancedMetaAction(Action, TestActionVisibiliy):
         return text.upper()
     def isVisible(self, context):
         return context == "day"
+
+class EdvancedMetaActionWithError(Action, TestActionVisibiliy):
+    def onCall(self, text):
+        return text.upper()
+    def isVisible(self, context):
+        return context_error == "day"

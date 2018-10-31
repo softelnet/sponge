@@ -42,7 +42,7 @@ public class WrappedException extends SpongeException {
     }
 
     @Override
-    public String toString() {
-        return super.toString() + " in " + sourceName;
+    public String getMessage() {
+        return super.getMessage() + " in " + sourceName;
     }
 }

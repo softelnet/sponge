@@ -20,6 +20,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Scanner;
+
 import org.junit.Test;
 
 import org.openksavi.sponge.action.Action;
@@ -27,6 +31,7 @@ import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.integration.tests.core.scanning.ScannedAction1;
 import org.openksavi.sponge.test.util.TestUtils;
 
@@ -80,6 +85,38 @@ public class CoreProcessorsTest {
             assertTrue(action instanceof TestActionVisibiliy);
             assertTrue(((TestActionVisibiliy) action).isVisible("day"));
             assertFalse(((TestActionVisibiliy) action).isVisible("night"));
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testProcessorAdditionalInterfaceError() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/processors_interface.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter enhActionAdapter = engine.getActionManager().getActionAdapter("EdvancedMetaActionWithError");
+            Action action = enhActionAdapter.getProcessor();
+
+            assertTrue(action instanceof TestActionVisibiliy);
+            try {
+                assertTrue(((TestActionVisibiliy) action).isVisible("day"));
+            } catch (Throwable e) {
+                throw SpongeUtils.wrapException(action, e);
+            }
+        } catch (Throwable e) {
+            String expectedMessage = "global name 'context_error' is not defined in kb.EdvancedMetaActionWithError";
+            String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
+            assertEquals(expectedToString, e.toString());
+            assertEquals(expectedMessage, e.getMessage());
+
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            try (Scanner scanner = new Scanner(sw.toString())) {
+                assertEquals(expectedToString, scanner.nextLine());
+            }
         } finally {
             engine.shutdown();
         }

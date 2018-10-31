@@ -23,10 +23,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -246,8 +249,20 @@ public class CoreActionsTest {
 
             fail("Exception not thrown");
         } catch (WrappedException e) {
-            assertEquals("kb.TestAction.onConfigure", e.getSourceName());
-            assertEquals("'org.openksavi.sponge.action.ResultMeta' object has no attribute 'displayName_error'", e.getMessage());
+            String sourceName = "kb.TestAction.onConfigure";
+            String expectedMessage =
+                    "'org.openksavi.sponge.action.ResultMeta' object has no attribute 'displayName_error' in " + sourceName;
+            String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
+
+            assertEquals(sourceName, e.getSourceName());
+            assertEquals(expectedToString, e.toString());
+            assertEquals(expectedMessage, e.getMessage());
+
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            try (Scanner scanner = new Scanner(sw.toString())) {
+                assertEquals(expectedToString, scanner.nextLine());
+            }
         } finally {
             engine.shutdown();
         }
