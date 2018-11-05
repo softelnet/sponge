@@ -39,7 +39,7 @@ public class MapTypeUnitConverter extends BaseUnitTypeConverter<MapType> {
 
         return ((Map) value).entrySet().stream()
                 .collect(Collectors.toMap((Map.Entry entry) -> converter.marshal(((MapType) type).getKeyType(), entry.getKey()),
-                        (Map.Entry entry) -> converter.unmarshal(((MapType) type).getValueType(), entry.getValue())));
+                        (Map.Entry entry) -> converter.marshal(((MapType) type).getValueType(), entry.getValue())));
     }
 
     @Override

@@ -16,7 +16,11 @@ def onLoad():
 
 class UpperCase(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("text", StringType().maxLength(256)).displayName("Text to upper case") ]
+        self.displayName = "Convert to upper case"
+        self.description = "Converts a string to upper case."
+        self.argsMeta = [
+            ArgMeta("text", StringType().maxLength(256)).displayName("Text to upper case").description("The text that will be converted to upper case.")
+        ]
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
@@ -31,6 +35,30 @@ class LowerCase(Action):
         self.logger.info("Action {} called", self.name)
         return str(text).lower()
 
+class EchoImage(Action):
+    def onConfigure(self):
+        self.displayName = "Echo an image"
+        self.argsMeta = [ArgMeta("image", BinaryType().mimeType("image/png")).displayName("Image")]
+        self.resultMeta = ResultMeta(BinaryType().mimeType("image/png")).displayName("Image echo")
+    def onCall(self, image):
+        return image
+
+class ListValues(Action):
+    def onConfigure(self):
+        self.features = {"visible":False}
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(ListType(StringType()))
+    def onCall(self):
+        return ["value1", "value2", "value3"]
+
+class ActionTypeAction(Action):
+    def onConfigure(self):
+        self.displayName = "Action type use case"
+        self.argsMeta = [ArgMeta("value", ActionType("ListValues")).displayName("Value")]
+        self.resultMeta = ResultMeta(StringType()).displayName("Same value")
+    def onCall(self, value):
+        return value
+
 class PrivateAction(Action):
     def onCall(self, args):
         return None
@@ -39,12 +67,59 @@ class NoMetadataAction(Action):
     def onCall(self, args):
         return None
 
-class FaultyAction(Action):
+class KnowledgeBaseErrorAction(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("text", StringType()) ]
+        self.displayName = "Knowledge base error action"
+        self.argsMeta = []
         self.resultMeta = ResultMeta(VoidType())
-    def onCall(self, args):
-        raise SpongeException("Error in " + self.name)
+    def onCall(self):
+        raise SpongeException("Knowledge base exception")
+
+class LangErrorAction(Action):
+    def onConfigure(self):
+        self.displayName = "Language error action"
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self):
+        return throws_error
+
+class ComplexObjectAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [
+            ArgMeta("arg", ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")).displayName("Text to upper case")
+        ]
+        self.resultMeta = ResultMeta(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")).displayName("Upper case text")
+    def onCall(self, arg):
+        self.logger.info("Action {} called", self.name)
+        arg.id += 1
+        self.logger.info("Date {}", str(arg.complexObject.date))
+        return arg
+
+class ComplexObjectListAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [
+            ArgMeta("arg", ListType(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))).displayName("Text to upper case")
+        ]
+        self.resultMeta = ResultMeta(ListType(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))).displayName("Upper case text")
+    def onCall(self, arg):
+        self.logger.info("Action {} called: {}", self.name, arg)
+        arg[0].id += 1
+        return arg
+
+class ComplexObjectHierarchyAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [
+            ArgMeta("stringArg", StringType()),
+            ArgMeta("anyArg", AnyType()),
+            ArgMeta("stringListArg", ListType(StringType())),
+            ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
+            ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
+            ArgMeta("mapArg", MapType(StringType(), ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")))
+        ]
+        self.resultMeta = ResultMeta(ListType(AnyType()))
+    def onCall(self, stringArg, anyArg, stringListArg, decimalListArg, stringArrayArg, mapArg):
+        self.logger.info("Action {} called: {}, {}, {}, {}, {}, {}", self.name, stringArg, anyArg, stringListArg, decimalListArg, stringArrayArg, mapArg)
+        return [stringArg, anyArg, stringListArg, decimalListArg, stringArrayArg, mapArg]
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

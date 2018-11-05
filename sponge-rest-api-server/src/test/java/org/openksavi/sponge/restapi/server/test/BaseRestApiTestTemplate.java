@@ -20,8 +20,8 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -80,14 +80,14 @@ public abstract class BaseRestApiTestTemplate {
     @Test
     public void testActions() {
         try (SpongeRestApiClient client = createRestApiClient()) {
-            assertEquals(3, client.getActions().size());
+            assertEquals(RestApiTestConstants.ACTIONS_WITH_METADATA_COUNT, client.getActions().size());
         }
     }
 
     @Test
     public void testActionsParamArgMetadataRequiredTrue() {
         try (SpongeRestApiClient client = createRestApiClient()) {
-            assertEquals(3, client.getActions(null, true).size());
+            assertEquals(RestApiTestConstants.ACTIONS_WITH_METADATA_COUNT, client.getActions(null, true).size());
         }
     }
 
@@ -96,7 +96,7 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestApiClient client = createRestApiClient()) {
             List<RestActionMeta> actions = client.getActions(null, false);
 
-            assertEquals(4, actions.size());
+            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT - RestApiTestConstants.ACTIONS_WITH_NO_METADATA_COUNT, actions.size());
             RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
             assertEquals(TypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
             assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
@@ -126,22 +126,20 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
-    public void testCall() {
+    public void testGetActionMeta() {
         try (SpongeRestApiClient client = createRestApiClient()) {
-            String arg1 = "test1";
+            String actionName = "UpperCase";
+            RestActionMeta actionMeta = client.getActionMeta(actionName);
 
-            Object result = client.call("UpperCase", arg1);
-
-            assertTrue(result instanceof String);
-            assertEquals(arg1.toUpperCase(), result);
-
-            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
-            assertFalse(engine.isError());
+            assertEquals(actionName, actionMeta.getName());
+            assertEquals(1, actionMeta.getArgsMeta().size());
+            assertTrue(actionMeta.getArgsMeta().get(0).getType() instanceof StringType);
+            assertTrue(actionMeta.getResultMeta().getType() instanceof StringType);
         }
     }
 
     @Test
-    public void testCallWithExpectedKnowledgeBaseVersion() {
+    public void testCall() {
         try (SpongeRestApiClient client = createRestApiClient()) {
             String arg1 = "test1";
 
@@ -160,12 +158,12 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestApiClient client = createRestApiClient()) {
             String arg1 = "test1";
 
-            RestActionMeta actionMeta = client.getActions("UpperCase").get(0);
+            RestActionMeta actionMeta = client.getActionMeta("UpperCase");
             actionMeta.getKnowledgeBase().setVersion(2);
 
             try {
-                Object result = client.call("UpperCase", arg1);
-                assertNull(result);
+                client.call("UpperCase", arg1);
+                fail("Exception expected");
             } finally {
                 engine.clearError();
             }

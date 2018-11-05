@@ -22,19 +22,16 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
 
-public class RestApioTestClientServiceTestEnvironment {
-
-    public static final String PROPERTY_PASSWORD_FILE = "password.file";
+public class RestApiTestClientServiceTestEnvironment {
 
     protected Server server;
 
     public void init() {
         System.setProperty(ConfigurationConstants.PROP_HOME, ".");
-        System.setProperty(PROPERTY_PASSWORD_FILE, "password.txt");
     }
 
     public void clear() {
-        System.clearProperty(PROPERTY_PASSWORD_FILE);
+        //
     }
 
     public void start(int port) {

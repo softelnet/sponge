@@ -32,7 +32,7 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 /**
  * This example program starts Sponge REST API HTTPS server.
  */
-public class RestApiHttpsSeverMain {
+public class RestApiHttpsServerMain {
 
     private GenericApplicationContext context;
 
@@ -75,6 +75,6 @@ public class RestApiHttpsSeverMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        new RestApiHttpsSeverMain().run();
+        new RestApiHttpsServerMain().run();
     }
 }

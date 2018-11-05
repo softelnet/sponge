@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.examples;
+package org.openksavi.sponge.restapi.test.base;
 
-public class TestCompoundComplexObject {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+public class ComplexObject {
 
     private Long id;
 
     private String name;
 
-    private TestComplexObject complexObject;
+    private BigDecimal bigDecimal;
+
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
+    private LocalDateTime date;
 
     public Long getId() {
         return id;
@@ -40,11 +50,19 @@ public class TestCompoundComplexObject {
         this.name = name;
     }
 
-    public TestComplexObject getComplexObject() {
-        return complexObject;
+    public BigDecimal getBigDecimal() {
+        return bigDecimal;
     }
 
-    public void setComplexObject(TestComplexObject complexObject) {
-        this.complexObject = complexObject;
+    public void setBigDecimal(BigDecimal bigDecimal) {
+        this.bigDecimal = bigDecimal;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

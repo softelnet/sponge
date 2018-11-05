@@ -20,13 +20,22 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class BaseResponse {
 
+    private String id;
+
     private String errorCode;
 
     private String errorMessage;
 
     private String detailedErrorMessage;
 
-    private String id;
+    @ApiModelProperty(value = "The corresponding request id", required = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @ApiModelProperty(value = "The error code", required = false)
     public String getErrorCode() {
@@ -53,14 +62,5 @@ public class BaseResponse {
 
     public void setDetailedErrorMessage(String detailedErrorMessage) {
         this.detailedErrorMessage = detailedErrorMessage;
-    }
-
-    @ApiModelProperty(value = "The corresponding request id", required = false)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

@@ -41,7 +41,7 @@ import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
-import org.openksavi.sponge.examples.TestCompoundComplexObject;
+import org.openksavi.sponge.examples.CustomObject;
 import org.openksavi.sponge.test.util.TestUtils;
 import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
@@ -164,13 +164,13 @@ public class CoreActionsTest {
 
             assertEquals("javaClassArg", argMeta[6].getName());
             assertEquals(TypeKind.OBJECT, argMeta[6].getType().getKind());
-            assertEquals(TestCompoundComplexObject.class.getName(), ((ObjectType) argMeta[6].getType()).getClassName());
+            assertEquals(CustomObject.class.getName(), ((ObjectType) argMeta[6].getType()).getClassName());
 
             assertEquals("javaClassListArg", argMeta[7].getName());
             assertEquals(TypeKind.LIST, argMeta[7].getType().getKind());
             Type elementType7 = ((ListType) argMeta[7].getType()).getElementType();
             assertEquals(TypeKind.OBJECT, elementType7.getKind());
-            assertEquals(TestCompoundComplexObject.class.getName(), ((ObjectType) elementType7).getClassName());
+            assertEquals(CustomObject.class.getName(), ((ObjectType) elementType7).getClassName());
 
             assertEquals("binaryArg", argMeta[8].getName());
             assertEquals(TypeKind.BINARY, argMeta[8].getType().getKind());

@@ -101,4 +101,8 @@ public abstract class RestApiClientUtils {
             }
         }
     }
+
+    public static String obfuscatePassword(String request) {
+        return request != null ? request.replaceAll("\"password\":\".*\"", "\"password\":\"***\"") : null;
+    }
 }

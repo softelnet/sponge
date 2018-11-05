@@ -27,6 +27,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestApiClient;
@@ -41,6 +43,8 @@ import org.openksavi.sponge.restapi.util.RestApiUtils;
  * instance and reuse it for all of your REST API calls.
  */
 public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
+
+    private static final Logger logger = LoggerFactory.getLogger(OkHttpSpongeRestApiClient.class);
 
     /** The OkHttp client. */
     private OkHttpClient okHttpClient;
@@ -93,6 +97,11 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
 
         try {
             String requestBody = getObjectMapper().writeValueAsString(request);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("REST API {} request: {}", operation, RestApiClientUtils.obfuscatePassword(requestBody));
+            }
+
             Response response = getOrCreateOkHttpClient()
                     .newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
                             .post(RequestBody.create(MediaType.get(RestApiConstants.APPLICATION_JSON_VALUE), requestBody)).build())
@@ -100,7 +109,12 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
 
             Validate.isTrue(RestApiUtils.isHttpSuccess(response.code()), "HTTP status code is %s", response.code());
 
-            return response.body() != null ? getObjectMapper().readValue(response.body().string(), responseClass) : null;
+            String responseBody = response.body().string();
+            if (logger.isDebugEnabled()) {
+                logger.debug("REST API {} response: {})", operation, RestApiClientUtils.obfuscatePassword(responseBody));
+            }
+
+            return response.body() != null ? getObjectMapper().readValue(responseBody, responseClass) : null;
         } catch (Throwable e) {
             throw RestApiClientUtils.wrapException(e);
         }

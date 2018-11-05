@@ -37,7 +37,7 @@ public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSe
     @Override
     public boolean canSendEvent(User user, String eventName) {
         try {
-            return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_SEND_EVENT,
+            return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_SEND_EVENT, user,
                     eventName);
         } catch (ProcessorNotFoundException e) {
             if (Objects.equals(e.getProcessorName(), RestApiServerConstants.ACTION_CAN_SEND_EVENT)) {

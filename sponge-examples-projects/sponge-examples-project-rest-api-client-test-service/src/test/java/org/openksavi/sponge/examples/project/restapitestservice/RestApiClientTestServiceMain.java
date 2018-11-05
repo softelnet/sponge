@@ -28,7 +28,7 @@ public class RestApiClientTestServiceMain {
     public void run() {
         LoggingUtils.initLoggingBridge();
 
-        RestApioTestClientServiceTestEnvironment environment = new RestApioTestClientServiceTestEnvironment();
+        RestApiTestClientServiceTestEnvironment environment = new RestApiTestClientServiceTestEnvironment();
         environment.init();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

@@ -238,11 +238,10 @@ public class DefaultRestApiService implements RestApiService {
                                 actionAdapter.getKnowledgeBase().getVersion()));
             }
 
-            Object result = marshalActionResult(actionAdapter,
-                    getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange)),
-                    exchange);
+            Object actionResult =
+                    getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange));
 
-            return setupSuccessResponse(new ActionCallResponse(result), request);
+            return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult, exchange)), request);
         } catch (Exception e) {
             if (actionAdapter != null) {
                 getEngine().handleError(actionAdapter, e);

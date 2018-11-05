@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.examples.project.restapitestservice;
 
+import java.time.Duration;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -51,6 +52,8 @@ public class RestApiTestServiceSpringConfig extends SpongeCamelConfiguration {
 
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(true);
+        plugin.getSettings().setPublishReload(true);
+        plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 
         plugin.setCamelContext(camelContext.get());
 

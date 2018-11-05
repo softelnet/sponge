@@ -18,7 +18,6 @@ package org.openksavi.sponge.restapi.server.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -100,29 +99,24 @@ public class AuthTokenExpirationTest {
         try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
             client.getConfiguration().setRelogin(true);
             assertNotNull(client.login());
-            assertEquals(5, client.getActions().size());
+            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
-            assertEquals(5, client.getActions().size());
+            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
         }
     }
 
-    @Test
+    @Test(expected = RestApiInvalidAuthTokenClientException.class)
     public void testAuthTokeExpirationNoRelogin() throws InterruptedException {
         try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
             client.getConfiguration().setRelogin(false);
             assertNotNull(client.login());
-            assertEquals(5, client.getActions().size());
+            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
-            try {
-                client.getActions();
-                fail("Exception expected");
-            } catch (RestApiInvalidAuthTokenClientException e) {
-                // This is OK.
-            }
+            client.getActions();
         }
     }
 }

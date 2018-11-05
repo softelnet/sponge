@@ -35,7 +35,7 @@ public class RestApiClientTestServiceTest {
 
     protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
 
-    protected static final RestApioTestClientServiceTestEnvironment environment = new RestApioTestClientServiceTestEnvironment();
+    protected static final RestApiTestClientServiceTestEnvironment environment = new RestApiTestClientServiceTestEnvironment();
 
     @BeforeClass
     public static void beforeClass() {

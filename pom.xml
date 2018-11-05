@@ -902,6 +902,7 @@
                 <module>sponge-reactivex</module>
                 <module>sponge-signal</module>
                 <module>sponge-rest-api-common</module>
+                <module>sponge-rest-api-test-base</module>
                 <module>sponge-rest-api-client</module>
                 <module>sponge-rest-api-server</module>
                 <module>sponge-tensorflow</module>

@@ -60,7 +60,7 @@ public class ActionMetaCacheTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("kb", "examples/rest-api-server/rest_api.py").build();
+                    .knowledgeBase("example", "examples/rest-api-server/rest_api.py").build();
         }
 
         @Bean
@@ -80,62 +80,76 @@ public class ActionMetaCacheTest {
 
     @Test
     public void testActionCacheOn() {
-        BaseSpongeRestApiClient client = createRestApiClient(true);
-        String actionName = "UpperCase";
+        try (BaseSpongeRestApiClient client = createRestApiClient(true)) {
+            String actionName = "UpperCase";
 
-        RestActionMeta actionMeta;
+            RestActionMeta actionMeta;
 
-        assertNull(client.getActionMetaCache().getIfPresent(actionName));
+            assertNull(client.getActionMeta(actionName, false));
 
-        actionMeta = client.getActionMeta(actionName);
-        assertNotNull(actionMeta);
-        assertNotNull(client.getActionMetaCache().getIfPresent(actionName));
+            actionMeta = client.getActionMeta(actionName);
+            assertNotNull(actionMeta);
+            assertNotNull(client.getActionMeta(actionName, false));
 
-        assertNotNull(client.getActionMeta(actionName));
-        assertTrue(actionMeta == client.getActionMeta(actionName));
-        assertNotNull(client.getActionMetaCache().getIfPresent(actionName));
+            assertNotNull(client.getActionMeta(actionName));
+            assertTrue(actionMeta == client.getActionMeta(actionName));
+            assertNotNull(client.getActionMeta(actionName, false));
 
-        client.clearCache();
-        assertNull(client.getActionMetaCache().getIfPresent(actionName));
+            client.clearCache();
+            assertNull(client.getActionMeta(actionName, false));
 
-        assertNotNull(client.getActionMeta(actionName));
-        assertNotNull(client.getActionMetaCache().getIfPresent(actionName));
+            assertNotNull(client.getActionMeta(actionName));
+            assertTrue(actionMeta != client.getActionMeta(actionName));
+            assertNotNull(client.getActionMeta(actionName, false));
+        }
     }
 
     @Test
     public void testActionCacheOff() {
-        BaseSpongeRestApiClient client = createRestApiClient(false);
-        String actionName = "UpperCase";
+        try (BaseSpongeRestApiClient client = createRestApiClient(false)) {
+            String actionName = "UpperCase";
 
-        RestActionMeta actionMeta;
+            RestActionMeta actionMeta;
 
-        actionMeta = client.getActionMeta(actionName);
-        assertNotNull(actionMeta);
+            actionMeta = client.getActionMeta(actionName);
+            assertNotNull(actionMeta);
 
-        assertNotNull(client.getActionMeta(actionName));
-        assertTrue(actionMeta != client.getActionMeta(actionName));
+            assertNotNull(client.getActionMeta(actionName));
+            assertTrue(actionMeta != client.getActionMeta(actionName));
 
-        client.clearCache();
+            client.clearCache();
 
-        assertNotNull(client.getActionMeta(actionName));
+            assertNotNull(client.getActionMeta(actionName));
+        }
     }
 
     @Test
     public void testActionCacheOnGetActions() {
-        BaseSpongeRestApiClient client = createRestApiClient(true);
-        String actionName = "UpperCase";
+        try (BaseSpongeRestApiClient client = createRestApiClient(true)) {
+            String actionName = "UpperCase";
 
-        assertNull(client.getActionMetaCache().getIfPresent(actionName));
+            assertNull(client.getActionMeta(actionName, false));
 
-        client.getActions();
-        assertNotNull(client.getActionMetaCache().getIfPresent(actionName));
+            client.getActions();
+            assertNotNull(client.getActionMeta(actionName, false));
 
-        assertNotNull(client.getActionMeta(actionName));
+            assertNotNull(client.getActionMeta(actionName));
 
-        client.clearCache();
-        assertNull(client.getActionMetaCache().getIfPresent(actionName));
+            client.clearCache();
+            assertNull(client.getActionMeta(actionName, false));
 
-        client.getActions();
-        assertNotNull(client.getActionMetaCache().getIfPresent(actionName));
+            client.getActions();
+            assertNotNull(client.getActionMeta(actionName, false));
+        }
+    }
+
+    @Test
+    public void testFetchActionMeta() {
+        try (BaseSpongeRestApiClient client = createRestApiClient(true)) {
+            String actionName = "UpperCase";
+
+            assertNull(client.getActionMeta(actionName, false));
+            assertNotNull(client.getActionMeta(actionName));
+        }
     }
 }

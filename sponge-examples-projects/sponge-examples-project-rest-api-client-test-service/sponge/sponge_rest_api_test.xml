@@ -3,22 +3,18 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <properties>
-        <!-- Set these properties via system properties in a servlet container environment! -->
-        <!-- <property name="password.file">password.txt</property> -->
+        <property name="commonkbDir">${sponge.home}/../../sponge-rest-api-server/examples/rest-api-server</property>
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="test" displayName="Test">
-            <file>sponge_test.py</file>
-        </knowledgeBase>
-        <knowledgeBase name="testPlus" displayName="Test plus">
-            <file>sponge_test_plus.py</file>
+        <knowledgeBase name="example" displayName="Example">
+            <file>${commonkbDir}/rest_api.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" displayName="Security">
-            <file>rest_api_security.py</file>
+            <file>${commonkbDir}/rest_api_security.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

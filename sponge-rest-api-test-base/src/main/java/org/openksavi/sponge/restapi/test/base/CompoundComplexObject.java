@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.examples;
+package org.openksavi.sponge.restapi.test.base;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-public class TestComplexObject {
+public class CompoundComplexObject {
 
     private Long id;
 
     private String name;
 
-    private BigDecimal bigDecimal;
-
-    private Date date;
+    private ComplexObject complexObject;
 
     public Long getId() {
         return id;
@@ -45,19 +40,11 @@ public class TestComplexObject {
         this.name = name;
     }
 
-    public BigDecimal getBigDecimal() {
-        return bigDecimal;
+    public ComplexObject getComplexObject() {
+        return complexObject;
     }
 
-    public void setBigDecimal(BigDecimal bigDecimal) {
-        this.bigDecimal = bigDecimal;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public void setComplexObject(ComplexObject complexObject) {
+        this.complexObject = complexObject;
     }
 }

@@ -14,8 +14,8 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringListArg", ListType(StringType())),
             ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
-            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject")),
-            ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.TestCompoundComplexObject"))),
+            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.CustomObject")),
+            ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))),
             ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags(["drawing", "handwritten"])
                 .features({"width":28, "height":28, "background":"black", "color":"white"})),
         ]

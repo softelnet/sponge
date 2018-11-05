@@ -33,7 +33,7 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 /**
  * This example program starts Sponge REST API server.
  */
-public class RestApiSeverMain {
+public class RestApiServerMain {
 
     private GenericApplicationContext context;
 
@@ -71,6 +71,6 @@ public class RestApiSeverMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        new RestApiSeverMain().run();
+        new RestApiServerMain().run();
     }
 }

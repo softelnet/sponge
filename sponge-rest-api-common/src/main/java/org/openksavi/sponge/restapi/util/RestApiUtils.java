@@ -38,7 +38,7 @@ public abstract class RestApiUtils {
     public static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
 
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         // Ensure a proper Type inheritance hierarchy deserialization from JSON to Java.
         mapper.addMixIn(Type.class, RestType.class);

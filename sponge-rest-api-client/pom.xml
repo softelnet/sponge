@@ -36,5 +36,12 @@
             <artifactId>spring-integration-http</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
