@@ -47,8 +47,6 @@ import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.test.base.CompoundComplexObject;
-import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
-import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -105,22 +103,6 @@ public class ComplexObjectRestApiTest {
     }
 
     @Test
-    public void testRestCallComplexObjectNoClass() {
-        CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
-
-        try (SpongeRestApiClient client = createRestApiClient()) {
-            CompoundComplexObject result = (CompoundComplexObject) client.call("ComplexObjectAction", compoundObject);
-
-            assertEquals(compoundObject.getId() + 1, result.getId().longValue());
-            assertEquals(compoundObject.getName(), result.getName());
-            assertEquals(compoundObject.getComplexObject().getId(), result.getComplexObject().getId());
-            assertEquals(compoundObject.getComplexObject().getName(), result.getComplexObject().getName());
-            assertEquals(compoundObject.getComplexObject().getBigDecimal(), result.getComplexObject().getBigDecimal());
-            assertEquals(compoundObject.getComplexObject().getDate(), result.getComplexObject().getDate());
-        }
-    }
-
-    @Test
     public void testRestCallComplexObjectNoMeta() {
         String actionName = "ComplexObjectAction";
         CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
@@ -142,6 +124,7 @@ public class ComplexObjectRestApiTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testRestCallComplexObjectList() {
         String actionName = "ComplexObjectListAction";
@@ -152,11 +135,7 @@ public class ComplexObjectRestApiTest {
 
             assertTrue(returnValue instanceof List);
 
-            TypeConverter typeConverter = new DefaultTypeConverter(new ObjectMapper());
-            @SuppressWarnings("unchecked")
-            List<CompoundComplexObject> resultList = (List<CompoundComplexObject>) typeConverter
-                    .unmarshal(engine.getActionManager().getActionAdapter(actionName).getResultMeta().getType(), returnValue);// RestApiUtils.unmarshalActionResult(new
-                                                                                                                              // DefaultTypeConverter(new
+            List<CompoundComplexObject> resultList = (List<CompoundComplexObject>) returnValue;
             assertEquals(1, resultList.size());
             CompoundComplexObject result = resultList.get(0);
             assertEquals(compoundObject.getId() + 1, result.getId().longValue());

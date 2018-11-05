@@ -37,8 +37,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.InvalidAuthTokenException;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.RestApiInvalidAuthTokenClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -107,7 +107,7 @@ public class AuthTokenExpirationTest {
         }
     }
 
-    @Test(expected = RestApiInvalidAuthTokenClientException.class)
+    @Test(expected = InvalidAuthTokenException.class)
     public void testAuthTokeExpirationNoRelogin() throws InterruptedException {
         try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
             client.getConfiguration().setRelogin(false);

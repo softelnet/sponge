@@ -47,6 +47,7 @@ public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
 
             plugin.getSettings().setPort(spongeRestApiPort());
+            plugin.getSettings().setIncludeDetailedErrorMessage(true);
             // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 
             return plugin;

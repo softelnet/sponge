@@ -39,7 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.ResponseErrorSpongeException;
+import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
@@ -130,7 +130,7 @@ public class RestApiSimpleSpringSecurityTest {
         try {
             client.getActions();
             fail("Exception expected");
-        } catch (ResponseErrorSpongeException e) {
+        } catch (ErrorResponseException e) {
             // This is OK.
         }
     }
@@ -158,7 +158,7 @@ public class RestApiSimpleSpringSecurityTest {
         await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "reloaded").get());
     }
 
-    @Test(expected = ResponseErrorSpongeException.class)
+    @Test(expected = ErrorResponseException.class)
     public void testReloadUser2() {
         createRestApiClient("joe", "password").reload();
     }

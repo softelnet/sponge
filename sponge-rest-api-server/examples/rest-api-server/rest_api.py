@@ -1,6 +1,6 @@
 """
 Sponge Knowledge base
-REST API
+Used for testing a REST API server and clients.
 """
 
 from java.util.concurrent.atomic import AtomicBoolean
@@ -73,7 +73,7 @@ class KnowledgeBaseErrorAction(Action):
         self.argsMeta = []
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self):
-        raise SpongeException("Knowledge base exception")
+        raise Exception("Knowledge base exception")
 
 class LangErrorAction(Action):
     def onConfigure(self):
@@ -92,7 +92,6 @@ class ComplexObjectAction(Action):
     def onCall(self, arg):
         self.logger.info("Action {} called", self.name)
         arg.id += 1
-        self.logger.info("Date {}", str(arg.complexObject.date))
         return arg
 
 class ComplexObjectListAction(Action):

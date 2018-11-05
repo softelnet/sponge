@@ -16,16 +16,16 @@
 
 package org.openksavi.sponge.restapi.client;
 
-public class RestApiIncorrectKnowledgeBaseVersionClientException extends ResponseErrorSpongeException {
+public class InvalidAuthTokenException extends ErrorResponseException {
 
-    private static final long serialVersionUID = 8896830720187264248L;
+    private static final long serialVersionUID = -9112103514690278718L;
 
     /**
      * Creates a new exception.
      *
      * @param message exception message.
      */
-    public RestApiIncorrectKnowledgeBaseVersionClientException(String message) {
+    public InvalidAuthTokenException(String message) {
         super(message);
     }
 
@@ -34,7 +34,7 @@ public class RestApiIncorrectKnowledgeBaseVersionClientException extends Respons
      *
      * @param throwable source throwable.
      */
-    public RestApiIncorrectKnowledgeBaseVersionClientException(Throwable throwable) {
+    public InvalidAuthTokenException(Throwable throwable) {
         super(throwable);
     }
 
@@ -44,7 +44,7 @@ public class RestApiIncorrectKnowledgeBaseVersionClientException extends Respons
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public RestApiIncorrectKnowledgeBaseVersionClientException(String message, Throwable throwable) {
+    public InvalidAuthTokenException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

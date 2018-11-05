@@ -28,7 +28,7 @@ import javax.net.ssl.X509TrustManager;
 import okhttp3.OkHttpClient;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.restapi.client.ClientSpongeException;
+import org.openksavi.sponge.restapi.client.SpongeClientException;
 
 /**
  * A set of REST API client utility methods.
@@ -40,7 +40,7 @@ public abstract class RestApiClientUtils {
     }
 
     public static SpongeException wrapException(Throwable e) {
-        return e instanceof SpongeException ? (SpongeException) e : new ClientSpongeException(e);
+        return e instanceof SpongeException ? (SpongeException) e : new SpongeClientException(e);
     }
 
     public static X509TrustManager createTrustAllTrustManager() {

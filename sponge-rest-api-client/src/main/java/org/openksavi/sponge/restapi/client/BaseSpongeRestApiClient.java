@@ -184,16 +184,16 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
             String message = response.getErrorMessage() != null ? response.getErrorMessage()
                     : String.format("Error code: %s", response.getErrorCode());
 
-            ResponseErrorSpongeException exception;
+            ErrorResponseException exception;
             switch (response.getErrorCode()) {
             case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
-                exception = new RestApiInvalidAuthTokenClientException(message);
+                exception = new InvalidAuthTokenException(message);
                 break;
             case RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION:
-                exception = new RestApiIncorrectKnowledgeBaseVersionClientException(message);
+                exception = new IncorrectKnowledgeBaseVersionException(message);
                 break;
             default:
-                exception = new ResponseErrorSpongeException(message);
+                exception = new ErrorResponseException(message);
             }
 
             exception.setErrorCode(response.getErrorCode());
@@ -208,7 +208,7 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     protected <T extends BaseRequest, R extends BaseResponse> R execute(String operation, T request, Class<R> responseClass) {
         try {
             return prepareResponse(doExecute(operation, prepareRequest(request), responseClass));
-        } catch (RestApiInvalidAuthTokenClientException e) {
+        } catch (InvalidAuthTokenException e) {
             // Relogin if set up and necessary.
             if (currentAuthToken.get() != null && configuration.isRelogin()) {
                 login();

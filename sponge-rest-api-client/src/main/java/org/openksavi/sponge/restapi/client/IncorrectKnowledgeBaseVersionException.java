@@ -16,23 +16,16 @@
 
 package org.openksavi.sponge.restapi.client;
 
-/**
- * Response error exception.
- */
-public class ResponseErrorSpongeException extends ClientSpongeException {
+public class IncorrectKnowledgeBaseVersionException extends ErrorResponseException {
 
-    private static final long serialVersionUID = 3962360804569372072L;
-
-    private String errorCode;
-
-    private String detailedErrorMessage;
+    private static final long serialVersionUID = 8896830720187264248L;
 
     /**
      * Creates a new exception.
      *
      * @param message exception message.
      */
-    public ResponseErrorSpongeException(String message) {
+    public IncorrectKnowledgeBaseVersionException(String message) {
         super(message);
     }
 
@@ -41,7 +34,7 @@ public class ResponseErrorSpongeException extends ClientSpongeException {
      *
      * @param throwable source throwable.
      */
-    public ResponseErrorSpongeException(Throwable throwable) {
+    public IncorrectKnowledgeBaseVersionException(Throwable throwable) {
         super(throwable);
     }
 
@@ -51,23 +44,7 @@ public class ResponseErrorSpongeException extends ClientSpongeException {
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public ResponseErrorSpongeException(String message, Throwable throwable) {
+    public IncorrectKnowledgeBaseVersionException(String message, Throwable throwable) {
         super(message, throwable);
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public String getDetailedErrorMessage() {
-        return detailedErrorMessage;
-    }
-
-    public void setDetailedErrorMessage(String detailedErrorMessage) {
-        this.detailedErrorMessage = detailedErrorMessage;
     }
 }

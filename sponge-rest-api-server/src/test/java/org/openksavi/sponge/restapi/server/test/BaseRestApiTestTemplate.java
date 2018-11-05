@@ -17,12 +17,14 @@
 package org.openksavi.sponge.restapi.server.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,15 +32,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.restapi.client.RestApiIncorrectKnowledgeBaseVersionClientException;
+import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.client.ErrorResponseException;
+import org.openksavi.sponge.restapi.client.IncorrectKnowledgeBaseVersionException;
 import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeKind;
 
@@ -153,7 +159,7 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
-    @Test(expected = RestApiIncorrectKnowledgeBaseVersionClientException.class)
+    @Test(expected = IncorrectKnowledgeBaseVersionException.class)
     public void testCallWithWrongExpectedKnowledgeBaseVersion() {
         try (SpongeRestApiClient client = createRestApiClient()) {
             String arg1 = "test1";
@@ -164,6 +170,64 @@ public abstract class BaseRestApiTestTemplate {
             try {
                 client.call("UpperCase", arg1);
                 fail("Exception expected");
+            } finally {
+                engine.clearError();
+            }
+        }
+    }
+
+    @Test
+    public void testCallBinaryArgAndResult() throws IOException {
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            byte[] image = IOUtils.toByteArray(getClass().getResourceAsStream("/image.png"));
+            byte[] resultImage = client.call(byte[].class, "EchoImage", image);
+            assertEquals(image.length, resultImage.length);
+            assertArrayEquals(image, resultImage);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCallWithActionTypeArg() {
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("ActionTypeAction");
+            List<String> values = client.call(List.class, ((ActionType) actionMeta.getArgsMeta().get(0).getType()).getActionName());
+            assertEquals("value3", client.call("ActionTypeAction", values.get(values.size() - 1)));
+        }
+    }
+
+    @Test
+    public void testCallLanguageError() {
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            try {
+                client.call("LangErrorAction");
+                fail("Exception expected");
+            } catch (ErrorResponseException e) {
+                assertEquals(RestApiConstants.DEFAULT_ERROR_CODE, e.getErrorCode());
+                assertTrue(e.getErrorMessage().startsWith("NameError: global name 'throws_error' is not defined in"));
+                assertTrue(e.getDetailedErrorMessage().startsWith(
+                        "org.openksavi.sponge.engine.WrappedException: NameError: global name 'throws_error' is not defined in"));
+            } catch (Throwable e) {
+                fail("ResponseErrorSpongeException expected");
+            } finally {
+                engine.clearError();
+            }
+        }
+    }
+
+    @Test
+    public void testCallKnowledgeBaseError() {
+        try (SpongeRestApiClient client = createRestApiClient()) {
+            try {
+                client.call("KnowledgeBaseErrorAction");
+                fail("Exception expected");
+            } catch (ErrorResponseException e) {
+                assertEquals(RestApiConstants.DEFAULT_ERROR_CODE, e.getErrorCode());
+                assertTrue(e.getErrorMessage().startsWith("Exception: Knowledge base exception in"));
+                assertTrue(e.getDetailedErrorMessage()
+                        .startsWith("org.openksavi.sponge.engine.WrappedException: Exception: Knowledge base exception in"));
+            } catch (Throwable e) {
+                fail("ResponseErrorSpongeException expected");
             } finally {
                 engine.clearError();
             }
