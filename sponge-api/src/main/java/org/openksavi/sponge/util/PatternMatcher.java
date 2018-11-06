@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.util;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -54,5 +55,5 @@ public interface PatternMatcher {
      * @param text the text.
      * @return {@code true} if the text matches any of the patterns.
      */
-    boolean matchesAny(String[] patterns, String text);
+    boolean matchesAny(List<String> patterns, String text);
 }

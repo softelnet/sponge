@@ -17,6 +17,7 @@
 package org.openksavi.sponge.core.rule;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.google.common.collect.Iterables;
 
@@ -58,9 +59,9 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
     @Override
     protected int getExpectedEventIndex(TreeNode<NodeValue> node, Event event) {
         int level = node.getLevel();
-        String[] eventNames = adapter.getEventNames();
-        if (level < eventNames.length && adapter.getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher()
-                .matches(eventNames[level], event.getName())) {
+        List<String> eventNames = adapter.getEventNames();
+        if (level < eventNames.size() && adapter.getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher()
+                .matches(eventNames.get(level), event.getName())) {
             node.getValue().setIndex(level);
             return level;
         }
@@ -134,7 +135,7 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
      */
     @Override
     protected boolean shouldRunRule() {
-        EventMode lastMode = adapter.getEventMode(adapter.getEventModes().length - 1);
+        EventMode lastMode = getDefinition().getEventSpec(getDefinition().getEventSpecs().size() - 1).getMode();
 
         // If the mode of the last specified event is FIRST or ALL always try to run the rule.
         if (lastMode == EventMode.FIRST || lastMode == EventMode.ALL) {
@@ -151,7 +152,7 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
         boolean fired = false;
         TreeNode<NodeValue> child;
 
-        EventMode eventMode = adapter.getEventModes()[node.getLevel() + 1];
+        EventMode eventMode = getDefinition().getEventSpec(node.getLevel() + 1).getMode();
         switch (eventMode) {
         case FIRST:
             // For FIRST mode consider only the first event in the next level.
@@ -220,12 +221,12 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
 
     @Override
     public void validate() {
-        EventMode firstMode = adapter.getEventModes()[0];
+        EventMode firstMode = getDefinition().getEventSpec(0).getMode();
         if (firstMode != EventMode.FIRST) {
             throw adapter.createValidationException("The mode of the first event in the sequence must be " + EventMode.FIRST + ".");
         }
 
-        EventMode lastMode = adapter.getEventModes()[adapter.getEventModes().length - 1];
+        EventMode lastMode = getDefinition().getEventSpec(getDefinition().getEventSpecs().size() - 1).getMode();
         if (lastMode == null) {
             throw adapter.createValidationException("The mode of the last event in the sequence is not set");
         }

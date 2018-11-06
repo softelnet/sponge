@@ -46,7 +46,7 @@ class RulesEvents : KKnowledgeBase() {
 
     abstract class TestRule : KRule() {
         fun setup(vararg eventSpec: String) {
-            setEvents(eventSpec)
+            setEvents(*eventSpec)
             duration = Duration.ofMillis(defaultDuration)
         }
 

@@ -22,6 +22,7 @@ import org.openksavi.sponge.action.ActionDefinition;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class BaseActionDefinition extends BaseProcessorDefinition implements ActionDefinition {
 
@@ -41,7 +42,7 @@ public class BaseActionDefinition extends BaseProcessorDefinition implements Act
 
     @Override
     public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
-        this.argsMeta = argsMeta;
+        this.argsMeta = SpongeUtils.createUnmodifiableList(argsMeta);
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.type;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -35,12 +36,12 @@ public class Type<T> {
     /** Tells if a value of this type may be null. The default is that a value must not be null, i.e. it is <b>not nullable</b>. */
     private boolean nullable = false;
 
-    @SuppressWarnings("unused")
     private Type() {
         //
     }
 
     protected Type(TypeKind kind) {
+        this();
         this.kind = kind;
     }
 
@@ -82,11 +83,11 @@ public class Type<T> {
     }
 
     public Map<String, Object> getFeatures() {
-        return features;
+        return Collections.unmodifiableMap(features);
     }
 
     public void setFeatures(Map<String, Object> features) {
-        this.features = features;
+        this.features = new LinkedHashMap<>(features);
     }
 
     public T getDefaultValue() {

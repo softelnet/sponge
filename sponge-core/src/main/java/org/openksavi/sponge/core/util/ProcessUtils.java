@@ -17,7 +17,6 @@
 package org.openksavi.sponge.core.util;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,13 +56,13 @@ public abstract class ProcessUtils {
 
     public static ProcessConfiguration.Builder createProcessConfigurationBuilder(Configuration configuration) {
         Map<String, String> env = new LinkedHashMap<>();
-        Arrays.stream(configuration.getConfigurationsAt(TAG_PROCESS_ENV)).forEach(c -> {
+        configuration.getConfigurationsAt(TAG_PROCESS_ENV).forEach(c -> {
             env.put(Validate.notNull(c.getAttribute(ATTR_PROCESS_ENV_NAME, null), "The environment variable must have a name"),
                     c.getValue());
         });
 
         ProcessConfiguration.Builder builder = ProcessConfiguration.builder(configuration.getString(TAG_PROCESS_EXECUTABLE, null))
-                .arguments(Arrays.stream(configuration.getConfigurationsAt(TAG_PROCESS_ARGUMENT)).map(Configuration::getValue)
+                .arguments(configuration.getConfigurationsAt(TAG_PROCESS_ARGUMENT).stream().map(Configuration::getValue)
                         .collect(Collectors.toList()))
                 .workingDir(configuration.getString(TAG_PROCESS_WORKING_DIR, null)).env(env)
                 .waitSeconds(configuration.getLong(TAG_PROCESS_WAIT_SECONDS, null));

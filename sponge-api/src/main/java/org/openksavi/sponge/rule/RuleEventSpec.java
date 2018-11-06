@@ -27,19 +27,19 @@ public interface RuleEventSpec {
      *
      * @return the event name.
      */
-    String getEventName();
+    String getName();
 
     /**
      * Returns the event alias.
      *
      * @return the event alias.
      */
-    String getEventAlias();
+    String getAlias();
 
     /**
      * Returns the event mode.
      *
      * @return the event mode.
      */
-    EventMode getEventMode();
+    EventMode getMode();
 }

@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 
@@ -66,8 +65,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      */
     @Override
     public void configure(Configuration configuration) {
-        Stream.of(configuration.getChildConfigurationsOf(PluginManagerConstants.CFG_PLUGINS))
-                .forEachOrdered(pluginConfig -> addPlugin(createAndConfigurePlugin(pluginConfig)));
+        configuration.getChildConfigurationsOf(PluginManagerConstants.CFG_PLUGINS)
+                .forEach(pluginConfig -> addPlugin(createAndConfigurePlugin(pluginConfig)));
     }
 
     protected boolean isValidPluginName(String name) {

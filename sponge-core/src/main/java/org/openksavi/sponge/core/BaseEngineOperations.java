@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.EngineOperations;
@@ -50,13 +51,13 @@ public class BaseEngineOperations implements EngineOperations {
      */
     @Override
     public Object call(String actionName, Object... args) {
-        return engine.getActionManager().callAction(actionName, args);
+        return engine.getActionManager().callAction(actionName, Arrays.asList(args));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T call(Class<T> resultClass, String actionName, Object... args) {
-        Object result = engine.getActionManager().callAction(actionName, args);
+        Object result = engine.getActionManager().callAction(actionName, Arrays.asList(args));
 
         SpongeUtils.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s",
                 resultClass);

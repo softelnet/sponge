@@ -26,6 +26,7 @@ import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.ProcessConfiguration.RedirectType;
 import org.openksavi.sponge.engine.SpongeEngine;
 
+@net.jcip.annotations.NotThreadSafe
 public class ProcessInstanceTest {
 
     @Test

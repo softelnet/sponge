@@ -76,7 +76,7 @@ public abstract class RestApiServerUtils {
         return PASSWORD_REPLACER.replaceAll(text);
     }
 
-    public static Object[] unmarshalActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
+    public static List<Object> unmarshalActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
             Exchange exchange) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {
@@ -85,7 +85,7 @@ public abstract class RestApiServerUtils {
 
         // Argument metadata not defined for this action. No type checking, returning raw values.
         if (actionAdapter.getArgsMeta() == null) {
-            return jsonArgs.toArray();
+            return jsonArgs;
         }
 
         List<Object> finalArgs = new ArrayList<>();
@@ -109,7 +109,7 @@ public abstract class RestApiServerUtils {
             index++;
         }
 
-        return finalArgs.toArray();
+        return finalArgs;
     }
 
     public static Object marshalActionResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result, Exchange exchange) {

@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.commons.configuration2.BaseHierarchicalConfiguration;
 import org.apache.commons.configuration2.CombinedConfiguration;
@@ -75,23 +76,17 @@ public class CommonsConfiguration implements Configuration {
     }
 
     @Override
-    public CommonsConfiguration[] getChildConfigurationsOf(String key) {
+    public List<Configuration> getChildConfigurationsOf(String key) {
         return createConfigurations(config.childConfigurationsAt(key));
     }
 
     @Override
-    public CommonsConfiguration[] getConfigurationsAt(String key) {
+    public List<Configuration> getConfigurationsAt(String key) {
         return createConfigurations(config.configurationsAt(key));
     }
 
-    protected CommonsConfiguration[] createConfigurations(List<HierarchicalConfiguration<ImmutableNode>> subs) {
-        CommonsConfiguration[] result = new CommonsConfiguration[subs.size()];
-
-        for (int i = 0; i < result.length; i++) {
-            result[i] = new CommonsConfiguration((BaseHierarchicalConfiguration) subs.get(i));
-        }
-
-        return result;
+    protected List<Configuration> createConfigurations(List<HierarchicalConfiguration<ImmutableNode>> subs) {
+        return subs.stream().map(sub -> new CommonsConfiguration((BaseHierarchicalConfiguration) sub)).collect(Collectors.toList());
     }
 
     @Override

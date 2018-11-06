@@ -17,7 +17,7 @@ void onInit() {
 
 class FilterTrigger extends Trigger {
     void onConfigure() {
-        this.setEvents("e1", "e2", "e3")
+        this.events = ["e1", "e2", "e3"]
     }
     void onRun(Event event) {
         this.logger.debug("Processing trigger for event {}", event)

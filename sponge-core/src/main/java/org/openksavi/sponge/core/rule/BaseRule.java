@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
-
 import org.openksavi.sponge.core.BaseEventSetProcessor;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
@@ -35,36 +33,6 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
 
     protected final BaseRuleAdapter getRuleAdapterImpl() {
         return (BaseRuleAdapter) super.getAdapter();
-    }
-
-    @Override
-    public final void setEventAliases(String... aliases) {
-        getAdapter().setEventAliases(aliases);
-    }
-
-    @Override
-    public final String[] getEventAliases() {
-        return getAdapter().getEventAliases();
-    }
-
-    @Override
-    public final String getEventAlias(int index) {
-        return getAdapter().getEventAlias(index);
-    }
-
-    @Override
-    public final void setEventModes(EventMode... modes) {
-        getAdapter().setEventModes(modes);
-    }
-
-    @Override
-    public final EventMode[] getEventModes() {
-        return getAdapter().getEventModes();
-    }
-
-    @Override
-    public final EventMode getEventMode(int index) {
-        return getAdapter().getEventMode(index);
     }
 
     @Override
@@ -97,20 +65,24 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
         return getRuleAdapterImpl().getEvent(eventAlias);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void setEvents(Object[] events) {
-        // Some scripting languages may invoke this method differently, because the array of Objects is too generic.
-        if (events.length == 1 && events[0] != null && events[0] instanceof Iterable) {
-            getRuleAdapterImpl().setEventSpecs(Lists.newArrayList((Iterable<Object>) events[0]));
-        } else {
-            getRuleAdapterImpl().setEventSpecs(Arrays.asList(events));
-        }
+    public void setEvents(String... eventStringSpecs) {
+        getRuleAdapterImpl().setEventStringSpecs(Arrays.asList(eventStringSpecs));
     }
 
     @Override
-    public void setEvents(String... eventSpecs) {
-        setEvents((Object[]) eventSpecs);
+    public void setEventSpecs(RuleEventSpec... eventSpecs) {
+        getRuleAdapterImpl().setEventSpecs(Arrays.asList(eventSpecs));
+    }
+
+    @Override
+    public void setEvent(String eventStringSpec) {
+        setEvents(eventStringSpec);
+    }
+
+    @Override
+    public void setEventSpec(RuleEventSpec eventSpec) {
+        setEventSpecs(eventSpec);
     }
 
     @Override
@@ -158,8 +130,7 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     protected final EventCondition createEventConditionForMethods(List<String> names) {
-        return new CompositeEventCondition(
-                names.stream().map(name -> createEventConditionForMethod(name)).collect(Collectors.toList()));
+        return new CompositeEventCondition(names.stream().map(name -> createEventConditionForMethod(name)).collect(Collectors.toList()));
     }
 
     protected final EventCondition createEventConditionForMethod(String name) {

@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.engine.processing;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -295,7 +294,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
                 }
 
                 // Remove associations with events that are no longer listened to by this processor.
-                List<String> processorEventNamesList = Arrays.asList(processor.getEventNames());
+                List<String> processorEventNamesList = processor.getEventNames();
                 for (String oldEventName : oldProcessor.getEventNames()) {
                     if (!processorEventNamesList.contains(oldEventName)) {
                         eventPatternProcessorMap.get(oldEventName).remove(registered);

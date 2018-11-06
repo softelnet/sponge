@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.rule;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
 import org.openksavi.sponge.rule.EventCondition;
@@ -82,52 +83,14 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
      */
     protected abstract boolean runRule();
 
-    @Override
-    public void setEventAliases(String... aliases) {
-        getDefinition().setEventAliases(aliases);
+    public void setEventStringSpecs(List<String> eventStringSpecs) {
+        setEventSpecs(eventStringSpecs.stream().map(spec -> getKnowledgeBase().getInterpreter().getRuleEventSpec(spec))
+                .collect(Collectors.toList()));
     }
 
-    @Override
-    public String[] getEventAliases() {
-        return getDefinition().getEventAliases();
-    }
-
-    @Override
-    public String getEventAlias(int index) {
-        return getDefinition().getEventAlias(index);
-    }
-
-    @Override
-    public void setEventModes(EventMode... modes) {
-        getDefinition().setEventModes(modes);
-    }
-
-    @Override
-    public EventMode[] getEventModes() {
-        return getDefinition().getEventModes();
-    }
-
-    @Override
-    public EventMode getEventMode(int index) {
-        return getDefinition().getEventMode(index);
-    }
-
-    public void setEventSpecs(List<Object> events) {
-        String[] eventNames = new String[events.size()];
-        String[] eventAliases = new String[events.size()];
-        EventMode[] modes = new EventMode[events.size()];
-
-        for (int i = 0; i < events.size(); i++) {
-            RuleEventSpec eventSpec = getKnowledgeBase().getInterpreter().getRuleEventSpec(events.get(i));
-
-            eventNames[i] = eventSpec.getEventName();
-            eventAliases[i] = eventSpec.getEventAlias();
-            modes[i] = eventSpec.getEventMode();
-        }
-
-        setEventNames(eventNames);
-        setEventAliases(eventAliases);
-        setEventModes(modes);
+    public void setEventSpecs(List<RuleEventSpec> eventSpecs) {
+        setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
+        getDefinition().setEventSpecs(eventSpecs);
     }
 
     @Override
@@ -137,7 +100,7 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
 
     @Override
     public int getEventCount() {
-        return getDefinition().getEventNames().length;
+        return getDefinition().getEventNames().size();
     }
 
     public RuleEventSpec makeEventSpec(String eventName, String eventAlias, EventMode eventMode) {

@@ -32,6 +32,7 @@ import org.openksavi.sponge.core.util.TreeNode;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.EventMode;
+import org.openksavi.sponge.rule.RuleDefinition;
 
 /**
  * Abstract rule adapter runtime.
@@ -52,6 +53,10 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
         this.adapter = adapter;
     }
 
+    protected RuleDefinition getDefinition() {
+        return adapter.getDefinition();
+    }
+
     /**
      * Checks conditions for the given node (containing level and event).
      *
@@ -59,7 +64,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
      * @return {@code true} if all conditions are met.
      */
     protected boolean checkConditions(TreeNode<NodeValue> node) {
-        List<EventCondition> conditions = adapter.getEventConditions(adapter.getEventAlias(getEventIndex(node)));
+        List<EventCondition> conditions = adapter.getEventConditions(getDefinition().getEventSpec(getEventIndex(node)).getAlias());
         if (conditions == null) {
             return true;
         }
@@ -152,7 +157,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
             // Recursively try to continue building the event tree, but only for modes FIRST, LAST and ALL.
             node.getChildren().forEach(child -> {
                 // NONE events are processed in shouldAddToEventTreeForNMode(), not here.
-                if (adapter.getEventMode(getEventIndex(child)) != EventMode.NONE) {
+                if (getDefinition().getEventSpec(getEventIndex(child)).getMode() != EventMode.NONE) {
                     buildEventTree(child, event);
                 }
             });
@@ -204,7 +209,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
      * @return event mode.
      */
     protected EventMode getEventMode(TreeNode<NodeValue> node) {
-        return adapter.getEventMode(getEventIndex(node));
+        return getDefinition().getEventSpec(getEventIndex(node)).getMode();
     }
 
     /**
@@ -239,7 +244,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
             // Running the rule for the calculated event sequence (there may be many such sequences for ALL mode).
             adapter.getProcessor().onRun(node.getValue().getEvent());
 
-            EventMode eventMode = adapter.getEventMode(getEventIndex(node));
+            EventMode eventMode = getDefinition().getEventSpec(getEventIndex(node)).getMode();
             switch (eventMode) {
             case FIRST:
                 return true;
@@ -297,7 +302,8 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
     protected void prepareEventAliasMap(TreeNode<NodeValue> node) {
         eventAliasMap.clear();
 
-        eventTree.getPath(node).forEach(n -> eventAliasMap.put(adapter.getEventAlias(getEventIndex(n)), n.getValue().getEvent()));
+        eventTree.getPath(node)
+                .forEach(n -> eventAliasMap.put(getDefinition().getEventSpec(getEventIndex(n)).getAlias(), n.getValue().getEvent()));
     }
 
     /**

@@ -43,7 +43,9 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -241,7 +243,7 @@ public abstract class SpongeUtils {
     }
 
     public static Object searchConfigurationValueByAttributeValue(Configuration root, String parentKey, String attrName, String attrValue) {
-        return Stream.of(root.getChildConfigurationsOf(parentKey))
+        return root.getChildConfigurationsOf(parentKey).stream()
                 .filter(configuration -> Objects.equals(configuration.getAttribute(attrName, null), attrValue)).map(Configuration::getValue)
                 .findFirst().orElse(null);
     }
@@ -302,6 +304,16 @@ public abstract class SpongeUtils {
         if (throwable instanceof SpongeException) {
             return (SpongeException) throwable;
         }
+
+        List<String> nestedSourceNames = ExceptionUtils.getThrowableList(throwable).stream().filter(e -> e instanceof WrappedException)
+                .map(e -> ((WrappedException) e).getSourceName()).filter(Objects::nonNull).collect(Collectors.toList());
+
+        if (!nestedSourceNames.isEmpty()) {
+            sourceName =
+                    (sourceName != null ? sourceName : "") + nestedSourceNames.stream().collect(Collectors.joining(" in ", " in ", ""));
+        }
+
+        // TODO throwable = ExceptionUtils.getRootCause(throwable);
 
         String specificErrorMessage = interpreter != null ? interpreter.getSpecificExceptionMessage(throwable) : null;
         if (sourceName == null) {
@@ -707,6 +719,14 @@ public abstract class SpongeUtils {
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);
         }
+    }
+
+    public static <T> List<T> createUnmodifiableList(List<T> source) {
+        return source != null ? Collections.unmodifiableList(new ArrayList<>(source)) : null;
+    }
+
+    public static <K, V> Map<K, V> createUnmodifiableMap(Map<K, V> source) {
+        return source != null ? Collections.unmodifiableMap(new LinkedHashMap<>(source)) : null;
     }
 
     protected SpongeUtils() {

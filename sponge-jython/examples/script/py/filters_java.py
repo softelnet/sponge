@@ -18,7 +18,7 @@ def onInit():
 
 class FilterTrigger(Trigger):
     def onConfigure(self):
-        self.setEvents("e1", "e2", "e3")
+        self.events = ["e1", "e2", "e3"]
     def onRun(self, event):
         self.logger.debug("Processing trigger for event {}", event)
         global eventCounter

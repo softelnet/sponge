@@ -252,7 +252,7 @@ public class DefaultRestApiService implements RestApiService {
         }
     }
 
-    protected Object[] unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request, Exchange exchange) {
+    protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request, Exchange exchange) {
         return RestApiServerUtils.unmarshalActionArgs(typeConverter, actionAdapter, request.getArgs(), exchange);
     }
 

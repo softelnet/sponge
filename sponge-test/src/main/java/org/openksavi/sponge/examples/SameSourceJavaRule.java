@@ -32,7 +32,7 @@ public class SameSourceJavaRule extends JRule {
 
     @Override
     public void onConfigure() {
-        setEvents(new Object[] { makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL) });
+        setEventSpecs(makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL));
 
         addAllConditions("severityCondition");
         addEventConditions("e2", (rule, event) -> {

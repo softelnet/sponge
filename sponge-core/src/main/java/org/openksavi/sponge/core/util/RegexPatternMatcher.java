@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.util;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
@@ -64,7 +65,7 @@ public class RegexPatternMatcher implements PatternMatcher {
     }
 
     @Override
-    public boolean matchesAny(String[] patterns, String text) {
+    public boolean matchesAny(List<String> patterns, String text) {
         for (String pattern : patterns) {
             if (matches(pattern, text)) {
                 return true;

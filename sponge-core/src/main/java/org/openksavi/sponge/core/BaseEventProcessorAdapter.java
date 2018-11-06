@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.core;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.openksavi.sponge.EventProcessor;
 import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.SpongeException;
@@ -38,7 +41,7 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
      * @return event names.
      */
     @Override
-    public String[] getEventNames() {
+    public List<String> getEventNames() {
         return getDefinition().getEventNames();
     }
 
@@ -53,7 +56,7 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
      * @param eventNames event names.
      */
     @Override
-    public void setEventNames(String... eventNames) {
+    public void setEventNames(List<String> eventNames) {
         getDefinition().setEventNames(eventNames);
     }
 
@@ -64,16 +67,16 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
      */
     @Override
     public void setEventName(String eventName) {
-        getDefinition().setEventNames(eventName);
+        setEventNames(Arrays.asList(eventName));
     }
 
     @Override
     public void validate() {
         super.validate();
 
-        String[] eventNames = getEventNames();
+        List<String> eventNames = getEventNames();
 
-        if (eventNames == null || eventNames.length < 1) {
+        if (eventNames == null || eventNames.isEmpty()) {
             throw new SpongeException("Invalid " + getType().getName() + " " + getName() + ". At least one event must be specified.");
         }
 

@@ -19,7 +19,6 @@ package org.openksavi.sponge.standalone;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -136,7 +135,7 @@ public class StandalonePlugin extends JPlugin {
                     .getBooleanAttribute(CONFIG_SPRING_CONFIGURATION_ATTR_CAMEL, camel);
 
             springConfigurationFiles =
-                    Stream.of(configuration.getConfigurationsAt(CONFIG_SPRING_CONFIGURATION + "." + CONFIG_SPRING_CONFIGUTARION_FILE))
+                    configuration.getConfigurationsAt(CONFIG_SPRING_CONFIGURATION + "." + CONFIG_SPRING_CONFIGUTARION_FILE).stream()
                             .map(conf -> conf.getValue()).filter(file -> !StringUtils.isEmpty(file)).collect(Collectors.toList());
         }
     }

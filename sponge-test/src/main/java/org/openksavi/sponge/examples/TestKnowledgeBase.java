@@ -127,7 +127,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST) });
+            setEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST));
             addConditions("e2", "e2condition");
             setDuration(Duration.ofSeconds(2));
         }
@@ -147,7 +147,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.FIRST) });
+            setEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.FIRST));
             setDuration(Duration.ofSeconds(2));
         }
 
@@ -162,7 +162,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEvents(new Object[] { makeEventSpec("e1"), makeEventSpec("e2", EventMode.ALL) });
+            setEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.ALL));
             setDuration(Duration.ofSeconds(2));
         }
 

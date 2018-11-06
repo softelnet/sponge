@@ -21,30 +21,30 @@ import org.openksavi.sponge.rule.RuleEventSpec;
 
 public class GenericRuleEventSpec implements RuleEventSpec {
 
-    private String eventName;
+    private String name;
 
-    private String eventAlias;
+    private String alias;
 
-    private EventMode eventMode;
+    private EventMode mode;
 
-    public GenericRuleEventSpec(String eventName, String eventAlias, EventMode eventMode) {
-        this.eventName = eventName;
-        this.eventAlias = eventAlias;
-        this.eventMode = eventMode;
+    public GenericRuleEventSpec(String name, String alias, EventMode mode) {
+        this.name = name;
+        this.alias = alias;
+        this.mode = mode;
     }
 
     @Override
-    public String getEventName() {
-        return eventName;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public String getEventAlias() {
-        return eventAlias;
+    public String getAlias() {
+        return alias;
     }
 
     @Override
-    public EventMode getEventMode() {
-        return eventMode;
+    public EventMode getMode() {
+        return mode;
     }
 }

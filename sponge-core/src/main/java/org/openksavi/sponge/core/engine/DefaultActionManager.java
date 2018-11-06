@@ -61,7 +61,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     }
 
     @Override
-    public Object callAction(String actionName, Object[] args) {
+    public Object callAction(String actionName, List<Object> args) {
         ActionAdapter action = registeredActions.get(actionName);
         if (action == null) {
             throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
@@ -74,7 +74,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
 
             // Important casting to an array of objects.
             return interpreter.invokeMethod(action.getProcessor(), Action.ON_CALL_METHOD_NAME,
-                    (Object[]) (args != null ? args : new Object[0]));
+                    (Object[]) (args != null ? args.toArray(new Object[args.size()]) : new Object[0]));
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(action.getProcessor(), e);
         }

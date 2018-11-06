@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -51,13 +50,14 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     private KnowledgeBase knowledgeBase;
 
     /** The processor features. */
-    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
+    private Map<String, Object> features;
 
     /**
      * Creates a new processor definition.
      *
      */
     public BaseProcessorDefinition() {
+        setFeatures(new LinkedHashMap<>());
     }
 
     /**
@@ -188,6 +188,6 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     public void setFeatures(Map<String, Object> features) {
         Validate.notNull(features, "The processor features cannot be null");
 
-        this.features = Collections.synchronizedMap(new LinkedHashMap<>(features));
+        this.features = SpongeUtils.createUnmodifiableMap(features);
     }
 }

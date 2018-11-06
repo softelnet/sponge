@@ -18,6 +18,7 @@ package org.openksavi.sponge.config;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -77,7 +78,7 @@ public interface Configuration {
      * @param key key of the parent node.
      * @return child configurations.
      */
-    Configuration[] getChildConfigurationsOf(String key);
+    List<Configuration> getChildConfigurationsOf(String key);
 
     /**
      * Returns all sub configurations specified by {@code key}.
@@ -85,7 +86,7 @@ public interface Configuration {
      * @param key key of the returned nodes.
      * @return sub configurations.
      */
-    Configuration[] getConfigurationsAt(String key);
+    List<Configuration> getConfigurationsAt(String key);
 
     /**
      * Returns string value.

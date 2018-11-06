@@ -16,12 +16,16 @@
 
 package org.openksavi.sponge.core;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.openksavi.sponge.EventProcessorDefinition;
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 public abstract class BaseEventProcessorDefinition extends BaseProcessorDefinition implements EventProcessorDefinition {
 
     /** Registered event names. */
-    private String[] eventNames;
+    private List<String> eventNames;
 
     /**
      * Returns event names for which this processor definition is registered.
@@ -29,13 +33,13 @@ public abstract class BaseEventProcessorDefinition extends BaseProcessorDefiniti
      * @return event names.
      */
     @Override
-    public String[] getEventNames() {
+    public List<String> getEventNames() {
         return eventNames;
     }
 
     @Override
     public String getEventName(int index) {
-        return eventNames[index];
+        return eventNames.get(index);
     }
 
     /**
@@ -44,12 +48,12 @@ public abstract class BaseEventProcessorDefinition extends BaseProcessorDefiniti
      * @param eventNames event names.
      */
     @Override
-    public void setEventNames(String... eventNames) {
-        this.eventNames = eventNames;
+    public void setEventNames(List<String> eventNames) {
+        this.eventNames = SpongeUtils.createUnmodifiableList(eventNames);
     }
 
     @Override
     public void setEventName(String eventName) {
-        setEventNames(eventName);
+        setEventNames(Arrays.asList(eventName));
     }
 }

@@ -22,26 +22,27 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.rule.EventCondition;
-import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.RuleDefinition;
+import org.openksavi.sponge.rule.RuleEventSpec;
 
 public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implements RuleDefinition {
 
     protected boolean ordered = true;
 
-    protected String[] aliases;
-
-    protected EventMode[] modes;
+    protected List<RuleEventSpec> eventSpecs;
 
     protected Map<String, List<EventCondition>> conditions = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public BaseRuleDefinition() {
     }
 
+    @Override
     public boolean isOrdered() {
         return ordered;
     }
@@ -52,33 +53,19 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
     }
 
     @Override
-    public void setEventAliases(String... aliases) {
-        this.aliases = aliases;
+    public List<RuleEventSpec> getEventSpecs() {
+        return eventSpecs;
     }
 
     @Override
-    public String[] getEventAliases() {
-        return aliases;
+    public RuleEventSpec getEventSpec(int index) {
+        Validate.isTrue(index >= 0 && index < eventSpecs.size(), "Invalid event specification index: %d", index);
+        return eventSpecs.get(index);
     }
 
     @Override
-    public String getEventAlias(int index) {
-        return aliases[index];
-    }
-
-    @Override
-    public void setEventModes(EventMode... modes) {
-        this.modes = modes;
-    }
-
-    @Override
-    public EventMode[] getEventModes() {
-        return modes;
-    }
-
-    @Override
-    public EventMode getEventMode(int index) {
-        return modes[index];
+    public void setEventSpecs(List<RuleEventSpec> eventSpecs) {
+        this.eventSpecs = SpongeUtils.createUnmodifiableList(eventSpecs);
     }
 
     @Override
@@ -90,8 +77,10 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
 
     @Override
     public void addAllEventConditions(EventCondition... newConditions) {
+        Validate.isTrue(eventSpecs != null && !eventSpecs.isEmpty(),
+                "Tring to add conditions to all events when no events have been specified");
         synchronized (conditions) {
-            Stream.of(aliases).forEachOrdered(alias -> addEventConditions(alias, newConditions));
+            eventSpecs.forEach(spec -> addEventConditions(spec.getAlias(), newConditions));
         }
     }
 
@@ -119,6 +108,7 @@ public class BaseRuleDefinition extends BaseEventSetProcessorDefinition implemen
         return conditions.get(eventAlias);
     }
 
+    @Override
     public Map<String, List<EventCondition>> getEventConditions() {
         return conditions;
     }

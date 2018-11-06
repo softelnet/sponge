@@ -116,8 +116,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
      */
     @Override
     public void configure(Configuration configuration) {
-        Configuration[] knowledgeBaseNodes = configuration.getChildConfigurationsOf(CFG_KNOWLEDGE_BASES);
-        for (Configuration knowledgeBaseNode : knowledgeBaseNodes) {
+        for (Configuration knowledgeBaseNode : configuration.getChildConfigurationsOf(CFG_KNOWLEDGE_BASES)) {
             addKnowledgeBase(createKnowledgeBaseFromConfiguration(knowledgeBaseNode));
         }
     }
@@ -132,7 +131,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         String description = configuration.getString(CFG_KNOWLEDGE_BASE_DESCRIPTION, null);
         String typeCode = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_TYPE, null);
 
-        Configuration[] fileNodes = configuration.getConfigurationsAt(CFG_KNOWLEDGE_BASE_FILE);
+        List<Configuration> fileNodes = configuration.getConfigurationsAt(CFG_KNOWLEDGE_BASE_FILE);
 
         String kbClass = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_CLASS, null);
 
@@ -151,7 +150,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     }
 
     protected DefaultScriptKnowledgeBase createScriptKnowledgeBaseFromConfiguration(String name, String typeCode,
-            Configuration[] fileNodes) {
+            List<Configuration> fileNodes) {
 
         List<KnowledgeBaseScript> scripts = new ArrayList<>();
         for (Configuration fileNode : fileNodes) {
@@ -190,7 +189,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     }
 
     protected KnowledgeBase createNonScriptKnowledgeBaseFromConfiguration(String name, String typeCode, String kbClass,
-            Configuration[] fileNodes) {
+            List<Configuration> fileNodes) {
         KnowledgeBase knowledgeBase = SpongeUtils.createInstance(kbClass, KnowledgeBase.class);
 
         if (typeCode != null) {
@@ -201,7 +200,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             }
         }
 
-        if (fileNodes.length > 0) {
+        if (!fileNodes.isEmpty()) {
             throw new SpongeException("Knowledge base files are not allowed for a non script knowledge base");
         }
 

@@ -253,7 +253,6 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
     private void setupXmlProperties() {
         for (Configuration configuration : rootConfig.getChildConfigurationsOf(ConfigurationConstants.TAG_PROPERTIES)) {
-
             String name = configuration.getAttribute(ConfigurationConstants.PROP_ATTRIBUTE_NAME, null);
             Object value = configuration.getValue();
             String systemProperty = System.getProperty(name);

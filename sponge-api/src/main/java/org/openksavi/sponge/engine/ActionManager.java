@@ -44,11 +44,11 @@ public interface ActionManager extends EngineModule {
      * Calls the action. Throws {@code ProcessorNotFoundException} when such action is not registered.
      *
      * @param actionName name of registered action.
-     * @param args arguments for an action call. This parameter may be {@code null} and in that case it will be passed as an empty array to
-     *        the action.
+     * @param args arguments for an action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     *        action.
      * @return result of executing action.
      */
-    Object callAction(String actionName, Object[] args);
+    Object callAction(String actionName, List<Object> args);
 
     /**
      * Returns registered processor adapter map.

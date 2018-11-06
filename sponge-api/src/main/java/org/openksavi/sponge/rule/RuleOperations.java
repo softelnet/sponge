@@ -41,52 +41,6 @@ public interface RuleOperations extends EventSetProcessorOperations {
     boolean isOrdered();
 
     /**
-     * Sets event aliases.
-     *
-     * @param aliases event aliases.
-     */
-    void setEventAliases(String... aliases);
-
-    /**
-     * Returns event aliases.
-     *
-     * @return event aliases.
-     */
-    String[] getEventAliases();
-
-    /**
-     * Returns an event alias for the specified event index.
-     *
-     * @param index event index.
-     *
-     * @return event alias.
-     */
-    String getEventAlias(int index);
-
-    /**
-     * Sets event modes.
-     *
-     * @param modes event modes.
-     */
-    void setEventModes(EventMode... modes);
-
-    /**
-     * Returns event modes.
-     *
-     * @return event modes.
-     */
-    EventMode[] getEventModes();
-
-    /**
-     * Returns an event mode for the specified event index.
-     *
-     * @param index event index.
-     *
-     * @return event mode.
-     */
-    EventMode getEventMode(int index);
-
-    /**
      * Adds event conditions.
      *
      * @param eventAlias event alias.

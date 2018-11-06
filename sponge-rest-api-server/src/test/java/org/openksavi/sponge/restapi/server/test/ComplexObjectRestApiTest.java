@@ -57,9 +57,6 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 public class ComplexObjectRestApiTest {
 
     @Inject
-    private SpongeEngine engine;
-
-    @Inject
     @Named(PortTestConfig.PORT_BEAN_NAME)
     protected Integer port;
 

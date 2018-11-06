@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.rule;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +27,7 @@ import org.openksavi.sponge.core.util.Tree;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.rule.RuleEventSpec;
 
 /**
  * Base rule adapter.
@@ -129,20 +129,21 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     public void validate() {
         super.validate();
 
-        if (getEventModes() == null || getEventModes().length < 1) {
-            throw createValidationException("Event modes are not specified.");
+        if (getDefinition().getEventSpecs() == null || getDefinition().getEventSpecs().isEmpty()) {
+            throw createValidationException("Event specifications are missing.");
         }
 
-        if (getEventNames().length != getEventModes().length) {
-            throw createValidationException("Each event should have a mode specified (explicitly or implicitly).");
+        if (getEventNames().size() != getDefinition().getEventSpecs().size()) {
+            throw createValidationException("Each event should have a specification (explicitly or implicitly).");
         }
 
-        if (Arrays.stream(getEventAliases()).distinct().count() < getEventAliases().length) {
-            throw createValidationException("Event aliases/names must be unique.");
+        if (getDefinition().getEventSpecs().stream().map(RuleEventSpec::getAlias).distinct().count() < getDefinition().getEventSpecs()
+                .size()) {
+            throw createValidationException("Event aliases together with names must be unique.");
         }
 
         // Validate condition event aliases.
-        Set<String> eventAliasesSet = Arrays.stream(getEventAliases()).collect(Collectors.toSet());
+        Set<String> eventAliasesSet = getDefinition().getEventSpecs().stream().map(RuleEventSpec::getAlias).collect(Collectors.toSet());
         for (String alias : getEventConditions().keySet()) {
             if (!eventAliasesSet.contains(alias)) {
                 throw createValidationException("Condition event alias '" + alias + "' does not exist");

@@ -49,11 +49,34 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
     List<Event> getEventSequence();
 
     /**
-     * Sets events.
+     * Sets the event specifications as strings.
      *
-     * @param events events.
+     * @param eventStringSpecs the event specifications.
      */
-    void setEvents(Object[] events);
+    @Override
+    void setEvents(String... eventStringSpecs);
+
+    /**
+     * Sets the event specifications.
+     *
+     * @param eventSpecs the event specifications.
+     */
+    void setEventSpecs(RuleEventSpec... eventSpecs);
+
+    /**
+     * Sets the event specification as a string.
+     *
+     * @param eventStringSpec the event specification.
+     */
+    @Override
+    void setEvent(String eventStringSpec);
+
+    /**
+     * Sets the event specification.
+     *
+     * @param eventSpec the event specification.
+     */
+    void setEventSpec(RuleEventSpec eventSpec);
 
     /**
      * Creates a new rule event specification.

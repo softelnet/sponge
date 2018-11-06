@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge;
 
+import java.util.List;
+
 /**
  * Event processor operations. Each event name may be specified as a regular expression thus creating a pattern matching more event names.
  *
@@ -27,7 +29,7 @@ public interface EventProcessorOperations extends ProcessorOperations {
      *
      * @return event names.
      */
-    String[] getEventNames();
+    List<String> getEventNames();
 
     /**
      * Returns an event name (or name pattern) for the specified event index.
@@ -43,7 +45,7 @@ public interface EventProcessorOperations extends ProcessorOperations {
      *
      * @param eventNames event names.
      */
-    void setEventNames(String... eventNames);
+    void setEventNames(List<String> eventNames);
 
     /**
      * Sets event name (or name pattern) this processor listens to.
