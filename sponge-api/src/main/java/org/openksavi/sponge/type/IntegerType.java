@@ -41,16 +41,6 @@ public class IntegerType extends Type<Number> {
     }
 
     @Override
-    public IntegerType tags(String... tags) {
-        return (IntegerType) super.tags(tags);
-    }
-
-    @Override
-    public IntegerType tag(String tag) {
-        return (IntegerType) super.tag(tag);
-    }
-
-    @Override
     public IntegerType features(Map<String, Object> features) {
         return (IntegerType) super.features(features);
     }

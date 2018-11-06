@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.List;
+
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
@@ -35,12 +37,12 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
-    public ArgMeta<?>[] getArgsMeta() {
+    public List<ArgMeta<?>> getArgsMeta() {
         return getAdapter().getArgsMeta();
     }
 
     @Override
-    public void setArgsMeta(ArgMeta<?>... argsMeta) {
+    public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
         getAdapter().setArgsMeta(argsMeta);
     }
 

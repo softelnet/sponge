@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.core.action;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang3.Validate;
 
@@ -53,12 +53,12 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public ArgMeta<?>[] getArgsMeta() {
+    public List<ArgMeta<?>> getArgsMeta() {
         return getDefinition().getArgsMeta();
     }
 
     @Override
-    public void setArgsMeta(ArgMeta<?>... argsMeta) {
+    public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
         getDefinition().setArgsMeta(argsMeta);
     }
 
@@ -81,7 +81,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
         if (getArgsMeta() != null) {
             boolean foundFirstOptionalArg = false;
-            for (ArgMeta<?> argMeta : Arrays.asList(getArgsMeta())) {
+            for (ArgMeta<?> argMeta : getArgsMeta()) {
                 validateArgMeta(argMeta);
 
                 // Optional arguments may be specified only as last in the argument list.

@@ -34,16 +34,6 @@ public class StringType extends Type<String> {
     }
 
     @Override
-    public StringType tags(String... tags) {
-        return (StringType) super.tags(tags);
-    }
-
-    @Override
-    public StringType tag(String tag) {
-        return (StringType) super.tag(tag);
-    }
-
-    @Override
     public StringType features(Map<String, Object> features) {
         return (StringType) super.features(features);
     }

@@ -19,4 +19,6 @@ package org.openksavi.sponge.test.script;
 public interface ActionsTest extends ScriptTest {
 
     void testActions();
+
+    void testHelloWorldAction();
 }

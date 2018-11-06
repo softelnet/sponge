@@ -30,16 +30,6 @@ public class VoidType extends Type<Object> {
     }
 
     @Override
-    public VoidType tags(String... tags) {
-        return (VoidType) super.tags(tags);
-    }
-
-    @Override
-    public VoidType tag(String tag) {
-        return (VoidType) super.tag(tag);
-    }
-
-    @Override
     public VoidType features(Map<String, Object> features) {
         return (VoidType) super.features(features);
     }

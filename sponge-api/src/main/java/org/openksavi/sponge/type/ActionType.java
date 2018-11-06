@@ -42,16 +42,6 @@ public class ActionType extends Type<Object> {
     }
 
     @Override
-    public ActionType tags(String... tags) {
-        return (ActionType) super.tags(tags);
-    }
-
-    @Override
-    public ActionType tag(String tag) {
-        return (ActionType) super.tag(tag);
-    }
-
-    @Override
     public ActionType features(Map<String, Object> features) {
         return (ActionType) super.features(features);
     }

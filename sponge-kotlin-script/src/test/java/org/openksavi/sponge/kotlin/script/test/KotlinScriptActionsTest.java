@@ -28,4 +28,10 @@ public class KotlinScriptActionsTest extends KotlinScriptTest implements Actions
     public void testActions() {
         ActionsTestTemplate.testActions(getType());
     }
+
+    @Override
+    @Test
+    public void testHelloWorldAction() {
+        ActionsTestTemplate.testHelloWorldAction(getType());
+    }
 }

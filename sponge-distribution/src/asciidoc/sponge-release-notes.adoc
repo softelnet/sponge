@@ -8,6 +8,7 @@ NOTE: The current versions of {sponge} don't guarantee a full backward compatibi
 [discrete]
 == 1.4.3 (Not released yet)
 
+* API change: Removed the `tags` property from a type (used in an action argument and in an action result metadata) because the existing `features` property is sufficient.
 * Added the `optional` property to the `ArgMeta`.
 * Action metadata cache in the REST API Java client.
 * Fixed usage of OkHttpClient in the REST API Java client.

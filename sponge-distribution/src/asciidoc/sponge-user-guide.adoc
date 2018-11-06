@@ -78,9 +78,6 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |`defaultValue`
 |An optional default value.
 
-|`tags` (or `tag`)
-|Optional tags (text labels).
-
 |`features` (or `feature`)
 |Optional features as a map of names to values (as the `Object` type).
 |===
@@ -133,9 +130,9 @@ AnyType().nullable(True)
 ListType(StringType())
 ListType(ObjectType("java.math.BigDecimal"))
 ObjectType("java.lang.String[]")
-ObjectType("org.openksavi.sponge.examples.CustomObject").tag("complex")
+ObjectType("org.openksavi.sponge.examples.CustomObject")
 ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))
-BinaryType().mimeType("image/png").tags(["drawing", "handwritten"]).features({"width":28, "height":28, "color":"white"})
+BinaryType().mimeType("image/png").features({"width":28, "height":28, "color":"white"})
 ----
 
 == Events

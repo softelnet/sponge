@@ -43,16 +43,6 @@ public class MapType<K, V> extends Type<Map<K, V>> {
     }
 
     @Override
-    public MapType<K, V> tags(String... tags) {
-        return (MapType<K, V>) super.tags(tags);
-    }
-
-    @Override
-    public MapType<K, V> tag(String tag) {
-        return (MapType<K, V>) super.tag(tag);
-    }
-
-    @Override
     public MapType<K, V> features(Map<String, Object> features) {
         return (MapType<K, V>) super.features(features);
     }

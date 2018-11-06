@@ -39,16 +39,6 @@ public class ListType<E> extends Type<List<E>> {
     }
 
     @Override
-    public ListType<E> tags(String... tags) {
-        return (ListType<E>) super.tags(tags);
-    }
-
-    @Override
-    public ListType<E> tag(String tag) {
-        return (ListType<E>) super.tag(tag);
-    }
-
-    @Override
     public ListType<E> features(Map<String, Object> features) {
         return (ListType<E>) super.features(features);
     }

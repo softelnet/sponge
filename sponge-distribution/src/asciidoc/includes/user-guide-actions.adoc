@@ -134,9 +134,9 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringListArg", ListType(StringType())),
             ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
-            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.CustomObject").tag("complex")),
+            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.CustomObject")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))),
-            ArgMeta("binaryArg", BinaryType().mimeType("image/png").tags(["drawing", "handwritten"]).features({"width":28, "height":28, "color":"white"})),
+            ArgMeta("binaryArg", BinaryType().mimeType("image/png").features({"width":28, "height":28, "color":"white"})),
         ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):

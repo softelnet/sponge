@@ -19,15 +19,19 @@ package org.openksavi.sponge.test.script.template;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
+import org.openksavi.sponge.type.StringType;
 
 public class ActionsTestTemplate {
 
@@ -55,6 +59,37 @@ public class ActionsTestTemplate {
 
             assertEquals(3,
                     engine.getOperations().call(Number.class, "ArrayArgumentAction", (Object) new Object[] { 1, 2, "text" }).intValue());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testHelloWorldAction(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_hello_world");
+
+        try {
+            String actionName = "HelloWorldAction";
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter(actionName);
+            assertEquals(actionName, adapter.getName());
+            assertEquals("Hello world", adapter.getDisplayName());
+            assertEquals("Returns a greeting text.", adapter.getDescription());
+            assertEquals(1, adapter.getArgsMeta().size());
+            assertTrue(adapter.getFeatures().isEmpty());
+
+            ArgMeta<?> argMeta = adapter.getArgsMeta().get(0);
+            assertEquals("name", argMeta.getName());
+            assertEquals("Your name", argMeta.getDisplayName());
+            assertEquals("Type your name.", argMeta.getDescription());
+            assertTrue(argMeta.getType() instanceof StringType);
+
+            assertEquals("Greeting", adapter.getResultMeta().getDisplayName());
+            assertEquals("The greeting text.", adapter.getResultMeta().getDescription());
+            assertTrue(adapter.getResultMeta().getType() instanceof StringType);
+
+            String name = "Sponge user";
+            assertEquals(String.format("Hello World! Hello %s!", name), engine.getOperations().call(actionName, name));
 
             assertFalse(engine.isError());
         } finally {

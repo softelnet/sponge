@@ -26,7 +26,6 @@ import static org.junit.Assert.fail;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -77,13 +76,13 @@ public class CoreActionsTest {
             assertEquals("Echo Action", upperActionAdapter.getDisplayName());
             assertEquals("Returns the upper case string", upperActionAdapter.getDescription());
 
-            ArgMeta<?>[] argMeta = upperActionAdapter.getArgsMeta();
-            assertEquals(1, argMeta.length);
-            assertEquals("text", argMeta[0].getName());
-            assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
-            assertEquals(false, argMeta[0].getType().isNullable());
-            assertEquals("Argument 1", argMeta[0].getDisplayName());
-            assertEquals("Argument 1 description", argMeta[0].getDescription());
+            List<ArgMeta<?>> argMeta = upperActionAdapter.getArgsMeta();
+            assertEquals(1, argMeta.size());
+            assertEquals("text", argMeta.get(0).getName());
+            assertEquals(TypeKind.STRING, argMeta.get(0).getType().getKind());
+            assertEquals(false, argMeta.get(0).getType().isNullable());
+            assertEquals("Argument 1", argMeta.get(0).getDisplayName());
+            assertEquals("Argument 1 description", argMeta.get(0).getDescription());
 
             assertEquals(TypeKind.STRING, upperActionAdapter.getResultMeta().getType().getKind());
             assertEquals("Upper case string", upperActionAdapter.getResultMeta().getDisplayName());
@@ -125,62 +124,61 @@ public class CoreActionsTest {
             assertEquals("Multiple arguments action", adapter.getDisplayName());
             assertEquals("Multiple arguments action.", adapter.getDescription());
 
-            ArgMeta<?>[] argMeta = adapter.getArgsMeta();
-            assertEquals(9, argMeta.length);
+            List<ArgMeta<?>> argMeta = adapter.getArgsMeta();
+            assertEquals(9, argMeta.size());
 
-            assertEquals("stringArg", argMeta[0].getName());
-            assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
-            assertEquals(10, ((StringType) argMeta[0].getType()).getMaxLength().intValue());
-            assertEquals("ipAddress", argMeta[0].getType().getFormat());
-            assertEquals(false, argMeta[0].getType().isNullable());
-            assertEquals(null, argMeta[0].getDisplayName());
-            assertEquals(null, argMeta[0].getDescription());
-            assertNull(argMeta[0].getType().getDefaultValue());
+            assertEquals("stringArg", argMeta.get(0).getName());
+            assertEquals(TypeKind.STRING, argMeta.get(0).getType().getKind());
+            assertEquals(10, ((StringType) argMeta.get(0).getType()).getMaxLength().intValue());
+            assertEquals("ipAddress", argMeta.get(0).getType().getFormat());
+            assertEquals(false, argMeta.get(0).getType().isNullable());
+            assertEquals(null, argMeta.get(0).getDisplayName());
+            assertEquals(null, argMeta.get(0).getDescription());
+            assertNull(argMeta.get(0).getType().getDefaultValue());
 
-            assertEquals("integerArg", argMeta[1].getName());
-            assertEquals(TypeKind.INTEGER, argMeta[1].getType().getKind());
-            assertEquals(1, ((IntegerType) argMeta[1].getType()).getMinValue().intValue());
-            assertEquals(100, ((IntegerType) argMeta[1].getType()).getMaxValue().intValue());
-            assertEquals(50, argMeta[1].getType().getDefaultValue());
+            assertEquals("integerArg", argMeta.get(1).getName());
+            assertEquals(TypeKind.INTEGER, argMeta.get(1).getType().getKind());
+            assertEquals(1, ((IntegerType) argMeta.get(1).getType()).getMinValue().intValue());
+            assertEquals(100, ((IntegerType) argMeta.get(1).getType()).getMaxValue().intValue());
+            assertEquals(50, argMeta.get(1).getType().getDefaultValue());
 
-            assertEquals("anyArg", argMeta[2].getName());
-            assertEquals(TypeKind.ANY, argMeta[2].getType().getKind());
-            assertTrue(argMeta[2].getType() instanceof AnyType);
-            assertEquals(true, argMeta[2].getType().isNullable());
+            assertEquals("anyArg", argMeta.get(2).getName());
+            assertEquals(TypeKind.ANY, argMeta.get(2).getType().getKind());
+            assertTrue(argMeta.get(2).getType() instanceof AnyType);
+            assertEquals(true, argMeta.get(2).getType().isNullable());
 
-            assertEquals("stringListArg", argMeta[3].getName());
-            assertEquals(TypeKind.LIST, argMeta[3].getType().getKind());
-            assertEquals(TypeKind.STRING, ((ListType) argMeta[3].getType()).getElementType().getKind());
+            assertEquals("stringListArg", argMeta.get(3).getName());
+            assertEquals(TypeKind.LIST, argMeta.get(3).getType().getKind());
+            assertEquals(TypeKind.STRING, ((ListType) argMeta.get(3).getType()).getElementType().getKind());
 
-            assertEquals("decimalListArg", argMeta[4].getName());
-            assertEquals(TypeKind.LIST, argMeta[4].getType().getKind());
-            Type elementType4 = ((ListType) argMeta[4].getType()).getElementType();
+            assertEquals("decimalListArg", argMeta.get(4).getName());
+            assertEquals(TypeKind.LIST, argMeta.get(4).getType().getKind());
+            Type elementType4 = ((ListType) argMeta.get(4).getType()).getElementType();
             assertEquals(TypeKind.OBJECT, elementType4.getKind());
             assertEquals(BigDecimal.class.getName(), ((ObjectType) elementType4).getClassName());
 
-            assertEquals("stringArrayArg", argMeta[5].getName());
-            assertEquals(TypeKind.OBJECT, argMeta[5].getType().getKind());
-            assertEquals(String[].class, SpongeUtils.getClass(((ObjectType) argMeta[5].getType()).getClassName()));
+            assertEquals("stringArrayArg", argMeta.get(5).getName());
+            assertEquals(TypeKind.OBJECT, argMeta.get(5).getType().getKind());
+            assertEquals(String[].class, SpongeUtils.getClass(((ObjectType) argMeta.get(5).getType()).getClassName()));
 
-            assertEquals("javaClassArg", argMeta[6].getName());
-            assertEquals(TypeKind.OBJECT, argMeta[6].getType().getKind());
-            assertEquals(CustomObject.class.getName(), ((ObjectType) argMeta[6].getType()).getClassName());
+            assertEquals("javaClassArg", argMeta.get(6).getName());
+            assertEquals(TypeKind.OBJECT, argMeta.get(6).getType().getKind());
+            assertEquals(CustomObject.class.getName(), ((ObjectType) argMeta.get(6).getType()).getClassName());
 
-            assertEquals("javaClassListArg", argMeta[7].getName());
-            assertEquals(TypeKind.LIST, argMeta[7].getType().getKind());
-            Type elementType7 = ((ListType) argMeta[7].getType()).getElementType();
+            assertEquals("javaClassListArg", argMeta.get(7).getName());
+            assertEquals(TypeKind.LIST, argMeta.get(7).getType().getKind());
+            Type elementType7 = ((ListType) argMeta.get(7).getType()).getElementType();
             assertEquals(TypeKind.OBJECT, elementType7.getKind());
             assertEquals(CustomObject.class.getName(), ((ObjectType) elementType7).getClassName());
 
-            assertEquals("binaryArg", argMeta[8].getName());
-            assertEquals(TypeKind.BINARY, argMeta[8].getType().getKind());
-            assertNull(argMeta[8].getType().getFormat());
-            assertEquals(4, argMeta[8].getType().getFeatures().size());
-            assertEquals(28, ((Number) argMeta[8].getType().getFeatures().get("width")).intValue());
-            assertEquals(28, ((Number) argMeta[8].getType().getFeatures().get("height")).intValue());
-            assertEquals("black", argMeta[8].getType().getFeatures().get("background"));
-            assertEquals("white", argMeta[8].getType().getFeatures().get("color"));
-            assertEquals(Arrays.asList("drawing", "handwritten"), argMeta[8].getType().getTags());
+            assertEquals("binaryArg", argMeta.get(8).getName());
+            assertEquals(TypeKind.BINARY, argMeta.get(8).getType().getKind());
+            assertNull(argMeta.get(8).getType().getFormat());
+            assertEquals(4, argMeta.get(8).getType().getFeatures().size());
+            assertEquals(28, ((Number) argMeta.get(8).getType().getFeatures().get("width")).intValue());
+            assertEquals(28, ((Number) argMeta.get(8).getType().getFeatures().get("height")).intValue());
+            assertEquals("black", argMeta.get(8).getType().getFeatures().get("background"));
+            assertEquals("white", argMeta.get(8).getType().getFeatures().get("color"));
 
             assertEquals(TypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
             assertEquals("Boolean result", adapter.getResultMeta().getDisplayName());
@@ -200,9 +198,9 @@ public class CoreActionsTest {
 
         try {
             ActionAdapter actionTypeAction = engine.getActionManager().getActionAdapter("ActionTypeAction");
-            assertEquals(1, actionTypeAction.getArgsMeta().length);
-            assertTrue(actionTypeAction.getArgsMeta()[0].getType() instanceof ActionType);
-            ArgMeta<ActionType> sensorNameArgMeta = (ArgMeta<ActionType>) actionTypeAction.getArgsMeta()[0];
+            assertEquals(1, actionTypeAction.getArgsMeta().size());
+            assertTrue(actionTypeAction.getArgsMeta().get(0).getType() instanceof ActionType);
+            ArgMeta<ActionType> sensorNameArgMeta = (ArgMeta<ActionType>) actionTypeAction.getArgsMeta().get(0);
             ActionAdapter getAvailableSensorNamesAction =
                     engine.getActionManager().getActionAdapter(sensorNameArgMeta.getType().getActionName());
             assertTrue(getAvailableSensorNamesAction.getResultMeta().getType() instanceof ListType);
@@ -277,15 +275,15 @@ public class CoreActionsTest {
         try {
             String actionName = "OptionalArgAction";
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter(actionName);
-            ArgMeta<?>[] argMeta = actionAdapter.getArgsMeta();
-            assertEquals(2, argMeta.length);
-            assertEquals("mandatoryText", argMeta[0].getName());
-            assertEquals(TypeKind.STRING, argMeta[0].getType().getKind());
-            assertFalse(argMeta[0].isOptional());
+            List<ArgMeta<?>> argMeta = actionAdapter.getArgsMeta();
+            assertEquals(2, argMeta.size());
+            assertEquals("mandatoryText", argMeta.get(0).getName());
+            assertEquals(TypeKind.STRING, argMeta.get(0).getType().getKind());
+            assertFalse(argMeta.get(0).isOptional());
 
-            assertEquals("optionalText", argMeta[1].getName());
-            assertEquals(TypeKind.STRING, argMeta[1].getType().getKind());
-            assertTrue(argMeta[1].isOptional());
+            assertEquals("optionalText", argMeta.get(1).getName());
+            assertEquals(TypeKind.STRING, argMeta.get(1).getType().getKind());
+            assertTrue(argMeta.get(1).isOptional());
 
             assertEquals("text1", engine.getOperations().call(String.class, actionName, "text1"));
             assertEquals("text1text2", engine.getOperations().call(String.class, actionName, "text1", "text2"));

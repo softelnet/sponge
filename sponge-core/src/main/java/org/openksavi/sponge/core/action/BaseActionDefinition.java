@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.List;
+
 import org.openksavi.sponge.action.ActionDefinition;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
@@ -23,7 +25,7 @@ import org.openksavi.sponge.core.BaseProcessorDefinition;
 
 public class BaseActionDefinition extends BaseProcessorDefinition implements ActionDefinition {
 
-    private ArgMeta<?>[] argsMeta;
+    private List<ArgMeta<?>> argsMeta;
 
     private ResultMeta<?> resultMeta;
 
@@ -33,12 +35,12 @@ public class BaseActionDefinition extends BaseProcessorDefinition implements Act
     }
 
     @Override
-    public ArgMeta<?>[] getArgsMeta() {
+    public List<ArgMeta<?>> getArgsMeta() {
         return argsMeta;
     }
 
     @Override
-    public void setArgsMeta(ArgMeta<?>... argsMeta) {
+    public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
         this.argsMeta = argsMeta;
     }
 

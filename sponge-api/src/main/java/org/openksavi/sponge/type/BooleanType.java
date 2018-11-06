@@ -30,16 +30,6 @@ public class BooleanType extends Type<Boolean> {
     }
 
     @Override
-    public BooleanType tags(String... tags) {
-        return (BooleanType) super.tags(tags);
-    }
-
-    @Override
-    public BooleanType tag(String tag) {
-        return (BooleanType) super.tag(tag);
-    }
-
-    @Override
     public BooleanType features(Map<String, Object> features) {
         return (BooleanType) super.features(features);
     }

@@ -38,16 +38,6 @@ public class NumberType extends Type<Number> {
     }
 
     @Override
-    public NumberType tags(String... tags) {
-        return (NumberType) super.tags(tags);
-    }
-
-    @Override
-    public NumberType tag(String tag) {
-        return (NumberType) super.tag(tag);
-    }
-
-    @Override
     public NumberType features(Map<String, Object> features) {
         return (NumberType) super.features(features);
     }

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.action;
 
+import java.util.List;
+
 import org.openksavi.sponge.ProcessorOperations;
 
 /**
@@ -28,14 +30,14 @@ public interface ActionOperations extends ProcessorOperations {
      *
      * @return the arguments metadata.
      */
-    ArgMeta<?>[] getArgsMeta();
+    List<ArgMeta<?>> getArgsMeta();
 
     /**
      * Sets the (optional) arguments metadata.
      *
      * @param argsMeta the arguments metadata.
      */
-    void setArgsMeta(ArgMeta<?>... argsMeta);
+    void setArgsMeta(List<ArgMeta<?>> argsMeta);
 
     /**
      * Returns the result metadata or {@code null} in not specified.

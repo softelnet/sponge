@@ -30,16 +30,6 @@ public class AnyType extends Type<Object> {
     }
 
     @Override
-    public AnyType tags(String... tags) {
-        return (AnyType) super.tags(tags);
-    }
-
-    @Override
-    public AnyType tag(String tag) {
-        return (AnyType) super.tag(tag);
-    }
-
-    @Override
     public AnyType features(Map<String, Object> features) {
         return (AnyType) super.features(features);
     }

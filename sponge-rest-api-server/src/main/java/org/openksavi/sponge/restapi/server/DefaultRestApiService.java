@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.restapi.server;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -304,10 +303,13 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionAdapter actionAdapter) {
-        return actionAdapter.getArgsMeta() != null ? Arrays
-                .stream(actionAdapter.getArgsMeta()).map(meta -> new RestActionArgMeta(meta.getName(),
-                        meta.getType() != null ? meta.getType() : null, meta.getDisplayName(), meta.getDescription(), meta.isOptional()))
-                .collect(Collectors.toList()) : null;
+        return actionAdapter
+                .getArgsMeta() != null
+                        ? actionAdapter.getArgsMeta().stream()
+                                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
+                                        meta.getDisplayName(), meta.getDescription(), meta.isOptional()))
+                                .collect(Collectors.toList())
+                        : null;
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {

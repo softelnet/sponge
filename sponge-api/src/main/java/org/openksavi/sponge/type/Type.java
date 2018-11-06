@@ -16,10 +16,7 @@
 
 package org.openksavi.sponge.type;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,8 +27,6 @@ public class Type<T> {
     private TypeKind kind;
 
     private String format;
-
-    private List<String> tags = new ArrayList<>();
 
     private Map<String, Object> features = new LinkedHashMap<>();
 
@@ -52,15 +47,6 @@ public class Type<T> {
     public Type<T> format(String format) {
         setFormat(format);
         return this;
-    }
-
-    public Type<T> tags(String... tags) {
-        this.tags.addAll(Arrays.asList(tags));
-        return this;
-    }
-
-    public Type<T> tag(String tag) {
-        return tags(tag);
     }
 
     public Type<T> features(Map<String, Object> features) {
@@ -93,14 +79,6 @@ public class Type<T> {
 
     public void setFormat(String format) {
         this.format = format;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
     }
 
     public Map<String, Object> getFeatures() {

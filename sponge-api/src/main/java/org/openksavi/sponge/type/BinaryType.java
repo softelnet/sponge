@@ -32,16 +32,6 @@ public class BinaryType extends Type<byte[]> {
     }
 
     @Override
-    public BinaryType tags(String... tags) {
-        return (BinaryType) super.tags(tags);
-    }
-
-    @Override
-    public BinaryType tag(String tag) {
-        return (BinaryType) super.tag(tag);
-    }
-
-    @Override
     public BinaryType features(Map<String, Object> features) {
         return (BinaryType) super.features(features);
     }

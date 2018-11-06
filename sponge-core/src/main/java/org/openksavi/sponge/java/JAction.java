@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.java;
 
+import java.util.Arrays;
+
+import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.core.action.BaseAction;
 
 /**
@@ -23,4 +26,7 @@ import org.openksavi.sponge.core.action.BaseAction;
  */
 public abstract class JAction extends BaseAction {
 
+    public void setArgsMeta(ArgMeta<?>... argsMeta) {
+        super.setArgsMeta(Arrays.asList(argsMeta));
+    }
 }

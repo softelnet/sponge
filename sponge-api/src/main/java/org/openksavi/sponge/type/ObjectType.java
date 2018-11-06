@@ -38,16 +38,6 @@ public class ObjectType<T> extends Type<T> {
     }
 
     @Override
-    public ObjectType<T> tags(String... tags) {
-        return (ObjectType<T>) super.tags(tags);
-    }
-
-    @Override
-    public ObjectType<T> tag(String tag) {
-        return (ObjectType<T>) super.tag(tag);
-    }
-
-    @Override
     public ObjectType<T> features(Map<String, Object> features) {
         return (ObjectType<T>) super.features(features);
     }

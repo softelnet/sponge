@@ -28,4 +28,10 @@ public class JRubyActionsTest extends JRubyTest implements ActionsTest {
     public void testActions() {
         ActionsTestTemplate.testActions(getType());
     }
+
+    @Override
+    @Test
+    public void testHelloWorldAction() {
+        ActionsTestTemplate.testHelloWorldAction(getType());
+    }
 }
