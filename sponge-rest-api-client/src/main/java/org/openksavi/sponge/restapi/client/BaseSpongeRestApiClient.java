@@ -320,15 +320,15 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     }
 
     @Override
-    public List<RestActionMeta> getActions(String nameRegExp) {
-        return getActions(nameRegExp, null);
+    public List<RestActionMeta> getActions(String name) {
+        return getActions(name, null);
     }
 
     @Override
-    public List<RestActionMeta> getActions(String nameRegExp, Boolean metadataRequired) {
+    public List<RestActionMeta> getActions(String name, Boolean metadataRequired) {
         GetActionsRequest request = new GetActionsRequest();
+        request.setName(name);
         request.setMetadataRequired(metadataRequired);
-        request.setNameRegExp(nameRegExp);
 
         return getActions(request).getActions();
     }
@@ -340,8 +340,8 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     protected RestActionMeta fetchActionMeta(String actionName) {
         GetActionsRequest request = new GetActionsRequest();
+        request.setName(actionName);
         request.setMetadataRequired(true);
-        request.setNameRegExp(actionName);
 
         return doGetActions(request, false).getActions().stream().findFirst().orElse(null);
     }

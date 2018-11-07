@@ -375,10 +375,10 @@ __optional__|The user name|string
 __optional__|The user password|string
 |**authToken** +
 __optional__|The authentication token|string
+|**name** +
+__optional__|The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
 |**metadataRequired** +
 __optional__|Metadata required|boolean
-|**nameRegExp** +
-__optional__|The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
 |===
 
 
@@ -392,8 +392,6 @@ __optional__|The action name or the regular expression (compatible with https://
 __optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ACTION)
 |**format** +
 __optional__|string
-|**tags** +
-__optional__|< string > array
 |**features** +
 __optional__|< string, object > map
 |**defaultValue** +

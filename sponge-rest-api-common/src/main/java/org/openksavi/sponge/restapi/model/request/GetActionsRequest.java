@@ -22,12 +22,23 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "GetActionsRequest", description = "Get actions request")
 public class GetActionsRequest extends BaseRequest {
 
-    private Boolean metadataRequired;
+    private String name;
 
-    private String nameRegExp;
+    private Boolean metadataRequired;
 
     public GetActionsRequest() {
         //
+    }
+
+    @ApiModelProperty(
+            value = "The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
+            required = false)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @ApiModelProperty(value = "Metadata required", required = false)
@@ -38,16 +49,4 @@ public class GetActionsRequest extends BaseRequest {
     public void setMetadataRequired(Boolean metadataRequired) {
         this.metadataRequired = metadataRequired;
     }
-
-    @ApiModelProperty(
-            value = "The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
-            required = false)
-    public String getNameRegExp() {
-        return nameRegExp;
-    }
-
-    public void setNameRegExp(String nameRegExp) {
-        this.nameRegExp = nameRegExp;
-    }
-
 }

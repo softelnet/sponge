@@ -159,7 +159,7 @@ The following table contains a summary of the REST API operations. For a complet
 
 |Get actions
 |`actions`
-|Returns the metadata of actions that are available to the user and those that have argument and result metadata specified in their configuration (this may be changed by setting the request property `metadataRequired` to `false`).
+|Returns the metadata of actions that are available to the user. If you want to get metadata for specified actions, set the request property `name` to an action name or a Java-compatible regular expression. If you want to get only actions that have argument and result metadata specified in their configuration, set the request property `metadataRequired` to `true` (defaults to `false`). 
 
 |Call an action
 |`call`
@@ -211,7 +211,7 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"username":"john","password":"password"}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"nameRegExp":".*Case"}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"name":".*Case"}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload

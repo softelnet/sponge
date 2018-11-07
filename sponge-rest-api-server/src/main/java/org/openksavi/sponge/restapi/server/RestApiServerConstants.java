@@ -37,7 +37,7 @@ public final class RestApiServerConstants {
 
     public static final boolean DEFAULT_ALLOW_ANONYMOUS = true;
 
-    public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = true;
+    public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = false;
 
     public static final String PRIVATE_ACTION_NAME_PREFIX = "RestApi";
 

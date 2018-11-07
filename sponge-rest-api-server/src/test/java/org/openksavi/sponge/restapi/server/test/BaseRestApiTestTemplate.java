@@ -86,7 +86,7 @@ public abstract class BaseRestApiTestTemplate {
     @Test
     public void testActions() {
         try (SpongeRestApiClient client = createRestApiClient()) {
-            assertEquals(RestApiTestConstants.ACTIONS_WITH_METADATA_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT, client.getActions().size());
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestApiClient client = createRestApiClient()) {
             List<RestActionMeta> actions = client.getActions(null, false);
 
-            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT - RestApiTestConstants.ACTIONS_WITH_NO_METADATA_COUNT, actions.size());
+            assertEquals(RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT, actions.size());
             RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
             assertEquals(TypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
             assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
@@ -123,11 +123,11 @@ public abstract class BaseRestApiTestTemplate {
     @Test
     public void testActionsNameExact() {
         try (SpongeRestApiClient client = createRestApiClient()) {
-            String nameRegExp = "UpperCase";
-            List<RestActionMeta> actions = client.getActions(nameRegExp);
+            String name = "UpperCase";
+            List<RestActionMeta> actions = client.getActions(name);
 
             assertEquals(1, actions.size());
-            assertEquals(actions.get(0).getName(), nameRegExp);
+            assertEquals(actions.get(0).getName(), name);
         }
     }
 

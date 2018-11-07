@@ -106,12 +106,12 @@ public class RestApiSimpleSpringSecurityTest {
 
     @Test
     public void testRestActionsUser1() {
-        doTestRestActions("john", "password", RestApiTestConstants.ALL_ACTION_COUNT);
+        doTestRestActions("john", "password", RestApiTestConstants.ADMIN_ALL_ACTION_COUNT);
     }
 
     @Test
     public void testRestActionsUser2() {
-        doTestRestActions("joe", "password", RestApiTestConstants.ANONYMOUS_ACTION_COUNT);
+        doTestRestActions("joe", "password", RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT);
     }
 
     @Test
@@ -119,15 +119,14 @@ public class RestApiSimpleSpringSecurityTest {
         // Tests auth token authentication.
         SpongeRestApiClient client = createRestApiClient("john", "password");
         assertNotNull(client.login());
-        assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
+        assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
 
         client.getConfiguration().setUsername(null);
         client.getConfiguration().setPassword(null);
-        assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
-
         client.logout();
 
         try {
+            // Try to get actions as anonymous (which is not allowed in the server configuration).
             client.getActions();
             fail("Exception expected");
         } catch (ErrorResponseException e) {

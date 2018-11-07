@@ -167,7 +167,7 @@ public class DefaultRestApiService implements RestApiService {
 
             boolean actualMetadataRequired = request.getMetadataRequired() != null ? request.getMetadataRequired()
                     : RestApiServerConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
-            String actionNameRegExp = request.getNameRegExp();
+            String actionNameRegExp = request.getName();
 
             String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
             Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().existsAction(isPublicActionActionName)

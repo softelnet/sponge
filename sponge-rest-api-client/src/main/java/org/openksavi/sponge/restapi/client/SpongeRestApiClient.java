@@ -120,19 +120,19 @@ public interface SpongeRestApiClient extends Closeable {
     /**
      * Sends the {@code actions} request to the server. This method may populate the action metadata cache.
      *
-     * @param nameRegExp the action name regular expression or {@code null} to return results for all actions.
+     * @param name the action name or the regular expression or {@code null} to return results for all actions.
      * @param metadataRequired if {@code true} only actions that have arguments and result metadata will be returned.
      * @return the list of actions metadata.
      */
-    List<RestActionMeta> getActions(String nameRegExp, Boolean metadataRequired);
+    List<RestActionMeta> getActions(String name, Boolean metadataRequired);
 
     /**
      * Sends the {@code actions} request to the server. This method may populate the action metadata cache.
      *
-     * @param nameRegExp the action name regular expression or {@code null} to return results for all actions.
+     * @param name the action name or the regular expression or {@code null} to return results for all actions.
      * @return the list of actions metadata.
      */
-    List<RestActionMeta> getActions(String nameRegExp);
+    List<RestActionMeta> getActions(String name);
 
     /**
      * Sends the {@code actions} request to the server. This method may populate the action metadata cache.

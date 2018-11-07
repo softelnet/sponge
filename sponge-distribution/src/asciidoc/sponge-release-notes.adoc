@@ -6,9 +6,10 @@ A high-level view of the changes introduced in {sponge} releases.
 NOTE: The current versions of {sponge} don't guarantee a full backward compatibility.
 
 [discrete]
-== 1.4.3 (Not released yet)
+== 1.5.0 (Not released yet)
 
 * API change: Removed the `tags` property from a type (used in an action argument and in an action result metadata) because the existing `features` property is sufficient.
+* API change: The `nameRegExp` property in the `GetActionsRequest` in the REST API has been renamed to `name`. The default value of the `metadataRequired` property is now `false`.
 * Added the `optional` property to the `ArgMeta`.
 * Action metadata cache in the REST API Java client.
 * Fixed usage of OkHttpClient in the REST API Java client.

@@ -99,11 +99,11 @@ public class AuthTokenExpirationTest {
         try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
             client.getConfiguration().setRelogin(true);
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
-            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
         }
     }
 
@@ -112,7 +112,7 @@ public class AuthTokenExpirationTest {
         try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
             client.getConfiguration().setRelogin(false);
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
