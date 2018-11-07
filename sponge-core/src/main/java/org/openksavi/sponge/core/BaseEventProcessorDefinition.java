@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.openksavi.sponge.EventProcessorDefinition;
@@ -50,10 +49,5 @@ public abstract class BaseEventProcessorDefinition extends BaseProcessorDefiniti
     @Override
     public void setEventNames(List<String> eventNames) {
         this.eventNames = SpongeUtils.createUnmodifiableList(eventNames);
-    }
-
-    @Override
-    public void setEventName(String eventName) {
-        setEventNames(Arrays.asList(eventName));
     }
 }

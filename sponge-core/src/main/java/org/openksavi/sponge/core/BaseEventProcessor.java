@@ -17,7 +17,6 @@
 package org.openksavi.sponge.core;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.openksavi.sponge.EventProcessor;
 import org.openksavi.sponge.EventProcessorAdapter;
@@ -25,37 +24,12 @@ import org.openksavi.sponge.EventProcessorAdapter;
 public abstract class BaseEventProcessor<T extends EventProcessorAdapter<?>> extends BaseProcessor<T> implements EventProcessor<T> {
 
     @Override
-    public final List<String> getEventNames() {
-        return getAdapter().getEventNames();
-    }
-
-    @Override
-    public final String getEventName(int index) {
-        return getAdapter().getEventName(index);
-    }
-
-    @Override
-    public final void setEventNames(List<String> eventNames) {
-        getAdapter().setEventNames(eventNames);
-    }
-
-    @Override
-    public final void setEventNames(String... eventNames) {
-        setEventNames(Arrays.asList(eventNames));
-    }
-
-    @Override
-    public final void setEventName(String eventName) {
-        getAdapter().setEventName(eventName);
-    }
-
-    @Override
     public void setEvents(String... eventNames) {
-        setEventNames(eventNames);
+        getAdapter().getDefinition().setEventNames(Arrays.asList(eventNames));
     }
 
     @Override
     public void setEvent(String eventName) {
-        setEventName(eventName);
+        setEvents(eventName);
     }
 }

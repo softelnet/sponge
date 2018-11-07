@@ -71,7 +71,7 @@ public class UnorderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
 
     @Override
     protected int getExpectedEventIndex(TreeNode<NodeValue> node, Event event) {
-        List<String> eventNames = adapter.getEventNames();
+        List<String> eventNames = adapter.getDefinition().getEventNames();
         Set<Integer> happenedEventIndexes = getPreviousHappenedEventIndexes(node);
 
         for (int i = 0; i < eventNames.size(); i++) {

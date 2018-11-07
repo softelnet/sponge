@@ -16,10 +16,34 @@
 
 package org.openksavi.sponge;
 
+import java.util.List;
+
 /**
  * Event processor definition.
  *
  */
 public interface EventProcessorDefinition extends ProcessorDefinition, EventProcessorOperations {
 
+    /**
+     * Returns event names (or name patterns) this processor listens to.
+     *
+     * @return event names.
+     */
+    List<String> getEventNames();
+
+    /**
+     * Sets event names (or name patterns) this processor listens to.
+     *
+     * @param eventNames event names.
+     */
+    void setEventNames(List<String> eventNames);
+
+    /**
+     * Returns an event name (or name pattern) for the specified event index.
+     *
+     * @param index event index.
+     *
+     * @return event name.
+     */
+    String getEventName(int index);
 }

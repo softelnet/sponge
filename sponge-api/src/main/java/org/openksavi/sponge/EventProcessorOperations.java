@@ -16,41 +16,10 @@
 
 package org.openksavi.sponge;
 
-import java.util.List;
-
 /**
  * Event processor operations. Each event name may be specified as a regular expression thus creating a pattern matching more event names.
  *
  */
 public interface EventProcessorOperations extends ProcessorOperations {
 
-    /**
-     * Returns event names (or name patterns) this processor listens to.
-     *
-     * @return event names.
-     */
-    List<String> getEventNames();
-
-    /**
-     * Returns an event name (or name pattern) for the specified event index.
-     *
-     * @param index event index.
-     *
-     * @return event name.
-     */
-    String getEventName(int index);
-
-    /**
-     * Sets event names (or name patterns) this processor listens to.
-     *
-     * @param eventNames event names.
-     */
-    void setEventNames(List<String> eventNames);
-
-    /**
-     * Sets event name (or name pattern) this processor listens to.
-     *
-     * @param eventName event name.
-     */
-    void setEventName(String eventName);
 }

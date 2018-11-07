@@ -272,44 +272,39 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().get()));
     }
 
-    /**
-     * Adds a new processor to this processing unit.
-     *
-     * @param processor processor.
-     */
     @Override
-    public void addProcessor(T processor) {
+    public void addProcessor(T processorAdapter) {
         lock.lock();
         try {
             invalidateCache();
 
-            AtomicReference<T> registered = registeredProcessorAdapterMap.get(processor.getName());
+            AtomicReference<T> registered = registeredProcessorAdapterMap.get(processorAdapter.getName());
 
             // Already registered with this name.
             if (registered != null) {
-                T oldProcessor = registered.get();
-                if (!oldProcessor.getType().equals(processor.getType())) {
-                    throw new SpongeException(
-                            "An event processor of different type has been already registered with the name: " + processor.getName());
+                T oldProcessorAdapter = registered.get();
+                if (!oldProcessorAdapter.getType().equals(processorAdapter.getType())) {
+                    throw new SpongeException("An event processor of different type has been already registered with the name: "
+                            + processorAdapter.getName());
                 }
 
                 // Remove associations with events that are no longer listened to by this processor.
-                List<String> processorEventNamesList = processor.getEventNames();
-                for (String oldEventName : oldProcessor.getEventNames()) {
+                List<String> processorEventNamesList = processorAdapter.getDefinition().getEventNames();
+                for (String oldEventName : oldProcessorAdapter.getDefinition().getEventNames()) {
                     if (!processorEventNamesList.contains(oldEventName)) {
                         eventPatternProcessorMap.get(oldEventName).remove(registered);
                     }
                 }
 
-                registered.set(processor);
+                registered.set(processorAdapter);
 
-                processorChanged(oldProcessor, processor);
+                processorChanged(oldProcessorAdapter, processorAdapter);
             } else {
-                registered = new AtomicReference<>(processor);
-                registeredProcessorAdapterMap.put(processor.getName(), registered);
+                registered = new AtomicReference<>(processorAdapter);
+                registeredProcessorAdapterMap.put(processorAdapter.getName(), registered);
             }
 
-            for (String eventName : processor.getEventNames()) {
+            for (String eventName : processorAdapter.getDefinition().getEventNames()) {
                 Set<AtomicReference<T>> processorList = eventPatternProcessorMap.get(eventName);
                 if (processorList == null) {
                     processorList = new CopyOnWriteArraySet<>();
@@ -320,7 +315,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
             }
 
             if (eventProcessorRegistrationListener != null) {
-                eventProcessorRegistrationListener.onProcessorAdded(processor);
+                eventProcessorRegistrationListener.onProcessorAdded(processorAdapter);
             }
         } finally {
             lock.unlock();

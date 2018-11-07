@@ -133,7 +133,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
             throw createValidationException("Event specifications are missing.");
         }
 
-        if (getEventNames().size() != getDefinition().getEventSpecs().size()) {
+        if (getDefinition().getEventNames().size() != getDefinition().getEventSpecs().size()) {
             throw createValidationException("Each event should have a specification (explicitly or implicitly).");
         }
 

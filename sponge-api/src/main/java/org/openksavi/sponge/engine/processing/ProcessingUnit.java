@@ -35,11 +35,11 @@ public interface ProcessingUnit<T extends EventProcessorAdapter<?>> extends Engi
     Map<String, T> getRegisteredProcessorAdapterMap();
 
     /**
-     * Adds a new processor to this processing unit.
+     * Adds a new processor adapter to this processing unit.
      *
-     * @param processor processor.
+     * @param processorAdapter the processor adapter.
      */
-    void addProcessor(T processor);
+    void addProcessor(T processorAdapter);
 
     /**
      * Removes processor specified by its name.

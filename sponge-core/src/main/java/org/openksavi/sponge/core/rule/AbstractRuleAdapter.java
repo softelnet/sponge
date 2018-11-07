@@ -89,7 +89,7 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     }
 
     public void setEventSpecs(List<RuleEventSpec> eventSpecs) {
-        setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
+        getDefinition().setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
         getDefinition().setEventSpecs(eventSpecs);
     }
 

@@ -22,4 +22,6 @@ package org.openksavi.sponge;
  */
 public interface EventProcessorAdapter<T extends EventProcessor<?>> extends ProcessorAdapter<T>, EventProcessorOperations {
 
+    @Override
+    EventProcessorDefinition getDefinition();
 }

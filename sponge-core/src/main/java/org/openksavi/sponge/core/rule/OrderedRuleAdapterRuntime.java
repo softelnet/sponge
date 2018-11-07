@@ -59,7 +59,7 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
     @Override
     protected int getExpectedEventIndex(TreeNode<NodeValue> node, Event event) {
         int level = node.getLevel();
-        List<String> eventNames = adapter.getEventNames();
+        List<String> eventNames = adapter.getDefinition().getEventNames();
         if (level < eventNames.size() && adapter.getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher()
                 .matches(eventNames.get(level), event.getName())) {
             node.getValue().setIndex(level);
