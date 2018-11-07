@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb">
-            <file>hello_world.rb</file>
+            <file>triggers_hello_world.rb</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

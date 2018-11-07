@@ -32,7 +32,7 @@ To startup the engine you should invoke the `startup()` method. After startup, t
 .Example of starting up
 [source,java]
 ----
-SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/script/py/hello_world.xml").build();
+SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/script/py/triggers_hello_world.xml").build();
 engine.startup();
 ----
 
@@ -1143,9 +1143,13 @@ ifdef::useReferences[({pySourcesUrl}/filters_java.py[py], {rbSourcesUrl}/filters
 ifdef::useReferences[({pySourcesUrl}/filters.py[py], {rbSourcesUrl}/filters.rb[rb], {groovySourcesUrl}/filters.groovy[groovy], {jsSourcesUrl}/filters.js[js])]
 |Shows how to use script-based filters.
 
-|`hello_world`
-ifdef::useReferences[({pySourcesUrl}/hello_world.py[py], {rbSourcesUrl}/hello_world.rb[rb], <{groovySourcesUrl}/hello_world.groovy[groovy], {jsSourcesUrl}/hello_world.js[js], {pySourcesUrl}/hello_world.xml[XML configuration])]
-|Hello world complete example.
+|`actions_hello_world`
+ifdef::useReferences[({pySourcesUrl}/actions_hello_world.py[py], {rbSourcesUrl}/actions_hello_world.rb[rb], <{groovySourcesUrl}/actions_hello_world.groovy[groovy], {jsSourcesUrl}/actions_hello_world.js[js], {pySourcesUrl}/actions_hello_world.xml[XML configuration])]
+|Hello world action complete example.
+
+|`triggers_hello_world`
+ifdef::useReferences[({pySourcesUrl}/triggers_hello_world.py[py], {rbSourcesUrl}/triggers_hello_world.rb[rb], <{groovySourcesUrl}/triggers_hello_world.groovy[groovy], {jsSourcesUrl}/triggers_hello_world.js[js], {pySourcesUrl}/triggers_hello_world.xml[XML configuration])]
+|Hello world trigger complete example.
 
 |`knowledge_base_callbacks`
 ifdef::useReferences[({pySourcesUrl}/knowledge_base_callbacks.py[py], {rbSourcesUrl}/knowledge_base_callbacks.rb[rb], {groovySourcesUrl}/knowledge_base_callbacks.groovy[groovy], {jsSourcesUrl}/knowledge_base_callbacks.js[js])]

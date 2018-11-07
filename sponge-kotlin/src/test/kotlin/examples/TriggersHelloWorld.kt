@@ -9,7 +9,7 @@ import org.openksavi.sponge.event.Event
 import org.openksavi.sponge.kotlin.KKnowledgeBase
 import org.openksavi.sponge.kotlin.KTrigger
 
-class HelloWorld : KKnowledgeBase() {
+class TriggersHelloWorld : KKnowledgeBase() {
 
     class HelloWorld : KTrigger() {
         override fun onConfigure() {

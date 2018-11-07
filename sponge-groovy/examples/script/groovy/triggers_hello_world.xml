@@ -8,7 +8,7 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb">
-            <file>hello_world.py</file>
+            <file>triggers_hello_world.groovy</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

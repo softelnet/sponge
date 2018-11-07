@@ -83,7 +83,7 @@ public class TriggersTestTemplate {
     }
 
     public static void testHelloWorld(KnowledgeBaseType type) {
-        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "hello_world");
+        SpongeEngine engine = ScriptTestUtils.startWithConfig(type, "triggers_hello_world");
 
         try {
             TimeUnit.SECONDS.sleep(1);

@@ -7,7 +7,8 @@
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="kb" class="org.openksavi.sponge.kotlin.examples.HelloWorld" />
+        <knowledgeBase name="kb">
+            <file>triggers_hello_world.kts</file>
+        </knowledgeBase>
     </knowledgeBases>
 </sponge>
-

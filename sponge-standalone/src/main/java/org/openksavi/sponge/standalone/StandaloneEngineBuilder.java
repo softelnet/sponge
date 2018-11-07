@@ -271,9 +271,9 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
         //@formatter:off
         String footer = new StringBuilder()
                 .append("\nExamples (change directory to " + VersionInfo.PRODUCT + " bin/ first):\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME + " -c ../examples/script/py/hello_world.xml\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k helloWorldKb=../examples/script/py/hello_world.py\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k ../examples/script/py/hello_world.py\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME + " -c ../examples/script/py/triggers_hello_world.xml\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k helloWorldKb=../examples/script/py/triggers_hello_world.py\n")
+                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k ../examples/script/py/triggers_hello_world.py\n")
                 .append(leftPadding + "./" + EXECUTABLE_NAME
                         + " -k filtersKb=../examples/script/py/filters.py -k heartbeatKb=../examples/script/js/rules_heartbeat.js\n")
                 .append(leftPadding + "./" + EXECUTABLE_NAME

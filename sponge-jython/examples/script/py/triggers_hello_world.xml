@@ -8,7 +8,8 @@
 
     <knowledgeBases>
         <knowledgeBase name="kb">
-            <file>hello_world.kts</file>
+            <file>triggers_hello_world.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>
+

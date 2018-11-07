@@ -60,13 +60,13 @@ Standalone command-line application sets its own default values for the followin
 # Change directory to Sponge bin/.
 
 # Run with the specified {sponge} XML configuration file.
-./sponge -c ../examples/script/py/hello_world.xml
+./sponge -c ../examples/script/py/triggers_hello_world.xml
 
 # Run with the knowledge base named 'helloWorldKb' using the specified knowledge base file.
-./sponge -k helloWorldKb=../examples/script/py/hello_world.py
+./sponge -k helloWorldKb=../examples/script/py/triggers_hello_world.py
 
 # Run with the knowledge base named 'kb' using the specified knowledge base file.
-./sponge -k ../examples/script/py/hello_world.py
+./sponge -k ../examples/script/py/triggers_hello_world.py
 
 # Run with two knowledge bases.
 ./sponge -k filtersKb=../examples/script/py/filters.py -k heartbeatKb=../examples/script/js/rules_heartbeat.js

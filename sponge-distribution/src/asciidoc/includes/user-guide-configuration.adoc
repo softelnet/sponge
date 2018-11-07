@@ -205,7 +205,7 @@ SpongeEngine engine = DefaultSpongeEngine.builder()
         .systemProperty("sponge.home", "..")
         .property("test.property", "TEST")
         .plugin(plugin)
-        .knowledgeBase("helloWorldKb", "examples/script/py/hello_world.py")
+        .knowledgeBase("helloWorldKb", "examples/script/py/triggers_hello_world.py")
         .knowledgeBase(new TestKnowledgeBase())
         .build();
 
