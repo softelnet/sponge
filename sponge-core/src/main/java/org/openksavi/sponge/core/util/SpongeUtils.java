@@ -305,16 +305,6 @@ public abstract class SpongeUtils {
             return (SpongeException) throwable;
         }
 
-        List<String> nestedSourceNames = ExceptionUtils.getThrowableList(throwable).stream().filter(e -> e instanceof WrappedException)
-                .map(e -> ((WrappedException) e).getSourceName()).filter(Objects::nonNull).collect(Collectors.toList());
-
-        if (!nestedSourceNames.isEmpty()) {
-            sourceName =
-                    (sourceName != null ? sourceName : "") + nestedSourceNames.stream().collect(Collectors.joining(" in ", " in ", ""));
-        }
-
-        // TODO throwable = ExceptionUtils.getRootCause(throwable);
-
         String specificErrorMessage = interpreter != null ? interpreter.getSpecificExceptionMessage(throwable) : null;
         if (sourceName == null) {
             return specificErrorMessage == null ? new SpongeException(throwable) : new SpongeException(specificErrorMessage, throwable);

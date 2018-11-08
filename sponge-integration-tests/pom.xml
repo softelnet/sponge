@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sponge-integration-tests</artifactId>
-    <name>Sponge - Integration tests</name>
+    <name>Sponge - Integration Tests</name>
 
     <properties>
         <sponge.root>${basedir}/..</sponge.root>

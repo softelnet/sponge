@@ -32,6 +32,8 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -52,6 +54,8 @@ import org.openksavi.sponge.type.Type;
 import org.openksavi.sponge.type.TypeKind;
 
 public class CoreActionsTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(CoreActionsTest.class);
 
     @Test
     public void testActionsMetadata() {
@@ -247,9 +251,71 @@ public class CoreActionsTest {
 
             fail("Exception not thrown");
         } catch (WrappedException e) {
+            logger.debug("Expected exception", e);
             String sourceName = "kb.TestAction.onConfigure";
             String expectedMessage =
                     "'org.openksavi.sponge.action.ResultMeta' object has no attribute 'displayName_error' in " + sourceName;
+            String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
+
+            assertEquals(sourceName, e.getSourceName());
+            assertEquals(expectedToString, e.toString());
+            assertEquals(expectedMessage, e.getMessage());
+
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            try (Scanner scanner = new Scanner(sw.toString())) {
+                assertEquals(expectedToString, scanner.nextLine());
+            }
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsOnCallError() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_on_call_error.py").build();
+
+        try {
+            engine.startup();
+            engine.getOperations().call("TestAction");
+            fail("Exception not thrown");
+        } catch (WrappedException e) {
+            logger.debug("Expected exception", e);
+            String sourceName = "kb.TestAction.onCall";
+            String expectedMessage = "NameError: global name 'error_here' is not defined in <script> at line number 8"
+                    + " in kb.ErrorCauseAction.onCall in <script> at line number 12 in " + sourceName;
+            String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
+
+            assertEquals(sourceName, e.getSourceName());
+            assertEquals(expectedToString, e.toString());
+            assertEquals(expectedMessage, e.getMessage());
+
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            try (Scanner scanner = new Scanner(sw.toString())) {
+                assertEquals(expectedToString, scanner.nextLine());
+            }
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsOnCallErrorDeepNested() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_on_call_error.py").build();
+
+        try {
+            engine.startup();
+            engine.getOperations().call("DeepNestedTestAction");
+            fail("Exception not thrown");
+        } catch (WrappedException e) {
+            logger.debug("Expected exception", e);
+            String sourceName = "kb.DeepNestedTestAction.onCall";
+            String expectedMessage = "NameError: global name 'error_here' is not defined in <script> at line number 8"
+                    + " in kb.ErrorCauseAction.onCall in <script> at line number 12 in kb.TestAction.onCall in <script>"
+                    + " at line number 16 in " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());

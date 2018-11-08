@@ -25,6 +25,8 @@ public class WrappedException extends SpongeException {
 
     private static final long serialVersionUID = -7842020620067616297L;
 
+    protected static final String WRAPPED_MESSAGE_PREFIX = WrappedException.class.getName() + ": ";
+
     private String sourceName;
 
     public WrappedException(String sourceName, Throwable throwable) {
@@ -32,7 +34,7 @@ public class WrappedException extends SpongeException {
     }
 
     public WrappedException(String sourceName, String message, Throwable throwable) {
-        super(message, throwable);
+        super(normalizeMessage(message), throwable);
 
         this.sourceName = sourceName;
     }
@@ -44,5 +46,16 @@ public class WrappedException extends SpongeException {
     @Override
     public String getMessage() {
         return super.getMessage() + " in " + sourceName;
+    }
+
+    protected static String normalizeMessage(String message) {
+        if (message != null) {
+            // Remove unnecessary prefixes from the message.
+            while (message.startsWith(WRAPPED_MESSAGE_PREFIX)) {
+                message = message.substring(WRAPPED_MESSAGE_PREFIX.length());
+            }
+        }
+
+        return message;
     }
 }

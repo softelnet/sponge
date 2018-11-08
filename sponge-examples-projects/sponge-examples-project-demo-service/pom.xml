@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sponge-examples-project-demo-service</artifactId>
-    <name>Sponge - Examples - Project - Demo service</name>
+    <name>Sponge - Examples - Project - Demo Service</name>
     <packaging>war</packaging>
 
     <properties>

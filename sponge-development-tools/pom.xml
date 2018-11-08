@@ -4,7 +4,7 @@
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-development-tools</artifactId>
     <version>1</version>
-    <name>Sponge - Development tools</name>
+    <name>Sponge - Development Tools</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

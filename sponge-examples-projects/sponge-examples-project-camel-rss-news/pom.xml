@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sponge-examples-project-camel-rss-news</artifactId>
-    <name>Sponge - Examples - Project - Camel RSS news</name>
+    <name>Sponge - Examples - Project - Camel RSS News</name>
 
     <properties>
         <sponge.root>${basedir}/../..</sponge.root>

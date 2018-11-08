@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sponge-examples-projects</artifactId>
-    <name>Sponge - Examples - Complete projects</name>
+    <name>Sponge - Examples - Complete Projects</name>
     <packaging>pom</packaging>
 
     <properties>
