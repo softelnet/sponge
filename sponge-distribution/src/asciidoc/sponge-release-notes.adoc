@@ -6,6 +6,11 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
+== 1.5.1 (not released yet)
+
+* Improved error handling in the REST API server.
+
+[discrete]
 == 1.5.0 (2018-11-08)
 
 * API change: Removed the `tags` property from a type (used in an action argument and in an action result metadata) because the existing `features` property is sufficient.

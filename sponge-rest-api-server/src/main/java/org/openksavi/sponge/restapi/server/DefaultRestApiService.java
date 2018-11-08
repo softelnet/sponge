@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -34,6 +35,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestActionResultMeta;
@@ -394,6 +396,18 @@ public class DefaultRestApiService implements RestApiService {
 
     protected RestKnowledgeBaseMeta createRestKnowledgeBase(KnowledgeBase kb) {
         return new RestKnowledgeBaseMeta(kb.getName(), kb.getDisplayName(), kb.getDescription(), kb.getVersion());
+    }
+
+    @Override
+    public BaseResponse createGenericErrorResponse(Throwable e, Exchange exchange) {
+        Validate.notNull(e, "Exception should be not null");
+        BaseResponse response = new BaseResponse();
+
+        response.setErrorCode(RestApiConstants.DEFAULT_ERROR_CODE);
+        response.setErrorMessage(e.getMessage());
+        response.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
+
+        return response;
     }
 
     @Override

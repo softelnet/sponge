@@ -18,10 +18,13 @@ package org.openksavi.sponge.restapi.server;
 
 import static org.apache.camel.model.rest.RestParamType.body;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -33,6 +36,7 @@ import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -42,6 +46,8 @@ import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 
 public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiService {
+
+    private static final Logger logger = LoggerFactory.getLogger(RestApiRouteBuilder.class);
 
     private RestApiService apiService;
 
@@ -68,10 +74,25 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         createErrorHandler();
         createRestConfiguration();
         createRestDefinition();
+        createOnException();
     }
 
     protected void createErrorHandler() {
         //
+    }
+
+    protected void createOnException() {
+        // @formatter:off
+        onException(Exception.class)
+            .handled(true)
+            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+            .setHeader(Exchange.CONTENT_TYPE, constant(RestApiConstants.APPLICATION_JSON_VALUE))
+            .process(exchange -> {
+                Throwable e = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
+                logger.info("REST API error", e);
+                exchange.getIn().setBody(apiService.createGenericErrorResponse(e, exchange), BaseResponse.class);
+            });
+        // @formatter:on
     }
 
     protected void createRestConfiguration() {
