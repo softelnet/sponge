@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetActionsRequest", description = "Get actions request")
+@ApiModel(value = "GetActionsRequest", description = "A get actions request")
 public class GetActionsRequest extends BaseRequest {
 
     private String name;

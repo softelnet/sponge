@@ -32,6 +32,9 @@ import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.StringTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.VoidTypeUnitConverter;
 
+/**
+ * A default type converter.
+ */
 public class DefaultTypeConverter extends BaseTypeConverter {
 
     public DefaultTypeConverter(ObjectMapper objectMapper) {

@@ -1,7 +1,7 @@
-= {sponge} REST API client
-The {sponge} REST API client simplifies connecting to a remote {sponge} REST API server from applications written in Java. The default implementation uses the http://square.github.io/okhttp/[OkHttp] library.
+= {sponge} REST API client for Java
+The {sponge} REST API client for Java simplifies connecting to a remote {sponge} REST API server from applications written in Java. The default implementation uses the http://square.github.io/okhttp/[OkHttp] library.
 
-.REST API client for an anonymous user example
+.REST API client for an anonymous user
 [source,java]
 ----
 try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
@@ -13,11 +13,11 @@ try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientCo
 <1> Create a new REST API client.
 <2> Call the remote action.
 
-.REST API client for a named user example
+.REST API client for a named user
 [source,java]
 ----
 SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
-        .url(String.format("http://localhost:%d/%s", PORT,RestApiConstants.DEFAULT_PATH))
+        .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH))
         .username(username)
         .password(password)
         .build());

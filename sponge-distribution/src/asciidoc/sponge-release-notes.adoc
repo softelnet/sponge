@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.5.1 (not released yet)
 
+* Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
 
 [discrete]

@@ -19,14 +19,34 @@ package org.openksavi.sponge.restapi.type.converter;
 import org.openksavi.sponge.type.Type;
 import org.openksavi.sponge.type.TypeKind;
 
+/**
+ * A unit type converter.
+ *
+ * @param <T> type.
+ */
 @SuppressWarnings("rawtypes")
 public interface UnitTypeConverter<T extends Type> {
 
+    /** The data type kind. */
     TypeKind getTypeKind();
 
-    // The {@code value} will never be null here.
+    /**
+     * Marshals the value as type.
+     *
+     * @param converter the type converter.
+     * @param type the type.
+     * @param value the value. It will never be {@code null} here.
+     * @return the converted value.
+     */
     Object marshal(TypeConverter converter, T type, Object value);
 
-    // The {@code value} will never be null here.
+    /**
+     * Unmarshals the value as type.
+     *
+     * @param converter the type converter.
+     * @param type the type.
+     * @param value the value. It will never be {@code null} here.
+     * @return the converted value.
+     */
     Object unmarshal(TypeConverter converter, T type, Object value);
 }

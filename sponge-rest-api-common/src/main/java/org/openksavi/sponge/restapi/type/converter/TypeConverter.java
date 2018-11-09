@@ -23,18 +23,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openksavi.sponge.type.Type;
 import org.openksavi.sponge.type.TypeKind;
 
+/**
+ * A type converter.
+ */
 @SuppressWarnings("rawtypes")
 public interface TypeConverter {
 
+    /**
+     * Marshals the value as type.
+     *
+     * @param type the type.
+     * @param value the value.
+     * @return the converted value.
+     */
     Object marshal(Type type, Object value);
 
+    /**
+     * Unmarshals the value as type.
+     *
+     * @param type the type.
+     * @param value the value.
+     * @return the converted value.
+     */
     Object unmarshal(Type type, Object value);
 
+    /**
+     * Registers the unit type converter.
+     *
+     * @param unitConverter the unit type converter.
+     */
     void register(UnitTypeConverter unitConverter);
 
+    /**
+     * Registers the unit type converters.
+     *
+     * @param unitConverters the unit type converters.
+     */
     void registerAll(List<UnitTypeConverter> unitConverters);
 
+    /**
+     * Unregisters a unit type converter for the type kind.
+     *
+     * @param typeKind the type kind.
+     * @return the previously registered unit type converter.
+     */
     UnitTypeConverter unregister(TypeKind typeKind);
 
+    /**
+     * Returns the JSON object mapper.
+     *
+     * @return the JSON object mapper.
+     */
     ObjectMapper getObjectMapper();
 }

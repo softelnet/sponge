@@ -22,7 +22,7 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionMeta", description = "Represents an action metadata")
+@ApiModel(value = "ActionMeta", description = "An action metadata")
 public class RestActionMeta {
 
     private String name;

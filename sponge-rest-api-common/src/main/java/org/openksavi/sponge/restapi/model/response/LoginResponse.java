@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "LoginResponse", description = "Login response")
+@ApiModel(value = "LoginResponse", description = "A login response")
 public class LoginResponse extends BaseResponse {
 
     private String authToken;

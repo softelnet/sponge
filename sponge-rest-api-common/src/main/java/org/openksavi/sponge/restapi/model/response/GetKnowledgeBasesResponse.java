@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 
-@ApiModel(value = "GetKnowledgeBasesResponse", description = "Get knowledge bases response")
+@ApiModel(value = "GetKnowledgeBasesResponse", description = "A get knowledge bases response")
 public class GetKnowledgeBasesResponse extends BaseResponse {
 
     private List<RestKnowledgeBaseMeta> knowledgeBases;

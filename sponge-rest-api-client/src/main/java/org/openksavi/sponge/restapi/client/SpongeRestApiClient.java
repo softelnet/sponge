@@ -67,7 +67,7 @@ public interface SpongeRestApiClient extends Closeable {
     String getVersion();
 
     /**
-     * Sends the {@code login} request to the server.
+     * Sends the {@code login} request to the server. Sets the auth token in the client for further requests.
      *
      * @param request the request.
      * @return the {@code login} response.
@@ -75,14 +75,14 @@ public interface SpongeRestApiClient extends Closeable {
     LoginResponse login(LoginRequest request);
 
     /**
-     * Sends the {@code login} request to the server.
+     * Sends the {@code login} request to the server. See {@link #login(LoginRequest)}.
      *
      * @return the optional auth token.
      */
     String login();
 
     /**
-     * Sends the {@code logout} request to the server.
+     * Sends the {@code logout} request to the server. Clears the auth token in the client.
      *
      * @param request the request.
      * @return the {@code logout} response.
@@ -90,7 +90,7 @@ public interface SpongeRestApiClient extends Closeable {
     LogoutResponse logout(LogoutRequest request);
 
     /**
-     * Sends the {@code logout} request to the server.
+     * Sends the {@code logout} request to the server. See {@link #logout(LogoutRequest)}.
      */
     void logout();
 
@@ -105,7 +105,7 @@ public interface SpongeRestApiClient extends Closeable {
     /**
      * Sends the {@code knowledgeBases} request to the server.
      *
-     * @return the list of knowledge bases metadata.
+     * @return the list of available knowledge bases metadata.
      */
     List<RestKnowledgeBaseMeta> getKnowledgeBases();
 
@@ -118,31 +118,31 @@ public interface SpongeRestApiClient extends Closeable {
     GetActionsResponse getActions(GetActionsRequest request);
 
     /**
-     * Sends the {@code actions} request to the server. This method may populate the action metadata cache.
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest)}.
      *
      * @param name the action name or the regular expression or {@code null} to return results for all actions.
      * @param metadataRequired if {@code true} only actions that have arguments and result metadata will be returned.
-     * @return the list of actions metadata.
+     * @return the list of available actions metadata..
      */
     List<RestActionMeta> getActions(String name, Boolean metadataRequired);
 
     /**
-     * Sends the {@code actions} request to the server. This method may populate the action metadata cache.
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest)}.
      *
      * @param name the action name or the regular expression or {@code null} to return results for all actions.
-     * @return the list of actions metadata.
+     * @return the list of available actions metadata..
      */
     List<RestActionMeta> getActions(String name);
 
     /**
-     * Sends the {@code actions} request to the server. This method may populate the action metadata cache.
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest)}.
      *
-     * @return the list of actions metadata.
+     * @return the list of available actions metadata..
      */
     List<RestActionMeta> getActions();
 
     /**
-     * Returns the metadata for a specified action. This method may fetch the metadata from the server or use the action metadata cache if
+     * Returns the metadata for the specified action. This method may fetch the metadata from the server or use the action metadata cache if
      * configured.
      *
      * @param actionName the action name.
@@ -152,7 +152,8 @@ public interface SpongeRestApiClient extends Closeable {
     RestActionMeta getActionMeta(String actionName);
 
     /**
-     * Returns the metadata for a specified action. This method may use the action metadata cache if configured.
+     * Returns the metadata for the specified action. This method may fetch the metadata from the server or use the action metadata cache if
+     * configured.
      *
      * @param actionName the action name.
      * @param allowFetchMetadata if {@code true} (the default value), the action metadata may be fetched from the server.
@@ -183,8 +184,7 @@ public interface SpongeRestApiClient extends Closeable {
     ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta);
 
     /**
-     * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined (on
-     * the server side).
+     * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined.
      *
      * @param request the request.
      * @param actionMeta the action metadata that will be used for marshaling and unmarshaling. If the value is {@code null}, this method
@@ -220,7 +220,7 @@ public interface SpongeRestApiClient extends Closeable {
     <T> T call(Class<T> resultClass, String actionName, Object... args);
 
     /**
-     * Send the event to the server.
+     * Sends the event to the server.
      *
      * @param request the request.
      * @return the response.
@@ -228,7 +228,7 @@ public interface SpongeRestApiClient extends Closeable {
     SendEventResponse send(SendEventRequest request);
 
     /**
-     * Send the event to the server.
+     * Sends the event to the server.
      *
      * @param eventName the event name.
      * @param attributes the event attributes.

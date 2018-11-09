@@ -19,7 +19,7 @@ package org.openksavi.sponge.action;
 import org.openksavi.sponge.type.Type;
 
 /**
- * Action result metadata (data type and display name).
+ * An action result metadata.
  */
 @SuppressWarnings("rawtypes")
 public class ResultMeta<T extends Type> {

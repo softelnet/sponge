@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "KnowledgeBaseMeta", description = "Represents a knowledge base metadata")
+@ApiModel(value = "KnowledgeBaseMeta", description = "A knowledge base metadata")
 public class RestKnowledgeBaseMeta {
 
     private String name;

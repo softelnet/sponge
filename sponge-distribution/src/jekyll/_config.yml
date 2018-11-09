@@ -58,6 +58,9 @@ asciidoctor:
     - standaloneDir={rootDir}/sponge-standalone
     - standalonePackage=sponge-{projectVersion}-standalone
     - sourcesUrl=https://github.com/softelnet/sponge/tree/master
+    - dartClientSourcesUrl=https://github.com/softelnet/sponge_client_dart/tree/master
+    - dartClientDartdoc=https://pub.dartlang.org/documentation/sponge_client_dart/latest/sponge_client_dart
+    - mobileGuiClientSourcesUrl=https://github.com/softelnet/sponge_mobile_client/tree/master
     - useReferences=true
     - downloadUrl=/download/{standalonePackage}.zip
     - logoDir=images

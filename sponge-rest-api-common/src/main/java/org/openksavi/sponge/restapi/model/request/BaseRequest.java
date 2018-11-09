@@ -18,6 +18,9 @@ package org.openksavi.sponge.restapi.model.request;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * A base request.
+ */
 public abstract class BaseRequest {
 
     private String id;

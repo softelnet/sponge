@@ -369,7 +369,8 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
                     logger.debug("Sponge completed a run once mode");
                 }
             } catch (Throwable e) {
-                safelyShutdownIfStartupError(eventScheduler, threadPoolManager, processingUnitManager);
+                safelyShutdownIfStartupError(processingUnitManager, threadPoolManager, knowledgeBaseManager, pluginManager, eventScheduler,
+                        eventQueueManager, configurationManager);
                 throw SpongeUtils.wrapException("startup", e);
             }
         } finally {
@@ -380,7 +381,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     protected void safelyShutdownIfStartupError(EngineModule... modules) {
         Stream.of(modules).forEachOrdered(module -> {
             try {
-                if (module != null) {
+                if (module != null && module.isRunning()) {
                     module.shutdown();
                 }
             } catch (Throwable ex) {

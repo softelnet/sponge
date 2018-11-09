@@ -27,6 +27,9 @@
         <standalonePackageName>sponge-${release.version}</standalonePackageName>
         <mainClass>org.openksavi.sponge.standalone.StandaloneEngineMain</mainClass>
         <sourcesUrl>https://github.com/softelnet/sponge/tree/master</sourcesUrl>
+        <dartClientSourcesUrl>https://github.com/softelnet/sponge_client_dart/tree/master</dartClientSourcesUrl>
+        <dartClientDartdoc>https://pub.dartlang.org/documentation/sponge_client_dart/latest/sponge_client_dart</dartClientDartdoc>
+        <mobileGuiClientSourcesUrl>https://github.com/softelnet/sponge_mobile_client/tree/master</mobileGuiClientSourcesUrl>
         <jekyllBuildDir>${project.build.directory}/jekyll/jekyll</jekyllBuildDir>
         <logoDir>${basedir}/src/images</logoDir>
         <homepage>http://sponge.openksavi.org</homepage>

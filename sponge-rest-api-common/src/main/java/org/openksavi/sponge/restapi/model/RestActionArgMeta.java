@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.type.Type;
 
-@ApiModel(value = "ActionArgMeta", description = "Represents an action argument metadata")
+@ApiModel(value = "ActionArgMeta", description = "An action argument metadata")
 @SuppressWarnings("rawtypes")
 public class RestActionArgMeta {
 

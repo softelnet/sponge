@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCallResponse", description = "Action call response")
+@ApiModel(value = "ActionCallResponse", description = "An action call response")
 public class ActionCallResponse extends BaseResponse {
 
     private Object result;

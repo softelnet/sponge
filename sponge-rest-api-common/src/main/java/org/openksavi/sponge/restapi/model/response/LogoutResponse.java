@@ -18,7 +18,7 @@ package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "LogoutResponse", description = "Logout response")
+@ApiModel(value = "LogoutResponse", description = "A logout response")
 public class LogoutResponse extends BaseResponse {
 
     public LogoutResponse() {
