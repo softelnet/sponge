@@ -361,7 +361,7 @@ __required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionR
 
 [[_swagger_getactionsrequest]]
 === GetActionsRequest
-Get actions request
+A get actions request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -403,7 +403,7 @@ __optional__|boolean
 
 [[_swagger_knowledgebasemeta]]
 === KnowledgeBaseMeta
-Represents a knowledge base metadata
+A knowledge base metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -422,7 +422,7 @@ __optional__|The knowledge base version|integer (int32)
 
 [[_swagger_actionmeta]]
 === ActionMeta
-Represents an action metadata
+An action metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -447,7 +447,7 @@ __optional__|The action result metadata|<<_swagger_actionresultmeta,ActionResult
 
 [[_swagger_actionargmeta]]
 === ActionArgMeta
-Represents an action argument metadata
+An action argument metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -468,7 +468,7 @@ __optional__|Optional argument|boolean
 
 [[_swagger_getactionsresponse]]
 === GetActionsResponse
-Get actions response
+A get actions response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -489,7 +489,7 @@ __required__|The Sponge actions|< <<_swagger_actionmeta,ActionMeta>> > array
 
 [[_swagger_actionresultmeta]]
 === ActionResultMeta
-Represents an action result metadata
+An action result metadata
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -506,7 +506,7 @@ __optional__|The action result description|string
 
 [[_swagger_actioncallrequest]]
 === ActionCallRequest
-Represents a Sponge action call
+An action call request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -531,7 +531,7 @@ __optional__|The expected knowledge base version|integer (int32)
 
 [[_swagger_actioncallresponse]]
 === ActionCallResponse
-Action call response
+An action call response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -552,7 +552,7 @@ __required__|The action result|object
 
 [[_swagger_getknowledgebasesrequest]]
 === GetKnowledgeBasesRequest
-Get knowledge bases request
+A get knowledge bases request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -571,7 +571,7 @@ __optional__|The authentication token|string
 
 [[_swagger_getknowledgebasesresponse]]
 === GetKnowledgeBasesResponse
-Get knowledge bases response
+A get knowledge bases response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -592,7 +592,7 @@ __required__|The Spoonge knowledge bases|< <<_swagger_knowledgebasemeta,Knowledg
 
 [[_swagger_loginrequest]]
 === LoginRequest
-Login request
+A login request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -611,7 +611,7 @@ __optional__|The authentication token|string
 
 [[_swagger_loginresponse]]
 === LoginResponse
-Login response
+A login response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -632,7 +632,7 @@ __required__|The authentication token|string
 
 [[_swagger_logoutrequest]]
 === LogoutRequest
-Logout request
+A logout request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -651,7 +651,7 @@ __optional__|The authentication token|string
 
 [[_swagger_logoutresponse]]
 === LogoutResponse
-Logout response
+A logout response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -670,7 +670,7 @@ __optional__|The detailed error message|string
 
 [[_swagger_reloadrequest]]
 === ReloadRequest
-Reload request
+A reload request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -689,7 +689,7 @@ __optional__|The authentication token|string
 
 [[_swagger_reloadresponse]]
 === ReloadResponse
-Reload response
+A reload response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -708,7 +708,7 @@ __optional__|The detailed error message|string
 
 [[_swagger_sendeventrequest]]
 === SendEventRequest
-Send event request
+A send event request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -731,7 +731,7 @@ __optional__|The event attributes|< string, object > map
 
 [[_swagger_sendeventresponse]]
 === SendEventResponse
-Send event response
+A send event response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -752,7 +752,7 @@ __required__|The event id|string
 
 [[_swagger_getversionrequest]]
 === GetVersionRequest
-Get version request
+A get version request
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]
@@ -771,7 +771,7 @@ __optional__|The authentication token|string
 
 [[_swagger_getversionresponse]]
 === GetVersionResponse
-Get version response
+A get version response
 
 
 [options="header", cols=".^3a,.^11a,.^4a"]

@@ -21,8 +21,8 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "SendEventRequest", description = "Send event request")
-public class SendEventRequest extends BaseRequest {
+@ApiModel(value = "SendEventRequest", description = "A send event request")
+public class SendEventRequest extends SpongeRequest {
 
     private String name;
 

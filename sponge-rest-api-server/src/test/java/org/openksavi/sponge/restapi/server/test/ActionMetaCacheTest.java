@@ -34,9 +34,9 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.BaseSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -72,15 +72,15 @@ public class ActionMetaCacheTest {
         }
     }
 
-    protected BaseSpongeRestApiClient createRestApiClient(boolean useActionMetaCache) {
-        return new OkHttpSpongeRestApiClient(
-                RestApiClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+    protected BaseSpongeRestClient createRestClient(boolean useActionMetaCache) {
+        return new OkHttpSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
                         .useActionMetaCache(useActionMetaCache).build());
     }
 
     @Test
     public void testActionCacheOn() {
-        try (BaseSpongeRestApiClient client = createRestApiClient(true)) {
+        try (BaseSpongeRestClient client = createRestClient(true)) {
             String actionName = "UpperCase";
 
             RestActionMeta actionMeta;
@@ -106,7 +106,7 @@ public class ActionMetaCacheTest {
 
     @Test
     public void testActionCacheOff() {
-        try (BaseSpongeRestApiClient client = createRestApiClient(false)) {
+        try (BaseSpongeRestClient client = createRestClient(false)) {
             String actionName = "UpperCase";
 
             RestActionMeta actionMeta;
@@ -125,7 +125,7 @@ public class ActionMetaCacheTest {
 
     @Test
     public void testActionCacheOnGetActions() {
-        try (BaseSpongeRestApiClient client = createRestApiClient(true)) {
+        try (BaseSpongeRestClient client = createRestClient(true)) {
             String actionName = "UpperCase";
 
             assertNull(client.getActionMeta(actionName, false));
@@ -145,7 +145,7 @@ public class ActionMetaCacheTest {
 
     @Test
     public void testFetchActionMeta() {
-        try (BaseSpongeRestApiClient client = createRestApiClient(true)) {
+        try (BaseSpongeRestClient client = createRestClient(true)) {
             String actionName = "UpperCase";
 
             assertNull(client.getActionMeta(actionName, false));

@@ -17,7 +17,7 @@
 package org.openksavi.sponge.type;
 
 /**
- * Data type kind.
+ * A data type kind.
  */
 @SuppressWarnings("rawtypes")
 public enum TypeKind {

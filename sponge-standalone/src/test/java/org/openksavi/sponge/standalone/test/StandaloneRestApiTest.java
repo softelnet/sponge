@@ -24,9 +24,9 @@ import org.junit.Test;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 @net.jcip.annotations.NotThreadSafe
@@ -43,7 +43,7 @@ public class StandaloneRestApiTest {
 
             String arg1 = "test1";
 
-            try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+            try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                     .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build())) {
                 Object result = client.call("UpperCase", arg1);
 

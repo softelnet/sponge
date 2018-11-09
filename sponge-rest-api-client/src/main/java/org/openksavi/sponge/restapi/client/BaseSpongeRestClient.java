@@ -38,7 +38,6 @@ import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.BaseRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
@@ -46,8 +45,8 @@ import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -55,6 +54,7 @@ import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
@@ -63,11 +63,11 @@ import org.openksavi.sponge.type.Type;
 /**
  * A base Sponge REST API client.
  */
-public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
+public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     protected static final boolean DEFAULT_ALLOW_FETCH_METADATA = true;
 
-    private RestApiClientConfiguration configuration;
+    private SpongeRestClientConfiguration configuration;
 
     private AtomicLong currentRequestId = new AtomicLong(0);
 
@@ -79,16 +79,16 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
 
     private LoadingCache<String, RestActionMeta> actionMetaCache;
 
-    public BaseSpongeRestApiClient(RestApiClientConfiguration configuration) {
+    public BaseSpongeRestClient(SpongeRestClientConfiguration configuration) {
         setConfiguration(configuration);
     }
 
     @Override
-    public RestApiClientConfiguration getConfiguration() {
+    public SpongeRestClientConfiguration getConfiguration() {
         return configuration;
     }
 
-    protected void setConfiguration(RestApiClientConfiguration configuration) {
+    protected void setConfiguration(SpongeRestClientConfiguration configuration) {
         this.configuration = configuration;
 
         initActionMetaCache();
@@ -153,9 +153,9 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + operation;
     }
 
-    protected abstract <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass);
+    protected abstract <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass);
 
-    protected <T extends BaseRequest> T prepareRequest(T request) {
+    protected <T extends SpongeRequest> T prepareRequest(T request) {
         if (configuration.isUseRequestId()) {
             request.setId(String.valueOf(currentRequestId.incrementAndGet()));
         }
@@ -179,33 +179,35 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         return request;
     }
 
-    protected <T extends BaseResponse> T prepareResponse(T response) {
-        if (response.getErrorCode() != null || response.getErrorMessage() != null) {
-            String message = response.getErrorMessage() != null ? response.getErrorMessage()
-                    : String.format("Error code: %s", response.getErrorCode());
+    protected <T extends SpongeResponse> T prepareResponse(T response) {
+        if (response.getErrorCode() != null) {
+            if (configuration.isThrowExceptionOnErrorResponse()) {
+                String message = response.getErrorMessage() != null ? response.getErrorMessage()
+                        : String.format("Error code: %s", response.getErrorCode());
 
-            ErrorResponseException exception;
-            switch (response.getErrorCode()) {
-            case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
-                exception = new InvalidAuthTokenException(message);
-                break;
-            case RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION:
-                exception = new IncorrectKnowledgeBaseVersionException(message);
-                break;
-            default:
-                exception = new ErrorResponseException(message);
+                ErrorResponseException exception;
+                switch (response.getErrorCode()) {
+                case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
+                    exception = new InvalidAuthTokenException(message);
+                    break;
+                case RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION:
+                    exception = new IncorrectKnowledgeBaseVersionException(message);
+                    break;
+                default:
+                    exception = new ErrorResponseException(message);
+                }
+
+                exception.setErrorCode(response.getErrorCode());
+                exception.setDetailedErrorMessage(response.getDetailedErrorMessage());
+
+                throw exception;
             }
-
-            exception.setErrorCode(response.getErrorCode());
-            exception.setDetailedErrorMessage(response.getDetailedErrorMessage());
-
-            throw exception;
         }
 
         return response;
     }
 
-    protected <T extends BaseRequest, R extends BaseResponse> R execute(String operation, T request, Class<R> responseClass) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R execute(String operation, T request, Class<R> responseClass) {
         try {
             return prepareResponse(doExecute(operation, prepareRequest(request), responseClass));
         } catch (InvalidAuthTokenException e) {
@@ -287,11 +289,13 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
     protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache) {
         GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class);
 
-        response.getActions().forEach(actionMeta -> unmarshalActionMeta(actionMeta));
+        if (response.getActions() != null) {
+            response.getActions().forEach(actionMeta -> unmarshalActionMeta(actionMeta));
 
-        // Populate the cache.
-        if (populateCache && configuration.isUseActionMetaCache() && actionMetaCache != null) {
-            response.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
+            // Populate the cache.
+            if (populateCache && configuration.isUseActionMetaCache() && actionMetaCache != null) {
+                response.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
+            }
         }
 
         return response;
@@ -343,7 +347,9 @@ public abstract class BaseSpongeRestApiClient implements SpongeRestApiClient {
         request.setName(actionName);
         request.setMetadataRequired(true);
 
-        return doGetActions(request, false).getActions().stream().findFirst().orElse(null);
+        List<RestActionMeta> actions = doGetActions(request, false).getActions();
+
+        return actions != null ? actions.stream().findFirst().orElse(null) : null;
     }
 
     @Override

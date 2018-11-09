@@ -19,8 +19,8 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "SendEventResponse", description = "Send event response")
-public class SendEventResponse extends BaseResponse {
+@ApiModel(value = "SendEventResponse", description = "A send event response")
+public class SendEventResponse extends SpongeResponse {
 
     private String eventId;
 

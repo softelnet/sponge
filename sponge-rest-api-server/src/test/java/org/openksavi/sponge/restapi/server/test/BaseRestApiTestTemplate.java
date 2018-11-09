@@ -40,7 +40,7 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.IncorrectKnowledgeBaseVersionException;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -57,18 +57,18 @@ public abstract class BaseRestApiTestTemplate {
     @Named(PortTestConfig.PORT_BEAN_NAME)
     protected Integer port;
 
-    protected abstract SpongeRestApiClient createRestApiClient();
+    protected abstract SpongeRestClient createRestClient();
 
     @Test
     public void testVersion() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             assertEquals(engine.getVersion(), client.getVersion());
         }
     }
 
     @Test
     public void testVersionWithId() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             client.getConfiguration().setUseRequestId(true);
 
             GetVersionRequest request = new GetVersionRequest();
@@ -85,21 +85,21 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testActions() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             assertEquals(RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT, client.getActions().size());
         }
     }
 
     @Test
     public void testActionsParamArgMetadataRequiredTrue() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             assertEquals(RestApiTestConstants.ACTIONS_WITH_METADATA_COUNT, client.getActions(null, true).size());
         }
     }
 
     @Test
     public void testActionsParamArgMetadataRequiredFalse() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             List<RestActionMeta> actions = client.getActions(null, false);
 
             assertEquals(RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT, actions.size());
@@ -111,7 +111,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testActionsNameRegExp() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             String nameRegExp = ".*Case";
             List<RestActionMeta> actions = client.getActions(nameRegExp);
 
@@ -122,7 +122,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testActionsNameExact() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             String name = "UpperCase";
             List<RestActionMeta> actions = client.getActions(name);
 
@@ -133,7 +133,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testGetActionMeta() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             String actionName = "UpperCase";
             RestActionMeta actionMeta = client.getActionMeta(actionName);
 
@@ -146,7 +146,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testCall() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             String arg1 = "test1";
 
             Object result = client.call("UpperCase", arg1);
@@ -161,7 +161,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test(expected = IncorrectKnowledgeBaseVersionException.class)
     public void testCallWithWrongExpectedKnowledgeBaseVersion() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             String arg1 = "test1";
 
             RestActionMeta actionMeta = client.getActionMeta("UpperCase");
@@ -178,7 +178,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testCallBinaryArgAndResult() throws IOException {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             byte[] image = IOUtils.toByteArray(getClass().getResourceAsStream("/image.png"));
             byte[] resultImage = client.call(byte[].class, "EchoImage", image);
             assertEquals(image.length, resultImage.length);
@@ -189,7 +189,7 @@ public abstract class BaseRestApiTestTemplate {
     @SuppressWarnings("unchecked")
     @Test
     public void testCallWithActionTypeArg() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("ActionTypeAction");
             List<String> values = client.call(List.class, ((ActionType) actionMeta.getArgsMeta().get(0).getType()).getActionName());
             assertEquals("value3", client.call("ActionTypeAction", values.get(values.size() - 1)));
@@ -198,7 +198,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testCallLanguageError() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             try {
                 client.call("LangErrorAction");
                 fail("Exception expected");
@@ -217,7 +217,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testCallKnowledgeBaseError() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             try {
                 client.call("KnowledgeBaseErrorAction");
                 fail("Exception expected");
@@ -236,7 +236,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testSend() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             assertNotNull(client.send("alarm", SpongeUtils.immutableMapOf("attr1", "Test")));
 
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());
@@ -246,7 +246,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testKnowledgeBases() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             assertEquals(1, client.getKnowledgeBases().size());
         }
     }

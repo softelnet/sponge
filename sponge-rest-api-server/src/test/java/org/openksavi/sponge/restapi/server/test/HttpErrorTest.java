@@ -44,8 +44,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
+import org.openksavi.sponge.restapi.client.util.RestClientUtils;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -80,7 +80,7 @@ public class HttpErrorTest {
 
     @Test
     public void testHttpErrorInJsonParser() throws IOException {
-        OkHttpClient client = RestApiClientUtils.createOkHttpClient();
+        OkHttpClient client = RestClientUtils.createOkHttpClient();
 
         String requestBody = "{\"error_property\":\"\"}";
         Response okHttpResponse = client
@@ -90,7 +90,7 @@ public class HttpErrorTest {
                 .execute();
         assertEquals(200, okHttpResponse.code());
         ObjectMapper mapper = RestApiUtils.createObjectMapper();
-        BaseResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), BaseResponse.class);
+        SpongeResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), SpongeResponse.class);
         assertEquals(RestApiConstants.DEFAULT_ERROR_CODE, apiResponse.getErrorCode());
         assertTrue(apiResponse.getErrorMessage().contains("Unrecognized field \"error_property\""));
     }

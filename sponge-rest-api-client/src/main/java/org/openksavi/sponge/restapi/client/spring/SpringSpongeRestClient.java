@@ -32,16 +32,16 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
-import org.openksavi.sponge.restapi.model.request.BaseRequest;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
+import org.openksavi.sponge.restapi.client.util.RestClientUtils;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 
 /**
  * A Sponge REST API client that uses Spring (version 5) and OkHttp.
  */
-public class SpringSpongeRestApiClient extends OkHttpSpongeRestApiClient {
+public class SpringSpongeRestClient extends OkHttpSpongeRestClient {
 
     /** The Spring REST template. */
     private RestTemplate restTemplate;
@@ -49,7 +49,7 @@ public class SpringSpongeRestApiClient extends OkHttpSpongeRestApiClient {
     /** The lock. */
     private Lock lock = new ReentrantLock(true);
 
-    public SpringSpongeRestApiClient(RestApiClientConfiguration configuration) {
+    public SpringSpongeRestClient(SpongeRestClientConfiguration configuration) {
         super(configuration);
     }
 
@@ -59,7 +59,7 @@ public class SpringSpongeRestApiClient extends OkHttpSpongeRestApiClient {
             lock.lock();
             try {
                 if (restTemplate == null) {
-                    OkHttpClient client = RestApiClientUtils.createOkHttpClient();
+                    OkHttpClient client = RestClientUtils.createOkHttpClient();
                     restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(client));
                     restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
 
@@ -78,7 +78,7 @@ public class SpringSpongeRestApiClient extends OkHttpSpongeRestApiClient {
     }
 
     @Override
-    protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass) {
         ResponseEntity<R> responseEntity = getOrCreateRestTemplate().exchange(getUrl(operation), HttpMethod.POST,
                 new HttpEntity<>(request, createHeaders()), responseClass);
         Validate.isTrue(!responseEntity.getStatusCode().isError(), "Error HTTP status code %s", responseEntity.getStatusCode());

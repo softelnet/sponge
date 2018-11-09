@@ -18,7 +18,10 @@ package org.openksavi.sponge.restapi.model.response;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class BaseResponse {
+/**
+ * A base response.
+ */
+public class SpongeResponse {
 
     private String id;
 

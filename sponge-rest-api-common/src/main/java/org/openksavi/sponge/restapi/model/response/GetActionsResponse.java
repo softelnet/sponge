@@ -23,8 +23,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 
-@ApiModel(value = "GetActionsResponse", description = "Get actions response")
-public class GetActionsResponse extends BaseResponse {
+@ApiModel(value = "GetActionsResponse", description = "A get actions response")
+public class GetActionsResponse extends SpongeResponse {
 
     private List<RestActionMeta> actions;
 

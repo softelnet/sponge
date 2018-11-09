@@ -373,7 +373,9 @@ def onStartup():
 
 include::user-guide-integration-rest-api-server.adoc[leveloffset=+1]
 
-include::user-guide-integration-rest-api-client.adoc[leveloffset=+1]
+include::user-guide-integration-rest-api-client-java.adoc[leveloffset=+1]
+
+include::user-guide-integration-rest-api-client-dart.adoc[leveloffset=+1]
 
 [[integration-external-subprocess]]
 == Run an external executable as a subprocess

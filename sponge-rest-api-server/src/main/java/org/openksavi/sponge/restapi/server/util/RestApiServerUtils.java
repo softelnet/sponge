@@ -26,7 +26,6 @@ import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.core.util.PatternStringReplacer;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
@@ -36,9 +35,6 @@ import org.openksavi.sponge.restapi.type.converter.TypeConverter;
  * A set of REST API server utility methods.
  */
 public abstract class RestApiServerUtils {
-
-    private static final PatternStringReplacer PASSWORD_REPLACER = new PatternStringReplacer(
-            RestApiServerConstants.JSON_REQUEST_PASSWORD_REGEXP, RestApiServerConstants.JSON_REQUEST_PASSWORD_REPLACE);
 
     private RestApiServerUtils() {
         //
@@ -70,10 +66,6 @@ public abstract class RestApiServerUtils {
 
         return user.getRoles().stream().filter(role -> roleToKnowledgeBases.containsKey(role)).anyMatch(
                 role -> roleToKnowledgeBases.get(role).stream().filter(Objects::nonNull).anyMatch(kbRegexp -> kbName.matches(kbRegexp)));
-    }
-
-    public static String hidePassword(String text) {
-        return PASSWORD_REPLACER.replaceAll(text);
     }
 
     public static List<Object> unmarshalActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,

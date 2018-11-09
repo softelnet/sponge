@@ -40,9 +40,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -91,17 +91,19 @@ public class RestApiSimpleSpringSecurityTest {
         }
     }
 
-    protected SpongeRestApiClient createRestApiClient(String username, String password) {
-        return new SpringSpongeRestApiClient(
-                RestApiClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+    protected SpongeRestClient createRestClient(String username, String password) {
+        return new SpringSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
                         .username(username).password(password).build());
     }
 
     protected void doTestRestActions(String username, String password, int actionCount) {
-        List<RestActionMeta> actions = createRestApiClient(username, password).getActions();
+        try (SpongeRestClient client = createRestClient(username, password)) {
+            List<RestActionMeta> actions = client.getActions();
 
-        assertNotNull(actions);
-        assertEquals(actionCount, actions.size());
+            assertNotNull(actions);
+            assertEquals(actionCount, actions.size());
+        }
     }
 
     @Test
@@ -117,48 +119,59 @@ public class RestApiSimpleSpringSecurityTest {
     @Test
     public void testLogin() {
         // Tests auth token authentication.
-        SpongeRestApiClient client = createRestApiClient("john", "password");
-        assertNotNull(client.login());
-        assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+        try (SpongeRestClient client = createRestClient("john", "password")) {
+            assertNotNull(client.login());
+            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
 
-        client.getConfiguration().setUsername(null);
-        client.getConfiguration().setPassword(null);
-        client.logout();
+            client.getConfiguration().setUsername(null);
+            client.getConfiguration().setPassword(null);
+            client.logout();
 
-        try {
-            // Try to get actions as anonymous (which is not allowed in the server configuration).
-            client.getActions();
-            fail("Exception expected");
-        } catch (ErrorResponseException e) {
-            // This is OK.
+            try {
+                // Try to get actions as anonymous (which is not allowed in the server configuration).
+                client.getActions();
+                fail("Exception expected");
+            } catch (ErrorResponseException e) {
+                // This is OK.
+            }
         }
     }
 
     @Test
     public void testLogout() {
         // Auth token disabled.
-        createRestApiClient("john", "password").logout();
+        try (SpongeRestClient client = createRestClient("john", "password")) {
+            client.logout();
+        }
     }
 
     @Test
     public void testKnowledgeBasesUser1() {
-        assertEquals(3, createRestApiClient("john", "password").getKnowledgeBases().size());
+        try (SpongeRestClient client = createRestClient("john", "password")) {
+            assertEquals(3, client.getKnowledgeBases().size());
+        }
     }
 
     @Test
     public void testKnowledgeBasesUser2() {
-        assertEquals(1, createRestApiClient("joe", "password").getKnowledgeBases().size());
+        try (SpongeRestClient client = createRestClient("joe", "password")) {
+            assertEquals(1, client.getKnowledgeBases().size());
+        }
     }
 
     @Test
     public void testReloadUser1() {
-        createRestApiClient("john", "password").reload();
+        try (SpongeRestClient client = createRestClient("john", "password")) {
+            client.reload();
 
-        await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "reloaded").get());
+            await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "reloaded").get());
+        }
     }
 
     @Test(expected = ErrorResponseException.class)
     public void testReloadUser2() {
-        createRestApiClient("joe", "password").reload();
+        try (SpongeRestClient client = createRestClient("joe", "password")) {
+            client.reload();
+        }
     }
 }

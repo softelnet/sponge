@@ -29,9 +29,9 @@ import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 
 @net.jcip.annotations.NotThreadSafe
 public class DemoServiceTest {
@@ -60,8 +60,8 @@ public class DemoServiceTest {
         environment.stop();
     }
 
-    protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+    protected SpongeRestClient createRestClient() {
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                 .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
     }
 
@@ -70,8 +70,8 @@ public class DemoServiceTest {
         byte[] imageData = SpongeUtils.readFileToByteArray(
                 Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
 
-        try (SpongeRestApiClient client = createRestApiClient()) {
-            assertEquals(5, createRestApiClient().call(Number.class, "MnistPredict", imageData));
+        try (SpongeRestClient client = createRestClient()) {
+            assertEquals(5, createRestClient().call(Number.class, "MnistPredict", imageData));
         }
     }
 }

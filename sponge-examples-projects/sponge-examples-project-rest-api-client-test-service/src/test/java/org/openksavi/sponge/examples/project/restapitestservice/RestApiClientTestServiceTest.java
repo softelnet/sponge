@@ -26,9 +26,9 @@ import org.junit.Test;
 import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 
 @net.jcip.annotations.NotThreadSafe
 public class RestApiClientTestServiceTest {
@@ -57,14 +57,14 @@ public class RestApiClientTestServiceTest {
         environment.stop();
     }
 
-    protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+    protected SpongeRestClient createRestClient() {
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                 .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
     }
 
     @Test
     public void testActionUppercase() {
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             assertEquals("TEXT TO UPPERCASE", client.call("UpperCase", "Text to uppercase"));
         }
     }

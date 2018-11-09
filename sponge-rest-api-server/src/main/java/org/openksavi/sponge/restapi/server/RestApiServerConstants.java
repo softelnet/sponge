@@ -87,10 +87,6 @@ public final class RestApiServerConstants {
 
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 
-    public static final String JSON_REQUEST_PASSWORD_REGEXP = "\"password\":\".*?\"";
-
-    public static final String JSON_REQUEST_PASSWORD_REPLACE = "\"password\":\"***\"";
-
     private RestApiServerConstants() {
         //
     }

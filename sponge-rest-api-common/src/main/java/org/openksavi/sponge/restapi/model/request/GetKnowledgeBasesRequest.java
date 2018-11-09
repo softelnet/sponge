@@ -18,8 +18,8 @@ package org.openksavi.sponge.restapi.model.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "GetKnowledgeBasesRequest", description = "Get knowledge bases request")
-public class GetKnowledgeBasesRequest extends BaseRequest {
+@ApiModel(value = "GetKnowledgeBasesRequest", description = "A get knowledge bases request")
+public class GetKnowledgeBasesRequest extends SpongeRequest {
 
     public GetKnowledgeBasesRequest() {
         //

@@ -5,7 +5,7 @@ Demo Plus
 
 from java.lang import System
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, isdir
 
 class DrawAndUploadDoodle(Action):
     def onConfigure(self):
@@ -30,7 +30,7 @@ class ListDoodles(Action):
         self.resultMeta = ResultMeta(ListType(StringType())).displayName("Doodles")
     def onCall(self):
         dir = sponge.getProperty("doodlesDir")
-        return [f for f in listdir(dir) if isfile(join(dir, f)) and f.endswith(".png")]
+        return [f for f in listdir(dir) if isfile(join(dir, f)) and f.endswith(".png")] if isdir(dir) else []
 
 class ViewDoodle(Action):
     def onConfigure(self):

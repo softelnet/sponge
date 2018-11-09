@@ -73,3 +73,5 @@ nullable
 doodle
 doodles
 unmarshaling
+dartdoc
+mapper

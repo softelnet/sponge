@@ -41,9 +41,9 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.test.base.CompoundComplexObject;
@@ -78,8 +78,8 @@ public class ComplexObjectRestApiTest {
         }
     }
 
-    protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+    protected SpongeRestClient createRestClient() {
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                 .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
     }
 
@@ -87,7 +87,7 @@ public class ComplexObjectRestApiTest {
     public void testRestCallComplexObject() {
         CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
 
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             CompoundComplexObject result = client.call(CompoundComplexObject.class, "ComplexObjectAction", compoundObject);
 
             assertEquals(compoundObject.getId() + 1, result.getId().longValue());
@@ -104,7 +104,7 @@ public class ComplexObjectRestApiTest {
         String actionName = "ComplexObjectAction";
         CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
 
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             Object value = client.call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getResult();
 
             assertTrue(value instanceof Map);
@@ -127,7 +127,7 @@ public class ComplexObjectRestApiTest {
         String actionName = "ComplexObjectListAction";
         CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
 
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             Object returnValue = client.call(actionName, Arrays.asList(compoundObject));
 
             assertTrue(returnValue instanceof List);
@@ -149,7 +149,7 @@ public class ComplexObjectRestApiTest {
         Map<String, CompoundComplexObject> map = new HashMap<>();
         map.put("first", RestApiTestUtils.createCompoundComplexObject());
 
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             Object returnValue = client.call("ComplexObjectHierarchyAction", "String", new Integer(100), Arrays.asList("a", "b", "c"),
                     Arrays.asList(new BigDecimal("1.25"), new BigDecimal("5.5")), new String[] { "A", "B" }, map);
 

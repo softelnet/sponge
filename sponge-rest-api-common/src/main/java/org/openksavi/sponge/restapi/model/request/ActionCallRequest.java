@@ -21,8 +21,8 @@ import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCallRequest", description = "Represents a Sponge action call")
-public class ActionCallRequest extends BaseRequest {
+@ApiModel(value = "ActionCallRequest", description = "An action call request")
+public class ActionCallRequest extends SpongeRequest {
 
     private String name;
 

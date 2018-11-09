@@ -42,9 +42,9 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.examples.project.demoservice.DemoServiceTestEnvironment;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 
 @net.jcip.annotations.NotThreadSafe
 public class DemoServiceLoadTest {
@@ -79,8 +79,8 @@ public class DemoServiceLoadTest {
         environment.stop();
     }
 
-    protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+    protected SpongeRestClient createRestClient() {
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                 .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
     }
 
@@ -89,7 +89,7 @@ public class DemoServiceLoadTest {
                 .get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), String.format("data/%d_0.png", digit)).toString());
     }
 
-    protected Callable<Void> createTestCallable(int threadNumber, List<Pair<Integer, byte[]>> images, SpongeRestApiClient client) {
+    protected Callable<Void> createTestCallable(int threadNumber, List<Pair<Integer, byte[]>> images, SpongeRestClient client) {
         return () -> {
             for (int i = 0; i < TEST_COUNT; i++) {
                 logger.info("Iteration ({}): {}/{}", threadNumber, i + 1, TEST_COUNT);
@@ -106,7 +106,7 @@ public class DemoServiceLoadTest {
         List<Pair<Integer, byte[]>> images =
                 Arrays.asList(1, 5, 7).stream().map(digit -> new ImmutablePair<>(digit, getImageData(digit))).collect(Collectors.toList());
 
-        try (SpongeRestApiClient client = createRestApiClient()) {
+        try (SpongeRestClient client = createRestClient()) {
             ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
             List<? extends Callable<Void>> tasks = IntStream.rangeClosed(1, THREAD_COUNT)
                     .mapToObj(threadNo -> createTestCallable(threadNo, images, client)).collect(Collectors.toList());

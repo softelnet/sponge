@@ -63,4 +63,8 @@ public abstract class RestApiUtils {
     public static boolean isHttpSuccess(int code) {
         return 200 <= code && code <= 299;
     }
+
+    public static String obfuscatePassword(String request) {
+        return request != null ? request.replaceAll("\"password\":\".*\"", "\"password\":\"***\"") : null;
+    }
 }

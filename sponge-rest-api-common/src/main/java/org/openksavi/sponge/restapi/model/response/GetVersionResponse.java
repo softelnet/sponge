@@ -19,8 +19,8 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetVersionResponse", description = "Get version response")
-public class GetVersionResponse extends BaseResponse {
+@ApiModel(value = "GetVersionResponse", description = "A get version response")
+public class GetVersionResponse extends SpongeResponse {
 
     private String version;
 

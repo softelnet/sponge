@@ -17,16 +17,16 @@
 package org.openksavi.sponge.restapi.server.test;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestClient;
 
 @net.jcip.annotations.NotThreadSafe
 public class SpringHttpsRestApiTest extends BaseHttpsRestApiTest {
 
     @Override
-    protected SpongeRestApiClient createRestApiClient() {
-        return new SpringSpongeRestApiClient(RestApiClientConfiguration.builder()
+    protected SpongeRestClient createRestClient() {
+        return new SpringSpongeRestClient(SpongeRestClientConfiguration.builder()
                 .url(String.format("https://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
     }
 }

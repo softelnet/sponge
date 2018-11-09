@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.client.test;
+package org.openksavi.sponge.restapi.client;
 
-import static org.junit.Assert.assertEquals;
+import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
 
-import org.junit.Test;
+/**
+ * A default Sponge REST API client that uses HttpOk. DefaultSpongeRestApiClient performs best when you create a single
+ * DefaultSpongeRestApiClient instance and reuse it for all of your REST API calls.
+ */
+public class DefaultSpongeRestClient extends OkHttpSpongeRestClient {
 
-import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
-
-public class RestApiClientUtilsTest {
-
-    @Test
-    public void testObfuscatePassword() {
-        assertEquals("{\"username\":\"test\",\"password\":\"***\"}",
-                RestApiClientUtils.obfuscatePassword("{\"username\":\"test\",\"password\":\"secret\"}"));
+    public DefaultSpongeRestClient(SpongeRestClientConfiguration configuration) {
+        super(configuration);
     }
 }

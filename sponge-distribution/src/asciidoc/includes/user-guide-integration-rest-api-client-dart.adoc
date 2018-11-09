@@ -1,0 +1,42 @@
+= {sponge} REST API client for Dart
+The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API server from applications written in Dart.
+
+.REST API client example
+[source,dart]
+----
+import 'package:sponge_client_dart/sponge_client_dart.dart';
+
+void main() async {
+  // Create a new client for an anonymous user.
+  var client = SpongeRestClient(
+      SpongeRestClientConfiguration('http://localhost:8888/sponge.json/v1'));
+
+  // Get the Sponge server version.
+  var version = await client.getVersion();
+  print('Sponge version: $version.');
+
+  // Get actions metadata.
+  List<ActionMeta> actionsMeta = await client.getActions();
+  print('Available action count: ${actionsMeta.length}.');
+
+  // Call the action with arguments.
+  String upperCaseText = await client.call('UpperCase', ['Text to upper case']);
+  print('Upper case text: $upperCaseText.');
+
+  // Send a new event to the Sponge engine.
+  var eventId = await client.send('alarm',
+      attributes: {'source': 'Dart client', 'message': 'Something happened'});
+  print('Sent event id: $eventId.');
+
+  // Create a new client for a named user.
+  client = SpongeRestClient(
+    SpongeRestClientConfiguration('http://localhost:8888/sponge.json/v1')
+      ..username = 'john'
+      ..password = 'password',
+  );
+}
+----
+
+Unless noted otherwise in the release notes, versions of the REST API client for Dart that have the same `major.minor` numbers as {sponge} are compatible.
+
+For more information see the {dartClientDartdoc}/SpongeRestClient-class.html[`SpongeRestClient` Dartdoc] and the project {dartClientSourcesUrl}/[source code].

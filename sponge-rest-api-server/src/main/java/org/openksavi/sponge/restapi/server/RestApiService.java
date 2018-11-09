@@ -27,7 +27,6 @@ import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -35,6 +34,7 @@ import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.util.HasEngine;
@@ -77,5 +77,5 @@ public interface RestApiService extends HasEngine, Initializable {
 
     ReloadResponse reload(ReloadRequest request, Exchange exchange);
 
-    BaseResponse createGenericErrorResponse(Throwable e, Exchange exchange);
+    SpongeResponse createGenericErrorResponse(Throwable e, Exchange exchange);
 }

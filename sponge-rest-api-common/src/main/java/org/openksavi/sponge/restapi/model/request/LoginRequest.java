@@ -18,8 +18,8 @@ package org.openksavi.sponge.restapi.model.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "LoginRequest", description = "Login request")
-public class LoginRequest extends BaseRequest {
+@ApiModel(value = "LoginRequest", description = "A login request")
+public class LoginRequest extends SpongeRequest {
 
     public LoginRequest() {
         //
