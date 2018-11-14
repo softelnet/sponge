@@ -63,7 +63,7 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * Default Sponge REST service.
@@ -204,13 +204,13 @@ public class DefaultRestApiService implements RestApiService {
         if (actionMeta != null) {
             if (actionMeta.getArgsMeta() != null) {
                 actionMeta.getArgsMeta().forEach(argMeta -> {
-                    Type type = argMeta.getType();
+                    DataType type = argMeta.getType();
                     type.setDefaultValue(typeConverter.marshal(type, type.getDefaultValue()));
                 });
             }
 
             if (actionMeta.getResultMeta() != null) {
-                Type type = actionMeta.getResultMeta().getType();
+                DataType type = actionMeta.getResultMeta().getType();
                 type.setDefaultValue(typeConverter.marshal(type, type.getDefaultValue()));
             }
         }

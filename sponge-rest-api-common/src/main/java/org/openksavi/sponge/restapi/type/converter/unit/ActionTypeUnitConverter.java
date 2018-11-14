@@ -18,11 +18,11 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.type.ActionType;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataTypeKind;
 
-public class ActionTypeUnitConverter extends BaseUnitTypeConverter<ActionType> {
+public class ActionTypeUnitConverter extends BaseUnitTypeConverter<Object, ActionType> {
 
     public ActionTypeUnitConverter() {
-        super(TypeKind.ACTION);
+        super(DataTypeKind.ACTION);
     }
 }

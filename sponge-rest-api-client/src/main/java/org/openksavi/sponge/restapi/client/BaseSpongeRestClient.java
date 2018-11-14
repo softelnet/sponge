@@ -58,7 +58,7 @@ import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * A base Sponge REST API client.
@@ -306,13 +306,13 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         if (actionMeta != null) {
             if (actionMeta.getArgsMeta() != null) {
                 actionMeta.getArgsMeta().forEach(argMeta -> {
-                    Type type = argMeta.getType();
+                    DataType type = argMeta.getType();
                     type.setDefaultValue(typeConverter.unmarshal(type, argMeta.getType().getDefaultValue()));
                 });
             }
 
             if (actionMeta.getResultMeta() != null) {
-                Type type = actionMeta.getResultMeta().getType();
+                DataType type = actionMeta.getResultMeta().getType();
                 type.setDefaultValue(typeConverter.unmarshal(type, type.getDefaultValue()));
             }
         }

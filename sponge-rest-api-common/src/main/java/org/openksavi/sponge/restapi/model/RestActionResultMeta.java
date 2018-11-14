@@ -19,13 +19,13 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ActionResultMeta", description = "An action result metadata")
 @SuppressWarnings("rawtypes")
 public class RestActionResultMeta {
 
-    private Type type;
+    private DataType type;
 
     private String displayName;
 
@@ -35,17 +35,17 @@ public class RestActionResultMeta {
         //
     }
 
-    public RestActionResultMeta(Type type, String displayName) {
+    public RestActionResultMeta(DataType type, String displayName) {
         this.type = type;
         this.displayName = displayName;
     }
 
     @ApiModelProperty(value = "The action result type", required = true)
-    public Type getType() {
+    public DataType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(DataType type) {
         this.type = type;
     }
 

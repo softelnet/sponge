@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * An integer type that supports long as well (internally uses {@code Number}).
  */
-public class IntegerType extends Type<Number> {
+public class IntegerType extends DataType<Number> {
 
     /** The minimum value (optional). */
     private Long minValue;
@@ -36,7 +36,7 @@ public class IntegerType extends Type<Number> {
     private boolean exclusiveMax = false;
 
     public IntegerType() {
-        super(TypeKind.INTEGER);
+        super(DataTypeKind.INTEGER);
     }
 
     @Override

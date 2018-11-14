@@ -16,19 +16,18 @@
 
 package org.openksavi.sponge.restapi.type.converter;
 
-import org.openksavi.sponge.type.Type;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 
 /**
  * A unit type converter.
  *
  * @param <T> type.
  */
-@SuppressWarnings("rawtypes")
-public interface UnitTypeConverter<T extends Type> {
+public interface UnitTypeConverter<T, D extends DataType<T>> {
 
     /** The data type kind. */
-    TypeKind getTypeKind();
+    DataTypeKind getTypeKind();
 
     /**
      * Marshals the value as type.
@@ -36,9 +35,11 @@ public interface UnitTypeConverter<T extends Type> {
      * @param converter the type converter.
      * @param type the type.
      * @param value the value. It will never be {@code null} here.
+     * @param T instance type.
+     * @param D data type.
      * @return the converted value.
      */
-    Object marshal(TypeConverter converter, T type, Object value);
+    Object marshal(TypeConverter converter, D type, T value);
 
     /**
      * Unmarshals the value as type.
@@ -46,7 +47,9 @@ public interface UnitTypeConverter<T extends Type> {
      * @param converter the type converter.
      * @param type the type.
      * @param value the value. It will never be {@code null} here.
+     * @param T instance type.
+     * @param D data type.
      * @return the converted value.
      */
-    Object unmarshal(TypeConverter converter, T type, Object value);
+    T unmarshal(TypeConverter converter, D type, Object value);
 }

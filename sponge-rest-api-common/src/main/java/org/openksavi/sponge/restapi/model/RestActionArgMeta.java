@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ActionArgMeta", description = "An action argument metadata")
 @SuppressWarnings("rawtypes")
@@ -27,7 +27,7 @@ public class RestActionArgMeta {
 
     private String name;
 
-    private Type type;
+    private DataType type;
 
     private String displayName;
 
@@ -39,7 +39,7 @@ public class RestActionArgMeta {
         //
     }
 
-    public RestActionArgMeta(String name, Type type, String displayName, String description, boolean optional) {
+    public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional) {
         this.name = name;
         this.type = type;
         this.displayName = displayName;
@@ -57,11 +57,11 @@ public class RestActionArgMeta {
     }
 
     @ApiModelProperty(value = "The action argument type", required = true)
-    public Type getType() {
+    public DataType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(DataType type) {
         this.type = type;
     }
 

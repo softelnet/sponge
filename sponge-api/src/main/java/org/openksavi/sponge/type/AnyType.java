@@ -21,10 +21,10 @@ import java.util.Map;
 /**
  * Any type. It may be used in situations when type is not important.
  */
-public class AnyType extends Type<Object> {
+public class AnyType extends DataType<Object> {
 
     public AnyType() {
-        super(TypeKind.ANY);
+        super(DataTypeKind.ANY);
     }
 
     @Override

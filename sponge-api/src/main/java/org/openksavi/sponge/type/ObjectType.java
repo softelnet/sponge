@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * @param <T> object type.
  */
-public class ObjectType<T> extends Type<T> {
+public class ObjectType<T> extends DataType<T> {
 
     /** The class name. */
     private String className;
@@ -33,7 +33,7 @@ public class ObjectType<T> extends Type<T> {
     }
 
     public ObjectType(String className) {
-        super(TypeKind.OBJECT);
+        super(DataTypeKind.OBJECT);
 
         this.className = className;
     }

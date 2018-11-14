@@ -21,10 +21,10 @@ import java.util.Map;
 /**
  * A void type that may be used to specify that an action returns no meaningful result.
  */
-public class VoidType extends Type<Object> {
+public class VoidType extends DataType<Void> {
 
     public VoidType() {
-        super(TypeKind.VOID);
+        super(DataTypeKind.VOID);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class VoidType extends Type<Object> {
     }
 
     @Override
-    public VoidType defaultValue(Object value) {
+    public VoidType defaultValue(Void value) {
         return (VoidType) super.defaultValue(value);
     }
 

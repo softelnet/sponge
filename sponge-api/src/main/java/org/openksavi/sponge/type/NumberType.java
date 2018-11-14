@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * A number type, that include both integer and floating-point numbers.
  */
-public class NumberType extends Type<Number> {
+public class NumberType extends DataType<Number> {
 
     /** The minimum value (optional). */
     private Number minValue;
@@ -36,7 +36,7 @@ public class NumberType extends Type<Number> {
     private boolean exclusiveMax = false;
 
     public NumberType() {
-        super(TypeKind.NUMBER);
+        super(DataTypeKind.NUMBER);
     }
 
     @Override

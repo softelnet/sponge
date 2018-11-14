@@ -16,13 +16,13 @@
 
 package org.openksavi.sponge.action;
 
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * An action argument metadata.
  */
 @SuppressWarnings("rawtypes")
-public class ArgMeta<T extends Type> {
+public class ArgMeta<T extends DataType> {
 
     /** The argument name. */
     private String name;

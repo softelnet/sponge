@@ -25,22 +25,22 @@ import java.util.Map;
  * @param <V> a map value type.
  */
 @SuppressWarnings("unchecked")
-public class MapType<K, V> extends Type<Map<K, V>> {
+public class MapType<K, V> extends DataType<Map<K, V>> {
 
     /** The map key type. */
-    private Type<?> keyType;
+    private DataType<?> keyType;
 
     /** The map value type. */
-    private Type<?> valueType;
+    private DataType<?> valueType;
 
     public MapType() {
-        super(TypeKind.MAP);
+        super(DataTypeKind.MAP);
         this.keyType = new AnyType();
         this.valueType = new AnyType();
     }
 
-    public MapType(Type<K> keyType, Type<V> valueType) {
-        super(TypeKind.MAP);
+    public MapType(DataType<K> keyType, DataType<V> valueType) {
+        super(DataTypeKind.MAP);
         this.keyType = keyType;
         this.valueType = valueType;
     }
@@ -70,11 +70,11 @@ public class MapType<K, V> extends Type<Map<K, V>> {
         return (MapType<K, V>) super.nullable(nullable);
     }
 
-    public Type<K> getKeyType() {
-        return (Type<K>) keyType;
+    public DataType<K> getKeyType() {
+        return (DataType<K>) keyType;
     }
 
-    public Type<V> getValueType() {
-        return (Type<V>) valueType;
+    public DataType<V> getValueType() {
+        return (DataType<V>) valueType;
     }
 }

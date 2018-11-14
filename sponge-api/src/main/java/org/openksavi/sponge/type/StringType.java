@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * A string type.
  */
-public class StringType extends Type<String> {
+public class StringType extends DataType<String> {
 
     /** The minimum length (optional). */
     private Integer minLength;
@@ -30,7 +30,7 @@ public class StringType extends Type<String> {
     private Integer maxLength;
 
     public StringType() {
-        super(TypeKind.STRING);
+        super(DataTypeKind.STRING);
     }
 
     @Override

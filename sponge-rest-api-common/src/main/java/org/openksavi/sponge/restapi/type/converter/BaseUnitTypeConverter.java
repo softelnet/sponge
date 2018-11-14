@@ -16,30 +16,30 @@
 
 package org.openksavi.sponge.restapi.type.converter;
 
-import org.openksavi.sponge.type.Type;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 
-@SuppressWarnings("rawtypes")
-public abstract class BaseUnitTypeConverter<T extends Type> implements UnitTypeConverter<T> {
+@SuppressWarnings({ "unchecked" })
+public abstract class BaseUnitTypeConverter<T, D extends DataType<T>> implements UnitTypeConverter<T, D> {
 
-    protected BaseUnitTypeConverter(TypeKind typeKind) {
+    protected BaseUnitTypeConverter(DataTypeKind typeKind) {
         this.typeKind = typeKind;
     }
 
-    protected TypeKind typeKind;
+    protected DataTypeKind typeKind;
 
     @Override
-    public TypeKind getTypeKind() {
+    public DataTypeKind getTypeKind() {
         return typeKind;
     }
 
     @Override
-    public Object marshal(TypeConverter converter, T type, Object value) {
+    public Object marshal(TypeConverter converter, D type, T value) {
         return value;
     }
 
     @Override
-    public Object unmarshal(TypeConverter converter, T type, Object value) {
-        return value;
+    public T unmarshal(TypeConverter converter, D type, Object value) {
+        return (T) value;
     }
 }

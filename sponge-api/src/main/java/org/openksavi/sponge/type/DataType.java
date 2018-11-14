@@ -23,10 +23,10 @@ import java.util.Map;
 /**
  * A data type. Used for example in action arguments metadata.
  */
-public class Type<T> {
+public class DataType<T> {
 
     /** The data type kind. */
-    private TypeKind kind;
+    private DataTypeKind kind;
 
     /** The format (optional). */
     private String format;
@@ -40,41 +40,41 @@ public class Type<T> {
     /** The data type features as a map of names to values. */
     private Map<String, Object> features = new LinkedHashMap<>();
 
-    private Type() {
+    private DataType() {
         //
     }
 
-    protected Type(TypeKind kind) {
+    protected DataType(DataTypeKind kind) {
         this();
         this.kind = kind;
     }
 
-    public Type<T> format(String format) {
+    public DataType<T> format(String format) {
         setFormat(format);
         return this;
     }
 
-    public Type<T> defaultValue(T value) {
+    public DataType<T> defaultValue(T value) {
         setDefaultValue(value);
         return this;
     }
 
-    public Type<T> nullable(boolean nullable) {
+    public DataType<T> nullable(boolean nullable) {
         setNullable(nullable);
         return this;
     }
 
-    public Type<T> features(Map<String, Object> features) {
+    public DataType<T> features(Map<String, Object> features) {
         this.features.putAll(features);
         return this;
     }
 
-    public Type<T> feature(String name, Object value) {
+    public DataType<T> feature(String name, Object value) {
         features.put(name, value);
         return this;
     }
 
-    public TypeKind getKind() {
+    public DataTypeKind getKind() {
         return kind;
     }
 

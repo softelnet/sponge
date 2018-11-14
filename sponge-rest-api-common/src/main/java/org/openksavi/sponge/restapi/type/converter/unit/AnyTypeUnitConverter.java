@@ -18,11 +18,11 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.type.AnyType;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataTypeKind;
 
-public class AnyTypeUnitConverter extends BaseUnitTypeConverter<AnyType> {
+public class AnyTypeUnitConverter extends BaseUnitTypeConverter<Object, AnyType> {
 
     public AnyTypeUnitConverter() {
-        super(TypeKind.ANY);
+        super(DataTypeKind.ANY);
     }
 }

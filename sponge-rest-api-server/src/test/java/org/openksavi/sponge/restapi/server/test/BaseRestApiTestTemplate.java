@@ -45,8 +45,8 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.type.ActionType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
-import org.openksavi.sponge.type.TypeKind;
 
 public abstract class BaseRestApiTestTemplate {
 
@@ -104,7 +104,7 @@ public abstract class BaseRestApiTestTemplate {
 
             assertEquals(RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT, actions.size());
             RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
-            assertEquals(TypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
+            assertEquals(DataTypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
             assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
         }
     }

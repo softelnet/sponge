@@ -30,16 +30,16 @@ import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.VoidType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "kind")
-@JsonSubTypes({ @Type(value = ActionType.class, name = TypeKind.CODE_ACTION), @Type(value = AnyType.class, name = TypeKind.CODE_ANY),
-        @Type(value = BinaryType.class, name = TypeKind.CODE_BINARY), @Type(value = BooleanType.class, name = TypeKind.CODE_BOOLEAN),
-        @Type(value = IntegerType.class, name = TypeKind.CODE_INTEGER), @Type(value = ListType.class, name = TypeKind.CODE_LIST),
-        @Type(value = MapType.class, name = TypeKind.CODE_MAP), @Type(value = NumberType.class, name = TypeKind.CODE_NUMBER),
-        @Type(value = ObjectType.class, name = TypeKind.CODE_OBJECT), @Type(value = StringType.class, name = TypeKind.CODE_STRING),
-        @Type(value = VoidType.class, name = TypeKind.CODE_VOID) })
-public abstract class RestType {
+@JsonSubTypes({ @Type(value = ActionType.class, name = DataTypeKind.CODE_ACTION), @Type(value = AnyType.class, name = DataTypeKind.CODE_ANY),
+        @Type(value = BinaryType.class, name = DataTypeKind.CODE_BINARY), @Type(value = BooleanType.class, name = DataTypeKind.CODE_BOOLEAN),
+        @Type(value = IntegerType.class, name = DataTypeKind.CODE_INTEGER), @Type(value = ListType.class, name = DataTypeKind.CODE_LIST),
+        @Type(value = MapType.class, name = DataTypeKind.CODE_MAP), @Type(value = NumberType.class, name = DataTypeKind.CODE_NUMBER),
+        @Type(value = ObjectType.class, name = DataTypeKind.CODE_OBJECT), @Type(value = StringType.class, name = DataTypeKind.CODE_STRING),
+        @Type(value = VoidType.class, name = DataTypeKind.CODE_VOID) })
+public abstract class RestDataType {
 
 }

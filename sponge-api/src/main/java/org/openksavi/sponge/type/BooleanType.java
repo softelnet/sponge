@@ -21,10 +21,10 @@ import java.util.Map;
 /**
  * A boolean type.
  */
-public class BooleanType extends Type<Boolean> {
+public class BooleanType extends DataType<Boolean> {
 
     public BooleanType() {
-        super(TypeKind.BOOLEAN);
+        super(DataTypeKind.BOOLEAN);
     }
 
     @Override

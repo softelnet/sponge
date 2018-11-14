@@ -24,18 +24,18 @@ import java.util.Map;
  *
  * @param <E> element type.
  */
-public class ListType<E> extends Type<List<E>> {
+public class ListType<E> extends DataType<List<E>> {
 
     /** The list element type. */
-    private Type<?> elementType;
+    private DataType<?> elementType;
 
     public ListType() {
-        super(TypeKind.LIST);
+        super(DataTypeKind.LIST);
         this.elementType = new AnyType();
     }
 
-    public ListType(Type<E> elementType) {
-        super(TypeKind.LIST);
+    public ListType(DataType<E> elementType) {
+        super(DataTypeKind.LIST);
         this.elementType = elementType;
     }
 
@@ -65,7 +65,7 @@ public class ListType<E> extends Type<List<E>> {
     }
 
     @SuppressWarnings("unchecked")
-    public Type<E> getElementType() {
-        return (Type<E>) elementType;
+    public DataType<E> getElementType() {
+        return (DataType<E>) elementType;
     }
 }
