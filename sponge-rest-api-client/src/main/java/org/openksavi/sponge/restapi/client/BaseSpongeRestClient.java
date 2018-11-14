@@ -420,6 +420,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected List<Object> marshalCallArgs(RestActionMeta actionMeta, List<Object> args) {
         if (args == null || actionMeta == null || actionMeta.getArgsMeta() == null) {
             return args;
@@ -433,6 +434,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     protected void unmarshalCallResult(RestActionMeta actionMeta, ActionCallResponse response) {
         if (actionMeta == null || actionMeta.getResultMeta() == null || response.getResult() == null) {
             return;

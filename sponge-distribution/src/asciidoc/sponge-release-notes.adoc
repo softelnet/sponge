@@ -12,6 +12,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed classes in the REST API client, including `SpongeRestApiClient` to `SpongeRestClient` and `SpongeRestApiClientConfiguration` to `SpongeRestClientConfiguration`.
 * Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
+* Libraries upgrade.
 
 [discrete]
 == 1.5.0 (2018-11-08)

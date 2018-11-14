@@ -37,6 +37,7 @@ import org.openksavi.sponge.restapi.type.converter.unit.VoidTypeUnitConverter;
  */
 public class DefaultTypeConverter extends BaseTypeConverter {
 
+    @SuppressWarnings("rawtypes")
     public DefaultTypeConverter(ObjectMapper objectMapper) {
         super(objectMapper);
 

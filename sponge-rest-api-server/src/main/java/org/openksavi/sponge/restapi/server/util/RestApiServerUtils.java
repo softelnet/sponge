@@ -68,6 +68,7 @@ public abstract class RestApiServerUtils {
                 role -> roleToKnowledgeBases.get(role).stream().filter(Objects::nonNull).anyMatch(kbRegexp -> kbName.matches(kbRegexp)));
     }
 
+    @SuppressWarnings("unchecked")
     public static List<Object> unmarshalActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
             Exchange exchange) {
         // No arguments provided. No type checking.
@@ -104,6 +105,7 @@ public abstract class RestApiServerUtils {
         return finalArgs;
     }
 
+    @SuppressWarnings("unchecked")
     public static Object marshalActionResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result, Exchange exchange) {
         if (result == null || actionAdapter.getResultMeta() == null) {
             return result;
