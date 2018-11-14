@@ -1,5 +1,5 @@
 = {sponge} REST API client for Dart
-The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API server from applications written in Dart.
+The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API service from applications written in Dart.
 
 .REST API client example
 [source,dart]
@@ -37,6 +37,8 @@ void main() async {
 }
 ----
 
-Unless noted otherwise in the release notes, versions of the REST API client for Dart that have the same `major.minor` numbers as {sponge} are compatible.
+Unless noted otherwise in the release notes, versions of the REST API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
+
+The REST API client for Dart is published in https://pub.dartlang.org/packages/sponge_client_dart[pub.dartlang.org].
 
 For more information see the {dartClientDartdoc}/SpongeRestClient-class.html[`SpongeRestClient` Dartdoc] and the project {dartClientSourcesUrl}/[source code].
