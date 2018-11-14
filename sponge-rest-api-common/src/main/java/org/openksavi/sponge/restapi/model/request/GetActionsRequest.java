@@ -41,7 +41,7 @@ public class GetActionsRequest extends SpongeRequest {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "Metadata required", required = false)
+    @ApiModelProperty(value = "The metadata required flag", required = false)
     public Boolean getMetadataRequired() {
         return metadataRequired;
     }

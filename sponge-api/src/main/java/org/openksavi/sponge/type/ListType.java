@@ -19,8 +19,14 @@ package org.openksavi.sponge.type;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A list type. This type requires an {@code elementType} parameter, which is is a type of list elements.
+ *
+ * @param <E> element type.
+ */
 public class ListType<E> extends Type<List<E>> {
 
+    /** The list element type. */
     private Type<?> elementType;
 
     public ListType() {

@@ -18,8 +18,14 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * An object. This type requires a class name (typically a Java class name) as a constructor parameter.
+ *
+ * @param <T> object type.
+ */
 public class ObjectType<T> extends Type<T> {
 
+    /** The class name. */
     private String className;
 
     protected ObjectType() {

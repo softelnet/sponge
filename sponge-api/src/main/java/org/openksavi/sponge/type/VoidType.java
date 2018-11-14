@@ -18,6 +18,9 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * A void type that may be used to specify that an action returns no meaningful result.
+ */
 public class VoidType extends Type<Object> {
 
     public VoidType() {

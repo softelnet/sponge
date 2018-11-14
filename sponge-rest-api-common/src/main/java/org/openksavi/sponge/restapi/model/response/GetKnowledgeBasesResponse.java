@@ -36,7 +36,7 @@ public class GetKnowledgeBasesResponse extends SpongeResponse {
         this.knowledgeBases = knowledgeBases;
     }
 
-    @ApiModelProperty(value = "The Spoonge knowledge bases", required = true)
+    @ApiModelProperty(value = "The available knowledge bases", required = true)
     public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
         return knowledgeBases;
     }

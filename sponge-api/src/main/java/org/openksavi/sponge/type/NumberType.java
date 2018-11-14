@@ -18,14 +18,21 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * A number type, that include both integer and floating-point numbers.
+ */
 public class NumberType extends Type<Number> {
 
+    /** The minimum value (optional). */
     private Number minValue;
 
+    /** The maximum value (optional). */
     private Number maxValue;
 
+    /** Tells if the minimum value should be exclusive. Defaults to {@code false}. */
     private boolean exclusiveMin = false;
 
+    /** Tells if the maximum value should be exclusive. Defaults to {@code false}. */
     private boolean exclusiveMax = false;
 
     public NumberType() {

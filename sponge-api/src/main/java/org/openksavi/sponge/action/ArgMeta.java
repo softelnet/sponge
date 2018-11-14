@@ -24,19 +24,19 @@ import org.openksavi.sponge.type.Type;
 @SuppressWarnings("rawtypes")
 public class ArgMeta<T extends Type> {
 
-    /** An argument name. */
+    /** The argument name. */
     private String name;
 
-    /** An argument data type. */
+    /** The argument data type. */
     private T type;
 
-    /** An argument display name. */
+    /** The argument display name. */
     private String displayName;
 
-    /** An argument description. */
+    /** The argument description. */
     private String description;
 
-    /** A flag specifying if this argument is optional. */
+    /** The flag specifying if this argument is optional. */
     private boolean optional = false;
 
     public ArgMeta(String name, T type) {
@@ -97,5 +97,9 @@ public class ArgMeta<T extends Type> {
 
     public void setOptional(boolean optional) {
         this.optional = optional;
+    }
+
+    public String getLabel() {
+        return displayName != null ? displayName : name;
     }
 }

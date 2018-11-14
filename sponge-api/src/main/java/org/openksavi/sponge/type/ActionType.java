@@ -24,6 +24,7 @@ import java.util.Map;
  */
 public class ActionType extends Type<Object> {
 
+    /** The action name. */
     private String actionName;
 
     protected ActionType() {

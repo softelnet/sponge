@@ -18,10 +18,15 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * A string type.
+ */
 public class StringType extends Type<String> {
 
+    /** The minimum length (optional). */
     private Integer minLength;
 
+    /** The maximum length (optional). */
     private Integer maxLength;
 
     public StringType() {

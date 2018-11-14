@@ -23,12 +23,16 @@ import java.util.Map;
  */
 public class IntegerType extends Type<Number> {
 
+    /** The minimum value (optional). */
     private Long minValue;
 
+    /** The maximum value (optional). */
     private Long maxValue;
 
+    /** Tells if the minimum value should be exclusive. Defaults to {@code false}. */
     private boolean exclusiveMin = false;
 
+    /** Tells if the maximum value should be exclusive. Defaults to {@code false}. */
     private boolean exclusiveMax = false;
 
     public IntegerType() {

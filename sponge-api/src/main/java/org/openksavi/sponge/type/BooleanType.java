@@ -18,6 +18,9 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * A boolean type.
+ */
 public class BooleanType extends Type<Boolean> {
 
     public BooleanType() {

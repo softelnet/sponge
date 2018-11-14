@@ -18,11 +18,19 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * A map type. This type requires two parameters: a type of keys and a type of values in the map.
+ *
+ * @param <K> a map key type.
+ * @param <V> a map value type.
+ */
 @SuppressWarnings("unchecked")
 public class MapType<K, V> extends Type<Map<K, V>> {
 
+    /** The map key type. */
     private Type<?> keyType;
 
+    /** The map value type. */
     private Type<?> valueType;
 
     public MapType() {

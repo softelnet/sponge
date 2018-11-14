@@ -76,4 +76,8 @@ public class RestKnowledgeBaseMeta {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+    public String getLabel() {
+        return displayName != null ? displayName : name;
+    }
 }

@@ -36,7 +36,7 @@ public class GetActionsResponse extends SpongeResponse {
         this.actions = actions;
     }
 
-    @ApiModelProperty(value = "The Sponge actions", required = true)
+    @ApiModelProperty(value = "The available actions", required = true)
     public List<RestActionMeta> getActions() {
         return actions;
     }

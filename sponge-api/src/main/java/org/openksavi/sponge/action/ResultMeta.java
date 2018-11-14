@@ -24,13 +24,13 @@ import org.openksavi.sponge.type.Type;
 @SuppressWarnings("rawtypes")
 public class ResultMeta<T extends Type> {
 
-    /** A result data type. */
+    /** The result data type. */
     private T type;
 
-    /** A result display name. */
+    /** The result display name. */
     private String displayName;
 
-    /** A result description. */
+    /** The result description. */
     private String description;
 
     public ResultMeta(T type) {

@@ -18,6 +18,9 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+/**
+ * Any type. It may be used in situations when type is not important.
+ */
 public class AnyType extends Type<Object> {
 
     public AnyType() {

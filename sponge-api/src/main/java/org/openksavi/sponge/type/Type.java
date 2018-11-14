@@ -25,16 +25,20 @@ import java.util.Map;
  */
 public class Type<T> {
 
+    /** The data type kind. */
     private TypeKind kind;
 
+    /** The format (optional). */
     private String format;
 
-    private Map<String, Object> features = new LinkedHashMap<>();
-
+    /** The default value (optional). */
     private T defaultValue;
 
     /** Tells if a value of this type may be null. The default is that a value must not be null, i.e. it is <b>not nullable</b>. */
     private boolean nullable = false;
+
+    /** The data type features as a map of names to values. */
+    private Map<String, Object> features = new LinkedHashMap<>();
 
     private Type() {
         //
@@ -50,16 +54,6 @@ public class Type<T> {
         return this;
     }
 
-    public Type<T> features(Map<String, Object> features) {
-        this.features.putAll(features);
-        return this;
-    }
-
-    public Type<T> feature(String name, Object value) {
-        features.put(name, value);
-        return this;
-    }
-
     public Type<T> defaultValue(T value) {
         setDefaultValue(value);
         return this;
@@ -67,6 +61,16 @@ public class Type<T> {
 
     public Type<T> nullable(boolean nullable) {
         setNullable(nullable);
+        return this;
+    }
+
+    public Type<T> features(Map<String, Object> features) {
+        this.features.putAll(features);
+        return this;
+    }
+
+    public Type<T> feature(String name, Object value) {
+        features.put(name, value);
         return this;
     }
 
@@ -80,14 +84,6 @@ public class Type<T> {
 
     public void setFormat(String format) {
         this.format = format;
-    }
-
-    public Map<String, Object> getFeatures() {
-        return Collections.unmodifiableMap(features);
-    }
-
-    public void setFeatures(Map<String, Object> features) {
-        this.features = new LinkedHashMap<>(features);
     }
 
     public T getDefaultValue() {
@@ -104,5 +100,13 @@ public class Type<T> {
 
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    public Map<String, Object> getFeatures() {
+        return Collections.unmodifiableMap(features);
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = new LinkedHashMap<>(features);
     }
 }
