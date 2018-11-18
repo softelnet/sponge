@@ -75,3 +75,4 @@ doodles
 unmarshaling
 dartdoc
 mapper
+minimalistic

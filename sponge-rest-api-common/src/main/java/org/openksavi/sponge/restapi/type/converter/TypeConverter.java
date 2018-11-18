@@ -38,7 +38,7 @@ public interface TypeConverter {
      * @param D data type.
      * @return the converted value.
      */
-    <T, D extends DataType<T>> Object marshal(D type, T value);
+    <T, D extends DataType> Object marshal(D type, T value);
 
     /**
      * Unmarshals the value as type.
@@ -49,7 +49,7 @@ public interface TypeConverter {
      * @param D data type.
      * @return the converted value.
      */
-    <T, D extends DataType<T>> T unmarshal(D type, Object value);
+    <T, D extends DataType> T unmarshal(D type, Object value);
 
     /**
      * Registers the unit type converter.

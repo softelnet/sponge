@@ -49,13 +49,13 @@ public abstract class BaseTypeConverter implements TypeConverter {
     }
 
     @Override
-    public <T, D extends DataType<T>> Object marshal(D type, T value) {
+    public <T, D extends DataType> Object marshal(D type, T value) {
         return value != null ? getUnitConverter(type).marshal(this, type, value) : null;
     }
 
     @Override
-    public <T, D extends DataType<T>> T unmarshal(D type, Object value) {
-        return value != null ? getUnitConverter(type).unmarshal(this, type, value) : null;
+    public <T, D extends DataType> T unmarshal(D type, Object value) {
+        return value != null ? (T) getUnitConverter(type).unmarshal(this, type, value) : null;
     }
 
     @Override
@@ -74,7 +74,7 @@ public abstract class BaseTypeConverter implements TypeConverter {
         return registry.remove(typeKind);
     }
 
-    protected <T, D extends DataType<T>> UnitTypeConverter<T, D> getUnitConverter(D type) {
+    protected <T, D extends DataType> UnitTypeConverter<T, D> getUnitConverter(D type) {
         return Validate.notNull(registry.get(type.getKind()), "Unsupported type {}", type.getKind());
     }
 }

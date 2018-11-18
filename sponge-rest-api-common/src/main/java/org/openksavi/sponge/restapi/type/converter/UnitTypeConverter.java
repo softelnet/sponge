@@ -24,7 +24,8 @@ import org.openksavi.sponge.type.DataTypeKind;
  *
  * @param <T> type.
  */
-public interface UnitTypeConverter<T, D extends DataType<T>> {
+@SuppressWarnings("rawtypes")
+public interface UnitTypeConverter<T, D extends DataType> {
 
     /** The data type kind. */
     DataTypeKind getTypeKind();
