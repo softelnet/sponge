@@ -2,20 +2,16 @@
 <sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
-    <properties>
-        <property name="commonkbDir">${sponge.home}/../../sponge-rest-api-server/examples/rest-api-server</property>
-    </properties>
-
     <knowledgeBases>
         <knowledgeBase name="example" displayName="Example">
-            <file>${commonkbDir}/rest_api.py</file>
+            <file>rest_api.py</file>
             <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" displayName="Security">
-            <file>${commonkbDir}/rest_api_security.py</file>
+            <file>rest_api_security.py</file>
         </knowledgeBase>
     </knowledgeBases>
 </sponge>

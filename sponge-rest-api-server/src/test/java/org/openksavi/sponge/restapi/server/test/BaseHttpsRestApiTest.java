@@ -27,6 +27,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
+import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
+import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
@@ -40,7 +42,7 @@ public abstract class BaseHttpsRestApiTest extends BaseRestApiTestTemplate {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("kb", "examples/rest-api-server/rest_api.py").build();
+                    .config("examples/rest-api-server/rest_api_security.xml").build();
         }
 
         @Bean
@@ -56,7 +58,16 @@ public abstract class BaseHttpsRestApiTest extends BaseRestApiTestTemplate {
             sslConfiguration.setKeyPassword("sponge");
             plugin.getSettings().setSslConfiguration(sslConfiguration);
 
+            plugin.getSettings().setAllowAnonymous(true);
+            plugin.getSettings().setPublishReload(true);
+            plugin.setSecurityService(restApiSecurityService());
+
             return plugin;
+        }
+
+        @Bean
+        public RestApiSecurityService restApiSecurityService() {
+            return new SimpleSpringInMemorySecurityService();
         }
     }
 }

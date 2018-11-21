@@ -29,6 +29,8 @@ class UpperCase(Action):
 
 class LowerCase(Action):
     def onConfigure(self):
+        self.displayName = "Convert to lower case"
+        self.description = "Converts a string to lower case."
         self.argsMeta = [ ArgMeta("text", StringType()).displayName("A text that will be changed to lower case") ]
         self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
     def onCall(self, text):

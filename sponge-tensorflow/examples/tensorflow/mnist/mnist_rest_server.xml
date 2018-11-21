@@ -9,7 +9,8 @@
             <file>mnist_rest_server.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
-            <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
     </knowledgeBases>
 

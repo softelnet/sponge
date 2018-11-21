@@ -68,9 +68,7 @@ public class RestApiSimpleSpringSecurityTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("admin", "classpath:org/openksavi/sponge/restapi/server/administration_library.py")
-                    .knowledgeBase("example", "examples/rest-api-server/rest_api.py")
-                    .knowledgeBase("security", "examples/rest-api-server/rest_api_security.py").build();
+                    .config("examples/rest-api-server/rest_api_security.xml").build();
         }
 
         @Bean
@@ -108,12 +106,12 @@ public class RestApiSimpleSpringSecurityTest {
 
     @Test
     public void testRestActionsUser1() {
-        doTestRestActions("john", "password", RestApiTestConstants.ADMIN_ALL_ACTION_COUNT);
+        doTestRestActions("john", "password", RestApiTestConstants.ADMIN_ACTIONS_COUNT);
     }
 
     @Test
     public void testRestActionsUser2() {
-        doTestRestActions("joe", "password", RestApiTestConstants.ANONYMOUS_ALL_ACTION_COUNT);
+        doTestRestActions("joe", "password", RestApiTestConstants.ANONYMOUS_ACTIONS_COUNT);
     }
 
     @Test
@@ -121,7 +119,7 @@ public class RestApiSimpleSpringSecurityTest {
         // Tests auth token authentication.
         try (SpongeRestClient client = createRestClient("john", "password")) {
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
 
             client.getConfiguration().setUsername(null);
             client.getConfiguration().setPassword(null);

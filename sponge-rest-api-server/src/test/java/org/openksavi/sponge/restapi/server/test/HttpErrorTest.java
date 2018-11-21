@@ -66,7 +66,7 @@ public class HttpErrorTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("example", "examples/rest-api-server/rest_api.py").build();
+                    .config("examples/rest-api-server/rest_api.xml").build();
         }
 
         @Bean

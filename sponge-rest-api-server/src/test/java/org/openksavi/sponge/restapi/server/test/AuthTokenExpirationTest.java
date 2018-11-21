@@ -64,9 +64,7 @@ public class AuthTokenExpirationTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("admin", "classpath:org/openksavi/sponge/restapi/server/administration_library.py")
-                    .knowledgeBase("example", "examples/rest-api-server/rest_api.py")
-                    .knowledgeBase("security", "examples/rest-api-server/rest_api_security.py").build();
+                    .config("examples/rest-api-server/rest_api_security.xml").build();
         }
 
         @Bean
@@ -99,11 +97,11 @@ public class AuthTokenExpirationTest {
         try (SpongeRestClient client = createRestClient("john", "password")) {
             client.getConfiguration().setRelogin(true);
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
         }
     }
 
@@ -112,7 +110,7 @@ public class AuthTokenExpirationTest {
         try (SpongeRestClient client = createRestClient("john", "password")) {
             client.getConfiguration().setRelogin(false);
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
