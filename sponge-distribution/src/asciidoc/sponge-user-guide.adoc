@@ -109,13 +109,13 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |A void type that may be used to specify that an action returns no meaningful result.
 
 |`ObjectType`
-|A Java object. This type requires a Java class name as a constructor parameter. For example: `ObjectType("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType("org.openksavi.sponge.examples.CustomObject[]")`.
+|An object. This type requires a class name (typically a Java class name) as a constructor parameter. For example: `ObjectType("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType("org.openksavi.sponge.examples.CustomObject[]")`.
 
 |`ListType`
-|A list type. This type requires a `Type` parameter, which is is a type of list elements. For example: `ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
+|A list type. This type requires a `DataType` parameter, which is is a type of list elements. For example: `ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
 
 |`MapType`
-|A map type. This type requires two `Type` parameters: a type of keys and a type of values in the map. For example: `MapType(Type.STRING, ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
+|A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType(StringType(), ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
 
 |`ActionType`
 |A type that allows using a result of one action to be a type for another action argument or result. For example, assuming that the result type of the action  `GetAvailableSensorNames` is a list of strings and the action returns `["sensor1", "sensor2"]`, `ActionType("GetAvailableSensorNames")` means that a value of this type may be `"sensor1"` or `"sensor2"`. You may customize this behavior in your application by setting an arbitrary format string for this `ActionType`, for example for allowing multi or single choice. The handling of `ActionType` (e.g. calling `GetAvailableSensorNames` action) must be implemented in a client code.

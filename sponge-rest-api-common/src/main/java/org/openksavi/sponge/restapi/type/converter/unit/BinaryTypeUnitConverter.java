@@ -19,16 +19,16 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.BinaryType;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataTypeKind;
 
-public class BinaryTypeUnitConverter extends BaseUnitTypeConverter<BinaryType> {
+public class BinaryTypeUnitConverter extends BaseUnitTypeConverter<byte[], BinaryType> {
 
     public BinaryTypeUnitConverter() {
-        super(TypeKind.BINARY);
+        super(DataTypeKind.BINARY);
     }
 
     @Override
-    public Object unmarshal(TypeConverter converter, BinaryType type, Object value) {
+    public byte[] unmarshal(TypeConverter converter, BinaryType type, Object value) {
         return converter.getObjectMapper().convertValue(value, byte[].class);
     }
 }

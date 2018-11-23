@@ -27,9 +27,9 @@ import org.springframework.util.SocketUtils;
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -58,8 +58,8 @@ public class MpdRestServerTestMain {
         }
     }
 
-    protected SpongeRestApiClient createRestApiClient() {
-        return new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+    protected SpongeRestClient createRestClient() {
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                 .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build());
     }
 
@@ -70,7 +70,7 @@ public class MpdRestServerTestMain {
         try {
             SpongeEngine engine = ctx.getBean(SpongeEngine.class);
 
-            try (SpongeRestApiClient client = createRestApiClient()) {
+            try (SpongeRestClient client = createRestClient()) {
                 String info = client.call(String.class, "MpdSetAndPlayPlaylist", null, null, "rock", null, null, false);
 
                 assertNotNull(info);

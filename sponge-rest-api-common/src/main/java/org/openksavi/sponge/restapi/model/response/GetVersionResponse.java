@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "GetVersionResponse", description = "A get version response")
-public class GetVersionResponse extends BaseResponse {
+public class GetVersionResponse extends SpongeResponse {
 
     private String version;
 

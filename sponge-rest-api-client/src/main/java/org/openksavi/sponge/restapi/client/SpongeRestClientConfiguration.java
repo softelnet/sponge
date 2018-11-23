@@ -21,7 +21,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * A Sponge REST API configuration.
  */
-public class RestApiClientConfiguration {
+public class SpongeRestClientConfiguration {
 
     private String url;
 
@@ -40,6 +40,8 @@ public class RestApiClientConfiguration {
     private int actionMetaCacheMaxSize = -1;
 
     private long actionMetaCacheExpireSeconds = -1;
+
+    private boolean throwExceptionOnErrorResponse = true;
 
     public void setUrl(String url) {
         this.url = url;
@@ -122,6 +124,14 @@ public class RestApiClientConfiguration {
         this.actionMetaCacheExpireSeconds = actionMetaCacheExpireSeconds;
     }
 
+    public boolean isThrowExceptionOnErrorResponse() {
+        return throwExceptionOnErrorResponse;
+    }
+
+    public void setThrowExceptionOnErrorResponse(boolean throwExceptionOnErrorResponse) {
+        this.throwExceptionOnErrorResponse = throwExceptionOnErrorResponse;
+    }
+
     /**
      * A Sponge REST API configuration builder.
      *
@@ -133,14 +143,14 @@ public class RestApiClientConfiguration {
 
     public static class Builder {
 
-        private RestApiClientConfiguration configuration = new RestApiClientConfiguration();
+        private SpongeRestClientConfiguration configuration = new SpongeRestClientConfiguration();
 
         /**
          * Builds the client.
          *
          * @return the client.
          */
-        public RestApiClientConfiguration build() {
+        public SpongeRestClientConfiguration build() {
             Validate.notNull(configuration.getUrl(), "URL not set");
 
             return configuration;
@@ -242,6 +252,20 @@ public class RestApiClientConfiguration {
          */
         public Builder actionMetaCacheExpireSeconds(long actionMetaCacheExpireSeconds) {
             configuration.setActionMetaCacheExpireSeconds(actionMetaCacheExpireSeconds);
+            return this;
+        }
+
+        /**
+         * Instructs the client to throw an exception when a response is an error response. Setting this value to {@code false} makes sense
+         * only when using the client API methods {@code *ByRequest()}.
+         *
+         * @param throwExceptionOnErrorResponse if {@code true} (the default value) the client will throw an exception when a response is an
+         *        error response.
+         *
+         * @return the builder.
+         */
+        public Builder throwExceptionOnErrorResponse(boolean throwExceptionOnErrorResponse) {
+            configuration.setThrowExceptionOnErrorResponse(throwExceptionOnErrorResponse);
             return this;
         }
     }

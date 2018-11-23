@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model.request;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "ReloadRequest", description = "A reload request")
-public class ReloadRequest extends BaseRequest {
+public class ReloadRequest extends SpongeRequest {
 
     public ReloadRequest() {
         //

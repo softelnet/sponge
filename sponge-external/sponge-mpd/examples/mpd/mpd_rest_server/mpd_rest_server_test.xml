@@ -6,7 +6,8 @@
             <file>classpath:org/openksavi/sponge/mpd/mpd_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="administration" displayName="Administration">
-            <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="sample" displayName="Samples">
             <file>mpd_rest_server_main.py</file>

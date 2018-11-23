@@ -16,8 +16,10 @@
 
 package org.openksavi.sponge.restapi.client.okhttp;
 
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Stream;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -31,20 +33,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.BaseSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
-import org.openksavi.sponge.restapi.model.request.BaseRequest;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
+import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRequestContext;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.util.RestClientUtils;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
  * A Sponge REST API client that uses OkHttp. OkHttpSpongeRestApiClient performs best when you create a single OkHttpSpongeRestApiClient
  * instance and reuse it for all of your REST API calls.
  */
-public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
+public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(OkHttpSpongeRestApiClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(OkHttpSpongeRestClient.class);
 
     /** The OkHttp client. */
     private OkHttpClient okHttpClient;
@@ -55,7 +58,7 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
     /** If {@code true}, the underlying OkHttpClient will be closed aggressively. */
     private boolean closeAggressively = false;
 
-    public OkHttpSpongeRestApiClient(RestApiClientConfiguration configuration) {
+    public OkHttpSpongeRestClient(SpongeRestClientConfiguration configuration) {
         super(configuration);
     }
 
@@ -73,7 +76,7 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
             lock.lock();
             try {
                 if (okHttpClient == null) {
-                    okHttpClient = RestApiClientUtils.createOkHttpClient();
+                    okHttpClient = RestClientUtils.createOkHttpClient();
                 }
             } finally {
                 lock.unlock();
@@ -92,31 +95,45 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
     }
 
     @Override
-    protected <T extends BaseRequest, R extends BaseResponse> R doExecute(String operation, T request, Class<R> responseClass) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass,
+            SpongeRequestContext context) {
         Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.APPLICATION_JSON_VALUE).build();
 
         try {
             String requestBody = getObjectMapper().writeValueAsString(request);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} request: {}", operation, RestApiClientUtils.obfuscatePassword(requestBody));
+                logger.debug("REST API {} request: {}", operation, RestApiUtils.obfuscatePassword(requestBody));
             }
 
-            Response response = getOrCreateOkHttpClient()
+            Stream.concat(Stream.of(context.getOnRequestSerializedListener()), onRequestSerializedListeners.stream())
+                    .filter(Objects::nonNull).forEach(listener -> listener.onRequestSerialized(request, requestBody));
+
+            Response httpResponse = getOrCreateOkHttpClient()
                     .newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
                             .post(RequestBody.create(MediaType.get(RestApiConstants.APPLICATION_JSON_VALUE), requestBody)).build())
                     .execute();
 
-            Validate.isTrue(RestApiUtils.isHttpSuccess(response.code()), "HTTP status code is %s", response.code());
-
-            String responseBody = response.body().string();
+            String responseBody = httpResponse.body() != null ? httpResponse.body().string() : null;
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} response: {})", operation, RestApiClientUtils.obfuscatePassword(responseBody));
+                logger.debug("REST API {} response: {})", operation, RestApiUtils.obfuscatePassword(responseBody));
             }
 
-            return response.body() != null ? getObjectMapper().readValue(responseBody, responseClass) : null;
+            Validate.isTrue(RestApiUtils.isHttpSuccess(httpResponse.code()), "HTTP status code is %s", httpResponse.code());
+
+            R response = null;
+            try {
+                response = getObjectMapper().readValue(responseBody, responseClass);
+            } finally {
+                final R finalResponse = response;
+                Stream.concat(Stream.of(context.getOnResponseDeserializedListener()), onResponseDeserializedListeners.stream())
+                        .filter(Objects::nonNull)
+                        .forEach(listener -> listener.onResponseDeserialized(request, finalResponse, responseBody));
+            }
+
+            return response;
         } catch (Throwable e) {
-            throw RestApiClientUtils.wrapException(e);
+            throw RestClientUtils.wrapException(e);
         }
     }
 
@@ -130,7 +147,7 @@ public class OkHttpSpongeRestApiClient extends BaseSpongeRestApiClient {
             lock.lock();
             try {
                 if (okHttpClient != null) {
-                    RestApiClientUtils.closeOkHttpClient(okHttpClient);
+                    RestClientUtils.closeOkHttpClient(okHttpClient);
                 }
             } finally {
                 lock.unlock();

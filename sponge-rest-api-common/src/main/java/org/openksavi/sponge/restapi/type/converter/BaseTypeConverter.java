@@ -27,15 +27,15 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.type.Type;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class BaseTypeConverter implements TypeConverter {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseTypeConverter.class);
 
-    private Map<TypeKind, UnitTypeConverter> registry = Collections.synchronizedMap(new LinkedHashMap<>());
+    private Map<DataTypeKind, UnitTypeConverter> registry = Collections.synchronizedMap(new LinkedHashMap<>());
 
     private ObjectMapper objectMapper;
 
@@ -49,13 +49,13 @@ public abstract class BaseTypeConverter implements TypeConverter {
     }
 
     @Override
-    public Object marshal(Type type, Object value) {
+    public <T, D extends DataType> Object marshal(D type, T value) {
         return value != null ? getUnitConverter(type).marshal(this, type, value) : null;
     }
 
     @Override
-    public Object unmarshal(Type type, Object value) {
-        return value != null ? getUnitConverter(type).unmarshal(this, type, value) : null;
+    public <T, D extends DataType> T unmarshal(D type, Object value) {
+        return value != null ? (T) getUnitConverter(type).unmarshal(this, type, value) : null;
     }
 
     @Override
@@ -70,11 +70,11 @@ public abstract class BaseTypeConverter implements TypeConverter {
     }
 
     @Override
-    public UnitTypeConverter unregister(TypeKind typeKind) {
+    public UnitTypeConverter unregister(DataTypeKind typeKind) {
         return registry.remove(typeKind);
     }
 
-    protected <T extends Type> UnitTypeConverter<T> getUnitConverter(T type) {
+    protected <T, D extends DataType> UnitTypeConverter<T, D> getUnitConverter(D type) {
         return Validate.notNull(registry.get(type.getKind()), "Unsupported type {}", type.getKind());
     }
 }

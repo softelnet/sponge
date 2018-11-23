@@ -4,8 +4,8 @@ The {sponge} REST API client for Java simplifies connecting to a remote {sponge}
 .REST API client for an anonymous user
 [source,java]
 ----
-try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
-        .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH))
+try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
+        .url("http://localhost:8080/sponge.json/v1")
         .build())) { // <1>
     String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
 }
@@ -16,18 +16,16 @@ try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientCo
 .REST API client for a named user
 [source,java]
 ----
-SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder()
+SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
         .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH))
         .username(username)
         .password(password)
         .build());
 ----
 
-`DefaultSpongeRestApiClient` performs best when you create a single `DefaultSpongeRestApiClient` instance and reuse it for all of your REST API calls.
+`DefaultSpongeRestClient` performs best when you create a single instance and reuse it for all of your REST API calls.
 
-For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/DefaultSpongeRestApiClient.html[`DefaultSpongeRestApiClient` Javadoc] and examples in the source code.
-
-There is also the implementation that uses the Spring (version 5) RestTemplate: `SpringSpongeRestApiClient`.
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/DefaultSpongeRestClient.html[`DefaultSpongeRestClient` Javadoc] and examples in the source code.
 
 == Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
@@ -41,12 +39,3 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
-In case of using `SpringSpongeRestApiClient` you should also add the following dependency to your `pom.xml`:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.springframework.integration</groupId>
-    <artifactId>spring-integration-http</artifactId>
-</dependency>
-----

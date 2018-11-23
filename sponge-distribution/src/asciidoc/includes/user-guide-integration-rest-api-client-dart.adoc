@@ -1,5 +1,5 @@
 = {sponge} REST API client for Dart
-The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API server from applications written in Dart.
+The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API service from applications written in Dart. It could be used in a https://flutter.io[Flutter] mobile application or an https://webdev.dartlang.org/angular[AngularDart] web application to connect to a {sponge} based back-end.
 
 .REST API client example
 [source,dart]
@@ -8,8 +8,8 @@ import 'package:sponge_client_dart/sponge_client_dart.dart';
 
 void main() async {
   // Create a new client for an anonymous user.
-  var client = SpongeClient(
-      SpongeClientConfiguration('http://localhost:8888/sponge.json/v1'));
+  var client = SpongeRestClient(
+      SpongeRestClientConfiguration('http://localhost:8888/sponge.json/v1'));
 
   // Get the Sponge server version.
   var version = await client.getVersion();
@@ -29,14 +29,18 @@ void main() async {
   print('Sent event id: $eventId.');
 
   // Create a new client for a named user.
-  client = SpongeClient(
-    SpongeClientConfiguration('http://localhost:8888/sponge.json/v1')
+  client = SpongeRestClient(
+    SpongeRestClientConfiguration('http://localhost:8888/sponge.json/v1')
       ..username = 'john'
       ..password = 'password',
   );
 }
 ----
 
-Unless noted otherwise in the release notes, versions of the REST API client for Dart that have the same `major.minor` numbers as {sponge} are compatible.
+Unless noted otherwise in the release notes, versions of the REST API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
 
-For more information see the {dartClientDartdoc}/SpongeClient-class.html[`SpongeClient` Dartdoc] and the project {dartClientSourcesUrl}/[source code].
+The REST API client for Dart is published at https://pub.dartlang.org/packages/sponge_client_dart[pub.dartlang.org].
+
+For more information see the {dartClientDartdoc}/SpongeRestClient-class.html[`SpongeRestClient` Dartdoc] and the project {dartClientSourcesUrl}/[source code].
+
+The example of using the REST API client for Dart in the AngularDart web application is hosted at https://github.com/softelnet/sponge_client_angular_dart_example.

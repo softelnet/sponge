@@ -16,21 +16,21 @@
 
 package org.openksavi.sponge.action;
 
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * An action result metadata.
  */
 @SuppressWarnings("rawtypes")
-public class ResultMeta<T extends Type> {
+public class ResultMeta<T extends DataType> {
 
-    /** A result data type. */
+    /** The result data type. */
     private T type;
 
-    /** A result display name. */
+    /** The result display name. */
     private String displayName;
 
-    /** A result description. */
+    /** The result description. */
     private String description;
 
     public ResultMeta(T type) {

@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model.request;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "GetVersionRequest", description = "A get version request")
-public class GetVersionRequest extends BaseRequest {
+public class GetVersionRequest extends SpongeRequest {
 
     public GetVersionRequest() {
         //

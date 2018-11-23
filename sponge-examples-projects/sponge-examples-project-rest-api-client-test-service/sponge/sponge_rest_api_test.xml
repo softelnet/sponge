@@ -9,9 +9,10 @@
     <knowledgeBases>
         <knowledgeBase name="example" displayName="Example">
             <file>${commonkbDir}/rest_api.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
-            <file>classpath:org/openksavi/sponge/restapi/server/administration_library.py</file>
+            <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" displayName="Security">
             <file>${commonkbDir}/rest_api_security.py</file>

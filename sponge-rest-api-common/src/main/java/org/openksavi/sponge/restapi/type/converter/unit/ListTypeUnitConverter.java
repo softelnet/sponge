@@ -17,35 +17,33 @@
 package org.openksavi.sponge.restapi.type.converter.unit;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.ListType;
-import org.openksavi.sponge.type.TypeKind;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class ListTypeUnitConverter extends BaseUnitTypeConverter<ListType> {
+public class ListTypeUnitConverter<E> extends BaseUnitTypeConverter<List<E>, ListType<E>> {
 
     public ListTypeUnitConverter() {
-        super(TypeKind.LIST);
+        super(DataTypeKind.LIST);
     }
 
     @Override
-    public Object marshal(TypeConverter converter, ListType type, Object value) {
-        Validate.isInstanceOf(Collection.class, value, "Expected list but got %s", value.getClass());
-
-        return ((Collection) value).stream().map((Object element) -> converter.marshal(((ListType) type).getElementType(), element))
-                .collect(Collectors.toList());
+    public Object marshal(TypeConverter converter, ListType<E> type, List<E> value) {
+        return value.stream().map(element -> converter.marshal(type.getElementType(), element)).collect(Collectors.toList());
     }
 
     @Override
-    public Object unmarshal(TypeConverter converter, ListType type, Object value) {
+    public List<E> unmarshal(TypeConverter converter, ListType<E> type, Object value) {
         Validate.isInstanceOf(Collection.class, value, "Expected list but got %s", value.getClass());
 
-        return ((Collection) value).stream().map((Object jsonElem) -> converter.unmarshal(((ListType) type).getElementType(), jsonElem))
+        return (List<E>) ((Collection) value).stream().map((Object jsonElem) -> converter.unmarshal(type.getElementType(), jsonElem))
                 .collect(Collectors.toList());
     }
 }

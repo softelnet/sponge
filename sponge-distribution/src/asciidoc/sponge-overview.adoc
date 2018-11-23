@@ -6,11 +6,11 @@
 
 This documentation applies to version {projectVersion} (release date: {projectDate}).
 
-{sponge} is a software library for implementing synchronous actions and asynchronous event processors. Event processors listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. {sponge} allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include filters, triggers, rules and correlators.
+{sponge} is a software library for implementing *synchronous actions* and *asynchronous event processors*. Event processors listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. {sponge} allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include *filters*, *triggers*, *rules* and *correlators*.
 
-Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. Python, Ruby, Groovy, JavaScript as well as in Java or Kotlin.
+Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. *Python*, *Ruby*, *Groovy*, *JavaScript* as well as in *Java* or *Kotlin*.
 
-{sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing] system, in some aspects.
+In some aspects {sponge} may be classified as a https://en.wikipedia.org/wiki/Complex_event_processing[Complex Event Processing].
 
 {sponge} requires Java 1.8 or above.
 
@@ -28,8 +28,7 @@ The main features of {sponge}:
 
 * Provides a concurrent processing of *actions* and incoming *events*.
 * Allows generating and scheduling of events (e.g. supports *cron* notation).
-* Events may represent such diverse entities as, for example, *SNMP traps*, *RSS* feeds or *MIDI* messages.
-* Supports writing knowledge bases in *several scripting languages*.
+* Events may represent such diverse entities as, for example, *SNMP* traps, *RSS* feeds or *MIDI* messages.
 * Allows *embedding in a custom Java application* (using Maven) or could be used as a *standalone command-line application*.
 * Supports connecting to many types of external systems by using *http://camel.apache.org[Apache Camel] integration*.
 * Provides *own Apache Camel component* for including {sponge} engine in a Camel route.
@@ -40,9 +39,8 @@ The main features of {sponge}:
 * Supports *reloading of knowledge bases on the fly* (i.e. while the system is running).
 * Supports processing of streams of {sponge} events by using *http://reactivex.io[Reactive Extensions (ReactiveX)]*.
 * Allows *publishing a custom REST API of your application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
-* Provides *REST API client libraries for Java and Dart* to simplify writing a client code.
-* Provides integration with *TensorFlow*, an open source machine learning framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
-* Could be used to *automate repetitive tasks (programmed in any of the supported scripting languages)*.
+* Provides *REST API client libraries* for *Java* and *Dart* to simplify writing a client code.
+* Provides integration with *TensorFlow*, an open source *machine learning* framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
 * Provides a comprehensive documentation and many examples.
 
 == License
@@ -50,6 +48,9 @@ The {sponge} standard libraries are released under the https://www.apache.org/li
 
 == Applications
 {sponge} could be used as a component in various types of applications. Here are some examples.
+
+Tasks automation::
+Tasks could be programmed in any of the supported scripting languages as {sponge} actions and published via the REST API.
 
 https://en.wikipedia.org/wiki/Internet_of_things[Internet of Things (IoT)]::
 {sponge} as a part of https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway] may locally process data provided by the devices in the field, thus only important data is sent to the central node, where data is collected, stored and manipulated by enterprise applications.
@@ -81,7 +82,7 @@ The potential users of a standalone command-line {sponge} application are:
 * Java developers (for example for prototyping),
 * system administrators with programming skills.
 
-Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing Javadoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel routes becomes important.
+Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing Javadoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel becomes important.
 
 == Considerations
 

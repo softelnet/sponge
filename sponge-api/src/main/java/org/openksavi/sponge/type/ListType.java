@@ -19,17 +19,23 @@ package org.openksavi.sponge.type;
 import java.util.List;
 import java.util.Map;
 
-public class ListType<E> extends Type<List<E>> {
+/**
+ * A list type. This type requires an {@code elementType} parameter, which is is a type of list elements.
+ *
+ * @param <E> element type.
+ */
+public class ListType<E> extends DataType<List<E>> {
 
-    private Type<?> elementType;
+    /** The list element type. */
+    private DataType<?> elementType;
 
     public ListType() {
-        super(TypeKind.LIST);
+        super(DataTypeKind.LIST);
         this.elementType = new AnyType();
     }
 
-    public ListType(Type<E> elementType) {
-        super(TypeKind.LIST);
+    public ListType(DataType<E> elementType) {
+        super(DataTypeKind.LIST);
         this.elementType = elementType;
     }
 
@@ -59,7 +65,7 @@ public class ListType<E> extends Type<List<E>> {
     }
 
     @SuppressWarnings("unchecked")
-    public Type<E> getElementType() {
-        return (Type<E>) elementType;
+    public DataType<E> getElementType() {
+        return (DataType<E>) elementType;
     }
 }

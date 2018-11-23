@@ -36,10 +36,10 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.InvalidAuthTokenException;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
@@ -64,9 +64,7 @@ public class AuthTokenExpirationTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("admin", "classpath:org/openksavi/sponge/restapi/server/administration_library.py")
-                    .knowledgeBase("example", "examples/rest-api-server/rest_api.py")
-                    .knowledgeBase("security", "examples/rest-api-server/rest_api_security.py").build();
+                    .config("examples/rest-api-server/rest_api_security.xml").build();
         }
 
         @Bean
@@ -88,31 +86,31 @@ public class AuthTokenExpirationTest {
         }
     }
 
-    protected SpongeRestApiClient createRestApiClient(String username, String password) {
-        return new DefaultSpongeRestApiClient(
-                RestApiClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+    protected SpongeRestClient createRestClient(String username, String password) {
+        return new DefaultSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
                         .username(username).password(password).build());
     }
 
     @Test
     public void testAuthTokeExpirationRelogin() throws InterruptedException {
-        try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
+        try (SpongeRestClient client = createRestClient("john", "password")) {
             client.getConfiguration().setRelogin(true);
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
         }
     }
 
     @Test(expected = InvalidAuthTokenException.class)
     public void testAuthTokeExpirationNoRelogin() throws InterruptedException {
-        try (SpongeRestApiClient client = createRestApiClient("john", "password")) {
+        try (SpongeRestClient client = createRestClient("john", "password")) {
             client.getConfiguration().setRelogin(false);
             assertNotNull(client.login());
-            assertEquals(RestApiTestConstants.ADMIN_ALL_ACTION_COUNT, client.getActions().size());
+            assertEquals(RestApiTestConstants.ADMIN_ACTIONS_COUNT, client.getActions().size());
 
             TimeUnit.SECONDS.sleep(3);
 

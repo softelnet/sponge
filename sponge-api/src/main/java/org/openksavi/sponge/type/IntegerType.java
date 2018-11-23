@@ -21,18 +21,22 @@ import java.util.Map;
 /**
  * An integer type that supports long as well (internally uses {@code Number}).
  */
-public class IntegerType extends Type<Number> {
+public class IntegerType extends DataType<Number> {
 
+    /** The minimum value (optional). */
     private Long minValue;
 
+    /** The maximum value (optional). */
     private Long maxValue;
 
+    /** Tells if the minimum value should be exclusive. Defaults to {@code false}. */
     private boolean exclusiveMin = false;
 
+    /** Tells if the maximum value should be exclusive. Defaults to {@code false}. */
     private boolean exclusiveMax = false;
 
     public IntegerType() {
-        super(TypeKind.INTEGER);
+        super(DataTypeKind.INTEGER);
     }
 
     @Override

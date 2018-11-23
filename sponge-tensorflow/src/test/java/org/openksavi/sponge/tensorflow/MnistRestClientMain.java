@@ -17,9 +17,9 @@
 package org.openksavi.sponge.tensorflow;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestApiClient;
-import org.openksavi.sponge.restapi.client.RestApiClientConfiguration;
-import org.openksavi.sponge.restapi.client.SpongeRestApiClient;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 
 public class MnistRestClientMain {
 
@@ -29,7 +29,7 @@ public class MnistRestClientMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        try (SpongeRestApiClient client = new DefaultSpongeRestApiClient(RestApiClientConfiguration.builder().build())) {
+        try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().build())) {
 
             String imageFile = "examples/tensorflow/mnist/data/1_0.png";
 

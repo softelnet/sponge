@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "ActionCallResponse", description = "An action call response")
-public class ActionCallResponse extends BaseResponse {
+public class ActionCallResponse extends SpongeResponse {
 
     private Object result;
 

@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "SendEventResponse", description = "A send event response")
-public class SendEventResponse extends BaseResponse {
+public class SendEventResponse extends SpongeResponse {
 
     private String eventId;
 

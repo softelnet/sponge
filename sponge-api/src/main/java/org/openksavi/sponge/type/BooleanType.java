@@ -18,10 +18,13 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class BooleanType extends Type<Boolean> {
+/**
+ * A boolean type.
+ */
+public class BooleanType extends DataType<Boolean> {
 
     public BooleanType() {
-        super(TypeKind.BOOLEAN);
+        super(DataTypeKind.BOOLEAN);
     }
 
     @Override

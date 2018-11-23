@@ -333,9 +333,19 @@ def onStartup(): # <7>
 
 The `HelloWorldAction` action is enabled automatically before executing `onStartup()`. Enabling means that an instance of `HelloWorldAction` class is created and then `HelloWorldAction.onConfigure` method is invoked to configure this action.
 
-The full source code of this example can be found in the file `actions_hello_world.py`.
+The full source code of the example can be found in the file `actions_hello_world.py`.
 
-.Running this example in the standalone command-line application
+The `onConfigure` method as well as metadata are optional for actions. It is helpful only when a generic access to actions is needed or for documentation. The minimalistic version of this example that doesn't define metadata is much simpler.
+
+.The minimalistic version of the Hello World action
+[source,python]
+----
+class HelloWorldAction(Action):
+    def onCall(self, name):
+        return "Hello World! Hello {}!".format(name)
+----
+
+.Running the example in the standalone command-line application
 [source,bash,subs="verbatim,attributes"]
 ----
 ./sponge -k ../examples/script/py/actions_hello_world.py

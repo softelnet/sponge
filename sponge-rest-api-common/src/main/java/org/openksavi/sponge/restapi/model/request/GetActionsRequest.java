@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "GetActionsRequest", description = "A get actions request")
-public class GetActionsRequest extends BaseRequest {
+public class GetActionsRequest extends SpongeRequest {
 
     private String name;
 
@@ -41,7 +41,7 @@ public class GetActionsRequest extends BaseRequest {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "Metadata required", required = false)
+    @ApiModelProperty(value = "The metadata required flag", required = false)
     public Boolean getMetadataRequired() {
         return metadataRequired;
     }

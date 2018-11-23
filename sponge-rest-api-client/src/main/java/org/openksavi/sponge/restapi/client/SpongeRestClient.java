@@ -20,6 +20,8 @@ import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
 
+import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
+import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -42,14 +44,31 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 /**
  * A Sponge REST API client.
  */
-public interface SpongeRestApiClient extends Closeable {
+public interface SpongeRestClient extends Closeable {
 
     /**
      * Returns the client configuration.
      *
      * @return the client configuration.
      */
-    RestApiClientConfiguration getConfiguration();
+    SpongeRestClientConfiguration getConfiguration();
+
+    void addOnRequestSerializedListener(OnRequestSerializedListener listener);
+
+    boolean removeOnRequestSerializedListener(OnRequestSerializedListener listener);
+
+    void addOnResponseDeserializedListener(OnResponseDeserializedListener listener);
+
+    boolean removeOnResponseDeserializedListener(OnResponseDeserializedListener listener);
+
+    /**
+     * Sends the {@code version} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the {@code version} response.
+     */
+    GetVersionResponse getVersion(GetVersionRequest request, SpongeRequestContext context);
 
     /**
      * Sends the {@code version} request to the server.
@@ -70,12 +89,21 @@ public interface SpongeRestApiClient extends Closeable {
      * Sends the {@code login} request to the server. Sets the auth token in the client for further requests.
      *
      * @param request the request.
+     * @param context the context.
+     * @return the {@code login} response.
+     */
+    LoginResponse login(LoginRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code login} request to the server. See {@link #login(LoginRequest,SpongeRequestContext)}.
+     *
+     * @param request the request.
      * @return the {@code login} response.
      */
     LoginResponse login(LoginRequest request);
 
     /**
-     * Sends the {@code login} request to the server. See {@link #login(LoginRequest)}.
+     * Sends the {@code login} request to the server. See {@link #login(LoginRequest,SpongeRequestContext)}.
      *
      * @return the optional auth token.
      */
@@ -85,14 +113,32 @@ public interface SpongeRestApiClient extends Closeable {
      * Sends the {@code logout} request to the server. Clears the auth token in the client.
      *
      * @param request the request.
+     * @param context the context.
+     * @return the {@code logout} response.
+     */
+    LogoutResponse logout(LogoutRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code logout} request to the server. See {@link #logout(LogoutRequest,SpongeRequestContext)}.
+     *
+     * @param request the request.
      * @return the {@code logout} response.
      */
     LogoutResponse logout(LogoutRequest request);
 
     /**
-     * Sends the {@code logout} request to the server. See {@link #logout(LogoutRequest)}.
+     * Sends the {@code logout} request to the server. See {@link #logout(LogoutRequest,SpongeRequestContext)}.
      */
     void logout();
+
+    /**
+     * Sends the {@code knowledgeBases} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the {@code knowledgeBases} response.
+     */
+    GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request, SpongeRequestContext context);
 
     /**
      * Sends the {@code knowledgeBases} request to the server.
@@ -113,12 +159,21 @@ public interface SpongeRestApiClient extends Closeable {
      * Sends the {@code actions} request to the server. This method may populate the action metadata cache.
      *
      * @param request the request.
+     * @param context the context.
+     * @return the {@code actions} response.
+     */
+    GetActionsResponse getActions(GetActionsRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest,SpongeRequestContext)}.
+     *
+     * @param request the request.
      * @return the {@code actions} response.
      */
     GetActionsResponse getActions(GetActionsRequest request);
 
     /**
-     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest)}.
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest,SpongeRequestContext)}.
      *
      * @param name the action name or the regular expression or {@code null} to return results for all actions.
      * @param metadataRequired if {@code true} only actions that have arguments and result metadata will be returned.
@@ -127,7 +182,7 @@ public interface SpongeRestApiClient extends Closeable {
     List<RestActionMeta> getActions(String name, Boolean metadataRequired);
 
     /**
-     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest)}.
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest,SpongeRequestContext)}.
      *
      * @param name the action name or the regular expression or {@code null} to return results for all actions.
      * @return the list of available actions metadata..
@@ -135,7 +190,7 @@ public interface SpongeRestApiClient extends Closeable {
     List<RestActionMeta> getActions(String name);
 
     /**
-     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest)}.
+     * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest,SpongeRequestContext)}.
      *
      * @return the list of available actions metadata..
      */
@@ -146,14 +201,15 @@ public interface SpongeRestApiClient extends Closeable {
      * configured.
      *
      * @param actionName the action name.
+     * @param allowFetchMetadata if {@code true} (the default value), the action metadata may be fetched from the server.
+     * @param context the context.
      *
      * @return the action metadata or {@code null} if there is no such action or that action has no metadata.
      */
-    RestActionMeta getActionMeta(String actionName);
+    RestActionMeta getActionMeta(String actionName, boolean allowFetchMetadata, SpongeRequestContext context);
 
     /**
-     * Returns the metadata for the specified action. This method may fetch the metadata from the server or use the action metadata cache if
-     * configured.
+     * Returns the metadata for the specified action. See {@link #getActionMeta(String,boolean,SpongeRequestContext)}.
      *
      * @param actionName the action name.
      * @param allowFetchMetadata if {@code true} (the default value), the action metadata may be fetched from the server.
@@ -163,25 +219,13 @@ public interface SpongeRestApiClient extends Closeable {
     RestActionMeta getActionMeta(String actionName, boolean allowFetchMetadata);
 
     /**
-     * Calls the action. Allows fetching the action metadata. For more information see
-     * {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
+     * Returns the metadata for the specified action. See {@link #getActionMeta(String,boolean,SpongeRequestContext)}.
      *
-     * @param request the request.
+     * @param actionName the action name.
      *
-     * @return the response.
+     * @return the action metadata or {@code null} if there is no such action or that action has no metadata.
      */
-    ActionCallResponse call(ActionCallRequest request);
-
-    /**
-     * Calls the action. Allows fetching the action metadata. For more information see
-     * {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
-     *
-     * @param request the request.
-     * @param actionMeta the action metadata.
-     *
-     * @return the response.
-     */
-    ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta);
+    RestActionMeta getActionMeta(String actionName);
 
     /**
      * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined.
@@ -192,13 +236,46 @@ public interface SpongeRestApiClient extends Closeable {
      * @param allowFetchMetadata if {@code true} (the default value), the action metadata (if {@code null}) may be fetched from the server
      *        by sending an additional request. If {@code false} and the action metadata is {@code null} or is not in the cache, the
      *        marshaling of arguments and unmarshaling of the result will be suppressed.
+     * @param context the context.
+     *
+     * @return the response.
+     */
+    ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta, boolean allowFetchMetadata, SpongeRequestContext context);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param request the request.
+     * @param actionMeta the action metadata.
+     * @param allowFetchMetadata the flag for fetching the metadata.
      *
      * @return the response.
      */
     ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta, boolean allowFetchMetadata);
 
     /**
-     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
+     * Calls the action. Allows fetching the action metadata. For more information see
+     * {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param request the request.
+     * @param actionMeta the action metadata.
+     *
+     * @return the response.
+     */
+    ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta);
+
+    /**
+     * Calls the action. Allows fetching the action metadata. For more information see
+     * {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param request the request.
+     *
+     * @return the response.
+     */
+    ActionCallResponse call(ActionCallRequest request);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
      *
      * @param actionName the action name.
      * @param args the action arguments.
@@ -208,7 +285,7 @@ public interface SpongeRestApiClient extends Closeable {
     Object call(String actionName, Object... args);
 
     /**
-     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean) call}.
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
      *
      * @param resultClass the result class.
      * @param actionName the action name.
@@ -218,6 +295,15 @@ public interface SpongeRestApiClient extends Closeable {
      * @param <T> the result type.
      */
     <T> T call(Class<T> resultClass, String actionName, Object... args);
+
+    /**
+     * Sends the event to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the response.
+     */
+    SendEventResponse send(SendEventRequest request, SpongeRequestContext context);
 
     /**
      * Sends the event to the server.
@@ -235,6 +321,15 @@ public interface SpongeRestApiClient extends Closeable {
      * @return the event ID.
      */
     String send(String eventName, Map<String, Object> attributes);
+
+    /**
+     * Sends the {@code reload} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the {@code reload} response.
+     */
+    ReloadResponse reload(ReloadRequest request, SpongeRequestContext context);
 
     /**
      * Sends the {@code reload} request to the server.

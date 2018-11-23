@@ -21,9 +21,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.Headers;
@@ -37,50 +34,23 @@ import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
-import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
+import org.openksavi.sponge.restapi.client.util.RestClientUtils;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
-import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { HttpErrorTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class HttpErrorTest {
-
-    @Inject
-    @Named(PortTestConfig.PORT_BEAN_NAME)
-    protected Integer port;
-
-    @Configuration
-    public static class TestConfig extends PortTestConfig {
-
-        @Bean
-        public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .knowledgeBase("example", "examples/rest-api-server/rest_api.py").build();
-        }
-
-        @Bean
-        public RestApiServerPlugin spongeRestApiPlugin() {
-            RestApiServerPlugin plugin = new RestApiServerPlugin();
-            plugin.getSettings().setPort(spongeRestApiPort());
-
-            return plugin;
-        }
-    }
+public class HttpErrorTest extends BasicTestTemplate {
 
     @Test
     public void testHttpErrorInJsonParser() throws IOException {
-        OkHttpClient client = RestApiClientUtils.createOkHttpClient();
+        OkHttpClient client = RestClientUtils.createOkHttpClient();
 
         String requestBody = "{\"error_property\":\"\"}";
         Response okHttpResponse = client
@@ -90,7 +60,7 @@ public class HttpErrorTest {
                 .execute();
         assertEquals(200, okHttpResponse.code());
         ObjectMapper mapper = RestApiUtils.createObjectMapper();
-        BaseResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), BaseResponse.class);
+        SpongeResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), SpongeResponse.class);
         assertEquals(RestApiConstants.DEFAULT_ERROR_CODE, apiResponse.getErrorCode());
         assertTrue(apiResponse.getErrorMessage().contains("Unrecognized field \"error_property\""));
     }

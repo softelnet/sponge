@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * A base response.
  */
-public class BaseResponse {
+public class SpongeResponse {
 
     private String id;
 

@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 
 @ApiModel(value = "GetKnowledgeBasesResponse", description = "A get knowledge bases response")
-public class GetKnowledgeBasesResponse extends BaseResponse {
+public class GetKnowledgeBasesResponse extends SpongeResponse {
 
     private List<RestKnowledgeBaseMeta> knowledgeBases;
 
@@ -36,7 +36,7 @@ public class GetKnowledgeBasesResponse extends BaseResponse {
         this.knowledgeBases = knowledgeBases;
     }
 
-    @ApiModelProperty(value = "The Spoonge knowledge bases", required = true)
+    @ApiModelProperty(value = "The available knowledge bases", required = true)
     public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
         return knowledgeBases;
     }

@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -35,13 +34,11 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestActionResultMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.BaseRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
@@ -49,8 +46,8 @@ import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -58,6 +55,7 @@ import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
@@ -65,7 +63,7 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * Default Sponge REST service.
@@ -206,13 +204,13 @@ public class DefaultRestApiService implements RestApiService {
         if (actionMeta != null) {
             if (actionMeta.getArgsMeta() != null) {
                 actionMeta.getArgsMeta().forEach(argMeta -> {
-                    Type type = argMeta.getType();
+                    DataType type = argMeta.getType();
                     type.setDefaultValue(typeConverter.marshal(type, type.getDefaultValue()));
                 });
             }
 
             if (actionMeta.getResultMeta() != null) {
-                Type type = actionMeta.getResultMeta().getType();
+                DataType type = actionMeta.getResultMeta().getType();
                 type.setDefaultValue(typeConverter.marshal(type, type.getDefaultValue()));
             }
         }
@@ -331,7 +329,7 @@ public class DefaultRestApiService implements RestApiService {
      * @param exchange the exchange.
      * @return the user.
      */
-    protected User authenticateRequest(BaseRequest request, Exchange exchange) {
+    protected User authenticateRequest(SpongeRequest request, Exchange exchange) {
         if (request.getAuthToken() != null) {
             SpongeUtils.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
             SpongeUtils.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
@@ -376,7 +374,7 @@ public class DefaultRestApiService implements RestApiService {
         return securityService.canCallAction(user, actionAdapter);
     }
 
-    protected <T extends BaseResponse, R extends BaseRequest> T setupResponse(T response, R request) {
+    protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
         if (request != null && request.getId() != null) {
             response.setId(request.getId());
         }
@@ -384,11 +382,11 @@ public class DefaultRestApiService implements RestApiService {
         return response;
     }
 
-    protected <T extends BaseResponse, R extends BaseRequest> T setupSuccessResponse(T response, R request) {
+    protected <T extends SpongeResponse, R extends SpongeRequest> T setupSuccessResponse(T response, R request) {
         return setupResponse(response, request);
     }
 
-    protected <T extends BaseResponse, R extends BaseRequest> T setupErrorResponse(T response, R request, Throwable exception) {
+    protected <T extends SpongeResponse, R extends SpongeRequest> T setupErrorResponse(T response, R request, Throwable exception) {
         errorResponseProvider.applyException(this, response, exception);
 
         return setupResponse(response, request);
@@ -399,13 +397,11 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public BaseResponse createGenericErrorResponse(Throwable e, Exchange exchange) {
+    public SpongeResponse createGenericErrorResponse(Throwable e, Exchange exchange) {
         Validate.notNull(e, "Exception should be not null");
-        BaseResponse response = new BaseResponse();
+        SpongeResponse response = new SpongeResponse();
 
-        response.setErrorCode(RestApiConstants.DEFAULT_ERROR_CODE);
-        response.setErrorMessage(e.getMessage());
-        response.setDetailedErrorMessage(ExceptionUtils.getStackTrace(e));
+        errorResponseProvider.applyException(this, response, e);
 
         return response;
     }

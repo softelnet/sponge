@@ -36,7 +36,6 @@ import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
-import org.openksavi.sponge.restapi.model.response.BaseResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -44,6 +43,7 @@ import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 
 public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiService {
 
@@ -90,7 +90,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             .process(exchange -> {
                 Throwable e = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
                 logger.info("REST API error", e);
-                exchange.getIn().setBody(apiService.createGenericErrorResponse(e, exchange), BaseResponse.class);
+                exchange.getIn().setBody(apiService.createGenericErrorResponse(e, exchange), SpongeResponse.class);
             });
         // @formatter:on
     }

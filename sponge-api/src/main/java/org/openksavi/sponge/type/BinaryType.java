@@ -18,12 +18,16 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
-public class BinaryType extends Type<byte[]> {
+/**
+ * A binary (byte array) type. Provides an optional property {@code mimeType}.
+ */
+public class BinaryType extends DataType<byte[]> {
 
+    /** The binary data mime type. */
     private String mimeType;
 
     public BinaryType() {
-        super(TypeKind.BINARY);
+        super(DataTypeKind.BINARY);
     }
 
     @Override

@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.client.test;
+package org.openksavi.sponge.restapi.util;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.restapi.client.util.RestApiClientUtils;
-
-public class RestApiClientUtilsTest {
+public class RestApiUtilsTest {
 
     @Test
     public void testObfuscatePassword() {
         assertEquals("{\"username\":\"test\",\"password\":\"***\"}",
-                RestApiClientUtils.obfuscatePassword("{\"username\":\"test\",\"password\":\"secret\"}"));
+                RestApiUtils.obfuscatePassword("{\"username\":\"test\",\"password\":\"secret\"}"));
+
+        assertEquals("{\"username\":\"test\",\"password\":\"***\"}",
+                RestApiUtils.obfuscatePassword("{\"username\":\"test\",\"password\":\"\"}"));
     }
 }

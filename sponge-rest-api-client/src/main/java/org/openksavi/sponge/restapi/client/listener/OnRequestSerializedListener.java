@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.client;
+package org.openksavi.sponge.restapi.client.listener;
 
-import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestApiClient;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 
-/**
- * A default Sponge REST API client that uses HttpOk. DefaultSpongeRestApiClient performs best when you create a single
- * DefaultSpongeRestApiClient instance and reuse it for all of your REST API calls.
- */
-public class DefaultSpongeRestApiClient extends OkHttpSpongeRestApiClient {
+@FunctionalInterface
+public interface OnRequestSerializedListener {
 
-    public DefaultSpongeRestApiClient(RestApiClientConfiguration configuration) {
-        super(configuration);
-    }
+    /**
+     * A callback that will be invoked when the request is serialized. Remember to obfuscate the password if the {@code requestString} is
+     * to be shown.
+     *
+     * @param request the request.
+     * @param requestString the serialized request.
+     */
+    void onRequestSerialized(SpongeRequest request, String requestString);
 }

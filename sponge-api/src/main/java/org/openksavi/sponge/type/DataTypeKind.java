@@ -20,7 +20,7 @@ package org.openksavi.sponge.type;
  * A data type kind.
  */
 @SuppressWarnings("rawtypes")
-public enum TypeKind {
+public enum DataTypeKind {
     STRING(StringType.class),
     NUMBER(NumberType.class),
     INTEGER(IntegerType.class),
@@ -55,13 +55,13 @@ public enum TypeKind {
 
     public static final String CODE_ACTION = "ACTION";
 
-    private Class<? extends Type> typeClass;
+    private Class<? extends DataType> typeClass;
 
-    private TypeKind(Class<? extends Type> typeClass) {
+    private DataTypeKind(Class<? extends DataType> typeClass) {
         this.typeClass = typeClass;
     }
 
-    public Class<? extends Type> getTypeClass() {
+    public Class<? extends DataType> getTypeClass() {
         return typeClass;
     }
 }

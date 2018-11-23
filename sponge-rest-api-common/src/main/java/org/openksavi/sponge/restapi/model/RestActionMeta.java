@@ -19,6 +19,8 @@ package org.openksavi.sponge.restapi.model;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -81,7 +83,7 @@ public class RestActionMeta {
         this.description = description;
     }
 
-    @ApiModelProperty(value = "The action knowledge base", required = true)
+    @ApiModelProperty(value = "The action knowledge base metadata", required = true)
     public RestKnowledgeBaseMeta getKnowledgeBase() {
         return knowledgeBase;
     }
@@ -115,5 +117,11 @@ public class RestActionMeta {
 
     public void setResultMeta(RestActionResultMeta resultMeta) {
         this.resultMeta = resultMeta;
+    }
+
+    @JsonIgnore
+    public String getLabel() {
+        return String.format("%s: %s", knowledgeBase != null ? knowledgeBase.getLabel() : null, displayName != null ? displayName : name);
+
     }
 }

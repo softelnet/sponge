@@ -21,22 +21,22 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.ObjectType;
-import org.openksavi.sponge.type.TypeKind;
 
-@SuppressWarnings("rawtypes")
-public class ObjectTypeUnitConverter extends BaseUnitTypeConverter<ObjectType> {
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectType<O>> {
 
     public ObjectTypeUnitConverter() {
-        super(TypeKind.OBJECT);
+        super(DataTypeKind.OBJECT);
     }
 
     @Override
-    public Object unmarshal(TypeConverter converter, ObjectType type, Object value) {
+    public O unmarshal(TypeConverter converter, ObjectType type, Object value) {
         Validate.isInstanceOf(ObjectType.class, type, "Object type %s doesn't match %s", type.getClass(), ObjectType.class);
         String className = ((ObjectType) type).getClassName();
 
-        return converter.getObjectMapper().convertValue(value,
+        return (O) converter.getObjectMapper().convertValue(value,
                 Validate.notNull(RestApiUtils.getClass(className), "Class % not found", className));
     }
 }

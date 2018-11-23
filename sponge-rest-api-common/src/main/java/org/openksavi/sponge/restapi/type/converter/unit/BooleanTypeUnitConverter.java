@@ -18,11 +18,11 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.type.BooleanType;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataTypeKind;
 
-public class BooleanTypeUnitConverter extends BaseUnitTypeConverter<BooleanType> {
+public class BooleanTypeUnitConverter extends BaseUnitTypeConverter<Boolean, BooleanType> {
 
     public BooleanTypeUnitConverter() {
-        super(TypeKind.BOOLEAN);
+        super(DataTypeKind.BOOLEAN);
     }
 }

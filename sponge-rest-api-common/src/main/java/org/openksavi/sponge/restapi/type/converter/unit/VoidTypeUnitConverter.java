@@ -17,12 +17,12 @@
 package org.openksavi.sponge.restapi.type.converter.unit;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.VoidType;
 
-public class VoidTypeUnitConverter extends BaseUnitTypeConverter<VoidType> {
+public class VoidTypeUnitConverter extends BaseUnitTypeConverter<Void, VoidType> {
 
     public VoidTypeUnitConverter() {
-        super(TypeKind.VOID);
+        super(DataTypeKind.VOID);
     }
 }

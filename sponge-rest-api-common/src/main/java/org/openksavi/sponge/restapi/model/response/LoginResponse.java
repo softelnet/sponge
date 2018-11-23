@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "LoginResponse", description = "A login response")
-public class LoginResponse extends BaseResponse {
+public class LoginResponse extends SpongeResponse {
 
     private String authToken;
 

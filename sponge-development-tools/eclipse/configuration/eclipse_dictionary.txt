@@ -75,3 +75,6 @@ doodles
 unmarshaling
 dartdoc
 mapper
+minimalistic
+deserializing
+deserialized

@@ -23,8 +23,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.ClassUtils;
 
-import org.openksavi.sponge.restapi.model.RestType;
-import org.openksavi.sponge.type.Type;
+import org.openksavi.sponge.restapi.model.RestDataType;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * A set of common REST API utility methods.
@@ -41,7 +41,7 @@ public abstract class RestApiUtils {
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         // Ensure a proper Type inheritance hierarchy deserialization from JSON to Java.
-        mapper.addMixIn(Type.class, RestType.class);
+        mapper.addMixIn(DataType.class, RestDataType.class);
 
         return mapper;
     }
@@ -62,5 +62,9 @@ public abstract class RestApiUtils {
 
     public static boolean isHttpSuccess(int code) {
         return 200 <= code && code <= 299;
+    }
+
+    public static String obfuscatePassword(String request) {
+        return request != null ? request.replaceAll("\"password\":\".*\"", "\"password\":\"***\"") : null;
     }
 }

@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * A base request.
  */
-public abstract class BaseRequest {
+public abstract class SpongeRequest {
 
     private String id;
 
@@ -31,7 +31,7 @@ public abstract class BaseRequest {
 
     private String authToken;
 
-    protected BaseRequest() {
+    protected SpongeRequest() {
         //
     }
 

@@ -23,54 +23,58 @@ import java.util.Map;
 /**
  * A data type. Used for example in action arguments metadata.
  */
-public class Type<T> {
+public class DataType<T> {
 
-    private TypeKind kind;
+    /** The data type kind. */
+    private DataTypeKind kind;
 
+    /** The format (optional). */
     private String format;
 
-    private Map<String, Object> features = new LinkedHashMap<>();
-
+    /** The default value (optional). */
     private T defaultValue;
 
     /** Tells if a value of this type may be null. The default is that a value must not be null, i.e. it is <b>not nullable</b>. */
     private boolean nullable = false;
 
-    private Type() {
+    /** The data type features as a map of names to values. */
+    private Map<String, Object> features = new LinkedHashMap<>();
+
+    private DataType() {
         //
     }
 
-    protected Type(TypeKind kind) {
+    protected DataType(DataTypeKind kind) {
         this();
         this.kind = kind;
     }
 
-    public Type<T> format(String format) {
+    public DataType<T> format(String format) {
         setFormat(format);
         return this;
     }
 
-    public Type<T> features(Map<String, Object> features) {
-        this.features.putAll(features);
-        return this;
-    }
-
-    public Type<T> feature(String name, Object value) {
-        features.put(name, value);
-        return this;
-    }
-
-    public Type<T> defaultValue(T value) {
+    public DataType<T> defaultValue(T value) {
         setDefaultValue(value);
         return this;
     }
 
-    public Type<T> nullable(boolean nullable) {
+    public DataType<T> nullable(boolean nullable) {
         setNullable(nullable);
         return this;
     }
 
-    public TypeKind getKind() {
+    public DataType<T> features(Map<String, Object> features) {
+        this.features.putAll(features);
+        return this;
+    }
+
+    public DataType<T> feature(String name, Object value) {
+        features.put(name, value);
+        return this;
+    }
+
+    public DataTypeKind getKind() {
         return kind;
     }
 
@@ -80,14 +84,6 @@ public class Type<T> {
 
     public void setFormat(String format) {
         this.format = format;
-    }
-
-    public Map<String, Object> getFeatures() {
-        return Collections.unmodifiableMap(features);
-    }
-
-    public void setFeatures(Map<String, Object> features) {
-        this.features = new LinkedHashMap<>(features);
     }
 
     public T getDefaultValue() {
@@ -104,5 +100,13 @@ public class Type<T> {
 
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    public Map<String, Object> getFeatures() {
+        return Collections.unmodifiableMap(features);
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = new LinkedHashMap<>(features);
     }
 }

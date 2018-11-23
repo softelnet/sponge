@@ -17,12 +17,12 @@
 package org.openksavi.sponge.restapi.type.converter.unit;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
-import org.openksavi.sponge.type.TypeKind;
 
-public class StringTypeUnitConverter extends BaseUnitTypeConverter<StringType> {
+public class StringTypeUnitConverter extends BaseUnitTypeConverter<String, StringType> {
 
     public StringTypeUnitConverter() {
-        super(TypeKind.STRING);
+        super(DataTypeKind.STRING);
     }
 }

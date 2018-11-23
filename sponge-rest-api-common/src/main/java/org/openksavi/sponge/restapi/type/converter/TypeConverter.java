@@ -20,8 +20,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.openksavi.sponge.type.Type;
-import org.openksavi.sponge.type.TypeKind;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 
 /**
  * A type converter.
@@ -34,18 +34,22 @@ public interface TypeConverter {
      *
      * @param type the type.
      * @param value the value.
+     * @param T instance type.
+     * @param D data type.
      * @return the converted value.
      */
-    Object marshal(Type type, Object value);
+    <T, D extends DataType> Object marshal(D type, T value);
 
     /**
      * Unmarshals the value as type.
      *
      * @param type the type.
      * @param value the value.
+     * @param T instance type.
+     * @param D data type.
      * @return the converted value.
      */
-    Object unmarshal(Type type, Object value);
+    <T, D extends DataType> T unmarshal(D type, Object value);
 
     /**
      * Registers the unit type converter.
@@ -67,7 +71,7 @@ public interface TypeConverter {
      * @param typeKind the type kind.
      * @return the previously registered unit type converter.
      */
-    UnitTypeConverter unregister(TypeKind typeKind);
+    UnitTypeConverter unregister(DataTypeKind typeKind);
 
     /**
      * Returns the JSON object mapper.

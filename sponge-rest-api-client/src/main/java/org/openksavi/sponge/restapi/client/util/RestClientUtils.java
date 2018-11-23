@@ -33,9 +33,9 @@ import org.openksavi.sponge.restapi.client.SpongeClientException;
 /**
  * A set of REST API client utility methods.
  */
-public abstract class RestApiClientUtils {
+public abstract class RestClientUtils {
 
-    private RestApiClientUtils() {
+    private RestClientUtils() {
         //
     }
 
@@ -68,14 +68,14 @@ public abstract class RestApiClientUtils {
 
             return sslContext;
         } catch (Exception e) {
-            throw RestApiClientUtils.wrapException(e);
+            throw RestClientUtils.wrapException(e);
         }
     }
 
     public static OkHttpClient createOkHttpClient() {
-        SSLContext sslContext = RestApiClientUtils.createTrustAllSslContext();
+        SSLContext sslContext = RestClientUtils.createTrustAllSslContext();
 
-        return new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestApiClientUtils.createTrustAllTrustManager())
+        return new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestClientUtils.createTrustAllTrustManager())
                 .hostnameVerifier((String hostname, SSLSession session) -> true).build();
     }
 
@@ -100,9 +100,5 @@ public abstract class RestApiClientUtils {
                 throw new SpongeException(e);
             }
         }
-    }
-
-    public static String obfuscatePassword(String request) {
-        return request != null ? request.replaceAll("\"password\":\".*\"", "\"password\":\"***\"") : null;
     }
 }
