@@ -27,8 +27,6 @@ SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfigurat
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/client/DefaultSpongeRestClient.html[`DefaultSpongeRestClient` Javadoc] and examples in the source code.
 
-There is also the implementation that uses the Spring (version 5) RestTemplate: `SpringSpongeRestClient`.
-
 == Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -41,12 +39,3 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
-In case of using `SpringSpongeRestClient` you should also add the following dependency to your `pom.xml`:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.springframework.integration</groupId>
-    <artifactId>spring-integration-http</artifactId>
-</dependency>
-----

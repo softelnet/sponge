@@ -16,8 +16,10 @@
 
 package org.openksavi.sponge.restapi.client.okhttp;
 
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Stream;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -32,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRequestContext;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.util.RestClientUtils;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
@@ -92,7 +95,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     }
 
     @Override
-    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass,
+            SpongeRequestContext context) {
         Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.APPLICATION_JSON_VALUE).build();
 
         try {
@@ -102,19 +106,32 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                 logger.debug("REST API {} request: {}", operation, RestApiUtils.obfuscatePassword(requestBody));
             }
 
-            Response response = getOrCreateOkHttpClient()
+            Stream.concat(Stream.of(context.getOnRequestSerializedListener()), onRequestSerializedListeners.stream())
+                    .filter(Objects::nonNull).forEach(listener -> listener.onRequestSerialized(request, requestBody));
+
+            Response httpResponse = getOrCreateOkHttpClient()
                     .newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
                             .post(RequestBody.create(MediaType.get(RestApiConstants.APPLICATION_JSON_VALUE), requestBody)).build())
                     .execute();
 
-            Validate.isTrue(RestApiUtils.isHttpSuccess(response.code()), "HTTP status code is %s", response.code());
-
-            String responseBody = response.body().string();
+            String responseBody = httpResponse.body() != null ? httpResponse.body().string() : null;
             if (logger.isDebugEnabled()) {
                 logger.debug("REST API {} response: {})", operation, RestApiUtils.obfuscatePassword(responseBody));
             }
 
-            return response.body() != null ? getObjectMapper().readValue(responseBody, responseClass) : null;
+            Validate.isTrue(RestApiUtils.isHttpSuccess(httpResponse.code()), "HTTP status code is %s", httpResponse.code());
+
+            R response = null;
+            try {
+                response = getObjectMapper().readValue(responseBody, responseClass);
+            } finally {
+                final R finalResponse = response;
+                Stream.concat(Stream.of(context.getOnResponseDeserializedListener()), onResponseDeserializedListeners.stream())
+                        .filter(Objects::nonNull)
+                        .forEach(listener -> listener.onResponseDeserialized(request, finalResponse, responseBody));
+            }
+
+            return response;
         } catch (Throwable e) {
             throw RestClientUtils.wrapException(e);
         }

@@ -10,6 +10,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 * API change: Renamed class `Type` to `DataType` and `TypeKind` to `DataTypeKind`.
 * API change: Renamed classes in the REST API client, including `SpongeRestApiClient` to `SpongeRestClient` and `SpongeRestApiClientConfiguration` to `SpongeRestClientConfiguration`.
+* API change: Removed `SpringSpongeRestClient` from the REST API client because the underlying Spring `RestTemplate` will be deprecated.
+* Added a context and listeners to the REST API client that provide access to JSON texts in a client code.
 * Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
 * Libraries upgrade.

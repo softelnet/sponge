@@ -39,10 +39,10 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
-import org.openksavi.sponge.restapi.client.spring.SpringSpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -90,7 +90,7 @@ public class RestApiSimpleSpringSecurityTest {
     }
 
     protected SpongeRestClient createRestClient(String username, String password) {
-        return new SpringSpongeRestClient(
+        return new DefaultSpongeRestClient(
                 SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
                         .username(username).password(password).build());
     }
