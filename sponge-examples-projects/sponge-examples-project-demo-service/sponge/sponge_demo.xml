@@ -51,9 +51,10 @@
                     <argument>--modelfile=../data/mnist_model.h5</argument>
                     <argument>--tempdir=../_tmp_</argument>
                     <workingDir>${mnist.home}/python</workingDir>
-                    <waitForOutputLineRegexp>MNIST service has started.</waitForOutputLineRegexp>
-                    <waitForErrorOutputLineRegexp>MNIST service has failed to start.</waitForErrorOutputLineRegexp>
-                    <redirectType>LOGGER</redirectType>
+                    <waitForPositiveLineRegexp>MNIST service has started.</waitForPositiveLineRegexp>
+                    <waitForNegativeLineRegexp>MNIST service has failed to start.</waitForNegativeLineRegexp>
+                    <outputRedirect>LOGGER</outputRedirect>
+                    <errorRedirect>LOGGER</errorRedirect>
                 </pythonScript>
             </configuration>
         </plugin>

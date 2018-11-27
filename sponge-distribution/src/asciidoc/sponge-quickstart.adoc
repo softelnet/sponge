@@ -207,7 +207,7 @@ Press `CTRL+C` to exit.
 IMPORTANT: When running on Windows, the {sponge} standalone command-line program doesn't support reloading of running knowledge bases by sending operating system signal to the background process.
 
 ==== Interactive mode
-The {sponge} standalone command-line program may be invoked in the interactive mode, providing command-line access to the knowledge base interpreter.
+The {sponge} standalone command-line program can be invoked in the interactive mode, providing command-line access to the knowledge base interpreter.
 
 .Invoke {sponge} in the interactive mode
 [source,bash,subs="verbatim,attributes"]

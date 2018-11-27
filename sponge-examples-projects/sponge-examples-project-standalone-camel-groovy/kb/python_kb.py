@@ -15,7 +15,7 @@ class CamelTrigger(Trigger):
         self.event = "spongeEvent"
     def onRun(self, event):
         message = spring.context.getBean("spongeEngine").info + ": " + event.get("message")
-        camel.send(message)
+        camel.emit(message)
         sponge.setVariable("sent", True)
 
 class PythonRoute(ScriptRouteBuilder):

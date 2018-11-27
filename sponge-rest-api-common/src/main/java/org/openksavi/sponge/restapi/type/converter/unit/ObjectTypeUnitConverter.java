@@ -37,6 +37,6 @@ public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectT
         String className = ((ObjectType) type).getClassName();
 
         return (O) converter.getObjectMapper().convertValue(value,
-                Validate.notNull(RestApiUtils.getClass(className), "Class % not found", className));
+                Validate.notNull(RestApiUtils.getClass(className), "Class %s not found", className));
     }
 }

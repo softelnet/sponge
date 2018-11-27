@@ -11,7 +11,7 @@ __Version__ : 1
 
 === URI scheme
 [%hardbreaks]
-__Host__ : 0.0.0.0:1836
+__Host__ : localhost:1836
 __BasePath__ : /
 __Schemes__ : HTTP
 
@@ -26,7 +26,7 @@ __Schemes__ : HTTP
 [[_swagger_paths]]
 == Paths
 
-[[_swagger_actions]]
+[[_swagger_sponge-actions]]
 === Get actions
 ....
 POST sponge.json/v1/actions
@@ -52,22 +52,12 @@ __required__|Get actions request|<<_swagger_getactionsrequest,GetActionsRequest>
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_call]]
+[[_swagger_sponge-call]]
 === Call an action
 ....
 POST sponge.json/v1/call
@@ -93,22 +83,12 @@ __required__|Call action request|<<_swagger_actioncallrequest,ActionCallRequest>
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_knowledgebases]]
+[[_swagger_sponge-knowledgebases]]
 === Get knowledge bases
 ....
 POST sponge.json/v1/knowledgeBases
@@ -134,22 +114,12 @@ __required__|Get knowledge bases request|<<_swagger_getknowledgebasesrequest,Get
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_login]]
+[[_swagger_sponge-login]]
 === Login
 ....
 POST sponge.json/v1/login
@@ -175,22 +145,12 @@ __required__|Login request|<<_swagger_loginrequest,LoginRequest>>
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_logout]]
+[[_swagger_sponge-logout]]
 === Logout
 ....
 POST sponge.json/v1/logout
@@ -216,22 +176,12 @@ __required__|Logout request|<<_swagger_logoutrequest,LogoutRequest>>
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_reload]]
+[[_swagger_sponge-reload]]
 === Reload knowledge bases
 ....
 POST sponge.json/v1/reload
@@ -257,22 +207,12 @@ __required__|Reload knowledge bases request|<<_swagger_reloadrequest,ReloadReque
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_send]]
+[[_swagger_sponge-send]]
 === Send a new event
 ....
 POST sponge.json/v1/send
@@ -298,22 +238,12 @@ __required__|Send event request|<<_swagger_sendeventrequest,SendEventRequest>>
 |===
 
 
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
-
-
 ==== Tags
 
 * sponge.json/v1
 
 
-[[_swagger_version]]
+[[_swagger_sponge-version]]
 === Get the Sponge version
 ....
 POST sponge.json/v1/version
@@ -337,16 +267,6 @@ __required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionR
 |HTTP Code|Description|Schema
 |**200**|The Sponge version response|<<_swagger_getversionresponse,GetVersionResponse>>
 |===
-
-
-==== Consumes
-
-* `application/json`
-
-
-==== Produces
-
-* `application/json`
 
 
 ==== Tags
@@ -378,26 +298,7 @@ __optional__|The authentication token|string
 |**name** +
 __optional__|The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
 |**metadataRequired** +
-__optional__|Metadata required|boolean
-|===
-
-
-[[_swagger_type]]
-=== Type
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**kind** +
-__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ACTION)
-|**format** +
-__optional__|string
-|**features** +
-__optional__|< string, object > map
-|**defaultValue** +
-__optional__|object
-|**nullable** +
-__optional__|boolean
+__optional__|The metadata required flag|boolean
 |===
 
 
@@ -435,7 +336,7 @@ __optional__|The action display name|string
 |**description** +
 __optional__|The action description|string
 |**knowledgeBase** +
-__required__|The action knowledge base|<<_swagger_knowledgebasemeta,KnowledgeBaseMeta>>
+__required__|The action knowledge base metadata|<<_swagger_knowledgebasemeta,KnowledgeBaseMeta>>
 |**features** +
 __required__|The action features|< string, object > map
 |**argsMeta** +
@@ -456,7 +357,7 @@ An action argument metadata
 |**name** +
 __required__|The action argument name|string
 |**type** +
-__required__|The action argument type|<<_swagger_type,Type>>
+__required__|The action argument type|<<_swagger_datatype,DataType>>
 |**displayName** +
 __optional__|The action argument display name|string
 |**description** +
@@ -483,7 +384,26 @@ __optional__|The error message|string
 |**detailedErrorMessage** +
 __optional__|The detailed error message|string
 |**actions** +
-__required__|The Sponge actions|< <<_swagger_actionmeta,ActionMeta>> > array
+__required__|The available actions|< <<_swagger_actionmeta,ActionMeta>> > array
+|===
+
+
+[[_swagger_datatype]]
+=== DataType
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**kind** +
+__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ACTION)
+|**format** +
+__optional__|string
+|**defaultValue** +
+__optional__|object
+|**nullable** +
+__optional__|boolean
+|**features** +
+__optional__|< string, object > map
 |===
 
 
@@ -496,7 +416,7 @@ An action result metadata
 |===
 |Name|Description|Schema
 |**type** +
-__required__|The action result type|<<_swagger_type,Type>>
+__required__|The action result type|<<_swagger_datatype,DataType>>
 |**displayName** +
 __optional__|The action result display name|string
 |**description** +
@@ -586,7 +506,7 @@ __optional__|The error message|string
 |**detailedErrorMessage** +
 __optional__|The detailed error message|string
 |**knowledgeBases** +
-__required__|The Spoonge knowledge bases|< <<_swagger_knowledgebasemeta,KnowledgeBaseMeta>> > array
+__required__|The available knowledge bases|< <<_swagger_knowledgebasemeta,KnowledgeBaseMeta>> > array
 |===
 
 

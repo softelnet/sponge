@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
@@ -80,11 +81,22 @@ public class DefaultRestApiService implements RestApiService {
 
     private RestApiErrorResponseProvider errorResponseProvider = new DefaultRestApiErrorResponseProvider();
 
-    private ObjectMapper mapper = RestApiUtils.createObjectMapper();
-
-    private TypeConverter typeConverter = new DefaultTypeConverter(mapper);
+    private TypeConverter typeConverter;
 
     public DefaultRestApiService() {
+        //
+    }
+
+    @Override
+    public void init() {
+        ObjectMapper mapper = RestApiUtils.createObjectMapper();
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, settings.isPrettyPrint());
+
+        typeConverter = new DefaultTypeConverter(mapper);
+    }
+
+    @Override
+    public void destroy() {
         //
     }
 
@@ -407,16 +419,6 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public void init() {
-        //
-    }
-
-    @Override
-    public void destroy() {
-        //
-    }
-
-    @Override
     public SpongeEngine getEngine() {
         return engine;
     }
@@ -436,6 +438,7 @@ public class DefaultRestApiService implements RestApiService {
         this.settings = settings;
     }
 
+    @Override
     public TypeConverter getTypeConverter() {
         return typeConverter;
     }
@@ -472,13 +475,5 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public void setErrorResponseProvider(RestApiErrorResponseProvider errorResponseProvider) {
         this.errorResponseProvider = errorResponseProvider;
-    }
-
-    public ObjectMapper getMapper() {
-        return mapper;
-    }
-
-    public void setMapper(ObjectMapper mapper) {
-        this.mapper = mapper;
     }
 }

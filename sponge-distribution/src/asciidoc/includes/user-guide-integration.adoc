@@ -1,7 +1,7 @@
 = Integration
 
 == Spring framework
-{sponge} engine may be configured as a Spring bean. That configuration provides standardized access to an embedded {sponge} engine for example in J2EE environment.
+{sponge} engine can be configured as a Spring bean. That configuration provides standardized access to an embedded {sponge} engine for example in J2EE environment.
 
 To provide access to the Spring `ApplicationContext` in the knowledge base, the `SpringPlugin` instance should be created, *configured as a Spring bean and added to the {sponge} engine*. The Spring plugin shouldn't be defined in {sponge} XML configuration file.
 
@@ -45,7 +45,7 @@ class SpringTrigger(Trigger):
 ----
 <1> A Spring bean named `"testBean"` is acquired from the Spring `ApplicationContext` by using `SpringPlugin` instance referenced by the `spring` variable.
 
-The `SpringSpongeEngine` starts up automatically (in the `afterPropertiesSet` Spring callback method) by default. However it may be configured not to start automatically by setting `autoStartup` to `false`.
+The `SpringSpongeEngine` starts up automatically (in the `afterPropertiesSet` Spring callback method) by default. However it can be configured not to start automatically by setting `autoStartup` to `false`.
 
 .SpringSpongeEngine not starting automatically example
 [source,java]
@@ -68,308 +68,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 </dependency>
 ----
 
-== Apache Camel
-
-=== {sponge} Camel component
-The *sponge* component provides integration bridge between Apache Camel and the {sponge} engine. It allows:
-
-* to route a body of a Camel message to the {sponge} engine by converting it to a {sponge} event (producer endpoint),
-* to route a message from a {sponge} knowledge base to a Camel route (consumer endpoint).
-
-=== Maven configuration
-Maven users will need to add the following dependency to their `pom.xml` for this component:
-
-[source,xml,subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>org.openksavi.sponge</groupId>
-    <artifactId>sponge-camel</artifactId>
-    <version>{projectVersion}</version>
-</dependency>
-----
-
-=== URI format
-[source,java]
-----
-sponge:engineRef[?options]
-----
-Where `engineRef` represents the name of the `SpongeEngine` implementation instance located in the Camel registry.
-
-=== Options
-
-[cols="1,2,5"]
-|===
-|Name |Default value |Description
-
-|`action`
-|`"CamelProducerAction"`
-|Could be used only on the producer side of the route. It will synchronously call the {sponge} action that has a name specified by the value of this option. However if there is the header named *CamelSpongeAction* in the Camel In message, it would override the value of this option.
-
-|`managed`
-|`true`
-|If set to `true` the {sponge} engine will be started automatically when the endpoint starts and will be shut down when the endpoint stops.
-|===
-
-=== {sponge} support for Camel
-
-==== CamelPlugin
-`CamelPlugin` provides an interface to the Camel context so it may be used in a knowledge base. 
-
-`CamelPlugin` may be configured in three different ways.
-
-* Explicitly as a Spring bean and assigned to the engine using the Engine Builder API. This is the preferred way.
-+
-.Example
-[source,python]
-----
-@Configuration
-public class SpringConfiguration extends SpongeCamelConfiguration {
-
-    @Bean
-    public SpongeEngine spongeEngine() {
-        return SpringSpongeEngine.builder()
-                .config("config.xml")
-                .plugin(camelPlugin())
-                .build();
-    }
-}
-----
-* Implicitly when creating a {sponge} Camel endpoint.
-* Explicitly in the {sponge} XML configuration file.
-+
-.Example
-[source,xml]
-----
-<?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
-
-    <plugins>
-        <!-- Note: don't change the plugin name. -->
-        <plugin name="camel" class="org.openksavi.sponge.camel.CamelPlugin" />
-    </plugins>
-</sponge>
-----
-
-TIP: If you use an implicit configuration and you get an error stating that `camel` variable is not defined, it signifies that a Camel context is not configured yet or {sponge} engine is not used in any Camel route.
-
-Only one `CamelContext` may be used with one instance of {sponge} engine, bound by a single `CamelPlugin`.
-
-.Important CamelPlugin properties and methods
-[cols="1,5"]
-|===
-|Property / Method |Description
-
-|`send(body)`
-|Sends the body to all current consumers.
-
-|`send(uri, body)`
-|Sends the body to an endpoint.
-
-|`request(uri, body)`
-|Sends the body to an endpoint returning any result output body.
-
-|`getContext()`
-|Returns a Camel context.
-
-|`getConsumers()`
-|Returns the current list of consumers.
-|===
-
-For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/camel/CamelPlugin.html[`CamelPlugin` Javadoc].
-
-
-==== Spring-based support
-`SpongeCamelConfiguration` provides base Camel and {sponge} configuration using Spring Java configuration. Your Spring configuration could inherit from this class.
-
-Spring bean named `"spongeProducerTemplate"` allows you to configure a Camel producer template used by `CamelPlugin` to send Camel messages. If none is present in a Spring configuration, then a default will be used.
-
-Spring bean named `springPlugin` is the instance of `SpringPlugin` that could be registered in the engine and used in knowledge bases as the `spring` variable.
-
-Spring bean named `camelPlugin` is the instance of `CamelPlugin` that could be registered in the engine and used in knowledge bases as the `camel` variable.
-
-=== Producer
-Using sponge component on the producer side of the route will forward a body of a Camel message to the specified {sponge} engine.
-
-{sponge} in a producer mode could be placed in many routes in one Camel context.
-
-.Producer example - Spring configuration
-[source,java]
-----
-@Configuration
-public class ExampleConfiguration extends SpongeCamelConfiguration {
-
-    @Bean
-    public SpongeEngine spongeEngine() {
-        // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
-        return SpringSpongeEngine.builder()
-                .knowledgeBase("camelkb", "examples/camel/camel_producer.py")
-                .plugins(springPlugin(), camelPlugin())
-                .build();
-    }
-
-    @Bean
-    public RouteBuilder exampleRoute() {
-        return new RouteBuilder() {
-            @Override
-            public void configure() {
-                from("direct:start").routeId("spongeProducer")
-                    .to("sponge:spongeEngine");
-            }
-        };
-    }
-}
-----
-
-.Python knowledge base `camel_producer.py`
-[source,python]
-----
-class CamelTrigger(Trigger):
-    def onConfigure(self):
-        self.event = "spongeProducer"
-    def onRun(self, event):
-        print event.body
-----
-
-.Producer example - Sample code that sends a Camel message
-[source,java]
-----
-// Starting a Spring context.
-GenericApplicationContext context = new AnnotationConfigApplicationContext(ExampleConfiguration.class);
-context.start();
-
-// Sending a Camel message.
-CamelContext camel = context.getBean(CamelContext.class);
-ProducerTemplate producerTemplate = camel.createProducerTemplate();
-producerTemplate.sendBody("direct:start", "Send me to the Sponge");
-
-// Waiting for the engine to process an event.
-----
-
-.Output console
-[source,bash,subs="verbatim,attributes"]
-----
-Send me to the Sponge
-----
-
-==== Camel producer action
-Camel producer action will be invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. The result returned by this action is placed as the body of the Camel _IN_ message. So it may be used by the next endpoint in the route if there is any.
-
-NOTE: To avoid misconception please note that events in the Output Event Queue are not sent to the Camel route.
-
-===== Default Camel producer action
-The default Camel producer action is provided by a Java action `CamelProducerAction`. If the body of the Camel message is a {sponge} event or event definition, than the event is sent to the {sponge} immediately. Otherwise this action creates and sends a new event that encapsulates the body. The event is then returned, so it is placed as the body of the Camel In message. The default name of the new event is the name of the corresponding Camel route.
-
-===== Custom Camel producer action
-You could provide a custom implementation of a Camel producer action in two ways:
-
-* define your own implementation of `CamelProducerAction` in a knowledge base,
-* define an action in a knowledge base that takes an instance of `Exchange` as an argument and specify it in the producer endpoint URI or in the message header, e.g.:
-+
-.Python knowledge base
-[source,python]
-----
-class CustomAction(Action):
-    def onCall(self, exchange):
-        return "OK"
-----
-+
-.Camel route that sets the action in the endpoint URI
-[source,java]
-----
-from("direct:start").routeId("spongeProducer")
-        .to("sponge:spongeEngine?action=CustomAction")
-        .log("Action result as a body: ${body}");
-----
-+
-.Camel route that sets the action in the header
-[source,java]
-----
-from("direct:start").routeId("spongeProducer")
-        .setHeader("CamelSpongeAction", constant("CustomAction"))
-        .to("sponge:spongeEngine)
-        .log("Action result as a body: ${body}");
-----
-
-=== Consumer
-Using sponge component on the consumer side of the route will forward messages sent from the specified {sponge} engine to a Camel route.
-
-{sponge} in a consumer mode could be placed in many routes in one Camel context.
-
-.Consumer example - Spring configuration
-[source,java]
-----
-@Configuration
-public class ExampleConfiguration extends SpongeCamelConfiguration {
-
-    @Bean
-    public SpongeEngine spongeEngine() {
-        // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
-        return SpringSpongeEngine.builder()
-                .knowledgeBase("camelkb", "examples/camel/camel_consumer.py")
-                .plugins(springPlugin(), camelPlugin())
-                .build();
-    }
-
-    @Bean
-    public RouteBuilder exampleRoute() {
-        return new RouteBuilder() {
-
-            @Override
-            public void configure() {
-                from("sponge:spongeEngine").routeId("spongeConsumer")
-                    .log("${body}")
-                    .to("stream:out");
-            }
-        };
-    }
-}
-----
-
-.Python knowledge base `camel_simple_consumer.py`
-[source,python]
-----
-class CamelTrigger(Trigger):
-    def onConfigure(self):
-        self.event = "spongeEvent"
-    def onRun(self, event):
-        camel.send(event.get("message"))
-
-    sponge.event("spongeEvent").set("message", "Send me to Camel")
-----
-
-The variable `camel` is a reference to the instance of `CamelPlugin` that is associated with the Camel context.
-
-.Output console
-[source,bash,subs="verbatim,attributes"]
-----
-Send me to Camel
-----
-
-You may also send a message to the Camel endpoint directly, e.g.:
-[source,python]
-----
-camel.send("direct:log", event.get("message"))
-----
-This allows you, for example, to create a flexible message flow using Camel routes and {sponge} as a dispatcher.
-
-=== Routes in scripting languages
-`ScriptRouteBuilder` class introduces `fromS` methods (meaning _from Script_) that delegate to the corresponding `from` methods in order to avoid using `from` since it could be a reserved keyword in scripting languages (e.g. in Python). So when defining Camel routes in Python you should use this class instead of standard `RouteBuilder`, e.g.:
-
-[source,python]
-----
-from org.openksavi.sponge.camel import ScriptRouteBuilder
-
-class PythonRoute(ScriptRouteBuilder):
-    def configure(self):
-        self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
-                .transform().simple("${body}") \
-                .process(lambda exchange: sponge.getVariable("receivedRssCount").incrementAndGet()) \
-                .to("stream:out")
-
-def onStartup():
-    camel.context.addRoutes(PythonRoute())
-----
+include::user-guide-integration-camel.adoc[leveloffset=+1]
 
 include::user-guide-integration-rest-api-server.adoc[leveloffset=+1]
 
@@ -378,8 +77,15 @@ include::user-guide-integration-rest-api-client-java.adoc[leveloffset=+1]
 include::user-guide-integration-rest-api-client-dart.adoc[leveloffset=+1]
 
 [[integration-external-subprocess]]
-== Run an external executable as a subprocess
-{sponge} provides a way to run an external executable as a subprocess of the {sponge} Java process. This feature is used by some of the plugins, for example by the Py4J integration plugin to execute an external Python script.
+== Running external processes
+{sponge} provides the `ProcessInstance` API to run an external executable as a subprocess of the {sponge} Java process. This feature is used by some of the plugins, for example by the Py4J integration plugin to execute an external Python script.
+
+In general, an external process can be executed using:
+
+* {sponge} `ProcessInstance` API (covered in this chapter),
+* scripting language API,
+* Apache Camel http://camel.apache.org/exec.html[exec component],
+* Java API (`ProcessBuilder`).
 
 .Subprocess configuration parameters
 [cols="1,1,4"]
@@ -408,64 +114,133 @@ include::user-guide-integration-rest-api-client-dart.adoc[leveloffset=+1]
 
 |`waitSeconds`
 |`Long`
-|The maximum number of seconds to wait after the start of the process. The thread that started the process will be blocked until the time elapses or the subprocess exits. May be `null` (the default value) if the thread shouldn't wait.
+|The maximum number of seconds to wait after the start of the process. The thread that started the process will be blocked until the time elapses or the subprocess exits. If `null` (the default value), the thread will not wait.
 
-|`redirectType`
-|`RedirectType`
-|The redirect type (see the following table). The default value is `INHERIT`.
+|`inputRedirect`
+|`InputRedirect`
+|The standard input redirect type (see the following tables).
+
+|`outputRedirect`
+|`OutputRedirect`
+|The standard output redirect type (see the following tables).
+
+|`errorRedirect`
+|`ErrorRedirect`
+|The standard error redirect type (see the following tables).
 
 |`charset`
 |`String`
-|The charset the subprocess output stream used if the `redirectType` is `STRING` or `LOGGER`.
+|The the charset of the subprocess streams used if the redirect type is `STRING`.
 
-|`waitForOutputLineRegexp`
+|`waitForPositiveLineRegexp`
 |`String`
-|The Java regular expression of a line from the process output text stream. The thread that started the process will wait (blocking) for such line. May be `null` if the thread shouldn't wait for a specific line (or `waitForErrorOutputLineRegexp` if set).
+|The Java regular expression of a line from the process output text stream. The thread that started the process will wait (blocking) for such line. If set to `null`, the thread will not wait for a specific line (or `waitForNegativeLineRegexp` if set).
 
-|`waitForErrorOutputLineRegexp`
+|`waitForNegativeLineRegexp`
 |`String`
 |Sets the Java regular expression of a line from the process output text stream that signals an error and should cause throwing an exception.
 
-|`waitForOutputLineTimeout`
+|`waitForLineTimeout`
 |`Long`
 |The timeout for waiting for a specific line from the process output stream (in seconds). If `null`, the thread could wait indefinitely. If the timeout is exceeded, the exception will be thrown.
+
+|`inputString`
+|`String`
+|The input string that will be set as the process standard input. Applicable only if the input redirect type is STRING.
+
+|`inputBinary`
+|`byte[]`
+|he input bytes that will be set as the process standard input. Applicable only if the input redirect type is BINARY.
 |===
 
-.Redirect type
+.Standard input redirect type
 [cols="1,5"]
 |===
 |Value |Description
 
-|`LOGGER`
-|Logs the subprocess standard output (as INFO) and error output (as WARN) to the logger.
+|`PIPE` |Indicates that subprocess standard input will be connected to the current Java process over a pipe. This is the default handling of subprocess standard input.
 
-|`INHERIT`
-|Sets the source and destination for subprocess standard I/O to be the same as those of the current Java process.
+|`INHERIT` |Sets the destination for subprocess standard input to be the same as those of the current Java process.
 
-|`STRING`
-|Writes all subprocess standard output and error output to the `ProcessInstance.outputString` string. The thread that started the subprocess will wait for the subprocess to exit.
+|`STRING` |Sets the subprocess input as the `ProcessConfiguration.inputString` string.
 
-|`BINARY`
-|Writes all subprocess standard output and error output to the `ProcessInstance.outputBinary` byte array. The thread that started the subprocess will wait for the subprocess to exit.
+|`BINARY` |Sets the subprocess input as the `ProcessConfiguration.inputBinary` bytes.
 
-|`NONE`
-|No redirection will be set.
+|`FILE` |Sets the subprocess input as the `ProcessConfiguration.inputFile` file specified as the file name.
+
+|`STREAM` |Sets the subprocess input as a stream. This is a special case of `PIPE` that makes easier writing to and closing the subprocess standard input `ProcessInstance.getInput()` after start. Then you should invoke manually `ProcessInstance.waitForReady()`.
 |===
 
-.Example of running an external executable with arguments
+.Standard output redirect type
+[cols="1,5"]
+|===
+|Value |Description
+
+|`PIPE` |Indicates that subprocess standard output will be connected to the current Java process over a pipe. This is the default handling of subprocess standard output.
+
+|`INHERIT` |Sets the destination for subprocess standard output to be the same as those of the current Java process.
+
+|`STRING` |Writes all subprocess standard output to the `ProcessInstance.outputString` string. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`BINARY` |Writes all subprocess standard output to the `ProcessInstance.outputBinary` byte array. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`FILE` |Writes all subprocess standard output to the `ProcessInstance.outputFile` file. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`LOGGER` |Logs the subprocess standard output to the logger (as INFO).
+|===
+
+.Standard error redirect type
+[cols="1,5"]
+|===
+|Value |Description
+
+|`PIPE` |Indicates that subprocess error output will be connected to the current Java process over a pipe. This is the default handling of subprocess error output.
+
+|`INHERIT` |Sets the destination for subprocess error output to be the same as those of the current Java process.
+
+|`STRING` |Writes all subprocess error output to the `ProcessInstance.errorString` string. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`FILE` |Writes all subprocess error output to the `ProcessInstance.getErrorFile` file. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`EXCEPTION` |Throw an exception if the error output is not empty. The thread that started the subprocess will wait for the subprocess to exit.
+
+|`LOGGER` |Logs the subprocess error output to the logger (as WARN).
+|===
+
+.Example of running an external executable with arguments in Java
 [source,java]
 ----
-ProcessInstance process = SpongeUtils.startProcess(engine,
-        ProcessConfiguration.builder("echo").arguments("TEST").redirectType(RedirectType.STRING).build());
-String output = process.outputString();
+ProcessInstance process = engine.getOperations().runProcess(
+        ProcessConfiguration.builder("echo").arguments("TEST").outputRedirect(OutputRedirect.STRING).build());
+String output = process.getOutputString();
 ----
 
-.Example of running an external executable with an additional environment
+.Example of running an external executable with arguments in Python
+[source,python]
+----
+from org.openksavi.sponge.util.process import ProcessConfiguration, OutputRedirect
+
+process = sponge.runProcess(ProcessConfiguration.builder("echo").arguments("TEST").outputRedirect(OutputRedirect.STRING).build())
+print process.outputString
+----
+
+.Example of running an external executable with an additional environment in Java
 [source,java]
 ----
-ProcessInstance process = SpongeUtils.startProcess(engine, ProcessConfiguration.builder("printenv")
-        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").redirectType(RedirectType.STRING).build());
+ProcessInstance process = engine.getOperations().runProcess(ProcessConfiguration.builder("printenv")
+        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputRedirect(OutputRedirect.STRING).build());
 ----
+
+.Example of running an external executable with an additional environment in Python
+[source,python]
+----
+from org.openksavi.sponge.util.process import ProcessConfiguration, OutputRedirect
+
+process = sponge.runProcess(ProcessConfiguration.builder("printenv").arguments("TEST_VARIABLE")
+                .env("TEST_VARIABLE", "TEST").outputRedirect(OutputRedirect.STRING).build())
+----
+
+For more examples see {sourcesUrl}/sponge-core/src/test/java/org/openksavi/sponge/core/util/process/ProcessInstanceTest.java[ProcessInstanceTest.java].
 
 == Python (CPython) / Py4J
 {sponge} may communicate with external programs written in the reference implementation of the Python programming language - https://en.wikipedia.org/wiki/CPython[CPython] using https://www.py4j.org[Py4J], and vice versa. A Python program and a {sponge} Java process communicate through network sockets.
@@ -541,7 +316,7 @@ WARNING: Local network sockets used by Py4j should be secured, for example using
 
 |`pythonScript`
 |<<integration-external-subprocess,XML element/ProcessConfiguration>>
-|The configuration of the CPython script that may be run as a subprocess of the {sponge} Java process when the plugin is starting up. Typically such script would init the Py4J connection on the CPython side. The plugin automatically adds to the environment variables for the subprocess: `PY4J_JAVA_PORT`, `PY4J_PYTHON_PORT` and optionally `PY4J_AUTH_TOKEN`.
+|The configuration of the CPython script that can be run as a subprocess of the {sponge} Java process when the plugin is starting up. Typically such script would init the Py4J connection on the CPython side. The plugin automatically adds to the environment variables for the subprocess: `PY4J_JAVA_PORT`, `PY4J_PYTHON_PORT` and optionally `PY4J_AUTH_TOKEN`.
 
 |`pythonScriptBeforeStartup`
 |`boolean`
@@ -682,7 +457,7 @@ The plugin may run a CPython script as a subprocess.
                     <argument>${sponge.configDir}/cpython_script.py</argument>
                     <waitSeconds>60</waitSeconds>
                     <waitForOutputLineRegexp>The CPython service has started.</waitForOutputLineRegexp>
-                    <redirectType>LOGGER</redirectType>
+                    <outputRedirect>LOGGER</outputRedirect>
                 </pythonScript>
                 <pythonScriptBeforeStartup>false</pythonScriptBeforeStartup>
             </configuration>
@@ -693,7 +468,7 @@ The plugin may run a CPython script as a subprocess.
 == ReactiveX
 The ReactiveX plugin (`ReactiveXPlugin`) provides support for using http://reactivex.io[ReactiveX] in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming. The plugin uses https://github.com/ReactiveX/RxJava[RxJava library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
 
-The default name of the ReactiveX plugin (which may be used in knowledge bases) is `rx`.
+The default name of the ReactiveX plugin (which can be used in knowledge bases) is `rx`.
 
 The main object provided by this plugin is an instance of a hot observable (`rx.observable`) that emits all non system {sponge} events. The plugin registers a Java-based correlator that listens to {sponge} events and sends them to the observable.
 
@@ -750,7 +525,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 == MIDI
 The MIDI plugin (`MidiPlugin`) allows processing https://en.wikipedia.org/wiki/MIDI[MIDI] messages by the {sponge} and provides communication with MIDI devices. It wraps MIDI messages in {sponge} events. The plugin supports `ShortMessage`, `MetaMessage` and `SysexMessage` MIDI messages wrapping them respectively in `MidiShortMessageEvent`, `MidiMetaMessageEvent` and `MidiSysexMessageEvent` {sponge} events. Although the MIDI support in the {sponge} provides a set of methods that use the `javax.sound.midi` API, the goal of this plugin is not to be a complete interface to the MIDI system but a bridge between MIDI messages and {sponge} events.
 
-The default name of the MIDI plugin (which may be used in knowledge bases) is `midi`.
+The default name of the MIDI plugin (which can be used in knowledge bases) is `midi`.
 
 .MIDI plugin configuration parameters
 [cols="1,1,4"]
@@ -831,7 +606,7 @@ The MPD plugin (`MpdPlugin`) provides an integration with an https://en.wikipedi
 
 NOTE: The plugin is located in the `sponge-mpd` {sponge} external module. The reason that the MPD support is located in the external {sponge} module is that *it is released under http://www.gnu.org/copyleft/gpl.html[GNU GPL Version 3] license* which is not compatible with the {sponge} Apache 2.0 license. This requirement is forced by the license of the underlying library https://github.com/finnyb/javampd[JavaMPD].
 
-The default name of the MPD plugin (which may be used in knowledge bases) is `mpd`.
+The default name of the MPD plugin (which can be used in knowledge bases) is `mpd`.
 
 The MPD plugin provides a simple predefined knowledge base library.
 
@@ -931,7 +706,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 == Raspberry Pi - Pi4J
 The Pi4J plugin (`Pi4JPlugin`) allows using the http://pi4j.com[Pi4J] library in {sponge} knowledge bases. The Pi4J library provides a friendly object-oriented I/O API and implementation libraries to access the full I/O capabilities of the Raspberry Pi platform. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
 
-The default name of the Pi4J plugin (which may be used in knowledge bases) is `pi4j`.
+The default name of the Pi4J plugin (which can be used in knowledge bases) is `pi4j`.
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi/pi4j/Pi4JPlugin.html[`Pi4JPlugin` Javadoc].
 
@@ -999,7 +774,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 == Raspberry Pi - GrovePi
 The GrovePi plugin (`GrovePiPlugin`) allows accessing the https://www.dexterindustries.com/grovepi/[GrovePi] hardware in {sponge} knowledge bases. GrovePi is an electronics board for Raspberry Pi that may have a variety of sensors and actuators connected to. The plugin uses https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
 
-The default name of the GrovePi plugin (which may be used in knowledge bases) is `grovepi`.
+The default name of the GrovePi plugin (which can be used in knowledge bases) is `grovepi`.
 
 IMPORTANT: If using this plugin in an embedded {sponge}, you have to manually install the https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library] in you local Maven repository because it isn't available in the Central Maven Repository.
 
@@ -1056,4 +831,56 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 include::user-guide-integration-tensorflow.adoc[leveloffset=+1]
+
+== GSM modem
+{sponge} provides access to a GSM modem device. The `GammuGsmModemPlugin` uses https://wammu.eu/gammu/[Gammu]. The requirement is that Gammu utility has to be installed. The current implementation of the `GammuGsmModemPlugin` is limited. It only sends SMSes. However you may invoke `gammu` in a knowledge base using the {sponge} `ProcessInstance` API.
+
+The default name of the plugin (which can be used in knowledge bases) is `gsm`.
+
+.Example of sending SMS using the `GammuGsmModemPlugin`
+[source,python]
+----
+class SendSms(Action):
+    def onConfigure(self):
+        self.displayName = "Send SMS"
+        self.description = "Sends a new SMS."
+        self.argsMeta = [
+            ArgMeta("recipient", StringType()).displayName("Recipient").description("The SMS recipient."),
+            ArgMeta("message", StringType()).displayName("Message").description("The SMS message.")
+        ]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, recipient, message):
+        gsm.sendSms(recipient, message)
+----
+
+.Example XML configuration
+[source,xml]
+----
+<plugin name="gsm" class="org.openksavi.sponge.gsmmodem.GammuGsmModemPlugin" />
+----
+
+.Example of sending SMS using the `ProcessInstance` API
+[source,python]
+----
+from org.openksavi.sponge.util.process import ProcessConfiguration, InputRedirect, OutputRedirect
+
+def sendSms(recipient, message):
+    process = sponge.runProcess(ProcessConfiguration.builder("gammu").arguments("sendsms", "TEXT", recipient,
+            None if gsm.canEncodeGsm(message) else "-unicode")
+            .inputRedirect(InputRedirect.STRING).inputString(message).outputRedirect(OutputRedirect.STRING).build())
+    if process.waitFor() != 0:
+        raise Exception("Exit code {}: {}".format(process.exitCode, process.outputString))
+----
+
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-gsm-modem</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
 

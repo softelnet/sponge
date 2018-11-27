@@ -16,13 +16,13 @@
 
 package org.openksavi.sponge.reactivex;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.java.JPlugin;
-
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 
 /**
  * ReactiveX plugin.

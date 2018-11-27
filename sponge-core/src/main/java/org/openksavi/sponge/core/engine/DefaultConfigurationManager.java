@@ -23,7 +23,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Charsets;
+
 import org.apache.commons.configuration2.CombinedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
@@ -31,10 +34,11 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.configuration2.resolver.DefaultEntityResolver;
 import org.apache.commons.configuration2.tree.MergeCombiner;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -82,6 +86,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
     /** Engine configuration. */
     private CommonsConfiguration engineConfig;
+
+    /** Properties from the properties file. */
+    private PropertiesConfiguration propertiesConfig;
 
     /** The number of the Main Processing Unit worker threads. */
     private Integer mainProcessingUnitThreadCount;
@@ -140,8 +147,10 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     public void doStartup() {
         home = System.getProperty(ConfigurationConstants.PROP_HOME);
 
-        setupRootConfig();
+        readConfiguration();
 
+        // Add properties from an optional properties file (has the same base name as the configuration file).
+        setupPropertiesFromPropertiesFile();
         // Add manually predefined properties.
         setupPredefinedProperties();
         // Add all system properties.
@@ -210,6 +219,12 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         if (executorShutdownTimeout == null) {
             executorShutdownTimeout = engineConfig.getLong(ConfigurationConstants.TAG_ENGINE_EXECUTOR_SHUTDOWN_TIMEOUT,
                     getEngine().getDefaultParameters().getExecutorShutdownTimeout());
+        }
+    }
+
+    private void setupPropertiesFromPropertiesFile() {
+        if (propertiesConfig != null) {
+            propertiesConfig.getKeys().forEachRemaining(key -> setProperty(key, propertiesConfig.getString(key)));
         }
     }
 
@@ -294,42 +309,67 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
     }
 
-    protected Pair<XMLConfiguration, URL> createXmlConfiguration(String fileName) {
+    protected Triple<XMLConfiguration, URL, PropertiesConfiguration> createXmlConfiguration(String fileName) {
         FallbackBasePathLocationStrategy locationStrategy =
                 new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
         FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
                 .configure(new Parameters().xml().setLocationStrategy(locationStrategy).setFileName(fileName).setSchemaValidation(true)
                         .setEntityResolver(new ResourceSchemaResolver()));
 
+        XMLConfiguration xmlConfiguration = null;
         try {
-            XMLConfiguration xmlConfiguration = builder.getConfiguration();
-
-            return new ImmutablePair<>(xmlConfiguration, locationStrategy.getLocatedUrl());
+            xmlConfiguration = builder.getConfiguration();
         } catch (ConfigurationException e) {
-            throw new ConfigException("Error reading configuration file " + fileName, e);
+            throw new ConfigException(locationStrategy.isNotFound() ? "Configuration file " + fileName + " not found"
+                    : "Error reading configuration file " + fileName, e);
         }
+
+        String propertiesFileName =
+                FilenameUtils.concat(FilenameUtils.getFullPath(fileName), FilenameUtils.getBaseName(fileName)) + ".properties";
+        PropertiesConfiguration propertiesConfiguration = null;
+        FallbackBasePathLocationStrategy propertiesLocationStrategy =
+                new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
+        try {
+            propertiesConfiguration =
+                    new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
+                            .configure(new Parameters().properties().setLocationStrategy(propertiesLocationStrategy)
+                                    .setFileName(propertiesFileName).setEncoding(Charsets.UTF_8.name()).setThrowExceptionOnMissing(false))
+                            .getConfiguration();
+        } catch (ConfigurationException e) {
+            // Ignoring the exception if the optional properties file hasn't been found.
+            if (propertiesLocationStrategy.isNotFound()) {
+                propertiesConfiguration = new PropertiesConfiguration();
+            } else {
+                throw new ConfigException("Error reading configuration properties file " + propertiesFileName, e);
+            }
+        }
+
+        return new ImmutableTriple<>(xmlConfiguration, locationStrategy.getLocatedUrl(), propertiesConfiguration);
     }
 
-    protected void setupRootConfig() {
+    protected void readConfiguration() {
         MergeCombiner combiner = new MergeCombiner();
         combiner.addListNode(PluginManagerConstants.CFG_PLUGIN);
 
         CombinedConfiguration cc = new CombinedConfiguration(combiner);
 
-        // Try to add explicit configuration
+        XMLConfiguration defaultConfiguration = createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG).getLeft();
+
+        // Try to add explicit configuration.
         if (configurationFilename != null) {
-            logger.info("Loading configuration file {}...", configurationFilename);
-            Pair<XMLConfiguration, URL> configurationPair = createXmlConfiguration(configurationFilename);
+            logger.info("Loading the configuration file {}...", configurationFilename);
+            Triple<XMLConfiguration, URL, PropertiesConfiguration> configurationResult = createXmlConfiguration(configurationFilename);
 
-            XMLConfiguration fileConfiguration = configurationPair.getLeft();
-            configurationFileUrl = configurationPair.getRight();
+            XMLConfiguration xmlConfiguration = configurationResult.getLeft();
+            configurationFileUrl = configurationResult.getMiddle();
+            propertiesConfig = configurationResult.getRight();
 
-            cc.addConfiguration(fileConfiguration);
-            fileConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, SpongeUtils.getFileDir(configurationFileUrl));
+            cc.addConfiguration(xmlConfiguration);
+            xmlConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, SpongeUtils.getFileDir(configurationFileUrl));
         }
 
-        // Add default configuration
-        cc.addConfiguration(createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG).getLeft());
+        // Add default configuration.
+        cc.addConfiguration(defaultConfiguration);
 
         if (configurationFilename != null && logger.isDebugEnabled()) {
             logger.debug("Initial XML configuration:\n{}", SpongeUtils.dumpConfiguration(cc));

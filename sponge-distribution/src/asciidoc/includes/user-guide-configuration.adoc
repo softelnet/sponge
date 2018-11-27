@@ -1,5 +1,5 @@
 = Configuration
-{sponge} may be configured:
+{sponge} can be configured:
 
 * in an XML configuration file,
 * using the Engine Builder API.
@@ -57,9 +57,9 @@ The specification of a configuration XML file is provided by the schema file {ho
 The configuration file is looked up using the default strategy provided by https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration], e.g. first in the file system as a relative or absolute path and then in the classpath. If not found, the configuration file is looked up in the file system relative to the {sponge} home directory.
 
 === Properties configuration
-The properties configuration section (`properties`) allows setting configuration properties. Configuration properties may be used in other places in the configuration file. Moreover the properties could be used as Java system properties if the attribute `system` is set to `true`. Java system properties passed to the Java Virtual Machine take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
+The properties configuration section (`properties`) allows setting configuration properties. Configuration properties may be used in other places in the configuration file. Moreover the properties can be used as Java system properties if the attribute `system` is set to `true`. Java system properties passed to the JVM take precedence over the ones defined in the properties configuration section of the configuration file. So, for example passing `-Dsponge.home=/opt/sponge` to the JVM  will override the corresponding property configuration.
 
-Properties could also be used as {sponge} variables in the engine scope. In that case you have to set the attribute `variable` to `true`. The type of such variables is always `String`.
+Properties can also be used as {sponge} variables in the engine scope. In that case you have to set the attribute `variable` to `true`. The type of such variables is always `String`.
 
 .Predefined properties
 [cols="1,4"]
@@ -72,6 +72,8 @@ Properties could also be used as {sponge} variables in the engine scope. In that
 |`sponge.configDir`
 |The configuration file directory. This property is read only. It may be `null` if there is no {sponge} configuration file.
 |===
+
+Properties may be loaded from an optional properties file located in the same directory as the configuration file, which name follows the convention `<XML configuration file basename>.properties`. This properties file is supposed to be encoded in UTF-8.
 
 === Engine configuration
 The engine configuration section (`<engine>`) contains engine configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.

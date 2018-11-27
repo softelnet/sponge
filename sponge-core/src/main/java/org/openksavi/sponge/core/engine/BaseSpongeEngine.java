@@ -449,7 +449,9 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     private void safelyShutdownModule(EngineModule module, AtomicReference<Throwable> exceptionHolder) {
         try {
-            module.shutdown();
+            if (module != null) {
+                module.shutdown();
+            }
         } catch (Throwable e) {
             if (exceptionHolder.get() == null) {
                 exceptionHolder.set(e);

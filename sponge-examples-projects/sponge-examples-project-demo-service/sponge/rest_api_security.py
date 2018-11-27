@@ -20,7 +20,7 @@ def onStartup():
     
     passwordFile = sponge.engine.configurationManager.getProperty("password.file")
     if not passwordFile:
-        raise Exception("Password file property  not found")
+        raise Exception("Password file property not found")
 
     with open(passwordFile, "r") as f:
         password = f.read().replace("\n", "")

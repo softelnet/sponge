@@ -42,20 +42,18 @@ public class DefaultCamelConsumer implements CamelConsumer {
     }
 
     @Override
-    public boolean send(Object body) {
-        final Exchange exchange = spongeEndpoint.createExchange(body);
-        return send(exchange);
+    public boolean emit(Object body) {
+        return emit(spongeEndpoint.createExchange(body));
     }
 
     @Override
-    public boolean send(final Exchange exchange) {
-        return send(exchange, callback -> {
-            //
+    public boolean emit(final Exchange exchange) {
+        return emit(exchange, callback -> {
         });
     }
 
     @Override
-    public boolean send(final Exchange exchange, AsyncCallback callback) {
+    public boolean emit(final Exchange exchange, AsyncCallback callback) {
         return processor.process(exchange, callback);
     }
 

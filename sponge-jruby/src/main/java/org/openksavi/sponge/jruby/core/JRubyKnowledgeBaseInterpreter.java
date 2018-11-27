@@ -132,7 +132,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     private void setLoadPaths(SpongeEngine engine) {
         if (engine != null) {
-            String rubyPath = engine.getConfigurationManager().getProperty(PROP_RUBY_PATH);
+            String rubyPath = getEngineOperations().getProperty(PROP_RUBY_PATH, null);
             if (rubyPath != null) {
                 List<String> paths = Arrays.asList(StringUtils.split(rubyPath, PROP_PATH_SEPARATOR));
                 container.setLoadPaths(paths);

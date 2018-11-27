@@ -26,11 +26,11 @@ import org.apache.camel.Processor;
  */
 public interface CamelConsumer {
 
-    boolean send(Object body);
+    boolean emit(Object body);
 
-    boolean send(Exchange exchange);
+    boolean emit(Exchange exchange);
 
-    boolean send(final Exchange exchange, AsyncCallback callback);
+    boolean emit(final Exchange exchange, AsyncCallback callback);
 
     Endpoint getEndpoint();
 

@@ -231,11 +231,11 @@ public interface SpongeRestClient extends Closeable {
      * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined.
      *
      * @param request the request.
-     * @param actionMeta the action metadata that will be used for marshaling and unmarshaling. If the value is {@code null}, this method
+     * @param actionMeta the action metadata that will be used for marshalling and unmarshalling. If the value is {@code null}, this method
      *        may fetch the action metadata from the server if the action metadata cache is turned off or is not populated.
      * @param allowFetchMetadata if {@code true} (the default value), the action metadata (if {@code null}) may be fetched from the server
      *        by sending an additional request. If {@code false} and the action metadata is {@code null} or is not in the cache, the
-     *        marshaling of arguments and unmarshaling of the result will be suppressed.
+     *        marshalling of arguments and unmarshalling of the result will be suppressed.
      * @param context the context.
      *
      * @return the response.

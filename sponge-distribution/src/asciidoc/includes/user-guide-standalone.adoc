@@ -34,6 +34,9 @@ Standalone command-line application doesn't support history of entered commands/
 
 |`-v`
 |Print the version information and exit.
+
+| `-D property=value` or `-Dproperty=value`
+|Set the Java system property.
 |===
 
 == Default parameters
@@ -270,13 +273,21 @@ If you experience too many logs in the console while running a non-interactive s
     </filter>
 ----
 
+To provide a custom logging configuration you may use the `-D` option according to the Logback documentation.
+
+.Custom logging configuration
+[source,bash]
+----
+./sponge -c ../examples/script/py/triggers_hello_world.xml -Dlogback.configurationFile=custom_logback.xml
+----
+
 === Interactive mode
 In an interactive mode a predefined console logger appender (configured in `config/logback.xml`) is turned off programmatically.
 
 Exceptions thrown from other threads of the {sponge} engine are not printed into the console. You may change that behavior by specifying `-e` command-line option.
 
 == REST API
-You may enable the {sponge} REST API in the standalone command line application but such configuration will provide no user management and a very limited security. Thus it may be used only in a secure network or for test purposes.
+You may enable the {sponge} REST API in the standalone command line application but such configuration will provide no user management and a very limited security. Thus it can be used only in a secure network or for test purposes.
 
 Manual start of the REST API (`autoStart` must be turned off) is required because the REST API server must start after the Camel context has started.
 
@@ -328,75 +339,55 @@ For more information see examples in the source code.
 |Log files.
 |===
 
-== Camel components and data formats available out of the box
+== Extension components
+The extension components are included in the {sponge} standalone command-line application distribution and could be used out of the box in {sponge} knowledge bases.
+
+=== Camel components and data formats
 Besides Camel core components and data formats, {sponge} standalone command-line application provides also a selected set of other Camel components and data formats ready to use.
 
-.Camel components out of the box
+.Camel components
 [width="75%"]
 |===
 |Component |Description
 
-|http://camel.apache.org/amqp.html[camel-amqp] |AMQP
-|http://camel.apache.org/bean-validator.html[camel-bean-validator] |Validation
-|http://camel.apache.org/dns.html[camel-dns] |DNS
-|http://camel.apache.org/docker.html[camel-docker] |Docker
-|http://camel.apache.org/dropbox.html[camel-dropbox] |Dropbox
-|http://camel.apache.org/ejb.html[camel-ejb] |EJB
-|http://camel.apache.org/eventadmin.html[camel-eventadmin] |OSGi EventAdmin events
 |http://camel.apache.org/exec.html[camel-exec] |Executing system commands
-|http://camel.apache.org/facebook.html[camel-facebook] |Facebook
-|http://camel.apache.org/ftp2.html[camel-ftp] |FTP
-|http://camel.apache.org/geocoder.html[camel-geocoder] |Geocoder
 |http://camel.apache.org/grape.html[camel-grape] |Grape
 |http://camel.apache.org/http4.html[camel-http4] |HTTP
 |http://camel.apache.org/mail.html[camel-mail] |Mail
-|http://camel.apache.org/irc.html[camel-irc] |IRC
-|http://camel.apache.org/jbpm.html[camel-jbpm] |jBPM
 |http://camel.apache.org/jdbc.html[camel-jdbc] |JDBC
 |http://camel.apache.org/jms.html[camel-jms] |JMS
 |http://camel.apache.org/jmx.html[camel-jmx] |JMX
-|http://camel.apache.org/jsch.html[camel-jsch] |SCP
-|http://camel.apache.org/ldap.html[camel-ldap] |LDAP
-|http://camel.apache.org/linkedin.html[camel-linkedin] |LinkedIn
 |http://camel.apache.org/mqtt.html[camel-mqtt] |MQTT
 |http://camel.apache.org/mustache.html[camel-mustache] |Mustache
 |http://camel.apache.org/netty4.html[camel-netty4] |Netty
 |http://camel.apache.org/netty-http.html[camel-netty4-http] |Netty HTTP
-|http://camel.apache.org/olingo2.html[camel-olingo2] |OData 2.0 services using Apache Olingo 2.0
 |http://camel.apache.org/paho.html[camel-paho] |Paho/MQTT
-|http://camel.apache.org/pdf.html[camel-pdf] |PDF
-|http://camel.apache.org/pgevent.html[camel-pgevent] |PostgreSQL events, LISTEN/NOTIFY
-|http://camel.apache.org/printer.html[camel-printer] |Printer
 |http://camel.apache.org/quartz2.html[camel-quartz2] |Quartz
-|http://camel.apache.org/rabbitmq.html[camel-rabbitmq] |RabbitMQ
 |http://camel.apache.org/rss.html[camel-rss] |RSS
-|http://camel.apache.org/smpp.html[camel-smpp] |SMPP
 |http://camel.apache.org/snmp.html[camel-snmp] |SNMP
 |http://camel.apache.org/sql-component.html[camel-sql] |SQL
 |http://camel.apache.org/ssh.html[camel-ssh] |SSH
-|http://camel.apache.org/stomp.html[camel-stomp] |STOMP
 |http://camel.apache.org/stream.html[camel-stream] |Input/output/error/file stream
-|http://camel.apache.org/twitter.html[camel-twitter] |Twitter
 |http://camel.apache.org/velocity.html[camel-velocity] |Velocity
-|http://camel.apache.org/vertx.html[camel-vertx] |Vert.x
-|http://camel.apache.org/weather.html[camel-weather] |Open Weather Map
-|http://camel.apache.org/websocket.html[camel-websocket] |Websocket
 |http://camel.apache.org/xmpp.html[camel-xmpp] |XMPP/Jabber
-|http://camel.apache.org/xquery-endpoint.html[camel-saxon] |XQuery template
 |===
 
-.Camel data formats out of the box
+.Camel data formats
 [width="75%"]
 |===
 |Data format |Description
 
-|http://camel.apache.org/xstream.html[camel-xstream] |XStream
 |http://camel.apache.org/json.html[camel-jackson] |JSON
-|http://camel.apache.org/soap.html[camel-soap] |SOAP
 |http://camel.apache.org/csv.html[camel-csv] |CSV
 |http://camel.apache.org/tar-dataformat.html[camel-tarfile] |Tar format
-|http://camel.apache.org/crypto.html[camel-crypto] |Java Cryptographic Extension
 |http://camel.apache.org/syslog.html[camel-syslog] |Syslog
-|http://camel.apache.org/ical.html[camel-ical] |ICal
-|http://camel.apache.org/barcode-data-format.html[camel-barcode] |Barcodes (QR-Code, etc.)
+|===
+
+=== Other components
+
+.Other components
+[width="75%"]
+|===
+|Component |Description
+|https://commons.apache.org/proper/commons-email/[Commons Email] |Provides an API for sending emails.
 |===

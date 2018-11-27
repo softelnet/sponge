@@ -51,11 +51,6 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-kotlin</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-camel</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -94,6 +89,11 @@
             <artifactId>sponge-rest-api-server</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-gsm-modem</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
@@ -129,10 +129,6 @@
         <dependency>
             <groupId>org.jline</groupId>
             <artifactId>jline</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-http</artifactId>
         </dependency>
 
         <dependency>

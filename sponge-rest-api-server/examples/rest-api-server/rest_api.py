@@ -23,9 +23,9 @@ class UpperCase(Action):
         ]
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text):
-        self.logger.info("Action {} called", self.name)
+        self.logger.info("Action {} called: {}", self.name, text)
         sponge.getVariable("actionCalled").set(True)
-        return str(text).upper()
+        return text.upper()
 
 class LowerCase(Action):
     def onConfigure(self):
@@ -35,7 +35,7 @@ class LowerCase(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
-        return str(text).lower()
+        return text.lower()
 
 class EchoImage(Action):
     def onConfigure(self):
@@ -134,7 +134,7 @@ class Alarm(Trigger):
     def onConfigure(self):
         self.event = "alarm"
     def onRun(self, event):
-        self.logger.debug("Received event: {}", str(event))
+        self.logger.debug("Received event: {}", event)
         sponge.getVariable("eventSent").set(True)
 
 def onAfterReload():

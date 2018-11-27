@@ -25,12 +25,12 @@ import org.springframework.util.SocketUtils;
 import py4j.GatewayServer;
 
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.ProcessConfiguration;
-import org.openksavi.sponge.core.util.ProcessInstance;
-import org.openksavi.sponge.core.util.ProcessUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.SslConfiguration;
+import org.openksavi.sponge.core.util.process.ProcessUtils;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.util.process.ProcessConfiguration;
+import org.openksavi.sponge.util.process.ProcessInstance;
 
 /**
  * Base, abstract Sponge plugin that provides integration with CPython using Py4J.
@@ -128,7 +128,11 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
                 finalConfiguration.getEnv().put(ENV_PY4J_AUTH_TOKEN, authToken);
             }
 
-            scriptProcess = SpongeUtils.startProcess(getEngine(), finalConfiguration);
+            try {
+                scriptProcess = getEngineOperations().runProcess(finalConfiguration);
+            } catch (InterruptedException e) {
+                throw SpongeUtils.wrapException(e);
+            }
             if (scriptProcess.getOutputString() != null) {
                 logger.info("Python script output: {}", scriptProcess.getOutputString());
             }
@@ -136,8 +140,12 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
     }
 
     public void killPythonScript() {
-        if (scriptProcess != null) {
-            scriptProcess.destroy();
+        try {
+            if (scriptProcess != null) {
+                scriptProcess.destroy();
+            }
+        } catch (InterruptedException e) {
+            throw SpongeUtils.wrapException(e);
         }
     }
 

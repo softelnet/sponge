@@ -97,7 +97,7 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     @Override
     protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass,
             SpongeRequestContext context) {
-        Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.APPLICATION_JSON_VALUE).build();
+        Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build();
 
         try {
             String requestBody = getObjectMapper().writeValueAsString(request);
@@ -109,10 +109,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
             Stream.concat(Stream.of(context.getOnRequestSerializedListener()), onRequestSerializedListeners.stream())
                     .filter(Objects::nonNull).forEach(listener -> listener.onRequestSerialized(request, requestBody));
 
-            Response httpResponse = getOrCreateOkHttpClient()
-                    .newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
-                            .post(RequestBody.create(MediaType.get(RestApiConstants.APPLICATION_JSON_VALUE), requestBody)).build())
-                    .execute();
+            Response httpResponse = getOrCreateOkHttpClient().newCall(new Request.Builder().url(getUrl(operation)).headers(headers)
+                    .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build()).execute();
 
             String responseBody = httpResponse.body() != null ? httpResponse.body().string() : null;
             if (logger.isDebugEnabled()) {

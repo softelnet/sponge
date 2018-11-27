@@ -15,7 +15,8 @@
                 <pythonScript>
                     <executable>python3</executable>
                     <argument>${sponge.configDir}/py4j_python_server_python_hello_world.py</argument>
-                    <redirectType>INHERIT</redirectType>
+                    <outputRedirect>INHERIT</outputRedirect>
+                    <errorRedirect>INHERIT</errorRedirect>
                     <waitSeconds>5</waitSeconds>
                 </pythonScript>
             </configuration>

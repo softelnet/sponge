@@ -15,7 +15,7 @@
                     <executable>python3</executable>
                     <argument>${sponge.configDir}/py4j_java_server_tls_python_hello_world.py</argument>
                     <waitSeconds>60</waitSeconds>
-                    <redirectType>STRING</redirectType>
+                    <outputRedirect>STRING</outputRedirect>
                 </pythonScript>
                 <pythonScriptBeforeStartup>false</pythonScriptBeforeStartup>
                 <security>

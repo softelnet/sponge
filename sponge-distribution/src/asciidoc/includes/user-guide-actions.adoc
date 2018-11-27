@@ -86,7 +86,7 @@ Metadata for arguments and a result support <<types, types>>.
 |An optional argument description.
 
 |`optional`
-|A not mandatory flag specifying if this argument is optional (defaults to `false`). Optional arguments may be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
+|A not mandatory flag specifying if this argument is optional (defaults to `false`). Optional arguments can be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
 |===
 
 .Result metadata properties
@@ -118,7 +118,7 @@ class UpperCase(Action):
         ]
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text, optionalText = None):
-        return str(text).upper() + ( " " + str(optionalText).upper() if optionalText is not None else "")
+        return text.upper() + ( " " + optionalText.upper() if optionalText is not None else "")
 ----
 
 .Action metadata example with multiple arguments

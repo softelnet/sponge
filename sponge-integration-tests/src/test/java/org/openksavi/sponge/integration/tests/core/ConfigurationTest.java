@@ -19,10 +19,13 @@ package org.openksavi.sponge.integration.tests.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -60,7 +63,7 @@ public class ConfigurationTest {
         engine.startup();
 
         try {
-            assertEquals("source value", engine.getConfigurationManager().getProperty("resultProperty"));
+            assertEquals("source value", engine.getOperations().getProperty("resultProperty"));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
@@ -120,7 +123,7 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void testConfigFileProperties() {
+    public void testConfigProperties() {
         String home = ".";
         SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/config_file_properties.xml")
                 .property(ConfigurationConstants.PROP_HOME, home).build();
@@ -132,8 +135,7 @@ public class ConfigurationTest {
             assertEquals("Config directory: " + configurationFileDir,
                     engine.getOperations().getPlugin("echoPlugin1", EchoPlugin.class).getEcho());
 
-            assertEquals("Config directory text: " + configurationFileDir,
-                    engine.getConfigurationManager().getProperty("configDirectoryText"));
+            assertEquals("Config directory text: " + configurationFileDir, engine.getOperations().getProperty("configDirectoryText"));
 
             assertEquals("Home directory: " + home, engine.getOperations().getPlugin("echoPlugin2", EchoPlugin.class).getEcho());
 
@@ -145,6 +147,49 @@ public class ConfigurationTest {
             assertEquals("${nonExistingPropertyValue}", engine.getOperations().getVariable("nonExistingProperty"));
 
             assertEquals(System.getProperty("java.home"), engine.getOperations().getVariable("javaHome"));
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testConfigurationNonExisting() {
+        String file = "examples/core/configuration_non_existing/non_existing_configuration_file.xml";
+        SpongeEngine engine = SpringSpongeEngine.builder().config(file).build();
+        try {
+            engine.startup();
+
+            fail("ConfigException expected");
+        } catch (ConfigException e) {
+            assertEquals("Configuration file " + file + " not found", e.getMessage());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testPropertiesFile() {
+        String home = ".";
+        SpongeEngine engine = DefaultSpongeEngine.builder().config("examples/core/configuration/config_with_properties_file.xml")
+                .property(ConfigurationConstants.PROP_HOME, home).build();
+        engine.startup();
+
+        try {
+            String configurationFileDir = SpongeUtils.getFileDir(engine.getConfigurationManager().getConfigurationFileUrl());
+            assertNotNull(configurationFileDir);
+            assertEquals("Config directory: " + configurationFileDir, engine.getOperations().getProperty("configDirectoryText"));
+            assertEquals("TEST", engine.getOperations().getProperty("property.value"));
+
+            assertNull(engine.getOperations().getProperty("nonExistingProperty", null));
+
+            try {
+                engine.getOperations().getProperty("nonExistingProperty");
+                fail("Exception expected");
+            } catch (IllegalArgumentException e) {
+                assertEquals("Property 'nonExistingProperty' not found or empty", e.getMessage());
+            }
+
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

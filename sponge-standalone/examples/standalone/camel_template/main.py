@@ -9,7 +9,7 @@ class AlarmTrigger(Trigger):
     def onConfigure(self):
         self.event = "alarm"
     def onRun(self, event):
-        print(camel.request("direct:template", event.get("message")))
+        print(camel.requestBody("direct:template", event.get("message")))
         sponge.getVariable("alarmSounded").set(True)
 
 

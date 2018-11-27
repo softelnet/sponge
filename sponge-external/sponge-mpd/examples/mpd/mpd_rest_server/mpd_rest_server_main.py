@@ -17,6 +17,6 @@ class UpperCase(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text, optionalText = None):
         self.logger.info("Action {} called", self.name)
-        return str(text).upper() + ( " " + str(optionalText).upper() if optionalText is not None else "")
+        return text.upper() + ( " " + optionalText.upper() if optionalText is not None else "")
 
 

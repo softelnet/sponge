@@ -241,6 +241,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     @Override
     public void doShutdown() {
         onClear();
+
+        knowledgeBases.clear();
     }
 
     @Override

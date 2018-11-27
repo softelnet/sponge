@@ -23,7 +23,7 @@ public final class RestApiConstants {
 
     public static final int API_VERSION = 1;
 
-    public static final String APPLICATION_JSON_VALUE = "application/json";
+    public static final String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
 
     public static final int DEFAULT_PORT = 1836;
 

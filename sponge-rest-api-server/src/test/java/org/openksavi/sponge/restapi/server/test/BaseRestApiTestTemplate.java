@@ -235,6 +235,20 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
+    public void testCallContentCharset() {
+        try (SpongeRestClient client = createRestClient()) {
+            String arg1 = "íñäöüèąśęćżźółń";
+
+            Object result = client.call("UpperCase", arg1);
+
+            assertTrue(result instanceof String);
+            assertEquals(arg1.toUpperCase(), result);
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
     public void testSend() {
         try (SpongeRestClient client = createRestClient()) {
             assertNotNull(client.send("alarm", SpongeUtils.immutableMapOf("attr1", "Test")));

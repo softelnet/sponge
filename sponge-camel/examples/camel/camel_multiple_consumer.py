@@ -9,19 +9,19 @@ class CamelTrigger(Trigger):
     def onRun(self, event):
         self.logger.debug("Received event name={}, body={}", event.name, event.body)
         message = "Hello World!"
-        camel.send("direct:log", message)
-        camel.send("direct:end", message)
+        camel.sendBody("direct:log", message)
+        camel.sendBody("direct:end", message)
 
         for consumer in camel.consumers:
             newExchange = consumer.endpoint.createExchange("CUSTOM CONSUMER")
-            consumer.send(newExchange)
+            consumer.emit(newExchange)
 
 class CamelConsumerTrigger(Trigger):
     def onConfigure(self):
         self.event = "e2"
     def onRun(self, event):
         self.logger.debug("Message for e2 event: {}", event.get("message"))
-        camel.send(event.get("message"))
+        camel.emit(event.get("message"))
 
 def onStartup():
     sponge.event("e2").set("message", "Hi there").send()

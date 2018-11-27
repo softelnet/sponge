@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <property name="configDirectoryText">${config.directory.text.prefix}: ${sponge.configDir}</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" type="python" />
+    </knowledgeBases>
+</sponge>
+

@@ -72,9 +72,12 @@ tomcat
 nullable
 doodle
 doodles
-unmarshaling
 dartdoc
 mapper
 minimalistic
 deserializing
 deserialized
+emails
+marshalling
+unicode
+gammu

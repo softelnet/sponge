@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.core.util;
+package org.openksavi.sponge.core.util.process;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

@@ -16,16 +16,23 @@
 
 package org.openksavi.sponge.camel;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExtendedStartupListener;
+import org.apache.camel.Message;
 import org.apache.camel.ProducerTemplate;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +53,7 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
 
     private CamelContext camelContext;
 
-    private List<CamelConsumer> consumers = Collections.synchronizedList(new ArrayList<>());
+    private List<CamelConsumer> consumers = new CopyOnWriteArrayList<>();
 
     private volatile ProducerTemplate producerTemplate;
 
@@ -59,7 +66,11 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
      */
     private boolean waitForContextFullyStarted = false;
 
+    private AtomicBoolean contextFullyStarted = new AtomicBoolean(false);
+
     private final CountDownLatch contextFullyStartedLatch = new CountDownLatch(1);
+
+    private Lock lock = new ReentrantLock(true);
 
     public CamelPlugin(CamelContext camelContext) {
         this();
@@ -82,9 +93,10 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
      * Waits for Camel context fully started.
      */
     public void waitForContextFullyStarted() {
-        if (waitForContextFullyStarted) {
+        if (waitForContextFullyStarted && !contextFullyStarted.get()) {
             try {
                 contextFullyStartedLatch.await();
+                contextFullyStarted.set(true);
             } catch (InterruptedException e) {
                 throw SpongeUtils.wrapException(e);
             }
@@ -119,31 +131,58 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
         return SpongeCamelEvent.create(getEngine(), name, exchange);
     }
 
-    public void send(Object body) {
+    /**
+     * Emits (sends) the body to all current consumers.
+     *
+     * @param body the body.
+     */
+    public void emit(Object body) {
         if (consumers.isEmpty()) {
-            logger.debug("No consumer to send a message");
+            logger.debug("No consumer to emit a message");
         } else {
             waitForContextFullyStarted();
 
             consumers.forEach(consumer -> {
-                logger.debug("Sending to consumer {}", consumer);
-                consumer.send(body);
+                logger.debug("Emitting to consumer {}", consumer);
+                consumer.emit(body);
             });
         }
     }
 
-    public void send(String uri, Object body) {
-        waitForContextFullyStarted();
-
+    /**
+     * Sends the body to an endpoint. The shortcut for {@code getProducerTemplate().sendBody(uri, body)}.
+     *
+     * @param uri the URI.
+     * @param body the body.
+     */
+    public void sendBody(String uri, Object body) {
         getProducerTemplate().sendBody(uri, body);
     }
 
+    /**
+     * Sends the body to an endpoint returning any result output body. The shortcut for
+     * {@code getProducerTemplate().requestBody(uri, body)}.
+     *
+     * @param uri the URI.
+     * @param body the body.
+     *
+     * @return the result.
+     */
+    public Object requestBody(String uri, Object body) {
+        return getProducerTemplate().requestBody(uri, body);
+    }
+
+    /**
+     * Returns the producer template for working with Camel and sending Camel messages to an endpoint.
+     *
+     * @return the producer template.
+     */
     public ProducerTemplate getProducerTemplate() {
         ProducerTemplate result = producerTemplate;
 
-        // https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
         if (result == null) {
-            synchronized (this) {
+            lock.lock();
+            try {
                 result = producerTemplate;
                 if (result == null) {
                     result = camelContext.getRegistry().lookupByNameAndType(PRODUCER_TEMPLATE, ProducerTemplate.class);
@@ -155,17 +194,19 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
                     producerTemplateCreatedManually = true;
                 }
 
+                waitForContextFullyStarted();
+
                 producerTemplate = result;
+            } finally {
+                lock.unlock();
             }
         }
 
         return result;
     }
 
-    public Object request(String uri, Object body) {
-        waitForContextFullyStarted();
-
-        return getProducerTemplate().requestBody(uri, body);
+    public void addAttachment(Message message, String attachmentFile) {
+        message.addAttachment(FilenameUtils.getName(attachmentFile), new DataHandler(new FileDataSource(attachmentFile)));
     }
 
     public String getRouteId(Exchange exchange) {

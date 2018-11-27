@@ -111,7 +111,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
     private void setPythonPath(SpongeEngine engine) {
         if (engine != null) {
-            String pythonPath = engine.getConfigurationManager().getProperty(PROP_PYTHON_PATH);
+            String pythonPath = getEngineOperations().getProperty(PROP_PYTHON_PATH, null);
             if (pythonPath != null) {
                 PySystemState engineSys = new PySystemState();
                 List<String> paths = Arrays.asList(StringUtils.split(pythonPath, PROP_PATH_SEPARATOR));

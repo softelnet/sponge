@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.QueueFullException;
 import org.openksavi.sponge.event.Event;
 
@@ -75,7 +75,7 @@ public class SynchroEventQueue extends BaseEventQueue {
                     try {
                         TimeUnit.MILLISECONDS.sleep(getEngine().getDefaultParameters().getInternalQueueBlockingPutSleep());
                     } catch (InterruptedException ie) {
-                        throw new SpongeException(ie);
+                        throw SpongeUtils.wrapException(ie);
                     }
                 }
             }

@@ -22,34 +22,37 @@ import org.openksavi.sponge.type.DataTypeKind;
 /**
  * A unit type converter.
  *
- * @param <T> type.
+ * @param <T> instance type.
+ * @param <T> data type.
  */
 @SuppressWarnings("rawtypes")
 public interface UnitTypeConverter<T, D extends DataType> {
 
-    /** The data type kind. */
+    /**
+     * Returns the data type kind.
+     *
+     * @return the data type kind.
+     */
     DataTypeKind getTypeKind();
 
     /**
-     * Marshals the value as type.
+     * Marshals the value as type. It doesn't force implementations to use strict types for a returned object instance as would suggest a
+     * generic {@code DataType}.
      *
      * @param converter the type converter.
      * @param type the type.
      * @param value the value. It will never be {@code null} here.
-     * @param T instance type.
-     * @param D data type.
      * @return the converted value.
      */
     Object marshal(TypeConverter converter, D type, T value);
 
     /**
-     * Unmarshals the value as type.
+     * Unmarshals the value as type. It doesn't force implementations to use strict types for the given value instance as would suggest a
+     * generic {@code DataType}.
      *
      * @param converter the type converter.
      * @param type the type.
      * @param value the value. It will never be {@code null} here.
-     * @param T instance type.
-     * @param D data type.
      * @return the converted value.
      */
     T unmarshal(TypeConverter converter, D type, Object value);

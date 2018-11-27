@@ -52,7 +52,7 @@ class MpdPlaylistChangeListener(Trigger):
         self.event = "mpdPlaylistChange"
     def onRun(self, event):
         self.logger.info("[{}] Playlist changed: {}{}", event.source.getClass().simpleName, event.source.event,
-                         (", current song: " + str(mpd.server.playlist.currentSong)) if event.source.event.name() == "SONG_CHANGED" else "")
+                         (", current song: " + mpd.server.playlist.currentSong.file) if event.source.event.name() == "SONG_CHANGED" else "")
 
 class MpdTrackPositionChangeListener(Trigger):
     def onConfigure(self):

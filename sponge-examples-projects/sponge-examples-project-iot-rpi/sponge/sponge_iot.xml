@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <!-- Set the following properties via system properties. -->
+        <property name="password.file">${sponge.configDir}/password.txt</property>
+
+        <!-- Due to the problem https://github.com/Pi4J/pi4j/issues/319, the dynamic linking option is turned on, where Pi4J is dynamically linked 
+            to WiringPi rather than the default static linking. -->
+        <property name="pi4j.linking" system="true">dynamic</property>
+
+        <!-- TODO Use this property -->
+        <property name="camera.dir">${sponge.home}/data/camera</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="iot" displayName="IoT">
+            <file>sponge_iot.py</file>
+            <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="admin" displayName="Admin">
+            <file>classpath*:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" displayName="Security">
+            <file>rest_api_security.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <configuration>
+                <spring camel="true" />
+            </configuration>
+        </plugin>
+
+<!--         <plugin name="pi" class="org.openksavi.sponge.rpi.pi4j.Pi4JPlugin" /> -->
+
+        <!-- <plugin name="grovepi" class="org.openksavi.sponge.rpi.grovepi.GrovePiPlugin" /> -->
+
+        <!-- <plugin name="gsm" class="org.openksavi.sponge.gsmmodem.GsmModemPlugin"> -->
+        <!-- <configuration> -->
+        <!-- <portDescriptor>/dev/ttyUSB0</portDescriptor> -->
+        <!-- </configuration> -->
+        <!-- </plugin> -->
+
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
+            <configuration>
+                <autoStart>false</autoStart>
+                <allowAnonymous>false</allowAnonymous>
+                <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

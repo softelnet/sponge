@@ -70,7 +70,7 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |Property |Description
 
 |`nullable`
-|Tells if a value of this type may be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
+|Tells if a value of this type can be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
 
 |`format`
 |An optional format.
@@ -240,7 +240,7 @@ Event could be created and sent:
 
 The EventDefinition fluent API is the preferred option.
 
-An event may be to sent as:
+An event may be sent as:
 
 * A single instance – the event will be placed in the Input Event Queue only once.
 * Many instances periodically – new instances of an event will be placed in the Input Event Queue periodically, each of them with its own id and send time.
@@ -440,13 +440,13 @@ def onLoad():
 |A name of a processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
 
 |`displayName`
-|A display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but may be useful in a client code.
+|A display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but could be useful in a client code.
 
 |`description`
-|A description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but may be useful in a client code.
+|A description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but could be useful in a client code.
 
 |`features`
-|Features of a processor. This is a shortcut for `getFeatures()`/`setFeatures(Map<String, Object>)` methods. The processor features property is simply a map of String to Object associated with a processor definition (not instance). It may be used to provide a custom behavior in a client code.
+|Features of a processor. This is a shortcut for `getFeatures()`/`setFeatures(Map<String, Object>)` methods. The processor features property is simply a map of String to Object associated with a processor definition (not instance). It could be used to provide a custom behavior in a client code.
 
 |`logger`
 |The read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`, e.g. `sponge.kb.python.kb1.EchoAction` for a python-based processor, `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.
@@ -455,7 +455,7 @@ def onLoad():
 |The read-only property that provides a processor adapter. This is a shortcut for `getAdapter()` method. A processor adapter is an internal object, associated with the processor, that is used by the engine. There should be no need to use this property in the client code.
 |===
 
-Thanks to many scripting languages, properties may be accessed using dot notation rather than a direct method call. For example a display name may be set using `self.displayName = "Display name"` or `self.setDisplayName("Display name")`.
+In many scripting languages properties can be accessed using dot notation rather than a direct method call. For example a display name may be set using `self.displayName = "Display name"` or `self.setDisplayName("Display name")`.
 
 include::includes/user-guide-actions.adoc[leveloffset=+1]
 
@@ -1066,7 +1066,7 @@ mnist.home=/opt/tomcat/sponge
 password.file=/opt/tomcat/sponge/password.txt
 ----
 
-The sample file `password.txt` contains the hashed, insecure password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. This simple password may be used only for development and tests. In the case of publishing the service, this file should contain the hashed, secret and strong password.
+The sample file `password.txt` contains the hashed, insecure password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. This simple password can be used only for development and tests. In the case of publishing the service, this file should contain the hashed, secret and strong password.
 
 [source,bash]
 ----
@@ -1459,6 +1459,10 @@ include::includes/user-guide-standalone.adoc[leveloffset=+1]
 |https://commons.apache.org/proper/commons-configuration/[Apache Commons Configuration]
 |Apache 2.0
 |Used for reading configuration files.
+
+|https://commons.apache.org/proper/commons-email/[Apache Commons Email]
+|Apache 2.0
+|Used for sending emails.
 
 |http://www.jython.org[Jython]
 |http://www.jython.org/license.html[Jython license]

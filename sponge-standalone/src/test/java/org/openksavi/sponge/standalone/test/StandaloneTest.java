@@ -17,6 +17,7 @@
 package org.openksavi.sponge.standalone.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.TimeUnit;
@@ -104,5 +105,25 @@ public class StandaloneTest {
     public void testExecuteScript() {
         StandaloneEngineMain engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-k", "examples/standalone/execute_script.py");
         assertFalse(engineMain.getEngine().isError());
+    }
+
+    @Test
+    public void testOptionSystemProperty() {
+        StandaloneEngineMain engineMain = null;
+        try {
+            String name1 = "PROPERTY_NAME_1";
+            String value1 = "PROPERTY_VALUE_1";
+            String name2 = "PROPERTY_NAME_2";
+            String value2 = "PROPERTY_VALUE_2";
+            engineMain = StandaloneTestUtils.startupStandaloneEngineMain("-k", "examples/standalone/trigger_simple.py",
+                    "-D" + name1 + "=" + value1, "-D", name2 + "=" + value2);
+            SpongeEngine engine = engineMain.getEngine();
+
+            assertEquals(value1, System.getProperty(name1));
+            assertEquals(value2, System.getProperty(name2));
+            assertFalse(engine.isError());
+        } finally {
+            StandaloneTestUtils.shutdownStandaloneEngineMain(engineMain);
+        }
     }
 }

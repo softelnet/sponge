@@ -16,7 +16,11 @@
 
 package org.openksavi.sponge.camel.test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
@@ -33,6 +37,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+
+import org.openksavi.sponge.engine.SpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { CamelGroovyConfigurationTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
@@ -51,6 +57,9 @@ public class CamelGroovyConfigurationTest {
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
+
+    @Inject
+    protected SpongeEngine engine;
 
     @Configuration
     @ImportResource("CamelTestTestConfiguration.groovy")
@@ -77,5 +86,7 @@ public class CamelGroovyConfigurationTest {
         logEndpoint.assertIsSatisfied();
 
         TimeUnit.SECONDS.sleep(2);
+
+        assertEquals(null, engine.getError());
     }
 }

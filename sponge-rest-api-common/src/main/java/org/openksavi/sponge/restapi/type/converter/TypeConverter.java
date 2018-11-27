@@ -30,23 +30,25 @@ import org.openksavi.sponge.type.DataTypeKind;
 public interface TypeConverter {
 
     /**
-     * Marshals the value as type.
+     * Marshals the value as a given type. It doesn't force implementations to use strict types for a returned object instance as would
+     * suggest a generic {@code DataType}.
      *
      * @param type the type.
      * @param value the value.
-     * @param T instance type.
-     * @param D data type.
+     * @param <T> instance type.
+     * @param <D> data type.
      * @return the converted value.
      */
     <T, D extends DataType> Object marshal(D type, T value);
 
     /**
-     * Unmarshals the value as type.
+     * Unmarshals the value as type. It doesn't force implementations to use strict types for the given value instance as would suggest a
+     * generic {@code DataType}.
      *
      * @param type the type.
      * @param value the value.
-     * @param T instance type.
-     * @param D data type.
+     * @param <T> instance type.
+     * @param <D> data type.
      * @return the converted value.
      */
     <T, D extends DataType> T unmarshal(D type, Object value);

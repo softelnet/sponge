@@ -14,16 +14,16 @@ class RssTrigger(Trigger):
         self.event = "rss"
     def onRun(self, event):
         # self.logger.debug("Received event name={}, body={}", event.name, event.body)
-        camel.send("direct:log", event.body)
+        camel.sendBody("direct:log", event.body)
 
 class RssDecomposedTrigger(Trigger):
     def onConfigure(self):
         self.event = "rssDecomposed"
     def onRun(self, event):
-        camel.send("direct:log", event)
+        camel.sendBody("direct:log", event)
 
 class CamelConsumerRssDecomposedTrigger(Trigger):
     def onConfigure(self):
         self.event = "rssDecomposed"
     def onRun(self, event):
-        camel.send("News from " + event.get("source") + " - " + event.get("title"))
+        camel.emit("News from " + event.get("source") + " - " + event.get("title"))

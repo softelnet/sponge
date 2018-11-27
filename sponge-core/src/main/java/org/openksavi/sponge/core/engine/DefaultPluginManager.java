@@ -98,8 +98,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
 
         Plugin plugin = createPluginStub(pluginName, knowledgeBaseName, className);
 
-        SpongeUtils.isTrue(!existsPlugin(plugin.getName()), "Plugin '%' already exists.", plugin.getName());
-        SpongeUtils.isTrue(isValidPluginName(plugin.getName()), "Invalid plugin name '%'", plugin.getName());
+        SpongeUtils.isTrue(!existsPlugin(plugin.getName()), "Plugin '%s' already exists.", plugin.getName());
+        SpongeUtils.isTrue(isValidPluginName(plugin.getName()), "Invalid plugin name '%s'", plugin.getName());
 
         plugin.setDisplayName(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_DISPLAY_NAME, null));
         plugin.setDescription(pluginConfig.getString(PluginManagerConstants.CFG_PLUGIN_DESCRIPTION, null));
@@ -320,6 +320,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     @Override
     public void doShutdown() {
         getPlugins().forEach(plugin -> plugin.shutdown());
+        pluginMap.clear();
     }
 
     /**

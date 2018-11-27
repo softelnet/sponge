@@ -17,7 +17,7 @@ class RssTrigger(Trigger):
     def onConfigure(self):
         self.event = "rss"
     def onRun(self, event):
-        camel.send("[" + event.get("channel") + "] " + event.get("title"))
+        camel.emit("[" + event.get("channel") + "] " + event.get("title"))
 
 class PythonRoute(ScriptRouteBuilder):
     def configure(self):

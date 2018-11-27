@@ -14,7 +14,7 @@ class UpperCase(Action):
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
         sponge.getVariable("actionCalled").set(True)
-        return str(text).upper()
+        return text.upper()
 
 class LowerCase(Action):
     def onConfigure(self):
@@ -24,7 +24,7 @@ class LowerCase(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
-        return str(text).lower()
+        return text.lower()
 
 class ListValues(Action):
     def onConfigure(self):

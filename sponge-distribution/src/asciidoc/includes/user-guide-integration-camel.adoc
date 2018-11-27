@@ -1,0 +1,303 @@
+= Apache Camel
+
+== {sponge} Camel component
+The *sponge* component provides integration bridge between Apache Camel and the {sponge} engine. It allows:
+
+* to route a body of a Camel message to the {sponge} engine by converting it to a {sponge} event (producer endpoint),
+* to route a message from a {sponge} knowledge base to a Camel route (consumer endpoint).
+
+== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml` for this component:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-camel</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+== URI format
+[source,java]
+----
+sponge:engineRef[?options]
+----
+Where `engineRef` represents the name of the `SpongeEngine` implementation instance located in the Camel registry.
+
+== Options
+
+[cols="1,2,5"]
+|===
+|Name |Default value |Description
+
+|`action`
+|`"CamelProducerAction"`
+|Could be used only on the producer side of the route. It will synchronously call the {sponge} action that has a name specified by the value of this option. However if there is the header named *CamelSpongeAction* in the Camel In message, it would override the value of this option.
+
+|`managed`
+|`true`
+|If set to `true` the {sponge} engine will be started automatically when the endpoint starts and will be shut down when the endpoint stops.
+|===
+
+== {sponge} support for Camel
+
+=== CamelPlugin
+`CamelPlugin` provides an interface to the Camel context so it may be used in a knowledge base. 
+
+`CamelPlugin` may be configured in three different ways.
+
+* Explicitly as a Spring bean and assigned to the engine using the Engine Builder API. This is the preferred way.
++
+.Example
+[source,python]
+----
+@Configuration
+public class SpringConfiguration extends SpongeCamelConfiguration {
+
+    @Bean
+    public SpongeEngine spongeEngine() {
+        return SpringSpongeEngine.builder()
+                .config("config.xml")
+                .plugin(camelPlugin())
+                .build();
+    }
+}
+----
+* Implicitly when creating a {sponge} Camel endpoint.
+* Explicitly in the {sponge} XML configuration file.
++
+.Example
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <plugins>
+        <!-- Note: don't change the plugin name. -->
+        <plugin name="camel" class="org.openksavi.sponge.camel.CamelPlugin" />
+    </plugins>
+</sponge>
+----
+
+TIP: If you use an implicit configuration and you get an error stating that `camel` variable is not defined, it signifies that a Camel context is not configured yet or {sponge} engine is not used in any Camel route.
+
+Only one `CamelContext` may be used with one instance of {sponge} engine, bound by a single `CamelPlugin`.
+
+.Important CamelPlugin properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`emit(body)`
+|Emits (sends) the body to all current consumers.
+
+|`producerTemplate`
+|The Camel http://camel.apache.org/producertemplate.html[ProducerTemplate] for working with Camel and sending Camel messages.
+
+|`sendBody(uri, body)`
+|Sends the body to an endpoint. The shortcut for `producerTemplate.sendBody(uri, body)`.
+
+|`requestBody(uri, body)`
+|Sends the body to an endpoint returning any result output body. The shortcut for `producerTemplate.requestBody(uri, body)`.
+
+|`getContext()`
+|Returns a Camel context.
+
+|`getConsumers()`
+|Returns the current list of consumers.
+|===
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/camel/CamelPlugin.html[`CamelPlugin` Javadoc].
+
+
+=== Spring-based support
+`SpongeCamelConfiguration` provides base Camel and {sponge} configuration using Spring Java configuration. Your Spring configuration could inherit from this class.
+
+Spring bean named `"spongeProducerTemplate"` allows you to configure a Camel producer template used by `CamelPlugin` to send Camel messages. If none is present in a Spring configuration, then a default will be used.
+
+Spring bean named `springPlugin` is the instance of `SpringPlugin` that could be registered in the engine and used in knowledge bases as the `spring` variable.
+
+Spring bean named `camelPlugin` is the instance of `CamelPlugin` that could be registered in the engine and used in knowledge bases as the `camel` variable.
+
+== Producer
+Using sponge component on the producer side of the route will forward a body of a Camel message to the specified {sponge} engine.
+
+{sponge} in a producer mode could be placed in many routes in one Camel context.
+
+.Producer example - Spring configuration
+[source,java]
+----
+@Configuration
+public class ExampleConfiguration extends SpongeCamelConfiguration {
+
+    @Bean
+    public SpongeEngine spongeEngine() {
+        // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
+        return SpringSpongeEngine.builder()
+                .knowledgeBase("camelkb", "examples/camel/camel_producer.py")
+                .plugins(springPlugin(), camelPlugin())
+                .build();
+    }
+
+    @Bean
+    public RouteBuilder exampleRoute() {
+        return new RouteBuilder() {
+            @Override
+            public void configure() {
+                from("direct:start").routeId("spongeProducer")
+                    .to("sponge:spongeEngine");
+            }
+        };
+    }
+}
+----
+
+.Python knowledge base `camel_producer.py`
+[source,python]
+----
+class CamelTrigger(Trigger):
+    def onConfigure(self):
+        self.event = "spongeProducer"
+    def onRun(self, event):
+        print event.body
+----
+
+.Producer example - Sample code that sends a Camel message
+[source,java]
+----
+// Starting a Spring context.
+GenericApplicationContext context = new AnnotationConfigApplicationContext(ExampleConfiguration.class);
+context.start();
+
+// Sending a Camel message.
+CamelContext camelContext = context.getBean(CamelContext.class);
+ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+producerTemplate.sendBody("direct:start", "Send me to the Sponge");
+----
+
+.Output console
+[source,bash,subs="verbatim,attributes"]
+----
+Send me to the Sponge
+----
+
+=== Camel producer action
+Camel producer action will be invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. The result returned by this action is placed as the body of the Camel _IN_ message. So it can be used by the next endpoint in the route if there is any.
+
+NOTE: To avoid any misconception please note that events in the Output Event Queue are not sent to the Camel route.
+
+=== Default Camel producer action
+The default Camel producer action is provided by a Java action `CamelProducerAction`. If the body of the Camel message is a {sponge} event or event definition, than the event is sent to the {sponge} immediately. Otherwise this action creates and sends a new event that encapsulates the body. The event is then returned, so it is placed as the body of the Camel In message. The default name of the new event is the name of the corresponding Camel route.
+
+=== Custom Camel producer action
+You could provide a custom implementation of a Camel producer action in two ways:
+
+* define your own implementation of `CamelProducerAction` in a knowledge base,
+* define an action in a knowledge base that takes an instance of `Exchange` as an argument and specify it in the producer endpoint URI or in the message header, e.g.:
++
+.Python knowledge base
+[source,python]
+----
+class CustomAction(Action):
+    def onCall(self, exchange):
+        return "OK"
+----
++
+.Camel route that sets the action in the endpoint URI
+[source,java]
+----
+from("direct:start").routeId("spongeProducer")
+        .to("sponge:spongeEngine?action=CustomAction")
+        .log("Action result as a body: ${body}");
+----
++
+.Camel route that sets the action in the header
+[source,java]
+----
+from("direct:start").routeId("spongeProducer")
+        .setHeader("CamelSpongeAction", constant("CustomAction"))
+        .to("sponge:spongeEngine)
+        .log("Action result as a body: ${body}");
+----
+
+== Consumer
+Using sponge component on the consumer side of the route will forward messages sent from the specified {sponge} engine to a Camel route.
+
+{sponge} in a consumer mode could be placed in many routes in one Camel context.
+
+.Consumer example - Spring configuration
+[source,java]
+----
+@Configuration
+public class ExampleConfiguration extends SpongeCamelConfiguration {
+
+    @Bean
+    public SpongeEngine spongeEngine() {
+        // Use EngineBuilder API to create an engine. Also bind Spring and Camel plugins as beans manually.
+        return SpringSpongeEngine.builder()
+                .knowledgeBase("camelkb", "examples/camel/camel_consumer.py")
+                .plugins(springPlugin(), camelPlugin())
+                .build();
+    }
+
+    @Bean
+    public RouteBuilder exampleRoute() {
+        return new RouteBuilder() {
+
+            @Override
+            public void configure() {
+                from("sponge:spongeEngine").routeId("spongeConsumer")
+                    .log("${body}")
+                    .to("stream:out");
+            }
+        };
+    }
+}
+----
+
+.Python knowledge base `camel_simple_consumer.py`
+[source,python]
+----
+class CamelTrigger(Trigger):
+    def onConfigure(self):
+        self.event = "spongeEvent"
+    def onRun(self, event):
+        camel.emit(event.get("message"))
+
+    sponge.event("spongeEvent").set("message", "Send me to Camel")
+----
+
+The variable `camel` is a reference to the instance of `CamelPlugin` that is associated with the Camel context.
+
+.Output console
+[source,bash,subs="verbatim,attributes"]
+----
+Send me to Camel
+----
+
+You may also send a message to the Camel endpoint directly, e.g.:
+[source,python]
+----
+camel.sendBody("direct:log", event.get("message"))
+----
+This allows you, for example, to create a flexible message flow using Camel routes and {sponge} as a dispatcher.
+
+== Routes in scripting languages
+`ScriptRouteBuilder` class introduces `fromS` methods (meaning _from Script_) that delegate to the corresponding `from` methods in order to avoid using `from` since it could be a reserved keyword in scripting languages (e.g. in Python). So when defining Camel routes in Python you should use this class instead of standard `RouteBuilder`, e.g.:
+
+[source,python]
+----
+from org.openksavi.sponge.camel import ScriptRouteBuilder
+
+class PythonRoute(ScriptRouteBuilder):
+    def configure(self):
+        self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
+                .transform().simple("${body}") \
+                .process(lambda exchange: sponge.getVariable("receivedRssCount").incrementAndGet()) \
+                .to("stream:out")
+
+def onStartup():
+    camel.context.addRoutes(PythonRoute())
+----

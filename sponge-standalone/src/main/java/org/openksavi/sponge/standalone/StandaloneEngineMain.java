@@ -30,20 +30,20 @@ import org.openksavi.sponge.logging.LoggingUtils;
  */
 public class StandaloneEngineMain {
 
-    private static final Logger logger = LoggerFactory.getLogger(StandaloneEngineMain.class);
+    // Important: This class must not use the static logger because the logger configuration in the main method would be too late.
 
     private StandaloneEngineBuilder builder;
 
     private StandaloneSpongeEngine engine;
 
-    private boolean testMode;
+    private boolean embeddedMode;
 
     public StandaloneEngineMain() {
         this(false);
     }
 
-    public StandaloneEngineMain(boolean testMode) {
-        this.testMode = testMode;
+    public StandaloneEngineMain(boolean embeddedMode) {
+        this.embeddedMode = embeddedMode;
     }
 
     public SpongeEngine getEngine() {
@@ -68,6 +68,10 @@ public class StandaloneEngineMain {
             }
         } catch (Throwable e) {
             handleError(e);
+
+            if (!embeddedMode) {
+                System.exit(1);
+            }
         }
     }
 
@@ -87,9 +91,13 @@ public class StandaloneEngineMain {
             handleError(e);
         }
 
-        if (!testMode) {
+        if (!embeddedMode) {
             System.exit(0);
         }
+    }
+
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(StandaloneEngineMain.class);
     }
 
     protected void handleError(Throwable e) {
@@ -101,26 +109,18 @@ public class StandaloneEngineMain {
                 engine.handleError("standalone", e);
             }
         } else {
-            if (e instanceof StandaloneInitializationException && !testMode) {
+            if (e instanceof StandaloneInitializationException && !embeddedMode) {
                 System.out.println(e.getMessage());
                 System.out.println("");
                 builder.printHelp();
             } else {
-                logger.error("Error", e);
+                getLogger().error("Error", e);
             }
         }
 
-        if (testMode) {
+        if (embeddedMode) {
             throw SpongeUtils.wrapException(e);
         }
-    }
-
-    public boolean isTestMode() {
-        return testMode;
-    }
-
-    public void setTestMode(boolean testMode) {
-        this.testMode = testMode;
     }
 
     /**
@@ -129,6 +129,8 @@ public class StandaloneEngineMain {
      * @param args arguments.
      */
     public static void main(String... args) {
+        StandaloneUtils.initSystemPropertiesFromCommandLineArgs(args);
+
         LoggingUtils.initLoggingBridge();
 
         new StandaloneEngineMain().startup(args);

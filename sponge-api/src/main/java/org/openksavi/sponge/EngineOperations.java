@@ -24,6 +24,8 @@ import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.util.process.ProcessConfiguration;
+import org.openksavi.sponge.util.process.ProcessInstance;
 
 /**
  * An engine operations.
@@ -409,7 +411,7 @@ public interface EngineOperations {
     void updateVariable(String name);
 
     /**
-     * Returns the configuration property value.
+     * Returns the configuration property value. Throws exception if not found.
      *
      * @param name the configuration property name.
      * @return the configuration property value.
@@ -417,9 +419,33 @@ public interface EngineOperations {
     String getProperty(String name);
 
     /**
+     * Returns the configuration property value or {@code defaultValue} if not found.
+     *
+     * @param name the configuration property name.
+     * @param defaultValue the default value
+     * @return the configuration property value.
+     */
+    String getProperty(String name, String defaultValue);
+
+    /**
      * Returns the home directory for the engine.
      *
      * @return the home directory for the engine.
      */
     String getHome();
+
+    /**
+     * Runs a new process. Should be invoked only once. Waits if necessary according to the configuration.
+     *
+     * <p>If the input redirect type is STREAM you should invoke manually
+     * {@link org.openksavi.sponge.util.process.ProcessInstance#waitForReady() ProcessInstance.waitForReady()} after writing to and closing
+     * the subprocess standard input {@link org.openksavi.sponge.util.process.ProcessInstance#getInput() ProcessInstance.getInput()}.
+     *
+     * @param processConfiguration the process configuration.
+     *
+     * @return a new process instance.
+     *
+     * @throws InterruptedException on interrupted.
+     */
+    ProcessInstance runProcess(ProcessConfiguration processConfiguration) throws InterruptedException;
 }

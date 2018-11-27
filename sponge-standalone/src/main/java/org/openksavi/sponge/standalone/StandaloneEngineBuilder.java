@@ -22,11 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 import org.jline.reader.impl.completer.StringsCompleter;
@@ -44,6 +40,7 @@ import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
 import org.openksavi.sponge.logging.LoggingUtils;
+import org.openksavi.sponge.spring.SpringKnowledgeBaseFileProvider;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
 /**
@@ -52,22 +49,6 @@ import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngine> {
 
     private static final Logger logger = LoggerFactory.getLogger(StandaloneEngineBuilder.class);
-
-    public static final String OPTION_CONFIG = "c";
-
-    public static final String OPTION_KNOWLEDGE_BASE = "k";
-
-    public static final String OPTION_SPRING = "s";
-
-    public static final String OPTION_CAMEL = "m";
-
-    public static final String OPTION_INTERACTIVE = "i";
-
-    public static final String OPTION_PRINT_ALL_EXCEPTIONS = "e";
-
-    public static final String OPTION_HELP = "h";
-
-    public static final String OPTION_VERSION = "v";
 
     public static final String DEFAULT_KNOWLEDGE_BASE_NAME = "kb";
 
@@ -78,8 +59,6 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
     public static final String ENV_COLUMNS = "COLUMNS";
 
     public static final String EXECUTABLE_NAME = "sponge";
-
-    private final Options options = createOptions();
 
     private String[] commandLineArgs;
 
@@ -93,6 +72,8 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
 
     public StandaloneEngineBuilder(StandaloneSpongeEngine engine) {
         super(engine);
+
+        knowledgeBaseFileProvider(new SpringKnowledgeBaseFileProvider());
     }
 
     public StandaloneEngineBuilder commandLineArgs(String... commandLineArgs) {
@@ -105,37 +86,6 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
         return this;
     }
 
-    private Options createOptions() {
-        Options options = new Options();
-
-        options.addOption(Option.builder(OPTION_CONFIG).longOpt("config").hasArg().argName("file")
-                .desc("Use given Sponge XML configuration file. Only one configuration file may be provided.").build());
-        options.addOption(Option.builder(OPTION_KNOWLEDGE_BASE).longOpt("knowledge-base").hasArg().argName("[name=]files]")
-                .desc("Use given knowledge base by setting its name (optional) and files (comma-separated). "
-                        + "When no name is provided, a default name 'kb' will be used. "
-                        + "This option may be used more than once to provide many knowledge bases. Each of them could use many files.")
-                .build());
-        options.addOption(
-                Option.builder(OPTION_SPRING).longOpt("spring").hasArg().argName("file").desc("Use given Spring configuration file. "
-                        + "This option may be used more than once to provide many Spring configuration files.").build());
-        options.addOption(Option.builder(OPTION_CAMEL).longOpt("camel")
-                .desc("Create an Apache Camel context. Works only if one or more 'spring' options are present.").build());
-        options.addOption(Option.builder(OPTION_INTERACTIVE).longOpt("interactive").hasArg().argName("[name]").optionalArg(true)
-                .desc("Run in an interactive mode by connecting to a knowledge base interpreter. "
-                        + "You may provide the name of one of the loaded knowledge bases, otherwise "
-                        + "the first loaded knowledge base will be chosen.")
-                .build());
-        options.addOption(Option.builder(OPTION_PRINT_ALL_EXCEPTIONS).longOpt("print-all-exceptions")
-                .desc("Applicable only in an interactive mode. "
-                        + "Print all exceptions (e.g. also thrown in event processors running in other threads). "
-                        + "Helpful for development purposes.")
-                .build());
-        options.addOption(Option.builder(OPTION_HELP).longOpt("help").desc("Print help message and exit.").build());
-        options.addOption(Option.builder(OPTION_VERSION).longOpt("version").desc("Print the version information and exit.").build());
-
-        return options;
-    }
-
     /**
      * Returns a new StandaloneEngine or {@code null} if help or version option is specified so the application should exit.
      */
@@ -146,47 +96,53 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                 return super.build();
             }
 
-            CommandLineParser parser = new DefaultParser();
-            CommandLine commandLine = parser.parse(options, commandLineArgs);
+            CommandLine commandLine = StandaloneUtils.parseCommandLine(commandLineArgs);
 
-            if (commandLine.hasOption(OPTION_HELP)) {
+            if (commandLine.hasOption(StandaloneConstants.OPTION_HELP)) {
                 printHelp();
                 return null;
             }
 
-            if (commandLine.hasOption(OPTION_VERSION)) {
+            if (commandLine.hasOption(StandaloneConstants.OPTION_VERSION)) {
                 System.out.println(getInfo());
                 return null;
             }
 
-            if (commandLine.hasOption(OPTION_CONFIG)) {
-                config(commandLine.getOptionValue(OPTION_CONFIG));
+            if (commandLine.hasOption(StandaloneConstants.OPTION_SYSTEM_PROPERTY)) {
+                StandaloneUtils.setSystemProperties(commandLine.getOptionProperties(StandaloneConstants.OPTION_SYSTEM_PROPERTY));
             }
 
-            if (Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(OPTION_CONFIG)).count() > 1) {
+            if (commandLine.hasOption(StandaloneConstants.OPTION_CONFIG)) {
+                config(commandLine.getOptionValue(StandaloneConstants.OPTION_CONFIG));
+            }
+
+            if (Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(StandaloneConstants.OPTION_CONFIG))
+                    .count() > 1) {
                 throw new StandaloneInitializationException("Only one Sponge XML configuration file may be provided.");
             }
 
-            Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(OPTION_KNOWLEDGE_BASE)).forEachOrdered(option -> {
-                String value = option.getValue();
-                if (value == null || StringUtils.isBlank(value)) {
-                    throw new StandaloneInitializationException("Empty knowledge base specification.");
-                }
+            Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(StandaloneConstants.OPTION_KNOWLEDGE_BASE))
+                    .forEachOrdered(option -> {
+                        String value = option.getValue();
+                        if (value == null || StringUtils.isBlank(value)) {
+                            throw new StandaloneInitializationException("Empty knowledge base specification.");
+                        }
 
-                String[] values = StringUtils.split(value, ARGUMENT_VALUE_SEPARATOR);
+                        String[] values = StringUtils.split(value, ARGUMENT_VALUE_SEPARATOR);
 
-                String kbName = values.length == 2 ? values[0] : DEFAULT_KNOWLEDGE_BASE_NAME;
-                String kbFilesString = values.length == 2 ? values[1] : values[0];
+                        String kbName = values.length == 2 ? values[0] : DEFAULT_KNOWLEDGE_BASE_NAME;
+                        String kbFilesString = values.length == 2 ? values[1] : values[0];
 
-                if (StringUtils.isBlank(kbName)) {
-                    throw new StandaloneInitializationException("Empty knowledge base name.");
-                }
+                        if (StringUtils.isBlank(kbName)) {
+                            throw new StandaloneInitializationException("Empty knowledge base name.");
+                        }
 
-                List<String> kbFiles = SpongeUtils.split(kbFilesString, KB_FILES_SEPARATOR);
-                knowledgeBase(kbName, kbFiles.toArray(new String[kbFiles.size()]));
-            });
+                        List<String> kbFiles = SpongeUtils.split(kbFilesString, KB_FILES_SEPARATOR);
+                        knowledgeBase(kbName, kbFiles.toArray(new String[kbFiles.size()]));
+                    });
 
-            if (!commandLine.hasOption(OPTION_CONFIG) && !commandLine.hasOption(OPTION_KNOWLEDGE_BASE)) {
+            if (!commandLine.hasOption(StandaloneConstants.OPTION_CONFIG)
+                    && !commandLine.hasOption(StandaloneConstants.OPTION_KNOWLEDGE_BASE)) {
                 throw new StandaloneInitializationException(
                         "An Sponge XML configuration file or a knowledge base file(s) should be provided.");
             }
@@ -196,30 +152,30 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
 
             applyDefaultParameters();
 
-            if (commandLine.hasOption(OPTION_INTERACTIVE)) {
-                InteractiveMode interactiveMode =
-                        new DefaultInteractiveMode(engine, commandLine.getOptionValue(OPTION_INTERACTIVE), interactiveModeConsoleSupplier);
+            if (commandLine.hasOption(StandaloneConstants.OPTION_INTERACTIVE)) {
+                InteractiveMode interactiveMode = new DefaultInteractiveMode(engine,
+                        commandLine.getOptionValue(StandaloneConstants.OPTION_INTERACTIVE), interactiveModeConsoleSupplier);
                 ExceptionHandler interactiveExceptionHandler = new SystemErrExceptionHandler();
                 interactiveMode.setExceptionHandler(interactiveExceptionHandler);
 
                 engine.setInteractiveMode(interactiveMode);
 
-                if (commandLine.hasOption(OPTION_PRINT_ALL_EXCEPTIONS)) {
+                if (commandLine.hasOption(StandaloneConstants.OPTION_PRINT_ALL_EXCEPTIONS)) {
                     engine.setExceptionHandler(new CombinedExceptionHandler(interactiveExceptionHandler, new LoggingExceptionHandler()));
                 } else {
                     LoggingUtils.logToConsole(false);
                 }
             } else {
-                if (commandLine.hasOption(OPTION_PRINT_ALL_EXCEPTIONS)) {
-                    throw new StandaloneInitializationException(
-                            "'" + OPTION_PRINT_ALL_EXCEPTIONS + "' option may be used only if '" + OPTION_INTERACTIVE + "' is also used.");
+                if (commandLine.hasOption(StandaloneConstants.OPTION_PRINT_ALL_EXCEPTIONS)) {
+                    throw new StandaloneInitializationException("'" + StandaloneConstants.OPTION_PRINT_ALL_EXCEPTIONS
+                            + "' option may be used only if '" + StandaloneConstants.OPTION_INTERACTIVE + "' is also used.");
                 }
             }
 
             StandaloneEngineListener standaloneListener = new StandaloneEngineListener(engine);
 
-            List<String> springConfigurationFiles =
-                    Stream.of(commandLine.getOptions()).filter(option -> option.getOpt().equals(OPTION_SPRING)).map(option -> {
+            List<String> springConfigurationFiles = Stream.of(commandLine.getOptions())
+                    .filter(option -> option.getOpt().equals(StandaloneConstants.OPTION_SPRING)).map(option -> {
                         String[] values = option.getValues();
                         if (values == null || values.length == 0) {
                             throw new StandaloneInitializationException("No Spring configuration file provided.");
@@ -232,7 +188,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                 standaloneListener.setSpringConfigurations(springConfigurationFiles);
             }
 
-            if (commandLine.hasOption(OPTION_CAMEL)) {
+            if (commandLine.hasOption(StandaloneConstants.OPTION_CAMEL)) {
                 standaloneListener.setCamel(true);
             }
 
@@ -282,6 +238,6 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                 .append("\nPress CTRL+C to exit the " + VersionInfo.PRODUCT + " standalone command-line application.\n")
                 .append("\nSee http://sponge.openksavi.org for more details.").toString();
         //@formatter:on
-        formatter.printHelp(EXECUTABLE_NAME, header, options, footer, true);
+        formatter.printHelp(EXECUTABLE_NAME, header, StandaloneConstants.OPTIONS, footer, true);
     }
 }

@@ -48,6 +48,7 @@ public class BasicTestTemplate {
         public RestApiServerPlugin spongeRestApiPlugin() {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
             plugin.getSettings().setPort(spongeRestApiPort());
+            plugin.getSettings().setPrettyPrint(true);
 
             return plugin;
         }

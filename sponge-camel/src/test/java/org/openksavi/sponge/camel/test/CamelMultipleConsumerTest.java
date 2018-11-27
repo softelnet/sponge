@@ -16,7 +16,11 @@
 
 package org.openksavi.sponge.camel.test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.LoggingLevel;
@@ -55,6 +59,9 @@ public class CamelMultipleConsumerTest {
 
     @Produce(uri = "direct:test")
     protected ProducerTemplate testProducer;
+
+    @Inject
+    protected SpongeEngine engine;
 
     @Configuration
     public static class TestConfig extends SingleRouteCamelConfiguration {
@@ -113,5 +120,7 @@ public class CamelMultipleConsumerTest {
         logEndpoint.assertIsSatisfied();
 
         TimeUnit.SECONDS.sleep(2);
+
+        assertEquals(null, engine.getError());
     }
 }

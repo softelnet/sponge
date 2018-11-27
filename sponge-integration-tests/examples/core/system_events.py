@@ -32,7 +32,7 @@ class C(Correlator):
         self.events = [".*"]
         self.maxInstances = 1
     def onEvent(self, event):
-        self.logger.debug(str(event))
+        self.logger.debug("{}", event)
         sponge.getVariable("listC").add(event.name)
 
 def onStartup():

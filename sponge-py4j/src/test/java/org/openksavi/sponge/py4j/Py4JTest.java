@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
-import org.openksavi.sponge.core.util.ProcessInstance;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.util.process.ProcessInstance;
 
 @net.jcip.annotations.NotThreadSafe
 public class Py4JTest {

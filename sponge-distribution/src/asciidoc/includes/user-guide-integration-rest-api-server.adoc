@@ -1,7 +1,7 @@
 = {sponge} REST API server
 The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API server plugin (`RestApiServerPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service. After starting the plugin, the online API specification in the https://swagger.io[Swagger] JSON format will be available at URL `http://localhost:1836/api-doc`.
 
-The default name of the REST API plugin (which may be used in knowledge bases) is `restApiServer`.
+The default name of the REST API plugin (which can be used in knowledge bases) is `restApiServer`.
 
 .Key REST API plugin configuration parameters
 [cols="1,1,4"]
@@ -10,11 +10,11 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`autoStart`
 |`boolean`
-|If `true` then the REST service will start when the plugin starts up. The default value is `true`.
+|If `true` then the REST service will start when the plugin starts up. Defaults to `true`.
 
 |`restComponentId`
 |`String`
-|The Camel REST component id. The default value is `"jetty"`.
+|The Camel REST component id. Defaults to `"jetty"`.
 
 |`host`
 |`String`
@@ -22,11 +22,11 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`port`
 |`int`
-|The REST API port. The default REST API port is `1836`.
+|The REST API port. Defaults to `1836`.
 
 |`prettyPrint`
 |`boolean`
-|The pretty print option.
+|The pretty print option. Defaults to `false`.
 
 |`publicActions`
 |`List<ProcessorQualifiedName>`
@@ -42,7 +42,7 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`publishReload`
 |`boolean`
-|If `true` then the reload operation will be published. The default value is `false`.
+|If `true` then the reload operation will be published. Defaults to `false`.
 
 |`routeBuilderClass`
 |`String`
@@ -50,11 +50,11 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`apiServiceClass`
 |`String`
-|The `RestApiService` implementation class name. The default implementation is `DefaultRestApiService`.
+|The `RestApiService` implementation class name. Defaults to `DefaultRestApiService`.
 
 |`securityServiceClass`
 |`String`
-|The `RestApiSecurityService` implementation class name. The default implementation is `NoSecuritySecurityService`.
+|The `RestApiSecurityService` implementation class name. Defaults to `NoSecuritySecurityService`.
 
 |`authTokenServiceClass`
 |`String`
@@ -62,7 +62,7 @@ The default name of the REST API plugin (which may be used in knowledge bases) i
 
 |`authTokenExpirationDurationSeconds`
 |`Long`
-|The duration (in seconds) after which an authentication token will expire. The default value is `null` which means infinity.
+|The duration (in seconds) after which an authentication token will expire. Defaults to `null` which means infinity.
 |===
 
 .The REST API server plugin XML configuration example
@@ -179,6 +179,8 @@ The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to p
 
 The default Jackson configuration for the REST API sets the ISO8601 format for dates.
 
+NOTE: A `BinaryType` value is marshalled to a base64 encoded string. This encoding adds significant overhead and should be used only for relatively small binary data.
+
 == Requests and responses
 Each request may contain base properties.
 
@@ -193,15 +195,15 @@ Each request may contain base properties.
 
 |`username`
 |No
-|A user name. May be used in a user/password authentication mode. In that case, if there is no user name present, the _anonumous_ user is assumed.
+|A user name that may be used in a user/password authentication mode. In that case, if there is no user name present, the _anonumous_ user is assumed.
 
 |`password`
 |No
-|A user password. May be used in a user/password authentication mode.
+|A user password that may be used in a user/password authentication mode.
 
 |`authToken`
 |No
-|An authentication token. May be used in a token-based authentication mode.
+|An authentication token that may be used in a token-based authentication mode.
 |===
 
 .Examples of REST API requests
@@ -264,7 +266,7 @@ def onStartup():
 For more information see examples in the source code.
 
 == HTTPS
-In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords may be sent in plain text over the network as a part of the REST API JSON requests.
+In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
 
 include::user-guide-rest-api.adoc[leveloffset=+2]
 

@@ -43,6 +43,8 @@ public class SpongeRestClientConfiguration {
 
     private boolean throwExceptionOnErrorResponse = true;
 
+    private boolean prettyPrint = false;
+
     public void setUrl(String url) {
         this.url = url;
     }
@@ -130,6 +132,14 @@ public class SpongeRestClientConfiguration {
 
     public void setThrowExceptionOnErrorResponse(boolean throwExceptionOnErrorResponse) {
         this.throwExceptionOnErrorResponse = throwExceptionOnErrorResponse;
+    }
+
+    public boolean isPrettyPrint() {
+        return prettyPrint;
+    }
+
+    public void setPrettyPrint(boolean prettyPrint) {
+        this.prettyPrint = prettyPrint;
     }
 
     /**
@@ -266,6 +276,17 @@ public class SpongeRestClientConfiguration {
          */
         public Builder throwExceptionOnErrorResponse(boolean throwExceptionOnErrorResponse) {
             configuration.setThrowExceptionOnErrorResponse(throwExceptionOnErrorResponse);
+            return this;
+        }
+
+        /**
+         * Sets the pretty print flag. The default value is {@code false}.
+         *
+         * @param prettyPrint the pretty print flag.
+         * @return the builder.
+         */
+        public Builder prettyPrint(boolean prettyPrint) {
+            configuration.setPrettyPrint(prettyPrint);
             return this;
         }
     }

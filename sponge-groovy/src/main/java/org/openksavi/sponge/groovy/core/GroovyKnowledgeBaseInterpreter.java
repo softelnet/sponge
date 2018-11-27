@@ -149,7 +149,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     private void setClasspath(SpongeEngine engine) {
         if (engine != null) {
-            String claaspath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);
+            String claaspath = getEngineOperations().getProperty(PROP_CLASSPATH, null);
             if (claaspath != null) {
                 Stream.of(StringUtils.split(claaspath, PROP_PATH_SEPARATOR))
                         .forEachOrdered(path -> shell.getClassLoader().addClasspath(path));
@@ -355,7 +355,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     private List<String> createClasspath(SpongeEngine engine) {
         List<String> result = new ArrayList<>();
         if (engine != null) {
-            String classpath = getEngineOperations().getEngine().getConfigurationManager().getProperty(PROP_CLASSPATH);
+            String classpath = getEngineOperations().getProperty(PROP_CLASSPATH, null);
             if (classpath != null) {
                 result.addAll(Arrays.asList(StringUtils.split(classpath, PROP_PATH_SEPARATOR)));
             }

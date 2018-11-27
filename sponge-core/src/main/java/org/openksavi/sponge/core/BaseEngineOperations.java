@@ -19,16 +19,21 @@ package org.openksavi.sponge.core;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.AttributeMapEvent;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.process.ProcessInstanceRuntime;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.util.process.ProcessConfiguration;
+import org.openksavi.sponge.util.process.ProcessInstance;
 
 public class BaseEngineOperations implements EngineOperations {
 
@@ -336,13 +341,30 @@ public class BaseEngineOperations implements EngineOperations {
         engine.getSession().updateVariable(name);
     }
 
+    protected String getProperty(String name, String defaultValue, boolean throwException) {
+        String result = engine.getConfigurationManager().getProperty(name);
+        Validate.isTrue(result != null || !throwException, "Property '%s' not found or empty", name);
+
+        return result != null ? result : defaultValue;
+    }
+
     @Override
     public String getProperty(String name) {
-        return engine.getConfigurationManager().getProperty(name);
+        return getProperty(name, null, true);
+    }
+
+    @Override
+    public String getProperty(String name, String defaultValue) {
+        return getProperty(name, defaultValue, false);
     }
 
     @Override
     public String getHome() {
         return engine.getConfigurationManager().getHome();
+    }
+
+    @Override
+    public ProcessInstance runProcess(ProcessConfiguration processConfiguration) throws InterruptedException {
+        return new ProcessInstanceRuntime(engine, processConfiguration).start();
     }
 }

@@ -18,7 +18,7 @@ class UpperEchoAction(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case string").description("Result description")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
-    	return str(text).upper()
+    	return text.upper()
 
 def onLoad():
     sponge.enableJava(PowerEchoMetadataAction)

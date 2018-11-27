@@ -29,6 +29,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
@@ -76,7 +77,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     private AtomicReference<String> currentAuthToken = new AtomicReference<>();
 
-    private TypeConverter typeConverter = new DefaultTypeConverter(RestApiUtils.createObjectMapper());
+    private TypeConverter typeConverter;
 
     private Lock lock = new ReentrantLock(true);
 
@@ -98,7 +99,16 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     protected void setConfiguration(SpongeRestClientConfiguration configuration) {
         this.configuration = configuration;
 
+        applyConfiguration();
+
         initActionMetaCache();
+    }
+
+    private void applyConfiguration() {
+        ObjectMapper mapper = RestApiUtils.createObjectMapper();
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, configuration.isPrettyPrint());
+
+        typeConverter = new DefaultTypeConverter(mapper);
     }
 
     public TypeConverter getTypeConverter() {

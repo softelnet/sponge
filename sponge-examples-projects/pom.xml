@@ -23,5 +23,6 @@
         <module>sponge-examples-project-standalone-camel-groovy</module>
         <module>sponge-examples-project-demo-service</module>
         <module>sponge-examples-project-rest-api-client-test-service</module>
+        <module>sponge-examples-project-iot-rpi</module>
     </modules>
  </project>

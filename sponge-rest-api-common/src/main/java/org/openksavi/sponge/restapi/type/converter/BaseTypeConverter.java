@@ -60,7 +60,7 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
     @Override
     public void register(UnitTypeConverter unitConverter) {
-        logger.debug("Registering {} converter: {}", unitConverter.getTypeKind(), unitConverter.getClass());
+        logger.trace("Registering {} converter: {}", unitConverter.getTypeKind(), unitConverter.getClass());
         registry.put(unitConverter.getTypeKind(), unitConverter);
     }
 

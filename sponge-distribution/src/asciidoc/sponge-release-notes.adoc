@@ -11,9 +11,14 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed class `Type` to `DataType` and `TypeKind` to `DataTypeKind`.
 * API change: Renamed classes in the REST API client, including `SpongeRestApiClient` to `SpongeRestClient` and `SpongeRestApiClientConfiguration` to `SpongeRestClientConfiguration`.
 * API change: Removed `SpringSpongeRestClient` from the REST API client because the underlying Spring `RestTemplate` will be deprecated.
+* API change: Renamed methods in `CamelPlugin`: `send(body)` to `emit(body)`, `send(uri, body)` to `sendBody(uri, body)` and `request(uri, body)` to `requestBody(uri, body)`.
+* API change: Major changes in an external process handling, including `ProcessInstance` and `ProcessConfiguration`.
+* The default value of the `prettyPrint` option in the REST API is now `false`.
 * Added a context and listeners to the REST API client that provide access to JSON texts in a client code.
 * Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
+* Added the `-D` option in the standalone command-line application for passing Java system properties.
+* Removed some of the Camel components from the standalone command-line application to reduce the overall package size.
 * Libraries upgrade.
 
 [discrete]

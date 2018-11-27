@@ -24,18 +24,19 @@ import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
-import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.VoidType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "kind")
-@JsonSubTypes({ @Type(value = ActionType.class, name = DataTypeKind.CODE_ACTION), @Type(value = AnyType.class, name = DataTypeKind.CODE_ANY),
-        @Type(value = BinaryType.class, name = DataTypeKind.CODE_BINARY), @Type(value = BooleanType.class, name = DataTypeKind.CODE_BOOLEAN),
+@JsonSubTypes({ @Type(value = ActionType.class, name = DataTypeKind.CODE_ACTION),
+        @Type(value = AnyType.class, name = DataTypeKind.CODE_ANY), @Type(value = BinaryType.class, name = DataTypeKind.CODE_BINARY),
+        @Type(value = BooleanType.class, name = DataTypeKind.CODE_BOOLEAN),
         @Type(value = IntegerType.class, name = DataTypeKind.CODE_INTEGER), @Type(value = ListType.class, name = DataTypeKind.CODE_LIST),
         @Type(value = MapType.class, name = DataTypeKind.CODE_MAP), @Type(value = NumberType.class, name = DataTypeKind.CODE_NUMBER),
         @Type(value = ObjectType.class, name = DataTypeKind.CODE_OBJECT), @Type(value = StringType.class, name = DataTypeKind.CODE_STRING),

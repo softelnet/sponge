@@ -31,7 +31,7 @@ public final class RestApiServerConstants {
 
     public static final String DEFAULT_SSL_CONTEXT_PARAMETERS_BEAN_NAME = "spongeRestApiSslContextParameters";
 
-    public static final boolean DEFAULT_PRETTY_PRINT = true;
+    public static final boolean DEFAULT_PRETTY_PRINT = false;
 
     public static final boolean DEFAULT_PUBLISH_RELOAD = false;
 

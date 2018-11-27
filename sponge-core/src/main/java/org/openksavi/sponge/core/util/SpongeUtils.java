@@ -52,9 +52,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -104,13 +101,13 @@ import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
-import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.VoidType;
 
 /**
@@ -135,39 +132,6 @@ public abstract class SpongeUtils {
     private static final List<Class<? extends DataType>> SUPPORTED_TYPES =
             Arrays.asList(ActionType.class, AnyType.class, BinaryType.class, BooleanType.class, IntegerType.class, ListType.class,
                     MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
-
-    /**
-     * Trial run of the engine. Shuts down after {@code timeout} seconds after startup.
-     *
-     * @param engine the engine.
-     * @param timeout timeout in seconds.
-     */
-    public static void trialRunEngine(SpongeEngine engine, int timeout) {
-        final Semaphore semaphore = new Semaphore(0, true);
-
-        // Startup the engine. After startup the engine runs on the threads other than the current one.
-        engine.startup();
-
-        try {
-            ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-            executor.schedule(() -> {
-                // Release the semaphore after timeout.
-                semaphore.release();
-            }, timeout, TimeUnit.SECONDS);
-
-            try {
-                // Wait for releasing the semaphore after timeout.
-                semaphore.acquire();
-            } catch (InterruptedException e) {
-                logger.warn("trialRunEngine", e);
-            }
-
-            executor.shutdown();
-        } finally {
-            // Shutdown the engine.
-            engine.shutdown();
-        }
-    }
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {
@@ -276,7 +240,7 @@ public abstract class SpongeUtils {
         return knowledgeBase.getClass().getSimpleName();
     }
 
-    public static void shutdownExecutorService(SpongeEngine engine, Object named, ExecutorService executorService, long timeout) {
+    public static void shutdownExecutorService(Object named, ExecutorService executorService, long timeout) {
         MoreExecutors.shutdownAndAwaitTermination(executorService, timeout, TimeUnit.MILLISECONDS);
         if (!executorService.isTerminated()) {
             logger.warn("Executor for {} hasn't shutdown gracefully.", named);
@@ -284,7 +248,7 @@ public abstract class SpongeUtils {
     }
 
     public static void shutdownExecutorService(SpongeEngine engine, Object named, ExecutorService executorService) {
-        shutdownExecutorService(engine, named, executorService, engine.getDefaultParameters().getExecutorShutdownTimeout());
+        shutdownExecutorService(named, executorService, engine.getDefaultParameters().getExecutorShutdownTimeout());
     }
 
     public static ScriptKnowledgeBaseInterpreter getScriptInterpreter(SpongeEngine engine, String kbName) {
@@ -303,6 +267,11 @@ public abstract class SpongeUtils {
     private static SpongeException doWrapException(String sourceName, KnowledgeBaseInterpreter interpreter, Throwable throwable) {
         if (throwable instanceof SpongeException) {
             return (SpongeException) throwable;
+        }
+
+        // Set the thread as interrupted before wrapping the exception.
+        if (throwable instanceof InterruptedException) {
+            Thread.currentThread().interrupt();
         }
 
         String specificErrorMessage = interpreter != null ? interpreter.getSpecificExceptionMessage(throwable) : null;
@@ -675,10 +644,6 @@ public abstract class SpongeUtils {
 
     public static File getFileDirAsFile(String filePath) {
         return FileUtils.getFile(filePath).getParentFile();
-    }
-
-    public static ProcessInstance startProcess(SpongeEngine engine, ProcessConfiguration processConfiguration) {
-        return ProcessUtils.startProcess(engine, processConfiguration);
     }
 
     public static LocalCacheBuilder cacheBuilder() {

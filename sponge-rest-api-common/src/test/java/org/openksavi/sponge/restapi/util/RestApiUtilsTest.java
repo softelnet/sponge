@@ -29,5 +29,14 @@ public class RestApiUtilsTest {
 
         assertEquals("{\"username\":\"test\",\"password\":\"***\"}",
                 RestApiUtils.obfuscatePassword("{\"username\":\"test\",\"password\":\"\"}"));
+
+        assertEquals("{\"username\":null,\"password\":null}", RestApiUtils.obfuscatePassword("{\"username\":null,\"password\":null}"));
+        assertEquals("{\"username\":null,\"password\":null,\"object\":{\"name\":\"value\"}}",
+                RestApiUtils.obfuscatePassword("{\"username\":null,\"password\":null,\"object\":{\"name\":\"value\"}}"));
+        assertEquals(
+                "{\"id\":null,\"username\":\"test\",\"password\":\"***\",\"authToken\":null,"
+                        + "\"name\":\"TestAction\",\"args\":[\"TEST\",null],\"version\":null}",
+                RestApiUtils.obfuscatePassword("{\"id\":null,\"username\":\"test\",\"password\":\"password\",\"authToken\":null,"
+                        + "\"name\":\"TestAction\",\"args\":[\"TEST\",null],\"version\":null}"));
     }
 }

@@ -33,11 +33,27 @@
         <Bug pattern="BC_UNCONFIRMED_CAST" />
     </Match>
     <Match>
-        <Class name="org.openksavi.sponge.core.util.ProcessInstance" />
+        <Class name="org.openksavi.sponge.util.process.ProcessConfiguration" />
+        <Or>
+            <Method name="getInputBinary" />
+            <Method name="setInputBinary" />
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.util.process.ProcessInstance" />
         <Or>
             <Method name="getOutputBinary" />
         </Or>
         <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.core.util.process.DefaultProcessInstance" />
+        <Or>
+            <Method name="getOutputBinary" />
+            <Method name="setOutputBinary" />
+        </Or>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
     </Match>
     <Match>
         <Class name="org.openksavi.sponge.core.rule.BaseRuleDefinition" />
@@ -65,6 +81,13 @@
     <Match>
         <Class name="org.openksavi.sponge.standalone.StandaloneEngineMain" />
         <Method name="runInteractiveLoop" />
+        <Bug pattern="DM_EXIT" />
+    </Match>
+
+    <!-- Reason: Intended feature -->
+    <Match>
+        <Class name="org.openksavi.sponge.standalone.StandaloneEngineMain" />
+        <Method name="startup" />
         <Bug pattern="DM_EXIT" />
     </Match>
 

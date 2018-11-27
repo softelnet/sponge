@@ -24,7 +24,7 @@ Instances of event processors, depending on their type, may be created:
 |No
 |===
 
-When configuring an event processor, each event name may be specified as a regular expression thus creating a pattern matching more event names. The regular expression has to be compatible with {javaSeJavaDocUrl}/java/util/regex/Pattern.html[`java.util.regex.Pattern`].
+When configuring an event processor, each event name can be specified as a regular expression thus creating a pattern matching more event names. The regular expression has to be compatible with {javaSeJavaDocUrl}/java/util/regex/Pattern.html[`java.util.regex.Pattern`].
 
 .Event name pattern example
 [source,python]
@@ -130,7 +130,7 @@ public class ShapeFilter extends JFilter { // <1>
 <6> If `shape` is not set then rejects that event by returning `false`.
 <7> Otherwise accepts the event by returning `true`.
 
-This Java-based filter may be enabled only manually, for example in a script knowledge base e.g.:
+This Java-based filter can be enabled only manually, for example in a script knowledge base e.g.:
 
 .Enabling a Java-based filter
 [source,python]

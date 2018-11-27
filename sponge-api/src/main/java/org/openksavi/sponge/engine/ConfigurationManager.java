@@ -32,7 +32,7 @@ import org.openksavi.sponge.plugin.Plugin;
 public interface ConfigurationManager extends EngineModule {
 
     /**
-     * Returns the property value.
+     * Returns the property value or {@code null} if there is none.
      *
      * @param name the property name.
      * @return the property value.

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.camel.test;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.inject.Inject;
 
 import org.apache.camel.EndpointInject;
@@ -85,5 +87,7 @@ public class CamelManyConsumersTest {
 
         logEndpoint.expectedMessageCount(2);
         logEndpoint.assertIsSatisfied();
+
+        assertEquals(null, engine.getError());
     }
 }

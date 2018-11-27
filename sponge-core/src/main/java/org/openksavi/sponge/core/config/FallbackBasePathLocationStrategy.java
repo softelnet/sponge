@@ -15,6 +15,8 @@ public class FallbackBasePathLocationStrategy implements FileLocationStrategy {
 
     private URL locatedUrl;
 
+    private boolean notFound = false;
+
     public FallbackBasePathLocationStrategy(FileLocationStrategy baseStrategy, String fallbackBasePath) {
         this.baseStrategy = baseStrategy;
         this.fallbackBasePath = fallbackBasePath;
@@ -30,10 +32,18 @@ public class FallbackBasePathLocationStrategy implements FileLocationStrategy {
         locatedUrl = fallbackBasePath != null ? FileLocatorUtils.DEFAULT_LOCATION_STRATEGY.locate(fileSystem,
                 FileLocatorUtils.fileLocator(locator).basePath(fallbackBasePath).create()) : null;
 
+        if (locatedUrl == null) {
+            notFound = true;
+        }
+
         return locatedUrl;
     }
 
     public URL getLocatedUrl() {
         return locatedUrl;
+    }
+
+    public boolean isNotFound() {
+        return notFound;
     }
 }
