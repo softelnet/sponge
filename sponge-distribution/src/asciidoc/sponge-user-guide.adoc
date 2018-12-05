@@ -151,7 +151,7 @@ Events are the basic element of processing in {sponge}. They have properties suc
 |A property that is a global unique identifier of an event (String). This is a shortcut for `getId()`/`setId(text)` methods.
 
 |`name`
-|A read-only property that is the name (type) of an event. This is a shortcut for the `getName()` method. A name of an event shouldn't be changed after the event has been created.
+|A read-only property that is the name (type) of an event. This is a shortcut for the `getName()` method. A name of an event shouldn't be changed after the event has been created. A name must not be empty nor contain white spaces or reserved characters (`:`). You should also avoid using names that are regular expressions.
 
 |`time`
 |A property that is a send time of an event, i.e. a time of adding an event to the Input Event Queue. The time is represented as `java.time.Instant`. This is a shortcut for `getTime()`/`setTime(instant)` methods.
@@ -233,12 +233,7 @@ Control events are used by the engine internally. The names of control events ha
 === Creating and sending events
 *Creating an event means creating an instance of an event class. Sending an event means that the created event will be put into the Input Event Queue, to be processed by filters and then by triggers, rules and correlators.*
 
-Event could be created and sent:
-
-* Using the EventDefinition fluent API (e.g. `sponge.event("helloEvent").set("say", "Hello World!").send()`). The method `sponge.event` returns `EventDefinition`.
-* Using the traditional API (e.g. `sponge.send(sponge.makeEvent("helloEvent").set("say", "Hello World!"))`).
-
-The EventDefinition fluent API is the preferred option.
+Event can be created and sent using the EventDefinition fluent API (e.g. `sponge.event("helloEvent").set("say", "Hello World!").send()`). The method `sponge.event` returns `EventDefinition`.
 
 An event may be sent as:
 

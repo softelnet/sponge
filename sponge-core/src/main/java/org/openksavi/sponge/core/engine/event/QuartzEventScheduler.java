@@ -29,6 +29,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.Validate;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -196,6 +197,8 @@ public class QuartzEventScheduler extends BaseEventScheduler {
     }
 
     protected EventSchedulerEntry doSchedule(Event event, Trigger trigger, boolean single) {
+        validateEvent(event);
+
         lock.lock();
         try {
             JobDataMap data = new JobDataMap();
@@ -299,7 +302,9 @@ public class QuartzEventScheduler extends BaseEventScheduler {
 
     @Override
     public EventSchedulerEntry scheduleAt(Event event, String crontabSpec) {
-        return doSchedule(event, newTrigger().withSchedule(cronSchedule(crontabSpec)).build(), false);
+        return doSchedule(event,
+                newTrigger().withSchedule(cronSchedule(Validate.notNull(crontabSpec, "Crontab specification cannot be null"))).build(),
+                false);
     }
 
     /**

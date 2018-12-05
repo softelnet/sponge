@@ -88,11 +88,12 @@ public class CamelRssTest {
                                     MemoryIdempotentRepository.memoryIdempotentRepository())
                             // Conversion from RSS XML to Sponge event with attributes.
                             .process((exchange) -> {
-                                exchange.getIn().setBody(spongeEngine().getOperations().makeEvent("rssDecomposed")
+                                exchange.getIn().setBody(spongeEngine().getOperations().event("rssDecomposed")
                                     .set("source", "BBC")
                                     .set("title", CamelUtils.xpath(exchange, "/rss/channel/item/title/text()"))
                                     .set("link", CamelUtils.xpath(exchange, "/rss/channel/item/link/text()"))
-                                    .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()")));
+                                    .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()"))
+                                    .make());
                             })
                             .to("sponge:spongeEngine");
 

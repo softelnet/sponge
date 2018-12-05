@@ -40,6 +40,8 @@ public final class EngineConstants {
 
     public static final String MATCH_ALL_REGEXP = ".*";
 
+    public static final char[] EVENT_NAME_RESERVED_CHARS = new char[] { ':' };
+
     private EngineConstants() {
         //
     }

@@ -17,6 +17,7 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -31,13 +32,44 @@ public class EventsTest {
     public void testSendSameEvent() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
         engine.startup();
-        Event event = engine.getOperations().event("e").set("value", 1).make();
-        engine.getOperations().event(event).send();
 
         try {
+            Event event = engine.getOperations().event("e").set("value", 1).make();
             engine.getOperations().event(event).send();
-        } catch (SpongeException e) {
-            assertEquals(String.format("The event with id %s has already been sent", event.getId()), e.getMessage());
+
+            try {
+                engine.getOperations().event(event).send();
+
+                fail("Exception expected");
+            } catch (SpongeException e) {
+                assertEquals(String.format("The event with id %s has already been sent", event.getId()), e.getMessage());
+            }
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEventNameIncorrectWhitespace() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+        engine.startup();
+
+        try {
+            engine.getOperations().event("e ").send();
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEventNameIncorrectColon() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+        engine.startup();
+
+        try {
+            engine.getOperations().event("e:1").send();
+        } finally {
+            engine.shutdown();
         }
     }
 }

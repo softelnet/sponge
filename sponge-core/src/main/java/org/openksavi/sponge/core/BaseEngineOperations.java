@@ -23,7 +23,6 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
-import org.openksavi.sponge.core.event.AttributeMapEvent;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.process.ProcessInstanceRuntime;
@@ -68,83 +67,6 @@ public class BaseEngineOperations implements EngineOperations {
                 resultClass);
 
         return (T) result;
-    }
-
-    @Override
-    public Event send(Event event) {
-        if (event == null) {
-            throw new IllegalArgumentException("Event cannot be null");
-        }
-        engine.getEventScheduler().scheduleNow(event);
-
-        return event;
-    }
-
-    @Override
-    public Event send(String eventName) {
-        return send(makeEvent(eventName));
-    }
-
-    @Override
-    public EventSchedulerEntry sendAfter(String name, long delay) {
-        return sendAfter(makeEvent(name), delay, 0);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAfter(String name, long delay, long interval) {
-        return sendAfter(makeEvent(name), delay, interval);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAfter(final Event event, long delay) {
-        return sendAfter(event, delay, 0);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAfter(final Event event, long delay, long interval) {
-        if (event == null) {
-            throw new IllegalArgumentException("Event cannot be null");
-        }
-        return engine.getEventScheduler().scheduleAfter(event, delay, interval);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(String name, long milliseconds) {
-        return sendAt(makeEvent(name), milliseconds, 0);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(String name, long milliseconds, long interval) {
-        return sendAt(makeEvent(name), milliseconds, interval);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(final Event event, long milliseconds) {
-        return sendAt(event, milliseconds, 0);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(final Event event, long milliseconds, long interval) {
-        if (event == null) {
-            throw new IllegalArgumentException("Event cannot be null");
-        }
-        return engine.getEventScheduler().scheduleAt(event, milliseconds, interval);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(final Event event, String crontabSpec) {
-        if (event == null) {
-            throw new IllegalArgumentException("Event cannot be null");
-        }
-        if (crontabSpec == null) {
-            throw new IllegalArgumentException("Crontab specification cannot be null");
-        }
-        return engine.getEventScheduler().scheduleAt(event, crontabSpec);
-    }
-
-    @Override
-    public EventSchedulerEntry sendAt(String name, String crontabSpec) {
-        return sendAt(makeEvent(name), crontabSpec);
     }
 
     /**
@@ -211,29 +133,6 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public String getStatisticsSummary() {
         return engine.getStatisticsManager().getSummary();
-    }
-
-    /**
-     * Creates a new named event with default clone policy.
-     *
-     * @param name event name.
-     * @return a new event.
-     */
-    @Override
-    public Event makeEvent(String name) {
-        return new AttributeMapEvent(name, engine.getConfigurationManager().getEventClonePolicy());
-    }
-
-    /**
-     * Creates a new named event with specified clone policy.
-     *
-     * @param name event name.
-     * @param policy event clone policy.
-     * @return a new event.
-     */
-    @Override
-    public Event makeEvent(String name, EventClonePolicy policy) {
-        return new AttributeMapEvent(name, policy);
     }
 
     @Override

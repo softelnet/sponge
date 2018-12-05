@@ -41,7 +41,7 @@ public class DefaultEventDefinition implements EventDefinition {
      */
     public DefaultEventDefinition(EngineOperations engineOperations, String name, EventClonePolicy clonePolicy) {
         this.engineOperations = engineOperations;
-        event = this.engineOperations.makeEvent(name, clonePolicy);
+        event = new AttributeMapEvent(name, clonePolicy);
     }
 
     /**
@@ -69,12 +69,14 @@ public class DefaultEventDefinition implements EventDefinition {
 
     @Override
     public Event send() {
-        return engineOperations.send(event);
+        engineOperations.getEngine().getEventScheduler().scheduleNow(event);
+
+        return event;
     }
 
     @Override
     public EventSchedulerEntry sendAfter(long delay) {
-        return engineOperations.sendAfter(event, delay);
+        return sendAfter(delay, 0);
     }
 
     @Override
@@ -84,7 +86,7 @@ public class DefaultEventDefinition implements EventDefinition {
 
     @Override
     public EventSchedulerEntry sendAfter(long delay, long interval) {
-        return engineOperations.sendAfter(event, delay, interval);
+        return engineOperations.getEngine().getEventScheduler().scheduleAfter(event, delay, interval);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class DefaultEventDefinition implements EventDefinition {
 
     @Override
     public EventSchedulerEntry sendAt(long milliseconds) {
-        return engineOperations.sendAt(event, milliseconds);
+        return sendAt(milliseconds, 0);
     }
 
     @Override
@@ -104,7 +106,7 @@ public class DefaultEventDefinition implements EventDefinition {
 
     @Override
     public EventSchedulerEntry sendAt(long milliseconds, long interval) {
-        return engineOperations.sendAt(event, milliseconds, interval);
+        return engineOperations.getEngine().getEventScheduler().scheduleAt(event, milliseconds, interval);
     }
 
     @Override
@@ -114,7 +116,7 @@ public class DefaultEventDefinition implements EventDefinition {
 
     @Override
     public EventSchedulerEntry sendAt(String crontabSpec) {
-        return engineOperations.sendAt(event, crontabSpec);
+        return engineOperations.getEngine().getEventScheduler().scheduleAt(event, crontabSpec);
     }
 
     @Override

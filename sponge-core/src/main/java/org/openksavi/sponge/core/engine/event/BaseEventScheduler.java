@@ -17,9 +17,14 @@
 package org.openksavi.sponge.core.engine.event;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.core.engine.BaseEngineModule;
+import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -61,6 +66,8 @@ public abstract class BaseEventScheduler extends BaseEngineModule implements Eve
      */
     @Override
     public void scheduleNow(Event event) {
+        validateEvent(event);
+
         SpongeUtils.isTrue(event.getId() == null && event.getTime() == null, "The event with id %s has already been sent", event.getId());
 
         event.setId(eventIdGenerator.getNext());
@@ -80,5 +87,16 @@ public abstract class BaseEventScheduler extends BaseEngineModule implements Eve
     @Override
     public void setEventIdGenerator(EventIdGenerator eventIdGenerator) {
         this.eventIdGenerator = eventIdGenerator;
+    }
+
+    protected void validateEvent(Event event) {
+        Validate.notNull(event, "Event must not be null");
+        Validate.isTrue(event.getName() != null && !event.getName().trim().isEmpty(), "Event name must not be null or empty");
+
+        Validate.isTrue(
+                !StringUtils.containsWhitespace(event.getName())
+                        && !StringUtils.containsAny(event.getName(), EngineConstants.EVENT_NAME_RESERVED_CHARS),
+                "Event name must not contain whitespaces or reserved characters %s",
+                Arrays.toString(EngineConstants.EVENT_NAME_RESERVED_CHARS));
     }
 }
