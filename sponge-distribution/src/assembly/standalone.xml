@@ -137,6 +137,8 @@
             </includes>
             <excludes>
                 <exclude>%regex[.*\.h5]</exclude>
+                <exclude>examples/**/_tmp_/</exclude>
+                <exclude>examples/**/__pycache__/</exclude>
             </excludes>
         </fileSet>
         <fileSet>

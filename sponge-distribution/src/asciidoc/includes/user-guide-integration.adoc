@@ -118,15 +118,15 @@ In general, an external process can be executed using:
 
 |`inputRedirect`
 |`InputRedirect`
-|The standard input redirect type (see the following tables).
+|The standard input redirect type (see the following tables). There are convenience methods `inputAs...` available.
 
 |`outputRedirect`
 |`OutputRedirect`
-|The standard output redirect type (see the following tables).
+|The standard output redirect type (see the following tables). There are convenience methods `outputAs...` available.
 
 |`errorRedirect`
 |`ErrorRedirect`
-|The standard error redirect type (see the following tables).
+|The standard error redirect type (see the following tables). There are convenience methods `errorAs...` available.
 
 |`charset`
 |`String`
@@ -210,34 +210,33 @@ In general, an external process can be executed using:
 .Example of running an external executable with arguments in Java
 [source,java]
 ----
-ProcessInstance process = engine.getOperations().runProcess(
-        ProcessConfiguration.builder("echo").arguments("TEST").outputRedirect(OutputRedirect.STRING).build());
+ProcessInstance process = engine.getOperations().process(ProcessConfiguration.builder("echo", "TEST").outputAsString()).run();
 String output = process.getOutputString();
 ----
 
 .Example of running an external executable with arguments in Python
 [source,python]
 ----
-from org.openksavi.sponge.util.process import ProcessConfiguration, OutputRedirect
+from org.openksavi.sponge.util.process import ProcessConfiguration
 
-process = sponge.runProcess(ProcessConfiguration.builder("echo").arguments("TEST").outputRedirect(OutputRedirect.STRING).build())
+process = sponge.process(ProcessConfiguration.builder("echo", "TEST").outputAsString()).run()
 print process.outputString
 ----
 
 .Example of running an external executable with an additional environment in Java
 [source,java]
 ----
-ProcessInstance process = engine.getOperations().runProcess(ProcessConfiguration.builder("printenv")
-        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputRedirect(OutputRedirect.STRING).build());
+ProcessInstance process = engine.getOperations().process(ProcessConfiguration.builder("printenv")
+        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputAsString()).run();
 ----
 
 .Example of running an external executable with an additional environment in Python
 [source,python]
 ----
-from org.openksavi.sponge.util.process import ProcessConfiguration, OutputRedirect
+from org.openksavi.sponge.util.process import ProcessConfiguration
 
-process = sponge.runProcess(ProcessConfiguration.builder("printenv").arguments("TEST_VARIABLE")
-                .env("TEST_VARIABLE", "TEST").outputRedirect(OutputRedirect.STRING).build())
+process = sponge.process(ProcessConfiguration.builder("printenv").arguments("TEST_VARIABLE")
+                .env("TEST_VARIABLE", "TEST").outputAsString()).run()
 ----
 
 For more examples see {sourcesUrl}/sponge-core/src/test/java/org/openksavi/sponge/core/util/process/ProcessInstanceTest.java[ProcessInstanceTest.java].

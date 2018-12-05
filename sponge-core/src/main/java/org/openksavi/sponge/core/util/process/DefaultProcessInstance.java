@@ -20,6 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 
+import org.apache.commons.lang3.Validate;
+
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
 
@@ -28,9 +31,9 @@ import org.openksavi.sponge.util.process.ProcessInstance;
  */
 public class DefaultProcessInstance implements ProcessInstance {
 
-    private Process internalProcess;
+    private ProcessInstanceRuntime runtime;
 
-    private ProcessConfiguration configuration;
+    private Process internalProcess;
 
     private String outputString;
 
@@ -42,13 +45,21 @@ public class DefaultProcessInstance implements ProcessInstance {
 
     private boolean waitSecondsTimedOut = false;
 
-    private ProcessInstanceRuntime runtime;
+    public DefaultProcessInstance(SpongeEngine engine, ProcessConfiguration configuration) {
+        runtime = new ProcessInstanceRuntime(engine, configuration, this);
+    }
 
-    public DefaultProcessInstance(Process internalProcess, ProcessConfiguration configuration, ProcessInstanceRuntime runtime) {
-        this.internalProcess = internalProcess;
-        this.configuration = configuration;
-        this.runtime = runtime;
-        startTime = Instant.now();
+    @Override
+    public ProcessInstance run() throws InterruptedException {
+        Validate.isTrue(internalProcess == null, "The process has already started");
+
+        runtime.start();
+
+        return this;
+    }
+
+    private void validateStarted() {
+        Validate.notNull(internalProcess, "The process is not started");
     }
 
     @Override
@@ -56,9 +67,13 @@ public class DefaultProcessInstance implements ProcessInstance {
         return internalProcess;
     }
 
+    public void setInternalProcess(Process internalProcess) {
+        this.internalProcess = internalProcess;
+    }
+
     @Override
     public ProcessConfiguration getConfiguration() {
-        return configuration;
+        return runtime.getConfiguration();
     }
 
     @Override
@@ -87,11 +102,15 @@ public class DefaultProcessInstance implements ProcessInstance {
 
     @Override
     public void waitForReady() throws InterruptedException {
+        validateStarted();
+
         runtime.waitForReady();
     }
 
     @Override
     public int waitFor() throws InterruptedException {
+        validateStarted();
+
         return runtime.waitFor();
     }
 
@@ -104,16 +123,22 @@ public class DefaultProcessInstance implements ProcessInstance {
 
     @Override
     public boolean isAlive() {
+        validateStarted();
+
         return internalProcess.isAlive();
     }
 
     @Override
     public int getExitCode() {
+        validateStarted();
+
         return internalProcess.exitValue();
     }
 
     @Override
     public String getOutputString() {
+        validateStarted();
+
         return outputString;
     }
 
@@ -124,6 +149,8 @@ public class DefaultProcessInstance implements ProcessInstance {
 
     @Override
     public byte[] getOutputBinary() {
+        validateStarted();
+
         return outputBinary;
     }
 
@@ -134,6 +161,8 @@ public class DefaultProcessInstance implements ProcessInstance {
 
     @Override
     public String getErrorString() {
+        validateStarted();
+
         return errorString;
     }
 
@@ -144,16 +173,22 @@ public class DefaultProcessInstance implements ProcessInstance {
 
     @Override
     public OutputStream getInput() {
+        validateStarted();
+
         return internalProcess.getOutputStream();
     }
 
     @Override
     public InputStream getOutput() {
+        validateStarted();
+
         return internalProcess.getInputStream();
     }
 
     @Override
     public InputStream getError() {
+        validateStarted();
+
         return internalProcess.getErrorStream();
     }
 }

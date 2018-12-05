@@ -50,7 +50,6 @@ import org.openksavi.sponge.util.process.ErrorRedirect;
 import org.openksavi.sponge.util.process.InputRedirect;
 import org.openksavi.sponge.util.process.OutputRedirect;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
-import org.openksavi.sponge.util.process.ProcessInstance;
 
 /**
  * A process instance runtime. Not thread safe.
@@ -69,7 +68,7 @@ public class ProcessInstanceRuntime {
 
     private ProcessConfiguration configuration;
 
-    private ProcessInstance instance;
+    private DefaultProcessInstance instance;
 
     private Semaphore semaphore = new Semaphore(0, true);
 
@@ -81,17 +80,14 @@ public class ProcessInstanceRuntime {
 
     private AtomicBoolean waitForReadyFinished = new AtomicBoolean(false);
 
-    public ProcessInstanceRuntime(SpongeEngine engine, ProcessConfiguration configuration) {
+    public ProcessInstanceRuntime(SpongeEngine engine, ProcessConfiguration configuration, DefaultProcessInstance instance) {
         this.engine = engine;
         this.configuration = configuration;
+        this.instance = instance;
     }
 
     public ProcessConfiguration getConfiguration() {
         return configuration;
-    }
-
-    public ProcessInstance getInstance() {
-        return instance;
     }
 
     protected void initState() {
@@ -99,6 +95,8 @@ public class ProcessInstanceRuntime {
         errorLine.set(null);
         inputStreamLineConsumerRunnableFutures.clear();
         executor = null;
+
+        instance.setStartTime(Instant.now());
     }
 
     protected ProcessBuilder createAndConfigureProcessBuilder() {
@@ -311,15 +309,13 @@ public class ProcessInstanceRuntime {
         }
 
         try {
-            instance = new DefaultProcessInstance(builder.start(), configuration, this);
+            instance.setInternalProcess(builder.start());
         } catch (IOException e) {
             throw SpongeUtils.wrapException(getName(), e);
         }
     }
 
-    public ProcessInstance start() throws InterruptedException {
-        SpongeUtils.isTrue(instance == null, "The process has already started");
-
+    public void start() throws InterruptedException {
         ProcessUtils.validateProcessConfiguration(configuration);
 
         // Set the initial state.
@@ -333,8 +329,6 @@ public class ProcessInstanceRuntime {
         if (ProcessUtils.shouldWaitForReadyInstantly(configuration)) {
             waitForReady();
         }
-
-        return instance;
     }
 
     public void waitForReady() throws InterruptedException {

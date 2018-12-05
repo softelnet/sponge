@@ -19,8 +19,6 @@ package org.openksavi.sponge.gsmmodem;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
-import org.openksavi.sponge.util.process.InputRedirect;
-import org.openksavi.sponge.util.process.OutputRedirect;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
 
@@ -51,9 +49,8 @@ public class GammuGsmModemPlugin extends JPlugin {
     public void sendSms(String number, String message) {
         try {
             String unicode = canEncodeGsm(message) ? null : "-unicode";
-            ProcessInstance process =
-                    getEngineOperations().runProcess(ProcessConfiguration.builder("gammu").arguments("sendsms", "TEXT", number, unicode)
-                            .inputRedirect(InputRedirect.STRING).inputString(message).outputRedirect(OutputRedirect.STRING).build());
+            ProcessInstance process = getEngineOperations().process(ProcessConfiguration.builder("gammu")
+                    .arguments("sendsms", "TEXT", number, unicode).inputAsString(message).outputAsString()).run();
 
             if (process.waitFor() != 0) {
                 throw new SpongeException(String.format("Exit code %d: %s", process.getExitCode(), process.getOutputString()));

@@ -287,9 +287,10 @@ public class ProcessConfiguration implements Cloneable {
      * Returns a new process configuration builder.
      *
      * @param executable the executable file name.
+     * @param arguments the optional arguments.
      * @return the builder.
      */
-    public static ProcessConfigurationBuilder builder(String executable) {
-        return new ProcessConfigurationBuilder(executable);
+    public static ProcessConfigurationBuilder builder(String executable, String... arguments) {
+        return new ProcessConfigurationBuilder(executable).arguments(arguments);
     }
 }

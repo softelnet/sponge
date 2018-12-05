@@ -25,7 +25,8 @@ import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
-import org.openksavi.sponge.util.process.ProcessInstance;
+import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
+import org.openksavi.sponge.util.process.ProcessDefinition;
 
 /**
  * An engine operations.
@@ -308,17 +309,18 @@ public interface EngineOperations {
     String getHome();
 
     /**
-     * Runs a new process. Should be invoked only once. Waits if necessary according to the configuration.
-     *
-     * <p>If the input redirect type is STREAM you should invoke manually
-     * {@link org.openksavi.sponge.util.process.ProcessInstance#waitForReady() ProcessInstance.waitForReady()} after writing to and closing
-     * the subprocess standard input {@link org.openksavi.sponge.util.process.ProcessInstance#getInput() ProcessInstance.getInput()}.
+     * Create a new process definition.
      *
      * @param processConfiguration the process configuration.
-     *
-     * @return a new process instance.
-     *
-     * @throws InterruptedException on interrupted.
+     * @return a new process definition.
      */
-    ProcessInstance runProcess(ProcessConfiguration processConfiguration) throws InterruptedException;
+    ProcessDefinition process(ProcessConfiguration processConfiguration);
+
+    /**
+     * Create a new process definition.
+     *
+     * @param processConfigurationBuilder the process configuration builder.
+     * @return a new process definition.
+     */
+    ProcessDefinition process(ProcessConfigurationBuilder processConfigurationBuilder);
 }

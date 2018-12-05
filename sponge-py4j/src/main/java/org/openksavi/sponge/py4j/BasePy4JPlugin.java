@@ -129,7 +129,7 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
             }
 
             try {
-                scriptProcess = getEngineOperations().runProcess(finalConfiguration);
+                scriptProcess = getEngineOperations().process(finalConfiguration).run();
             } catch (InterruptedException e) {
                 throw SpongeUtils.wrapException(e);
             }

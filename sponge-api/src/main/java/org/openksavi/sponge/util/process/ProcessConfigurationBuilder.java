@@ -342,4 +342,145 @@ public class ProcessConfigurationBuilder {
         configuration.setRedirectErrorStream(redirectErrorStream);
         return this;
     }
+
+    /**
+     * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#INHERIT INHERIT}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder inputAsInherit() {
+        return inputRedirect(InputRedirect.INHERIT);
+    }
+
+    /**
+     * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#STRING STRING}.
+     *
+     * @param inputString the input string.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder inputAsString(String inputString) {
+        return inputRedirect(InputRedirect.STRING).inputString(inputString);
+    }
+
+    /**
+     * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#BINARY BINARY}.
+     *
+     * @param inputBinary the input binary.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder inputAsBinary(byte[] inputBinary) {
+        return inputRedirect(InputRedirect.BINARY).inputBinary(inputBinary);
+    }
+
+    /**
+     * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#FILE FILE}.
+     *
+     * @param inputFile the input file name.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder inputAsFile(String inputFile) {
+        return inputRedirect(InputRedirect.FILE).inputFile(inputFile);
+    }
+
+    /**
+     * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#STREAM STREAM}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder inputAsStream() {
+        return inputRedirect(InputRedirect.STREAM);
+    }
+
+    /**
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#INHERIT INHERIT}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputAsInherit() {
+        return outputRedirect(OutputRedirect.INHERIT);
+    }
+
+    /**
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#STRING STRING}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputAsString() {
+        return outputRedirect(OutputRedirect.STRING);
+    }
+
+    /**
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#BINARY BINARY}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputAsBinary() {
+        return outputRedirect(OutputRedirect.BINARY);
+    }
+
+    /**
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#FILE FILE}.
+     *
+     * @param outputFile the output file name.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputAsFile(String outputFile) {
+        return outputRedirect(OutputRedirect.FILE).outputFile(outputFile);
+    }
+
+    /**
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#LOGGER LOGGER}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputAsLogger() {
+        return outputRedirect(OutputRedirect.LOGGER);
+    }
+
+    /**
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#INHERIT INHERIT}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder errorAsInherit() {
+        return errorRedirect(ErrorRedirect.INHERIT);
+    }
+
+    /**
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#STRING STRING}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder errorAsString() {
+        return errorRedirect(ErrorRedirect.STRING);
+    }
+
+    /**
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#FILE FILE}.
+     *
+     * @param errorFile the error file.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder errorAsFile(String errorFile) {
+        return errorRedirect(ErrorRedirect.FILE).errorFile(errorFile);
+    }
+
+    /**
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#EXCEPTION
+     * EXCEPTION}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder errorAsException() {
+        return errorRedirect(ErrorRedirect.EXCEPTION);
+    }
+
+    /**
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#LOGGER LOGGER}.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder errorAsLogger() {
+        return errorRedirect(ErrorRedirect.LOGGER);
+    }
 }

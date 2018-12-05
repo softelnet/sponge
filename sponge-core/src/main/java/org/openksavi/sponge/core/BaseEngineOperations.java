@@ -25,14 +25,15 @@ import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.core.util.process.ProcessInstanceRuntime;
+import org.openksavi.sponge.core.util.process.DefaultProcessDefinition;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
-import org.openksavi.sponge.util.process.ProcessInstance;
+import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
+import org.openksavi.sponge.util.process.ProcessDefinition;
 
 public class BaseEngineOperations implements EngineOperations {
 
@@ -263,7 +264,12 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public ProcessInstance runProcess(ProcessConfiguration processConfiguration) throws InterruptedException {
-        return new ProcessInstanceRuntime(engine, processConfiguration).start();
+    public ProcessDefinition process(ProcessConfiguration processConfiguration) {
+        return new DefaultProcessDefinition(engine, processConfiguration);
+    }
+
+    @Override
+    public ProcessDefinition process(ProcessConfigurationBuilder processConfigurationBuilder) {
+        return process(processConfigurationBuilder.build());
     }
 }
