@@ -76,7 +76,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     public void validate() {
         super.validate();
 
-        SpongeUtils.isTrue(getArgsMeta() != null && getResultMeta() != null || getArgsMeta() == null && getResultMeta() == null,
+        Validate.isTrue(getArgsMeta() != null && getResultMeta() != null || getArgsMeta() == null && getResultMeta() == null,
                 "Both argument metadata and result metadata must be set or not");
 
         if (getArgsMeta() != null) {

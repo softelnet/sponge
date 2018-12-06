@@ -29,6 +29,9 @@ public enum ErrorRedirect {
     /** Throw an exception if the error output is not empty. The thread that started the subprocess will wait for the subprocess to exit. */
     EXCEPTION,
 
-    /** Logs the subprocess error output to the logger (as WARN). */
-    LOGGER
+    /**
+     * Sends a subprocess standard error as text lines to a line consumer (if set). It also logs the subprocess error output to the logger
+     * (as WARN).
+     */
+    CONSUMER
 }

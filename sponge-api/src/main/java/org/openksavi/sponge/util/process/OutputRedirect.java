@@ -32,6 +32,9 @@ public enum OutputRedirect {
      */
     FILE,
 
-    /** Logs the subprocess standard output to the logger (as INFO). */
-    LOGGER
+    /**
+     * Sends a subprocess standard output as text lines to a line consumer (if set). It also logs the subprocess standard output to the
+     * logger (as INFO).
+     */
+    CONSUMER
 }

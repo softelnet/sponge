@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.config.Configuration;
-import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.util.process.ErrorRedirect;
 import org.openksavi.sponge.util.process.InputRedirect;
 import org.openksavi.sponge.util.process.OutputRedirect;
@@ -129,35 +128,30 @@ public abstract class ProcessUtils {
     }
 
     public static void validateProcessConfiguration(ProcessConfiguration configuration) {
-        SpongeUtils.isTrue(configuration.getOutputLineConsumer() == null || configuration.getOutputRedirect() == OutputRedirect.LOGGER,
-                "If the output line consumer is provided, the output redirect type must be LOGGER");
-        SpongeUtils.isTrue(configuration.getErrorLineConsumer() == null || configuration.getErrorRedirect() == ErrorRedirect.LOGGER,
-                "If the error line consumer is provided, the error redirect type must be LOGGER");
+        Validate.isTrue(configuration.getOutputLineConsumer() == null || configuration.getOutputRedirect() == OutputRedirect.CONSUMER,
+                "If the output line consumer is provided, the output redirect type must be CONSUMER");
+        Validate.isTrue(configuration.getErrorLineConsumer() == null || configuration.getErrorRedirect() == ErrorRedirect.CONSUMER,
+                "If the error line consumer is provided, the error redirect type must be CONSUMER");
 
-        SpongeUtils.isTrue(
-                !shouldWaitForSpecificLine(configuration) || configuration.getOutputRedirect() == OutputRedirect.LOGGER
-                        || configuration.getErrorRedirect() == ErrorRedirect.LOGGER,
-                "If the waiting for a specific line is set, the output or error redirect type must be LOGGER");
+        Validate.isTrue(
+                !shouldWaitForSpecificLine(configuration) || configuration.getOutputRedirect() == OutputRedirect.CONSUMER
+                        || configuration.getErrorRedirect() == ErrorRedirect.CONSUMER,
+                "If the waiting for a specific line is set, the output or error redirect type must be CONSUMER");
 
-        if (configuration.getInputRedirect() == InputRedirect.STRING) {
-            SpongeUtils.isTrue(configuration.getInputString() != null, "The input string must be set if the input redirect is STRING");
-        }
+        Validate.isTrue(configuration.getInputRedirect() != InputRedirect.STRING || configuration.getInputString() != null,
+                "The input string must be set if the input redirect is STRING");
 
-        if (configuration.getInputRedirect() == InputRedirect.BINARY) {
-            SpongeUtils.isTrue(configuration.getInputBinary() != null, "The input binary must be set if the input redirect is BINARY");
-        }
+        Validate.isTrue(configuration.getInputRedirect() != InputRedirect.BINARY || configuration.getInputBinary() != null,
+                "The input binary must be set if the input redirect is BINARY");
 
-        if (configuration.getInputRedirect() == InputRedirect.FILE) {
-            SpongeUtils.isTrue(configuration.getInputFile() != null, "The input file must be set if the input redirect is FILE");
-        }
+        Validate.isTrue(configuration.getInputRedirect() != InputRedirect.FILE || configuration.getInputFile() != null,
+                "The input file must be set if the input redirect is FILE");
 
-        if (configuration.getOutputRedirect() == OutputRedirect.FILE) {
-            SpongeUtils.isTrue(configuration.getOutputFile() != null, "The output file must be set if the output redirect is FILE");
-        }
+        Validate.isTrue(configuration.getOutputRedirect() != OutputRedirect.FILE || configuration.getOutputFile() != null,
+                "The output file must be set if the output redirect is FILE");
 
-        if (configuration.getErrorRedirect() == ErrorRedirect.FILE) {
-            SpongeUtils.isTrue(configuration.getErrorFile() != null, "The error file must be set if the error redirect is FILE");
-        }
+        Validate.isTrue(configuration.getErrorRedirect() != ErrorRedirect.FILE || configuration.getErrorFile() != null,
+                "The error file must be set if the error redirect is FILE");
     }
 
     public static boolean shouldWaitForReadyInstantly(ProcessConfiguration configuration) {

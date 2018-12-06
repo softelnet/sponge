@@ -18,6 +18,6 @@ class ProcessEnv(Action):
 
 class ProcessWaitForOutput(Action):
     def onCall(self):
-        process = sponge.process(ProcessConfiguration.builder("echo", "MSG").outputAsLogger()
+        process = sponge.process(ProcessConfiguration.builder("echo", "MSG").outputAsConsumer()
                 .waitForPositiveLineRegexp(".*MSG.*").waitForNegativeLineRegexp(".*ERROR.*")).run()
         return "OK"

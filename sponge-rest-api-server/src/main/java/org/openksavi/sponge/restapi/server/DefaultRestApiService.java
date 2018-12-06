@@ -31,7 +31,6 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
-import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -241,7 +240,7 @@ public class DefaultRestApiService implements RestApiService {
 
             actionAdapter = getEngine().getActionManager().getActionAdapter(request.getName());
             Validate.notNull(actionAdapter, "The action %s doesn't exist", request.getName());
-            SpongeUtils.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
+            Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
 
             if (request.getVersion() != null && !Objects.equals(request.getVersion(), actionAdapter.getKnowledgeBase().getVersion())) {
                 throw new RestApiIncorrectKnowledgeBaseVersionServerException(
@@ -278,9 +277,9 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(request, "The request must not be null");
 
             User user = authenticateRequest(request, exchange);
-            SpongeUtils.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event named '%s'",
+            Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event named '%s'",
                     request.getName());
-            SpongeUtils.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
+            Validate.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
 
             EventDefinition definition = getEngine().getOperations().event(request.getName());
             if (request.getAttributes() != null) {
@@ -303,7 +302,7 @@ public class DefaultRestApiService implements RestApiService {
 
             User user = authenticateRequest(request, exchange);
 
-            SpongeUtils.isTrue(user.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
+            Validate.isTrue(user.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
 
             getEngine().reload();
 
@@ -343,8 +342,8 @@ public class DefaultRestApiService implements RestApiService {
      */
     protected User authenticateRequest(SpongeRequest request, Exchange exchange) {
         if (request.getAuthToken() != null) {
-            SpongeUtils.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
-            SpongeUtils.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
+            Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
+            Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
 
             String username = getSafeAuthTokenService().validateAuthToken(request.getAuthToken(), exchange);
             return securityService.getUser(username);

@@ -58,7 +58,7 @@ public class ProcessInstanceTest {
     public void testProcessWaitForOutput() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        engine.getOperations().process(ProcessConfiguration.builder("echo").arguments("MSG").outputAsLogger()
+        engine.getOperations().process(ProcessConfiguration.builder("echo").arguments("MSG").outputAsConsumer()
                 .waitForPositiveLineRegexp(".*MSG.*").waitForNegativeLineRegexp(".*ERROR.*")).run();
     }
 
@@ -68,7 +68,7 @@ public class ProcessInstanceTest {
 
         ProcessInstance process = engine.getOperations()
                 .process(ProcessConfiguration.builder("python").arguments("src/test/resources/test_infinite_process_wait_for_output.py")
-                        .outputAsLogger().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*"))
+                        .outputAsConsumer().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*"))
                 .run();
 
         process.destroy();
@@ -80,7 +80,7 @@ public class ProcessInstanceTest {
 
         ProcessInstance process =
                 engine.getOperations().process(ProcessConfiguration.builder("bash").arguments("-c").arguments("echo STARTED; sleep 600")
-                        .outputAsLogger().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*")).run();
+                        .outputAsConsumer().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*")).run();
 
         process.destroy();
     }
@@ -92,7 +92,7 @@ public class ProcessInstanceTest {
         try {
             engine.getOperations()
                     .process(
-                            ProcessConfiguration.builder("echo").arguments("ERROR").outputAsLogger().waitForNegativeLineRegexp(".*ERROR.*"))
+                            ProcessConfiguration.builder("echo").arguments("ERROR").outputAsConsumer().waitForNegativeLineRegexp(".*ERROR.*"))
                     .run();
         } catch (SpongeException e) {
             assertEquals("Error in the subprocess: ERROR", e.getMessage());
@@ -105,7 +105,7 @@ public class ProcessInstanceTest {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         engine.getOperations()
-                .process(ProcessConfiguration.builder("echo").arguments("OK").outputAsLogger().waitForPositiveLineRegexp(".*NONEXISTING.*"))
+                .process(ProcessConfiguration.builder("echo").arguments("OK").outputAsConsumer().waitForPositiveLineRegexp(".*NONEXISTING.*"))
                 .run();
     }
 

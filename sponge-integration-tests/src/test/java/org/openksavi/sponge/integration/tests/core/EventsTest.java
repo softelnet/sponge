@@ -21,7 +21,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
@@ -41,7 +40,7 @@ public class EventsTest {
                 engine.getOperations().event(event).send();
 
                 fail("Exception expected");
-            } catch (SpongeException e) {
+            } catch (IllegalArgumentException e) {
                 assertEquals(String.format("The event with id %s has already been sent", event.getId()), e.getMessage());
             }
         } finally {

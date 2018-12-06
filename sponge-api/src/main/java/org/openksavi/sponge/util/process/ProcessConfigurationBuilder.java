@@ -267,7 +267,7 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * The process standard output line consumer. Applicable only if the output redirect type is LOGGER.
+     * The process standard output line consumer. Applicable only if the output redirect type is CONSUMER.
      *
      * @param outputLineConsumer the line consumer.
      * @return this builder.
@@ -278,7 +278,7 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * The process error output line consumer. Applicable only if the error redirect type is LOGGER.
+     * The process error output line consumer. Applicable only if the error redirect type is CONSUMER.
      *
      * @param errorLineConsumer the line consumer.
      * @return this builder.
@@ -289,7 +289,7 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * The logging consumer for the process standard output. Applicable only if the output redirect type is LOGGER. The default logging
+     * The logging consumer for the process standard output. Applicable only if the output redirect type is CONSUMER. The default logging
      * level is {@code INFO}.
      *
      * @param outputLoggingConsumer the logging consumer.
@@ -301,8 +301,8 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * The logging consumer for the process error output. Applicable only if the error redirect type is LOGGER. The default logging level is
-     * {@code WARN}.
+     * The logging consumer for the process error output. Applicable only if the error redirect type is CONSUMER. The default logging level
+     * is {@code WARN}.
      *
      * @param errorLoggingConsumer the logging consumer.
      * @return this builder.
@@ -429,12 +429,22 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#LOGGER LOGGER}.
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#CONSUMER CONSUMER}.
+     *
+     * @param outputLineConsumer the line consumer.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputAsConsumer(Consumer<String> outputLineConsumer) {
+        return outputRedirect(OutputRedirect.CONSUMER).outputLineConsumer(outputLineConsumer);
+    }
+
+    /**
+     * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#CONSUMER CONSUMER}.
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsLogger() {
-        return outputRedirect(OutputRedirect.LOGGER);
+    public ProcessConfigurationBuilder outputAsConsumer() {
+        return outputRedirect(OutputRedirect.CONSUMER);
     }
 
     /**
@@ -476,11 +486,12 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#LOGGER LOGGER}.
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#CONSUMER
+     * CONSUMER}.
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsLogger() {
-        return errorRedirect(ErrorRedirect.LOGGER);
+    public ProcessConfigurationBuilder errorAsConsumer() {
+        return errorRedirect(ErrorRedirect.CONSUMER);
     }
 }

@@ -22,8 +22,8 @@
                     <workingDir>${sponge.configDir}/python</workingDir>
                     <waitForPositiveLineRegexp>MNIST service has started.</waitForPositiveLineRegexp>
                     <waitForNegativeLineRegexp>MNIST service has failed to start.</waitForNegativeLineRegexp>
-                    <outputRedirect>LOGGER</outputRedirect>
-                    <errorRedirect>LOGGER</errorRedirect>
+                    <outputRedirect>CONSUMER</outputRedirect>
+                    <errorRedirect>CONSUMER</errorRedirect>
                 </pythonScript>
             </configuration>
         </plugin>

@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,14 +173,14 @@ public class ProcessInstanceRuntime {
         return inputStreamLineConsumerRunnableFutures.size();
     }
 
-    protected void optionallySetOutputLogger() {
+    protected void optionallySetOutputConsumers() {
         List<InputStreamLineConsumerRunnable> runnables = new ArrayList<>();
-        if (configuration.getOutputRedirect() == OutputRedirect.LOGGER) {
+        if (configuration.getOutputRedirect() == OutputRedirect.CONSUMER) {
             runnables.add(createInputStreamLineConsumerRunnable(instance.getInternalProcess().getInputStream(),
                     configuration.getOutputLineConsumer(), processOutputLogger, getOutputLoggingConsumer()));
         }
 
-        if (configuration.getErrorRedirect() == ErrorRedirect.LOGGER) {
+        if (configuration.getErrorRedirect() == ErrorRedirect.CONSUMER) {
             runnables.add(createInputStreamLineConsumerRunnable(instance.getInternalProcess().getErrorStream(),
                     configuration.getErrorLineConsumer(), processErrorLogger, getErrorLoggingConsumer()));
         }
@@ -196,7 +197,7 @@ public class ProcessInstanceRuntime {
             if (configuration.getWaitForLineTimeout() == null) {
                 semaphore.acquire(getRequiredFullSemaphorePermits());
             } else {
-                SpongeUtils.isTrue(
+                Validate.isTrue(
                         semaphore.tryAcquire(getRequiredFullSemaphorePermits(), configuration.getWaitForLineTimeout(), TimeUnit.SECONDS),
                         "Process wait timeout exceeded");
             }
@@ -324,7 +325,7 @@ public class ProcessInstanceRuntime {
         // Start subprocess.
         startProcess(createAndConfigureProcessBuilder());
 
-        optionallySetOutputLogger();
+        optionallySetOutputConsumers();
 
         if (ProcessUtils.shouldWaitForReadyInstantly(configuration)) {
             waitForReady();
