@@ -64,7 +64,7 @@ public abstract class CamelUtils {
     }
 
     public static CamelPlugin getPlugin(SpongeEngine engine) {
-        CamelPlugin plugin = engine.getPluginManager().getPlugin(CamelPlugin.NAME, CamelPlugin.class);
+        CamelPlugin plugin = engine.getPluginManager().getPlugin(CamelPlugin.class, CamelPlugin.NAME);
         if (plugin == null) {
             throw new SpongeException("Camel plugin not found");
         }

@@ -19,7 +19,7 @@ class ColorFilter extends Filter {
     }
     boolean onAccept(Event event) {
         this.logger.debug("Received event {}", event)
-        String color = event.getOrDefault("color", null)
+        String color = event.get("color", null)
         if (color == null || color != "blue") {
             this.logger.debug("rejected")
             return false

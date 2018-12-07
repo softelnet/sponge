@@ -90,9 +90,8 @@ public class ProcessInstanceTest {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         try {
-            engine.getOperations()
-                    .process(
-                            ProcessConfiguration.builder("echo").arguments("ERROR").outputAsConsumer().waitForNegativeLineRegexp(".*ERROR.*"))
+            engine.getOperations().process(
+                    ProcessConfiguration.builder("echo").arguments("ERROR").outputAsConsumer().waitForNegativeLineRegexp(".*ERROR.*"))
                     .run();
         } catch (SpongeException e) {
             assertEquals("Error in the subprocess: ERROR", e.getMessage());
@@ -104,9 +103,8 @@ public class ProcessInstanceTest {
     public void testProcessWaitForNonexistingOutputEarlyExit() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        engine.getOperations()
-                .process(ProcessConfiguration.builder("echo").arguments("OK").outputAsConsumer().waitForPositiveLineRegexp(".*NONEXISTING.*"))
-                .run();
+        engine.getOperations().process(
+                ProcessConfiguration.builder("echo").arguments("OK").outputAsConsumer().waitForPositiveLineRegexp(".*NONEXISTING.*")).run();
     }
 
     @Test

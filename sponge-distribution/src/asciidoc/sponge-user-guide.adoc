@@ -162,10 +162,10 @@ Events are the basic element of processing in {sponge}. They have properties suc
 |`Object get(attributeName)`
 |A method that returns a value of an attribute or throws `IllegalArgumentException` if it does't exist.
 
-|`Object get(attributeName, attributeClass)`
+|`Object get(attributeClass, attributeName)`
 |A method that returns a value of an attribute (assuming it is an instance of `attributeClass`) or throws `IllegalArgumentException` if it does't exist.
 
-|`Object getOrDefault(attributeName, defaultValue)`
+|`Object get(attributeName, defaultValue)`
 |A method that returns a value of an attribute or `defaultValue` if it does't exist.
 
 |`boolean has(attributeName)`

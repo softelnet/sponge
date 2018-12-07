@@ -100,12 +100,12 @@ public interface EngineOperations {
     /**
      * Returns the plugin that has the specified name and type or {@code null} if there is no such plugin.
      *
-     * @param name plugin name.
      * @param cls plugin class.
+     * @param name plugin name.
      * @return plugin.
      * @param <T> Plugin type.
      */
-    <T extends Plugin> T getPlugin(String name, Class<T> cls);
+    <T extends Plugin> T getPlugin(Class<T> cls, String name);
 
     /**
      * Returns the plugin that has the specified type or {@code null} if there is no such plugin.

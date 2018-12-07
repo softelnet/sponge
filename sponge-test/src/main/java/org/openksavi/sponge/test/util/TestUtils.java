@@ -69,7 +69,7 @@ public class TestUtils {
                         Stream.of(expected).map(sequence -> Arrays.asList(sequence)).collect(Collectors.toCollection(LinkedHashSet::new));
                 Set<List<String>> realSet = new LinkedHashSet<>();
                 lists.forEach(list -> realSet.add(list.stream()
-                        .map(event -> event != null ? event.get(CorrelationEventsLog.LABEL_ATTRIBUTE_NAME, String.class) : null)
+                        .map(event -> event != null ? event.get(String.class, CorrelationEventsLog.LABEL_ATTRIBUTE_NAME) : null)
                         .collect(Collectors.toCollection(ArrayList::new))));
                 expectedSequenceReport = expectedSet;
                 realSequenceReport = realSet;
@@ -78,7 +78,7 @@ public class TestUtils {
                 for (int i = 0; i < expected.length; i++) {
                     String[] expectedSequence = expected[i];
                     String[] realSequence = lists.get(i).stream()
-                            .map(event -> event != null ? event.get(CorrelationEventsLog.LABEL_ATTRIBUTE_NAME, String.class) : null)
+                            .map(event -> event != null ? event.get(String.class, CorrelationEventsLog.LABEL_ATTRIBUTE_NAME) : null)
                             .toArray(String[]::new);
                     expectedSequenceReport = Arrays.asList(expectedSequence);
                     realSequenceReport = Arrays.asList(realSequence);

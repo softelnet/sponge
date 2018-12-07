@@ -95,8 +95,8 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public <T extends Plugin> T getPlugin(String name, Class<T> cls) {
-        return engine.getPluginManager().getPlugin(name, cls);
+    public <T extends Plugin> T getPlugin(Class<T> cls, String name) {
+        return engine.getPluginManager().getPlugin(cls, name);
     }
 
     @Override

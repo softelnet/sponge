@@ -142,7 +142,7 @@ For each plugin a global variable will be created. The name of this variable is 
 |`getPlugin(String name)`
 |Returns the plugin that has the specified name or `null` if there is no such plugin.
 
-|`getPlugin(String name, Class<T> cls)`
+|`getPlugin(Class<T> cls, String name)`
 |Returns the plugin that has the specified name and type or `null` if there is no such plugin.
 
 |`getPlugin(Class<T> cls)`
@@ -318,7 +318,7 @@ class Filters : KKnowledgeBase() {
         override fun onConfigure() = setEvent("e1")
         override fun onAccept(event: Event): Boolean {
             logger.debug("Received event {}", event)
-            val color: String? = event.getOrDefault("color", null)
+            val color: String? = event.get("color", null)
             if (color == null || color != "blue") {
                 logger.debug("rejected")
                 return false

@@ -66,7 +66,7 @@ public class CorrelationEventsLog {
             List<Event> eventSequence = rule.getEventSequence();
 
             Event firstEvent = eventSequence.get(0);
-            String firstLabel = firstEvent.get(LABEL_ATTRIBUTE_NAME, String.class);
+            String firstLabel = firstEvent.get(String.class, LABEL_ATTRIBUTE_NAME);
             assert firstLabel != null : firstEvent;
             if (!events.containsKey(key)) {
                 events.put(key, createMap());

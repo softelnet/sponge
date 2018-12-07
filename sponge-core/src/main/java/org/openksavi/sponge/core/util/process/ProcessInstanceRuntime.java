@@ -16,11 +16,9 @@
 
 package org.openksavi.sponge.core.util.process;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.Charset;
 import java.time.Duration;
@@ -40,6 +38,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,16 +213,29 @@ public class ProcessInstanceRuntime {
     }
 
     protected String readErrorStream() throws IOException {
-        try (BufferedReader errors =
-                new BufferedReader(new InputStreamReader(instance.getInternalProcess().getErrorStream(), getCharset()))) {
-            String errorsString = errors.lines().collect(Collectors.joining("\n")).trim();
+        String errorsString = IOUtils.readLines(instance.getInternalProcess().getErrorStream(), getCharset()).stream()
+                .collect(Collectors.joining("\n")).trim();
 
-            return errorsString.isEmpty() ? null : errorsString;
-        }
+        return errorsString.isEmpty() ? null : errorsString;
     }
 
     protected void optionallySetOutputData() {
         try {
+            switch (configuration.getOutputRedirect()) {
+            case STRING:
+                instance.setOutputString(IOUtils.readLines(instance.getInternalProcess().getInputStream(), getCharset()).stream()
+                        .collect(Collectors.joining("\n")));
+                break;
+            case BINARY:
+                instance.setOutputBinary(IOUtils.toByteArray(instance.getInternalProcess().getInputStream()));
+                break;
+            case FILE:
+                FileUtils.copyInputStreamToFile(instance.getInternalProcess().getInputStream(), new File(configuration.getOutputFile()));
+                break;
+            default:
+                break;
+            }
+
             switch (configuration.getErrorRedirect()) {
             case STRING:
                 instance.setErrorString(readErrorStream());
@@ -237,21 +249,6 @@ public class ProcessInstanceRuntime {
                 break;
             case FILE:
                 FileUtils.copyInputStreamToFile(instance.getInternalProcess().getErrorStream(), new File(configuration.getErrorFile()));
-                break;
-            default:
-                break;
-            }
-
-            switch (configuration.getOutputRedirect()) {
-            case STRING:
-                instance.setOutputString(IOUtils.readLines(instance.getInternalProcess().getInputStream(), getCharset()).stream()
-                        .collect(Collectors.joining("\n")));
-                break;
-            case BINARY:
-                instance.setOutputBinary(IOUtils.toByteArray(instance.getInternalProcess().getInputStream()));
-                break;
-            case FILE:
-                FileUtils.copyInputStreamToFile(instance.getInternalProcess().getInputStream(), new File(configuration.getOutputFile()));
                 break;
             default:
                 break;
@@ -302,9 +299,13 @@ public class ProcessInstanceRuntime {
         }
     }
 
+    protected String getArgsString() {
+        return configuration.getArguments().stream().map(arg -> StringUtils.containsWhitespace(arg) ? String.format("\"%s\"", arg) : arg)
+                .collect(Collectors.joining(" "));
+    }
+
     protected void startProcess(ProcessBuilder builder) {
-        logger.info("Running a new subprocess: {} {}", configuration.getExecutable(),
-                configuration.getArguments().stream().collect(Collectors.joining(" ")));
+        logger.info("Running a new subprocess: {} {}", configuration.getExecutable(), getArgsString());
         if (!configuration.getEnv().isEmpty()) {
             logger.debug("The subprocess additional environment: {}", configuration.getEnv());
         }
@@ -332,6 +333,12 @@ public class ProcessInstanceRuntime {
         }
     }
 
+    protected void optionallyValidateExitCode() {
+        if (!instance.isAlive() && instance.getExitCode() != 0) {
+            throw new SpongeException("The subprocess exit code is " + instance.getExitCode());
+        }
+    }
+
     public void waitForReady() throws InterruptedException {
         if (waitForReadyFinished.get()) {
             return;
@@ -349,12 +356,17 @@ public class ProcessInstanceRuntime {
         optionallyWaitForTheProcessToEnd();
 
         waitForReadyFinished.set(true);
+
+        optionallyValidateExitCode();
     }
 
     public int waitFor() throws InterruptedException {
         waitForReady();
 
-        return instance.getInternalProcess().waitFor();
+        int exitCode = instance.getInternalProcess().waitFor();
+        optionallyValidateExitCode();
+
+        return exitCode;
     }
 
     public void destroy() throws InterruptedException {

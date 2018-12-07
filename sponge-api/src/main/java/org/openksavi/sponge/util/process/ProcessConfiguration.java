@@ -81,6 +81,8 @@ public class ProcessConfiguration implements Cloneable {
 
     public boolean redirectErrorStream = false;
 
+    public boolean exceptionOnExitCode = false;
+
     public ProcessConfiguration(String executable) {
         this.executable = executable;
     }
@@ -267,6 +269,14 @@ public class ProcessConfiguration implements Cloneable {
 
     public void setRedirectErrorStream(boolean redirectErrorStream) {
         this.redirectErrorStream = redirectErrorStream;
+    }
+
+    public boolean isExceptionOnExitCode() {
+        return exceptionOnExitCode;
+    }
+
+    public void setExceptionOnExitCode(boolean exceptionOnExitCode) {
+        this.exceptionOnExitCode = exceptionOnExitCode;
     }
 
     @Override

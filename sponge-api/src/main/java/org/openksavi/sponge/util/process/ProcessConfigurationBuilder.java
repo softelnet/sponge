@@ -344,6 +344,17 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
+     * If {@code true}, throws exception if the process exit code is not {@code 0}. Defaults to {@code false}.
+     *
+     * @param exceptionOnExitCode exception on exit code flag.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder exceptionOnExitCode(boolean exceptionOnExitCode) {
+        configuration.setExceptionOnExitCode(exceptionOnExitCode);
+        return this;
+    }
+
+    /**
      * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#INHERIT INHERIT}.
      *
      * @return this builder.

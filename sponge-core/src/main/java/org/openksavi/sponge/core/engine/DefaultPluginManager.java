@@ -183,7 +183,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends Plugin> T getPlugin(String name, Class<T> cls) {
+    public <T extends Plugin> T getPlugin(Class<T> cls, String name) {
         Plugin plugin = pluginMap.get(name);
 
         if (plugin == null) {

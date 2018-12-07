@@ -145,22 +145,13 @@ public abstract class BaseEvent implements Event {
         // });
     }
 
-    /**
-     * Returns attribute value.
-     *
-     * @param name attribute name.
-     * @param cls attribute class.
-     * @return attribute value.
-     */
     @Override
-    // @SuppressWarnings("unchecked")
-    public final <T> T get(String name, Class<T> cls) {
+    public final <T> T get(Class<T> cls, String name) {
         return doGet(name, false, null);
     }
 
     @Override
-    public final <T> T getOrDefault(String name, T defaultValue) {
-        // return doGet(name, () -> defaultValue);
+    public final <T> T get(String name, T defaultValue) {
         return doGet(name, true, defaultValue);
     }
 

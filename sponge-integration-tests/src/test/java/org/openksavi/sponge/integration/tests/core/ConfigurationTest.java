@@ -133,16 +133,16 @@ public class ConfigurationTest {
             String configurationFileDir = SpongeUtils.getFileDir(engine.getConfigurationManager().getConfigurationFileUrl());
             assertNotNull(configurationFileDir);
             assertEquals("Config directory: " + configurationFileDir,
-                    engine.getOperations().getPlugin("echoPlugin1", EchoPlugin.class).getEcho());
+                    engine.getOperations().getPlugin(EchoPlugin.class, "echoPlugin1").getEcho());
 
             assertEquals("Config directory text: " + configurationFileDir, engine.getOperations().getProperty("configDirectoryText"));
 
-            assertEquals("Home directory: " + home, engine.getOperations().getPlugin("echoPlugin2", EchoPlugin.class).getEcho());
+            assertEquals("Home directory: " + home, engine.getOperations().getPlugin(EchoPlugin.class, "echoPlugin2").getEcho());
 
             assertEquals("Config directory text: " + configurationFileDir,
-                    engine.getOperations().getPlugin("echoPlugin3", EchoPlugin.class).getEcho());
+                    engine.getOperations().getPlugin(EchoPlugin.class, "echoPlugin3").getEcho());
 
-            assertEquals("${nonExistingPropertyValue}", engine.getOperations().getPlugin("echoPlugin4", EchoPlugin.class).getEcho());
+            assertEquals("${nonExistingPropertyValue}", engine.getOperations().getPlugin(EchoPlugin.class, "echoPlugin4").getEcho());
 
             assertEquals("${nonExistingPropertyValue}", engine.getOperations().getVariable("nonExistingProperty"));
 

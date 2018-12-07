@@ -76,7 +76,7 @@ class ColorFilter(Filter): # <1>
         self.event = "e1" # <3>
     def onAccept(self, event): # <4>
         self.logger.debug("Received event {}", event) # <5>
-        color = event.getOrDefault("color", None) # <6>
+        color = event.get("color", None) # <6>
         if (color is None or color != "blue"): # <7>
             self.logger.debug("rejected")
             return False

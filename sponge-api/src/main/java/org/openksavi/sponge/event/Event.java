@@ -74,12 +74,12 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     /**
      * Returns the attribute value or throws {@code IllegalArgumentException} if it does't exist.
      *
-     * @param name attribute name.
      * @param cls attribute class.
+     * @param name attribute name.
      * @return attribute value.
      * @param <T> attribute.
      */
-    <T> T get(String name, Class<T> cls);
+    <T> T get(Class<T> cls, String name);
 
     /**
      * Returns the attribute value or {@code defaultValue} if it does't exist.
@@ -89,7 +89,7 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
      * @return attribute value.
      * @param <T> attribute.
      */
-    <T> T getOrDefault(String name, T defaultValue);
+    <T> T get(String name, T defaultValue);
 
     /**
      * Sets attribute value.

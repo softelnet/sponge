@@ -128,7 +128,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
     }
 
     private StandalonePlugin getStandalonePlugin() {
-        return engine.getPluginManager().getPlugin(StandalonePlugin.NAME, StandalonePlugin.class);
+        return engine.getPluginManager().getPlugin(StandalonePlugin.class, StandalonePlugin.NAME);
     }
 
     /**

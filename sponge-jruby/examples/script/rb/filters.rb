@@ -19,7 +19,7 @@ class ColorFilter < Filter
     end
     def onAccept(event)
         self.logger.debug("Received event {}", event)
-        color = event.getOrDefault("color", nil)
+        color = event.get("color", nil)
         if (color.nil? || color != "blue")
             self.logger.debug("rejected")
             return false

@@ -52,6 +52,6 @@ public class SameSourceJavaRule extends JRule {
     }
 
     public boolean severityCondition(Event event) {
-        return event.get("severity", Number.class).intValue() > 5;
+        return event.get(Number.class, "severity").intValue() > 5;
     }
 }

@@ -14,6 +14,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed methods in `CamelPlugin`: `send(body)` to `emit(body)`, `send(uri, body)` to `sendBody(uri, body)` and `request(uri, body)` to `requestBody(uri, body)`.
 * API change: Major changes in an external process handling, including `ProcessInstance` and `ProcessConfiguration`.
 * API change: Removed alternative, deprecated methods for creating and sending events in `EngineOperations`.
+* API change: Renamed `Event.getOrDefault` to `Event.get`.
 * Added a new validation that an event name must not contain white spaces nor colons.
 * The default value of the `prettyPrint` option in the REST API is now `false`.
 * Added a context and listeners to the REST API client that provide access to JSON texts in a client code.
