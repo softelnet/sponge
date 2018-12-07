@@ -3,7 +3,6 @@
     xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
 
     <properties>
-        <!-- Set the following properties via system properties. -->
         <property name="password.file">${sponge.configDir}/password.txt</property>
 
         <!-- Due to the problem https://github.com/Pi4J/pi4j/issues/319, the dynamic linking option is turned on, where Pi4J is dynamically linked 
@@ -36,13 +35,9 @@
 
 <!--         <plugin name="pi" class="org.openksavi.sponge.rpi.pi4j.Pi4JPlugin" /> -->
 
-        <!-- <plugin name="grovepi" class="org.openksavi.sponge.rpi.grovepi.GrovePiPlugin" /> -->
+        <plugin name="grovepi" class="org.openksavi.sponge.rpi.grovepi.GrovePiPlugin" />
 
-        <!-- <plugin name="gsm" class="org.openksavi.sponge.gsmmodem.GsmModemPlugin"> -->
-        <!-- <configuration> -->
-        <!-- <portDescriptor>/dev/ttyUSB0</portDescriptor> -->
-        <!-- </configuration> -->
-        <!-- </plugin> -->
+        <plugin name="gsm" class="org.openksavi.sponge.gsmmodem.GammuGsmModemPlugin" />
 
         <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
             <configuration>
