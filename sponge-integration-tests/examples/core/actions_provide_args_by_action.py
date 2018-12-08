@@ -1,6 +1,6 @@
 """
 Sponge Knowledge base
-Action type
+Provide arguments by action
 """
 
 class GetAvailableSensorNames(Action):
@@ -11,11 +11,13 @@ class GetAvailableSensorNames(Action):
     def onCall(self):
         return ["sensor1", "sensor2"]
 
-class ActionTypeAction(Action):
+class ProvideByAction(Action):
     def onConfigure(self):
-        self.displayName = "Action type example action"
-        self.argsMeta = [ ArgMeta("sensorName", ActionType("GetAvailableSensorNames")) ]
+        self.displayName = "Action with provided argument"
+        self.argsMeta = [ ArgMeta("sensorName", StringType()).provided() ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
     def onCall(self, sensorName):
         return sensorName == "sensor1"
+    def provideArgs(self, names, current):
+        return {"sensorName":ArgValue().valueSet(sponge.call("GetAvailableSensorNames"))}
 

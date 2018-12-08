@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -35,16 +37,23 @@ public class RestActionArgMeta {
 
     private boolean optional;
 
+    private boolean provided = false;
+
+    private List<String> depends;
+
     public RestActionArgMeta() {
         //
     }
 
-    public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional) {
+    public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional, boolean provided,
+            List<String> depends) {
         this.name = name;
         this.type = type;
         this.displayName = displayName;
         this.description = description;
         this.optional = optional;
+        this.provided = provided;
+        this.depends = depends;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -90,5 +99,23 @@ public class RestActionArgMeta {
 
     public void setOptional(boolean optional) {
         this.optional = optional;
+    }
+
+    @ApiModelProperty(value = "Provided argument", required = false)
+    public boolean isProvided() {
+        return provided;
+    }
+
+    public void setProvided(boolean provided) {
+        this.provided = provided;
+    }
+
+    @ApiModelProperty(value = "Argument depends on others arguments", required = false)
+    public List<String> getDepends() {
+        return depends;
+    }
+
+    public void setDepends(List<String> depends) {
+        this.depends = depends;
     }
 }

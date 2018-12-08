@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.type.converter.unit;
+package org.openksavi.sponge.restapi.model.request;
 
-import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
-import org.openksavi.sponge.type.ActionType;
-import org.openksavi.sponge.type.DataTypeKind;
+/**
+ * An action execution related request.
+ */
+public interface ActionExecutionRequest {
 
-public class ActionTypeUnitConverter extends BaseUnitTypeConverter<Object, ActionType> {
+    String getName();
 
-    public ActionTypeUnitConverter() {
-        super(DataTypeKind.ACTION);
-    }
+    void setName(String name);
+
+    Integer getVersion();
+
+    void setVersion(Integer version);
 }

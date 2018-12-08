@@ -39,6 +39,7 @@ import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
@@ -48,6 +49,7 @@ import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
@@ -194,6 +196,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request, exchange));
         createOperation(restDefinition, RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class, "Send event request",
                 SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request, exchange));
+        createOperation(restDefinition, RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments",
+                ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
+                "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request, exchange));
 
         if (getSettings().isPublishReload()) {
             createOperation(restDefinition, RestApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,

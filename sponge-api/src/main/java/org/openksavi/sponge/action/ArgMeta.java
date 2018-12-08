@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.openksavi.sponge.type.DataType;
 
 /**
@@ -39,6 +43,10 @@ public class ArgMeta<T extends DataType> {
     /** The flag specifying if this argument is optional. */
     private boolean optional = false;
 
+    private boolean provided = false;
+
+    private List<String> depends = new ArrayList<>();
+
     public ArgMeta(String name, T type) {
         this.name = name;
         this.type = type;
@@ -56,6 +64,16 @@ public class ArgMeta<T extends DataType> {
 
     public ArgMeta<T> optional() {
         this.optional = true;
+        return this;
+    }
+
+    public ArgMeta<T> provided() {
+        this.provided = true;
+        return this;
+    }
+
+    public ArgMeta<T> depends(String... depends) {
+        this.depends.addAll(Arrays.asList(depends));
         return this;
     }
 
@@ -101,5 +119,21 @@ public class ArgMeta<T extends DataType> {
 
     public String getLabel() {
         return displayName != null ? displayName : name;
+    }
+
+    public boolean isProvided() {
+        return provided;
+    }
+
+    public void setProvided(boolean provided) {
+        this.provided = provided;
+    }
+
+    public List<String> getDepends() {
+        return depends;
+    }
+
+    public void setDepends(List<String> depends) {
+        this.depends = depends;
     }
 }

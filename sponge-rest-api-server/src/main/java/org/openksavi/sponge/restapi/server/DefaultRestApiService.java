@@ -17,6 +17,7 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -44,6 +46,7 @@ import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
@@ -53,6 +56,7 @@ import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
@@ -229,24 +233,29 @@ public class DefaultRestApiService implements RestApiService {
         return actionMeta;
     }
 
+    protected ActionAdapter getActionAdapterForRequest(String actionName, Integer version, User user) {
+        ActionAdapter actionAdapter = getEngine().getActionManager().getActionAdapter(actionName);
+
+        Validate.notNull(actionAdapter, "The action %s doesn't exist", actionAdapter.getName());
+        Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", actionAdapter.getName());
+
+        if (version != null && !Objects.equals(version, actionAdapter.getKnowledgeBase().getVersion())) {
+            throw new RestApiIncorrectKnowledgeBaseVersionServerException(
+                    String.format("The expected knowledge base version (%d) differs from the actual (%d)", version,
+                            actionAdapter.getKnowledgeBase().getVersion()));
+        }
+
+        return actionAdapter;
+    }
+
     @Override
     public ActionCallResponse call(ActionCallRequest request, Exchange exchange) {
         ActionAdapter actionAdapter = null;
 
         try {
             Validate.notNull(request, "The request must not be null");
-
             User user = authenticateRequest(request, exchange);
-
-            actionAdapter = getEngine().getActionManager().getActionAdapter(request.getName());
-            Validate.notNull(actionAdapter, "The action %s doesn't exist", request.getName());
-            Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", request.getName());
-
-            if (request.getVersion() != null && !Objects.equals(request.getVersion(), actionAdapter.getKnowledgeBase().getVersion())) {
-                throw new RestApiIncorrectKnowledgeBaseVersionServerException(
-                        String.format("The expected knowledge base version (%d) differs from the actual (%d)", request.getVersion(),
-                                actionAdapter.getKnowledgeBase().getVersion()));
-            }
+            actionAdapter = getActionAdapterForRequest(request.getName(), request.getVersion(), user);
 
             Object actionResult =
                     getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange));
@@ -264,11 +273,11 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request, Exchange exchange) {
-        return RestApiServerUtils.unmarshalActionArgs(typeConverter, actionAdapter, request.getArgs(), exchange);
+        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, request.getArgs(), exchange);
     }
 
     protected Object marshalActionResult(ActionAdapter actionAdapter, Object result, Exchange exchange) {
-        return RestApiServerUtils.marshalActionResult(typeConverter, actionAdapter, result, exchange);
+        return RestApiServerUtils.marshalActionCallResult(typeConverter, actionAdapter, result, exchange);
     }
 
     @Override
@@ -294,6 +303,32 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
+    public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, Exchange exchange) {
+        ActionAdapter actionAdapter = null;
+
+        try {
+            Validate.notNull(request, "The request must not be null");
+            User user = authenticateRequest(request, exchange);
+            actionAdapter = getActionAdapterForRequest(request.getName(), request.getVersion(), user);
+
+            Map<String, ArgValue<?>> provided =
+                    getEngine().getOperations().provideActionArgs(actionAdapter.getName(), request.getArgNames(),
+                            RestApiServerUtils.unmarshalProvideActionArgs(typeConverter, actionAdapter, request.getCurrent(), exchange));
+            RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
+
+            return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
+        } catch (Exception e) {
+            if (actionAdapter != null) {
+                getEngine().handleError(actionAdapter, e);
+            } else {
+                getEngine().handleError("REST provideActionArgs", e);
+            }
+
+            return setupErrorResponse(new ProvideActionArgsResponse(), request, e);
+        }
+    }
+
+    @Override
     public ReloadResponse reload(ReloadRequest request, Exchange exchange) {
         try {
             if (request == null) {
@@ -314,13 +349,10 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionAdapter actionAdapter) {
-        return actionAdapter
-                .getArgsMeta() != null
-                        ? actionAdapter.getArgsMeta().stream()
-                                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
-                                        meta.getDisplayName(), meta.getDescription(), meta.isOptional()))
-                                .collect(Collectors.toList())
-                        : null;
+        return actionAdapter.getArgsMeta() != null ? actionAdapter.getArgsMeta().stream()
+                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null, meta.getDisplayName(),
+                        meta.getDescription(), meta.isOptional(), meta.isProvided(), meta.getDepends()))
+                .collect(Collectors.toList()) : null;
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {

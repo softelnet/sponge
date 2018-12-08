@@ -18,15 +18,18 @@ package org.openksavi.sponge.restapi.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -35,6 +38,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
@@ -42,11 +46,13 @@ import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.ActionExecutionRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
@@ -56,6 +62,7 @@ import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
@@ -381,6 +388,23 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected void unmarshalProvidedActionArgValues(RestActionMeta actionMeta, Map<String, ArgValue<?>> argValues) {
+        if (argValues == null || actionMeta.getArgsMeta() == null) {
+            return;
+        }
+
+        argValues.forEach((argName, argValue) -> {
+            RestActionArgMeta argMeta = actionMeta.getArgMeta(argName);
+            ((ArgValue) argValue).setValue(typeConverter.unmarshal(argMeta.getType(), argValue.getValue()));
+
+            if (argValue.getValueSet() != null) {
+                ((ArgValue) argValue).setValueSet(argValue.getValueSet().stream()
+                        .map(value -> typeConverter.unmarshal(argMeta.getType(), value)).collect(Collectors.toList()));
+            }
+        });
+    }
+
     @Override
     public GetActionsResponse getActions(GetActionsRequest request, SpongeRequestContext context) {
         return doGetActions(request, true, context);
@@ -444,7 +468,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return getActionMeta(actionName, DEFAULT_ALLOW_FETCH_METADATA);
     }
 
-    protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request, SpongeRequestContext context) {
+    protected void setupActionExecutionRequest(RestActionMeta actionMeta, ActionExecutionRequest request) {
         // Conditionally set the verification of the knowledge base version on the server side.
         if (configuration.isVerifyKnowledgeBaseVersion() && actionMeta != null && request.getVersion() == null) {
             request.setVersion(actionMeta.getKnowledgeBase().getVersion());
@@ -453,10 +477,14 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), request.getName()),
                 "Action name '%s' in the metadata doesn't match the action name '%s' in the request",
                 actionMeta != null ? actionMeta.getName() : null, request.getName());
+    }
+
+    protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request, SpongeRequestContext context) {
+        setupActionExecutionRequest(actionMeta, request);
 
         validateCallArgs(actionMeta, request.getArgs());
 
-        request.setArgs(marshalCallArgs(actionMeta, request.getArgs()));
+        request.setArgs(marshalActionCallArgs(actionMeta, request.getArgs()));
 
         ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class, context);
 
@@ -493,7 +521,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
     }
 
-    protected List<Object> marshalCallArgs(RestActionMeta actionMeta, List<Object> args) {
+    protected List<Object> marshalActionCallArgs(RestActionMeta actionMeta, List<Object> args) {
         if (args == null || actionMeta == null || actionMeta.getArgsMeta() == null) {
             return args;
         }
@@ -504,6 +532,17 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
 
         return result;
+    }
+
+    protected Map<String, Object> marshalProvideActionArgsCurrent(RestActionMeta actionMeta, Map<String, Object> current) {
+        if (current == null || actionMeta == null || actionMeta.getArgsMeta() == null) {
+            return current;
+        }
+
+        Map<String, Object> marshalled = new LinkedHashMap<>();
+        current.forEach((name, value) -> marshalled.put(name, typeConverter.marshal(actionMeta.getArgMeta(name).getType(), value)));
+
+        return marshalled;
     }
 
     protected void unmarshalCallResult(RestActionMeta actionMeta, ActionCallResponse response) {
@@ -559,6 +598,38 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public String send(String eventName, Map<String, Object> attributes) {
         return send(new SendEventRequest(eventName, attributes)).getEventId();
+    }
+
+    @Override
+    public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, SpongeRequestContext context) {
+        RestActionMeta actionMeta = getActionMeta(request.getName());
+        setupActionExecutionRequest(actionMeta, request);
+
+        request.setCurrent(marshalProvideActionArgsCurrent(actionMeta, request.getCurrent()));
+
+        ProvideActionArgsResponse response =
+                execute(RestApiConstants.OPERATION_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
+
+        if (actionMeta != null) {
+            unmarshalProvidedActionArgValues(actionMeta, response.getProvided());
+        }
+
+        return response;
+    }
+
+    @Override
+    public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request) {
+        return provideActionArgs(request, null);
+    }
+
+    @Override
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName, Set<String> argNames, Map<String, Object> current) {
+        return provideActionArgs(new ProvideActionArgsRequest(actionName, argNames, current)).getProvided();
+    }
+
+    @Override
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName) {
+        return provideActionArgs(actionName, null, null);
     }
 
     @Override

@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.action;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.openksavi.sponge.Processor;
 
 /**
@@ -24,6 +27,12 @@ import org.openksavi.sponge.Processor;
  */
 public interface Action extends Processor<ActionAdapter>, ActionOperations {
 
-    /** The onCall method name. */
-    public static final String ON_CALL_METHOD_NAME = "onCall";
+    /**
+     * A callback method that returns the provided values along with value sets of the action arguments.
+     *
+     * @param names the set of argument names.
+     * @param current the map of argument names and their current values passed from a client code.
+     * @return the map of argument names and values (value sets).
+     */
+    Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current);
 }

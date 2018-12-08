@@ -21,11 +21,14 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,16 +38,17 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.IncorrectKnowledgeBaseVersionException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
-import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
 
@@ -186,16 +190,6 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testCallWithActionTypeArg() {
-        try (SpongeRestClient client = createRestClient()) {
-            RestActionMeta actionMeta = client.getActionMeta("ActionTypeAction");
-            List<String> values = client.call(List.class, ((ActionType) actionMeta.getArgsMeta().get(0).getType()).getActionName());
-            assertEquals("value3", client.call("ActionTypeAction", values.get(values.size() - 1)));
-        }
-    }
-
     @Test
     public void testCallLanguageError() {
         try (SpongeRestClient client = createRestClient()) {
@@ -245,6 +239,79 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(arg1.toUpperCase(), result);
 
             assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testProvideActionArgs() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "SetActuator";
+
+            List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
+
+            assertTrue(argsMeta.get(0).isProvided());
+            assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertTrue(argsMeta.get(1).isProvided());
+            assertEquals(0, argsMeta.get(1).getDepends().size());
+            assertTrue(argsMeta.get(2).isProvided());
+            assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertFalse(argsMeta.get(3).isProvided());
+            assertEquals(0, argsMeta.get(3).getDepends().size());
+
+            // Reset the test state.
+            client.call(actionName, "A", false, 1, 1);
+
+            Map<String, ArgValue<?>> providedArgs = client.provideActionArgs(actionName);
+            assertEquals(3, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator1"));
+            assertEquals("A", providedArgs.get("actuator1").getValue());
+            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals(false, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator3"));
+            assertEquals(1, providedArgs.get("actuator3").getValue());
+            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertTrue(providedArgs.get("actuator3").isValuePresent());
+
+            assertNull(providedArgs.get("actuator4"));
+
+            client.call(actionName, "B", true, 5, 10);
+
+            providedArgs = client.provideActionArgs(actionName);
+            assertEquals(3, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator1"));
+            assertEquals("B", providedArgs.get("actuator1").getValue());
+            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals(true, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator3"));
+            assertEquals(5, providedArgs.get("actuator3").getValue());
+            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertTrue(providedArgs.get("actuator3").isValuePresent());
+
+            assertNull(providedArgs.get("actuator4"));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testProvideActionArgByAction() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
+            List<String> values = (List<String>) client.provideActionArgs(actionMeta.getName()).get("value").getValueSet();
+            assertEquals("value3", client.call(actionMeta.getName(), values.get(values.size() - 1)));
         }
     }
 

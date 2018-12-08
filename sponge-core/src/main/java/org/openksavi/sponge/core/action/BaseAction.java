@@ -16,11 +16,15 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessor;
 
@@ -54,5 +58,11 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     @Override
     public void setResultMeta(ResultMeta<?> resultMeta) {
         getAdapter().setResultMeta(resultMeta);
+    }
+
+    @Override
+    public Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current) {
+        // The default implementation.
+        return Collections.emptyMap();
     }
 }

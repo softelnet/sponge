@@ -18,11 +18,15 @@ package org.openksavi.sponge.restapi.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.apache.commons.lang3.Validate;
 
 @ApiModel(value = "ActionMeta", description = "An action metadata")
 public class RestActionMeta {
@@ -123,5 +127,13 @@ public class RestActionMeta {
     public String getLabel() {
         return String.format("%s: %s", knowledgeBase != null ? knowledgeBase.getLabel() : null, displayName != null ? displayName : name);
 
+    }
+
+    @JsonIgnore
+    public RestActionArgMeta getArgMeta(String argName) {
+        Optional<RestActionArgMeta> argMetaO = argsMeta.stream().filter(argMeta -> Objects.equals(argMeta.getName(), argName)).findFirst();
+        Validate.isTrue(argMetaO.isPresent(), "Metadata for argument %s not found", argName);
+
+        return argMetaO.get();
     }
 }

@@ -8,6 +8,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.6.0 (not released yet)
 
+* A noteworthy new feature: There is a possibility to provide action argument values and possible value sets in the action configuration. It makes easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed by the action and its arguments.
+* Added a new REST API operation `actionArgs` that fetches the provided action arguments from the server.
 * API change: Renamed class `Type` to `DataType` and `TypeKind` to `DataTypeKind`.
 * API change: Renamed classes in the REST API client, including `SpongeRestApiClient` to `SpongeRestClient` and `SpongeRestApiClientConfiguration` to `SpongeRestClientConfiguration`.
 * API change: Removed `SpringSpongeRestClient` from the REST API client because the underlying Spring `RestTemplate` will be deprecated.
@@ -15,6 +17,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Major changes in an external process handling, including `ProcessInstance` and `ProcessConfiguration`.
 * API change: Removed alternative, deprecated methods for creating and sending events in `EngineOperations`.
 * API change: Renamed `Event.getOrDefault` to `Event.get`.
+* API change: Removed `ActionType` because there is a more versatile feature of providing action argument values and value sets.
 * Added a new validation that an event name must not contain white spaces nor colons.
 * The default value of the `prettyPrint` option in the REST API is now `false`.
 * Added a context and listeners to the REST API client that provide access to JSON texts in a client code.

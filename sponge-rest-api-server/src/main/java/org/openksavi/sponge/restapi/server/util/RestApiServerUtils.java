@@ -18,14 +18,17 @@ package org.openksavi.sponge.restapi.server.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
@@ -68,7 +71,7 @@ public abstract class RestApiServerUtils {
                 role -> roleToKnowledgeBases.get(role).stream().filter(Objects::nonNull).anyMatch(kbRegexp -> kbName.matches(kbRegexp)));
     }
 
-    public static List<Object> unmarshalActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
+    public static List<Object> unmarshalActionCallArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
             Exchange exchange) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {
@@ -104,11 +107,45 @@ public abstract class RestApiServerUtils {
         return finalArgs;
     }
 
-    public static Object marshalActionResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result, Exchange exchange) {
+    public static Object marshalActionCallResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result,
+            Exchange exchange) {
         if (result == null || actionAdapter.getResultMeta() == null) {
             return result;
         }
 
         return typeConverter.marshal(actionAdapter.getResultMeta().getType(), result);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static void marshalProvidedActionArgValues(TypeConverter typeConverter, ActionAdapter actionAdapter,
+            Map<String, ArgValue<?>> argValues) {
+
+        argValues.forEach((argName, argValue) -> {
+            ArgMeta<?> argMeta = actionAdapter.getArgMeta(argName);
+            ((ArgValue) argValue).setValue(typeConverter.marshal(argMeta.getType(), argValue.getValue()));
+
+            if (argValue.getValueSet() != null) {
+                ((ArgValue) argValue).setValueSet(argValue.getValueSet().stream()
+                        .map(value -> typeConverter.marshal(argMeta.getType(), value)).collect(Collectors.toList()));
+            }
+        });
+    }
+
+    public static Map<String, Object> unmarshalProvideActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter,
+            Map<String, Object> jsonArgs, Exchange exchange) {
+        // No arguments provided. No type checking.
+        if (jsonArgs == null) {
+            return null;
+        }
+
+        // Argument metadata not defined for this action. No type checking, returning raw values.
+        if (actionAdapter.getArgsMeta() == null) {
+            return jsonArgs;
+        }
+
+        Map<String, Object> unmarshalled = new LinkedHashMap<>();
+        jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(actionAdapter.getArgMeta(name).getType(), value)));
+
+        return unmarshalled;
     }
 }

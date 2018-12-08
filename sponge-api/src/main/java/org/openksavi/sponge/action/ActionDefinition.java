@@ -23,4 +23,6 @@ import org.openksavi.sponge.ProcessorDefinition;
  */
 public interface ActionDefinition extends ProcessorDefinition, ActionOperations {
 
+    /** The onCall method name. */
+    public static final String ON_CALL_METHOD_NAME = "onCall";
 }

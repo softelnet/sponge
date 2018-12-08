@@ -16,13 +16,21 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -58,6 +66,16 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
+    public ArgMeta<?> getArgMeta(String name) {
+        Optional<ArgMeta<?>> argMetaO =
+                getDefinition().getArgsMeta().stream().filter(argMeta -> Objects.equals(argMeta.getName(), name)).findFirst();
+
+        Validate.isTrue(argMetaO.isPresent(), "Metadata for argument %s not found", name);
+
+        return argMetaO.get();
+    }
+
+    @Override
     public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
         getDefinition().setArgsMeta(argsMeta);
     }
@@ -70,6 +88,36 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     @Override
     public void setResultMeta(ResultMeta<?> resultMeta) {
         getDefinition().setResultMeta(resultMeta);
+    }
+
+    @Override
+    public Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current) {
+        Validate.notNull(getArgsMeta(), "Argument metadata not defined");
+
+        Set<String> allProvidedArguments =
+                getArgsMeta().stream().filter(ArgMeta::isProvided).map(ArgMeta::getName).collect(Collectors.toSet());
+
+        if (names != null) {
+            for (String name : names) {
+                Validate.isTrue(getArgMeta(name).isProvided(), "Argument %s is not defined as provided", name);
+            }
+        } else {
+            // Use all provided argument names.
+            names = allProvidedArguments;
+        }
+
+        if (current == null) {
+            current = Collections.emptyMap();
+        }
+
+        Map<String, ArgValue<?>> provided = getProcessor().provideArgs(names, current);
+        Validate.notNull(provided, "The map of provided arguments must not be null");
+
+        provided.keySet().forEach(providedArg -> {
+            Validate.isTrue(allProvidedArguments.contains(providedArg), "The provided argument %s is not specified");
+        });
+
+        return provided;
     }
 
     @Override
@@ -90,11 +138,11 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                     foundFirstOptionalArg = true;
                 }
             }
+
+            validateArgProvidedDependsFlags(getArgsMeta());
         }
 
-        if (getResultMeta() != null) {
-            validateResultMeta(getResultMeta());
-        }
+        validateResultMeta(getResultMeta());
     }
 
     private void validateArgMeta(ArgMeta<?> argMeta) {
@@ -107,9 +155,24 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         SpongeUtils.validateType(argMeta.getType(), errorSource);
     }
 
+    private void validateArgProvidedDependsFlags(List<ArgMeta<?>> argsMeta) {
+        Set<String> prevArgNames = new HashSet<>();
+        for (ArgMeta<?> argMeta : getArgsMeta()) {
+            Validate.isTrue(argMeta.getDepends().isEmpty() || argMeta.isProvided(),
+                    "The argument %s in the action %s has depends but is not provided", argMeta.getName(), getName());
+            argMeta.getDepends().forEach(dependsOnArg -> {
+                Validate.isTrue(prevArgNames.contains(dependsOnArg), "Argument %s depends on argument %s that is not defined before",
+                        argMeta.getName(), dependsOnArg);
+            });
+            prevArgNames.add(argMeta.getName());
+        }
+    }
+
     private void validateResultMeta(ResultMeta<?> resultMeta) {
-        String errorSource = String.format("result of the action %s", getName());
-        Validate.notNull(resultMeta.getType(), "Null type of the %s", errorSource);
-        SpongeUtils.validateType(resultMeta.getType(), errorSource);
+        if (resultMeta != null) {
+            String errorSource = String.format("result of the action %s", getName());
+            Validate.notNull(resultMeta.getType(), "Null type of the %s", errorSource);
+            SpongeUtils.validateType(resultMeta.getType(), errorSource);
+        }
     }
 }

@@ -17,13 +17,18 @@
 package org.openksavi.sponge.core;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.EngineOperations;
+import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.process.DefaultProcessDefinition;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -66,6 +71,22 @@ public class BaseEngineOperations implements EngineOperations {
         Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
 
         return (T) result;
+    }
+
+    @Override
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName, Set<String> argNames, Map<String, Object> current) {
+        ActionAdapter actionAdapter =
+                Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
+        try {
+            return actionAdapter.provideArgs(argNames, current);
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
+        }
+    }
+
+    @Override
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName) {
+        return provideActionArgs(actionName, null, null);
     }
 
     /**

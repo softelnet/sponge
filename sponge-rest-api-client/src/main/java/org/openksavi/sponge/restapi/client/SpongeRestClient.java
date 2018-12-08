@@ -19,7 +19,9 @@ package org.openksavi.sponge.restapi.client;
 import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -30,6 +32,7 @@ import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
+import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
@@ -38,6 +41,7 @@ import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
+import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 
@@ -321,6 +325,41 @@ public interface SpongeRestClient extends Closeable {
      * @return the event ID.
      */
     String send(String eventName, Map<String, Object> attributes);
+
+    /**
+     * Sends the {@code actionArgs} request to the server. Fetches the provided action arguments from the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the response.
+     */
+    ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code actionArgs} request to the server. Fetches the provided action arguments from the server.
+     *
+     * @param request the request.
+     * @return the response.
+     */
+    ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request);
+
+    /**
+     * Fetches the provided action arguments from the server.
+     *
+     * @param actionName the action name.
+     * @param argNames the names of arguments to fetch.
+     * @param current the current values of arguments from a client code.
+     * @return the provided action arguments.
+     */
+    Map<String, ArgValue<?>> provideActionArgs(String actionName, Set<String> argNames, Map<String, Object> current);
+
+    /**
+     * Fetches all provided action arguments from the server ignoring current values (set by a client code).
+     *
+     * @param actionName the action name.
+     * @return the provided action arguments.
+     */
+    Map<String, ArgValue<?>> provideActionArgs(String actionName);
 
     /**
      * Sends the {@code reload} request to the server.

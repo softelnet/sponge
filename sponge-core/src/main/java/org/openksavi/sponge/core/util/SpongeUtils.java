@@ -49,6 +49,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -63,6 +64,7 @@ import javax.net.ssl.TrustManagerFactory;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -97,7 +99,6 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
-import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -129,9 +130,8 @@ public abstract class SpongeUtils {
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
     @SuppressWarnings("rawtypes")
-    private static final List<Class<? extends DataType>> SUPPORTED_TYPES =
-            Arrays.asList(ActionType.class, AnyType.class, BinaryType.class, BooleanType.class, IntegerType.class, ListType.class,
-                    MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
+    private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnyType.class, BinaryType.class, BooleanType.class,
+            IntegerType.class, ListType.class, MapType.class, NumberType.class, ObjectType.class, StringType.class, VoidType.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {
@@ -377,6 +377,26 @@ public abstract class SpongeUtils {
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);
         }
+    }
+
+    public static <E> Set<E> immutableSetOf(E e) {
+        return ImmutableSet.of(e);
+    }
+
+    public static <E> Set<E> immutableSetOf(E e1, E e2) {
+        return ImmutableSet.of(e1, e2);
+    }
+
+    public static <E> Set<E> immutableSetOf(E e1, E e2, E e3) {
+        return ImmutableSet.of(e1, e2, e3);
+    }
+
+    public static <E> Set<E> immutableSetOf(E e1, E e2, E e3, E e4) {
+        return ImmutableSet.of(e1, e2, e3, e4);
+    }
+
+    public static <E> Set<E> immutableSetOf(E e1, E e2, E e3, E e4, E e5) {
+        return ImmutableSet.of(e1, e2, e3, e4, e5);
     }
 
     public static <K, V> Map<K, V> immutableMapOf(K k1, V v1) {

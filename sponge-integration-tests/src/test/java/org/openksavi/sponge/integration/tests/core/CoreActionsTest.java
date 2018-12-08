@@ -19,6 +19,7 @@ package org.openksavi.sponge.integration.tests.core;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -26,6 +27,8 @@ import static org.junit.Assert.fail;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -38,20 +41,20 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.examples.CustomObject;
 import org.openksavi.sponge.test.util.TestUtils;
-import org.openksavi.sponge.type.ActionType;
 import org.openksavi.sponge.type.AnyType;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
-import org.openksavi.sponge.type.DataType;
-import org.openksavi.sponge.type.DataTypeKind;
 
 public class CoreActionsTest {
 
@@ -193,33 +196,6 @@ public class CoreActionsTest {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Test
-    public void testActionsActionType() {
-        SpongeEngine engine =
-                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_action_type.py").build();
-        engine.startup();
-
-        try {
-            ActionAdapter actionTypeAction = engine.getActionManager().getActionAdapter("ActionTypeAction");
-            assertEquals(1, actionTypeAction.getArgsMeta().size());
-            assertTrue(actionTypeAction.getArgsMeta().get(0).getType() instanceof ActionType);
-            ArgMeta<ActionType> sensorNameArgMeta = (ArgMeta<ActionType>) actionTypeAction.getArgsMeta().get(0);
-            ActionAdapter getAvailableSensorNamesAction =
-                    engine.getActionManager().getActionAdapter(sensorNameArgMeta.getType().getActionName());
-            assertTrue(getAvailableSensorNamesAction.getResultMeta().getType() instanceof ListType);
-            assertTrue(((ListType) getAvailableSensorNamesAction.getResultMeta().getType()).getElementType() instanceof StringType);
-
-            List<String> availableSensors = engine.getOperations().call(List.class, sensorNameArgMeta.getType().getActionName());
-
-            assertTrue(engine.getOperations().call(Boolean.class, "ActionTypeAction", availableSensors.get(0)));
-
-            assertFalse(engine.isError());
-        } finally {
-            engine.shutdown();
-        }
-    }
-
     @Test
     public void testActionsMetadataTypesMap() {
         SpongeEngine engine =
@@ -341,6 +317,7 @@ public class CoreActionsTest {
         try {
             String actionName = "OptionalArgAction";
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter(actionName);
+
             List<ArgMeta<?>> argMeta = actionAdapter.getArgsMeta();
             assertEquals(2, argMeta.size());
             assertEquals("mandatoryText", argMeta.get(0).getName());
@@ -353,6 +330,186 @@ public class CoreActionsTest {
 
             assertEquals("text1", engine.getOperations().call(String.class, actionName, "text1"));
             assertEquals("text1text2", engine.getOperations().call(String.class, actionName, "text1", "text2"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsProvideArgs() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuator");
+            List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
+            Map<String, ArgValue<?>> providedArgs;
+
+            assertTrue(argsMeta.get(0).isProvided());
+            assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertTrue(argsMeta.get(1).isProvided());
+            assertEquals(0, argsMeta.get(1).getDepends().size());
+            assertTrue(argsMeta.get(2).isProvided());
+            assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertFalse(argsMeta.get(3).isProvided());
+            assertEquals(0, argsMeta.get(3).getDepends().size());
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), null, null);
+            assertEquals(3, providedArgs.size());
+
+            assertNotNull(providedArgs.get("actuator1"));
+            assertEquals("A", providedArgs.get("actuator1").getValue());
+            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals(false, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator3"));
+            assertEquals(1, providedArgs.get("actuator3").getValue());
+            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertTrue(providedArgs.get("actuator3").isValuePresent());
+
+            assertNull(providedArgs.get("actuator4"));
+
+            engine.getOperations().call(actionAdapter.getName(), "B", true, 5, 10);
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), null, null);
+            assertEquals(3, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator1"));
+            assertEquals("B", providedArgs.get("actuator1").getValue());
+            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals(true, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getValueSet());
+
+            assertNotNull(providedArgs.get("actuator3"));
+            assertEquals(5, providedArgs.get("actuator3").getValue());
+            assertNull(providedArgs.get("actuator3").getValueSet());
+
+            assertNull(providedArgs.get("actuator4"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsProvideArgsDepends() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_depends.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuator");
+            List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
+            Map<String, ArgValue<?>> providedArgs;
+
+            assertTrue(argsMeta.get(0).isProvided());
+            assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertTrue(argsMeta.get(1).isProvided());
+            assertEquals(1, argsMeta.get(1).getDepends().size());
+            assertEquals("actuator1", argsMeta.get(1).getDepends().get(0));
+            assertTrue(argsMeta.get(2).isProvided());
+            assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertTrue(argsMeta.get(3).isProvided());
+            assertEquals(0, argsMeta.get(3).getDepends().size());
+            assertFalse(argsMeta.get(4).isProvided());
+            assertEquals(0, argsMeta.get(4).getDepends().size());
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), SpongeUtils.immutableSetOf("actuator1"),
+                    Collections.emptyMap());
+            assertEquals(1, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator1"));
+            Object actuator1value = providedArgs.get("actuator1").getValue();
+            assertEquals("X", actuator1value);
+            assertEquals(Arrays.asList("X", "Y", "Z"), providedArgs.get("actuator1").getValueSet());
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),
+                    SpongeUtils.immutableSetOf("actuator2", "actuator3", "actuator4"),
+                    SpongeUtils.immutableMapOf("actuator1", actuator1value));
+
+            assertEquals(3, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals("A", providedArgs.get("actuator2").getValue());
+            assertEquals(Arrays.asList("A", "B", "C", "X"), providedArgs.get("actuator2").getValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator3"));
+            assertEquals(false, providedArgs.get("actuator3").getValue());
+            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertTrue(providedArgs.get("actuator3").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator4"));
+            assertNull(providedArgs.get("actuator4").getValue());
+            assertEquals(Arrays.asList("a", "b", "c"), providedArgs.get("actuator4").getValueSet());
+            assertFalse(providedArgs.get("actuator4").isValuePresent());
+
+            assertNull(providedArgs.get("actuator5"));
+
+            engine.getOperations().call(actionAdapter.getName(), "Y", "B", true, 5, 10);
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), SpongeUtils.immutableSetOf("actuator1"),
+                    Collections.emptyMap());
+            assertEquals(1, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator1"));
+            actuator1value = providedArgs.get("actuator1").getValue();
+            assertEquals("Y", actuator1value);
+            assertEquals(Arrays.asList("X", "Y", "Z"), providedArgs.get("actuator1").getValueSet());
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),
+                    SpongeUtils.immutableSetOf("actuator2", "actuator3", "actuator4"),
+                    SpongeUtils.immutableMapOf("actuator1", actuator1value));
+
+            assertEquals(3, providedArgs.size());
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals("B", providedArgs.get("actuator2").getValue());
+            assertEquals(Arrays.asList("A", "B", "C", "Y"), providedArgs.get("actuator2").getValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator3"));
+            assertEquals(true, providedArgs.get("actuator3").getValue());
+            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertTrue(providedArgs.get("actuator3").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator4"));
+            assertNull(providedArgs.get("actuator4").getValue());
+            assertEquals(Arrays.asList("a", "b", "c"), providedArgs.get("actuator4").getValueSet());
+            assertFalse(providedArgs.get("actuator4").isValuePresent());
+
+            assertNull(providedArgs.get("actuator5"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @Test
+    public void testActionsProvideArgsByAction() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_by_action.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideByAction");
+            assertEquals(1, actionAdapter.getArgsMeta().size());
+            ArgMeta<StringType> sensorNameArgMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
+            assertTrue(sensorNameArgMeta.getType() instanceof StringType);
+            List<String> availableSensors =
+                    (List<String>) engine.getOperations().provideActionArgs(actionAdapter.getName()).get("sensorName").getValueSet();
+
+            assertTrue(engine.getOperations().call(Boolean.class, "ProvideByAction", availableSensors.get(0)));
 
             assertFalse(engine.isError());
         } finally {

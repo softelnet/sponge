@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.ProcessorNotFoundException;
-import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionDefinition;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
@@ -73,7 +73,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
         try {
 
             // Important casting to an array of objects.
-            return interpreter.invokeMethod(action.getProcessor(), Action.ON_CALL_METHOD_NAME,
+            return interpreter.invokeMethod(action.getProcessor(), ActionDefinition.ON_CALL_METHOD_NAME,
                     (Object[]) (args != null ? args.toArray(new Object[args.size()]) : new Object[0]));
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(action.getProcessor(), e);

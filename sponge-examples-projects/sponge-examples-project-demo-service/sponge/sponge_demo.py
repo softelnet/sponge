@@ -34,10 +34,13 @@ class ListValues(Action):
     def onCall(self):
         return ["value1", "value2", "value3"]
 
-class ActionTypeAction(Action):
+class ProvideByAction(Action):
     def onConfigure(self):
-        self.displayName = "Action type use case"
-        self.argsMeta = [ArgMeta("value", ActionType("ListValues")).displayName("Value")]
+        self.displayName = "Action with provided argument"
+        self.argsMeta = [ArgMeta("value", StringType()).displayName("Value").provided()]
         self.resultMeta = ResultMeta(StringType()).displayName("Same value")
     def onCall(self, value):
         return value
+    def provideArgs(self, names, current):
+        return {"value":ArgValue().valueSet(sponge.call("ListValues"))}
+

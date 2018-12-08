@@ -116,9 +116,6 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 
 |`MapType`
 |A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType(StringType(), ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
-
-|`ActionType`
-|A type that allows using a result of one action to be a type for another action argument or result. For example, assuming that the result type of the action  `GetAvailableSensorNames` is a list of strings and the action returns `["sensor1", "sensor2"]`, `ActionType("GetAvailableSensorNames")` means that a value of this type may be `"sensor1"` or `"sensor2"`. You may customize this behavior in your application by setting an arbitrary format string for this `ActionType`, for example for allowing multi or single choice. The handling of `ActionType` (e.g. calling `GetAvailableSensorNames` action) must be implemented in a client code.
 |===
 
 .Type examples
