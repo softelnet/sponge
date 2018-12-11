@@ -37,16 +37,18 @@ public class RestActionArgMeta {
 
     private boolean optional;
 
-    private boolean provided = false;
+    private boolean provided;
 
     private List<String> depends;
+
+    private boolean readOnly;
 
     public RestActionArgMeta() {
         //
     }
 
     public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional, boolean provided,
-            List<String> depends) {
+            List<String> depends, boolean readOnly) {
         this.name = name;
         this.type = type;
         this.displayName = displayName;
@@ -54,6 +56,7 @@ public class RestActionArgMeta {
         this.optional = optional;
         this.provided = provided;
         this.depends = depends;
+        this.readOnly = readOnly;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -117,5 +120,14 @@ public class RestActionArgMeta {
 
     public void setDepends(List<String> depends) {
         this.depends = depends;
+    }
+
+    @ApiModelProperty(value = "Read only argument", required = false)
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }

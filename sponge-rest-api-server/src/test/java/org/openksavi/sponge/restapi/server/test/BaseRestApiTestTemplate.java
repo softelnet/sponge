@@ -252,15 +252,19 @@ public abstract class BaseRestApiTestTemplate {
 
             assertTrue(argsMeta.get(0).isProvided());
             assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertFalse(argsMeta.get(0).isReadOnly());
             assertTrue(argsMeta.get(1).isProvided());
             assertEquals(0, argsMeta.get(1).getDepends().size());
+            assertFalse(argsMeta.get(1).isReadOnly());
             assertTrue(argsMeta.get(2).isProvided());
             assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertTrue(argsMeta.get(2).isReadOnly());
             assertFalse(argsMeta.get(3).isProvided());
             assertEquals(0, argsMeta.get(3).getDepends().size());
+            assertFalse(argsMeta.get(3).isReadOnly());
 
             // Reset the test state.
-            client.call(actionName, "A", false, 1, 1);
+            client.call(actionName, "A", false, null, 1);
 
             Map<String, ArgValue<?>> providedArgs = client.provideActionArgs(actionName);
             assertEquals(3, providedArgs.size());
@@ -275,13 +279,13 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(1, providedArgs.get("actuator3").getValue());
+            // The value of actuator3 should not be asserted because it is read only in this test. Other tests may change its value.
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
 
-            client.call(actionName, "B", true, 5, 10);
+            client.call(actionName, "B", true, null, 10);
 
             providedArgs = client.provideActionArgs(actionName);
             assertEquals(3, providedArgs.size());
@@ -296,7 +300,7 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(5, providedArgs.get("actuator3").getValue());
+            // The value of actuator3 should not be asserted because it is read only in this test. Other tests may change its value.
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 

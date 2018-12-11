@@ -47,6 +47,8 @@ public class ArgMeta<T extends DataType> {
 
     private List<String> depends = new ArrayList<>();
 
+    private boolean readOnly = false;
+
     public ArgMeta(String name, T type) {
         this.name = name;
         this.type = type;
@@ -74,6 +76,11 @@ public class ArgMeta<T extends DataType> {
 
     public ArgMeta<T> depends(String... depends) {
         this.depends.addAll(Arrays.asList(depends));
+        return this;
+    }
+
+    public ArgMeta<T> readOnly() {
+        this.readOnly = true;
         return this;
     }
 
@@ -135,5 +142,13 @@ public class ArgMeta<T extends DataType> {
 
     public void setDepends(List<String> depends) {
         this.depends = depends;
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }

@@ -143,7 +143,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 }
             }
 
-            validateArgProvidedDependsFlags(getArgsMeta());
+            validateArgProvided(getArgsMeta());
         }
 
         validateResultMeta(getResultMeta());
@@ -159,7 +159,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         SpongeUtils.validateType(argMeta.getType(), errorSource);
     }
 
-    private void validateArgProvidedDependsFlags(List<ArgMeta<?>> argsMeta) {
+    private void validateArgProvided(List<ArgMeta<?>> argsMeta) {
         Set<String> prevArgNames = new HashSet<>();
         for (ArgMeta<?> argMeta : getArgsMeta()) {
             Validate.isTrue(argMeta.getDepends().isEmpty() || argMeta.isProvided(),
@@ -168,6 +168,9 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 Validate.isTrue(prevArgNames.contains(dependsOnArg), "Argument %s depends on argument %s that is not defined before",
                         argMeta.getName(), dependsOnArg);
             });
+            Validate.isTrue(!argMeta.isReadOnly() || argMeta.isProvided(), "Read only argument %s must be defined as provided",
+                    argMeta.getName());
+            Validate.isTrue(!argMeta.isReadOnly() || argMeta.getType().isNullable(), "Read only argument %s type must be nullable");
             prevArgNames.add(argMeta.getName());
         }
     }
