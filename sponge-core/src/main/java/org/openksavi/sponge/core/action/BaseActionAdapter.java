@@ -18,6 +18,8 @@ package org.openksavi.sponge.core.action;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -91,27 +93,29 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current) {
+    public Map<String, ArgValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
         Validate.notNull(getArgsMeta(), "Argument metadata not defined");
 
         Set<String> allProvidedArguments =
                 getArgsMeta().stream().filter(ArgMeta::isProvided).map(ArgMeta::getName).collect(Collectors.toSet());
+        Set<String> finalNames = new LinkedHashSet<>();
 
         if (names != null) {
             for (String name : names) {
                 Validate.isTrue(getArgMeta(name).isProvided(), "Argument %s is not defined as provided", name);
+                finalNames.add(name);
             }
         } else {
             // Use all provided argument names.
-            names = allProvidedArguments;
+            finalNames.addAll(allProvidedArguments);
         }
 
         if (current == null) {
             current = Collections.emptyMap();
         }
 
-        Map<String, ArgValue<?>> provided = getProcessor().provideArgs(names, current);
-        Validate.notNull(provided, "The map of provided arguments must not be null");
+        Map<String, ArgValue<?>> provided = new LinkedHashMap<>();
+        getProcessor().provideArgs(finalNames, current, provided);
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(allProvidedArguments.contains(providedArg), "The provided argument %s is not specified");

@@ -4,11 +4,11 @@ Provide action arguments
 """
 
 def onInit():
-    sponge.setVariable("actuator1", "X")
-    sponge.setVariable("actuator2", "A")
-    sponge.setVariable("actuator3", False)
+    sponge.setVariable("actuator1", "A")
+    sponge.setVariable("actuator2", False)
+    sponge.setVariable("actuator3", 1)
     sponge.setVariable("actuator4", 1)
-    sponge.setVariable("actuator5", 1)
+    sponge.setVariable("actuator5", "X")
 
 class SetActuator(Action):
     def onConfigure(self):
@@ -16,10 +16,10 @@ class SetActuator(Action):
         self.description = "Sets the actuator state."
         self.argsMeta = [
             ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(),
-            ArgMeta("actuator2", StringType()).displayName("Actuator 2 state").provided().depends("actuator1"),
-            ArgMeta("actuator3", BooleanType()).displayName("Actuator 3 state").provided(),
-            ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state").provided(),
-            ArgMeta("actuator5", IntegerType()).displayName("Actuator 5 state")
+            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(),
+            ArgMeta("actuator3", IntegerType()).displayName("Actuator 3 state").provided(),
+            ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state"),
+            ArgMeta("actuator5", StringType()).displayName("Actuator 5 state").provided().depends("actuator1"),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
@@ -28,16 +28,14 @@ class SetActuator(Action):
         sponge.setVariable("actuator3", actuator3)
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
-    def provideArgs(self, names, current):
-        """ Arguments depend on each other, so they are returned selectively.
-        """
-        provided = {}
+    def provideArgs(self, names, current, provided):
         if "actuator1" in names:
-            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["X", "Y", "Z"])
+            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
         if "actuator2" in names:
-            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None)).valueSet(["A", "B", "C", current["actuator1"]])
+            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
             provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
         if "actuator4" in names:
-            provided["actuator4"] = ArgValue().valueSet(["a", "b", "c"])
-        return provided
+            provided["actuator4"] = ArgValue().valueSet([2, 4, 8])
+        if "actuator5" in names:
+            provided["actuator5"] = ArgValue().value(sponge.getVariable("actuator5", None)).valueSet(["X", "Y", "Z", current["actuator1"]])

@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core.action;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,8 +60,7 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current) {
-        // The default implementation.
-        return Collections.emptyMap();
+    public void provideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided) {
+        // The default implementation doesn't modify the provided map.
     }
 }

@@ -16,6 +16,7 @@ def onInit():
     sponge.setVariable("actuator2", False)
     sponge.setVariable("actuator3", 1)
     sponge.setVariable("actuator4", 1)
+    sponge.setVariable("actuator5", "X")
 
 def onLoad():
     sponge.kb.version = 1
@@ -66,8 +67,9 @@ class ProvideByAction(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Same value")
     def onCall(self, value):
         return value
-    def provideArgs(self, names, current):
-        return {"value":ArgValue().valueSet(sponge.call("ListValues"))}
+    def provideArgs(self, names, current, provided):
+        if "value" in names:
+            provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
 
 class PrivateAction(Action):
     def onCall(self, args):
@@ -146,12 +148,43 @@ class SetActuator(Action):
         sponge.setVariable("actuator2", actuator2)
         sponge.setVariable("actuator3", actuator3)
         sponge.setVariable("actuator4", actuator4)
-    def provideArgs(self, names, current):
-        return {
-            "actuator1":ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"]),
-            "actuator2":ArgValue().value(sponge.getVariable("actuator2", None)),
-            "actuator3":ArgValue().value(sponge.getVariable("actuator3", None))
-        }
+    def provideArgs(self, names, current, provided):
+        if "actuator1" in names:
+            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
+        if "actuator2" in names:
+            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
+        if "actuator3" in names:
+            provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
+
+class SetActuatorDepends(Action):
+    def onConfigure(self):
+        self.displayName = "Set actuator with depends"
+        self.description = "Sets the actuator state."
+        self.argsMeta = [
+            ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(),
+            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(),
+            ArgMeta("actuator3", IntegerType()).displayName("Actuator 3 state").provided(),
+            ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state"),
+            ArgMeta("actuator5", StringType()).displayName("Actuator 5 state").provided().depends("actuator1"),
+        ]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
+        sponge.setVariable("actuator1", actuator1)
+        sponge.setVariable("actuator2", actuator2)
+        sponge.setVariable("actuator3", actuator3)
+        sponge.setVariable("actuator4", actuator4)
+        sponge.setVariable("actuator5", actuator5)
+    def provideArgs(self, names, current, provided):
+        if "actuator1" in names:
+            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
+        if "actuator2" in names:
+            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
+        if "actuator3" in names:
+            provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
+        if "actuator4" in names:
+            provided["actuator4"] = ArgValue().valueSet([2, 4, 8])
+        if "actuator5" in names:
+            provided["actuator5"] = ArgValue().value(sponge.getVariable("actuator5", None)).valueSet(["X", "Y", "Z", current["actuator1"]])
 
 
 class RestApiIsActionPublic(Action):

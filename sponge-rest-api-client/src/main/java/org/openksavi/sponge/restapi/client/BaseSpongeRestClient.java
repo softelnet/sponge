@@ -22,7 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -623,7 +622,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName, Set<String> argNames, Map<String, Object> current) {
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
         return provideActionArgs(new ProvideActionArgsRequest(actionName, argNames, current)).getProvided();
     }
 

@@ -17,8 +17,8 @@
 package org.openksavi.sponge.core;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.Validate;
@@ -74,7 +74,7 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName, Set<String> argNames, Map<String, Object> current) {
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
         ActionAdapter actionAdapter =
                 Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
         try {

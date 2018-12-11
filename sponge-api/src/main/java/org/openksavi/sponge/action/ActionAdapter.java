@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge.action;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.openksavi.sponge.ProcessorAdapter;
 
@@ -38,9 +38,9 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
     /**
      * Returns the provided values along with value sets of the action arguments.
      *
-     * @param names the set of argument names.
+     * @param names the list of argument names.
      * @param current the map of argument names and their current values passed from a client code.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current);
+    Map<String, ArgValue<?>> provideArgs(List<String> names, Map<String, Object> current);
 }

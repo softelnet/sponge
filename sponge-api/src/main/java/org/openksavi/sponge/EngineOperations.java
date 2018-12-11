@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.action.ArgValue;
@@ -67,11 +67,11 @@ public interface EngineOperations {
      * Returns the provided values along with value sets of the action arguments.
      *
      * @param actionName the action name.
-     * @param argNames the set of argument names.
+     * @param argNames the list of argument names.
      * @param current the map of argument names and their current values passed from a client code.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideActionArgs(String actionName, Set<String> argNames, Map<String, Object> current);
+    Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Returns the provided values along with value sets of the action arguments.

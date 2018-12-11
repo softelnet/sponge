@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge.restapi.model.request;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,7 +27,7 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
 
     private String name;
 
-    private Set<String> argNames;
+    private List<String> argNames;
 
     private Map<String, Object> current;
 
@@ -37,14 +37,14 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
         //
     }
 
-    public ProvideActionArgsRequest(String name, Set<String> argNames, Map<String, Object> current, Integer version) {
+    public ProvideActionArgsRequest(String name, List<String> argNames, Map<String, Object> current, Integer version) {
         this.name = name;
         this.argNames = argNames;
         this.current = current;
         this.version = version;
     }
 
-    public ProvideActionArgsRequest(String name, Set<String> argNames, Map<String, Object> current) {
+    public ProvideActionArgsRequest(String name, List<String> argNames, Map<String, Object> current) {
         this(name, argNames, current, null);
     }
 
@@ -60,11 +60,11 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
     }
 
     @ApiModelProperty(value = "The names of action arguments to provide", required = false)
-    public Set<String> getArgNames() {
+    public List<String> getArgNames() {
         return argNames;
     }
 
-    public void setArgNames(Set<String> argNames) {
+    public void setArgNames(List<String> argNames) {
         this.argNames = argNames;
     }
 

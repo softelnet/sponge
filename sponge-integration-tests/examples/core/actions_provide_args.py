@@ -25,11 +25,10 @@ class SetActuator(Action):
         sponge.setVariable("actuator2", actuator2)
         sponge.setVariable("actuator3", actuator3)
         sponge.setVariable("actuator4", actuator4)
-    def provideArgs(self, names, current):
-        """ Arguments don't depend on each other, so they are returned all at once.
-        """
-        return {
-            "actuator1":ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"]),
-            "actuator2":ArgValue().value(sponge.getVariable("actuator2", None)),
-            "actuator3":ArgValue().value(sponge.getVariable("actuator3", None))
-        }
+    def provideArgs(self, names, current, provided):
+        if "actuator1" in names:
+            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
+        if "actuator2" in names:
+            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
+        if "actuator3" in names:
+            provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))

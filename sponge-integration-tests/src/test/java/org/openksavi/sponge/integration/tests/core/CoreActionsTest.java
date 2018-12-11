@@ -415,78 +415,77 @@ public class CoreActionsTest {
             assertTrue(argsMeta.get(0).isProvided());
             assertEquals(0, argsMeta.get(0).getDepends().size());
             assertTrue(argsMeta.get(1).isProvided());
-            assertEquals(1, argsMeta.get(1).getDepends().size());
-            assertEquals("actuator1", argsMeta.get(1).getDepends().get(0));
+            assertEquals(0, argsMeta.get(1).getDepends().size());
             assertTrue(argsMeta.get(2).isProvided());
             assertEquals(0, argsMeta.get(2).getDepends().size());
-            assertTrue(argsMeta.get(3).isProvided());
+            assertFalse(argsMeta.get(3).isProvided());
             assertEquals(0, argsMeta.get(3).getDepends().size());
-            assertFalse(argsMeta.get(4).isProvided());
-            assertEquals(0, argsMeta.get(4).getDepends().size());
+            assertTrue(argsMeta.get(4).isProvided());
+            assertEquals(1, argsMeta.get(4).getDepends().size());
+            assertEquals("actuator1", argsMeta.get(4).getDepends().get(0));
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), SpongeUtils.immutableSetOf("actuator1"),
-                    Collections.emptyMap());
+            providedArgs =
+                    engine.getOperations().provideActionArgs(actionAdapter.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             Object actuator1value = providedArgs.get("actuator1").getValue();
-            assertEquals("X", actuator1value);
-            assertEquals(Arrays.asList("X", "Y", "Z"), providedArgs.get("actuator1").getValueSet());
+            assertEquals("A", actuator1value);
+            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),
-                    SpongeUtils.immutableSetOf("actuator2", "actuator3", "actuator4"),
-                    SpongeUtils.immutableMapOf("actuator1", actuator1value));
-
+                    Arrays.asList("actuator2", "actuator3", "actuator5"), SpongeUtils.immutableMapOf("actuator1", actuator1value));
             assertEquals(3, providedArgs.size());
+
             assertNotNull(providedArgs.get("actuator2"));
-            assertEquals("A", providedArgs.get("actuator2").getValue());
-            assertEquals(Arrays.asList("A", "B", "C", "X"), providedArgs.get("actuator2").getValueSet());
+            assertEquals(false, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(false, providedArgs.get("actuator3").getValue());
+            assertEquals(1, providedArgs.get("actuator3").getValue());
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
-            assertNotNull(providedArgs.get("actuator4"));
-            assertNull(providedArgs.get("actuator4").getValue());
-            assertEquals(Arrays.asList("a", "b", "c"), providedArgs.get("actuator4").getValueSet());
-            assertFalse(providedArgs.get("actuator4").isValuePresent());
+            assertNull(providedArgs.get("actuator4"));
 
-            assertNull(providedArgs.get("actuator5"));
+            assertNotNull(providedArgs.get("actuator5"));
+            assertEquals("X", providedArgs.get("actuator5").getValue());
+            assertEquals(Arrays.asList("X", "Y", "Z", "A"), providedArgs.get("actuator5").getValueSet());
+            assertTrue(providedArgs.get("actuator5").isValuePresent());
 
-            engine.getOperations().call(actionAdapter.getName(), "Y", "B", true, 5, 10);
+            engine.getOperations().call(actionAdapter.getName(), "B", true, 5, 10, "Y");
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), SpongeUtils.immutableSetOf("actuator1"),
-                    Collections.emptyMap());
+            providedArgs =
+                    engine.getOperations().provideActionArgs(actionAdapter.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             actuator1value = providedArgs.get("actuator1").getValue();
-            assertEquals("Y", actuator1value);
-            assertEquals(Arrays.asList("X", "Y", "Z"), providedArgs.get("actuator1").getValueSet());
+            assertEquals("B", actuator1value);
+            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),
-                    SpongeUtils.immutableSetOf("actuator2", "actuator3", "actuator4"),
-                    SpongeUtils.immutableMapOf("actuator1", actuator1value));
+                    Arrays.asList("actuator2", "actuator3", "actuator5"), SpongeUtils.immutableMapOf("actuator1", actuator1value));
 
             assertEquals(3, providedArgs.size());
+
             assertNotNull(providedArgs.get("actuator2"));
-            assertEquals("B", providedArgs.get("actuator2").getValue());
-            assertEquals(Arrays.asList("A", "B", "C", "Y"), providedArgs.get("actuator2").getValueSet());
+            assertEquals(true, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(true, providedArgs.get("actuator3").getValue());
+            assertEquals(5, providedArgs.get("actuator3").getValue());
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
-            assertNotNull(providedArgs.get("actuator4"));
-            assertNull(providedArgs.get("actuator4").getValue());
-            assertEquals(Arrays.asList("a", "b", "c"), providedArgs.get("actuator4").getValueSet());
-            assertFalse(providedArgs.get("actuator4").isValuePresent());
+            assertNull(providedArgs.get("actuator4"));
 
-            assertNull(providedArgs.get("actuator5"));
+            assertNotNull(providedArgs.get("actuator5"));
+            assertEquals("Y", providedArgs.get("actuator5").getValue());
+            assertEquals(Arrays.asList("X", "Y", "Z", "B"), providedArgs.get("actuator5").getValueSet());
+            assertTrue(providedArgs.get("actuator5").isValuePresent());
 
             assertFalse(engine.isError());
         } finally {

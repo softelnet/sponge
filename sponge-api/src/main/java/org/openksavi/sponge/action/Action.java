@@ -32,7 +32,7 @@ public interface Action extends Processor<ActionAdapter>, ActionOperations {
      *
      * @param names the set of argument names.
      * @param current the map of argument names and their current values passed from a client code.
-     * @return the map of argument names and values (value sets).
+     * @param provided the map of argument names and values (value sets) that is to be set up in this callback method.
      */
-    Map<String, ArgValue<?>> provideArgs(Set<String> names, Map<String, Object> current);
+    void provideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided);
 }
