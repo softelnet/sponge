@@ -53,7 +53,7 @@ Tasks automation::
 Tasks could be programmed in any of the supported scripting languages as {sponge} actions and published via the REST API.
 
 https://en.wikipedia.org/wiki/Internet_of_things[Internet of Things (IoT)]::
-{sponge} as a part of https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway] can locally process data provided by the devices in the field, thus only important data is sent to the central node, where data is collected, stored and manipulated by enterprise applications.
+{sponge} as a part of https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway] can locally process data provided by the devices in the field, thus only important data is sent to the central node where data is collected, stored and manipulated by enterprise applications.
 
 https://en.wikipedia.org/wiki/Edge_computing[Edge computing]::
 {sponge} may be used on edge devices (also known as smart devices), providing a computation platform that would be largely or completely performed on distributed device nodes. The requirement is that such device must have Java (JRE) installed. The example is Raspberry Pi with connected sensors.

@@ -231,6 +231,15 @@ public interface SpongeRestClient extends Closeable {
     RestActionMeta getActionMeta(String actionName);
 
     /**
+     * Validates the action call arguments. This method is invoked internally by the {@code call} methods. Throws exception on validation
+     * failure.
+     *
+     * @param actionMeta the action metadata.
+     * @param args the action arguments.
+     */
+    void validateCallArgs(RestActionMeta actionMeta, List<Object> args);
+
+    /**
      * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined.
      *
      * @param request the request.

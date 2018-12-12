@@ -109,7 +109,6 @@
         <swagger.version>1.5.21</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jserialcomm.version>2.3.0</jserialcomm.version>
-        <jrpicam.version>0.2.0</jrpicam.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
 
         <activemq.version>5.14.5</activemq.version>
@@ -824,11 +823,6 @@
                 <groupId>com.fazecast</groupId>
                 <artifactId>jSerialComm</artifactId>
                 <version>${jserialcomm.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.sciss</groupId>
-                <artifactId>jrpicam</artifactId>
-                <version>${jrpicam.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.brake.threegpp</groupId>

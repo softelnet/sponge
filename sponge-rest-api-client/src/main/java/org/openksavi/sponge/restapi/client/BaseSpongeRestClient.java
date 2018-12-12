@@ -492,9 +492,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return response;
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
-    protected void validateCallArgs(RestActionMeta actionMeta, List args) {
-        // Validate arguments.
+    public void validateCallArgs(RestActionMeta actionMeta, List args) {
         if (actionMeta == null || actionMeta.getArgsMeta() == null) {
             return;
         }

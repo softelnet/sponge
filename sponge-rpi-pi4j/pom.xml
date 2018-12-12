@@ -26,10 +26,6 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>de.sciss</groupId>
-            <artifactId>jrpicam</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
