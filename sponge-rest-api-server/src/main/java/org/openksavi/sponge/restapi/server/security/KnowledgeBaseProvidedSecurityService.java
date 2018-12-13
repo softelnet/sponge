@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.server.security;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.openksavi.sponge.ProcessorNotFoundException;
@@ -37,8 +38,8 @@ public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSe
     @Override
     public boolean canSendEvent(User user, String eventName) {
         try {
-            return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_SEND_EVENT, user,
-                    eventName);
+            return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_SEND_EVENT,
+                    Arrays.asList(user, eventName));
         } catch (ProcessorNotFoundException e) {
             if (Objects.equals(e.getProcessorName(), RestApiServerConstants.ACTION_CAN_SEND_EVENT)) {
                 return false;
@@ -52,7 +53,7 @@ public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSe
     public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
         try {
             return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE,
-                    user, knowledgeBase.getName());
+                    Arrays.asList(user, knowledgeBase.getName()));
         } catch (ProcessorNotFoundException e) {
             if (Objects.equals(e.getProcessorName(), RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE)) {
                 return false;

@@ -35,7 +35,7 @@ class AlarmTrigger(Trigger):
         self.event = "alarm"
     def onRun(self, event):
         print("Sound the alarm! {}".format(event.get("message")))
-        print("Last news was:\n{}".format(sponge.call("EmphasizeAction", storagePlugin.storedValue[-1])))
+        print("Last news was:\n{}".format(sponge.call("EmphasizeAction", [storagePlugin.storedValue[-1]])))
         sponge.getVariable("alarmSounded").set(True)
 
 # Start only one instance of this correlator for the system. Note that in this example data is stored in a plugin,

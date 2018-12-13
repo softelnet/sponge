@@ -17,5 +17,5 @@ var HelloWorldAction = Java.extend(Action, {
 });
 
 function onStartup() {
-    sponge.logger.info("{}", sponge.call("HelloWorldAction", "Sponge user"))
+    sponge.logger.info("{}", sponge.call("HelloWorldAction", ["Sponge user"]))
 }

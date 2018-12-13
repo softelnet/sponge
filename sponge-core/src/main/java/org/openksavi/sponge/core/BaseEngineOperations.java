@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -59,18 +59,28 @@ public class BaseEngineOperations implements EngineOperations {
      * @param args arguments to pass to action.
      */
     @Override
-    public Object call(String actionName, Object... args) {
-        return engine.getActionManager().callAction(actionName, Arrays.asList(args));
+    public Object call(String actionName, List<Object> args) {
+        return engine.getActionManager().callAction(actionName, args);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T call(Class<T> resultClass, String actionName, Object... args) {
-        Object result = engine.getActionManager().callAction(actionName, Arrays.asList(args));
+    public <T> T call(Class<T> resultClass, String actionName, List<Object> args) {
+        Object result = call(actionName, args);
 
         Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
 
         return (T) result;
+    }
+
+    @Override
+    public Object call(String actionName) {
+        return call(actionName, Collections.emptyList());
+    }
+
+    @Override
+    public <T> T call(Class<T> resultClass, String actionName) {
+        return call(resultClass, actionName, Collections.emptyList());
     }
 
     @Override
@@ -85,8 +95,13 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
+    public Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames) {
+        return provideActionArgs(actionName, argNames, null);
+    }
+
+    @Override
     public Map<String, ArgValue<?>> provideActionArgs(String actionName) {
-        return provideActionArgs(actionName, null, null);
+        return provideActionArgs(actionName, null);
     }
 
     /**

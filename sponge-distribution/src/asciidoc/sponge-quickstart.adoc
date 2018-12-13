@@ -320,7 +320,7 @@ class HelloWorldAction(Action): # <1>
         return "Hello World! Hello {}!".format(name)
 
 def onStartup(): # <7>
-    sponge.logger.info("{}", sponge.call("HelloWorldAction", "Sponge user")) # <8>
+    sponge.logger.info("{}", sponge.call("HelloWorldAction", ["Sponge user"])) # <8>
 ----
 <1> The definition of the `HelloWorldAction` action.
 <2> The action configuration callback method. The method body defines the optional action metadata. The metadata could be used by a client code, for example a generic UI for calling actions or a REST API client.
@@ -373,7 +373,7 @@ class HelloWorldAction < Action # <1>
 end
 
 def onStartup # <7>
-    $sponge.logger.info("{}", $sponge.call("HelloWorldAction", "Sponge user")) # <8>
+    $sponge.logger.info("{}", $sponge.call("HelloWorldAction", ["Sponge user"])) # <8>
 end
 ----
 
@@ -406,7 +406,7 @@ class HelloWorldAction extends Action { // <1>
 }
 
 void onStartup() { // <7>
-    sponge.logger.info("{}", sponge.call("HelloWorldAction", "Sponge user")) // <8>
+    sponge.logger.info("{}", sponge.call("HelloWorldAction", ["Sponge user"])) // <8>
 }
 ----
 
@@ -439,7 +439,7 @@ var HelloWorldAction = Java.extend(Action, { // <1>
 });
 
 function onStartup() { // <7>
-    sponge.logger.info("{}", sponge.call("HelloWorldAction", "Sponge user")) // <8>
+    sponge.logger.info("{}", sponge.call("HelloWorldAction", ["Sponge user"])) // <8>
 }
 ----
 

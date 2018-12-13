@@ -17,7 +17,7 @@
 package org.openksavi.sponge.restapi.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -574,14 +574,24 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
-    public Object call(String actionName, Object... args) {
-        return call(new ActionCallRequest(actionName, Arrays.asList((Object[]) args))).getResult();
+    public Object call(String actionName, List<Object> args) {
+        return call(new ActionCallRequest(actionName, args)).getResult();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T call(Class<T> resultClass, String actionName, Object... args) {
-        return (T) call(actionName, (Object[]) args);
+    public <T> T call(Class<T> resultClass, String actionName, List<Object> args) {
+        return (T) call(actionName, args);
+    }
+
+    @Override
+    public Object call(String actionName) {
+        return call(actionName, Collections.emptyList());
+    }
+
+    @Override
+    public <T> T call(Class<T> resultClass, String actionName) {
+        return call(resultClass, actionName, Collections.emptyList());
     }
 
     @Override

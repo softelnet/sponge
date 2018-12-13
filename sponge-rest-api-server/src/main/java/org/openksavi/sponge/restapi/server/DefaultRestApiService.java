@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -186,7 +187,7 @@ public class DefaultRestApiService implements RestApiService {
 
             String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
             Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().existsAction(isPublicActionActionName)
-                    ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, action).booleanValue()
+                    ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, Arrays.asList(action)).booleanValue()
                     : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
 
             Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
@@ -403,7 +404,7 @@ public class DefaultRestApiService implements RestApiService {
 
         String isEventPlubliActionName = RestApiServerConstants.ACTION_IS_EVENT_PUBLIC;
         boolean publicByAction = getEngine().getOperations().existsAction(isEventPlubliActionName)
-                ? getEngine().getOperations().call(Boolean.class, isEventPlubliActionName, eventName).booleanValue()
+                ? getEngine().getOperations().call(Boolean.class, isEventPlubliActionName, Arrays.asList(eventName)).booleanValue()
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         return publicBySettings && publicByAction;

@@ -294,7 +294,7 @@ public interface SpongeRestClient extends Closeable {
      *
      * @return the action result.
      */
-    Object call(String actionName, Object... args);
+    Object call(String actionName, List<Object> args);
 
     /**
      * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
@@ -306,7 +306,27 @@ public interface SpongeRestClient extends Closeable {
      * @return the action result.
      * @param <T> the result type.
      */
-    <T> T call(Class<T> resultClass, String actionName, Object... args);
+    <T> T call(Class<T> resultClass, String actionName, List<Object> args);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param actionName the action name.
+     *
+     * @return the action result.
+     */
+    Object call(String actionName);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param resultClass the result class.
+     * @param actionName the action name.
+     *
+     * @return the action result.
+     * @param <T> the result type.
+     */
+    <T> T call(Class<T> resultClass, String actionName);
 
     /**
      * Sends the event to the server.

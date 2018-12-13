@@ -19,6 +19,8 @@ package org.openksavi.sponge.mpd;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +30,8 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -71,7 +73,7 @@ public class MpdRestServerTestMain {
             SpongeEngine engine = ctx.getBean(SpongeEngine.class);
 
             try (SpongeRestClient client = createRestClient()) {
-                String info = client.call(String.class, "MpdSetAndPlayPlaylist", null, null, "rock", null, null, false);
+                String info = client.call(String.class, "MpdSetAndPlayPlaylist", Arrays.asList(null, null, "rock", null, null, false));
 
                 assertNotNull(info);
                 assertFalse(engine.isError());

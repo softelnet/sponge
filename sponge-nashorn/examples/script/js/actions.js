@@ -35,11 +35,11 @@ function onLoad() {
 
 function onStartup() {
     sponge.logger.debug("Calling script defined action");
-    sponge.setVariable("scriptActionResult", sponge.call("EchoAction", 1, "test"));
+    sponge.setVariable("scriptActionResult", sponge.call("EchoAction", [1, "test"]));
     sponge.logger.debug("Action returned: {}", sponge.getVariable("scriptActionResult"));
 
     sponge.logger.debug("Calling Java defined action");
-    sponge.setVariable("javaActionResult", sponge.call("PowerEchoAction", 1, "test"));
+    sponge.setVariable("javaActionResult", sponge.call("PowerEchoAction", [1, "test"]));
     sponge.logger.debug("Action returned: {}", sponge.getVariable("javaActionResult"));
 
     sponge.logger.debug("Disabling actions");

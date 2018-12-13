@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.camel;
 
+import java.util.Arrays;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -52,6 +54,6 @@ public class SpongeProducer extends DefaultProducer {
             actionName = action != null ? action : CamelProducerAction.NAME;
         }
 
-        exchange.getIn().setBody(engine.getOperations().call(actionName, exchange));
+        exchange.getIn().setBody(engine.getOperations().call(actionName, Arrays.asList(exchange)));
     }
 }

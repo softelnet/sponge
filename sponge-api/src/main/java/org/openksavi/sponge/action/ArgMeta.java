@@ -43,10 +43,13 @@ public class ArgMeta<T extends DataType> {
     /** The flag specifying if this argument is optional. */
     private boolean optional = false;
 
+    /** The flag specifying if this argument is provided. */
     private boolean provided = false;
 
+    /** The list of attribute names that this attribute depends on. Available only if an attribute is provided. */
     private List<String> depends = new ArrayList<>();
 
+    /** The flag specifying if this argument is read only. Available only if an attribute is provided. */
     private boolean readOnly = false;
 
     public ArgMeta(String name, T type) {
