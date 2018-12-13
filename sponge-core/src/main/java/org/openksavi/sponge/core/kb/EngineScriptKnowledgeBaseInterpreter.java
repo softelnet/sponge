@@ -175,10 +175,17 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     @SuppressWarnings("unchecked")
     @Override
     public <T> T eval(Reader reader, String fileName) {
+        Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+        Object prevFileName = bindings.get(ScriptEngine.FILENAME);
+
         try {
+            bindings.put(ScriptEngine.FILENAME, fileName);
+
             return (T) scriptEngine.eval(reader);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(fileName, this, e);
+        } finally {
+            bindings.put(ScriptEngine.FILENAME, prevFileName);
         }
     }
 

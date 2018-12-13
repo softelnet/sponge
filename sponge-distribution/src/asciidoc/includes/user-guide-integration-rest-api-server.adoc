@@ -165,6 +165,10 @@ The following table contains a summary of the REST API operations. For a complet
 |`call`
 |Calls an action.
 
+|Provide action arguments
+|`actionArgs`
+|Returns _provided arguments_, i.e. values along with value sets of action arguments. The request accepts the following properties: `name` - the action name, `argNames` -  the optional list of argument names that are to be provided (if `null`, all provided arguments will be produced), `current` - the optional map of argument names and their current values passed from a client code.
+
 |Send a new event
 |`send`
 |Sends a new event.

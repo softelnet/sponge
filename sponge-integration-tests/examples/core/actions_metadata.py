@@ -25,12 +25,12 @@ def onLoad():
 
 def onStartup():
     sponge.logger.debug("Calling script defined action")
-    scriptActionResult = sponge.call("UpperEchoAction", "test")
+    scriptActionResult = sponge.call("UpperEchoAction", ["test"])
     sponge.logger.debug("Action returned: {}", scriptActionResult)
     sponge.setVariable("scriptActionResult", scriptActionResult)
 
     sponge.logger.debug("Calling Java defined action")
-    javaActionResult = sponge.call("PowerEchoMetadataAction", 1, "test")
+    javaActionResult = sponge.call("PowerEchoMetadataAction", [1, "test"])
     sponge.logger.debug("Action returned: {}", javaActionResult)
     sponge.setVariable("javaActionResult", javaActionResult)
 

@@ -58,7 +58,7 @@ public class ComplexObjectRestApiTest extends BasicTestTemplate {
         CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
 
         try (SpongeRestClient client = createRestClient()) {
-            CompoundComplexObject result = client.call(CompoundComplexObject.class, "ComplexObjectAction", compoundObject);
+            CompoundComplexObject result = client.call(CompoundComplexObject.class, "ComplexObjectAction", Arrays.asList(compoundObject));
 
             assertEquals(compoundObject.getId() + 1, result.getId().longValue());
             assertEquals(compoundObject.getName(), result.getName());
@@ -98,7 +98,7 @@ public class ComplexObjectRestApiTest extends BasicTestTemplate {
         CompoundComplexObject compoundObject = RestApiTestUtils.createCompoundComplexObject();
 
         try (SpongeRestClient client = createRestClient()) {
-            Object returnValue = client.call(actionName, Arrays.asList(compoundObject));
+            Object returnValue = client.call(actionName, Arrays.asList(Arrays.asList(compoundObject)));
 
             assertTrue(returnValue instanceof List);
 
@@ -120,8 +120,9 @@ public class ComplexObjectRestApiTest extends BasicTestTemplate {
         map.put("first", RestApiTestUtils.createCompoundComplexObject());
 
         try (SpongeRestClient client = createRestClient()) {
-            Object returnValue = client.call("ComplexObjectHierarchyAction", "String", new Integer(100), Arrays.asList("a", "b", "c"),
-                    Arrays.asList(new BigDecimal("1.25"), new BigDecimal("5.5")), new String[] { "A", "B" }, map);
+            Object returnValue =
+                    client.call("ComplexObjectHierarchyAction", Arrays.asList("String", new Integer(100), Arrays.asList("a", "b", "c"),
+                            Arrays.asList(new BigDecimal("1.25"), new BigDecimal("5.5")), new String[] { "A", "B" }, map));
 
             assertTrue(returnValue instanceof List);
         }

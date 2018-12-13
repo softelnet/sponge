@@ -37,12 +37,12 @@ class Actions : KKnowledgeBase() {
 
     override fun onStartup() {
         sponge.logger.debug("Calling script defined action")
-        val scriptActionResult = sponge.call("EchoAction", 1, "test")
+        val scriptActionResult = sponge.call("EchoAction", listOf(1, "test"))
         sponge.logger.debug("Action returned: {}", scriptActionResult)
         sponge.setVariable("scriptActionResult", scriptActionResult)
 
         sponge.logger.debug("Calling Java defined action")
-        val javaActionResult = sponge.call("PowerEchoAction", 1, "test")
+        val javaActionResult = sponge.call("PowerEchoAction", listOf(1, "test"))
         sponge.logger.debug("Action returned: {}", javaActionResult)
         sponge.setVariable("javaActionResult", javaActionResult)
 

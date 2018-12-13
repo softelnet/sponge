@@ -57,8 +57,8 @@ public class ActionsTestTemplate {
             assertEquals(2, ((Number) javaResult[0]).intValue());
             assertEquals("TEST", javaResult[1]);
 
-            assertEquals(3,
-                    engine.getOperations().call(Number.class, "ArrayArgumentAction", (Object) new Object[] { 1, 2, "text" }).intValue());
+            assertEquals(3, engine.getOperations()
+                    .call(Number.class, "ArrayArgumentAction", Arrays.asList((Object) new Object[] { 1, 2, "text" })).intValue());
 
             assertFalse(engine.isError());
         } finally {
@@ -89,7 +89,7 @@ public class ActionsTestTemplate {
             assertTrue(adapter.getResultMeta().getType() instanceof StringType);
 
             String name = "Sponge user";
-            assertEquals(String.format("Hello World! Hello %s!", name), engine.getOperations().call(actionName, name));
+            assertEquals(String.format("Hello World! Hello %s!", name), engine.getOperations().call(actionName, Arrays.asList(name)));
 
             assertFalse(engine.isError());
         } finally {

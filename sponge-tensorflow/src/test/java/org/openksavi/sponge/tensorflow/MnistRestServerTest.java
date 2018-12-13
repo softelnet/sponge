@@ -19,6 +19,7 @@ package org.openksavi.sponge.tensorflow;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,8 +42,8 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -86,7 +87,7 @@ public class MnistRestServerTest {
         byte[] imageData = SpongeUtils.readFileToByteArray("examples/tensorflow/mnist/data/5_0.png");
 
         try (SpongeRestClient client = createRestApiClient()) {
-            List<Number> result = client.call(List.class, "MnistPredictDetailed", imageData);
+            List<Number> result = client.call(List.class, "MnistPredictDetailed", Arrays.asList(imageData));
             List<Double> predictions = result.stream().map(e -> e.doubleValue()).collect(Collectors.toList());
 
             int prediction = IntStream.range(0, predictions.size()).boxed().max(Comparator.comparingDouble(predictions::get)).get();

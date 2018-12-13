@@ -72,7 +72,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         Optional<ArgMeta<?>> argMetaO =
                 getDefinition().getArgsMeta().stream().filter(argMeta -> Objects.equals(argMeta.getName(), name)).findFirst();
 
-        Validate.isTrue(argMetaO.isPresent(), "Metadata for argument %s not found", name);
+        Validate.isTrue(argMetaO.isPresent(), "Metadata for argument '%s' not found", name);
 
         return argMetaO.get();
     }
@@ -102,7 +102,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
         if (names != null) {
             for (String name : names) {
-                Validate.isTrue(getArgMeta(name).isProvided(), "Argument %s is not defined as provided", name);
+                Validate.isTrue(getArgMeta(name).isProvided(), "Argument '%s' is not defined as provided", name);
                 finalNames.add(name);
             }
         } else {
@@ -118,7 +118,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         getProcessor().provideArgs(finalNames, current, provided);
 
         provided.keySet().forEach(providedArg -> {
-            Validate.isTrue(allProvidedArguments.contains(providedArg), "The provided argument %s is not specified");
+            Validate.isTrue(allProvidedArguments.contains(providedArg), "The provided argument '%s' is not specified", providedArg);
         });
 
         return provided;
@@ -143,38 +143,42 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 }
             }
 
-            validateArgProvidedDependsFlags(getArgsMeta());
+            validateArgProvided(getArgsMeta());
         }
 
         validateResultMeta(getResultMeta());
     }
 
     private void validateArgMeta(ArgMeta<?> argMeta) {
-        Validate.notNull(argMeta, "Null argument metadata in the %s action", getName());
+        Validate.notNull(argMeta, "Null argument metadata in the '%s' action", getName());
 
         String errorSource =
-                String.format("argument %s in the action %s", argMeta.getName() != null ? argMeta.getName() : "unnamed", getName());
+                String.format("argument '%s' in the action '%s'", argMeta.getName() != null ? argMeta.getName() : "unnamed", getName());
         Validate.notNull(argMeta.getName(), "Null name of the %s", errorSource);
         Validate.notNull(argMeta.getType(), "Null type of the %s", errorSource);
         SpongeUtils.validateType(argMeta.getType(), errorSource);
     }
 
-    private void validateArgProvidedDependsFlags(List<ArgMeta<?>> argsMeta) {
+    private void validateArgProvided(List<ArgMeta<?>> argsMeta) {
         Set<String> prevArgNames = new HashSet<>();
         for (ArgMeta<?> argMeta : getArgsMeta()) {
             Validate.isTrue(argMeta.getDepends().isEmpty() || argMeta.isProvided(),
-                    "The argument %s in the action %s has depends but is not provided", argMeta.getName(), getName());
+                    "The argument '%s' in the action '%s' has depends but is not provided", argMeta.getName(), getName());
             argMeta.getDepends().forEach(dependsOnArg -> {
-                Validate.isTrue(prevArgNames.contains(dependsOnArg), "Argument %s depends on argument %s that is not defined before",
+                Validate.isTrue(prevArgNames.contains(dependsOnArg), "Argument '%s' depends on argument '%s' that is not defined before",
                         argMeta.getName(), dependsOnArg);
             });
+            Validate.isTrue(!argMeta.isReadOnly() || argMeta.isProvided(), "Read only argument '%s' must be defined as provided",
+                    argMeta.getName());
+            Validate.isTrue(!argMeta.isReadOnly() || argMeta.getType().isNullable(), "Read only argument '%s' type must be nullable",
+                    argMeta.getName());
             prevArgNames.add(argMeta.getName());
         }
     }
 
     private void validateResultMeta(ResultMeta<?> resultMeta) {
         if (resultMeta != null) {
-            String errorSource = String.format("result of the action %s", getName());
+            String errorSource = String.format("result of the action '%s'", getName());
             Validate.notNull(resultMeta.getType(), "Null type of the %s", errorSource);
             SpongeUtils.validateType(resultMeta.getType(), errorSource);
         }

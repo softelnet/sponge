@@ -41,6 +41,8 @@ public class FileKnowledgeBaseScriptProvider extends BaseKnowledgeBaseScriptProv
     @Override
     public List<KnowledgeBaseReaderHolder> getReaders() throws IOException {
         Charset charset = script.getCharset() != null ? script.getCharset() : Charset.defaultCharset();
+
+        logger.debug("Using knowledge base file provider: {}", engine.getKnowledgeBaseFileProvider().getClass());
         List<KnowledgeBaseReaderHolder> readers = engine.getKnowledgeBaseFileProvider().getReaders(engine, script.getFileName(), charset);
 
         if (readers.isEmpty()) {

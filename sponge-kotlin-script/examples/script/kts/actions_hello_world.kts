@@ -25,5 +25,5 @@ class HelloWorldAction : KAction() {
 }
 
 override fun onStartup() {
-    sponge.logger.info("{}", sponge.call("HelloWorldAction", "Sponge user"))
+    sponge.logger.info("{}", sponge.call("HelloWorldAction", listOf("Sponge user")))
 }

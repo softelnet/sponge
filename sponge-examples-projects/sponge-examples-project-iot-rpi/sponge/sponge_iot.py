@@ -104,7 +104,7 @@ class SendNotificationSms(Action):
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, message):
         if NOTIFICATION_SMS_PHONE:
-            sponge.call("SendSms", NOTIFICATION_SMS_PHONE, message)
+            sponge.call("SendSms", [NOTIFICATION_SMS_PHONE, message])
 
 def sendNotificationEmail(subject, message, attachmentFiles = []):
     email = SimpleEmail() if len(attachmentFiles) == 0 else MultiPartEmail()
@@ -163,21 +163,21 @@ def onStartup():
     CAMERA_LOCK = ReentrantLock(True)
     
     # Set LCD.
-    sponge.call("SetLcd", "Starting Sponge...", "006030")
+    sponge.call("SetLcd", ["Starting Sponge...", "006030"])
 
     # Manual start of the REST API (autoStart is turned off) because the REST API server must start after the Camel context has started.
     camel.waitForContextFullyStarted()
     restApiServer.start()
 
     # Set LCD.
-    sponge.call("SetLcd", "Sponge running", "00f767")
+    sponge.call("SetLcd", ["Sponge running", "00f767"])
     
     # Sent start notification event.
     sponge.event("notificationStart").send()
 
 def onShutdown():
      try:
-         sponge.call("SetLcd", "", "000000")
+         sponge.call("SetLcd", ["", "000000"])
      except:
          sponge.logger.warn("Shutdown error: {}", sys.exc_info()[1])
 

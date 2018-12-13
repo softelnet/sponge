@@ -28,11 +28,11 @@ import org.openksavi.sponge.Processor;
 public interface Action extends Processor<ActionAdapter>, ActionOperations {
 
     /**
-     * A callback method that returns the provided values along with value sets of the action arguments.
+     * A callback method that returns the provided argument values along with argument value sets (i.e. possible values of an argument).
      *
-     * @param names the set of argument names.
-     * @param current the map of argument names and their current values passed from a client code.
-     * @param provided the map of argument names and values (value sets) that is to be set up in this callback method.
+     * @param names the not null set of argument names that are to be provided.
+     * @param current the not null map of argument names and their current values passed from a client code.
+     * @param provided the initially empty map of argument names and values (value sets) that is to be set up in this callback method.
      */
     void provideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided);
 }

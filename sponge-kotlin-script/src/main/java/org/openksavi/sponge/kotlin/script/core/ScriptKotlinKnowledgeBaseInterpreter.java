@@ -22,8 +22,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.script.Bindings;
 import javax.script.Compilable;
 import javax.script.Invocable;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -203,15 +205,22 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
     }
 
     @Override
-    protected void doLoad(Reader reader, String name) {
+    protected void doLoad(Reader reader, String fileName) {
+        Bindings bindings = getScriptEngine().getBindings(ScriptContext.ENGINE_SCOPE);
+        Object prevFileName = bindings.get(ScriptEngine.FILENAME);
+
         try {
+            bindings.put(ScriptEngine.FILENAME, fileName);
+
             CompiledKotlinScript script = (CompiledKotlinScript) ((Compilable) getScriptEngine()).compile(reader);
             script.eval();
 
             // Add the last script as the first.
             scripts.add(0, script);
         } catch (ScriptException e) {
-            throw SpongeUtils.wrapException(name, this, e);
+            throw SpongeUtils.wrapException(fileName, this, e);
+        } finally {
+            bindings.put(ScriptEngine.FILENAME, prevFileName);
         }
     }
 

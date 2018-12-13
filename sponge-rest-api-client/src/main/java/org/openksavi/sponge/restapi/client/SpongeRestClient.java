@@ -231,6 +231,15 @@ public interface SpongeRestClient extends Closeable {
     RestActionMeta getActionMeta(String actionName);
 
     /**
+     * Validates the action call arguments. This method is invoked internally by the {@code call} methods. Throws exception on validation
+     * failure.
+     *
+     * @param actionMeta the action metadata.
+     * @param args the action arguments.
+     */
+    void validateCallArgs(RestActionMeta actionMeta, List<Object> args);
+
+    /**
      * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined.
      *
      * @param request the request.
@@ -285,7 +294,7 @@ public interface SpongeRestClient extends Closeable {
      *
      * @return the action result.
      */
-    Object call(String actionName, Object... args);
+    Object call(String actionName, List<Object> args);
 
     /**
      * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
@@ -297,7 +306,27 @@ public interface SpongeRestClient extends Closeable {
      * @return the action result.
      * @param <T> the result type.
      */
-    <T> T call(Class<T> resultClass, String actionName, Object... args);
+    <T> T call(Class<T> resultClass, String actionName, List<Object> args);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param actionName the action name.
+     *
+     * @return the action result.
+     */
+    Object call(String actionName);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RestActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param resultClass the result class.
+     * @param actionName the action name.
+     *
+     * @return the action result.
+     * @param <T> the result type.
+     */
+    <T> T call(Class<T> resultClass, String actionName);
 
     /**
      * Sends the event to the server.

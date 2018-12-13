@@ -17,7 +17,7 @@ class SetActuator(Action):
         self.argsMeta = [
             ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(),
             ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(),
-            ArgMeta("actuator3", IntegerType()).displayName("Actuator 3 state").provided(),
+            ArgMeta("actuator3", IntegerType().nullable()).displayName("Actuator 3 state").provided().readOnly(),
             ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state"),
             ArgMeta("actuator5", StringType()).displayName("Actuator 5 state").provided().depends("actuator1"),
         ]
@@ -25,7 +25,7 @@ class SetActuator(Action):
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)
         sponge.setVariable("actuator2", actuator2)
-        sponge.setVariable("actuator3", actuator3)
+        # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
     def provideArgs(self, names, current, provided):
@@ -39,3 +39,6 @@ class SetActuator(Action):
             provided["actuator4"] = ArgValue().valueSet([2, 4, 8])
         if "actuator5" in names:
             provided["actuator5"] = ArgValue().value(sponge.getVariable("actuator5", None)).valueSet(["X", "Y", "Z", current["actuator1"]])
+
+def onStartup():
+    sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

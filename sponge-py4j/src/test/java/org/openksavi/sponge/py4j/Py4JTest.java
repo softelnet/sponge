@@ -20,6 +20,7 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -82,7 +83,7 @@ public class Py4JTest {
         Process process = null;
 
         try {
-            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
+            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", Arrays.asList("test")));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();
@@ -101,7 +102,7 @@ public class Py4JTest {
         Process process = null;
 
         try {
-            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", "test"));
+            assertEquals("TEST", engine.getOperations().call("PythonUpperCase", Arrays.asList("test")));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

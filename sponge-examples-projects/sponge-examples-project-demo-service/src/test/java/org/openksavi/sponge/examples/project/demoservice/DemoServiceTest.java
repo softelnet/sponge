@@ -19,6 +19,7 @@ package org.openksavi.sponge.examples.project.demoservice;
 import static org.junit.Assert.assertEquals;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -30,8 +31,8 @@ import org.springframework.util.SocketUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 
 @net.jcip.annotations.NotThreadSafe
 public class DemoServiceTest {
@@ -71,7 +72,7 @@ public class DemoServiceTest {
                 Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
 
         try (SpongeRestClient client = createRestClient()) {
-            assertEquals(5, createRestClient().call(Number.class, "MnistPredict", imageData));
+            assertEquals(5, createRestClient().call(Number.class, "MnistPredict", Arrays.asList(imageData)));
         }
     }
 }
