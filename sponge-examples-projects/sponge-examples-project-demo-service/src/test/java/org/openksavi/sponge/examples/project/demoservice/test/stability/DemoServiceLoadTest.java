@@ -43,8 +43,8 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.examples.project.demoservice.DemoServiceTestEnvironment;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 
 @net.jcip.annotations.NotThreadSafe
 public class DemoServiceLoadTest {
@@ -94,7 +94,7 @@ public class DemoServiceLoadTest {
             for (int i = 0; i < TEST_COUNT; i++) {
                 logger.info("Iteration ({}): {}/{}", threadNumber, i + 1, TEST_COUNT);
                 images.forEach(digitData -> assertEquals(digitData.getKey(),
-                        client.call(Number.class, "MnistPredict", (Object) digitData.getValue())));
+                        client.call(Number.class, "MnistPredict", Arrays.asList(digitData.getValue()))));
             }
 
             return null;

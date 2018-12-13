@@ -47,6 +47,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.examples.CustomObject;
+import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.test.util.TestUtils;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.DataType;
@@ -259,8 +260,9 @@ public class CoreActionsTest {
         } catch (WrappedException e) {
             logger.debug("Expected exception", e);
             String sourceName = "kb.TestAction.onCall";
-            String expectedMessage = "NameError: global name 'error_here' is not defined in <script> at line number 8"
-                    + " in kb.ErrorCauseAction.onCall in <script> at line number 12 in " + sourceName;
+            String expectedMessage =
+                    "NameError: global name 'error_here' is not defined in examples/core/actions_on_call_error.py at line number 8"
+                            + " in kb.ErrorCauseAction.onCall in examples/core/actions_on_call_error.py at line number 12 in " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
@@ -289,9 +291,10 @@ public class CoreActionsTest {
         } catch (WrappedException e) {
             logger.debug("Expected exception", e);
             String sourceName = "kb.DeepNestedTestAction.onCall";
-            String expectedMessage = "NameError: global name 'error_here' is not defined in <script> at line number 8"
-                    + " in kb.ErrorCauseAction.onCall in <script> at line number 12 in kb.TestAction.onCall in <script>"
-                    + " at line number 16 in " + sourceName;
+            String expectedMessage =
+                    "NameError: global name 'error_here' is not defined in examples/core/actions_on_call_error.py at line number 8"
+                            + " in kb.ErrorCauseAction.onCall in examples/core/actions_on_call_error.py at line number 12 in kb.TestAction.onCall"
+                            + " in examples/core/actions_on_call_error.py" + " at line number 16 in " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
@@ -328,8 +331,8 @@ public class CoreActionsTest {
             assertEquals(DataTypeKind.STRING, argMeta.get(1).getType().getKind());
             assertTrue(argMeta.get(1).isOptional());
 
-            assertEquals("text1", engine.getOperations().call(String.class, actionName, "text1"));
-            assertEquals("text1text2", engine.getOperations().call(String.class, actionName, "text1", "text2"));
+            assertEquals("text1", engine.getOperations().call(String.class, actionName, Arrays.asList("text1")));
+            assertEquals("text1text2", engine.getOperations().call(String.class, actionName, Arrays.asList("text1", "text2")));
 
             assertFalse(engine.isError());
         } finally {
@@ -350,12 +353,16 @@ public class CoreActionsTest {
 
             assertTrue(argsMeta.get(0).isProvided());
             assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertFalse(argsMeta.get(0).isReadOnly());
             assertTrue(argsMeta.get(1).isProvided());
             assertEquals(0, argsMeta.get(1).getDepends().size());
+            assertFalse(argsMeta.get(1).isReadOnly());
             assertTrue(argsMeta.get(2).isProvided());
             assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertTrue(argsMeta.get(2).isReadOnly());
             assertFalse(argsMeta.get(3).isProvided());
             assertEquals(0, argsMeta.get(3).getDepends().size());
+            assertFalse(argsMeta.get(3).isReadOnly());
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), null, null);
             assertEquals(3, providedArgs.size());
@@ -377,7 +384,7 @@ public class CoreActionsTest {
 
             assertNull(providedArgs.get("actuator4"));
 
-            engine.getOperations().call(actionAdapter.getName(), "B", true, 5, 10);
+            engine.getOperations().call(actionAdapter.getName(), Arrays.asList("B", true, null, 10));
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), null, null);
             assertEquals(3, providedArgs.size());
@@ -390,7 +397,7 @@ public class CoreActionsTest {
             assertNull(providedArgs.get("actuator2").getValueSet());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(5, providedArgs.get("actuator3").getValue());
+            assertEquals(1, providedArgs.get("actuator3").getValue());
             assertNull(providedArgs.get("actuator3").getValueSet());
 
             assertNull(providedArgs.get("actuator4"));
@@ -418,6 +425,7 @@ public class CoreActionsTest {
             assertEquals(0, argsMeta.get(1).getDepends().size());
             assertTrue(argsMeta.get(2).isProvided());
             assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertTrue(argsMeta.get(2).getType().isNullable());
             assertFalse(argsMeta.get(3).isProvided());
             assertEquals(0, argsMeta.get(3).getDepends().size());
             assertTrue(argsMeta.get(4).isProvided());
@@ -454,7 +462,7 @@ public class CoreActionsTest {
             assertEquals(Arrays.asList("X", "Y", "Z", "A"), providedArgs.get("actuator5").getValueSet());
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
-            engine.getOperations().call(actionAdapter.getName(), "B", true, 5, 10, "Y");
+            engine.getOperations().call(actionAdapter.getName(), Arrays.asList("B", true, null, 10, "Y"));
 
             providedArgs =
                     engine.getOperations().provideActionArgs(actionAdapter.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
@@ -476,7 +484,7 @@ public class CoreActionsTest {
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(5, providedArgs.get("actuator3").getValue());
+            assertEquals(1, providedArgs.get("actuator3").getValue());
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
@@ -508,7 +516,31 @@ public class CoreActionsTest {
             List<String> availableSensors =
                     (List<String>) engine.getOperations().provideActionArgs(actionAdapter.getName()).get("sensorName").getValueSet();
 
-            assertTrue(engine.getOperations().call(Boolean.class, "ProvideByAction", availableSensors.get(0)));
+            assertTrue(engine.getOperations().call(Boolean.class, "ProvideByAction", Arrays.asList(availableSensors.get(0))));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsCallListArg() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call_list_arg.py").build();
+        engine.startup();
+
+        try {
+            List<Object> listArg = Arrays.asList("aa", "bb", "cc", 1, 2, 3);
+            Object result = engine.getOperations().call("ListArgAction", Arrays.asList("A", 1, listArg));
+            assertTrue(result instanceof List);
+            assertEquals(listArg, result);
+
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ListArgAction");
+            result = ((ScriptKnowledgeBaseInterpreter) actionAdapter.getKnowledgeBase().getInterpreter())
+                    .eval("sponge.call(\"ListArgAction\", [\"A\", 1, [\"aa\", \"bb\", \"cc\", 1, 2, 3]])");
+            assertTrue(result instanceof List);
+            assertEquals(listArg, result);
 
             assertFalse(engine.isError());
         } finally {

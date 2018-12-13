@@ -50,7 +50,7 @@ public interface EngineOperations {
      * @param args arguments to pass to action.
      * @return result of action called for specified arguments.
      */
-    Object call(String actionName, Object... args);
+    Object call(String actionName, List<Object> args);
 
     /**
      * Calls the registered action with arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
@@ -61,17 +61,44 @@ public interface EngineOperations {
      * @param <T> result type.
      * @return result of action called for specified arguments.
      */
-    <T> T call(Class<T> resultClass, String actionName, Object... args);
+    <T> T call(Class<T> resultClass, String actionName, List<Object> args);
+
+    /**
+     * Calls the registered action with no arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
+     *
+     * @param actionName actionName the action name.
+     * @return result of action called for specified arguments.
+     */
+    Object call(String actionName);
+
+    /**
+     * Calls the registered action with no arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
+     *
+     * @param resultClass result class.
+     * @param actionName actionName the action name.
+     * @param <T> result type.
+     * @return result of action called for specified arguments.
+     */
+    <T> T call(Class<T> resultClass, String actionName);
+
+    /**
+     * Returns the provided values along with value sets of the action arguments.
+     *
+     * @param actionName the action name.
+     * @param argNames the list of argument names that are to be provided.
+     * @param current the map of argument names and their current values passed from a client code.
+     * @return the map of argument names and values (value sets).
+     */
+    Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Returns the provided values along with value sets of the action arguments.
      *
      * @param actionName the action name.
      * @param argNames the list of argument names.
-     * @param current the map of argument names and their current values passed from a client code.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
+    Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames);
 
     /**
      * Returns the provided values along with value sets of the action arguments.

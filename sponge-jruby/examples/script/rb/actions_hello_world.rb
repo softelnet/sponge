@@ -14,5 +14,5 @@ class HelloWorldAction < Action
 end
 
 def onStartup
-    $sponge.logger.info("{}", $sponge.call("HelloWorldAction", "Sponge user"))
+    $sponge.logger.info("{}", $sponge.call("HelloWorldAction", ["Sponge user"]))
 end

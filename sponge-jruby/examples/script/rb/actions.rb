@@ -31,12 +31,12 @@ end
 
 def onStartup
     $sponge.logger.debug("Calling script defined action")
-    scriptActionResult = $sponge.call("EchoAction", 1, "test")
+    scriptActionResult = $sponge.call("EchoAction", [1, "test"])
     $sponge.logger.debug("Action returned: {}", scriptActionResult)
     $sponge.setVariable("scriptActionResult", scriptActionResult)
 
     $sponge.logger.debug("Calling Java defined action")
-    javaActionResult = $sponge.call("PowerEchoAction", 1, "test")
+    javaActionResult = $sponge.call("PowerEchoAction", [1, "test"])
     $sponge.logger.debug("Action returned: {}", javaActionResult)
     $sponge.setVariable("javaActionResult", javaActionResult)
 

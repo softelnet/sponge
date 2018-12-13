@@ -154,7 +154,7 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             String arg1 = "test1";
 
-            Object result = client.call("UpperCase", arg1);
+            Object result = client.call("UpperCase", Arrays.asList(arg1));
 
             assertTrue(result instanceof String);
             assertEquals(arg1.toUpperCase(), result);
@@ -173,7 +173,7 @@ public abstract class BaseRestApiTestTemplate {
             actionMeta.getKnowledgeBase().setVersion(2);
 
             try {
-                client.call("UpperCase", arg1);
+                client.call("UpperCase", Arrays.asList(arg1));
                 fail("Exception expected");
             } finally {
                 engine.clearError();
@@ -185,7 +185,7 @@ public abstract class BaseRestApiTestTemplate {
     public void testCallBinaryArgAndResult() throws IOException {
         try (SpongeRestClient client = createRestClient()) {
             byte[] image = IOUtils.toByteArray(getClass().getResourceAsStream("/image.png"));
-            byte[] resultImage = client.call(byte[].class, "EchoImage", image);
+            byte[] resultImage = client.call(byte[].class, "EchoImage", Arrays.asList(image));
             assertEquals(image.length, resultImage.length);
             assertArrayEquals(image, resultImage);
         }
@@ -234,7 +234,7 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             String arg1 = "íñäöüèąśęćżźółń";
 
-            Object result = client.call("UpperCase", arg1);
+            Object result = client.call("UpperCase", Arrays.asList(arg1));
 
             assertTrue(result instanceof String);
             assertEquals(arg1.toUpperCase(), result);
@@ -252,15 +252,19 @@ public abstract class BaseRestApiTestTemplate {
 
             assertTrue(argsMeta.get(0).isProvided());
             assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertFalse(argsMeta.get(0).isReadOnly());
             assertTrue(argsMeta.get(1).isProvided());
             assertEquals(0, argsMeta.get(1).getDepends().size());
+            assertFalse(argsMeta.get(1).isReadOnly());
             assertTrue(argsMeta.get(2).isProvided());
             assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertTrue(argsMeta.get(2).isReadOnly());
             assertFalse(argsMeta.get(3).isProvided());
             assertEquals(0, argsMeta.get(3).getDepends().size());
+            assertFalse(argsMeta.get(3).isReadOnly());
 
             // Reset the test state.
-            client.call(actionName, "A", false, 1, 1);
+            client.call(actionName, Arrays.asList("A", false, null, 1));
 
             Map<String, ArgValue<?>> providedArgs = client.provideActionArgs(actionName);
             assertEquals(3, providedArgs.size());
@@ -275,13 +279,13 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(1, providedArgs.get("actuator3").getValue());
+            // The value of actuator3 should not be asserted because it is read only in this test. Other tests may change its value.
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
 
-            client.call(actionName, "B", true, 5, 10);
+            client.call(actionName, Arrays.asList("B", true, null, 10));
 
             providedArgs = client.provideActionArgs(actionName);
             assertEquals(3, providedArgs.size());
@@ -296,7 +300,7 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
-            assertEquals(5, providedArgs.get("actuator3").getValue());
+            // The value of actuator3 should not be asserted because it is read only in this test. Other tests may change its value.
             assertNull(providedArgs.get("actuator3").getValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
@@ -312,7 +316,7 @@ public abstract class BaseRestApiTestTemplate {
             String actionName = "SetActuatorDepends";
 
             // Reset the test state.
-            client.call(actionName, "A", false, 1, 1, "X");
+            client.call(actionName, Arrays.asList("A", false, 1, 1, "X"));
 
             List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
@@ -358,7 +362,7 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(Arrays.asList("X", "Y", "Z", "A"), providedArgs.get("actuator5").getValueSet());
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
-            client.call(actionName, "B", true, 5, 10, "Y");
+            client.call(actionName, Arrays.asList("B", true, 5, 10, "Y"));
 
             providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());
@@ -400,7 +404,7 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
             List<String> values = (List<String>) client.provideActionArgs(actionMeta.getName()).get("value").getValueSet();
-            assertEquals("value3", client.call(actionMeta.getName(), values.get(values.size() - 1)));
+            assertEquals("value3", client.call(actionMeta.getName(), Arrays.asList(values.get(values.size() - 1))));
         }
     }
 

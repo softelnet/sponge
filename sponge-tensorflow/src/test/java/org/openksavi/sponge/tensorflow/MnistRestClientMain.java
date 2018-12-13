@@ -16,10 +16,12 @@
 
 package org.openksavi.sponge.tensorflow;
 
+import java.util.Arrays;
+
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 
 public class MnistRestClientMain {
 
@@ -33,7 +35,7 @@ public class MnistRestClientMain {
 
             String imageFile = "examples/tensorflow/mnist/data/1_0.png";
 
-            Number recognizedDigit = client.call(Number.class, "MnistPredict", SpongeUtils.readFileToByteArray(imageFile));
+            Number recognizedDigit = client.call(Number.class, "MnistPredict", Arrays.asList(SpongeUtils.readFileToByteArray(imageFile)));
 
             System.out.println(String.format("Recognized digit for image file %s is %s.", imageFile, recognizedDigit));
         }

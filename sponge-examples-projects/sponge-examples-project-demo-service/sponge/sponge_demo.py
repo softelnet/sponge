@@ -12,8 +12,6 @@ class UpperCase(Action):
         ]
         self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
     def onCall(self, text):
-        self.logger.info("Action {} called", self.name)
-        sponge.getVariable("actionCalled").set(True)
         return text.upper()
 
 class LowerCase(Action):
@@ -23,7 +21,6 @@ class LowerCase(Action):
         self.argsMeta = [ ArgMeta("text", StringType()).displayName("A text that will be changed to lower case") ]
         self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
     def onCall(self, text):
-        self.logger.info("Action {} called", self.name)
         return text.lower()
 
 class ListValues(Action):
@@ -41,6 +38,7 @@ class ProvideByAction(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Same value")
     def onCall(self, value):
         return value
-    def provideArgs(self, names, current):
-        return {"value":ArgValue().valueSet(sponge.call("ListValues"))}
+    def provideArgs(self, names, current, provided):
+        if "value" in names:
+            provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
 

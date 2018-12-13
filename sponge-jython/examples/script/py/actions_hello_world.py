@@ -13,4 +13,4 @@ class HelloWorldAction(Action):
         return "Hello World! Hello {}!".format(name)
 
 def onStartup():
-    sponge.logger.info("{}", sponge.call("HelloWorldAction", "Sponge user"))
+    sponge.logger.info("{}", sponge.call("HelloWorldAction", ["Sponge user"]))

@@ -64,6 +64,10 @@ public class DataType<T> {
         return this;
     }
 
+    public DataType<T> nullable() {
+        return nullable(true);
+    }
+
     public DataType<T> features(Map<String, Object> features) {
         this.features.putAll(features);
         return this;

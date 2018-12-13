@@ -18,6 +18,8 @@ package org.openksavi.sponge.examples.project.restapitestservice;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -27,8 +29,8 @@ import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 
 @net.jcip.annotations.NotThreadSafe
 public class RestApiClientTestServiceTest {
@@ -65,7 +67,7 @@ public class RestApiClientTestServiceTest {
     @Test
     public void testActionUppercase() {
         try (SpongeRestClient client = createRestClient()) {
-            assertEquals("TEXT TO UPPERCASE", client.call("UpperCase", "Text to uppercase"));
+            assertEquals("TEXT TO UPPERCASE", client.call("UpperCase", Arrays.asList("Text to uppercase")));
         }
     }
 }

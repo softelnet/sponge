@@ -16,19 +16,9 @@
 
 package org.openksavi.sponge.rpi.pi4j;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import com.hopding.jrpicam.RPiCamera;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 
-import org.apache.commons.lang3.Validate;
-
-import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
 
 /**
@@ -42,8 +32,6 @@ public class Pi4JPlugin extends JPlugin {
     private GpioController gpio;
 
     private boolean shouldShutdownGpio = false;
-
-    private RPiCamera camera;
 
     /**
      * Creates a new Pi4J plugin.
@@ -95,38 +83,5 @@ public class Pi4JPlugin extends JPlugin {
 
     public void setShouldShutdownGpio(boolean shouldShutdownGpio) {
         this.shouldShutdownGpio = shouldShutdownGpio;
-    }
-
-    public RPiCamera getCamera() {
-        return camera;
-    }
-
-    public void setCamera(RPiCamera camera) {
-        this.camera = camera;
-    }
-
-    public byte[] takePictureAsBytes(String format) {
-        try {
-            return getImageBytes(camera.takeBufferedStill(), format);
-        } catch (IOException | InterruptedException e) {
-            throw SpongeUtils.wrapException("takePictureAsBytes", e);
-        }
-    }
-
-    public byte[] getImageBytes(BufferedImage image, String format) {
-        ByteArrayOutputStream baos = null;
-        byte[] bytes = null;
-        try {
-            baos = new ByteArrayOutputStream();
-            Validate.isTrue(ImageIO.write(image, format, baos), "No appropriate image writer is found");
-            baos.flush();
-            bytes = baos.toByteArray();
-        } catch (IOException e) {
-            throw SpongeUtils.wrapException("getImageBytes", e);
-        } finally {
-            SpongeUtils.close(baos);
-        }
-
-        return bytes;
     }
 }

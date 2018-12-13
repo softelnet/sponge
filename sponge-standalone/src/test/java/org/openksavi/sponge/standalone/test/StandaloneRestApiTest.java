@@ -20,13 +20,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
 @net.jcip.annotations.NotThreadSafe
@@ -45,7 +47,7 @@ public class StandaloneRestApiTest {
 
             try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
                     .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build())) {
-                Object result = client.call("UpperCase", arg1);
+                Object result = client.call("UpperCase", Arrays.asList(arg1));
 
                 assertTrue(result instanceof String);
                 assertEquals(arg1.toUpperCase(), result);

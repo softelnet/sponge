@@ -7,7 +7,7 @@ The {sponge} REST API client for Java simplifies connecting to a remote {sponge}
 try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
         .url("http://localhost:8080/sponge.json/v1")
         .build())) { // <1>
-    String upperCaseText = client.call(String.class, "UpperCase", "text"); // <2>
+    String upperCaseText = client.call(String.class, "UpperCase",  Arrays.asList("text")); // <2>
 }
 ----
 <1> Create a new REST API client.
