@@ -38,7 +38,7 @@ class ProvideByAction(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Same value")
     def onCall(self, value):
         return value
-    def provideArgs(self, names, current, provided):
+    def onProvideArgs(self, names, current, provided):
         if "value" in names:
             provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
 

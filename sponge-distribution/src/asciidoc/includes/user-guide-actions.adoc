@@ -14,7 +14,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`Object onCall(_dynamic arguments_)`
 |The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. The implementation of this method is mandatory.
 
-|`void provideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue> provided)`
+|`void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue> provided)`
 |A callback method that returns the provided argument values along with argument value sets (i.e. possible values of an argument). The provided arguments are explained later in this document.
 |===
 
@@ -190,7 +190,7 @@ class SetActuator(Action):
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
-    def provideArgs(self, names, current, provided):
+    def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
             provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
         if "actuator2" in names:
@@ -215,9 +215,9 @@ A provided argument can be `readOnly`. In that case its value in the `onCall` me
 
 A provided argument can _depend_ on other arguments but only those that are specified earlier. In the example argument `actuator5` depends on `actuator1`. Its possible value set contains the value of `actuator1`.
 
-Arguments configured as provided have to be calculated in the `provideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `value` method sets the provided value and the optional `valueSet` method sets the possible value set.
+Arguments configured as provided have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `value` method sets the provided value and the optional `valueSet` method sets the possible value set.
 
-The parameter `names` in the `provideArgs` is a set of argument names that are to be provided. The `current` parameter is a not null map of argument names and their current values passed from a client code. Here, the current value means the value used in a client code, for example entered by a user into an UI before calling the action.
+The parameter `names` in the `onProvideArgs` is a set of argument names that are to be provided. The `current` parameter is a not null map of argument names and their current values passed from a client code. Here, the current value means the value used in a client code, for example entered by a user into an UI before calling the action.
 
 == Implementing interfaces
 Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.

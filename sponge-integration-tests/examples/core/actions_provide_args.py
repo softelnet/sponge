@@ -25,7 +25,7 @@ class SetActuator(Action):
         sponge.setVariable("actuator2", actuator2)
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
-    def provideArgs(self, names, current, provided):
+    def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
             provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
         if "actuator2" in names:

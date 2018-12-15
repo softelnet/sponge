@@ -60,7 +60,7 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
-    public void provideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided) {
+    public void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided) {
         // The default implementation doesn't modify the provided map.
     }
 }
