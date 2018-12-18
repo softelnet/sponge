@@ -91,7 +91,7 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
         importExpressions.add(getAddImportExpression(KPlugin.class, Plugin.class.getSimpleName()));
         importExpressions.addAll(getStandardImportClasses().stream().map(cls -> getAddImportExpression(cls)).collect(Collectors.toList()));
 
-        // TODO The line below performs very slow in Kotlin
+        // TODO The line below performs very slow in Kotlin.
         eval(result, importExpressions.stream().collect(Collectors.joining(";\n")));
 
         setVariable(result, KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());

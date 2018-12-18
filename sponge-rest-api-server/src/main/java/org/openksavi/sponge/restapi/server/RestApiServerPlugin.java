@@ -229,7 +229,7 @@ public class RestApiServerPlugin extends JPlugin {
         simpleRegistry.put(settings.getSslContextParametersBeanName(),
                 CamelUtils.createSslContextParameters(settings.getSslConfiguration()));
 
-        // TODO Handle many invocations of this method resulting in a growing registry list.
+        // TODO Handle many invocations of this method that cause growing of the registry list.
         ((DefaultCamelContext) camelContext).setRegistry(new CompositeRegistry(Arrays.asList(simpleRegistry, camelContext.getRegistry())));
     }
 

@@ -17,7 +17,11 @@
 package org.openksavi.sponge.rpi.grovepi;
 
 import java.io.IOException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.iot.raspberry.grovepi.GrovePi;
 import org.iot.raspberry.grovepi.pi4j.GrovePi4J;
 
@@ -33,7 +37,14 @@ public class GrovePiPlugin extends JPlugin {
     /** The default name of this plugin. */
     public static final String DEFAULT_PLUGIN_NAME = "grovepi";
 
+    /** https://forum.predix.io/questions/19383/ioexception-error-writing-to-i2cdevice-on-i2cbus-g.html */
+    private static final String I2C_ERROR = "Error writing to I2CDevice on I2CBus '1' ('/dev/i2c-1') at address 0x4. Got '-20001'.";
+
     private GrovePi device;
+
+    private Lock lock = new ReentrantLock(true);
+
+    private int errorRetryCount = 3;
 
     /**
      * Creates a new GrovePi plugin.
@@ -75,5 +86,60 @@ public class GrovePiPlugin extends JPlugin {
 
     public GrovePi getDevice() {
         return device;
+    }
+
+    protected boolean isRetryError(Throwable e) {
+        IOException ioException =
+                (IOException) ExceptionUtils.getThrowableList(e).stream().filter(IOException.class::isInstance).findFirst().orElse(null);
+
+        return ioException != null && I2C_ERROR.equals(ioException.getMessage());
+    }
+
+    public <T> T get(Supplier<T> command) {
+        lock.lock();
+        try {
+            Throwable exception = null;
+
+            for (int i = 0; i < errorRetryCount; i++) {
+                try {
+                    return command.get();
+                } catch (Throwable e) {
+                    exception = e;
+
+                    if (!isRetryError(e)) {
+                        break;
+                    }
+                }
+            }
+
+            throw SpongeUtils.wrapException(GrovePiPlugin.class.getSimpleName(), exception);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void set(Runnable command) {
+        lock.lock();
+        try {
+            Throwable exception = null;
+
+            for (int i = 0; i < errorRetryCount; i++) {
+                try {
+                    command.run();
+
+                    return;
+                } catch (Throwable e) {
+                    exception = e;
+
+                    if (!isRetryError(e)) {
+                        break;
+                    }
+                }
+            }
+
+            throw SpongeUtils.wrapException(GrovePiPlugin.class.getSimpleName(), exception);
+        } finally {
+            lock.unlock();
+        }
     }
 }

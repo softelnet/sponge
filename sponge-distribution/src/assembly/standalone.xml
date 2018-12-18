@@ -164,6 +164,15 @@
                 <include>kb/**</include>
             </includes>
         </fileSet>
+
+        <fileSet>
+            <directory>../sponge-examples-projects/sponge-examples-project-iot-rpi</directory>
+            <outputDirectory>examples/sponge-iot-rpi</outputDirectory>
+            <includes>
+                <include>kb/**</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>../sponge-external/sponge-mpd</directory>
             <outputDirectory></outputDirectory>

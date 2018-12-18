@@ -8,6 +8,7 @@ def onInit():
     sponge.setVariable("actuator2", False)
     sponge.setVariable("actuator3", 1)
     sponge.setVariable("actuator4", 1)
+    sponge.setVariable("actuatorType", "auto")
 
 class SetActuator(Action):
     def onConfigure(self):
@@ -32,6 +33,20 @@ class SetActuator(Action):
             provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
             provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
+
+class SetActuatorValueSetDisplayNames(Action):
+    def onConfigure(self):
+        self.displayName = "Set actuator type"
+        self.description = "Sets the actuator type."
+        self.argsMeta = [
+            ArgMeta("actuatorType", StringType()).displayName("Actuator type").provided(),
+        ]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, actuatorType):
+        sponge.setVariable("actuatorType", actuatorType)
+    def onProvideArgs(self, names, current, provided):
+        if "actuatorType" in names:
+            provided["actuatorType"] = ArgValue().value(sponge.getVariable("actuatorType", None)).valueSet(["auto", "manual"], ["Automatic", "Manual"])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator")["actuator1"].getValue())
