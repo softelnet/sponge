@@ -1038,7 +1038,7 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 
 [[rest-api-demo-service]]
 ==== REST API Demo Service
-The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] example shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
 
 [discrete]
 ===== Running
@@ -1088,6 +1088,153 @@ You may also run this example using the Jetty server started by the maven comman
 cd sponge-examples-projects/sponge-examples-project-demo-service
 mvn jetty:run
 ----
+
+[[iot-rpi-service]]
+==== IoT on Raspberry Pi
+The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-iot-rpi[IoT on Raspberry Pi] project shows how to use {sponge} to read sensors, set actuators, take pictures, send SMS messages, send emails and execute OS commands.
+
+The {sponge} standalone command line application is installed on a Raspberry Pi with a GrovePi extension board. {sponge} provides a synchronous REST API to remotely call actions (that for example change state of actuators). It also sends sensor data (temperature, humidity and light) to an MQTT broker using Apache Camel. The project allows processing sensor data on two levels: locally on the Raspberry Pi edge device by {sponge} (to avoid sending too much data to a management system) or by an external system that connects to the MQTT broker.
+
+===== The hardware
+
+.The sensors and actuators connected to the GrovePi
+[cols="2,3"]
+|===
+|Sensor / actuator |Description
+
+|http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/[DHT sensor] |Connected to the port D2.
+|https://www.seeedstudio.com/Grove-Light-Sensor-p-746.html[Light sensor] |Connected to the port A1.
+|http://wiki.seeedstudio.com/Grove-Rotary_Angle_Sensor/[Rotary angle sensor] |Connected to the port A0.
+|http://wiki.seeedstudio.com/Grove-Sound_Sensor/[Sound sensor] |Connected to the port A2.
+|http://wiki.seeedstudio.com/Grove-Red_LED/[Red LED] |Connected to the port D4.
+|https://www.seeedstudio.com/Grove-Blue-LED-p-1139.html[Blue LED] |Connected to the port D5.
+|http://wiki.seeedstudio.com/Grove-Buzzer/[Buzzer] |Connected to the port D7.
+|http://wiki.seeedstudio.com/Grove-LCD_RGB_Backlight/[LCD RGB Backlight] |Connected to the port I2C-1.
+|===
+
+.Other hardware connected to the Raspberry Pi
+[cols="2,3"]
+|===
+|Name |Description
+
+|HD Night Vision IR camera |
+|Huawei E3131h-2 modem |Connected via a powered USB hub.
+|===
+
+===== Prerequisites
+The Linux distribution used for this example is Raspbian. All command are invoked by the user `pi`. For SMS sending the `gammu` utility should be installed.
+
+[source,bash]
+----
+$ sudo apt-get install gammu
+----
+
+===== Installation
+First you should download and unpack the {sponge} standalone command line application into the `/home/pi/local/app/` directory. The directory `/home/pi/local/app/examples/sponge-iot-rpi` (containing the example knowledge base files) should be copied to `/home/pi/local/` in order to modify the configuration files in a fresh copy.
+
+The preferred installation is as a systemd service.
+
+[source,bash]
+----
+$ sudo vim /lib/systemd/system/sponge_iot.service
+----
+
+[source,bash,subs="verbatim,attributes"]
+----
+[Unit]
+Description=Sponge IoT Service
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/pi/local/app/sponge-{projectVersion}/bin/sponge -c /home/pi/local/sponge-iot-rpi/kb/sponge_iot.xml -Dsponge.home=/home/pi/local/sponge-iot-rpi
+WorkingDirectory=/home/pi/local/sponge-iot-rpi/
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
+----
+
+[source,bash]
+----
+$ sudo chmod 644 /lib/systemd/system/sponge_iot.service
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable sponge_iot.service
+----
+
+===== Configuration
+The `sponge_iot.properties` file allows the configuration of the service name, the phone number that will receive SMS notifications, the email address for notifications, the temperature threshold to trigger sending an SMS notification, the email client settings and the MQTT broker settings.
+
+Note that the provided password file `password.txt` stores sample passwords. For each user the password is: password.
+
+===== REST API Actions
+The subset of {sponge} actions is published via the {sponge} REST API. The published actions have their metadata configured. These actions could be used by the {sponge} mobile client application to manage the IoT device using a GUI.
+
+.The published actions
+[cols="1,4"]
+|===
+|Name |Description
+
+|SetGrovePiMode |Sets the GrovePi mode (`auto` or `manual`). In the `auto` mode the device behavior is automated according to the following rules. The LCD display shows the current temperature and humidity. The red LED is turned on if there is dark in the room. The blue LED light depends on the position of the rotary angle sensor. The `auto` mode is implemented by triggers and correlators. In the `manual` mode the actuators (LCD, LEDs, etc.) can be managed manually via the published actions.
+
+|ManageLcd |Provides management of the LCD properties, i.e. the display text and color.
+
+|ManageSensorActuatorValues |Provides management of the sensor and actuator values. Reads the temperature and humidity sensor, the light sensor, the rotary angle sensor and the sound sensor. Sets the values of the LEDs and the buzzer.
+
+|TakePicture |Takes a picture using the RPI camera.
+
+|SendNotificationEmail |Sends a notification email to the configured recipient.
+
+|SendNotificationSms |Sends a notification SMS to the configured recipient.
+
+|OsGetDiskSpaceInfo |Executes `df -h` and returns the disk space info as a markdown string.
+
+|OsDmesg |Executes `dmesg` and returns the output as a markdown string.
+|===
+
+The REST API uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+
+===== MQTT
+{sponge} publishes the values of temperature, humidity and light sensors to the MQTT topics `sponge/temperature`, `sponge/humidity` and `sponge/light`. The topic prefix can be changed in the configuration.
+
+===== Modifications in the knowledge bases
+After installation, configuration and an initial run you could add your modifications to the knowledge bases. The preferred way to do this is:
+
+* Temporarily stop and disable the {sponge} system service.
+* Run {sponge} in an interactive mode in the current console.
+
+[source,bash,subs="verbatim,attributes"]
+----
+$ cd ~/local/sponge-iot-rpi
+$ sudo ~/local/app/sponge-{projectVersion}/bin/sponge -c ~/local/sponge-iot-rpi/kb/sponge_iot.xml -Dsponge.home=. -i iot
+----
+
+* Open a new shell console to view logs.
+
+[source,bash,subs="verbatim,attributes"]
+----
+$ tail -f ~/local/sponge-iot-rpi/logs/sponge-<current_date>.log
+----
+
+* Open a new shell console to modify and save the knowledge base files.
+* After saving the knowledge base files, reload the knowledge bases in the interactive mode.
+
+[source,bash,subs="verbatim,attributes"]
+----
+ > sponge.reload()
+----
+
+* If the changes require restarting {sponge}, exit the interactive mode (it stops the {sponge} engine) and start {sponge} again.
+
+[source,bash,subs="verbatim,attributes"]
+----
+ > exit
+ $ sudo ~/local/app/sponge-{projectVersion}/bin/sponge -c ~/local/sponge-iot-rpi/kb/sponge_iot.xml -Dsponge.home=. -i iot
+----
+
+* If you modify actions and use the {sponge} mobile client to test the knowledge bases, please remember to refresh the action metadata in the GUI.
+* Repeat these steps until your knowledge bases are finished.
+* Start and enable the {sponge} system service.
 
 === Scripting examples
 The scripting examples show how to use certain {sponge} functionalities in script knowledge bases. See the sources in {sourcesUrl}/sponge-jython/examples/script/py[Python examples], {sourcesUrl}/sponge-jruby/examples/script/rb[Ruby examples], {sourcesUrl}/sponge-groovy/examples/script/groovy[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples/script/js[JavaScript examples].
