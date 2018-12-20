@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.gsmmodem;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
@@ -29,6 +32,8 @@ public class GammuGsmModemPlugin extends JPlugin {
 
     /** The default name of this plugin. */
     public static final String DEFAULT_PLUGIN_NAME = "gsm";
+
+    private Lock lock = new ReentrantLock(true);
 
     /**
      * Creates a new GSM modem plugin.
@@ -47,6 +52,7 @@ public class GammuGsmModemPlugin extends JPlugin {
     }
 
     public void sendSms(String number, String message) {
+        lock.lock();
         try {
             String unicode = canEncodeGsm(message) ? null : "-unicode";
             ProcessInstance process = getEngineOperations().process(ProcessConfiguration.builder("gammu")
@@ -57,6 +63,8 @@ public class GammuGsmModemPlugin extends JPlugin {
             }
         } catch (InterruptedException e) {
             throw SpongeUtils.wrapException(e);
+        } finally {
+            lock.unlock();
         }
     }
 

@@ -67,7 +67,7 @@ class ProvideByAction(Action):
         self.resultMeta = ResultMeta(StringType()).displayName("Same value")
     def onCall(self, value):
         return value
-    def provideArgs(self, names, current, provided):
+    def onProvideArgs(self, names, current, provided):
         if "value" in names:
             provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
 
@@ -148,7 +148,7 @@ class SetActuator(Action):
         sponge.setVariable("actuator2", actuator2)
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
-    def provideArgs(self, names, current, provided):
+    def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
             provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
         if "actuator2" in names:
@@ -174,7 +174,7 @@ class SetActuatorDepends(Action):
         sponge.setVariable("actuator3", actuator3)
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
-    def provideArgs(self, names, current, provided):
+    def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
             provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
         if "actuator2" in names:

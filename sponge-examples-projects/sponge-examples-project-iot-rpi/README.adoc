@@ -1,0 +1,5 @@
+= Sponge IoT on Raspberry Pi demo
+
+This is the source code for the Sponge IoT on Raspberry Pi demo.
+
+The sample passwords for user `admin` and `iot` configured in the `password.txt` are: `password`.

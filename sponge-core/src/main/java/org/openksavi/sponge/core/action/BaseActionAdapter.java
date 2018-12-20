@@ -115,7 +115,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         }
 
         Map<String, ArgValue<?>> provided = new LinkedHashMap<>();
-        getProcessor().provideArgs(finalNames, current, provided);
+        getProcessor().onProvideArgs(finalNames, current, provided);
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(allProvidedArguments.contains(providedArg), "The provided argument '%s' is not specified", providedArg);

@@ -35,6 +35,9 @@ public class ArgValue<T> {
      */
     private List<T> valueSet;
 
+    /** The value set display names. */
+    private List<String> valueSetDisplayNames;
+
     public ArgValue() {
         //
     }
@@ -64,6 +67,14 @@ public class ArgValue<T> {
         this.valueSet = valueSet;
     }
 
+    public List<String> getValueSetDisplayNames() {
+        return valueSetDisplayNames;
+    }
+
+    public void setValueSetDisplayNames(List<String> valueSetDisplayNames) {
+        this.valueSetDisplayNames = valueSetDisplayNames;
+    }
+
     public ArgValue<T> value(T value) {
         setValue(value);
         return this;
@@ -71,6 +82,12 @@ public class ArgValue<T> {
 
     public ArgValue<T> valueSet(List<T> valueSet) {
         setValueSet(valueSet);
+        return this;
+    }
+
+    public ArgValue<T> valueSet(List<T> valueSet, List<String> displayNames) {
+        setValueSet(valueSet);
+        setValueSetDisplayNames(displayNames);
         return this;
     }
 }

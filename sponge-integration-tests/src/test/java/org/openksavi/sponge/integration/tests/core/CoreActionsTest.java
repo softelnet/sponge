@@ -364,7 +364,7 @@ public class CoreActionsTest {
             assertEquals(0, argsMeta.get(3).getDepends().size());
             assertFalse(argsMeta.get(3).isReadOnly());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), null, null);
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
             assertEquals(3, providedArgs.size());
 
             assertNotNull(providedArgs.get("actuator1"));
@@ -386,7 +386,7 @@ public class CoreActionsTest {
 
             engine.getOperations().call(actionAdapter.getName(), Arrays.asList("B", true, null, 10));
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(), null, null);
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
@@ -401,6 +401,49 @@ public class CoreActionsTest {
             assertNull(providedArgs.get("actuator3").getValueSet());
 
             assertNull(providedArgs.get("actuator4"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsProvideArgsValueSetDisplayNames() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorValueSetDisplayNames");
+            List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
+            Map<String, ArgValue<?>> providedArgs;
+
+            assertTrue(argsMeta.get(0).isProvided());
+            assertEquals(0, argsMeta.get(0).getDepends().size());
+            assertFalse(argsMeta.get(0).isReadOnly());
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
+            assertEquals(1, providedArgs.size());
+
+            ArgValue<?> argValue = providedArgs.get("actuatorType");
+            assertNotNull(argValue);
+            assertEquals("auto", argValue.getValue());
+            assertEquals(Arrays.asList("auto", "manual"), argValue.getValueSet());
+            assertEquals(Arrays.asList("Automatic", "Manual"), argValue.getValueSetDisplayNames());
+            assertTrue(argValue.isValuePresent());
+
+            engine.getOperations().call(actionAdapter.getName(), Arrays.asList("manual"));
+
+            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
+            assertEquals(1, providedArgs.size());
+
+            argValue = providedArgs.get("actuatorType");
+            assertNotNull(argValue);
+            assertEquals("manual", argValue.getValue());
+            assertEquals(Arrays.asList("auto", "manual"), argValue.getValueSet());
+            assertEquals(Arrays.asList("Automatic", "Manual"), argValue.getValueSetDisplayNames());
+            assertTrue(argValue.isValuePresent());
 
             assertFalse(engine.isError());
         } finally {
