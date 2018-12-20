@@ -22,6 +22,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new validation that an event name must not contain white spaces nor colons.
 * The default value of the `prettyPrint` option in the REST API is now `false`.
 * Added a context and listeners to the REST API client that provide access to JSON texts in a client code.
+* Added a critical section in event handling by a correlator.
 * Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
 * Added the `-D` option in the standalone command-line application for passing Java system properties.

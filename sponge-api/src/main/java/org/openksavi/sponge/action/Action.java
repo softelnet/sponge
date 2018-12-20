@@ -34,5 +34,5 @@ public interface Action extends Processor<ActionAdapter>, ActionOperations {
      * @param current the not null map of argument names and their current values passed from a client code.
      * @param provided the initially empty map of argument names and values (value sets) that is to be set up in this callback method.
      */
-    void provideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided);
+    void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided);
 }

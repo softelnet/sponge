@@ -1,3 +1,5 @@
 = Sponge Demo service
 
 This is the source code for the Sponge Demo service.
+
+The sample password for user `admin` configured in the `password.txt` is: `password`.

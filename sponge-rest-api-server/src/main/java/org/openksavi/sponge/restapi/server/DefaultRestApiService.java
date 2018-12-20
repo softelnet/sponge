@@ -237,8 +237,8 @@ public class DefaultRestApiService implements RestApiService {
     protected ActionAdapter getActionAdapterForRequest(String actionName, Integer version, User user) {
         ActionAdapter actionAdapter = getEngine().getActionManager().getActionAdapter(actionName);
 
-        Validate.notNull(actionAdapter, "The action %s doesn't exist", actionAdapter.getName());
-        Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", actionAdapter.getName());
+        Validate.notNull(actionAdapter, "The action %s doesn't exist", actionName);
+        Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", actionName);
 
         if (version != null && !Objects.equals(version, actionAdapter.getKnowledgeBase().getVersion())) {
             throw new RestApiIncorrectKnowledgeBaseVersionServerException(

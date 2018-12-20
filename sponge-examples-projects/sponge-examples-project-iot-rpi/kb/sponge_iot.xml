@@ -4,19 +4,30 @@
 
     <properties>
         <property name="password.file">${sponge.configDir}/password.txt</property>
-
-        <!-- Due to the problem https://github.com/Pi4J/pi4j/issues/319, the dynamic linking option is turned on, where Pi4J is dynamically linked 
-            to WiringPi rather than the default static linking. -->
-        <property name="pi4j.linking" system="true">dynamic</property>
-
-        <!-- TODO Use this property -->
         <property name="camera.dir">${sponge.home}/data/camera</property>
+        <property name="pictureFormat" variable="true">jpg</property>
     </properties>
 
     <knowledgeBases>
+        <knowledgeBase name="grovepi" displayName="Grove Pi">
+            <file>sponge_iot_grovepi.py</file>
+            <file>sponge_iot_grovepi_device.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="email" displayName="Email">
+            <file>sponge_iot_email.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="sms" displayName="SMS">
+            <file>sponge_iot_sms.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="camera" displayName="Camera">
+            <file>sponge_iot_camera.py</file>
+        </knowledgeBase>
         <knowledgeBase name="iot" displayName="IoT">
             <file>sponge_iot.py</file>
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="os" displayName="OS">
+            <file>sponge_iot_os.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
@@ -32,8 +43,6 @@
                 <spring camel="true" />
             </configuration>
         </plugin>
-
-<!--         <plugin name="pi" class="org.openksavi.sponge.rpi.pi4j.Pi4JPlugin" /> -->
 
         <plugin name="grovepi" class="org.openksavi.sponge.rpi.grovepi.GrovePiPlugin" />
 
