@@ -99,8 +99,8 @@
                     </httpConnector>
                     <systemProperties>
                         <systemProperty>
-                            <name>mnist.home</name>
-                            <value>../../sponge-tensorflow/examples/tensorflow/mnist</value>
+                            <name>digits.home</name>
+                            <value>../../sponge-tensorflow/examples/tensorflow/digits</value>
                         </systemProperty>
                     </systemProperties>
                 </configuration>

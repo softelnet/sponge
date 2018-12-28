@@ -118,13 +118,10 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
 
     @Override
     public final void processEvent(Event event) {
-        lock.lock();
         try {
             onEvent(event);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(getProcessor(), e);
-        } finally {
-            lock.unlock();
         }
     }
 

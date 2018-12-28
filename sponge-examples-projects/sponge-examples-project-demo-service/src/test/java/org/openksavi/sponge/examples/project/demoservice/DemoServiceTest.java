@@ -69,10 +69,10 @@ public class DemoServiceTest {
     @Test
     public void testRestCallPredict() {
         byte[] imageData = SpongeUtils.readFileToByteArray(
-                Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), "data/5_0.png").toString());
+                Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_DIGITS_HOME), "data/5_0.png").toString());
 
         try (SpongeRestClient client = createRestClient()) {
-            assertEquals(5, createRestClient().call(Number.class, "MnistPredict", Arrays.asList(imageData)));
+            assertEquals(5, createRestClient().call(Number.class, "DigitsPredict", Arrays.asList(imageData)));
         }
     }
 }

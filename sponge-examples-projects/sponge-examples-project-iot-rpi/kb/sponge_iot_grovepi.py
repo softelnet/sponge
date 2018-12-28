@@ -97,7 +97,7 @@ class ManageSensorActuatorValues(Action):
             ArgMeta("rotarySensor", NumberType().nullable()).displayName(u"Rotary sensor").provided().readOnly(),
             ArgMeta("soundSensor", NumberType().nullable()).displayName(u"Sound sensor").provided().readOnly(),
             ArgMeta("redLed", BooleanType()).displayName("Red LED").provided(),
-            ArgMeta("blueLed", IntegerType()).displayName("Blue LED").provided(),
+            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).displayName("Blue LED").provided(),
             ArgMeta("buzzer", BooleanType()).displayName("Buzzer").provided()
         ]
         self.resultMeta = ResultMeta(VoidType())

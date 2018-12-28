@@ -1,6 +1,6 @@
 """
 Sponge Knowledge base
-MNIST common library 
+Digits recognition common library 
 """
 
 def createImageArgMeta():

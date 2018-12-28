@@ -23,7 +23,7 @@ import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 
-public class MnistRestClientMain {
+public class DigitsRestClientMain {
 
     /**
      * Main method.
@@ -33,9 +33,9 @@ public class MnistRestClientMain {
     public static void main(String... args) {
         try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().build())) {
 
-            String imageFile = "examples/tensorflow/mnist/data/1_0.png";
+            String imageFile = "examples/tensorflow/digits/data/1_0.png";
 
-            Number recognizedDigit = client.call(Number.class, "MnistPredict", Arrays.asList(SpongeUtils.readFileToByteArray(imageFile)));
+            Number recognizedDigit = client.call(Number.class, "DigitsPredict", Arrays.asList(SpongeUtils.readFileToByteArray(imageFile)));
 
             System.out.println(String.format("Recognized digit for image file %s is %s.", imageFile, recognizedDigit));
         }

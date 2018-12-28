@@ -3,10 +3,10 @@
 
     <knowledgeBases>
         <knowledgeBase name="digits" displayName="Digits">
-            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
-            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_predict.py</file>
-            <file>classpath:org/openksavi/sponge/tensorflow/mnist/mnist_library_admin.py</file>
-            <file>mnist_rest_server.py</file>
+            <file>${sponge.configDir}/actions/digits_common.py</file>
+            <file>${sponge.configDir}/actions/digits_predict.py</file>
+            <file>${sponge.configDir}/actions/digits_learn.py</file>
+            <file>digits_rest_server.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" displayName="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
@@ -17,19 +17,18 @@
     <plugins>
         <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
             <configuration>
-                <facadeInterface>org.openksavi.sponge.tensorflow.mnist.MnistService</facadeInterface>
+                <facadeInterface>org.openksavi.sponge.tensorflow.ImageClassifierService</facadeInterface>
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
-                    <argument>mnist_service.py</argument>
-                    <argument>--modelfile=${sponge.configDir}/data/mnist_model.h5</argument>
-                    <argument>--tempdir=${sponge.configDir}/_tmp_</argument>
+                    <argument>digits_service.py</argument>
+                    <argument>--modelfile=${sponge.configDir}/data/digits_model.h5</argument>
+                    <argument>--workspacedir=${sponge.configDir}/_workspace_</argument>
                     <workingDir>${sponge.configDir}/python</workingDir>
-                    <waitForPositiveLineRegexp>MNIST service has started.</waitForPositiveLineRegexp>
-                    <waitForNegativeLineRegexp>MNIST service has failed to start.</waitForNegativeLineRegexp>
+                    <waitForPositiveLineRegexp>The service has started.</waitForPositiveLineRegexp>
+                    <waitForNegativeLineRegexp>The service has failed to start.</waitForNegativeLineRegexp>
                     <outputRedirect>CONSUMER</outputRedirect>
                     <errorRedirect>CONSUMER</errorRedirect>
                 </pythonScript>
-                <generateAuthToken>true</generateAuthToken>
             </configuration>
         </plugin>
         <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">

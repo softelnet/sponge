@@ -45,5 +45,56 @@ class ViewDoodle(Action):
             doodles = sponge.call("ListDoodles")
             provided["image"] = ArgValue().value(doodles[len(doodles)-1] if doodles else None).valueSet(doodles)
 
+class ConsoleOutput(Action):
+    def onConfigure(self):
+        self.displayName = "Console output"
+        self.description = "Returns the console output."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(StringType().format("console")).displayName("Console output")
+    def onCall(self):
+        result = ""
+        for i in range(30):
+            result += str(i) + ". Row " + str(i) + " - 120\n"
+        return result
+
+class MarkdownText(Action):
+    def onConfigure(self):
+        self.displayName = "Markdown text"
+        self.description = "Returns the markdown text."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(StringType().format("markdown")).displayName("Markdown text")
+    def onCall(self):
+        return """Heading
+=======
+
+## Sub-heading
+
+Paragraphs are separated by a blank line.
+
+Two spaces at the end of a line produces a line break.
+
+Text attributes _italic_, **bold**, `monospace`.
+
+Horizontal rule:
+
+---
+
+Bullet list:
+
+  * apples
+  * oranges
+  * pears
+
+Numbered list:
+
+  1. wash
+  2. rinse
+  3. repeat
+
+```
+source code example
+```
+"""
+
 def onStartup():
     sponge.logger.info(str(sponge.call("ListDoodles")))

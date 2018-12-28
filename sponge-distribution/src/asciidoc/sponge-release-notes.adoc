@@ -23,10 +23,12 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * The default value of the `prettyPrint` option in the REST API is now `false`.
 * Added a context and listeners to the REST API client that provide access to JSON texts in a client code.
 * Added a critical section in event handling by a correlator.
+* Added a new property to correlators: `instanceSynchronous`.
 * Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
 * Added the `-D` option in the standalone command-line application for passing Java system properties.
 * Removed some of the Camel components from the standalone command-line application to reduce the overall package size.
+* Cleanup in the Digits recognition example.
 * Libraries upgrade.
 
 [discrete]

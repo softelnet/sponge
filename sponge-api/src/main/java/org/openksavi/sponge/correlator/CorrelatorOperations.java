@@ -36,4 +36,20 @@ public interface CorrelatorOperations extends EventSetProcessorOperations {
      * @return the maximum number of concurrent instances allowed for this correlator.
      */
     int getMaxInstances();
+
+    /**
+     * Sets the instance synchronous flag.
+     *
+     * @param instanceSynchronous the instance synchronous flag.
+     */
+    void setInstanceSynchronous(boolean instanceSynchronous);
+
+    /**
+     * Returns the instance synchronous flag. If {@code true} (the default value), one instance of the correlator will process only one
+     * event at a time. If {@code false}, one instance of the correlator will process many events concurrently. In that case the correlator has to be
+     * thread safe.
+     *
+     * @return the instance synchronous flag.
+     */
+    boolean isInstanceSynchronous();
 }

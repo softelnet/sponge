@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.correlator;
 
+import java.util.concurrent.locks.Lock;
+
 import org.openksavi.sponge.core.BaseEventSetProcessor;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
@@ -31,6 +33,16 @@ public abstract class BaseCorrelator extends BaseEventSetProcessor<CorrelatorAda
     @Override
     public final int getMaxInstances() {
         return getAdapter().getMaxInstances();
+    }
+
+    @Override
+    public final boolean isInstanceSynchronous() {
+        return getAdapter().isInstanceSynchronous();
+    }
+
+    @Override
+    public final void setInstanceSynchronous(boolean instanceSynchronous) {
+        getAdapter().setInstanceSynchronous(instanceSynchronous);
     }
 
     @Override
@@ -51,5 +63,14 @@ public abstract class BaseCorrelator extends BaseEventSetProcessor<CorrelatorAda
     @Override
     public final CorrelatorAdapter createAdapter() {
         return new BaseCorrelatorAdapter(new BaseCorrelatorDefinition());
+    }
+
+    /**
+     * Returns the lock that can be used to synchronize threads when the instance synchronous flag is set to {@code false}.
+     *
+     * @return the lock.
+     */
+    public final Lock getLock() {
+        return ((BaseCorrelatorAdapter) getAdapter()).getLock();
     }
 }

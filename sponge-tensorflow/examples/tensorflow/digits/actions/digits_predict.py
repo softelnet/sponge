@@ -1,17 +1,17 @@
 """
 Sponge Knowledge base
-MNIST library
+Digits recognition library
 """
 
-class MnistPredict(Action):
+class DigitsPredict(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit"
-        self.description = "Tries to recognize a handwritten digit"
+        self.description = "Recognizes a handwritten digit"
         self.argsMeta = [createImageArgMeta()]
         self.resultMeta = ResultMeta(IntegerType()).displayName("Recognized digit")
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
-        prediction = predictions.index(max(predictions))
+        prediction = max(predictions, key=predictions.get)
         probability = predictions[prediction]
 
         # Handle the optional predictionThreshold Sponge variable.
@@ -21,16 +21,16 @@ class MnistPredict(Action):
             return None
         else:
             self.logger.debug("Prediction: {}, probability: {}", prediction, probability)
-            return prediction
+            return int(prediction)
 
-class MnistPredictDetailed(Action):
+class DigitsPredictProbabilities(Action):
     def onConfigure(self):
         self.displayName = "Recognize a digit (probabilities)"
-        self.description = "Tries to recognize a handwritten digit returning a probabilities list"
+        self.description = "Recognizes a handwritten digit returning probabilities"
         self.argsMeta = [createImageArgMeta()]
-        self.resultMeta = ResultMeta(ListType(NumberType())).displayName("Digit probabilities")
+        self.resultMeta = ResultMeta(MapType(StringType(), NumberType())).displayName("Digit probabilities")
     def onCall(self, image):
         return py4j.facade.predict(image)
 
-def mnistServiceInit(py4jPlugin):
+def imageClassifierServiceInit(py4jPlugin):
     SpongeUtils.awaitUntil(lambda: py4jPlugin.facade.isReady())

@@ -85,8 +85,9 @@ public class DemoServiceLoadTest {
     }
 
     protected byte[] getImageData(int digit) {
-        return SpongeUtils.readFileToByteArray(Paths
-                .get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_MNIST_HOME), String.format("data/%d_0.png", digit)).toString());
+        return SpongeUtils.readFileToByteArray(
+                Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_DIGITS_HOME), String.format("data/%d_0.png", digit))
+                        .toString());
     }
 
     protected Callable<Void> createTestCallable(int threadNumber, List<Pair<Integer, byte[]>> images, SpongeRestClient client) {
@@ -94,7 +95,7 @@ public class DemoServiceLoadTest {
             for (int i = 0; i < TEST_COUNT; i++) {
                 logger.info("Iteration ({}): {}/{}", threadNumber, i + 1, TEST_COUNT);
                 images.forEach(digitData -> assertEquals(digitData.getKey(),
-                        client.call(Number.class, "MnistPredict", Arrays.asList(digitData.getValue()))));
+                        client.call(Number.class, "DigitsPredict", Arrays.asList(digitData.getValue()))));
             }
 
             return null;

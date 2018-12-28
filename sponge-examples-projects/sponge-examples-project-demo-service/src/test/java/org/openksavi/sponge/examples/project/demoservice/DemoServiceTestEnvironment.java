@@ -24,7 +24,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class DemoServiceTestEnvironment {
 
-    public static final String PROPERTY_MNIST_HOME = "mnist.home";
+    public static final String PROPERTY_DIGITS_HOME = "digits.home";
 
     public static final String PROPERTY_PASSWORD_FILE = "password.file";
 
@@ -32,12 +32,12 @@ public class DemoServiceTestEnvironment {
 
     public void init() {
         System.setProperty(ConfigurationConstants.PROP_HOME, ".");
-        System.setProperty(PROPERTY_MNIST_HOME, "../../sponge-tensorflow/examples/tensorflow/mnist");
+        System.setProperty(PROPERTY_DIGITS_HOME, "../../sponge-tensorflow/examples/tensorflow/digits");
         System.setProperty(PROPERTY_PASSWORD_FILE, "password.txt");
     }
 
     public void clear() {
-        System.clearProperty(PROPERTY_MNIST_HOME);
+        System.clearProperty(PROPERTY_DIGITS_HOME);
         System.clearProperty(PROPERTY_PASSWORD_FILE);
     }
 
