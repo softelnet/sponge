@@ -89,16 +89,19 @@ Metadata for arguments and a result support <<types, types>>.
 |An optional argument description.
 
 |`optional`
-|A not mandatory flag specifying if this argument is optional (defaults to `false`). Optional arguments can be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
+|A not mandatory flag specifying if this argument is optional. Defaults to `false`. Optional arguments can be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
 
 |`provided`
-|A flag specifying if this argument is _provided_ (defaults to `false`).
+|A flag specifying if this argument is _provided_. Defaults to `false`.
 
 |`depends`
-|A list of attribute names that this attribute depends on. Available only if an attribute is _provided_.
+|A list of attribute names that this attribute depends on. Available only if the attribute is _provided_.
 
 |`readOnly`
-|A flag specifying if this argument is read only. Available only if an attribute is _provided_.
+|A flag specifying if this argument is read only. Defaults to `false`. Available only if the attribute is _provided_.
+
+|`overwrite`
+|A flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to `false`. Available only if the attribute is _provided_. This flag should be handled by a client code.
 |===
 
 .Result metadata properties
@@ -217,7 +220,7 @@ A provided argument can _depend_ on other arguments but only those that are spec
 
 Arguments configured as provided have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `value` method sets the provided value and the optional `valueSet` method sets the possible value set.
 
-The parameter `names` in the `onProvideArgs` is a set of argument names that are to be provided. The `current` parameter is a not null map of argument names and their current values passed from a client code. Here, the current value means the value used in a client code, for example entered by a user into an UI before calling the action.
+The parameter `names` in the `onProvideArgs` is a set of argument names that are to be provided. The `current` parameter is a not null map of argument names and their current values passed from a client code. The current value means the value used in a client code, for example entered by a user into an UI before calling the action. This map is required to contain values of those arguments that the arguments specified in the `names` depend on.
 
 == Implementing interfaces
 Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.

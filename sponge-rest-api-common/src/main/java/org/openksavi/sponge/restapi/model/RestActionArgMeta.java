@@ -43,12 +43,14 @@ public class RestActionArgMeta {
 
     private boolean readOnly;
 
+    private boolean overwrite;
+
     public RestActionArgMeta() {
         //
     }
 
     public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional, boolean provided,
-            List<String> depends, boolean readOnly) {
+            List<String> depends, boolean readOnly, boolean overwrite) {
         this.name = name;
         this.type = type;
         this.displayName = displayName;
@@ -57,6 +59,7 @@ public class RestActionArgMeta {
         this.provided = provided;
         this.depends = depends;
         this.readOnly = readOnly;
+        this.overwrite = overwrite;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -129,5 +132,14 @@ public class RestActionArgMeta {
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    @ApiModelProperty(value = "The overwrite flag", required = false)
+    public boolean isOverwrite() {
+        return overwrite;
+    }
+
+    public void setOverwrite(boolean overwrite) {
+        this.overwrite = overwrite;
     }
 }

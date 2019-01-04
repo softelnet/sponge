@@ -108,7 +108,7 @@ class DigitsModel:
         self.evaluate(self.model, self.x_test, self.y_test)
 
     def _preprocess_image_data(self, image_data):
-        image = preprocessing.image.load_img(BytesIO(image_data), grayscale=True, target_size=(self.img_rows, self.img_cols))
+        image = preprocessing.image.load_img(BytesIO(image_data), color_mode = 'grayscale', target_size=(self.img_rows, self.img_cols))
         image_tensor = preprocessing.image.img_to_array(image)
         image_tensor /= 255.0
         image_tensor = np.expand_dims(image_tensor, axis=0)

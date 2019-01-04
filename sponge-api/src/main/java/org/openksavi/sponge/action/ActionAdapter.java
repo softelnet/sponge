@@ -39,7 +39,8 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
      * Returns the provided values along with value sets of the action arguments.
      *
      * @param names the list of argument names.
-     * @param current the map of argument names and their current values passed from a client code.
+     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
+     *        those arguments that the arguments specified in the {@code names} depend on.
      * @return the map of argument names and values (value sets).
      */
     Map<String, ArgValue<?>> provideArgs(List<String> names, Map<String, Object> current);

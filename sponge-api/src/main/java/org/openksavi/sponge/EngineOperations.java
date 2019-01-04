@@ -86,7 +86,8 @@ public interface EngineOperations {
      *
      * @param actionName the action name.
      * @param argNames the list of argument names that are to be provided.
-     * @param current the map of argument names and their current values passed from a client code.
+     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
+     *        those arguments that the arguments specified in the {@code names} depend on.
      * @return the map of argument names and values (value sets).
      */
     Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);

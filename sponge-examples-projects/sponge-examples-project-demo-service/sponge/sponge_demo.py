@@ -42,3 +42,14 @@ class ProvideByAction(Action):
         if "value" in names:
             provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
 
+class ChooseColor(Action):
+    def onConfigure(self):
+        self.displayName = "Choose a color"
+        self.description = "Shows a color argument."
+        self.argsMeta = [
+            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
+                .displayName("Color").description("The color.")
+        ]
+        self.resultMeta = ResultMeta(StringType())
+    def onCall(self, color):
+        return "The chosen color is " + color
