@@ -25,6 +25,8 @@ public class BaseCorrelatorDefinition extends BaseEventSetProcessorDefinition im
 
     private int maxInstances = UNBOUND_MAX_INSTANCES;
 
+    private boolean instanceSynchronous = true;
+
     @Override
     public void setMaxInstances(int maxInstances) {
         this.maxInstances = maxInstances;
@@ -37,5 +39,15 @@ public class BaseCorrelatorDefinition extends BaseEventSetProcessorDefinition im
 
     public boolean isMaxInstancesUnbound() {
         return maxInstances == UNBOUND_MAX_INSTANCES;
+    }
+
+    @Override
+    public boolean isInstanceSynchronous() {
+        return instanceSynchronous;
+    }
+
+    @Override
+    public void setInstanceSynchronous(boolean instanceSynchronous) {
+        this.instanceSynchronous = instanceSynchronous;
     }
 }

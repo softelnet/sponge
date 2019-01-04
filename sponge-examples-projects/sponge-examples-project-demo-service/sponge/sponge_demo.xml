@@ -4,7 +4,7 @@
 
     <properties>
         <!-- Set these properties via system properties in a servlet container environment! -->
-        <!-- <property name="mnist.home">mnist</property> -->
+        <!-- <property name="digits.home">digits</property> -->
         <!-- <property name="password.file">password.txt</property> -->
 
         <!-- The optional prediction probability threshold. -->
@@ -21,13 +21,13 @@
             <file>sponge_demo_plus.py</file>
         </knowledgeBase>
         <knowledgeBase name="digits" displayName="Digits">
-            <file>classpath*:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
-            <file>classpath*:org/openksavi/sponge/tensorflow/mnist/mnist_library_predict.py</file>
-            <file>mnist_demo.py</file>
+            <file>${digits.home}/actions/digits_common.py</file>
+            <file>${digits.home}/actions/digits_predict.py</file>
+            <file>sponge_demo_digits.py</file>
         </knowledgeBase>
-        <knowledgeBase name="digitsAdmin" displayName="Digits admin">
-            <file>classpath*:org/openksavi/sponge/tensorflow/mnist/mnist_library_common.py</file>
-            <file>classpath*:org/openksavi/sponge/tensorflow/mnist/mnist_library_admin.py</file>
+        <knowledgeBase name="digitsLearn" displayName="Digits learn">
+            <file>${digits.home}/actions/digits_common.py</file>
+            <file>${digits.home}/actions/digits_learn.py</file>
         </knowledgeBase>
         <knowledgeBase name="engine" displayName="Engine">
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
@@ -43,16 +43,16 @@
     <plugins>
         <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
             <configuration>
-                <facadeInterface>org.openksavi.sponge.tensorflow.mnist.MnistService</facadeInterface>
+                <facadeInterface>org.openksavi.sponge.tensorflow.ImageClassifierService</facadeInterface>
                 <pythonScript>
                     <executable>${user.home}/tensorflow/bin/python3</executable>
-                    <argument>mnist_service.py</argument>
+                    <argument>digits_service.py</argument>
                     <!-- The model file and the temporary directory are specified relative to the Python workingDir. -->
-                    <argument>--modelfile=../data/mnist_model.h5</argument>
-                    <argument>--tempdir=../_tmp_</argument>
-                    <workingDir>${mnist.home}/python</workingDir>
-                    <waitForPositiveLineRegexp>MNIST service has started.</waitForPositiveLineRegexp>
-                    <waitForNegativeLineRegexp>MNIST service has failed to start.</waitForNegativeLineRegexp>
+                    <argument>--modelfile=../data/digits_model.h5</argument>
+                    <argument>--workspacedir=../_workspace_</argument>
+                    <workingDir>${digits.home}/python</workingDir>
+                    <waitForPositiveLineRegexp>The service has started.</waitForPositiveLineRegexp>
+                    <waitForNegativeLineRegexp>The service has failed to start.</waitForNegativeLineRegexp>
                     <outputRedirect>CONSUMER</outputRedirect>
                     <errorRedirect>CONSUMER</errorRedirect>
                 </pythonScript>

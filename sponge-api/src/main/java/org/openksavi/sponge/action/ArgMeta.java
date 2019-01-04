@@ -40,17 +40,25 @@ public class ArgMeta<T extends DataType> {
     /** The argument description. */
     private String description;
 
-    /** The flag specifying if this argument is optional. */
+    /** The flag specifying if this argument is optional. Defaults to {@code false}. */
     private boolean optional = false;
 
-    /** The flag specifying if this argument is provided. */
+    /** The flag specifying if this argument is provided. Defaults to {@code false}. */
     private boolean provided = false;
 
-    /** The list of attribute names that this attribute depends on. Available only if an attribute is provided. */
+    /** The list of attribute names that this attribute depends on. Available only if the attribute is provided. */
     private List<String> depends = new ArrayList<>();
 
-    /** The flag specifying if this argument is read only. Available only if an attribute is provided. */
+    /**
+     * The flag specifying if this argument is read only. Defaults to {@code false}. Available only if the attribute is provided.
+     */
     private boolean readOnly = false;
+
+    /**
+     * The flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to
+     * {@code false}. Available only if the attribute is provided. This flag should be handled by a client code.
+     */
+    private boolean overwrite = false;
 
     public ArgMeta(String name, T type) {
         this.name = name;
@@ -84,6 +92,11 @@ public class ArgMeta<T extends DataType> {
 
     public ArgMeta<T> readOnly() {
         this.readOnly = true;
+        return this;
+    }
+
+    public ArgMeta<T> overwrite() {
+        this.overwrite = true;
         return this;
     }
 
@@ -153,5 +166,13 @@ public class ArgMeta<T extends DataType> {
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    public boolean isOverwrite() {
+        return overwrite;
+    }
+
+    public void setOverwrite(boolean overwrite) {
+        this.overwrite = overwrite;
     }
 }

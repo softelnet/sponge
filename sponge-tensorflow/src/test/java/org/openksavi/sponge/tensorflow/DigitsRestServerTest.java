@@ -20,10 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -49,9 +46,9 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { MnistRestServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { DigitsRestServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class MnistRestServerTest {
+public class DigitsRestServerTest {
 
     protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
 
@@ -64,7 +61,7 @@ public class MnistRestServerTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .config("examples/tensorflow/mnist/mnist_rest_server_test.xml").build();
+                    .config("examples/tensorflow/digits/digits_rest_server_test.xml").build();
         }
 
         @Bean
@@ -84,13 +81,13 @@ public class MnistRestServerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testRestCallPredict() {
-        byte[] imageData = SpongeUtils.readFileToByteArray("examples/tensorflow/mnist/data/5_0.png");
+        byte[] imageData = SpongeUtils.readFileToByteArray("examples/tensorflow/digits/data/5_0.png");
 
         try (SpongeRestClient client = createRestApiClient()) {
-            List<Number> result = client.call(List.class, "MnistPredictDetailed", Arrays.asList(imageData));
-            List<Double> predictions = result.stream().map(e -> e.doubleValue()).collect(Collectors.toList());
+            Map<String, Number> result = client.call(Map.class, "DigitsPredictProbabilities", Arrays.asList(imageData));
+            int prediction = Integer.parseInt(result.entrySet().stream()
+                    .reduce((i, j) -> i.getValue().doubleValue() >= j.getValue().doubleValue() ? i : j).map(Map.Entry::getKey).get());
 
-            int prediction = IntStream.range(0, predictions.size()).boxed().max(Comparator.comparingDouble(predictions::get)).get();
             assertEquals(5, prediction);
             assertFalse(engine.isError());
         }

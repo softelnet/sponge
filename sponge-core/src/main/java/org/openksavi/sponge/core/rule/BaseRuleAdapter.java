@@ -46,11 +46,17 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     }
 
     /**
-     * Processes the incoming event. Must be called inside a locked critical section.
+     * Processes the incoming event synchronously.
      */
     @Override
     public void onEvent(Event event) {
-        runtime.onEvent(event);
+        lock.lock();
+
+        try {
+            runtime.onEvent(event);
+        } finally {
+            lock.unlock();
+        }
     }
 
     public SpongeException createValidationException(String text) {

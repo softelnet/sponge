@@ -1,9 +1,9 @@
 #
-# Run: python3 -i mnist_model_create.py
+# Run: python3 -i digits_model_create.py
 #
 
 import matplotlib.pyplot as plt
-import mnist_model as m
+import digits_model as m
 
 def plot_loss(history):
     loss = history.history['loss']
@@ -39,8 +39,11 @@ def plot_acc(history):
 
     plt.show(block=False)
 
-model = m.MnistModel("../data/mnist_model.h5")
-model.load(True)
-plot_acc(model.history)
-plot_loss(model.history)
+if __name__ == '__main__':
+    model = m.DigitsModel()
+    model.configure('../data/digits_model.h5')
+    model.load(True)
+
+    plot_acc(model.history)
+    plot_loss(model.history)
 

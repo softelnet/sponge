@@ -172,6 +172,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                     argMeta.getName());
             Validate.isTrue(!argMeta.isReadOnly() || argMeta.getType().isNullable(), "Read only argument '%s' type must be nullable",
                     argMeta.getName());
+            Validate.isTrue(!argMeta.isOverwrite() || argMeta.isProvided(),
+                    "The argument '%s' that has the overwrite flag must be defined as provided", argMeta.getName());
             prevArgNames.add(argMeta.getName());
         }
     }

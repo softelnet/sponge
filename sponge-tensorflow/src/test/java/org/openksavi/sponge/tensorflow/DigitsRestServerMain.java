@@ -27,7 +27,7 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.logging.LoggingUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
-public class MnistRestServerMain {
+public class DigitsRestServerMain {
 
     private GenericApplicationContext context;
 
@@ -36,7 +36,7 @@ public class MnistRestServerMain {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin()).config("examples/tensorflow/mnist/mnist_rest_server.xml").build();
+            return SpringSpongeEngine.builder().plugins(camelPlugin()).config("examples/tensorflow/digits/digits_rest_server.xml").build();
         }
     }
 
@@ -54,6 +54,6 @@ public class MnistRestServerMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        new MnistRestServerMain().run();
+        new DigitsRestServerMain().run();
     }
 }

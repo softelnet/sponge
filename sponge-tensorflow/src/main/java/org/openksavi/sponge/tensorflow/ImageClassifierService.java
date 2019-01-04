@@ -14,20 +14,33 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.tensorflow.mnist;
+package org.openksavi.sponge.tensorflow;
 
 import java.util.List;
+import java.util.Map;
+
+import org.openksavi.sponge.Experimental;
 
 /**
- * MNIST service interface.
+ * An image classifier service interface.
  */
-public interface MnistService {
+public interface ImageClassifierService {
 
     boolean isReady();
 
-    List<Double> predict(byte[] image);
+    List<String> getLabels();
 
-    void learn(byte[] image, int digit);
+    /**
+     * Returns a map of the labels and the corresponding probabilities.
+     *
+     * @param image the image.
+     * @return the probability map.
+     */
+    Map<String, Double> predict(byte[] image);
+
+    void addToLearn(byte[] image, String label);
+
+    void learn(byte[] image, String label);
 
     void reset();
 }

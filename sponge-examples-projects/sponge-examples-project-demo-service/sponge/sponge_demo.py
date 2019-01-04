@@ -18,7 +18,7 @@ class LowerCase(Action):
     def onConfigure(self):
         self.displayName = "Convert to lower case"
         self.description = "Converts a string to lower case."
-        self.argsMeta = [ ArgMeta("text", StringType()).displayName("A text that will be changed to lower case") ]
+        self.argsMeta = [ ArgMeta("text", StringType()).displayName("Text to lower case").description("The text that will be changed to lower case") ]
         self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
     def onCall(self, text):
         return text.lower()
@@ -42,3 +42,14 @@ class ProvideByAction(Action):
         if "value" in names:
             provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
 
+class ChooseColor(Action):
+    def onConfigure(self):
+        self.displayName = "Choose a color"
+        self.description = "Shows a color argument."
+        self.argsMeta = [
+            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
+                .displayName("Color").description("The color.")
+        ]
+        self.resultMeta = ResultMeta(StringType())
+    def onCall(self, color):
+        return "The chosen color is " + color

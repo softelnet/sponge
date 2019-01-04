@@ -26,7 +26,7 @@ public class ArgValue<T> {
     /** The value. */
     private T value;
 
-    /** If the value is present this flag is {@ code true}. */
+    /** If the value is present this flag is {@code true}. */
     private boolean valuePresent = false;
 
     /**
@@ -52,7 +52,6 @@ public class ArgValue<T> {
 
     public void setValue(T value) {
         this.value = value;
-        valuePresent = true;
     }
 
     public boolean isValuePresent() {
@@ -77,6 +76,7 @@ public class ArgValue<T> {
 
     public ArgValue<T> value(T value) {
         setValue(value);
+        setValuePresent(true);
         return this;
     }
 

@@ -8,16 +8,16 @@ import numpy as np
 from io import BytesIO
 import os.path
 
-print("TensorFlow version", tf.__version__)
-print("Keras version", keras.__version__)
+print('TensorFlow version', tf.__version__)
+print('Keras version', keras.__version__)
 
 # The model is based on https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py
 # and http://nbviewer.jupyter.org/github/fchollet/deep-learning-with-python-notebooks/blob/master/5.1-introduction-to-convnets.ipynb.
 # Test loss: 0.0215
 # Test accuracy: 0.9932
 # This model is used only for the purpose of showing how to invoke machine learning prediction via a Sponge action.
-class MnistModel:
-    def __init__(self, model_file):
+class DigitsModel:
+    def __init__(self):
         self.model = None
         self.history = None
         self.batch_size = 128
@@ -25,9 +25,12 @@ class MnistModel:
         self.epochs = 12
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
+        self.labels = list(map(str, range(10)))
+
+    def configure(self, model_file):
         self.model_file = model_file
 
-    def __load_mnist_data(self):
+    def _load_mnist_data(self):
         # the data, split between train and test sets
         (x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
 
@@ -54,7 +57,7 @@ class MnistModel:
         
         return (x_train, y_train, x_test, y_test, input_shape)
 
-    def __create_model_and_train(self):
+    def _create_model_and_train(self):
         model = models.Sequential()
         model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=self.input_shape))
         model.add(layers.MaxPooling2D((2, 2)))
@@ -87,7 +90,7 @@ class MnistModel:
         model.summary()
 
     def load(self, create_new = False):
-        (self.x_train, self.y_train, self.x_test, self.y_test, self.input_shape) = self.__load_mnist_data()
+        (self.x_train, self.y_train, self.x_test, self.y_test, self.input_shape) = self._load_mnist_data()
 
         # Keras hack [https://github.com/tensorflow/tensorflow/issues/14356]
         K.clear_session()
@@ -97,46 +100,37 @@ class MnistModel:
             self.model = models.load_model(self.model_file)
         else:
             print('Creating and training a new model')
-            self.__create_model_and_train()
+            self._create_model_and_train()
 
         # Have to initialize before threading (https://stackoverflow.com/questions/40850089/is-keras-thread-safe)
         self.model._make_predict_function()
 
         self.evaluate(self.model, self.x_test, self.y_test)
 
-    def __preprocess_image_data(self, image_data):
-        image = preprocessing.image.load_img(BytesIO(image_data), grayscale=True, target_size=(self.img_rows, self.img_cols))
+    def _preprocess_image_data(self, image_data):
+        image = preprocessing.image.load_img(BytesIO(image_data), color_mode = 'grayscale', target_size=(self.img_rows, self.img_cols))
         image_tensor = preprocessing.image.img_to_array(image)
         image_tensor /= 255.0
         image_tensor = np.expand_dims(image_tensor, axis=0)
         return (image_tensor, image)
 
+    def getLabels(self):
+        return self.labels
+
     def predict(self, image_data):
-        image_tensor, image = self.__preprocess_image_data(image_data)
+        image_tensor, image = self._preprocess_image_data(image_data)
 
         prediction_tensor = self.model.predict(image_tensor)[0]
-        prediction = np.argmax(prediction_tensor)
-        prediction_prob = np.amax(prediction_tensor)
-
+        #prediction = np.argmax(prediction_tensor)
+        #prediction_prob = np.amax(prediction_tensor)
         #print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(prediction_tensor)), flush=True)
 
         return prediction_tensor
 
     def learn(self, image_data, digit):
-        x, image = self.__preprocess_image_data(image_data)
-        
-        self.model.fit(x, keras.utils.to_categorical([digit], self.num_classes), epochs=self.epochs, verbose=0)
-
-        """
-        # Generator-based version commented
-        datagen = preprocessing.image.ImageDataGenerator(
-            featurewise_center=True,
-            featurewise_std_normalization=True,
-            rotation_range=20,
-            width_shift_range=0.2,
-            height_shift_range=0.2,
-            horizontal_flip=True)
-        datagen.fit(x)
-        self.model.fit_generator(datagen.flow(x, keras.utils.to_categorical([digit], self.num_classes), batch_size=1),
-                    epochs=self.epochs, verbose=0)
-        """
+        x, image = self._preprocess_image_data(image_data)
+        self.model.fit(x,
+                       keras.utils.to_categorical([digit], self.num_classes),
+                       epochs=self.epochs,
+                       verbose=0,
+                       validation_data=(self.x_test, self.y_test))

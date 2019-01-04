@@ -13,8 +13,8 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../../sponge-tensorflow/examples/tensorflow/mnist/python</directory>
-            <outputDirectory>python</outputDirectory>
+            <directory>../../sponge-tensorflow/examples/tensorflow/digits/python</directory>
+            <outputDirectory>digits/python</outputDirectory>
             <includes>
                 <include>*</include>
             </includes>
@@ -23,8 +23,15 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>../../sponge-tensorflow/examples/tensorflow/mnist/data</directory>
-            <outputDirectory>data</outputDirectory>
+            <directory>../../sponge-tensorflow/examples/tensorflow/digits/data</directory>
+            <outputDirectory>digits/data</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../../sponge-tensorflow/examples/tensorflow/digits/actions</directory>
+            <outputDirectory>digits/actions</outputDirectory>
             <includes>
                 <include>*</include>
             </includes>

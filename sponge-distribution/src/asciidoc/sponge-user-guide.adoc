@@ -1049,12 +1049,12 @@ cd sponge-examples-projects/sponge-examples-project-demo-service
 mvn clean install -Pall
 ----
 
-The resulting archive `target/sponge-demo-api.war` is the web application providing the Demo REST API service. The archive `target/sponge-scripts.zip` contains Sponge script files and the MNIST example files (see the TensorFlow integration chapter) that will be accessed by the web application.
+The resulting archive `target/sponge-demo-api.war` is the web application providing the Demo REST API service. The archive `target/sponge-scripts.zip` contains Sponge script files and the Digits recognition example files (see the TensorFlow integration chapter) that will be accessed by the web application.
 
-Assuming that Tomcat is installed in `/opt/tomcat` and the Sponge script files and the MNIST example files are extracted into the `/opt/tomcat/sponge` directory, you should add the following properties to the `catalina.properties` file:
+Assuming that Tomcat is installed in `/opt/tomcat` and the Sponge script files and the Digits recognition example files are extracted into the `/opt/tomcat/sponge` directory, you should add the following properties to the `catalina.properties` file:
 ----
 sponge.home=/opt/tomcat/sponge
-mnist.home=/opt/tomcat/sponge
+digits.home=/opt/tomcat/sponge/digits
 password.file=/opt/tomcat/sponge/password.txt
 ----
 

@@ -590,4 +590,68 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testActionsProvideArgNoOverwrite() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_overwrite.py").build();
+        engine.startup();
+
+        String value = "CLIENT_VALUE";
+
+        try {
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideArgNoOverwrite");
+            assertEquals(1, actionAdapter.getArgsMeta().size());
+            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
+            assertFalse(argMeta.isOverwrite());
+            ArgValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
+            String providedValue = (String) argValue.getValue();
+            assertEquals("PROVIDED", providedValue);
+
+            if (argValue.isValuePresent() && argMeta.isOverwrite()) {
+                value = providedValue;
+            }
+
+            assertEquals("CLIENT_VALUE", value);
+
+            engine.getOperations().call(actionAdapter.getName(), Arrays.asList(value));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testActionsProvideArgOverwrite() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_overwrite.py").build();
+        engine.startup();
+
+        String value = "CLIENT_VALUE";
+
+        try {
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideArgOverwrite");
+            assertEquals(1, actionAdapter.getArgsMeta().size());
+            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
+            assertTrue(argMeta.isOverwrite());
+            ArgValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
+            String providedValue = (String) argValue.getValue();
+            assertEquals("PROVIDED", providedValue);
+
+            if (argValue.isValuePresent() && argMeta.isOverwrite()) {
+                value = providedValue;
+            }
+
+            assertEquals("PROVIDED", value);
+
+            engine.getOperations().call(actionAdapter.getName(), Arrays.asList(value));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

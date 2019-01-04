@@ -528,6 +528,9 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`maxInstances`
 |This property may be used to set the maximum number of concurrent instances allowed for this correlator. It is a shortcut for `setMaxInstances(value)` method. If this value is not set, there will be no limit of concurrent instances. In that case you will probably need to implement `onAcceptAsFirst()` method.
 
+|`instanceSynchronous`
+|The instance synchronous flag. If `true` (the default value), one instance of the correlator will process only one event at a time. If `false`, one instance of the correlator will process many events concurrently. In that case the correlator has to be thread safe.
+
 |`duration`
 |This property may be used to set the time how long a correlator lasts (represented as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]). It is a shortcut for `setDuration(value)` method. The instance of a correlator will be active only for a given period of time since the arrival of the first *accepted as first* event. After that time on the instance of this correlator the `onDuration` callback method will be invoked.
 

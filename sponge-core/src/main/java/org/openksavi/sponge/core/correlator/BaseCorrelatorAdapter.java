@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.correlator;
 
+import java.util.concurrent.locks.Lock;
+
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
 import org.openksavi.sponge.core.BaseEventSetProcessorDefinition;
 import org.openksavi.sponge.correlator.Correlator;
@@ -62,7 +64,18 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
 
     @Override
     protected void onEvent(Event event) {
-        getProcessor().onEvent(event);
+        boolean instanceSynchronous = isInstanceSynchronous();
+
+        if (instanceSynchronous) {
+            lock.lock();
+        }
+        try {
+            getProcessor().onEvent(event);
+        } finally {
+            if (instanceSynchronous) {
+                lock.unlock();
+            }
+        }
     }
 
     @Override
@@ -76,6 +89,16 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     }
 
     @Override
+    public boolean isInstanceSynchronous() {
+        return getDefinition().isInstanceSynchronous();
+    }
+
+    @Override
+    public void setInstanceSynchronous(boolean instanceSynchronous) {
+        getDefinition().setInstanceSynchronous(instanceSynchronous);
+    }
+
+    @Override
     public boolean isCandidateForFirstEvent(Event event) {
         return true;
     }
@@ -83,5 +106,9 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     @Override
     public Event getFirstEvent() {
         return firstEvent;
+    }
+
+    public final Lock getLock() {
+        return lock;
     }
 }

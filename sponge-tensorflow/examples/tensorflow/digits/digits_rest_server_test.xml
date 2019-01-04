@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="digits" displayName="Digits">
+            <file>${sponge.configDir}/actions/digits_common.py</file>
+            <file>${sponge.configDir}/actions/digits_predict.py</file>
+            <file>${sponge.configDir}/actions/digits_learn.py</file>
+            <file>digits_rest_server.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
+            <configuration>
+                <facadeInterface>org.openksavi.sponge.tensorflow.ImageClassifierService</facadeInterface>
+                <pythonScript>
+                    <executable>${user.home}/tensorflow/bin/python3</executable>
+                    <argument>digits_service.py</argument>
+                    <argument>--modelfile=${sponge.configDir}/data/digits_model.h5</argument>
+                    <argument>--workspacedir=${sponge.configDir}/_workspace_</argument>
+                    <workingDir>${sponge.configDir}/python</workingDir>
+                    <waitForPositiveLineRegexp>The service has started.</waitForPositiveLineRegexp>
+                    <waitForNegativeLineRegexp>The service has failed to start.</waitForNegativeLineRegexp>
+                    <outputRedirect>CONSUMER</outputRedirect>
+                    <errorRedirect>CONSUMER</errorRedirect>
+                </pythonScript>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+
