@@ -59,7 +59,7 @@ def onRun():
 
     sponge.logger.info("Setting the playlist...")
     # Set the playlist to rock albums released since 1970 
-    selectedAlbums = selectAlbums(albums, 1970, 2018, ".*(Rock).*")
+    selectedAlbums = selectAlbums(albums, 1970, None, ".*(Rock).*")
     if len(selectedAlbums) > 0:
         setAndPlayPlaylist(selectedAlbums)
         sponge.logger.info("The playlist is set, {} albums found", len(selectedAlbums))
