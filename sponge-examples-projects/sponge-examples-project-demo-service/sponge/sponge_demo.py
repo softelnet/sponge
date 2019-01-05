@@ -3,6 +3,9 @@ Sponge Knowledge base
 Demo
 """
 
+from java.lang import String
+from org.openksavi.sponge.util.process import ProcessConfiguration
+
 class UpperCase(Action):
     def onConfigure(self):
         self.displayName = "Convert to upper case"
@@ -53,3 +56,85 @@ class ChooseColor(Action):
         self.resultMeta = ResultMeta(StringType())
     def onCall(self, color):
         return "The chosen color is " + color
+
+class ConsoleOutput(Action):
+    def onConfigure(self):
+        self.displayName = "Console output"
+        self.description = "Returns the console output."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(StringType().format("console")).displayName("Console output")
+    def onCall(self):
+        result = ""
+        for i in range(30):
+            result += str(i) + ". Row " + str(i) + " - 120\n"
+        return result
+
+class MarkdownText(Action):
+    def onConfigure(self):
+        self.displayName = "Markdown text"
+        self.description = "Returns the markdown text."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(StringType().format("markdown")).displayName("Markdown text")
+    def onCall(self):
+        return """Heading
+=======
+
+## Sub-heading
+
+Paragraphs are separated by a blank line.
+
+Two spaces at the end of a line produces a line break.
+
+Text attributes _italic_, **bold**, `monospace`.
+
+Horizontal rule:
+
+---
+
+Bullet list:
+
+  * apples
+  * oranges
+  * pears
+
+Numbered list:
+
+  1. wash
+  2. rinse
+  3. repeat
+
+```
+source code example
+```
+"""
+
+class HtmlFileOutput(Action):
+    def onConfigure(self):
+        self.displayName = "HTML file output"
+        self.description = "Returns the HTML file."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(BinaryType().mimeType("text/html")).displayName("HTML file")
+    def onCall(self):
+        return String("""
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+      <title>HTML page</title>
+    </head>
+    <body>
+        <!-- Main content -->
+        <h1>Header</h1>
+        <p>Some text
+    </body>
+</html>
+""").getBytes("UTF-8")
+
+class PdfFileOutput(Action):
+    def onConfigure(self):
+        self.displayName = "PDF file output"
+        self.description = "Returns the PDF file."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(BinaryType().mimeType("application/pdf")).displayName("PDF file")
+    def onCall(self):
+        return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
+                              .outputAsBinary()).run().outputBinary
