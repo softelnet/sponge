@@ -186,6 +186,14 @@ class SetActuatorDepends(Action):
         if "actuator5" in names:
             provided["actuator5"] = ArgValue().value(sponge.getVariable("actuator5", None)).valueSet(["X", "Y", "Z", current["actuator1"]])
 
+class AnnotatedTypeAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [ArgMeta("arg1", AnnotatedType(BooleanType())).displayName("Argument 1")]
+        self.resultMeta = ResultMeta(AnnotatedType(StringType())).displayName("Annotated result")
+    def onCall(self, arg1):
+        features = {"feature1":"value1"}
+        features.update(arg1.features)
+        return AnnotatedValue("RESULT", features)
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

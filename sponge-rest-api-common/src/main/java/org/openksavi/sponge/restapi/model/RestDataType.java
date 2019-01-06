@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import org.openksavi.sponge.type.AnnotatedType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -33,8 +34,8 @@ import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.VoidType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "kind")
-@JsonSubTypes({ @Type(value = AnyType.class, name = DataTypeKind.CODE_ANY),
-        @Type(value = BinaryType.class, name = DataTypeKind.CODE_BINARY),
+@JsonSubTypes({ @Type(value = AnnotatedType.class, name = DataTypeKind.CODE_ANNOTATED),
+        @Type(value = AnyType.class, name = DataTypeKind.CODE_ANY), @Type(value = BinaryType.class, name = DataTypeKind.CODE_BINARY),
         @Type(value = BooleanType.class, name = DataTypeKind.CODE_BOOLEAN),
         @Type(value = IntegerType.class, name = DataTypeKind.CODE_INTEGER), @Type(value = ListType.class, name = DataTypeKind.CODE_LIST),
         @Type(value = MapType.class, name = DataTypeKind.CODE_MAP), @Type(value = NumberType.class, name = DataTypeKind.CODE_NUMBER),

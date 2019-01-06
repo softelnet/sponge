@@ -49,6 +49,7 @@ import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.examples.CustomObject;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.test.util.TestUtils;
+import org.openksavi.sponge.type.AnnotatedType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
@@ -56,6 +57,7 @@ import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 public class CoreActionsTest {
 
@@ -648,6 +650,34 @@ public class CoreActionsTest {
             assertEquals("PROVIDED", value);
 
             engine.getOperations().call(actionAdapter.getName(), Arrays.asList(value));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Test
+    public void testActionsMetadataAnnotatedType() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_annotated_type.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("AnnotatedTypeAction");
+            assertEquals(0, adapter.getArgsMeta().size());
+
+            DataType resultType = adapter.getResultMeta().getType();
+            assertEquals(DataTypeKind.ANNOTATED, resultType.getKind());
+            assertTrue(resultType instanceof AnnotatedType);
+            assertEquals(DataTypeKind.STRING, ((AnnotatedType) resultType).getValueType().getKind());
+
+            AnnotatedValue<String> result = engine.getOperations().call(AnnotatedValue.class, adapter.getName());
+            assertEquals("RESULT", result.getValue());
+            assertEquals(2, result.getFeatures().size());
+            assertEquals("value1", result.getFeatures().get("feature1"));
+            assertEquals("value2", result.getFeatures().get("feature2"));
 
             assertFalse(engine.isError());
         } finally {

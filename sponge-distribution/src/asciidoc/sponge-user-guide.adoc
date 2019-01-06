@@ -103,7 +103,7 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |A binary (byte array) type. Provides an optional property `mimeType`.
 
 |`AnyType`
-|Any type. It may be used in situations when type is not important.
+|An any type. It may be used in situations when type is not important.
 
 |`VoidType`
 |A void type that may be used to specify that an action returns no meaningful result.
@@ -116,6 +116,9 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 
 |`MapType`
 |A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType(StringType(), ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
+
+|`AnnotatedType`
+|An annotated type. This type requires a `DataType` parameter, which is is a type of an annotated value. For example: `AnnotatedType(BinaryType().mimeType("image/png"))`. A value of this type should be an instance of the `AnnotatedValue` class, e.g. `AnnotatedValue(imageBytes, {"filename":imageFilename})`, where the first parameter is the annotated value and the second is the features map that may be used in a client code.
 |===
 
 .Type examples

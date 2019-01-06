@@ -30,7 +30,8 @@ public enum DataTypeKind {
     VOID(VoidType.class),
     OBJECT(ObjectType.class),
     LIST(ListType.class),
-    MAP(MapType.class);
+    MAP(MapType.class),
+    ANNOTATED(AnnotatedType.class);
 
     public static final String CODE_STRING = "STRING";
 
@@ -51,6 +52,8 @@ public enum DataTypeKind {
     public static final String CODE_LIST = "LIST";
 
     public static final String CODE_MAP = "MAP";
+
+    public static final String CODE_ANNOTATED = "ANNOTATED";
 
     private Class<? extends DataType> typeClass;
 

@@ -52,6 +52,7 @@ import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 public abstract class BaseRestApiTestTemplate {
 
@@ -238,6 +239,23 @@ public abstract class BaseRestApiTestTemplate {
 
             assertTrue(result instanceof String);
             assertEquals(arg1.toUpperCase(), result);
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCallAnnotatedType() {
+        try (SpongeRestClient client = createRestClient()) {
+            AnnotatedValue<Boolean> annotatedArg =
+                    new AnnotatedValue<>(true, SpongeUtils.immutableMapOf("argFeature1", "argFeature1Value1"));
+            AnnotatedValue<String> result = client.call(AnnotatedValue.class, "AnnotatedTypeAction", Arrays.asList(annotatedArg));
+
+            assertEquals("RESULT", result.getValue());
+            assertEquals(2, result.getFeatures().size());
+            assertEquals("value1", result.getFeatures().get("feature1"));
+            assertEquals("argFeature1Value1", result.getFeatures().get("argFeature1"));
 
             assertFalse(engine.isError());
         }

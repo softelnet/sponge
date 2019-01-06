@@ -24,6 +24,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a context and listeners to the REST API client that provide access to JSON texts in a client code.
 * Added a critical section in event handling by a correlator.
 * Added a new property to correlators: `instanceSynchronous`.
+* Added a new data type `AnnotatedType`.
 * Documentation includes the REST API client for Dart.
 * Improved error handling in the REST API server.
 * Added the `-D` option in the standalone command-line application for passing Java system properties.
