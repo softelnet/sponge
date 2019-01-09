@@ -1,0 +1,386 @@
+= Mobile client application
+:page-permalink: /mobile/
+
+The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS.
+
+NOTE: The application is currently under development. It will be released as an open source. The beta version will be released in the first quarter of 2019.
+
+== Features
+The following screenshots show the key features of the mobile application.
+
+image::screens/mobile/actions_connection_list.jpg[title="Selecting a connection to the Sponge instance in the action list screen",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The application allows you to connect to a single {sponge} REST API server at a time. You may configure many connections and choose one of them.
+
+image::screens/mobile/actions.jpg[title="The action list",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The main screen shows the list of actions defined in the connected {sponge} engine. Only actions that have argument and result metadata are available. This is because the application uses a generic access to the actions utilizing their data types, display names, descriptions, features and so on. The number in the action icon is the number of action arguments.
+
+To call an action or set action attributes tap the triangular icon on the right side of the action display name.
+
+The floating button allows to refresh the action list from the server. The refresh button clears all entered action arguments and received results.
+
+NOTE: The application currently doesn't supports all {sponge} data types.
+
+image::screens/mobile/drawer.jpg[title="The navigation drawer",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The navigation drawer allows switching between the available main views.
+
+image::screens/mobile/connections.jpg[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
+
+You may add, edit and remove connections to {sponge} instances as well as activate a connection. To remove a connection swipe the corresponding element.
+
+image::screens/mobile/connections_edit.jpg[title="Editing a connection to a Sponge instance",width=300,pdfwidth=35%,scaledwidth=35%]
+
+A {sponge} address is the URL of the {sponge} instance.
+
+image::screens/mobile/action_call_manage_lcd.jpg[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Actions may have read only, provided arguments only to show a data from the server (see the `Current LCD text` attribute). The `REFRESH` button retrieves the current values of read only, provided arguments from the server.
+
+.The definition of the action that manages the Raspberry Pi LCD display
+[source,python]
+----
+class ManageLcd(Action):
+    def onConfigure(self):
+        self.displayName = "Manage the LCD text and color"
+        self.description = "Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property."
+        self.argsMeta = [
+            ArgMeta("currentText", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
+                .displayName("Current LCD text").description("The currently displayed LCD text.").provided().readOnly(),
+            ArgMeta("text", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
+                .displayName("Text to display").description("The text that will be displayed in the LCD.").provided(),
+            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
+                .displayName("LCD color").description("The LCD color.").provided().overwrite(),
+            ArgMeta("clearText", BooleanType().nullable(True).defaultValue(False))
+                .displayName("Clear text").description("The text the LCD will be cleared.")
+        ]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, currentText, text, color, clearText = None):
+        sponge.call("SetLcd", [text, color, clearText])
+    def onProvideArgs(self, names, current, provided):
+        grovePiDevice = sponge.getVariable("grovePiDevice")
+        if "currentText" in names:
+            provided["currentText"] = ArgValue().value(grovePiDevice.getLcdText())
+        if "text" in names:
+            provided["text"] = ArgValue().value(grovePiDevice.getLcdText())
+        if "color" in names:
+            provided["color"] = ArgValue().value(grovePiDevice.getLcdColor())
+
+----
+
+image::screens/mobile/action_call_manage_sensors.jpg[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The action call screen allows editing the action arguments.
+
+.The definition of the action that manages the Grove Pi sensors and actuators
+[source,python]
+----
+class ManageSensorActuatorValues(Action):
+    def onConfigure(self):
+        self.displayName = "Manage the sensor and actuator values"
+        self.description = "Provides management of the sensor and actuator values."
+        self.argsMeta = [
+            ArgMeta("temperatureSensor", NumberType().nullable()).displayName(u"Temperature sensor (°C)").provided().readOnly(),
+            ArgMeta("humiditySensor", NumberType().nullable()).displayName(u"Humidity sensor (%)").provided().readOnly(),
+            ArgMeta("lightSensor", NumberType().nullable()).displayName(u"Light sensor").provided().readOnly(),
+            ArgMeta("rotarySensor", NumberType().nullable()).displayName(u"Rotary sensor").provided().readOnly(),
+            ArgMeta("soundSensor", NumberType().nullable()).displayName(u"Sound sensor").provided().readOnly(),
+            ArgMeta("redLed", BooleanType()).displayName("Red LED").provided().overwrite(),
+            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).displayName("Blue LED").provided().overwrite(),
+            ArgMeta("buzzer", BooleanType()).displayName("Buzzer").provided().overwrite()
+        ]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
+        grovePiDevice = sponge.getVariable("grovePiDevice")
+        grovePiDevice.setRedLed(redLed)
+        grovePiDevice.setBlueLed(blueLed)
+        grovePiDevice.setBuzzer(buzzer)
+    def onProvideArgs(self, names, current, provided):
+        values = sponge.call("GetSensorActuatorValues", [names])
+        for name, value in values.iteritems():
+            provided[name] = ArgValue().value(value)
+
+class GetSensorActuatorValues(Action):
+    def onCall(self, names):
+        values = {}
+        grovePiDevice = sponge.getVariable("grovePiDevice")
+        if "temperatureSensor" or "humiditySensor" in names:
+            th = grovePiDevice.getTemperatureHumiditySensor()
+            if "temperatureSensor" in names:
+                values["temperatureSensor"] = th.temperature if th else None
+            if "humiditySensor" in names:
+                values["humiditySensor"] = th.humidity if th else None
+        if "lightSensor" in names:
+            values["lightSensor"] = grovePiDevice.getLightSensor()
+        if "rotarySensor" in names:
+            values["rotarySensor"] = grovePiDevice.getRotarySensor().factor
+        if "soundSensor" in names:
+            values["soundSensor"] = grovePiDevice.getSoundSensor()
+        if "redLed" in names:
+            values["redLed"] = grovePiDevice.getRedLed()
+        if "blueLed" in names:
+            values["blueLed"] = grovePiDevice.getBlueLed()
+        if "buzzer" in names:
+            values["buzzer"] = grovePiDevice.getBuzzer()
+        return values
+----
+
+image::screens/mobile/action_call_send_sms.jpg[title="The action call that sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Actions arguments may be edited in multiline text fields.
+
+.The definition of the action that sends an SMS from the Raspberry Pi
+[source,python]
+----
+class SendSms(Action):
+    def onConfigure(self):
+        self.displayName = "Send an SMS"
+        self.description = "Sends a new SMS."
+        self.argsMeta = [
+            ArgMeta("recipient", StringType().format("phone"))
+                .displayName("Recipient").description("The SMS recipient."),
+            ArgMeta("message", StringType().maxLength(160).features({"maxLines":5}))
+                .displayName("Message").description("The SMS message.")
+        ]
+        self.resultMeta = ResultMeta(VoidType())
+    def onCall(self, recipient, message):
+        gsm.sendSms(recipient, message)
+----
+
+image::screens/mobile/action_call_color.jpg[title="The action call argument editor for a color type",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The color picker widget allows a user to choose a color as an argument value.
+
+.The definition of the action that takes a color argument
+[source,python]
+----
+class ChooseColor(Action):
+    def onConfigure(self):
+        self.displayName = "Choose a color"
+        self.description = "Shows a color argument."
+        self.argsMeta = [
+            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
+                .displayName("Color").description("The color.")
+        ]
+        self.resultMeta = ResultMeta(StringType())
+    def onCall(self, color):
+        return "The chosen color is " + color
+----
+
+image::screens/mobile/action_call_digit_drawing.jpg[title="The action call argument editor for a digit drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The drawing panel allows a user to paint an image that will be set as an argument value in an action call.
+
+.The definition of the action that recognizes a handwritten digit
+[source,python]
+----
+class DigitsPredict(Action):
+    def onConfigure(self):
+        self.displayName = "Recognize a digit"
+        self.description = "Recognizes a handwritten digit"
+        self.argsMeta = [
+            ArgMeta("image", BinaryType().mimeType("image/png")
+                   .features({"characteristic":"drawing", "width":28, "height":28, "background":"000000", "color":"FFFFFF", "strokeWidth":1.5}))\
+                   .displayName("Image of a digit")
+        ]
+        self.resultMeta = ResultMeta(IntegerType()).displayName("Recognized digit")
+    def onCall(self, image):
+        predictions = py4j.facade.predict(image)
+        prediction = max(predictions, key=predictions.get)
+        probability = predictions[prediction]
+
+        # Handle the optional predictionThreshold Sponge variable.
+        predictionThreshold = sponge.getVariable("predictionThreshold", None)
+        if predictionThreshold and probability < float(predictionThreshold):
+            self.logger.debug("The prediction {} probability {} is lower than the threshold {}.", prediction, probability, predictionThreshold)
+            return None
+        else:
+            self.logger.debug("Prediction: {}, probability: {}", prediction, probability)
+            return int(prediction)
+----
+
+image::screens/mobile/action_call_digit.jpg[title="The action call for an attribute of type drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The action call screen shows all action arguments.
+
+image::screens/mobile/action_call_digit_result.jpg[title="The action call result for a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
+
+If the action has been called, the result is shown below the action display name. If the result can't be fully shown in the action list, you may tap the result to see the details.
+
+image::screens/mobile/action_call_doodle_drawing.jpg[title="The action call argument editor for a doodle drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Drawing panels can be configured in a corresponding action definition, where a color, a background color etc. could be specified.
+
+.The definition of the action that requires drawing a doodle
+[source,python]
+----
+class DrawAndUploadDoodle(Action):
+    def onConfigure(self):
+        self.displayName = "Draw and upload a doodle"
+        self.description = "Shows a canvas to draw a doodle and uploads it to the server"
+        self.argsMeta = [
+            ArgMeta("image", BinaryType().mimeType("image/png")
+                   .features({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5}))\
+                   .displayName("Doodle")
+        ]
+        self.resultMeta = ResultMeta(StringType()).displayName("Status")
+    def onCall(self, image):
+        fileName = str(System.currentTimeMillis()) + ".png"
+        SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + fileName)
+        return "Uploaded as " + fileName
+----
+
+image::screens/mobile/action_call_doodle.jpg[title="The action call for a doodle drawing as an argument",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The action call screen shows all action arguments, for example a drawing.
+
+image::screens/mobile/action_call_arg_depends.jpg[title="The action call that shows argument dependencies",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Action arguments may depend on each other. Argument dependencies are supported in the action call panel and allow creating simple, interactive forms where some arguments are provided by the server, some entered by the user, some read only and some depend on the values of others. The important thing is that all that configuration is defined in an action in a knowledge base placed on the server side, not in the mobile application.
+
+.The definition of the action that provides arguments with dependencies
+[source,python]
+----
+class DependingArgumentsAction(Action):
+    def onConfigure(self):
+        self.displayName = "Action with depending arguments"
+        self.argsMeta = [
+            ArgMeta("continent", StringType()).displayName("Continent").provided(),
+            ArgMeta("country", StringType()).displayName("Country").provided().depends("continent"),
+            ArgMeta("city", StringType()).displayName("City").provided().depends("country"),
+            ArgMeta("river", StringType()).displayName("River").provided().depends("continent"),
+            ArgMeta("weather", StringType()).displayName("Weather").provided(),
+        ]
+        self.resultMeta = ResultMeta(StringType()).displayName("Sentences")
+    def onCall(self, continent, country, city, river, weather):
+        return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
+    def onProvideArgs(self, names, current, provided):
+        if "continent" in names:
+            provided["continent"] = ArgValue().valueSet(["Africa", "Asia", "Europe"])
+        if "country" in names:
+            continent = current["continent"]
+            if continent == "Africa":
+                countries = ["Nigeria", "Ethiopia", "Egypt"]
+            elif continent == "Asia":
+                countries = ["China", "India", "Indonesia"]
+            elif continent == "Europe":
+                countries = ["Russia", "Germany", "Turkey"]
+            else:
+                countries = []
+            provided["country"] = ArgValue().valueSet(countries)
+        if "city" in names:
+            country = current["country"]
+            if country == "Nigeria":
+                cities = ["Lagos", "Kano", "Ibadan"]
+            elif country == "Ethiopia":
+                cities = ["Addis Ababa", "Gondar", "Mek'ele"]
+            elif country == "Egypt":
+                cities = ["Cairo", "Alexandria", "Giza"]
+            elif country == "China":
+                cities = ["Guangzhou", "Shanghai", "Chongqing"]
+            elif country == "India":
+                cities = ["Mumbai", "Delhi", "Bangalore"]
+            elif country == "Indonesia":
+                cities = ["Jakarta", "Surabaya", "Medan"]
+            elif country == "Russia":
+                cities = ["Moscow", "Saint Petersburg", "Novosibirsk"]
+            elif country == "Germany":
+                cities = ["Berlin", "Hamburg", "Munich"]
+            elif country == "Turkey":
+                cities = ["Istanbul", "Ankara", "Izmir"]
+            else:
+                cities = []
+            provided["city"] = ArgValue().valueSet(cities)
+        if "river" in names:
+            continent = current["continent"]
+            if continent == "Africa":
+                rivers = ["Nile", "Chambeshi", "Niger"]
+            elif continent == "Asia":
+                rivers = ["Yangtze", "Yellow River", "Mekong"]
+            elif continent == "Europe":
+                rivers = ["Volga", "Danube", "Dnepr"]
+            else:
+                rivers = []
+            provided["river"] = ArgValue().valueSet(rivers)
+        if "weather" in names:
+            provided["weather"] = ArgValue().valueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+----
+
+image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Allowed argument values can be defined in an action and provided from the server every time the action call screen is shown or an argument dependency value changes.
+
+image::screens/mobile/actions_binary_result.jpg[title="The action binary result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Actions may return contents that can be viewed for example as a HTML or a PDF file using the mobile OS viewers.
+
+.The definitions of the actions that return a HTML and a PDF file respectively
+[source,python]
+----
+class HtmlFileOutput(Action):
+    def onConfigure(self):
+        self.displayName = "HTML file output"
+        self.description = "Returns the HTML file."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(BinaryType().mimeType("text/html")).displayName("HTML file")
+    def onCall(self):
+        return String("""
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+      <title>HTML page</title>
+    </head>
+    <body>
+        <!-- Main content -->
+        <h1>Header</h1>
+        <p>Some text
+    </body>
+</html>
+""").getBytes("UTF-8")
+
+class PdfFileOutput(Action):
+    def onConfigure(self):
+        self.displayName = "PDF file output"
+        self.description = "Returns the PDF file."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(BinaryType().mimeType("application/pdf")).displayName("PDF file")
+    def onCall(self):
+        return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
+                              .outputAsBinary()).run().outputBinary
+----
+
+image::screens/mobile/actions_console_result.jpg[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Actions may return a console output, for example the result of running the `df -h` command on the server.
+
+.The definition of the action that returns an OS command output
+[source,python]
+----
+class OsGetDiskSpaceInfo(Action):
+    def onConfigure(self):
+        self.displayName = "Get disk space info"
+        self.description = "Returns the disk space info."
+        self.argsMeta = []
+        self.resultMeta = ResultMeta(StringType().format("console")).displayName("Disk space info")
+    def onCall(self):
+        return sponge.process(ProcessConfiguration.builder("df", "-h").outputAsString()).run().outputString
+----
+
+image::screens/mobile/actions_markdown_result.jpg[title="The action Markdown formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+Actions may return a https://en.wikipedia.org/wiki/Markdown[Markdown] formatted text.
+
+image::screens/mobile/drawer_digits.jpg[title="The navigation drawer if connected to a Sponge instance that supports a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The access to actions in the mobile application is generic. However the application includes a demo of recognizing a handwritten digit. If the current connection points to a {sponge} instance that has the required action that performs the digit recognition, this demo is enabled in the navigation drawer.
+
+image::screens/mobile/digits_info.jpg[title="The digit recognition demo - the information dialog",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/digits_drawing.jpg[title="The digit recognition demo - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The digit recognition demo screen allows drawing a digit that will be recognized by the {sponge} action. After each stroke the remote action call is made and the result is shown in the circle.
+
+image::screens/mobile/dark_theme.jpg[title="The application dart theme",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The application may be switched to the dark theme in the settings.

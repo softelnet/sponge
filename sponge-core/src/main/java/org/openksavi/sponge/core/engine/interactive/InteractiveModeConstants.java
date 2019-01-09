@@ -27,6 +27,8 @@ public final class InteractiveModeConstants {
 
     public static final String QUIT_COMMAND = "quit";
 
+    public static final String JYTHON_EXIT_COMMAND = "exit()";
+
     public static final String PROMPT = "> ";
 
     private InteractiveModeConstants() {

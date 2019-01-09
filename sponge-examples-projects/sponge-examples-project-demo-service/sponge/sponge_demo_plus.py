@@ -11,7 +11,8 @@ class DrawAndUploadDoodle(Action):
     def onConfigure(self):
         self.displayName = "Draw and upload a doodle"
         self.description = "Shows a canvas to draw a doodle and uploads it to the server"
-        self.argsMeta = [ArgMeta("image", BinaryType().mimeType("image/png")
+        self.argsMeta = [
+            ArgMeta("image", BinaryType().mimeType("image/png")
                    .features({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5}))\
                    .displayName("Doodle")
         ]

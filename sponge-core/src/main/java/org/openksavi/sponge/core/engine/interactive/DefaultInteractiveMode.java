@@ -91,7 +91,8 @@ public class DefaultInteractiveMode implements InteractiveMode {
 
             command = StringUtils.stripEnd(command, null);
 
-            if (StringUtils.equalsAny(command.trim(), InteractiveModeConstants.EXIT_COMMAND, InteractiveModeConstants.QUIT_COMMAND)) {
+            if (StringUtils.equalsAny(command.trim().replaceAll("\\s", ""), InteractiveModeConstants.EXIT_COMMAND,
+                    InteractiveModeConstants.QUIT_COMMAND, InteractiveModeConstants.JYTHON_EXIT_COMMAND)) {
                 return false;
             }
 

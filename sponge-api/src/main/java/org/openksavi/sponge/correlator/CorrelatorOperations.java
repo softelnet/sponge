@@ -46,8 +46,8 @@ public interface CorrelatorOperations extends EventSetProcessorOperations {
 
     /**
      * Returns the instance synchronous flag. If {@code true} (the default value), one instance of the correlator will process only one
-     * event at a time. If {@code false}, one instance of the correlator will process many events concurrently. In that case the correlator has to be
-     * thread safe.
+     * event at a time. If {@code false}, one instance of the correlator will process many events concurrently. In that case the correlator
+     * has to be thread safe.
      *
      * @return the instance synchronous flag.
      */
