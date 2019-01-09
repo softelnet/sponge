@@ -12,7 +12,7 @@ class SetGrovePiMode(Action):
     def onConfigure(self):
         self.displayName = "Set the GrovePi mode"
         self.description = "Sets the GrovePi mode."
-        self.argsMeta = [ArgMeta("mode", StringType()).displayName("The GrovePi mode").provided()]
+        self.argsMeta = [ArgMeta("mode", StringType()).displayName("The GrovePi mode").provided().overwrite()]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, mode):
         if mode not in ["auto", "manual"]:
@@ -33,7 +33,7 @@ class ManageLcd(Action):
             ArgMeta("text", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
                 .displayName("Text to display").description("The text that will be displayed in the LCD.").provided(),
             ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
-                .displayName("LCD color").description("The LCD color.").provided(),
+                .displayName("LCD color").description("The LCD color.").provided().overwrite(),
             ArgMeta("clearText", BooleanType().nullable(True).defaultValue(False))
                 .displayName("Clear text").description("The text the LCD will be cleared.")
         ]
@@ -96,9 +96,9 @@ class ManageSensorActuatorValues(Action):
             ArgMeta("lightSensor", NumberType().nullable()).displayName(u"Light sensor").provided().readOnly(),
             ArgMeta("rotarySensor", NumberType().nullable()).displayName(u"Rotary sensor").provided().readOnly(),
             ArgMeta("soundSensor", NumberType().nullable()).displayName(u"Sound sensor").provided().readOnly(),
-            ArgMeta("redLed", BooleanType()).displayName("Red LED").provided(),
-            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).displayName("Blue LED").provided(),
-            ArgMeta("buzzer", BooleanType()).displayName("Buzzer").provided()
+            ArgMeta("redLed", BooleanType()).displayName("Red LED").provided().overwrite(),
+            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).displayName("Blue LED").provided().overwrite(),
+            ArgMeta("buzzer", BooleanType()).displayName("Buzzer").provided().overwrite()
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):

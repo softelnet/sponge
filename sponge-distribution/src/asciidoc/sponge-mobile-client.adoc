@@ -1,0 +1,52 @@
+= Mobile client application
+:page-permalink: /mobile/
+
+The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS.
+
+NOTE: The application is currently under development. It will be released as an open source. The beta version will be released in the first quarter of 2019.
+
+The following screenshots show key features of the mobile application.
+
+image::screens/mobile/actions.jpg[title="The action list",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/drawer.jpg[title="The navigation drawer",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/connections.jpg[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/connections_edit.jpg[title="Editing a connection to a Sponge instance",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_manage_lcd.jpg[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_manage_sensors.jpg[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_send_sms.jpg[title="The action call that remotely sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_color.jpg[title="The action call argument editor for a color type",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_digit_drawing.jpg[title="The action call argument editor for a digit drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_digit.jpg[title="The action call for an attribute of type drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_digit_result.jpg[title="The action call result for a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_doodle_drawing.jpg[title="The action call argument editor for a doodle drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_doodle.jpg[title="The action call for a doodle drawing as an argument",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_arg_depends.jpg[title="The action call that shows argument dependencies",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/actions_binary_result.jpg[title="The action binary result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/actions_console_result.jpg[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/actions_markdown_result.jpg[title="The action Markdown formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/digits_drawing.jpg[title="The digit recognition demo - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/digits_info.jpg[title="The digit recognition demo - the information dialog",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/drawer_digits.jpg[title="The navigation drawer if connected to a Sponge instance that supports a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/dark_theme.jpg[title="The application dart theme",width=300,pdfwidth=35%,scaledwidth=35%]
