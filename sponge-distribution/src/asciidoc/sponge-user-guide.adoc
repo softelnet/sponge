@@ -1235,7 +1235,7 @@ $ tail -f ~/local/sponge-iot-rpi/logs/sponge-<current_date>.log
  $ sudo ~/local/app/sponge-{projectVersion}/bin/sponge -c ~/local/sponge-iot-rpi/kb/sponge_iot.xml -Dsponge.home=. -i iot
 ----
 
-* If you modify actions and use the {sponge} mobile client to test the knowledge bases, please remember to refresh the action metadata in the GUI.
+* If you modify actions and use the {sponge} mobile client application to test the knowledge bases, please remember to refresh the action metadata in the GUI.
 * Repeat these steps until your knowledge bases are finished.
 * Start and enable the {sponge} system service.
 

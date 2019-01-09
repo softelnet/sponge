@@ -26,6 +26,37 @@ __Schemes__ : HTTP
 [[_swagger_paths]]
 == Paths
 
+[[_swagger_sponge-actionargs]]
+=== Provide action arguments
+....
+POST sponge.json/v1/actionArgs
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|The provide action arguments request|<<_swagger_provideactionargsrequest,ProvideActionArgsRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The provide action arguments response|<<_swagger_provideactionargsresponse,ProvideActionArgsResponse>>
+|===
+
+
+==== Tags
+
+* sponge.json/v1
+
+
 [[_swagger_sponge-actions]]
 === Get actions
 ....
@@ -279,6 +310,88 @@ __required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionR
 [[_swagger_definitions]]
 == Definitions
 
+[[_swagger_provideactionargsrequest]]
+=== ProvideActionArgsRequest
+A provide action arguments request
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The request id|string
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|**authToken** +
+__optional__|The authentication token|string
+|**name** +
+__required__|The action name|string
+|**argNames** +
+__optional__|The names of action arguments to provide|< string > array
+|**current** +
+__optional__|The current values of action arguments in a client code|< string, object > map
+|**version** +
+__optional__|The expected knowledge base version|integer (int32)
+|===
+
+
+[[_swagger_provideactionargsresponse]]
+=== ProvideActionArgsResponse
+A provide action arguments response
+
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The corresponding request id|string
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**provided** +
+__required__|The provided action arguments|< string, <<_swagger_argvalueobject,ArgValueObject>> > map
+|===
+
+
+[[_swagger_argvalue]]
+=== ArgValue
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**valuePresent** +
+__optional__|boolean
+|**valueSet** +
+__optional__|< object > array
+|**valueSetDisplayNames** +
+__optional__|< string > array
+|===
+
+
+[[_swagger_argvalueobject]]
+=== ArgValueObject
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**valuePresent** +
+__optional__|boolean
+|**valueSet** +
+__optional__|< object > array
+|**valueSetDisplayNames** +
+__optional__|< string > array
+|===
+
+
 [[_swagger_getactionsrequest]]
 === GetActionsRequest
 A get actions request
@@ -364,6 +477,14 @@ __optional__|The action argument display name|string
 __optional__|The action argument description|string
 |**optional** +
 __optional__|Optional argument|boolean
+|**provided** +
+__optional__|Provided argument|boolean
+|**depends** +
+__optional__|Argument depends on others arguments|< string > array
+|**readOnly** +
+__optional__|Read only argument|boolean
+|**overwrite** +
+__optional__|The overwrite flag|boolean
 |===
 
 
@@ -395,7 +516,7 @@ __required__|The available actions|< <<_swagger_actionmeta,ActionMeta>> > array
 |===
 |Name|Schema
 |**kind** +
-__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ACTION)
+__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ANNOTATED)
 |**format** +
 __optional__|string
 |**defaultValue** +

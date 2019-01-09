@@ -138,3 +138,67 @@ class PdfFileOutput(Action):
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
+
+class DependingArgumentsAction(Action):
+    def onConfigure(self):
+        self.displayName = "Action with depending arguments"
+        self.argsMeta = [
+            ArgMeta("continent", StringType()).displayName("Continent").provided(),
+            ArgMeta("country", StringType()).displayName("Country").provided().depends("continent"),
+            ArgMeta("city", StringType()).displayName("City").provided().depends("country"),
+            ArgMeta("river", StringType()).displayName("River").provided().depends("continent"),
+            ArgMeta("weather", StringType()).displayName("Weather").provided(),
+        ]
+        self.resultMeta = ResultMeta(StringType()).displayName("Sentences")
+    def onCall(self, continent, country, city, river, weather):
+        return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
+    def onProvideArgs(self, names, current, provided):
+        if "continent" in names:
+            provided["continent"] = ArgValue().valueSet(["Africa", "Asia", "Europe"])
+        if "country" in names:
+            continent = current["continent"]
+            if continent == "Africa":
+                countries = ["Nigeria", "Ethiopia", "Egypt"]
+            elif continent == "Asia":
+                countries = ["China", "India", "Indonesia"]
+            elif continent == "Europe":
+                countries = ["Russia", "Germany", "Turkey"]
+            else:
+                countries = []
+            provided["country"] = ArgValue().valueSet(countries)
+        if "city" in names:
+            country = current["country"]
+            if country == "Nigeria":
+                cities = ["Lagos", "Kano", "Ibadan"]
+            elif country == "Ethiopia":
+                cities = ["Addis Ababa", "Gondar", "Mek'ele"]
+            elif country == "Egypt":
+                cities = ["Cairo", "Alexandria", "Giza"]
+            elif country == "China":
+                cities = ["Guangzhou", "Shanghai", "Chongqing"]
+            elif country == "India":
+                cities = ["Mumbai", "Delhi", "Bangalore"]
+            elif country == "Indonesia":
+                cities = ["Jakarta", "Surabaya", "Medan"]
+            elif country == "Russia":
+                cities = ["Moscow", "Saint Petersburg", "Novosibirsk"]
+            elif country == "Germany":
+                cities = ["Berlin", "Hamburg", "Munich"]
+            elif country == "Turkey":
+                cities = ["Istanbul", "Ankara", "Izmir"]
+            else:
+                cities = []
+            provided["city"] = ArgValue().valueSet(cities)
+        if "river" in names:
+            continent = current["continent"]
+            if continent == "Africa":
+                rivers = ["Nile", "Chambeshi", "Niger"]
+            elif continent == "Asia":
+                rivers = ["Yangtze", "Yellow River", "Mekong"]
+            elif continent == "Europe":
+                rivers = ["Volga", "Danube", "Dnepr"]
+            else:
+                rivers = []
+            provided["river"] = ArgValue().valueSet(rivers)
+        if "weather" in names:
+            provided["weather"] = ArgValue().valueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
