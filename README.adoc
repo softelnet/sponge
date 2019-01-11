@@ -1,5 +1,5 @@
 = Sponge
-:url: http://sponge.openksavi.org
+:url: https://sponge.openksavi.org
 :sponge: Sponge
 :github: https://github.com/softelnet/sponge
 

@@ -8,7 +8,7 @@ This documentation applies to version {projectVersion} (release date: {projectDa
 
 {sponge} is a software for implementing *synchronous actions* and *asynchronous event processors*. Event processors listen to certain events and perform specified operations when some conditions are met. Events are usually sent by external systems. {sponge} allows to introduce temporal and logical conditions to processed events. Event processing may end up with sending of another, high-level event thus creating a hierarchical model of events. The supported event processors include *filters*, *triggers*, *rules* and *correlators*.
 
-In order to use {sponge} you may choose to:
+There are several ways to use {sponge}:
 
 * Embed {sponge} as a software library in your Java application using Maven dependency.
 * Download the {sponge} standalone command-line program and use it in your environment.
@@ -48,6 +48,7 @@ The main features of {sponge}:
 * Allows *publishing a custom REST API of your application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
 * Provides *REST API client libraries* for *Java* and *Dart* to simplify writing a client code.
 * Provides integration with *TensorFlow*, an open source *machine learning* framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
+* Allows fast creating generic, opinionated  mobile applications backed by a server-side business logic. The business logic has to be defined in {sponge} actions and the end user only runs the {sponge} mobile client application (currently under development) that provides a generic GUI to call actions. It could be useful in the cases when the mobile GUI doesn't have to be customized.
 * Provides a comprehensive documentation and many examples.
 
 == License

@@ -32,7 +32,7 @@
         <mobileGuiClientSourcesUrl>https://github.com/softelnet/sponge_mobile_client/tree/master</mobileGuiClientSourcesUrl>
         <jekyllBuildDir>${project.build.directory}/jekyll/jekyll</jekyllBuildDir>
         <logoDir>${basedir}/src/images</logoDir>
-        <homepage>http://sponge.openksavi.org</homepage>
+        <homepage>https://sponge.openksavi.org</homepage>
         <standalonePackage>${standalonePackageName}-standalone</standalonePackage>
         <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
         <javaSeJavaDocUrl>https://docs.oracle.com/javase/8/docs/api</javaSeJavaDocUrl>

@@ -1,5 +1,5 @@
 = Sponge
-:url: http://sponge.openksavi.org
+:url: https://sponge.openksavi.org
 :sponge: Sponge
 
 External, optional Sponge modules released under various licenses.
