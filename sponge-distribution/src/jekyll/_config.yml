@@ -38,7 +38,7 @@ asciidoctor:
     - projectDate=${release.date}
     - imagesdir=/docs/images
     - toclevels=5
-    - homepage=http://sponge.openksavi.org
+    - homepage=https://sponge.openksavi.org
     - sectnums=true
     - sectnumlevels=5
     - icons=font
@@ -65,7 +65,7 @@ asciidoctor:
     - downloadUrl=/download/{standalonePackage}.zip
     - logoDir=images
     - javaSeJavaDocUrl=https://docs.oracle.com/javase/8/docs/api
-    - spongeJavaDocUrl=http://sponge.openksavi.org/docs/javadoc
+    - spongeJavaDocUrl=https://sponge.openksavi.org/docs/javadoc
 
 defaults:
   -

@@ -236,7 +236,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                         + " -k ../examples/standalone/multiple_kb_files/event_processors.py"
                         + ",../examples/standalone/multiple_kb_files/example2.py\n")
                 .append("\nPress CTRL+C to exit the " + VersionInfo.PRODUCT + " standalone command-line application.\n")
-                .append("\nSee http://sponge.openksavi.org for more details.").toString();
+                .append("\nSee https://sponge.openksavi.org for more details.").toString();
         //@formatter:on
         formatter.printHelp(EXECUTABLE_NAME, header, StandaloneConstants.OPTIONS, footer, true);
     }

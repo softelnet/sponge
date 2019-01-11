@@ -1,16 +1,30 @@
 = Mobile client application
 :page-permalink: /mobile/
 
+== Introduction
+
 The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS.
 
 NOTE: The application is currently under development. It will be released as an open source. The beta version will be released in the first quarter of 2019.
 
 == Features
-The following screenshots show the key features of the mobile application.
+The following chapters show the key features of the mobile application.
+
+=== Connections
 
 image::screens/mobile/actions_connection_list.jpg[title="Selecting a connection to the Sponge instance in the action list screen",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The application allows you to connect to a single {sponge} REST API server at a time. You may configure many connections and choose one of them.
+
+image::screens/mobile/connections.jpg[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
+
+You may add, edit and remove connections to {sponge} instances as well as activate a connection. To remove a connection swipe the corresponding element.
+
+image::screens/mobile/connections_edit.jpg[title="Editing a connection to a Sponge instance",width=300,pdfwidth=35%,scaledwidth=35%]
+
+A {sponge} address is the URL of the {sponge} instance.
+
+=== Action list
 
 image::screens/mobile/actions.jpg[title="The action list",width=300,pdfwidth=35%,scaledwidth=35%]
 
@@ -22,17 +36,13 @@ The floating button allows to refresh the action list from the server. The refre
 
 NOTE: The application currently doesn't supports all {sponge} data types.
 
+=== Navigation
+
 image::screens/mobile/drawer.jpg[title="The navigation drawer",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The navigation drawer allows switching between the available main views.
 
-image::screens/mobile/connections.jpg[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
-
-You may add, edit and remove connections to {sponge} instances as well as activate a connection. To remove a connection swipe the corresponding element.
-
-image::screens/mobile/connections_edit.jpg[title="Editing a connection to a Sponge instance",width=300,pdfwidth=35%,scaledwidth=35%]
-
-A {sponge} address is the URL of the {sponge} instance.
+=== Action call
 
 image::screens/mobile/action_call_manage_lcd.jpg[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
 
@@ -311,6 +321,8 @@ image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action ca
 
 Allowed argument values can be defined in an action and provided from the server every time the action call screen is shown or an argument dependency value changes.
 
+=== Action result
+
 image::screens/mobile/actions_binary_result.jpg[title="The action binary result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return contents that can be viewed for example as a HTML or a PDF file using the mobile OS viewers.
@@ -371,16 +383,23 @@ image::screens/mobile/actions_markdown_result.jpg[title="The action Markdown for
 
 Actions may return a https://en.wikipedia.org/wiki/Markdown[Markdown] formatted text.
 
+=== User experience
+
+image::screens/mobile/dark_theme.jpg[title="The application dart theme",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The application may be switched to the dark theme in the settings.
+
+=== Included demos
+The access to actions in the mobile application is generic. However the application may include demos that use a customized UI.
+
+==== Handwritten digit recognition
+
 image::screens/mobile/drawer_digits.jpg[title="The navigation drawer if connected to a Sponge instance that supports a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
 
-The access to actions in the mobile application is generic. However the application includes a demo of recognizing a handwritten digit. If the current connection points to a {sponge} instance that has the required action that performs the digit recognition, this demo is enabled in the navigation drawer.
+If the current connection points to a {sponge} instance that has the required action that performs a handwritten digit recognition, this demo is enabled in the navigation drawer.
 
 image::screens/mobile/digits_info.jpg[title="The digit recognition demo - the information dialog",width=300,pdfwidth=35%,scaledwidth=35%]
 
 image::screens/mobile/digits_drawing.jpg[title="The digit recognition demo - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The digit recognition demo screen allows drawing a digit that will be recognized by the {sponge} action. After each stroke the remote action call is made and the result is shown in the circle.
-
-image::screens/mobile/dark_theme.jpg[title="The application dart theme",width=300,pdfwidth=35%,scaledwidth=35%]
-
-The application may be switched to the dark theme in the settings.

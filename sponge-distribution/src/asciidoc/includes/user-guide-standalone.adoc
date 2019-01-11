@@ -132,8 +132,8 @@ You may provide Spring configuration files using a command-line option or defini
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
@@ -169,8 +169,8 @@ You could use Camel routes to send events to {sponge} from an external systems, 
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
@@ -210,8 +210,8 @@ You could use Camel routes to send events to {sponge} from an external systems, 
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<sponge xmlns="http://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://sponge.openksavi.org http://sponge.openksavi.org/schema/config.xsd">
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
         <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
