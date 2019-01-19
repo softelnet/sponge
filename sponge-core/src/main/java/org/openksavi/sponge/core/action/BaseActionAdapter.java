@@ -97,12 +97,12 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         Validate.notNull(getArgsMeta(), "Argument metadata not defined");
 
         Set<String> allProvidedArguments =
-                getArgsMeta().stream().filter(ArgMeta::isProvided).map(ArgMeta::getName).collect(Collectors.toSet());
+                getArgsMeta().stream().filter(BaseActionAdapter::isArgProvided).map(ArgMeta::getName).collect(Collectors.toSet());
         Set<String> finalNames = new LinkedHashSet<>();
 
         if (names != null) {
             for (String name : names) {
-                Validate.isTrue(getArgMeta(name).isProvided(), "Argument '%s' is not defined as provided", name);
+                Validate.isTrue(isArgProvided(getArgMeta(name)), "Argument '%s' is not defined as provided", name);
                 finalNames.add(name);
             }
         } else {
@@ -162,20 +162,21 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     private void validateArgProvided(List<ArgMeta<?>> argsMeta) {
         Set<String> prevArgNames = new HashSet<>();
         for (ArgMeta<?> argMeta : getArgsMeta()) {
-            Validate.isTrue(argMeta.getDepends().isEmpty() || argMeta.isProvided(),
-                    "The argument '%s' in the action '%s' has depends but is not provided", argMeta.getName(), getName());
-            argMeta.getDepends().forEach(dependsOnArg -> {
-                Validate.isTrue(prevArgNames.contains(dependsOnArg), "Argument '%s' depends on argument '%s' that is not defined before",
-                        argMeta.getName(), dependsOnArg);
-            });
-            Validate.isTrue(!argMeta.isReadOnly() || argMeta.isProvided(), "Read only argument '%s' must be defined as provided",
-                    argMeta.getName());
-            Validate.isTrue(!argMeta.isReadOnly() || argMeta.getType().isNullable(), "Read only argument '%s' type must be nullable",
-                    argMeta.getName());
-            Validate.isTrue(!argMeta.isOverwrite() || argMeta.isProvided(),
-                    "The argument '%s' that has the overwrite flag must be defined as provided", argMeta.getName());
+            if (argMeta.getProvided() != null) {
+                argMeta.getProvided().getDepends().forEach(dependsOnArg -> {
+                    Validate.isTrue(prevArgNames.contains(dependsOnArg),
+                            "The argument '%s' depends on argument '%s' that is not defined before", argMeta.getName(), dependsOnArg);
+                });
+                Validate.isTrue(!argMeta.getProvided().isReadOnly() || argMeta.getType().isNullable(),
+                        "The provided, read only argument '%s' type must be nullable", argMeta.getName());
+            }
+
             prevArgNames.add(argMeta.getName());
         }
+    }
+
+    private static boolean isArgProvided(ArgMeta<?> argMeta) {
+        return argMeta.getProvided() != null;
     }
 
     private void validateResultMeta(ResultMeta<?> resultMeta) {

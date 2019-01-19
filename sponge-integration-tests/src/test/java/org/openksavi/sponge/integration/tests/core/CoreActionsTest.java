@@ -353,18 +353,22 @@ public class CoreActionsTest {
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
 
-            assertTrue(argsMeta.get(0).isProvided());
-            assertEquals(0, argsMeta.get(0).getDepends().size());
-            assertFalse(argsMeta.get(0).isReadOnly());
-            assertTrue(argsMeta.get(1).isProvided());
-            assertEquals(0, argsMeta.get(1).getDepends().size());
-            assertFalse(argsMeta.get(1).isReadOnly());
-            assertTrue(argsMeta.get(2).isProvided());
-            assertEquals(0, argsMeta.get(2).getDepends().size());
-            assertTrue(argsMeta.get(2).isReadOnly());
-            assertFalse(argsMeta.get(3).isProvided());
-            assertEquals(0, argsMeta.get(3).getDepends().size());
-            assertFalse(argsMeta.get(3).isReadOnly());
+            assertNotNull(argsMeta.get(0).getProvided());
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(0).getProvided().getDepends().size());
+            assertFalse(argsMeta.get(0).getProvided().isReadOnly());
+            assertNotNull(argsMeta.get(1).getProvided());
+            assertTrue(argsMeta.get(1).getProvided().isValue());
+            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(1).getProvided().getDepends().size());
+            assertFalse(argsMeta.get(1).getProvided().isReadOnly());
+            assertNotNull(argsMeta.get(2).getProvided());
+            assertTrue(argsMeta.get(2).getProvided().isValue());
+            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(2).getProvided().getDepends().size());
+            assertTrue(argsMeta.get(2).getProvided().isReadOnly());
+            assertNull(argsMeta.get(3).getProvided());
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
             assertEquals(3, providedArgs.size());
@@ -421,9 +425,11 @@ public class CoreActionsTest {
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
 
-            assertTrue(argsMeta.get(0).isProvided());
-            assertEquals(0, argsMeta.get(0).getDepends().size());
-            assertFalse(argsMeta.get(0).isReadOnly());
+            assertNotNull(argsMeta.get(0).getProvided());
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(0).getProvided().getDepends().size());
+            assertFalse(argsMeta.get(0).getProvided().isReadOnly());
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
             assertEquals(1, providedArgs.size());
@@ -464,18 +470,25 @@ public class CoreActionsTest {
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
 
-            assertTrue(argsMeta.get(0).isProvided());
-            assertEquals(0, argsMeta.get(0).getDepends().size());
-            assertTrue(argsMeta.get(1).isProvided());
-            assertEquals(0, argsMeta.get(1).getDepends().size());
-            assertTrue(argsMeta.get(2).isProvided());
-            assertEquals(0, argsMeta.get(2).getDepends().size());
+            assertNotNull(argsMeta.get(0).getProvided());
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(0).getProvided().getDepends().size());
+            assertNotNull(argsMeta.get(1).getProvided());
+            assertTrue(argsMeta.get(1).getProvided().isValue());
+            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(1).getProvided().getDepends().size());
+            assertNotNull(argsMeta.get(2).getProvided());
+            assertTrue(argsMeta.get(2).getProvided().isValue());
+            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(2).getProvided().getDepends().size());
             assertTrue(argsMeta.get(2).getType().isNullable());
-            assertFalse(argsMeta.get(3).isProvided());
-            assertEquals(0, argsMeta.get(3).getDepends().size());
-            assertTrue(argsMeta.get(4).isProvided());
-            assertEquals(1, argsMeta.get(4).getDepends().size());
-            assertEquals("actuator1", argsMeta.get(4).getDepends().get(0));
+            assertNull(argsMeta.get(3).getProvided());
+            assertNotNull(argsMeta.get(4).getProvided());
+            assertTrue(argsMeta.get(4).getProvided().isValue());
+            assertTrue(argsMeta.get(4).getProvided().isValueSet());
+            assertEquals(1, argsMeta.get(4).getProvided().getDepends().size());
+            assertEquals("actuator1", argsMeta.get(4).getProvided().getDepends().get(0));
 
             providedArgs =
                     engine.getOperations().provideActionArgs(actionAdapter.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
@@ -606,12 +619,12 @@ public class CoreActionsTest {
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideArgNoOverwrite");
             assertEquals(1, actionAdapter.getArgsMeta().size());
             ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
-            assertFalse(argMeta.isOverwrite());
+            assertFalse(argMeta.getProvided().isOverwrite());
             ArgValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
-            if (argValue.isValuePresent() && argMeta.isOverwrite()) {
+            if (argValue.isValuePresent() && argMeta.getProvided().isOverwrite()) {
                 value = providedValue;
             }
 
@@ -638,12 +651,12 @@ public class CoreActionsTest {
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideArgOverwrite");
             assertEquals(1, actionAdapter.getArgsMeta().size());
             ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
-            assertTrue(argMeta.isOverwrite());
+            assertTrue(argMeta.getProvided().isOverwrite());
             ArgValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
-            if (argValue.isValuePresent() && argMeta.isOverwrite()) {
+            if (argValue.isValuePresent() && argMeta.getProvided().isOverwrite()) {
                 value = providedValue;
             }
 

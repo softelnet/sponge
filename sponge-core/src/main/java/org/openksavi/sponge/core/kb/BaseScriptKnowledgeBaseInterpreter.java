@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ArgProvided;
 import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.config.Configuration;
@@ -260,7 +261,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                ArgMeta.class, ResultMeta.class, ArgValue.class,
+                ArgMeta.class, ResultMeta.class, ArgProvided.class, ArgValue.class,
                 AnnotatedValue.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class));
         //@formatter:on

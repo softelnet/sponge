@@ -19,8 +19,6 @@ package org.openksavi.sponge.tensorflow;
 import java.util.List;
 import java.util.Map;
 
-import org.openksavi.sponge.Experimental;
-
 /**
  * An image classifier service interface.
  */

@@ -67,7 +67,7 @@ sponge.enableJava(JavaEchoAction)
 ----
 
 == Arguments and result metadata
-Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and a result. Metadata are not verified by the engine while performing an action call but could be interpreted by a client code or {sponge} plugins. For example they could be useful in a generic GUI that calls {sponge} actions. 
+Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and a result. Metadata are not verified by the engine while performing an action call but could be interpreted by a client code or {sponge} plugins. For example they could be useful in a generic GUI that calls {sponge} actions.
 
 Metadata for arguments and a result support <<types, types>>.
 
@@ -92,16 +92,28 @@ Metadata for arguments and a result support <<types, types>>.
 |A not mandatory flag specifying if this argument is optional. Defaults to `false`. Optional arguments can be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
 
 |`provided`
-|A flag specifying if this argument is _provided_. Defaults to `false`.
+|The _provided_ argument specification. Defaults to `null`.
+|===
+
+.Provided argument specification properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`value`
+|A flag specifying if this argument value is provided.
+
+|`valueSet`
+|The flag specifying if this argument value set is provided.
 
 |`depends`
-|A list of attribute names that this attribute depends on. Available only if the attribute is _provided_.
+|A list of attribute names that this attribute depends on.
 
 |`readOnly`
-|A flag specifying if this argument is read only. Defaults to `false`. Available only if the attribute is _provided_.
+|A flag specifying if this argument is read only. Defaults to `false`.
 
 |`overwrite`
-|A flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to `false`. Available only if the attribute is _provided_. This flag should be handled by a client code.
+|A flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
 |===
 
 .Result metadata properties
@@ -180,11 +192,11 @@ class SetActuator(Action):
         self.displayName = "Set actuator"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(),
-            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(),
-            ArgMeta("actuator3", IntegerType().nullable()).displayName("Actuator 3 state").provided().readOnly(),
+            ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(ArgProvided().value().valueSet()),
+            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(ArgProvided().value()),
+            ArgMeta("actuator3", IntegerType().nullable()).displayName("Actuator 3 state").provided(ArgProvided().value().readOnly()),
             ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).displayName("Actuator 5 state").provided().depends("actuator1"),
+            ArgMeta("actuator5", StringType()).displayName("Actuator 5 state").provided(ArgProvided().value().valueSet().depends("actuator1")),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
@@ -200,8 +212,6 @@ class SetActuator(Action):
             provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
             provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
-        if "actuator4" in names:
-            provided["actuator4"] = ArgValue().valueSet([2, 4, 8])
         if "actuator5" in names:
             provided["actuator5"] = ArgValue().value(sponge.getVariable("actuator5", None)).valueSet(["X", "Y", "Z", current["actuator1"]])
 
@@ -218,7 +228,7 @@ A provided argument can be `readOnly`. In that case its value in the `onCall` me
 
 A provided argument can _depend_ on other arguments but only those that are specified earlier. In the example argument `actuator5` depends on `actuator1`. Its possible value set contains the value of `actuator1`.
 
-Arguments configured as provided have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `value` method sets the provided value and the optional `valueSet` method sets the possible value set.
+Arguments configured as provided have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `value` method sets the provided value. The optional `valueSet` method sets the possible value set. The options `valueSetDisplayNames` method sets the value set display names.
 
 The parameter `names` in the `onProvideArgs` is a set of argument names that are to be provided. The `current` parameter is a not null map of argument names and their current values passed from a client code. The current value means the value used in a client code, for example entered by a user into an UI before calling the action. This map is required to contain values of those arguments that the arguments specified in the `names` depend on.
 

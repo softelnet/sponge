@@ -14,7 +14,7 @@ class GetAvailableSensorNames(Action):
 class ProvideByAction(Action):
     def onConfigure(self):
         self.displayName = "Action with provided argument"
-        self.argsMeta = [ ArgMeta("sensorName", StringType()).provided() ]
+        self.argsMeta = [ ArgMeta("sensorName", StringType()).provided(ArgProvided().valueSet()) ]
         self.resultMeta = ResultMeta(BooleanType()).displayName("Boolean result")
     def onCall(self, sensorName):
         return sensorName == "sensor1"

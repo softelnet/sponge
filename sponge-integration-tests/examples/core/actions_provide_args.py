@@ -15,9 +15,9 @@ class SetActuator(Action):
         self.displayName = "Set actuator"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(),
-            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(),
-            ArgMeta("actuator3", IntegerType().nullable()).displayName("Actuator 3 state").provided().readOnly(),
+            ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(ArgProvided().value().valueSet()),
+            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(ArgProvided().value()),
+            ArgMeta("actuator3", IntegerType().nullable()).displayName("Actuator 3 state").provided(ArgProvided().value().readOnly()),
             ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state")
         ]
         self.resultMeta = ResultMeta(VoidType())
@@ -39,7 +39,7 @@ class SetActuatorValueSetDisplayNames(Action):
         self.displayName = "Set actuator type"
         self.description = "Sets the actuator type."
         self.argsMeta = [
-            ArgMeta("actuatorType", StringType()).displayName("Actuator type").provided(),
+            ArgMeta("actuatorType", StringType()).displayName("Actuator type").provided(ArgProvided().value().valueSet()),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuatorType):

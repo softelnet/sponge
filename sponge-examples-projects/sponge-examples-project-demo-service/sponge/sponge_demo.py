@@ -37,7 +37,7 @@ class ListValues(Action):
 class ProvideByAction(Action):
     def onConfigure(self):
         self.displayName = "Action with provided argument"
-        self.argsMeta = [ArgMeta("value", StringType()).displayName("Value").provided()]
+        self.argsMeta = [ArgMeta("value", StringType()).displayName("Value").provided(ArgProvided().valueSet())]
         self.resultMeta = ResultMeta(StringType()).displayName("Same value")
     def onCall(self, value):
         return value
@@ -143,11 +143,11 @@ class DependingArgumentsAction(Action):
     def onConfigure(self):
         self.displayName = "Action with depending arguments"
         self.argsMeta = [
-            ArgMeta("continent", StringType()).displayName("Continent").provided(),
-            ArgMeta("country", StringType()).displayName("Country").provided().depends("continent"),
-            ArgMeta("city", StringType()).displayName("City").provided().depends("country"),
-            ArgMeta("river", StringType()).displayName("River").provided().depends("continent"),
-            ArgMeta("weather", StringType()).displayName("Weather").provided(),
+            ArgMeta("continent", StringType()).displayName("Continent").provided(ArgProvided().valueSet()),
+            ArgMeta("country", StringType()).displayName("Country").provided(ArgProvided().valueSet().depends("continent")),
+            ArgMeta("city", StringType()).displayName("City").provided(ArgProvided().valueSet().depends("country")),
+            ArgMeta("river", StringType()).displayName("River").provided(ArgProvided().valueSet().depends("continent")),
+            ArgMeta("weather", StringType()).displayName("Weather").provided(ArgProvided().valueSet()),
         ]
         self.resultMeta = ResultMeta(StringType()).displayName("Sentences")
     def onCall(self, continent, country, city, river, weather):

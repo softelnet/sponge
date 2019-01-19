@@ -16,11 +16,10 @@
 
 package org.openksavi.sponge.restapi.model;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.action.ArgProvided;
 import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ActionArgMeta", description = "An action argument metadata")
@@ -37,29 +36,19 @@ public class RestActionArgMeta {
 
     private boolean optional;
 
-    private boolean provided;
-
-    private List<String> depends;
-
-    private boolean readOnly;
-
-    private boolean overwrite;
+    private ArgProvided provided;
 
     public RestActionArgMeta() {
         //
     }
 
-    public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional, boolean provided,
-            List<String> depends, boolean readOnly, boolean overwrite) {
+    public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional, ArgProvided provided) {
         this.name = name;
         this.type = type;
         this.displayName = displayName;
         this.description = description;
         this.optional = optional;
         this.provided = provided;
-        this.depends = depends;
-        this.readOnly = readOnly;
-        this.overwrite = overwrite;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -107,39 +96,12 @@ public class RestActionArgMeta {
         this.optional = optional;
     }
 
-    @ApiModelProperty(value = "Provided argument", required = false)
-    public boolean isProvided() {
+    @ApiModelProperty(value = "The provided argument specification", required = false)
+    public ArgProvided getProvided() {
         return provided;
     }
 
-    public void setProvided(boolean provided) {
+    public void setProvided(ArgProvided provided) {
         this.provided = provided;
-    }
-
-    @ApiModelProperty(value = "Argument depends on others arguments", required = false)
-    public List<String> getDepends() {
-        return depends;
-    }
-
-    public void setDepends(List<String> depends) {
-        this.depends = depends;
-    }
-
-    @ApiModelProperty(value = "Read only argument", required = false)
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-    }
-
-    @ApiModelProperty(value = "The overwrite flag", required = false)
-    public boolean isOverwrite() {
-        return overwrite;
-    }
-
-    public void setOverwrite(boolean overwrite) {
-        this.overwrite = overwrite;
     }
 }

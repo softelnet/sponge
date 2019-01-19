@@ -6,6 +6,11 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
+== 1.7.0 (not released yet)
+
+* API change: A provided argument specification in now placed in the `ArgProvided` class, not directly in the `ArgMeta` as before.
+
+[discrete]
 == 1.6.0 (2019-01-11)
 
 * A noteworthy new feature: There is a possibility to provide action argument values and possible value sets in the action configuration. It makes easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed by the action and its arguments.

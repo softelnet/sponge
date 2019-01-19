@@ -268,18 +268,19 @@ public abstract class BaseRestApiTestTemplate {
 
             List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
 
-            assertTrue(argsMeta.get(0).isProvided());
-            assertEquals(0, argsMeta.get(0).getDepends().size());
-            assertFalse(argsMeta.get(0).isReadOnly());
-            assertTrue(argsMeta.get(1).isProvided());
-            assertEquals(0, argsMeta.get(1).getDepends().size());
-            assertFalse(argsMeta.get(1).isReadOnly());
-            assertTrue(argsMeta.get(2).isProvided());
-            assertEquals(0, argsMeta.get(2).getDepends().size());
-            assertTrue(argsMeta.get(2).isReadOnly());
-            assertFalse(argsMeta.get(3).isProvided());
-            assertEquals(0, argsMeta.get(3).getDepends().size());
-            assertFalse(argsMeta.get(3).isReadOnly());
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(0).getProvided().getDepends().size());
+            assertFalse(argsMeta.get(0).getProvided().isReadOnly());
+            assertTrue(argsMeta.get(1).getProvided().isValue());
+            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(1).getProvided().getDepends().size());
+            assertFalse(argsMeta.get(1).getProvided().isReadOnly());
+            assertTrue(argsMeta.get(2).getProvided().isValue());
+            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(2).getProvided().getDepends().size());
+            assertTrue(argsMeta.get(2).getProvided().isReadOnly());
+            assertNull(argsMeta.get(3).getProvided());
 
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false, null, 1));
@@ -339,17 +340,20 @@ public abstract class BaseRestApiTestTemplate {
             List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
 
-            assertTrue(argsMeta.get(0).isProvided());
-            assertEquals(0, argsMeta.get(0).getDepends().size());
-            assertTrue(argsMeta.get(1).isProvided());
-            assertEquals(0, argsMeta.get(1).getDepends().size());
-            assertTrue(argsMeta.get(2).isProvided());
-            assertEquals(0, argsMeta.get(2).getDepends().size());
-            assertFalse(argsMeta.get(3).isProvided());
-            assertEquals(0, argsMeta.get(3).getDepends().size());
-            assertTrue(argsMeta.get(4).isProvided());
-            assertEquals(1, argsMeta.get(4).getDepends().size());
-            assertEquals("actuator1", argsMeta.get(4).getDepends().get(0));
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(0).getProvided().getDepends().size());
+            assertTrue(argsMeta.get(1).getProvided().isValue());
+            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(1).getProvided().getDepends().size());
+            assertTrue(argsMeta.get(2).getProvided().isValue());
+            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertEquals(0, argsMeta.get(2).getProvided().getDepends().size());
+            assertNull(argsMeta.get(3).getProvided());
+            assertTrue(argsMeta.get(4).getProvided().isValue());
+            assertTrue(argsMeta.get(4).getProvided().isValueSet());
+            assertEquals(1, argsMeta.get(4).getProvided().getDepends().size());
+            assertEquals("actuator1", argsMeta.get(4).getProvided().getDepends().get(0));
 
             providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());

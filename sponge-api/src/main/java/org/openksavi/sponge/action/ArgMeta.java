@@ -16,10 +16,6 @@
 
 package org.openksavi.sponge.action;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.openksavi.sponge.type.DataType;
 
 /**
@@ -43,22 +39,8 @@ public class ArgMeta<T extends DataType> {
     /** The flag specifying if this argument is optional. Defaults to {@code false}. */
     private boolean optional = false;
 
-    /** The flag specifying if this argument is provided. Defaults to {@code false}. */
-    private boolean provided = false;
-
-    /** The list of attribute names that this attribute depends on. Available only if the attribute is provided. */
-    private List<String> depends = new ArrayList<>();
-
-    /**
-     * The flag specifying if this argument is read only. Defaults to {@code false}. Available only if the attribute is provided.
-     */
-    private boolean readOnly = false;
-
-    /**
-     * The flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to
-     * {@code false}. Available only if the attribute is provided. This flag should be handled by a client code.
-     */
-    private boolean overwrite = false;
+    /** The provided argument specification. Defaults to {@code null}. */
+    private ArgProvided provided;
 
     public ArgMeta(String name, T type) {
         this.name = name;
@@ -80,23 +62,8 @@ public class ArgMeta<T extends DataType> {
         return this;
     }
 
-    public ArgMeta<T> provided() {
-        this.provided = true;
-        return this;
-    }
-
-    public ArgMeta<T> depends(String... depends) {
-        this.depends.addAll(Arrays.asList(depends));
-        return this;
-    }
-
-    public ArgMeta<T> readOnly() {
-        this.readOnly = true;
-        return this;
-    }
-
-    public ArgMeta<T> overwrite() {
-        this.overwrite = true;
+    public ArgMeta<T> provided(ArgProvided provided) {
+        this.provided = provided;
         return this;
     }
 
@@ -144,35 +111,11 @@ public class ArgMeta<T extends DataType> {
         return displayName != null ? displayName : name;
     }
 
-    public boolean isProvided() {
+    public ArgProvided getProvided() {
         return provided;
     }
 
-    public void setProvided(boolean provided) {
+    public void setProvided(ArgProvided provided) {
         this.provided = provided;
-    }
-
-    public List<String> getDepends() {
-        return depends;
-    }
-
-    public void setDepends(List<String> depends) {
-        this.depends = depends;
-    }
-
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-    }
-
-    public boolean isOverwrite() {
-        return overwrite;
-    }
-
-    public void setOverwrite(boolean overwrite) {
-        this.overwrite = overwrite;
     }
 }

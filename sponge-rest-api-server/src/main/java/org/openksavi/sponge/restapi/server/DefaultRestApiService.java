@@ -350,11 +350,12 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionAdapter actionAdapter) {
-        return actionAdapter.getArgsMeta() != null ? actionAdapter.getArgsMeta().stream()
-                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null, meta.getDisplayName(),
-                        meta.getDescription(), meta.isOptional(), meta.isProvided(), meta.getDepends(), meta.isReadOnly(),
-                        meta.isOverwrite()))
-                .collect(Collectors.toList()) : null;
+        return actionAdapter.getArgsMeta() != null
+                ? actionAdapter.getArgsMeta().stream()
+                        .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
+                                meta.getDisplayName(), meta.getDescription(), meta.isOptional(), meta.getProvided()))
+                        .collect(Collectors.toList())
+                : null;
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {
