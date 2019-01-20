@@ -17,6 +17,9 @@
 package org.openksavi.sponge.action;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.openksavi.sponge.util.LabeledValue;
 
 /**
  * An argument value and a possible value set.
@@ -30,13 +33,10 @@ public class ArgValue<T> {
     private boolean valuePresent = false;
 
     /**
-     * The possible value set if not {@code null}. For example it may be a list of string values to choose from. If the value set is present
-     * is is not {@code null}.
+     * The possible value set with optional labels. For example it may be a list of string values to choose from. If there is no value set
+     * for this argument, this property is {@code null}.
      */
-    private List<T> valueSet;
-
-    /** The value set display names. */
-    private List<String> valueSetDisplayNames;
+    private List<LabeledValue<T>> labeledValueSet;
 
     public ArgValue() {
         //
@@ -44,10 +44,6 @@ public class ArgValue<T> {
 
     public T getValue() {
         return value;
-    }
-
-    public List<T> getValueSet() {
-        return valueSet;
     }
 
     public void setValue(T value) {
@@ -62,16 +58,22 @@ public class ArgValue<T> {
         this.valuePresent = valuePresent;
     }
 
-    public void setValueSet(List<T> valueSet) {
-        this.valueSet = valueSet;
+    public List<LabeledValue<T>> getLabeledValueSet() {
+        return labeledValueSet;
     }
 
-    public List<String> getValueSetDisplayNames() {
-        return valueSetDisplayNames;
+    public void setLabeledValueSet(List<LabeledValue<T>> labeledValueSet) {
+        this.labeledValueSet = labeledValueSet;
     }
 
-    public void setValueSetDisplayNames(List<String> valueSetDisplayNames) {
-        this.valueSetDisplayNames = valueSetDisplayNames;
+    /**
+     * The utility getter for the possible value set without labels.
+     *
+     * @return the value set.
+     */
+    public List<T> getValueSet() {
+        return labeledValueSet != null ? labeledValueSet.stream().map(labeledValue -> labeledValue != null ? labeledValue.getValue() : null)
+                .collect(Collectors.toList()) : null;
     }
 
     public ArgValue<T> value(T value) {
@@ -80,14 +82,14 @@ public class ArgValue<T> {
         return this;
     }
 
-    public ArgValue<T> valueSet(List<T> valueSet) {
-        setValueSet(valueSet);
+    public ArgValue<T> labeledValueSet(List<LabeledValue<T>> valueSet) {
+        setLabeledValueSet(valueSet);
         return this;
     }
 
-    public ArgValue<T> valueSet(List<T> valueSet, List<String> displayNames) {
-        setValueSet(valueSet);
-        setValueSetDisplayNames(displayNames);
+    public ArgValue<T> valueSet(List<T> valueSet) {
+        setLabeledValueSet(
+                valueSet != null ? valueSet.stream().map(value -> new LabeledValue<>(value, null)).collect(Collectors.toList()) : null);
         return this;
     }
 }

@@ -53,6 +53,7 @@ import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
+import org.openksavi.sponge.util.LabeledValue;
 
 public abstract class BaseRestApiTestTemplate {
 
@@ -329,6 +330,7 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testProvideActionArgsDepends() {
         try (SpongeRestClient client = createRestClient()) {
@@ -361,6 +363,15 @@ public abstract class BaseRestApiTestTemplate {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            List<LabeledValue<?>> actuator1LabeledValueSet = ((ArgValue) providedArgs.get("actuator1")).getLabeledValueSet();
+            assertEquals(3, actuator1LabeledValueSet.size());
+            assertEquals("A", actuator1LabeledValueSet.get(0).getValue());
+            assertEquals("Value A", actuator1LabeledValueSet.get(0).getLabel());
+            assertEquals("B", actuator1LabeledValueSet.get(1).getValue());
+            assertEquals("Value B", actuator1LabeledValueSet.get(1).getLabel());
+            assertEquals("C", actuator1LabeledValueSet.get(2).getValue());
+            assertEquals("Value C", actuator1LabeledValueSet.get(2).getLabel());
+
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator2", "actuator3", "actuator5"),

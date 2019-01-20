@@ -58,6 +58,7 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
+import org.openksavi.sponge.util.LabeledValue;
 
 public class CoreActionsTest {
 
@@ -437,8 +438,11 @@ public class CoreActionsTest {
             ArgValue<?> argValue = providedArgs.get("actuatorType");
             assertNotNull(argValue);
             assertEquals("auto", argValue.getValue());
-            assertEquals(Arrays.asList("auto", "manual"), argValue.getValueSet());
-            assertEquals(Arrays.asList("Automatic", "Manual"), argValue.getValueSetDisplayNames());
+            assertEquals(2, argValue.getLabeledValueSet().size());
+            assertEquals("auto", argValue.getLabeledValueSet().get(0).getValue());
+            assertEquals("Auto", argValue.getLabeledValueSet().get(0).getLabel());
+            assertEquals("manual", argValue.getLabeledValueSet().get(1).getValue());
+            assertEquals("Manual", argValue.getLabeledValueSet().get(1).getLabel());
             assertTrue(argValue.isValuePresent());
 
             engine.getOperations().call(actionAdapter.getName(), Arrays.asList("manual"));
@@ -449,8 +453,11 @@ public class CoreActionsTest {
             argValue = providedArgs.get("actuatorType");
             assertNotNull(argValue);
             assertEquals("manual", argValue.getValue());
-            assertEquals(Arrays.asList("auto", "manual"), argValue.getValueSet());
-            assertEquals(Arrays.asList("Automatic", "Manual"), argValue.getValueSetDisplayNames());
+            assertEquals(2, argValue.getLabeledValueSet().size());
+            assertEquals("auto", argValue.getLabeledValueSet().get(0).getValue());
+            assertEquals("Auto", argValue.getLabeledValueSet().get(0).getLabel());
+            assertEquals("manual", argValue.getLabeledValueSet().get(1).getValue());
+            assertEquals("Manual", argValue.getLabeledValueSet().get(1).getLabel());
             assertTrue(argValue.isValuePresent());
 
             assertFalse(engine.isError());
@@ -459,6 +466,7 @@ public class CoreActionsTest {
         }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testActionsProvideArgsDepends() {
         SpongeEngine engine =
@@ -497,6 +505,15 @@ public class CoreActionsTest {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            List<LabeledValue<?>> actuator1LabeledValueSet = ((ArgValue) providedArgs.get("actuator1")).getLabeledValueSet();
+            assertEquals(3, actuator1LabeledValueSet.size());
+            assertEquals("A", actuator1LabeledValueSet.get(0).getValue());
+            assertEquals("Value A", actuator1LabeledValueSet.get(0).getLabel());
+            assertEquals("B", actuator1LabeledValueSet.get(1).getValue());
+            assertEquals("Value B", actuator1LabeledValueSet.get(1).getLabel());
+            assertEquals("C", actuator1LabeledValueSet.get(2).getValue());
+            assertEquals("Value C", actuator1LabeledValueSet.get(2).getLabel());
+
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),

@@ -20,8 +20,8 @@ class SetGrovePiMode(Action):
         sponge.setVariable("grovePiMode", mode)
     def onProvideArgs(self, names, current, provided):
         if "mode" in names:
-            provided["mode"] = ArgValue().value(sponge.getVariable("grovePiMode", None)).valueSet(["auto", "manual"],
-                                                                                              ["Auto", "Manual"])
+            provided["mode"] = ArgValue().value(sponge.getVariable("grovePiMode", None)).labeledValueSet([LabeledValue("auto", "Auto"),
+                                                                                                          LabeledValue("manual", "Manual")])
 
 class ManageLcd(Action):
     def onConfigure(self):

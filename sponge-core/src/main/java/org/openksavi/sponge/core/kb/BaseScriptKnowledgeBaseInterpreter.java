@@ -53,6 +53,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.type.value.AnnotatedValue;
+import org.openksavi.sponge.util.LabeledValue;
 
 /**
  * Script based knowledge base interpreter.
@@ -261,8 +262,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                ArgMeta.class, ResultMeta.class, ArgProvided.class, ArgValue.class,
-                AnnotatedValue.class,
+                ArgMeta.class, ResultMeta.class, ArgProvided.class, ArgValue.class, LabeledValue.class, AnnotatedValue.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class));
         //@formatter:on
 

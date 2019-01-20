@@ -30,7 +30,8 @@ class SetActuator(Action):
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
-            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
+            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).labeledValueSet(
+                [LabeledValue("A", "Value A"), LabeledValue("B", "Value B"), LabeledValue("C", "Value C")])
         if "actuator2" in names:
             provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
