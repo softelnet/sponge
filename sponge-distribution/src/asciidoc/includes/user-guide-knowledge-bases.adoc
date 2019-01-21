@@ -121,8 +121,11 @@ For each plugin a global variable will be created. The name of this variable is 
 |`disableJavaAll()`
 |Disables Java-based processors.
 
-|`Object call(String actionName, Object... args)`
+|`Object call(String actionName, List<Object> args)`
 |Calls registered action with arguments.
+
+|`ValueHolder<Object> callIfExists(String actionName, List<Object> args)`
+|Calls the action if it exists. Returns the action result wrapped in a value holder or `null` if the action is not registered.
 
 |`shutdown()`
 |Shuts down the engine using the current thread.

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.util.ValueHolder;
 
 /**
  * Action Manager.
@@ -41,14 +42,34 @@ public interface ActionManager extends EngineModule {
     void removeAction(String actionName);
 
     /**
-     * Calls the action. Throws {@code ProcessorNotFoundException} when such action is not registered.
+     * Calls the action. Throws {@code ProcessorNotFoundException} if the action is not registered.
      *
-     * @param actionName name of registered action.
-     * @param args arguments for an action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     * @param actionName the name of the registered action.
+     * @param args the arguments for the action call. This parameter may be {@code null} and in that case no arguments will be passed to the
      *        action.
-     * @return result of executing action.
+     * @return the result of executing the action.
      */
     Object callAction(String actionName, List<Object> args);
+
+    /**
+     * Calls the action. Throws {@code ProcessorNotFoundException} if the action is not registered.
+     *
+     * @param actionAdapter the action adapter.
+     * @param args the arguments for the action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     *        action.
+     * @return the result of executing the action.
+     */
+    Object callAction(ActionAdapter actionAdapter, List<Object> args);
+
+    /**
+     * Calls the action if it exists.
+     *
+     * @param actionName the name of the registered action.
+     * @param args the arguments for the action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     *        action.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    ValueHolder<Object> callActionIfExists(String actionName, List<Object> args);
 
     /**
      * Returns registered processor adapter map.

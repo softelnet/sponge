@@ -59,6 +59,7 @@ import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.LabeledValue;
+import org.openksavi.sponge.util.ValueHolder;
 
 public class CoreActionsTest {
 
@@ -708,6 +709,31 @@ public class CoreActionsTest {
             assertEquals(2, result.getFeatures().size());
             assertEquals("value1", result.getFeatures().get("feature1"));
             assertEquals("value2", result.getFeatures().get("feature2"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testCallIfExists() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata.py").build();
+        engine.startup();
+
+        try {
+            ValueHolder<String> stringHolder = engine.getOperations().callIfExists(String.class, "UpperEchoAction", Arrays.asList("text"));
+            assertNotNull(stringHolder);
+            assertEquals("TEXT", stringHolder.getValue());
+
+            assertNull(engine.getOperations().callIfExists(String.class, "UpperEchoAction_Nonexisting", Arrays.asList("text")));
+
+            ValueHolder<Object> objectHolder = engine.getOperations().callIfExists("UpperEchoAction", Arrays.asList("text"));
+            assertNotNull(objectHolder);
+            assertEquals("TEXT", objectHolder.getValue());
+
+            assertNull(engine.getOperations().callIfExists("UpperEchoAction_Nonexisting", Arrays.asList("text")));
 
             assertFalse(engine.isError());
         } finally {

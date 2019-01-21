@@ -35,6 +35,7 @@ import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
 import org.openksavi.sponge.util.process.ProcessDefinition;
@@ -52,12 +53,6 @@ public class BaseEngineOperations implements EngineOperations {
         return engine;
     }
 
-    /**
-     * Calls registered action with arguments.
-     *
-     * @param actionName name of the action.
-     * @param args arguments to pass to action.
-     */
     @Override
     public Object call(String actionName, List<Object> args) {
         return engine.getActionManager().callAction(actionName, args);
@@ -81,6 +76,36 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public <T> T call(Class<T> resultClass, String actionName) {
         return call(resultClass, actionName, Collections.emptyList());
+    }
+
+    @Override
+    public ValueHolder<Object> callIfExists(String actionName, List<Object> args) {
+        return engine.getActionManager().callActionIfExists(actionName, args);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName, List<Object> args) {
+        ValueHolder<Object> resultHolder = callIfExists(actionName, args);
+
+        if (resultHolder == null) {
+            return null;
+        }
+
+        Object result = resultHolder.getValue();
+        Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
+
+        return new ValueHolder<>((T) result);
+    }
+
+    @Override
+    public ValueHolder<Object> callIfExists(String actionName) {
+        return callIfExists(actionName, Collections.emptyList());
+    }
+
+    @Override
+    public <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName) {
+        return callIfExists(resultClass, actionName, Collections.emptyList());
     }
 
     @Override

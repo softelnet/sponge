@@ -27,6 +27,7 @@ import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
 import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
 import org.openksavi.sponge.util.process.ProcessDefinition;
@@ -80,6 +81,44 @@ public interface EngineOperations {
      * @return result of action called for specified arguments.
      */
     <T> T call(Class<T> resultClass, String actionName);
+
+    /**
+     * Calls the action if it exists.
+     *
+     * @param actionName actionName the action name.
+     * @param args arguments to pass to action.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    ValueHolder<Object> callIfExists(String actionName, List<Object> args);
+
+    /**
+     * Calls the action if it exists.
+     *
+     * @param resultClass result class.
+     * @param actionName actionName the action name.
+     * @param args arguments to pass to action.
+     * @param <T> result type.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName, List<Object> args);
+
+    /**
+     * Calls the action if it exists.
+     *
+     * @param actionName actionName the action name.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    ValueHolder<Object> callIfExists(String actionName);
+
+    /**
+     * Calls the action if it exists.
+     *
+     * @param resultClass result class.
+     * @param actionName actionName the action name.
+     * @param <T> result type.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName);
 
     /**
      * Returns the provided values along with value sets of the action arguments.
