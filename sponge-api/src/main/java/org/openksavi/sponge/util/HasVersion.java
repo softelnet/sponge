@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.model.request;
-
-import org.openksavi.sponge.ProcessorQualifiedVersion;
+package org.openksavi.sponge.util;
 
 /**
- * An action execution related request.
+ * Represents an entity that may have a version.
  */
-public interface ActionExecutionRequest {
+public interface HasVersion {
 
-    String getName();
+    /**
+     * Sets the version.
+     *
+     * @param version the version.
+     */
+    void setVersion(Integer version);
 
-    void setName(String name);
-
-    ProcessorQualifiedVersion getQualifiedVersion();
-
-    void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion);
+    /**
+     * Returns the version.
+     *
+     * @return the version or {@code null}.
+     */
+    Integer getVersion();
 }

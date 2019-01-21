@@ -19,7 +19,7 @@ def onInit():
     sponge.setVariable("actuator5", "X")
 
 def onLoad():
-    sponge.kb.version = 1
+    sponge.kb.version = 2
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -29,6 +29,7 @@ class UpperCase(Action):
             ArgMeta("text", StringType().maxLength(256)).label("Text to upper case").description("The text that will be converted to upper case.")
         ]
         self.resultMeta = ResultMeta(StringType()).label("Upper case text")
+        self.version = 2
     def onCall(self, text):
         self.logger.info("Action {} called: {}", self.name, text)
         sponge.getVariable("actionCalled").set(True)

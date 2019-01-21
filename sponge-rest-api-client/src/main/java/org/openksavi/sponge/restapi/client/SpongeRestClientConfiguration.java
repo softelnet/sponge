@@ -33,7 +33,7 @@ public class SpongeRestClientConfiguration {
 
     private boolean relogin = true;
 
-    private boolean verifyKnowledgeBaseVersion = true;
+    private boolean verifyProcessorVersion = true;
 
     private boolean useActionMetaCache = true;
 
@@ -90,12 +90,12 @@ public class SpongeRestClientConfiguration {
         setPassword(password);
     }
 
-    public boolean isVerifyKnowledgeBaseVersion() {
-        return verifyKnowledgeBaseVersion;
+    public boolean isVerifyProcessorVersion() {
+        return verifyProcessorVersion;
     }
 
-    public void setVerifyKnowledgeBaseVersion(boolean verifyKnowledgeBaseVersion) {
-        this.verifyKnowledgeBaseVersion = verifyKnowledgeBaseVersion;
+    public void setVerifyProcessorVersion(boolean verifyProcessorVersion) {
+        this.verifyProcessorVersion = verifyProcessorVersion;
     }
 
     public boolean isSsl() {
@@ -222,13 +222,13 @@ public class SpongeRestClientConfiguration {
         }
 
         /**
-         * Sets the flag to verify a knowledge base version on the server. The default value is {@code true}.
+         * Sets the flag to verify a processor version on the server. The default value is {@code true}.
          *
-         * @param verifyKnowledgeBaseVersion the flag to verify a knowledge base version on the server.
+         * @param verifyProcessorVersion the flag to verify a processor version on the server.
          * @return the builder.
          */
-        public Builder verifyKnowledgeBaseVersion(boolean verifyKnowledgeBaseVersion) {
-            configuration.setVerifyKnowledgeBaseVersion(verifyKnowledgeBaseVersion);
+        public Builder verifyProcessorVersion(boolean verifyProcessorVersion) {
+            configuration.setVerifyProcessorVersion(verifyProcessorVersion);
             return this;
         }
 

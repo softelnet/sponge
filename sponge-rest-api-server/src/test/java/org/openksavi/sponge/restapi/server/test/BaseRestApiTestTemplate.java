@@ -39,6 +39,7 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.action.ArgValue;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -172,11 +173,14 @@ public abstract class BaseRestApiTestTemplate {
             String arg1 = "test1";
 
             RestActionMeta actionMeta = client.getActionMeta("UpperCase");
-            actionMeta.getKnowledgeBase().setVersion(2);
+            actionMeta.setQualifiedVersion(new ProcessorQualifiedVersion(1, 1));
 
             try {
                 client.call("UpperCase", Arrays.asList(arg1));
                 fail("Exception expected");
+            } catch (IncorrectKnowledgeBaseVersionException e) {
+                assertEquals("The expected action qualified version (1.1) differs from the actual (2.2)", e.getMessage());
+                throw e;
             } finally {
                 engine.clearError();
             }

@@ -83,6 +83,16 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     }
 
     @Override
+    public void setVersion(Integer version) {
+        adapter.setVersion(version);
+    }
+
+    @Override
+    public Integer getVersion() {
+        return adapter.getVersion();
+    }
+
+    @Override
     public Map<String, Object> getFeatures() {
         return adapter.getFeatures();
     }

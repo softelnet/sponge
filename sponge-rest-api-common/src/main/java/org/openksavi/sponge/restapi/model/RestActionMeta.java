@@ -28,6 +28,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.ProcessorQualifiedVersion;
+
 @ApiModel(value = "ActionMeta", description = "An action metadata")
 public class RestActionMeta {
 
@@ -45,12 +47,13 @@ public class RestActionMeta {
 
     private RestActionResultMeta resultMeta;
 
+    private ProcessorQualifiedVersion qualifiedVersion;
+
     public RestActionMeta() {
-        //
     }
 
     public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, Map<String, Object> features,
-            List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
+            List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta, ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.label = label;
         this.description = description;
@@ -58,6 +61,7 @@ public class RestActionMeta {
         this.features = features;
         this.argsMeta = argsMeta;
         this.resultMeta = resultMeta;
+        this.qualifiedVersion = qualifiedVersion;
     }
 
     @ApiModelProperty(value = "The action name", required = true)
@@ -121,6 +125,15 @@ public class RestActionMeta {
 
     public void setResultMeta(RestActionResultMeta resultMeta) {
         this.resultMeta = resultMeta;
+    }
+
+    @ApiModelProperty(value = "The action qualified version", required = false)
+    public ProcessorQualifiedVersion getQualifiedVersion() {
+        return qualifiedVersion;
+    }
+
+    public void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion) {
+        this.qualifiedVersion = qualifiedVersion;
     }
 
     @JsonIgnore

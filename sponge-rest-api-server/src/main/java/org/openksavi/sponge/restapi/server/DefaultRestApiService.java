@@ -19,7 +19,6 @@ package org.openksavi.sponge.restapi.server;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgValue;
@@ -207,7 +207,7 @@ public class DefaultRestApiService implements RestApiService {
                     .filter(action -> canCallAction(user, action))
                     .map(action -> new RestActionMeta(action.getName(), action.getLabel(), action.getDescription(),
                             createRestKnowledgeBase(action.getKnowledgeBase()), action.getFeatures(), createActionArgMetaList(action),
-                            createActionResultMeta(action)))
+                            createActionResultMeta(action), action.getQualifiedVersion()))
                     .map(action -> marshalActionMeta(action)).collect(Collectors.toList())), request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
@@ -234,16 +234,16 @@ public class DefaultRestApiService implements RestApiService {
         return actionMeta;
     }
 
-    protected ActionAdapter getActionAdapterForRequest(String actionName, Integer version, User user) {
+    protected ActionAdapter getActionAdapterForRequest(String actionName, ProcessorQualifiedVersion qualifiedVersion, User user) {
         ActionAdapter actionAdapter = getEngine().getActionManager().getActionAdapter(actionName);
 
         Validate.notNull(actionAdapter, "The action %s doesn't exist", actionName);
         Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", actionName);
 
-        if (version != null && !Objects.equals(version, actionAdapter.getKnowledgeBase().getVersion())) {
+        if (qualifiedVersion != null && !qualifiedVersion.equals(actionAdapter.getQualifiedVersion())) {
             throw new RestApiIncorrectKnowledgeBaseVersionServerException(
-                    String.format("The expected knowledge base version (%d) differs from the actual (%d)", version,
-                            actionAdapter.getKnowledgeBase().getVersion()));
+                    String.format("The expected action qualified version (%s) differs from the actual (%s)", qualifiedVersion.toString(),
+                            actionAdapter.getQualifiedVersion().toString()));
         }
 
         return actionAdapter;
@@ -256,7 +256,7 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
             User user = authenticateRequest(request, exchange);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getVersion(), user);
+            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
             Object actionResult =
                     getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange));
@@ -310,7 +310,7 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
             User user = authenticateRequest(request, exchange);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getVersion(), user);
+            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
             Map<String, ArgValue<?>> provided =
                     getEngine().getOperations().provideActionArgs(actionAdapter.getName(), request.getArgNames(),
@@ -361,8 +361,7 @@ public class DefaultRestApiService implements RestApiService {
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {
         ResultMeta<?> resultMeta = actionAdapter.getResultMeta();
-        return resultMeta != null
-                ? new RestActionResultMeta(resultMeta.getType(), resultMeta.getLabel()) : null;
+        return resultMeta != null ? new RestActionResultMeta(resultMeta.getType(), resultMeta.getLabel()) : null;
     }
 
     protected RestApiAuthTokenService getSafeAuthTokenService() {

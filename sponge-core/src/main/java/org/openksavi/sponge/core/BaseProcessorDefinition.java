@@ -49,6 +49,8 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** Knowledge base reference. */
     private KnowledgeBase knowledgeBase;
 
+    private Integer version;
+
     /** The processor features. */
     private Map<String, Object> features;
 
@@ -167,6 +169,16 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
 
     public void setKnowledgeBase(BaseKnowledgeBase knowledgeBase) {
         this.knowledgeBase = knowledgeBase;
+    }
+
+    @Override
+    public Integer getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

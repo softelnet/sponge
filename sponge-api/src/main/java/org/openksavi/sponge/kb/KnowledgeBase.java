@@ -17,11 +17,12 @@
 package org.openksavi.sponge.kb;
 
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasVersion;
 
 /**
  * Knowledge base.
  */
-public interface KnowledgeBase extends KnowledgeBaseOperations, Descriptive {
+public interface KnowledgeBase extends KnowledgeBaseOperations, Descriptive, HasVersion {
 
     /**
      * Returns knowledge base interpreter type.
@@ -62,19 +63,4 @@ public interface KnowledgeBase extends KnowledgeBaseOperations, Descriptive {
      * Scans this knowledge base for processor definitions (classes) in order to auto enable.
      */
     void scanToAutoEnable();
-
-    /**
-     * Returns the optional version of this knowledge base.
-     *
-     * @return the version of this knowledge base or {@code null}.
-     */
-    Integer getVersion();
-
-
-    /**
-     * Sets the version of this knowledge base.
-     *
-     * @param version the version of this knowledge base.
-     */
-    void setVersion(Integer version);
 }

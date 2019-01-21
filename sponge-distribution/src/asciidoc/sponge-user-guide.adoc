@@ -440,6 +440,9 @@ def onLoad():
 |`description`
 |A description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but could be useful in a client code.
 
+|`version`
+|A processor version as an integer. This is a shortcut for `getVersion()`/`setVersion(integer)` methods. A version is not used internally by the engine. However it is used to enforce version checking when calling actions via the REST API.
+
 |`features`
 |Features of a processor. This is a shortcut for `getFeatures()`/`setFeatures(Map<String, Object>)` methods. The processor features property is simply a map of String to Object associated with a processor definition (not instance). It could be used to provide a custom behavior in a client code.
 

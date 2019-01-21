@@ -467,9 +467,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     protected void setupActionExecutionRequest(RestActionMeta actionMeta, ActionExecutionRequest request) {
-        // Conditionally set the verification of the knowledge base version on the server side.
-        if (configuration.isVerifyKnowledgeBaseVersion() && actionMeta != null && request.getVersion() == null) {
-            request.setVersion(actionMeta.getKnowledgeBase().getVersion());
+        // Conditionally set the verification of the processor qualified version on the server side.
+        if (configuration.isVerifyProcessorVersion() && actionMeta != null && request.getQualifiedVersion() == null) {
+            request.setQualifiedVersion(actionMeta.getQualifiedVersion());
         }
 
         Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), request.getName()),

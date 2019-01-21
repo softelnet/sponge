@@ -38,6 +38,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
@@ -733,6 +734,47 @@ public class CoreActionsTest {
             assertEquals("TEXT", objectHolder.getValue());
 
             assertNull(engine.getOperations().callIfExists("UpperEchoAction_Nonexisting", Arrays.asList("text")));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionVersion() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_version.py").build();
+        engine.startup();
+
+        try {
+            assertEquals(new Integer(12), engine.getActionManager().getActionAdapter("VersionedAction").getVersion());
+            assertNull(engine.getActionManager().getActionAdapter("NonVersionedAction").getVersion());
+
+            assertEquals(new ProcessorQualifiedVersion(null, 12),
+                    engine.getActionManager().getActionAdapter("VersionedAction").getQualifiedVersion());
+            assertEquals(new ProcessorQualifiedVersion(null, null),
+                    engine.getActionManager().getActionAdapter("NonVersionedAction").getQualifiedVersion());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionVersionKnowledgeBaseVersion() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_version_kb_version.py").build();
+        engine.startup();
+
+        try {
+            assertEquals(new Integer(12), engine.getActionManager().getActionAdapter("VersionedAction").getVersion());
+            assertNull(engine.getActionManager().getActionAdapter("NonVersionedAction").getVersion());
+
+            assertEquals(new ProcessorQualifiedVersion(2, 12),
+                    engine.getActionManager().getActionAdapter("VersionedAction").getQualifiedVersion());
+            assertEquals(new ProcessorQualifiedVersion(2, null),
+                    engine.getActionManager().getActionAdapter("NonVersionedAction").getQualifiedVersion());
 
             assertFalse(engine.isError());
         } finally {

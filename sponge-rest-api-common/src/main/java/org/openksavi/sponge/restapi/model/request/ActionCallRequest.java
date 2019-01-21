@@ -21,6 +21,8 @@ import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.ProcessorQualifiedVersion;
+
 @ApiModel(value = "ActionCallRequest", description = "An action call request")
 public class ActionCallRequest extends SpongeRequest implements ActionExecutionRequest {
 
@@ -28,16 +30,15 @@ public class ActionCallRequest extends SpongeRequest implements ActionExecutionR
 
     private List<Object> args;
 
-    private Integer version;
+    private ProcessorQualifiedVersion qualifiedVersion;
 
     public ActionCallRequest() {
-        //
     }
 
-    public ActionCallRequest(String name, List<Object> args, Integer version) {
+    public ActionCallRequest(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.args = args;
-        this.version = version;
+        this.qualifiedVersion = qualifiedVersion;
     }
 
     public ActionCallRequest(String name, List<Object> args) {
@@ -65,13 +66,13 @@ public class ActionCallRequest extends SpongeRequest implements ActionExecutionR
     }
 
     @Override
-    @ApiModelProperty(value = "The expected knowledge base version", required = false)
-    public Integer getVersion() {
-        return version;
+    @ApiModelProperty(value = "The action expected qualified version", required = false)
+    public ProcessorQualifiedVersion getQualifiedVersion() {
+        return qualifiedVersion;
     }
 
     @Override
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion) {
+        this.qualifiedVersion = qualifiedVersion;
     }
 }

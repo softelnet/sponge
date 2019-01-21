@@ -60,4 +60,11 @@ public interface ProcessorAdapter<T extends Processor<?>> extends ProcessorOpera
      * Validates this processor adapter.
      */
     void validate();
+
+    /**
+     * Returns the processor qualified version. Never returns {@code null}.
+     *
+     * @return the processor qualified version.
+     */
+    ProcessorQualifiedVersion getQualifiedVersion();
 }

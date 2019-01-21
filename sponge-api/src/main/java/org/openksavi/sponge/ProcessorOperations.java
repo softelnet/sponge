@@ -20,11 +20,12 @@ import java.util.Map;
 
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasVersion;
 
 /**
  * Processor operations.
  */
-public interface ProcessorOperations extends Descriptive {
+public interface ProcessorOperations extends Descriptive, HasVersion {
 
     /**
      * Returns the knowledge base associated with this processor.

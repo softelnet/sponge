@@ -904,6 +904,7 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- TODO Remove dependency here. -->
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
