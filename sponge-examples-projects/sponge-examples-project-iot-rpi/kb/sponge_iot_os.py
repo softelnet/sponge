@@ -7,18 +7,18 @@ from org.openksavi.sponge.util.process import ProcessConfiguration
 
 class OsGetDiskSpaceInfo(Action):
     def onConfigure(self):
-        self.displayName = "Get disk space info"
+        self.label = "Get disk space info"
         self.description = "Returns the disk space info."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("console")).displayName("Disk space info")
+        self.resultMeta = ResultMeta(StringType().format("console")).label("Disk space info")
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("df", "-h").outputAsString()).run().outputString
 
 class OsDmesg(Action):
     def onConfigure(self):
-        self.displayName = "Run dmesg"
+        self.label = "Run dmesg"
         self.description = "Returns the dmesg output."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("console")).displayName("The dmesg output")
+        self.resultMeta = ResultMeta(StringType().format("console")).label("The dmesg output")
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("dmesg").outputAsString()).run().outputString

@@ -12,10 +12,10 @@ def onInit():
 
 class UpperEchoAction(Action):
     def onConfigure(self):
-        self.displayName = "Echo Action"
+        self.label = "Echo Action"
         self.description = "Returns the upper case string"
-        self.argsMeta = [ ArgMeta("text", StringType()).displayName("Argument 1").description("Argument 1 description") ]
-        self.resultMeta = ResultMeta(StringType()).displayName("Upper case string").description("Result description")
+        self.argsMeta = [ ArgMeta("text", StringType()).label("Argument 1").description("Argument 1 description") ]
+        self.resultMeta = ResultMeta(StringType()).label("Upper case string").description("Result description")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
     	return text.upper()

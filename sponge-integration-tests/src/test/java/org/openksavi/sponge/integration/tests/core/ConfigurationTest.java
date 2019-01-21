@@ -102,18 +102,18 @@ public class ConfigurationTest {
 
         try {
             assertEquals("descriptiveEngine", engine.getName());
-            assertEquals("Descriptive engine", engine.getDisplayName());
+            assertEquals("Descriptive engine", engine.getLabel());
             assertEquals("Engine description", engine.getDescription());
             assertEquals("Sponge (descriptiveEngine) " + engine.getVersion(), engine.getInfo());
 
             KnowledgeBase kb = engine.getKnowledgeBaseManager().getKnowledgeBase("sampleKb");
             assertEquals("sampleKb", kb.getName());
-            assertEquals("Sample knowledge base", kb.getDisplayName());
+            assertEquals("Sample knowledge base", kb.getLabel());
             assertEquals("Sample knowledge base description", kb.getDescription());
 
             Plugin plugin = engine.getPluginManager().getPlugin("echoPlugin");
             assertEquals("echoPlugin", plugin.getName());
-            assertEquals("Echo plugin", plugin.getDisplayName());
+            assertEquals("Echo plugin", plugin.getLabel());
             assertEquals("Echo plugin description", plugin.getDescription());
 
             assertFalse(engine.isError());

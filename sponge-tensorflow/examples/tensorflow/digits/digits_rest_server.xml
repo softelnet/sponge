@@ -2,13 +2,13 @@
 <sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="digits" displayName="Digits">
+        <knowledgeBase name="digits" label="Digits">
             <file>${sponge.configDir}/actions/digits_common.py</file>
             <file>${sponge.configDir}/actions/digits_predict.py</file>
             <file>${sponge.configDir}/actions/digits_learn.py</file>
             <file>digits_rest_server.py</file>
         </knowledgeBase>
-        <knowledgeBase name="admin" displayName="Admin">
+        <knowledgeBase name="admin" label="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
             <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>

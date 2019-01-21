@@ -53,9 +53,9 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * Sets the process display name.
+     * Sets the process name.
      *
-     * @param name the process display name.
+     * @param name the process name.
      * @return this builder.
      */
     public ProcessConfigurationBuilder name(String name) {

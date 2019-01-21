@@ -22,14 +22,14 @@ In a general form an XML configuration file is built as in the following example
     </properties>
 
     <!-- Engine configuration section -->
-    <engine name="SampleSponge" displayName="Sample Sponge">
+    <engine name="SampleSponge" label="Sample Sponge">
         <description>The sample Sponge engine.</description>
         <mainProcessingUnitThreadCount>6</mainProcessingUnitThreadCount>
     </engine>
 
     <!-- Knowledge bases configuration section -->
     <knowledgeBases>
-        <knowledgeBase name="pythonKb" displayName="Python-based processors">
+        <knowledgeBase name="pythonKb" label="Python-based processors">
             <description>The Python-based knowledge base.</description>
             <file>kb_file_1.py</file>
             <file required="false">${sponge.home}/examples/script/py/kb_file_2.py</file>
@@ -40,7 +40,7 @@ In a general form an XML configuration file is built as in the following example
 
     <!-- Plugins configuration section -->
     <plugins>
-        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin" displayName="Connection plugin">
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin" label="Connection plugin">
             <description>The connection plugin provides the connection related code.</description>
             <configuration>
                 <connection>
@@ -131,9 +131,9 @@ Each `<knowledgeBase>` tag contains:
 |Attribute
 |The name of the knowledge base.
 
-|`displayName`
+|`label`
 |Attribute
-|The display name of the knowledge base.
+|The knowledge base label.
 
 |`type`
 |Attribute
@@ -169,9 +169,9 @@ The plugins configuration section (`<plugins>`) contains plugin definitions (`<p
 |Attribute
 |The unique name of the plugin (mandatory). A text without white spaces and special symbols. Also used as a variable name in order to access a given plugin in the knowledge base.
 
-|`displayName`
+|`label`
 |Attribute
-|The plugin display name.
+|The plugin label.
 
 |`class`
 |Attribute

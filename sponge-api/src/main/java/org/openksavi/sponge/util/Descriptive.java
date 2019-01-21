@@ -17,7 +17,7 @@
 package org.openksavi.sponge.util;
 
 /**
- * Represents an entity that has a name, a display name and a description.
+ * Represents an entity that has a name, a label and a description.
  */
 public interface Descriptive {
 
@@ -36,18 +36,18 @@ public interface Descriptive {
     void setName(String name);
 
     /**
-     * Sets the display name.
+     * Sets the label.
      *
-     * @param displayName the display name.
+     * @param label the label.
      */
-    void setDisplayName(String displayName);
+    void setLabel(String label);
 
     /**
-     * Returns the display name.
+     * Returns the label.
      *
-     * @return the display name.
+     * @return the label.
      */
-    String getDisplayName();
+    String getLabel();
 
     /**
      * Sets the description.

@@ -32,7 +32,7 @@ public class ProcessorNotFoundException extends SpongeException {
     private String processorName;
 
     public ProcessorNotFoundException(ProcessorType processorType, String processorName) {
-        super(String.format(DEFAULT_MESSAGE_PATTERN, processorType.getDisplayName(), processorName));
+        super(String.format(DEFAULT_MESSAGE_PATTERN, processorType.getLabel(), processorName));
 
         this.processorType = processorType;
         this.processorName = processorName;

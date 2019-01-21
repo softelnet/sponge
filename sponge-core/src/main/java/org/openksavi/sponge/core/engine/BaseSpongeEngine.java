@@ -391,15 +391,15 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     /**
-     * Setup the name, display name and description.
+     * Setup the name, label and description.
      */
     protected void setupEngineDescriptive() {
         if (getName() == null && configurationManager.getEngineName() != null) {
             setName(configurationManager.getEngineName());
         }
 
-        if (getDisplayName() == null && configurationManager.getEngineDisplayName() != null) {
-            setDisplayName(configurationManager.getEngineDisplayName());
+        if (getLabel() == null && configurationManager.getEngineLabel() != null) {
+            setLabel(configurationManager.getEngineLabel());
         }
 
         if (getDescription() == null && configurationManager.getEngineDescription() != null) {

@@ -2,18 +2,18 @@
 <sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
-    <engine name="descriptiveEngine" displayName="Descriptive engine">
+    <engine name="descriptiveEngine" label="Descriptive engine">
         <description>Engine description</description>
     </engine>
 
     <knowledgeBases>
-        <knowledgeBase name="sampleKb" type="python" displayName="Sample knowledge base">
+        <knowledgeBase name="sampleKb" type="python" label="Sample knowledge base">
             <description>Sample knowledge base description</description>
         </knowledgeBase>
     </knowledgeBases>
 
     <plugins>
-        <plugin name="echoPlugin" class="org.openksavi.sponge.examples.EchoPlugin" displayName="Echo plugin">
+        <plugin name="echoPlugin" class="org.openksavi.sponge.examples.EchoPlugin" label="Echo plugin">
             <description>Echo plugin description</description>
             <configuration>
                 <echo>Echo test!</echo>

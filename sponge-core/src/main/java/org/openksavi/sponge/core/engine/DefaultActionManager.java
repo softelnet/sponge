@@ -33,6 +33,7 @@ import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
+import org.openksavi.sponge.util.ValueHolder;
 
 /**
  * Action manager.
@@ -67,17 +68,31 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
             throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
         }
 
-        KnowledgeBaseInterpreter interpreter = ((BaseProcessorDefinition) action.getDefinition()).isJavaDefined()
-                ? getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
-                : action.getKnowledgeBase().getInterpreter();
-        try {
+        return callAction(action, args);
+    }
 
+    @Override
+    public Object callAction(ActionAdapter actionAdapter, List<Object> args) {
+        KnowledgeBaseInterpreter interpreter = ((BaseProcessorDefinition) actionAdapter.getDefinition()).isJavaDefined()
+                ? getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
+                : actionAdapter.getKnowledgeBase().getInterpreter();
+        try {
             // Important casting to an array of objects.
-            return interpreter.invokeMethod(action.getProcessor(), ActionDefinition.ON_CALL_METHOD_NAME,
+            return interpreter.invokeMethod(actionAdapter.getProcessor(), ActionDefinition.ON_CALL_METHOD_NAME,
                     (Object[]) (args != null ? args.toArray(new Object[args.size()]) : new Object[0]));
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(action.getProcessor(), e);
+            throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
         }
+    }
+
+    @Override
+    public ValueHolder<Object> callActionIfExists(String actionName, List<Object> args) {
+        ActionAdapter action = registeredActions.get(actionName);
+        if (action == null) {
+            return null;
+        }
+
+        return new ValueHolder<>(callAction(action, args));
     }
 
     @Override

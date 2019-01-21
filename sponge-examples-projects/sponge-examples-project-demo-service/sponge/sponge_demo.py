@@ -8,21 +8,21 @@ from org.openksavi.sponge.util.process import ProcessConfiguration
 
 class UpperCase(Action):
     def onConfigure(self):
-        self.displayName = "Convert to upper case"
+        self.label = "Convert to upper case"
         self.description = "Converts a string to upper case."
         self.argsMeta = [
-            ArgMeta("text", StringType().maxLength(256)).displayName("Text to upper case").description("The text that will be converted to upper case.")
+            ArgMeta("text", StringType().maxLength(256)).label("Text to upper case").description("The text that will be converted to upper case.")
         ]
-        self.resultMeta = ResultMeta(StringType()).displayName("Upper case text")
+        self.resultMeta = ResultMeta(StringType()).label("Upper case text")
     def onCall(self, text):
         return text.upper()
 
 class LowerCase(Action):
     def onConfigure(self):
-        self.displayName = "Convert to lower case"
+        self.label = "Convert to lower case"
         self.description = "Converts a string to lower case."
-        self.argsMeta = [ ArgMeta("text", StringType()).displayName("Text to lower case").description("The text that will be changed to lower case") ]
-        self.resultMeta = ResultMeta(StringType()).displayName("Lower case text")
+        self.argsMeta = [ ArgMeta("text", StringType()).label("Text to lower case").description("The text that will be changed to lower case") ]
+        self.resultMeta = ResultMeta(StringType()).label("Lower case text")
     def onCall(self, text):
         return text.lower()
 
@@ -36,9 +36,9 @@ class ListValues(Action):
 
 class ProvideByAction(Action):
     def onConfigure(self):
-        self.displayName = "Action with provided argument"
-        self.argsMeta = [ArgMeta("value", StringType()).displayName("Value").provided(ArgProvided().valueSet())]
-        self.resultMeta = ResultMeta(StringType()).displayName("Same value")
+        self.label = "Action with provided argument"
+        self.argsMeta = [ArgMeta("value", StringType()).label("Value").provided(ArgProvided().valueSet())]
+        self.resultMeta = ResultMeta(StringType()).label("Same value")
     def onCall(self, value):
         return value
     def onProvideArgs(self, names, current, provided):
@@ -47,11 +47,11 @@ class ProvideByAction(Action):
 
 class ChooseColor(Action):
     def onConfigure(self):
-        self.displayName = "Choose a color"
+        self.label = "Choose a color"
         self.description = "Shows a color argument."
         self.argsMeta = [
             ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
-                .displayName("Color").description("The color.")
+                .label("Color").description("The color.")
         ]
         self.resultMeta = ResultMeta(StringType())
     def onCall(self, color):
@@ -59,10 +59,10 @@ class ChooseColor(Action):
 
 class ConsoleOutput(Action):
     def onConfigure(self):
-        self.displayName = "Console output"
+        self.label = "Console output"
         self.description = "Returns the console output."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("console")).displayName("Console output")
+        self.resultMeta = ResultMeta(StringType().format("console")).label("Console output")
     def onCall(self):
         result = ""
         for i in range(30):
@@ -71,10 +71,10 @@ class ConsoleOutput(Action):
 
 class MarkdownText(Action):
     def onConfigure(self):
-        self.displayName = "Markdown text"
+        self.label = "Markdown text"
         self.description = "Returns the markdown text."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("markdown")).displayName("Markdown text")
+        self.resultMeta = ResultMeta(StringType().format("markdown")).label("Markdown text")
     def onCall(self):
         return """Heading
 =======
@@ -110,10 +110,10 @@ source code example
 
 class HtmlFileOutput(Action):
     def onConfigure(self):
-        self.displayName = "HTML file output"
+        self.label = "HTML file output"
         self.description = "Returns the HTML file."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("text/html")).displayName("HTML file")
+        self.resultMeta = ResultMeta(BinaryType().mimeType("text/html")).label("HTML file")
     def onCall(self):
         return String("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -131,25 +131,25 @@ class HtmlFileOutput(Action):
 
 class PdfFileOutput(Action):
     def onConfigure(self):
-        self.displayName = "PDF file output"
+        self.label = "PDF file output"
         self.description = "Returns the PDF file."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("application/pdf")).displayName("PDF file")
+        self.resultMeta = ResultMeta(BinaryType().mimeType("application/pdf")).label("PDF file")
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
 
 class DependingArgumentsAction(Action):
     def onConfigure(self):
-        self.displayName = "Action with depending arguments"
+        self.label = "Action with depending arguments"
         self.argsMeta = [
-            ArgMeta("continent", StringType()).displayName("Continent").provided(ArgProvided().valueSet()),
-            ArgMeta("country", StringType()).displayName("Country").provided(ArgProvided().valueSet().depends("continent")),
-            ArgMeta("city", StringType()).displayName("City").provided(ArgProvided().valueSet().depends("country")),
-            ArgMeta("river", StringType()).displayName("River").provided(ArgProvided().valueSet().depends("continent")),
-            ArgMeta("weather", StringType()).displayName("Weather").provided(ArgProvided().valueSet()),
+            ArgMeta("continent", StringType()).label("Continent").provided(ArgProvided().valueSet()),
+            ArgMeta("country", StringType()).label("Country").provided(ArgProvided().valueSet().depends("continent")),
+            ArgMeta("city", StringType()).label("City").provided(ArgProvided().valueSet().depends("country")),
+            ArgMeta("river", StringType()).label("River").provided(ArgProvided().valueSet().depends("continent")),
+            ArgMeta("weather", StringType()).label("Weather").provided(ArgProvided().valueSet()),
         ]
-        self.resultMeta = ResultMeta(StringType()).displayName("Sentences")
+        self.resultMeta = ResultMeta(StringType()).label("Sentences")
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):

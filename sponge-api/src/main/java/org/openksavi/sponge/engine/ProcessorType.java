@@ -67,7 +67,7 @@ public enum ProcessorType {
         return adapterClass;
     }
 
-    public String getDisplayName() {
+    public String getLabel() {
         if (name.isEmpty()) {
             return name;
         } else if (name.length() == 1) {

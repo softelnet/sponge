@@ -14,10 +14,10 @@ def onInit():
 
 class TakePicture(Action):
     def onConfigure(self):
-        self.displayName = "Take a picture"
+        self.label = "Take a picture"
         self.description = "Takes a picture using the RPI camera."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("image/" + sponge.getVariable("pictureFormat"))).displayName("Picture")
+        self.resultMeta = ResultMeta(BinaryType().mimeType("image/" + sponge.getVariable("pictureFormat"))).label("Picture")
 
     def onCall(self):
         CAMERA_LOCK.lock()

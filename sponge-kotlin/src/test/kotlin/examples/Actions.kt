@@ -19,7 +19,7 @@ class Actions : KKnowledgeBase() {
 
     class EchoAction : KAction() {
         override fun onConfigure() {
-            displayName = "Echo Action"
+            label = "Echo Action"
         }
 
         fun onCall(value: Number, text: String): Array<Any?> {

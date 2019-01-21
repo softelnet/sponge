@@ -30,8 +30,8 @@ public class ArgMeta<T extends DataType> {
     /** The argument data type. */
     private T type;
 
-    /** The argument display name. */
-    private String displayName;
+    /** The argument label. */
+    private String label;
 
     /** The argument description. */
     private String description;
@@ -47,8 +47,8 @@ public class ArgMeta<T extends DataType> {
         this.type = type;
     }
 
-    public ArgMeta<T> displayName(String displayName) {
-        this.displayName = displayName;
+    public ArgMeta<T> label(String label) {
+        this.label = label;
         return this;
     }
 
@@ -83,12 +83,12 @@ public class ArgMeta<T extends DataType> {
         this.type = type;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getLabel() {
+        return label;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getDescription() {
@@ -105,10 +105,6 @@ public class ArgMeta<T extends DataType> {
 
     public void setOptional(boolean optional) {
         this.optional = optional;
-    }
-
-    public String getLabel() {
-        return displayName != null ? displayName : name;
     }
 
     public ArgProvided getProvided() {

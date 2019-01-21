@@ -73,18 +73,18 @@ public class ActionsTestTemplate {
             String actionName = "HelloWorldAction";
             ActionAdapter adapter = engine.getActionManager().getActionAdapter(actionName);
             assertEquals(actionName, adapter.getName());
-            assertEquals("Hello world", adapter.getDisplayName());
+            assertEquals("Hello world", adapter.getLabel());
             assertEquals("Returns a greeting text.", adapter.getDescription());
             assertEquals(1, adapter.getArgsMeta().size());
             assertTrue(adapter.getFeatures().isEmpty());
 
             ArgMeta<?> argMeta = adapter.getArgsMeta().get(0);
             assertEquals("name", argMeta.getName());
-            assertEquals("Your name", argMeta.getDisplayName());
+            assertEquals("Your name", argMeta.getLabel());
             assertEquals("Type your name.", argMeta.getDescription());
             assertTrue(argMeta.getType() instanceof StringType);
 
-            assertEquals("Greeting", adapter.getResultMeta().getDisplayName());
+            assertEquals("Greeting", adapter.getResultMeta().getLabel());
             assertEquals("The greeting text.", adapter.getResultMeta().getDescription());
             assertTrue(adapter.getResultMeta().getType() instanceof StringType);
 

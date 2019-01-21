@@ -434,8 +434,8 @@ def onLoad():
 |`name`
 |A name of a processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
 
-|`displayName`
-|A display name of a processor. This is a shortcut for `getDisplayName()`/`setDisplayName(text)` methods. A display name is not used internally but could be useful in a client code.
+|`label`
+|A processor label. This is a shortcut for `getLabel()`/`setLabel(text)` methods. A label is not used internally but could be useful in a client code.
 
 |`description`
 |A description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but could be useful in a client code.
@@ -450,7 +450,7 @@ def onLoad():
 |The read-only property that provides a processor adapter. This is a shortcut for `getAdapter()` method. A processor adapter is an internal object, associated with the processor, that is used by the engine. There should be no need to use this property in the client code.
 |===
 
-In many scripting languages properties can be accessed using dot notation rather than a direct method call. For example a display name may be set using `self.displayName = "Display name"` or `self.setDisplayName("Display name")`.
+In many scripting languages properties can be accessed using dot notation rather than a direct method call. For example a label may be set using `self.label = "Label"` or `self.setLabel("Label")`.
 
 include::includes/user-guide-actions.adoc[leveloffset=+1]
 

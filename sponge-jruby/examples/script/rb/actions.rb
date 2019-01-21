@@ -11,7 +11,7 @@ end
 
 class EchoAction < Action
     def onConfigure
-        self.displayName = "Echo Action"
+        self.label = "Echo Action"
     end
     def onCall(value, text)
         self.logger.info("Action {} called", self.name)

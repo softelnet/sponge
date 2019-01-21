@@ -3,14 +3,14 @@
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="example" displayName="Example">
+        <knowledgeBase name="example" label="Example">
             <file>rest_api.py</file>
             <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="admin" displayName="Admin">
+        <knowledgeBase name="admin" label="Admin">
             <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="security" displayName="Security">
+        <knowledgeBase name="security" label="Security">
             <file>rest_api_security.py</file>
         </knowledgeBase>
     </knowledgeBases>

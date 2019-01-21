@@ -2,17 +2,17 @@
 <sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="mpd" displayName="MPD">
+        <knowledgeBase name="mpd" label="MPD">
             <file>classpath:org/openksavi/sponge/mpd/mpd_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="administration" displayName="Administration">
+        <knowledgeBase name="administration" label="Administration">
             <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
             <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="sample" displayName="Samples">
+        <knowledgeBase name="sample" label="Samples">
             <file>mpd_rest_server_main.py</file>
         </knowledgeBase>
-        <knowledgeBase name="security" displayName="Security">
+        <knowledgeBase name="security" label="Security">
             <file>mpd_rest_server_security.py</file>
         </knowledgeBase>
     </knowledgeBases>

@@ -5,11 +5,11 @@ Digits recognition learn library
 
 class DigitsAddToLearn(Action):
     def onConfigure(self):
-        self.displayName = "Add a digit to learn"
+        self.label = "Add a digit to learn"
         self.description = "Adds a digit to learn"
         self.argsMeta = [
             createImageArgMeta(),
-            ArgMeta("digit", StringType()).displayName("Digit").provided(ArgProvided().valueSet())
+            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvided().valueSet())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):
@@ -21,11 +21,11 @@ class DigitsAddToLearn(Action):
 
 class DigitsLearn(Action):
     def onConfigure(self):
-        self.displayName = "Learn a digit"
+        self.label = "Learn a digit"
         self.description = "Learns a digit"
         self.argsMeta = [
             createImageArgMeta(),
-            ArgMeta("digit", StringType()).displayName("Digit").provided(ArgProvided().valueSet())
+            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvided().valueSet())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):
@@ -37,7 +37,7 @@ class DigitsLearn(Action):
 
 class MnistResetModel(Action):
     def onConfigure(self):
-        self.displayName = "Reset the model"
+        self.label = "Reset the model"
         self.description = "Resets the model by loading the state before manual learning"
         self.features = {"confirmation":True}
         self.argsMeta = []

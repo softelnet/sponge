@@ -22,23 +22,23 @@ function onInit() {
 }
 var Trigger1 = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.displayName = "Trigger1, file1";
+        self.label = "Trigger1, file1";
         self.event = "e1";
     },
     onRun: function(self, event) {
         //self.logger.debug("file1: Received event {}", event);
-        sponge.getVariable("eventCounter").get(self.displayName).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.label).incrementAndGet();
     }
 });
 
 var Trigger2 = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.displayName = "Trigger2, file1";
+        self.label = "Trigger2, file1";
         self.event = "e2";
     },
     onRun: function(self, event) {
         //self.logger.debug("file1: Received event {}", event);
-        sponge.getVariable("eventCounter").get(self.displayName).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.label).incrementAndGet();
     }
 });
 

@@ -16,8 +16,6 @@
 
 package org.openksavi.sponge.restapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -26,7 +24,7 @@ public class RestKnowledgeBaseMeta {
 
     private String name;
 
-    private String displayName;
+    private String label;
 
     private String description;
 
@@ -36,9 +34,9 @@ public class RestKnowledgeBaseMeta {
         //
     }
 
-    public RestKnowledgeBaseMeta(String name, String displayName, String description, Integer version) {
+    public RestKnowledgeBaseMeta(String name, String label, String description, Integer version) {
         this.name = name;
-        this.displayName = displayName;
+        this.label = label;
         this.description = description;
         this.version = version;
     }
@@ -52,13 +50,13 @@ public class RestKnowledgeBaseMeta {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The knowledge base display name", required = false)
-    public String getDisplayName() {
-        return displayName;
+    @ApiModelProperty(value = "The knowledge base label", required = false)
+    public String getLabel() {
+        return label;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @ApiModelProperty(value = "The knowledge base description", required = false)
@@ -77,10 +75,5 @@ public class RestKnowledgeBaseMeta {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    @JsonIgnore
-    public String getLabel() {
-        return displayName != null ? displayName : name;
     }
 }

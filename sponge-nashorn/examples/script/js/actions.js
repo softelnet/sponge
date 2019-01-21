@@ -11,7 +11,7 @@ function onInit() {
 
 var EchoAction = Java.extend(Action, {
     onConfigure: function(self) {
-        self.displayName = "Echo Action";
+        self.label = "Echo Action";
     },
     onCall: function(self, args) {
         self.logger.info("Action {} called", self.name);

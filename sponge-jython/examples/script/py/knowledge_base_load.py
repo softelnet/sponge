@@ -21,22 +21,22 @@ def onInit():
 
 class Trigger1(Trigger):
     def onConfigure(self):
-        self.displayName = "Trigger1, file1"
+        self.label = "Trigger1, file1"
         self.event = "e1"
     def onRun(self, event):
         #self.logger.debug("file1: Received event {}", event)
         global eventCounter
-        eventCounter.get(self.displayName).incrementAndGet()
+        eventCounter.get(self.label).incrementAndGet()
 
 
 class Trigger2(Trigger):
     def onConfigure(self):
-        self.displayName = "Trigger2, file1"
+        self.label = "Trigger2, file1"
         self.event = "e2"
     def onRun(self, event):
         #self.logger.debug("file1: Received event {}", event)
         global eventCounter
-        eventCounter.get(self.displayName).incrementAndGet()
+        eventCounter.get(self.label).incrementAndGet()
 
 
 class LoadKbFile(Trigger):
