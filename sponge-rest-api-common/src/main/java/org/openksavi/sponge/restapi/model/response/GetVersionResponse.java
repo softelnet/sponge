@@ -25,7 +25,6 @@ public class GetVersionResponse extends SpongeResponse {
     private String version;
 
     public GetVersionResponse() {
-        //
     }
 
     public GetVersionResponse(String version) {

@@ -31,7 +31,6 @@ public class RestKnowledgeBaseMeta {
     private Integer version;
 
     public RestKnowledgeBaseMeta() {
-        //
     }
 
     public RestKnowledgeBaseMeta(String name, String label, String description, Integer version) {

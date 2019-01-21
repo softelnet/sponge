@@ -39,7 +39,6 @@ public class RestActionArgMeta {
     private ArgProvided provided;
 
     public RestActionArgMeta() {
-        //
     }
 
     public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvided provided) {

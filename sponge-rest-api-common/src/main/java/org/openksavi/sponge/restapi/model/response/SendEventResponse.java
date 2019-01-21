@@ -25,7 +25,6 @@ public class SendEventResponse extends SpongeResponse {
     private String eventId;
 
     public SendEventResponse() {
-        //
     }
 
     public SendEventResponse(String eventId) {

@@ -22,6 +22,5 @@ import io.swagger.annotations.ApiModel;
 public class GetVersionRequest extends SpongeRequest {
 
     public GetVersionRequest() {
-        //
     }
 }

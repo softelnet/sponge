@@ -32,7 +32,6 @@ public class RestActionResultMeta {
     private String description;
 
     public RestActionResultMeta() {
-        //
     }
 
     public RestActionResultMeta(DataType type, String label) {

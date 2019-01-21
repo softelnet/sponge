@@ -25,7 +25,6 @@ public class ActionCallResponse extends SpongeResponse {
     private Object result;
 
     public ActionCallResponse() {
-        //
     }
 
     public ActionCallResponse(Object result) {

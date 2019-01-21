@@ -22,6 +22,5 @@ import io.swagger.annotations.ApiModel;
 public class GetKnowledgeBasesRequest extends SpongeRequest {
 
     public GetKnowledgeBasesRequest() {
-        //
     }
 }

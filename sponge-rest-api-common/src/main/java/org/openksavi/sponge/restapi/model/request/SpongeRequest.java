@@ -32,7 +32,6 @@ public abstract class SpongeRequest {
     private String authToken;
 
     protected SpongeRequest() {
-        //
     }
 
     @ApiModelProperty(value = "The request id", required = false)

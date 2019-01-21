@@ -22,7 +22,6 @@ import io.swagger.annotations.ApiModel;
 public class LoginRequest extends SpongeRequest {
 
     public LoginRequest() {
-        //
     }
 
     public LoginRequest(String username, String password) {

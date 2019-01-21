@@ -22,6 +22,5 @@ import io.swagger.annotations.ApiModel;
 public class ReloadResponse extends SpongeResponse {
 
     public ReloadResponse() {
-        //
     }
 }

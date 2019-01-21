@@ -29,7 +29,6 @@ public class GetActionsResponse extends SpongeResponse {
     private List<RestActionMeta> actions;
 
     public GetActionsResponse() {
-        //
     }
 
     public GetActionsResponse(List<RestActionMeta> actions) {

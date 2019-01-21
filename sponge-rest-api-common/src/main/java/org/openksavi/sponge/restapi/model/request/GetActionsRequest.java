@@ -27,7 +27,6 @@ public class GetActionsRequest extends SpongeRequest {
     private Boolean metadataRequired;
 
     public GetActionsRequest() {
-        //
     }
 
     @ApiModelProperty(

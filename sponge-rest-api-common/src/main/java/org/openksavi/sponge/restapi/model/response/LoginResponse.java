@@ -25,7 +25,6 @@ public class LoginResponse extends SpongeResponse {
     private String authToken;
 
     public LoginResponse() {
-        //
     }
 
     public LoginResponse(String authToken) {

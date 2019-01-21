@@ -29,7 +29,6 @@ public class SendEventRequest extends SpongeRequest {
     private Map<String, Object> attributes;
 
     public SendEventRequest() {
-        //
     }
 
     public SendEventRequest(String name, Map<String, Object> attributes) {

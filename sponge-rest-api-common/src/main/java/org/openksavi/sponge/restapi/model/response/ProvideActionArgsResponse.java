@@ -29,7 +29,6 @@ public class ProvideActionArgsResponse extends SpongeResponse {
     private Map<String, ArgValue<?>> provided;
 
     public ProvideActionArgsResponse() {
-        //
     }
 
     public ProvideActionArgsResponse(Map<String, ArgValue<?>> provided) {

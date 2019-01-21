@@ -29,7 +29,6 @@ public class GetKnowledgeBasesResponse extends SpongeResponse {
     private List<RestKnowledgeBaseMeta> knowledgeBases;
 
     public GetKnowledgeBasesResponse() {
-        //
     }
 
     public GetKnowledgeBasesResponse(List<RestKnowledgeBaseMeta> knowledgeBases) {

@@ -42,5 +42,4 @@ import org.openksavi.sponge.type.VoidType;
         @Type(value = ObjectType.class, name = DataTypeKind.CODE_OBJECT), @Type(value = StringType.class, name = DataTypeKind.CODE_STRING),
         @Type(value = VoidType.class, name = DataTypeKind.CODE_VOID) })
 public abstract class RestDataType {
-
 }
