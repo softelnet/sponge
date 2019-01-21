@@ -39,8 +39,8 @@ public abstract class BaseEngineModule implements EngineModule {
     /** Name. */
     private String name;
 
-    /** Display name. */
-    private String displayName;
+    /** Label. */
+    private String label;
 
     /** Description. */
     private String description;
@@ -136,13 +136,13 @@ public abstract class BaseEngineModule implements EngineModule {
     }
 
     @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getLabel() {
+        return label;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @Override

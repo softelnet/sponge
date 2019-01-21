@@ -312,10 +312,10 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 ----
 class HelloWorldAction(Action): # <1>
     def onConfigure(self): # <2>
-        self.displayName = "Hello world" # <3>
+        self.label = "Hello world" # <3>
         self.description = "Returns a greeting text."
-        self.argsMeta = [ArgMeta("name", StringType()).displayName("Your name").description("Type your name.")] # <4>
-        self.resultMeta = ResultMeta(StringType()).displayName("Greeting").description("The greeting text.") # <5>
+        self.argsMeta = [ArgMeta("name", StringType()).label("Your name").description("Type your name.")] # <4>
+        self.resultMeta = ResultMeta(StringType()).label("Greeting").description("The greeting text.") # <5>
     def onCall(self, name): # <6>
         return "Hello World! Hello {}!".format(name)
 
@@ -324,7 +324,7 @@ def onStartup(): # <7>
 ----
 <1> The definition of the `HelloWorldAction` action.
 <2> The action configuration callback method. The method body defines the optional action metadata. The metadata could be used by a client code, for example a generic UI for calling actions or a REST API client.
-<3> Sets up the action display name and the description.
+<3> Sets up the action label and the description.
 <4> Sets up the action argument metadata. There is only one argument named `name` of String type.
 <5> Sets up the action result metadata.
 <6> The action callback method that will be invoked when the action is called.
@@ -362,10 +362,10 @@ NOTE: All callouts placed in the source code in the examples below remain the sa
 ----
 class HelloWorldAction < Action # <1>
     def onConfigure # <2>
-        self.displayName = "Hello world" # <3>
+        self.label = "Hello world" # <3>
         self.description = "Returns a greeting text."
-        self.argsMeta = [ArgMeta.new("name", StringType.new()).displayName("Your name").description("Type your name.")] # <4>
-        self.resultMeta = ResultMeta.new(StringType.new()).displayName("Greeting").description("The greeting text.") # <5>
+        self.argsMeta = [ArgMeta.new("name", StringType.new()).label("Your name").description("Type your name.")] # <4>
+        self.resultMeta = ResultMeta.new(StringType.new()).label("Greeting").description("The greeting text.") # <5>
     end
     def onCall(name) # <6>
         return "Hello World! Hello %s!" % [name]
@@ -394,10 +394,10 @@ Press `CTRL+C` to exit the {sponge} standalone command-line application.
 ----
 class HelloWorldAction extends Action { // <1>
     void onConfigure() { // <2>
-        this.displayName = "Hello world" // <3>
+        this.label = "Hello world" // <3>
         this.description = "Returns a greeting text."
-        this.argsMeta = [new ArgMeta("name", new StringType()).displayName("Your name").description("Type your name.")] // <4>
-        this.resultMeta = new ResultMeta(new StringType()).displayName("Greeting").description("The greeting text.") // <5>
+        this.argsMeta = [new ArgMeta("name", new StringType()).label("Your name").description("Type your name.")] // <4>
+        this.resultMeta = new ResultMeta(new StringType()).label("Greeting").description("The greeting text.") // <5>
     }
 
     String onCall(String name) { // <6>
@@ -427,10 +427,10 @@ Press `CTRL+C` to exit the {sponge} standalone command-line application.
 ----
 var HelloWorldAction = Java.extend(Action, { // <1>
     onConfigure: function(self) { // <2>
-        self.displayName = "Hello world"; // <3>
+        self.label = "Hello world"; // <3>
         self.description = "Returns a greeting text.";
-        self.argsMeta = [new ArgMeta("name", new StringType()).displayName("Your name").description("Type your name.")]; // <4>
-        self.resultMeta = new ResultMeta(new StringType()).displayName("Greeting").description("The greeting text."); // <5>
+        self.argsMeta = [new ArgMeta("name", new StringType()).label("Your name").description("Type your name.")]; // <4>
+        self.resultMeta = new ResultMeta(new StringType()).label("Greeting").description("The greeting text."); // <5>
     },
     onCall: function(self, args) { // <6>
         // The onCall method in JS always gets an array of arguments. Dynamic onCall callback methods are not supported.

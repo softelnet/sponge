@@ -40,10 +40,6 @@ public class RestApiServerMain {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            // DefaultScriptKnowledgeBase scriptKb = new DefaultScriptKnowledgeBase("kb");
-            // scriptKb.setDisplayName("REST API");
-            // scriptKb.addScript(new FileKnowledgeBaseScript("examples/rest-api-server/rest_api.py"));
-
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
                     .config("examples/rest-api-server/rest_api.xml").build();
         }

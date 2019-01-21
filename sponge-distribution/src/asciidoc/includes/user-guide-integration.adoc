@@ -94,7 +94,7 @@ In general, an external process can be executed using:
 
 |`name`
 |`String`
-|The process display name.
+|The process name.
 
 |`executable`
 |`String`
@@ -612,7 +612,7 @@ The MPD plugin provides a simple predefined knowledge base library.
 .Example use of the MPD predefined knowledge base library
 [source,xml]
 ----
-<knowledgeBase name="mpd" displayName="MPD">
+<knowledgeBase name="mpd" label="MPD">
     <file>classpath*:org/openksavi/sponge/mpd/mpd_library.py</file>
 </knowledgeBase>
 ----
@@ -841,11 +841,11 @@ The default name of the plugin (which can be used in knowledge bases) is `gsm`.
 ----
 class SendSms(Action):
     def onConfigure(self):
-        self.displayName = "Send SMS"
+        self.label = "Send SMS"
         self.description = "Sends a new SMS."
         self.argsMeta = [
-            ArgMeta("recipient", StringType()).displayName("Recipient").description("The SMS recipient."),
-            ArgMeta("message", StringType()).displayName("Message").description("The SMS message.")
+            ArgMeta("recipient", StringType()).label("Recipient").description("The SMS recipient."),
+            ArgMeta("message", StringType()).label("Message").description("The SMS message.")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, recipient, message):

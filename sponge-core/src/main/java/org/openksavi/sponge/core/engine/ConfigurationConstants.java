@@ -65,7 +65,7 @@ public final class ConfigurationConstants {
 
     public static final String ENGINE_ATTRIBUTE_NAME = "name";
 
-    public static final String ENGINE_ATTRIBUTE_DISPLAY_NAME = "displayName";
+    public static final String ENGINE_ATTRIBUTE_LABEL = "label";
 
     public static final String TAG_ENGINE_DESCRIPTION = "description";
 

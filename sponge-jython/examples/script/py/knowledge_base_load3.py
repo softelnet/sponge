@@ -5,21 +5,21 @@ Loading knowledge bases
 
 class Trigger1(Trigger):
     def onConfigure(self):
-        self.displayName = "Trigger1, file3"
+        self.label = "Trigger1, file3"
         self.event = "e1"
     def onRun(self, event):
         #self.logger.debug("file3: Received event {}", event)
         global eventCounter
-        eventCounter.get(self.displayName).incrementAndGet()
+        eventCounter.get(self.label).incrementAndGet()
 
 class Trigger3(Trigger):
     def onConfigure(self):
-        self.displayName = "Trigger3, file3"
+        self.label = "Trigger3, file3"
         self.event = "e3"
     def onRun(self, event):
         #self.logger.debug("file3: Received event {}", event)
         global eventCounter
-        eventCounter.get(self.displayName).incrementAndGet()
+        eventCounter.get(self.label).incrementAndGet()
 
 # Execute immediately while loading
 sponge.enableAll(Trigger1, Trigger3)

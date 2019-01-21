@@ -8,11 +8,11 @@ import os
 
 class SendNotificationEmail(Action):
     def onConfigure(self):
-        self.displayName = "Send a notification email"
+        self.label = "Send a notification email"
         self.description = "Sends a notification email."
         self.argsMeta = [
-            ArgMeta("subject", StringType()).displayName("Subject").description("The email subject."),
-            ArgMeta("message", StringType().features({"maxLines":5})).displayName(
+            ArgMeta("subject", StringType()).label("Subject").description("The email subject."),
+            ArgMeta("message", StringType().features({"maxLines":5})).label(
                 "Message").description("The email message.")
             # The attachmentFiles attribute won't be visible in the UI.
         ]

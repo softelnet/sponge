@@ -34,8 +34,8 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** Name. */
     private String name;
 
-    /** Display name. */
-    private String displayName;
+    /** Label. */
+    private String label;
 
     /** Description. */
     private String description;
@@ -87,7 +87,7 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
      */
     @Override
     public String toString() {
-        return (displayName != null) ? displayName : name;
+        return label != null ? label : name;
     }
 
     /**
@@ -104,24 +104,14 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
         }
     }
 
-    /**
-     * Sets display name.
-     *
-     * @param displayName display name.
-     */
     @Override
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    /**
-     * Returns display name.
-     *
-     * @return display name.
-     */
     @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getLabel() {
+        return label;
     }
 
     @Override

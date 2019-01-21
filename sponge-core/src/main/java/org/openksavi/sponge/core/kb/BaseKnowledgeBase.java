@@ -32,7 +32,7 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
 
     private String name;
 
-    private String displayName;
+    private String label;
 
     private String description;
 
@@ -79,13 +79,13 @@ public abstract class BaseKnowledgeBase implements KnowledgeBase {
     }
 
     @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getLabel() {
+        return label;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @Override

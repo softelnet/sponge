@@ -75,8 +75,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** The engine name. */
     private String engineName;
 
-    /** The engine display name. */
-    private String engineDisplayName;
+    /** The engine label. */
+    private String engineLabel;
 
     /** The engine description. */
     private String engineDescription;
@@ -164,7 +164,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
         engineConfig = rootConfig.getChildConfiguration(ConfigurationConstants.TAG_ENGINE_CONFIG);
         engineName = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_NAME, null);
-        engineDisplayName = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_DISPLAY_NAME, null);
+        engineLabel = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_LABEL, null);
         engineDescription = engineConfig.getString(ConfigurationConstants.TAG_ENGINE_DESCRIPTION, null);
         setupEngineParameters();
 
@@ -423,13 +423,13 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     }
 
     @Override
-    public String getEngineDisplayName() {
-        return engineDisplayName;
+    public String getEngineLabel() {
+        return engineLabel;
     }
 
     @Override
-    public void setEngineDisplayName(String engineDisplayName) {
-        this.engineDisplayName = engineDisplayName;
+    public void setEngineLabel(String engineLabel) {
+        this.engineLabel = engineLabel;
     }
 
     @Override

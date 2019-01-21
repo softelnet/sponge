@@ -27,8 +27,8 @@ public class ResultMeta<T extends DataType> {
     /** The result data type. */
     private T type;
 
-    /** The result display name. */
-    private String displayName;
+    /** The result label. */
+    private String label;
 
     /** The result description. */
     private String description;
@@ -37,8 +37,8 @@ public class ResultMeta<T extends DataType> {
         this.type = type;
     }
 
-    public ResultMeta<T> displayName(String displayName) {
-        this.displayName = displayName;
+    public ResultMeta<T> label(String label) {
+        this.label = label;
         return this;
     }
 
@@ -55,12 +55,12 @@ public class ResultMeta<T extends DataType> {
         this.type = type;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getLabel() {
+        return label;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getDescription() {

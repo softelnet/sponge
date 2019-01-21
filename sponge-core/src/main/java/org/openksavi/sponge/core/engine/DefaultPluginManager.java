@@ -102,7 +102,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
         Validate.isTrue(!existsPlugin(plugin.getName()), "Plugin '%s' already exists.", plugin.getName());
         Validate.isTrue(isValidPluginName(plugin.getName()), "Invalid plugin name '%s'", plugin.getName());
 
-        plugin.setDisplayName(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_DISPLAY_NAME, null));
+        plugin.setLabel(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_LABEL, null));
         plugin.setDescription(pluginConfig.getString(PluginManagerConstants.CFG_PLUGIN_DESCRIPTION, null));
 
         plugin.setConfiguration(pluginConfig.getChildConfiguration(PluginManagerConstants.CFG_PLUGIN_CONFIGURATION), true);
@@ -250,8 +250,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
                 plugin.setName(pluginStub.getName());
             }
 
-            if (pluginStub.getDisplayName() != null) {
-                plugin.setDisplayName(pluginStub.getDisplayName());
+            if (pluginStub.getLabel() != null) {
+                plugin.setLabel(pluginStub.getLabel());
             }
 
             if (pluginStub.getDescription() != null) {

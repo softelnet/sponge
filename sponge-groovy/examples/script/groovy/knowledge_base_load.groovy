@@ -20,23 +20,23 @@ void onInit() {
 
 class Trigger1 extends Trigger {
     void onConfigure() {
-        this.displayName = "Trigger1, file1"
+        this.label = "Trigger1, file1"
         this.event = "e1"
     }
     void onRun(Event event) {
         //this.logger.debug("file1: Received event {}", event)
-        sponge.getVariable("eventCounter").get(this.displayName).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.label).incrementAndGet()
     }
 }
 
 class Trigger2 extends Trigger {
     void onConfigure() {
-        this.displayName = "Trigger2, file1"
+        this.label = "Trigger2, file1"
         this.event = "e2"
     }
     void onRun(Event event) {
         //this.logger.debug("file1: Received event {}", event)
-        sponge.getVariable("eventCounter").get(this.displayName).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.label).incrementAndGet()
     }
 }
 

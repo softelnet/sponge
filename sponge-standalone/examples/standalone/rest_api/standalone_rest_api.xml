@@ -2,7 +2,7 @@
 <sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <knowledgeBases>
-        <knowledgeBase name="restApiKb" displayName="REST API">
+        <knowledgeBase name="restApiKb" label="REST API">
             <file>standalone_rest_api.py</file>
         </knowledgeBase>
     </knowledgeBases>

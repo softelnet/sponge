@@ -33,7 +33,7 @@ public class RestActionMeta {
 
     private String name;
 
-    private String displayName;
+    private String label;
 
     private String description;
 
@@ -49,10 +49,10 @@ public class RestActionMeta {
         //
     }
 
-    public RestActionMeta(String name, String displayName, String description, RestKnowledgeBaseMeta knowledgeBase,
-            Map<String, Object> features, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
+    public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, Map<String, Object> features,
+            List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta) {
         this.name = name;
-        this.displayName = displayName;
+        this.label = label;
         this.description = description;
         this.knowledgeBase = knowledgeBase;
         this.features = features;
@@ -69,13 +69,13 @@ public class RestActionMeta {
         this.name = name;
     }
 
-    @ApiModelProperty(value = "The action display name", required = false)
-    public String getDisplayName() {
-        return displayName;
+    @ApiModelProperty(value = "The action label", required = false)
+    public String getLabel() {
+        return label;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @ApiModelProperty(value = "The action description", required = false)
@@ -121,12 +121,6 @@ public class RestActionMeta {
 
     public void setResultMeta(RestActionResultMeta resultMeta) {
         this.resultMeta = resultMeta;
-    }
-
-    @JsonIgnore
-    public String getLabel() {
-        return String.format("%s: %s", knowledgeBase != null ? knowledgeBase.getLabel() : null, displayName != null ? displayName : name);
-
     }
 
     @JsonIgnore

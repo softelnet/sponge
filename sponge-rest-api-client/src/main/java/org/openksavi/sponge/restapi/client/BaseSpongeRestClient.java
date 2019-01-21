@@ -515,7 +515,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         for (int i = 0; i < actionMeta.getArgsMeta().size(); i++) {
             RestActionArgMeta meta = actionMeta.getArgsMeta().get(i);
             Validate.isTrue(meta.isOptional() || meta.getType().isNullable() || args.get(i) != null, "Action argument '%s' is not set",
-                    meta.getDisplayName() != null ? meta.getDisplayName() : meta.getName());
+                    meta.getLabel() != null ? meta.getLabel() : meta.getName());
         }
     }
 

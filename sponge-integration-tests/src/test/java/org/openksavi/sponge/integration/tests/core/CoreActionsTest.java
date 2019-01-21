@@ -85,7 +85,7 @@ public class CoreActionsTest {
             assertEquals("TEST", javaResult[1]);
 
             ActionAdapter upperActionAdapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
-            assertEquals("Echo Action", upperActionAdapter.getDisplayName());
+            assertEquals("Echo Action", upperActionAdapter.getLabel());
             assertEquals("Returns the upper case string", upperActionAdapter.getDescription());
 
             List<ArgMeta<?>> argMeta = upperActionAdapter.getArgsMeta();
@@ -93,11 +93,11 @@ public class CoreActionsTest {
             assertEquals("text", argMeta.get(0).getName());
             assertEquals(DataTypeKind.STRING, argMeta.get(0).getType().getKind());
             assertEquals(false, argMeta.get(0).getType().isNullable());
-            assertEquals("Argument 1", argMeta.get(0).getDisplayName());
+            assertEquals("Argument 1", argMeta.get(0).getLabel());
             assertEquals("Argument 1 description", argMeta.get(0).getDescription());
 
             assertEquals(DataTypeKind.STRING, upperActionAdapter.getResultMeta().getType().getKind());
-            assertEquals("Upper case string", upperActionAdapter.getResultMeta().getDisplayName());
+            assertEquals("Upper case string", upperActionAdapter.getResultMeta().getLabel());
             assertEquals("Result description", upperActionAdapter.getResultMeta().getDescription());
 
             assertFalse(engine.isError());
@@ -133,7 +133,7 @@ public class CoreActionsTest {
 
         try {
             ActionAdapter adapter = engine.getActionManager().getActionAdapter("MultipleArgumentsAction");
-            assertEquals("Multiple arguments action", adapter.getDisplayName());
+            assertEquals("Multiple arguments action", adapter.getLabel());
             assertEquals("Multiple arguments action.", adapter.getDescription());
 
             List<ArgMeta<?>> argMeta = adapter.getArgsMeta();
@@ -144,7 +144,7 @@ public class CoreActionsTest {
             assertEquals(10, ((StringType) argMeta.get(0).getType()).getMaxLength().intValue());
             assertEquals("ipAddress", argMeta.get(0).getType().getFormat());
             assertEquals(false, argMeta.get(0).getType().isNullable());
-            assertEquals(null, argMeta.get(0).getDisplayName());
+            assertEquals(null, argMeta.get(0).getLabel());
             assertEquals(null, argMeta.get(0).getDescription());
             assertNull(argMeta.get(0).getType().getDefaultValue());
 
@@ -193,7 +193,7 @@ public class CoreActionsTest {
             assertEquals("white", argMeta.get(8).getType().getFeatures().get("color"));
 
             assertEquals(DataTypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
-            assertEquals("Boolean result", adapter.getResultMeta().getDisplayName());
+            assertEquals("Boolean result", adapter.getResultMeta().getLabel());
 
             assertFalse(engine.isError());
         } finally {
@@ -234,8 +234,7 @@ public class CoreActionsTest {
         } catch (WrappedException e) {
             logger.debug("Expected exception", e);
             String sourceName = "kb.TestAction.onConfigure";
-            String expectedMessage =
-                    "'org.openksavi.sponge.action.ResultMeta' object has no attribute 'displayName_error' in " + sourceName;
+            String expectedMessage = "'org.openksavi.sponge.action.ResultMeta' object has no attribute 'label_error' in " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
@@ -417,13 +416,13 @@ public class CoreActionsTest {
     }
 
     @Test
-    public void testActionsProvideArgsValueSetDisplayNames() {
+    public void testActionsProvideArgsLabeledValueSet() {
         SpongeEngine engine =
                 DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args.py").build();
         engine.startup();
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorValueSetDisplayNames");
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorLabeledValueSet");
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
 

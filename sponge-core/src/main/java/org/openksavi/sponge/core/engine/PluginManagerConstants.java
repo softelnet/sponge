@@ -30,8 +30,8 @@ public final class PluginManagerConstants {
     /** Plugin name tag. */
     public static final String CFG_PLUGIN_NAME = "name";
 
-    /** Plugin display name tag. */
-    public static final String CFG_PLUGIN_DISPLAY_NAME = "displayName";
+    /** Plugin label tag. */
+    public static final String CFG_PLUGIN_LABEL = "label";
 
     /** Plugin class tag. */
     public static final String CFG_PLUGIN_CLASS = "class";

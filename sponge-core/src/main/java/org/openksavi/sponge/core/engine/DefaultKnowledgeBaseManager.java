@@ -61,8 +61,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     /** Configuration knowledge base name attribute name. */
     private static final String CFG_KNOWLEDGE_BASE_ATTR_NAME = "name";
 
-    /** Configuration knowledge base type attribute display name. */
-    private static final String CFG_KNOWLEDGE_BASE_ATTR_DISPLAY_NAME = "displayName";
+    /** Configuration knowledge base type attribute label. */
+    private static final String CFG_KNOWLEDGE_BASE_ATTR_LABEL = "label";
 
     /** Configuration knowledge base type attribute name. */
     private static final String CFG_KNOWLEDGE_BASE_ATTR_TYPE = "type";
@@ -127,7 +127,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             throw new SpongeException("Knowledge base name must not be empty");
         }
 
-        String displayName = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_DISPLAY_NAME, null);
+        String label = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_LABEL, null);
         String description = configuration.getString(CFG_KNOWLEDGE_BASE_DESCRIPTION, null);
         String typeCode = configuration.getAttribute(CFG_KNOWLEDGE_BASE_ATTR_TYPE, null);
 
@@ -138,8 +138,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         KnowledgeBase knowledgeBase = kbClass == null ? createScriptKnowledgeBaseFromConfiguration(name, typeCode, fileNodes)
                 : createNonScriptKnowledgeBaseFromConfiguration(name, typeCode, kbClass, fileNodes);
 
-        if (displayName != null) {
-            knowledgeBase.setDisplayName(displayName);
+        if (label != null) {
+            knowledgeBase.setLabel(label);
         }
 
         if (description != null) {

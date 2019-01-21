@@ -114,7 +114,7 @@ The REST API plugin provides a simple predefined knowledge base libraries: `engi
 .Example use of the REST API predefined knowledge base library
 [source,xml]
 ----
-<knowledgeBase name="security" displayName="Security">
+<knowledgeBase name="security" label="Security">
     <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
 </knowledgeBase>
 ----

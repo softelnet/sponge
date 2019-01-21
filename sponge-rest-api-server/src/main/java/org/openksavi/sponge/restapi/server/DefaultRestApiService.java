@@ -205,7 +205,7 @@ public class DefaultRestApiService implements RestApiService {
                     .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null : true)
                     .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
                     .filter(action -> canCallAction(user, action))
-                    .map(action -> new RestActionMeta(action.getName(), action.getDisplayName(), action.getDescription(),
+                    .map(action -> new RestActionMeta(action.getName(), action.getLabel(), action.getDescription(),
                             createRestKnowledgeBase(action.getKnowledgeBase()), action.getFeatures(), createActionArgMetaList(action),
                             createActionResultMeta(action)))
                     .map(action -> marshalActionMeta(action)).collect(Collectors.toList())), request);
@@ -350,18 +350,19 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionAdapter actionAdapter) {
-        return actionAdapter.getArgsMeta() != null
-                ? actionAdapter.getArgsMeta().stream()
-                        .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
-                                meta.getDisplayName(), meta.getDescription(), meta.isOptional(), meta.getProvided()))
-                        .collect(Collectors.toList())
-                : null;
+        return actionAdapter
+                .getArgsMeta() != null
+                        ? actionAdapter.getArgsMeta().stream()
+                                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
+                                        meta.getLabel(), meta.getDescription(), meta.isOptional(), meta.getProvided()))
+                                .collect(Collectors.toList())
+                        : null;
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {
         ResultMeta<?> resultMeta = actionAdapter.getResultMeta();
         return resultMeta != null
-                ? new RestActionResultMeta(resultMeta.getType() != null ? resultMeta.getType() : null, resultMeta.getDisplayName()) : null;
+                ? new RestActionResultMeta(resultMeta.getType(), resultMeta.getLabel()) : null;
     }
 
     protected RestApiAuthTokenService getSafeAuthTokenService() {
@@ -439,7 +440,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected RestKnowledgeBaseMeta createRestKnowledgeBase(KnowledgeBase kb) {
-        return new RestKnowledgeBaseMeta(kb.getName(), kb.getDisplayName(), kb.getDescription(), kb.getVersion());
+        return new RestKnowledgeBaseMeta(kb.getName(), kb.getLabel(), kb.getDescription(), kb.getVersion());
     }
 
     @Override

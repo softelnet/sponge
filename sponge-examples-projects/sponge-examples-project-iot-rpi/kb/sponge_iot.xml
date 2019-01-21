@@ -9,30 +9,30 @@
     </properties>
 
     <knowledgeBases>
-        <knowledgeBase name="grovepi" displayName="Grove Pi">
+        <knowledgeBase name="grovepi" label="Grove Pi">
             <file>sponge_iot_grovepi.py</file>
             <file>sponge_iot_grovepi_device.py</file>
         </knowledgeBase>
-        <knowledgeBase name="email" displayName="Email">
+        <knowledgeBase name="email" label="Email">
             <file>sponge_iot_email.py</file>
         </knowledgeBase>
-        <knowledgeBase name="sms" displayName="SMS">
+        <knowledgeBase name="sms" label="SMS">
             <file>sponge_iot_sms.py</file>
         </knowledgeBase>
-        <knowledgeBase name="camera" displayName="Camera">
+        <knowledgeBase name="camera" label="Camera">
             <file>sponge_iot_camera.py</file>
         </knowledgeBase>
-        <knowledgeBase name="iot" displayName="IoT">
+        <knowledgeBase name="iot" label="IoT">
             <file>sponge_iot.py</file>
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="os" displayName="OS">
+        <knowledgeBase name="os" label="OS">
             <file>sponge_iot_os.py</file>
         </knowledgeBase>
-        <knowledgeBase name="admin" displayName="Admin">
+        <knowledgeBase name="admin" label="Admin">
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
         </knowledgeBase>
-        <knowledgeBase name="security" displayName="Security">
+        <knowledgeBase name="security" label="Security">
             <file>rest_api_security.py</file>
         </knowledgeBase>
     </knowledgeBases>

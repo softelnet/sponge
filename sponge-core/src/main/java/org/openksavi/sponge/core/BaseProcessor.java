@@ -58,13 +58,13 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     }
 
     @Override
-    public final void setDisplayName(String displayName) {
-        adapter.setDisplayName(displayName);
+    public final void setLabel(String label) {
+        adapter.setLabel(label);
     }
 
     @Override
-    public final String getDisplayName() {
-        return adapter.getDisplayName();
+    public final String getLabel() {
+        return adapter.getLabel();
     }
 
     @Override

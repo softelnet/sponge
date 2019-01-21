@@ -12,13 +12,13 @@ def onInit():
 
 class SetActuator(Action):
     def onConfigure(self):
-        self.displayName = "Set actuator"
+        self.label = "Set actuator"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).displayName("Actuator 1 state").provided(ArgProvided().value().valueSet()),
-            ArgMeta("actuator2", BooleanType()).displayName("Actuator 2 state").provided(ArgProvided().value()),
-            ArgMeta("actuator3", IntegerType().nullable()).displayName("Actuator 3 state").provided(ArgProvided().value().readOnly()),
-            ArgMeta("actuator4", IntegerType()).displayName("Actuator 4 state")
+            ArgMeta("actuator1", StringType()).label("Actuator 1 state").provided(ArgProvided().value().valueSet()),
+            ArgMeta("actuator2", BooleanType()).label("Actuator 2 state").provided(ArgProvided().value()),
+            ArgMeta("actuator3", IntegerType().nullable()).label("Actuator 3 state").provided(ArgProvided().value().readOnly()),
+            ArgMeta("actuator4", IntegerType()).label("Actuator 4 state")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4):
@@ -34,12 +34,12 @@ class SetActuator(Action):
         if "actuator3" in names:
             provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
 
-class SetActuatorValueSetDisplayNames(Action):
+class SetActuatorLabeledValueSet(Action):
     def onConfigure(self):
-        self.displayName = "Set actuator type"
+        self.label = "Set actuator type"
         self.description = "Sets the actuator type."
         self.argsMeta = [
-            ArgMeta("actuatorType", StringType()).displayName("Actuator type").provided(ArgProvided().value().valueSet()),
+            ArgMeta("actuatorType", StringType()).label("Actuator type").provided(ArgProvided().value().valueSet()),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuatorType):

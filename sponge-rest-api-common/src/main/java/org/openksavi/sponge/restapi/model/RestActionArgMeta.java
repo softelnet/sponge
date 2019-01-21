@@ -30,7 +30,7 @@ public class RestActionArgMeta {
 
     private DataType type;
 
-    private String displayName;
+    private String label;
 
     private String description;
 
@@ -42,10 +42,10 @@ public class RestActionArgMeta {
         //
     }
 
-    public RestActionArgMeta(String name, DataType type, String displayName, String description, boolean optional, ArgProvided provided) {
+    public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvided provided) {
         this.name = name;
         this.type = type;
-        this.displayName = displayName;
+        this.label = label;
         this.description = description;
         this.optional = optional;
         this.provided = provided;
@@ -69,13 +69,13 @@ public class RestActionArgMeta {
         this.type = type;
     }
 
-    @ApiModelProperty(value = "The action argument display name", required = false)
-    public String getDisplayName() {
-        return displayName;
+    @ApiModelProperty(value = "The action argument label", required = false)
+    public String getLabel() {
+        return label;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @ApiModelProperty(value = "The action argument description", required = false)

@@ -148,24 +148,14 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     public void clear() {
     }
 
-    /**
-     * Sets display name.
-     *
-     * @param displayName display name.
-     */
     @Override
-    public void setDisplayName(String displayName) {
-        definition.setDisplayName(displayName);
+    public void setLabel(String label) {
+        definition.setLabel(label);
     }
 
-    /**
-     * Returns display name.
-     *
-     * @return display name.
-     */
     @Override
-    public String getDisplayName() {
-        return definition.getDisplayName();
+    public String getLabel() {
+        return definition.getLabel();
     }
 
     @Override

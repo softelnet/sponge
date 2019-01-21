@@ -27,7 +27,7 @@ public class RestActionResultMeta {
 
     private DataType type;
 
-    private String displayName;
+    private String label;
 
     private String description;
 
@@ -35,9 +35,9 @@ public class RestActionResultMeta {
         //
     }
 
-    public RestActionResultMeta(DataType type, String displayName) {
+    public RestActionResultMeta(DataType type, String label) {
         this.type = type;
-        this.displayName = displayName;
+        this.label = label;
     }
 
     @ApiModelProperty(value = "The action result type", required = true)
@@ -49,13 +49,13 @@ public class RestActionResultMeta {
         this.type = type;
     }
 
-    @ApiModelProperty(value = "The action result display name", required = false)
-    public String getDisplayName() {
-        return displayName;
+    @ApiModelProperty(value = "The action result label", required = false)
+    public String getLabel() {
+        return label;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @ApiModelProperty(value = "The action result description", required = false)

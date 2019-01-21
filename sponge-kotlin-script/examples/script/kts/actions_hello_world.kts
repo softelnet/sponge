@@ -13,10 +13,10 @@ import org.openksavi.sponge.type.StringType
 
 class HelloWorldAction : KAction() {
     override fun onConfigure() {
-        displayName = "Hello world"
+        label = "Hello world"
         description = "Returns a greeting text."
-        argsMeta = listOf(ArgMeta("name", StringType()).displayName("Your name").description("Type your name."))
-        resultMeta = ResultMeta(StringType()).displayName("Greeting").description("The greeting text.")
+        argsMeta = listOf(ArgMeta("name", StringType()).label("Your name").description("Type your name."))
+        resultMeta = ResultMeta(StringType()).label("Greeting").description("The greeting text.")
     }
 
     fun onCall(name: String): String {
