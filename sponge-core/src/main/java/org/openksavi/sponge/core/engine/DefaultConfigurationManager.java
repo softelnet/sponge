@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.engine;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import org.apache.commons.configuration2.tree.MergeCombiner;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
@@ -337,7 +339,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
                             .getConfiguration();
         } catch (ConfigurationException e) {
             // Ignoring the exception if the optional properties file hasn't been found.
-            if (propertiesLocationStrategy.isNotFound()) {
+            if (propertiesLocationStrategy.isNotFound() || ExceptionUtils.hasCause(e, FileNotFoundException.class)) {
                 propertiesConfiguration = new PropertiesConfiguration();
             } else {
                 throw new ConfigException("Error reading configuration properties file " + propertiesFileName, e);
