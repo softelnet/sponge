@@ -1,6 +1,6 @@
 """
 Sponge Knowledge base
-MPD library. This file may define MPD specific code that could be used as one of knowledge base files.
+MPD library that uses JavaMPD. This file defines MPD specific code that could be used as one of knowledge base files.
 """
 
 from collections import defaultdict
