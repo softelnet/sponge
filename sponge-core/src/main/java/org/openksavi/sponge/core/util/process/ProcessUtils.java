@@ -104,11 +104,11 @@ public abstract class ProcessUtils {
         builder.waitForPositiveLineRegexp(configuration.getString(TAG_PROCESS_WAIT_FOR_POSITIVE_LINE_REGEXP, null))
                 .waitForNegativeLineRegexp(configuration.getString(TAG_PROCESS_WAIT_FOR_NEGATIVE_LINE_REGEXP, null))
                 .waitForLineTimeout(configuration.getLong(TAG_PROCESS_WAIT_FOR_LINE_TIMEOUT, null))
-                .inputString(configuration.getString(TAG_PROCESS_INPUT_STRING, null));
+                .inputAsString(configuration.getString(TAG_PROCESS_INPUT_STRING, null));
 
         String inputBinaryString = configuration.getString(TAG_PROCESS_INPUT_BINARY, null);
         if (inputBinaryString != null) {
-            builder.inputBinary(Base64.getDecoder().decode(inputBinaryString));
+            builder.inputAsBinary(Base64.getDecoder().decode(inputBinaryString));
         }
 
         return builder;

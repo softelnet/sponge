@@ -207,6 +207,8 @@ In general, an external process can be executed using:
 |`CONSUMER` |Sends a subprocess standard error as text lines to a line consumer (if set). It also logs the subprocess error output to the logger (as WARN).
 |===
 
+The preferred way to configure redirects is to use `inputAs...`, `outputAs...` and `errorAs...` methods.
+
 .Example of running an external executable with arguments in Java
 [source,java]
 ----
@@ -861,12 +863,12 @@ class SendSms(Action):
 .Example of sending SMS using the `ProcessInstance` API
 [source,python]
 ----
-from org.openksavi.sponge.util.process import ProcessConfiguration, InputRedirect, OutputRedirect
+from org.openksavi.sponge.util.process import ProcessConfiguration
 
 def sendSms(recipient, message):
     process = sponge.runProcess(ProcessConfiguration.builder("gammu").arguments("sendsms", "TEXT", recipient,
             None if gsm.canEncodeGsm(message) else "-unicode")
-            .inputRedirect(InputRedirect.STRING).inputString(message).outputRedirect(OutputRedirect.STRING).build())
+            .inputAsString(message).outputAsString().build())
     if process.waitFor() != 0:
         raise Exception("Exit code {}: {}".format(process.exitCode, process.outputString))
 ----

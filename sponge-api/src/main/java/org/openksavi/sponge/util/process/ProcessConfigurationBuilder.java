@@ -212,83 +212,6 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * The input string that will be directed to the process standard input. Applicable only if the input redirect type is STRING.
-     *
-     * @param inputString the input string.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder inputString(String inputString) {
-        configuration.setInputString(inputString);
-        return this;
-    }
-
-    /**
-     * The input bytes that will be directed to the process standard input. Applicable only if the input redirect type is BINARY.
-     *
-     * @param inputBinary the input bytes.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder inputBinary(byte[] inputBinary) {
-        configuration.setInputBinary(inputBinary);
-        return this;
-    }
-
-    /**
-     * The file that will be directed to the process standard input. Applicable only if the input redirect type is FILE.
-     *
-     * @param inputFile the input file.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder inputFile(String inputFile) {
-        configuration.setInputFile(inputFile);
-        return this;
-    }
-
-    /**
-     * The file that the process standard output will be directed to. Applicable only if the output redirect type is FILE.
-     *
-     * @param outputFile the output file.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder outputFile(String outputFile) {
-        configuration.setOutputFile(outputFile);
-        return this;
-    }
-
-    /**
-     * The file that the process error output will be directed to. Applicable only if the error redirect type is FILE.
-     *
-     * @param errorFile the error file.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder errorFile(String errorFile) {
-        configuration.setErrorFile(errorFile);
-        return this;
-    }
-
-    /**
-     * The process standard output line consumer. Applicable only if the output redirect type is CONSUMER.
-     *
-     * @param outputLineConsumer the line consumer.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder outputLineConsumer(Consumer<String> outputLineConsumer) {
-        configuration.setOutputLineConsumer(outputLineConsumer);
-        return this;
-    }
-
-    /**
-     * The process error output line consumer. Applicable only if the error redirect type is CONSUMER.
-     *
-     * @param errorLineConsumer the line consumer.
-     * @return this builder.
-     */
-    public ProcessConfigurationBuilder errorLineConsumer(Consumer<String> errorLineConsumer) {
-        configuration.setErrorLineConsumer(errorLineConsumer);
-        return this;
-    }
-
-    /**
      * The logging consumer for the process standard output. Applicable only if the output redirect type is CONSUMER. The default logging
      * level is {@code INFO}.
      *
@@ -370,7 +293,9 @@ public class ProcessConfigurationBuilder {
      * @return this builder.
      */
     public ProcessConfigurationBuilder inputAsString(String inputString) {
-        return inputRedirect(InputRedirect.STRING).inputString(inputString);
+        configuration.setInputRedirect(InputRedirect.STRING);
+        configuration.setInputString(inputString);
+        return this;
     }
 
     /**
@@ -380,7 +305,9 @@ public class ProcessConfigurationBuilder {
      * @return this builder.
      */
     public ProcessConfigurationBuilder inputAsBinary(byte[] inputBinary) {
-        return inputRedirect(InputRedirect.BINARY).inputBinary(inputBinary);
+        configuration.setInputRedirect(InputRedirect.BINARY);
+        configuration.setInputBinary(inputBinary);
+        return this;
     }
 
     /**
@@ -390,7 +317,9 @@ public class ProcessConfigurationBuilder {
      * @return this builder.
      */
     public ProcessConfigurationBuilder inputAsFile(String inputFile) {
-        return inputRedirect(InputRedirect.FILE).inputFile(inputFile);
+        configuration.setInputRedirect(InputRedirect.FILE);
+        configuration.setInputFile(inputFile);
+        return this;
     }
 
     /**
@@ -436,7 +365,9 @@ public class ProcessConfigurationBuilder {
      * @return this builder.
      */
     public ProcessConfigurationBuilder outputAsFile(String outputFile) {
-        return outputRedirect(OutputRedirect.FILE).outputFile(outputFile);
+        configuration.setOutputRedirect(OutputRedirect.FILE);
+        configuration.setOutputFile(outputFile);
+        return this;
     }
 
     /**
@@ -446,7 +377,9 @@ public class ProcessConfigurationBuilder {
      * @return this builder.
      */
     public ProcessConfigurationBuilder outputAsConsumer(Consumer<String> outputLineConsumer) {
-        return outputRedirect(OutputRedirect.CONSUMER).outputLineConsumer(outputLineConsumer);
+        configuration.setOutputRedirect(OutputRedirect.CONSUMER);
+        configuration.setOutputLineConsumer(outputLineConsumer);
+        return this;
     }
 
     /**
@@ -483,7 +416,9 @@ public class ProcessConfigurationBuilder {
      * @return this builder.
      */
     public ProcessConfigurationBuilder errorAsFile(String errorFile) {
-        return errorRedirect(ErrorRedirect.FILE).errorFile(errorFile);
+        configuration.setErrorRedirect(ErrorRedirect.FILE);
+        configuration.setErrorFile(errorFile);
+        return this;
     }
 
     /**
@@ -504,5 +439,18 @@ public class ProcessConfigurationBuilder {
      */
     public ProcessConfigurationBuilder errorAsConsumer() {
         return errorRedirect(ErrorRedirect.CONSUMER);
+    }
+
+    /**
+     * A convenience method to set the process error redirect type {@link org.openksavi.sponge.util.process.ErrorRedirect#CONSUMER
+     * CONSUMER}.
+     *
+     * @param errorLineConsumer the line consumer.
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder errorAsConsumer(Consumer<String> errorLineConsumer) {
+        configuration.setErrorRedirect(ErrorRedirect.CONSUMER);
+        configuration.setErrorLineConsumer(errorLineConsumer);
+        return this;
     }
 }
