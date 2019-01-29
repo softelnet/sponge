@@ -1,0 +1,5 @@
+= Sponge MPD/MPC demo
+
+This is the source code for the Sponge MPD client demo that uses mpc.
+
+The sample passwords for user `admin` and `iot` configured in the `password.txt` are: `password`.
