@@ -14,6 +14,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Removed `inputString`, `inputBinary`, `inputFile`, `outputFile`, `errorFile`, `outputLineConsumer`, `errorLineConsumer` methods from the `ProcessConfigurationBuilder`. The preferred way to configure redirects is to use `inputAs...`, `outputAs...` and `errorAs...` methods.
 * Added new methods `callIfExists` in the `EngineOperations`.
 * Added `Processor.version` and verification of an action qualified version in the REST API.
+* Libraries upgrade.
 
 [discrete]
 == 1.6.0 (2019-01-11)
