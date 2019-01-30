@@ -310,6 +310,19 @@ __required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionR
 [[_swagger_definitions]]
 == Definitions
 
+[[_swagger_processorqualifiedversion]]
+=== ProcessorQualifiedVersion
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**knowledgeBaseVersion** +
+__optional__|integer (int32)
+|**processorVersion** +
+__optional__|integer (int32)
+|===
+
+
 [[_swagger_provideactionargsrequest]]
 === ProvideActionArgsRequest
 A provide action arguments request
@@ -332,8 +345,8 @@ __required__|The action name|string
 __optional__|The names of action arguments to provide|< string > array
 |**current** +
 __optional__|The current values of action arguments in a client code|< string, object > map
-|**version** +
-__optional__|The expected knowledge base version|integer (int32)
+|**qualifiedVersion** +
+__optional__|The action expected qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
 |===
 
 
@@ -368,10 +381,10 @@ __required__|The provided action arguments|< string, <<_swagger_argvalueobject,A
 __optional__|object
 |**valuePresent** +
 __optional__|boolean
+|**labeledValueSet** +
+__optional__|< <<_swagger_labeledvalueobject,LabeledValueObject>> > array
 |**valueSet** +
 __optional__|< object > array
-|**valueSetDisplayNames** +
-__optional__|< string > array
 |===
 
 
@@ -385,10 +398,36 @@ __optional__|< string > array
 __optional__|object
 |**valuePresent** +
 __optional__|boolean
+|**labeledValueSet** +
+__optional__|< <<_swagger_labeledvalueobject,LabeledValueObject>> > array
 |**valueSet** +
 __optional__|< object > array
-|**valueSetDisplayNames** +
-__optional__|< string > array
+|===
+
+
+[[_swagger_labeledvalue]]
+=== LabeledValue
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**label** +
+__optional__|string
+|===
+
+
+[[_swagger_labeledvalueobject]]
+=== LabeledValueObject
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**label** +
+__optional__|string
 |===
 
 
@@ -425,8 +464,8 @@ A knowledge base metadata
 |Name|Description|Schema
 |**name** +
 __required__|The knowledge base name|string
-|**displayName** +
-__optional__|The knowledge base display name|string
+|**label** +
+__optional__|The knowledge base label|string
 |**description** +
 __optional__|The knowledge base description|string
 |**version** +
@@ -444,8 +483,8 @@ An action metadata
 |Name|Description|Schema
 |**name** +
 __required__|The action name|string
-|**displayName** +
-__optional__|The action display name|string
+|**label** +
+__optional__|The action label|string
 |**description** +
 __optional__|The action description|string
 |**knowledgeBase** +
@@ -456,6 +495,27 @@ __required__|The action features|< string, object > map
 __optional__|The action arguments metadata|< <<_swagger_actionargmeta,ActionArgMeta>> > array
 |**resultMeta** +
 __optional__|The action result metadata|<<_swagger_actionresultmeta,ActionResultMeta>>
+|**qualifiedVersion** +
+__optional__|The action qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
+|===
+
+
+[[_swagger_argprovided]]
+=== ArgProvided
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|boolean
+|**valueSet** +
+__optional__|boolean
+|**depends** +
+__optional__|< string > array
+|**readOnly** +
+__optional__|boolean
+|**overwrite** +
+__optional__|boolean
 |===
 
 
@@ -471,20 +531,14 @@ An action argument metadata
 __required__|The action argument name|string
 |**type** +
 __required__|The action argument type|<<_swagger_datatype,DataType>>
-|**displayName** +
-__optional__|The action argument display name|string
+|**label** +
+__optional__|The action argument label|string
 |**description** +
 __optional__|The action argument description|string
 |**optional** +
 __optional__|Optional argument|boolean
 |**provided** +
-__optional__|Provided argument|boolean
-|**depends** +
-__optional__|Argument depends on others arguments|< string > array
-|**readOnly** +
-__optional__|Read only argument|boolean
-|**overwrite** +
-__optional__|The overwrite flag|boolean
+__optional__|The provided argument specification|<<_swagger_argprovided,ArgProvided>>
 |===
 
 
@@ -538,8 +592,8 @@ An action result metadata
 |Name|Description|Schema
 |**type** +
 __required__|The action result type|<<_swagger_datatype,DataType>>
-|**displayName** +
-__optional__|The action result display name|string
+|**label** +
+__optional__|The action result label|string
 |**description** +
 __optional__|The action result description|string
 |===
@@ -565,8 +619,8 @@ __optional__|The authentication token|string
 __required__|The action name|string
 |**args** +
 __optional__|The action arguments|< object > array
-|**version** +
-__optional__|The expected knowledge base version|integer (int32)
+|**qualifiedVersion** +
+__optional__|The action expected qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
 |===
 
 

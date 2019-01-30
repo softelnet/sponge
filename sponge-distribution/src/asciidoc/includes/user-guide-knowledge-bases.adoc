@@ -236,9 +236,7 @@ def onStartup():
 sponge.kb.load("triggers.py")
 ----
 
-****
-When the same name is used for a new processor, the previous definition will be replaced with the new one. However, this behavior could depend on the specific scripting language.
-****
+NOTE: If the same name is used for a new processor, the previous definition will be replaced with the new one. However, this behavior could depend on the specific scripting language.
 
 == Reloading
 Sometimes a situation may happen that there will be a need for a dynamic modification of processors, for example to add a new rule or modify an existing one. It is possible to do it without the need of shutting down and then starting the system again.
