@@ -54,7 +54,6 @@ import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
-import org.openksavi.sponge.util.LabeledValue;
 
 public abstract class BaseRestApiTestTemplate {
 
@@ -254,7 +253,7 @@ public abstract class BaseRestApiTestTemplate {
     public void testCallAnnotatedType() {
         try (SpongeRestClient client = createRestClient()) {
             AnnotatedValue<Boolean> annotatedArg =
-                    new AnnotatedValue<>(true, SpongeUtils.immutableMapOf("argFeature1", "argFeature1Value1"));
+                    new AnnotatedValue<>(true).withFeatures(SpongeUtils.immutableMapOf("argFeature1", "argFeature1Value1"));
             AnnotatedValue<String> result = client.call(AnnotatedValue.class, "AnnotatedTypeAction", Arrays.asList(annotatedArg));
 
             assertEquals("RESULT", result.getValue());
@@ -367,14 +366,14 @@ public abstract class BaseRestApiTestTemplate {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
-            List<LabeledValue<?>> actuator1LabeledValueSet = ((ArgValue) providedArgs.get("actuator1")).getLabeledValueSet();
-            assertEquals(3, actuator1LabeledValueSet.size());
-            assertEquals("A", actuator1LabeledValueSet.get(0).getValue());
-            assertEquals("Value A", actuator1LabeledValueSet.get(0).getLabel());
-            assertEquals("B", actuator1LabeledValueSet.get(1).getValue());
-            assertEquals("Value B", actuator1LabeledValueSet.get(1).getLabel());
-            assertEquals("C", actuator1LabeledValueSet.get(2).getValue());
-            assertEquals("Value C", actuator1LabeledValueSet.get(2).getLabel());
+            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
+            assertEquals(3, actuator1AnnotatedValueSet.size());
+            assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
+            assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());
+            assertEquals("B", actuator1AnnotatedValueSet.get(1).getValue());
+            assertEquals("Value B", actuator1AnnotatedValueSet.get(1).getLabel());
+            assertEquals("C", actuator1AnnotatedValueSet.get(2).getValue());
+            assertEquals("Value C", actuator1AnnotatedValueSet.get(2).getLabel());
 
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 

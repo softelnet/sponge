@@ -28,6 +28,12 @@ public class AnnotatedValue<T> {
     /** The value. */
     private T value;
 
+    /** The optional value label. */
+    private String label;
+
+    /** The optional value description. */
+    private String description;
+
     /** The annotated type features as a map of names to values. */
     private Map<String, Object> features = new LinkedHashMap<>();
 
@@ -35,9 +41,15 @@ public class AnnotatedValue<T> {
         //
     }
 
-    public AnnotatedValue(T value, Map<String, Object> features) {
+    public AnnotatedValue(T value, String label, String description, Map<String, Object> features) {
         this.value = value;
-        this.setFeatures(features);
+        this.label = label;
+        this.description = description;
+        this.features = features;
+    }
+
+    public AnnotatedValue(T value) {
+        this.value = value;
     }
 
     public T getValue() {
@@ -48,11 +60,42 @@ public class AnnotatedValue<T> {
         this.value = value;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Map<String, Object> getFeatures() {
         return Collections.unmodifiableMap(features);
     }
 
     public void setFeatures(Map<String, Object> features) {
         this.features = new LinkedHashMap<>(features);
+    }
+
+    public AnnotatedValue<T> withLabel(String label) {
+        setLabel(label);
+        return this;
+    }
+
+    public AnnotatedValue<T> withDescription(String description) {
+        setDescription(description);
+        return this;
+    }
+
+    public AnnotatedValue<T> withFeatures(Map<String, Object> features) {
+        this.features.putAll(features);
+        return this;
     }
 }

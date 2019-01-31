@@ -40,11 +40,11 @@ class ViewDoodle(Action):
         self.argsMeta = [ArgMeta("image", StringType()).label("Doodle name").provided(ArgProvided().value().valueSet())]
         self.resultMeta = ResultMeta(AnnotatedType(BinaryType().mimeType("image/png"))).label("Doodle image")
     def onCall(self, name):
-        return AnnotatedValue(SpongeUtils.readFileToByteArray(sponge.getProperty("doodlesDir") + "/" + name), {"filename":"doodle_" + name})
+        return AnnotatedValue(SpongeUtils.readFileToByteArray(sponge.getProperty("doodlesDir") + "/" + name)).withFeatures({"filename":"doodle_" + name})
     def onProvideArgs(self, names, current, provided):
         if "image" in names:
             doodles = sponge.call("ListDoodles")
-            provided["image"] = ArgValue().value(doodles[len(doodles)-1] if doodles else None).valueSet(doodles)
+            provided["image"] = ArgValue().withValue(doodles[len(doodles)-1] if doodles else None).withValueSet(doodles)
 
 def onStartup():
     sponge.logger.info(str(sponge.call("ListDoodles")))

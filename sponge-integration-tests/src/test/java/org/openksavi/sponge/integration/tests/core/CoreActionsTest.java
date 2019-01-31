@@ -59,7 +59,6 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
-import org.openksavi.sponge.util.LabeledValue;
 import org.openksavi.sponge.util.ValueHolder;
 
 public class CoreActionsTest {
@@ -382,12 +381,12 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(false, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             assertEquals(1, providedArgs.get("actuator3").getValue());
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
@@ -402,11 +401,11 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(true, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
 
             assertNotNull(providedArgs.get("actuator3"));
             assertEquals(1, providedArgs.get("actuator3").getValue());
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
 
             assertNull(providedArgs.get("actuator4"));
 
@@ -417,13 +416,13 @@ public class CoreActionsTest {
     }
 
     @Test
-    public void testActionsProvideArgsLabeledValueSet() {
+    public void testActionsProvideArgsAnnotatedValueSet() {
         SpongeEngine engine =
                 DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args.py").build();
         engine.startup();
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorLabeledValueSet");
+            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorAnnotatedValueSet");
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
             Map<String, ArgValue<?>> providedArgs;
 
@@ -439,11 +438,11 @@ public class CoreActionsTest {
             ArgValue<?> argValue = providedArgs.get("actuatorType");
             assertNotNull(argValue);
             assertEquals("auto", argValue.getValue());
-            assertEquals(2, argValue.getLabeledValueSet().size());
-            assertEquals("auto", argValue.getLabeledValueSet().get(0).getValue());
-            assertEquals("Auto", argValue.getLabeledValueSet().get(0).getLabel());
-            assertEquals("manual", argValue.getLabeledValueSet().get(1).getValue());
-            assertEquals("Manual", argValue.getLabeledValueSet().get(1).getLabel());
+            assertEquals(2, argValue.getAnnotatedValueSet().size());
+            assertEquals("auto", argValue.getAnnotatedValueSet().get(0).getValue());
+            assertEquals("Auto", argValue.getAnnotatedValueSet().get(0).getLabel());
+            assertEquals("manual", argValue.getAnnotatedValueSet().get(1).getValue());
+            assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getLabel());
             assertTrue(argValue.isValuePresent());
 
             engine.getOperations().call(actionAdapter.getName(), Arrays.asList("manual"));
@@ -454,11 +453,11 @@ public class CoreActionsTest {
             argValue = providedArgs.get("actuatorType");
             assertNotNull(argValue);
             assertEquals("manual", argValue.getValue());
-            assertEquals(2, argValue.getLabeledValueSet().size());
-            assertEquals("auto", argValue.getLabeledValueSet().get(0).getValue());
-            assertEquals("Auto", argValue.getLabeledValueSet().get(0).getLabel());
-            assertEquals("manual", argValue.getLabeledValueSet().get(1).getValue());
-            assertEquals("Manual", argValue.getLabeledValueSet().get(1).getLabel());
+            assertEquals(2, argValue.getAnnotatedValueSet().size());
+            assertEquals("auto", argValue.getAnnotatedValueSet().get(0).getValue());
+            assertEquals("Auto", argValue.getAnnotatedValueSet().get(0).getLabel());
+            assertEquals("manual", argValue.getAnnotatedValueSet().get(1).getValue());
+            assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getLabel());
             assertTrue(argValue.isValuePresent());
 
             assertFalse(engine.isError());
@@ -506,14 +505,14 @@ public class CoreActionsTest {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
-            List<LabeledValue<?>> actuator1LabeledValueSet = ((ArgValue) providedArgs.get("actuator1")).getLabeledValueSet();
-            assertEquals(3, actuator1LabeledValueSet.size());
-            assertEquals("A", actuator1LabeledValueSet.get(0).getValue());
-            assertEquals("Value A", actuator1LabeledValueSet.get(0).getLabel());
-            assertEquals("B", actuator1LabeledValueSet.get(1).getValue());
-            assertEquals("Value B", actuator1LabeledValueSet.get(1).getLabel());
-            assertEquals("C", actuator1LabeledValueSet.get(2).getValue());
-            assertEquals("Value C", actuator1LabeledValueSet.get(2).getLabel());
+            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
+            assertEquals(3, actuator1AnnotatedValueSet.size());
+            assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
+            assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());
+            assertEquals("B", actuator1AnnotatedValueSet.get(1).getValue());
+            assertEquals("Value B", actuator1AnnotatedValueSet.get(1).getLabel());
+            assertEquals("C", actuator1AnnotatedValueSet.get(2).getValue());
+            assertEquals("Value C", actuator1AnnotatedValueSet.get(2).getLabel());
 
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
@@ -523,12 +522,12 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(false, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             assertEquals(1, providedArgs.get("actuator3").getValue());
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
@@ -556,12 +555,12 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(true, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             assertEquals(1, providedArgs.get("actuator3").getValue());
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));

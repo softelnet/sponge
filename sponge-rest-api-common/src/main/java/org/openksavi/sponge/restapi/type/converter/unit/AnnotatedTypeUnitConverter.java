@@ -34,7 +34,8 @@ public class AnnotatedTypeUnitConverter<T> extends BaseUnitTypeConverter<Annotat
 
     @Override
     public Object marshal(TypeConverter converter, AnnotatedType<T> type, AnnotatedValue<T> value) {
-        return new AnnotatedValue<>(converter.marshal(type.getValueType(), value.getValue()), value.getFeatures());
+        return new AnnotatedValue<>(converter.marshal(type.getValueType(), value.getValue()), value.getLabel(), value.getDescription(),
+                value.getFeatures());
     }
 
     @SuppressWarnings("unchecked")

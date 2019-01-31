@@ -43,7 +43,7 @@ class ProvideByAction(Action):
         return value
     def onProvideArgs(self, names, current, provided):
         if "value" in names:
-            provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
+            provided["value"] = ArgValue().withValueSet(sponge.call("ListValues"))
 
 class ChooseColor(Action):
     def onConfigure(self):
@@ -154,7 +154,7 @@ class DependingArgumentsAction(Action):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):
         if "continent" in names:
-            provided["continent"] = ArgValue().valueSet(["Africa", "Asia", "Europe"])
+            provided["continent"] = ArgValue().withValueSet(["Africa", "Asia", "Europe"])
         if "country" in names:
             continent = current["continent"]
             if continent == "Africa":
@@ -165,7 +165,7 @@ class DependingArgumentsAction(Action):
                 countries = ["Russia", "Germany", "Turkey"]
             else:
                 countries = []
-            provided["country"] = ArgValue().valueSet(countries)
+            provided["country"] = ArgValue().withValueSet(countries)
         if "city" in names:
             country = current["country"]
             if country == "Nigeria":
@@ -188,7 +188,7 @@ class DependingArgumentsAction(Action):
                 cities = ["Istanbul", "Ankara", "Izmir"]
             else:
                 cities = []
-            provided["city"] = ArgValue().valueSet(cities)
+            provided["city"] = ArgValue().withValueSet(cities)
         if "river" in names:
             continent = current["continent"]
             if continent == "Africa":
@@ -199,6 +199,6 @@ class DependingArgumentsAction(Action):
                 rivers = ["Volga", "Danube", "Dnepr"]
             else:
                 rivers = []
-            provided["river"] = ArgValue().valueSet(rivers)
+            provided["river"] = ArgValue().withValueSet(rivers)
         if "weather" in names:
-            provided["weather"] = ArgValue().valueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+            provided["weather"] = ArgValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])

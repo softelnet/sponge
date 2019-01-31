@@ -8,4 +8,4 @@ class AnnotatedTypeAction(Action):
         self.argsMeta = []
         self.resultMeta = ResultMeta(AnnotatedType(StringType())).label("Annotated result")
     def onCall(self):
-        return AnnotatedValue("RESULT", {"feature1":"value1", "feature2":"value2"})
+        return AnnotatedValue("RESULT").withFeatures({"feature1":"value1", "feature2":"value2"})

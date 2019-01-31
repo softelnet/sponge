@@ -11,7 +11,7 @@ class ProvideArgNoOverwrite(Action):
         return
     def onProvideArgs(self, names, current, provided):
         if "value" in names:
-            provided["value"] = ArgValue().value("PROVIDED")
+            provided["value"] = ArgValue().withValue("PROVIDED")
 
 class ProvideArgOverwrite(Action):
     def onConfigure(self):
@@ -21,4 +21,4 @@ class ProvideArgOverwrite(Action):
         return
     def onProvideArgs(self, names, current, provided):
         if "value" in names:
-            provided["value"] = ArgValue().value("PROVIDED")
+            provided["value"] = ArgValue().withValue("PROVIDED")

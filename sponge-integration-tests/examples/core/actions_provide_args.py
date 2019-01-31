@@ -28,13 +28,13 @@ class SetActuator(Action):
         sponge.setVariable("actuator4", actuator4)
     def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
-            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
+            provided["actuator1"] = ArgValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
         if "actuator2" in names:
-            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
+            provided["actuator2"] = ArgValue().withValue(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
-            provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
+            provided["actuator3"] = ArgValue().withValue(sponge.getVariable("actuator3", None))
 
-class SetActuatorLabeledValueSet(Action):
+class SetActuatorAnnotatedValueSet(Action):
     def onConfigure(self):
         self.label = "Set actuator type"
         self.description = "Sets the actuator type."
@@ -46,8 +46,8 @@ class SetActuatorLabeledValueSet(Action):
         sponge.setVariable("actuatorType", actuatorType)
     def onProvideArgs(self, names, current, provided):
         if "actuatorType" in names:
-            provided["actuatorType"] = ArgValue().value(sponge.getVariable("actuatorType", None)).labeledValueSet([LabeledValue("auto", "Auto"),
-                                                                                                          LabeledValue("manual", "Manual")])
+            provided["actuatorType"] = ArgValue().withValue(sponge.getVariable("actuatorType", None)).withAnnotatedValueSet(
+                [AnnotatedValue("auto").withLabel("Auto"), AnnotatedValue("manual").withLabel("Manual")])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator")["actuator1"].getValue())

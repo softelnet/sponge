@@ -20,8 +20,8 @@ class SetGrovePiMode(Action):
         sponge.setVariable("grovePiMode", mode)
     def onProvideArgs(self, names, current, provided):
         if "mode" in names:
-            provided["mode"] = ArgValue().value(sponge.getVariable("grovePiMode", None)).labeledValueSet([LabeledValue("auto", "Auto"),
-                                                                                                          LabeledValue("manual", "Manual")])
+            provided["mode"] = ArgValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").witLabel("Auto"),
+                                                                                                          AnnotatedValue("manual").witLabel("Manual")])
 
 class ManageLcd(Action):
     def onConfigure(self):
@@ -43,11 +43,11 @@ class ManageLcd(Action):
     def onProvideArgs(self, names, current, provided):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         if "currentText" in names:
-            provided["currentText"] = ArgValue().value(grovePiDevice.getLcdText())
+            provided["currentText"] = ArgValue().withValue(grovePiDevice.getLcdText())
         if "text" in names:
-            provided["text"] = ArgValue().value(grovePiDevice.getLcdText())
+            provided["text"] = ArgValue().withValue(grovePiDevice.getLcdText())
         if "color" in names:
-            provided["color"] = ArgValue().value(grovePiDevice.getLcdColor())
+            provided["color"] = ArgValue().withValue(grovePiDevice.getLcdColor())
 
 class SetLcd(Action):
     def onCall(self, text, color, clearText = None):
@@ -109,7 +109,7 @@ class ManageSensorActuatorValues(Action):
     def onProvideArgs(self, names, current, provided):
         values = sponge.call("GetSensorActuatorValues", [names])
         for name, value in values.iteritems():
-            provided[name] = ArgValue().value(value)
+            provided[name] = ArgValue().withValue(value)
 
 class DhtSensorListener(Correlator):
     def onConfigure(self):

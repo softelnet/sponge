@@ -396,9 +396,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             RestActionArgMeta argMeta = actionMeta.getArgMeta(argName);
             ((ArgValue) argValue).setValue(typeConverter.unmarshal(argMeta.getType(), argValue.getValue()));
 
-            if (argValue.getLabeledValueSet() != null) {
-                argValue.getLabeledValueSet().stream().filter(Objects::nonNull).forEach(
-                        labeledValue -> labeledValue.setValue(typeConverter.unmarshal(argMeta.getType(), labeledValue.getValue())));
+            if (argValue.getAnnotatedValueSet() != null) {
+                argValue.getAnnotatedValueSet().stream().filter(Objects::nonNull).forEach(
+                        annotatedValue -> annotatedValue.setValue(typeConverter.unmarshal(argMeta.getType(), annotatedValue.getValue())));
             }
         });
     }

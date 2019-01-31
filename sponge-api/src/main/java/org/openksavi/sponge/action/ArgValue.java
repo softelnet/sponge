@@ -19,7 +19,7 @@ package org.openksavi.sponge.action;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openksavi.sponge.util.LabeledValue;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 /**
  * An argument value and a possible value set.
@@ -33,10 +33,10 @@ public class ArgValue<T> {
     private boolean valuePresent = false;
 
     /**
-     * The possible value set with optional labels. For example it may be a list of string values to choose from. If there is no value set
-     * for this argument, this property is {@code null}.
+     * The possible value set with optional annotations. For example it may be a list of string values to choose from. If there is no value
+     * set for this argument, this property is {@code null}.
      */
-    private List<LabeledValue<T>> labeledValueSet;
+    private List<AnnotatedValue<T>> annotatedValueSet;
 
     public ArgValue() {
         //
@@ -58,38 +58,37 @@ public class ArgValue<T> {
         this.valuePresent = valuePresent;
     }
 
-    public List<LabeledValue<T>> getLabeledValueSet() {
-        return labeledValueSet;
+    public List<AnnotatedValue<T>> getAnnotatedValueSet() {
+        return annotatedValueSet;
     }
 
-    public void setLabeledValueSet(List<LabeledValue<T>> labeledValueSet) {
-        this.labeledValueSet = labeledValueSet;
+    public void setAnnotatedValueSet(List<AnnotatedValue<T>> annotatedValueSet) {
+        this.annotatedValueSet = annotatedValueSet;
     }
 
     /**
-     * The utility getter for the possible value set without labels.
+     * The utility getter for the possible value set without annotations.
      *
      * @return the value set.
      */
     public List<T> getValueSet() {
-        return labeledValueSet != null ? labeledValueSet.stream().map(labeledValue -> labeledValue != null ? labeledValue.getValue() : null)
-                .collect(Collectors.toList()) : null;
+        return annotatedValueSet != null ? annotatedValueSet.stream()
+                .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
 
-    public ArgValue<T> value(T value) {
+    public ArgValue<T> withValue(T value) {
         setValue(value);
         setValuePresent(true);
         return this;
     }
 
-    public ArgValue<T> labeledValueSet(List<LabeledValue<T>> valueSet) {
-        setLabeledValueSet(valueSet);
+    public ArgValue<T> withAnnotatedValueSet(List<AnnotatedValue<T>> annotatedValueSet) {
+        setAnnotatedValueSet(annotatedValueSet);
         return this;
     }
 
-    public ArgValue<T> valueSet(List<T> valueSet) {
-        setLabeledValueSet(
-                valueSet != null ? valueSet.stream().map(value -> new LabeledValue<>(value, null)).collect(Collectors.toList()) : null);
-        return this;
+    public ArgValue<T> withValueSet(List<T> valueSet) {
+        return withAnnotatedValueSet(
+                valueSet != null ? valueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()) : null);
     }
 }

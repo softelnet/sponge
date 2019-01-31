@@ -70,7 +70,7 @@ class ProvideByAction(Action):
         return value
     def onProvideArgs(self, names, current, provided):
         if "value" in names:
-            provided["value"] = ArgValue().valueSet(sponge.call("ListValues"))
+            provided["value"] = ArgValue().withValueSet(sponge.call("ListValues"))
 
 class PrivateAction(Action):
     def onCall(self, args):
@@ -151,11 +151,11 @@ class SetActuator(Action):
         sponge.setVariable("actuator4", actuator4)
     def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
-            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).valueSet(["A", "B", "C"])
+            provided["actuator1"] = ArgValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
         if "actuator2" in names:
-            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
+            provided["actuator2"] = ArgValue().withValue(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
-            provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
+            provided["actuator3"] = ArgValue().withValue(sponge.getVariable("actuator3", None))
 
 class SetActuatorDepends(Action):
     def onConfigure(self):
@@ -177,14 +177,14 @@ class SetActuatorDepends(Action):
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, names, current, provided):
         if "actuator1" in names:
-            provided["actuator1"] = ArgValue().value(sponge.getVariable("actuator1", None)).labeledValueSet(
-                [LabeledValue("A", "Value A"), LabeledValue("B", "Value B"), LabeledValue("C", "Value C")])
+            provided["actuator1"] = ArgValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
+                [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
         if "actuator2" in names:
-            provided["actuator2"] = ArgValue().value(sponge.getVariable("actuator2", None))
+            provided["actuator2"] = ArgValue().withValue(sponge.getVariable("actuator2", None))
         if "actuator3" in names:
-            provided["actuator3"] = ArgValue().value(sponge.getVariable("actuator3", None))
+            provided["actuator3"] = ArgValue().withValue(sponge.getVariable("actuator3", None))
         if "actuator5" in names:
-            provided["actuator5"] = ArgValue().value(sponge.getVariable("actuator5", None)).valueSet(["X", "Y", "Z", current["actuator1"]])
+            provided["actuator5"] = ArgValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", current["actuator1"]])
 
 class AnnotatedTypeAction(Action):
     def onConfigure(self):
@@ -193,7 +193,7 @@ class AnnotatedTypeAction(Action):
     def onCall(self, arg1):
         features = {"feature1":"value1"}
         features.update(arg1.features)
-        return AnnotatedValue("RESULT", features)
+        return AnnotatedValue("RESULT").withFeatures(features)
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

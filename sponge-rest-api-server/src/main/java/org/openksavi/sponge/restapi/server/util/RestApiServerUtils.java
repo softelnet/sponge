@@ -33,7 +33,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
-import org.openksavi.sponge.util.LabeledValue;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 /**
  * A set of REST API server utility methods.
@@ -125,13 +125,11 @@ public abstract class RestApiServerUtils {
             ArgMeta<?> argMeta = actionAdapter.getArgMeta(argName);
             ((ArgValue) argValue).setValue(typeConverter.marshal(argMeta.getType(), argValue.getValue()));
 
-            if (argValue.getLabeledValueSet() != null) {
-                ((ArgValue) argValue)
-                        .setLabeledValueSet(
-                                argValue.getLabeledValueSet().stream()
-                                        .map(labeledValue -> new LabeledValue(
-                                                typeConverter.marshal(argMeta.getType(), labeledValue.getValue()), labeledValue.getLabel()))
-                                        .collect(Collectors.toList()));
+            if (argValue.getAnnotatedValueSet() != null) {
+                ((ArgValue) argValue).setAnnotatedValueSet(argValue.getAnnotatedValueSet().stream()
+                        .map(annotatedValue -> new AnnotatedValue(typeConverter.marshal(argMeta.getType(), annotatedValue.getValue()),
+                                annotatedValue.getLabel(), annotatedValue.getDescription(), annotatedValue.getFeatures()))
+                        .collect(Collectors.toList()));
             }
         });
     }

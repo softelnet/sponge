@@ -20,4 +20,4 @@ class ProvideByAction(Action):
         return sensorName == "sensor1"
     def onProvideArgs(self, names, current, provided):
         if "sensorName" in names:
-            provided["sensorName"] = ArgValue().valueSet(sponge.call("GetAvailableSensorNames"))
+            provided["sensorName"] = ArgValue().withValueSet(sponge.call("GetAvailableSensorNames"))

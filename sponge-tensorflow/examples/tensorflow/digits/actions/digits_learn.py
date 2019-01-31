@@ -17,7 +17,7 @@ class DigitsAddToLearn(Action):
         return None
     def onProvideArgs(self, names, current, provided):
         if "digit" in names:
-            provided["digit"] = ArgValue().valueSet(py4j.facade.getLabels())
+            provided["digit"] = ArgValue().withValueSet(py4j.facade.getLabels())
 
 class DigitsLearn(Action):
     def onConfigure(self):
@@ -33,7 +33,7 @@ class DigitsLearn(Action):
         return None
     def onProvideArgs(self, names, current, provided):
         if "digit" in names:
-            provided["digit"] = ArgValue().valueSet(py4j.facade.getLabels())
+            provided["digit"] = ArgValue().withValueSet(py4j.facade.getLabels())
 
 class MnistResetModel(Action):
     def onConfigure(self):
