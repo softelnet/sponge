@@ -295,6 +295,7 @@ public class TestKnowledgeBase extends JKnowledgeBase { // <1>
 <2> The definition of the Java trigger.
 <3> Makes an event of type (name) `e1` with an attribute `mark` set to `1` and schedules it to be sent after `1` second.
 
+[discrete]
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -349,6 +350,7 @@ In Kotlin knowledge bases there is no global variable `sponge`. Instead you have
 
 See more examples of Kotlin-based knowledge bases in the `sponge-kotlin` project.
 
+[discrete]
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 

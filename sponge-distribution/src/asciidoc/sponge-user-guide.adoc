@@ -502,7 +502,7 @@ Plugins could be written in Java or in a supported scripting language as a part 
 |The read-only property that provides a plugin logger. This is a shortcut for `getLogger()` method. A plugin logger name has the following format: `sponge.kb.plugin.<pluginName>`. Example logger name: `sponge.kb.plugin.scriptPlugin`.
 |===
 
-
+[discrete]
 === Example in Java
 
 .Definition of the plugin in the XML configuration file
@@ -614,6 +614,7 @@ Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two
 * `sponge.getPlugin("echoPlugin").echo`
 * `echoPlugin.echo`
 
+[discrete]
 === Example in a script language
 
 .Definition of the plugin in the XML configuration file
@@ -779,6 +780,7 @@ Actions should be created only when there is a need to provide some functionalit
 ==== Limitations
 Note that Jython 2.7.1 has a few bugs that could in some cases impact the stability of the system, e.g.: http://bugs.jython.org/issue2487.
 
+[discrete]
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -795,6 +797,7 @@ The dependency for Jython used in {sponge} is https://github.com/scijava/jython-
 
 === Ruby
 
+[discrete]
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -829,6 +832,7 @@ For every knowledge base file there is a new Groovy `Script` instance created. F
 
 It seems that a Groovy-based knowledge base must have at east one function (may be empty). Otherwise you may get `org.codehaus.groovy.runtime.metaclass.MissingMethodExceptionNoStack` exception.
 
+[discrete]
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -896,6 +900,7 @@ var EmphasizeAction = Java.extend(Action, {
 });
 ----
 
+[discrete]
 ==== Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 
@@ -1101,6 +1106,7 @@ The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-iot-rpi[IoT on
 
 The {sponge} standalone command line application is installed on a Raspberry Pi with a GrovePi extension board. {sponge} provides a synchronous REST API to remotely call actions (that for example change state of actuators). It also sends sensor data (temperature, humidity and light) to an MQTT broker using Apache Camel. The project allows processing sensor data on two levels: locally on the Raspberry Pi edge device by {sponge} (to avoid sending too much data to a management system) or by an external system that connects to the MQTT broker.
 
+[discrete]
 ===== The hardware
 
 .The sensors and actuators connected to the GrovePi
@@ -1127,6 +1133,7 @@ The {sponge} standalone command line application is installed on a Raspberry Pi 
 |Huawei E3131h-2 modem |Connected via a powered USB hub.
 |===
 
+[discrete]
 ===== Prerequisites
 The Linux distribution used for this example is Raspbian. All command are invoked by the user `pi`. For SMS sending the `gammu` utility should be installed.
 
@@ -1135,6 +1142,7 @@ The Linux distribution used for this example is Raspbian. All command are invoke
 $ sudo apt-get install gammu
 ----
 
+[discrete]
 ===== Installation
 First you should download and unpack the {sponge} standalone command line application into the `/home/pi/local/app/` directory. The directory `/home/pi/local/app/examples/sponge-iot-rpi` (containing the example knowledge base files) should be copied to `/home/pi/local/` in order to modify the configuration files in a fresh copy.
 
@@ -1168,11 +1176,13 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl enable sponge_iot.service
 ----
 
+[discrete]
 ===== Configuration
 The `sponge_iot.properties` file allows the configuration of the service name, the phone number that will receive SMS notifications, the email address for notifications, the temperature threshold to trigger sending an SMS notification, the email client settings and the MQTT broker settings.
 
 Note that the provided password file `password.txt` stores sample passwords. For each user the password is: password.
 
+[discrete]
 ===== REST API Actions
 The subset of {sponge} actions is published via the {sponge} REST API. The published actions have their metadata configured. These actions could be used by the {sponge} mobile client application to manage the IoT device using a GUI.
 
@@ -1200,9 +1210,11 @@ The subset of {sponge} actions is published via the {sponge} REST API. The publi
 
 The REST API uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
 
+[discrete]
 ===== MQTT
 {sponge} publishes the values of temperature, humidity and light sensors to the MQTT topics `sponge/temperature`, `sponge/humidity` and `sponge/light`. The topic prefix can be changed in the configuration.
 
+[discrete]
 ===== Modifications in the knowledge bases
 After installation, configuration and an initial run you could add your modifications to the knowledge bases. The preferred way to do this is:
 

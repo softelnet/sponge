@@ -3,6 +3,7 @@
 
 Although there could be many ways of using TensorFlow from Java, this integration uses the https://www.py4j.org[Py4J] library wrapped in the Py4J plugin to communicate between a {sponge} Java process and a Python program running TensorFlow. The TensorFlow Python API has been chosen over the Java API, because, at the time of writing, the TensorFlow APIs in languages other than Python were not covered by the API stability promises. For use cases that require low latency times, the usage of Py4J may be insufficient. An alternative approach is to use https://www.tensorflow.org/serving/[TensorFlow serving], designed for production environments.
 
+[discrete]
 == Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:
 

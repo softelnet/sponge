@@ -20,6 +20,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 The `onConfigure` method in actions is not mandatory.
 
+[discrete]
 == Example in a script language
 The code presented below defines the action named `EchoAction` that simply returns all arguments.
 
@@ -43,6 +44,7 @@ def onStartup():
 Action returned: test
 ----
 
+[discrete]
 == Example in Java
 The code presented below defines the Java-based action named `JavaEchoAction`.
 

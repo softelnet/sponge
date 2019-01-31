@@ -381,10 +381,27 @@ __required__|The provided action arguments|< string, <<_swagger_argvalueobject,A
 __optional__|object
 |**valuePresent** +
 __optional__|boolean
-|**labeledValueSet** +
-__optional__|< <<_swagger_labeledvalueobject,LabeledValueObject>> > array
+|**annotatedValueSet** +
+__optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
 |**valueSet** +
 __optional__|< object > array
+|===
+
+
+[[_swagger_annotatedvalue]]
+=== AnnotatedValue
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**label** +
+__optional__|string
+|**description** +
+__optional__|string
+|**features** +
+__optional__|< string, object > map
 |===
 
 
@@ -398,15 +415,15 @@ __optional__|< object > array
 __optional__|object
 |**valuePresent** +
 __optional__|boolean
-|**labeledValueSet** +
-__optional__|< <<_swagger_labeledvalueobject,LabeledValueObject>> > array
+|**annotatedValueSet** +
+__optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
 |**valueSet** +
 __optional__|< object > array
 |===
 
 
-[[_swagger_labeledvalue]]
-=== LabeledValue
+[[_swagger_annotatedvalueobject]]
+=== AnnotatedValueObject
 
 [options="header", cols=".^3a,.^4a"]
 |===
@@ -415,19 +432,10 @@ __optional__|< object > array
 __optional__|object
 |**label** +
 __optional__|string
-|===
-
-
-[[_swagger_labeledvalueobject]]
-=== LabeledValueObject
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|object
-|**label** +
+|**description** +
 __optional__|string
+|**features** +
+__optional__|< string, object > map
 |===
 
 

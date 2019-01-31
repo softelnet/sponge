@@ -63,6 +63,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 Every filter should implement abstract `onConfigure` and `onAccept` methods.
 
+[discrete]
 === Example in a script language
 The code presented below creates a filter which filters only events whose name is `"e1"`. Other events are not processed by this filter. Events `e1` successfully pass through the filter only if they have an attribute `"color"` set to the value `"blue"`. The others are rejected.
 
@@ -95,6 +96,7 @@ class ColorFilter(Filter): # <1>
 
 The filter `ColorFilter` will be enabled automatically. The enabling creates one instance of `ColorFilter` class and invokes `ColorFilter.onConfigure` method to set it up. Since that moment the filter listens to the specified events.
 
+[discrete]
 === Example in Java
 The filter presented below checks if an event named `"e1"` or `"e2"` or `"e3"` has an attribute `"shape"` set. If not, an event is ignored and will not be processed further.
 
@@ -163,6 +165,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 Every trigger should implement abstract `onConfigure` and `onRun` methods.
 
+[discrete]
 === Example in a script language
 The code presented below defines the trigger named `TriggerA` listening to events named `"a"`.
 
@@ -183,6 +186,7 @@ class TriggerA(Trigger): # <1>
 
 The trigger `TriggerA` will be enabled automatically. The enabling creates an instance of `TriggerA` class and invokes `TriggerA.onConfigure` method to set it up. Since that moment the trigger listens to the specified events.
 
+[discrete]
 === Example in Java
 The code presented below defines the trigger named `SampleJavaTrigger` listening to events named `"e1"`.
 
@@ -404,6 +408,7 @@ IMPORTANT: A condition in the form of a closure or a lambda specifies two argume
 
 The condition methods tell if an incoming event (corresponding to the sequence of events specified by the rule) should be considered suitable.
 
+[discrete]
 === Example in a script language
 The code presented below defines a rule named `SameSourceAllRule` listening to an ordered sequence of events (`"filesystemFailure"`, `"diskFailure"`).
 The two events have to have `severity` greater than `5` and the same `source`. Moreover the second event has to happen not later than after `4` seconds since the first one. The method `onRun()` will be invoked for every sequence of events that match this definition.
@@ -450,6 +455,7 @@ A condition could be expressed as a lambda function, for example:
 self.addConditions("e1", lambda rule, event: int(event.get("severity")) > 5)
 ----
 
+[discrete]
 === Example in Java
 The code presented below defines a rule analogous to the one shown above but defined as a Java class.
 
@@ -560,6 +566,7 @@ Every correlator may implement the `onAcceptAsFirst` method and should implement
 
 IMPORTANT: Because of correlators are not singletons the `onConfigure` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `onInit` method *must not* contain such configuration because it is invoked later, every time a new instance of the correlator is created.
 
+[discrete]
 === Example in a script language
 The code presented below defines the correlator named `SampleCorrelator` that listens to events `"filesystemFailure"` and `"diskFailure"`.
 The maximum number of concurrent instances allowed for this correlator is set to `1`. A `filesystemFailure` event will be accepted as the first event only when there is no instance of this correlator already running. When the `filesystemFailure` event is accepted as the first, a new instance of this correlator will be created. Each instance of this correlator adds to its internal event log list `eventLog` any suitable event. When `4` fitting events are collected the correlator instance will finish.
@@ -595,6 +602,7 @@ class SampleCorrelator(Correlator): # <1>
 
 The correlator will be enabled automatically. Then, in case of acceptance of an event, a new instance of a correlator `SampleCorrelator` will be created.
 
+[discrete]
 === Example in Java
 The code presented below defines the correlator analogous to the one shown above but defined as a Java class.
 
