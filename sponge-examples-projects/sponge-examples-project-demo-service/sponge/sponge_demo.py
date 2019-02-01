@@ -37,13 +37,13 @@ class ListValues(Action):
 class ProvideByAction(Action):
     def onConfigure(self):
         self.label = "Action with provided argument"
-        self.argsMeta = [ArgMeta("value", StringType()).label("Value").provided(ArgProvided().valueSet())]
+        self.argsMeta = [ArgMeta("value", StringType()).label("Value").provided(ArgProvidedMeta().valueSet())]
         self.resultMeta = ResultMeta(StringType()).label("Same value")
     def onCall(self, value):
         return value
     def onProvideArgs(self, names, current, provided):
         if "value" in names:
-            provided["value"] = ArgValue().withValueSet(sponge.call("ListValues"))
+            provided["value"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
 
 class ChooseColor(Action):
     def onConfigure(self):
@@ -143,18 +143,18 @@ class DependingArgumentsAction(Action):
     def onConfigure(self):
         self.label = "Action with depending arguments"
         self.argsMeta = [
-            ArgMeta("continent", StringType()).label("Continent").provided(ArgProvided().valueSet()),
-            ArgMeta("country", StringType()).label("Country").provided(ArgProvided().valueSet().depends("continent")),
-            ArgMeta("city", StringType()).label("City").provided(ArgProvided().valueSet().depends("country")),
-            ArgMeta("river", StringType()).label("River").provided(ArgProvided().valueSet().depends("continent")),
-            ArgMeta("weather", StringType()).label("Weather").provided(ArgProvided().valueSet()),
+            ArgMeta("continent", StringType()).label("Continent").provided(ArgProvidedMeta().valueSet()),
+            ArgMeta("country", StringType()).label("Country").provided(ArgProvidedMeta().valueSet().depends("continent")),
+            ArgMeta("city", StringType()).label("City").provided(ArgProvidedMeta().valueSet().depends("country")),
+            ArgMeta("river", StringType()).label("River").provided(ArgProvidedMeta().valueSet().depends("continent")),
+            ArgMeta("weather", StringType()).label("Weather").provided(ArgProvidedMeta().valueSet()),
         ]
         self.resultMeta = ResultMeta(StringType()).label("Sentences")
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):
         if "continent" in names:
-            provided["continent"] = ArgValue().withValueSet(["Africa", "Asia", "Europe"])
+            provided["continent"] = ArgProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
         if "country" in names:
             continent = current["continent"]
             if continent == "Africa":
@@ -165,7 +165,7 @@ class DependingArgumentsAction(Action):
                 countries = ["Russia", "Germany", "Turkey"]
             else:
                 countries = []
-            provided["country"] = ArgValue().withValueSet(countries)
+            provided["country"] = ArgProvidedValue().withValueSet(countries)
         if "city" in names:
             country = current["country"]
             if country == "Nigeria":
@@ -188,7 +188,7 @@ class DependingArgumentsAction(Action):
                 cities = ["Istanbul", "Ankara", "Izmir"]
             else:
                 cities = []
-            provided["city"] = ArgValue().withValueSet(cities)
+            provided["city"] = ArgProvidedValue().withValueSet(cities)
         if "river" in names:
             continent = current["continent"]
             if continent == "Africa":
@@ -199,6 +199,6 @@ class DependingArgumentsAction(Action):
                 rivers = ["Volga", "Danube", "Dnepr"]
             else:
                 rivers = []
-            provided["river"] = ArgValue().withValueSet(rivers)
+            provided["river"] = ArgProvidedValue().withValueSet(rivers)
         if "weather" in names:
-            provided["weather"] = ArgValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+            provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])

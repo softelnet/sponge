@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -129,7 +129,7 @@ public interface EngineOperations {
      *        those arguments that the arguments specified in the {@code names} depend on.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
+    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Returns the provided values along with value sets of the action arguments.
@@ -138,7 +138,7 @@ public interface EngineOperations {
      * @param argNames the list of argument names.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames);
+    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames);
 
     /**
      * Returns the provided values along with value sets of the action arguments.
@@ -146,7 +146,7 @@ public interface EngineOperations {
      * @param actionName the action name.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideActionArgs(String actionName);
+    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName);
 
     /**
      * Shuts down the engine using the current thread.

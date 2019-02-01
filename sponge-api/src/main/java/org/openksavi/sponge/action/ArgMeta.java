@@ -40,7 +40,7 @@ public class ArgMeta<T extends DataType> {
     private boolean optional = false;
 
     /** The provided argument specification. Defaults to {@code null}. */
-    private ArgProvided provided;
+    private ArgProvidedMeta provided;
 
     public ArgMeta(String name, T type) {
         this.name = name;
@@ -62,7 +62,7 @@ public class ArgMeta<T extends DataType> {
         return this;
     }
 
-    public ArgMeta<T> provided(ArgProvided provided) {
+    public ArgMeta<T> provided(ArgProvidedMeta provided) {
         this.provided = provided;
         return this;
     }
@@ -107,11 +107,11 @@ public class ArgMeta<T extends DataType> {
         this.optional = optional;
     }
 
-    public ArgProvided getProvided() {
+    public ArgProvidedMeta getProvided() {
         return provided;
     }
 
-    public void setProvided(ArgProvided provided) {
+    public void setProvided(ArgProvidedMeta provided) {
         this.provided = provided;
     }
 }

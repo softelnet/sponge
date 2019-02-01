@@ -36,7 +36,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
@@ -387,14 +387,14 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected void unmarshalProvidedActionArgValues(RestActionMeta actionMeta, Map<String, ArgValue<?>> argValues) {
+    protected void unmarshalProvidedActionArgValues(RestActionMeta actionMeta, Map<String, ArgProvidedValue<?>> argValues) {
         if (argValues == null || actionMeta.getArgsMeta() == null) {
             return;
         }
 
         argValues.forEach((argName, argValue) -> {
             RestActionArgMeta argMeta = actionMeta.getArgMeta(argName);
-            ((ArgValue) argValue).setValue(typeConverter.unmarshal(argMeta.getType(), argValue.getValue()));
+            ((ArgProvidedValue) argValue).setValue(typeConverter.unmarshal(argMeta.getType(), argValue.getValue()));
 
             if (argValue.getAnnotatedValueSet() != null) {
                 argValue.getAnnotatedValueSet().stream().filter(Objects::nonNull).forEach(
@@ -631,12 +631,12 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
         return provideActionArgs(new ProvideActionArgsRequest(actionName, argNames, current)).getProvided();
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName) {
+    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName) {
         return provideActionArgs(actionName, null, null);
     }
 

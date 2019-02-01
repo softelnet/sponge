@@ -14,10 +14,10 @@ class GetAvailableSensorNames(Action):
 class ProvideByAction(Action):
     def onConfigure(self):
         self.label = "Action with provided argument"
-        self.argsMeta = [ ArgMeta("sensorName", StringType()).provided(ArgProvided().valueSet()) ]
+        self.argsMeta = [ ArgMeta("sensorName", StringType()).provided(ArgProvidedMeta().valueSet()) ]
         self.resultMeta = ResultMeta(BooleanType()).label("Boolean result")
     def onCall(self, sensorName):
         return sensorName == "sensor1"
     def onProvideArgs(self, names, current, provided):
         if "sensorName" in names:
-            provided["sensorName"] = ArgValue().withValueSet(sponge.call("GetAvailableSensorNames"))
+            provided["sensorName"] = ArgProvidedValue().withValueSet(sponge.call("GetAvailableSensorNames"))

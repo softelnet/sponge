@@ -21,26 +21,26 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 
 @ApiModel(value = "ProvideActionArgsResponse", description = "A provide action arguments response")
 public class ProvideActionArgsResponse extends SpongeResponse {
 
-    private Map<String, ArgValue<?>> provided;
+    private Map<String, ArgProvidedValue<?>> provided;
 
     public ProvideActionArgsResponse() {
     }
 
-    public ProvideActionArgsResponse(Map<String, ArgValue<?>> provided) {
+    public ProvideActionArgsResponse(Map<String, ArgProvidedValue<?>> provided) {
         this.provided = provided;
     }
 
     @ApiModelProperty(value = "The provided action arguments", required = true)
-    public Map<String, ArgValue<?>> getProvided() {
+    public Map<String, ArgProvidedValue<?>> getProvided() {
         return provided;
     }
 
-    public void setProvided(Map<String, ArgValue<?>> provided) {
+    public void setProvided(Map<String, ArgProvidedValue<?>> provided) {
         this.provided = provided;
     }
 }

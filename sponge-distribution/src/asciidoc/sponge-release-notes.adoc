@@ -9,8 +9,9 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.7.0 (not released yet)
 
 * API change: Renamed `displayName` to `label`.
-* API change: A provided argument specification in now placed in the `ArgProvided` class, not directly in the `ArgMeta` as before.
-* API change: Removed `LabeledValue` and `ArgValue.valueSetDisplayNames` because of a new support for an annotated value set.
+* API change: Renamed `ArgProvided` to `ArgProvidedMeta`, `ArgValue` to `ArgProvidedValue`.
+* API change: A provided argument specification in now placed in the `ArgProvidedMeta` class, not directly in the `ArgMeta` as before.
+* API change: Removed `LabeledValue` and `ArgProvidedValue.valueSetDisplayNames` because of a new support for an annotated value set.
 * API change: Removed `inputString`, `inputBinary`, `inputFile`, `outputFile`, `errorFile`, `outputLineConsumer`, `errorLineConsumer` methods from the `ProcessConfigurationBuilder`. The preferred way to configure redirects is to use `inputAs...`, `outputAs...` and `errorAs...` methods.
 * Added new methods `callIfExists` in the `EngineOperations`.
 * Added `Processor.version` and verification of an action qualified version in the REST API.

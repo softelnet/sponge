@@ -12,7 +12,7 @@ class SetGrovePiMode(Action):
     def onConfigure(self):
         self.label = "Set the GrovePi mode"
         self.description = "Sets the GrovePi mode."
-        self.argsMeta = [ArgMeta("mode", StringType()).label("The GrovePi mode").provided(ArgProvided().value().valueSet().overwrite())]
+        self.argsMeta = [ArgMeta("mode", StringType()).label("The GrovePi mode").provided(ArgProvidedMeta().value().valueSet().overwrite())]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, mode):
         if mode not in ["auto", "manual"]:
@@ -20,7 +20,7 @@ class SetGrovePiMode(Action):
         sponge.setVariable("grovePiMode", mode)
     def onProvideArgs(self, names, current, provided):
         if "mode" in names:
-            provided["mode"] = ArgValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").witLabel("Auto"),
+            provided["mode"] = ArgProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").witLabel("Auto"),
                                                                                                           AnnotatedValue("manual").witLabel("Manual")])
 
 class ManageLcd(Action):
@@ -29,11 +29,11 @@ class ManageLcd(Action):
         self.description = "Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property."
         self.argsMeta = [
             ArgMeta("currentText", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
-                .label("Current LCD text").description("The currently displayed LCD text.").provided(ArgProvided().value().readOnly()),
+                .label("Current LCD text").description("The currently displayed LCD text.").provided(ArgProvidedMeta().value().readOnly()),
             ArgMeta("text", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
-                .label("Text to display").description("The text that will be displayed in the LCD.").provided(ArgProvided().value()),
+                .label("Text to display").description("The text that will be displayed in the LCD.").provided(ArgProvidedMeta().value()),
             ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
-                .label("LCD color").description("The LCD color.").provided(ArgProvided().value().overwrite()),
+                .label("LCD color").description("The LCD color.").provided(ArgProvidedMeta().value().overwrite()),
             ArgMeta("clearText", BooleanType().nullable(True).defaultValue(False))
                 .label("Clear text").description("The text the LCD will be cleared.")
         ]
@@ -43,11 +43,11 @@ class ManageLcd(Action):
     def onProvideArgs(self, names, current, provided):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         if "currentText" in names:
-            provided["currentText"] = ArgValue().withValue(grovePiDevice.getLcdText())
+            provided["currentText"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
         if "text" in names:
-            provided["text"] = ArgValue().withValue(grovePiDevice.getLcdText())
+            provided["text"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
         if "color" in names:
-            provided["color"] = ArgValue().withValue(grovePiDevice.getLcdColor())
+            provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
 
 class SetLcd(Action):
     def onCall(self, text, color, clearText = None):
@@ -91,14 +91,14 @@ class ManageSensorActuatorValues(Action):
         self.label = "Manage the sensor and actuator values"
         self.description = "Provides management of the sensor and actuator values."
         self.argsMeta = [
-            ArgMeta("temperatureSensor", NumberType().nullable()).label(u"Temperature sensor (°C)").provided(ArgProvided().value().readOnly()),
-            ArgMeta("humiditySensor", NumberType().nullable()).label(u"Humidity sensor (%)").provided(ArgProvided().value().readOnly()),
-            ArgMeta("lightSensor", NumberType().nullable()).label(u"Light sensor").provided(ArgProvided().value().readOnly()),
-            ArgMeta("rotarySensor", NumberType().nullable()).label(u"Rotary sensor").provided(ArgProvided().value().readOnly()),
-            ArgMeta("soundSensor", NumberType().nullable()).label(u"Sound sensor").provided(ArgProvided().value().readOnly()),
-            ArgMeta("redLed", BooleanType()).label("Red LED").provided(ArgProvided().value().overwrite()),
-            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).label("Blue LED").provided(ArgProvided().value().overwrite()),
-            ArgMeta("buzzer", BooleanType()).label("Buzzer").provided(ArgProvided().value().overwrite())
+            ArgMeta("temperatureSensor", NumberType().nullable()).label(u"Temperature sensor (°C)").provided(ArgProvidedMeta().value().readOnly()),
+            ArgMeta("humiditySensor", NumberType().nullable()).label(u"Humidity sensor (%)").provided(ArgProvidedMeta().value().readOnly()),
+            ArgMeta("lightSensor", NumberType().nullable()).label(u"Light sensor").provided(ArgProvidedMeta().value().readOnly()),
+            ArgMeta("rotarySensor", NumberType().nullable()).label(u"Rotary sensor").provided(ArgProvidedMeta().value().readOnly()),
+            ArgMeta("soundSensor", NumberType().nullable()).label(u"Sound sensor").provided(ArgProvidedMeta().value().readOnly()),
+            ArgMeta("redLed", BooleanType()).label("Red LED").provided(ArgProvidedMeta().value().overwrite()),
+            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).label("Blue LED").provided(ArgProvidedMeta().value().overwrite()),
+            ArgMeta("buzzer", BooleanType()).label("Buzzer").provided(ArgProvidedMeta().value().overwrite())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
@@ -109,7 +109,7 @@ class ManageSensorActuatorValues(Action):
     def onProvideArgs(self, names, current, provided):
         values = sponge.call("GetSensorActuatorValues", [names])
         for name, value in values.iteritems():
-            provided[name] = ArgValue().withValue(value)
+            provided[name] = ArgProvidedValue().withValue(value)
 
 class DhtSensorListener(Correlator):
     def onConfigure(self):

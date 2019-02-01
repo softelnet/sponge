@@ -9,7 +9,7 @@ class DigitsAddToLearn(Action):
         self.description = "Adds a digit to learn"
         self.argsMeta = [
             createImageArgMeta(),
-            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvided().valueSet())
+            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvidedMeta().valueSet())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):
@@ -17,7 +17,7 @@ class DigitsAddToLearn(Action):
         return None
     def onProvideArgs(self, names, current, provided):
         if "digit" in names:
-            provided["digit"] = ArgValue().withValueSet(py4j.facade.getLabels())
+            provided["digit"] = ArgProvidedValue().withValueSet(py4j.facade.getLabels())
 
 class DigitsLearn(Action):
     def onConfigure(self):
@@ -25,7 +25,7 @@ class DigitsLearn(Action):
         self.description = "Learns a digit"
         self.argsMeta = [
             createImageArgMeta(),
-            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvided().valueSet())
+            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvidedMeta().valueSet())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):
@@ -33,7 +33,7 @@ class DigitsLearn(Action):
         return None
     def onProvideArgs(self, names, current, provided):
         if "digit" in names:
-            provided["digit"] = ArgValue().withValueSet(py4j.facade.getLabels())
+            provided["digit"] = ArgProvidedValue().withValueSet(py4j.facade.getLabels())
 
 class MnistResetModel(Action):
     def onConfigure(self):

@@ -25,7 +25,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -109,7 +109,7 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
         ActionAdapter actionAdapter =
                 Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
         try {
@@ -120,12 +120,12 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName, List<String> argNames) {
+    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames) {
         return provideActionArgs(actionName, argNames, null);
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideActionArgs(String actionName) {
+    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName) {
         return provideActionArgs(actionName, null);
     }
 

@@ -19,7 +19,7 @@ package org.openksavi.sponge.restapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.action.ArgProvided;
+import org.openksavi.sponge.action.ArgProvidedMeta;
 import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ActionArgMeta", description = "An action argument metadata")
@@ -36,12 +36,12 @@ public class RestActionArgMeta {
 
     private boolean optional;
 
-    private ArgProvided provided;
+    private ArgProvidedMeta provided;
 
     public RestActionArgMeta() {
     }
 
-    public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvided provided) {
+    public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvidedMeta provided) {
         this.name = name;
         this.type = type;
         this.label = label;
@@ -95,12 +95,12 @@ public class RestActionArgMeta {
         this.optional = optional;
     }
 
-    @ApiModelProperty(value = "The provided argument specification", required = false)
-    public ArgProvided getProvided() {
+    @ApiModelProperty(value = "The provided argument metadata", required = false)
+    public ArgProvidedMeta getProvided() {
         return provided;
     }
 
-    public void setProvided(ArgProvided provided) {
+    public void setProvided(ArgProvidedMeta provided) {
         this.provided = provided;
     }
 }

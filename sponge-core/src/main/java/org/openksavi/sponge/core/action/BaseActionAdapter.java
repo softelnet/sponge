@@ -32,7 +32,7 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -93,7 +93,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public Map<String, ArgValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
+    public Map<String, ArgProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
         Validate.notNull(getArgsMeta(), "Argument metadata not defined");
 
         Set<String> allProvidedArguments =
@@ -114,7 +114,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
             current = Collections.emptyMap();
         }
 
-        Map<String, ArgValue<?>> provided = new LinkedHashMap<>();
+        Map<String, ArgProvidedValue<?>> provided = new LinkedHashMap<>();
         getProcessor().onProvideArgs(finalNames, current, provided);
 
         provided.keySet().forEach(providedArg -> {

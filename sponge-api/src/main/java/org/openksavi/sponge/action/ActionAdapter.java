@@ -43,5 +43,5 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
      *        those arguments that the arguments specified in the {@code names} depend on.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgValue<?>> provideArgs(List<String> names, Map<String, Object> current);
+    Map<String, ArgProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current);
 }

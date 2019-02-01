@@ -40,7 +40,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -289,7 +289,7 @@ public abstract class BaseRestApiTestTemplate {
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false, null, 1));
 
-            Map<String, ArgValue<?>> providedArgs = client.provideActionArgs(actionName);
+            Map<String, ArgProvidedValue<?>> providedArgs = client.provideActionArgs(actionName);
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("A", providedArgs.get("actuator1").getValue());
@@ -343,7 +343,7 @@ public abstract class BaseRestApiTestTemplate {
             client.call(actionName, Arrays.asList("A", false, 1, 1, "X"));
 
             List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
-            Map<String, ArgValue<?>> providedArgs;
+            Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertTrue(argsMeta.get(0).getProvided().isValue());
             assertTrue(argsMeta.get(0).getProvided().isValueSet());
@@ -366,7 +366,7 @@ public abstract class BaseRestApiTestTemplate {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
-            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
+            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
             assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());

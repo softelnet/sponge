@@ -21,9 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A provided argument specification.
+ * A provided argument metadata.
  */
-public class ArgProvided {
+public class ArgProvidedMeta {
 
     /** The flag specifying if this argument value is provided. */
     private boolean value;
@@ -43,30 +43,30 @@ public class ArgProvided {
      */
     private boolean overwrite = false;
 
-    public ArgProvided() {
+    public ArgProvidedMeta() {
     }
 
-    public ArgProvided value() {
+    public ArgProvidedMeta value() {
         value = true;
         return this;
     }
 
-    public ArgProvided valueSet() {
+    public ArgProvidedMeta valueSet() {
         valueSet = true;
         return this;
     }
 
-    public ArgProvided depends(String... depends) {
+    public ArgProvidedMeta depends(String... depends) {
         this.depends.addAll(Arrays.asList(depends));
         return this;
     }
 
-    public ArgProvided readOnly() {
+    public ArgProvidedMeta readOnly() {
         readOnly = true;
         return this;
     }
 
-    public ArgProvided overwrite() {
+    public ArgProvidedMeta overwrite() {
         overwrite = true;
         return this;
     }

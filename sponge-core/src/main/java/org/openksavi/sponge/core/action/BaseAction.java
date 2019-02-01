@@ -23,7 +23,7 @@ import java.util.Set;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessor;
 
@@ -60,7 +60,7 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
-    public void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue<?>> provided) {
+    public void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgProvidedValue<?>> provided) {
         // The default implementation doesn't modify the provided map.
     }
 }

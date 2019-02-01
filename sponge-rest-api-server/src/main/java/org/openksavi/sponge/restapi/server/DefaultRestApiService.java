@@ -31,7 +31,7 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -312,8 +312,9 @@ public class DefaultRestApiService implements RestApiService {
             User user = authenticateRequest(request, exchange);
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
-            Map<String, ArgValue<?>> provided =
-                    getEngine().getOperations().provideActionArgs(actionAdapter.getName(), request.getArgNames(),
+            Map<String,
+                    ArgProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getName(),
+                            request.getArgNames(),
                             RestApiServerUtils.unmarshalProvideActionArgs(typeConverter, actionAdapter, request.getCurrent(), exchange));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
 

@@ -42,7 +42,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -352,7 +352,7 @@ public class CoreActionsTest {
         try {
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuator");
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
-            Map<String, ArgValue<?>> providedArgs;
+            Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
             assertTrue(argsMeta.get(0).getProvided().isValue());
@@ -424,7 +424,7 @@ public class CoreActionsTest {
         try {
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorAnnotatedValueSet");
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
-            Map<String, ArgValue<?>> providedArgs;
+            Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
             assertTrue(argsMeta.get(0).getProvided().isValue());
@@ -435,7 +435,7 @@ public class CoreActionsTest {
             providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
             assertEquals(1, providedArgs.size());
 
-            ArgValue<?> argValue = providedArgs.get("actuatorType");
+            ArgProvidedValue<?> argValue = providedArgs.get("actuatorType");
             assertNotNull(argValue);
             assertEquals("auto", argValue.getValue());
             assertEquals(2, argValue.getAnnotatedValueSet().size());
@@ -476,7 +476,7 @@ public class CoreActionsTest {
         try {
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuator");
             List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
-            Map<String, ArgValue<?>> providedArgs;
+            Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
             assertTrue(argsMeta.get(0).getProvided().isValue());
@@ -505,7 +505,7 @@ public class CoreActionsTest {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
-            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
+            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
             assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());
@@ -637,7 +637,7 @@ public class CoreActionsTest {
             assertEquals(1, actionAdapter.getArgsMeta().size());
             ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
             assertFalse(argMeta.getProvided().isOverwrite());
-            ArgValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
+            ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
@@ -669,7 +669,7 @@ public class CoreActionsTest {
             assertEquals(1, actionAdapter.getArgsMeta().size());
             ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
             assertTrue(argMeta.getProvided().isOverwrite());
-            ArgValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
+            ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 

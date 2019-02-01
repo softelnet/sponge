@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 
 /**
- * An argument value and a possible value set.
+ * A provided argument value and a possible value set.
  */
-public class ArgValue<T> {
+public class ArgProvidedValue<T> {
 
     /** The value. */
     private T value;
@@ -38,7 +38,7 @@ public class ArgValue<T> {
      */
     private List<AnnotatedValue<T>> annotatedValueSet;
 
-    public ArgValue() {
+    public ArgProvidedValue() {
         //
     }
 
@@ -76,18 +76,18 @@ public class ArgValue<T> {
                 .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
 
-    public ArgValue<T> withValue(T value) {
+    public ArgProvidedValue<T> withValue(T value) {
         setValue(value);
         setValuePresent(true);
         return this;
     }
 
-    public ArgValue<T> withAnnotatedValueSet(List<AnnotatedValue<T>> annotatedValueSet) {
+    public ArgProvidedValue<T> withAnnotatedValueSet(List<AnnotatedValue<T>> annotatedValueSet) {
         setAnnotatedValueSet(annotatedValueSet);
         return this;
     }
 
-    public ArgValue<T> withValueSet(List<T> valueSet) {
+    public ArgProvidedValue<T> withValueSet(List<T> valueSet) {
         return withAnnotatedValueSet(
                 valueSet != null ? valueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()) : null);
     }

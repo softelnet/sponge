@@ -28,7 +28,7 @@ import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ArgValue;
+import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
@@ -119,14 +119,14 @@ public abstract class RestApiServerUtils {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void marshalProvidedActionArgValues(TypeConverter typeConverter, ActionAdapter actionAdapter,
-            Map<String, ArgValue<?>> argValues) {
+            Map<String, ArgProvidedValue<?>> argValues) {
 
         argValues.forEach((argName, argValue) -> {
             ArgMeta<?> argMeta = actionAdapter.getArgMeta(argName);
-            ((ArgValue) argValue).setValue(typeConverter.marshal(argMeta.getType(), argValue.getValue()));
+            ((ArgProvidedValue) argValue).setValue(typeConverter.marshal(argMeta.getType(), argValue.getValue()));
 
             if (argValue.getAnnotatedValueSet() != null) {
-                ((ArgValue) argValue).setAnnotatedValueSet(argValue.getAnnotatedValueSet().stream()
+                ((ArgProvidedValue) argValue).setAnnotatedValueSet(argValue.getAnnotatedValueSet().stream()
                         .map(annotatedValue -> new AnnotatedValue(typeConverter.marshal(argMeta.getType(), annotatedValue.getValue()),
                                 annotatedValue.getLabel(), annotatedValue.getDescription(), annotatedValue.getFeatures()))
                         .collect(Collectors.toList()));
