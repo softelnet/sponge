@@ -70,9 +70,16 @@ class StartNotificationTrigger(Trigger):
         self.event = "notificationStart"
     def onRun(self, event):
         serviceName = sponge.getProperty("service.name", "Service")
-        sponge.call("SendNotificationSms", ["{} started".format(serviceName)])
-        sponge.call("SendNotificationEmail", ["{} started".format(serviceName), "Host: {}".format(socket.gethostname()),
+        try:
+            sponge.call("SendNotificationSms", ["{} started".format(serviceName)])
+        except:
+            sponge.logger.warn("SendNotificationSms error: {}", sys.exc_info()[1])
+
+        try:
+            sponge.call("SendNotificationEmail", ["{} started".format(serviceName), "Host: {}".format(socket.gethostname()),
                     [sponge.call("TakePictureAsFile")]])
+        except:
+            sponge.logger.warn("SendNotificationEmail error: {}", sys.exc_info()[1])
 
 def onStartup():
     sponge.call("SetLcd", ["Spoonge starting...", "006030"])
