@@ -28,6 +28,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestDefinition;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,6 +163,12 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                     if (logger.isDebugEnabled()) {
                         logger.debug("REST API {} request: {}", operation, RestApiUtils.obfuscatePassword(requestBody));
                     }
+
+                    // Allow empty body.
+                    if (StringUtils.isBlank(requestBody)) {
+                        requestBody = "{}";
+                    }
+
                     try {
                         setupResponse(operation, exchange,
                                 operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange));
@@ -196,9 +203,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request, exchange));
         createOperation(restDefinition, RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class, "Send event request",
                 SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments",
-                ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
-                "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request, exchange));
+        createOperation(restDefinition, RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments", ProvideActionArgsRequest.class,
+                "The provide action arguments request", ProvideActionArgsResponse.class, "The provide action arguments response",
+                (request, exchange) -> apiService.provideActionArgs(request, exchange));
 
         if (getSettings().isPublishReload()) {
             createOperation(restDefinition, RestApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,
