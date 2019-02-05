@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgProvidedValue;
@@ -330,5 +331,30 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public ProcessDefinition process(ProcessConfigurationBuilder processConfigurationBuilder) {
         return process(processConfigurationBuilder.build());
+    }
+
+    @Override
+    public void addCategory(CategoryMeta categoryMeta) {
+        engine.addCategory(categoryMeta);
+    }
+
+    @Override
+    public void addCategories(CategoryMeta... categoryMeta) {
+        engine.addCategories(categoryMeta);
+    }
+
+    @Override
+    public CategoryMeta getCategory(String categoryName) {
+        return engine.getCategory(categoryName);
+    }
+
+    @Override
+    public CategoryMeta removeCategory(String categoryName) {
+        return engine.removeCategory(categoryName);
+    }
+
+    @Override
+    public List<CategoryMeta> getCategories() {
+        return engine.getCategories();
     }
 }

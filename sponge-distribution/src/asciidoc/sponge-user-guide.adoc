@@ -87,29 +87,23 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |===
 |Type |Description
 
-|`StringType`
-|A string type. Provides optional properties `minLength` and `maxLength`, e.g.: `StringType().maxLength(10)`.
-
-|`NumberType`
-|A number type, that include both integer and floating-point numbers. Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `NumberType()`.
-
-|`IntegerType`
-|An integer type (commonly used integer type or long). Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `IntegerType().minValue(1).minValue(100)`.
-
-|`BooleanType`
-|A boolean type.
-
-|`BinaryType`
-|A binary (byte array) type. Provides an optional property `mimeType`.
+|`AnnotatedType`
+|An annotated type. This type requires a `DataType` parameter, which is is a type of an annotated value. A value of this type has to be an instance of `AnnotatedValue`. For example: `AnnotatedType(BinaryType().mimeType("image/png"))`. A value of this type should be an instance of the `AnnotatedValue` class, e.g. `AnnotatedValue(imageBytes).withFeatures({"filename":imageFilename})`, where the first property is the annotated value and the second is the features map that may be used in a client code.
 
 |`AnyType`
 |An any type. It may be used in situations when type is not important.
 
-|`VoidType`
-|A void type that may be used to specify that an action returns no meaningful result.
+|`BinaryType`
+|A binary (byte array) type. Provides an optional property `mimeType`.
 
-|`ObjectType`
-|An object. This type requires a class name (typically a Java class name) as a constructor parameter. For example: `ObjectType("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType("org.openksavi.sponge.examples.CustomObject[]")`.
+|`BooleanType`
+|A boolean type.
+
+|`DynamicType`
+|An dynamic type representing dynamically typed values. A value of this type has to be an instance of `DynamicValue`.
+
+|`IntegerType`
+|An integer type (commonly used integer type or long). Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `IntegerType().minValue(1).minValue(100)`.
 
 |`ListType`
 |A list type. This type requires a `DataType` parameter, which is is a type of list elements. For example: `ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
@@ -117,8 +111,20 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |`MapType`
 |A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType(StringType(), ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
 
-|`AnnotatedType`
-|An annotated type. This type requires a `DataType` parameter, which is is a type of an annotated value. For example: `AnnotatedType(BinaryType().mimeType("image/png"))`. A value of this type should be an instance of the `AnnotatedValue` class, e.g. `AnnotatedValue(imageBytes).withFeatures({"filename":imageFilename})`, where the first property is the annotated value and the second is the features map that may be used in a client code.
+|`NumberType`
+|A number type, that include both integer and floating-point numbers. Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `NumberType()`.
+
+|`ObjectType`
+|An object. This type requires a class name (typically a Java class name) as a constructor parameter. For example: `ObjectType("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType("org.openksavi.sponge.examples.CustomObject[]")`.
+
+|`StringType`
+|A string type. Provides optional properties `minLength` and `maxLength`, e.g.: `StringType().maxLength(10)`.
+
+|`TypeType`
+|A type representing a data type. A value of this type has to be an instance of `DataType`.
+
+|`VoidType`
+|A void type that may be used to specify that an action returns no meaningful result.
 |===
 
 .Type examples

@@ -17,6 +17,9 @@
         <knowledgeBase name="demo" label="Demo">
             <file>sponge_demo.py</file>
         </knowledgeBase>
+        <knowledgeBase name="demoForms" label="Forms">
+            <file>sponge_demo_forms.py</file>
+        </knowledgeBase>
         <knowledgeBase name="demoPlus" label="Demo plus">
             <file>sponge_demo_plus.py</file>
         </knowledgeBase>

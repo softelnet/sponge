@@ -17,7 +17,10 @@
 package org.openksavi.sponge.core.engine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,9 +29,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.VersionInfo;
@@ -174,6 +179,9 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     /** Pattern matcher. */
     private PatternMatcher patternMatcher = new RegexPatternMatcher();
+
+    /** Registered categories. */
+    private Map<String, CategoryMeta> categories = new LinkedHashMap<>();
 
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
@@ -842,5 +850,34 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public void setPatternMatcher(PatternMatcher patternMatcher) {
         this.patternMatcher = patternMatcher;
+    }
+
+    @Override
+    public void addCategory(CategoryMeta categoryMeta) {
+        categories.put(categoryMeta.getName(), categoryMeta);
+    }
+
+    @Override
+    public void addCategories(CategoryMeta... categoryMeta) {
+        Arrays.stream(categoryMeta).forEach(this::addCategory);
+    }
+
+    @Override
+    public CategoryMeta getCategory(String categoryName) {
+        return categories.get(categoryName);
+    }
+
+    @Override
+    public CategoryMeta removeCategory(String categoryName) {
+        Validate.isTrue(
+                !getProcessorManager().getAllProcessorAdapters().stream().map(ProcessorAdapter::getCategory)
+                        .anyMatch(adapterCategory -> adapterCategory != null && adapterCategory.equals(categoryName)),
+                "The category %s is being used and can't be removed", categoryName);
+        return categories.remove(categoryName);
+    }
+
+    @Override
+    public List<CategoryMeta> getCategories() {
+        return new ArrayList<>(categories.values());
     }
 }

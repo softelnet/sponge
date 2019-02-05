@@ -428,3 +428,25 @@ You may specify a version number for a knowledge base as an integer. It could be
 def onLoad():
     sponge.kb.version = 1
 ----
+
+== Categories
+Processors may be assigned to registered categories. Categories could be used in a client code to group processors independently of knowledge bases. This feature be useful if you don't want to group processor by knowledge bases which requires more resources because each knowledge base has its own interpreter.
+
+.Example of registering a category.
+[source,python]
+----
+def onInit():
+    sponge.addCategories(CategoryMeta("myActions").label("My actions").description("My actions description"),
+                         CategoryMeta("yourActions").label("Your actions").description("Your actions description"))
+----
+
+.Example of assigning a processor to a category.
+[source,python]
+----
+class MyAction1(Action):
+    def onConfigure(self):
+        self.label = "MyAction 1"
+        self.category = "myActions"
+    def onCall(self, text):
+        return None
+----

@@ -82,8 +82,8 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
         handlers.values().forEach(handler -> handler.shutdown());
     }
 
-    @SuppressWarnings("unchecked")
-    protected <A extends ProcessorAdapter<?>> List<A> getProcessorAdapterList(ProcessorType type) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected <A extends ProcessorAdapter> List<A> getProcessorAdapterList(ProcessorType type) {
         return getRegisteredProcessorAdapterMap().values().stream().filter(adapter -> adapter.getType() == type).map(adapter -> (A) adapter)
                 .collect(Collectors.toList());
     }

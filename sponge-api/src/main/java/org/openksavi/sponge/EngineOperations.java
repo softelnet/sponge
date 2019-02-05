@@ -411,4 +411,41 @@ public interface EngineOperations {
      * @return a new process definition.
      */
     ProcessDefinition process(ProcessConfigurationBuilder processConfigurationBuilder);
+
+    /**
+     * Adds or updates a category.
+     *
+     * @param categoryMeta the category metadata.
+     */
+    void addCategory(CategoryMeta categoryMeta);
+
+    /**
+     * Adds or updates categories.
+     *
+     * @param categoryMeta the category metadata array.
+     */
+    void addCategories(CategoryMeta... categoryMeta);
+
+    /**
+     * Returns a category.
+     *
+     * @param categoryName the category name.
+     * @return the category metadata or {@code null}.
+     */
+    CategoryMeta getCategory(String categoryName);
+
+    /**
+     * Removes a category. Throws an exception if this category is being used.
+     *
+     * @param categoryName the category name.
+     * @return the removed category metadata or {@code null}.
+     */
+    CategoryMeta removeCategory(String categoryName);
+
+    /**
+     * Returns all categories.
+     *
+     * @return the categories.
+     */
+    List<CategoryMeta> getCategories();
 }

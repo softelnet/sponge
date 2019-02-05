@@ -20,10 +20,12 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.openksavi.sponge.SpongeException;
+
 /**
  * A data type. Used for example in action arguments metadata.
  */
-public class DataType<T> {
+public class DataType<T> implements Cloneable {
 
     /** The data type kind. */
     private DataTypeKind kind;
@@ -40,12 +42,12 @@ public class DataType<T> {
     /** The data type features as a map of names to values. */
     private Map<String, Object> features = new LinkedHashMap<>();
 
+    @SuppressWarnings("unused")
     private DataType() {
         //
     }
 
     protected DataType(DataTypeKind kind) {
-        this();
         this.kind = kind;
     }
 
@@ -112,5 +114,15 @@ public class DataType<T> {
 
     public void setFeatures(Map<String, Object> features) {
         this.features = new LinkedHashMap<>(features);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public DataType<T> clone() {
+        try {
+            return (DataType<T>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new SpongeException(e);
+        }
     }
 }

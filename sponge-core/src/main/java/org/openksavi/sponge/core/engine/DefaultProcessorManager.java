@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.engine;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
@@ -319,6 +321,16 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         } else {
             throw new SpongeException("Unsupported processor class: " + processorClass);
         }
+    }
+
+    public List<ProcessorAdapter> getAllProcessorAdapters() {
+        List<ProcessorAdapter> processors = new ArrayList<>();
+
+        processors.addAll(getEngine().getActionManager().getRegisteredActionAdapterMap().values());
+        processors.addAll(getEngine().getFilterProcessingUnit().getRegisteredProcessorAdapterMap().values());
+        processors.addAll(getEngine().getMainProcessingUnit().getRegisteredProcessorAdapterMap().values());
+
+        return processors;
     }
 
     /**

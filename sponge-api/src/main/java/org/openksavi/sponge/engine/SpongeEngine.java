@@ -18,6 +18,7 @@ package org.openksavi.sponge.engine;
 
 import java.util.List;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
@@ -386,4 +387,41 @@ public interface SpongeEngine extends EngineModule {
      * @param patternMatcher the pattern matcher.
      */
     void setPatternMatcher(PatternMatcher patternMatcher);
+
+    /**
+     * Adds or updates a category.
+     *
+     * @param categoryMeta the category metadata.
+     */
+    void addCategory(CategoryMeta categoryMeta);
+
+    /**
+     * Adds or updates categories.
+     *
+     * @param categoryMeta the category metadata array.
+     */
+    void addCategories(CategoryMeta... categoryMeta);
+
+    /**
+     * Returns a category.
+     *
+     * @param categoryName the category name.
+     * @return the category metadata or {@code null}.
+     */
+    CategoryMeta getCategory(String categoryName);
+
+    /**
+     * Removes a category. Throws an exception if this category is being used.
+     *
+     * @param categoryName the category name.
+     * @return the removed category metadata or {@code null}.
+     */
+    CategoryMeta removeCategory(String categoryName);
+
+    /**
+     * Returns all categories.
+     *
+     * @return the categories.
+     */
+    List<CategoryMeta> getCategories();
 }

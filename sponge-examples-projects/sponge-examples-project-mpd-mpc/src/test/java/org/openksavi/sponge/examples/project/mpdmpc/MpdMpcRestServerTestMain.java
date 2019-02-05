@@ -24,7 +24,6 @@ import java.util.Arrays;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.GenericApplicationContext;
 
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -35,8 +34,6 @@ import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public class MpdMpcRestServerTestMain {
-
-    private GenericApplicationContext context;
 
     @Configuration
     public static class Config extends SpongeCamelConfiguration {

@@ -54,6 +54,9 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** The processor features. */
     private Map<String, Object> features;
 
+    /** The processor category name. */
+    private String category;
+
     /**
      * Creates a new processor definition.
      *
@@ -191,5 +194,15 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
         Validate.notNull(features, "The processor features cannot be null");
 
         this.features = SpongeUtils.createUnmodifiableMap(features);
+    }
+
+    @Override
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

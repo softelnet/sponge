@@ -47,4 +47,18 @@ public interface ProcessorOperations extends Descriptive, HasVersion {
      * @param features the processor features.
      */
     void setFeatures(Map<String, Object> features);
+
+    /**
+     * Returns the optional category name.
+     *
+     * @return the category name.
+     */
+    String getCategory();
+
+    /**
+     * Sets the category name.
+     *
+     * @param category the category name.
+     */
+    void setCategory(String category);
 }

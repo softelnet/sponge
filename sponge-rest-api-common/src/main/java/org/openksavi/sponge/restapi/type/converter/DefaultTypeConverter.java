@@ -24,12 +24,14 @@ import org.openksavi.sponge.restapi.type.converter.unit.AnnotatedTypeUnitConvert
 import org.openksavi.sponge.restapi.type.converter.unit.AnyTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.BinaryTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.BooleanTypeUnitConverter;
+import org.openksavi.sponge.restapi.type.converter.unit.DynamicTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.IntegerTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.ListTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.MapTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.NumberTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.StringTypeUnitConverter;
+import org.openksavi.sponge.restapi.type.converter.unit.TypeTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.VoidTypeUnitConverter;
 
 /**
@@ -43,7 +45,8 @@ public class DefaultTypeConverter extends BaseTypeConverter {
 
         // Register default unit converters.
         registerAll(Arrays.asList(new AnnotatedTypeUnitConverter(), new AnyTypeUnitConverter(), new BinaryTypeUnitConverter(),
-                new BooleanTypeUnitConverter(), new IntegerTypeUnitConverter(), new ListTypeUnitConverter(), new MapTypeUnitConverter(),
-                new NumberTypeUnitConverter(), new ObjectTypeUnitConverter(), new StringTypeUnitConverter(), new VoidTypeUnitConverter()));
+                new BooleanTypeUnitConverter(), new DynamicTypeUnitConverter(), new IntegerTypeUnitConverter(), new ListTypeUnitConverter(),
+                new MapTypeUnitConverter(), new NumberTypeUnitConverter(), new ObjectTypeUnitConverter(), new StringTypeUnitConverter(),
+                new TypeTypeUnitConverter(), new VoidTypeUnitConverter()));
     }
 }

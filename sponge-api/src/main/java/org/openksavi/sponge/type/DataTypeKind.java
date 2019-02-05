@@ -21,39 +21,45 @@ package org.openksavi.sponge.type;
  */
 @SuppressWarnings("rawtypes")
 public enum DataTypeKind {
-    STRING(StringType.class),
-    NUMBER(NumberType.class),
-    INTEGER(IntegerType.class),
-    BOOLEAN(BooleanType.class),
-    BINARY(BinaryType.class),
+    ANNOTATED(AnnotatedType.class),
     ANY(AnyType.class),
-    VOID(VoidType.class),
-    OBJECT(ObjectType.class),
+    BINARY(BinaryType.class),
+    BOOLEAN(BooleanType.class),
+    DYNAMIC(DynamicType.class),
+    INTEGER(IntegerType.class),
     LIST(ListType.class),
     MAP(MapType.class),
-    ANNOTATED(AnnotatedType.class);
+    NUMBER(NumberType.class),
+    OBJECT(ObjectType.class),
+    STRING(StringType.class),
+    TYPE(TypeType.class),
+    VOID(VoidType.class);
 
-    public static final String CODE_STRING = "STRING";
-
-    public static final String CODE_NUMBER = "NUMBER";
-
-    public static final String CODE_INTEGER = "INTEGER";
-
-    public static final String CODE_BOOLEAN = "BOOLEAN";
-
-    public static final String CODE_BINARY = "BINARY";
+    public static final String CODE_ANNOTATED = "ANNOTATED";
 
     public static final String CODE_ANY = "ANY";
 
-    public static final String CODE_VOID = "VOID";
+    public static final String CODE_BINARY = "BINARY";
 
-    public static final String CODE_OBJECT = "OBJECT";
+    public static final String CODE_BOOLEAN = "BOOLEAN";
+
+    public static final String CODE_DYNAMIC = "DYNAMIC";
+
+    public static final String CODE_INTEGER = "INTEGER";
 
     public static final String CODE_LIST = "LIST";
 
     public static final String CODE_MAP = "MAP";
 
-    public static final String CODE_ANNOTATED = "ANNOTATED";
+    public static final String CODE_NUMBER = "NUMBER";
+
+    public static final String CODE_OBJECT = "OBJECT";
+
+    public static final String CODE_STRING = "STRING";
+
+    public static final String CODE_TYPE = "TYPE";
+
+    public static final String CODE_VOID = "VOID";
 
     private Class<? extends DataType> typeClass;
 

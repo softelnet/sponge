@@ -16,7 +16,10 @@
 
 package org.openksavi.sponge.engine;
 
+import java.util.List;
+
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -132,4 +135,12 @@ public interface ProcessorManager extends EngineModule {
      */
     @SuppressWarnings("rawtypes")
     <T extends Processor> T createProcessorInstance(ProcessorDefinition definition, Class<T> cls);
+
+    /**
+     * Returns all processor adapters.
+     *
+     * @return all processor adapters.
+     */
+    @SuppressWarnings("rawtypes")
+    List<ProcessorAdapter> getAllProcessorAdapters();
 }

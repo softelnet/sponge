@@ -102,6 +102,16 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         adapter.setFeatures(features);
     }
 
+    @Override
+    public String getCategory() {
+        return adapter.getCategory();
+    }
+
+    @Override
+    public void setCategory(String category) {
+        adapter.setCategory(category);
+    }
+
     public KnowledgeBaseEngineOperations getSponge() {
         return getKnowledgeBase().getEngineOperations();
     }

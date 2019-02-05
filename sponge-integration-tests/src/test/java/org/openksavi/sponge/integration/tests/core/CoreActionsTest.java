@@ -34,10 +34,12 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -52,6 +54,7 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.test.util.TestUtils;
 import org.openksavi.sponge.type.AnnotatedType;
 import org.openksavi.sponge.type.AnyType;
+import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.IntegerType;
@@ -59,6 +62,7 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
+import org.openksavi.sponge.type.value.DynamicValue;
 import org.openksavi.sponge.util.ValueHolder;
 
 public class CoreActionsTest {
@@ -137,7 +141,7 @@ public class CoreActionsTest {
             assertEquals("Multiple arguments action.", adapter.getDescription());
 
             List<ArgMeta<?>> argMeta = adapter.getArgsMeta();
-            assertEquals(9, argMeta.size());
+            assertEquals(11, argMeta.size());
 
             assertEquals("stringArg", argMeta.get(0).getName());
             assertEquals(DataTypeKind.STRING, argMeta.get(0).getType().getKind());
@@ -191,6 +195,12 @@ public class CoreActionsTest {
             assertEquals(28, ((Number) argMeta.get(8).getType().getFeatures().get("height")).intValue());
             assertEquals("black", argMeta.get(8).getType().getFeatures().get("background"));
             assertEquals("white", argMeta.get(8).getType().getFeatures().get("color"));
+
+            assertEquals("typeArg", argMeta.get(9).getName());
+            assertEquals(DataTypeKind.TYPE, argMeta.get(9).getType().getKind());
+
+            assertEquals("dynamicArg", argMeta.get(10).getName());
+            assertEquals(DataTypeKind.DYNAMIC, argMeta.get(10).getType().getKind());
 
             assertEquals(DataTypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
             assertEquals("Boolean result", adapter.getResultMeta().getLabel());
@@ -774,6 +784,113 @@ public class CoreActionsTest {
                     engine.getActionManager().getActionAdapter("VersionedAction").getQualifiedVersion());
             assertEquals(new ProcessorQualifiedVersion(2, null),
                     engine.getActionManager().getActionAdapter("NonVersionedAction").getQualifiedVersion());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionCategory() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_category.py").build();
+        engine.startup();
+
+        try {
+            assertEquals("myActions", engine.getActionManager().getActionAdapter("MyAction1").getCategory());
+            assertEquals("myActions", engine.getActionManager().getActionAdapter("MyAction2").getCategory());
+            assertEquals("yourActions", engine.getActionManager().getActionAdapter("YourAction1").getCategory());
+            assertNull(engine.getActionManager().getActionAdapter("OtherAction").getCategory());
+
+            assertEquals(3, engine.getCategories().size());
+
+            CategoryMeta myActionsCategory = engine.getCategory("myActions");
+            assertEquals("myActions", myActionsCategory.getName());
+            assertEquals("My actions", myActionsCategory.getLabel());
+            assertEquals("My actions description", myActionsCategory.getDescription());
+
+            CategoryMeta yourActionsCategory = engine.getCategory("yourActions");
+            assertEquals("yourActions", yourActionsCategory.getName());
+            assertEquals("Your actions", yourActionsCategory.getLabel());
+            assertEquals("Your actions description", yourActionsCategory.getDescription());
+
+            CategoryMeta notUsedCategory = engine.getCategory("notUsedCategory");
+            assertEquals("notUsedCategory", notUsedCategory.getName());
+            assertNull(notUsedCategory.getLabel());
+            assertNull(notUsedCategory.getDescription());
+
+            try {
+                engine.removeCategory("myActions");
+                fail("Exception expected");
+            } catch (Throwable e) {
+                assertTrue(e instanceof IllegalArgumentException);
+            }
+
+            engine.removeCategory("notUsedCategory");
+
+            assertEquals(2, engine.getCategories().size());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionCategoryInvalid() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_category_invalid.py").build();
+        try {
+            engine.startup();
+            fail("Exception expected");
+        } catch (Throwable e) {
+            assertTrue(ExceptionUtils.indexOfThrowable(e, IllegalArgumentException.class) > -1);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    public void testActionsMetadataDynamicTypes() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_dynamic.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("DynamicResultAction");
+            DataType resultType = adapter.getResultMeta().getType();
+            assertEquals(DataTypeKind.DYNAMIC, resultType.getKind());
+
+            DynamicValue<String> resultForString =
+                    engine.getOperations().call(DynamicValue.class, adapter.getName(), Arrays.asList("string"));
+            assertEquals("text", resultForString.getValue());
+            assertEquals(DataTypeKind.STRING, resultForString.getType().getKind());
+
+            DynamicValue<String> resultForBoolean =
+                    engine.getOperations().call(DynamicValue.class, adapter.getName(), Arrays.asList("boolean"));
+            assertEquals(true, resultForBoolean.getValue());
+            assertEquals(DataTypeKind.BOOLEAN, resultForBoolean.getType().getKind());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes" })
+    @Test
+    public void testActionsMetadataTypeTypes() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_dynamic.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("TypeResultAction");
+            DataType resultType = adapter.getResultMeta().getType();
+            assertEquals(DataTypeKind.TYPE, resultType.getKind());
+
+            assertTrue(engine.getOperations().call(DataType.class, adapter.getName(), Arrays.asList("string")) instanceof StringType);
+            assertTrue(engine.getOperations().call(DataType.class, adapter.getName(), Arrays.asList("boolean")) instanceof BooleanType);
 
             assertFalse(engine.isError());
         } finally {

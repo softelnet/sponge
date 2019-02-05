@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 
 @ApiModel(value = "ActionMeta", description = "An action metadata")
@@ -41,6 +42,8 @@ public class RestActionMeta {
 
     private RestKnowledgeBaseMeta knowledgeBase;
 
+    private CategoryMeta category;
+
     private Map<String, Object> features;
 
     private List<RestActionArgMeta> argsMeta;
@@ -52,12 +55,14 @@ public class RestActionMeta {
     public RestActionMeta() {
     }
 
-    public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, Map<String, Object> features,
-            List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta, ProcessorQualifiedVersion qualifiedVersion) {
+    public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, CategoryMeta category,
+            Map<String, Object> features, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta,
+            ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.label = label;
         this.description = description;
         this.knowledgeBase = knowledgeBase;
+        this.category = category;
         this.features = features;
         this.argsMeta = argsMeta;
         this.resultMeta = resultMeta;
@@ -98,6 +103,15 @@ public class RestActionMeta {
 
     public void setKnowledgeBase(RestKnowledgeBaseMeta knowledgeBase) {
         this.knowledgeBase = knowledgeBase;
+    }
+
+    @ApiModelProperty(value = "The action category metadata", required = false)
+    public CategoryMeta getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryMeta category) {
+        this.category = category;
     }
 
     @ApiModelProperty(value = "The action features", required = true)

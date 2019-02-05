@@ -18,13 +18,13 @@ package org.openksavi.sponge.core;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -210,13 +210,23 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
 
     @Override
     public void validate() {
-        if (getName() == null) {
-            throw new SpongeException("Invalid " + getType().getName() + ". Name must not be empty.");
-        }
+        Validate.isTrue(getName() != null, "Invalid %s. Name must not be empty.", getType().getName());
+        Validate.isTrue(getCategory() == null || getKnowledgeBase().getEngineOperations().getCategory(getCategory()) != null,
+                "Category %s is not registered", getCategory());
     }
 
     @Override
     public ProcessorQualifiedVersion getQualifiedVersion() {
         return new ProcessorQualifiedVersion(getKnowledgeBase().getVersion(), getVersion());
+    }
+
+    @Override
+    public String getCategory() {
+        return definition.getCategory();
+    }
+
+    @Override
+    public void setCategory(String category) {
+        definition.setCategory(category);
     }
 }

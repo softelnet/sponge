@@ -21,7 +21,8 @@ import java.util.Map;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 
 /**
- * An annotated type. This type requires a {@code valueType} parameter, which is is a type of an annotated value.
+ * An annotated type. This type requires a {@code valueType} parameter, which is is a type of an annotated value. A value of this type has
+ * to be an instance of {@linkplain org.openksavi.sponge.type.value.AnnotatedValue}.
  *
  * @param <T> valueType type.
  */

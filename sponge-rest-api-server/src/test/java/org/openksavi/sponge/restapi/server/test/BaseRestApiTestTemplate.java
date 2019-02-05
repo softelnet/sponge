@@ -51,9 +51,12 @@ import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.type.BooleanType;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
+import org.openksavi.sponge.type.value.DynamicValue;
 
 public abstract class BaseRestApiTestTemplate {
 
@@ -145,6 +148,9 @@ public abstract class BaseRestApiTestTemplate {
             RestActionMeta actionMeta = client.getActionMeta(actionName);
 
             assertEquals(actionName, actionMeta.getName());
+            assertEquals("category1", actionMeta.getCategory().getName());
+            assertEquals("Category 1", actionMeta.getCategory().getLabel());
+            assertEquals("Category 1 description", actionMeta.getCategory().getDescription());
             assertEquals(1, actionMeta.getArgsMeta().size());
             assertTrue(actionMeta.getArgsMeta().get(0).getType() instanceof StringType);
             assertTrue(actionMeta.getResultMeta().getType() instanceof StringType);
@@ -260,6 +266,41 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(2, result.getFeatures().size());
             assertEquals("value1", result.getFeatures().get("feature1"));
             assertEquals("argFeature1Value1", result.getFeatures().get("argFeature1"));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes" })
+    @Test
+    public void testCallDynamicType() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("DynamicResultAction");
+            DataType resultType = actionMeta.getResultMeta().getType();
+            assertEquals(DataTypeKind.DYNAMIC, resultType.getKind());
+
+            DynamicValue resultForString = client.call(DynamicValue.class, actionMeta.getName(), Arrays.asList("string"));
+            assertEquals("text", resultForString.getValue());
+            assertEquals(DataTypeKind.STRING, resultForString.getType().getKind());
+
+            DynamicValue resultForBoolean = client.call(DynamicValue.class, actionMeta.getName(), Arrays.asList("boolean"));
+            assertEquals(true, resultForBoolean.getValue());
+            assertEquals(DataTypeKind.BOOLEAN, resultForBoolean.getType().getKind());
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes" })
+    @Test
+    public void testCallTypeType() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("TypeResultAction");
+            DataType resultType = actionMeta.getResultMeta().getType();
+            assertEquals(DataTypeKind.TYPE, resultType.getKind());
+
+            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string")) instanceof StringType);
+            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("boolean")) instanceof BooleanType);
 
             assertFalse(engine.isError());
         }

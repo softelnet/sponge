@@ -18,6 +18,8 @@ def onInit():
     sponge.setVariable("actuator4", 1)
     sponge.setVariable("actuator5", "X")
 
+    sponge.addCategories(CategoryMeta("category1").label("Category 1").description("Category 1 description"),
+                         CategoryMeta("category2").label("Category 2").description("Category 2 description"))
 def onLoad():
     sponge.kb.version = 2
 
@@ -25,6 +27,7 @@ class UpperCase(Action):
     def onConfigure(self):
         self.label = "Convert to upper case"
         self.description = "Converts a string to upper case."
+        self.category = "category1"
         self.argsMeta = [
             ArgMeta("text", StringType().maxLength(256)).label("Text to upper case").description("The text that will be converted to upper case.")
         ]
@@ -39,6 +42,7 @@ class LowerCase(Action):
     def onConfigure(self):
         self.label = "Convert to lower case"
         self.description = "Converts a string to lower case."
+        self.category = "category1"
         self.argsMeta = [ ArgMeta("text", StringType()).label("A text that will be changed to lower case") ]
         self.resultMeta = ResultMeta(StringType()).label("Lower case text")
     def onCall(self, text):
@@ -48,6 +52,7 @@ class LowerCase(Action):
 class EchoImage(Action):
     def onConfigure(self):
         self.label = "Echo an image"
+        self.category = "category2"
         self.argsMeta = [ArgMeta("image", BinaryType().mimeType("image/png")).label("Image")]
         self.resultMeta = ResultMeta(BinaryType().mimeType("image/png")).label("Image echo")
     def onCall(self, image):
@@ -64,6 +69,7 @@ class ListValues(Action):
 class ProvideByAction(Action):
     def onConfigure(self):
         self.label = "Action with provided argument"
+        self.category = "category2"
         self.argsMeta = [ArgMeta("value", StringType()).label("Value").provided(ArgProvidedMeta().valueSet())]
         self.resultMeta = ResultMeta(StringType()).label("Same value")
     def onCall(self, value):
@@ -194,6 +200,30 @@ class AnnotatedTypeAction(Action):
         features = {"feature1":"value1"}
         features.update(arg1.features)
         return AnnotatedValue("RESULT").withFeatures(features)
+
+class DynamicResultAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [ArgMeta("type", StringType())]
+        self.resultMeta = ResultMeta(DynamicType())
+    def onCall(self, type):
+        if type == "string":
+            return DynamicValue("text", StringType())
+        elif type == "boolean":
+            return DynamicValue(True, BooleanType())
+        else:
+            return None
+
+class TypeResultAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [ArgMeta("type", StringType())]
+        self.resultMeta = ResultMeta(TypeType())
+    def onCall(self, type):
+        if type == "string":
+            return StringType()
+        elif type == "boolean":
+            return BooleanType()
+        else:
+            return None
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

@@ -17,9 +17,11 @@ class MultipleArgumentsAction(Action):
             ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.CustomObject")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))),
             ArgMeta("binaryArg", BinaryType().mimeType("image/png").features({"width":28, "height":28, "background":"black", "color":"white"})),
+            ArgMeta("typeArg", TypeType()),
+            ArgMeta("dynamicArg", DynamicType()),
         ]
         self.resultMeta = ResultMeta(BooleanType()).label("Boolean result")
-    def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):
+    def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg, typeArg, dynamicArg):
         return True
 
 class ActionReturningMap(Action):
