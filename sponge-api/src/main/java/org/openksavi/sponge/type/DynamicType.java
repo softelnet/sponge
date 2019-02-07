@@ -32,27 +32,27 @@ public class DynamicType extends DataType<DynamicValue> {
     }
 
     @Override
-    public DynamicType format(String format) {
-        return (DynamicType) super.format(format);
+    public DynamicType withFormat(String format) {
+        return (DynamicType) super.withFormat(format);
     }
 
     @Override
-    public DynamicType features(Map<String, Object> features) {
-        return (DynamicType) super.features(features);
+    public DynamicType withFeatures(Map<String, Object> features) {
+        return (DynamicType) super.withFeatures(features);
     }
 
     @Override
-    public DynamicType feature(String name, Object value) {
-        return (DynamicType) super.feature(name, value);
+    public DynamicType withFeature(String name, Object value) {
+        return (DynamicType) super.withFeature(name, value);
     }
 
     @Override
-    public DynamicType defaultValue(DynamicValue value) {
-        return (DynamicType) super.defaultValue(value);
+    public DynamicType withDefaultValue(DynamicValue value) {
+        return (DynamicType) super.withDefaultValue(value);
     }
 
     @Override
-    public DynamicType nullable(boolean nullable) {
-        return (DynamicType) super.nullable(nullable);
+    public DynamicType withNullable(boolean nullable) {
+        return (DynamicType) super.withNullable(nullable);
     }
 }

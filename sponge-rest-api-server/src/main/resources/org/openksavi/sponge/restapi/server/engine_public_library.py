@@ -8,7 +8,7 @@ class EngineGetVersion(Action):
         self.label = "Sponge version"
         self.description = "Shows the Sponge version."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType()).label("Version").description("Sponge version")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Version").withDescription("Sponge version")
     def onCall(self):
         return sponge.version
 

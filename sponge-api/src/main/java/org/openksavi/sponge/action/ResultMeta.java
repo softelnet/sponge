@@ -37,12 +37,12 @@ public class ResultMeta<T extends DataType> {
         this.type = type;
     }
 
-    public ResultMeta<T> label(String label) {
+    public ResultMeta<T> withLabel(String label) {
         this.label = label;
         return this;
     }
 
-    public ResultMeta<T> description(String description) {
+    public ResultMeta<T> withDescription(String description) {
         this.description = description;
         return this;
     }

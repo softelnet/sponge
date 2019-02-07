@@ -4,7 +4,7 @@ Action invalid category
 """
 
 def onInit():
-    sponge.addCategory(CategoryMeta("myActions").label("My actions").description("My actions description"))
+    sponge.addCategory(CategoryMeta("myActions").withLabel("My actions").withDescription("My actions description"))
 
 class MyAction1(Action):
     def onConfigure(self):

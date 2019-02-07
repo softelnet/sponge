@@ -47,22 +47,22 @@ public class ArgMeta<T extends DataType> {
         this.type = type;
     }
 
-    public ArgMeta<T> label(String label) {
+    public ArgMeta<T> withLabel(String label) {
         this.label = label;
         return this;
     }
 
-    public ArgMeta<T> description(String description) {
+    public ArgMeta<T> withDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public ArgMeta<T> optional() {
+    public ArgMeta<T> withOptional() {
         this.optional = true;
         return this;
     }
 
-    public ArgMeta<T> provided(ArgProvidedMeta provided) {
+    public ArgMeta<T> withProvided(ArgProvidedMeta provided) {
         this.provided = provided;
         return this;
     }

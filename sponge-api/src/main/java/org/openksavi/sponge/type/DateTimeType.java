@@ -37,28 +37,28 @@ public class DateTimeType extends DataType<Object> {
     }
 
     @Override
-    public DateTimeType format(String format) {
-        return (DateTimeType) super.format(format);
+    public DateTimeType withFormat(String format) {
+        return (DateTimeType) super.withFormat(format);
     }
 
     @Override
-    public DateTimeType features(Map<String, Object> features) {
-        return (DateTimeType) super.features(features);
+    public DateTimeType withFeatures(Map<String, Object> features) {
+        return (DateTimeType) super.withFeatures(features);
     }
 
     @Override
-    public DateTimeType feature(String name, Object value) {
-        return (DateTimeType) super.feature(name, value);
+    public DateTimeType withFeature(String name, Object value) {
+        return (DateTimeType) super.withFeature(name, value);
     }
 
     @Override
-    public DateTimeType defaultValue(Object value) {
-        return (DateTimeType) super.defaultValue(value);
+    public DateTimeType withDefaultValue(Object value) {
+        return (DateTimeType) super.withDefaultValue(value);
     }
 
     @Override
-    public DateTimeType nullable(boolean nullable) {
-        return (DateTimeType) super.nullable(nullable);
+    public DateTimeType withNullable(boolean nullable) {
+        return (DateTimeType) super.withNullable(nullable);
     }
 
     public DateTimeKind getDateTimeKind() {
@@ -69,27 +69,27 @@ public class DateTimeType extends DataType<Object> {
         this.dateTimeKind = dateTimeKind;
     }
 
-    public DateTimeType dateTime() {
+    public DateTimeType withDateTime() {
         setDateTimeKind(DateTimeKind.DATE_TIME);
         return this;
     }
 
-    public DateTimeType dateTimeZone() {
+    public DateTimeType withDateTimeZone() {
         setDateTimeKind(DateTimeKind.DATE_TIME_ZONE);
         return this;
     }
 
-    public DateTimeType date() {
+    public DateTimeType withDate() {
         setDateTimeKind(DateTimeKind.DATE);
         return this;
     }
 
-    public DateTimeType time() {
+    public DateTimeType withTime() {
         setDateTimeKind(DateTimeKind.TIME);
         return this;
     }
 
-    public DateTimeType instant() {
+    public DateTimeType withInstant() {
         setDateTimeKind(DateTimeKind.INSTANT);
         return this;
     }

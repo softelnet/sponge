@@ -15,8 +15,8 @@ class HelloWorldAction : KAction() {
     override fun onConfigure() {
         label = "Hello world"
         description = "Returns a greeting text."
-        argsMeta = listOf(ArgMeta("name", StringType()).label("Your name").description("Type your name."))
-        resultMeta = ResultMeta(StringType()).label("Greeting").description("The greeting text.")
+        argsMeta = listOf(ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name."))
+        resultMeta = ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text.")
     }
 
     fun onCall(name: String): String {

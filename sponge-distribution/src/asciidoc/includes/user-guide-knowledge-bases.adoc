@@ -429,6 +429,9 @@ def onLoad():
     sponge.kb.version = 1
 ----
 
+== Naming conventions
+The builder-style methods in the metadata classes follow the naming convention `with<Property>`, e.g. `BinaryType().withMimeType("image/png")`.
+
 == Categories
 Processors may be assigned to registered categories. Categories could be used in a client code to group processors independently of knowledge bases. This feature be useful if you don't want to group processor by knowledge bases which requires more resources because each knowledge base has its own interpreter.
 
@@ -436,8 +439,8 @@ Processors may be assigned to registered categories. Categories could be used in
 [source,python]
 ----
 def onInit():
-    sponge.addCategories(CategoryMeta("myActions").label("My actions").description("My actions description"),
-                         CategoryMeta("yourActions").label("Your actions").description("Your actions description"))
+    sponge.addCategories(CategoryMeta("myActions").withLabel("My actions").withDescription("My actions description"),
+                         CategoryMeta("yourActions").withLabel("Your actions").withDescription("Your actions description"))
 ----
 
 .Example of assigning a processor to a category.

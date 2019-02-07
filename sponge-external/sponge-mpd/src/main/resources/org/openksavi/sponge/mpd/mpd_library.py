@@ -83,14 +83,14 @@ class MpdSetAndPlayPlaylist(Action):
         self.label = "Set and play a playlist"
         self.description = "Sets a playlist according to the arguments and starts playing it immediately."
         self.argsMeta = [
-            ArgMeta("artist", StringType().nullable(True)).label("Artist").description("Artist may be specified as a regular expression."),
-            ArgMeta("album", StringType().nullable(True)).label("Album").description("Album may be specified as a regular expression."),
-            ArgMeta("genre", StringType().nullable(True)).label("Genre").description("Genre may be specified as a regular expression."),
-            ArgMeta("minYear", IntegerType().nullable(True)).label("Release year (since)").description("An album minimum release year."),
-            ArgMeta("maxYear", IntegerType().nullable(True)).label("Release year (to)").description("An album maximum release year."),
-            ArgMeta("autoPlay", BooleanType().defaultValue(True)).label("Auto play").description("Plays the playlist automatically."),
+            ArgMeta("artist", StringType().withNullable(True)).withLabel("Artist").withDescription("Artist may be specified as a regular expression."),
+            ArgMeta("album", StringType().withNullable(True)).withLabel("Album").withDescription("Album may be specified as a regular expression."),
+            ArgMeta("genre", StringType().withNullable(True)).withLabel("Genre").withDescription("Genre may be specified as a regular expression."),
+            ArgMeta("minYear", IntegerType().withNullable(True)).withLabel("Release year (since)").withDescription("An album minimum release year."),
+            ArgMeta("maxYear", IntegerType().withNullable(True)).withLabel("Release year (to)").withDescription("An album maximum release year."),
+            ArgMeta("autoPlay", BooleanType().withDefaultValue(True)).withLabel("Auto play").withDescription("Plays the playlist automatically."),
         ]
-        self.resultMeta = ResultMeta(StringType()).label("Info").description("A short info of the status of the action call.")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Info").withDescription("A short info of the status of the action call.")
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         library = MpdLibrary()
 

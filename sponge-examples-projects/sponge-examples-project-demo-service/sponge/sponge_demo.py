@@ -11,9 +11,9 @@ class UpperCase(Action):
         self.label = "Convert to upper case"
         self.description = "Converts a string to upper case."
         self.argsMeta = [
-            ArgMeta("text", StringType().maxLength(256)).label("Text to upper case").description("The text that will be converted to upper case.")
+            ArgMeta("text", StringType().withMaxLength(256)).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
         ]
-        self.resultMeta = ResultMeta(StringType()).label("Upper case text")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Upper case text")
     def onCall(self, text):
         return text.upper()
 
@@ -21,8 +21,8 @@ class LowerCase(Action):
     def onConfigure(self):
         self.label = "Convert to lower case"
         self.description = "Converts a string to lower case."
-        self.argsMeta = [ ArgMeta("text", StringType()).label("Text to lower case").description("The text that will be changed to lower case") ]
-        self.resultMeta = ResultMeta(StringType()).label("Lower case text")
+        self.argsMeta = [ ArgMeta("text", StringType()).withLabel("Text to lower case").withDescription("The text that will be changed to lower case") ]
+        self.resultMeta = ResultMeta(StringType()).withLabel("Lower case text")
     def onCall(self, text):
         return text.lower()
 
@@ -37,8 +37,8 @@ class ListValues(Action):
 class ProvideByAction(Action):
     def onConfigure(self):
         self.label = "Action with provided argument"
-        self.argsMeta = [ArgMeta("value", StringType()).label("Value").provided(ArgProvidedMeta().valueSet())]
-        self.resultMeta = ResultMeta(StringType()).label("Same value")
+        self.argsMeta = [ArgMeta("value", StringType()).withLabel("Value").withProvided(ArgProvidedMeta().withValueSet())]
+        self.resultMeta = ResultMeta(StringType()).withLabel("Same value")
     def onCall(self, value):
         return value
     def onProvideArgs(self, names, current, provided):
@@ -50,8 +50,8 @@ class ChooseColor(Action):
         self.label = "Choose a color"
         self.description = "Shows a color argument."
         self.argsMeta = [
-            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
-                .label("Color").description("The color.")
+            ArgMeta("color", StringType().withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"}))
+                .withLabel("Color").withDescription("The color.")
         ]
         self.resultMeta = ResultMeta(StringType())
     def onCall(self, color):
@@ -62,7 +62,7 @@ class ConsoleOutput(Action):
         self.label = "Console output"
         self.description = "Returns the console output."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("console")).label("Console output")
+        self.resultMeta = ResultMeta(StringType().withFormat("console")).withLabel("Console output")
     def onCall(self):
         result = ""
         for i in range(30):
@@ -74,7 +74,7 @@ class MarkdownText(Action):
         self.label = "Markdown text"
         self.description = "Returns the markdown text."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("markdown")).label("Markdown text")
+        self.resultMeta = ResultMeta(StringType().withFormat("markdown")).withLabel("Markdown text")
     def onCall(self):
         return """Heading
 =======
@@ -113,7 +113,7 @@ class HtmlFileOutput(Action):
         self.label = "HTML file output"
         self.description = "Returns the HTML file."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("text/html")).label("HTML file")
+        self.resultMeta = ResultMeta(BinaryType().withMimeType("text/html")).withLabel("HTML file")
     def onCall(self):
         return String("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -134,7 +134,7 @@ class PdfFileOutput(Action):
         self.label = "PDF file output"
         self.description = "Returns the PDF file."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("application/pdf")).label("PDF file")
+        self.resultMeta = ResultMeta(BinaryType().withMimeType("application/pdf")).withLabel("PDF file")
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
@@ -143,13 +143,13 @@ class DependingArgumentsAction(Action):
     def onConfigure(self):
         self.label = "Action with depending arguments"
         self.argsMeta = [
-            ArgMeta("continent", StringType()).label("Continent").provided(ArgProvidedMeta().valueSet()),
-            ArgMeta("country", StringType()).label("Country").provided(ArgProvidedMeta().valueSet().depends("continent")),
-            ArgMeta("city", StringType()).label("City").provided(ArgProvidedMeta().valueSet().depends("country")),
-            ArgMeta("river", StringType()).label("River").provided(ArgProvidedMeta().valueSet().depends("continent")),
-            ArgMeta("weather", StringType()).label("Weather").provided(ArgProvidedMeta().valueSet()),
+            ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
+            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
+            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDepends("country")),
+            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
+            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet()),
         ]
-        self.resultMeta = ResultMeta(StringType()).label("Sentences")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Sentences")
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):

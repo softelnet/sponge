@@ -15,11 +15,11 @@ class SetActuator(Action):
         self.label = "Set actuator"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).label("Actuator 1 state").provided(ArgProvidedMeta().value().valueSet()),
-            ArgMeta("actuator2", BooleanType()).label("Actuator 2 state").provided(ArgProvidedMeta().value()),
-            ArgMeta("actuator3", IntegerType().nullable()).label("Actuator 3 state").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("actuator4", IntegerType()).label("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).label("Actuator 5 state").provided(ArgProvidedMeta().value().valueSet().depends("actuator1")),
+            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
+            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
+            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
+            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1")),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):

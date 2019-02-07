@@ -34,36 +34,36 @@ public class StringType extends DataType<String> {
     }
 
     @Override
-    public StringType format(String format) {
-        return (StringType) super.format(format);
+    public StringType withFormat(String format) {
+        return (StringType) super.withFormat(format);
     }
 
     @Override
-    public StringType features(Map<String, Object> features) {
-        return (StringType) super.features(features);
+    public StringType withFeatures(Map<String, Object> features) {
+        return (StringType) super.withFeatures(features);
     }
 
     @Override
-    public StringType feature(String name, Object value) {
-        return (StringType) super.feature(name, value);
+    public StringType withFeature(String name, Object value) {
+        return (StringType) super.withFeature(name, value);
     }
 
     @Override
-    public StringType defaultValue(String value) {
-        return (StringType) super.defaultValue(value);
+    public StringType withDefaultValue(String value) {
+        return (StringType) super.withDefaultValue(value);
     }
 
     @Override
-    public StringType nullable(boolean nullable) {
-        return (StringType) super.nullable(nullable);
+    public StringType withNullable(boolean nullable) {
+        return (StringType) super.withNullable(nullable);
     }
 
-    public StringType minLength(Integer minLength) {
+    public StringType withMinLength(Integer minLength) {
         setMinLength(minLength);
         return this;
     }
 
-    public StringType maxLength(Integer maxLength) {
+    public StringType withMaxLength(Integer maxLength) {
         setMaxLength(maxLength);
         return this;
     }

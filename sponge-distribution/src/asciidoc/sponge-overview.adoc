@@ -103,5 +103,5 @@ The {sponge} standard libraries are released under the https://www.apache.org/li
 
 [quote, Marcin Paś, Co-Founder & CTO at Softelnet]
 ____
-Softelnet has been using Open Source Software in its commercial products for many years. Therefore we appreciate the impact of Open Source on the IT industry and believe that its constant development is important. In order to contribute to the Open Source community we share and maintain projects such as Sponge.
+We have been using Open Source Software in our commercial products for many years. Therefore we appreciate the impact of Open Source on the IT industry and believe that its constant development is important. In order to contribute to the Open Source community we share and maintain projects such as Sponge.
 ____

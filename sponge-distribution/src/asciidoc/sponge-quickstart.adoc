@@ -314,8 +314,8 @@ class HelloWorldAction(Action): # <1>
     def onConfigure(self): # <2>
         self.label = "Hello world" # <3>
         self.description = "Returns a greeting text."
-        self.argsMeta = [ArgMeta("name", StringType()).label("Your name").description("Type your name.")] # <4>
-        self.resultMeta = ResultMeta(StringType()).label("Greeting").description("The greeting text.") # <5>
+        self.argsMeta = [ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name.")] # <4>
+        self.resultMeta = ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text.") # <5>
     def onCall(self, name): # <6>
         return "Hello World! Hello {}!".format(name)
 
@@ -364,8 +364,8 @@ class HelloWorldAction < Action # <1>
     def onConfigure # <2>
         self.label = "Hello world" # <3>
         self.description = "Returns a greeting text."
-        self.argsMeta = [ArgMeta.new("name", StringType.new()).label("Your name").description("Type your name.")] # <4>
-        self.resultMeta = ResultMeta.new(StringType.new()).label("Greeting").description("The greeting text.") # <5>
+        self.argsMeta = [ArgMeta.new("name", StringType.new()).withLabel("Your name").withDescription("Type your name.")] # <4>
+        self.resultMeta = ResultMeta.new(StringType.new()).withLabel("Greeting").withDescription("The greeting text.") # <5>
     end
     def onCall(name) # <6>
         return "Hello World! Hello %s!" % [name]
@@ -396,8 +396,8 @@ class HelloWorldAction extends Action { // <1>
     void onConfigure() { // <2>
         this.label = "Hello world" // <3>
         this.description = "Returns a greeting text."
-        this.argsMeta = [new ArgMeta("name", new StringType()).label("Your name").description("Type your name.")] // <4>
-        this.resultMeta = new ResultMeta(new StringType()).label("Greeting").description("The greeting text.") // <5>
+        this.argsMeta = [new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")] // <4>
+        this.resultMeta = new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text.") // <5>
     }
 
     String onCall(String name) { // <6>
@@ -429,8 +429,8 @@ var HelloWorldAction = Java.extend(Action, { // <1>
     onConfigure: function(self) { // <2>
         self.label = "Hello world"; // <3>
         self.description = "Returns a greeting text.";
-        self.argsMeta = [new ArgMeta("name", new StringType()).label("Your name").description("Type your name.")]; // <4>
-        self.resultMeta = new ResultMeta(new StringType()).label("Greeting").description("The greeting text."); // <5>
+        self.argsMeta = [new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")]; // <4>
+        self.resultMeta = new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text."); // <5>
     },
     onCall: function(self, args) { // <6>
         // The onCall method in JS always gets an array of arguments. Dynamic onCall callback methods are not supported.

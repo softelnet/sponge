@@ -40,46 +40,48 @@ public class IntegerType extends DataType<Number> {
     }
 
     @Override
-    public IntegerType format(String format) {
-        return (IntegerType) super.format(format);
+    public IntegerType withFormat(String format) {
+        return (IntegerType) super.withFormat(format);
     }
 
     @Override
-    public IntegerType features(Map<String, Object> features) {
-        return (IntegerType) super.features(features);
+    public IntegerType withFeatures(Map<String, Object> features) {
+        return (IntegerType) super.withFeatures(features);
     }
 
     @Override
-    public IntegerType feature(String name, Object value) {
-        return (IntegerType) super.feature(name, value);
+    public IntegerType withFeature(String name, Object value) {
+        return (IntegerType) super.withFeature(name, value);
     }
 
     @Override
-    public IntegerType defaultValue(Number value) {
-        return (IntegerType) super.defaultValue(value);
+    public IntegerType withDefaultValue(Number value) {
+        return (IntegerType) super.withDefaultValue(value);
     }
 
     @Override
-    public IntegerType nullable(boolean nullable) {
-        return (IntegerType) super.nullable(nullable);
+    public IntegerType withNullable(boolean nullable) {
+        return (IntegerType) super.withNullable(nullable);
     }
 
-    public IntegerType minValue(Long minValue) {
+    public IntegerType withMinValue(Long minValue) {
         setMinValue(minValue);
         return this;
     }
 
-    public IntegerType maxValue(Long maxValue) {
-        setMaxValue(maxValue);
-        return this;
-    }
-
-    public IntegerType exclusiveMin(boolean exclusiveMin) {
+    public IntegerType withMinValue(Long minValue, boolean exclusiveMin) {
+        setMinValue(minValue);
         setExclusiveMin(exclusiveMin);
         return this;
     }
 
-    public IntegerType exclusiveMax(boolean exclusiveMax) {
+    public IntegerType withMaxValue(Long maxValue) {
+        setMaxValue(maxValue);
+        return this;
+    }
+
+    public IntegerType withMaxValue(Long maxValue, boolean exclusiveMax) {
+        setMaxValue(maxValue);
         setExclusiveMax(exclusiveMax);
         return this;
     }

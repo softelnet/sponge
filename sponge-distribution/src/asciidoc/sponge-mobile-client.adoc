@@ -55,14 +55,14 @@ class ManageLcd(Action):
         self.label = "Manage the LCD text and color"
         self.description = "Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property."
         self.argsMeta = [
-            ArgMeta("currentText", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
-                .label("Current LCD text").description("The currently displayed LCD text.").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("text", StringType().maxLength(256).nullable(True).features({"maxLines":2}))
-                .label("Text to display").description("The text that will be displayed in the LCD.").provided(ArgProvidedMeta().value()),
-            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
-                .label("LCD color").description("The LCD color.").provided(ArgProvidedMeta().value().overwrite()),
-            ArgMeta("clearText", BooleanType().nullable(True).defaultValue(False))
-                .label("Clear text").description("The text the LCD will be cleared.")
+            ArgMeta("currentText", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
+                .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("text", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
+                .withLabel("Text to display").withDescription("The text that will be displayed in the LCD.").withProvided(ArgProvidedMeta().withValue()),
+            ArgMeta("color", StringType().withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"}))
+                .withLabel("LCD color").withDescription("The LCD color.").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
+            ArgMeta("clearText", BooleanType().withNullable(True).withDefaultValue(False))
+                .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, currentText, text, color, clearText = None):
@@ -90,14 +90,14 @@ class ManageSensorActuatorValues(Action):
         self.label = "Manage the sensor and actuator values"
         self.description = "Provides management of the sensor and actuator values."
         self.argsMeta = [
-            ArgMeta("temperatureSensor", NumberType().nullable()).label(u"Temperature sensor (°C)").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("humiditySensor", NumberType().nullable()).label(u"Humidity sensor (%)").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("lightSensor", NumberType().nullable()).label(u"Light sensor").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("rotarySensor", NumberType().nullable()).label(u"Rotary sensor").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("soundSensor", NumberType().nullable()).label(u"Sound sensor").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("redLed", BooleanType()).label("Red LED").provided(ArgProvidedMeta().value().overwrite()),
-            ArgMeta("blueLed", IntegerType().minValue(0).maxValue(255)).label("Blue LED").provided(ArgProvidedMeta().value().overwrite()),
-            ArgMeta("buzzer", BooleanType()).label("Buzzer").provided(ArgProvidedMeta().value().overwrite())
+            ArgMeta("temperatureSensor", NumberType().withNullable()).withLabel(u"Temperature sensor (°C)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("humiditySensor", NumberType().withNullable()).withLabel(u"Humidity sensor (%)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("lightSensor", NumberType().withNullable()).withLabel(u"Light sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("rotarySensor", NumberType().withNullable()).withLabel(u"Rotary sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("soundSensor", NumberType().withNullable()).withLabel(u"Sound sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("redLed", BooleanType()).withLabel("Red LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
+            ArgMeta("blueLed", IntegerType().withMinValue(0).withMaxValue(255)).withLabel("Blue LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
+            ArgMeta("buzzer", BooleanType()).withLabel("Buzzer").withProvided(ArgProvidedMeta().withValue().withOverwrite())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
@@ -147,10 +147,10 @@ class SendSms(Action):
         self.label = "Send an SMS"
         self.description = "Sends a new SMS."
         self.argsMeta = [
-            ArgMeta("recipient", StringType().format("phone"))
-                .label("Recipient").description("The SMS recipient."),
-            ArgMeta("message", StringType().maxLength(160).features({"maxLines":5}))
-                .label("Message").description("The SMS message.")
+            ArgMeta("recipient", StringType().withFormat("phone"))
+                .withLabel("Recipient").withDescription("The SMS recipient."),
+            ArgMeta("message", StringType().withMaxLength(160).withFeatures({"maxLines":5}))
+                .withLabel("Message").withDescription("The SMS message.")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, recipient, message):
@@ -169,8 +169,8 @@ class ChooseColor(Action):
         self.label = "Choose a color"
         self.description = "Shows a color argument."
         self.argsMeta = [
-            ArgMeta("color", StringType().maxLength(6).nullable(True).features({"characteristic":"color"}))
-                .label("Color").description("The color.")
+            ArgMeta("color", StringType().withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"}))
+                .withLabel("Color").withDescription("The color.")
         ]
         self.resultMeta = ResultMeta(StringType())
     def onCall(self, color):
@@ -189,11 +189,11 @@ class DigitsPredict(Action):
         self.label = "Recognize a digit"
         self.description = "Recognizes a handwritten digit"
         self.argsMeta = [
-            ArgMeta("image", BinaryType().mimeType("image/png")
-                   .features({"characteristic":"drawing", "width":28, "height":28, "background":"000000", "color":"FFFFFF", "strokeWidth":1.5}))\
-                   .label("Image of a digit")
+            ArgMeta("image", BinaryType().withMimeType("image/png")
+                   .withFeatures({"characteristic":"drawing", "width":28, "height":28, "background":"000000", "color":"FFFFFF", "strokeWidth":1.5}))\
+                   .withLabel("Image of a digit")
         ]
-        self.resultMeta = ResultMeta(IntegerType()).label("Recognized digit")
+        self.resultMeta = ResultMeta(IntegerType()).withLabel("Recognized digit")
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
         prediction = max(predictions, key=predictions.get)
@@ -229,11 +229,11 @@ class DrawAndUploadDoodle(Action):
         self.label = "Draw and upload a doodle"
         self.description = "Shows a canvas to draw a doodle and uploads it to the server"
         self.argsMeta = [
-            ArgMeta("image", BinaryType().mimeType("image/png")
-                   .features({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5}))\
-                   .label("Doodle")
+            ArgMeta("image", BinaryType().withMimeType("image/png")
+                   .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5}))\
+                   .withLabel("Doodle")
         ]
-        self.resultMeta = ResultMeta(StringType()).label("Status")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Status")
     def onCall(self, image):
         fileName = str(System.currentTimeMillis()) + ".png"
         SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + fileName)
@@ -255,13 +255,13 @@ class DependingArgumentsAction(Action):
     def onConfigure(self):
         self.label = "Action with depending arguments"
         self.argsMeta = [
-            ArgMeta("continent", StringType()).label("Continent").provided(ArgProvidedMeta().valueSet()),
-            ArgMeta("country", StringType()).label("Country").provided(ArgProvidedMeta().valueSet().depends("continent")),
-            ArgMeta("city", StringType()).label("City").provided(ArgProvidedMeta().valueSet().depends("country")),
-            ArgMeta("river", StringType()).label("River").provided(ArgProvidedMeta().valueSet().depends("continent")),
-            ArgMeta("weather", StringType()).label("Weather").provided(ArgProvidedMeta().valueSet()),
+            ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
+            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
+            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDepends("country")),
+            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
+            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet()),
         ]
-        self.resultMeta = ResultMeta(StringType()).label("Sentences")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Sentences")
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):
@@ -334,7 +334,7 @@ class HtmlFileOutput(Action):
         self.label = "HTML file output"
         self.description = "Returns the HTML file."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("text/html")).label("HTML file")
+        self.resultMeta = ResultMeta(BinaryType().withMimeType("text/html")).withLabel("HTML file")
     def onCall(self):
         return String("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -355,7 +355,7 @@ class PdfFileOutput(Action):
         self.label = "PDF file output"
         self.description = "Returns the PDF file."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().mimeType("application/pdf")).label("PDF file")
+        self.resultMeta = ResultMeta(BinaryType().withMimeType("application/pdf")).withLabel("PDF file")
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
@@ -373,7 +373,7 @@ class OsGetDiskSpaceInfo(Action):
         self.label = "Get disk space info"
         self.description = "Returns the disk space info."
         self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().format("console")).label("Disk space info")
+        self.resultMeta = ResultMeta(StringType().withFormat("console")).withLabel("Disk space info")
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("df", "-h").outputAsString()).run().outputString
 ----

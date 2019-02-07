@@ -51,31 +51,31 @@ public class DataType<T> implements Cloneable {
         this.kind = kind;
     }
 
-    public DataType<T> format(String format) {
+    public DataType<T> withFormat(String format) {
         setFormat(format);
         return this;
     }
 
-    public DataType<T> defaultValue(T value) {
+    public DataType<T> withDefaultValue(T value) {
         setDefaultValue(value);
         return this;
     }
 
-    public DataType<T> nullable(boolean nullable) {
+    public DataType<T> withNullable(boolean nullable) {
         setNullable(nullable);
         return this;
     }
 
-    public DataType<T> nullable() {
-        return nullable(true);
+    public DataType<T> withNullable() {
+        return withNullable(true);
     }
 
-    public DataType<T> features(Map<String, Object> features) {
+    public DataType<T> withFeatures(Map<String, Object> features) {
         this.features.putAll(features);
         return this;
     }
 
-    public DataType<T> feature(String name, Object value) {
+    public DataType<T> withFeature(String name, Object value) {
         features.put(name, value);
         return this;
     }

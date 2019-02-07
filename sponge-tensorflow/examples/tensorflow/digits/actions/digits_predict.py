@@ -8,7 +8,7 @@ class DigitsPredict(Action):
         self.label = "Recognize a digit"
         self.description = "Recognizes a handwritten digit"
         self.argsMeta = [createImageArgMeta()]
-        self.resultMeta = ResultMeta(IntegerType()).label("Recognized digit")
+        self.resultMeta = ResultMeta(IntegerType()).withLabel("Recognized digit")
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
         prediction = max(predictions, key=predictions.get)
@@ -28,7 +28,7 @@ class DigitsPredictProbabilities(Action):
         self.label = "Recognize a digit (probabilities)"
         self.description = "Recognizes a handwritten digit returning probabilities"
         self.argsMeta = [createImageArgMeta()]
-        self.resultMeta = ResultMeta(MapType(StringType(), NumberType())).label("Digit probabilities")
+        self.resultMeta = ResultMeta(MapType(StringType(), NumberType())).withLabel("Digit probabilities")
     def onCall(self, image):
         return py4j.facade.predict(image)
 

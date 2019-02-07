@@ -70,12 +70,12 @@ public class CategoryMeta implements Descriptive {
         this.description = description;
     }
 
-    public CategoryMeta label(String label) {
+    public CategoryMeta withLabel(String label) {
         setLabel(label);
         return this;
     }
 
-    public CategoryMeta description(String description) {
+    public CategoryMeta withDescription(String description) {
         setDescription(description);
         return this;
     }

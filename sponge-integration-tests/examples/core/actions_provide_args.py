@@ -15,10 +15,10 @@ class SetActuator(Action):
         self.label = "Set actuator"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).label("Actuator 1 state").provided(ArgProvidedMeta().value().valueSet()),
-            ArgMeta("actuator2", BooleanType()).label("Actuator 2 state").provided(ArgProvidedMeta().value()),
-            ArgMeta("actuator3", IntegerType().nullable()).label("Actuator 3 state").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("actuator4", IntegerType()).label("Actuator 4 state")
+            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
+            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
+            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4):
@@ -39,7 +39,7 @@ class SetActuatorAnnotatedValueSet(Action):
         self.label = "Set actuator type"
         self.description = "Sets the actuator type."
         self.argsMeta = [
-            ArgMeta("actuatorType", StringType()).label("Actuator type").provided(ArgProvidedMeta().value().valueSet()),
+            ArgMeta("actuatorType", StringType()).withLabel("Actuator type").withProvided(ArgProvidedMeta().withValue().withValueSet()),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuatorType):

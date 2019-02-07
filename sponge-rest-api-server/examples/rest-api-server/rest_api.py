@@ -18,8 +18,8 @@ def onInit():
     sponge.setVariable("actuator4", 1)
     sponge.setVariable("actuator5", "X")
 
-    sponge.addCategories(CategoryMeta("category1").label("Category 1").description("Category 1 description"),
-                         CategoryMeta("category2").label("Category 2").description("Category 2 description"))
+    sponge.addCategories(CategoryMeta("category1").withLabel("Category 1").withDescription("Category 1 description"),
+                         CategoryMeta("category2").withLabel("Category 2").withDescription("Category 2 description"))
 def onLoad():
     sponge.kb.version = 2
 
@@ -29,9 +29,9 @@ class UpperCase(Action):
         self.description = "Converts a string to upper case."
         self.category = "category1"
         self.argsMeta = [
-            ArgMeta("text", StringType().maxLength(256)).label("Text to upper case").description("The text that will be converted to upper case.")
+            ArgMeta("text", StringType().withMaxLength(256)).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
         ]
-        self.resultMeta = ResultMeta(StringType()).label("Upper case text")
+        self.resultMeta = ResultMeta(StringType()).withLabel("Upper case text")
         self.version = 2
     def onCall(self, text):
         self.logger.info("Action {} called: {}", self.name, text)
@@ -43,8 +43,8 @@ class LowerCase(Action):
         self.label = "Convert to lower case"
         self.description = "Converts a string to lower case."
         self.category = "category1"
-        self.argsMeta = [ ArgMeta("text", StringType()).label("A text that will be changed to lower case") ]
-        self.resultMeta = ResultMeta(StringType()).label("Lower case text")
+        self.argsMeta = [ ArgMeta("text", StringType()).withLabel("A text that will be changed to lower case") ]
+        self.resultMeta = ResultMeta(StringType()).withLabel("Lower case text")
     def onCall(self, text):
         self.logger.info("Action {} called", self.name)
         return text.lower()
@@ -53,8 +53,8 @@ class EchoImage(Action):
     def onConfigure(self):
         self.label = "Echo an image"
         self.category = "category2"
-        self.argsMeta = [ArgMeta("image", BinaryType().mimeType("image/png")).label("Image")]
-        self.resultMeta = ResultMeta(BinaryType().mimeType("image/png")).label("Image echo")
+        self.argsMeta = [ArgMeta("image", BinaryType().withMimeType("image/png")).withLabel("Image")]
+        self.resultMeta = ResultMeta(BinaryType().withMimeType("image/png")).withLabel("Image echo")
     def onCall(self, image):
         return image
 
@@ -70,8 +70,8 @@ class ProvideByAction(Action):
     def onConfigure(self):
         self.label = "Action with provided argument"
         self.category = "category2"
-        self.argsMeta = [ArgMeta("value", StringType()).label("Value").provided(ArgProvidedMeta().valueSet())]
-        self.resultMeta = ResultMeta(StringType()).label("Same value")
+        self.argsMeta = [ArgMeta("value", StringType()).withLabel("Value").withProvided(ArgProvidedMeta().withValueSet())]
+        self.resultMeta = ResultMeta(StringType()).withLabel("Same value")
     def onCall(self, value):
         return value
     def onProvideArgs(self, names, current, provided):
@@ -105,9 +105,9 @@ class LangErrorAction(Action):
 class ComplexObjectAction(Action):
     def onConfigure(self):
         self.argsMeta = [
-            ArgMeta("arg", ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")).label("Text to upper case")
+            ArgMeta("arg", ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")).withLabel("Text to upper case")
         ]
-        self.resultMeta = ResultMeta(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")).label("Upper case text")
+        self.resultMeta = ResultMeta(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")).withLabel("Upper case text")
     def onCall(self, arg):
         self.logger.info("Action {} called", self.name)
         arg.id += 1
@@ -116,9 +116,9 @@ class ComplexObjectAction(Action):
 class ComplexObjectListAction(Action):
     def onConfigure(self):
         self.argsMeta = [
-            ArgMeta("arg", ListType(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))).label("Text to upper case")
+            ArgMeta("arg", ListType(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))).withLabel("Text to upper case")
         ]
-        self.resultMeta = ResultMeta(ListType(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))).label("Upper case text")
+        self.resultMeta = ResultMeta(ListType(ObjectType("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))).withLabel("Upper case text")
     def onCall(self, arg):
         self.logger.info("Action {} called: {}", self.name, arg)
         arg[0].id += 1
@@ -144,10 +144,10 @@ class SetActuator(Action):
         self.label = "Set actuator"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).label("Actuator 1 state").provided(ArgProvidedMeta().value().valueSet()),
-            ArgMeta("actuator2", BooleanType()).label("Actuator 2 state").provided(ArgProvidedMeta().value()),
-            ArgMeta("actuator3", IntegerType().nullable()).label("Actuator 3 state").provided(ArgProvidedMeta().value().readOnly()),
-            ArgMeta("actuator4", IntegerType()).label("Actuator 4 state")
+            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
+            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
+            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4):
@@ -168,11 +168,11 @@ class SetActuatorDepends(Action):
         self.label = "Set actuator with depends"
         self.description = "Sets the actuator state."
         self.argsMeta = [
-            ArgMeta("actuator1", StringType()).label("Actuator 1 state").provided(ArgProvidedMeta().value().valueSet()),
-            ArgMeta("actuator2", BooleanType()).label("Actuator 2 state").provided(ArgProvidedMeta().value()),
-            ArgMeta("actuator3", IntegerType()).label("Actuator 3 state").provided(ArgProvidedMeta().value()),
-            ArgMeta("actuator4", IntegerType()).label("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).label("Actuator 5 state").provided(ArgProvidedMeta().value().valueSet().depends("actuator1")),
+            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
+            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
+            ArgMeta("actuator3", IntegerType()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue()),
+            ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
+            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1")),
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
@@ -194,8 +194,8 @@ class SetActuatorDepends(Action):
 
 class AnnotatedTypeAction(Action):
     def onConfigure(self):
-        self.argsMeta = [ArgMeta("arg1", AnnotatedType(BooleanType())).label("Argument 1")]
-        self.resultMeta = ResultMeta(AnnotatedType(StringType())).label("Annotated result")
+        self.argsMeta = [ArgMeta("arg1", AnnotatedType(BooleanType())).withLabel("Argument 1")]
+        self.resultMeta = ResultMeta(AnnotatedType(StringType())).withLabel("Annotated result")
     def onCall(self, arg1):
         features = {"feature1":"value1"}
         features.update(arg1.features)
@@ -228,11 +228,11 @@ class TypeResultAction(Action):
 class DateTimeAction(Action):
     def onConfigure(self):
         self.argsMeta = [
-            ArgMeta("dateTime", DateTimeType().dateTime()),
-            ArgMeta("dateTimeZone", DateTimeType().dateTimeZone()),
-            ArgMeta("date", DateTimeType().date().format("yyyy-MM-dd")),
-            ArgMeta("time", DateTimeType().time().format("HH:mm:ss")),
-            ArgMeta("instant", DateTimeType().instant()),
+            ArgMeta("dateTime", DateTimeType().withDateTime()),
+            ArgMeta("dateTimeZone", DateTimeType().withDateTimeZone()),
+            ArgMeta("date", DateTimeType().withDate().withFormat("yyyy-MM-dd")),
+            ArgMeta("time", DateTimeType().withTime().withFormat("HH:mm:ss")),
+            ArgMeta("instant", DateTimeType().withInstant()),
         ]
         self.resultMeta = ResultMeta(ListType(DynamicType()))
     def onCall(self, dateTime, dateTimeZone, date, time, instant):

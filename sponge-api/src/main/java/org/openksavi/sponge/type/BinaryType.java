@@ -31,31 +31,31 @@ public class BinaryType extends DataType<byte[]> {
     }
 
     @Override
-    public BinaryType format(String format) {
-        return (BinaryType) super.format(format);
+    public BinaryType withFormat(String format) {
+        return (BinaryType) super.withFormat(format);
     }
 
     @Override
-    public BinaryType features(Map<String, Object> features) {
-        return (BinaryType) super.features(features);
+    public BinaryType withFeatures(Map<String, Object> features) {
+        return (BinaryType) super.withFeatures(features);
     }
 
     @Override
-    public BinaryType feature(String name, Object value) {
-        return (BinaryType) super.feature(name, value);
+    public BinaryType withFeature(String name, Object value) {
+        return (BinaryType) super.withFeature(name, value);
     }
 
     @Override
-    public BinaryType defaultValue(byte[] value) {
-        return (BinaryType) super.defaultValue(value);
+    public BinaryType withDefaultValue(byte[] value) {
+        return (BinaryType) super.withDefaultValue(value);
     }
 
     @Override
-    public BinaryType nullable(boolean nullable) {
-        return (BinaryType) super.nullable(nullable);
+    public BinaryType withNullable(boolean nullable) {
+        return (BinaryType) super.withNullable(nullable);
     }
 
-    public BinaryType mimeType(String mimeType) {
+    public BinaryType withMimeType(String mimeType) {
         this.mimeType = mimeType;
         return this;
     }

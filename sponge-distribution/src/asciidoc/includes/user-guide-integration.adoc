@@ -855,8 +855,8 @@ class SendSms(Action):
         self.label = "Send SMS"
         self.description = "Sends a new SMS."
         self.argsMeta = [
-            ArgMeta("recipient", StringType()).label("Recipient").description("The SMS recipient."),
-            ArgMeta("message", StringType()).label("Message").description("The SMS message.")
+            ArgMeta("recipient", StringType()).withLabel("Recipient").withDescription("The SMS recipient."),
+            ArgMeta("message", StringType()).withLabel("Message").withDescription("The SMS message.")
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, recipient, message):

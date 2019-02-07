@@ -9,7 +9,7 @@ class DigitsAddToLearn(Action):
         self.description = "Adds a digit to learn"
         self.argsMeta = [
             createImageArgMeta(),
-            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvidedMeta().valueSet())
+            ArgMeta("digit", StringType()).withLabel("Digit").withProvided(ArgProvidedMeta().withValueSet())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):
@@ -25,7 +25,7 @@ class DigitsLearn(Action):
         self.description = "Learns a digit"
         self.argsMeta = [
             createImageArgMeta(),
-            ArgMeta("digit", StringType()).label("Digit").provided(ArgProvidedMeta().valueSet())
+            ArgMeta("digit", StringType()).withLabel("Digit").withProvided(ArgProvidedMeta().withValueSet())
         ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, image, digit):

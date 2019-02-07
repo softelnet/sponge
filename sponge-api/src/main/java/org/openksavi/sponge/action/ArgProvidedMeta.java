@@ -46,27 +46,27 @@ public class ArgProvidedMeta {
     public ArgProvidedMeta() {
     }
 
-    public ArgProvidedMeta value() {
+    public ArgProvidedMeta withValue() {
         value = true;
         return this;
     }
 
-    public ArgProvidedMeta valueSet() {
+    public ArgProvidedMeta withValueSet() {
         valueSet = true;
         return this;
     }
 
-    public ArgProvidedMeta depends(String... depends) {
+    public ArgProvidedMeta withDepends(String... depends) {
         this.depends.addAll(Arrays.asList(depends));
         return this;
     }
 
-    public ArgProvidedMeta readOnly() {
+    public ArgProvidedMeta withReadOnly() {
         readOnly = true;
         return this;
     }
 
-    public ArgProvidedMeta overwrite() {
+    public ArgProvidedMeta withOverwrite() {
         overwrite = true;
         return this;
     }

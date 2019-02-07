@@ -32,7 +32,7 @@ public class TypeTypeUnitConverter extends BaseUnitTypeConverter<DataType, TypeT
     @SuppressWarnings("unchecked")
     @Override
     public DataType marshal(TypeConverter converter, TypeType type, DataType value) {
-        return value.clone().defaultValue(converter.marshal(value, value.getDefaultValue()));
+        return value.clone().withDefaultValue(converter.marshal(value, value.getDefaultValue()));
     }
 
     @SuppressWarnings("unchecked")

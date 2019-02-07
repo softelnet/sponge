@@ -40,46 +40,48 @@ public class NumberType extends DataType<Number> {
     }
 
     @Override
-    public NumberType format(String format) {
-        return (NumberType) super.format(format);
+    public NumberType withFormat(String format) {
+        return (NumberType) super.withFormat(format);
     }
 
     @Override
-    public NumberType features(Map<String, Object> features) {
-        return (NumberType) super.features(features);
+    public NumberType withFeatures(Map<String, Object> features) {
+        return (NumberType) super.withFeatures(features);
     }
 
     @Override
-    public NumberType feature(String name, Object value) {
-        return (NumberType) super.feature(name, value);
+    public NumberType withFeature(String name, Object value) {
+        return (NumberType) super.withFeature(name, value);
     }
 
     @Override
-    public NumberType defaultValue(Number value) {
-        return (NumberType) super.defaultValue(value);
+    public NumberType withDefaultValue(Number value) {
+        return (NumberType) super.withDefaultValue(value);
     }
 
     @Override
-    public NumberType nullable(boolean nullable) {
-        return (NumberType) super.nullable(nullable);
+    public NumberType withNullable(boolean nullable) {
+        return (NumberType) super.withNullable(nullable);
     }
 
-    public NumberType minValue(Number minValue) {
+    public NumberType withMinValue(Number minValue) {
         setMinValue(minValue);
         return this;
     }
 
-    public NumberType maxValue(Number maxValue) {
-        setMaxValue(maxValue);
-        return this;
-    }
-
-    public NumberType exclusiveMin(boolean exclusiveMin) {
+    public NumberType withMinValue(Number minValue, boolean exclusiveMin) {
+        setMinValue(minValue);
         setExclusiveMin(exclusiveMin);
         return this;
     }
 
-    public NumberType exclusiveMax(boolean exclusiveMax) {
+    public NumberType withMaxValue(Number maxValue) {
+        setMaxValue(maxValue);
+        return this;
+    }
+
+    public NumberType withMaxValue(Number maxValue, boolean exclusiveMax) {
+        setMaxValue(maxValue);
         setExclusiveMax(exclusiveMax);
         return this;
     }

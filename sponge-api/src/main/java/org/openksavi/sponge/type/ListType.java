@@ -40,28 +40,28 @@ public class ListType<E> extends DataType<List<E>> {
     }
 
     @Override
-    public ListType<E> format(String format) {
-        return (ListType<E>) super.format(format);
+    public ListType<E> withFormat(String format) {
+        return (ListType<E>) super.withFormat(format);
     }
 
     @Override
-    public ListType<E> features(Map<String, Object> features) {
-        return (ListType<E>) super.features(features);
+    public ListType<E> withFeatures(Map<String, Object> features) {
+        return (ListType<E>) super.withFeatures(features);
     }
 
     @Override
-    public ListType<E> feature(String name, Object value) {
-        return (ListType<E>) super.feature(name, value);
+    public ListType<E> withFeature(String name, Object value) {
+        return (ListType<E>) super.withFeature(name, value);
     }
 
     @Override
-    public ListType<E> defaultValue(List<E> value) {
-        return (ListType<E>) super.defaultValue(value);
+    public ListType<E> withDefaultValue(List<E> value) {
+        return (ListType<E>) super.withDefaultValue(value);
     }
 
     @Override
-    public ListType<E> nullable(boolean nullable) {
-        return (ListType<E>) super.nullable(nullable);
+    public ListType<E> withNullable(boolean nullable) {
+        return (ListType<E>) super.withNullable(nullable);
     }
 
     @SuppressWarnings("unchecked")

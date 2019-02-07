@@ -28,27 +28,27 @@ public class AnyType extends DataType<Object> {
     }
 
     @Override
-    public AnyType format(String format) {
-        return (AnyType) super.format(format);
+    public AnyType withFormat(String format) {
+        return (AnyType) super.withFormat(format);
     }
 
     @Override
-    public AnyType features(Map<String, Object> features) {
-        return (AnyType) super.features(features);
+    public AnyType withFeatures(Map<String, Object> features) {
+        return (AnyType) super.withFeatures(features);
     }
 
     @Override
-    public AnyType feature(String name, Object value) {
-        return (AnyType) super.feature(name, value);
+    public AnyType withFeature(String name, Object value) {
+        return (AnyType) super.withFeature(name, value);
     }
 
     @Override
-    public AnyType defaultValue(Object value) {
-        return (AnyType) super.defaultValue(value);
+    public AnyType withDefaultValue(Object value) {
+        return (AnyType) super.withDefaultValue(value);
     }
 
     @Override
-    public AnyType nullable(boolean nullable) {
-        return (AnyType) super.nullable(nullable);
+    public AnyType withNullable(boolean nullable) {
+        return (AnyType) super.withNullable(nullable);
     }
 }

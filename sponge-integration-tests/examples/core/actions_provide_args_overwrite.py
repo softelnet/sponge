@@ -5,7 +5,7 @@ Provide arguments with overwrite
 
 class ProvideArgNoOverwrite(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("value", StringType()).provided(ArgProvidedMeta().value()) ]
+        self.argsMeta = [ ArgMeta("value", StringType()).withProvided(ArgProvidedMeta().withValue()) ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, value):
         return
@@ -15,7 +15,7 @@ class ProvideArgNoOverwrite(Action):
 
 class ProvideArgOverwrite(Action):
     def onConfigure(self):
-        self.argsMeta = [ ArgMeta("value", StringType()).provided(ArgProvidedMeta().value().overwrite()) ]
+        self.argsMeta = [ ArgMeta("value", StringType()).withProvided(ArgProvidedMeta().withValue().withOverwrite()) ]
         self.resultMeta = ResultMeta(VoidType())
     def onCall(self, value):
         return

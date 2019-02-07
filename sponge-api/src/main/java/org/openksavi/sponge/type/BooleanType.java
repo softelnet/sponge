@@ -28,27 +28,27 @@ public class BooleanType extends DataType<Boolean> {
     }
 
     @Override
-    public BooleanType format(String format) {
-        return (BooleanType) super.format(format);
+    public BooleanType withFormat(String format) {
+        return (BooleanType) super.withFormat(format);
     }
 
     @Override
-    public BooleanType features(Map<String, Object> features) {
-        return (BooleanType) super.features(features);
+    public BooleanType withFeatures(Map<String, Object> features) {
+        return (BooleanType) super.withFeatures(features);
     }
 
     @Override
-    public BooleanType feature(String name, Object value) {
-        return (BooleanType) super.feature(name, value);
+    public BooleanType withFeature(String name, Object value) {
+        return (BooleanType) super.withFeature(name, value);
     }
 
     @Override
-    public BooleanType defaultValue(Boolean value) {
-        return (BooleanType) super.defaultValue(value);
+    public BooleanType withDefaultValue(Boolean value) {
+        return (BooleanType) super.withDefaultValue(value);
     }
 
     @Override
-    public BooleanType nullable(boolean nullable) {
-        return (BooleanType) super.nullable(nullable);
+    public BooleanType withNullable(boolean nullable) {
+        return (BooleanType) super.withNullable(nullable);
     }
 }

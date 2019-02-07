@@ -39,28 +39,28 @@ public class ObjectType<T> extends DataType<T> {
     }
 
     @Override
-    public ObjectType<T> format(String format) {
-        return (ObjectType<T>) super.format(format);
+    public ObjectType<T> withFormat(String format) {
+        return (ObjectType<T>) super.withFormat(format);
     }
 
     @Override
-    public ObjectType<T> features(Map<String, Object> features) {
-        return (ObjectType<T>) super.features(features);
+    public ObjectType<T> withFeatures(Map<String, Object> features) {
+        return (ObjectType<T>) super.withFeatures(features);
     }
 
     @Override
-    public ObjectType<T> feature(String name, Object value) {
-        return (ObjectType<T>) super.feature(name, value);
+    public ObjectType<T> withFeature(String name, Object value) {
+        return (ObjectType<T>) super.withFeature(name, value);
     }
 
     @Override
-    public ObjectType<T> defaultValue(T value) {
-        return (ObjectType<T>) super.defaultValue(value);
+    public ObjectType<T> withDefaultValue(T value) {
+        return (ObjectType<T>) super.withDefaultValue(value);
     }
 
     @Override
-    public ObjectType<T> nullable(boolean nullable) {
-        return (ObjectType<T>) super.nullable(nullable);
+    public ObjectType<T> withNullable(boolean nullable) {
+        return (ObjectType<T>) super.withNullable(nullable);
     }
 
     public String getClassName() {

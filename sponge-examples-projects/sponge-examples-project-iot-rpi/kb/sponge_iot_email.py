@@ -11,9 +11,9 @@ class SendNotificationEmail(Action):
         self.label = "Send a notification email"
         self.description = "Sends a notification email."
         self.argsMeta = [
-            ArgMeta("subject", StringType()).label("Subject").description("The email subject."),
-            ArgMeta("message", StringType().features({"maxLines":5})).label(
-                "Message").description("The email message.")
+            ArgMeta("subject", StringType()).withLabel("Subject").withDescription("The email subject."),
+            ArgMeta("message", StringType().withFeatures({"maxLines":5})).withLabel(
+                "Message").withDescription("The email message.")
             # The attachmentFiles attribute won't be visible in the UI.
         ]
         self.resultMeta = ResultMeta(VoidType())

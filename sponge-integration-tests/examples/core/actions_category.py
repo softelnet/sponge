@@ -4,8 +4,8 @@ Action category
 """
 
 def onInit():
-    sponge.addCategories(CategoryMeta("myActions").label("My actions").description("My actions description"),
-                         CategoryMeta("yourActions").label("Your actions").description("Your actions description"),
+    sponge.addCategories(CategoryMeta("myActions").withLabel("My actions").withDescription("My actions description"),
+                         CategoryMeta("yourActions").withLabel("Your actions").withDescription("Your actions description"),
                          CategoryMeta("notUsedCategory"))
 
 class MyAction1(Action):

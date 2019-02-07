@@ -42,28 +42,28 @@ public class AnnotatedType<T> extends DataType<AnnotatedValue<T>> {
     }
 
     @Override
-    public AnnotatedType<T> format(String format) {
-        return (AnnotatedType<T>) super.format(format);
+    public AnnotatedType<T> withFormat(String format) {
+        return (AnnotatedType<T>) super.withFormat(format);
     }
 
     @Override
-    public AnnotatedType<T> features(Map<String, Object> features) {
-        return (AnnotatedType<T>) super.features(features);
+    public AnnotatedType<T> withFeatures(Map<String, Object> features) {
+        return (AnnotatedType<T>) super.withFeatures(features);
     }
 
     @Override
-    public AnnotatedType<T> feature(String name, Object value) {
-        return (AnnotatedType<T>) super.feature(name, value);
+    public AnnotatedType<T> withFeature(String name, Object value) {
+        return (AnnotatedType<T>) super.withFeature(name, value);
     }
 
     @Override
-    public AnnotatedType<T> defaultValue(AnnotatedValue<T> value) {
-        return (AnnotatedType<T>) super.defaultValue(value);
+    public AnnotatedType<T> withDefaultValue(AnnotatedValue<T> value) {
+        return (AnnotatedType<T>) super.withDefaultValue(value);
     }
 
     @Override
-    public AnnotatedType<T> nullable(boolean nullable) {
-        return (AnnotatedType<T>) super.nullable(nullable);
+    public AnnotatedType<T> withNullable(boolean nullable) {
+        return (AnnotatedType<T>) super.withNullable(nullable);
     }
 
     @SuppressWarnings("unchecked")

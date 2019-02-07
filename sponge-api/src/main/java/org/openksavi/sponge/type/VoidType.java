@@ -28,27 +28,27 @@ public class VoidType extends DataType<Void> {
     }
 
     @Override
-    public VoidType format(String format) {
-        return (VoidType) super.format(format);
+    public VoidType withFormat(String format) {
+        return (VoidType) super.withFormat(format);
     }
 
     @Override
-    public VoidType features(Map<String, Object> features) {
-        return (VoidType) super.features(features);
+    public VoidType withFeatures(Map<String, Object> features) {
+        return (VoidType) super.withFeatures(features);
     }
 
     @Override
-    public VoidType feature(String name, Object value) {
-        return (VoidType) super.feature(name, value);
+    public VoidType withFeature(String name, Object value) {
+        return (VoidType) super.withFeature(name, value);
     }
 
     @Override
-    public VoidType defaultValue(Void value) {
-        return (VoidType) super.defaultValue(value);
+    public VoidType withDefaultValue(Void value) {
+        return (VoidType) super.withDefaultValue(value);
     }
 
     @Override
-    public VoidType nullable(boolean nullable) {
-        return (VoidType) super.nullable(nullable);
+    public VoidType withNullable(boolean nullable) {
+        return (VoidType) super.withNullable(nullable);
     }
 }

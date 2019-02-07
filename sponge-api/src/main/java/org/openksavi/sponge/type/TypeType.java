@@ -29,27 +29,27 @@ public class TypeType extends DataType<DataType> {
     }
 
     @Override
-    public TypeType format(String format) {
-        return (TypeType) super.format(format);
+    public TypeType withFormat(String format) {
+        return (TypeType) super.withFormat(format);
     }
 
     @Override
-    public TypeType features(Map<String, Object> features) {
-        return (TypeType) super.features(features);
+    public TypeType withFeatures(Map<String, Object> features) {
+        return (TypeType) super.withFeatures(features);
     }
 
     @Override
-    public TypeType feature(String name, Object value) {
-        return (TypeType) super.feature(name, value);
+    public TypeType withFeature(String name, Object value) {
+        return (TypeType) super.withFeature(name, value);
     }
 
     @Override
-    public TypeType defaultValue(DataType value) {
-        return (TypeType) super.defaultValue(value);
+    public TypeType withDefaultValue(DataType value) {
+        return (TypeType) super.withDefaultValue(value);
     }
 
     @Override
-    public TypeType nullable(boolean nullable) {
-        return (TypeType) super.nullable(nullable);
+    public TypeType withNullable(boolean nullable) {
+        return (TypeType) super.withNullable(nullable);
     }
 }

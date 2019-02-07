@@ -46,28 +46,28 @@ public class MapType<K, V> extends DataType<Map<K, V>> {
     }
 
     @Override
-    public MapType<K, V> format(String format) {
-        return (MapType<K, V>) super.format(format);
+    public MapType<K, V> withFormat(String format) {
+        return (MapType<K, V>) super.withFormat(format);
     }
 
     @Override
-    public MapType<K, V> features(Map<String, Object> features) {
-        return (MapType<K, V>) super.features(features);
+    public MapType<K, V> withFeatures(Map<String, Object> features) {
+        return (MapType<K, V>) super.withFeatures(features);
     }
 
     @Override
-    public MapType<K, V> feature(String name, Object value) {
-        return (MapType<K, V>) super.feature(name, value);
+    public MapType<K, V> withFeature(String name, Object value) {
+        return (MapType<K, V>) super.withFeature(name, value);
     }
 
     @Override
-    public MapType<K, V> defaultValue(Map<K, V> value) {
-        return (MapType<K, V>) super.defaultValue(value);
+    public MapType<K, V> withDefaultValue(Map<K, V> value) {
+        return (MapType<K, V>) super.withDefaultValue(value);
     }
 
     @Override
-    public MapType<K, V> nullable(boolean nullable) {
-        return (MapType<K, V>) super.nullable(nullable);
+    public MapType<K, V> withNullable(boolean nullable) {
+        return (MapType<K, V>) super.withNullable(nullable);
     }
 
     public DataType<K> getKeyType() {
