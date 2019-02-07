@@ -30,5 +30,8 @@ public enum DateTimeKind {
     DATE,
 
     /** Represented by LocalTime. */
-    TIME
+    TIME,
+
+    /** Represented by Instant. */
+    INSTANT
 }

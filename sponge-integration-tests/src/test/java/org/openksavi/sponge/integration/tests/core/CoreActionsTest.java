@@ -27,11 +27,11 @@ import static org.junit.Assert.fail;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -918,13 +918,16 @@ public class CoreActionsTest {
             assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) adapter.getArgsMeta().get(1).getType()).getDateTimeKind());
             assertEquals(DateTimeKind.DATE, ((DateTimeType) adapter.getArgsMeta().get(2).getType()).getDateTimeKind());
             assertEquals(DateTimeKind.TIME, ((DateTimeType) adapter.getArgsMeta().get(3).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.INSTANT, ((DateTimeType) adapter.getArgsMeta().get(4).getType()).getDateTimeKind());
 
             LocalDateTime dateTime = LocalDateTime.now();
             ZonedDateTime dateTimeZone = ZonedDateTime.now();
             LocalDate date = LocalDate.now();
             LocalTime time = LocalTime.now();
+            Instant instant = Instant.now();
 
-            List dates = engine.getOperations().call(List.class, adapter.getName(), Arrays.asList(dateTime, dateTimeZone, date, time));
+            List dates =
+                    engine.getOperations().call(List.class, adapter.getName(), Arrays.asList(dateTime, dateTimeZone, date, time, instant));
             assertTrue(dates.get(0) instanceof LocalDateTime);
             assertEquals(dateTime, dates.get(0));
             assertTrue(dates.get(1) instanceof ZonedDateTime);
@@ -933,8 +936,8 @@ public class CoreActionsTest {
             assertEquals(date, dates.get(2));
             assertTrue(dates.get(3) instanceof LocalTime);
             assertEquals(time, dates.get(3));
-
-            System.out.println(DateTimeFormatter.ISO_OFFSET_DATE_TIME.toFormat());
+            assertTrue(dates.get(4) instanceof Instant);
+            assertEquals(instant, dates.get(4));
 
             assertFalse(engine.isError());
         } finally {

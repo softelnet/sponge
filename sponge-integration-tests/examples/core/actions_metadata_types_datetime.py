@@ -10,7 +10,8 @@ class DateTimeAction(Action):
             ArgMeta("dateTimeZone", DateTimeType().dateTimeZone()),
             ArgMeta("date", DateTimeType().date()),
             ArgMeta("time", DateTimeType().time()),
+            ArgMeta("instant", DateTimeType().instant()),
         ]
         self.resultMeta = ResultMeta(ListType(AnyType()))
-    def onCall(self, dateTime, dateTimeZone, date, time):
-        return [dateTime, dateTimeZone, date, time]
+    def onCall(self, dateTime, dateTimeZone, date, time, instant):
+        return [dateTime, dateTimeZone, date, time, instant]

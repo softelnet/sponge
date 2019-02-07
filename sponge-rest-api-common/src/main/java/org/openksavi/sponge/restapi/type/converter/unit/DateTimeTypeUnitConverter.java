@@ -16,11 +16,13 @@
 
 package org.openksavi.sponge.restapi.type.converter.unit;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
@@ -40,17 +42,12 @@ public class DateTimeTypeUnitConverter<T> extends BaseUnitTypeConverter<Object, 
     @Override
     public Object marshal(TypeConverter converter, DateTimeType type, Object value) {
         switch (type.getDateTimeKind()) {
-        case DATE_TIME:
-            return ((LocalDateTime) value).format(getFormatter(type));
-        case DATE_TIME_ZONE:
-            return ((ZonedDateTime) value).format(getFormatter(type));
-        case DATE:
-            return ((LocalDate) value).format(getFormatter(type));
-        case TIME:
-            return ((LocalTime) value).format(getFormatter(type));
+        case INSTANT:
+            // Formatter not used.
+            return ((Instant) value).toString();
+        default:
+            return getFormatter(type).format((TemporalAccessor) value);
         }
-
-        throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());
     }
 
     @Override
@@ -65,6 +62,9 @@ public class DateTimeTypeUnitConverter<T> extends BaseUnitTypeConverter<Object, 
             return LocalDate.parse(stringValue, getFormatter(type));
         case TIME:
             return LocalTime.parse(stringValue, getFormatter(type));
+        case INSTANT:
+            // Formatter not used.
+            return Instant.parse(stringValue);
         }
 
         throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());
@@ -84,6 +84,8 @@ public class DateTimeTypeUnitConverter<T> extends BaseUnitTypeConverter<Object, 
             return DateTimeFormatter.ISO_DATE;
         case TIME:
             return DateTimeFormatter.ISO_TIME;
+        case INSTANT:
+            return DateTimeFormatter.ISO_INSTANT;
         }
 
         throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());

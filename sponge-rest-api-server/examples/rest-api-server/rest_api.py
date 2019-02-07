@@ -232,11 +232,13 @@ class DateTimeAction(Action):
             ArgMeta("dateTimeZone", DateTimeType().dateTimeZone()),
             ArgMeta("date", DateTimeType().date().format("yyyy-MM-dd")),
             ArgMeta("time", DateTimeType().time().format("HH:mm:ss")),
+            ArgMeta("instant", DateTimeType().instant()),
         ]
         self.resultMeta = ResultMeta(ListType(DynamicType()))
-    def onCall(self, dateTime, dateTimeZone, date, time):
+    def onCall(self, dateTime, dateTimeZone, date, time, instant):
         return [DynamicValue(dateTime, self.argsMeta[0].getType()), DynamicValue(dateTimeZone, self.argsMeta[1].getType()),
-                DynamicValue(date, self.argsMeta[2].getType()), DynamicValue(time, self.argsMeta[3].getType())]
+                DynamicValue(date, self.argsMeta[2].getType()), DynamicValue(time, self.argsMeta[3].getType()),
+                DynamicValue(instant, self.argsMeta[4].getType())]
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

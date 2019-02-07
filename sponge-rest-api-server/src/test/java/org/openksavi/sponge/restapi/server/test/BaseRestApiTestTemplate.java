@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -323,14 +324,17 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) actionMeta.getArgsMeta().get(1).getType()).getDateTimeKind());
             assertEquals(DateTimeKind.DATE, ((DateTimeType) actionMeta.getArgsMeta().get(2).getType()).getDateTimeKind());
             assertEquals(DateTimeKind.TIME, ((DateTimeType) actionMeta.getArgsMeta().get(3).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.INSTANT, ((DateTimeType) actionMeta.getArgsMeta().get(4).getType()).getDateTimeKind());
 
             LocalDateTime dateTime = LocalDateTime.now();
             ZonedDateTime dateTimeZone = ZonedDateTime.now(ZoneId.of("America/Detroit"));
             LocalDate date = LocalDate.parse("2019-02-06");
             LocalTime time =
                     LocalTime.parse("15:15:00", DateTimeFormatter.ofPattern(actionMeta.getArgsMeta().get(3).getType().getFormat()));
+            Instant instant = Instant.now();
 
-            List<DynamicValue> dates = client.call(List.class, actionMeta.getName(), Arrays.asList(dateTime, dateTimeZone, date, time));
+            List<DynamicValue> dates =
+                    client.call(List.class, actionMeta.getName(), Arrays.asList(dateTime, dateTimeZone, date, time, instant));
             assertTrue(dates.get(0).getValue() instanceof LocalDateTime);
             assertEquals(dateTime, dates.get(0).getValue());
             assertTrue(dates.get(1).getValue() instanceof ZonedDateTime);
@@ -340,6 +344,8 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(date, dates.get(2).getValue());
             assertTrue(dates.get(3).getValue() instanceof LocalTime);
             assertEquals(time, dates.get(3).getValue());
+            assertTrue(dates.get(4).getValue() instanceof Instant);
+            assertEquals(instant, dates.get(4).getValue());
 
             assertFalse(engine.isError());
         }

@@ -88,4 +88,9 @@ public class DateTimeType extends DataType<Object> {
         setDateTimeKind(DateTimeKind.TIME);
         return this;
     }
+
+    public DateTimeType instant() {
+        setDateTimeKind(DateTimeKind.INSTANT);
+        return this;
+    }
 }
