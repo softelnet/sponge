@@ -104,6 +104,7 @@ import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.DynamicType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
@@ -133,9 +134,9 @@ public abstract class SpongeUtils {
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
     @SuppressWarnings("rawtypes")
-    private static final List<Class<? extends DataType>> SUPPORTED_TYPES =
-            Arrays.asList(AnnotatedType.class, AnyType.class, BinaryType.class, BooleanType.class, DynamicType.class, IntegerType.class,
-                    ListType.class, MapType.class, NumberType.class, ObjectType.class, StringType.class, TypeType.class, VoidType.class);
+    private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnnotatedType.class, AnyType.class,
+            BinaryType.class, BooleanType.class, DateTimeType.class, DynamicType.class, IntegerType.class, ListType.class, MapType.class,
+            NumberType.class, ObjectType.class, StringType.class, TypeType.class, VoidType.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {

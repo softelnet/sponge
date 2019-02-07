@@ -27,6 +27,11 @@ import static org.junit.Assert.fail;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -57,6 +62,8 @@ import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
+import org.openksavi.sponge.type.DateTimeKind;
+import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
@@ -891,6 +898,43 @@ public class CoreActionsTest {
 
             assertTrue(engine.getOperations().call(DataType.class, adapter.getName(), Arrays.asList("string")) instanceof StringType);
             assertTrue(engine.getOperations().call(DataType.class, adapter.getName(), Arrays.asList("boolean")) instanceof BooleanType);
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void testActionsMetadataDateTimeType() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_datetime.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("DateTimeAction");
+            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) adapter.getArgsMeta().get(0).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) adapter.getArgsMeta().get(1).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE, ((DateTimeType) adapter.getArgsMeta().get(2).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.TIME, ((DateTimeType) adapter.getArgsMeta().get(3).getType()).getDateTimeKind());
+
+            LocalDateTime dateTime = LocalDateTime.now();
+            ZonedDateTime dateTimeZone = ZonedDateTime.now();
+            LocalDate date = LocalDate.now();
+            LocalTime time = LocalTime.now();
+
+            List dates = engine.getOperations().call(List.class, adapter.getName(), Arrays.asList(dateTime, dateTimeZone, date, time));
+            assertTrue(dates.get(0) instanceof LocalDateTime);
+            assertEquals(dateTime, dates.get(0));
+            assertTrue(dates.get(1) instanceof ZonedDateTime);
+            assertEquals(dateTimeZone, dates.get(1));
+            assertTrue(dates.get(2) instanceof LocalDate);
+            assertEquals(date, dates.get(2));
+            assertTrue(dates.get(3) instanceof LocalTime);
+            assertEquals(time, dates.get(3));
+
+            System.out.println(DateTimeFormatter.ISO_OFFSET_DATE_TIME.toFormat());
 
             assertFalse(engine.isError());
         } finally {

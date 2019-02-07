@@ -225,6 +225,19 @@ class TypeResultAction(Action):
         else:
             return None
 
+class DateTimeAction(Action):
+    def onConfigure(self):
+        self.argsMeta = [
+            ArgMeta("dateTime", DateTimeType().dateTime()),
+            ArgMeta("dateTimeZone", DateTimeType().dateTimeZone()),
+            ArgMeta("date", DateTimeType().date().format("yyyy-MM-dd")),
+            ArgMeta("time", DateTimeType().time().format("HH:mm:ss")),
+        ]
+        self.resultMeta = ResultMeta(ListType(DynamicType()))
+    def onCall(self, dateTime, dateTimeZone, date, time):
+        return [DynamicValue(dateTime, self.argsMeta[0].getType()), DynamicValue(dateTimeZone, self.argsMeta[1].getType()),
+                DynamicValue(date, self.argsMeta[2].getType()), DynamicValue(time, self.argsMeta[3].getType())]
+
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.name.startswith("Private") or actionAdapter.name.startswith("RestApi"))

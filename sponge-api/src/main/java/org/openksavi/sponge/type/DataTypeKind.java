@@ -25,6 +25,7 @@ public enum DataTypeKind {
     ANY(AnyType.class),
     BINARY(BinaryType.class),
     BOOLEAN(BooleanType.class),
+    DATE_TIME(DateTimeType.class),
     DYNAMIC(DynamicType.class),
     INTEGER(IntegerType.class),
     LIST(ListType.class),
@@ -42,6 +43,8 @@ public enum DataTypeKind {
     public static final String CODE_BINARY = "BINARY";
 
     public static final String CODE_BOOLEAN = "BOOLEAN";
+
+    public static final String CODE_DATE_TIME = "DATE_TIME";
 
     public static final String CODE_DYNAMIC = "DYNAMIC";
 

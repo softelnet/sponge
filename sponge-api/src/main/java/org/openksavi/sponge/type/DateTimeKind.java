@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.test;
+package org.openksavi.sponge.type;
 
-public final class RestApiTestConstants {
+/**
+ * A date/time type kind.
+ */
+public enum DateTimeKind {
+    /** Represented by LocalDateTime. */
+    DATE_TIME,
 
-    public static final int ADMIN_ACTIONS_COUNT = 19;
+    /** Represented by ZonedDateTime. */
+    DATE_TIME_ZONE,
 
-    public static final int ANONYMOUS_ACTIONS_COUNT = ADMIN_ACTIONS_COUNT - 1;
+    /** Represented by LocalDate. */
+    DATE,
 
-    public static final int ANONYMOUS_ACTIONS_WITH_METADATA_COUNT = ANONYMOUS_ACTIONS_COUNT - 1;
-
-    private RestApiTestConstants() {
-        //
-    }
+    /** Represented by LocalTime. */
+    TIME
 }

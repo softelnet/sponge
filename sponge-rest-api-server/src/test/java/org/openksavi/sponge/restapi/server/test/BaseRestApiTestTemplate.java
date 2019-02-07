@@ -26,6 +26,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -54,6 +60,8 @@ import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
+import org.openksavi.sponge.type.DateTimeKind;
+import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
@@ -301,6 +309,37 @@ public abstract class BaseRestApiTestTemplate {
 
             assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string")) instanceof StringType);
             assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("boolean")) instanceof BooleanType);
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Test
+    public void testCallDateTimeType() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("DateTimeAction");
+            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) actionMeta.getArgsMeta().get(0).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) actionMeta.getArgsMeta().get(1).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE, ((DateTimeType) actionMeta.getArgsMeta().get(2).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.TIME, ((DateTimeType) actionMeta.getArgsMeta().get(3).getType()).getDateTimeKind());
+
+            LocalDateTime dateTime = LocalDateTime.now();
+            ZonedDateTime dateTimeZone = ZonedDateTime.now(ZoneId.of("America/Detroit"));
+            LocalDate date = LocalDate.parse("2019-02-06");
+            LocalTime time =
+                    LocalTime.parse("15:15:00", DateTimeFormatter.ofPattern(actionMeta.getArgsMeta().get(3).getType().getFormat()));
+
+            List<DynamicValue> dates = client.call(List.class, actionMeta.getName(), Arrays.asList(dateTime, dateTimeZone, date, time));
+            assertTrue(dates.get(0).getValue() instanceof LocalDateTime);
+            assertEquals(dateTime, dates.get(0).getValue());
+            assertTrue(dates.get(1).getValue() instanceof ZonedDateTime);
+            assertEquals(dateTimeZone.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                    ((ZonedDateTime) dates.get(1).getValue()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            assertTrue(dates.get(2).getValue() instanceof LocalDate);
+            assertEquals(date, dates.get(2).getValue());
+            assertTrue(dates.get(3).getValue() instanceof LocalTime);
+            assertEquals(time, dates.get(3).getValue());
 
             assertFalse(engine.isError());
         }

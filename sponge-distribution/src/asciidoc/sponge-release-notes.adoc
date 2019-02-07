@@ -9,7 +9,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.7.1 (not released yet)
 
 * Added support for categories. Processors may be assigned to registered categories.
-* Added new types: `DynamicType`, `TypeType`.
+* Added new types: `DynamicType`, `TypeType`, `DateTimeType`.
 * Fixed the bug that caused an error when sending an empty body in the REST API request.
 
 [discrete]
