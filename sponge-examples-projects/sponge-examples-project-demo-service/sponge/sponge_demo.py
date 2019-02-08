@@ -5,6 +5,7 @@ Demo
 
 from java.lang import String
 from org.openksavi.sponge.util.process import ProcessConfiguration
+from java.time.format import DateTimeFormatter
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -202,3 +203,13 @@ class DependingArgumentsAction(Action):
             provided["river"] = ArgProvidedValue().withValueSet(rivers)
         if "weather" in names:
             provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+
+class DateTimeAction(Action):
+    def onConfigure(self):
+        self.label = "Action with a date/time argument"
+        self.argsMeta = [
+            ArgMeta("dateTime", DateTimeType().withDateTime().withFormat("yyyy-MM-dd HH:mm")).withLabel("Date and time"),
+        ]
+        self.resultMeta = ResultMeta(StringType()).withLabel("Formatted text")
+    def onCall(self, dateTime):
+        return dateTime.format(DateTimeFormatter.ofPattern(self.argsMeta[0].type.format))
