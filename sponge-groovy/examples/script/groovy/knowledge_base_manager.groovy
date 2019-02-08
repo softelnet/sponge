@@ -15,7 +15,7 @@ void onInit() {
 
 class VerifyTrigger extends Trigger {
     void onConfigure() {
-        this.event = "verify"
+        this.withEvent("verify")
     }
     void onRun(Event event) {
         verifyManager()
@@ -35,7 +35,7 @@ class VerifyTrigger extends Trigger {
 
 class TriggerA extends Trigger {
     void onConfigure() {
-        this.event = "a"
+        this.withEvent("a")
     }
     void onRun(Event event) {
         //

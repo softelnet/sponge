@@ -13,8 +13,7 @@ function onInit() {
 
 var RuleFFF = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["e1", "e2", "e3 :first"];
-        self.synchronous = true;
+        self.withEvents(["e1", "e2", "e3 :first"]).withSynchronous(true);
     },
     onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);
@@ -24,9 +23,7 @@ var RuleFFF = Java.extend(Rule, {
 
 var RuleFFL = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["e1", "e2", "e3 :last"];
-        self.duration = Duration.ofSeconds(2);
-        self.synchronous = false;
+        self.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofSeconds(2)).withSynchronous(false);
     },
     onRun: function(self, event) {
         self.logger.debug("Running rule for event: {}", event.name);

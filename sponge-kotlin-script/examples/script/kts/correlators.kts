@@ -18,8 +18,7 @@ class SampleCorrelator : Correlator() {
     var eventLog = mutableListOf<Event>()
 
     override fun onConfigure() {
-        setEvents("filesystemFailure", "diskFailure")
-        maxInstances = 1
+        withEvents("filesystemFailure", "diskFailure").withMaxInstances(1)
     }
 
     override fun onAcceptAsFirst(event: Event) = event.name == "filesystemFailure"

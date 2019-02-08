@@ -176,7 +176,7 @@ The following table contains a summary of the REST API operations. For a complet
 
 |Reload knowledge bases
 |`reload`
-|Reloads all knowledge bases. This operation may not be published. It should be available only to administrators.
+|Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
 |===
 
 == JSON/Java mapping

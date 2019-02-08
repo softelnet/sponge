@@ -12,15 +12,13 @@ def onInit():
 
 class SetActuator(Action):
     def onConfigure(self):
-        self.label = "Set actuator"
-        self.description = "Sets the actuator state."
-        self.argsMeta = [
+        self.withLabel("Set actuator").withDescription("Sets the actuator state.")
+        self.withArgs([
             ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
             ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
             ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state")
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, actuator1, actuator2, actuator3, actuator4):
         sponge.setVariable("actuator1", actuator1)
         sponge.setVariable("actuator2", actuator2)
@@ -36,12 +34,10 @@ class SetActuator(Action):
 
 class SetActuatorAnnotatedValueSet(Action):
     def onConfigure(self):
-        self.label = "Set actuator type"
-        self.description = "Sets the actuator type."
-        self.argsMeta = [
-            ArgMeta("actuatorType", StringType()).withLabel("Actuator type").withProvided(ArgProvidedMeta().withValue().withValueSet()),
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        self.withLabel("Set actuator type").withDescription("Sets the actuator type.")
+        self.withArg(
+            ArgMeta("actuatorType", StringType()).withLabel("Actuator type").withProvided(ArgProvidedMeta().withValue().withValueSet())
+        ).withNoResult()
     def onCall(self, actuatorType):
         sponge.setVariable("actuatorType", actuatorType)
     def onProvideArgs(self, names, current, provided):

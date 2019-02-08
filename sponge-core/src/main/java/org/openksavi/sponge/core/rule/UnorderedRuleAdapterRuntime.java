@@ -47,8 +47,8 @@ public class UnorderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
     private List<String> createNoneModeEventAliases() {
         List<String> result = new ArrayList<>();
         for (int i = 0; i < adapter.getEventCount(); i++) {
-            if (getDefinition().getEventSpec(i).getMode() == EventMode.NONE) {
-                result.add(getDefinition().getEventSpec(i).getAlias());
+            if (getMeta().getEventSpec(i).getMode() == EventMode.NONE) {
+                result.add(getMeta().getEventSpec(i).getAlias());
             }
         }
 
@@ -71,7 +71,7 @@ public class UnorderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
 
     @Override
     protected int getExpectedEventIndex(TreeNode<NodeValue> node, Event event) {
-        List<String> eventNames = adapter.getDefinition().getEventNames();
+        List<String> eventNames = getMeta().getEventNames();
         Set<Integer> happenedEventIndexes = getPreviousHappenedEventIndexes(node);
 
         for (int i = 0; i < eventNames.size(); i++) {
@@ -130,7 +130,7 @@ public class UnorderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
             TreeNode<NodeValue> child = treeNodeIterator.next();
 
             int index = getEventIndex(child);
-            EventMode eventMode = getDefinition().getEventSpec(index).getMode();
+            EventMode eventMode = getMeta().getEventSpec(index).getMode();
             switch (eventMode) {
             case FIRST:
                 if (!mapFirst.containsKey(index)) {
@@ -212,12 +212,12 @@ public class UnorderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
             }
         }
 
-        return getDefinition().getEventSpec(getEventIndex(node)).getMode();
+        return getMeta().getEventSpec(getEventIndex(node)).getMode();
     }
 
     @Override
     protected boolean isLeafLevel(TreeNode<NodeValue> node) {
-        if (adapter.hasDuration() && !adapter.isDurationTriggered()) {
+        if (getMeta().hasDuration() && !adapter.isDurationTriggered()) {
             return node.getLevel() == adapter.getEventCount() - 1;
         } else {
             return node.getLevel() == adapter.getEventCount() - 1 - noneModeEventAliases.size();
@@ -228,8 +228,8 @@ public class UnorderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
     protected void prepareEventAliasMap(TreeNode<NodeValue> node) {
         eventAliasMap.clear();
 
-        eventTree.getPath(node).forEach(
-                n -> eventAliasMap.put(adapter.getDefinition().getEventSpec(getEventIndex(n)).getAlias(), n.getValue().getEvent()));
+        eventTree.getPath(node)
+                .forEach(n -> eventAliasMap.put(getMeta().getEventSpec(getEventIndex(n)).getAlias(), n.getValue().getEvent()));
 
         // For event with NONE mode put null.
         noneModeEventAliases.forEach(alias -> eventAliasMap.put(alias, null));

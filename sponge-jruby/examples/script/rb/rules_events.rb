@@ -15,7 +15,7 @@ end
 
 class RuleF < Rule
     def onConfigure
-        self.events = ["e1"]
+        self.withEvent("e1")
     end
     def onRun(event)
         $correlationEventsLog.addEvents("RuleF", self)
@@ -25,7 +25,7 @@ end
 # F(irst)F(irst)F(irst)
 class RuleFFF < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e3 :first"]
+        self.withEvents(["e1", "e2", "e3 :first"])
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
@@ -35,8 +35,7 @@ end
 
 class RuleFFFDuration < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e3 :first"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2", "e3 :first"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
@@ -47,8 +46,7 @@ end
 # F(irst)F(irst)L(ast)
 class RuleFFL < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e3 :last"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
@@ -59,8 +57,7 @@ end
 # F(irst)F(irst)A(ll)
 class RuleFFA < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e3 :all"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2", "e3 :all"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -71,8 +68,7 @@ end
 # F(irst)F(irst)N(one)
 class RuleFFN < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e4 :none"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2", "e4 :none"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)
@@ -83,8 +79,7 @@ end
 # F(irst)L(ast)F(irst)
 class RuleFLF < Rule
     def onConfigure
-        self.events = ["e1", "e2 :last", "e3 :first"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e3 :first"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -96,8 +91,7 @@ end
 # F(irst)L(ast)L(ast)
 class RuleFLL < Rule
     def onConfigure
-        self.events = ["e1", "e2 :last", "e3 :last"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e3 :last"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -108,8 +102,7 @@ end
 # F(irst)L(ast)A(ll)
 class RuleFLA < Rule
     def onConfigure
-        self.events = ["e1", "e2 :last", "e3 :all"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e3 :all"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -120,8 +113,7 @@ end
 # F(irst)L(ast)N(one)
 class RuleFLN < Rule
     def onConfigure
-        self.events = ["e1", "e2 :last", "e4 :none"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e4 :none"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)
@@ -132,8 +124,7 @@ end
 # F(irst)A(ll)F(irst)
 class RuleFAF < Rule
     def onConfigure
-        self.events = ["e1", "e2 :all", "e3 :first"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e3 :first"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -144,8 +135,7 @@ end
 # F(irst)A(ll)L(ast)
 class RuleFAL < Rule
     def onConfigure
-        self.events = ["e1", "e2 :all", "e3 :last"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e3 :last"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -156,8 +146,7 @@ end
 # F(irst)A(ll)A(ll)
 class RuleFAA < Rule
     def onConfigure
-        self.events = ["e1", "e2 :all", "e3 :all"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e3 :all"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, self.eventSequence)
@@ -168,8 +157,7 @@ end
 # F(irst)A(ll)N(one)
 class RuleFAN < Rule
     def onConfigure
-        self.events = ["e1", "e2 :all", "e5 :none"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e5 :none"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)
@@ -180,7 +168,7 @@ end
 # F(irst)N(one)F(irst)
 class RuleFNF < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e3"]
+        self.withEvents(["e1", "e5 :none", "e3"])
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)
@@ -191,8 +179,7 @@ end
 # F(irst)N(one)L(ast)
 class RuleFNL < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e3 :last"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e5 :none", "e3 :last"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)
@@ -203,8 +190,7 @@ end
 # F(irst)N(one)A(ll)
 class RuleFNA < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e3 :all"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e5 :none", "e3 :all"]).withDuration( Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)
@@ -214,8 +200,7 @@ end
 
 class RuleFNFReject < Rule
     def onConfigure
-        self.events = ["e1", "e2 :none", "e3"]
-        self.duration = Duration.ofMillis($defaultDuration)
+        self.withEvents(["e1", "e2 :none", "e3"]).withDuration(Duration.ofMillis($defaultDuration))
     end
     def onRun(event)
         self.logger.debug("Running rule for sequence: {}", self.eventSequence)

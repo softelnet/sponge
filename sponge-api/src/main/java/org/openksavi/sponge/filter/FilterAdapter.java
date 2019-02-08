@@ -21,6 +21,6 @@ import org.openksavi.sponge.EventProcessorAdapter;
 /**
  * Filer adapter.
  */
-public interface FilterAdapter extends EventProcessorAdapter<Filter> {
+public interface FilterAdapter extends EventProcessorAdapter<Filter>, FilterOperations {
 
 }

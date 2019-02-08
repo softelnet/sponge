@@ -16,12 +16,8 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.Validate;
-
 import org.openksavi.sponge.ProcessorDefinition;
+import org.openksavi.sponge.ProcessorMeta;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -30,15 +26,6 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  * Processor definition.
  */
 public abstract class BaseProcessorDefinition implements ProcessorDefinition {
-
-    /** Name. */
-    private String name;
-
-    /** Label. */
-    private String label;
-
-    /** Description. */
-    private String description;
 
     /** Is this processor defined in Java (not in the scripting knowledge base). */
     private boolean javaDefined = false;
@@ -49,50 +36,26 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
     /** Knowledge base reference. */
     private KnowledgeBase knowledgeBase;
 
-    private Integer version;
+    /** The processor metadata. */
+    private ProcessorMeta meta;
 
-    /** The processor features. */
-    private Map<String, Object> features;
-
-    /** The processor category name. */
-    private String category;
-
-    /**
-     * Creates a new processor definition.
-     *
-     */
-    public BaseProcessorDefinition() {
-        setFeatures(new LinkedHashMap<>());
+    protected BaseProcessorDefinition(ProcessorMeta meta) {
+        this.meta = meta;
     }
 
-    /**
-     * Returns this processor definition name.
-     *
-     * @return name.
-     */
     @Override
-    public String getName() {
-        return name;
+    public ProcessorMeta getMeta() {
+        return meta;
     }
 
     /**
-     * Sets this processor definition name.
+     * Returns the string representation.
      *
-     * @param name processor definition name.
-     */
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns string representation.
-     *
-     * @return string representation.
+     * @return the string representation.
      */
     @Override
     public String toString() {
-        return label != null ? label : name;
+        return getMeta().getLabel() != null ? getMeta().getLabel() : getMeta().getName();
     }
 
     /**
@@ -105,28 +68,8 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            throw SpongeUtils.wrapException(name, e);
+            throw SpongeUtils.wrapException(getMeta().getName(), e);
         }
-    }
-
-    @Override
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /**
@@ -172,37 +115,5 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
 
     public void setKnowledgeBase(BaseKnowledgeBase knowledgeBase) {
         this.knowledgeBase = knowledgeBase;
-    }
-
-    @Override
-    public Integer getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    @Override
-    public Map<String, Object> getFeatures() {
-        return features;
-    }
-
-    @Override
-    public void setFeatures(Map<String, Object> features) {
-        Validate.notNull(features, "The processor features cannot be null");
-
-        this.features = SpongeUtils.createUnmodifiableMap(features);
-    }
-
-    @Override
-    public String getCategory() {
-        return category;
-    }
-
-    @Override
-    public void setCategory(String category) {
-        this.category = category;
     }
 }

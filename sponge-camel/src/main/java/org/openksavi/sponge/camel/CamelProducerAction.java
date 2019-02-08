@@ -29,7 +29,7 @@ public class CamelProducerAction extends JAction {
 
     @Override
     public void onConfigure() {
-        setName(NAME);
+        withName(NAME);
     }
 
     public Object onCall(Exchange exchange) {

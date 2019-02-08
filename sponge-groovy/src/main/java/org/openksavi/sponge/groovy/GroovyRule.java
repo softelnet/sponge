@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.groovy;
 
+import java.util.List;
 import java.util.function.Function;
 
 import groovy.lang.Closure;
@@ -41,17 +42,19 @@ public abstract class GroovyRule extends BaseRule {
         }
     };
 
-    @SuppressWarnings("unchecked")
-    public void addConditions(String eventAlias, Closure<Boolean>... closures) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, closures));
+    public GroovyRule withConditions(String eventAlias, List<Closure<Boolean>> closures) {
+        return (GroovyRule) super.withEventCondition(eventAlias, CompositeEventCondition.create(MAPPER, closures));
     }
 
-    @SuppressWarnings("unchecked")
-    public void addAllConditions(Closure<Boolean>... closures) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, closures));
+    public final GroovyRule withCondition(String eventAlias, Closure<Boolean> closure) {
+        return (GroovyRule) super.withEventCondition(eventAlias, MAPPER.apply(closure));
     }
 
-    public void addCondition(String eventAlias, Closure<Boolean> closure) {
-        addEventCondition(eventAlias, MAPPER.apply(closure));
+    public GroovyRule withAllConditions(List<Closure<Boolean>> closures) {
+        return (GroovyRule) super.withAllEventCondition(CompositeEventCondition.create(MAPPER, closures));
+    }
+
+    public final GroovyRule withAllCondition(Closure<Boolean> closure) {
+        return (GroovyRule) super.withAllEventCondition(MAPPER.apply(closure));
     }
 }

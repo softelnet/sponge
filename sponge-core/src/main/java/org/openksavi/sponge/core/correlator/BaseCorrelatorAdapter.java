@@ -47,6 +47,11 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
     }
 
     @Override
+    public BaseCorrelatorMeta getMeta() {
+        return (BaseCorrelatorMeta) super.getMeta();
+    }
+
+    @Override
     protected void onDuration() {
         getProcessor().onDuration();
     }
@@ -64,7 +69,7 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
 
     @Override
     protected void onEvent(Event event) {
-        boolean instanceSynchronous = isInstanceSynchronous();
+        boolean instanceSynchronous = getMeta().isInstanceSynchronous();
 
         if (instanceSynchronous) {
             lock.lock();
@@ -76,26 +81,6 @@ public class BaseCorrelatorAdapter extends BaseEventSetProcessorAdapter<Correlat
                 lock.unlock();
             }
         }
-    }
-
-    @Override
-    public void setMaxInstances(int maxInstances) {
-        getDefinition().setMaxInstances(maxInstances);
-    }
-
-    @Override
-    public int getMaxInstances() {
-        return getDefinition().getMaxInstances();
-    }
-
-    @Override
-    public boolean isInstanceSynchronous() {
-        return getDefinition().isInstanceSynchronous();
-    }
-
-    @Override
-    public void setInstanceSynchronous(boolean instanceSynchronous) {
-        getDefinition().setInstanceSynchronous(instanceSynchronous);
     }
 
     @Override

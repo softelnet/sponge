@@ -84,11 +84,11 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
     public void addDuration(T adapter) {
         lock.lock();
         try {
-            if (adapter.hasDuration()) {
+            if (adapter.getMeta().hasDuration()) {
                 EventSetProcessorDurationTask<T> task = new EventSetProcessorDurationTask<>(adapter);
                 durationTasks.put(adapter, task);
                 ScheduledFuture<?> future = ((ScheduledExecutorService) durationThreadPool.getExecutor()).schedule(task,
-                        adapter.getDuration().toMillis(), TimeUnit.MILLISECONDS);
+                        adapter.getMeta().getDuration().toMillis(), TimeUnit.MILLISECONDS);
                 task.setFuture(future);
             }
         } finally {
@@ -100,7 +100,7 @@ public abstract class BaseEventSetProcessorMainProcessingUnitHandler<G extends E
     public void removeDuration(T adapter) {
         lock.lock();
         try {
-            if (adapter.hasDuration()) {
+            if (adapter.getMeta().hasDuration()) {
                 EventSetProcessorDurationTask<T> task = durationTasks.get(adapter);
                 if (task != null) {
                     task.getFuture().cancel(true);

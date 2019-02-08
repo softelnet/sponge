@@ -16,7 +16,9 @@ fun onInit() {
 }
 
 class ColorFilter : Filter() {
-    override fun onConfigure() = setEvent("e1")
+    override fun onConfigure() {
+        withEvent("e1")
+    }
     override fun onAccept(event: Event): Boolean {
         logger.debug("Received event {}", event)
         val color: String? = event.get("color", null)
@@ -31,7 +33,9 @@ class ColorFilter : Filter() {
 }
 
 class ColorTrigger : Trigger() {
-    override fun onConfigure() = setEvent("e1")
+    override fun onConfigure() {
+        withEvent("e1")
+    }
     override fun onRun(event: Event) {
         logger.debug("Received event {}", event)
         sponge.getVariable<Map<String, AtomicInteger>>("eventCounter").get(event.get<String>("color"))!!.incrementAndGet()

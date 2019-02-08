@@ -5,23 +5,21 @@
 
 var Trigger1 = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.label = "Trigger1, file2";
-        self.event = "e1";
+        self.withLabel("Trigger1, file2").withEvent("e1");
     },
     onRun: function(self, event) {
         //self.logger.debug("file2: Received event {}", event);
-        sponge.getVariable("eventCounter").get(self.label).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.meta.label).incrementAndGet();
     }
 });
 
 var Trigger2 = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.label = "Trigger2, file2";
-        self.event = "e2";
+        self.withLabel("Trigger2, file2").withEvent("e2");
     },
     onRun: function(self, event) {
         //self.logger.debug("file2: Received event {}", event);
-        sponge.getVariable("eventCounter").get(self.label).incrementAndGet();
+        sponge.getVariable("eventCounter").get(self.meta.label).incrementAndGet();
     }
 });
 

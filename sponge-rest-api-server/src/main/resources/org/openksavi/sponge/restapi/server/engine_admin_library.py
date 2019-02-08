@@ -5,10 +5,7 @@ Engine - administration library.
 
 class EngineReload(Action):
     def onConfigure(self):
-        self.label = "Reload Sponge knowledge bases"
-        self.description = "Reloads Sponge knowledge bases."
-        self.features = {"confirmation":True}
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(VoidType())
+        self.withLabel("Reload Sponge knowledge bases").withDescription("Reloads Sponge knowledge bases.").withFeatures({"confirmation":True})
+        self.withNoArgs().withNoResult()
     def onCall(self):
         sponge.reload()

@@ -15,10 +15,9 @@ class ActionsHelloWorld : KKnowledgeBase() {
 
     class HelloWorldAction : KAction() {
         override fun onConfigure() {
-            label = "Hello world"
-            description = "Returns a greeting text."
-            argsMeta = listOf(ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name."))
-            resultMeta = ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text.")
+            withLabel("Hello world").withDescription("Returns a greeting text.")
+            withArg(ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name."))
+            withResult(ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text."))
         }
 
         fun onCall(name: String): String {

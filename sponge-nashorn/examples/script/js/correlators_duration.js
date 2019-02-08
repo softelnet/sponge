@@ -13,8 +13,7 @@ function onInit() {
 
 var SampleCorrelator = Java.extend(Correlator, {
     onConfigure: function(self) {
-        self.events = ["filesystemFailure", "diskFailure"];
-        self.duration = Duration.ofSeconds(2);
+        self.withEvents(["filesystemFailure", "diskFailure"]).withDuration(Duration.ofSeconds(2));
         sponge.setVariableIfNone("SampleCorrelator_instanceStarted", function() { return new AtomicBoolean(false)});
     },
     onAcceptAsFirst: function(self, event) {

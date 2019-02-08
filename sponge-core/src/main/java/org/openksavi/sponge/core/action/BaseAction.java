@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +28,7 @@ import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessor;
+import org.openksavi.sponge.type.VoidType;
 
 public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements Action {
 
@@ -35,32 +38,74 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     @Override
+    public BaseActionMeta getMeta() {
+        return (BaseActionMeta) super.getMeta();
+    }
+
+    @Override
     public final ActionAdapter createAdapter() {
         return new BaseActionAdapter(new BaseActionDefinition());
     }
 
     @Override
-    public List<ArgMeta<?>> getArgsMeta() {
-        return getAdapter().getArgsMeta();
-    }
-
-    @Override
-    public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
-        getAdapter().setArgsMeta(argsMeta);
-    }
-
-    @Override
-    public ResultMeta<?> getResultMeta() {
-        return getAdapter().getResultMeta();
-    }
-
-    @Override
-    public void setResultMeta(ResultMeta<?> resultMeta) {
-        getAdapter().setResultMeta(resultMeta);
-    }
-
-    @Override
     public void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgProvidedValue<?>> provided) {
         // The default implementation doesn't modify the provided map.
+    }
+
+    @Override
+    public BaseAction withName(String name) {
+        return (BaseAction) super.withName(name);
+    }
+
+    @Override
+    public BaseAction withLabel(String label) {
+        return (BaseAction) super.withLabel(label);
+    }
+
+    @Override
+    public BaseAction withDescription(String description) {
+        return (BaseAction) super.withDescription(description);
+    }
+
+    @Override
+    public BaseAction withVersion(Integer version) {
+        return (BaseAction) super.withVersion(version);
+    }
+
+    @Override
+    public BaseAction withFeatures(Map<String, Object> features) {
+        return (BaseAction) super.withFeatures(features);
+    }
+
+    @Override
+    public BaseAction withFeature(String name, Object value) {
+        return (BaseAction) super.withFeature(name, value);
+    }
+
+    @Override
+    public BaseAction withCategory(String category) {
+        return (BaseAction) super.withCategory(category);
+    }
+
+    public BaseAction withArgs(List<ArgMeta<?>> argsMeta) {
+        getMeta().setArgsMeta(argsMeta);
+        return this;
+    }
+
+    public BaseAction withArg(ArgMeta<?> argMeta) {
+        return withArgs(Arrays.asList(argMeta));
+    }
+
+    public BaseAction withNoArgs() {
+        return withArgs(Collections.emptyList());
+    }
+
+    public BaseAction withResult(ResultMeta<?> resultMeta) {
+        getMeta().setResultMeta(resultMeta);
+        return this;
+    }
+
+    public BaseAction withNoResult() {
+        return withResult(new ResultMeta<>(new VoidType()));
     }
 }

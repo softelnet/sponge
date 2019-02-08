@@ -26,8 +26,7 @@ class CorrelatorsDuration : KKnowledgeBase() {
         }
 
         override fun onConfigure() {
-            setEvents("filesystemFailure", "diskFailure")
-            duration = Duration.ofSeconds(2)
+            withEvents("filesystemFailure", "diskFailure").withDuration(Duration.ofSeconds(2))
         }
 
         override fun onAcceptAsFirst(event: Event) = SampleCorrelator.instanceStarted.compareAndSet(false, true)

@@ -75,6 +75,11 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
         return (BaseEventSetProcessorDefinition) super.getDefinition();
     }
 
+    @Override
+    public BaseEventSetProcessorMeta getMeta() {
+        return getDefinition().getMeta();
+    }
+
     /**
      * Returns all event set processor adapters that belong to this group.
      *
@@ -94,7 +99,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
      */
     @SuppressWarnings("unchecked")
     protected void tryAddNewEventSetProcessor(Event event) {
-        String name = getDefinition().getName();
+        String name = getMeta().getName();
         try {
             // Check (on the template adapter) if the event could be a candidate as the first event to create a new instance of the event
             // set processor.
@@ -122,7 +127,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
 
             adapter.setState(EventSetProcessorState.RUNNING);
 
-            logger.debug("{} - New instance, hash: {}, event: {}", adapter.getName(), adapter.hashCode(), event);
+            logger.debug("{} - New instance, hash: {}, event: {}", getMeta().getName(), adapter.hashCode(), event);
         } catch (Exception e) {
             throw SpongeUtils.wrapException(name, e);
         }
@@ -221,7 +226,7 @@ public abstract class BaseEventSetProcessorAdapterGroup<T extends EventSetProces
     private void logEventTree(String label) {
         if (logger.isDebugEnabled()) {
             if (this instanceof BaseRuleAdapterGroup) {
-                eventSetProcessorAdapters.forEach(adapter -> logger.debug("({}/{}): Event tree " + label + ": {}", adapter.getName(),
+                eventSetProcessorAdapters.forEach(adapter -> logger.debug("({}/{}): Event tree " + label + ": {}", getMeta().getName(),
                         adapter.hashCode(), ((BaseRuleAdapter) adapter).getEventTree()));
             }
         }

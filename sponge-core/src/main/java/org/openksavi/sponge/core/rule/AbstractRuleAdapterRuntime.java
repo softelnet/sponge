@@ -57,6 +57,10 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
         return adapter.getDefinition();
     }
 
+    protected BaseRuleMeta getMeta() {
+        return adapter.getMeta();
+    }
+
     /**
      * Checks conditions for the given node (containing level and event).
      *
@@ -64,7 +68,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
      * @return {@code true} if all conditions are met.
      */
     protected boolean checkConditions(TreeNode<NodeValue> node) {
-        List<EventCondition> conditions = adapter.getEventConditions(getDefinition().getEventSpec(getEventIndex(node)).getAlias());
+        List<EventCondition> conditions = getMeta().getEventConditions(getMeta().getEventSpec(getEventIndex(node)).getAlias());
         if (conditions == null) {
             return true;
         }
@@ -157,7 +161,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
             // Recursively try to continue building the event tree, but only for modes FIRST, LAST and ALL.
             node.getChildren().forEach(child -> {
                 // NONE events are processed in shouldAddToEventTreeForNMode(), not here.
-                if (getDefinition().getEventSpec(getEventIndex(child)).getMode() != EventMode.NONE) {
+                if (getMeta().getEventSpec(getEventIndex(child)).getMode() != EventMode.NONE) {
                     buildEventTree(child, event);
                 }
             });
@@ -209,7 +213,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
      * @return event mode.
      */
     protected EventMode getEventMode(TreeNode<NodeValue> node) {
-        return getDefinition().getEventSpec(getEventIndex(node)).getMode();
+        return getMeta().getEventSpec(getEventIndex(node)).getMode();
     }
 
     /**
@@ -238,13 +242,13 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
             prepareEventAliasMap(node);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Running {}. Event tree: {}", adapter.getName(), eventTree);
+                logger.debug("Running {}. Event tree: {}", getMeta().getName(), eventTree);
             }
 
             // Running the rule for the calculated event sequence (there may be many such sequences for ALL mode).
             adapter.getProcessor().onRun(node.getValue().getEvent());
 
-            EventMode eventMode = getDefinition().getEventSpec(getEventIndex(node)).getMode();
+            EventMode eventMode = getMeta().getEventSpec(getEventIndex(node)).getMode();
             switch (eventMode) {
             case FIRST:
                 return true;
@@ -303,7 +307,7 @@ public abstract class AbstractRuleAdapterRuntime implements RuleAdapterRuntime {
         eventAliasMap.clear();
 
         eventTree.getPath(node)
-                .forEach(n -> eventAliasMap.put(getDefinition().getEventSpec(getEventIndex(n)).getAlias(), n.getValue().getEvent()));
+                .forEach(n -> eventAliasMap.put(getMeta().getEventSpec(getEventIndex(n)).getAlias(), n.getValue().getEvent()));
     }
 
     /**

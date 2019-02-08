@@ -13,7 +13,7 @@ class TriggersHelloWorld : KKnowledgeBase() {
 
     class HelloWorld : KTrigger() {
         override fun onConfigure() {
-            setEvent("helloEvent")
+            withEvent("helloEvent")
         }
 
         override fun onRun(event: Event) {

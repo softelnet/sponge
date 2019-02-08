@@ -16,8 +16,7 @@ void onInit() {
 class FirstRule extends Rule {
     void onConfigure() {
         // Events specified without aliases
-        this.events = ["filesystemFailure", "diskFailure"]
-        this.addConditions("diskFailure", { rule, event ->
+        this.withEvents(["filesystemFailure", "diskFailure"]).withCondition("diskFailure", { rule, event ->
                 return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     }
@@ -30,10 +29,10 @@ class FirstRule extends Rule {
 class SameSourceAllRule extends Rule {
     void onConfigure() {
         // Events specified with aliases (e1 and e2)
-        this.events = ["filesystemFailure e1", "diskFailure e2 :all"]
-        this.addConditions("e1", this.&severityCondition)
-        this.addConditions("e2", this.&severityCondition, this.&diskFailureSourceCondition)
-        this.duration = Duration.ofSeconds(8)
+        this.withEvents(["filesystemFailure e1", "diskFailure e2 :all"])
+            .withCondition("e1", this.&severityCondition)
+            .withConditions("e2", [this.&severityCondition, this.&diskFailureSourceCondition])
+            .withDuration(Duration.ofSeconds(8))
     }
     void onRun(Event event) {
         this.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),

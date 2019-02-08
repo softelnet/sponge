@@ -169,11 +169,11 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
                     // Non-singletons (in this case rule group adapters and correlator group adapters) are blocked while processing
                     // the previous event.
                     // Note that only the earliest event going to the given adapter should be considered.
-                    if (!currentlyProcessedNonSingletons.contains(adapter.getName())
-                            && !nonSingletonsWaitningForEarlierEvent.contains(adapter.getName())) {
+                    if (!currentlyProcessedNonSingletons.contains(adapter.getMeta().getName())
+                            && !nonSingletonsWaitningForEarlierEvent.contains(adapter.getMeta().getName())) {
                         // If necessary verify also event name readiness.
                         if (allowConcurrentEventTypeProcessing || !currentlyProcessedEventNames.contains(event.getName())) {
-                            currentlyProcessedNonSingletons.add(adapter.getName());
+                            currentlyProcessedNonSingletons.add(adapter.getMeta().getName());
                             currentlyProcessedEventNames.add(event.getName());
                             iterator.remove();
 
@@ -181,7 +181,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
                         }
                     }
 
-                    nonSingletonsWaitningForEarlierEvent.add(adapter.getName());
+                    nonSingletonsWaitningForEarlierEvent.add(adapter.getMeta().getName());
                 }
             }
 
@@ -202,7 +202,7 @@ public class DecomposedQueue<T extends EventProcessorAdapter<?>> implements Even
         try {
             internalLock.lock();
             logger.debug("Release: {}", entry);
-            currentlyProcessedNonSingletons.remove(entry.getLeft().getName());
+            currentlyProcessedNonSingletons.remove(entry.getLeft().getMeta().getName());
             currentlyProcessedEventNames.remove(entry.getRight().getName());
             lockCondition.signal();
         } finally {

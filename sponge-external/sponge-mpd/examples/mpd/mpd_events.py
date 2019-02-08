@@ -7,56 +7,56 @@ from org.openksavi.sponge.mpd.event import MpdEventCategory
 
 class MpdChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdChange"
+        self.withEvent("mpdChange")
     def onRun(self, event):
         self.logger.info("[{}] MPD change: {}", event.source.getClass().simpleName, event.source.event)
 
 class MpdErrorListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdError"
+        self.withEvent("mpdError")
     def onRun(self, event):
         self.logger.info("[{}] MPD error: {}", event.source.getClass().simpleName, event.source.message)
 
 class MpdBitrateChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdBitrateChange"
+        self.withEvent("mpdBitrateChange")
     def onRun(self, event):
         self.logger.info("[{}] Bitrate changed: {} -> {}", event.source.getClass().simpleName, event.source.oldBitrate, event.source.newBitrate)
 
 class MpdConnectionChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdConnectionChange"
+        self.withEvent("mpdConnectionChange")
     def onRun(self, event):
         self.logger.info("[{}] Connection changed: {}", event.source.getClass().simpleName, event.source.connected)
 
 class MpdOutputChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdOutputChange"
+        self.withEvent("mpdOutputChange")
     def onRun(self, event):
         self.logger.info("[{}] Output changed: {}", event.source.getClass().simpleName, event.source.event)
 
 class MpdPlayerChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdPlayerChange"
+        self.withEvent("mpdPlayerChange")
     def onRun(self, event):
         self.logger.info("[{}] Player changed: {}", event.source.getClass().simpleName, event.source.status)
 
 class MpdVolumeChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdVolumeChange"
+        self.withEvent("mpdVolumeChange")
     def onRun(self, event):
         self.logger.info("[{}] Volume changed: {}", event.source.getClass().simpleName, event.source.volume)
 
 class MpdPlaylistChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdPlaylistChange"
+        self.withEvent("mpdPlaylistChange")
     def onRun(self, event):
         self.logger.info("[{}] Playlist changed: {}{}", event.source.getClass().simpleName, event.source.event,
                          (", current song: " + mpd.server.playlist.currentSong.file) if event.source.event.name() == "SONG_CHANGED" else "")
 
 class MpdTrackPositionChangeListener(Trigger):
     def onConfigure(self):
-        self.event = "mpdTrackPositionChange"
+        self.withEvent("mpdTrackPositionChange")
     def onRun(self, event):
         self.logger.info("[{}] Track position changed: {}", event.source.getClass().simpleName, event.source.elapsedTime)
 

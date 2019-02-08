@@ -12,8 +12,7 @@ def onInit():
 
 class FibonacciRule(Rule):
     def onConfigure(self):
-        self.events = ["f f1", "f f2"]
-        self.addConditions("f2", lambda rule, event: event.get("index") - rule.getEvent("f1").get("index") == 1)
+        self.withEvents(["f f1", "f f2"]).withCondition("f2", lambda rule, event: event.get("index") - rule.getEvent("f1").get("index") == 1)
     def onRun(self, event):
         f1 = self.getEvent("f1")
         f2 = self.getEvent("f2")
@@ -27,7 +26,7 @@ class FibonacciRule(Rule):
 
 class LogTrigger(Trigger):
     def onConfigure(self):
-        self.event = "f"
+        self.withEvent("f")
     def onRun(self, event):
         self.logger.debug("f({}) = {}", event.get("index"), event.get("value"))
 

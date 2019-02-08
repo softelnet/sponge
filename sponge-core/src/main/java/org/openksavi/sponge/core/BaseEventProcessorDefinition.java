@@ -16,38 +16,18 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.List;
-
 import org.openksavi.sponge.EventProcessorDefinition;
-import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.EventProcessorMeta;
+import org.openksavi.sponge.ProcessorMeta;
 
 public abstract class BaseEventProcessorDefinition extends BaseProcessorDefinition implements EventProcessorDefinition {
 
-    /** Registered event names. */
-    private List<String> eventNames;
-
-    /**
-     * Returns event names for which this processor definition is registered.
-     *
-     * @return event names.
-     */
-    @Override
-    public List<String> getEventNames() {
-        return eventNames;
+    protected BaseEventProcessorDefinition(ProcessorMeta meta) {
+        super(meta);
     }
 
     @Override
-    public String getEventName(int index) {
-        return eventNames.get(index);
-    }
-
-    /**
-     * Sets event names for which this processor definition is registered.
-     *
-     * @param eventNames event names.
-     */
-    @Override
-    public void setEventNames(List<String> eventNames) {
-        this.eventNames = SpongeUtils.createUnmodifiableList(eventNames);
+    public EventProcessorMeta getMeta() {
+        return (EventProcessorMeta) super.getMeta();
     }
 }

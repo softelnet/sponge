@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.rule;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -36,63 +37,13 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     @Override
-    public final void addEventConditions(String eventAlias, EventCondition... conditions) {
-        getAdapter().addEventConditions(eventAlias, conditions);
-    }
-
-    @Override
-    public final void addAllEventConditions(EventCondition... conditions) {
-        getAdapter().addAllEventConditions(conditions);
-    }
-
-    @Override
-    public final void addEventCondition(String eventAlias, EventCondition condition) {
-        getAdapter().addEventCondition(eventAlias, condition);
-    }
-
-    @Override
-    public final List<EventCondition> getEventConditions(String eventAlias) {
-        return getAdapter().getEventConditions(eventAlias);
-    }
-
-    @Override
-    public final Map<String, List<EventCondition>> getEventConditions() {
-        return getAdapter().getEventConditions();
+    public BaseRuleMeta getMeta() {
+        return (BaseRuleMeta) super.getMeta();
     }
 
     @Override
     public final Event getEvent(String eventAlias) {
         return getRuleAdapterImpl().getEvent(eventAlias);
-    }
-
-    @Override
-    public void setEvents(String... eventStringSpecs) {
-        getRuleAdapterImpl().setEventStringSpecs(Arrays.asList(eventStringSpecs));
-    }
-
-    @Override
-    public void setEventSpecs(RuleEventSpec... eventSpecs) {
-        getRuleAdapterImpl().setEventSpecs(Arrays.asList(eventSpecs));
-    }
-
-    @Override
-    public void setEvent(String eventStringSpec) {
-        setEvents(eventStringSpec);
-    }
-
-    @Override
-    public void setEventSpec(RuleEventSpec eventSpec) {
-        setEventSpecs(eventSpec);
-    }
-
-    @Override
-    public boolean isOrdered() {
-        return getAdapter().isOrdered();
-    }
-
-    @Override
-    public void setOrdered(boolean ordered) {
-        getAdapter().setOrdered(ordered);
     }
 
     @Override
@@ -130,10 +81,102 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     protected final EventCondition createEventConditionForMethods(List<String> names) {
-        return new CompositeEventCondition(names.stream().map(name -> createEventConditionForMethod(name)).collect(Collectors.toList()));
+        return names.size() == 1 ? createEventConditionForMethod(names.get(0))
+                : new CompositeEventCondition(names.stream().map(name -> createEventConditionForMethod(name)).collect(Collectors.toList()));
     }
 
     protected final EventCondition createEventConditionForMethod(String name) {
         return ReflectionEventCondition.create(this, name);
+    }
+
+    @Override
+    public BaseRule withName(String name) {
+        return (BaseRule) super.withName(name);
+    }
+
+    @Override
+    public BaseRule withLabel(String label) {
+        return (BaseRule) super.withLabel(label);
+    }
+
+    @Override
+    public BaseRule withDescription(String description) {
+        return (BaseRule) super.withDescription(description);
+    }
+
+    @Override
+    public BaseRule withVersion(Integer version) {
+        return (BaseRule) super.withVersion(version);
+    }
+
+    @Override
+    public BaseRule withFeatures(Map<String, Object> features) {
+        return (BaseRule) super.withFeatures(features);
+    }
+
+    @Override
+    public BaseRule withFeature(String name, Object value) {
+        return (BaseRule) super.withFeature(name, value);
+    }
+
+    @Override
+    public BaseRule withCategory(String category) {
+        return (BaseRule) super.withCategory(category);
+    }
+
+    @Override
+    public BaseRule withEvents(List<String> eventStringSpecs) {
+        getMeta().setEventSpecs(eventStringSpecs.stream().map((String spec) -> getKnowledgeBase().getInterpreter().getRuleEventSpec(spec))
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    @Override
+    public BaseRule withEvent(String eventStringSpec) {
+        return withEvents(Arrays.asList(eventStringSpec));
+    }
+
+    @Override
+    public BaseRule withDuration(Duration duration) {
+        return (BaseRule) super.withDuration(duration);
+    }
+
+    @Override
+    public BaseRule withSynchronous(Boolean synchronous) {
+        return (BaseRule) super.withSynchronous(synchronous);
+    }
+
+    public BaseRule withEventConditions(String eventAlias, List<EventCondition> conditions) {
+        getMeta().addEventConditions(eventAlias, conditions);
+        return this;
+    }
+
+    public BaseRule withEventCondition(String eventAlias, EventCondition condition) {
+        withEventConditions(eventAlias, Arrays.asList(condition));
+        return this;
+    }
+
+    public BaseRule withAllEventConditions(List<EventCondition> conditions) {
+        getMeta().addAllEventConditions(conditions);
+        return this;
+    }
+
+    public BaseRule withAllEventCondition(EventCondition condition) {
+        return withAllEventConditions(Arrays.asList(condition));
+    }
+
+    public BaseRule withEventSpecs(List<RuleEventSpec> eventSpecs) {
+        getMeta().setEventSpecs(eventSpecs);
+        return this;
+    }
+
+    public BaseRule withEventSpec(RuleEventSpec eventSpec) {
+        getMeta().setEventSpec(eventSpec);
+        return this;
+    }
+
+    public BaseRule withOrdered(boolean ordered) {
+        getMeta().setOrdered(ordered);
+        return this;
     }
 }

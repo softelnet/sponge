@@ -16,7 +16,7 @@ void onInit() {
 
 class RuleF extends Rule {
     void onConfigure() {
-        this.events = ["e1"]
+        this.withEvents(["e1"])
     }
     void onRun(Event event) {
         sponge.getVariable("correlationEventsLog").addEvents("RuleF", this)
@@ -26,7 +26,7 @@ class RuleF extends Rule {
 // F(irst)F(irst)F(irst)
 class RuleFFF extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e3 :first"]
+        this.withEvents(["e1", "e2", "e3 :first"])
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
@@ -36,8 +36,7 @@ class RuleFFF extends Rule {
 
 class RuleFFFDuration extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e3 :first"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2", "e3 :first"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
@@ -48,8 +47,7 @@ class RuleFFFDuration extends Rule {
 // F(irst)F(irst)L(ast)
 class RuleFFL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e3 :last"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
@@ -60,8 +58,7 @@ class RuleFFL extends Rule {
 // F(irst)F(irst)A(ll)
 class RuleFFA extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e3 :all"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2", "e3 :all"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -72,8 +69,7 @@ class RuleFFA extends Rule {
 // F(irst)F(irst)N(one)
 class RuleFFN extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e4 :none"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2", "e4 :none"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
@@ -84,8 +80,7 @@ class RuleFFN extends Rule {
 // F(irst)L(ast)F(irst)
 class RuleFLF extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :last", "e3 :first"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :last", "e3 :first"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -96,8 +91,7 @@ class RuleFLF extends Rule {
 // F(irst)L(ast)L(ast)
 class RuleFLL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :last", "e3 :last"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :last", "e3 :last"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -108,8 +102,7 @@ class RuleFLL extends Rule {
 // F(irst)L(ast)A(ll)
 class RuleFLA extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :last", "e3 :all"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :last", "e3 :all"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -120,8 +113,7 @@ class RuleFLA extends Rule {
 // F(irst)L(ast)N(one)
 class RuleFLN extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :last", "e4 :none"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :last", "e4 :none"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
@@ -132,8 +124,7 @@ class RuleFLN extends Rule {
 // F(irst)A(ll)F(irst)
 class RuleFAF extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :all", "e3 :first"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :all", "e3 :first"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -144,8 +135,7 @@ class RuleFAF extends Rule {
 // F(irst)A(ll)L(ast)
 class RuleFAL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :all", "e3 :last"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :all", "e3 :last"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -156,8 +146,7 @@ class RuleFAL extends Rule {
 // F(irst)A(ll)A(ll)
 class RuleFAA extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :all", "e3 :all"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :all", "e3 :all"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}, sequence: {}", event.name, this.eventSequence)
@@ -168,8 +157,7 @@ class RuleFAA extends Rule {
 // F(irst)A(ll)N(one)
 class RuleFAN extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :all", "e5 :none"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :all", "e5 :none"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
@@ -180,7 +168,7 @@ class RuleFAN extends Rule {
 // F(irst)N(one)F(irst)
 class RuleFNF extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e3"]
+        this.withEvents(["e1", "e5 :none", "e3"])
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
@@ -191,8 +179,7 @@ class RuleFNF extends Rule {
 // F(irst)N(one)L(ast)
 class RuleFNL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e3 :last"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e5 :none", "e3 :last"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
@@ -203,8 +190,7 @@ class RuleFNL extends Rule {
 // F(irst)N(one)A(ll)
 class RuleFNA extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e3 :all"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e5 :none", "e3 :all"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)
@@ -214,8 +200,7 @@ class RuleFNA extends Rule {
 
 class RuleFNFReject extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2 :none", "e3"]
-        this.duration = Duration.ofMillis(sponge.getVariable("defaultDuration"))
+        this.withEvents(["e1", "e2 :none", "e3"]).withDuration(Duration.ofMillis(sponge.getVariable("defaultDuration")))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for sequence: {}", this.eventSequence)

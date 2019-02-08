@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.kotlin;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.openksavi.sponge.core.trigger.BaseTrigger;
 import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
 
@@ -32,5 +36,54 @@ public abstract class KTrigger extends BaseTrigger {
     @Override
     public final KotlinKnowledgeBaseEngineOperations getSponge() {
         return (KotlinKnowledgeBaseEngineOperations) super.getSponge();
+    }
+
+    @Override
+    public final KTrigger withName(String name) {
+        return (KTrigger) super.withName(name);
+    }
+
+    @Override
+    public final KTrigger withLabel(String label) {
+        return (KTrigger) super.withLabel(label);
+    }
+
+    @Override
+    public final KTrigger withDescription(String description) {
+        return (KTrigger) super.withDescription(description);
+    }
+
+    @Override
+    public final KTrigger withVersion(Integer version) {
+        return (KTrigger) super.withVersion(version);
+    }
+
+    @Override
+    public final KTrigger withFeatures(Map<String, Object> features) {
+        return (KTrigger) super.withFeatures(features);
+    }
+
+    @Override
+    public final KTrigger withFeature(String name, Object value) {
+        return (KTrigger) super.withFeature(name, value);
+    }
+
+    @Override
+    public final KTrigger withCategory(String category) {
+        return (KTrigger) super.withCategory(category);
+    }
+
+    @Override
+    public final KTrigger withEvents(List<String> eventNames) {
+        return (KTrigger) super.withEvents(eventNames);
+    }
+
+    public final KTrigger withEvents(String... events) {
+        return withEvents(Arrays.asList(events));
+    }
+
+    @Override
+    public final KTrigger withEvent(String eventName) {
+        return (KTrigger) super.withEvent(eventName);
     }
 }

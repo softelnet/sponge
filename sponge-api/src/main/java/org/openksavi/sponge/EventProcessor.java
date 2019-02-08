@@ -17,21 +17,8 @@
 package org.openksavi.sponge;
 
 /**
- * Event processor. Each event name may be specified as a regular expression thus creating a pattern matching more event names.
+ * Event processor.
  */
 public interface EventProcessor<T extends EventProcessorAdapter<?>> extends Processor<T>, EventProcessorOperations {
 
-    /**
-     * A convenient method for setting event names (or name patterns) that this event processor will be listening to.
-     *
-     * @param eventNames the event names.
-     */
-    void setEvents(String... eventNames);
-
-    /**
-     * A convenient method for setting event name (or name pattern) that this event processor will be listening to.
-     *
-     * @param eventName the event name.
-     */
-    void setEvent(String eventName);
 }

@@ -16,7 +16,7 @@ def onInit():
 
 class ColorFilter(Filter):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onAccept(self, event):
         self.logger.debug("Received event {}", event)
         color = event.get("color", None)
@@ -29,7 +29,7 @@ class ColorFilter(Filter):
 
 class ColorTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         self.logger.debug("Received event {}", event)
         global eventCounter
@@ -39,11 +39,3 @@ def onStartup():
     sponge.event("e1").send()
     sponge.event("e1").set("color", "red").send()
     sponge.event("e1").set("color", "blue").send()
-
-
-
-
-
-
-
-

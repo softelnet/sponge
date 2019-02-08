@@ -16,6 +16,7 @@
                     <argument>${sponge.configDir}/py4j_java_server_tls_python_hello_world.py</argument>
                     <waitSeconds>60</waitSeconds>
                     <outputRedirect>STRING</outputRedirect>
+                    <errorRedirect>EXCEPTION</errorRedirect>
                 </pythonScript>
                 <pythonScriptBeforeStartup>false</pythonScriptBeforeStartup>
                 <security>

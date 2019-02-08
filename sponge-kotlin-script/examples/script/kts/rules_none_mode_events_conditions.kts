@@ -20,13 +20,12 @@ fun onInit() {
 
 class RuleFNF : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e2 :none", "e3")
-        addConditions("e2", this::e2LabelCondition)
+        withEvents("e1", "e2 :none", "e3").withCondition("e2", this::e2LabelCondition)
     }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for events: {}", eventAliasMap)
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 
     fun e2LabelCondition(event: Event) = event.get<String>("label").toInt() > 4
@@ -34,13 +33,12 @@ class RuleFNF : Rule() {
 
 class RuleFNNFReject : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e2 :none", "e6 :none", "e3")
-        addConditions("e2", this::e2LabelCondition)
+        withEvents("e1", "e2 :none", "e6 :none", "e3").withCondition("e2", this::e2LabelCondition)
     }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for events: {}", eventAliasMap)
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 
     fun e2LabelCondition(event: Event) = event.get<String>("label").toInt() in 2..4

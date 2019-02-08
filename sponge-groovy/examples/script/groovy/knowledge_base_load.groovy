@@ -20,30 +20,26 @@ void onInit() {
 
 class Trigger1 extends Trigger {
     void onConfigure() {
-        this.label = "Trigger1, file1"
-        this.event = "e1"
+        this.withLabel("Trigger1, file1").withEvent("e1")
     }
     void onRun(Event event) {
-        //this.logger.debug("file1: Received event {}", event)
-        sponge.getVariable("eventCounter").get(this.label).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.meta.label).incrementAndGet()
     }
 }
 
 class Trigger2 extends Trigger {
     void onConfigure() {
-        this.label = "Trigger2, file1"
-        this.event = "e2"
+        this.withLabel("Trigger2, file1").withEvent("e2")
     }
     void onRun(Event event) {
-        //this.logger.debug("file1: Received event {}", event)
-        sponge.getVariable("eventCounter").get(this.label).incrementAndGet()
+        sponge.getVariable("eventCounter").get(this.meta.label).incrementAndGet()
     }
 }
 
 
 class LoadKbFile extends Trigger {
     void onConfigure() {
-        this.event = "loadKbFile"
+        this.withEvent("loadKbFile")
     }
     void onRun(Event event) {
         def kbFile = event.get("kbFile")

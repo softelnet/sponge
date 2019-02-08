@@ -21,6 +21,6 @@ import org.openksavi.sponge.EventProcessorDefinition;
 /**
  * Filter definition.
  */
-public interface FilterDefinition extends EventProcessorDefinition {
+public interface FilterDefinition extends EventProcessorDefinition, FilterOperations {
 
 }

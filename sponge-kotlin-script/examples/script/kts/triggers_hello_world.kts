@@ -5,7 +5,7 @@
 
 class HelloWorld : Trigger() {
     override fun onConfigure() {
-        setEvent("helloEvent")
+        withEvent("helloEvent")
     }
 
     override fun onRun(event: Event?) {

@@ -56,6 +56,10 @@ public class CompositeEventCondition implements EventCondition {
 
     @SafeVarargs
     public static <T> CompositeEventCondition create(Function<? super T, ? extends EventCondition> mapper, T... conditionTemplates) {
-        return new CompositeEventCondition(Arrays.stream(conditionTemplates).map(mapper).collect(Collectors.toList()));
+        return create(mapper, Arrays.asList(conditionTemplates));
+    }
+
+    public static <T> CompositeEventCondition create(Function<? super T, ? extends EventCondition> mapper, List<T> conditionTemplates) {
+        return new CompositeEventCondition(conditionTemplates.stream().map(mapper).collect(Collectors.toList()));
     }
 }

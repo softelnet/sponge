@@ -51,7 +51,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     public void addAction(ActionAdapter actionAdapter) {
         Validate.notNull(actionAdapter, "addAction called with null actionAdapter.");
 
-        registeredActions.put(actionAdapter.getName(), actionAdapter);
+        registeredActions.put(actionAdapter.getMeta().getName(), actionAdapter);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     public List<ActionAdapter> getActionAdapters(String knowledgeBaseRegexp, String actionNameRegexp) {
         return registeredActions.values().stream()
                 .filter(adapter -> (knowledgeBaseRegexp == null || adapter.getKnowledgeBase().getName().matches(knowledgeBaseRegexp))
-                        && (actionNameRegexp == null || adapter.getName().matches(actionNameRegexp)))
+                        && (actionNameRegexp == null || adapter.getMeta().getName().matches(actionNameRegexp)))
                 .collect(Collectors.toList());
     }
 }

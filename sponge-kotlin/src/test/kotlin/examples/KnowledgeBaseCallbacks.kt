@@ -15,7 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger
 class KnowledgeBaseCallbacks : KKnowledgeBase() {
 
     class ReloadTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("reload")
+        override fun onConfigure() {
+            withEvent("reload")
+        }
         override fun onRun(event: Event) {
             logger.debug("Received event: {}", event.name)
             sponge.reload()

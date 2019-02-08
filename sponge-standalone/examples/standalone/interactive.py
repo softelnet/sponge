@@ -12,7 +12,7 @@ def onInit():
 
 class AlarmTrigger(Trigger):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         sponge.getVariable("alarms").incrementAndGet()
         print "Sound the alarm!"

@@ -18,8 +18,7 @@ fun onInit() {
 
 class RuleFFF : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e2", "e3 :first")
-        setSynchronous(true)
+        withEvents("e1", "e2", "e3 :first").withSynchronous(true)
     }
 
     override fun onRun(event: Event?) {
@@ -30,9 +29,7 @@ class RuleFFF : Rule() {
 
 class RuleFFL : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e2", "e3 :last")
-        duration = Duration.ofSeconds(2)
-        setSynchronous(false)
+        withEvents("e1", "e2", "e3 :last").withDuration(Duration.ofSeconds(2)).withSynchronous(false)
     }
 
     override fun onRun(event: Event?) {

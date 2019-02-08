@@ -12,8 +12,7 @@ void onInit() {
 
 class RuleFFF extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e3 :first"]
-        this.synchronous = true
+        this.withEvents(["e1", "e2", "e3 :first"]).withSynchronous(true)
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)
@@ -23,9 +22,7 @@ class RuleFFF extends Rule {
 
 class RuleFFL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e2", "e3 :last"]
-        this.duration = Duration.ofSeconds(2)
-        this.synchronous = false
+        this.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofSeconds(2)).withSynchronous(false)
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for event: {}", event.name)

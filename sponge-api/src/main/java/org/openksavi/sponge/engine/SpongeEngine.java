@@ -21,19 +21,24 @@ import java.util.List;
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
+import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.event.EventScheduler;
 import org.openksavi.sponge.engine.processing.EventSetProcessorDurationStrategy;
 import org.openksavi.sponge.filter.FilterAdapter;
+import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleAdapterGroup;
+import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.spi.EngineModuleProvider;
 import org.openksavi.sponge.spi.EventQueueProvider;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
+import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.util.PatternMatcher;
 
 /**
@@ -424,4 +429,44 @@ public interface SpongeEngine extends EngineModule {
      * @return the categories.
      */
     List<CategoryMeta> getCategories();
+
+    /**
+     * Returns the action metadata.
+     *
+     * @param actionName the action name.
+     * @return the action metadata.
+     */
+    ActionMeta getActionMeta(String actionName);
+
+    /**
+     * Returns the filter metadata.
+     *
+     * @param filterName the filter name.
+     * @return the filter metadata.
+     */
+    FilterMeta getFilterMeta(String filterName);
+
+    /**
+     * Returns the trigger metadata.
+     *
+     * @param triggerName the trigger name.
+     * @return the trigger metadata.
+     */
+    TriggerMeta getTriggerMeta(String triggerName);
+
+    /**
+     * Returns the correlator metadata.
+     *
+     * @param correlatorName the correlator name.
+     * @return the correlator metadata.
+     */
+    CorrelatorMeta getCorrelatorMeta(String correlatorName);
+
+    /**
+     * Returns the rule metadata.
+     *
+     * @param ruleName the rule name.
+     * @return the rule metadata.
+     */
+    RuleMeta getRuleMeta(String ruleName);
 }

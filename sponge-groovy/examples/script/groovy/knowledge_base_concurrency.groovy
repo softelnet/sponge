@@ -13,7 +13,7 @@ void onInit() {
 
 class A extends Trigger {
     void onConfigure() {
-        this.event = "a"
+        this.withEvent("a")
     }
     void onRun(Event event) {
         TimeUnit.SECONDS.sleep(1)
@@ -25,7 +25,7 @@ class A extends Trigger {
 
 class B extends Trigger {
     void onConfigure() {
-        this.event = "b"
+        this.withEvent("b")
     }
     void onRun(Event event) {
         TimeUnit.SECONDS.sleep(2)
@@ -37,7 +37,7 @@ class B extends Trigger {
 
 class C extends Trigger {
     void onConfigure() {
-        this.event = "c"
+        this.withEvent("c")
     }
     void onRun(Event event) {
         TimeUnit.SECONDS.sleep(8)

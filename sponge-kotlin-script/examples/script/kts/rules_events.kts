@@ -22,15 +22,19 @@ fun onInit() {
 // Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleF : Rule() {
-    override fun onConfigure() = setEvents("e1")
+    override fun onConfigure() {
+        withEvents("e1")
+    }
     override fun onRun(event: Event?) {
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 }
 
 // F(irst)F(irst)F(irst)
 class RuleFFF : Rule() {
-    override fun onConfigure() = setEvents("e1", "e2", "e3 :first")
+    override fun onConfigure() {
+        withEvents("e1", "e2", "e3 :first")
+    }
     override fun onRun(event: Event?) {
         logger.debug("Running rule for event: {}", event?.name)
         Constants.correlationEventsLog.addEvents(name, this)
@@ -39,13 +43,12 @@ class RuleFFF : Rule() {
 
 abstract class TestRule : Rule() {
     fun setup(vararg eventSpec: String) {
-        setEvents(eventSpec)
-        duration = Duration.ofMillis(Constants.defaultDuration)
+        withEvents(eventSpec).withDuration(Duration.ofMillis(Constants.defaultDuration))
     }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for event: {}, sequence: {}", event?.name, SpongeUtils.toStringEventSequence(eventSequence, "label"))
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 }
 

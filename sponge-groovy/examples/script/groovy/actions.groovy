@@ -13,7 +13,7 @@ void onInit() {
 
 class EchoAction extends Action {
     void onConfigure() {
-        this.label = "Echo Action"
+        this.withLabel("Echo Action")
     }
 
     Object onCall(int value, String text) {

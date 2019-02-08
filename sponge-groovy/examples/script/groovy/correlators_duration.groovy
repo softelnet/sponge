@@ -15,8 +15,7 @@ class SampleCorrelator extends Correlator {
     private eventLog
 
     void onConfigure() {
-        this.events = ["filesystemFailure", "diskFailure"]
-        this.duration = Duration.ofSeconds(2)
+        this.withEvents(["filesystemFailure", "diskFailure"]).withDuration(Duration.ofSeconds(2))
     }
     boolean onAcceptAsFirst(Event event) {
         return instanceStarted.compareAndSet(false, true)

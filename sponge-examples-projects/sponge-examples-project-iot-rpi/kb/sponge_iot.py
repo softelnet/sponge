@@ -32,7 +32,7 @@ class IoTRouteBuilder(ScriptRouteBuilder):
 
 class SensorChangeToMqtt(Trigger):
     def onConfigure(self):
-        self.event = "sensorChange"
+        self.withEvent("sensorChange")
     def onRun(self, event):
         for sensor in event.getAll():
             value = event.get(sensor)
@@ -40,8 +40,7 @@ class SensorChangeToMqtt(Trigger):
 
 class TemperatureSensorChange(Correlator):
     def onConfigure(self):
-        self.event = "sensorChange"
-        self.maxInstances = 1
+        self.withEvent("sensorChange").withMaxInstances(1)
     def onInit(self):
         self.alarmSentTime = 0
     def onEvent(self, event):
@@ -58,7 +57,7 @@ class TemperatureSensorChange(Correlator):
 
 class TemperatureAlarmListener(Trigger):
     def onConfigure(self):
-        self.event = "temperatureAlarm"
+        self.withEvent("temperatureAlarm")
     def onRun(self, event):
         temperature = event.get("temperature")
         self.logger.warn("Temperature alarm: {}!", temperature)
@@ -67,7 +66,7 @@ class TemperatureAlarmListener(Trigger):
 
 class StartNotificationTrigger(Trigger):
     def onConfigure(self):
-        self.event = "notificationStart"
+        self.withEvent("notificationStart")
     def onRun(self, event):
         serviceName = sponge.getProperty("service.name", "Service")
         try:

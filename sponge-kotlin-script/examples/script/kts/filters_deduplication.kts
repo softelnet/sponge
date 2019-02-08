@@ -21,7 +21,9 @@ fun onInit() {
 class ColorDeduplicationFilter : Filter() {
     lateinit var deduplication: Deduplication
 
-    override fun onConfigure() = setEvent("e1")
+    override fun onConfigure() {
+        withEvent("e1")
+    }
 
     override fun onInit() {
         deduplication = Deduplication("color").also {
@@ -33,7 +35,9 @@ class ColorDeduplicationFilter : Filter() {
 }
 
 class ColorTrigger : Trigger() {
-    override fun onConfigure() = setEvents("e1", "e2")
+    override fun onConfigure() {
+        withEvents("e1", "e2")
+    }
 
     override fun onRun(event: Event) {
         logger.debug("Received event {}", event)

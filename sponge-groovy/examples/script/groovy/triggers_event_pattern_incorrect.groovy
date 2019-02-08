@@ -5,7 +5,7 @@
 
 class TriggerAPattern extends Trigger {
     void onConfigure() {
-        this.event = "a.**"
+        this.withEvent("a.**")
     }
     void onRun(Event event) {
     }

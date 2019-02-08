@@ -16,8 +16,6 @@
 
 package org.openksavi.sponge.core;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +45,11 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
      */
     protected BaseProcessorAdapter(BaseProcessorDefinition definition) {
         this.definition = definition;
+    }
+
+    @Override
+    public BaseProcessorMeta getMeta() {
+        return (BaseProcessorMeta) definition.getMeta();
     }
 
     @Override
@@ -98,46 +101,6 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
         definition.setKnowledgeBase(knowledgeBase);
     }
 
-    @Override
-    public void setVersion(Integer version) {
-        definition.setVersion(version);
-    }
-
-    @Override
-    public Integer getVersion() {
-        return definition.getVersion();
-    }
-
-    @Override
-    public Map<String, Object> getFeatures() {
-        return definition.getFeatures();
-    }
-
-    @Override
-    public void setFeatures(Map<String, Object> features) {
-        definition.setFeatures(features);
-    }
-
-    /**
-     * Returns this processor name.
-     *
-     * @return processor name.
-     */
-    @Override
-    public String getName() {
-        return definition.getName();
-    }
-
-    /**
-     * Sets this processor name.
-     *
-     * @param name processor name.
-     */
-    @Override
-    public void setName(String name) {
-        definition.setName(name);
-    }
-
     /**
      * Clones this processor.
      *
@@ -148,7 +111,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            throw SpongeUtils.wrapException(getName(), e);
+            throw SpongeUtils.wrapException(getMeta().getName(), e);
         }
     }
 
@@ -157,26 +120,6 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
      */
     @Override
     public void clear() {
-    }
-
-    @Override
-    public void setLabel(String label) {
-        definition.setLabel(label);
-    }
-
-    @Override
-    public String getLabel() {
-        return definition.getLabel();
-    }
-
-    @Override
-    public void setDescription(String description) {
-        definition.setDescription(description);
-    }
-
-    @Override
-    public String getDescription() {
-        return definition.getDescription();
     }
 
     /**
@@ -195,7 +138,7 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
      * @return logger.
      */
     public Logger getLogger() {
-        return LoggerFactory.getLogger(SpongeUtils.createLoggerName(getKnowledgeBase(), getName()));
+        return LoggerFactory.getLogger(SpongeUtils.createLoggerName(getKnowledgeBase(), getMeta().getName()));
     }
 
     /**
@@ -205,28 +148,19 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
      */
     @Override
     public String toString() {
-        return getName() != null ? getName() : super.toString();
+        return getMeta().getName() != null ? getMeta().getName() : super.toString();
     }
 
     @Override
     public void validate() {
-        Validate.isTrue(getName() != null, "Invalid %s. Name must not be empty.", getType().getName());
-        Validate.isTrue(getCategory() == null || getKnowledgeBase().getEngineOperations().getCategory(getCategory()) != null,
-                "Category %s is not registered", getCategory());
+        Validate.isTrue(getMeta().getName() != null, "Invalid %s. Name must not be empty.", getType().getName());
+        Validate.isTrue(
+                getMeta().getCategory() == null || getKnowledgeBase().getEngineOperations().getCategory(getMeta().getCategory()) != null,
+                "Category %s is not registered", getMeta().getCategory());
     }
 
     @Override
     public ProcessorQualifiedVersion getQualifiedVersion() {
-        return new ProcessorQualifiedVersion(getKnowledgeBase().getVersion(), getVersion());
-    }
-
-    @Override
-    public String getCategory() {
-        return definition.getCategory();
-    }
-
-    @Override
-    public void setCategory(String category) {
-        definition.setCategory(category);
+        return new ProcessorQualifiedVersion(getKnowledgeBase().getVersion(), getMeta().getVersion());
     }
 }

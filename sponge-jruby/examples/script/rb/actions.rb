@@ -11,10 +11,10 @@ end
 
 class EchoAction < Action
     def onConfigure
-        self.label = "Echo Action"
+        self.withLabel("Echo Action")
     end
     def onCall(value, text)
-        self.logger.info("Action {} called", self.name)
+        self.logger.info("Action {} called", self.meta.name)
         return [value, text]
     end
 end

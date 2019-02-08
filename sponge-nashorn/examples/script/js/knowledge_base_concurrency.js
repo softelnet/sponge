@@ -13,7 +13,7 @@ function onInit() {
 
 var A = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "a";
+        self.withEvent("a");
     },
     onRun: function(self, event) {
         TimeUnit.SECONDS.sleep(1);
@@ -25,7 +25,7 @@ var A = Java.extend(Trigger, {
 
 var B = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "b";
+        self.withEvent("b");
     },
     onRun: function(self, event) {
         TimeUnit.SECONDS.sleep(2);
@@ -37,7 +37,7 @@ var B = Java.extend(Trigger, {
 
 var C = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "c";
+        self.withEvent("c");
     },
     onRun: function(self, event) {
         TimeUnit.SECONDS.sleep(8);

@@ -16,11 +16,12 @@ def onInit():
 
 class FirstRule(Rule):
     def onConfigure(self):
-        self.events = ["filesystemFailure", "diskFailure"]; self.ordered = False
-        self.addAllConditions(lambda rule, event: rule.firstEvent.get("source") == event.get("source"))
-        self.addAllConditions(lambda rule, event:
-                           Duration.between(rule.firstEvent.time, event.time).seconds <= 2)
-        self.duration = Duration.ofSeconds(5)
+        self.withEvents(["filesystemFailure", "diskFailure"]).withOrdered(False)
+        self.withAllConditions([
+            lambda rule, event: rule.firstEvent.get("source") == event.get("source"),
+            lambda rule, event:Duration.between(rule.firstEvent.time, event.time).seconds <= 2
+        ])
+        self.withDuration(Duration.ofSeconds(5))
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventSequence)
         sponge.getVariable("sameSourceFirstFireCount").incrementAndGet()
@@ -28,10 +29,10 @@ class FirstRule(Rule):
 
 class SameSourceAllRule(Rule):
     def onConfigure(self):
-        self.events = ["filesystemFailure e1", "diskFailure e2 :all"]; self.ordered = False
-        self.addConditions("e1", self.severityCondition)
-        self.addConditions("e2", self.severityCondition, self.diskFailureSourceCondition)
-        self.duration = Duration.ofSeconds(5)
+        self.withEvents(["filesystemFailure e1", "diskFailure e2 :all"]).withOrdered(False)
+        self.withCondition("e1", self.severityCondition)
+        self.withConditions("e2", [self.severityCondition, self.diskFailureSourceCondition])
+        self.withDuration(Duration.ofSeconds(5))
     def onRun(self, event):
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
                          self.eventSequence)
@@ -45,7 +46,7 @@ class SameSourceAllRule(Rule):
 
 class AlarmFilter(Filter):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onInit(self):
         self.deduplication = Deduplication("source")
         self.deduplication.cacheBuilder.expireAfterWrite(2, TimeUnit.SECONDS)
@@ -54,7 +55,7 @@ class AlarmFilter(Filter):
 
 class Alarm(Trigger):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         self.logger.debug("Received alarm from {}", event.get("source"))
 

@@ -14,7 +14,7 @@ function onInit() {
 
 var ClonePolicyTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"];
+        self.withEvents(["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]);
     },
     onRun: function(self, event) {
         var events = sponge.getVariable("events");

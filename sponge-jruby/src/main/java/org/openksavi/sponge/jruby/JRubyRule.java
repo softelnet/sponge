@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.jruby;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.jruby.RubyMethod;
@@ -43,19 +44,19 @@ public abstract class JRubyRule extends BaseRule {
         }
     };
 
-    public final void setEvents(Object eventNames) {
-        super.setEvents(RubyUtils.toJavaArray(eventNames));
+    public JRubyRule withConditions(String eventAlias, List<RubyObject> rubyObjects) {
+        return (JRubyRule) super.withEventCondition(eventAlias, CompositeEventCondition.create(MAPPER, rubyObjects));
     }
 
-    public void addConditions(String eventAlias, RubyObject... rubyObjects) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, rubyObjects));
+    public JRubyRule withCondition(String eventAlias, RubyObject rubyObject) {
+        return (JRubyRule) super.withEventCondition(eventAlias, MAPPER.apply(rubyObject));
     }
 
-    public void addAllConditions(RubyObject... rubyObjects) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, rubyObjects));
+    public JRubyRule withAllConditions(List<RubyObject> rubyObjects) {
+        return (JRubyRule) super.withAllEventCondition(CompositeEventCondition.create(MAPPER, rubyObjects));
     }
 
-    public void addCondition(String eventAlias, RubyObject rubyObject) {
-        addEventCondition(eventAlias, MAPPER.apply(rubyObject));
+    public JRubyRule withAllCondition(RubyObject rubyObject) {
+        return (JRubyRule) super.withAllEventCondition(MAPPER.apply(rubyObject));
     }
 }

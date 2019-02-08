@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.core.trigger;
 
+import java.util.List;
+import java.util.Map;
+
 import org.openksavi.sponge.core.BaseEventProcessor;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.trigger.Trigger;
@@ -24,12 +27,62 @@ import org.openksavi.sponge.trigger.TriggerAdapter;
 public abstract class BaseTrigger extends BaseEventProcessor<TriggerAdapter> implements Trigger {
 
     @Override
+    public BaseTriggerMeta getMeta() {
+        return (BaseTriggerMeta) super.getMeta();
+    }
+
+    @Override
     public boolean onAccept(Event event) {
         return true;
     }
 
     @Override
-    public final TriggerAdapter createAdapter() {
+    public TriggerAdapter createAdapter() {
         return new BaseTriggerAdapter(new BaseTriggerDefinition());
+    }
+
+    @Override
+    public BaseTrigger withName(String name) {
+        return (BaseTrigger) super.withName(name);
+    }
+
+    @Override
+    public BaseTrigger withLabel(String label) {
+        return (BaseTrigger) super.withLabel(label);
+    }
+
+    @Override
+    public BaseTrigger withDescription(String description) {
+        return (BaseTrigger) super.withDescription(description);
+    }
+
+    @Override
+    public BaseTrigger withVersion(Integer version) {
+        return (BaseTrigger) super.withVersion(version);
+    }
+
+    @Override
+    public BaseTrigger withFeatures(Map<String, Object> features) {
+        return (BaseTrigger) super.withFeatures(features);
+    }
+
+    @Override
+    public BaseTrigger withFeature(String name, Object value) {
+        return (BaseTrigger) super.withFeature(name, value);
+    }
+
+    @Override
+    public BaseTrigger withCategory(String category) {
+        return (BaseTrigger) super.withCategory(category);
+    }
+
+    @Override
+    public BaseTrigger withEvents(List<String> eventNames) {
+        return (BaseTrigger) super.withEvents(eventNames);
+    }
+
+    @Override
+    public BaseTrigger withEvent(String eventName) {
+        return (BaseTrigger) super.withEvent(eventName);
     }
 }

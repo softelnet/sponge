@@ -25,7 +25,7 @@ end
 
 class VerifyTrigger < Trigger
     def onConfigure
-        self.event = "verify"
+        self.withEvent("verify")
     end
     def onRun(event)
         verifyManager()
@@ -34,7 +34,7 @@ end
 
 class TriggerA < Trigger
     def onConfigure
-        self.event = "a"
+        self.withEvent("a")
     end
     def onRun(event)
     end

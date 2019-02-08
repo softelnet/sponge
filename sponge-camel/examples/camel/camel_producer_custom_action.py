@@ -12,7 +12,7 @@ def onInit():
 
 class UnusedCamelTrigger(Trigger):
     def onConfigure(self):
-        self.event = "spongeProducer"
+        self.withEvent("spongeProducer")
     def onRun(self, event):
         sponge.getVariable("sentCamelMessage_" + event.name).set(True)
 

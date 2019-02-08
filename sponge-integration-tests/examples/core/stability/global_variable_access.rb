@@ -13,7 +13,7 @@ end
 
 class E1 < Trigger
     def onConfigure
-        self.event = "e"
+        self.withEvent("e")
     end
     def onRun(event)
         $sponge.getVariable("test1").set(true)
@@ -23,7 +23,7 @@ end
 
 class E2 < Trigger
     def onConfigure
-        self.event = "e"
+        self.withEvent("e")
     end
     def onRun(event)
         $sponge.getVariable("test1").set(false)
@@ -33,7 +33,7 @@ end
 
 class E3 < Trigger
     def onConfigure
-        self.event = "e"
+        self.withEvent("e")
     end
     def onRun(event)
         $sponge.getVariable("test1").set(true)
@@ -43,7 +43,7 @@ end
 
 class E4 < Trigger
     def onConfigure
-        self.event = "e"
+        self.withEvent("e")
     end
     def onRun(event)
         $sponge.getVariable("test1").set(false)
@@ -53,7 +53,7 @@ end
 
 class Stop < Trigger
     def onConfigure
-        self.event = "stop"
+        self.withEvent("stop")
     end
     def onRun(event)
         $sponge.getVariable("stopped").set(true)

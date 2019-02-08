@@ -34,8 +34,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.CategoryMeta;
+import org.openksavi.sponge.EventProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.processing.QueuedEventSetProcessorDurationStrategy;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
@@ -47,6 +49,7 @@ import org.openksavi.sponge.core.util.RegexPatternMatcher;
 import org.openksavi.sponge.core.util.ServiceLoaderUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
+import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.EngineModule;
@@ -59,6 +62,7 @@ import org.openksavi.sponge.engine.OnStartupListener;
 import org.openksavi.sponge.engine.PluginManager;
 import org.openksavi.sponge.engine.ProcessingUnitManager;
 import org.openksavi.sponge.engine.ProcessorManager;
+import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.Session;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.StatisticsManager;
@@ -70,15 +74,18 @@ import org.openksavi.sponge.engine.processing.MainProcessingUnit;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
 import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.filter.FilterAdapter;
+import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseFileProvider;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleAdapterGroup;
+import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.spi.EngineModuleProvider;
 import org.openksavi.sponge.spi.EventQueueProvider;
 import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
+import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.util.PatternMatcher;
 
 /**
@@ -664,7 +671,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
      */
     @Override
     public void handleError(ProcessorAdapter<?> processorAdapter, Throwable e) {
-        handleError((processorAdapter != null && processorAdapter.getName() != null)
+        handleError((processorAdapter != null && processorAdapter.getMeta().getName() != null)
                 ? SpongeUtils.getProcessorQualifiedName(processorAdapter).toString() : "unknown", processorAdapter, e);
     }
 
@@ -870,7 +877,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public CategoryMeta removeCategory(String categoryName) {
         Validate.isTrue(
-                !getProcessorManager().getAllProcessorAdapters().stream().map(ProcessorAdapter::getCategory)
+                !getProcessorManager().getAllProcessorAdapters().stream().map(adapter -> adapter.getMeta().getCategory())
                         .anyMatch(adapterCategory -> adapterCategory != null && adapterCategory.equals(categoryName)),
                 "The category %s is being used and can't be removed", categoryName);
         return categories.remove(categoryName);
@@ -879,5 +886,51 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public List<CategoryMeta> getCategories() {
         return new ArrayList<>(categories.values());
+    }
+
+    @Override
+    public ActionMeta getActionMeta(String actionName) {
+        ActionAdapter adapter = getActionManager().getActionAdapter(actionName);
+        Validate.isTrue(adapter != null, "Action %s not found", actionName);
+
+        return adapter.getMeta();
+    }
+
+    @Override
+    public FilterMeta getFilterMeta(String filterName) {
+        FilterAdapter adapter = getFilterProcessingUnit().getRegisteredProcessorAdapterMap().get(filterName);
+        Validate.isTrue(adapter != null, "Filter %s not found", filterName);
+
+        return adapter.getMeta();
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public TriggerMeta getTriggerMeta(String triggerName) {
+        EventProcessorAdapter adapter = getMainProcessingUnit().getRegisteredProcessorAdapterMap().get(triggerName);
+        Validate.isTrue(adapter != null, "Trigger %s not found", adapter);
+        Validate.isTrue(adapter.getType() == ProcessorType.TRIGGER, "Processor %s is not a trigger", triggerName);
+
+        return (TriggerMeta) adapter.getMeta();
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public CorrelatorMeta getCorrelatorMeta(String correlatorName) {
+        EventProcessorAdapter adapter = getMainProcessingUnit().getRegisteredProcessorAdapterMap().get(correlatorName);
+        Validate.isTrue(adapter != null, "Correlator %s not found", adapter);
+        Validate.isTrue(adapter.getType() == ProcessorType.CORRELATOR_GROUP, "Processor %s is not a correlator", correlatorName);
+
+        return (CorrelatorMeta) adapter.getMeta();
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public RuleMeta getRuleMeta(String ruleName) {
+        EventProcessorAdapter adapter = getMainProcessingUnit().getRegisteredProcessorAdapterMap().get(ruleName);
+        Validate.isTrue(adapter != null, "Rule %s not found", adapter);
+        Validate.isTrue(adapter.getType() == ProcessorType.RULE_GROUP, "Processor %s is not a rule", ruleName);
+
+        return (RuleMeta) adapter.getMeta();
     }
 }

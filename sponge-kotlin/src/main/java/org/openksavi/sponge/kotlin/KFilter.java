@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.kotlin;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.openksavi.sponge.core.filter.BaseFilter;
 import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
 
@@ -32,5 +36,54 @@ public abstract class KFilter extends BaseFilter {
     @Override
     public final KotlinKnowledgeBaseEngineOperations getSponge() {
         return (KotlinKnowledgeBaseEngineOperations) super.getSponge();
+    }
+
+    @Override
+    public final KFilter withName(String name) {
+        return (KFilter) super.withName(name);
+    }
+
+    @Override
+    public final KFilter withLabel(String label) {
+        return (KFilter) super.withLabel(label);
+    }
+
+    @Override
+    public final KFilter withDescription(String description) {
+        return (KFilter) super.withDescription(description);
+    }
+
+    @Override
+    public final KFilter withVersion(Integer version) {
+        return (KFilter) super.withVersion(version);
+    }
+
+    @Override
+    public final KFilter withFeatures(Map<String, Object> features) {
+        return (KFilter) super.withFeatures(features);
+    }
+
+    @Override
+    public final KFilter withFeature(String name, Object value) {
+        return (KFilter) super.withFeature(name, value);
+    }
+
+    @Override
+    public final KFilter withCategory(String category) {
+        return (KFilter) super.withCategory(category);
+    }
+
+    @Override
+    public final KFilter withEvents(List<String> eventNames) {
+        return (KFilter) super.withEvents(eventNames);
+    }
+
+    public final KFilter withEvents(String... events) {
+        return withEvents(Arrays.asList(events));
+    }
+
+    @Override
+    public final KFilter withEvent(String eventName) {
+        return (KFilter) super.withEvent(eventName);
     }
 }

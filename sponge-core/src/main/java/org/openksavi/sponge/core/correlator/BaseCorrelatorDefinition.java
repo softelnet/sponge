@@ -21,33 +21,12 @@ import org.openksavi.sponge.correlator.CorrelatorDefinition;
 
 public class BaseCorrelatorDefinition extends BaseEventSetProcessorDefinition implements CorrelatorDefinition {
 
-    public static final int UNBOUND_MAX_INSTANCES = -1;
-
-    private int maxInstances = UNBOUND_MAX_INSTANCES;
-
-    private boolean instanceSynchronous = true;
-
-    @Override
-    public void setMaxInstances(int maxInstances) {
-        this.maxInstances = maxInstances;
+    public BaseCorrelatorDefinition() {
+        super(new BaseCorrelatorMeta());
     }
 
     @Override
-    public int getMaxInstances() {
-        return maxInstances;
-    }
-
-    public boolean isMaxInstancesUnbound() {
-        return maxInstances == UNBOUND_MAX_INSTANCES;
-    }
-
-    @Override
-    public boolean isInstanceSynchronous() {
-        return instanceSynchronous;
-    }
-
-    @Override
-    public void setInstanceSynchronous(boolean instanceSynchronous) {
-        this.instanceSynchronous = instanceSynchronous;
+    public BaseCorrelatorMeta getMeta() {
+        return (BaseCorrelatorMeta) super.getMeta();
     }
 }

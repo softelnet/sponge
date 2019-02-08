@@ -12,13 +12,13 @@ def onInit():
 
 class TriggerA(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         sponge.getVariable("countA").incrementAndGet()
 
 class TriggerAPattern(Trigger):
     def onConfigure(self):
-        self.event = "a.*"
+        self.withEvent("a.*")
     def onRun(self, event):
         self.logger.debug("Received matching event {}", event.name)
         sponge.getVariable("countAPattern").incrementAndGet()

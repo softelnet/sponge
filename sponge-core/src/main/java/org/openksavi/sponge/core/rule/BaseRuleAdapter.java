@@ -45,6 +45,11 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
         return ProcessorType.RULE;
     }
 
+    @Override
+    public BaseRuleMeta getMeta() {
+        return (BaseRuleMeta) super.getMeta();
+    }
+
     /**
      * Processes the incoming event synchronously.
      */
@@ -60,7 +65,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     }
 
     public SpongeException createValidationException(String text) {
-        return new SpongeException("Invalid rule " + getName() + ". " + text);
+        return new SpongeException("Invalid rule " + getMeta().getName() + ". " + text);
     }
 
     /**
@@ -78,7 +83,7 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
 
     public RuleAdapterRuntime getRuntime() {
         if (runtime == null) {
-            runtime = getDefinition().isOrdered() ? new OrderedRuleAdapterRuntime(this) : new UnorderedRuleAdapterRuntime(this);
+            runtime = getMeta().isOrdered() ? new OrderedRuleAdapterRuntime(this) : new UnorderedRuleAdapterRuntime(this);
         }
 
         return runtime;
@@ -129,22 +134,21 @@ public class BaseRuleAdapter extends AbstractRuleAdapter<Rule> {
     public void validate() {
         super.validate();
 
-        if (getDefinition().getEventSpecs() == null || getDefinition().getEventSpecs().isEmpty()) {
+        if (getMeta().getEventSpecs() == null || getMeta().getEventSpecs().isEmpty()) {
             throw createValidationException("Event specifications are missing.");
         }
 
-        if (getDefinition().getEventNames().size() != getDefinition().getEventSpecs().size()) {
+        if (getMeta().getEventNames().size() != getMeta().getEventSpecs().size()) {
             throw createValidationException("Each event should have a specification (explicitly or implicitly).");
         }
 
-        if (getDefinition().getEventSpecs().stream().map(RuleEventSpec::getAlias).distinct().count() < getDefinition().getEventSpecs()
-                .size()) {
+        if (getMeta().getEventSpecs().stream().map(RuleEventSpec::getAlias).distinct().count() < getMeta().getEventSpecs().size()) {
             throw createValidationException("Event aliases together with names must be unique.");
         }
 
         // Validate condition event aliases.
-        Set<String> eventAliasesSet = getDefinition().getEventSpecs().stream().map(RuleEventSpec::getAlias).collect(Collectors.toSet());
-        for (String alias : getEventConditions().keySet()) {
+        Set<String> eventAliasesSet = getMeta().getEventSpecs().stream().map(RuleEventSpec::getAlias).collect(Collectors.toSet());
+        for (String alias : getMeta().getEventConditions().keySet()) {
             if (!eventAliasesSet.contains(alias)) {
                 throw createValidationException("Condition event alias '" + alias + "' does not exist");
             }

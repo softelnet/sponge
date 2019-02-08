@@ -26,13 +26,12 @@ class RulesNoneModeEventsConditions : KKnowledgeBase() {
 
     class RuleFNF : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e2 :none", "e3")
-            addConditions("e2", this::e2LabelCondition)
+            withEvents("e1", "e2 :none", "e3").withCondition("e2", this::e2LabelCondition)
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventAliasMap)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
 
         fun e2LabelCondition(event: Event) = event.get<String>("label").toInt() > 4
@@ -40,13 +39,12 @@ class RulesNoneModeEventsConditions : KKnowledgeBase() {
 
     class RuleFNNFReject : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e2 :none", "e6 :none", "e3")
-            addConditions("e2", this::e2LabelCondition)
+            withEvents("e1", "e2 :none", "e6 :none", "e3").withCondition("e2", this::e2LabelCondition)
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventAliasMap)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
 
         fun e2LabelCondition(event: Event) = event.get<String>("label").toInt() in 2..4

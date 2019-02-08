@@ -24,7 +24,7 @@ function checkPageStatus(host) {
 
 var HttpStatusTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "checkStatus";
+        self.withEvent("checkStatus");
     },
     onRun: function(self, event) {
         var status = checkPageStatus(event.get("host"));

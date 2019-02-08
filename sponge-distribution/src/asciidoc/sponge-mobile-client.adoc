@@ -2,7 +2,7 @@
 :page-permalink: /mobile/
 
 == Introduction
-The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS.
+The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} REST API.
 
 NOTE: The application is currently under development. It will be released as an open source. The beta version will be released in the first quarter of 2019.
 
@@ -13,7 +13,7 @@ The following chapters show the key features of the mobile application.
 
 image::screens/mobile/actions_connection_list.jpg[title="Selecting a connection to the Sponge instance in the action list screen",width=300,pdfwidth=35%,scaledwidth=35%]
 
-The application allows you to connect to a single {sponge} REST API server at a time. You may configure many connections and choose one of them.
+You may configure many connections to {sponge} REST API services. The application allows you to connect to a single service at the same time.
 
 image::screens/mobile/connections.jpg[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
 
@@ -52,9 +52,9 @@ Actions may have read only, provided arguments only to show a data from the serv
 ----
 class ManageLcd(Action):
     def onConfigure(self):
-        self.label = "Manage the LCD text and color"
-        self.description = "Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property."
-        self.argsMeta = [
+        self.withLabel("Manage the LCD text and color")
+        self.withDescription("Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property.")
+        self.withArgs([
             ArgMeta("currentText", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
                 .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("text", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
@@ -63,8 +63,7 @@ class ManageLcd(Action):
                 .withLabel("LCD color").withDescription("The LCD color.").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
             ArgMeta("clearText", BooleanType().withNullable(True).withDefaultValue(False))
                 .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, currentText, text, color, clearText = None):
         sponge.call("SetLcd", [text, color, clearText])
     def onProvideArgs(self, names, current, provided):
@@ -76,6 +75,9 @@ class ManageLcd(Action):
         if "color" in names:
             provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
 
+class SetLcd(Action):
+    def onCall(self, text, color, clearText = None):
+        sponge.getVariable("grovePiDevice").setLcd("" if (clearText or text is None) else text, color)
 ----
 
 image::screens/mobile/action_call_manage_sensors.jpg[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -87,9 +89,8 @@ The action call screen allows editing the action arguments.
 ----
 class ManageSensorActuatorValues(Action):
     def onConfigure(self):
-        self.label = "Manage the sensor and actuator values"
-        self.description = "Provides management of the sensor and actuator values."
-        self.argsMeta = [
+        self.withLabel("Manage the sensor and actuator values").withDescription("Provides management of the sensor and actuator values.")
+        self.withArgs([
             ArgMeta("temperatureSensor", NumberType().withNullable()).withLabel(u"Temperature sensor (°C)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("humiditySensor", NumberType().withNullable()).withLabel(u"Humidity sensor (%)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("lightSensor", NumberType().withNullable()).withLabel(u"Light sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
@@ -98,8 +99,7 @@ class ManageSensorActuatorValues(Action):
             ArgMeta("redLed", BooleanType()).withLabel("Red LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
             ArgMeta("blueLed", IntegerType().withMinValue(0).withMaxValue(255)).withLabel("Blue LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
             ArgMeta("buzzer", BooleanType()).withLabel("Buzzer").withProvided(ArgProvidedMeta().withValue().withOverwrite())
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         grovePiDevice.setRedLed(redLed)
@@ -144,15 +144,13 @@ Actions arguments may be edited in multiline text fields.
 ----
 class SendSms(Action):
     def onConfigure(self):
-        self.label = "Send an SMS"
-        self.description = "Sends a new SMS."
-        self.argsMeta = [
+        self.withLabel("Send an SMS").withDescription("Sends a new SMS.")
+        self.withArgs([
             ArgMeta("recipient", StringType().withFormat("phone"))
                 .withLabel("Recipient").withDescription("The SMS recipient."),
             ArgMeta("message", StringType().withMaxLength(160).withFeatures({"maxLines":5}))
                 .withLabel("Message").withDescription("The SMS message.")
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, recipient, message):
         gsm.sendSms(recipient, message)
 ----
@@ -166,13 +164,12 @@ The color picker widget allows a user to choose a color as an argument value.
 ----
 class ChooseColor(Action):
     def onConfigure(self):
-        self.label = "Choose a color"
-        self.description = "Shows a color argument."
-        self.argsMeta = [
+        self.withLabel("Choose a color").withDescription("Shows a color argument.")
+        self.withArg(
             ArgMeta("color", StringType().withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"}))
                 .withLabel("Color").withDescription("The color.")
-        ]
-        self.resultMeta = ResultMeta(StringType())
+        )
+        self.withResult(ResultMeta(StringType()))
     def onCall(self, color):
         return "The chosen color is " + color
 ----
@@ -186,14 +183,8 @@ The drawing panel allows a user to paint an image that will be set as an argumen
 ----
 class DigitsPredict(Action):
     def onConfigure(self):
-        self.label = "Recognize a digit"
-        self.description = "Recognizes a handwritten digit"
-        self.argsMeta = [
-            ArgMeta("image", BinaryType().withMimeType("image/png")
-                   .withFeatures({"characteristic":"drawing", "width":28, "height":28, "background":"000000", "color":"FFFFFF", "strokeWidth":1.5}))\
-                   .withLabel("Image of a digit")
-        ]
-        self.resultMeta = ResultMeta(IntegerType()).withLabel("Recognized digit")
+        self.withLabel("Recognize a digit").withDescription("Recognizes a handwritten digit")
+        self.withArg(createImageArgMeta()).withResult(ResultMeta(IntegerType()).withLabel("Recognized digit"))
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
         prediction = max(predictions, key=predictions.get)
@@ -226,14 +217,13 @@ Drawing panels can be configured in a corresponding action definition, where a c
 ----
 class DrawAndUploadDoodle(Action):
     def onConfigure(self):
-        self.label = "Draw and upload a doodle"
-        self.description = "Shows a canvas to draw a doodle and uploads it to the server"
-        self.argsMeta = [
+        self.withLabel("Draw and upload a doodle").withDescription("Shows a canvas to draw a doodle and uploads it to the server")
+        self.withArg(
             ArgMeta("image", BinaryType().withMimeType("image/png")
                    .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5}))\
                    .withLabel("Doodle")
-        ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Status")
+        )
+        self.withResult(ResultMeta(StringType()).withLabel("Status"))
     def onCall(self, image):
         fileName = str(System.currentTimeMillis()) + ".png"
         SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + fileName)
@@ -253,15 +243,15 @@ Action arguments may depend on each other. Argument dependencies are supported i
 ----
 class DependingArgumentsAction(Action):
     def onConfigure(self):
-        self.label = "Action with depending arguments"
-        self.argsMeta = [
+        self.withLabel("Action with depending arguments")
+        self.withArgs([
             ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
             ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
             ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDepends("country")),
             ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
-            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet()),
-        ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Sentences")
+            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet())
+        ])
+        self.withResult(ResultMeta(StringType()).withLabel("Sentences"))
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):
@@ -331,10 +321,8 @@ Actions may return contents that can be viewed for example as a HTML or a PDF fi
 ----
 class HtmlFileOutput(Action):
     def onConfigure(self):
-        self.label = "HTML file output"
-        self.description = "Returns the HTML file."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().withMimeType("text/html")).withLabel("HTML file")
+        self.withLabel("HTML file output").withDescription("Returns the HTML file.")
+        self.withNoArgs().withResult(ResultMeta(BinaryType().withMimeType("text/html")).withLabel("HTML file"))
     def onCall(self):
         return String("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -352,10 +340,8 @@ class HtmlFileOutput(Action):
 
 class PdfFileOutput(Action):
     def onConfigure(self):
-        self.label = "PDF file output"
-        self.description = "Returns the PDF file."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().withMimeType("application/pdf")).withLabel("PDF file")
+        self.withLabel("PDF file output").withDescription("Returns the PDF file.")
+        self.withNoArgs().withResult(ResultMeta(BinaryType().withMimeType("application/pdf")).withLabel("PDF file"))
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
@@ -370,10 +356,8 @@ Actions may return a console output, for example the result of running the `df -
 ----
 class OsGetDiskSpaceInfo(Action):
     def onConfigure(self):
-        self.label = "Get disk space info"
-        self.description = "Returns the disk space info."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().withFormat("console")).withLabel("Disk space info")
+        self.withLabel("Get disk space info").withDescription("Returns the disk space info.")
+        self.withNoArgs().withResult(ResultMeta(StringType().withFormat("console")).withLabel("Disk space info"))
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("df", "-h").outputAsString()).run().outputString
 ----

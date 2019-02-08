@@ -13,7 +13,7 @@ fun onInit() {
 
 class EchoAction : Action() {
     override fun onConfigure() {
-        label = "Echo Action"
+        withLabel("Echo Action")
     }
 
     fun onCall(value: Number, text: String): Array<Any?> {

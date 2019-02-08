@@ -62,7 +62,7 @@ public class SyncAsyncEventSetProcessorMainProcessingUnitHandler<G extends Event
     }
 
     private boolean isSynchronous(EventSetProcessorDefinition processorDefinition) {
-        Boolean isSynchronous = processorDefinition.isSynchronous();
+        Boolean isSynchronous = processorDefinition.getMeta().isSynchronous();
         if (isSynchronous != null) {
             return isSynchronous;
         }

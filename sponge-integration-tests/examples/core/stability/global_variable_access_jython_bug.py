@@ -13,7 +13,7 @@ def onInit():
 
 class AbstractE(Trigger):
     def onConfigure(self):
-        self.event = "e"
+        self.withEvent("e")
 
 class E1(AbstractE):
     def onRun(self, event):
@@ -37,7 +37,7 @@ class E4(AbstractE):
 
 class Stop(Trigger):
     def onConfigure(self):
-        self.event = "stop"
+        self.withEvent("stop")
     def onRun(self, event):
         sponge.getVariable("stopped").set(True)
 

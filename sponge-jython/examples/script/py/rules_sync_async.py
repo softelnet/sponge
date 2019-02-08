@@ -14,8 +14,7 @@ def onInit():
 
 class RuleFFF(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e3 :first"]
-        self.synchronous = True
+        self.withEvents(["e1", "e2", "e3 :first"]).withSynchronous(True)
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         global correlationEventsLog
@@ -23,10 +22,8 @@ class RuleFFF(Rule):
 
 class RuleFFL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e3 :last"]
         global defaultDuration
-        self.duration = Duration.ofSeconds(2)
-        self.synchronous = False
+        self.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofSeconds(2)).withSynchronous(False)
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         global correlationEventsLog

@@ -24,7 +24,9 @@ class RulesHeartbeat : KKnowledgeBase() {
 
     class HeartbeatFilter : KFilter() {
         var heartbeatCounter = 0
-        override fun onConfigure() = setEvent("heartbeat")
+        override fun onConfigure() {
+            withEvent("heartbeat")
+        }
         override fun onAccept(event: Event): Boolean {
             heartbeatCounter++
             if (heartbeatCounter > 2) {
@@ -39,9 +41,9 @@ class RulesHeartbeat : KKnowledgeBase() {
     /** Sounds the alarm when heartbeat event stops occurring at most every 2 seconds. */
     class HeartbeatRule : KRule() {
         override fun onConfigure() {
-            setEvents("heartbeat h1", "heartbeat h2 :none")
-            addConditions("h2", { rule: Rule, event: Event -> rule.firstEvent.get<Any?>("source") == event.get<Any?>("source") })
-            duration = Duration.ofSeconds(2)
+            withEvents("heartbeat h1", "heartbeat h2 :none")
+            withConditions("h2", { rule: Rule, event: Event -> rule.firstEvent.get<Any?>("source") == event.get<Any?>("source") })
+            withDuration(Duration.ofSeconds(2))
         }
 
         override fun onRun(event: Event?) {
@@ -50,7 +52,9 @@ class RulesHeartbeat : KKnowledgeBase() {
     }
 
     class AlarmTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("alarm")
+        override fun onConfigure() {
+            withEvent("alarm")
+        }
         override fun onRun(event: Event) {
             println("Sound the alarm!")
             sponge.getVariable<AtomicBoolean>("soundTheAlarm").set(true)

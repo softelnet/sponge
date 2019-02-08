@@ -15,7 +15,7 @@ void onInit() {
 
 class ColorFilter extends Filter {
     void onConfigure() {
-        this.event = "e1"
+        this.withEvent("e1")
     }
     boolean onAccept(Event event) {
         this.logger.debug("Received event {}", event)
@@ -32,7 +32,7 @@ class ColorFilter extends Filter {
 
 class ColorTrigger extends Trigger {
     void onConfigure() {
-        this.event = "e1"
+        this.withEvent("e1")
     }
     void onRun(Event event) {
         this.logger.debug("Received event {}", event)

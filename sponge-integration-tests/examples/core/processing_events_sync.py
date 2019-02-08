@@ -17,11 +17,11 @@ def onInit():
     sponge.setVariable("testStatus", None)
 
 def doWork(rule):
-    running.get(rule.name).set(True)
+    running.get(rule.meta.name).set(True)
     rule.logger.debug("Work start")
     TimeUnit.SECONDS.sleep(10)
     rule.logger.debug("Work stop")
-    running.get(rule.name).set(False)
+    running.get(rule.meta.name).set(False)
 
 def assertState(condition, message):
     if not condition:
@@ -30,13 +30,13 @@ def assertState(condition, message):
 
 class Rule1(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     def onRun(self, event):
         doWork(self)
 
 class Rule2(Rule):
     def onConfigure(self):
-        self.events = ["e2", "e3"]
+        self.withEvents(["e2", "e3"])
     def onRun(self, event):
         assertState(running.get("Rule1").get(), "Rule1 should be running")
         doWork(self)
@@ -44,7 +44,7 @@ class Rule2(Rule):
 
 class Rule3(Rule):
     def onConfigure(self):
-        self.events = ["e4", "e5"]
+        self.withEvents(["e4", "e5"])
     def onRun(self, event):
         global running
         assertState(running.get("Rule1").get(), "Rule1 should be running")
@@ -53,7 +53,7 @@ class Rule3(Rule):
 
 class Rule4(Rule):
     def onConfigure(self):
-        self.events = ["e6", "e7"]
+        self.withEvents(["e6", "e7"])
     def onRun(self, event):
         global running
         assertState(running.get("Rule1").get(), "Rule1 should be running")

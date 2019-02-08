@@ -22,7 +22,9 @@ class KnowledgeBaseManager : KKnowledgeBase() {
     }
 
     class VerifyTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("verify")
+        override fun onConfigure() {
+            withEvent("verify")
+        }
 
         override fun onRun(event: Event) = verifyManager()
 
@@ -40,7 +42,9 @@ class KnowledgeBaseManager : KKnowledgeBase() {
     }
 
     class TriggerA : KTrigger() {
-        override fun onConfigure() = setEvent("a")
+        override fun onConfigure() {
+            withEvent("a")
+        }
         override fun onRun(event: Event) {
         }
     }

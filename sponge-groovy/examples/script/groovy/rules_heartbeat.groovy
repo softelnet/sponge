@@ -14,7 +14,7 @@ class HeartbeatFilter extends Filter {
     int heartbeatCounter = 0
 
     void onConfigure() {
-        this.event = "heartbeat"
+        this.withEvent("heartbeat")
     }
     boolean onAccept(Event event) {
         this.heartbeatCounter += 1
@@ -30,11 +30,11 @@ class HeartbeatFilter extends Filter {
 // Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule extends Rule {
     void onConfigure() {
-        this.events = ["heartbeat h1", "heartbeat h2 :none"]
-        this.addConditions("h2", { rule, event ->
+        this.withEvents(["heartbeat h1", "heartbeat h2 :none"])
+        this.withCondition("h2", { rule, event ->
                 return rule.firstEvent.get("source") == event.get("source")
         })
-        this.duration = Duration.ofSeconds(2)
+        this.withDuration(Duration.ofSeconds(2))
     }
     void onRun(Event event) {
         sponge.event("alarm").set("severity", 1).send()
@@ -43,7 +43,7 @@ class HeartbeatRule extends Rule {
 
 class AlarmTrigger extends Trigger {
     void onConfigure() {
-        this.event = "alarm"
+        this.withEvent("alarm")
     }
     void onRun(Event event) {
         println "Sound the alarm!"

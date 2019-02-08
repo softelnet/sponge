@@ -18,7 +18,7 @@ end
 
 class AutoFilter < Filter
     def onConfigure
-        self.event = "e1"
+        self.withEvent("e1")
     end
     def onAccept(event)
         self.logger.debug("Received event: {}", event.name)
@@ -29,7 +29,7 @@ end
 
 class AutoTrigger < Trigger
     def onConfigure
-        self.event = "e1"
+        self.withEvent("e1")
     end
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)
@@ -39,7 +39,7 @@ end
 
 class AutoRule < Rule
     def onConfigure
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     end
     def onRun(event)
         self.logger.debug("Running for sequence: {}", self.eventSequence)
@@ -49,7 +49,7 @@ end
 
 class AutoCorrelator < Correlator
     def onConfigure
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     end
     def onAcceptAsFirst(event)
         return event.name == "e1"

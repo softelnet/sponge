@@ -21,6 +21,15 @@ import org.openksavi.sponge.trigger.TriggerDefinition;
 
 public class BaseTriggerDefinition extends BaseEventProcessorDefinition implements TriggerDefinition {
 
+    public BaseTriggerDefinition() {
+        super(new BaseTriggerMeta());
+    }
+
+    @Override
+    public BaseTriggerMeta getMeta() {
+        return (BaseTriggerMeta) super.getMeta();
+    }
+
     @Override
     public boolean isSingleton() {
         return true;

@@ -5,7 +5,7 @@ Digits REST server
 
 class CallPredict(Trigger):
     def onConfigure(self): 
-        self.event = "predict"
+        self.withEvent("predict")
     def onRun(self, event):
         file = event.get("file")
         predictions = sponge.call("DigitsPredictProbabilities", [SpongeUtils.readFileToByteArray(file)])

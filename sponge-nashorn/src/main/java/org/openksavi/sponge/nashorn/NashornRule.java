@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.nashorn;
 
+import java.util.List;
 import java.util.function.Function;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -76,15 +77,19 @@ public abstract class NashornRule extends BaseRule implements NashornScriptObjec
 
     public abstract void onRun(Object self, Event event);
 
-    public void addConditions(String eventAlias, ScriptObjectMirror... functions) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, functions));
+    public NashornRule withConditions(String eventAlias, List<ScriptObjectMirror> functions) {
+        return (NashornRule) super.withEventCondition(eventAlias, CompositeEventCondition.create(MAPPER, functions));
     }
 
-    public void addAllConditions(ScriptObjectMirror... functions) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, functions));
+    public NashornRule withCondition(String eventAlias, ScriptObjectMirror function) {
+        return (NashornRule) super.withEventCondition(eventAlias, MAPPER.apply(function));
     }
 
-    public void addCondition(String eventAlias, ScriptObjectMirror function) {
-        addEventCondition(eventAlias, MAPPER.apply(function));
+    public NashornRule withAllConditions(List<ScriptObjectMirror> functions) {
+        return (NashornRule) super.withAllEventCondition(CompositeEventCondition.create(MAPPER, functions));
+    }
+
+    public NashornRule withAllCondition(ScriptObjectMirror function) {
+        return (NashornRule) super.withAllEventCondition(MAPPER.apply(function));
     }
 }

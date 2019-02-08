@@ -20,7 +20,9 @@ class RulesInstances : KKnowledgeBase() {
     }
 
     class RuleA : KRule() {
-        override fun onConfigure() = setEvents("a a1", "a a2")
+        override fun onConfigure() {
+            withEvents("a a1", "a a2")
+        }
 
         override fun onRun(event: Event?) {
             sponge.getVariable<AtomicInteger>("countA").incrementAndGet()
@@ -28,7 +30,9 @@ class RulesInstances : KKnowledgeBase() {
     }
 
     class RuleB : KRule() {
-        override fun onConfigure() = setEvents("b b1", "b b2")
+        override fun onConfigure() {
+            withEvents("b b1", "b b2")
+        }
 
         override fun onRun(event: Event?) {
             sponge.getVariable<AtomicInteger>("countB").incrementAndGet()

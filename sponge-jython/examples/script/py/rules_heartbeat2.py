@@ -11,8 +11,7 @@ def onInit():
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule(Rule):
     def onConfigure(self):
-        self.events = ["heartbeat h1", "heartbeat h2 :none"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["heartbeat h1", "heartbeat h2 :none"]).withDuration(Duration.ofSeconds(2))
     def onRun(self, event):
         self.logger.info("Sound the alarm!")
         sponge.getVariable("soundTheAlarm").set(True)

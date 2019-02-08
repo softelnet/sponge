@@ -11,7 +11,7 @@ end
 
 class A < Trigger
     def onConfigure
-        self.event = "a"
+        self.withEvent("a")
     end
     def onRun(event)
         TimeUnit::SECONDS::sleep(1)
@@ -23,7 +23,7 @@ end
 
 class B < Trigger
     def onConfigure
-        self.event = "b"
+        self.withEvent("b")
     end
     def onRun(event)
         TimeUnit::SECONDS::sleep(2)
@@ -35,7 +35,7 @@ end
 
 class C < Trigger
     def onConfigure
-        self.event = "c"
+        self.withEvent("c")
     end
     def onRun(event)
         TimeUnit::SECONDS::sleep(8)

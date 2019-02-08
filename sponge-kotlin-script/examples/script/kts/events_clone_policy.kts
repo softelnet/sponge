@@ -16,7 +16,9 @@ fun onInit() {
 }
 
 class ClonePolicyTrigger : Trigger() {
-    override fun onConfigure() = setEvents("defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy")
+    override fun onConfigure() {
+        withEvents("defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy")
+    }
 
     override fun onRun(event: Event) {
         var events: Map<String, MutableList<Event>> = sponge.getVariable("events")

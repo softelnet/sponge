@@ -8,7 +8,7 @@ import re, collections
 # Reject news with empty or short titles.
 class NewsFilter(Filter):
     def onConfigure(self):
-        self.event = "news"
+        self.withEvent("news")
     def onAccept(self, event):
         title = event.get("title")
         words = len(re.findall("\w+", title))
@@ -17,22 +17,21 @@ class NewsFilter(Filter):
 # Log every news.
 class LogNewsTrigger(Trigger):
     def onConfigure(self):
-        self.event = "news"
+        self.withEvent("news")
     def onRun(self, event):
         print("News from {} - {}".format(event.get("source"), event.get("title")))
 
 # Send 'alarm' event when news stop arriving for 3 seconds.
 class NoNewNewsAlarmRule(Rule):
     def onConfigure(self):
-        self.events = ["news n1", "news n2 :none"]
-        self.duration = Duration.ofSeconds(3)
+        self.withEvents(["news n1", "news n2 :none"]).withDuration(Duration.ofSeconds(3))
     def onRun(self, event):
-        sponge.event("alarm").set("severity", 1).set("message", "No new news for " + str(self.duration.seconds) + "s.").send()
+        sponge.event("alarm").set("severity", 1).set("message", "No new news for " + str(self.meta.duration.seconds) + "s.").send()
 
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         print("Sound the alarm! {}".format(event.get("message")))
         print("Last news was:\n{}".format(sponge.call("EmphasizeAction", [storagePlugin.storedValue[-1]])))
@@ -43,7 +42,7 @@ class AlarmTrigger(Trigger):
 class LatestNewsCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def onConfigure(self):
-        self.events = ["news"]
+        self.withEvent("news")
     def onAcceptAsFirst(self, event):
         return LatestNewsCorrelator.instanceStarted.compareAndSet(False, True)
     def onInit(self):

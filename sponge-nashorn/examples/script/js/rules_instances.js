@@ -14,7 +14,7 @@ function onInit() {
 
 var RuleA = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["a a1", "a a2"];
+        self.withEvents(["a a1", "a a2"]);
     },
     onRun: function(self, event) {
         sponge.getVariable("countA").incrementAndGet();
@@ -23,7 +23,7 @@ var RuleA = Java.extend(Rule, {
 
 var RuleB = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["b b1", "b b2"];
+        self.withEvents(["b b1", "b b2"]);
     },
     onRun: function(self, event) {
         sponge.getVariable("countB").incrementAndGet();

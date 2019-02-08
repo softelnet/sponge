@@ -21,6 +21,6 @@ import org.openksavi.sponge.EventProcessorDefinition;
 /**
  * Trigger definition.
  */
-public interface TriggerDefinition extends EventProcessorDefinition {
+public interface TriggerDefinition extends EventProcessorDefinition, TriggerOperations {
 
 }

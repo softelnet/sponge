@@ -95,7 +95,7 @@ public class DemoServiceLoadTest {
             for (int i = 0; i < TEST_COUNT; i++) {
                 logger.info("Iteration ({}): {}/{}", threadNumber, i + 1, TEST_COUNT);
                 images.forEach(digitData -> assertEquals(digitData.getKey(),
-                        client.call(Number.class, "DigitsPredict", Arrays.asList(digitData.getValue()))));
+                        client.call(Number.class, "DigitsPredict", Arrays.asList((Object) digitData.getValue()))));
             }
 
             return null;

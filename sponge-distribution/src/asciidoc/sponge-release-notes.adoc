@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.7.1 (not released yet)
 
+* API change: The processor metadata properties have to be specified using the builder-style methods, e.g. `self.withLabel("Label").withDescription("Description")`.
 * API change: Renamed the builder-style methods in the metadata classes to follow the naming convention `with<Property>`, e.g. `BinaryType().mimeType("image/png")` is now `BinaryType().withMimeType("image/png")`.
 * Added support for categories. Processors may be assigned to registered categories.
 * Added new types: `DynamicType`, `TypeType`, `DateTimeType`.

@@ -15,7 +15,7 @@ end
 
 class ColorFilter < Filter
     def onConfigure
-        self.event = "e1"
+        self.withEvent("e1")
     end
     def onAccept(event)
         self.logger.debug("Received event {}", event)
@@ -32,7 +32,7 @@ end
 
 class ColorTrigger < Trigger
     def onConfigure
-        self.event = "e1"
+        self.withEvent("e1")
     end
     def onRun(event)
         self.logger.debug("Received event {}", event)

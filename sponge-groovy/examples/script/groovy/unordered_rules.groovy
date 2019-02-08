@@ -16,10 +16,10 @@ void onInit() {
 
 class FirstRule extends Rule {
     void onConfigure() {
-        this.events = ["filesystemFailure", "diskFailure"]; this.ordered = false
-        this.addAllConditions({ rule, event -> return rule.firstEvent.get("source") == event.get("source")})
-        this.addAllConditions({ rule, event -> return Duration.between(rule.firstEvent.time, event.time).seconds <= 2})
-        this.duration = Duration.ofSeconds(5)
+        this.withEvents(["filesystemFailure", "diskFailure"]).withOrdered(false).withAllConditions([
+            { rule, event -> return rule.firstEvent.get("source") == event.get("source")},
+            { rule, event -> return Duration.between(rule.firstEvent.time, event.time).seconds <= 2}
+        ]).withDuration(Duration.ofSeconds(5))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventSequence)
@@ -30,10 +30,9 @@ class FirstRule extends Rule {
 
 class SameSourceAllRule extends Rule {
     void onConfigure() {
-        this.events = ["filesystemFailure e1", "diskFailure e2 :all"]; this.ordered = false
-        this.addConditions("e1", this.&severityCondition)
-        this.addConditions("e2", this.&severityCondition, this.&diskFailureSourceCondition)
-        this.duration = Duration.ofSeconds(5)
+        this.withEvents(["filesystemFailure e1", "diskFailure e2 :all"]).withOrdered(false)
+            .withCondition("e1", this.&severityCondition).withConditions("e2", [this.&severityCondition, this.&diskFailureSourceCondition])
+            .withDuration(Duration.ofSeconds(5))
     }
     void onRun(Event event) {
         this.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
@@ -51,7 +50,7 @@ class SameSourceAllRule extends Rule {
 class AlarmFilter extends Filter {
     def deduplication = new Deduplication("source")
     void onConfigure() {
-        this.event = "alarm"
+        this.withEvent("alarm")
     }
     void onInit() {
         this.deduplication.cacheBuilder.expireAfterWrite(2, TimeUnit.SECONDS)
@@ -63,7 +62,7 @@ class AlarmFilter extends Filter {
 
 class Alarm extends Trigger {
     void onConfigure() {
-        this.event = "alarm"
+        this.withEvent("alarm")
     }
     void onRun(Event event) {
         this.logger.debug("Received alarm from {}", event.get("source"))

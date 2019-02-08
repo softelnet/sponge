@@ -16,12 +16,7 @@
 
 package org.openksavi.sponge.core.rule;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
-import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.rule.RuleAdapter;
@@ -37,38 +32,8 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     }
 
     @Override
-    public boolean isOrdered() {
-        return getDefinition().isOrdered();
-    }
-
-    @Override
-    public void setOrdered(boolean ordered) {
-        getDefinition().setOrdered(ordered);
-    }
-
-    @Override
-    public void addEventConditions(String eventAlias, EventCondition... conditions) {
-        getDefinition().addEventConditions(eventAlias, conditions);
-    }
-
-    @Override
-    public void addAllEventConditions(EventCondition... conditions) {
-        getDefinition().addAllEventConditions(conditions);
-    }
-
-    @Override
-    public void addEventCondition(String eventAlias, EventCondition condition) {
-        getDefinition().addEventCondition(eventAlias, condition);
-    }
-
-    @Override
-    public List<EventCondition> getEventConditions(String eventAlias) {
-        return getDefinition().getEventConditions(eventAlias);
-    }
-
-    @Override
-    public final Map<String, List<EventCondition>> getEventConditions() {
-        return getDefinition().getEventConditions();
+    public BaseRuleMeta getMeta() {
+        return (BaseRuleMeta) super.getMeta();
     }
 
     @Override
@@ -83,16 +48,6 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
      */
     protected abstract boolean runRule();
 
-    public void setEventStringSpecs(List<String> eventStringSpecs) {
-        setEventSpecs(eventStringSpecs.stream().map(spec -> getKnowledgeBase().getInterpreter().getRuleEventSpec(spec))
-                .collect(Collectors.toList()));
-    }
-
-    public void setEventSpecs(List<RuleEventSpec> eventSpecs) {
-        getDefinition().setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
-        getDefinition().setEventSpecs(eventSpecs);
-    }
-
     @Override
     public BaseRuleDefinition getDefinition() {
         return (BaseRuleDefinition) super.getDefinition();
@@ -100,7 +55,7 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
 
     @Override
     public int getEventCount() {
-        return getDefinition().getEventNames().size();
+        return getMeta().getEventNames().size();
     }
 
     public RuleEventSpec makeEventSpec(String eventName, String eventAlias, EventMode eventMode) {

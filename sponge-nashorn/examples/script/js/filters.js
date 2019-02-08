@@ -15,7 +15,7 @@ function onInit() {
 
 var ColorFilter = Java.extend(Filter, {
     onConfigure: function(self) {
-        self.event = "e1";
+        self.withEvent("e1");
     },
     onAccept: function(self, event) {
         self.logger.debug("Received event {}", event);
@@ -32,7 +32,7 @@ var ColorFilter = Java.extend(Filter, {
 
 var ColorTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "e1";
+        self.withEvent("e1");
     },
     onRun: function(self, event) {
         self.logger.debug("Received event {}", event);

@@ -28,10 +28,10 @@ public class PowerEchoMetadataAction extends JAction {
 
     @Override
     public void onConfigure() {
-        setFeatures(SpongeUtils.immutableMapOf("visibility", true));
-        setArgsMeta(new ArgMeta<>("value", new NumberType()).withLabel("Argument 1"),
+        withFeatures(SpongeUtils.immutableMapOf("visibility", true));
+        withArgs(new ArgMeta<>("value", new NumberType()).withLabel("Argument 1"),
                 new ArgMeta<>("text", new StringType()).withLabel("Argument 2"));
-        setResultMeta(new ResultMeta<>(new AnyType()));
+        withResult(new ResultMeta<>(new AnyType()));
     }
 
     public Object onCall(Number value, String text) {

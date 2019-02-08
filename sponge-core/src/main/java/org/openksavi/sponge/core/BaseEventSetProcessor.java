@@ -26,6 +26,11 @@ import org.openksavi.sponge.event.Event;
 public abstract class BaseEventSetProcessor<T extends EventSetProcessorAdapter<?>> extends BaseEventProcessor<T>
         implements EventSetProcessor<T> {
 
+    @Override
+    public BaseEventSetProcessorMeta getMeta() {
+        return (BaseEventSetProcessorMeta) super.getMeta();
+    }
+
     @SuppressWarnings({ "rawtypes" })
     protected final BaseEventSetProcessorAdapter getEventSetProcessorAdapterImpl() {
         return (BaseEventSetProcessorAdapter) super.getAdapter();
@@ -37,32 +42,17 @@ public abstract class BaseEventSetProcessor<T extends EventSetProcessorAdapter<?
     }
 
     @Override
-    public final boolean hasDuration() {
-        return getAdapter().hasDuration();
-    }
-
-    @Override
-    public final void setDuration(Duration duration) {
-        getAdapter().setDuration(duration);
-    }
-
-    @Override
-    public final Duration getDuration() {
-        return getAdapter().getDuration();
-    }
-
-    @Override
-    public final Boolean isSynchronous() {
-        return getAdapter().isSynchronous();
-    }
-
-    @Override
-    public final void setSynchronous(Boolean synchronous) {
-        getAdapter().setSynchronous(synchronous);
-    }
-
-    @Override
     public final EventSetProcessorAdapterGroup<EventSetProcessorAdapter<?>> getGroup() {
         return getAdapter().getGroup();
+    }
+
+    public BaseEventSetProcessor<T> withDuration(Duration duration) {
+        getMeta().setDuration(duration);
+        return this;
+    }
+
+    public BaseEventSetProcessor<T> withSynchronous(Boolean synchronous) {
+        getMeta().setSynchronous(synchronous);
+        return this;
     }
 }

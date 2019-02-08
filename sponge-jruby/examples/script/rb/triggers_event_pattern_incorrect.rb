@@ -3,7 +3,7 @@
 
 class TriggerAPattern < Trigger
     def onConfigure
-        self.event = "a.**"
+        self.withEvent("a.**")
     end
     def onRun(event)
     end

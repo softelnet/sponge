@@ -80,7 +80,7 @@ public abstract class RestApiServerUtils {
         }
 
         // Argument metadata not defined for this action. No type checking, returning raw values.
-        if (actionAdapter.getArgsMeta() == null) {
+        if (actionAdapter.getMeta().getArgsMeta() == null) {
             return jsonArgs;
         }
 
@@ -89,14 +89,14 @@ public abstract class RestApiServerUtils {
         for (Object jsonArg : jsonArgs) {
             Object finalArg = jsonArg;
             // Unmarshal only those who have metadata. Others are returned as raw values.
-            if (finalArg != null && index < actionAdapter.getArgsMeta().size()) {
-                ArgMeta<?> argMeta = actionAdapter.getArgsMeta().get(index);
+            if (finalArg != null && index < actionAdapter.getMeta().getArgsMeta().size()) {
+                ArgMeta<?> argMeta = actionAdapter.getMeta().getArgsMeta().get(index);
                 if (argMeta != null && argMeta.getType() != null) {
                     try {
                         finalArg = typeConverter.unmarshal(argMeta.getType(), finalArg);
                     } catch (Exception e) {
                         throw SpongeUtils.wrapException(String.format("Unmarshal argument %s in the %s action",
-                                argMeta.getName() != null ? argMeta.getName() : index, actionAdapter.getName()), e);
+                                argMeta.getName() != null ? argMeta.getName() : index, actionAdapter.getMeta().getName()), e);
                     }
                 }
             }
@@ -110,11 +110,11 @@ public abstract class RestApiServerUtils {
 
     public static Object marshalActionCallResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result,
             Exchange exchange) {
-        if (result == null || actionAdapter.getResultMeta() == null) {
+        if (result == null || actionAdapter.getMeta().getResultMeta() == null) {
             return result;
         }
 
-        return typeConverter.marshal(actionAdapter.getResultMeta().getType(), result);
+        return typeConverter.marshal(actionAdapter.getMeta().getResultMeta().getType(), result);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -122,7 +122,7 @@ public abstract class RestApiServerUtils {
             Map<String, ArgProvidedValue<?>> argValues) {
 
         argValues.forEach((argName, argValue) -> {
-            ArgMeta<?> argMeta = actionAdapter.getArgMeta(argName);
+            ArgMeta<?> argMeta = actionAdapter.getMeta().getArgMeta(argName);
             ((ArgProvidedValue) argValue).setValue(typeConverter.marshal(argMeta.getType(), argValue.getValue()));
 
             if (argValue.getAnnotatedValueSet() != null) {
@@ -142,12 +142,13 @@ public abstract class RestApiServerUtils {
         }
 
         // Argument metadata not defined for this action. No type checking, returning raw values.
-        if (actionAdapter.getArgsMeta() == null) {
+        if (actionAdapter.getMeta().getArgsMeta() == null) {
             return jsonArgs;
         }
 
         Map<String, Object> unmarshalled = new LinkedHashMap<>();
-        jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(actionAdapter.getArgMeta(name).getType(), value)));
+        jsonArgs.forEach((name, value) -> unmarshalled.put(name,
+                typeConverter.unmarshal(actionAdapter.getMeta().getArgMeta(name).getType(), value)));
 
         return unmarshalled;
     }

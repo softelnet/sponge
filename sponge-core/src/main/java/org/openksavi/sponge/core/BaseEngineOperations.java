@@ -26,16 +26,21 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.process.DefaultProcessDefinition;
+import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
+import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.rule.RuleMeta;
+import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
@@ -356,5 +361,30 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public List<CategoryMeta> getCategories() {
         return engine.getCategories();
+    }
+
+    @Override
+    public ActionMeta getActionMeta(String actionName) {
+        return engine.getActionMeta(actionName);
+    }
+
+    @Override
+    public FilterMeta getFilterMeta(String filterName) {
+        return engine.getFilterMeta(filterName);
+    }
+
+    @Override
+    public TriggerMeta getTriggerMeta(String triggerName) {
+        return engine.getTriggerMeta(triggerName);
+    }
+
+    @Override
+    public CorrelatorMeta getCorrelatorMeta(String correlatorName) {
+        return engine.getCorrelatorMeta(correlatorName);
+    }
+
+    @Override
+    public RuleMeta getRuleMeta(String ruleName) {
+        return engine.getRuleMeta(ruleName);
     }
 }

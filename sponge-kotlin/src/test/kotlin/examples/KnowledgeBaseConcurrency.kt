@@ -19,7 +19,9 @@ class KnowledgeBaseConcurrency : KKnowledgeBase() {
     }
 
     class A : KTrigger() {
-        override fun onConfigure() = setEvent("a")
+        override fun onConfigure() {
+            withEvent("a")
+        }
         override fun onRun(event: Event) {
             TimeUnit.SECONDS.sleep(1)
             sponge.getVariable<AtomicReference<Any>>("value").set("A1")
@@ -29,7 +31,9 @@ class KnowledgeBaseConcurrency : KKnowledgeBase() {
     }
 
     class B : KTrigger() {
-        override fun onConfigure() = setEvent("b")
+        override fun onConfigure() {
+            withEvent("b")
+        }
         override fun onRun(event: Event) {
             TimeUnit.SECONDS.sleep(2)
             sponge.getVariable<AtomicReference<Any>>("value").set("B1")
@@ -39,7 +43,9 @@ class KnowledgeBaseConcurrency : KKnowledgeBase() {
     }
 
     class C : KTrigger() {
-        override fun onConfigure() = setEvent("c")
+        override fun onConfigure() {
+            withEvent("c")
+        }
         override fun onRun(event: Event) {
             TimeUnit.SECONDS.sleep(8)
             sponge.getVariable<AtomicReference<Any>>("value").set("C1")

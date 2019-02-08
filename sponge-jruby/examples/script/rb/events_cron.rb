@@ -11,7 +11,7 @@ end
 
 class CronTrigger < Trigger
     def onConfigure
-        self.event = "cronEvent"
+        self.withEvent("cronEvent")
     end
     def onRun(event)
         $eventCounter.incrementAndGet

@@ -5,7 +5,7 @@
 
 var TriggerAPattern = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "a.**";
+        self.withEvent("a.**");
     },
     onRun: function(self, event) {
     }

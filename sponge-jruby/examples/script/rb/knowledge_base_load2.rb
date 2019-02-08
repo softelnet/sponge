@@ -3,23 +3,21 @@
 
 class Trigger1 < Trigger
     def onConfigure
-        self.label = "Trigger1, file2"
-        self.event = "e1"
+        self.withLabel("Trigger1, file2").withEvent("e1")
     end
     def onRun(event)
         #self.logger.debug("file2: Received event {}", event)
-        $eventCounter.get(self.label).incrementAndGet()
+        $eventCounter.get(self.meta.label).incrementAndGet()
     end
 end
 
 class Trigger2 < Trigger
     def onConfigure
-        self.label = "Trigger2, file2"
-        self.event = "e2"
+        self.withLabel("Trigger2, file2").withEvent("e2")
     end
     def onRun(event)
         #self.logger.debug("file2: Received event {}", event)
-        $eventCounter.get(self.label).incrementAndGet()
+        $eventCounter.get(self.meta.label).incrementAndGet()
     end
 end
 

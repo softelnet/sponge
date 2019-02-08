@@ -19,8 +19,7 @@ class SampleCorrelator extends Correlator {
     private eventLog
 
     void onConfigure() {
-        this.events = ["filesystemFailure", "diskFailure"]
-        this.maxInstances = 1
+        this.withEvents(["filesystemFailure", "diskFailure"]).withMaxInstances(1)
     }
     boolean onAcceptAsFirst(Event event) {
         return event.name == "filesystemFailure"

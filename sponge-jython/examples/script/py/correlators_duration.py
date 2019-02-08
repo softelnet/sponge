@@ -12,8 +12,7 @@ def onInit():
 class SampleCorrelator(Correlator):
     instanceStarted = AtomicBoolean(False)
     def onConfigure(self):
-        self.events = ["filesystemFailure", "diskFailure"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["filesystemFailure", "diskFailure"]).withDuration(Duration.ofSeconds(2))
     def onAcceptAsFirst(self, event):
         return SampleCorrelator.instanceStarted.compareAndSet(False, True)
     def onInit(self):

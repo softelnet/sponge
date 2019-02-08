@@ -14,7 +14,7 @@ def onInit():
 
 class Trigger1(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         global eventCounter
         eventCounter.incrementAndGet()
@@ -24,7 +24,7 @@ class Trigger1(Trigger):
 
 class Trigger2(Trigger):
     def onConfigure(self):
-        self.event = "e2"
+        self.withEvent("e2")
     def onRun(self, event):
         self.logger.debug("Removing entry")
         global eventEntry

@@ -16,8 +16,7 @@ function onInit() {
 
 var SampleCorrelator = Java.extend(Correlator, {
     onConfigure: function(self) {
-        self.events = ["filesystemFailure", "diskFailure"];
-        self.maxInstances = 1;
+        self.withEvents(["filesystemFailure", "diskFailure"]).withMaxInstances(1);
     },
     onAcceptAsFirst: function(self, event) {
         return event.name == "filesystemFailure"

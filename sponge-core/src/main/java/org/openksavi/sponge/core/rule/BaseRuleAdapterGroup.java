@@ -47,6 +47,11 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
         return ProcessorType.RULE_GROUP;
     }
 
+    @Override
+    public BaseRuleMeta getMeta() {
+        return (BaseRuleMeta) super.getMeta();
+    }
+
     /**
      * Checks if there is a need for creating a new rule instance.
      *
@@ -55,8 +60,8 @@ public class BaseRuleAdapterGroup extends BaseEventSetProcessorAdapterGroup<Rule
      */
     @Override
     public boolean needNewInstance(Event event) {
-        return getTemplateAdapter().getDefinition().isOrdered() ? getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher()
-                .matches(getDefinition().getEventName(0), event.getName()) : true;
+        return getMeta().isOrdered() ? getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher()
+                .matches(getMeta().getEventName(0), event.getName()) : true;
     }
 
     @Override

@@ -16,7 +16,7 @@ function onInit() {
 
 var FilterTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.events = ["e1", "e2", "e3"];
+        self.withEvents(["e1", "e2", "e3"]);
     },
     onRun: function(self, event) {
         self.logger.debug("Processing trigger for event {}", event);

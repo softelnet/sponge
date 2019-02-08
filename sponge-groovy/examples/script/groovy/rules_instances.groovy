@@ -14,7 +14,7 @@ void onInit() {
 
 class RuleA extends Rule {
     void onConfigure() {
-        this.events = ["a a1", "a a2"]
+        this.withEvents(["a a1", "a a2"])
     }
     void onRun(Event event) {
         sponge.getVariable("countA").incrementAndGet()
@@ -23,7 +23,7 @@ class RuleA extends Rule {
 
 class RuleB extends Rule {
     void onConfigure() {
-        this.events = ["b b1", "b b2"]
+        this.withEvents(["b b1", "b b2"])
     }
     void onRun(Event event) {
         sponge.getVariable("countB").incrementAndGet()

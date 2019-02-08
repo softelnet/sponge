@@ -14,7 +14,7 @@ def onInit():
 
 class TriggerA(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         sponge.getVariable("receivedEventA1").set(1)
 
@@ -23,7 +23,7 @@ sponge.enable(TriggerA)
 
 class TriggerA(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         sponge.getVariable("receivedEventA2").set(2)
 

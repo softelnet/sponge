@@ -16,42 +16,22 @@
 
 package org.openksavi.sponge.core.action;
 
-import java.util.List;
-
 import org.openksavi.sponge.action.ActionDefinition;
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
-import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class BaseActionDefinition extends BaseProcessorDefinition implements ActionDefinition {
 
-    private List<ArgMeta<?>> argsMeta;
+    public BaseActionDefinition() {
+        super(new BaseActionMeta());
+    }
 
-    private ResultMeta<?> resultMeta;
+    @Override
+    public BaseActionMeta getMeta() {
+        return (BaseActionMeta) super.getMeta();
+    }
 
     @Override
     public boolean isSingleton() {
         return true;
-    }
-
-    @Override
-    public List<ArgMeta<?>> getArgsMeta() {
-        return argsMeta;
-    }
-
-    @Override
-    public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
-        this.argsMeta = SpongeUtils.createUnmodifiableList(argsMeta);
-    }
-
-    @Override
-    public ResultMeta<?> getResultMeta() {
-        return resultMeta;
-    }
-
-    @Override
-    public void setResultMeta(ResultMeta<?> resultMeta) {
-        this.resultMeta = resultMeta;
     }
 }

@@ -127,6 +127,9 @@ For each plugin a global variable will be created. The name of this variable is 
 |`ValueHolder<Object> callIfExists(String actionName, List<Object> args)`
 |Calls the action if it exists. Returns the action result wrapped in a value holder or `null` if the action is not registered.
 
+|`Map<String, ArgProvidedValue> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current)`
+|Returns the provided values along with value sets of the action arguments.
+
 |`shutdown()`
 |Shuts down the engine using the current thread.
 
@@ -195,7 +198,12 @@ For each plugin a global variable will be created. The name of this variable is 
 
 |`statisticsSummary`
 |The read-only property whose value is the engine statistics summary as a text.
+
+|`get<_Processor_>Meta(String processorName)`
+A set of methods that return processor metadata.
 |===
+
+For a complete list of available methods see the {spongeJavaDocUrl}/org/openksavi/sponge/EngineOperations.html[`EngineOperations`] and the {spongeJavaDocUrl}/org/openksavi/sponge/kb/KnowledgeBaseEngineOperations.html[`KnowledgeBaseEngineOperations`] Javadoc.
 
 == User variables
 A user variable could be defined in one of the two scopes:
@@ -276,7 +284,7 @@ public class TestKnowledgeBase extends JKnowledgeBase { // <1>
 
         @Override
         public void onConfigure() {
-            setEvent("e1");
+            withEvent("e1");
         }
 
         @Override
@@ -317,7 +325,9 @@ Kotlin-based knowledge bases are currently supported only as non script knowledg
 class Filters : KKnowledgeBase() {
 
     class ColorFilter : KFilter() {
-        override fun onConfigure() = setEvent("e1")
+        override fun onConfigure() {
+            withEvent("e1")
+        }
         override fun onAccept(event: Event): Boolean {
             logger.debug("Received event {}", event)
             val color: String? = event.get("color", null)
@@ -332,7 +342,9 @@ class Filters : KKnowledgeBase() {
     }
 
     class ColorTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("e1")
+        override fun onConfigure() {
+            withEvent("e1")
+        }
         override fun onRun(event: Event) {
             logger.debug("Received event {}", event)
         }
@@ -448,8 +460,7 @@ def onInit():
 ----
 class MyAction1(Action):
     def onConfigure(self):
-        self.label = "MyAction 1"
-        self.category = "myActions"
+        self.withLabel("MyAction 1").withCategory("myActions")
     def onCall(self, text):
         return None
 ----

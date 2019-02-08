@@ -12,13 +12,13 @@ def onInit():
 
 class F1(Filter):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onAccept(self, event):
         return True
 
 class T1(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         sponge.logger.debug("Input event queue: {}, main event queue: {}, decomposed queue: {}, worker thread pool queue: {}",
               sponge.engine.eventQueueManager.inputEventQueue.size,

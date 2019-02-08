@@ -14,7 +14,7 @@ void onInit() {
 
 class ClonePolicyTrigger extends Trigger {
     void onConfigure() {
-        this.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
+        this.withEvents(["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"])
     }
     void onRun(Event event) {
         Map events = sponge.getVariable("events")

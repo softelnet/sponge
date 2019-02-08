@@ -21,27 +21,25 @@ def onInit():
 
 class Trigger1(Trigger):
     def onConfigure(self):
-        self.label = "Trigger1, file1"
-        self.event = "e1"
+        self.withLabel("Trigger1, file1").withEvent("e1")
     def onRun(self, event):
         #self.logger.debug("file1: Received event {}", event)
         global eventCounter
-        eventCounter.get(self.label).incrementAndGet()
+        eventCounter.get(self.meta.label).incrementAndGet()
 
 
 class Trigger2(Trigger):
     def onConfigure(self):
-        self.label = "Trigger2, file1"
-        self.event = "e2"
+        self.withLabel("Trigger2, file1").withEvent("e2")
     def onRun(self, event):
         #self.logger.debug("file1: Received event {}", event)
         global eventCounter
-        eventCounter.get(self.label).incrementAndGet()
+        eventCounter.get(self.meta.label).incrementAndGet()
 
 
 class LoadKbFile(Trigger):
     def onConfigure(self):
-        self.event = "loadKbFile"
+        self.withEvent("loadKbFile")
     def onRun(self, event):
         kbFile = event.get("kbFile")
         sponge.kb.load(kbFile)

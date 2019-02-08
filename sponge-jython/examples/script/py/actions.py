@@ -12,7 +12,7 @@ def onInit():
 
 class EchoAction(Action):
     def onConfigure(self):
-        self.label = "Echo Action"
+        self.withLabel("Echo Action")
     def onCall(self, value, text):
     	return [value, text]
 

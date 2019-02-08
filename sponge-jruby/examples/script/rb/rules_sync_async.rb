@@ -11,8 +11,7 @@ end
 
 class RuleFFF < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e3 :first"]
-        self.synchronous = true
+        self.withEvents(["e1", "e2", "e3 :first"]).withSynchronous(true)
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)
@@ -22,9 +21,7 @@ end
 
 class RuleFFL < Rule
     def onConfigure
-        self.events = ["e1", "e2", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
-        self.synchronous = false
+        self.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofSeconds(2)).withSynchronous(false)
     end
     def onRun(event)
         self.logger.debug("Running rule for event: {}", event.name)

@@ -17,9 +17,15 @@
 package org.openksavi.sponge;
 
 /**
- * Event processor operations. Each event name may be specified as a regular expression thus creating a pattern matching more event names.
- *
+ * Event processor operations.
  */
 public interface EventProcessorOperations extends ProcessorOperations {
 
+    /**
+     * Return the metadata.
+     *
+     * @return the metadata.
+     */
+    @Override
+    EventProcessorMeta getMeta();
 }

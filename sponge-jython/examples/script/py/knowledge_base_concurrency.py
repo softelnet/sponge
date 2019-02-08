@@ -12,7 +12,7 @@ def onInit():
 
 class A(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         TimeUnit.SECONDS.sleep(1)
         sponge.getVariable("value").set("A1")
@@ -21,7 +21,7 @@ class A(Trigger):
 
 class B(Trigger):
     def onConfigure(self):
-        self.event = "b"
+        self.withEvent("b")
     def onRun(self, event):
         TimeUnit.SECONDS.sleep(2)
         sponge.getVariable("value").set("B1")
@@ -30,7 +30,7 @@ class B(Trigger):
 
 class C(Trigger):
     def onConfigure(self):
-        self.event = "c"
+        self.withEvent("c")
     def onRun(self, event):
         TimeUnit.SECONDS.sleep(8)
         sponge.getVariable("value").set("C1")

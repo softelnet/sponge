@@ -15,7 +15,7 @@ void onInit() {
 
 class TriggerA extends Trigger {
     void onConfigure() {
-        this.event = "a"
+        this.withEvent("a")
     }
     void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)
@@ -25,7 +25,7 @@ class TriggerA extends Trigger {
 
 class TriggerB extends Trigger {
     void onConfigure() {
-        this.event = "b"
+        this.withEvent("b")
     }
     void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)

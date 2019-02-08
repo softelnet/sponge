@@ -16,6 +16,12 @@
 
 package org.openksavi.sponge.kotlin;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.openksavi.sponge.action.ArgMeta;
+import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.action.BaseAction;
 import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
 
@@ -32,5 +38,69 @@ public abstract class KAction extends BaseAction {
     @Override
     public final KotlinKnowledgeBaseEngineOperations getSponge() {
         return (KotlinKnowledgeBaseEngineOperations) super.getSponge();
+    }
+
+    @Override
+    public final KAction withName(String name) {
+        return (KAction) super.withName(name);
+    }
+
+    @Override
+    public final KAction withLabel(String label) {
+        return (KAction) super.withLabel(label);
+    }
+
+    @Override
+    public final KAction withDescription(String description) {
+        return (KAction) super.withDescription(description);
+    }
+
+    @Override
+    public final KAction withVersion(Integer version) {
+        return (KAction) super.withVersion(version);
+    }
+
+    @Override
+    public final KAction withFeatures(Map<String, Object> features) {
+        return (KAction) super.withFeatures(features);
+    }
+
+    @Override
+    public final KAction withFeature(String name, Object value) {
+        return (KAction) super.withFeature(name, value);
+    }
+
+    @Override
+    public final KAction withCategory(String category) {
+        return (KAction) super.withCategory(category);
+    }
+
+    @Override
+    public final KAction withArgs(List<ArgMeta<?>> argsMeta) {
+        return (KAction) super.withArgs(argsMeta);
+    }
+
+    public final KAction withArgs(ArgMeta<?>... argsMeta) {
+        return withArgs(Arrays.asList(argsMeta));
+    }
+
+    @Override
+    public final KAction withArg(ArgMeta<?> argMeta) {
+        return (KAction) super.withArg(argMeta);
+    }
+
+    @Override
+    public final KAction withNoArgs() {
+        return (KAction) super.withNoArgs();
+    }
+
+    @Override
+    public final KAction withResult(ResultMeta<?> resultMeta) {
+        return (KAction) super.withResult(resultMeta);
+    }
+
+    @Override
+    public final KAction withNoResult() {
+        return (KAction) super.withNoResult();
     }
 }

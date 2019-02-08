@@ -9,7 +9,7 @@ led = None
 
 class LedBlink(Trigger):
     def onConfigure(self):
-        self.event = "blink"
+        self.withEvent("blink")
     def onRun(self, event):
         global led, state
         state = not state

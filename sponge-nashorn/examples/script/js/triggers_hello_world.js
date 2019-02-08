@@ -5,7 +5,7 @@
 
 var HelloWorldTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "helloEvent";
+        self.withEvent("helloEvent");
     },
     onRun : function(self, event) {
         print(event.get("say"));

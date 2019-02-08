@@ -29,11 +29,11 @@ end
 
 class PluginTrigger < Trigger
     def onConfigure
-        self.event = "e1"
+        self.withEvent("e1")
     end
     def onRun(event)
-    	    valueBefore = $scriptPlugin.getStoredValue()
-    	    self.logger.info("Plugin stored value: {}", valueBefore)
+        valueBefore = $scriptPlugin.getStoredValue()
+        self.logger.info("Plugin stored value: {}", valueBefore)
         $sponge.setVariable("valueBefore", valueBefore)
 
         $scriptPlugin.setStoredValue(event.get("value"))

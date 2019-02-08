@@ -5,13 +5,11 @@ Digits recognition learn library
 
 class DigitsAddToLearn(Action):
     def onConfigure(self):
-        self.label = "Add a digit to learn"
-        self.description = "Adds a digit to learn"
-        self.argsMeta = [
+        self.withLabel("Add a digit to learn").withDescription("Adds a digit to learn")
+        self.withArgs([
             createImageArgMeta(),
             ArgMeta("digit", StringType()).withLabel("Digit").withProvided(ArgProvidedMeta().withValueSet())
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, image, digit):
         py4j.facade.addToLearn(image, digit)
         return None
@@ -21,13 +19,11 @@ class DigitsAddToLearn(Action):
 
 class DigitsLearn(Action):
     def onConfigure(self):
-        self.label = "Learn a digit"
-        self.description = "Learns a digit"
-        self.argsMeta = [
+        self.withLabel("Learn a digit").withDescription("Learns a digit")
+        self.withArgs([
             createImageArgMeta(),
             ArgMeta("digit", StringType()).withLabel("Digit").withProvided(ArgProvidedMeta().withValueSet())
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, image, digit):
         py4j.facade.learn(image, digit)
         return None
@@ -37,11 +33,8 @@ class DigitsLearn(Action):
 
 class MnistResetModel(Action):
     def onConfigure(self):
-        self.label = "Reset the model"
-        self.description = "Resets the model by loading the state before manual learning"
-        self.features = {"confirmation":True}
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(VoidType())
+        self.withLabel("Reset the model").withDescription("Resets the model by loading the state before manual learning").withFeatures({"confirmation":True})
+        self.withNoArgs().withNoResult()
     def onCall(self):
         py4j.facade.reset()
         return None
