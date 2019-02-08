@@ -61,6 +61,11 @@ public class DateTimeType extends DataType<Object> {
         return (DateTimeType) super.withNullable(nullable);
     }
 
+    @Override
+    public DateTimeType withNullable() {
+        return (DateTimeType) super.withNullable();
+    }
+
     public DateTimeKind getDateTimeKind() {
         return dateTimeKind;
     }

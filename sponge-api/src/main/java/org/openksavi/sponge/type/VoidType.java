@@ -51,4 +51,9 @@ public class VoidType extends DataType<Void> {
     public VoidType withNullable(boolean nullable) {
         return (VoidType) super.withNullable(nullable);
     }
+
+    @Override
+    public VoidType withNullable() {
+        return (VoidType) super.withNullable();
+    }
 }

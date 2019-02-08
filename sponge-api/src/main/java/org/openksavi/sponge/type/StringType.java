@@ -58,6 +58,11 @@ public class StringType extends DataType<String> {
         return (StringType) super.withNullable(nullable);
     }
 
+    @Override
+    public StringType withNullable() {
+        return (StringType) super.withNullable();
+    }
+
     public StringType withMinLength(Integer minLength) {
         setMinLength(minLength);
         return this;

@@ -64,6 +64,11 @@ public class ListType<E> extends DataType<List<E>> {
         return (ListType<E>) super.withNullable(nullable);
     }
 
+    @Override
+    public ListType<E> withNullable() {
+        return (ListType<E>) super.withNullable();
+    }
+
     @SuppressWarnings("unchecked")
     public DataType<E> getElementType() {
         return (DataType<E>) elementType;

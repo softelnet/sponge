@@ -51,4 +51,9 @@ public class BooleanType extends DataType<Boolean> {
     public BooleanType withNullable(boolean nullable) {
         return (BooleanType) super.withNullable(nullable);
     }
+
+    @Override
+    public BooleanType withNullable() {
+        return (BooleanType) super.withNullable();
+    }
 }

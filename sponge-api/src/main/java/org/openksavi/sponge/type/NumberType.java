@@ -64,6 +64,11 @@ public class NumberType extends DataType<Number> {
         return (NumberType) super.withNullable(nullable);
     }
 
+    @Override
+    public NumberType withNullable() {
+        return (NumberType) super.withNullable();
+    }
+
     public NumberType withMinValue(Number minValue) {
         setMinValue(minValue);
         return this;

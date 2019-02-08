@@ -70,6 +70,11 @@ public class MapType<K, V> extends DataType<Map<K, V>> {
         return (MapType<K, V>) super.withNullable(nullable);
     }
 
+    @Override
+    public MapType<K, V> withNullable() {
+        return (MapType<K, V>) super.withNullable();
+    }
+
     public DataType<K> getKeyType() {
         return (DataType<K>) keyType;
     }

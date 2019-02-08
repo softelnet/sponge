@@ -66,6 +66,11 @@ public class AnnotatedType<T> extends DataType<AnnotatedValue<T>> {
         return (AnnotatedType<T>) super.withNullable(nullable);
     }
 
+    @Override
+    public AnnotatedType<T> withNullable() {
+        return (AnnotatedType<T>) super.withNullable();
+    }
+
     @SuppressWarnings("unchecked")
     public DataType<T> getValueType() {
         return (DataType<T>) valueType;

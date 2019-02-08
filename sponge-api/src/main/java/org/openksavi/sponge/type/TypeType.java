@@ -52,4 +52,9 @@ public class TypeType extends DataType<DataType> {
     public TypeType withNullable(boolean nullable) {
         return (TypeType) super.withNullable(nullable);
     }
+
+    @Override
+    public TypeType withNullable() {
+        return (TypeType) super.withNullable();
+    }
 }

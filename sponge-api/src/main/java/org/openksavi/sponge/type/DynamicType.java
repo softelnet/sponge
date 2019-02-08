@@ -55,4 +55,9 @@ public class DynamicType extends DataType<DynamicValue> {
     public DynamicType withNullable(boolean nullable) {
         return (DynamicType) super.withNullable(nullable);
     }
+
+    @Override
+    public DynamicType withNullable() {
+        return (DynamicType) super.withNullable();
+    }
 }

@@ -64,6 +64,11 @@ public class IntegerType extends DataType<Number> {
         return (IntegerType) super.withNullable(nullable);
     }
 
+    @Override
+    public IntegerType withNullable() {
+        return (IntegerType) super.withNullable();
+    }
+
     public IntegerType withMinValue(Long minValue) {
         setMinValue(minValue);
         return this;

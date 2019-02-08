@@ -63,6 +63,11 @@ public class ObjectType<T> extends DataType<T> {
         return (ObjectType<T>) super.withNullable(nullable);
     }
 
+    @Override
+    public ObjectType<T> withNullable() {
+        return (ObjectType<T>) super.withNullable();
+    }
+
     public String getClassName() {
         return className;
     }

@@ -51,4 +51,9 @@ public class AnyType extends DataType<Object> {
     public AnyType withNullable(boolean nullable) {
         return (AnyType) super.withNullable(nullable);
     }
+
+    @Override
+    public AnyType withNullable() {
+        return (AnyType) super.withNullable();
+    }
 }
