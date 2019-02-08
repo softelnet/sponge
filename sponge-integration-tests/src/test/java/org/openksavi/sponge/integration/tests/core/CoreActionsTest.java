@@ -944,4 +944,50 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testActionsConfigureBuilderStyle() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_configure_builder_style.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
+            assertEquals("UpperEchoAction", adapter.getName());
+            assertEquals("Echo Action", adapter.getLabel());
+            assertEquals("Returns the upper case string", adapter.getDescription());
+            ArgMeta<?> argMeta = adapter.getArgsMeta().get(0);
+            assertEquals(DataTypeKind.STRING, argMeta.getType().getKind());
+
+            assertEquals("Echo Action returns: TEXT", engine.getOperations().call(String.class, adapter.getName(), Arrays.asList("Text")));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsConfigureBuilderStyleChangedName() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_configure_builder_style.py").build();
+        engine.startup();
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("UpperAction");
+            assertEquals("UpperAction", adapter.getName());
+            assertEquals("Echo Action", adapter.getLabel());
+            assertEquals("Returns the upper case string", adapter.getDescription());
+            ArgMeta<?> argMeta = adapter.getArgsMeta().get(0);
+            assertEquals(DataTypeKind.STRING, argMeta.getType().getKind());
+
+            assertEquals("Echo Action returns: TEXT", engine.getOperations().call(String.class, adapter.getName(), Arrays.asList("Text")));
+
+            assertNull(engine.getActionManager().getActionAdapter("UpperEchoChangedNameAction"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

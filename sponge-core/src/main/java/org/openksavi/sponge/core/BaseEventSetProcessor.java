@@ -65,4 +65,14 @@ public abstract class BaseEventSetProcessor<T extends EventSetProcessorAdapter<?
     public final EventSetProcessorAdapterGroup<EventSetProcessorAdapter<?>> getGroup() {
         return getAdapter().getGroup();
     }
+
+    public BaseEventSetProcessor<T> withDuration(Duration duration) {
+        setDuration(duration);
+        return this;
+    }
+
+    public BaseEventSetProcessor<T> withSynchronous(Boolean synchronous) {
+        setSynchronous(synchronous);
+        return this;
+    }
 }

@@ -462,7 +462,7 @@ def onLoad():
 |The read-only property that provides a processor adapter. This is a shortcut for `getAdapter()` method. A processor adapter is an internal object, associated with the processor, that is used by the engine. There should be no need to use this property in the client code.
 |===
 
-In many scripting languages properties can be accessed using dot notation rather than a direct method call. For example a label may be set using `self.label = "Label"` or `self.setLabel("Label")`.
+In many scripting languages properties can be accessed using dot notation rather than a direct method call. For example a label may be set using `self.label = "Label"` or `self.setLabel("Label")`. Moreover you can use builder-style methods to set processors properties, e.g. `self.withLabel("Label").withDescription("Description")`.
 
 include::includes/user-guide-actions.adoc[leveloffset=+1]
 

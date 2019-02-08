@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.correlator;
 
+import java.time.Duration;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
 import org.openksavi.sponge.core.BaseEventSetProcessor;
@@ -72,5 +74,70 @@ public abstract class BaseCorrelator extends BaseEventSetProcessor<CorrelatorAda
      */
     public final Lock getLock() {
         return ((BaseCorrelatorAdapter) getAdapter()).getLock();
+    }
+
+    @Override
+    public final BaseCorrelator withName(String name) {
+        return (BaseCorrelator) super.withName(name);
+    }
+
+    @Override
+    public final BaseCorrelator withLabel(String label) {
+        return (BaseCorrelator) super.withLabel(label);
+    }
+
+    @Override
+    public final BaseCorrelator withDescription(String description) {
+        return (BaseCorrelator) super.withDescription(description);
+    }
+
+    @Override
+    public final BaseCorrelator withVersion(Integer version) {
+        return (BaseCorrelator) super.withVersion(version);
+    }
+
+    @Override
+    public final BaseCorrelator withFeatures(Map<String, Object> features) {
+        return (BaseCorrelator) super.withFeatures(features);
+    }
+
+    @Override
+    public final BaseCorrelator withFeature(String name, Object value) {
+        return (BaseCorrelator) super.withFeature(name, value);
+    }
+
+    @Override
+    public final BaseCorrelator withCategory(String category) {
+        return (BaseCorrelator) super.withCategory(category);
+    }
+
+    @Override
+    public final BaseCorrelator withEvents(String... eventNames) {
+        return (BaseCorrelator) super.withEvents(eventNames);
+    }
+
+    @Override
+    public final BaseCorrelator withEvent(String eventName) {
+        return (BaseCorrelator) super.withEvent(eventName);
+    }
+
+    @Override
+    public final BaseCorrelator withDuration(Duration duration) {
+        return (BaseCorrelator) super.withDuration(duration);
+    }
+
+    @Override
+    public final BaseCorrelator withSynchronous(Boolean synchronous) {
+        return (BaseCorrelator) super.withSynchronous(synchronous);
+    }
+
+    public final BaseCorrelator withMaxInstances(int maxInstances) {
+        setMaxInstances(maxInstances);
+        return this;
+    }
+
+    public final BaseCorrelator withInstanceSynchronous(boolean instanceSynchronous) {
+        setInstanceSynchronous(instanceSynchronous);
+        return this;
     }
 }

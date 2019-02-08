@@ -32,4 +32,14 @@ public abstract class BaseEventProcessor<T extends EventProcessorAdapter<?>> ext
     public void setEvent(String eventName) {
         setEvents(eventName);
     }
+
+    public BaseEventProcessor<T> withEvents(String... eventNames) {
+        setEvents(eventNames);
+        return this;
+    }
+
+    public BaseEventProcessor<T> withEvent(String eventName) {
+        setEvent(eventName);
+        return this;
+    }
 }

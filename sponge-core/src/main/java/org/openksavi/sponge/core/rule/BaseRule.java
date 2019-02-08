@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.rule;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -135,5 +136,90 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
 
     protected final EventCondition createEventConditionForMethod(String name) {
         return ReflectionEventCondition.create(this, name);
+    }
+
+    @Override
+    public final BaseRule withName(String name) {
+        return (BaseRule) super.withName(name);
+    }
+
+    @Override
+    public final BaseRule withLabel(String label) {
+        return (BaseRule) super.withLabel(label);
+    }
+
+    @Override
+    public final BaseRule withDescription(String description) {
+        return (BaseRule) super.withDescription(description);
+    }
+
+    @Override
+    public final BaseRule withVersion(Integer version) {
+        return (BaseRule) super.withVersion(version);
+    }
+
+    @Override
+    public final BaseRule withFeatures(Map<String, Object> features) {
+        return (BaseRule) super.withFeatures(features);
+    }
+
+    @Override
+    public final BaseRule withFeature(String name, Object value) {
+        return (BaseRule) super.withFeature(name, value);
+    }
+
+    @Override
+    public final BaseRule withCategory(String category) {
+        return (BaseRule) super.withCategory(category);
+    }
+
+    @Override
+    public final BaseRule withEvents(String... eventStringSpecs) {
+        return (BaseRule) super.withEvents(eventStringSpecs);
+    }
+
+    @Override
+    public final BaseRule withEvent(String eventStringSpec) {
+        return (BaseRule) super.withEvent(eventStringSpec);
+    }
+
+    @Override
+    public final BaseRule withDuration(Duration duration) {
+        return (BaseRule) super.withDuration(duration);
+    }
+
+    @Override
+    public final BaseRule withSynchronous(Boolean synchronous) {
+        return (BaseRule) super.withSynchronous(synchronous);
+    }
+
+    public final BaseRule withEventConditions(String eventAlias, EventCondition... conditions) {
+        addEventConditions(eventAlias, conditions);
+        return this;
+    }
+
+    public final BaseRule withAllEventConditions(EventCondition... conditions) {
+        addAllEventConditions(conditions);
+        return this;
+    }
+
+    public final BaseRule withEventCondition(String eventAlias, EventCondition condition) {
+        addEventCondition(eventAlias, condition);
+        return this;
+    }
+
+    public final BaseRule withEventSpecs(RuleEventSpec... eventSpecs) {
+        setEventSpecs(eventSpecs);
+        return this;
+    }
+
+    public final BaseRule withEventSpec(RuleEventSpec eventSpec) {
+        setEventSpecs(eventSpec);
+        return this;
+    }
+
+    public final BaseRule withOrdered(boolean ordered) {
+        setOrdered(ordered);
+        return this;
     }
 }

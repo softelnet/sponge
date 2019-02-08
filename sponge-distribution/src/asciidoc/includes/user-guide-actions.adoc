@@ -69,7 +69,7 @@ sponge.enableJava(JavaEchoAction)
 ----
 
 == Arguments and result metadata
-Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and a result. Metadata are not verified by the engine while performing an action call but could be interpreted by a client code or {sponge} plugins. For example they could be useful in a generic GUI that calls {sponge} actions.
+Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and a result. Metadata are not verified by the engine while performing an action call but could be interpreted by a client code or {sponge} plugins. For example they could be useful in a generic GUI that calls {sponge} actions. Metadata can be specified using the builder-style methods.
 
 Metadata for arguments and a result support <<types, types>>.
 
@@ -170,6 +170,18 @@ class MultipleArgumentsAction(Action):
         self.resultMeta = ResultMeta(BooleanType()).withLabel("Boolean result")
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):
         return True
+----
+
+.Action metadata using the builder-style methods
+[source,python]
+----
+class UpperEchoAction(Action):
+    def onConfigure(self):
+        self.withLabel("Echo Action").withDescription("Returns the upper case string").withArgsMeta([
+            ArgMeta("text", StringType()).withLabel("Argument 1").withDescription("Argument 1 description")
+        ]).withResultMeta(ResultMeta(StringType()).withLabel("Upper case string").withDescription("Result description"))
+    def onCall(self, text):
+        return self.label + " returns: " + text.upper()
 ----
 
 For more information see `ArgMeta` and `ResultMeta`.

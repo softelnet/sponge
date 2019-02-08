@@ -125,6 +125,41 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         return ((BaseProcessorAdapter<?>) adapter).getLogger();
     }
 
+    public BaseProcessor<T> withName(String name) {
+        setName(name);
+        return this;
+    }
+
+    public BaseProcessor<T> withLabel(String label) {
+        setLabel(label);
+        return this;
+    }
+
+    public BaseProcessor<T> withDescription(String description) {
+        setDescription(description);
+        return this;
+    }
+
+    public BaseProcessor<T> withVersion(Integer version) {
+        setVersion(version);
+        return this;
+    }
+
+    public BaseProcessor<T> withFeatures(Map<String, Object> features) {
+        setFeatures(features);
+        return this;
+    }
+
+    public BaseProcessor<T> withFeature(String name, Object value) {
+        getFeatures().put(name, value);
+        return this;
+    }
+
+    public BaseProcessor<T> withCategory(String category) {
+        setCategory(category);
+        return this;
+    }
+
     @Override
     public String toString() {
         return getName() != null ? getName() : super.toString();
