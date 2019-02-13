@@ -55,14 +55,4 @@ public abstract class BaseEventSetProcessor<T extends EventSetProcessorAdapter<?
         getMeta().setSynchronous(synchronous);
         return this;
     }
-
-    public BaseEventSetProcessor<T> withDuration(Duration duration) {
-        setDuration(duration);
-        return this;
-    }
-
-    public BaseEventSetProcessor<T> withSynchronous(Boolean synchronous) {
-        setSynchronous(synchronous);
-        return this;
-    }
 }

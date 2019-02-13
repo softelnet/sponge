@@ -108,49 +108,4 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     public BaseAction withNoResult() {
         return withResult(new ResultMeta<>(new VoidType()));
     }
-
-    @Override
-    public final BaseAction withName(String name) {
-        return (BaseAction) super.withName(name);
-    }
-
-    @Override
-    public final BaseAction withLabel(String label) {
-        return (BaseAction) super.withLabel(label);
-    }
-
-    @Override
-    public final BaseAction withDescription(String description) {
-        return (BaseAction) super.withDescription(description);
-    }
-
-    @Override
-    public final BaseAction withVersion(Integer version) {
-        return (BaseAction) super.withVersion(version);
-    }
-
-    @Override
-    public final BaseAction withFeatures(Map<String, Object> features) {
-        return (BaseAction) super.withFeatures(features);
-    }
-
-    @Override
-    public final BaseAction withFeature(String name, Object value) {
-        return (BaseAction) super.withFeature(name, value);
-    }
-
-    @Override
-    public final BaseAction withCategory(String category) {
-        return (BaseAction) super.withCategory(category);
-    }
-
-    public final BaseAction withArgsMeta(List<ArgMeta<?>> argsMeta) {
-        setArgsMeta(argsMeta);
-        return this;
-    }
-
-    public final BaseAction withResultMeta(ResultMeta<?> resultMeta) {
-        setResultMeta(resultMeta);
-        return this;
-    }
 }

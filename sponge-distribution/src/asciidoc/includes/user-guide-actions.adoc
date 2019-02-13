@@ -187,7 +187,7 @@ class MultipleArgumentsAction(Action):
         return True
 ----
 
-.Action metadata using the builder-style methods
+.Action metadata using the fluent builder-style methods
 [source,python]
 ----
 class UpperEchoAction(Action):
