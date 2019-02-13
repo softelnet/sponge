@@ -24,7 +24,9 @@ class FiltersJava : KKnowledgeBase() {
     }
 
     class FilterTrigger : KTrigger() {
-        override fun onConfigure() = setEvents("e1", "e2", "e3")
+        override fun onConfigure() {
+            withEvents("e1", "e2", "e3")
+        }
         override fun onRun(event: Event) {
             logger.debug("Processing trigger for event {}", event)
             sponge.getVariable<Map<String, AtomicInteger>>("eventCounter").get(event.name)!!.incrementAndGet()

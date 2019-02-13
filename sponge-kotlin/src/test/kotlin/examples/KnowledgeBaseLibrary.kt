@@ -39,7 +39,9 @@ class KnowledgeBaseLibrary : KKnowledgeBase() {
     }
 
     class HttpStatusTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("checkStatus")
+        override fun onConfigure() {
+            withEvent("checkStatus")
+        }
 
         override fun onRun(event: Event) {
             val status = checkPageStatus(event.get<String>("host"))

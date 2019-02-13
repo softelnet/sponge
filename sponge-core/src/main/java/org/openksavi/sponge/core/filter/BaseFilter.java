@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.filter;
 
+import java.util.List;
 import java.util.Map;
 
 import org.openksavi.sponge.core.BaseEventProcessor;
@@ -30,47 +31,52 @@ public abstract class BaseFilter extends BaseEventProcessor<FilterAdapter> imple
     }
 
     @Override
-    public final BaseFilter withName(String name) {
+    public BaseFilterMeta getMeta() {
+        return (BaseFilterMeta) super.getMeta();
+    }
+
+    @Override
+    public BaseFilter withName(String name) {
         return (BaseFilter) super.withName(name);
     }
 
     @Override
-    public final BaseFilter withLabel(String label) {
+    public BaseFilter withLabel(String label) {
         return (BaseFilter) super.withLabel(label);
     }
 
     @Override
-    public final BaseFilter withDescription(String description) {
+    public BaseFilter withDescription(String description) {
         return (BaseFilter) super.withDescription(description);
     }
 
     @Override
-    public final BaseFilter withVersion(Integer version) {
+    public BaseFilter withVersion(Integer version) {
         return (BaseFilter) super.withVersion(version);
     }
 
     @Override
-    public final BaseFilter withFeatures(Map<String, Object> features) {
+    public BaseFilter withFeatures(Map<String, Object> features) {
         return (BaseFilter) super.withFeatures(features);
     }
 
     @Override
-    public final BaseFilter withFeature(String name, Object value) {
+    public BaseFilter withFeature(String name, Object value) {
         return (BaseFilter) super.withFeature(name, value);
     }
 
     @Override
-    public final BaseFilter withCategory(String category) {
+    public BaseFilter withCategory(String category) {
         return (BaseFilter) super.withCategory(category);
     }
 
     @Override
-    public final BaseFilter withEvents(String... eventNames) {
+    public BaseFilter withEvents(List<String> eventNames) {
         return (BaseFilter) super.withEvents(eventNames);
     }
 
     @Override
-    public final BaseFilter withEvent(String eventName) {
+    public BaseFilter withEvent(String eventName) {
         return (BaseFilter) super.withEvent(eventName);
     }
 }

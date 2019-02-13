@@ -14,14 +14,14 @@ def onInit():
 
 class TriggerA(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         sponge.getVariable("receivedEventA").set(True)
 
 class TriggerB(Trigger):
     def onConfigure(self):
-        self.event = "b"
+        self.withEvent("b")
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         receivedEventBCount = sponge.getVariable("receivedEventBCount")

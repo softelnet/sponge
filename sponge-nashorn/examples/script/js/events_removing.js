@@ -13,7 +13,7 @@ function onInit() {
 
 var Trigger1 = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "e1";
+        self.withEvent("e1");
     },
     onRun: function(self, event) {
         eventCounter = sponge.getVariable("eventCounter")
@@ -28,7 +28,7 @@ var Trigger1 = Java.extend(Trigger, {
 
 var Trigger2 = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "e2";
+        self.withEvent("e2");
     },
     onRun: function(self, event) {
         self.logger.debug("Removing entry");

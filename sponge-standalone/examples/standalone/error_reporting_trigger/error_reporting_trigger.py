@@ -5,7 +5,7 @@ Error reporting
 
 class HelloWorldTrigger(Trigger):
     def onConfigure(self):
-        self.event = "helloEvent"
+        self.withEvent("helloEvent")
     def onRun(self, event):
         whatIsThis.doSomething()
         print event.get("say")

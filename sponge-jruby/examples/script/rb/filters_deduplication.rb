@@ -19,7 +19,7 @@ end
 
 class ColorDeduplicationFilter < Filter
     def onConfigure
-        self.event = "e1"
+        self.withEvent("e1")
     end
     def onInit
         @deduplication = Deduplication.new("color")
@@ -32,7 +32,7 @@ end
 
 class ColorTrigger < Trigger
     def onConfigure
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     end
     def onRun(event)
         self.logger.debug("Received event {}", event)

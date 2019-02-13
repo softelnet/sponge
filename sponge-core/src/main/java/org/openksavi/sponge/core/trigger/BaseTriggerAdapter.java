@@ -35,4 +35,9 @@ public class BaseTriggerAdapter extends BaseEventProcessorAdapter<Trigger> imple
     public ProcessorType getType() {
         return ProcessorType.TRIGGER;
     }
+
+    @Override
+    public BaseTriggerMeta getMeta() {
+        return (BaseTriggerMeta) super.getMeta();
+    }
 }

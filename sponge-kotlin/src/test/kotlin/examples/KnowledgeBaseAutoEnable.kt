@@ -30,7 +30,9 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
     }
 
     class AutoFilter : KFilter() {
-        override fun onConfigure() = setEvent("e1")
+        override fun onConfigure() {
+            withEvent("e1")
+        }
         override fun onAccept(event: Event): Boolean {
             logger.debug("Received event: {}", event.name)
             sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
@@ -39,7 +41,9 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
     }
 
     class AutoTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("e1")
+        override fun onConfigure() {
+            withEvent("e1")
+        }
         override fun onRun(event: Event) {
             logger.debug("Received event: {}", event.name)
             sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
@@ -47,7 +51,9 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
     }
 
     class AutoRule : KRule() {
-        override fun onConfigure() = setEvents("e1", "e2")
+        override fun onConfigure() {
+            withEvents("e1", "e2")
+        }
         override fun onRun(event: Event) {
             logger.debug("Running for sequence: {}", eventSequence)
             sponge.getVariable<AtomicInteger>("counter").incrementAndGet()
@@ -55,7 +61,9 @@ class KnowledgeBaseAutoEnable : KKnowledgeBase() {
     }
 
     class AutoCorrelator : KCorrelator() {
-        override fun onConfigure() = setEvents("e1", "e2")
+        override fun onConfigure() {
+            withEvents("e1", "e2")
+        }
 
         override fun onAcceptAsFirst(event: Event) = event.name == "e1"
 

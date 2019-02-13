@@ -10,7 +10,7 @@ def onInit():
 
 class PluginTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         self.logger.debug("Connection name is still: {}", connectionPlugin.connectionName)
         sponge.setVariable("connectionName", connectionPlugin.connectionName)

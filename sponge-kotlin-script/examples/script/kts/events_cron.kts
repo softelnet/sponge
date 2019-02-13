@@ -11,7 +11,9 @@ fun onInit() {
 }
 
 class CronTrigger : Trigger() {
-    override fun onConfigure() = setEvent("cronEvent")
+    override fun onConfigure() {
+        withEvent("cronEvent")
+    }
     override fun onRun(event: Event) {
         var eventCounter: AtomicInteger = sponge.getVariable("eventCounter")
         eventCounter.incrementAndGet()

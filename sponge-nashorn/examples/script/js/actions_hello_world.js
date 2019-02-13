@@ -5,10 +5,9 @@
 
 var HelloWorldAction = Java.extend(Action, {
     onConfigure: function(self) {
-        self.label = "Hello world";
-        self.description = "Returns a greeting text.";
-        self.argsMeta = [new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")];
-        self.resultMeta = new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text.");
+        self.withLabel("Hello world").withDescription("Returns a greeting text.");
+        self.withArg(new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name."));
+        self.withResult(new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text."));
     },
     onCall: function(self, args) {
         // The onCall method in JS always gets an array of arguments. Dynamic onCall callback methods are not supported.

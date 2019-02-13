@@ -28,14 +28,6 @@ import org.openksavi.sponge.ProcessorAdapter;
 public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperations {
 
     /**
-     * Returns the argument metadata. Throws exception if not found.
-     *
-     * @param name the argument name.
-     * @return the argument metadata.
-     */
-    ArgMeta<?> getArgMeta(String name);
-
-    /**
      * Returns the provided values along with value sets of the action arguments.
      *
      * @param names the list of argument names.

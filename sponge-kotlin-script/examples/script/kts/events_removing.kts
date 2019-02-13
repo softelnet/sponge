@@ -11,7 +11,9 @@ fun onInit() {
 }
 
 class Trigger1 : Trigger() {
-    override fun onConfigure() = setEvent("e1")
+    override fun onConfigure() {
+        withEvent("e1")
+    }
     override fun onRun(event: Event) {
         var eventCounter: AtomicInteger = sponge.getVariable("eventCounter")
         eventCounter.incrementAndGet()
@@ -23,7 +25,9 @@ class Trigger1 : Trigger() {
 }
 
 class Trigger2 : Trigger() {
-    override fun onConfigure() = setEvent("e2")
+    override fun onConfigure() {
+        withEvent("e2")
+    }
     override fun onRun(event: Event) {
         logger.debug("Removing entry")
         sponge.removeEvent(sponge.getVariable("eventEntry"))

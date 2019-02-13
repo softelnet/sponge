@@ -51,7 +51,7 @@ engine.shutdown();
 ----
 class SomeTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         sponge.requestShutdown()
 ----
@@ -230,8 +230,7 @@ The following rule detects a situation when there is no `heartbeat` event for `5
 ----
 class DetectLackOfHearbeat(Rule):
     def onConfigure(self):
-        self.events = ["startup", "heartbeat :none"]
-        self.duration = Duration.ofSeconds(5)
+        self.withEvents(["startup", "heartbeat :none"]).withDuration(Duration.ofSeconds(5))
     def onRun(self, event):
         print "No heartbeat!"
 ----
@@ -328,7 +327,7 @@ Types of processors:
 *** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 
 === Creating processors
-In order to define your processor in a script knowledge base, you have to create a class extending the base class pointed by a specific alias (e.g. `Filter` for filters). In order to define your processor in a Java knowledge base, you have to create a class extending a specific class (e.g. `JavaFilter` for filters).
+In order to define your processor in a script knowledge base, you have to create a class extending the base class pointed by a specific alias (e.g. `Filter` for filters). In order to define your processor in a Java knowledge base, you have to create a class extending a specific class (e.g. `JFilter` for filters).
 
 A name of a processor is a name of a class defining this processor.
 
@@ -435,25 +434,34 @@ def onLoad():
 |Property / Method |Description
 
 |*`onConfigure()`*
-|A configuration callback method that will be invoked when a processor is being enabled. This method is mandatory.
+|The configuration callback method that will be invoked when a processor is being enabled. This method is mandatory.
 
 |`onInit()`
-|An initialization callback method that will be invoked after `onConfigure()`, each time a new working instance of the processor is created.
+|The initialization callback method that will be invoked after `onConfigure()`, each time a new working instance of the processor is created.
 
-|`name`
-|A name of a processor. This is a shortcut for `getName()`/`setName(text)` methods. Because of names of processors are created automatically, the setter shouldn't be used in a client code.
+|`withName(String name)`
+|Sets a processor name. The name can be read using `self.meta.name`. Because names of processors are created automatically, this method shouldn't be invoked directly.
 
-|`label`
-|A processor label. This is a shortcut for `getLabel()`/`setLabel(text)` methods. A label is not used internally but could be useful in a client code.
+|`withLabel(String label)`
+|Sets a processor label. The label can be read using `self.meta.label`. A label is not used internally but could be useful in a client code.
 
-|`description`
-|A description of a processor. This is a shortcut for `getDescription()`/`setDescription(text)` methods. A description is not used internally but could be useful in a client code.
+|`withDescription(String description)`
+|Sets a processor description. The description can be read using `self.meta.description`. A description is not used internally but could be useful in a client code.
 
-|`version`
-|A processor version as an integer. This is a shortcut for `getVersion()`/`setVersion(integer)` methods. A version is not used internally by the engine. However it is used to enforce version checking when calling actions via the REST API.
+|`withVersion(Integer version)`
+|Sets a processor version. The version can be read using `self.meta.version`. A version is not used internally by the engine. However it is used to enforce version checking when calling actions via the REST API.
 
-|`features`
-|Features of a processor. This is a shortcut for `getFeatures()`/`setFeatures(Map<String, Object>)` methods. The processor features property is simply a map of String to Object associated with a processor definition (not instance). It could be used to provide a custom behavior in a client code.
+|`withFeatures(Map<String, Object> features)`
+|Adds processor features. The features can be read using `self.meta.features`. The processor features is simply a map of String to Object associated with a processor definition (not instance). It could be used to provide a custom behavior in a client code.
+
+|`withFeature(String name, Object value)`
+|Adds a single processor feature.
+
+|`withCategory(String category)`
+|Sets a processor category. The category can be read using `self.meta.category`. A category is not used internally but could be useful in a client code.
+
+|`meta`
+|The read-only property that provides a processor metadata.
 
 |`logger`
 |The read-only property that provides a processor logger. This is a shortcut for `getLogger()` method. A processor logger name has the following format: `sponge.kb.<language>.<knowledgeBaseName>.<processorName>`, e.g. `sponge.kb.python.kb1.EchoAction` for a python-based processor, `sponge.kb.python.kb1.org.openksavi.sponge.examples.PowerEchoAction` for a Java-based processor enabled in a Python-based knowledge base.
@@ -462,7 +470,7 @@ def onLoad():
 |The read-only property that provides a processor adapter. This is a shortcut for `getAdapter()` method. A processor adapter is an internal object, associated with the processor, that is used by the engine. There should be no need to use this property in the client code.
 |===
 
-In many scripting languages properties can be accessed using dot notation rather than a direct method call. For example a label may be set using `self.label = "Label"` or `self.setLabel("Label")`. Moreover you can use builder-style methods to set processors properties, e.g. `self.withLabel("Label").withDescription("Description")`.
+Processors provide builder-style, fluent methods to set metadata properties, e.g. `self.withLabel("Label").withDescription("Description")`. In many scripting languages properties can be accessed using a dot notation rather than a direct method call. For example a processor metadata may be read using `self.meta` or `self.getMeta()`.
 
 include::includes/user-guide-actions.adoc[leveloffset=+1]
 
@@ -607,7 +615,7 @@ public class EchoPlugin extends JPlugin { // <1>
 ----
 class PluginTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         self.logger.debug("Echo from the plugin: {}", echoPlugin.echo) # <1>
 ----
@@ -867,7 +875,7 @@ There is a limitation for using custom class attributes and methods in processor
 ----
 var HeartbeatFilter = Java.extend(Filter, {
     onConfigure: function(self) {
-        self.event = "heartbeat";
+        self.withEvent("heartbeat");
     },
     onInit: function(self) {
         self.target = new function() { // <1>
@@ -899,7 +907,7 @@ Dynamic `onCall` callback methods are not supported. Every JavaScript action has
 ----
 var EmphasizeAction = Java.extend(Action, {
     onCall: function(self, args) {
-        self.logger.debug("Action {} called", self.name);
+        self.logger.debug("Action {} called", self.meta.name);
         if (args.length > 0) {
             return "*** " + args[0] + " ***";
         } else {

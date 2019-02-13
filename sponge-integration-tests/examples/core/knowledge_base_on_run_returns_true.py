@@ -11,7 +11,7 @@ def onInit():
 
 class AssertTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e"
+        self.withEvent("e")
     def onRun(self, event):
         sponge.getVariable("trigger").set(True)
 

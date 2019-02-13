@@ -17,7 +17,7 @@ def onInit():
 
 class RuleF(Rule):
     def onConfigure(self):
-        self.events = ["e1"]
+        self.withEvents(["e1"])
     def onRun(self, event):
         global correlationEventsLog
         correlationEventsLog.addEvents("RuleF", self)
@@ -25,7 +25,7 @@ class RuleF(Rule):
 # F(irst)F(irst)F(irst)
 class RuleFFF(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e3 :first"]
+        self.withEvents(["e1", "e2", "e3 :first"])
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         global correlationEventsLog
@@ -33,9 +33,8 @@ class RuleFFF(Rule):
 
 class RuleFFFDuration(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e3 :first"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2", "e3 :first"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         global correlationEventsLog
@@ -44,9 +43,8 @@ class RuleFFFDuration(Rule):
 # F(irst)F(irst)L(ast)
 class RuleFFL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e3 :last"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2", "e3 :last"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -55,9 +53,8 @@ class RuleFFL(Rule):
 # F(irst)F(irst)A(ll)
 class RuleFFA(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e3 :all"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2", "e3 :all"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -66,9 +63,8 @@ class RuleFFA(Rule):
 # F(irst)F(irst)N(one)
 class RuleFFN(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2", "e4 :none"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2", "e4 :none"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -77,9 +73,8 @@ class RuleFFN(Rule):
 # F(irst)L(ast)F(irst)
 class RuleFLF(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :last", "e3 :first"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e3 :first"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -88,9 +83,8 @@ class RuleFLF(Rule):
 # F(irst)L(ast)L(ast)
 class RuleFLL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :last", "e3 :last"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e3 :last"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -99,9 +93,8 @@ class RuleFLL(Rule):
 # F(irst)L(ast)A(ll)
 class RuleFLA(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :last", "e3 :all"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e3 :all"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -110,9 +103,8 @@ class RuleFLA(Rule):
 # F(irst)L(ast)N(one)
 class RuleFLN(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :last", "e4 :none"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :last", "e4 :none"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -121,9 +113,8 @@ class RuleFLN(Rule):
 # F(irst)A(ll)F(irst)
 class RuleFAF(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :all", "e3 :first"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e3 :first"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -132,9 +123,8 @@ class RuleFAF(Rule):
 # F(irst)A(ll)L(ast)
 class RuleFAL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :all", "e3 :last"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e3 :last"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -143,9 +133,8 @@ class RuleFAL(Rule):
 # F(irst)A(ll)A(ll)
 class RuleFAA(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :all", "e3 :all"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e3 :all"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}, sequence: {}", event.name, SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -154,9 +143,8 @@ class RuleFAA(Rule):
 # F(irst)A(ll)N(one)
 class RuleFAN(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :all", "e5 :none"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :all", "e5 :none"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -165,7 +153,7 @@ class RuleFAN(Rule):
 # F(irst)N(one)F(irst)
 class RuleFNF(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e3"]
+        self.withEvents(["e1", "e5 :none", "e3"])
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -174,9 +162,8 @@ class RuleFNF(Rule):
 # F(irst)N(one)L(ast)
 class RuleFNL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e3 :last"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e5 :none", "e3 :last"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -185,9 +172,8 @@ class RuleFNL(Rule):
 # F(irst)N(one)A(ll)
 class RuleFNA(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e3 :all"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e5 :none", "e3 :all"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog
@@ -195,9 +181,8 @@ class RuleFNA(Rule):
 
 class RuleFNFReject(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :none", "e3"]
         global defaultDuration
-        self.duration = Duration.ofMillis(defaultDuration)
+        self.withEvents(["e1", "e2 :none", "e3"]).withDuration(Duration.ofMillis(defaultDuration))
     def onRun(self, event):
         self.logger.debug("Running rule for sequence: {}", SpongeUtils.toStringEventSequence(self.eventSequence, "label"))
         global correlationEventsLog

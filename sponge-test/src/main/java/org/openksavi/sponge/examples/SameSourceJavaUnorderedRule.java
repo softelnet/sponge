@@ -31,17 +31,17 @@ public class SameSourceJavaUnorderedRule extends JRule {
 
     @Override
     public void onConfigure() {
-        setEvents("filesystemFailure e1", "diskFailure e2 :all");
-        setOrdered(false);
+        withEvents("filesystemFailure e1", "diskFailure e2 :all");
+        withOrdered(false);
 
-        addAllConditions("severityCondition");
-        addEventConditions("e2", (rule, event) -> {
+        withAllConditions("severityCondition");
+        withConditions("e2", (rule, event) -> {
             // Both events have to have the same source
             return event.get("source").equals(rule.getFirstEvent().get("source"))
                     && Duration.between(rule.getFirstEvent().getTime(), event.getTime()).getSeconds() <= 4;
         });
 
-        setDuration(Duration.ofSeconds(5));
+        withDuration(Duration.ofSeconds(5));
     }
 
     @Override

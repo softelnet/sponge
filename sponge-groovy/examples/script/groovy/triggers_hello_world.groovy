@@ -5,7 +5,7 @@
 
 class HelloWorldTrigger extends Trigger {
     void onConfigure() {
-        this.event = "helloEvent"
+        this.withEvent("helloEvent")
     }
     void onRun(Event event) {
         println event.get("say")

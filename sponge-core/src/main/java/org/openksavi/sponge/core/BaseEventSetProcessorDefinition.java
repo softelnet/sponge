@@ -16,44 +16,18 @@
 
 package org.openksavi.sponge.core;
 
-import java.time.Duration;
-
 import org.openksavi.sponge.EventSetProcessorDefinition;
+import org.openksavi.sponge.ProcessorMeta;
 
 public abstract class BaseEventSetProcessorDefinition extends BaseEventProcessorDefinition implements EventSetProcessorDefinition {
 
-    /** Duration. */
-    protected Duration duration;
-
-    /** Synchronous. */
-    private Boolean synchronous;
-
-    public BaseEventSetProcessorDefinition() {
+    protected BaseEventSetProcessorDefinition(ProcessorMeta meta) {
+        super(meta);
     }
 
     @Override
-    public boolean hasDuration() {
-        return duration != null;
-    }
-
-    @Override
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    @Override
-    public Duration getDuration() {
-        return duration;
-    }
-
-    @Override
-    public Boolean isSynchronous() {
-        return synchronous;
-    }
-
-    @Override
-    public void setSynchronous(Boolean synchronous) {
-        this.synchronous = synchronous;
+    public BaseEventSetProcessorMeta getMeta() {
+        return (BaseEventSetProcessorMeta) super.getMeta();
     }
 
     @Override

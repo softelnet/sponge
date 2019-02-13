@@ -16,21 +16,19 @@ def onInit():
 
 class A(Rule):
     def onConfigure(self):
-        self.events = ["startup", "e :all"]
+        self.withEvents(["startup", "e :all"])
     def onRun(self, event):
         sponge.getVariable("countA").incrementAndGet()
 
 class B(Rule):
     def onConfigure(self):
-        self.events = ["startup", "a :none"]
-        self.duration = Duration.ofSeconds(3)
+        self.withEvents(["startup", "a :none"]).withDuration(Duration.ofSeconds(3))
     def onRun(self, event):
         sponge.getVariable("countB").incrementAndGet()
 
 class C(Correlator):
     def onConfigure(self):
-        self.events = [".*"]
-        self.maxInstances = 1
+        self.withEvent(".*").withMaxInstances(1)
     def onEvent(self, event):
         self.logger.debug("{}", event)
         sponge.getVariable("listC").add(event.name)

@@ -13,18 +13,18 @@ def onInit():
 
 class NameRule(Rule):
     def onConfigure(self):
-        self.events = ["a1 a", "b1 b"]
+        self.withEvents(["a1 a", "b1 b"])
     def onRun(self, event):
         global correlationEventsLog
-        correlationEventsLog.addEvents(self.name, self)
+        correlationEventsLog.addEvents(self.meta.name, self)
 
 class PatternRule(Rule):
     def onConfigure(self):
-        self.events = [ "a.+ a", "b.+ b" ]
+        self.withEvents(["a.+ a", "b.+ b"])
     def onRun(self, event):
         self.logger.debug("Received matching events ({}, {})", self.getEvent("a").name, event.name)
         global correlationEventsLog
-        correlationEventsLog.addEvents(self.name, self)
+        correlationEventsLog.addEvents(self.meta.name, self)
 
 def onStartup():
     for name in ["a1", "b1", "a2", "b2", "a", "b", "a1", "b2"]:

@@ -8,7 +8,7 @@ import re, collections
 # Reject news with empty or short titles.
 class NewsFilter(Filter):
     def onConfigure(self):
-        self.event = "news"
+        self.withEvent("news")
     def onAccept(self, event):
         title = event.get("title")
         words = len(re.findall("\w+", title))
@@ -17,22 +17,21 @@ class NewsFilter(Filter):
 # Log every news.
 class LogNewsTrigger(Trigger):
     def onConfigure(self):
-        self.event = "news"
+        self.withEvent("news")
     def onRun(self, event):
         self.logger.info("News from " + event.get("source") + " - " + event.get("title"))
 
 # Send 'alarm' event when news stop arriving for 3 seconds.
 class NoNewNewsAlarmRule(Rule):
     def onConfigure(self):
-        self.events = ["news n1", "news n2 :none"]
-        self.duration = Duration.ofSeconds(3)
+        self.withEvents(["news n1", "news n2 :none"]).withDuration(Duration.ofSeconds(3))
     def onRun(self, event):
-        sponge.event("alarm").set("severity", 1).set("message", "No new news for " + str(self.duration.seconds) + "s.").send()
+        sponge.event("alarm").set("severity", 1).set("message", "No new news for " + str(self.meta.duration.seconds) + "s.").send()
 
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         self.logger.info("Sound the alarm! {}", event.get("message"))
         self.logger.info("Last news was (repeat {} time(s)):\n{}", echoPlugin.count,
@@ -43,8 +42,7 @@ class AlarmTrigger(Trigger):
 # not in this correlator.
 class LatestNewsCorrelator(Correlator):
     def onConfigure(self):
-        self.events = ["news"]
-        self.maxInstances = 1
+        self.withEvent("news").withMaxInstances(1)
     def onInit(self):
         storagePlugin.storedValue = collections.deque(maxlen=int(sponge.getVariable("latestNewsMaxSize", 2)))
     def onEvent(self, event):

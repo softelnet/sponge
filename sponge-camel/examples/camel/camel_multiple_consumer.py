@@ -5,7 +5,7 @@ Camel integration
 
 class CamelTrigger(Trigger):
     def onConfigure(self):
-        self.event = "spongeProducer"
+        self.withEvent("spongeProducer")
     def onRun(self, event):
         self.logger.debug("Received event name={}, body={}", event.name, event.body)
         message = "Hello World!"
@@ -18,7 +18,7 @@ class CamelTrigger(Trigger):
 
 class CamelConsumerTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e2"
+        self.withEvent("e2")
     def onRun(self, event):
         self.logger.debug("Message for e2 event: {}", event.get("message"))
         camel.emit(event.get("message"))

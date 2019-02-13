@@ -22,7 +22,7 @@ import org.openksavi.sponge.event.Event;
 /**
  * Trigger.
  */
-public interface Trigger extends EventProcessor<TriggerAdapter> {
+public interface Trigger extends EventProcessor<TriggerAdapter>, TriggerOperations {
 
     /**
      * A callback method that informs whether the specified event is to be accepted.

@@ -14,7 +14,7 @@ end
 
 class TriggerA < Trigger
     def onConfigure
-        self.event = "a"
+        self.withEvent("a")
     end
 
     def onRun(event)
@@ -27,7 +27,7 @@ $sponge.enable(TriggerA)
 
 class TriggerA < Trigger
     def onConfigure
-        self.event = "a"
+        self.withEvent("a")
     end
 
     def onRun(event)

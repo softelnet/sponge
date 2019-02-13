@@ -13,7 +13,7 @@ function onInit() {
 
 var TriggerA = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "a";
+        self.withEvent("a");
     },
     onRun: function(self, event) {
         sponge.getVariable("countA").incrementAndGet();
@@ -22,7 +22,7 @@ var TriggerA = Java.extend(Trigger, {
 
 var TriggerAPattern = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "a.*";
+        self.withEvent("a.*");
     },
     onRun: function(self, event) {
         self.logger.debug("Received matching event {}", event.name);

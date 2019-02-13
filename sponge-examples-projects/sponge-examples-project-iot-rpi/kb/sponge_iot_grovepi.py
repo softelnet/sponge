@@ -10,24 +10,23 @@ def onStartup():
 
 class SetGrovePiMode(Action):
     def onConfigure(self):
-        self.label = "Set the GrovePi mode"
-        self.description = "Sets the GrovePi mode."
-        self.argsMeta = [ArgMeta("mode", StringType()).withLabel("The GrovePi mode").withProvided(ArgProvidedMeta().withValue().withValueSet().withOverwrite())]
-        self.resultMeta = ResultMeta(VoidType())
+        self.withLabel("Set the GrovePi mode").withDescription("Sets the GrovePi mode.")
+        self.withArg(ArgMeta("mode", StringType()).withLabel("The GrovePi mode").withProvided(ArgProvidedMeta().withValue().withValueSet().withOverwrite()))
+        self.withNoResult()
     def onCall(self, mode):
         if mode not in ["auto", "manual"]:
             raise Exception("Unsupported GrovePi mode: " + mode)
         sponge.setVariable("grovePiMode", mode)
     def onProvideArgs(self, names, current, provided):
         if "mode" in names:
-            provided["mode"] = ArgProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").witLabel("Auto"),
-                                                                                                          AnnotatedValue("manual").witLabel("Manual")])
+            provided["mode"] = ArgProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").withLabel("Auto"),
+                                                                                                          AnnotatedValue("manual").withLabel("Manual")])
 
 class ManageLcd(Action):
     def onConfigure(self):
-        self.label = "Manage the LCD text and color"
-        self.description = "Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property."
-        self.argsMeta = [
+        self.withLabel("Manage the LCD text and color")
+        self.withDescription("Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property.")
+        self.withArgs([
             ArgMeta("currentText", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
                 .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("text", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
@@ -36,8 +35,7 @@ class ManageLcd(Action):
                 .withLabel("LCD color").withDescription("The LCD color.").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
             ArgMeta("clearText", BooleanType().withNullable(True).withDefaultValue(False))
                 .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, currentText, text, color, clearText = None):
         sponge.call("SetLcd", [text, color, clearText])
     def onProvideArgs(self, names, current, provided):
@@ -55,10 +53,8 @@ class SetLcd(Action):
 
 class GetLcdText(Action):
     def onConfigure(self):
-        self.label = "Get the LCD text"
-        self.description = "Returns the LCD text."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().withFeatures({"maxLines":5})).withLabel("LCD Text")
+        self.withLabel("Get the LCD text").withDescription("Returns the LCD text.")
+        self.withNoArgs().withResult(ResultMeta(StringType().withFeatures({"maxLines":5})).withLabel("LCD Text"))
     def onCall(self):
         return sponge.getVariable("grovePiDevice").getLcdText()
 
@@ -88,9 +84,8 @@ class GetSensorActuatorValues(Action):
 
 class ManageSensorActuatorValues(Action):
     def onConfigure(self):
-        self.label = "Manage the sensor and actuator values"
-        self.description = "Provides management of the sensor and actuator values."
-        self.argsMeta = [
+        self.withLabel("Manage the sensor and actuator values").withDescription("Provides management of the sensor and actuator values.")
+        self.withArgs([
             ArgMeta("temperatureSensor", NumberType().withNullable()).withLabel(u"Temperature sensor (°C)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("humiditySensor", NumberType().withNullable()).withLabel(u"Humidity sensor (%)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("lightSensor", NumberType().withNullable()).withLabel(u"Light sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
@@ -99,8 +94,7 @@ class ManageSensorActuatorValues(Action):
             ArgMeta("redLed", BooleanType()).withLabel("Red LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
             ArgMeta("blueLed", IntegerType().withMinValue(0).withMaxValue(255)).withLabel("Blue LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
             ArgMeta("buzzer", BooleanType()).withLabel("Buzzer").withProvided(ArgProvidedMeta().withValue().withOverwrite())
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        ]).withNoResult()
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         grovePiDevice.setRedLed(redLed)
@@ -113,8 +107,7 @@ class ManageSensorActuatorValues(Action):
 
 class DhtSensorListener(Correlator):
     def onConfigure(self):
-        self.event = "dhtSensorListener"
-        self.maxInstances = 1
+        self.withEvent("dhtSensorListener").withMaxInstances(1)
     def onInit(self):
         self.temperature = None
         self.humidity = None
@@ -142,7 +135,7 @@ class DhtSensorListener(Correlator):
 
 class RotarySensorListener(Trigger):
     def onConfigure(self):
-        self.event = "rotarySensorListener"
+        self.withEvent("rotarySensorListener")
 
     def onRun(self, event):
         try:
@@ -155,8 +148,7 @@ class RotarySensorListener(Trigger):
 
 class LightSensorListener(Correlator):
     def onConfigure(self):
-        self.event = "lightSensorListener"
-        self.maxInstances = 1
+        self.withEvent("lightSensorListener").withMaxInstances(1)
     def onInit(self):
         self.light = None
         self.darkThreshold = 20.0

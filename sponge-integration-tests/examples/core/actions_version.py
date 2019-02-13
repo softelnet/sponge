@@ -5,7 +5,7 @@ Action version
 
 class VersionedAction(Action):
     def onConfigure(self):
-        self.version = 12
+        self.withVersion(12)
     def onCall(self):
         return None
 

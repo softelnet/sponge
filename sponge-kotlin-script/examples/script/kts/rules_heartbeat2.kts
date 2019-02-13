@@ -13,8 +13,7 @@ fun onInit() {
 /** Sounds the alarm when heartbeat event stops occurring at most every 2 seconds. */
 class HeartbeatRule : Rule() {
     override fun onConfigure() {
-        setEvents("heartbeat h1", "heartbeat h2 :none")
-        duration = Duration.ofSeconds(2)
+        withEvents("heartbeat h1", "heartbeat h2 :none").withDuration(Duration.ofSeconds(2))
     }
 
     override fun onRun(event: Event?) {

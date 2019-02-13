@@ -9,7 +9,7 @@ void onInit() {
 
 class CronTrigger extends Trigger {
     void onConfigure() {
-        this.event = "cronEvent"
+        this.withEvent("cronEvent")
     }
     void onRun(Event event) {
         int eventCounter = sponge.getVariable("eventCounter")

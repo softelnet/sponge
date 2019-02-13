@@ -16,7 +16,10 @@
 
 package org.openksavi.sponge.kotlin;
 
+import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -32,6 +35,7 @@ import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kotlin.core.KotlinUtils;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.rule.RuleEventSpec;
 
 /**
  * Kotlin-specific implementation of the rule.
@@ -49,52 +53,169 @@ public abstract class KRule extends BaseRule {
         }
     };
 
-    public void addCondition(String eventAlias, KFunction<Boolean> kotlinObject) {
-        addEventCondition(eventAlias, createEventConditionForMethod(KotlinUtils.createEventConditionMethodName(kotlinObject)));
+    @Override
+    public final KRule withName(String name) {
+        return (KRule) super.withName(name);
     }
 
-    public void addCondition(String eventAlias, String methodName) {
-        addEventCondition(eventAlias, createEventConditionForMethod(methodName));
+    @Override
+    public final KRule withLabel(String label) {
+        return (KRule) super.withLabel(label);
     }
 
-    public void addCondition(String eventAlias, Function2<Rule, Event, Boolean> kotlinObject) {
-        addEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    @Override
+    public final KRule withDescription(String description) {
+        return (KRule) super.withDescription(description);
     }
 
-    public void addCondition(String eventAlias, BiFunction<Rule, Event, Boolean> kotlinObject) {
-        addEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    @Override
+    public final KRule withVersion(Integer version) {
+        return (KRule) super.withVersion(version);
     }
 
-    public void addConditions(String eventAlias, KFunction<Boolean>... kotlinObjects) {
-        addEventConditions(eventAlias, createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+    @Override
+    public final KRule withFeatures(Map<String, Object> features) {
+        return (KRule) super.withFeatures(features);
     }
 
-    public void addConditions(String eventAlias, String... methodNames) {
-        addEventConditions(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
+    @Override
+    public final KRule withFeature(String name, Object value) {
+        return (KRule) super.withFeature(name, value);
     }
 
-    public void addConditions(String eventAlias, Function2<Rule, Event, Boolean>... kotlinObjects) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
+    @Override
+    public final KRule withCategory(String category) {
+        return (KRule) super.withCategory(category);
     }
 
-    public void addConditions(String eventAlias, BiFunction<Rule, Event, Boolean>... kotlinObjects) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
+    @Override
+    public final KRule withEvents(List<String> eventStringSpecs) {
+        return (KRule) super.withEvents(eventStringSpecs);
     }
 
-    public void addAllConditions(KFunction<Boolean>... kotlinObjects) {
-        addAllEventConditions(createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+    public final KRule withEvents(String... eventStringSpecs) {
+        return withEvents(Arrays.asList(eventStringSpecs));
     }
 
-    public void addAllConditions(String... methodNames) {
-        addAllEventConditions(createEventConditionForMethods(Arrays.asList(methodNames)));
+    @Override
+    public final KRule withEvent(String eventStringSpec) {
+        return (KRule) super.withEvent(eventStringSpec);
     }
 
-    public void addAllConditions(Function2<Rule, Event, Boolean>... kotlinObjects) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, kotlinObjects));
+    @Override
+    public final KRule withDuration(Duration duration) {
+        return (KRule) super.withDuration(duration);
     }
 
-    public void addAllConditions(BiFunction<Rule, Event, Boolean>... kotlinObjects) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, kotlinObjects));
+    @Override
+    public final KRule withSynchronous(Boolean synchronous) {
+        return (KRule) super.withSynchronous(synchronous);
+    }
+
+    @Override
+    public final KRule withEventConditions(String eventAlias, List<EventCondition> conditions) {
+        return (KRule) super.withEventConditions(eventAlias, conditions);
+    }
+
+    @Override
+    public final KRule withEventCondition(String eventAlias, EventCondition condition) {
+        return (KRule) super.withEventCondition(eventAlias, condition);
+    }
+
+    @Override
+    public final KRule withAllEventCondition(EventCondition condition) {
+        return (KRule) super.withAllEventCondition(condition);
+    }
+
+    @Override
+    public final KRule withAllEventConditions(List<EventCondition> conditions) {
+        return (KRule) super.withAllEventConditions(conditions);
+    }
+
+    @Override
+    public final KRule withEventSpecs(List<RuleEventSpec> eventSpecs) {
+        return (KRule) super.withEventSpecs(eventSpecs);
+    }
+
+    public final KRule withEventSpecs(RuleEventSpec... eventSpecs) {
+        return withEventSpecs(Arrays.asList(eventSpecs));
+    }
+
+    @Override
+    public final KRule withEventSpec(RuleEventSpec eventSpec) {
+        return (KRule) super.withEventSpec(eventSpec);
+    }
+
+    @Override
+    public final KRule withOrdered(boolean ordered) {
+        return (KRule) super.withOrdered(ordered);
+    }
+
+    public final KRule withCondition(String eventAlias, KFunction<Boolean> kotlinObject) {
+        return (KRule) super.withEventCondition(eventAlias,
+                createEventConditionForMethod(KotlinUtils.createEventConditionMethodName(kotlinObject)));
+    }
+
+    public final KRule withCondition(String eventAlias, String methodName) {
+        return (KRule) super.withEventCondition(eventAlias, createEventConditionForMethod(methodName));
+    }
+
+    public final KRule withCondition(String eventAlias, Function2<Rule, Event, Boolean> kotlinObject) {
+        return (KRule) super.withEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    }
+
+    public final KRule withCondition(String eventAlias, BiFunction<Rule, Event, Boolean> kotlinObject) {
+        return (KRule) super.withEventCondition(eventAlias, MAPPER.apply(kotlinObject));
+    }
+
+    public final KRule withConditions(String eventAlias, KFunction<Boolean>... kotlinObjects) {
+        return (KRule) super.withEventCondition(eventAlias,
+                createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+    }
+
+    public final KRule withConditions(String eventAlias, String... methodNames) {
+        return (KRule) super.withEventCondition(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
+    }
+
+    public final KRule withConditions(String eventAlias, Function2<Rule, Event, Boolean>... kotlinObjects) {
+        return (KRule) super.withEventCondition(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
+    }
+
+    public final KRule withConditions(String eventAlias, BiFunction<Rule, Event, Boolean>... kotlinObjects) {
+        return (KRule) super.withEventCondition(eventAlias, CompositeEventCondition.create(MAPPER, kotlinObjects));
+    }
+
+    public final KRule withAllConditions(KFunction<Boolean>... kotlinObjects) {
+        return (KRule) super.withAllEventCondition(
+                createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+    }
+
+    public final KRule withAllConditions(String... methodNames) {
+        return (KRule) super.withAllEventCondition(createEventConditionForMethods(Arrays.asList(methodNames)));
+    }
+
+    public final KRule withAllConditions(Function2<Rule, Event, Boolean>... kotlinObjects) {
+        return (KRule) super.withAllEventCondition(CompositeEventCondition.create(MAPPER, kotlinObjects));
+    }
+
+    public final KRule withAllConditions(BiFunction<Rule, Event, Boolean>... kotlinObjects) {
+        return (KRule) super.withAllEventCondition(CompositeEventCondition.create(MAPPER, kotlinObjects));
+    }
+
+    public final KRule withAllCondition(KFunction<Boolean> kotlinObject) {
+        return withAllConditions(kotlinObject);
+    }
+
+    public final KRule withAllCondition(String methodName) {
+        return withAllConditions(methodName);
+    }
+
+    public final KRule withAllCondition(Function2<Rule, Event, Boolean> kotlinObject) {
+        return withAllConditions(kotlinObject);
+    }
+
+    public final KRule withAllCondition(BiFunction<Rule, Event, Boolean> kotlinObject) {
+        return withAllConditions(kotlinObject);
     }
 
     /**

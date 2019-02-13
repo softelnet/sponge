@@ -20,30 +20,28 @@ end
 
 class Trigger1 < Trigger
     def onConfigure
-        self.label = "Trigger1, file1"
-        self.event = "e1"
+        self.withLabel("Trigger1, file1").withEvent("e1")
     end
     def onRun(event)
         #self.logger.debug("file1: Received event {}", event)
-        $eventCounter.get(self.label).incrementAndGet()
+        $eventCounter.get(self.meta.label).incrementAndGet()
     end
 end
 
 
 class Trigger2 < Trigger
     def onConfigure
-        self.label = "Trigger2, file1"
-        self.event = "e2"
+        self.withLabel("Trigger2, file1").withEvent("e2")
     end
     def onRun(event)
         #self.logger.debug("file1: Received event {}", event)
-        $eventCounter.get(self.label).incrementAndGet()
+        $eventCounter.get(self.meta.label).incrementAndGet()
     end
 end
 
 class LoadKbFile < Trigger
     def onConfigure
-        self.event = "loadKbFile"
+        self.withEvent("loadKbFile")
     end
     def onRun(event)
         kbFile = event.get("kbFile")

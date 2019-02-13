@@ -19,47 +19,46 @@ fun onInit() {
 // Naming F(irst), L(ast), A(ll), N(one)
 
 class RuleFNNF : Rule() {
-    override fun onConfigure() = setEvents("e1", "e5 :none", "e6 :none", "e3")
+    override fun onConfigure() {
+        withEvents("e1", "e5 :none", "e6 :none", "e3")
+    }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for events: {}", eventAliasMap)
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 }
 
 class RuleFNNNL : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last")
-        duration = Duration.ofSeconds(2)
+        withEvents("e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last").withDuration(Duration.ofSeconds(2))
     }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for events: {}", eventAliasMap)
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 }
 
 class RuleFNNNLReject : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last")
-        duration = Duration.ofSeconds(2)
+        withEvents("e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last").withDuration(Duration.ofSeconds(2))
     }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for events: {}", eventAliasMap)
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 }
 
 class RuleFNFNL : Rule() {
     override fun onConfigure() {
-        setEvents("e1", "e5 :none", "e2", "e7 :none", "e3 :last")
-        duration = Duration.ofSeconds(2)
+        withEvents("e1", "e5 :none", "e2", "e7 :none", "e3 :last").withDuration(Duration.ofSeconds(2))
     }
 
     override fun onRun(event: Event?) {
         logger.debug("Running rule for events: {}", eventAliasMap)
-        Constants.correlationEventsLog.addEvents(name, this)
+        Constants.correlationEventsLog.addEvents(meta.name, this)
     }
 }
 

@@ -21,7 +21,7 @@ def onInit():
 
 class ColorDeduplicationFilter(Filter):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onInit(self):
         self.deduplication = Deduplication("color")
         self.deduplication.cacheBuilder.maximumSize(1000).expireAfterWrite(5, TimeUnit.MINUTES)
@@ -30,7 +30,7 @@ class ColorDeduplicationFilter(Filter):
 
 class ColorTrigger(Trigger):
     def onConfigure(self):
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     def onRun(self, event):
         self.logger.debug("Received event {}", event)
         global eventCounter

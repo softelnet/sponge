@@ -23,7 +23,7 @@ public class ScannedTrigger2 extends JTrigger {
 
     @Override
     public void onConfigure() {
-        setEvent("e2");
+        withEvent("e2");
     }
 
     @Override

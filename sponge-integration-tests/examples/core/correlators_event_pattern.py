@@ -12,15 +12,13 @@ def onInit():
 
 class NameCorrelator(Correlator):
     def onConfigure(self):
-        self.events = ["a1", "b1"]
-        self.maxInstances = 1
+        self.withEvents(["a1", "b1"]).withMaxInstances(1)
     def onEvent(self, event):
         sponge.getVariable("nameCount").incrementAndGet()
 
 class PatternCorrelator(Correlator):
     def onConfigure(self):
-        self.events = ["a.+", "b.*"]
-        self.maxInstances = 1
+        self.withEvents(["a.+", "b.*"]).withMaxInstances(1)
     def onEvent(self, event):
         sponge.getVariable("patternCount").incrementAndGet()
 

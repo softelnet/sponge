@@ -22,8 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,46 +61,21 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public List<ArgMeta<?>> getArgsMeta() {
-        return getDefinition().getArgsMeta();
-    }
-
-    @Override
-    public ArgMeta<?> getArgMeta(String name) {
-        Optional<ArgMeta<?>> argMetaO =
-                getDefinition().getArgsMeta().stream().filter(argMeta -> Objects.equals(argMeta.getName(), name)).findFirst();
-
-        Validate.isTrue(argMetaO.isPresent(), "Metadata for argument '%s' not found", name);
-
-        return argMetaO.get();
-    }
-
-    @Override
-    public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
-        getDefinition().setArgsMeta(argsMeta);
-    }
-
-    @Override
-    public ResultMeta<?> getResultMeta() {
-        return getDefinition().getResultMeta();
-    }
-
-    @Override
-    public void setResultMeta(ResultMeta<?> resultMeta) {
-        getDefinition().setResultMeta(resultMeta);
+    public BaseActionMeta getMeta() {
+        return (BaseActionMeta) super.getMeta();
     }
 
     @Override
     public Map<String, ArgProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
-        Validate.notNull(getArgsMeta(), "Argument metadata not defined");
+        Validate.notNull(getMeta().getArgsMeta(), "Argument metadata not defined");
 
         Set<String> allProvidedArguments =
-                getArgsMeta().stream().filter(BaseActionAdapter::isArgProvided).map(ArgMeta::getName).collect(Collectors.toSet());
+                getMeta().getArgsMeta().stream().filter(BaseActionAdapter::isArgProvided).map(ArgMeta::getName).collect(Collectors.toSet());
         Set<String> finalNames = new LinkedHashSet<>();
 
         if (names != null) {
             for (String name : names) {
-                Validate.isTrue(isArgProvided(getArgMeta(name)), "Argument '%s' is not defined as provided", name);
+                Validate.isTrue(isArgProvided(getMeta().getArgMeta(name)), "Argument '%s' is not defined as provided", name);
                 finalNames.add(name);
             }
         } else {
@@ -128,12 +101,14 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     public void validate() {
         super.validate();
 
-        Validate.isTrue(getArgsMeta() != null && getResultMeta() != null || getArgsMeta() == null && getResultMeta() == null,
+        Validate.isTrue(
+                getMeta().getArgsMeta() != null && getMeta().getResultMeta() != null
+                        || getMeta().getArgsMeta() == null && getMeta().getResultMeta() == null,
                 "Both argument metadata and result metadata must be set or not");
 
-        if (getArgsMeta() != null) {
+        if (getMeta().getArgsMeta() != null) {
             boolean foundFirstOptionalArg = false;
-            for (ArgMeta<?> argMeta : getArgsMeta()) {
+            for (ArgMeta<?> argMeta : getMeta().getArgsMeta()) {
                 validateArgMeta(argMeta);
 
                 // Optional arguments may be specified only as last in the argument list.
@@ -143,17 +118,17 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 }
             }
 
-            validateArgProvided(getArgsMeta());
+            validateArgProvided(getMeta().getArgsMeta());
         }
 
-        validateResultMeta(getResultMeta());
+        validateResultMeta(getMeta().getResultMeta());
     }
 
     private void validateArgMeta(ArgMeta<?> argMeta) {
-        Validate.notNull(argMeta, "Null argument metadata in the '%s' action", getName());
+        Validate.notNull(argMeta, "Null argument metadata in the '%s' action", getMeta().getName());
 
-        String errorSource =
-                String.format("argument '%s' in the action '%s'", argMeta.getName() != null ? argMeta.getName() : "unnamed", getName());
+        String errorSource = String.format("argument '%s' in the action '%s'", argMeta.getName() != null ? argMeta.getName() : "unnamed",
+                getMeta().getName());
         Validate.notNull(argMeta.getName(), "Null name of the %s", errorSource);
         Validate.notNull(argMeta.getType(), "Null type of the %s", errorSource);
         SpongeUtils.validateType(argMeta.getType(), errorSource);
@@ -161,7 +136,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
     private void validateArgProvided(List<ArgMeta<?>> argsMeta) {
         Set<String> prevArgNames = new HashSet<>();
-        for (ArgMeta<?> argMeta : getArgsMeta()) {
+        for (ArgMeta<?> argMeta : getMeta().getArgsMeta()) {
             if (argMeta.getProvided() != null) {
                 argMeta.getProvided().getDepends().forEach(dependsOnArg -> {
                     Validate.isTrue(prevArgNames.contains(dependsOnArg),
@@ -181,7 +156,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
     private void validateResultMeta(ResultMeta<?> resultMeta) {
         if (resultMeta != null) {
-            String errorSource = String.format("result of the action '%s'", getName());
+            String errorSource = String.format("result of the action '%s'", getMeta().getName());
             Validate.notNull(resultMeta.getType(), "Null type of the %s", errorSource);
             SpongeUtils.validateType(resultMeta.getType(), errorSource);
         }

@@ -24,7 +24,7 @@ def checkPageStatus(host):
 
 class HttpStatusTrigger(Trigger):
     def onConfigure(self):
-        self.event = "checkStatus"
+        self.withEvent("checkStatus")
     def onRun(self, event):
         status = checkPageStatus(event.get("host"))
         sponge.getVariable("hostStatus").put(event.get("host"), status)

@@ -28,31 +28,34 @@ class RulesEvents : KKnowledgeBase() {
     // Naming F(irst), L(ast), A(ll), N(one)
 
     class RuleF : KRule() {
-        override fun onConfigure() = setEvents("e1")
+        override fun onConfigure() {
+            withEvents("e1")
+        }
         override fun onRun(event: Event?) {
-            //sponge.getVariable<CorrelationEventsLog>("correlationEventsLog").addEvents(name, this)
-            correlationEventsLog.addEvents(name, this)
+            //sponge.getVariable<CorrelationEventsLog>("correlationEventsLog").addEvents(meta.name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 
     // F(irst)F(irst)F(irst)
     class RuleFFF : KRule() {
-        override fun onConfigure() = setEvents("e1", "e2", "e3 :first")
+        override fun onConfigure() {
+            withEvents("e1", "e2", "e3 :first")
+        }
         override fun onRun(event: Event?) {
             logger.debug("Running rule for event: {}", event?.name)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 
     abstract class TestRule : KRule() {
         fun setup(vararg eventSpec: String) {
-            setEvents(*eventSpec)
-            duration = Duration.ofMillis(defaultDuration)
+            withEvents(*eventSpec).withDuration(Duration.ofMillis(defaultDuration))
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for event: {}, sequence: {}", event?.name, SpongeUtils.toStringEventSequence(eventSequence, "label"))
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 

@@ -590,7 +590,7 @@ public abstract class SpongeUtils {
     public static ProcessorQualifiedName getProcessorQualifiedName(ProcessorOperations processorOperations) {
         return new ProcessorQualifiedName(
                 processorOperations.getKnowledgeBase() != null ? processorOperations.getKnowledgeBase().getName() : null,
-                processorOperations.getName());
+                processorOperations.getMeta().getName());
     }
 
     /**

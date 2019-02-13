@@ -7,7 +7,7 @@ from java.util.concurrent.atomic import AtomicBoolean
 # Handles 'alarm' events.
 class AlarmTrigger(Trigger):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         print(camel.requestBody("direct:template", event.get("message")))
         sponge.getVariable("alarmSounded").set(True)

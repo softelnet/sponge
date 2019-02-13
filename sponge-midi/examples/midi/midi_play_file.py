@@ -9,7 +9,7 @@ from java.io import File
 
 class SameSound(Trigger):
     def onConfigure(self):
-        self.event = "midiShort"
+        self.withEvent("midiShort")
     def onRun(self, event):
         # Exact sound as read from the MIDi file.
         midi.sound(event.message)
@@ -19,14 +19,14 @@ class SameSound(Trigger):
 
 class Log(Trigger):
     def onConfigure(self):
-        self.event = "midi.*"
+        self.withEvent("midi.*")
     def onRun(self, event):
         self.logger.info("{}MIDI message: {}", "[" + MidiUtils.getKeyNote(event.data1) + "] " if event.category.code == "short"
                          and event.command == ShortMessage.NOTE_ON else "", event.messageString)
 
 class Stop(Trigger):
     def onConfigure(self):
-        self.event = "midiMeta"
+        self.withEvent("midiMeta")
     def onRun(self, event):
         # Playback finished
         if event.messageType == 47:

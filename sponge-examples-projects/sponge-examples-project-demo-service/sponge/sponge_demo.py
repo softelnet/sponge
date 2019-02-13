@@ -9,37 +9,34 @@ from java.time.format import DateTimeFormatter
 
 class UpperCase(Action):
     def onConfigure(self):
-        self.label = "Convert to upper case"
-        self.description = "Converts a string to upper case."
-        self.argsMeta = [
+        self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")
+        self.withArg(
             ArgMeta("text", StringType().withMaxLength(256)).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
-        ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Upper case text")
+        )
+        self.withResult(ResultMeta(StringType()).withLabel("Upper case text"))
     def onCall(self, text):
         return text.upper()
 
 class LowerCase(Action):
     def onConfigure(self):
-        self.label = "Convert to lower case"
-        self.description = "Converts a string to lower case."
-        self.argsMeta = [ ArgMeta("text", StringType()).withLabel("Text to lower case").withDescription("The text that will be changed to lower case") ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Lower case text")
+        self.withLabel("Convert to lower case").withDescription("Converts a string to lower case.")
+        self.withArg(ArgMeta("text", StringType()).withLabel("Text to lower case").withDescription("The text that will be changed to lower case"))
+        self.withResult(ResultMeta(StringType()).withLabel("Lower case text"))
     def onCall(self, text):
         return text.lower()
 
 class ListValues(Action):
     def onConfigure(self):
-        self.features = {"visible":False}
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(ListType(StringType()))
+        self.withFeatures({"visible":False})
+        self.withNoArgs().withResult(ResultMeta(ListType(StringType())))
     def onCall(self):
         return ["value1", "value2", "value3"]
 
 class ProvideByAction(Action):
     def onConfigure(self):
-        self.label = "Action with provided argument"
-        self.argsMeta = [ArgMeta("value", StringType()).withLabel("Value").withProvided(ArgProvidedMeta().withValueSet())]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Same value")
+        self.withLabel("Action with provided argument")
+        self.withArg(ArgMeta("value", StringType()).withLabel("Value").withProvided(ArgProvidedMeta().withValueSet()))
+        self.withResult(ResultMeta(StringType()).withLabel("Same value"))
     def onCall(self, value):
         return value
     def onProvideArgs(self, names, current, provided):
@@ -48,22 +45,19 @@ class ProvideByAction(Action):
 
 class ChooseColor(Action):
     def onConfigure(self):
-        self.label = "Choose a color"
-        self.description = "Shows a color argument."
-        self.argsMeta = [
+        self.withLabel("Choose a color").withDescription("Shows a color argument.")
+        self.withArg(
             ArgMeta("color", StringType().withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"}))
                 .withLabel("Color").withDescription("The color.")
-        ]
-        self.resultMeta = ResultMeta(StringType())
+        )
+        self.withResult(ResultMeta(StringType()))
     def onCall(self, color):
         return "The chosen color is " + color
 
 class ConsoleOutput(Action):
     def onConfigure(self):
-        self.label = "Console output"
-        self.description = "Returns the console output."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().withFormat("console")).withLabel("Console output")
+        self.withLabel("Console output").withDescription("Returns the console output.")
+        self.withNoArgs().withResult(ResultMeta(StringType().withFormat("console")).withLabel("Console output"))
     def onCall(self):
         result = ""
         for i in range(30):
@@ -72,10 +66,8 @@ class ConsoleOutput(Action):
 
 class MarkdownText(Action):
     def onConfigure(self):
-        self.label = "Markdown text"
-        self.description = "Returns the markdown text."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(StringType().withFormat("markdown")).withLabel("Markdown text")
+        self.withLabel("Markdown text").withDescription("Returns the markdown text.")
+        self.withNoArgs().withResult(ResultMeta(StringType().withFormat("markdown")).withLabel("Markdown text"))
     def onCall(self):
         return """Heading
 =======
@@ -111,10 +103,8 @@ source code example
 
 class HtmlFileOutput(Action):
     def onConfigure(self):
-        self.label = "HTML file output"
-        self.description = "Returns the HTML file."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().withMimeType("text/html")).withLabel("HTML file")
+        self.withLabel("HTML file output").withDescription("Returns the HTML file.")
+        self.withNoArgs().withResult(ResultMeta(BinaryType().withMimeType("text/html")).withLabel("HTML file"))
     def onCall(self):
         return String("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -132,25 +122,23 @@ class HtmlFileOutput(Action):
 
 class PdfFileOutput(Action):
     def onConfigure(self):
-        self.label = "PDF file output"
-        self.description = "Returns the PDF file."
-        self.argsMeta = []
-        self.resultMeta = ResultMeta(BinaryType().withMimeType("application/pdf")).withLabel("PDF file")
+        self.withLabel("PDF file output").withDescription("Returns the PDF file.")
+        self.withNoArgs().withResult(ResultMeta(BinaryType().withMimeType("application/pdf")).withLabel("PDF file"))
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
 
 class DependingArgumentsAction(Action):
     def onConfigure(self):
-        self.label = "Action with depending arguments"
-        self.argsMeta = [
+        self.withLabel("Action with depending arguments")
+        self.withArgs([
             ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
             ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
             ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDepends("country")),
             ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
-            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet()),
-        ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Sentences")
+            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet())
+        ])
+        self.withResult(ResultMeta(StringType()).withLabel("Sentences"))
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, names, current, provided):
@@ -206,10 +194,8 @@ class DependingArgumentsAction(Action):
 
 class DateTimeAction(Action):
     def onConfigure(self):
-        self.label = "Action with a date/time argument"
-        self.argsMeta = [
-            ArgMeta("dateTime", DateTimeType().withDateTime().withFormat("yyyy-MM-dd HH:mm")).withLabel("Date and time"),
-        ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Formatted text")
+        self.withLabel("Action with a date/time argument")
+        self.withArg(ArgMeta("dateTime", DateTimeType().withDateTime().withFormat("yyyy-MM-dd HH:mm")).withLabel("Date and time"))
+        self.withResult(ResultMeta(StringType()).withLabel("Formatted text"))
     def onCall(self, dateTime):
-        return dateTime.format(DateTimeFormatter.ofPattern(self.argsMeta[0].type.format))
+        return dateTime.format(DateTimeFormatter.ofPattern(self.meta.argsMeta[0].type.format))

@@ -25,10 +25,10 @@ public class ReactiveXCorrelator extends JCorrelator {
 
     @Override
     public void onConfigure() {
-        setEvents(".*");
+        withEvents(".*");
 
         // Only one instance of this correlator will be running.
-        setMaxInstances(1);
+        withMaxInstances(1);
     }
 
     @Override

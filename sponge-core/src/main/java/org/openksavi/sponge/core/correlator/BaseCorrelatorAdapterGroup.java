@@ -48,6 +48,11 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
     }
 
     @Override
+    public BaseCorrelatorMeta getMeta() {
+        return (BaseCorrelatorMeta) super.getMeta();
+    }
+
+    @Override
     public ProcessorType getType() {
         return ProcessorType.CORRELATOR_GROUP;
     }
@@ -60,9 +65,8 @@ public class BaseCorrelatorAdapterGroup extends BaseEventSetProcessorAdapterGrou
      */
     @Override
     public boolean needNewInstance(Event event) {
-        return getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher().matchesAny(getDefinition().getEventNames(),
-                event.getName())
-                && (getDefinition().isMaxInstancesUnbound() || getCorrelators().size() < getDefinition().getMaxInstances());
+        return getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher().matchesAny(getMeta().getEventNames(),
+                event.getName()) && (getMeta().isMaxInstancesUnbound() || getCorrelators().size() < getMeta().getMaxInstances());
     }
 
     @Override

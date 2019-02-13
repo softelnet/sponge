@@ -91,7 +91,8 @@ public abstract class BaseMainProcessingUnit extends BaseProcessingUnit<EventPro
     @Override
     public boolean existsProcessor(String name, ProcessorType type) {
         return getRegisteredProcessorAdapterMap().values().stream()
-                .filter(adapter -> adapter.getType() == type && StringUtils.equals(adapter.getName(), name)).findAny().isPresent();
+                .filter(adapter -> adapter.getType() == type && StringUtils.equals(adapter.getMeta().getName(), name)).findAny()
+                .isPresent();
     }
 
     @Override

@@ -10,7 +10,7 @@ void onInit() {
 
 class Trigger1 extends Trigger {
     void onConfigure() {
-        this.event = "e1"
+        this.withEvent("e1")
     }
     void onRun(Event event) {
     	int eventCounter = sponge.getVariable("eventCounter")
@@ -25,7 +25,7 @@ class Trigger1 extends Trigger {
 
 class Trigger2 extends Trigger {
     void onConfigure() {
-        this.event = "e2"
+        this.withEvent("e2")
     }
     void onRun(Event event) {
         this.logger.debug("Removing entry")

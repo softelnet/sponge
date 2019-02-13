@@ -16,45 +16,16 @@
 
 package org.openksavi.sponge;
 
-import java.time.Duration;
-
 /**
  * Event set processor operations.
  */
 public interface EventSetProcessorOperations extends EventProcessorOperations {
 
     /**
-     * Informs whether this event set processor has a duration.
+     * Return the metadata.
      *
-     * @return {@code true} if this event set processor has duration.
+     * @return the metadata.
      */
-    boolean hasDuration();
-
-    /**
-     * Sets a duration.
-     *
-     * @param duration a duration.
-     */
-    void setDuration(Duration duration);
-
-    /**
-     * Returns a duration.
-     *
-     * @return a duration.
-     */
-    Duration getDuration();
-
-    /**
-     * Returns {@code true} if this event set processor is synchronous.
-     *
-     * @return {@code true} if this event set processor is synchronous. {@code null} value means that the default value should be used.
-     */
-    Boolean isSynchronous();
-
-    /**
-     * Sets synchronous flag.
-     *
-     * @param synchronous synchronous flag.
-     */
-    void setSynchronous(Boolean synchronous);
+    @Override
+    EventSetProcessorMeta getMeta();
 }

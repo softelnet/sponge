@@ -86,10 +86,12 @@ The potential users of an embedded {sponge} are Java developers.
 
 The potential users of a standalone command-line {sponge} application are:
 
-* Java, Python, Ruby, Groovy or JavaScript developers,
-* DevOps engineers, system administrators with programming skills.
+* Java, Python, Ruby, Groovy and JavaScript developers,
+* DevOps engineers and system administrators with programming skills.
 
 Because of {sponge} is a Java-based solution, at least basic knowledge of Java is suggested. It becomes important when browsing Javadoc API, using Java libraries, analyzing exception stack traces, etc. Moreover, to effectively use {sponge} for problems that require integration, a knowledge of Apache Camel becomes important.
+
+The {sponge} mobile client application is intended for end users with no programming knowledge required.
 
 == License
 The {sponge} standard libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license]. However some optional {sponge} libraries and the {sponge} standalone command-line application are licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3] because they use optional, third-party libraries that require it.

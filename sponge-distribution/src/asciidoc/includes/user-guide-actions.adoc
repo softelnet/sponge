@@ -11,6 +11,21 @@ In addition to the inherited <<processor-methods,processor properties and method
 |===
 |Property / Method |Description
 
+|`withArgs(List<ArgMeta> argsMeta)`
+|Sets action arguments metadata. The action arguments metadata can be read using `self.meta.argsMeta`.
+
+|`withArg(ArgMeta argMeta)`
+|Sets a single action argument metadata. The action arguments metadata can be read using `self.meta.argsMeta`.
+
+|`withNoArgs()`
+|Defines that an action has no arguments.
+
+|`withResult(ResultMeta resultMeta)`
+|Sets an action result metadata. The action result metadata can be read using `self.meta.resultMeta`.
+
+|`withNoResult()`
+|Defines that an action has no result, i.e. it's result is of `VoidType`.
+
 |`Object onCall(_dynamic arguments_)`
 |The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. The implementation of this method is mandatory.
 
@@ -94,7 +109,7 @@ Metadata for arguments and a result support <<types, types>>.
 |A not mandatory flag specifying if this argument is optional. Defaults to `false`. Optional arguments can be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
 
 |`provided`
-|The _provided_ argument specification as an instance of the `ArgProvided` class. Defaults to `null`.
+|The _provided_ argument specification as an instance of the `ArgProvidedMeta` class. Defaults to `null`.
 |===
 
 .Provided argument specification properties
@@ -138,15 +153,13 @@ Metadata for arguments and a result support <<types, types>>.
 ----
 class UpperCase(Action):
     def onConfigure(self):
-        self.label = "Convert to upper case"
-        self.description = "Converts a string to upper case."
-        self.features = {"visibility":True}
-        self.argsMeta = [
+        self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")
+        self.withArgs([
             ArgMeta("text", StringType()).withLabel("Text to upper case").withDescription("The text that will be converted to upper case."),
-            ArgMeta("optionalText", AnyType().withNullable(True)).withLabel("Text suffix").withOptional()
-        ]
-        self.resultMeta = ResultMeta(StringType()).withLabel("Upper case text")
+            ArgMeta("suffix", AnyType().withNullable(True)).withLabel("Text suffix").withDescription("Not used")
+        ]).withResult(ResultMeta(StringType()).withLabel("Upper case text"))
     def onCall(self, text, optionalText = None):
+        self.logger.info("Action {} called", self.meta.name)
         return text.upper() + ( " " + optionalText.upper() if optionalText is not None else "")
 ----
 
@@ -155,8 +168,8 @@ class UpperCase(Action):
 ----
 class MultipleArgumentsAction(Action):
     def onConfigure(self):
-        self.label = "Multiple arguments action"
-        self.argsMeta = [
+        self.withLabel("Multiple arguments action").withDescription("Multiple arguments action.")
+        self.withArgs([
             ArgMeta("stringArg", StringType().withMaxLength(10).withFormat("ipAddress")),
             ArgMeta("integerArg", IntegerType().withMinValue(1).withMaxValue(100).withDefaultValue(50)),
             ArgMeta("anyArg", AnyType().withNullable(True)),
@@ -165,10 +178,12 @@ class MultipleArgumentsAction(Action):
             ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
             ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.CustomObject")),
             ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))),
-            ArgMeta("binaryArg", BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "color":"white"})),
-        ]
-        self.resultMeta = ResultMeta(BooleanType()).withLabel("Boolean result")
-    def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg):
+            ArgMeta("binaryArg", BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "background":"black", "color":"white"})),
+            ArgMeta("typeArg", TypeType()),
+            ArgMeta("dynamicArg", DynamicType())
+        ])
+        self.withResult(ResultMeta(BooleanType()).withLabel("Boolean result"))
+    def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg, typeArg, dynamicArg):
         return True
 ----
 
@@ -203,16 +218,14 @@ def onInit():
 
 class SetActuator(Action):
     def onConfigure(self):
-        self.label = "Set actuator"
-        self.description = "Sets the actuator state."
-        self.argsMeta = [
+        self.withLabel("Set actuator").withDescription("Sets the actuator state.")
+        self.withArgs([
             ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
             ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
             ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1")),
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1"))
+        ]).withNoResult()
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)
         sponge.setVariable("actuator2", actuator2)

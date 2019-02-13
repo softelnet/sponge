@@ -78,7 +78,7 @@ public class ReflectionEventCondition extends MethodNameEventCondition {
         Method method = MethodUtils.getMatchingMethod(rule.getClass(), methodName, Event.class);
 
         if (method == null) {
-            throw new IllegalArgumentException("Event condition method " + methodName + " not found in rule " + rule.getName());
+            throw new IllegalArgumentException("Event condition method " + methodName + " not found in rule " + rule.getMeta().getName());
         }
 
         return method;

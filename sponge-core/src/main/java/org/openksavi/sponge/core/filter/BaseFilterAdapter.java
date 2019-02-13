@@ -35,4 +35,9 @@ public class BaseFilterAdapter extends BaseEventProcessorAdapter<Filter> impleme
     public ProcessorType getType() {
         return ProcessorType.FILTER;
     }
+
+    @Override
+    public BaseFilterMeta getMeta() {
+        return (BaseFilterMeta) super.getMeta();
+    }
 }

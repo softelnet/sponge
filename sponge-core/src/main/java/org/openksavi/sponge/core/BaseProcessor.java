@@ -43,73 +43,18 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         return adapter;
     }
 
-    public final void setAdapter(T owner) {
-        this.adapter = owner;
+    public final void setAdapter(T adapter) {
+        this.adapter = adapter;
     }
 
     @Override
-    public final String getName() {
-        return adapter.getName();
-    }
-
-    @Override
-    public final void setName(String name) {
-        adapter.setName(name);
-    }
-
-    @Override
-    public final void setLabel(String label) {
-        adapter.setLabel(label);
-    }
-
-    @Override
-    public final String getLabel() {
-        return adapter.getLabel();
-    }
-
-    @Override
-    public final void setDescription(String description) {
-        adapter.setDescription(description);
-    }
-
-    @Override
-    public final String getDescription() {
-        return adapter.getDescription();
+    public BaseProcessorMeta getMeta() {
+        return (BaseProcessorMeta) adapter.getMeta();
     }
 
     @Override
     public KnowledgeBase getKnowledgeBase() {
         return adapter.getKnowledgeBase();
-    }
-
-    @Override
-    public void setVersion(Integer version) {
-        adapter.setVersion(version);
-    }
-
-    @Override
-    public Integer getVersion() {
-        return adapter.getVersion();
-    }
-
-    @Override
-    public Map<String, Object> getFeatures() {
-        return adapter.getFeatures();
-    }
-
-    @Override
-    public void setFeatures(Map<String, Object> features) {
-        adapter.setFeatures(features);
-    }
-
-    @Override
-    public String getCategory() {
-        return adapter.getCategory();
-    }
-
-    @Override
-    public void setCategory(String category) {
-        adapter.setCategory(category);
     }
 
     public KnowledgeBaseEngineOperations getSponge() {
@@ -123,6 +68,41 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
     @Override
     public final Logger getLogger() {
         return ((BaseProcessorAdapter<?>) adapter).getLogger();
+    }
+
+    public BaseProcessor<T> withName(String name) {
+        getMeta().withName(name);
+        return this;
+    }
+
+    public BaseProcessor<T> withLabel(String label) {
+        getMeta().withLabel(label);
+        return this;
+    }
+
+    public BaseProcessor<T> withDescription(String description) {
+        getMeta().withDescription(description);
+        return this;
+    }
+
+    public BaseProcessor<T> withVersion(Integer version) {
+        getMeta().withVersion(version);
+        return this;
+    }
+
+    public BaseProcessor<T> withFeatures(Map<String, Object> features) {
+        getMeta().withFeatures(features);
+        return this;
+    }
+
+    public BaseProcessor<T> withFeature(String name, Object value) {
+        getMeta().withFeature(name, value);
+        return this;
+    }
+
+    public BaseProcessor<T> withCategory(String category) {
+        getMeta().withCategory(category);
+        return this;
     }
 
     public BaseProcessor<T> withName(String name) {
@@ -162,6 +142,6 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
 
     @Override
     public String toString() {
-        return getName() != null ? getName() : super.toString();
+        return getMeta().getName() != null ? getMeta().getName() : super.toString();
     }
 }

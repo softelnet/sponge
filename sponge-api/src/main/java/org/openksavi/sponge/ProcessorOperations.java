@@ -16,16 +16,12 @@
 
 package org.openksavi.sponge;
 
-import java.util.Map;
-
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.util.Descriptive;
-import org.openksavi.sponge.util.HasVersion;
 
 /**
  * Processor operations.
  */
-public interface ProcessorOperations extends Descriptive, HasVersion {
+public interface ProcessorOperations {
 
     /**
      * Returns the knowledge base associated with this processor.
@@ -35,30 +31,9 @@ public interface ProcessorOperations extends Descriptive, HasVersion {
     KnowledgeBase getKnowledgeBase();
 
     /**
-     * Returns the processor features. The default value is the empty map.
+     * Returns the metadata.
      *
-     * @return the processor features. Never returns {@code null}.
+     * @return the metadata.
      */
-    Map<String, Object> getFeatures();
-
-    /**
-     * Sets the (optional) processor features. Must not be {@code null}.
-     *
-     * @param features the processor features.
-     */
-    void setFeatures(Map<String, Object> features);
-
-    /**
-     * Returns the optional category name.
-     *
-     * @return the category name.
-     */
-    String getCategory();
-
-    /**
-     * Sets the category name.
-     *
-     * @param category the category name.
-     */
-    void setCategory(String category);
+    ProcessorMeta getMeta();
 }

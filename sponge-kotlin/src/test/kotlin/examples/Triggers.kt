@@ -22,7 +22,9 @@ class Triggers : KKnowledgeBase() {
     }
 
     class TriggerA : KTrigger() {
-        override fun onConfigure() = setEvent("a")
+        override fun onConfigure() {
+            withEvent("a")
+        }
         override fun onRun(event: Event) {
             logger.debug("Received event {}", event)
             sponge.getVariable<AtomicBoolean>("receivedEventA").set(true)
@@ -30,7 +32,9 @@ class Triggers : KKnowledgeBase() {
     }
 
     class TriggerB : KTrigger() {
-        override fun onConfigure() = setEvent("b")
+        override fun onConfigure() {
+            withEvent("b")
+        }
         override fun onRun(event: Event) {
             logger.debug("Received event {}", event)
             val receivedEventBCount = sponge.getVariable<AtomicInteger>("receivedEventBCount")

@@ -35,13 +35,19 @@ public abstract class BaseEventProcessorAdapter<T extends EventProcessor<?>> ext
     }
 
     @Override
+    public BaseEventProcessorMeta getMeta() {
+        return (BaseEventProcessorMeta) super.getMeta();
+    }
+
+    @Override
     public void validate() {
         super.validate();
 
-        List<String> eventNames = getDefinition().getEventNames();
+        List<String> eventNames = getMeta().getEventNames();
 
         if (eventNames == null || eventNames.isEmpty()) {
-            throw new SpongeException("Invalid " + getType().getName() + " " + getName() + ". At least one event must be specified.");
+            throw new SpongeException(
+                    "Invalid " + getType().getName() + " " + getMeta().getName() + ". At least one event must be specified.");
         }
 
         // Validate the patterns for event names.

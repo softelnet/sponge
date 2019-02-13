@@ -59,7 +59,7 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
     @Override
     protected int getExpectedEventIndex(TreeNode<NodeValue> node, Event event) {
         int level = node.getLevel();
-        List<String> eventNames = adapter.getDefinition().getEventNames();
+        List<String> eventNames = getMeta().getEventNames();
         if (level < eventNames.size() && adapter.getKnowledgeBase().getEngineOperations().getEngine().getPatternMatcher()
                 .matches(eventNames.get(level), event.getName())) {
             node.getValue().setIndex(level);
@@ -135,7 +135,7 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
      */
     @Override
     protected boolean shouldRunRule() {
-        EventMode lastMode = getDefinition().getEventSpec(getDefinition().getEventSpecs().size() - 1).getMode();
+        EventMode lastMode = getMeta().getEventSpec(getMeta().getEventSpecs().size() - 1).getMode();
 
         // If the mode of the last specified event is FIRST or ALL always try to run the rule.
         if (lastMode == EventMode.FIRST || lastMode == EventMode.ALL) {
@@ -152,7 +152,7 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
         boolean fired = false;
         TreeNode<NodeValue> child;
 
-        EventMode eventMode = getDefinition().getEventSpec(node.getLevel() + 1).getMode();
+        EventMode eventMode = getMeta().getEventSpec(node.getLevel() + 1).getMode();
         switch (eventMode) {
         case FIRST:
             // For FIRST mode consider only the first event in the next level.
@@ -221,17 +221,17 @@ public class OrderedRuleAdapterRuntime extends AbstractRuleAdapterRuntime {
 
     @Override
     public void validate() {
-        EventMode firstMode = getDefinition().getEventSpec(0).getMode();
+        EventMode firstMode = getMeta().getEventSpec(0).getMode();
         if (firstMode != EventMode.FIRST) {
             throw adapter.createValidationException("The mode of the first event in the sequence must be " + EventMode.FIRST + ".");
         }
 
-        EventMode lastMode = getDefinition().getEventSpec(getDefinition().getEventSpecs().size() - 1).getMode();
+        EventMode lastMode = getMeta().getEventSpec(getMeta().getEventSpecs().size() - 1).getMode();
         if (lastMode == null) {
             throw adapter.createValidationException("The mode of the last event in the sequence is not set");
         }
 
-        if ((lastMode == EventMode.LAST || lastMode == EventMode.NONE) && !adapter.hasDuration()) {
+        if ((lastMode == EventMode.LAST || lastMode == EventMode.NONE) && !getMeta().hasDuration()) {
             throw adapter.createValidationException(
                     "If the mode of the last event in the sequence is " + lastMode + " a duration should be set.");
         }

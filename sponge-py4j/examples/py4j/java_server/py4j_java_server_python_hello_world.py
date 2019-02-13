@@ -8,8 +8,9 @@ gateway = JavaGateway()
 # The Sponge in other process accessed via Py4J. Note that it doesn't provide a simplified bean property access for getters and setters.
 sponge = gateway.entry_point
 
-print("Connected to {}".format(sponge.getInfo()))
-sponge.event("helloEvent").set("say", "Hello from Python's Py4J").send()
-print("Triggers count: {}, first: {}".format(len(sponge.getEngine().getTriggers()), sponge.getEngine().getTriggers()[0].getName()))
-
-gateway.shutdown()
+try:
+    print("Connected to {}".format(sponge.getInfo()))
+    sponge.event("helloEvent").set("say", "Hello from Python's Py4J").send()
+    print("Triggers count: {}, first: {}".format(len(sponge.getEngine().getTriggers()), sponge.getEngine().getTriggers()[0].getMeta().getName()))
+finally:
+    gateway.shutdown()

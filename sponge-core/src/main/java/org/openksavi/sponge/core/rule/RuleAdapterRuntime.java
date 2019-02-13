@@ -84,6 +84,5 @@ public interface RuleAdapterRuntime {
         public void setIndex(Integer index) {
             this.index = index;
         }
-
     }
 }

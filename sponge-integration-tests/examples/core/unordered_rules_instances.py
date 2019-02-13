@@ -13,13 +13,13 @@ def onInit():
 
 class AB(Rule):
     def onConfigure(self):
-        self.events = ["a", "b"]; self.ordered = False
+        self.withEvents(["a", "b"]).withOrdered(False)
     def onRun(self, event):
         sponge.getVariable("countAB").incrementAndGet()
 
 class A(Rule):
     def onConfigure(self):
-        self.events = ["a a1", "a a2"]; self.ordered = False
+        self.withEvents(["a a1", "a a2"]).withOrdered(False)
     def onRun(self, event):
         sponge.getVariable("countA").incrementAndGet()
 

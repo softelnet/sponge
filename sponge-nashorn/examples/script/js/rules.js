@@ -15,8 +15,7 @@ function onInit() {
 var FirstRule = Java.extend(Rule, {
     onConfigure: function(self) {
         // Events specified without aliases
-        self.events = ["filesystemFailure", "diskFailure"];
-        self.addConditions("diskFailure", function(rule, event) {
+        self.withEvents(["filesystemFailure", "diskFailure"]).withCondition("diskFailure", function(rule, event) {
             return Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0;
         });
     },
@@ -29,15 +28,17 @@ var FirstRule = Java.extend(Rule, {
 var SameSourceAllRule = Java.extend(Rule, {
     onConfigure: function(self) {
         // Events specified with aliases (e1 and e2)
-        self.events = ["filesystemFailure e1", "diskFailure e2 :all"];
-        self.addConditions("e1", this.severityCondition);
-        self.addConditions("e2", this.severityCondition, function(rule, event) {
-            // Both events have to have the same source
-            event1 = rule.getEvent("e1");
-            return event.get("source") == event1.get("source") &&
-                Duration.between(event1.time, event.time).seconds <= 4;
-        });
-        self.duration = Duration.ofSeconds(8);
+        self.withEvents(["filesystemFailure e1", "diskFailure e2 :all"]);
+        self.withCondition("e1", this.severityCondition).withConditions("e2", [
+            this.severityCondition,
+            function(rule, event) {
+                // Both events have to have the same source
+                event1 = rule.getEvent("e1");
+                return event.get("source") == event1.get("source") &&
+                    Duration.between(event1.time, event.time).seconds <= 4;
+            }
+        ]);
+        self.withDuration(Duration.ofSeconds(8));
     },
     onRun: function(self, event) {
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),

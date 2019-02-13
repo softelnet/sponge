@@ -8,7 +8,6 @@ def onInit():
 
 class MyAction1(Action):
     def onConfigure(self):
-        self.label = "MyAction 1"
-        self.category = "yourActions"
+        self.withLabel("MyAction 1").withCategory("yourActions")
     def onCall(self, text):
     	return None

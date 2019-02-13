@@ -14,11 +14,12 @@ end
 
 class FirstRule < Rule
     def onConfigure
-        self.events = ["filesystemFailure", "diskFailure"]; self.ordered = false
-        self.addAllConditions(lambda { |rule, event| rule.firstEvent.get("source") == event.get("source")})
-        self.addAllConditions(lambda { |rule, event|
-            Duration.between(rule.firstEvent.time, event.time).seconds <= 2})
-        self.duration = Duration.ofSeconds(5)
+        self.withEvents(["filesystemFailure", "diskFailure"]).withOrdered(false)
+        self.withAllConditions([
+            lambda { |rule, event| rule.firstEvent.get("source") == event.get("source")},
+            lambda { |rule, event| Duration.between(rule.firstEvent.time, event.time).seconds <= 2}
+        ])
+        self.withDuration(Duration.ofSeconds(5))
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventSequence)
@@ -29,10 +30,10 @@ end
 
 class SameSourceAllRule < Rule
     def onConfigure
-        self.events = ["filesystemFailure e1", "diskFailure e2 :all"]; self.ordered = false
-        self.addConditions("e1", self.method(:severityCondition))
-        self.addConditions("e2", self.method(:severityCondition), self.method(:diskFailureSourceCondition))
-        self.duration = Duration.ofSeconds(5)
+        self.withEvents(["filesystemFailure e1", "diskFailure e2 :all"]).withOrdered(false)
+        self.withCondition("e1", self.method(:severityCondition))
+        self.withConditions("e2", [self.method(:severityCondition), self.method(:diskFailureSourceCondition)])
+        self.withDuration(Duration.ofSeconds(5))
     end
     def onRun(event)
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
@@ -49,7 +50,7 @@ end
 
 class AlarmFilter < Filter
     def onConfigure
-        self.event = "alarm"
+        self.withEvent("alarm")
     end
     def onInit
         @deduplication = Deduplication.new("source")
@@ -62,7 +63,7 @@ end
 
 class Alarm < Trigger
     def onConfigure
-        self.event = "alarm"
+        self.withEvent("alarm")
     end
     def onRun(event)
         self.logger.debug("Received alarm from {}", event.get("source"))

@@ -11,7 +11,7 @@ end
 
 class TriggerA < Trigger
     def onConfigure
-        self.event = "a"
+        self.withEvent("a")
     end
     def onRun(event)
         $sponge.getVariable("countA").incrementAndGet()
@@ -20,7 +20,7 @@ end
 
 class TriggerAPattern < Trigger
     def onConfigure
-        self.event = "a.*"
+        self.withEvent("a.*")
     end
     def onRun(event)
         self.logger.debug("Received matching event {}", event.name)

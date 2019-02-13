@@ -20,7 +20,7 @@ var AutoAction = Java.extend(Action, {
 
 var AutoFilter = Java.extend(Filter, {
     onConfigure: function(self) {
-        self.event = "e1";
+        self.withEvent("e1");
     },
     onAccept: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
@@ -31,7 +31,7 @@ var AutoFilter = Java.extend(Filter, {
 
 var AutoTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "e1";
+        self.withEvent("e1");
     },
     onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
@@ -41,7 +41,7 @@ var AutoTrigger = Java.extend(Trigger, {
 
 var AutoRule = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["e1", "e2"];
+        self.withEvents(["e1", "e2"]);
     },
     onRun: function(self, event) {
         self.logger.debug("Running for sequence: {}", self.eventSequence);
@@ -51,7 +51,7 @@ var AutoRule = Java.extend(Rule, {
 
 var AutoCorrelator = Java.extend(Correlator, {
     onConfigure: function(self) {
-        self.events = ["e1", "e2"];
+        self.withEvents(["e1", "e2"]);
     },
     onAcceptAsFirst: function(self, event) {
         return event.name == "e1";

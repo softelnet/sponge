@@ -86,7 +86,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEvents("e3");
+            withEvents("e3");
         }
 
         @Override
@@ -99,7 +99,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEvent("e3");
+            withEvent("e3");
         }
 
         @Override
@@ -113,7 +113,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEvent("e1");
+            withEvent("e1");
         }
 
         @Override
@@ -127,9 +127,9 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST));
-            addConditions("e2", "e2condition");
-            setDuration(Duration.ofSeconds(2));
+            withEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST));
+            withConditions("e2", "e2condition");
+            withDuration(Duration.ofSeconds(2));
         }
 
         public boolean e2condition(Event event) {
@@ -147,8 +147,8 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.FIRST));
-            setDuration(Duration.ofSeconds(2));
+            withEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.FIRST));
+            withDuration(Duration.ofSeconds(2));
         }
 
         @Override
@@ -162,8 +162,8 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            setEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.ALL));
-            setDuration(Duration.ofSeconds(2));
+            withEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.ALL));
+            withDuration(Duration.ofSeconds(2));
         }
 
         @Override

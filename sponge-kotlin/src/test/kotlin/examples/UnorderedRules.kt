@@ -28,11 +28,12 @@ class UnorderedRules : KKnowledgeBase() {
 
     class FirstRule : KRule() {
         override fun onConfigure() {
-            setEvents("filesystemFailure", "diskFailure")
-            setOrdered(false)
-            addAllConditions({ rule: Rule, event: Event -> rule.firstEvent.get<Any?>("source") == event.get<Any?>("source") })
-            addAllConditions({ rule: Rule, event: Event -> Duration.between(rule.firstEvent.time, event.time).seconds <= 2 })
-            duration = Duration.ofSeconds(5)
+            withEvents("filesystemFailure", "diskFailure").withOrdered(false)
+            withAllConditions(
+                { rule: Rule, event: Event -> rule.firstEvent.get<Any?>("source") == event.get<Any?>("source") },
+                { rule: Rule, event: Event -> Duration.between(rule.firstEvent.time, event.time).seconds <= 2 }
+            )
+            withDuration(Duration.ofSeconds(5))
         }
 
         override fun onRun(event: Event?) {
@@ -44,11 +45,10 @@ class UnorderedRules : KKnowledgeBase() {
 
     class SameSourceAllRule : KRule() {
         override fun onConfigure() {
-            setEvents("filesystemFailure e1", "diskFailure e2 :all")
-            setOrdered(false)
-            addCondition("e1", this::severityCondition)
-            addConditions("e2", this::severityCondition, this::diskFailureSourceCondition)
-            duration = Duration.ofSeconds(5)
+            withEvents("filesystemFailure e1", "diskFailure e2 :all").withOrdered(false)
+            withCondition("e1", this::severityCondition)
+            withConditions("e2", this::severityCondition, this::diskFailureSourceCondition)
+            withDuration(Duration.ofSeconds(5))
         }
 
         override fun onRun(event: Event?) {
@@ -68,7 +68,9 @@ class UnorderedRules : KKnowledgeBase() {
 
     class AlarmFilter : KFilter() {
         val deduplication = Deduplication("source")
-        override fun onConfigure() = setEvent("alarm")
+        override fun onConfigure() {
+            withEvent("alarm")
+        }
         override fun onInit() {
             deduplication.cacheBuilder.expireAfterWrite(2, TimeUnit.SECONDS)
         }
@@ -77,7 +79,9 @@ class UnorderedRules : KKnowledgeBase() {
     }
 
     class Alarm : KTrigger() {
-        override fun onConfigure() = setEvent("alarm")
+        override fun onConfigure() {
+            withEvent("alarm")
+        }
         override fun onRun(event: Event) = logger.debug("Received alarm from {}", event.get<String>("source"))
     }
 

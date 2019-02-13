@@ -13,7 +13,7 @@ end
 
 class RuleFNNF < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e6 :none", "e3 :first"]
+        self.withEvents(["e1", "e5 :none", "e6 :none", "e3 :first"])
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
@@ -23,8 +23,7 @@ end
 
 class RuleFNNNL < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
@@ -34,8 +33,7 @@ end
 
 class RuleFNNNLReject < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
@@ -45,8 +43,7 @@ end
 
 class RuleFNFNL < Rule
     def onConfigure
-        self.events = ["e1", "e5 :none", "e2 :first", "e7 :none", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["e1", "e5 :none", "e2 :first", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     end
     def onRun(event)
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)

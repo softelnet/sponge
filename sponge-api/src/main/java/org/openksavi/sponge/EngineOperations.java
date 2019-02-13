@@ -20,13 +20,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
+import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.event.EventSchedulerEntry;
+import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.plugin.Plugin;
+import org.openksavi.sponge.rule.RuleMeta;
+import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
@@ -448,4 +453,44 @@ public interface EngineOperations {
      * @return the categories.
      */
     List<CategoryMeta> getCategories();
+
+    /**
+     * Returns the action metadata.
+     *
+     * @param actionName the action name.
+     * @return the action metadata.
+     */
+    ActionMeta getActionMeta(String actionName);
+
+    /**
+     * Returns the filter metadata.
+     *
+     * @param filterName the filter name.
+     * @return the filter metadata.
+     */
+    FilterMeta getFilterMeta(String filterName);
+
+    /**
+     * Returns the trigger metadata.
+     *
+     * @param triggerName the trigger name.
+     * @return the trigger metadata.
+     */
+    TriggerMeta getTriggerMeta(String triggerName);
+
+    /**
+     * Returns the correlator metadata.
+     *
+     * @param correlatorName the correlator name.
+     * @return the correlator metadata.
+     */
+    CorrelatorMeta getCorrelatorMeta(String correlatorName);
+
+    /**
+     * Returns the rule metadata.
+     *
+     * @param ruleName the rule name.
+     * @return the rule metadata.
+     */
+    RuleMeta getRuleMeta(String ruleName);
 }

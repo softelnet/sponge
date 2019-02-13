@@ -38,7 +38,7 @@ public class TestConfig {
 ----
 class SpringTrigger(Trigger):
     def onConfigure(self):
-        self.event = "springEvent"
+        self.withEvent("springEvent")
     def onRun(self, event):
         beanValue = spring.context.getBean("testBean") # <1>
         self.logger.debug("Bean value = {}", beanValue)
@@ -567,13 +567,13 @@ from org.openksavi.sponge.midi import MidiUtils
 
 class SameSound(Trigger):
     def onConfigure(self):
-        self.event = "midiShort" # <1>
+        self.withEvent("midiShort") # <1>
     def onRun(self, event):
         midi.sound(event.message) # <2>
 
 class Log(Trigger):
     def onConfigure(self):
-        self.event = "midiShort"
+        self.withEvent("midiShort")
     def onRun(self, event):
         self.logger.info("{}Input message: {}", "[" + MidiUtils.getKeyNote(event.data1) + "] " if event.command == ShortMessage.NOTE_ON else "",
                          event.messageString) # <3>
@@ -729,7 +729,7 @@ state = False
 
 class LedBlink(Trigger):
     def onConfigure(self):
-        self.event = "blink"
+        self.withEvent("blink")
     def onRun(self, event):
         global led, state
         state = not state
@@ -800,7 +800,7 @@ state = False
 
 class LedBlink(Trigger):
     def onConfigure(self):
-        self.event = "blink"
+        self.withEvent("blink")
     def onRun(self, event):
         global led, state
         state = not state
@@ -852,13 +852,13 @@ The default name of the plugin (which can be used in knowledge bases) is `gsm`.
 ----
 class SendSms(Action):
     def onConfigure(self):
-        self.label = "Send SMS"
-        self.description = "Sends a new SMS."
-        self.argsMeta = [
-            ArgMeta("recipient", StringType()).withLabel("Recipient").withDescription("The SMS recipient."),
-            ArgMeta("message", StringType()).withLabel("Message").withDescription("The SMS message.")
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+        self.withLabel("Send an SMS").withDescription("Sends a new SMS.")
+        self.withArgs([
+            ArgMeta("recipient", StringType().withFormat("phone"))
+                .withLabel("Recipient").withDescription("The SMS recipient."),
+            ArgMeta("message", StringType().withMaxLength(160).withFeatures({"maxLines":5}))
+                .withLabel("Message").withDescription("The SMS message.")
+        ]).withNoResult()
     def onCall(self, recipient, message):
         gsm.sendSms(recipient, message)
 ----

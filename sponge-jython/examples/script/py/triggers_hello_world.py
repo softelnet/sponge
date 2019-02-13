@@ -5,7 +5,7 @@ Hello world
 
 class HelloWorldTrigger(Trigger):
     def onConfigure(self):
-        self.event = "helloEvent"
+        self.withEvent("helloEvent")
     def onRun(self, event):
         print event.get("say")
 

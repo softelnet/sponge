@@ -15,12 +15,12 @@ function onInit() {
 
 var FirstRule = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["filesystemFailure", "diskFailure"]; self.ordered = false;
-        self.addAllConditions(function(rule, event) { return rule.firstEvent.get("source") == event.get("source"); })
-        self.addAllConditions(function(rule, event) { 
-            return Duration.between(rule.firstEvent.time, event.time).seconds <= 2;
-        });
-        self.duration = Duration.ofSeconds(5);
+        self.withEvents(["filesystemFailure", "diskFailure"]).withOrdered(false);
+        self.withAllConditions([
+            function(rule, event) { return rule.firstEvent.get("source") == event.get("source"); },
+            function(rule, event) { return Duration.between(rule.firstEvent.time, event.time).seconds <= 2; }
+        ]);
+        self.withDuration(Duration.ofSeconds(5));
     },
     onRun: function(self, event) {
         self.logger.debug("Running rule for events: {}", self.eventSequence);
@@ -32,13 +32,16 @@ var FirstRule = Java.extend(Rule, {
 var SameSourceAllRule = Java.extend(Rule, {
     onConfigure: function(self) {
         // Events specified with aliases (e1 and e2)
-        self.events = ["filesystemFailure e1", "diskFailure e2 :all"]; self.ordered = false;
-        self.addConditions("e1", this.severityCondition);
-        self.addConditions("e2", this.severityCondition, function(rule, event) {
-            return event.get("source") == rule.firstEvent.get("source") &&
-                Duration.between(rule.firstEvent.time, event.time).seconds <= 4;
-        });
-        self.duration = Duration.ofSeconds(8);
+        self.withEvents(["filesystemFailure e1", "diskFailure e2 :all"]).withOrdered(false);
+        self.withCondition("e1", this.severityCondition);
+        self.withConditions("e2", [
+            this.severityCondition,
+            function(rule, event) {
+                return event.get("source") == rule.firstEvent.get("source") &&
+                    Duration.between(rule.firstEvent.time, event.time).seconds <= 4;
+            }
+        ]);
+        self.withDuration(Duration.ofSeconds(8));
     },
     onRun: function(self, event) {
         self.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
@@ -52,7 +55,7 @@ var SameSourceAllRule = Java.extend(Rule, {
 
 var AlarmFilter = Java.extend(Filter, {
     onConfigure: function(self) {
-        self.event = "alarm";
+        self.withEvent("alarm");
     },
     onInit: function(self) {
         // There is some magic required here because of the limitations in JavaScript support.
@@ -68,7 +71,7 @@ var AlarmFilter = Java.extend(Filter, {
 
 var Alarm = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "alarm";
+        self.withEvent("alarm");
     },
     onRun: function(self, event) {
         self.logger.debug("Received alarm from {}", event.get("source"));

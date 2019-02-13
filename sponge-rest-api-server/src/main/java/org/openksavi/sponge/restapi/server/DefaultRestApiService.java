@@ -31,6 +31,7 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
@@ -196,30 +197,33 @@ public class DefaultRestApiService implements RestApiService {
             Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
                     ? settings.getPublicActions().stream()
                             .filter(qn -> action.getKnowledgeBase().getName().matches(qn.getKnowledgeBaseName())
-                                    && action.getName().matches(qn.getName()))
+                                    && action.getMeta().getName().matches(qn.getName()))
                             .findAny().isPresent()
                     : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
 
             Predicate<ActionAdapter> isSelectedByNameRegExp =
-                    action -> actionNameRegExp != null ? action.getName().matches(actionNameRegExp) : true;
+                    action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true;
 
-            return setupSuccessResponse(
-                    new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
-                            .filter(isPublicBySettings)
-                            .filter(action -> actualMetadataRequired ? action.getArgsMeta() != null && action.getResultMeta() != null
-                                    : true)
+            return setupSuccessResponse(new GetActionsResponse(
+                    getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction).filter(isPublicBySettings)
+                            .filter(action -> actualMetadataRequired
+                                    ? action.getMeta().getArgsMeta() != null && action.getMeta().getResultMeta() != null : true)
                             .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                            .filter(action -> canCallAction(user, action))
-                            .map(action -> new RestActionMeta(action.getName(), action.getLabel(), action.getDescription(),
-                                    createRestKnowledgeBase(action.getKnowledgeBase()), getEngine().getCategory(action.getCategory()),
-                                    action.getFeatures(), createActionArgMetaList(action), createActionResultMeta(action),
-                                    action.getQualifiedVersion()))
+                            .filter(action -> canCallAction(user, action)).map(action -> createRestActionMeta(action))
                             .map(action -> marshalActionMeta(action)).collect(Collectors.toList())),
                     request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new GetActionsResponse(), request, e);
         }
+    }
+
+    protected RestActionMeta createRestActionMeta(ActionAdapter actionAdapter) {
+        ActionMeta meta = actionAdapter.getMeta();
+        return new RestActionMeta(meta.getName(), meta.getLabel(), meta.getDescription(),
+                createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), getEngine().getCategory(meta.getCategory()), meta.getFeatures(),
+                createActionArgMetaList(meta), createActionResultMeta(meta), actionAdapter.getQualifiedVersion());
+
     }
 
     protected RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
@@ -317,7 +321,7 @@ public class DefaultRestApiService implements RestApiService {
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
             Map<String,
-                    ArgProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getName(),
+                    ArgProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
                             request.getArgNames(),
                             RestApiServerUtils.unmarshalProvideActionArgs(typeConverter, actionAdapter, request.getCurrent(), exchange));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
@@ -354,18 +358,18 @@ public class DefaultRestApiService implements RestApiService {
         }
     }
 
-    protected List<RestActionArgMeta> createActionArgMetaList(ActionAdapter actionAdapter) {
-        return actionAdapter
+    protected List<RestActionArgMeta> createActionArgMetaList(ActionMeta actionMeta) {
+        return actionMeta
                 .getArgsMeta() != null
-                        ? actionAdapter.getArgsMeta().stream()
+                        ? actionMeta.getArgsMeta().stream()
                                 .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
                                         meta.getLabel(), meta.getDescription(), meta.isOptional(), meta.getProvided()))
                                 .collect(Collectors.toList())
                         : null;
     }
 
-    protected RestActionResultMeta createActionResultMeta(ActionAdapter actionAdapter) {
-        ResultMeta<?> resultMeta = actionAdapter.getResultMeta();
+    protected RestActionResultMeta createActionResultMeta(ActionMeta actionMeta) {
+        ResultMeta<?> resultMeta = actionMeta.getResultMeta();
         return resultMeta != null ? new RestActionResultMeta(resultMeta.getType(), resultMeta.getLabel()) : null;
     }
 
@@ -418,7 +422,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected boolean canCallAction(User user, ActionAdapter actionAdapter) {
-        if (RestApiServerUtils.isActionPrivate(actionAdapter.getName())) {
+        if (RestApiServerUtils.isActionPrivate(actionAdapter.getMeta().getName())) {
             return false;
         }
 

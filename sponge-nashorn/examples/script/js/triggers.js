@@ -15,7 +15,7 @@ function onInit() {
 
 var TriggerA = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "a";
+        self.withEvent("a");
     },
     onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);
@@ -25,7 +25,7 @@ var TriggerA = Java.extend(Trigger, {
 
 var TriggerB = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "b";
+        self.withEvent("b");
     },
     onRun: function(self, event) {
         self.logger.debug("Received event: {}", event.name);

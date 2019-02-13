@@ -11,7 +11,7 @@ void onInit() {
 
 class PluginTrigger extends Trigger {
     void onConfigure() {
-        this.event = "e1"
+        this.withEvent("e1")
     }
     void onRun(Event event) {
         def connectionPlugin = sponge.getPlugin("connectionPlugin")

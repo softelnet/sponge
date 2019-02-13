@@ -28,7 +28,7 @@ public class SampleJavaTrigger extends JTrigger {
 
     @Override
     public void onConfigure() {
-        setEvent("testJava");
+        withEvent("testJava");
     }
 
     @Override

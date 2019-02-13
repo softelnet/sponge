@@ -7,38 +7,35 @@ from java.util.concurrent.atomic import AtomicBoolean, AtomicInteger
 
 class ReloadTrigger(Trigger):
     def onConfigure(self):
-        self.event = "reload"
+        self.withEvent("reload")
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         sponge.requestReload()
 
 class RuleAShouldNoBeRun(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2 :last"]
-        self.duration = Duration.ofSeconds(3)
+        self.withEvents(["e1", "e2 :last"]).withDuration(Duration.ofSeconds(3))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         sponge.getVariable("ruleAFired").set(True)
 
 class RuleBShouldNotBeRun(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e3 :last"]
-        self.duration = Duration.ofSeconds(3)
+        self.withEvents(["e1", "e3 :last"]).withDuration(Duration.ofSeconds(3))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         sponge.getVariable("ruleBFired").set(True)
 
 class RuleCShouldBeRun(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2"]
-        self.duration = Duration.ofSeconds(3)
+        self.withEvents(["e1", "e2"]).withDuration(Duration.ofSeconds(3))
     def onRun(self, event):
         self.logger.debug("Running rule for event: {}", event.name)
         sponge.getVariable("ruleCFired").set(True)
 
 class EndTestTrigger(Trigger):
     def onConfigure(self):
-        self.event = "endTest"
+        self.withEvent("endTest")
     def onRun(self, event):
         sponge.getVariable("endTest").set(True)
 

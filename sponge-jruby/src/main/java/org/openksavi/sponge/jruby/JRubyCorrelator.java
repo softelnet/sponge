@@ -23,7 +23,4 @@ import org.openksavi.sponge.core.correlator.BaseCorrelator;
  */
 public abstract class JRubyCorrelator extends BaseCorrelator {
 
-    public final void setEvents(Object eventNames) {
-        super.setEvents(RubyUtils.toJavaArray(eventNames));
-    }
 }

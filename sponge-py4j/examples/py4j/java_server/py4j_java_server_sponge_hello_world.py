@@ -11,7 +11,7 @@ def onInit():
 
 class HelloWorldTrigger(Trigger):
     def onConfigure(self):
-        self.event = "helloEvent"
+        self.withEvent("helloEvent")
     def onRun(self, event):
         self.logger.info("Say: {}", event.get("say"))
         sponge.getVariable("eventCounter").incrementAndGet()

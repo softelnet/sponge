@@ -8,20 +8,20 @@ from org.openksavi.sponge.midi import MidiUtils
 
 class SameSound(Trigger):
     def onConfigure(self):
-        self.event = "midiShort"
+        self.withEvent("midiShort")
     def onRun(self, event):
         midi.sound(event.message)
 
 class Log(Trigger):
     def onConfigure(self):
-        self.event = "midiShort"
+        self.withEvent("midiShort")
     def onRun(self, event):
         self.logger.info("{}Input message: {}", "[" + MidiUtils.getKeyNote(event.data1) + "] " if event.command == ShortMessage.NOTE_ON else "",
                          event.messageString)
 
 class Stop(Trigger):
     def onConfigure(self):
-        self.event = "exit"
+        self.withEvent("exit")
     def onRun(self, event):
         sponge.requestShutdown()
 

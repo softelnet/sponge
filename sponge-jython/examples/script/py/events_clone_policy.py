@@ -17,7 +17,7 @@ def onInit():
 
 class ClonePolicyTrigger(Trigger):
     def onConfigure(self):
-        self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
+        self.withEvents(["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"])
     def onRun(self, event):
         global events
         events.get(event.name).add(event)

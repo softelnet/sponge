@@ -8,7 +8,7 @@ import org.openksavi.sponge.test.util.TestStatus
 
 class ReloadTrigger extends Trigger {
     void onConfigure() {
-        this.event = "reload"
+        this.withEvent("reload")
     }
     void onRun(Event event) {
         this.logger.debug("Received event: {}", event.name)

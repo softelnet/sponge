@@ -16,8 +16,7 @@ fun onInit() {
 class FirstRule : Rule() {
     override fun onConfigure() {
         // Events specified without aliases
-        setEvents("filesystemFailure", "diskFailure")
-        addConditions("diskFailure", { rule: Rule, event: Event ->
+        withEvents("filesystemFailure", "diskFailure").withCondition("diskFailure", { rule: Rule, event: Event ->
             Duration.between(rule.getEvent("filesystemFailure").time, event.time).seconds >= 0
         })
     }
@@ -31,10 +30,9 @@ class FirstRule : Rule() {
 class SameSourceAllRule : Rule() {
     override fun onConfigure() {
         // Events specified with aliases (e1 and e2)
-        setEvents("filesystemFailure e1", "diskFailure e2 :all")
-        addCondition("e1", this::severityCondition)
-        addConditions("e2", this::severityCondition, this::diskFailureSourceCondition)
-        duration = Duration.ofSeconds(8)
+        withEvents("filesystemFailure e1", "diskFailure e2 :all")
+        withCondition("e1", this::severityCondition).withConditions("e2", this::severityCondition, this::diskFailureSourceCondition)
+        withDuration(Duration.ofSeconds(8))
     }
 
     override fun onRun(event: Event?) {

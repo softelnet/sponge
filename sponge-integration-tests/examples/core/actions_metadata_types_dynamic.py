@@ -5,8 +5,7 @@ Action metadata dynamic types
 
 class DynamicResultAction(Action):
     def onConfigure(self):
-        self.argsMeta = [ArgMeta("type", StringType())]
-        self.resultMeta = ResultMeta(DynamicType())
+        self.withArg(ArgMeta("type", StringType())).withResult(ResultMeta(DynamicType()))
     def onCall(self, type):
         if type == "string":
             return DynamicValue("text", StringType())
@@ -17,8 +16,7 @@ class DynamicResultAction(Action):
 
 class TypeResultAction(Action):
     def onConfigure(self):
-        self.argsMeta = [ArgMeta("type", StringType())]
-        self.resultMeta = ResultMeta(TypeType())
+        self.withArg(ArgMeta("type", StringType())).withResult(ResultMeta(TypeType()))
     def onCall(self, type):
         if type == "string":
             return StringType()

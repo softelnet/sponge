@@ -19,14 +19,18 @@ class TriggersEventPattern : KKnowledgeBase() {
     }
 
     class TriggerA : KTrigger() {
-        override fun onConfigure() = setEvent("a")
+        override fun onConfigure() {
+            withEvent("a")
+        }
         override fun onRun(event: Event) {
             sponge.getVariable<AtomicInteger>("countA").incrementAndGet()
         }
     }
 
     class TriggerAPattern : KTrigger() {
-        override fun onConfigure() = setEvent("a.*")
+        override fun onConfigure() {
+            withEvent("a.*")
+        }
         override fun onRun(event: Event) {
             logger.debug("Received matching event {}", event.name)
             sponge.getVariable<AtomicInteger>("countAPattern").incrementAndGet()

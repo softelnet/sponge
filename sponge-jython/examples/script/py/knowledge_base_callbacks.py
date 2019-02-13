@@ -8,7 +8,7 @@ from org.openksavi.sponge.test.util import TestStatus
 
 class ReloadTrigger(Trigger):
     def onConfigure(self):
-        self.event = "reload"
+        self.withEvent("reload")
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         sponge.reload()

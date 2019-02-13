@@ -12,7 +12,7 @@ function onInit() {
 
 var CronTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "cronEvent";
+        self.withEvent("cronEvent");
     },
     onRun: function(self, event) {
         eventCounter = sponge.getVariable("eventCounter")

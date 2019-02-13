@@ -10,22 +10,19 @@ def onInit():
 
 class MyAction1(Action):
     def onConfigure(self):
-        self.label = "MyAction 1"
-        self.category = "myActions"
+        self.withLabel("MyAction 1").withCategory("myActions")
     def onCall(self, text):
     	return None
 
 class MyAction2(Action):
     def onConfigure(self):
-        self.label = "MyAction 2"
-        self.category = "myActions"
+        self.withLabel("MyAction 2").withCategory("myActions")
     def onCall(self, text):
         return None
 
 class YourAction1(Action):
     def onConfigure(self):
-        self.label = "YourAction1 1"
-        self.category = "yourActions"
+        self.withLabel("YourAction1 1").withCategory("yourActions")
     def onCall(self, text):
         return None
 

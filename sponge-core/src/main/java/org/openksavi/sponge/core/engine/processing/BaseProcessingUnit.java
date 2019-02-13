@@ -278,19 +278,19 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
         try {
             invalidateCache();
 
-            AtomicReference<T> registered = registeredProcessorAdapterMap.get(processorAdapter.getName());
+            AtomicReference<T> registered = registeredProcessorAdapterMap.get(processorAdapter.getMeta().getName());
 
             // Already registered with this name.
             if (registered != null) {
                 T oldProcessorAdapter = registered.get();
                 if (!oldProcessorAdapter.getType().equals(processorAdapter.getType())) {
                     throw new SpongeException("An event processor of different type has been already registered with the name: "
-                            + processorAdapter.getName());
+                            + processorAdapter.getMeta().getName());
                 }
 
                 // Remove associations with events that are no longer listened to by this processor.
-                List<String> processorEventNamesList = processorAdapter.getDefinition().getEventNames();
-                for (String oldEventName : oldProcessorAdapter.getDefinition().getEventNames()) {
+                List<String> processorEventNamesList = processorAdapter.getMeta().getEventNames();
+                for (String oldEventName : oldProcessorAdapter.getMeta().getEventNames()) {
                     if (!processorEventNamesList.contains(oldEventName)) {
                         eventPatternProcessorMap.get(oldEventName).remove(registered);
                     }
@@ -301,10 +301,10 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
                 processorChanged(oldProcessorAdapter, processorAdapter);
             } else {
                 registered = new AtomicReference<>(processorAdapter);
-                registeredProcessorAdapterMap.put(processorAdapter.getName(), registered);
+                registeredProcessorAdapterMap.put(processorAdapter.getMeta().getName(), registered);
             }
 
-            for (String eventName : processorAdapter.getDefinition().getEventNames()) {
+            for (String eventName : processorAdapter.getMeta().getEventNames()) {
                 Set<AtomicReference<T>> processorList = eventPatternProcessorMap.get(eventName);
                 if (processorList == null) {
                     processorList = new CopyOnWriteArraySet<>();
@@ -390,9 +390,12 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     private void doRemoveProcessor(Set<AtomicReference<T>> processorList, String removedProcessorName, boolean clear) {
         lock.lock();
         try {
-            List<AtomicReference<T>> toRemove = processorList.stream()
-                    .filter(processor -> processor.get().getName() != null && processor.get().getName().equals(removedProcessorName))
-                    .collect(Collectors.toList());
+            List<AtomicReference<
+                    T>> toRemove =
+                            processorList.stream()
+                                    .filter(processor -> processor.get().getMeta().getName() != null
+                                            && processor.get().getMeta().getName().equals(removedProcessorName))
+                                    .collect(Collectors.toList());
             toRemove.forEach(processor -> {
                 if (clear) {
                     processor.get().clear();

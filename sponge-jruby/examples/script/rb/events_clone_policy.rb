@@ -18,7 +18,7 @@ end
 
 class ClonePolicyTrigger < Trigger
     def onConfigure
-        self.events = ["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"]
+        self.withEvents(["defaultClonePolicy", "deepClonePolicy", "shallowClonePolicy"])
     end
     def onRun(event)
         $events.get(event.name).add(event)

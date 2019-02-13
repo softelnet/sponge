@@ -14,7 +14,7 @@ fun onInit() {
 
 class RuleA : Rule() {
     override fun onConfigure() {
-        setEvents("a a1", "a a2")
+        withEvents("a a1", "a a2")
     }
 
     override fun onRun(event: Event?) {
@@ -24,7 +24,7 @@ class RuleA : Rule() {
 
 class RuleB : Rule() {
     override fun onConfigure() {
-        setEvents("b b1", "b b2")
+        withEvents("b b1", "b b2")
     }
 
     override fun onRun(event: Event?) {

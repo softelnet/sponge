@@ -14,7 +14,7 @@ def onInit():
 
 class A(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         self.logger.debug("A start")
         index = 0
@@ -33,7 +33,7 @@ class A(Trigger):
 
 class B(Trigger):
     def onConfigure(self):
-        self.event = "b"
+        self.withEvent("b")
     def onRun(self, event):
         pass
 

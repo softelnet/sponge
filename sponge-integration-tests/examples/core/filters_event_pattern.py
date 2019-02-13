@@ -14,21 +14,21 @@ def onInit():
 
 class NameFilter(Filter):
     def onConfigure(self):
-        self.event = "a1"
+        self.withEvent("a1")
     def onAccept(self, event):
         sponge.getVariable("nameCount").incrementAndGet()
         return True
 
 class PatternFilter(Filter):
     def onConfigure(self):
-        self.event = "a.+"
+        self.withEvent("a.+")
     def onAccept(self, event):
         sponge.getVariable("patternCount").incrementAndGet()
         return False
 
 class AcceptedTrigger(Trigger):
     def onConfigure(self):
-        self.event = ".+"
+        self.withEvent(".+")
     def onRun(self, event):
         self.logger.info("accepted {}", event.name)
         if event.name != EventName.STARTUP:
@@ -36,7 +36,7 @@ class AcceptedTrigger(Trigger):
 
 class NotAcceptedTrigger(Trigger):
     def onConfigure(self):
-        self.event = "a.+"
+        self.withEvent("a.+")
     def onRun(self, event):
         sponge.getVariable("notAcceptedCount").incrementAndGet()
 

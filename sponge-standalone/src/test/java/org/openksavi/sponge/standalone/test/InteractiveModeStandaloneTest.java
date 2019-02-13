@@ -73,7 +73,7 @@ public class InteractiveModeStandaloneTest {
             // Create trigger and send event.
             writeMulti("class T(Trigger):\\");
             writeMulti("    def onConfigure(self):\\");
-            writeMulti("        self.event = \"notification\"\\");
+            writeMulti("        self.withEvent(\"notification\")\\");
             writeMulti("    def onRun(self, event):\\");
             writeMulti("        sponge.getVariable(\"notifications\").incrementAndGet()\\");
             writeMulti("        print \"Received the notification!\"");

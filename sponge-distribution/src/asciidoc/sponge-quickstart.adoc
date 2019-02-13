@@ -30,7 +30,7 @@ The main advantage of scripting knowledge bases is a possibility of modification
 
 Basic features of a knowledge base:
 
-* contains a logic of event processing,
+* contains a logic of action and event processing,
 * defines callback functions that will be invoked by the {sponge} engine in certain life cycles of the system (e.g. on load, on startup, on shutdown).
 
 === Plugins
@@ -312,10 +312,9 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 ----
 class HelloWorldAction(Action): # <1>
     def onConfigure(self): # <2>
-        self.label = "Hello world" # <3>
-        self.description = "Returns a greeting text."
-        self.argsMeta = [ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name.")] # <4>
-        self.resultMeta = ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text.") # <5>
+        self.withLabel("Hello world").withDescription("Returns a greeting text.") # <3>
+        self.withArg(ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name.")) # <4>
+        self.withResult(ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text.")) # <5>
     def onCall(self, name): # <6>
         return "Hello World! Hello {}!".format(name)
 
@@ -362,10 +361,9 @@ NOTE: All callouts placed in the source code in the examples below remain the sa
 ----
 class HelloWorldAction < Action # <1>
     def onConfigure # <2>
-        self.label = "Hello world" # <3>
-        self.description = "Returns a greeting text."
-        self.argsMeta = [ArgMeta.new("name", StringType.new()).withLabel("Your name").withDescription("Type your name.")] # <4>
-        self.resultMeta = ResultMeta.new(StringType.new()).withLabel("Greeting").withDescription("The greeting text.") # <5>
+        self.withLabel("Hello world").withDescription("Returns a greeting text.")" # <3>
+        self.withArg(ArgMeta.new("name", StringType.new()).withLabel("Your name").withDescription("Type your name.")) # <4>
+        self.withResult(ResultMeta.new(StringType.new()).withLabel("Greeting").withDescription("The greeting text.")) # <5>
     end
     def onCall(name) # <6>
         return "Hello World! Hello %s!" % [name]
@@ -394,10 +392,9 @@ Press `CTRL+C` to exit the {sponge} standalone command-line application.
 ----
 class HelloWorldAction extends Action { // <1>
     void onConfigure() { // <2>
-        this.label = "Hello world" // <3>
-        this.description = "Returns a greeting text."
-        this.argsMeta = [new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")] // <4>
-        this.resultMeta = new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text.") // <5>
+        this.withLabel("Hello world").withDescription("Returns a greeting text.") // <3>
+        this.withArg(new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")) // <4>
+        this.withResult(new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text.")) // <5>
     }
 
     String onCall(String name) { // <6>
@@ -427,10 +424,9 @@ Press `CTRL+C` to exit the {sponge} standalone command-line application.
 ----
 var HelloWorldAction = Java.extend(Action, { // <1>
     onConfigure: function(self) { // <2>
-        self.label = "Hello world"; // <3>
-        self.description = "Returns a greeting text.";
-        self.argsMeta = [new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")]; // <4>
-        self.resultMeta = new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text."); // <5>
+        self.withLabel("Hello world").withDescription("Returns a greeting text."); // <3>
+        self.withArg(new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")); // <4>
+        self.withResult(new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text."));// <5>
     },
     onCall: function(self, args) { // <6>
         // The onCall method in JS always gets an array of arguments. Dynamic onCall callback methods are not supported.
@@ -463,7 +459,7 @@ This chapter presents a different version of the Hello World example. In this ca
 ----
 class HelloWorldTrigger(Trigger): # <1>
     def onConfigure(self): # <2>
-        self.event = "helloEvent" # <3>
+        self.withEvent("helloEvent") # <3>
     def onRun(self, event): # <4>
         print event.get("say") # <5>
 
@@ -505,7 +501,7 @@ NOTE: All callouts placed in the source code in the examples below remain the sa
 ----
 class HelloWorldTrigger < Trigger # <1>
     def onConfigure # <2>
-        self.event = "helloEvent" # <3>
+        self.withEvent("helloEvent") # <3>
     end
 
     def onRun(event) # <4>
@@ -535,7 +531,7 @@ Press `CTRL+C` to exit.
 ----
 class HelloWorldTrigger extends Trigger { // <1>
     void onConfigure() { // <2>
-        this.event = "helloEvent" // <3>
+        this.withEvent("helloEvent") // <3>
     }
     void onRun(Event event) { // <4>
         println event.get("say") // <5>
@@ -564,7 +560,7 @@ Press `CTRL+C` to exit.
 ----
 var HelloWorldTrigger = Java.extend(Trigger, { // <1>
     onConfigure: function(self) { // <2>
-        self.event = "helloEvent"; // <3>
+        self.withEvent("helloEvent"); // <3>
     },
     onRun: function(self, event) { // <4>
         print(event.get("say")); // <5>
@@ -599,15 +595,15 @@ The rule `HeartbeatRule` will fire (i.e. execute its `onRun` method) when it det
 # Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 class HeartbeatRule(Rule): # <1>
     def onConfigure(self): # <2>
-        self.events = ["heartbeat h1", "heartbeat h2 :none"] # <3>
-        self.addConditions("h2", lambda rule, event: rule.firstEvent.get("source") == event.get("source")) # <4>
-        self.duration = Duration.ofSeconds(2) # <5>
+        self.withEvents(["heartbeat h1", "heartbeat h2 :none"]) # <3>
+        self.withCondition("h2", lambda rule, event: rule.firstEvent.get("source") == event.get("source")) # <4>
+        self.withDuration(Duration.ofSeconds(2)) # <5>
     def onRun(self, event): # <6>
         sponge.event("alarm").set("severity", 1).send() # <7>
 
 class AlarmTrigger(Trigger): # <8>
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         print "Sound the alarm!"
 ----
@@ -647,11 +643,11 @@ TIP: This example doesn't detect a situation when there hasn't been any `heartbe
 # Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 class HeartbeatRule < Rule # <1>
     def onConfigure # <2>
-        self.events = ["heartbeat h1", "heartbeat h2 :none"] # <3>
-        self.addConditions("h2", lambda { |rule, event|
+        self.withEvents(["heartbeat h1", "heartbeat h2 :none"]) # <3>
+        self.withCondition("h2", lambda { |rule, event|
             return rule.firstEvent.get("source") == event.get("source")
         }) # <4>
-        self.duration = Duration.ofSeconds(2) # <5>
+        self.withDuration(Duration.ofSeconds(2)) # <5>
     end
     def onRun(event) # <6>
         $sponge.event("alarm").set("severity", 1).send() # <7>
@@ -660,7 +656,7 @@ end
 
 class AlarmTrigger < Trigger # <8>
     def onConfigure
-        self.event = "alarm"
+        self.withEvent("alarm")
     end
     def onRun(event)
         puts "Sound the alarm!"
@@ -692,11 +688,11 @@ Press `CTRL+C` to exit.
 // Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 class HeartbeatRule extends Rule { // <1>
     void onConfigure() { // <2>
-        this.events = ["heartbeat h1", "heartbeat h2 :none"] // <3>
-        this.addConditions("h2", { rule, event ->
+        this.withEvents(["heartbeat h1", "heartbeat h2 :none"]) // <3>
+        this.withCondition("h2", { rule, event ->
             return rule.firstEvent.get("source") == event.get("source")
         }) // <4>
-        this.duration = Duration.ofSeconds(2) // <5>
+        this.withDuration(Duration.ofSeconds(2)) // <5>
     }
     void onRun(Event event) { // <6>
         sponge.event("alarm").set("severity", 1).send() // <7>
@@ -705,7 +701,7 @@ class HeartbeatRule extends Rule { // <1>
 
 class AlarmTrigger extends Trigger { // <8>
     void onConfigure() {
-        this.event = "alarm"
+        this.withEvent("alarm")
     }
     void onRun(Event event) {
         println "Sound the alarm!"
@@ -737,11 +733,11 @@ Press `CTRL+C` to exit.
 // Sounds the alarm when heartbeat event stops happening at most every 2 seconds.
 var HeartbeatRule = Java.extend(Rule, { // <1>
     onConfigure: function(self) { // <2>
-        self.events = ["heartbeat h1", "heartbeat h2 :none"]; // <3>
-        self.addConditions("h2", function(rule, event) {
+        self.withEvents(["heartbeat h1", "heartbeat h2 :none"]); // <3>
+        self.withCondition("h2", function(rule, event) {
             return rule.firstEvent.get("source") == event.get("source");
         }); // <4>
-        self.duration = Duration.ofSeconds(2); // <5>
+        self.withDuration(Duration.ofSeconds(2)); // <5>
     },
     onRun: function(self, event) { // <6>
         sponge.event("alarm").set("severity", 1).send(); // <7>
@@ -750,7 +746,7 @@ var HeartbeatRule = Java.extend(Rule, { // <1>
 
 var AlarmTrigger = Java.extend(Trigger, { // <8>
     onConfigure: function(self) {
-        self.event = "alarm";
+        self.withEvent("alarm");
     },
     onRun: function(self, event) {
         print("Sound the alarm!");

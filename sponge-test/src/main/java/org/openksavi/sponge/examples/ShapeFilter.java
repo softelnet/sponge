@@ -23,7 +23,7 @@ public class ShapeFilter extends JFilter {
 
     @Override
     public void onConfigure() {
-        setEvents("e1", "e2", "e3");
+        withEvents("e1", "e2", "e3");
     }
 
     @Override

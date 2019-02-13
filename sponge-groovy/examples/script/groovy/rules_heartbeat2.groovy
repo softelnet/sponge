@@ -12,8 +12,7 @@ void onInit() {
 // Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule extends Rule {
     void onConfigure() {
-        this.events = ["heartbeat h1", "heartbeat h2 :none"]
-        this.duration = Duration.ofSeconds(2)
+        this.withEvents(["heartbeat h1", "heartbeat h2 :none"]).withDuration(Duration.ofSeconds(2))
     }
     void onRun(Event event) {
         this.logger.info("Sound the alarm!")

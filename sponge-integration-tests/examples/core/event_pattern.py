@@ -11,14 +11,14 @@ def onInit():
 
 class A(Trigger):
     def onConfigure(self):
-        self.event = "a.+"
+        self.withEvent("a.+")
     def onRun(self, event):
         self.logger.debug("Received {}", event.name)
         sponge.getVariable("count").incrementAndGet()
 
 class PhaseTrigger(Trigger):
     def onConfigure(self):
-        self.event = "phase.+"
+        self.withEvent("phase.+")
     def onRun(self, event):
         if event.name == "phase1":
             self.sendEvents()

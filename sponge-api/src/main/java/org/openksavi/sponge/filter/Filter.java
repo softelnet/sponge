@@ -22,7 +22,7 @@ import org.openksavi.sponge.event.Event;
 /**
  * Filter.
  */
-public interface Filter extends EventProcessor<FilterAdapter> {
+public interface Filter extends EventProcessor<FilterAdapter>, FilterOperations {
 
     /**
      * A callback method that informs whether the specified event is to be accepted.

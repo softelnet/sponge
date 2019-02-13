@@ -26,7 +26,9 @@ class KotlinKbPlugin : Plugin() {
 }
 
 class PluginTrigger : Trigger() {
-    override fun onConfigure() = setEvent("e1")
+    override fun onConfigure() {
+        withEvent("e1")
+    }
     override fun onRun(event: Event) {
         val kotlinKbPlugin = sponge.getPlugin(KotlinKbPlugin::class.java)
         val valueBefore = kotlinKbPlugin.storedValue

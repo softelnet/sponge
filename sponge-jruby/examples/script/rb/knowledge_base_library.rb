@@ -28,7 +28,7 @@ end
 
 class HttpStatusTrigger < Trigger
     def onConfigure
-        self.event = "checkStatus"
+        self.withEvent("checkStatus")
     end
     def onInit
         @mutex = Mutex.new

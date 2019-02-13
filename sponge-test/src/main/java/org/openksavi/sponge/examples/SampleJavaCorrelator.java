@@ -29,8 +29,8 @@ public class SampleJavaCorrelator extends JCorrelator {
 
     @Override
     public void onConfigure() {
-        setEvents("filesystemFailure", "diskFailure");
-        setMaxInstances(1);
+        withEvents("filesystemFailure", "diskFailure");
+        withMaxInstances(1);
     }
 
     @Override

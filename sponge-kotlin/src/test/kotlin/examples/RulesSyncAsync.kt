@@ -24,26 +24,23 @@ class RulesSyncAsync : KKnowledgeBase() {
 
     class RuleFFF : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e2", "e3 :first")
-            setSynchronous(true)
+            withEvents("e1", "e2", "e3 :first").withSynchronous(true)
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for event: {}", event?.name)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 
     class RuleFFL : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e2", "e3 :last")
-            duration = Duration.ofSeconds(2)
-            setSynchronous(false)
+            withEvents("e1", "e2", "e3 :last").withDuration(Duration.ofSeconds(2)).withSynchronous(false)
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for event: {}", event?.name)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 

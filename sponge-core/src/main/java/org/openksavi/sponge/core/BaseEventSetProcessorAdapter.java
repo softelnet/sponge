@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.core;
 
-import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
@@ -59,6 +58,11 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
     @Override
     public BaseEventSetProcessorDefinition getDefinition() {
         return (BaseEventSetProcessorDefinition) super.getDefinition();
+    }
+
+    @Override
+    public BaseEventSetProcessorMeta getMeta() {
+        return (BaseEventSetProcessorMeta) super.getMeta();
     }
 
     /**
@@ -129,7 +133,7 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
 
     @Override
     public final void durationOccurred() {
-        logger.debug("{} - Duration occurred", getName());
+        logger.debug("{} - Duration occurred", getMeta().getName());
         lock.lock();
         try {
             if (isRunning()) {
@@ -143,31 +147,6 @@ public abstract class BaseEventSetProcessorAdapter<T extends EventSetProcessor<?
     }
 
     protected abstract void onDuration();
-
-    @Override
-    public boolean hasDuration() {
-        return getDefinition().hasDuration();
-    }
-
-    @Override
-    public void setDuration(Duration duration) {
-        getDefinition().setDuration(duration);
-    }
-
-    @Override
-    public Duration getDuration() {
-        return getDefinition().getDuration();
-    }
-
-    @Override
-    public Boolean isSynchronous() {
-        return getDefinition().isSynchronous();
-    }
-
-    @Override
-    public void setSynchronous(Boolean synchronous) {
-        getDefinition().setSynchronous(synchronous);
-    }
 
     public boolean isDurationTriggered() {
         return durationTriggered.get();

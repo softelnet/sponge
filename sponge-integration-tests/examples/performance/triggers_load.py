@@ -5,25 +5,25 @@ Triggers load test.
 
 class A(Trigger):
     def onConfigure(self):
-        self.event = "a"
+        self.withEvent("a")
     def onRun(self, event):
         pass
 
 class B(Trigger):
     def onConfigure(self):
-        self.event = "b"
+        self.withEvent("b")
     def onRun(self, event):
         pass
 
 class C(Trigger):
     def onConfigure(self):
-        self.event = "c"
+        self.withEvent("c")
     def onRun(self, event):
         pass
 
 class Stats(Trigger):
     def onConfigure(self):
-        self.event = "stats"
+        self.withEvent("stats")
     def onRun(self, event):
         self.logger.debug("Statistics: {}", sponge.engine.statisticsManager.summary)
 

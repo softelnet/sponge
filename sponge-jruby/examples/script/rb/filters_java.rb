@@ -17,7 +17,7 @@ end
 
 class FilterTrigger < Trigger
     def onConfigure
-        self.events = ["e1", "e2", "e3"]
+        self.withEvents(["e1", "e2", "e3"])
     end
     def onRun(event)
         self.logger.debug("Processing trigger for event {}", event)

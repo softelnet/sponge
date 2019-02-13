@@ -32,17 +32,15 @@ public class SameSourceJavaRule extends JRule {
 
     @Override
     public void onConfigure() {
-        setEventSpecs(makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL));
-
-        addAllConditions("severityCondition");
-        addEventConditions("e2", (rule, event) -> {
+        withEventSpecs(makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL));
+        withAllConditions("severityCondition");
+        withConditions("e2", (rule, event) -> {
             // Both events have to have the same source
             Event event1 = rule.getEvent("e1");
             return event.get("source").equals(event1.get("source"))
                     && Duration.between(event1.getTime(), event.getTime()).getSeconds() <= 4;
         });
-
-        setDuration(Duration.ofSeconds(8));
+        withDuration(Duration.ofSeconds(8));
     }
 
     @Override

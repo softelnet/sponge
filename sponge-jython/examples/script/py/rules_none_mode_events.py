@@ -16,7 +16,7 @@ def onInit():
 
 class RuleFNNF(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e6 :none", "e3"]
+        self.withEvents(["e1", "e5 :none", "e6 :none", "e3"])
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
@@ -24,8 +24,7 @@ class RuleFNNF(Rule):
 
 class RuleFNNNL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
@@ -33,8 +32,7 @@ class RuleFNNNL(Rule):
 
 class RuleFNNNLReject(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog
@@ -42,8 +40,7 @@ class RuleFNNNLReject(Rule):
 
 class RuleFNFNL(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e5 :none", "e2", "e7 :none", "e3 :last"]
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["e1", "e5 :none", "e2", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     def onRun(self, event):
         self.logger.debug("Running rule for events: {}", self.eventAliasMap)
         global correlationEventsLog

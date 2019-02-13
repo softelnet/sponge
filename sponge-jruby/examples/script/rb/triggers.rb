@@ -14,7 +14,7 @@ end
 
 class TriggerA < Trigger
     def onConfigure
-        self.event = "a"
+        self.withEvent("a")
     end
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)
@@ -24,7 +24,7 @@ end
 
 class TriggerB < Trigger
     def onConfigure
-        self.event = "b"
+        self.withEvent("b")
     end
     def onRun(event)
         self.logger.debug("Received event: {}", event.name)

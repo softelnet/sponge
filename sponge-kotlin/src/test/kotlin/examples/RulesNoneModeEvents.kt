@@ -25,47 +25,46 @@ class RulesNoneModeEvents : KKnowledgeBase() {
     // Naming F(irst), L(ast), A(ll), N(one)
 
     class RuleFNNF : KRule() {
-        override fun onConfigure() = setEvents("e1", "e5 :none", "e6 :none", "e3")
+        override fun onConfigure() {
+            withEvents("e1", "e5 :none", "e6 :none", "e3")
+        }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventAliasMap)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 
     class RuleFNNNL : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last")
-            duration = Duration.ofSeconds(2)
+            withEvents("e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last").withDuration(Duration.ofSeconds(2))
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventAliasMap)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 
     class RuleFNNNLReject : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last")
-            duration = Duration.ofSeconds(2)
+            withEvents("e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last").withDuration(Duration.ofSeconds(2))
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventAliasMap)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 
     class RuleFNFNL : KRule() {
         override fun onConfigure() {
-            setEvents("e1", "e5 :none", "e2", "e7 :none", "e3 :last")
-            duration = Duration.ofSeconds(2)
+            withEvents("e1", "e5 :none", "e2", "e7 :none", "e3 :last").withDuration(Duration.ofSeconds(2))
         }
 
         override fun onRun(event: Event?) {
             logger.debug("Running rule for events: {}", eventAliasMap)
-            correlationEventsLog.addEvents(name, this)
+            correlationEventsLog.addEvents(meta.name, this)
         }
     }
 

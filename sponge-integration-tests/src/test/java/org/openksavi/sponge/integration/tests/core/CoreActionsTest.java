@@ -48,6 +48,7 @@ import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
@@ -96,10 +97,10 @@ public class CoreActionsTest {
             assertEquals("TEST", javaResult[1]);
 
             ActionAdapter upperActionAdapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
-            assertEquals("Echo Action", upperActionAdapter.getLabel());
-            assertEquals("Returns the upper case string", upperActionAdapter.getDescription());
+            assertEquals("Echo Action", upperActionAdapter.getMeta().getLabel());
+            assertEquals("Returns the upper case string", upperActionAdapter.getMeta().getDescription());
 
-            List<ArgMeta<?>> argMeta = upperActionAdapter.getArgsMeta();
+            List<ArgMeta<?>> argMeta = upperActionAdapter.getMeta().getArgsMeta();
             assertEquals(1, argMeta.size());
             assertEquals("text", argMeta.get(0).getName());
             assertEquals(DataTypeKind.STRING, argMeta.get(0).getType().getKind());
@@ -107,9 +108,9 @@ public class CoreActionsTest {
             assertEquals("Argument 1", argMeta.get(0).getLabel());
             assertEquals("Argument 1 description", argMeta.get(0).getDescription());
 
-            assertEquals(DataTypeKind.STRING, upperActionAdapter.getResultMeta().getType().getKind());
-            assertEquals("Upper case string", upperActionAdapter.getResultMeta().getLabel());
-            assertEquals("Result description", upperActionAdapter.getResultMeta().getDescription());
+            assertEquals(DataTypeKind.STRING, upperActionAdapter.getMeta().getResultMeta().getType().getKind());
+            assertEquals("Upper case string", upperActionAdapter.getMeta().getResultMeta().getLabel());
+            assertEquals("Result description", upperActionAdapter.getMeta().getResultMeta().getDescription());
 
             assertFalse(engine.isError());
         } finally {
@@ -143,11 +144,11 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("MultipleArgumentsAction");
-            assertEquals("Multiple arguments action", adapter.getLabel());
-            assertEquals("Multiple arguments action.", adapter.getDescription());
+            ActionMeta actionMeta = engine.getActionMeta("MultipleArgumentsAction");
+            assertEquals("Multiple arguments action", actionMeta.getLabel());
+            assertEquals("Multiple arguments action.", actionMeta.getDescription());
 
-            List<ArgMeta<?>> argMeta = adapter.getArgsMeta();
+            List<ArgMeta<?>> argMeta = actionMeta.getArgsMeta();
             assertEquals(11, argMeta.size());
 
             assertEquals("stringArg", argMeta.get(0).getName());
@@ -209,8 +210,8 @@ public class CoreActionsTest {
             assertEquals("dynamicArg", argMeta.get(10).getName());
             assertEquals(DataTypeKind.DYNAMIC, argMeta.get(10).getType().getKind());
 
-            assertEquals(DataTypeKind.BOOLEAN, adapter.getResultMeta().getType().getKind());
-            assertEquals("Boolean result", adapter.getResultMeta().getLabel());
+            assertEquals(DataTypeKind.BOOLEAN, actionMeta.getResultMeta().getType().getKind());
+            assertEquals("Boolean result", actionMeta.getResultMeta().getLabel());
 
             assertFalse(engine.isError());
         } finally {
@@ -341,7 +342,7 @@ public class CoreActionsTest {
             String actionName = "OptionalArgAction";
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter(actionName);
 
-            List<ArgMeta<?>> argMeta = actionAdapter.getArgsMeta();
+            List<ArgMeta<?>> argMeta = actionAdapter.getMeta().getArgsMeta();
             assertEquals(2, argMeta.size());
             assertEquals("mandatoryText", argMeta.get(0).getName());
             assertEquals(DataTypeKind.STRING, argMeta.get(0).getType().getKind());
@@ -367,8 +368,8 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuator");
-            List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
+            ActionMeta actionMeta = engine.getActionMeta("SetActuator");
+            List<ArgMeta<?>> argsMeta = actionMeta.getArgsMeta();
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
@@ -388,7 +389,7 @@ public class CoreActionsTest {
             assertTrue(argsMeta.get(2).getProvided().isReadOnly());
             assertNull(argsMeta.get(3).getProvided());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
             assertEquals(3, providedArgs.size());
 
             assertNotNull(providedArgs.get("actuator1"));
@@ -408,9 +409,9 @@ public class CoreActionsTest {
 
             assertNull(providedArgs.get("actuator4"));
 
-            engine.getOperations().call(actionAdapter.getName(), Arrays.asList("B", true, null, 10));
+            engine.getOperations().call(actionMeta.getName(), Arrays.asList("B", true, null, 10));
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
@@ -439,8 +440,8 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuatorAnnotatedValueSet");
-            List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
+            ActionMeta actionMeta = engine.getActionMeta("SetActuatorAnnotatedValueSet");
+            List<ArgMeta<?>> argsMeta = actionMeta.getArgsMeta();
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
@@ -449,7 +450,7 @@ public class CoreActionsTest {
             assertEquals(0, argsMeta.get(0).getProvided().getDepends().size());
             assertFalse(argsMeta.get(0).getProvided().isReadOnly());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
             assertEquals(1, providedArgs.size());
 
             ArgProvidedValue<?> argValue = providedArgs.get("actuatorType");
@@ -462,9 +463,9 @@ public class CoreActionsTest {
             assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getLabel());
             assertTrue(argValue.isValuePresent());
 
-            engine.getOperations().call(actionAdapter.getName(), Arrays.asList("manual"));
+            engine.getOperations().call(actionMeta.getName(), Arrays.asList("manual"));
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName());
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
             assertEquals(1, providedArgs.size());
 
             argValue = providedArgs.get("actuatorType");
@@ -491,8 +492,8 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("SetActuator");
-            List<ArgMeta<?>> argsMeta = actionAdapter.getArgsMeta();
+            ActionMeta actionMeta = engine.getActionMeta("SetActuator");
+            List<ArgMeta<?>> argsMeta = actionMeta.getArgsMeta();
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
@@ -516,7 +517,7 @@ public class CoreActionsTest {
             assertEquals("actuator1", argsMeta.get(4).getProvided().getDepends().get(0));
 
             providedArgs =
-                    engine.getOperations().provideActionArgs(actionAdapter.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
+                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             Object actuator1value = providedArgs.get("actuator1").getValue();
@@ -533,7 +534,7 @@ public class CoreActionsTest {
 
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(),
                     Arrays.asList("actuator2", "actuator3", "actuator5"), SpongeUtils.immutableMapOf("actuator1", actuator1value));
             assertEquals(3, providedArgs.size());
 
@@ -554,10 +555,10 @@ public class CoreActionsTest {
             assertEquals(Arrays.asList("X", "Y", "Z", "A"), providedArgs.get("actuator5").getValueSet());
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
-            engine.getOperations().call(actionAdapter.getName(), Arrays.asList("B", true, null, 10, "Y"));
+            engine.getOperations().call(actionMeta.getName(), Arrays.asList("B", true, null, 10, "Y"));
 
             providedArgs =
-                    engine.getOperations().provideActionArgs(actionAdapter.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
+                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             actuator1value = providedArgs.get("actuator1").getValue();
@@ -565,7 +566,7 @@ public class CoreActionsTest {
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionAdapter.getName(),
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(),
                     Arrays.asList("actuator2", "actuator3", "actuator5"), SpongeUtils.immutableMapOf("actuator1", actuator1value));
 
             assertEquals(3, providedArgs.size());
@@ -601,12 +602,12 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideByAction");
-            assertEquals(1, actionAdapter.getArgsMeta().size());
-            ArgMeta<StringType> sensorNameArgMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
+            ActionMeta actionMeta = engine.getActionMeta("ProvideByAction");
+            assertEquals(1, actionMeta.getArgsMeta().size());
+            ArgMeta<StringType> sensorNameArgMeta = (ArgMeta<StringType>) actionMeta.getArgsMeta().get(0);
             assertTrue(sensorNameArgMeta.getType() instanceof StringType);
             List<String> availableSensors =
-                    (List<String>) engine.getOperations().provideActionArgs(actionAdapter.getName()).get("sensorName").getValueSet();
+                    (List<String>) engine.getOperations().provideActionArgs(actionMeta.getName()).get("sensorName").getValueSet();
 
             assertTrue(engine.getOperations().call(Boolean.class, "ProvideByAction", Arrays.asList(availableSensors.get(0))));
 
@@ -650,11 +651,11 @@ public class CoreActionsTest {
         String value = "CLIENT_VALUE";
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideArgNoOverwrite");
-            assertEquals(1, actionAdapter.getArgsMeta().size());
-            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
+            ActionMeta actionMeta = engine.getActionMeta("ProvideArgNoOverwrite");
+            assertEquals(1, actionMeta.getArgsMeta().size());
+            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionMeta.getArgsMeta().get(0);
             assertFalse(argMeta.getProvided().isOverwrite());
-            ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
+            ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName()).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
@@ -664,7 +665,7 @@ public class CoreActionsTest {
 
             assertEquals("CLIENT_VALUE", value);
 
-            engine.getOperations().call(actionAdapter.getName(), Arrays.asList(value));
+            engine.getOperations().call(actionMeta.getName(), Arrays.asList(value));
 
             assertFalse(engine.isError());
         } finally {
@@ -682,11 +683,11 @@ public class CoreActionsTest {
         String value = "CLIENT_VALUE";
 
         try {
-            ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter("ProvideArgOverwrite");
-            assertEquals(1, actionAdapter.getArgsMeta().size());
-            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionAdapter.getArgsMeta().get(0);
+            ActionMeta actionMeta = engine.getActionMeta("ProvideArgOverwrite");
+            assertEquals(1, actionMeta.getArgsMeta().size());
+            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionMeta.getArgsMeta().get(0);
             assertTrue(argMeta.getProvided().isOverwrite());
-            ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionAdapter.getName()).get("value");
+            ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName()).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
@@ -696,7 +697,7 @@ public class CoreActionsTest {
 
             assertEquals("PROVIDED", value);
 
-            engine.getOperations().call(actionAdapter.getName(), Arrays.asList(value));
+            engine.getOperations().call(actionMeta.getName(), Arrays.asList(value));
 
             assertFalse(engine.isError());
         } finally {
@@ -712,15 +713,15 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("AnnotatedTypeAction");
-            assertEquals(0, adapter.getArgsMeta().size());
+            ActionMeta actionMeta = engine.getActionMeta("AnnotatedTypeAction");
+            assertEquals(0, actionMeta.getArgsMeta().size());
 
-            DataType resultType = adapter.getResultMeta().getType();
+            DataType resultType = actionMeta.getResultMeta().getType();
             assertEquals(DataTypeKind.ANNOTATED, resultType.getKind());
             assertTrue(resultType instanceof AnnotatedType);
             assertEquals(DataTypeKind.STRING, ((AnnotatedType) resultType).getValueType().getKind());
 
-            AnnotatedValue<String> result = engine.getOperations().call(AnnotatedValue.class, adapter.getName());
+            AnnotatedValue<String> result = engine.getOperations().call(AnnotatedValue.class, actionMeta.getName());
             assertEquals("RESULT", result.getValue());
             assertEquals(2, result.getFeatures().size());
             assertEquals("value1", result.getFeatures().get("feature1"));
@@ -763,8 +764,8 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            assertEquals(new Integer(12), engine.getActionManager().getActionAdapter("VersionedAction").getVersion());
-            assertNull(engine.getActionManager().getActionAdapter("NonVersionedAction").getVersion());
+            assertEquals(new Integer(12), engine.getActionMeta("VersionedAction").getVersion());
+            assertNull(engine.getActionMeta("NonVersionedAction").getVersion());
 
             assertEquals(new ProcessorQualifiedVersion(null, 12),
                     engine.getActionManager().getActionAdapter("VersionedAction").getQualifiedVersion());
@@ -784,8 +785,8 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            assertEquals(new Integer(12), engine.getActionManager().getActionAdapter("VersionedAction").getVersion());
-            assertNull(engine.getActionManager().getActionAdapter("NonVersionedAction").getVersion());
+            assertEquals(new Integer(12), engine.getActionMeta("VersionedAction").getVersion());
+            assertNull(engine.getActionMeta("NonVersionedAction").getVersion());
 
             assertEquals(new ProcessorQualifiedVersion(2, 12),
                     engine.getActionManager().getActionAdapter("VersionedAction").getQualifiedVersion());
@@ -805,10 +806,10 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            assertEquals("myActions", engine.getActionManager().getActionAdapter("MyAction1").getCategory());
-            assertEquals("myActions", engine.getActionManager().getActionAdapter("MyAction2").getCategory());
-            assertEquals("yourActions", engine.getActionManager().getActionAdapter("YourAction1").getCategory());
-            assertNull(engine.getActionManager().getActionAdapter("OtherAction").getCategory());
+            assertEquals("myActions", engine.getActionMeta("MyAction1").getCategory());
+            assertEquals("myActions", engine.getActionMeta("MyAction2").getCategory());
+            assertEquals("yourActions", engine.getActionMeta("YourAction1").getCategory());
+            assertNull(engine.getActionMeta("OtherAction").getCategory());
 
             assertEquals(3, engine.getCategories().size());
 
@@ -864,17 +865,17 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("DynamicResultAction");
-            DataType resultType = adapter.getResultMeta().getType();
+            ActionMeta actionMeta = engine.getActionMeta("DynamicResultAction");
+            DataType resultType = actionMeta.getResultMeta().getType();
             assertEquals(DataTypeKind.DYNAMIC, resultType.getKind());
 
             DynamicValue<String> resultForString =
-                    engine.getOperations().call(DynamicValue.class, adapter.getName(), Arrays.asList("string"));
+                    engine.getOperations().call(DynamicValue.class, actionMeta.getName(), Arrays.asList("string"));
             assertEquals("text", resultForString.getValue());
             assertEquals(DataTypeKind.STRING, resultForString.getType().getKind());
 
             DynamicValue<String> resultForBoolean =
-                    engine.getOperations().call(DynamicValue.class, adapter.getName(), Arrays.asList("boolean"));
+                    engine.getOperations().call(DynamicValue.class, actionMeta.getName(), Arrays.asList("boolean"));
             assertEquals(true, resultForBoolean.getValue());
             assertEquals(DataTypeKind.BOOLEAN, resultForBoolean.getType().getKind());
 
@@ -892,12 +893,12 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("TypeResultAction");
-            DataType resultType = adapter.getResultMeta().getType();
+            ActionMeta actionMeta = engine.getActionMeta("TypeResultAction");
+            DataType resultType = actionMeta.getResultMeta().getType();
             assertEquals(DataTypeKind.TYPE, resultType.getKind());
 
-            assertTrue(engine.getOperations().call(DataType.class, adapter.getName(), Arrays.asList("string")) instanceof StringType);
-            assertTrue(engine.getOperations().call(DataType.class, adapter.getName(), Arrays.asList("boolean")) instanceof BooleanType);
+            assertTrue(engine.getOperations().call(DataType.class, actionMeta.getName(), Arrays.asList("string")) instanceof StringType);
+            assertTrue(engine.getOperations().call(DataType.class, actionMeta.getName(), Arrays.asList("boolean")) instanceof BooleanType);
 
             assertFalse(engine.isError());
         } finally {
@@ -913,12 +914,12 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("DateTimeAction");
-            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) adapter.getArgsMeta().get(0).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) adapter.getArgsMeta().get(1).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.DATE, ((DateTimeType) adapter.getArgsMeta().get(2).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.TIME, ((DateTimeType) adapter.getArgsMeta().get(3).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.INSTANT, ((DateTimeType) adapter.getArgsMeta().get(4).getType()).getDateTimeKind());
+            ActionMeta actionMeta = engine.getActionMeta("DateTimeAction");
+            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) actionMeta.getArgsMeta().get(0).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) actionMeta.getArgsMeta().get(1).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE, ((DateTimeType) actionMeta.getArgsMeta().get(2).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.TIME, ((DateTimeType) actionMeta.getArgsMeta().get(3).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.INSTANT, ((DateTimeType) actionMeta.getArgsMeta().get(4).getType()).getDateTimeKind());
 
             LocalDateTime dateTime = LocalDateTime.now();
             ZonedDateTime dateTimeZone = ZonedDateTime.now();
@@ -926,8 +927,8 @@ public class CoreActionsTest {
             LocalTime time = LocalTime.now();
             Instant instant = Instant.now();
 
-            List dates =
-                    engine.getOperations().call(List.class, adapter.getName(), Arrays.asList(dateTime, dateTimeZone, date, time, instant));
+            List dates = engine.getOperations().call(List.class, actionMeta.getName(),
+                    Arrays.asList(dateTime, dateTimeZone, date, time, instant));
             assertTrue(dates.get(0) instanceof LocalDateTime);
             assertEquals(dateTime, dates.get(0));
             assertTrue(dates.get(1) instanceof ZonedDateTime);
@@ -952,14 +953,15 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
-            assertEquals("UpperEchoAction", adapter.getName());
-            assertEquals("Echo Action", adapter.getLabel());
-            assertEquals("Returns the upper case string", adapter.getDescription());
-            ArgMeta<?> argMeta = adapter.getArgsMeta().get(0);
+            ActionMeta actionMeta = engine.getActionMeta("UpperEchoAction");
+            assertEquals("UpperEchoAction", actionMeta.getName());
+            assertEquals("Echo Action", actionMeta.getLabel());
+            assertEquals("Returns the upper case string", actionMeta.getDescription());
+            ArgMeta<?> argMeta = actionMeta.getArgsMeta().get(0);
             assertEquals(DataTypeKind.STRING, argMeta.getType().getKind());
 
-            assertEquals("Echo Action returns: TEXT", engine.getOperations().call(String.class, adapter.getName(), Arrays.asList("Text")));
+            assertEquals("Echo Action returns: TEXT",
+                    engine.getOperations().call(String.class, actionMeta.getName(), Arrays.asList("Text")));
 
             assertFalse(engine.isError());
         } finally {
@@ -974,14 +976,15 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionAdapter adapter = engine.getActionManager().getActionAdapter("UpperAction");
-            assertEquals("UpperAction", adapter.getName());
-            assertEquals("Echo Action", adapter.getLabel());
-            assertEquals("Returns the upper case string", adapter.getDescription());
-            ArgMeta<?> argMeta = adapter.getArgsMeta().get(0);
+            ActionMeta actionMeta = engine.getActionMeta("UpperAction");
+            assertEquals("UpperAction", actionMeta.getName());
+            assertEquals("Echo Action", actionMeta.getLabel());
+            assertEquals("Returns the upper case string", actionMeta.getDescription());
+            ArgMeta<?> argMeta = actionMeta.getArgsMeta().get(0);
             assertEquals(DataTypeKind.STRING, argMeta.getType().getKind());
 
-            assertEquals("Echo Action returns: TEXT", engine.getOperations().call(String.class, adapter.getName(), Arrays.asList("Text")));
+            assertEquals("Echo Action returns: TEXT",
+                    engine.getOperations().call(String.class, actionMeta.getName(), Arrays.asList("Text")));
 
             assertNull(engine.getActionManager().getActionAdapter("UpperEchoChangedNameAction"));
 

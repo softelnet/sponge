@@ -12,7 +12,9 @@ import org.openksavi.sponge.kotlin.KTrigger
 class TriggersEventPatternIncorrect : KKnowledgeBase() {
 
     class TriggerAPattern : KTrigger() {
-        override fun onConfigure() = setEvent("a.**")
+        override fun onConfigure() {
+            withEvent("a.**")
+        }
         override fun onRun(event: Event) {
         }
     }

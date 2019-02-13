@@ -17,7 +17,7 @@ class AutoAction(Action):
 
 class AutoFilter(Filter):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onAccept(self, event):
         self.logger.debug("Received event: {}", event.name)
         sponge.getVariable("counter").incrementAndGet()
@@ -25,21 +25,21 @@ class AutoFilter(Filter):
 
 class AutoTrigger(Trigger):
     def onConfigure(self):
-        self.event = "e1"
+        self.withEvent("e1")
     def onRun(self, event):
         self.logger.debug("Received event: {}", event.name)
         sponge.getVariable("counter").incrementAndGet()
 
 class AutoRule(Rule):
     def onConfigure(self):
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     def onRun(self, event):
         self.logger.debug("Running for sequence: {}", self.eventSequence)
         sponge.getVariable("counter").incrementAndGet()
 
 class AutoCorrelator(Correlator):
     def onConfigure(self):
-        self.events = ["e1", "e2"]
+        self.withEvents(["e1", "e2"])
     def onAcceptAsFirst(self, event):
         return event.name == "e1"
     def onEvent(self, event):

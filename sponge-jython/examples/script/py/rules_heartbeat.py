@@ -12,7 +12,7 @@ def onInit():
 
 class HeartbeatFilter(Filter):
     def onConfigure(self):
-        self.event = "heartbeat"
+        self.withEvent("heartbeat")
     def onInit(self):
         self.heartbeatCounter = 0
     def onAccept(self, event):
@@ -27,15 +27,15 @@ class HeartbeatFilter(Filter):
 # Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 class HeartbeatRule(Rule):
     def onConfigure(self):
-        self.events = ["heartbeat h1", "heartbeat h2 :none"]
-        self.addConditions("h2", lambda rule, event: rule.firstEvent.get("source") == event.get("source"))
-        self.duration = Duration.ofSeconds(2)
+        self.withEvents(["heartbeat h1", "heartbeat h2 :none"])
+        self.withCondition("h2", lambda rule, event: rule.firstEvent.get("source") == event.get("source"))
+        self.withDuration(Duration.ofSeconds(2))
     def onRun(self, event):
         sponge.event("alarm").set("severity", 1).send()
 
 class AlarmTrigger(Trigger):
     def onConfigure(self):
-        self.event = "alarm"
+        self.withEvent("alarm")
     def onRun(self, event):
         print "Sound the alarm!"
         sponge.getVariable("soundTheAlarm").set(True)

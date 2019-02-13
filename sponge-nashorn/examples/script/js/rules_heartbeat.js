@@ -14,7 +14,7 @@ function onInit() {
 
 var HeartbeatFilter = Java.extend(Filter, {
     onConfigure: function(self) {
-        self.event = "heartbeat";
+        self.withEvent("heartbeat");
     },
     onInit: function(self) {
         self.target = new function() {
@@ -36,11 +36,11 @@ var HeartbeatFilter = Java.extend(Filter, {
 // Sounds the alarm when heartbeat event stops occurring at most every 2 seconds.
 var HeartbeatRule = Java.extend(Rule, {
     onConfigure: function(self) {
-        self.events = ["heartbeat h1", "heartbeat h2 :none"];
-        self.addConditions("h2", function(rule, event) {
+        self.withEvents(["heartbeat h1", "heartbeat h2 :none"]);
+        self.withCondition("h2", function(rule, event) {
             return rule.firstEvent.get("source") == event.get("source");
         });
-        self.duration = Duration.ofSeconds(2);
+        self.withDuration(Duration.ofSeconds(2));
     },
     onRun: function(self, event) {
         sponge.event("alarm").set("severity", 1).send();
@@ -49,7 +49,7 @@ var HeartbeatRule = Java.extend(Rule, {
 
 var AlarmTrigger = Java.extend(Trigger, {
     onConfigure: function(self) {
-        self.event = "alarm";
+        self.withEvent("alarm");
     },
     onRun: function(self, event) {
         print("Sound the alarm!");

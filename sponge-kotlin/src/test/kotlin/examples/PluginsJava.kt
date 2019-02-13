@@ -20,7 +20,9 @@ class PluginsJava : KKnowledgeBase() {
     }
 
     class PluginTrigger : KTrigger() {
-        override fun onConfigure() = setEvent("e1")
+        override fun onConfigure() {
+            withEvent("e1")
+        }
         override fun onRun(event: Event) {
             val connectionPlugin = sponge.getPlugin(ConnectionPlugin::class.java)
             logger.debug("Connection name is still: {}", connectionPlugin.connectionName)

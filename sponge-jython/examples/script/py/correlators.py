@@ -16,8 +16,7 @@ def onInit():
 
 class SampleCorrelator(Correlator):
     def onConfigure(self):
-        self.events = ["filesystemFailure", "diskFailure"]
-        self.maxInstances = 1
+        self.withEvents(["filesystemFailure", "diskFailure"]).withMaxInstances(1)
     def onAcceptAsFirst(self, event):
         return event.name == "filesystemFailure"
     def onInit(self):

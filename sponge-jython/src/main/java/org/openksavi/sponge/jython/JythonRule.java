@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.jython;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.python.core.PyFunction;
@@ -43,27 +44,19 @@ public abstract class JythonRule extends BaseRule {
         }
     };
 
-    public void addCondition(String eventAlias, PyMethod pyObject) {
-        addEventCondition(eventAlias, MAPPER.apply(pyObject));
+    public JythonRule withConditions(String eventAlias, List<PyObject> pyObjects) {
+        return (JythonRule) super.withEventCondition(eventAlias, CompositeEventCondition.create(MAPPER, pyObjects));
     }
 
-    public void addCondition(String eventAlias, PyFunction pyObject) {
-        addEventCondition(eventAlias, MAPPER.apply(pyObject));
+    public JythonRule withCondition(String eventAlias, PyObject pyObject) {
+        return (JythonRule) super.withEventCondition(eventAlias, MAPPER.apply(pyObject));
     }
 
-    public void addConditions(String eventAlias, PyMethod... pyObjects) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, pyObjects));
+    public JythonRule withAllConditions(List<PyObject> pyObjects) {
+        return (JythonRule) super.withAllEventCondition(CompositeEventCondition.create(MAPPER, pyObjects));
     }
 
-    public void addConditions(String eventAlias, PyFunction... pyObjects) {
-        addEventConditions(eventAlias, CompositeEventCondition.create(MAPPER, pyObjects));
-    }
-
-    public void addAllConditions(PyMethod... pyObjects) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, pyObjects));
-    }
-
-    public void addAllConditions(PyFunction... pyObjects) {
-        addAllEventConditions(CompositeEventCondition.create(MAPPER, pyObjects));
+    public JythonRule withAllCondition(PyObject pyObject) {
+        return (JythonRule) super.withAllEventCondition(MAPPER.apply(pyObject));
     }
 }

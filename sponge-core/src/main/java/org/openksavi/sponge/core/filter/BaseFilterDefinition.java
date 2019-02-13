@@ -21,6 +21,15 @@ import org.openksavi.sponge.filter.FilterDefinition;
 
 public class BaseFilterDefinition extends BaseEventProcessorDefinition implements FilterDefinition {
 
+    public BaseFilterDefinition() {
+        super(new BaseFilterMeta());
+    }
+
+    @Override
+    public BaseFilterMeta getMeta() {
+        return (BaseFilterMeta) super.getMeta();
+    }
+
     @Override
     public boolean isSingleton() {
         return true;

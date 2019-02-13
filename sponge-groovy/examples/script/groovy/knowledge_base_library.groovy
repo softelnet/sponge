@@ -13,7 +13,7 @@ void onInit() {
 
 class HttpStatusTrigger extends Trigger {
     void onConfigure() {
-        this.event = "checkStatus"
+        this.withEvent("checkStatus")
     }
     void onRun(Event event) {
         String status = checkPageStatus(event.get("host"))

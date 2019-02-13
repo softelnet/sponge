@@ -12,7 +12,7 @@ end
 
 class RuleA < Rule
     def onConfigure
-        self.events = ["a a1", "a a2"]
+        self.withEvents(["a a1", "a a2"])
     end
     def onRun(event)
         $sponge.getVariable("countA").incrementAndGet()
@@ -21,7 +21,7 @@ end
 
 class RuleB < Rule
     def onConfigure
-        self.events = ["b b1", "b b2"]
+        self.withEvents(["b b1", "b b2"])
     end
     def onRun(event)
         $sponge.getVariable("countB").incrementAndGet()

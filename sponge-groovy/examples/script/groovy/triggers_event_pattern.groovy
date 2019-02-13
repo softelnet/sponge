@@ -13,7 +13,7 @@ void onInit() {
 
 class TriggerA extends Trigger {
     void onConfigure() {
-        this.event = "a"
+        this.withEvent("a")
     }
     void onRun(Event event) {
         sponge.getVariable("countA").incrementAndGet()
@@ -22,7 +22,7 @@ class TriggerA extends Trigger {
 
 class TriggerAPattern extends Trigger {
     void onConfigure() {
-        this.event = "a.*"
+        this.withEvent("a.*")
     }
     void onRun(Event event) {
         this.logger.debug("Received matching event {}", event.name)

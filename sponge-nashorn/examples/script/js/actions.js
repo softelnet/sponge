@@ -11,10 +11,10 @@ function onInit() {
 
 var EchoAction = Java.extend(Action, {
     onConfigure: function(self) {
-        self.label = "Echo Action";
+        self.withLabel("Echo Action");
     },
     onCall: function(self, args) {
-        self.logger.info("Action {} called", self.name);
+        self.logger.info("Action {} called", self.meta.name);
         for each (var arg in args) {
             self.logger.debug("Arg: {} ({})", arg, typeof arg);
         }

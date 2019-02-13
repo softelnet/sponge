@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.java;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.openksavi.sponge.core.trigger.BaseTrigger;
 
 /**
@@ -23,4 +27,52 @@ import org.openksavi.sponge.core.trigger.BaseTrigger;
  */
 public abstract class JTrigger extends BaseTrigger {
 
+    @Override
+    public final JTrigger withName(String name) {
+        return (JTrigger) super.withName(name);
+    }
+
+    @Override
+    public final JTrigger withLabel(String label) {
+        return (JTrigger) super.withLabel(label);
+    }
+
+    @Override
+    public final JTrigger withDescription(String description) {
+        return (JTrigger) super.withDescription(description);
+    }
+
+    @Override
+    public final JTrigger withVersion(Integer version) {
+        return (JTrigger) super.withVersion(version);
+    }
+
+    @Override
+    public final JTrigger withFeatures(Map<String, Object> features) {
+        return (JTrigger) super.withFeatures(features);
+    }
+
+    @Override
+    public final JTrigger withFeature(String name, Object value) {
+        return (JTrigger) super.withFeature(name, value);
+    }
+
+    @Override
+    public final JTrigger withCategory(String category) {
+        return (JTrigger) super.withCategory(category);
+    }
+
+    @Override
+    public final JTrigger withEvents(List<String> eventNames) {
+        return (JTrigger) super.withEvents(eventNames);
+    }
+
+    public final JTrigger withEvents(String... events) {
+        return withEvents(Arrays.asList(events));
+    }
+
+    @Override
+    public final JTrigger withEvent(String eventName) {
+        return (JTrigger) super.withEvent(eventName);
+    }
 }

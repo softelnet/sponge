@@ -15,7 +15,7 @@ void onInit() {
 
 class RuleFNNF extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e6 :none", "e3"]
+        this.withEvents(["e1", "e5 :none", "e6 :none", "e3"])
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
@@ -25,8 +25,7 @@ class RuleFNNF extends Rule {
 
 class RuleFNNNL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]
-        this.duration = Duration.ofSeconds(2)
+        this.withEvents(["e1", "e5 :none", "e6 :none", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
@@ -36,8 +35,7 @@ class RuleFNNNL extends Rule {
 
 class RuleFNNNLReject extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]
-        this.duration = Duration.ofSeconds(2)
+        this.withEvents(["e1", "e5 :none", "e2 :none", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)
@@ -47,8 +45,7 @@ class RuleFNNNLReject extends Rule {
 
 class RuleFNFNL extends Rule {
     void onConfigure() {
-        this.events = ["e1", "e5 :none", "e2", "e7 :none", "e3 :last"]
-        this.duration = Duration.ofSeconds(2)
+        this.withEvents(["e1", "e5 :none", "e2", "e7 :none", "e3 :last"]).withDuration(Duration.ofSeconds(2))
     }
     void onRun(Event event) {
         this.logger.debug("Running rule for events: {}", this.eventAliasMap)

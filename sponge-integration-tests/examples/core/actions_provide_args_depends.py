@@ -12,16 +12,14 @@ def onInit():
 
 class SetActuator(Action):
     def onConfigure(self):
-        self.label = "Set actuator"
-        self.description = "Sets the actuator state."
-        self.argsMeta = [
+        self.withLabel("Set actuator").withDescription("Sets the actuator state.")
+        self.withArgs([
             ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
             ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
             ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
             ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1")),
-        ]
-        self.resultMeta = ResultMeta(VoidType())
+            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1"))
+        ]).withNoResult()
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)
         sponge.setVariable("actuator2", actuator2)

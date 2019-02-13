@@ -90,7 +90,8 @@ public class DefaultStatisticsManager extends BaseEngineModule implements Statis
     @SuppressWarnings("rawtypes")
     protected String getEventSetProcessorsSummary(String label, List<? extends EventSetProcessorAdapterGroup> groups) {
         return label + "(" + groups.size() + ")" + (groups.isEmpty() ? "" : ": ")
-                + groups.stream().map(group -> String.format("%s (%s)", group.getName(), group.getEventSetProcessorAdapters().size()))
+                + groups.stream()
+                        .map(group -> String.format("%s (%s)", group.getMeta().getName(), group.getEventSetProcessorAdapters().size()))
                         .collect(Collectors.joining(", "));
     }
 

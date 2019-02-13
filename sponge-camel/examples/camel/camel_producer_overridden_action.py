@@ -13,14 +13,14 @@ def onInit():
 
 class CamelTrigger(Trigger):
     def onConfigure(self):
-        self.event = "camelEvent"
+        self.withEvent("camelEvent")
     def onRun(self, event):
         print event.body
         sponge.getVariable("sentCamelMessage_" + event.name).set(True)
 
 class UnusedCamelTrigger(Trigger):
     def onConfigure(self):
-        self.event = "spongeProducer"
+        self.withEvent("spongeProducer")
     def onRun(self, event):
         print event.body
         sponge.getVariable("sentCamelMessage_" + event.name).set(True)

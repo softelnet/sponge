@@ -16,8 +16,6 @@
 
 package org.openksavi.sponge.rule;
 
-import java.util.List;
-
 import org.openksavi.sponge.EventSetProcessorDefinition;
 
 /**
@@ -25,26 +23,4 @@ import org.openksavi.sponge.EventSetProcessorDefinition;
  */
 public interface RuleDefinition extends EventSetProcessorDefinition, RuleOperations {
 
-    /**
-     * Returns the event specifications.
-     *
-     * @return the event specifications.
-     */
-    List<RuleEventSpec> getEventSpecs();
-
-    /**
-     * Returns the event specification for the specified event index.
-     *
-     * @param index event index.
-     *
-     * @return the event specification.
-     */
-    RuleEventSpec getEventSpec(int index);
-
-    /**
-     * Sets the event specifications.
-     *
-     * @param eventSpecs the event specifications.
-     */
-    void setEventSpecs(List<RuleEventSpec> eventSpecs);
 }
