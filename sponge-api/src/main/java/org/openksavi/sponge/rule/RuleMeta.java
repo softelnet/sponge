@@ -34,13 +34,6 @@ public interface RuleMeta extends EventSetProcessorMeta {
     void setEventSpecs(List<RuleEventSpec> eventSpecs);
 
     /**
-     * Sets the event specification.
-     *
-     * @param eventSpec the event specification.
-     */
-    void setEventSpec(RuleEventSpec eventSpec);
-
-    /**
      * Returns the event specifications.
      *
      * @return the event specifications.

@@ -133,9 +133,9 @@ class DependingArgumentsAction(Action):
         self.withLabel("Action with depending arguments")
         self.withArgs([
             ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
-            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
-            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDepends("country")),
-            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
+            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDependency("continent")),
+            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDependency("country")),
+            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDependency("continent")),
             ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet())
         ])
         self.withResult(ResultMeta(StringType()).withLabel("Sentences"))
@@ -199,3 +199,11 @@ class DateTimeAction(Action):
         self.withResult(ResultMeta(StringType()).withLabel("Formatted text"))
     def onCall(self, dateTime):
         return dateTime.format(DateTimeFormatter.ofPattern(self.meta.argsMeta[0].type.format))
+
+class ManyArgumentsAction(Action):
+    def onConfigure(self):
+        self.withLabel("Many arguments action")
+        self.withArgs(map(lambda i:  ArgMeta("a" + str(i + 1), StringType().withNullable()).withLabel("Argument " + str(i + 1)), range(30)))
+        self.withNoResult()
+    def onCall(self, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30):
+        return None

@@ -88,7 +88,7 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     }
 
     public BaseAction withArgs(List<ArgMeta<?>> argsMeta) {
-        getMeta().setArgsMeta(argsMeta);
+        getMeta().addArgsMeta(argsMeta);
         return this;
     }
 

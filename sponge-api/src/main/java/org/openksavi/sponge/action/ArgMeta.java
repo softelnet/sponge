@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.action;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.openksavi.sponge.type.DataType;
 
 /**
@@ -42,6 +45,9 @@ public class ArgMeta<T extends DataType> {
     /** The provided argument specification. Defaults to {@code null}. */
     private ArgProvidedMeta provided;
 
+    /** The features. */
+    private Map<String, Object> features = new LinkedHashMap<>();
+
     public ArgMeta(String name, T type) {
         this.name = name;
         this.type = type;
@@ -64,6 +70,16 @@ public class ArgMeta<T extends DataType> {
 
     public ArgMeta<T> withProvided(ArgProvidedMeta provided) {
         this.provided = provided;
+        return this;
+    }
+
+    public ArgMeta<T> withFeatures(Map<String, Object> features) {
+        getFeatures().putAll(features);
+        return this;
+    }
+
+    public ArgMeta<T> withFeature(String name, Object value) {
+        getFeatures().put(name, value);
         return this;
     }
 
@@ -113,5 +129,13 @@ public class ArgMeta<T extends DataType> {
 
     public void setProvided(ArgProvidedMeta provided) {
         this.provided = provided;
+    }
+
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = new LinkedHashMap<>(features);
     }
 }

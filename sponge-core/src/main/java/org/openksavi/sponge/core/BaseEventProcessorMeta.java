@@ -16,10 +16,10 @@
 
 package org.openksavi.sponge.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openksavi.sponge.EventProcessorMeta;
-import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
  * A base event processor metadata.
@@ -46,7 +46,15 @@ public class BaseEventProcessorMeta extends BaseProcessorMeta implements EventPr
      */
     @Override
     public void setEventNames(List<String> eventNames) {
-        this.eventNames = SpongeUtils.createUnmodifiableList(eventNames);
+        this.eventNames = new ArrayList<>(eventNames);
+    }
+
+    public void addEventNames(List<String> eventNames) {
+        if (this.eventNames != null) {
+            this.eventNames.addAll(eventNames);
+        } else {
+            setEventNames(eventNames);
+        }
     }
 
     @Override

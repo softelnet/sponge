@@ -138,7 +138,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         Set<String> prevArgNames = new HashSet<>();
         for (ArgMeta<?> argMeta : getMeta().getArgsMeta()) {
             if (argMeta.getProvided() != null) {
-                argMeta.getProvided().getDepends().forEach(dependsOnArg -> {
+                argMeta.getProvided().getDependencies().forEach(dependsOnArg -> {
                     Validate.isTrue(prevArgNames.contains(dependsOnArg),
                             "The argument '%s' depends on argument '%s' that is not defined before", argMeta.getName(), dependsOnArg);
                 });

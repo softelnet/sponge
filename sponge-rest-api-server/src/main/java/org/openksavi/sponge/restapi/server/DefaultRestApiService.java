@@ -359,13 +359,10 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionMeta actionMeta) {
-        return actionMeta
-                .getArgsMeta() != null
-                        ? actionMeta.getArgsMeta().stream()
-                                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null,
-                                        meta.getLabel(), meta.getDescription(), meta.isOptional(), meta.getProvided()))
-                                .collect(Collectors.toList())
-                        : null;
+        return actionMeta.getArgsMeta() != null ? actionMeta.getArgsMeta().stream()
+                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null, meta.getLabel(),
+                        meta.getDescription(), meta.isOptional(), meta.getProvided(), meta.getFeatures()))
+                .collect(Collectors.toList()) : null;
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionMeta actionMeta) {

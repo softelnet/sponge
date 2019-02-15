@@ -246,9 +246,9 @@ class DependingArgumentsAction(Action):
         self.withLabel("Action with depending arguments")
         self.withArgs([
             ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
-            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
-            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDepends("country")),
-            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDepends("continent")),
+            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDependency("continent")),
+            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDependency("country")),
+            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDependency("continent")),
             ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet())
         ])
         self.withResult(ResultMeta(StringType()).withLabel("Sentences"))

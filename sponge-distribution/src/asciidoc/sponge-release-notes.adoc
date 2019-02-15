@@ -10,8 +10,10 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 * API change: The processor metadata properties have to be specified using the builder-style methods, e.g. `self.withLabel("Label").withDescription("Description")`.
 * API change: Renamed the builder-style methods in the metadata classes to follow the naming convention `with<Property>`, e.g. `BinaryType().mimeType("image/png")` is now `BinaryType().withMimeType("image/png")`.
+* API change: Renamed `ArgProvidedMeta.depends` to `ArgProvidedMeta.dependencies`.
 * Added support for categories. Processors may be assigned to registered categories.
 * Added new types: `DynamicType`, `TypeType`, `DateTimeType`.
+* Added `ArgMeta.withFeatures` and `ArgMeta.withFeature`,
 * Fixed the bug that caused an error when sending an empty body in the REST API request.
 
 [discrete]

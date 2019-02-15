@@ -17,7 +17,6 @@
 package org.openksavi.sponge.core.rule;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorMeta;
-import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.rule.RuleMeta;
@@ -66,13 +64,17 @@ public class BaseRuleMeta extends BaseEventSetProcessorMeta implements RuleMeta 
 
     @Override
     public void setEventSpecs(List<RuleEventSpec> eventSpecs) {
-        this.eventSpecs = SpongeUtils.createUnmodifiableList(eventSpecs);
+        this.eventSpecs = new ArrayList<>(eventSpecs);
         setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
     }
 
-    @Override
-    public void setEventSpec(RuleEventSpec eventSpec) {
-        setEventSpecs(Arrays.asList(eventSpec));
+    public void addEventSpecs(List<RuleEventSpec> eventSpecs) {
+        if (this.eventSpecs != null) {
+            this.eventSpecs.addAll(eventSpecs);
+            addEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
+        } else {
+            setEventSpecs(eventSpecs);
+        }
     }
 
     @Override

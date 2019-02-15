@@ -40,6 +40,13 @@ public interface ActionMeta extends ProcessorMeta {
     void setArgsMeta(List<ArgMeta<?>> argsMeta);
 
     /**
+     * Adds the (optional) arguments metadata.
+     *
+     * @param argsMeta the arguments metadata.
+     */
+    void addArgsMeta(List<ArgMeta<?>> argsMeta);
+
+    /**
      * Returns the argument metadata. Throws exception if not found.
      *
      * @param name the argument name.

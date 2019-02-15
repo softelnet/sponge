@@ -126,7 +126,7 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
 
     @Override
     public BaseRule withEvents(List<String> eventStringSpecs) {
-        getMeta().setEventSpecs(eventStringSpecs.stream().map((String spec) -> getKnowledgeBase().getInterpreter().getRuleEventSpec(spec))
+        getMeta().addEventSpecs(eventStringSpecs.stream().map((String spec) -> getKnowledgeBase().getInterpreter().getRuleEventSpec(spec))
                 .collect(Collectors.toList()));
         return this;
     }
@@ -166,13 +166,12 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     }
 
     public BaseRule withEventSpecs(List<RuleEventSpec> eventSpecs) {
-        getMeta().setEventSpecs(eventSpecs);
+        getMeta().addEventSpecs(eventSpecs);
         return this;
     }
 
     public BaseRule withEventSpec(RuleEventSpec eventSpec) {
-        getMeta().setEventSpec(eventSpec);
-        return this;
+        return withEventSpecs(Arrays.asList(eventSpec));
     }
 
     public BaseRule withOrdered(boolean ordered) {

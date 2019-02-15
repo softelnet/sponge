@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model;
 
+import java.util.Map;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -38,16 +40,20 @@ public class RestActionArgMeta {
 
     private ArgProvidedMeta provided;
 
+    private Map<String, Object> features;
+
     public RestActionArgMeta() {
     }
 
-    public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvidedMeta provided) {
+    public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvidedMeta provided,
+            Map<String, Object> features) {
         this.name = name;
         this.type = type;
         this.label = label;
         this.description = description;
         this.optional = optional;
         this.provided = provided;
+        this.features = features;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -102,5 +108,14 @@ public class RestActionArgMeta {
 
     public void setProvided(ArgProvidedMeta provided) {
         this.provided = provided;
+    }
+
+    @ApiModelProperty(value = "The argument features", required = false)
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 }

@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +27,6 @@ import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorMeta;
-import org.openksavi.sponge.core.util.SpongeUtils;
 
 /**
  * A base action metadata.
@@ -44,7 +44,16 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
 
     @Override
     public void setArgsMeta(List<ArgMeta<?>> argsMeta) {
-        this.argsMeta = SpongeUtils.createUnmodifiableList(argsMeta);
+        this.argsMeta = argsMeta != null ? new ArrayList<>(argsMeta) : null;
+    }
+
+    @Override
+    public void addArgsMeta(List<ArgMeta<?>> argsMeta) {
+        if (this.argsMeta != null) {
+            this.argsMeta.addAll(argsMeta);
+        } else {
+            setArgsMeta(argsMeta);
+        }
     }
 
     @Override

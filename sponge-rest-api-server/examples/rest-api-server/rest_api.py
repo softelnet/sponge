@@ -146,7 +146,7 @@ class SetActuatorDepends(Action):
             ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
             ArgMeta("actuator3", IntegerType()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue()),
             ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDepends("actuator1")),
+            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDependency("actuator1")),
         ]).withResult(ResultMeta(VoidType()))
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)

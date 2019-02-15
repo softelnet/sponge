@@ -32,7 +32,7 @@ public class ArgProvidedMeta {
     private boolean valueSet;
 
     /** The list of attribute names that this provided attribute depends on. */
-    private List<String> depends = new ArrayList<>();
+    private List<String> dependencies = new ArrayList<>();
 
     /** The flag specifying if this provided argument is read only. Defaults to {@code false}. */
     private boolean readOnly = false;
@@ -56,9 +56,13 @@ public class ArgProvidedMeta {
         return this;
     }
 
-    public ArgProvidedMeta withDepends(String... depends) {
-        this.depends.addAll(Arrays.asList(depends));
+    public ArgProvidedMeta withDependcies(List<String> dependencies) {
+        this.dependencies.addAll(dependencies);
         return this;
+    }
+
+    public ArgProvidedMeta withDependency(String dependency) {
+        return withDependcies(Arrays.asList(dependency));
     }
 
     public ArgProvidedMeta withReadOnly() {
@@ -87,12 +91,12 @@ public class ArgProvidedMeta {
         this.valueSet = valueSet;
     }
 
-    public List<String> getDepends() {
-        return depends;
+    public List<String> getDependencies() {
+        return dependencies;
     }
 
-    public void setDepends(List<String> depends) {
-        this.depends = depends;
+    public void setDependencies(List<String> dependencies) {
+        this.dependencies = new ArrayList<>(dependencies);
     }
 
     public boolean isReadOnly() {
