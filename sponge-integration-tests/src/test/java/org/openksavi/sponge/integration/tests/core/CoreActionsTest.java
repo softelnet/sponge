@@ -252,18 +252,16 @@ public class CoreActionsTest {
         } catch (WrappedException e) {
             logger.debug("Expected exception", e);
             String sourceName = "kb.TestAction.onConfigure";
-            String expectedMessage = "'org.openksavi.sponge.action.ResultMeta' object has no attribute 'label_error' in " + sourceName;
+            String expectedMessage = "Traceback (most recent call last):\n"
+                    + "  File \"examples/core/actions_on_configure_error.py\", line 8, in onConfigure\n"
+                    + "    self.withNoArgs().withResult(ResultMeta(StringType()).label_error(\"Test action\"))\n"
+                    + "AttributeError: 'org.openksavi.sponge.action.ResultMeta' object has no attribute 'label_error'\n" + " in "
+                    + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
             assertEquals(expectedToString, e.toString());
             assertEquals(expectedMessage, e.getMessage());
-
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            try (Scanner scanner = new Scanner(sw.toString())) {
-                assertEquals(expectedToString, scanner.nextLine());
-            }
         } finally {
             engine.shutdown();
         }

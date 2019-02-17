@@ -20,10 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Scanner;
-
 import org.junit.Test;
 
 import org.openksavi.sponge.action.Action;
@@ -105,16 +101,12 @@ public class CoreProcessorsTest {
                 throw SpongeUtils.wrapException(action, e);
             }
         } catch (Throwable e) {
-            String expectedMessage = "global name 'context_error' is not defined in kb.EdvancedMetaActionWithError";
+            String expectedMessage = "Traceback (most recent call last):\n"
+                    + "  File \"examples/core/processors_interface.py\", line 18, in isVisible\n" + "    return context_error == \"day\"\n"
+                    + "NameError: global name 'context_error' is not defined\n" + " in kb.EdvancedMetaActionWithError";
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
             assertEquals(expectedToString, e.toString());
             assertEquals(expectedMessage, e.getMessage());
-
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            try (Scanner scanner = new Scanner(sw.toString())) {
-                assertEquals(expectedToString, scanner.nextLine());
-            }
         } finally {
             engine.shutdown();
         }

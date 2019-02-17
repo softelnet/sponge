@@ -31,10 +31,8 @@ import javax.script.ScriptEngineManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.python.core.Py;
-import org.python.core.PyBaseException;
 import org.python.core.PyException;
 import org.python.core.PyObject;
-import org.python.core.PyString;
 import org.python.core.PySystemState;
 import org.python.core.PyType;
 import org.python.jsr223.PyScriptEngineScope;
@@ -196,17 +194,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     public String getSpecificExceptionMessage(Throwable e) {
         // Jython exception message may be null.
         if (e.getMessage() == null && e instanceof PyException) {
-            PyObject value = ((PyException) e).value;
-            if (value != null && value instanceof PyBaseException) {
-                PyObject pyMessage = ((PyBaseException) value).getMessage();
-                if (pyMessage != null && pyMessage instanceof PyString) {
-                    String message = ((PyString) pyMessage).getString();
-
-                    if (!StringUtils.isEmpty(message)) {
-                        return message;
-                    }
-                }
-            }
+            return e.toString();
         }
 
         return null;

@@ -13,7 +13,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed `ArgProvidedMeta.depends` to `ArgProvidedMeta.dependencies`.
 * Added support for categories. Processors may be assigned to registered categories.
 * Added new types: `DynamicType`, `TypeType`, `DateTimeType`.
-* Added `ArgMeta.withFeatures` and `ArgMeta.withFeature`,
+* Added `ArgMeta.withFeatures` and `ArgMeta.withFeature`.
 * Fixed the bug that caused an error when sending an empty body in the REST API request.
 
 [discrete]

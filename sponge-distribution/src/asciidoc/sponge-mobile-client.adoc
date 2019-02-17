@@ -4,6 +4,8 @@
 == Introduction
 The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} REST API.
 
+One of many use cases of the application is to connect to IoT devices that have {sponge} installed and execute available actions. Different types of such devices provide different sets of actions that are specific to a device features. For example one device could have a camera and provide an action to take a picture. Another device could have a temperature sensor and provide its readings.
+
 NOTE: The application is currently under development. It will be released as an open source. The beta version will be released in the first quarter of 2019.
 
 == Features

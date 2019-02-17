@@ -7,10 +7,12 @@ from java.lang import System
 from java.util.concurrent.atomic import AtomicInteger
 from java.util.concurrent import CopyOnWriteArrayList
 from java.util.function import Predicate
+import re
 
 def onInit():
     global LIBRARY
     LIBRARY = createLibrary()
+    sponge.setVariable("booksOrder", "author")
 
 class ChangedButtonLabelsForm(Action):
     def onConfigure(self):
@@ -77,6 +79,8 @@ class Library:
         self.currentId = AtomicInteger(0)
 
     def addBook(self, author, title):
+        if list(filter(lambda book: book.author == author and book.title == title, self.books)):
+            raise Exception("This book has been added to the library")
         self.books.add(Book(self.currentId.incrementAndGet(), author, title))
 
     def getBook(self, bookId):
@@ -89,6 +93,10 @@ class Library:
 
     def removeBook(self, bookId):
         self.books.removeIf(PyPredicate(lambda book: book.id == bookId))
+
+    def findBooks(self, searchString):
+        return list(filter(lambda book: searchString is None or re.search(searchString.upper(), book.author.upper())\
+                            or re.search(searchString.upper(), book.title.upper()), self.books))
 
 def createLibrary():
     library = Library()
@@ -115,21 +123,27 @@ class ProvidedListArgForm(Action):
     def onConfigure(self):
         self.withLabel("Library")
         self.withArgs([
+            ArgMeta("search", StringType().withNullable()).withLabel("Search"),
+            ArgMeta("order", StringType()).withLabel("Sort by").withProvided(ArgProvidedMeta().withValue().withValueSet()),
             # Provided with overwrite to allow GUI refresh.
             ArgMeta("books", ListType(AnnotatedType(IntegerType())).withFeatures({
-                "createAction":"CreateBook", "updateAction":"UpdateBook", "deleteAction":"DeleteBook",
-                "createLabel":"Add", "updateLabel":"Edit", "deleteLabel":"Remove",
-            })).withLabel("Books").withProvided(ArgProvidedMeta().withValue().withOverwrite())
+                "createAction":"CreateBook", "readAction":"ReadBook", "updateAction":"UpdateBook", "deleteAction":"DeleteBook",
+                "createLabel":"Add", "readLabel":"View", "updateLabel":"Edit", "deleteLabel":"Remove",
+            })).withLabel("Books").withProvided(ArgProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"]))
         ]).withNoResult()
         self.withFeatures({
             "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
-    def onCall(self, books):
+    def onCall(self, search, order, books):
         return None
     def onProvideArgs(self, names, current, provided):
+        if "order" in names:
+            provided["order"] = ArgProvidedValue().withValue(sponge.getVariable("booksOrder")).withAnnotatedValueSet([
+                AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
         if "books" in names:
             provided["books"] = ArgProvidedValue().withValue(
-                map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)), LIBRARY.books))
+                map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)),
+                    sorted(LIBRARY.findBooks(current["search"]), key = lambda book: book.author if current["order"] == "author" else book.title)))
 
 class CreateBook(Action):
     def onConfigure(self):
@@ -143,24 +157,38 @@ class CreateBook(Action):
     def onCall(self, author, title):
         LIBRARY.addBook(author, title)
 
-class UpdateBook(Action):
+class AbstractReadUpdateBook(Action):
     def onConfigure(self):
-        self.withLabel("Modify a book")
         self.withArgs([
             ArgMeta("bookId", AnnotatedType(IntegerType())).withFeature("visible", False),
             ArgMeta("author", StringType()).withLabel("Author").withProvided(ArgProvidedMeta().withValue().withDependency("bookId")),
             ArgMeta("title", StringType()).withLabel("Title").withProvided(ArgProvidedMeta().withValue().withDependency("bookId"))
         ]).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel"})
-
-    def onCall(self, bookId, author, title):
-        LIBRARY.updateBook(bookId.value, author, title)
+        self.withFeatures({"visible":False, "clearLabel":None})
 
     def onProvideArgs(self, names, current, provided):
         if "author" or "title" in names:
             book = LIBRARY.getBook(current["bookId"].value)
             provided["author"] = ArgProvidedValue().withValue(book.author)
             provided["title"] = ArgProvidedValue().withValue(book.title)
+
+class ReadBook(AbstractReadUpdateBook):
+    def onConfigure(self):
+        AbstractReadUpdateBook.onConfigure(self)
+        self.withLabel("Read a book")
+        self.withFeatures({"callLabel":None, "cancelLabel":"Close"})
+
+    def onCall(self, bookId, author, title):
+        pass
+
+class UpdateBook(AbstractReadUpdateBook):
+    def onConfigure(self):
+        AbstractReadUpdateBook.onConfigure(self)
+        self.withLabel("Modify a book")
+        self.withFeatures({"callLabel":"Save", "cancelLabel":"Cancel"})
+
+    def onCall(self, bookId, author, title):
+        LIBRARY.updateBook(bookId.value, author, title)
 
 class DeleteBook(Action):
     def onConfigure(self):

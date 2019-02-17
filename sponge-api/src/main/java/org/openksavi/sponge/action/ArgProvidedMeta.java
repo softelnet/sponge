@@ -56,13 +56,13 @@ public class ArgProvidedMeta {
         return this;
     }
 
-    public ArgProvidedMeta withDependcies(List<String> dependencies) {
+    public ArgProvidedMeta withDependencies(List<String> dependencies) {
         this.dependencies.addAll(dependencies);
         return this;
     }
 
     public ArgProvidedMeta withDependency(String dependency) {
-        return withDependcies(Arrays.asList(dependency));
+        return withDependencies(Arrays.asList(dependency));
     }
 
     public ArgProvidedMeta withReadOnly() {
