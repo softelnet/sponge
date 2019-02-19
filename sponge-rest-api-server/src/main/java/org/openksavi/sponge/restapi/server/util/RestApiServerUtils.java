@@ -90,7 +90,7 @@ public abstract class RestApiServerUtils {
             Object finalArg = jsonArg;
             // Unmarshal only those who have metadata. Others are returned as raw values.
             if (finalArg != null && index < actionAdapter.getMeta().getArgsMeta().size()) {
-                ArgMeta<?> argMeta = actionAdapter.getMeta().getArgsMeta().get(index);
+                ArgMeta argMeta = actionAdapter.getMeta().getArgsMeta().get(index);
                 if (argMeta != null && argMeta.getType() != null) {
                     try {
                         finalArg = typeConverter.unmarshal(argMeta.getType(), finalArg);
@@ -122,7 +122,7 @@ public abstract class RestApiServerUtils {
             Map<String, ArgProvidedValue<?>> argValues) {
 
         argValues.forEach((argName, argValue) -> {
-            ArgMeta<?> argMeta = actionAdapter.getMeta().getArgMeta(argName);
+            ArgMeta argMeta = actionAdapter.getMeta().getArgMeta(argName);
             ((ArgProvidedValue) argValue).setValue(typeConverter.marshal(argMeta.getType(), argValue.getValue()));
 
             if (argValue.getAnnotatedValueSet() != null) {

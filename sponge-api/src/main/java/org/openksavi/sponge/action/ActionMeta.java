@@ -30,21 +30,21 @@ public interface ActionMeta extends ProcessorMeta {
      *
      * @return the arguments metadata.
      */
-    List<ArgMeta<?>> getArgsMeta();
+    List<ArgMeta> getArgsMeta();
 
     /**
      * Sets the (optional) arguments metadata.
      *
      * @param argsMeta the arguments metadata.
      */
-    void setArgsMeta(List<ArgMeta<?>> argsMeta);
+    void setArgsMeta(List<ArgMeta> argsMeta);
 
     /**
      * Adds the (optional) arguments metadata.
      *
      * @param argsMeta the arguments metadata.
      */
-    void addArgsMeta(List<ArgMeta<?>> argsMeta);
+    void addArgsMeta(List<ArgMeta> argsMeta);
 
     /**
      * Returns the argument metadata. Throws exception if not found.
@@ -52,7 +52,7 @@ public interface ActionMeta extends ProcessorMeta {
      * @param name the argument name.
      * @return the argument metadata.
      */
-    ArgMeta<?> getArgMeta(String name);
+    ArgMeta getArgMeta(String name);
 
     /**
      * Returns the result metadata or {@code null} in not specified.

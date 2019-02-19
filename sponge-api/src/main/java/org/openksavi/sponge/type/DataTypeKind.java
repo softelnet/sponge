@@ -32,6 +32,7 @@ public enum DataTypeKind {
     MAP(MapType.class),
     NUMBER(NumberType.class),
     OBJECT(ObjectType.class),
+    RECORD(RecordType.class),
     STRING(StringType.class),
     TYPE(TypeType.class),
     VOID(VoidType.class);
@@ -57,6 +58,8 @@ public enum DataTypeKind {
     public static final String CODE_NUMBER = "NUMBER";
 
     public static final String CODE_OBJECT = "OBJECT";
+
+    public static final String CODE_RECORD = "RECORD";
 
     public static final String CODE_STRING = "STRING";
 

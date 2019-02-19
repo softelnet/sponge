@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.model;
 
+import java.util.List;
 import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
@@ -42,11 +43,13 @@ public class RestActionArgMeta {
 
     private Map<String, Object> features;
 
+    private List<RestActionArgMeta> subArgs;
+
     public RestActionArgMeta() {
     }
 
     public RestActionArgMeta(String name, DataType type, String label, String description, boolean optional, ArgProvidedMeta provided,
-            Map<String, Object> features) {
+            Map<String, Object> features, List<RestActionArgMeta> subArgs) {
         this.name = name;
         this.type = type;
         this.label = label;
@@ -54,6 +57,7 @@ public class RestActionArgMeta {
         this.optional = optional;
         this.provided = provided;
         this.features = features;
+        this.subArgs = subArgs;
     }
 
     @ApiModelProperty(value = "The action argument name", required = true)
@@ -117,5 +121,14 @@ public class RestActionArgMeta {
 
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
+    }
+
+    @ApiModelProperty(value = "The sub-arguments metadata", required = false)
+    public List<RestActionArgMeta> getSubArgs() {
+        return subArgs;
+    }
+
+    public void setSubArgs(List<RestActionArgMeta> subArgs) {
+        this.subArgs = subArgs;
     }
 }

@@ -138,6 +138,18 @@ class SetActuator(Action):
         if "actuator3" in names:
             provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
 
+class SetActuatorNotLimitedValueSet(Action):
+    def onConfigure(self):
+        self.withLabel("Set actuator not limited value set")
+        self.withArgs([
+            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet(ValueSetMeta().withNotLimited())),
+        ]).withNoResult()
+    def onCall(self, actuator1):
+        pass
+    def onProvideArgs(self, names, current, provided):
+        if "actuator1" in names:
+            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+
 class SetActuatorDepends(Action):
     def onConfigure(self):
         self.withLabel("Set actuator with depends").withDescription("Sets the actuator state.")
@@ -209,6 +221,25 @@ class DateTimeAction(Action):
         return [DynamicValue(dateTime, self.meta.argsMeta[0].type), DynamicValue(dateTimeZone, self.meta.argsMeta[1].type),
                 DynamicValue(date, self.meta.argsMeta[2].type), DynamicValue(time, self.meta.argsMeta[3].type),
                 DynamicValue(instant, self.meta.argsMeta[4].type)]
+
+def createBookType():
+    return RecordType("Book", [
+                RecordTypeField("id", IntegerType().withNullable()).withLabel("Identifier"),
+                RecordTypeField("author", StringType()).withLabel("Author"),
+                RecordTypeField("title", StringType()).withLabel("Title"),
+            ])
+
+class RecordAsResultAction(Action):
+    def onConfigure(self):
+        self.withArg(ArgMeta("bookId", IntegerType())).withResult(ResultMeta(createBookType().withNullable()))
+    def onCall(self, bookId):
+        return {"id":bookId, "author":"James Joyce", "title":"Ulysses"}
+
+class RecordAsArgAction(Action):
+    def onConfigure(self):
+        self.withArg(ArgMeta("book", createBookType())).withResult(ResultMeta(IntegerType()))
+    def onCall(self, book):
+        return book["id"]
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

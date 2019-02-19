@@ -65,16 +65,16 @@ public abstract class JAction extends BaseAction {
     }
 
     @Override
-    public final JAction withArgs(List<ArgMeta<?>> argsMeta) {
+    public final JAction withArgs(List<ArgMeta> argsMeta) {
         return (JAction) super.withArgs(argsMeta);
     }
 
-    public final JAction withArgs(ArgMeta<?>... argsMeta) {
+    public final JAction withArgs(ArgMeta... argsMeta) {
         return withArgs(Arrays.asList(argsMeta));
     }
 
     @Override
-    public final JAction withArg(ArgMeta<?> argMeta) {
+    public final JAction withArg(ArgMeta argMeta) {
         return (JAction) super.withArg(argMeta);
     }
 

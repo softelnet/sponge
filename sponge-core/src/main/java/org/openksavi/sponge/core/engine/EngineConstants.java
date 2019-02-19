@@ -42,6 +42,8 @@ public final class EngineConstants {
 
     public static final String EVENT_NAME_RESERVED_CHARS = ":";
 
+    public static final String ACTION_SUB_ARG_SEPARATOR = ".";
+
     private EngineConstants() {
         //
     }

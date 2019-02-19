@@ -34,6 +34,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -68,6 +69,7 @@ import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.ObjectType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
@@ -100,7 +102,7 @@ public class CoreActionsTest {
             assertEquals("Echo Action", upperActionAdapter.getMeta().getLabel());
             assertEquals("Returns the upper case string", upperActionAdapter.getMeta().getDescription());
 
-            List<ArgMeta<?>> argMeta = upperActionAdapter.getMeta().getArgsMeta();
+            List<ArgMeta> argMeta = upperActionAdapter.getMeta().getArgsMeta();
             assertEquals(1, argMeta.size());
             assertEquals("text", argMeta.get(0).getName());
             assertEquals(DataTypeKind.STRING, argMeta.get(0).getType().getKind());
@@ -148,7 +150,7 @@ public class CoreActionsTest {
             assertEquals("Multiple arguments action", actionMeta.getLabel());
             assertEquals("Multiple arguments action.", actionMeta.getDescription());
 
-            List<ArgMeta<?>> argMeta = actionMeta.getArgsMeta();
+            List<ArgMeta> argMeta = actionMeta.getArgsMeta();
             assertEquals(11, argMeta.size());
 
             assertEquals("stringArg", argMeta.get(0).getName());
@@ -340,7 +342,7 @@ public class CoreActionsTest {
             String actionName = "OptionalArgAction";
             ActionAdapter actionAdapter = engine.getActionManager().getActionAdapter(actionName);
 
-            List<ArgMeta<?>> argMeta = actionAdapter.getMeta().getArgsMeta();
+            List<ArgMeta> argMeta = actionAdapter.getMeta().getArgsMeta();
             assertEquals(2, argMeta.size());
             assertEquals("mandatoryText", argMeta.get(0).getName());
             assertEquals(DataTypeKind.STRING, argMeta.get(0).getType().getKind());
@@ -367,22 +369,22 @@ public class CoreActionsTest {
 
         try {
             ActionMeta actionMeta = engine.getActionMeta("SetActuator");
-            List<ArgMeta<?>> argsMeta = actionMeta.getArgsMeta();
+            List<ArgMeta> argsMeta = actionMeta.getArgsMeta();
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
             assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
             assertFalse(argsMeta.get(0).getProvided().isReadOnly());
             assertNotNull(argsMeta.get(1).getProvided());
             assertTrue(argsMeta.get(1).getProvided().isValue());
-            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertFalse(argsMeta.get(1).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(1).getProvided().getDependencies().size());
             assertFalse(argsMeta.get(1).getProvided().isReadOnly());
             assertNotNull(argsMeta.get(2).getProvided());
             assertTrue(argsMeta.get(2).getProvided().isValue());
-            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertFalse(argsMeta.get(2).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(2).getProvided().getDependencies().size());
             assertTrue(argsMeta.get(2).getProvided().isReadOnly());
             assertNull(argsMeta.get(3).getProvided());
@@ -439,12 +441,13 @@ public class CoreActionsTest {
 
         try {
             ActionMeta actionMeta = engine.getActionMeta("SetActuatorAnnotatedValueSet");
-            List<ArgMeta<?>> argsMeta = actionMeta.getArgsMeta();
+            List<ArgMeta> argsMeta = actionMeta.getArgsMeta();
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
             assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
+            assertTrue(argsMeta.get(0).getProvided().getValueSet().isLimited());
             assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
             assertFalse(argsMeta.get(0).getProvided().isReadOnly());
 
@@ -482,6 +485,27 @@ public class CoreActionsTest {
         }
     }
 
+    @Test
+    public void testActionsProvideArgsValueSetNotLimited() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args.py").build();
+        engine.startup();
+
+        try {
+            ActionMeta actionMeta = engine.getActionMeta("SetActuatorNotLimitedValueSet");
+            List<ArgMeta> argsMeta = actionMeta.getArgsMeta();
+
+            assertNotNull(argsMeta.get(0).getProvided());
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
+            assertFalse(argsMeta.get(0).getProvided().getValueSet().isLimited());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testActionsProvideArgsDepends() {
@@ -491,26 +515,26 @@ public class CoreActionsTest {
 
         try {
             ActionMeta actionMeta = engine.getActionMeta("SetActuator");
-            List<ArgMeta<?>> argsMeta = actionMeta.getArgsMeta();
+            List<ArgMeta> argsMeta = actionMeta.getArgsMeta();
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertNotNull(argsMeta.get(0).getProvided());
             assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
             assertNotNull(argsMeta.get(1).getProvided());
             assertTrue(argsMeta.get(1).getProvided().isValue());
-            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertFalse(argsMeta.get(1).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(1).getProvided().getDependencies().size());
             assertNotNull(argsMeta.get(2).getProvided());
             assertTrue(argsMeta.get(2).getProvided().isValue());
-            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertFalse(argsMeta.get(2).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(2).getProvided().getDependencies().size());
             assertTrue(argsMeta.get(2).getType().isNullable());
             assertNull(argsMeta.get(3).getProvided());
             assertNotNull(argsMeta.get(4).getProvided());
             assertTrue(argsMeta.get(4).getProvided().isValue());
-            assertTrue(argsMeta.get(4).getProvided().isValueSet());
+            assertTrue(argsMeta.get(4).getProvided().hasValueSet());
             assertEquals(1, argsMeta.get(4).getProvided().getDependencies().size());
             assertEquals("actuator1", argsMeta.get(4).getProvided().getDependencies().get(0));
 
@@ -602,7 +626,7 @@ public class CoreActionsTest {
         try {
             ActionMeta actionMeta = engine.getActionMeta("ProvideByAction");
             assertEquals(1, actionMeta.getArgsMeta().size());
-            ArgMeta<StringType> sensorNameArgMeta = (ArgMeta<StringType>) actionMeta.getArgsMeta().get(0);
+            ArgMeta sensorNameArgMeta = actionMeta.getArgsMeta().get(0);
             assertTrue(sensorNameArgMeta.getType() instanceof StringType);
             List<String> availableSensors =
                     (List<String>) engine.getOperations().provideActionArgs(actionMeta.getName()).get("sensorName").getValueSet();
@@ -651,7 +675,7 @@ public class CoreActionsTest {
         try {
             ActionMeta actionMeta = engine.getActionMeta("ProvideArgNoOverwrite");
             assertEquals(1, actionMeta.getArgsMeta().size());
-            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionMeta.getArgsMeta().get(0);
+            ArgMeta argMeta = actionMeta.getArgsMeta().get(0);
             assertFalse(argMeta.getProvided().isOverwrite());
             ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName()).get("value");
             String providedValue = (String) argValue.getValue();
@@ -683,7 +707,7 @@ public class CoreActionsTest {
         try {
             ActionMeta actionMeta = engine.getActionMeta("ProvideArgOverwrite");
             assertEquals(1, actionMeta.getArgsMeta().size());
-            ArgMeta<StringType> argMeta = (ArgMeta<StringType>) actionMeta.getArgsMeta().get(0);
+            ArgMeta argMeta = actionMeta.getArgsMeta().get(0);
             assertTrue(argMeta.getProvided().isOverwrite());
             ArgProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName()).get("value");
             String providedValue = (String) argValue.getValue();
@@ -955,7 +979,7 @@ public class CoreActionsTest {
             assertEquals("UpperEchoAction", actionMeta.getName());
             assertEquals("Echo Action", actionMeta.getLabel());
             assertEquals("Returns the upper case string", actionMeta.getDescription());
-            ArgMeta<?> argMeta = actionMeta.getArgsMeta().get(0);
+            ArgMeta argMeta = actionMeta.getArgsMeta().get(0);
             assertEquals(DataTypeKind.STRING, argMeta.getType().getKind());
 
             assertEquals("Echo Action returns: TEXT",
@@ -978,13 +1002,113 @@ public class CoreActionsTest {
             assertEquals("UpperAction", actionMeta.getName());
             assertEquals("Echo Action", actionMeta.getLabel());
             assertEquals("Returns the upper case string", actionMeta.getDescription());
-            ArgMeta<?> argMeta = actionMeta.getArgsMeta().get(0);
+            ArgMeta argMeta = actionMeta.getArgsMeta().get(0);
             assertEquals(DataTypeKind.STRING, argMeta.getType().getKind());
 
             assertEquals("Echo Action returns: TEXT",
                     engine.getOperations().call(String.class, actionMeta.getName(), Arrays.asList("Text")));
 
             assertNull(engine.getActionManager().getActionAdapter("UpperEchoChangedNameAction"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @Test
+    public void testActionsMetadataRecordType() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_record.py").build();
+        engine.startup();
+
+        try {
+            ActionMeta actionMeta = engine.getActionMeta("RecordAsResultAction");
+            RecordType recordType = (RecordType) actionMeta.getResultMeta().getType();
+            assertEquals(DataTypeKind.RECORD, recordType.getKind());
+            assertEquals("Book", recordType.getName());
+            assertEquals(3, recordType.getFields().size());
+            assertEquals("id", recordType.getFields().get(0).getName());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getType().getKind());
+
+            Map<String, Object> book1 = engine.getOperations().call(Map.class, actionMeta.getName(), Arrays.asList(1));
+            assertEquals(3, book1.size());
+            assertEquals(1, book1.get("id"));
+            assertEquals("James Joyce", book1.get("author"));
+            assertEquals("Ulysses", book1.get("title"));
+
+            actionMeta = engine.getActionMeta("RecordAsArgAction");
+            recordType = (RecordType) actionMeta.getArgsMeta().get(0).getType();
+            assertEquals(DataTypeKind.RECORD, recordType.getKind());
+            assertEquals(3, recordType.getFields().size());
+            assertEquals("id", recordType.getFields().get(0).getName());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getType().getKind());
+
+            Map<String, Object> book2 =
+                    SpongeUtils.immutableMapOf("author", "Arthur Conan Doyle", "title", "Adventures of Sherlock Holmes");
+
+            engine.getOperations().call("RecordAsArgAction", Arrays.asList(book2));
+
+            Map<String, Object> book3 = engine.getOperations().call(Map.class, "RecordAsResultAction", Arrays.asList(1));
+            assertEquals(3, book3.size());
+            assertEquals(1, book3.get("id"));
+            assertEquals(book2.get("author"), book3.get("author"));
+            assertEquals(book2.get("title"), book3.get("title"));
+
+            assertNull(engine.getOperations().call(Map.class, "RecordAsResultAction", Arrays.asList(5)));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Test
+    public void testActionsMetadataRecordTypeSubArgs() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_record_subargs.py").build();
+        engine.startup();
+
+        try {
+            ActionMeta actionMeta = engine.getActionMeta("UpdateBook");
+            ArgMeta argMeta = actionMeta.getArgsMeta().get(0);
+            RecordType recordType = (RecordType) ((AnnotatedType) argMeta.getType()).getValueType();
+
+            assertEquals(3, argMeta.getSubArgs().size());
+
+            ArgMeta bookIdArgMeta = argMeta.getSubArgs().get(0);
+            assertEquals(DataTypeKind.INTEGER, bookIdArgMeta.getType().getKind());
+            assertEquals(recordType.getFields().get(0).getName(), bookIdArgMeta.getName());
+
+            ArgMeta bookAuthorArgMeta = argMeta.getSubArgs().get(1);
+            assertEquals(DataTypeKind.STRING, bookAuthorArgMeta.getType().getKind());
+            assertEquals(recordType.getFields().get(1).getName(), bookAuthorArgMeta.getName());
+
+            ArgMeta bookTitleArgMeta = argMeta.getSubArgs().get(2);
+            assertEquals(DataTypeKind.STRING, bookTitleArgMeta.getType().getKind());
+            assertEquals(recordType.getFields().get(2).getName(), bookTitleArgMeta.getName());
+
+            Map<String, Object> book =
+                    new LinkedHashMap<>(SpongeUtils.immutableMapOf("id", 1, "author", "James Joyce", "title", "Ulysses"));
+            Map<String, ArgProvidedValue<?>> provideActionArgs = engine.getOperations().provideActionArgs("UpdateBook",
+                    Arrays.asList("book", "book.author"), SpongeUtils.immutableMapOf("book.id", 5));
+            List authorValueSet = provideActionArgs.get("book.author").getValueSet();
+            assertEquals("James Joyce", authorValueSet.get(0));
+            assertEquals("Arthur Conan Doyle", authorValueSet.get(1));
+
+            Map<String, Object> providedBook = ((AnnotatedValue<Map<String, Object>>) provideActionArgs.get("book").getValue()).getValue();
+            assertEquals(5, providedBook.get("id"));
+            assertEquals("James Joyce", providedBook.get("author"));
+            assertEquals("Ulysses", providedBook.get("title"));
+
+            book.put("author", "Arthur Conan Doyle");
+            engine.getOperations().call("UpdateBook", Arrays.asList(book));
 
             assertFalse(engine.isError());
         } finally {

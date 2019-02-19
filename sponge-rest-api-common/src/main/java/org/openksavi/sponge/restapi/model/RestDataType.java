@@ -32,6 +32,7 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
@@ -44,7 +45,8 @@ import org.openksavi.sponge.type.VoidType;
         @Type(value = DynamicType.class, name = DataTypeKind.CODE_DYNAMIC),
         @Type(value = IntegerType.class, name = DataTypeKind.CODE_INTEGER), @Type(value = ListType.class, name = DataTypeKind.CODE_LIST),
         @Type(value = MapType.class, name = DataTypeKind.CODE_MAP), @Type(value = NumberType.class, name = DataTypeKind.CODE_NUMBER),
-        @Type(value = ObjectType.class, name = DataTypeKind.CODE_OBJECT), @Type(value = StringType.class, name = DataTypeKind.CODE_STRING),
-        @Type(value = TypeType.class, name = DataTypeKind.CODE_TYPE), @Type(value = VoidType.class, name = DataTypeKind.CODE_VOID) })
+        @Type(value = ObjectType.class, name = DataTypeKind.CODE_OBJECT), @Type(value = RecordType.class, name = DataTypeKind.CODE_RECORD),
+        @Type(value = StringType.class, name = DataTypeKind.CODE_STRING), @Type(value = TypeType.class, name = DataTypeKind.CODE_TYPE),
+        @Type(value = VoidType.class, name = DataTypeKind.CODE_VOID) })
 public abstract class RestDataType {
 }

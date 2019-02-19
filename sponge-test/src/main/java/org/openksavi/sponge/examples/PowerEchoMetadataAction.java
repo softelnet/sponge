@@ -29,8 +29,8 @@ public class PowerEchoMetadataAction extends JAction {
     @Override
     public void onConfigure() {
         withFeatures(SpongeUtils.immutableMapOf("visibility", true));
-        withArgs(new ArgMeta<>("value", new NumberType()).withLabel("Argument 1"),
-                new ArgMeta<>("text", new StringType()).withLabel("Argument 2"));
+        withArgs(new ArgMeta("value", new NumberType()).withLabel("Argument 1"),
+                new ArgMeta("text", new StringType()).withLabel("Argument 2"));
         withResult(new ResultMeta<>(new AnyType()));
     }
 

@@ -16,22 +16,27 @@
 
 package org.openksavi.sponge.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.DataType;
 
 /**
  * An action argument metadata.
  */
 @SuppressWarnings("rawtypes")
-public class ArgMeta<T extends DataType> {
+public class ArgMeta implements Cloneable {
 
     /** The argument name. */
     private String name;
 
     /** The argument data type. */
-    private T type;
+    private DataType type;
 
     /** The argument label. */
     private String label;
@@ -48,39 +53,55 @@ public class ArgMeta<T extends DataType> {
     /** The features. */
     private Map<String, Object> features = new LinkedHashMap<>();
 
-    public ArgMeta(String name, T type) {
+    /** The sub-arguments metadata. Defaults to an empty list. */
+    private List<ArgMeta> subArgs = new ArrayList<>();
+
+    public ArgMeta(String name, DataType type) {
         this.name = name;
         this.type = type;
     }
 
-    public ArgMeta<T> withLabel(String label) {
+    public ArgMeta(String name) {
+        this(name, new AnyType());
+    }
+
+    public ArgMeta withLabel(String label) {
         this.label = label;
         return this;
     }
 
-    public ArgMeta<T> withDescription(String description) {
+    public ArgMeta withDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public ArgMeta<T> withOptional() {
-        this.optional = true;
+    public ArgMeta withOptional() {
+        optional = true;
         return this;
     }
 
-    public ArgMeta<T> withProvided(ArgProvidedMeta provided) {
+    public ArgMeta withProvided(ArgProvidedMeta provided) {
         this.provided = provided;
         return this;
     }
 
-    public ArgMeta<T> withFeatures(Map<String, Object> features) {
+    public ArgMeta withFeatures(Map<String, Object> features) {
         getFeatures().putAll(features);
         return this;
     }
 
-    public ArgMeta<T> withFeature(String name, Object value) {
+    public ArgMeta withFeature(String name, Object value) {
         getFeatures().put(name, value);
         return this;
+    }
+
+    public ArgMeta withSubArgs(List<ArgMeta> subArgs) {
+        this.subArgs.addAll(subArgs);
+        return this;
+    }
+
+    public ArgMeta withSubArg(ArgMeta subArg) {
+        return withSubArgs(Arrays.asList(subArg));
     }
 
     public String getName() {
@@ -91,11 +112,11 @@ public class ArgMeta<T extends DataType> {
         this.name = name;
     }
 
-    public T getType() {
+    public DataType getType() {
         return type;
     }
 
-    public void setType(T type) {
+    public void setType(DataType type) {
         this.type = type;
     }
 
@@ -137,5 +158,22 @@ public class ArgMeta<T extends DataType> {
 
     public void setFeatures(Map<String, Object> features) {
         this.features = new LinkedHashMap<>(features);
+    }
+
+    public List<ArgMeta> getSubArgs() {
+        return subArgs;
+    }
+
+    public void setSubArgs(List<ArgMeta> subArgs) {
+        this.subArgs = new ArrayList<>(subArgs);
+    }
+
+    @Override
+    public ArgMeta clone() {
+        try {
+            return (ArgMeta) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new SpongeException(e);
+        }
     }
 }

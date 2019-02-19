@@ -104,6 +104,7 @@ import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.DynamicType;
 import org.openksavi.sponge.type.IntegerType;
@@ -111,6 +112,7 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
@@ -133,10 +135,14 @@ public abstract class SpongeUtils {
 
     public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
 
+    protected SpongeUtils() {
+        //
+    }
+
     @SuppressWarnings("rawtypes")
     private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnnotatedType.class, AnyType.class,
             BinaryType.class, BooleanType.class, DateTimeType.class, DynamicType.class, IntegerType.class, ListType.class, MapType.class,
-            NumberType.class, ObjectType.class, StringType.class, TypeType.class, VoidType.class);
+            NumberType.class, ObjectType.class, RecordType.class, StringType.class, TypeType.class, VoidType.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {
@@ -618,6 +624,12 @@ public abstract class SpongeUtils {
     @SuppressWarnings("rawtypes")
     public static void validateType(DataType type, String valueName) {
         switch (type.getKind()) {
+        case ANNOTATED:
+            Validate.isInstanceOf(AnnotatedType.class, type, "The type should be an instance of %s", AnnotatedType.class);
+            Validate.isTrue(((AnnotatedType) type).getValueType().getKind() != DataTypeKind.ANNOTATED, "Annotated types cannot be nested");
+            validateType(Validate.notNull(((AnnotatedType) type).getValueType(), "Annotated value type not specified in the %s", valueName),
+                    valueName);
+            break;
         case OBJECT:
             Validate.isInstanceOf(ObjectType.class, type, "The type should be an instance of %s", ObjectType.class);
             String className = ((ObjectType) type).getClassName();
@@ -633,6 +645,16 @@ public abstract class SpongeUtils {
             Validate.isInstanceOf(MapType.class, type, "The type should be an instance of %s", MapType.class);
             validateType(Validate.notNull(((MapType) type).getKeyType(), "Map key type not specified in the %s", valueName), valueName);
             validateType(Validate.notNull(((MapType) type).getValueType(), "Map value type not specified in the %s", valueName), valueName);
+            break;
+        case RECORD:
+            Validate.isInstanceOf(RecordType.class, type, "The type should be an instance of %s", RecordType.class);
+            Validate.isTrue(((RecordType) type).getFields() != null && !((RecordType) type).getFields().isEmpty(),
+                    "The record type must define fields");
+            ((RecordType) type).getFields().forEach(field -> {
+                Validate.notNull(field.getName(), "Record field name not specified in the %s", valueName);
+                Validate.notNull(field.getType(), "Record field type not specified in the %s", valueName);
+                validateType(field.getType(), valueName);
+            });
             break;
         default:
             break;
@@ -701,9 +723,5 @@ public abstract class SpongeUtils {
 
     public static <K, V> Map<K, V> createUnmodifiableMap(Map<K, V> source) {
         return source != null ? Collections.unmodifiableMap(new LinkedHashMap<>(source)) : null;
-    }
-
-    protected SpongeUtils() {
-        //
     }
 }

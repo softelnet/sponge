@@ -78,7 +78,7 @@ public class ActionsTestTemplate {
             assertEquals(1, actionMeta.getArgsMeta().size());
             assertTrue(actionMeta.getFeatures().isEmpty());
 
-            ArgMeta<?> argMeta = actionMeta.getArgsMeta().get(0);
+            ArgMeta argMeta = actionMeta.getArgsMeta().get(0);
             assertEquals("name", argMeta.getName());
             assertEquals("Your name", argMeta.getLabel());
             assertEquals("Type your name.", argMeta.getDescription());

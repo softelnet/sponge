@@ -63,6 +63,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
@@ -351,6 +352,50 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCallRecordType() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("RecordAsResultAction");
+            RecordType recordType = (RecordType) actionMeta.getResultMeta().getType();
+            assertEquals(DataTypeKind.RECORD, recordType.getKind());
+            assertEquals("Book", recordType.getName());
+            assertEquals(3, recordType.getFields().size());
+            assertEquals("id", recordType.getFields().get(0).getName());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getType().getKind());
+            assertEquals("author", recordType.getFields().get(1).getName());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getType().getKind());
+            assertEquals("title", recordType.getFields().get(2).getName());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getType().getKind());
+
+            Map<String, Object> book1 = client.call(Map.class, actionMeta.getName(), Arrays.asList(1));
+            assertEquals(3, book1.size());
+            assertEquals(1, book1.get("id"));
+            assertEquals("James Joyce", book1.get("author"));
+            assertEquals("Ulysses", book1.get("title"));
+
+            actionMeta = client.getActionMeta("RecordAsArgAction");
+            recordType = (RecordType) actionMeta.getArgsMeta().get(0).getType();
+            assertEquals(DataTypeKind.RECORD, recordType.getKind());
+            assertEquals(3, recordType.getFields().size());
+            assertEquals("id", recordType.getFields().get(0).getName());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getType().getKind());
+            assertEquals("author", recordType.getFields().get(1).getName());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getType().getKind());
+            assertEquals("title", recordType.getFields().get(2).getName());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getType().getKind());
+
+            Map<String, Object> book2 =
+                    SpongeUtils.immutableMapOf("id", 5, "author", "Arthur Conan Doyle", "title", "Adventures of Sherlock Holmes");
+
+            Number bookId = client.call(Number.class, "RecordAsArgAction", Arrays.asList(book2));
+
+            assertEquals(5, bookId.intValue());
+
+            assertFalse(engine.isError());
+        }
+    }
+
     @Test
     public void testProvideActionArgs() {
         try (SpongeRestClient client = createRestClient()) {
@@ -359,15 +404,16 @@ public abstract class BaseRestApiTestTemplate {
             List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
 
             assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
+            assertTrue(argsMeta.get(0).getProvided().getValueSet().isLimited());
             assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
             assertFalse(argsMeta.get(0).getProvided().isReadOnly());
             assertTrue(argsMeta.get(1).getProvided().isValue());
-            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertFalse(argsMeta.get(1).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(1).getProvided().getDependencies().size());
             assertFalse(argsMeta.get(1).getProvided().isReadOnly());
             assertTrue(argsMeta.get(2).getProvided().isValue());
-            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertFalse(argsMeta.get(2).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(2).getProvided().getDependencies().size());
             assertTrue(argsMeta.get(2).getProvided().isReadOnly());
             assertNull(argsMeta.get(3).getProvided());
@@ -419,6 +465,21 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
+    @Test
+    public void testProvideActionArgsNotLimitedValueSet() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "SetActuatorNotLimitedValueSet";
+
+            List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
+            assertNotNull(argsMeta.get(0).getProvided());
+            assertTrue(argsMeta.get(0).getProvided().isValue());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
+            assertFalse(argsMeta.get(0).getProvided().getValueSet().isLimited());
+
+            assertFalse(engine.isError());
+        }
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testProvideActionArgsDepends() {
@@ -432,17 +493,17 @@ public abstract class BaseRestApiTestTemplate {
             Map<String, ArgProvidedValue<?>> providedArgs;
 
             assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().isValueSet());
+            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
             assertTrue(argsMeta.get(1).getProvided().isValue());
-            assertFalse(argsMeta.get(1).getProvided().isValueSet());
+            assertFalse(argsMeta.get(1).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(1).getProvided().getDependencies().size());
             assertTrue(argsMeta.get(2).getProvided().isValue());
-            assertFalse(argsMeta.get(2).getProvided().isValueSet());
+            assertFalse(argsMeta.get(2).getProvided().hasValueSet());
             assertEquals(0, argsMeta.get(2).getProvided().getDependencies().size());
             assertNull(argsMeta.get(3).getProvided());
             assertTrue(argsMeta.get(4).getProvided().isValue());
-            assertTrue(argsMeta.get(4).getProvided().isValueSet());
+            assertTrue(argsMeta.get(4).getProvided().hasValueSet());
             assertEquals(1, argsMeta.get(4).getProvided().getDependencies().size());
             assertEquals("actuator1", argsMeta.get(4).getProvided().getDependencies().get(0));
 

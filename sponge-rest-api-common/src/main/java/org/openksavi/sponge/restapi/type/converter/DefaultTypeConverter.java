@@ -31,6 +31,7 @@ import org.openksavi.sponge.restapi.type.converter.unit.ListTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.MapTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.NumberTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
+import org.openksavi.sponge.restapi.type.converter.unit.RecordTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.StringTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.TypeTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.VoidTypeUnitConverter;
@@ -48,6 +49,7 @@ public class DefaultTypeConverter extends BaseTypeConverter {
         registerAll(Arrays.asList(new AnnotatedTypeUnitConverter(), new AnyTypeUnitConverter(), new BinaryTypeUnitConverter(),
                 new BooleanTypeUnitConverter(), new DateTimeTypeUnitConverter(), new DynamicTypeUnitConverter(),
                 new IntegerTypeUnitConverter(), new ListTypeUnitConverter(), new MapTypeUnitConverter(), new NumberTypeUnitConverter(),
-                new ObjectTypeUnitConverter(), new StringTypeUnitConverter(), new TypeTypeUnitConverter(), new VoidTypeUnitConverter()));
+                new ObjectTypeUnitConverter(), new RecordTypeUnitConverter(), new StringTypeUnitConverter(), new TypeTypeUnitConverter(),
+                new VoidTypeUnitConverter()));
     }
 }

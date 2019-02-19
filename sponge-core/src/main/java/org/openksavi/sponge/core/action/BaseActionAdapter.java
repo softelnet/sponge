@@ -23,6 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
@@ -35,6 +36,8 @@ import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
+import org.openksavi.sponge.type.AnnotatedType;
+import org.openksavi.sponge.type.RecordType;
 
 /**
  * A base action adapter.
@@ -69,8 +72,6 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     public Map<String, ArgProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
         Validate.notNull(getMeta().getArgsMeta(), "Argument metadata not defined");
 
-        Set<String> allProvidedArguments =
-                getMeta().getArgsMeta().stream().filter(BaseActionAdapter::isArgProvided).map(ArgMeta::getName).collect(Collectors.toSet());
         Set<String> finalNames = new LinkedHashSet<>();
 
         if (names != null) {
@@ -80,7 +81,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
             }
         } else {
             // Use all provided argument names.
-            finalNames.addAll(allProvidedArguments);
+            finalNames.addAll(getMeta().getArgsMeta().stream().filter(BaseActionAdapter::isArgProvided).map(ArgMeta::getName)
+                    .collect(Collectors.toSet()));
         }
 
         if (current == null) {
@@ -91,7 +93,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         getProcessor().onProvideArgs(finalNames, current, provided);
 
         provided.keySet().forEach(providedArg -> {
-            Validate.isTrue(allProvidedArguments.contains(providedArg), "The provided argument '%s' is not specified", providedArg);
+            Validate.isTrue(getMeta().getArgMeta(providedArg).getProvided() != null,
+                    "The provided argument '%s' is not configured as provided", providedArg);
         });
 
         return provided;
@@ -108,7 +111,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
         if (getMeta().getArgsMeta() != null) {
             boolean foundFirstOptionalArg = false;
-            for (ArgMeta<?> argMeta : getMeta().getArgsMeta()) {
+            for (ArgMeta argMeta : getMeta().getArgsMeta()) {
                 validateArgMeta(argMeta);
 
                 // Optional arguments may be specified only as last in the argument list.
@@ -118,13 +121,13 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 }
             }
 
-            validateArgProvided(getMeta().getArgsMeta());
+            validateArgProvided();
         }
 
         validateResultMeta(getMeta().getResultMeta());
     }
 
-    private void validateArgMeta(ArgMeta<?> argMeta) {
+    private void validateArgMeta(ArgMeta argMeta) {
         Validate.notNull(argMeta, "Null argument metadata in the '%s' action", getMeta().getName());
 
         String errorSource = String.format("argument '%s' in the action '%s'", argMeta.getName() != null ? argMeta.getName() : "unnamed",
@@ -132,25 +135,73 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         Validate.notNull(argMeta.getName(), "Null name of the %s", errorSource);
         Validate.notNull(argMeta.getType(), "Null type of the %s", errorSource);
         SpongeUtils.validateType(argMeta.getType(), errorSource);
+        validateSubArgsMeta(argMeta);
     }
 
-    private void validateArgProvided(List<ArgMeta<?>> argsMeta) {
-        Set<String> prevArgNames = new HashSet<>();
-        for (ArgMeta<?> argMeta : getMeta().getArgsMeta()) {
+    private static void validateSubArgsMeta(ArgMeta argMeta) {
+        if (argMeta.getSubArgs() != null && !argMeta.getSubArgs().isEmpty()) {
+            RecordType recordType = Validate.notNull(getRecordType(argMeta),
+                    "Sub-arguments can be specified only for record or annotated record arguments");
+
+            // Validate that all sub-arguments have names and there are no duplicates.
+            Set<String> prevSubArgNames = new HashSet<>();
+            argMeta.getSubArgs().forEach(subArgMeta -> {
+                Validate.notNull(subArgMeta.getName(), "Sub-argument metadata must have a name");
+                Validate.isTrue(!prevSubArgNames.contains(subArgMeta.getName()), "Sub-argument %s has already been specified",
+                        subArgMeta.getName());
+                prevSubArgNames.add(subArgMeta.getName());
+            });
+
+            Map<String, ArgMeta> subArgsMeta =
+                    argMeta.getSubArgs().stream().collect(Collectors.toMap(ArgMeta::getName, Function.identity()));
+            // Map<String, DataType> fieldTypes =
+            // recordType.getFields().stream().collect(Collectors.toMap(RecordTypeField::getName, RecordTypeField::getType));
+
+            // Create full list containing all from record modifying the metadata.
+            // List<ArgMeta> newSubArgs = new ArrayList<>(recordType.getFields().size());
+            argMeta.setSubArgs(recordType.getFields().stream().map(field -> {
+                ArgMeta subArgMeta = subArgsMeta.get(field.getName());
+                if (subArgMeta == null) {
+                    subArgMeta = new ArgMeta(field.getName());
+                }
+
+                return ActionUtils.mergeRecordFieldToArgMeta(subArgMeta, field);
+            }).collect(Collectors.toList()));
+
+            // Recursively validate sub-arguments.
+            argMeta.getSubArgs().forEach(subArgMeta -> validateSubArgsMeta(subArgMeta));
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected static RecordType getRecordType(ArgMeta argMeta) {
+        if (argMeta.getType() instanceof RecordType) {
+            return (RecordType) argMeta.getType();
+        }
+
+        if (argMeta.getType() instanceof AnnotatedType && ((AnnotatedType) argMeta.getType()).getValueType() instanceof RecordType) {
+            return (RecordType) ((AnnotatedType) argMeta.getType()).getValueType();
+        }
+
+        return null;
+    }
+
+    private void validateArgProvided() {
+        Map<String, ArgMeta> fullArgsMetaMap = ActionUtils.createFullActionArgsMetaMap(getMeta());
+
+        for (ArgMeta argMeta : getMeta().getArgsMeta()) {
             if (argMeta.getProvided() != null) {
                 argMeta.getProvided().getDependencies().forEach(dependsOnArg -> {
-                    Validate.isTrue(prevArgNames.contains(dependsOnArg),
-                            "The argument '%s' depends on argument '%s' that is not defined before", argMeta.getName(), dependsOnArg);
+                    Validate.isTrue(fullArgsMetaMap.containsKey(dependsOnArg),
+                            "The argument '%s' depends on argument '%s' that is not defined", argMeta.getName(), dependsOnArg);
                 });
                 Validate.isTrue(!argMeta.getProvided().isReadOnly() || argMeta.getType().isNullable(),
                         "The provided, read only argument '%s' type must be nullable", argMeta.getName());
             }
-
-            prevArgNames.add(argMeta.getName());
         }
     }
 
-    private static boolean isArgProvided(ArgMeta<?> argMeta) {
+    private static boolean isArgProvided(ArgMeta argMeta) {
         return argMeta.getProvided() != null;
     }
 

@@ -18,7 +18,7 @@ package org.openksavi.sponge.restapi.server.test;
 
 public final class RestApiTestConstants {
 
-    public static final int ADMIN_ACTIONS_COUNT = 19;
+    public static final int ADMIN_ACTIONS_COUNT = 22;
 
     public static final int ANONYMOUS_ACTIONS_COUNT = ADMIN_ACTIONS_COUNT - 1;
 

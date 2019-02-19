@@ -76,16 +76,16 @@ public abstract class KAction extends BaseAction {
     }
 
     @Override
-    public final KAction withArgs(List<ArgMeta<?>> argsMeta) {
+    public final KAction withArgs(List<ArgMeta> argsMeta) {
         return (KAction) super.withArgs(argsMeta);
     }
 
-    public final KAction withArgs(ArgMeta<?>... argsMeta) {
+    public final KAction withArgs(ArgMeta... argsMeta) {
         return withArgs(Arrays.asList(argsMeta));
     }
 
     @Override
-    public final KAction withArg(ArgMeta<?> argMeta) {
+    public final KAction withArg(ArgMeta argMeta) {
         return (KAction) super.withArg(argMeta);
     }
 

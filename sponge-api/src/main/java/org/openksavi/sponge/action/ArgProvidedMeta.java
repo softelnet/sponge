@@ -28,8 +28,8 @@ public class ArgProvidedMeta {
     /** The flag specifying if this argument value is provided. */
     private boolean value;
 
-    /** The flag specifying if this argument value set is provided. */
-    private boolean valueSet;
+    /** The metadata specifying if this argument value set is provided. Defaults to {@code null}. */
+    private ValueSetMeta valueSet;
 
     /** The list of attribute names that this provided attribute depends on. */
     private List<String> dependencies = new ArrayList<>();
@@ -52,7 +52,11 @@ public class ArgProvidedMeta {
     }
 
     public ArgProvidedMeta withValueSet() {
-        valueSet = true;
+        return withValueSet(new ValueSetMeta());
+    }
+
+    public ArgProvidedMeta withValueSet(ValueSetMeta valueSet) {
+        this.valueSet = valueSet;
         return this;
     }
 
@@ -83,12 +87,16 @@ public class ArgProvidedMeta {
         this.value = value;
     }
 
-    public boolean isValueSet() {
+    public ValueSetMeta getValueSet() {
         return valueSet;
     }
 
-    public void setValueSet(boolean valueSet) {
+    public void setValueSet(ValueSetMeta valueSet) {
         this.valueSet = valueSet;
+    }
+
+    public boolean hasValueSet() {
+        return valueSet != null;
     }
 
     public List<String> getDependencies() {

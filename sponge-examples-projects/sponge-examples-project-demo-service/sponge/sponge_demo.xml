@@ -17,8 +17,16 @@
         <knowledgeBase name="demo" label="Demo">
             <file>sponge_demo.py</file>
         </knowledgeBase>
-        <knowledgeBase name="demoForms" label="Action forms">
-            <file>sponge_demo_forms.py</file>
+        <knowledgeBase name="demoForms" label="Action forms/Base">
+            <file>sponge_demo_forms_base.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoFormsLibraryArgs" label="Action forms/Library args">
+            <file>sponge_demo_forms_library_common.py</file>
+            <file>sponge_demo_forms_library_args.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoFormsLibraryRecord" label="Action forms/Library records">
+            <file>sponge_demo_forms_library_common.py</file>
+            <file>sponge_demo_forms_library_records.py</file>
         </knowledgeBase>
         <knowledgeBase name="demoPlus" label="Demo plus">
             <file>sponge_demo_plus.py</file>

@@ -87,12 +87,12 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
         return (BaseAction) super.withCategory(category);
     }
 
-    public BaseAction withArgs(List<ArgMeta<?>> argsMeta) {
+    public BaseAction withArgs(List<ArgMeta> argsMeta) {
         getMeta().addArgsMeta(argsMeta);
         return this;
     }
 
-    public BaseAction withArg(ArgMeta<?> argMeta) {
+    public BaseAction withArg(ArgMeta argMeta) {
         return withArgs(Arrays.asList(argMeta));
     }
 

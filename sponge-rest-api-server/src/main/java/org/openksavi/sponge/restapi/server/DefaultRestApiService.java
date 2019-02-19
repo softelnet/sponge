@@ -17,6 +17,7 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -32,6 +33,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
@@ -359,10 +361,17 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<RestActionArgMeta> createActionArgMetaList(ActionMeta actionMeta) {
-        return actionMeta.getArgsMeta() != null ? actionMeta.getArgsMeta().stream()
-                .map(meta -> new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null, meta.getLabel(),
-                        meta.getDescription(), meta.isOptional(), meta.getProvided(), meta.getFeatures()))
-                .collect(Collectors.toList()) : null;
+        return actionMeta.getArgsMeta() != null
+                ? actionMeta.getArgsMeta().stream().map(meta -> createActionArgMeta(meta)).collect(Collectors.toList()) : null;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected RestActionArgMeta createActionArgMeta(ArgMeta meta) {
+        List<RestActionArgMeta> subArgs = meta.getSubArgs() != null ? (List<RestActionArgMeta>) meta.getSubArgs().stream()
+                .map(subArgMeta -> createActionArgMeta((ArgMeta) subArgMeta)).collect(Collectors.toList()) : Collections.emptyList();
+        return new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null, meta.getLabel(), meta.getDescription(),
+                meta.isOptional(), meta.getProvided(), meta.getFeatures(), subArgs);
+
     }
 
     protected RestActionResultMeta createActionResultMeta(ActionMeta actionMeta) {
