@@ -35,7 +35,7 @@ class RecordLibraryForm(Action):
         if "books" in names:
             provided["books"] = ArgProvidedValue().withValue(
                 map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)),
-                    sorted(LIBRARY.findBooks(current["search"]), key = lambda book: book.author if current["order"] == "author" else book.title)))
+                    sorted(LIBRARY.findBooks(current["search"]), key = lambda book: book.author.lower() if current["order"] == "author" else book.title.lower())))
 
 class RecordCreateBook(Action):
     def onConfigure(self):

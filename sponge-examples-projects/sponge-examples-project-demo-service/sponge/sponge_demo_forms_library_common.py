@@ -76,4 +76,4 @@ class Library:
                             or re.search(searchString.upper(), book.title.upper()), self.books))
 
     def getAuthors(self):
-        return sorted(list(map(lambda book: book.author, self.books)))
+        return sorted(list(map(lambda book: book.author, self.books)), key = lambda author: author.lower())
