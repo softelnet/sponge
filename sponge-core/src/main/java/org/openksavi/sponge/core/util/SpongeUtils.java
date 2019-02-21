@@ -651,7 +651,7 @@ public abstract class SpongeUtils {
             Validate.isTrue(((RecordType) type).getFields() != null && !((RecordType) type).getFields().isEmpty(),
                     "The record type must define fields");
             ((RecordType) type).getFields().forEach(field -> {
-                Validate.notNull(field.getName(), "Record field name not specified in the %s", valueName);
+                validateRecordFieldName(field.getName(), valueName);
                 Validate.notNull(field.getType(), "Record field type not specified in the %s", valueName);
                 validateType(field.getType(), valueName);
             });
@@ -723,5 +723,18 @@ public abstract class SpongeUtils {
 
     public static <K, V> Map<K, V> createUnmodifiableMap(Map<K, V> source) {
         return source != null ? Collections.unmodifiableMap(new LinkedHashMap<>(source)) : null;
+    }
+
+    public static void validateEventName(String name) {
+        Validate.isTrue(name != null && !name.trim().isEmpty(), "Event name must not be null or empty");
+        Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, EngineConstants.EVENT_NAME_RESERVED_CHARS),
+                "Event name must not contain whitespaces or reserved characters %s", EngineConstants.EVENT_NAME_RESERVED_CHARS);
+
+    }
+
+    public static void validateRecordFieldName(String name, String valueName) {
+        Validate.isTrue(name != null && !name.trim().isEmpty(), "Record field name not specified in the %s", valueName);
+        Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, EngineConstants.ACTION_SUB_ARG_SEPARATOR),
+                "The record field name is invalid in the %s", valueName);
     }
 }

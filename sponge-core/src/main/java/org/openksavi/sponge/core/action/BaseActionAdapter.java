@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.action;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -37,7 +38,9 @@ import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.type.AnnotatedType;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.type.RecordTypeField;
 
 /**
  * A base action adapter.
@@ -138,29 +141,34 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         validateSubArgsMeta(argMeta);
     }
 
+    @SuppressWarnings("rawtypes")
     private static void validateSubArgsMeta(ArgMeta argMeta) {
-        if (argMeta.getSubArgs() != null && !argMeta.getSubArgs().isEmpty()) {
-            RecordType recordType = Validate.notNull(getRecordType(argMeta),
-                    "Sub-arguments can be specified only for record or annotated record arguments");
+        RecordType recordType = getRecordType(argMeta);
+        // If the argument meta has the record type, validate and populate sub-argument metadata.
+        if (recordType != null) {
+            if (argMeta.getSubArgs() == null) {
+                argMeta.setSubArgs(new ArrayList<>());
+            }
 
-            // Validate that all sub-arguments have names and there are no duplicates.
+            // Validate that all sub-arguments have names corresponding to the record type fields and there are no duplicates.
+            Map<String, DataType> recordFieldTypesMap =
+                    recordType.getFields().stream().collect(Collectors.toMap(RecordTypeField::getName, RecordTypeField::getType));
             Set<String> prevSubArgNames = new HashSet<>();
             argMeta.getSubArgs().forEach(subArgMeta -> {
-                Validate.notNull(subArgMeta.getName(), "Sub-argument metadata must have a name");
-                Validate.isTrue(!prevSubArgNames.contains(subArgMeta.getName()), "Sub-argument %s has already been specified",
+                Validate.notNull(subArgMeta.getName(), "The sub-argument metadata must have a name");
+                Validate.isTrue(!prevSubArgNames.contains(subArgMeta.getName()), "The sub-argument %s has already been specified",
                         subArgMeta.getName());
+                Validate.isTrue(recordFieldTypesMap.containsKey(subArgMeta.getName()),
+                        "The sub-argument %s name must be the same as a record field name", subArgMeta.getName());
                 prevSubArgNames.add(subArgMeta.getName());
             });
 
-            Map<String, ArgMeta> subArgsMeta =
+            Map<String, ArgMeta> subArgsMetaMap =
                     argMeta.getSubArgs().stream().collect(Collectors.toMap(ArgMeta::getName, Function.identity()));
-            // Map<String, DataType> fieldTypes =
-            // recordType.getFields().stream().collect(Collectors.toMap(RecordTypeField::getName, RecordTypeField::getType));
 
-            // Create full list containing all from record modifying the metadata.
-            // List<ArgMeta> newSubArgs = new ArrayList<>(recordType.getFields().size());
+            // Create the full list containing all meta corresponding to the record fields, thus modifying the metadata.
             argMeta.setSubArgs(recordType.getFields().stream().map(field -> {
-                ArgMeta subArgMeta = subArgsMeta.get(field.getName());
+                ArgMeta subArgMeta = subArgsMetaMap.get(field.getName());
                 if (subArgMeta == null) {
                     subArgMeta = new ArgMeta(field.getName());
                 }
@@ -170,6 +178,9 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
             // Recursively validate sub-arguments.
             argMeta.getSubArgs().forEach(subArgMeta -> validateSubArgsMeta(subArgMeta));
+        } else {
+            Validate.notNull(argMeta.getSubArgs() == null || argMeta.getSubArgs().isEmpty(),
+                    "Sub-arguments can be specified only for record or annotated record arguments");
         }
     }
 

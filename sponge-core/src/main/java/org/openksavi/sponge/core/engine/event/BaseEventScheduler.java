@@ -19,12 +19,11 @@ package org.openksavi.sponge.core.engine.event;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.core.engine.BaseEngineModule;
-import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.event.AtomicLongEventIdGenerator;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.event.EventScheduler;
@@ -89,11 +88,6 @@ public abstract class BaseEventScheduler extends BaseEngineModule implements Eve
 
     protected void validateEvent(Event event) {
         Validate.notNull(event, "Event must not be null");
-        Validate.isTrue(event.getName() != null && !event.getName().trim().isEmpty(), "Event name must not be null or empty");
-
-        Validate.isTrue(
-                !StringUtils.containsWhitespace(event.getName())
-                        && !StringUtils.containsAny(event.getName(), EngineConstants.EVENT_NAME_RESERVED_CHARS),
-                "Event name must not contain whitespaces or reserved characters %s", EngineConstants.EVENT_NAME_RESERVED_CHARS);
+        SpongeUtils.validateEventName(event.getName());
     }
 }

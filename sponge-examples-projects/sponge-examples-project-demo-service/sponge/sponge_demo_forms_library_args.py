@@ -27,7 +27,7 @@ class ArgLibraryForm(Action):
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
         if "books" in names:
             provided["books"] = ArgProvidedValue().withValue(
-                map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)),
+                map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)).withDescription("Sample description (ID: " + str(book.id) +")"),
                     sorted(LIBRARY.findBooks(current["search"]), key = lambda book: book.author.lower() if current["order"] == "author" else book.title.lower())))
 
 class ArgCreateBook(Action):

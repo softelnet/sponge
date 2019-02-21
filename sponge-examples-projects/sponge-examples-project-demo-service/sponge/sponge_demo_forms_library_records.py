@@ -44,7 +44,7 @@ class RecordCreateBook(Action):
             ArgMeta("book", createBookRecordType()).withLabel("Book").withSubArgs([
                 ArgMeta("id").withFeature("visible", False),
                 ArgMeta("author").withProvided(ArgProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
-            ])
+            ]).withProvided(ArgProvidedMeta().withValue())
         ]).withNoResult()
         self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel"})
 
@@ -54,6 +54,9 @@ class RecordCreateBook(Action):
 
     def onProvideArgs(self, names, current, provided):
         global LIBRARY
+        if "book" in names:
+            # Create an initial, blank instance of a book and provide it to GUI.
+            provided["book"] = ArgProvidedValue().withValue({})
         if "book.author" in names:
             provided["book.author"] = ArgProvidedValue().withValueSet(LIBRARY.getAuthors())
 
@@ -63,7 +66,7 @@ class RecordAbstractReadUpdateBook(Action):
             ArgMeta("book", AnnotatedType(createBookRecordType())).withSubArgs([
                 ArgMeta("id").withFeature("visible", False),
                 ArgMeta("author").withProvided(ArgProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
-            ]).withProvided(ArgProvidedMeta().withValue().withDependency("book.id"))).withNoResult()
+            ]).withLabel("Book").withProvided(ArgProvidedMeta().withValue().withDependency("book.id"))).withNoResult()
         self.withFeatures({"visible":False, "clearLabel":None})
 
     def onProvideArgs(self, names, current, provided):
