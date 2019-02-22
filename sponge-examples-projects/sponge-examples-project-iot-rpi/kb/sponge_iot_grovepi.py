@@ -17,9 +17,9 @@ class SetGrovePiMode(Action):
         if mode not in ["auto", "manual"]:
             raise Exception("Unsupported GrovePi mode: " + mode)
         sponge.setVariable("grovePiMode", mode)
-    def onProvideArgs(self, names, current, provided):
-        if "mode" in names:
-            provided["mode"] = ArgProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").withLabel("Auto"),
+    def onProvideArgs(self, context):
+        if "mode" in context.names:
+            context.provided["mode"] = ArgProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").withLabel("Auto"),
                                                                                                           AnnotatedValue("manual").withLabel("Manual")])
 
 class ManageLcd(Action):
@@ -38,14 +38,14 @@ class ManageLcd(Action):
         ]).withNoResult()
     def onCall(self, currentText, text, color, clearText = None):
         sponge.call("SetLcd", [text, color, clearText])
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         grovePiDevice = sponge.getVariable("grovePiDevice")
-        if "currentText" in names:
-            provided["currentText"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "text" in names:
-            provided["text"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "color" in names:
-            provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
+        if "currentText" in context.names:
+            context.provided["currentText"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
+        if "text" in context.names:
+            context.provided["text"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
+        if "color" in context.names:
+            context.provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
 
 class SetLcd(Action):
     def onCall(self, text, color, clearText = None):
@@ -100,10 +100,10 @@ class ManageSensorActuatorValues(Action):
         grovePiDevice.setRedLed(redLed)
         grovePiDevice.setBlueLed(blueLed)
         grovePiDevice.setBuzzer(buzzer)
-    def onProvideArgs(self, names, current, provided):
-        values = sponge.call("GetSensorActuatorValues", [names])
+    def onProvideArgs(self, context):
+        values = sponge.call("GetSensorActuatorValues", [context.names])
         for name, value in values.iteritems():
-            provided[name] = ArgProvidedValue().withValue(value)
+            context.provided[name] = ArgProvidedValue().withValue(value)
 
 class DhtSensorListener(Correlator):
     def onConfigure(self):

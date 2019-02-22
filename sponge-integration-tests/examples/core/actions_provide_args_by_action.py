@@ -16,6 +16,6 @@ class ProvideByAction(Action):
         self.withResult(ResultMeta(BooleanType()).withLabel("Boolean result"))
     def onCall(self, sensorName):
         return sensorName == "sensor1"
-    def onProvideArgs(self, names, current, provided):
-        if "sensorName" in names:
-            provided["sensorName"] = ArgProvidedValue().withValueSet(sponge.call("GetAvailableSensorNames"))
+    def onProvideArgs(self, context):
+        if "sensorName" in context.names:
+            context.provided["sensorName"] = ArgProvidedValue().withValueSet(sponge.call("GetAvailableSensorNames"))

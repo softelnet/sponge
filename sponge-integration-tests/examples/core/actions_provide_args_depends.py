@@ -26,16 +26,17 @@ class SetActuator(Action):
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
-        if "actuator2" in names:
-            provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in names:
-            provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
-        if "actuator5" in names:
-            provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", current["actuator1"]])
+        if "actuator2" in context.names:
+            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+        if "actuator3" in context.names:
+            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+        if "actuator5" in context.names:
+            context.provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
+                "X", "Y", "Z", context.current["actuator1"]])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

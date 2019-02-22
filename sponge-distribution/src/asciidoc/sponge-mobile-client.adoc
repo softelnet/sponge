@@ -68,14 +68,14 @@ class ManageLcd(Action):
         ]).withNoResult()
     def onCall(self, currentText, text, color, clearText = None):
         sponge.call("SetLcd", [text, color, clearText])
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         grovePiDevice = sponge.getVariable("grovePiDevice")
-        if "currentText" in names:
-            provided["currentText"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "text" in names:
-            provided["text"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "color" in names:
-            provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
+        if "currentText" in context.names:
+            context.provided["currentText"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
+        if "text" in context.names:
+            context.provided["text"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
+        if "color" in context.names:
+            context.provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
 
 class SetLcd(Action):
     def onCall(self, text, color, clearText = None):
@@ -107,10 +107,10 @@ class ManageSensorActuatorValues(Action):
         grovePiDevice.setRedLed(redLed)
         grovePiDevice.setBlueLed(blueLed)
         grovePiDevice.setBuzzer(buzzer)
-    def onProvideArgs(self, names, current, provided):
-        values = sponge.call("GetSensorActuatorValues", [names])
+    def onProvideArgs(self, context):
+        values = sponge.call("GetSensorActuatorValues", [context.names])
         for name, value in values.iteritems():
-            provided[name] = ArgProvidedValue().withValue(value)
+            context.provided[name] = ArgProvidedValue().withValue(value)
 
 class GetSensorActuatorValues(Action):
     def onCall(self, names):
@@ -256,11 +256,11 @@ class DependingArgumentsAction(Action):
         self.withResult(ResultMeta(StringType()).withLabel("Sentences"))
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
-    def onProvideArgs(self, names, current, provided):
-        if "continent" in names:
-            provided["continent"] = ArgProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
-        if "country" in names:
-            continent = current["continent"]
+    def onProvideArgs(self, context):
+        if "continent" in context.names:
+            context.provided["continent"] = ArgProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
+        if "country" in context.names:
+            continent = context.current["continent"]
             if continent == "Africa":
                 countries = ["Nigeria", "Ethiopia", "Egypt"]
             elif continent == "Asia":
@@ -269,9 +269,9 @@ class DependingArgumentsAction(Action):
                 countries = ["Russia", "Germany", "Turkey"]
             else:
                 countries = []
-            provided["country"] = ArgProvidedValue().withValueSet(countries)
-        if "city" in names:
-            country = current["country"]
+            context.provided["country"] = ArgProvidedValue().withValueSet(countries)
+        if "city" in context.names:
+            country = context.current["country"]
             if country == "Nigeria":
                 cities = ["Lagos", "Kano", "Ibadan"]
             elif country == "Ethiopia":
@@ -292,9 +292,9 @@ class DependingArgumentsAction(Action):
                 cities = ["Istanbul", "Ankara", "Izmir"]
             else:
                 cities = []
-            provided["city"] = ArgProvidedValue().withValueSet(cities)
-        if "river" in names:
-            continent = current["continent"]
+            context.provided["city"] = ArgProvidedValue().withValueSet(cities)
+        if "river" in context.names:
+            continent = context.current["continent"]
             if continent == "Africa":
                 rivers = ["Nile", "Chambeshi", "Niger"]
             elif continent == "Asia":
@@ -303,9 +303,9 @@ class DependingArgumentsAction(Action):
                 rivers = ["Volga", "Danube", "Dnepr"]
             else:
                 rivers = []
-            provided["river"] = ArgProvidedValue().withValueSet(rivers)
-        if "weather" in names:
-            provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+            context.provided["river"] = ArgProvidedValue().withValueSet(rivers)
+        if "weather" in context.names:
+            context.provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
 ----
 
 image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]

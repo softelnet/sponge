@@ -6,6 +6,7 @@ Demo
 from java.lang import String
 from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.time.format import DateTimeFormatter
+from java.time import LocalDateTime
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -40,11 +41,11 @@ class ProvideByAction(Action):
         self.withResult(ResultMeta(StringType()).withLabel("Same value"))
     def onCall(self, valueLimited, valueNotLimited):
         return valueLimited + "/" + valueNotLimited
-    def onProvideArgs(self, names, current, provided):
-        if "valueLimited" in names:
-            provided["valueLimited"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
-        if "valueNotLimited" in names:
-            provided["valueNotLimited"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
+    def onProvideArgs(self, context):
+        if "valueLimited" in context.names:
+            context.provided["valueLimited"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
+        if "valueNotLimited" in context.names:
+            context.provided["valueNotLimited"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
 
 class ChooseColor(Action):
     def onConfigure(self):
@@ -144,11 +145,11 @@ class DependingArgumentsAction(Action):
         self.withResult(ResultMeta(StringType()).withLabel("Sentences"))
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
-    def onProvideArgs(self, names, current, provided):
-        if "continent" in names:
-            provided["continent"] = ArgProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
-        if "country" in names:
-            continent = current["continent"]
+    def onProvideArgs(self, context):
+        if "continent" in context.names:
+            context.provided["continent"] = ArgProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
+        if "country" in context.names:
+            continent = context.current["continent"]
             if continent == "Africa":
                 countries = ["Nigeria", "Ethiopia", "Egypt"]
             elif continent == "Asia":
@@ -157,9 +158,9 @@ class DependingArgumentsAction(Action):
                 countries = ["Russia", "Germany", "Turkey"]
             else:
                 countries = []
-            provided["country"] = ArgProvidedValue().withValueSet(countries)
-        if "city" in names:
-            country = current["country"]
+            context.provided["country"] = ArgProvidedValue().withValueSet(countries)
+        if "city" in context.names:
+            country = context.current["country"]
             if country == "Nigeria":
                 cities = ["Lagos", "Kano", "Ibadan"]
             elif country == "Ethiopia":
@@ -180,9 +181,9 @@ class DependingArgumentsAction(Action):
                 cities = ["Istanbul", "Ankara", "Izmir"]
             else:
                 cities = []
-            provided["city"] = ArgProvidedValue().withValueSet(cities)
-        if "river" in names:
-            continent = current["continent"]
+            context.provided["city"] = ArgProvidedValue().withValueSet(cities)
+        if "river" in context.names:
+            continent = context.current["continent"]
             if continent == "Africa":
                 rivers = ["Nile", "Chambeshi", "Niger"]
             elif continent == "Asia":
@@ -191,9 +192,9 @@ class DependingArgumentsAction(Action):
                 rivers = ["Volga", "Danube", "Dnepr"]
             else:
                 rivers = []
-            provided["river"] = ArgProvidedValue().withValueSet(rivers)
-        if "weather" in names:
-            provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+            context.provided["river"] = ArgProvidedValue().withValueSet(rivers)
+        if "weather" in context.names:
+            context.provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
 
 class DateTimeAction(Action):
     def onConfigure(self):
@@ -210,3 +211,31 @@ class ManyArgumentsAction(Action):
         self.withNoResult()
     def onCall(self, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30):
         return None
+
+class DynamicResultAction(Action):
+    def onConfigure(self):
+        self.withLabel("Action returning a dynamic result")
+        self.withArg(ArgMeta("type", StringType()).withProvided(ArgProvidedMeta().withValueSet())).withResult(ResultMeta(DynamicType()))
+    def onCall(self, type):
+        if type == "string":
+            return DynamicValue("text", StringType())
+        elif type == "boolean":
+            return DynamicValue(True, BooleanType())
+        elif type == "datetime":
+            return DynamicValue(LocalDateTime.now(), DateTimeType().withTime().withFormat("HH:mm"))
+        else:
+            return None
+    def onProvideArgs(self, context):
+        if "type" in context.names:
+            context.provided["type"] = ArgProvidedValue().withValueSet(["string", "boolean", "datetime"])
+
+
+class RecordResultAction(Action):
+    def onConfigure(self):
+        self.withLabel("Action returning a record")
+        self.withNoArgs().withResult(ResultMeta(RecordType("Book", [
+                RecordTypeField("author", StringType()).withLabel("Author"),
+                RecordTypeField("title", StringType()).withLabel("Title"),
+            ])))
+    def onCall(self):
+        return {"author":"James Joyce", "title":"Ulysses"}

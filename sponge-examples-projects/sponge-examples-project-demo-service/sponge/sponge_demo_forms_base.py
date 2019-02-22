@@ -15,9 +15,9 @@ class ChangedButtonLabelsForm(Action):
         self.withFeatures({"callLabel":"Call", "refreshLabel":"Reload", "clearLabel":"Reset", "cancelLabel":"Close"})
     def onCall(self, version, text):
         return text.upper()
-    def onProvideArgs(self, names, current, provided):
-        if "version" in names:
-            provided["version"] = ArgProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
+    def onProvideArgs(self, context):
+        if "version" in context.names:
+            context.provided["version"] = ArgProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
 
 class HiddenButtonsForm(Action):
     def onConfigure(self):
@@ -29,9 +29,9 @@ class HiddenButtonsForm(Action):
         self.withFeatures({"callLabel":"Call", "refreshLabel":None, "clearLabel":None, "cancelLabel":None})
     def onCall(self, version, text):
         return text.upper()
-    def onProvideArgs(self, names, current, provided):
-        if "version" in names:
-            provided["version"] = ArgProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
+    def onProvideArgs(self, context):
+        if "version" in context.names:
+            context.provided["version"] = ArgProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
 
 class DefaultCallButtonForm(Action):
     def onConfigure(self):
@@ -43,6 +43,6 @@ class DefaultCallButtonForm(Action):
         self.withFeatures({"refreshLabel":None, "clearLabel":None, "cancelLabel":None})
     def onCall(self, version, text):
         return text.upper()
-    def onProvideArgs(self, names, current, provided):
-        if "version" in names:
-            provided["version"] = ArgProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
+    def onProvideArgs(self, context):
+        if "version" in context.names:
+            context.provided["version"] = ArgProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))

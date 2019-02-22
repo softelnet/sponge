@@ -24,13 +24,13 @@ class SetActuator(Action):
         sponge.setVariable("actuator2", actuator2)
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
-        if "actuator2" in names:
-            provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in names:
-            provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+        if "actuator2" in context.names:
+            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+        if "actuator3" in context.names:
+            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
 
 class SetActuatorAnnotatedValueSet(Action):
     def onConfigure(self):
@@ -40,9 +40,9 @@ class SetActuatorAnnotatedValueSet(Action):
         ).withNoResult()
     def onCall(self, actuatorType):
         sponge.setVariable("actuatorType", actuatorType)
-    def onProvideArgs(self, names, current, provided):
-        if "actuatorType" in names:
-            provided["actuatorType"] = ArgProvidedValue().withValue(sponge.getVariable("actuatorType", None)).withAnnotatedValueSet(
+    def onProvideArgs(self, context):
+        if "actuatorType" in context.names:
+            context.provided["actuatorType"] = ArgProvidedValue().withValue(sponge.getVariable("actuatorType", None)).withAnnotatedValueSet(
                 [AnnotatedValue("auto").withLabel("Auto"), AnnotatedValue("manual").withLabel("Manual")])
 
 class SetActuatorNotLimitedValueSet(Action):
@@ -53,9 +53,9 @@ class SetActuatorNotLimitedValueSet(Action):
         ]).withNoResult()
     def onCall(self, actuator1):
         pass
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator")["actuator1"].getValue())

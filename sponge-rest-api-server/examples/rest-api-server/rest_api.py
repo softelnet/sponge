@@ -62,9 +62,9 @@ class ProvideByAction(Action):
         self.withResult(ResultMeta(StringType()).withLabel("Same value"))
     def onCall(self, value):
         return value
-    def onProvideArgs(self, names, current, provided):
-        if "value" in names:
-            provided["value"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
+    def onProvideArgs(self, context):
+        if "value" in context.names:
+            context.provided["value"] = ArgProvidedValue().withValueSet(sponge.call("ListValues"))
 
 class PrivateAction(Action):
     def onCall(self, args):
@@ -130,13 +130,13 @@ class SetActuator(Action):
         sponge.setVariable("actuator2", actuator2)
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
-        if "actuator2" in names:
-            provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in names:
-            provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+        if "actuator2" in context.names:
+            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+        if "actuator3" in context.names:
+            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
 
 class SetActuatorNotLimitedValueSet(Action):
     def onConfigure(self):
@@ -146,9 +146,9 @@ class SetActuatorNotLimitedValueSet(Action):
         ]).withNoResult()
     def onCall(self, actuator1):
         pass
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
 
 class SetActuatorDepends(Action):
     def onConfigure(self):
@@ -166,16 +166,17 @@ class SetActuatorDepends(Action):
         sponge.setVariable("actuator3", actuator3)
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
-        if "actuator2" in names:
-            provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in names:
-            provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
-        if "actuator5" in names:
-            provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", current["actuator1"]])
+        if "actuator2" in context.names:
+            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+        if "actuator3" in context.names:
+            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+        if "actuator5" in context.names:
+            context.provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
+                "X", "Y", "Z", context.current["actuator1"]])
 
 class AnnotatedTypeAction(Action):
     def onConfigure(self):

@@ -29,8 +29,8 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`Object onCall(_dynamic arguments_)`
 |The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. The implementation of this method is mandatory.
 
-|`void onProvideArgs(Set<String> names, Map<String, Object> current, Map<String, ArgValue> provided)`
-|A callback method that returns the provided argument values along with argument value sets (i.e. possible values of an argument). The provided arguments are explained later in this document.
+|`void onProvideArgs(ProvideArgsContext context)`
+|A callback method that provides argument values along with argument value sets (i.e. possible values of an argument). The provided arguments are explained later in this document.
 |===
 
 The `onConfigure` method in actions is not mandatory.
@@ -205,7 +205,24 @@ class UpperEchoAction(Action):
 For more information see `ArgMeta` and `ResultMeta`.
 
 == Provided arguments
-An action argument can be _provided_, i.e. its value and possible value set may be computed and returned to a client code every time before calling an action. A provided argument gives more flexibility than the `defaultValue` in the argument data type.
+An action argument can be _provided_, i.e. its value and possible value set may be computed and returned to a client code any time before calling an action. A provided argument gives more flexibility than the `defaultValue` in the argument data type.
+
+The `onProvideArgs(ProvideArgsContext context)` method is used to provide action argument values.
+
+.`ProvideArgsContext` properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`Set<String> names`
+|A not null set of argument names that are to be provided.
+
+|`Map<String, Object> current`
+|The not null map of argument names and their current values passed from a client code. The map is required to contain values of those arguments that the arguments specified in the `names` depend on.
+
+|`Map<String, ArgProvidedValue> provided`
+|An initially empty map of argument names and values (value sets) that is to be set up in be provided.
+|===
 
 This feature makes easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
 
@@ -235,16 +252,16 @@ class SetActuator(Action):
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
-    def onProvideArgs(self, names, current, provided):
-        if "actuator1" in names:
-            provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
+    def onProvideArgs(self, context):
+        if "actuator1" in context.names:
+            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
-        if "actuator2" in names:
-            provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in names:
-            provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
-        if "actuator5" in names:
-            provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", current["actuator1"]])
+        if "actuator2" in context.names:
+            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+        if "actuator3" in context.names:
+            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+        if "actuator5" in context.names:
+            context.provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", context.current["actuator1"]])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

@@ -27,15 +27,15 @@ class RecordLibraryForm(Action):
         })
     def onCall(self, search, order, books):
         return None
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         global LIBRARY
-        if "order" in names:
-            provided["order"] = ArgProvidedValue().withValue("author").withAnnotatedValueSet([
+        if "order" in context.names:
+            context.provided["order"] = ArgProvidedValue().withValue("author").withAnnotatedValueSet([
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
-        if "books" in names:
-            provided["books"] = ArgProvidedValue().withValue(
+        if "books" in context.names:
+            context.provided["books"] = ArgProvidedValue().withValue(
                 map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)),
-                    sorted(LIBRARY.findBooks(current["search"]), key = lambda book: book.author.lower() if current["order"] == "author" else book.title.lower())))
+                    sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 
 class RecordCreateBook(Action):
     def onConfigure(self):
@@ -52,13 +52,13 @@ class RecordCreateBook(Action):
         global LIBRARY
         LIBRARY.addBook(book["author"], book["title"])
 
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         global LIBRARY
-        if "book" in names:
+        if "book" in context.names:
             # Create an initial, blank instance of a book and provide it to GUI.
-            provided["book"] = ArgProvidedValue().withValue({})
-        if "book.author" in names:
-            provided["book.author"] = ArgProvidedValue().withValueSet(LIBRARY.getAuthors())
+            context.provided["book"] = ArgProvidedValue().withValue({})
+        if "book.author" in context.names:
+            context.provided["book.author"] = ArgProvidedValue().withValueSet(LIBRARY.getAuthors())
 
 class RecordAbstractReadUpdateBook(Action):
     def onConfigure(self):
@@ -69,12 +69,12 @@ class RecordAbstractReadUpdateBook(Action):
             ]).withLabel("Book").withProvided(ArgProvidedMeta().withValue().withDependency("book.id"))).withNoResult()
         self.withFeatures({"visible":False, "clearLabel":None})
 
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         global LIBRARY
-        if "book" in names:
-            provided["book"] = ArgProvidedValue().withValue(AnnotatedValue(LIBRARY.getBook(current["book.id"]).toMap()))
-        if "book.author" in names:
-            provided["book.author"] = ArgProvidedValue().withValueSet(LIBRARY.getAuthors())
+        if "book" in context.names:
+            context.provided["book"] = ArgProvidedValue().withValue(AnnotatedValue(LIBRARY.getBook(context.current["book.id"]).toMap()))
+        if "book.author" in context.names:
+            context.provided["book.author"] = ArgProvidedValue().withValueSet(LIBRARY.getAuthors())
 
 class RecordReadBook(RecordAbstractReadUpdateBook):
     def onConfigure(self):

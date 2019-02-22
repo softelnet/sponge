@@ -20,15 +20,15 @@ class ArgLibraryForm(Action):
         })
     def onCall(self, search, order, books):
         return None
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         global LIBRARY
-        if "order" in names:
-            provided["order"] = ArgProvidedValue().withValue("author").withAnnotatedValueSet([
+        if "order" in context.names:
+            context.provided["order"] = ArgProvidedValue().withValue("author").withAnnotatedValueSet([
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
-        if "books" in names:
-            provided["books"] = ArgProvidedValue().withValue(
+        if "books" in context.names:
+            context.provided["books"] = ArgProvidedValue().withValue(
                 map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)).withDescription("Sample description (ID: " + str(book.id) +")"),
-                    sorted(LIBRARY.findBooks(current["search"]), key = lambda book: book.author.lower() if current["order"] == "author" else book.title.lower())))
+                    sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 
 class ArgCreateBook(Action):
     def onConfigure(self):
@@ -52,12 +52,12 @@ class ArgAbstractReadUpdateBook(Action):
         ]).withNoResult()
         self.withFeatures({"visible":False, "clearLabel":None})
 
-    def onProvideArgs(self, names, current, provided):
+    def onProvideArgs(self, context):
         global LIBRARY
-        if "author" or "title" in names:
-            book = LIBRARY.getBook(current["bookId"].value)
-            provided["author"] = ArgProvidedValue().withValue(book.author)
-            provided["title"] = ArgProvidedValue().withValue(book.title)
+        if "author" or "title" in context.names:
+            book = LIBRARY.getBook(context.current["bookId"].value)
+            context.provided["author"] = ArgProvidedValue().withValue(book.author)
+            context.provided["title"] = ArgProvidedValue().withValue(book.title)
 
 class ArgReadBook(ArgAbstractReadUpdateBook):
     def onConfigure(self):

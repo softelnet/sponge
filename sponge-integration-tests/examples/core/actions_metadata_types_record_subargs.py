@@ -19,9 +19,9 @@ class Library(Action):
         ]).withNoResult()
     def onCall(self, search, order, books):
         return None
-    def onProvideArgs(self, names, current, provided):
-        if "books" in names:
-            provided["books"] = ArgProvidedValue().withValue([
+    def onProvideArgs(self, context):
+        if "books" in context.names:
+            context.provided["books"] = ArgProvidedValue().withValue([
                 {"id":1, "author":"James Joyce", "title":"Ulysses"},
                 {"id":2, "author":"Arthur Conan Doyle", "title":"Adventures of Sherlock Holmes"}
             ])
@@ -36,9 +36,9 @@ class CreateBook(Action):
         ]).withNoResult()
     def onCall(self, book):
         pass
-    def onProvideArgs(self, names, current, provided):
-        if "book.author" in names:
-            provided["book.author"] = ArgProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
+    def onProvideArgs(self, context):
+        if "book.author" in context.names:
+            context.provided["book.author"] = ArgProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
 
 class UpdateBook(Action):
     def onConfigure(self):
@@ -47,10 +47,10 @@ class UpdateBook(Action):
                 ArgMeta("id").withFeature("visible", False),
                 ArgMeta("author").withProvided(ArgProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ]).withProvided(ArgProvidedMeta().withValue().withDependency("book.id"))).withNoResult()
-    def onProvideArgs(self, names, current, provided):
-        if "book" in names:
-            provided["book"] = ArgProvidedValue().withValue(AnnotatedValue({"id":current["book.id"], "author":"James Joyce", "title":"Ulysses"}))
-        if "book.author" in names:
-            provided["book.author"] = ArgProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
+    def onProvideArgs(self, context):
+        if "book" in context.names:
+            context.provided["book"] = ArgProvidedValue().withValue(AnnotatedValue({"id":context.current["book.id"], "author":"James Joyce", "title":"Ulysses"}))
+        if "book.author" in context.names:
+            context.provided["book.author"] = ArgProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
     def onCall(self, book):
         pass

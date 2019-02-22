@@ -33,6 +33,7 @@ import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ArgProvidedValue;
+import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -93,7 +94,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         }
 
         Map<String, ArgProvidedValue<?>> provided = new LinkedHashMap<>();
-        getProcessor().onProvideArgs(finalNames, current, provided);
+        getProcessor().onProvideArgs(new ProvideArgsContext(finalNames, current, provided));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(getMeta().getArgMeta(providedArg).getProvided() != null,
