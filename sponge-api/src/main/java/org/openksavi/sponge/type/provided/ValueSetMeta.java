@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.action;
+package org.openksavi.sponge.type.provided;
 
 /**
  * A value set metadata.

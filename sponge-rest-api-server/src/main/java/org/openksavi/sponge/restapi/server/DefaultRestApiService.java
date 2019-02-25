@@ -17,7 +17,6 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -33,16 +32,11 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ArgProvidedValue;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
-import org.openksavi.sponge.restapi.model.RestActionResultMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
@@ -73,6 +67,7 @@ import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.TypeTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.TypeType;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
  * Default Sponge REST service.
@@ -206,14 +201,13 @@ public class DefaultRestApiService implements RestApiService {
             Predicate<ActionAdapter> isSelectedByNameRegExp =
                     action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true;
 
-            return setupSuccessResponse(new GetActionsResponse(
-                    getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction).filter(isPublicBySettings)
-                            .filter(action -> actualMetadataRequired
-                                    ? action.getMeta().getArgsMeta() != null && action.getMeta().getResultMeta() != null : true)
-                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                            .filter(action -> canCallAction(user, action)).map(action -> createRestActionMeta(action))
-                            .map(action -> marshalActionMeta(action)).collect(Collectors.toList())),
-                    request);
+            return setupSuccessResponse(new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp)
+                    .filter(isPublicByAction).filter(isPublicBySettings)
+                    .filter(action -> actualMetadataRequired ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null
+                            : true)
+                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                    .filter(action -> canCallAction(user, action)).map(action -> createRestActionMeta(action))
+                    .map(action -> marshalActionMeta(action)).collect(Collectors.toList())), request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new GetActionsResponse(), request, e);
@@ -224,20 +218,20 @@ public class DefaultRestApiService implements RestApiService {
         ActionMeta meta = actionAdapter.getMeta();
         return new RestActionMeta(meta.getName(), meta.getLabel(), meta.getDescription(),
                 createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), getEngine().getCategory(meta.getCategory()), meta.getFeatures(),
-                createActionArgMetaList(meta), createActionResultMeta(meta), actionAdapter.getQualifiedVersion());
+                meta.getArgs(), meta.getResult(), actionAdapter.getQualifiedVersion());
 
     }
 
     protected RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
-            if (actionMeta.getArgsMeta() != null) {
-                actionMeta.getArgsMeta().forEach(
-                        argMeta -> argMeta.setType(defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), argMeta.getType())));
+            if (actionMeta.getArgs() != null) {
+                actionMeta.setArgs(actionMeta.getArgs().stream()
+                        .map(argType -> defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), argType))
+                        .collect(Collectors.toList()));
             }
 
-            if (actionMeta.getResultMeta() != null) {
-                actionMeta.getResultMeta()
-                        .setType(defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), actionMeta.getResultMeta().getType()));
+            if (actionMeta.getResult() != null) {
+                actionMeta.setResult(defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), actionMeta.getResult()));
             }
         }
 
@@ -323,7 +317,7 @@ public class DefaultRestApiService implements RestApiService {
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
             Map<String,
-                    ArgProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
+                    ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
                             request.getArgNames(),
                             RestApiServerUtils.unmarshalProvideActionArgs(typeConverter, actionAdapter, request.getCurrent(), exchange));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
@@ -358,25 +352,6 @@ public class DefaultRestApiService implements RestApiService {
             getEngine().handleError("REST reload", e);
             return setupErrorResponse(new ReloadResponse(), request, e);
         }
-    }
-
-    protected List<RestActionArgMeta> createActionArgMetaList(ActionMeta actionMeta) {
-        return actionMeta.getArgsMeta() != null
-                ? actionMeta.getArgsMeta().stream().map(meta -> createActionArgMeta(meta)).collect(Collectors.toList()) : null;
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected RestActionArgMeta createActionArgMeta(ArgMeta meta) {
-        List<RestActionArgMeta> subArgs = meta.getSubArgs() != null ? (List<RestActionArgMeta>) meta.getSubArgs().stream()
-                .map(subArgMeta -> createActionArgMeta((ArgMeta) subArgMeta)).collect(Collectors.toList()) : Collections.emptyList();
-        return new RestActionArgMeta(meta.getName(), meta.getType() != null ? meta.getType() : null, meta.getLabel(), meta.getDescription(),
-                meta.isOptional(), meta.getProvided(), meta.getFeatures(), subArgs);
-
-    }
-
-    protected RestActionResultMeta createActionResultMeta(ActionMeta actionMeta) {
-        ResultMeta<?> resultMeta = actionMeta.getResultMeta();
-        return resultMeta != null ? new RestActionResultMeta(resultMeta.getType(), resultMeta.getLabel()) : null;
     }
 
     protected RestApiAuthTokenService getSafeAuthTokenService() {

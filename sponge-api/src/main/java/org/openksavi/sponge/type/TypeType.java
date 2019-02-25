@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A type representing a data type. A value of this type has to be an instance of {@linkplain org.openksavi.sponge.type.DataType}.
  */
@@ -25,7 +27,36 @@ import java.util.Map;
 public class TypeType extends DataType<DataType> {
 
     public TypeType() {
-        super(DataTypeKind.TYPE);
+        this(null);
+    }
+
+    public TypeType(String name) {
+        super(DataTypeKind.TYPE, name);
+    }
+
+    @Override
+    public TypeType withName(String name) {
+        return (TypeType) super.withName(name);
+    }
+
+    @Override
+    public TypeType withLabel(String label) {
+        return (TypeType) super.withLabel(label);
+    }
+
+    @Override
+    public TypeType withDescription(String description) {
+        return (TypeType) super.withDescription(description);
+    }
+
+    @Override
+    public TypeType withAnnotated(boolean annotated) {
+        return (TypeType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public TypeType withAnnotated() {
+        return (TypeType) super.withAnnotated();
     }
 
     @Override
@@ -56,5 +87,15 @@ public class TypeType extends DataType<DataType> {
     @Override
     public TypeType withNullable() {
         return (TypeType) super.withNullable();
+    }
+
+    @Override
+    public TypeType withOptional() {
+        return (TypeType) super.withOptional();
+    }
+
+    @Override
+    public TypeType withProvided(ProvidedMeta provided) {
+        return (TypeType) super.withProvided(provided);
     }
 }

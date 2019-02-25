@@ -18,6 +18,7 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.value.DynamicValue;
 
 /**
@@ -28,7 +29,36 @@ import org.openksavi.sponge.type.value.DynamicValue;
 public class DynamicType extends DataType<DynamicValue> {
 
     public DynamicType() {
-        super(DataTypeKind.DYNAMIC);
+        this(null);
+    }
+
+    public DynamicType(String name) {
+        super(DataTypeKind.DYNAMIC, name);
+    }
+
+    @Override
+    public DynamicType withName(String name) {
+        return (DynamicType) super.withName(name);
+    }
+
+    @Override
+    public DynamicType withLabel(String label) {
+        return (DynamicType) super.withLabel(label);
+    }
+
+    @Override
+    public DynamicType withDescription(String description) {
+        return (DynamicType) super.withDescription(description);
+    }
+
+    @Override
+    public DynamicType withAnnotated(boolean annotated) {
+        return (DynamicType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public DynamicType withAnnotated() {
+        return (DynamicType) super.withAnnotated();
     }
 
     @Override
@@ -59,5 +89,15 @@ public class DynamicType extends DataType<DynamicValue> {
     @Override
     public DynamicType withNullable() {
         return (DynamicType) super.withNullable();
+    }
+
+    @Override
+    public DynamicType withOptional() {
+        return (DynamicType) super.withOptional();
+    }
+
+    @Override
+    public DynamicType withProvided(ProvidedMeta provided) {
+        return (DynamicType) super.withProvided(provided);
     }
 }

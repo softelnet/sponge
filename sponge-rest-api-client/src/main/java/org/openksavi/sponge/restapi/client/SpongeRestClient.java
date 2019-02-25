@@ -20,7 +20,6 @@ import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
 
-import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -43,6 +42,7 @@ import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
  * A Sponge REST API client.
@@ -379,7 +379,7 @@ public interface SpongeRestClient extends Closeable {
      * @param current the current values of arguments from a client code.
      * @return the provided action arguments.
      */
-    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Fetches all provided action arguments from the server ignoring current values (set by a client code).
@@ -387,7 +387,7 @@ public interface SpongeRestClient extends Closeable {
      * @param actionName the action name.
      * @return the provided action arguments.
      */
-    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName);
 
     /**
      * Sends the {@code reload} request to the server.

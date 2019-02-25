@@ -18,13 +18,44 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A void type that may be used to specify that an action returns no meaningful result.
  */
 public class VoidType extends DataType<Void> {
 
     public VoidType() {
-        super(DataTypeKind.VOID);
+        this(null);
+    }
+
+    public VoidType(String name) {
+        super(DataTypeKind.VOID, name);
+    }
+
+    @Override
+    public VoidType withName(String name) {
+        return (VoidType) super.withName(name);
+    }
+
+    @Override
+    public VoidType withLabel(String label) {
+        return (VoidType) super.withLabel(label);
+    }
+
+    @Override
+    public VoidType withDescription(String description) {
+        return (VoidType) super.withDescription(description);
+    }
+
+    @Override
+    public VoidType withAnnotated(boolean annotated) {
+        return (VoidType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public VoidType withAnnotated() {
+        return (VoidType) super.withAnnotated();
     }
 
     @Override
@@ -55,5 +86,15 @@ public class VoidType extends DataType<Void> {
     @Override
     public VoidType withNullable() {
         return (VoidType) super.withNullable();
+    }
+
+    @Override
+    public VoidType withOptional() {
+        return (VoidType) super.withOptional();
+    }
+
+    @Override
+    public VoidType withProvided(ProvidedMeta provided) {
+        return (VoidType) super.withProvided(provided);
     }
 }

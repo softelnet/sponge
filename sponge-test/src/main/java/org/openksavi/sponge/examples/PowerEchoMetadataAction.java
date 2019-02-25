@@ -16,8 +16,6 @@
 
 package org.openksavi.sponge.examples;
 
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.type.AnyType;
@@ -29,9 +27,8 @@ public class PowerEchoMetadataAction extends JAction {
     @Override
     public void onConfigure() {
         withFeatures(SpongeUtils.immutableMapOf("visibility", true));
-        withArgs(new ArgMeta("value", new NumberType()).withLabel("Argument 1"),
-                new ArgMeta("text", new StringType()).withLabel("Argument 2"));
-        withResult(new ResultMeta<>(new AnyType()));
+        withArgs(new NumberType("value").withLabel("Argument 1"), new StringType("text").withLabel("Argument 2"));
+        withResult(new AnyType());
     }
 
     public Object onCall(Number value, String text) {

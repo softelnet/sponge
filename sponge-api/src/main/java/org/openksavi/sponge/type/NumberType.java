@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A number type, that include both integer and floating-point numbers.
  */
@@ -36,7 +38,36 @@ public class NumberType extends DataType<Number> {
     private boolean exclusiveMax = false;
 
     public NumberType() {
-        super(DataTypeKind.NUMBER);
+        this(null);
+    }
+
+    public NumberType(String name) {
+        super(DataTypeKind.NUMBER, name);
+    }
+
+    @Override
+    public NumberType withName(String name) {
+        return (NumberType) super.withName(name);
+    }
+
+    @Override
+    public NumberType withLabel(String label) {
+        return (NumberType) super.withLabel(label);
+    }
+
+    @Override
+    public NumberType withDescription(String description) {
+        return (NumberType) super.withDescription(description);
+    }
+
+    @Override
+    public NumberType withAnnotated(boolean annotated) {
+        return (NumberType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public NumberType withAnnotated() {
+        return (NumberType) super.withAnnotated();
     }
 
     @Override
@@ -67,6 +98,16 @@ public class NumberType extends DataType<Number> {
     @Override
     public NumberType withNullable() {
         return (NumberType) super.withNullable();
+    }
+
+    @Override
+    public NumberType withOptional() {
+        return (NumberType) super.withOptional();
+    }
+
+    @Override
+    public NumberType withProvided(ProvidedMeta provided) {
+        return (NumberType) super.withProvided(provided);
     }
 
     public NumberType withMinValue(Number minValue) {

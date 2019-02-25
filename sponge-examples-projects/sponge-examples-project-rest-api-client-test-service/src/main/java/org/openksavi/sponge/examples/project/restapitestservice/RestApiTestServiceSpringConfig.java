@@ -55,6 +55,8 @@ public class RestApiTestServiceSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setPublishReload(true);
         plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 
+        plugin.getSettings().setPrettyPrint(true);
+
         plugin.setCamelContext(camelContext.get());
 
         plugin.setSecurityService(restApiSecurityService());

@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * An object. This type requires a class name (typically a Java class name) as a constructor parameter.
  *
@@ -28,14 +30,43 @@ public class ObjectType<T> extends DataType<T> {
     /** The class name. */
     private String className;
 
-    protected ObjectType() {
+    public ObjectType() {
         this(null);
     }
 
-    public ObjectType(String className) {
-        super(DataTypeKind.OBJECT);
+    public ObjectType(String name) {
+        this(name, null);
+    }
+
+    public ObjectType(String name, String className) {
+        super(DataTypeKind.OBJECT, name);
 
         this.className = className;
+    }
+
+    @Override
+    public ObjectType<T> withName(String name) {
+        return (ObjectType<T>) super.withName(name);
+    }
+
+    @Override
+    public ObjectType<T> withLabel(String label) {
+        return (ObjectType<T>) super.withLabel(label);
+    }
+
+    @Override
+    public ObjectType<T> withDescription(String description) {
+        return (ObjectType<T>) super.withDescription(description);
+    }
+
+    @Override
+    public ObjectType<T> withAnnotated(boolean annotated) {
+        return (ObjectType<T>) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public ObjectType<T> withAnnotated() {
+        return (ObjectType<T>) super.withAnnotated();
     }
 
     @Override
@@ -66,6 +97,21 @@ public class ObjectType<T> extends DataType<T> {
     @Override
     public ObjectType<T> withNullable() {
         return (ObjectType<T>) super.withNullable();
+    }
+
+    @Override
+    public ObjectType<T> withOptional() {
+        return (ObjectType<T>) super.withOptional();
+    }
+
+    @Override
+    public ObjectType<T> withProvided(ProvidedMeta provided) {
+        return (ObjectType<T>) super.withProvided(provided);
+    }
+
+    public ObjectType<T> withClassName(String className) {
+        this.className = className;
+        return this;
     }
 
     public String getClassName() {

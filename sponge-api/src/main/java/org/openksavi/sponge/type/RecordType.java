@@ -17,34 +17,62 @@
 package org.openksavi.sponge.type;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import org.openksavi.sponge.type.provided.ProvidedMeta;
 
 /**
  * A record type. This type requires a list of record field types. A value of this type has to be an instance of Map<String, Object> with
  * elements corresponding to the field names and values.
  */
+@SuppressWarnings("rawtypes")
 public class RecordType extends DataType<Map<String, Object>> {
 
-    /** The record type name. */
-    private String name;
-
     /** The field types. */
-    private List<RecordTypeField> fields;
+    private List<DataType> fields;
 
-    protected RecordType() {
-        this(Collections.emptyList());
+    public RecordType() {
+        this((String) null);
     }
 
-    public RecordType(List<RecordTypeField> fields) {
+    public RecordType(String name) {
+        this(name, new ArrayList<>());
+    }
+
+    public RecordType(List<DataType> fields) {
         this(null, fields);
     }
 
-    public RecordType(String name, List<RecordTypeField> fields) {
-        super(DataTypeKind.RECORD);
-        setName(name);
-        setFields(fields);
+    public RecordType(String name, List<DataType> fields) {
+        super(DataTypeKind.RECORD, name);
+        this.fields = new ArrayList<>(fields);
+    }
+
+    @Override
+    public RecordType withName(String name) {
+        return (RecordType) super.withName(name);
+    }
+
+    @Override
+    public RecordType withLabel(String label) {
+        return (RecordType) super.withLabel(label);
+    }
+
+    @Override
+    public RecordType withDescription(String description) {
+        return (RecordType) super.withDescription(description);
+    }
+
+    @Override
+    public RecordType withAnnotated(boolean annotated) {
+        return (RecordType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public RecordType withAnnotated() {
+        return (RecordType) super.withAnnotated();
     }
 
     @Override
@@ -77,19 +105,45 @@ public class RecordType extends DataType<Map<String, Object>> {
         return (RecordType) super.withNullable();
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public RecordType withOptional() {
+        return (RecordType) super.withOptional();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public RecordType withProvided(ProvidedMeta provided) {
+        return (RecordType) super.withProvided(provided);
     }
 
-    public List<RecordTypeField> getFields() {
+    /**
+     * Adds new fields. Replaces an already existing field that has the same name.
+     *
+     * @param fields the fields.
+     * @return this type.
+     */
+    public RecordType withFields(List<DataType> fields) {
+        fields.forEach(field -> {
+            boolean replaced = false;
+            for (int i = 0; i < this.fields.size(); i++) {
+                if (Objects.equals(field.getName(), this.fields.get(i).getName())) {
+                    this.fields.set(i, field);
+                    replaced = true;
+                }
+            }
+
+            if (!replaced) {
+                this.fields.add(field);
+            }
+        });
+
+        return this;
+    }
+
+    public List<DataType> getFields() {
         return fields;
     }
 
-    public void setFields(List<RecordTypeField> fields) {
+    public void setFields(List<DataType> fields) {
         this.fields = new ArrayList<>(fields);
     }
 }

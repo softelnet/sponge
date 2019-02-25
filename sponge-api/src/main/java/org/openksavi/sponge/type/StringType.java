@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A string type.
  */
@@ -30,7 +32,36 @@ public class StringType extends DataType<String> {
     private Integer maxLength;
 
     public StringType() {
-        super(DataTypeKind.STRING);
+        this(null);
+    }
+
+    public StringType(String name) {
+        super(DataTypeKind.STRING, name);
+    }
+
+    @Override
+    public StringType withName(String name) {
+        return (StringType) super.withName(name);
+    }
+
+    @Override
+    public StringType withLabel(String label) {
+        return (StringType) super.withLabel(label);
+    }
+
+    @Override
+    public StringType withDescription(String description) {
+        return (StringType) super.withDescription(description);
+    }
+
+    @Override
+    public StringType withAnnotated(boolean annotated) {
+        return (StringType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public StringType withAnnotated() {
+        return (StringType) super.withAnnotated();
     }
 
     @Override
@@ -61,6 +92,16 @@ public class StringType extends DataType<String> {
     @Override
     public StringType withNullable() {
         return (StringType) super.withNullable();
+    }
+
+    @Override
+    public StringType withOptional() {
+        return (StringType) super.withOptional();
+    }
+
+    @Override
+    public StringType withProvided(ProvidedMeta provided) {
+        return (StringType) super.withProvided(provided);
     }
 
     public StringType withMinLength(Integer minLength) {

@@ -23,12 +23,12 @@ import java.util.Map;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.action.ArgMeta;
 import org.openksavi.sponge.action.ProvideArgsContext;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessor;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.VoidType;
 
+@SuppressWarnings("rawtypes")
 public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements Action {
 
     @Override
@@ -86,25 +86,25 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
         return (BaseAction) super.withCategory(category);
     }
 
-    public BaseAction withArgs(List<ArgMeta> argsMeta) {
-        getMeta().addArgsMeta(argsMeta);
+    public BaseAction withArgs(List<DataType> argTypes) {
+        getMeta().addArgs(argTypes);
         return this;
     }
 
-    public BaseAction withArg(ArgMeta argMeta) {
-        return withArgs(Arrays.asList(argMeta));
+    public BaseAction withArg(DataType argType) {
+        return withArgs(Arrays.asList(argType));
     }
 
     public BaseAction withNoArgs() {
         return withArgs(Collections.emptyList());
     }
 
-    public BaseAction withResult(ResultMeta<?> resultMeta) {
-        getMeta().setResultMeta(resultMeta);
+    public BaseAction withResult(DataType resultType) {
+        getMeta().setResult(resultType);
         return this;
     }
 
     public BaseAction withNoResult() {
-        return withResult(new ResultMeta<>(new VoidType()));
+        return withResult(new VoidType());
     }
 }

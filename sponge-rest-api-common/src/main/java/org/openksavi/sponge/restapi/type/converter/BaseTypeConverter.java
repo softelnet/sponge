@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class BaseTypeConverter implements TypeConverter {
@@ -50,12 +51,35 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
     @Override
     public <T, D extends DataType> Object marshal(D type, T value) {
-        return value != null ? getUnitConverter(type).marshal(this, type, value) : null;
+        if (value == null) {
+            return null;
+        }
+
+        if (type.isAnnotated()) {
+            AnnotatedValue<T> annotatedValue = (AnnotatedValue) value;
+            return new AnnotatedValue<>(getUnitConverter(type).marshal(this, type, annotatedValue.getValue()), annotatedValue.getLabel(),
+                    annotatedValue.getDescription(), annotatedValue.getFeatures());
+        }
+
+        return getUnitConverter(type).marshal(this, type, value);
     }
 
     @Override
     public <T, D extends DataType> T unmarshal(D type, Object value) {
-        return value != null ? (T) getUnitConverter(type).unmarshal(this, type, value) : null;
+        if (value == null) {
+            return null;
+        }
+
+        if (type.isAnnotated()) {
+            Validate.isInstanceOf(Map.class, value, "Expected an annotated value as a map but got %s", value.getClass());
+
+            AnnotatedValue annotatedValue = objectMapper.convertValue(value, AnnotatedValue.class);
+            annotatedValue.setValue(getUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
+
+            return (T) annotatedValue;
+        }
+
+        return (T) getUnitConverter(type).unmarshal(this, type, value);
     }
 
     @Override

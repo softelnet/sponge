@@ -47,14 +47,12 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.IncorrectKnowledgeBaseVersionException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
@@ -65,9 +63,11 @@ import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
 
+@SuppressWarnings("rawtypes")
 public abstract class BaseRestApiTestTemplate {
 
     @Inject
@@ -124,8 +124,8 @@ public abstract class BaseRestApiTestTemplate {
 
             assertEquals(RestApiTestConstants.ANONYMOUS_ACTIONS_COUNT, actions.size());
             RestActionMeta meta = actions.stream().filter(action -> action.getName().equals("UpperCase")).findFirst().get();
-            assertEquals(DataTypeKind.STRING, meta.getArgsMeta().get(0).getType().getKind());
-            assertTrue(meta.getArgsMeta().get(0).getType() instanceof StringType);
+            assertEquals(DataTypeKind.STRING, meta.getArgs().get(0).getKind());
+            assertTrue(meta.getArgs().get(0) instanceof StringType);
         }
     }
 
@@ -161,9 +161,9 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals("category1", actionMeta.getCategory().getName());
             assertEquals("Category 1", actionMeta.getCategory().getLabel());
             assertEquals("Category 1 description", actionMeta.getCategory().getDescription());
-            assertEquals(1, actionMeta.getArgsMeta().size());
-            assertTrue(actionMeta.getArgsMeta().get(0).getType() instanceof StringType);
-            assertTrue(actionMeta.getResultMeta().getType() instanceof StringType);
+            assertEquals(1, actionMeta.getArgs().size());
+            assertTrue(actionMeta.getArgs().get(0) instanceof StringType);
+            assertTrue(actionMeta.getResult() instanceof StringType);
         }
     }
 
@@ -281,12 +281,11 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
-    @SuppressWarnings({ "rawtypes" })
     @Test
     public void testCallDynamicType() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("DynamicResultAction");
-            DataType resultType = actionMeta.getResultMeta().getType();
+            DataType resultType = actionMeta.getResult();
             assertEquals(DataTypeKind.DYNAMIC, resultType.getKind());
 
             DynamicValue resultForString = client.call(DynamicValue.class, actionMeta.getName(), Arrays.asList("string"));
@@ -301,12 +300,11 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
-    @SuppressWarnings({ "rawtypes" })
     @Test
     public void testCallTypeType() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("TypeResultAction");
-            DataType resultType = actionMeta.getResultMeta().getType();
+            DataType resultType = actionMeta.getResult();
             assertEquals(DataTypeKind.TYPE, resultType.getKind());
 
             assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string")) instanceof StringType);
@@ -316,22 +314,21 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     @Test
     public void testCallDateTimeType() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("DateTimeAction");
-            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) actionMeta.getArgsMeta().get(0).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) actionMeta.getArgsMeta().get(1).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.DATE, ((DateTimeType) actionMeta.getArgsMeta().get(2).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.TIME, ((DateTimeType) actionMeta.getArgsMeta().get(3).getType()).getDateTimeKind());
-            assertEquals(DateTimeKind.INSTANT, ((DateTimeType) actionMeta.getArgsMeta().get(4).getType()).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) actionMeta.getArgs().get(0)).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) actionMeta.getArgs().get(1)).getDateTimeKind());
+            assertEquals(DateTimeKind.DATE, ((DateTimeType) actionMeta.getArgs().get(2)).getDateTimeKind());
+            assertEquals(DateTimeKind.TIME, ((DateTimeType) actionMeta.getArgs().get(3)).getDateTimeKind());
+            assertEquals(DateTimeKind.INSTANT, ((DateTimeType) actionMeta.getArgs().get(4)).getDateTimeKind());
 
             LocalDateTime dateTime = LocalDateTime.now();
             ZonedDateTime dateTimeZone = ZonedDateTime.now(ZoneId.of("America/Detroit"));
             LocalDate date = LocalDate.parse("2019-02-06");
-            LocalTime time =
-                    LocalTime.parse("15:15:00", DateTimeFormatter.ofPattern(actionMeta.getArgsMeta().get(3).getType().getFormat()));
+            LocalTime time = LocalTime.parse("15:15:00", DateTimeFormatter.ofPattern(actionMeta.getArgs().get(3).getFormat()));
             Instant instant = Instant.now();
 
             List<DynamicValue> dates =
@@ -357,16 +354,16 @@ public abstract class BaseRestApiTestTemplate {
     public void testCallRecordType() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("RecordAsResultAction");
-            RecordType recordType = (RecordType) actionMeta.getResultMeta().getType();
+            RecordType recordType = (RecordType) actionMeta.getResult();
             assertEquals(DataTypeKind.RECORD, recordType.getKind());
-            assertEquals("Book", recordType.getName());
+            assertEquals("book", recordType.getName());
             assertEquals(3, recordType.getFields().size());
             assertEquals("id", recordType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getType().getKind());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getKind());
             assertEquals("author", recordType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getKind());
             assertEquals("title", recordType.getFields().get(2).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getKind());
 
             Map<String, Object> book1 = client.call(Map.class, actionMeta.getName(), Arrays.asList(1));
             assertEquals(3, book1.size());
@@ -375,15 +372,15 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals("Ulysses", book1.get("title"));
 
             actionMeta = client.getActionMeta("RecordAsArgAction");
-            recordType = (RecordType) actionMeta.getArgsMeta().get(0).getType();
+            recordType = (RecordType) actionMeta.getArgs().get(0);
             assertEquals(DataTypeKind.RECORD, recordType.getKind());
             assertEquals(3, recordType.getFields().size());
             assertEquals("id", recordType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getType().getKind());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getKind());
             assertEquals("author", recordType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getKind());
             assertEquals("title", recordType.getFields().get(2).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getType().getKind());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getKind());
 
             Map<String, Object> book2 =
                     SpongeUtils.immutableMapOf("id", 5, "author", "Arthur Conan Doyle", "title", "Adventures of Sherlock Holmes");
@@ -401,27 +398,27 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             String actionName = "SetActuator";
 
-            List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
+            List<DataType> argTypes = client.getActionMeta(actionName).getArgs();
 
-            assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
-            assertTrue(argsMeta.get(0).getProvided().getValueSet().isLimited());
-            assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
-            assertFalse(argsMeta.get(0).getProvided().isReadOnly());
-            assertTrue(argsMeta.get(1).getProvided().isValue());
-            assertFalse(argsMeta.get(1).getProvided().hasValueSet());
-            assertEquals(0, argsMeta.get(1).getProvided().getDependencies().size());
-            assertFalse(argsMeta.get(1).getProvided().isReadOnly());
-            assertTrue(argsMeta.get(2).getProvided().isValue());
-            assertFalse(argsMeta.get(2).getProvided().hasValueSet());
-            assertEquals(0, argsMeta.get(2).getProvided().getDependencies().size());
-            assertTrue(argsMeta.get(2).getProvided().isReadOnly());
-            assertNull(argsMeta.get(3).getProvided());
+            assertTrue(argTypes.get(0).getProvided().isValue());
+            assertTrue(argTypes.get(0).getProvided().hasValueSet());
+            assertTrue(argTypes.get(0).getProvided().getValueSet().isLimited());
+            assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
+            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertTrue(argTypes.get(1).getProvided().isValue());
+            assertFalse(argTypes.get(1).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
+            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+            assertTrue(argTypes.get(2).getProvided().isValue());
+            assertFalse(argTypes.get(2).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(2).getProvided().getDependencies().size());
+            assertTrue(argTypes.get(2).getProvided().isReadOnly());
+            assertNull(argTypes.get(3).getProvided());
 
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false, null, 1));
 
-            Map<String, ArgProvidedValue<?>> providedArgs = client.provideActionArgs(actionName);
+            Map<String, ProvidedValue<?>> providedArgs = client.provideActionArgs(actionName);
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("A", providedArgs.get("actuator1").getValue());
@@ -470,17 +467,17 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             String actionName = "SetActuatorNotLimitedValueSet";
 
-            List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
-            assertNotNull(argsMeta.get(0).getProvided());
-            assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
-            assertFalse(argsMeta.get(0).getProvided().getValueSet().isLimited());
+            List<DataType> argTypes = client.getActionMeta(actionName).getArgs();
+            assertNotNull(argTypes.get(0).getProvided());
+            assertTrue(argTypes.get(0).getProvided().isValue());
+            assertTrue(argTypes.get(0).getProvided().hasValueSet());
+            assertFalse(argTypes.get(0).getProvided().getValueSet().isLimited());
 
             assertFalse(engine.isError());
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     @Test
     public void testProvideActionArgsDepends() {
         try (SpongeRestClient client = createRestClient()) {
@@ -489,23 +486,23 @@ public abstract class BaseRestApiTestTemplate {
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false, 1, 1, "X"));
 
-            List<RestActionArgMeta> argsMeta = client.getActionMeta(actionName).getArgsMeta();
-            Map<String, ArgProvidedValue<?>> providedArgs;
+            List<DataType> argTypes = client.getActionMeta(actionName).getArgs();
+            Map<String, ProvidedValue<?>> providedArgs;
 
-            assertTrue(argsMeta.get(0).getProvided().isValue());
-            assertTrue(argsMeta.get(0).getProvided().hasValueSet());
-            assertEquals(0, argsMeta.get(0).getProvided().getDependencies().size());
-            assertTrue(argsMeta.get(1).getProvided().isValue());
-            assertFalse(argsMeta.get(1).getProvided().hasValueSet());
-            assertEquals(0, argsMeta.get(1).getProvided().getDependencies().size());
-            assertTrue(argsMeta.get(2).getProvided().isValue());
-            assertFalse(argsMeta.get(2).getProvided().hasValueSet());
-            assertEquals(0, argsMeta.get(2).getProvided().getDependencies().size());
-            assertNull(argsMeta.get(3).getProvided());
-            assertTrue(argsMeta.get(4).getProvided().isValue());
-            assertTrue(argsMeta.get(4).getProvided().hasValueSet());
-            assertEquals(1, argsMeta.get(4).getProvided().getDependencies().size());
-            assertEquals("actuator1", argsMeta.get(4).getProvided().getDependencies().get(0));
+            assertTrue(argTypes.get(0).getProvided().isValue());
+            assertTrue(argTypes.get(0).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
+            assertTrue(argTypes.get(1).getProvided().isValue());
+            assertFalse(argTypes.get(1).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
+            assertTrue(argTypes.get(2).getProvided().isValue());
+            assertFalse(argTypes.get(2).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(2).getProvided().getDependencies().size());
+            assertNull(argTypes.get(3).getProvided());
+            assertTrue(argTypes.get(4).getProvided().isValue());
+            assertTrue(argTypes.get(4).getProvided().hasValueSet());
+            assertEquals(1, argTypes.get(4).getProvided().getDependencies().size());
+            assertEquals("actuator1", argTypes.get(4).getProvided().getDependencies().get(0));
 
             providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1"), Collections.emptyMap());
             assertEquals(1, providedArgs.size());
@@ -513,7 +510,7 @@ public abstract class BaseRestApiTestTemplate {
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
             assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
-            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ArgProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
+            List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
             assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());

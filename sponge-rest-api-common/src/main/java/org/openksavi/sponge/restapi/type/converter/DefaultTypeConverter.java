@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.openksavi.sponge.restapi.type.converter.unit.AnnotatedTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.AnyTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.BinaryTypeUnitConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.BooleanTypeUnitConverter;
@@ -46,10 +45,9 @@ public class DefaultTypeConverter extends BaseTypeConverter {
         super(objectMapper);
 
         // Register default unit converters.
-        registerAll(Arrays.asList(new AnnotatedTypeUnitConverter(), new AnyTypeUnitConverter(), new BinaryTypeUnitConverter(),
-                new BooleanTypeUnitConverter(), new DateTimeTypeUnitConverter(), new DynamicTypeUnitConverter(),
-                new IntegerTypeUnitConverter(), new ListTypeUnitConverter(), new MapTypeUnitConverter(), new NumberTypeUnitConverter(),
-                new ObjectTypeUnitConverter(), new RecordTypeUnitConverter(), new StringTypeUnitConverter(), new TypeTypeUnitConverter(),
-                new VoidTypeUnitConverter()));
+        registerAll(Arrays.asList(new AnyTypeUnitConverter(), new BinaryTypeUnitConverter(), new BooleanTypeUnitConverter(),
+                new DateTimeTypeUnitConverter(), new DynamicTypeUnitConverter(), new IntegerTypeUnitConverter(),
+                new ListTypeUnitConverter(), new MapTypeUnitConverter(), new NumberTypeUnitConverter(), new ObjectTypeUnitConverter(),
+                new RecordTypeUnitConverter(), new StringTypeUnitConverter(), new TypeTypeUnitConverter(), new VoidTypeUnitConverter()));
     }
 }

@@ -82,13 +82,13 @@ class MpdSetAndPlayPlaylist(Action):
     def onConfigure(self):
         self.withLabel("Set and play a playlist").withDescription("Sets a playlist according to the arguments and starts playing it immediately.")
         self.withArgs([
-            ArgMeta("artist", StringType().withNullable(True)).withLabel("Artist").withDescription("Artist may be specified as a regular expression."),
-            ArgMeta("album", StringType().withNullable(True)).withLabel("Album").withDescription("Album may be specified as a regular expression."),
-            ArgMeta("genre", StringType().withNullable(True)).withLabel("Genre").withDescription("Genre may be specified as a regular expression."),
-            ArgMeta("minYear", IntegerType().withNullable(True)).withLabel("Release year (since)").withDescription("An album minimum release year."),
-            ArgMeta("maxYear", IntegerType().withNullable(True)).withLabel("Release year (to)").withDescription("An album maximum release year."),
-            ArgMeta("autoPlay", BooleanType().withDefaultValue(True)).withLabel("Auto play").withDescription("Plays the playlist automatically.")
-        ]).withResult(ResultMeta(StringType()).withLabel("Info").withDescription("A short info of the status of the action call."))
+            StringType("artist").withNullable().withLabel("Artist").withDescription("Artist may be specified as a regular expression."),
+            StringType("album").withNullable().withLabel("Album").withDescription("Album may be specified as a regular expression."),
+            StringType("genre").withNullable().withLabel("Genre").withDescription("Genre may be specified as a regular expression."),
+            IntegerType("minYear").withNullable().withLabel("Release year (since)").withDescription("An album minimum release year."),
+            IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("An album maximum release year."),
+            BooleanType("autoPlay").withDefaultValue(True).withLabel("Auto play").withDescription("Plays the playlist automatically.")
+        ]).withResult(StringType().withLabel("Info").withDescription("A short info of the status of the action call."))
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         library = MpdLibrary()
 

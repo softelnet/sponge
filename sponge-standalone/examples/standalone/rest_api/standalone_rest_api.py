@@ -5,7 +5,7 @@ REST API
 
 class UpperCase(Action):
     def onConfigure(self):
-        self.withArg(ArgMeta("text", StringType()).withLabel("Text to upper case")).withResult(ResultMeta(StringType()).withLabel("Upper case text"))
+        self.withArg(StringType("text").withLabel("Text to upper case")).withResult(StringType().withLabel("Upper case text"))
     def onCall(self, text):
         self.logger.info("Action {} called", self.meta.name)
         return text.upper()

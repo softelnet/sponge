@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.action.ActionMeta;
-import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
@@ -32,6 +31,7 @@ import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.trigger.TriggerMeta;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
@@ -134,7 +134,7 @@ public interface EngineOperations {
      *        those arguments that the arguments specified in the {@code names} depend on.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Returns the provided values along with value sets of the action arguments.
@@ -143,7 +143,7 @@ public interface EngineOperations {
      * @param argNames the list of argument names.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames);
 
     /**
      * Returns the provided values along with value sets of the action arguments.
@@ -151,7 +151,7 @@ public interface EngineOperations {
      * @param actionName the action name.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName);
 
     /**
      * Shuts down the engine using the current thread.

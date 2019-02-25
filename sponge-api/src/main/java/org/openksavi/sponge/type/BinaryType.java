@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A binary (byte array) type. Provides an optional property {@code mimeType}.
  */
@@ -27,7 +29,36 @@ public class BinaryType extends DataType<byte[]> {
     private String mimeType;
 
     public BinaryType() {
-        super(DataTypeKind.BINARY);
+        this(null);
+    }
+
+    public BinaryType(String name) {
+        super(DataTypeKind.BINARY, name);
+    }
+
+    @Override
+    public BinaryType withName(String name) {
+        return (BinaryType) super.withName(name);
+    }
+
+    @Override
+    public BinaryType withLabel(String label) {
+        return (BinaryType) super.withLabel(label);
+    }
+
+    @Override
+    public BinaryType withDescription(String description) {
+        return (BinaryType) super.withDescription(description);
+    }
+
+    @Override
+    public BinaryType withAnnotated(boolean annotated) {
+        return (BinaryType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public BinaryType withAnnotated() {
+        return (BinaryType) super.withAnnotated();
     }
 
     @Override
@@ -58,6 +89,16 @@ public class BinaryType extends DataType<byte[]> {
     @Override
     public BinaryType withNullable() {
         return (BinaryType) super.withNullable();
+    }
+
+    @Override
+    public BinaryType withOptional() {
+        return (BinaryType) super.withOptional();
+    }
+
+    @Override
+    public BinaryType withProvided(ProvidedMeta provided) {
+        return (BinaryType) super.withProvided(provided);
     }
 
     public BinaryType withMimeType(String mimeType) {

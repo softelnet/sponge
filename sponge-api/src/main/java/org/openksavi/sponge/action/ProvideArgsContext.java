@@ -19,6 +19,8 @@ package org.openksavi.sponge.action;
 import java.util.Map;
 import java.util.Set;
 
+import org.openksavi.sponge.type.provided.ProvidedValue;
+
 /**
  * A provided action arguments context.
  */
@@ -36,9 +38,9 @@ public class ProvideArgsContext {
     /**
      * The initially empty map of argument names and values (value sets) that is to be set up in be provided.
      */
-    private Map<String, ArgProvidedValue<?>> provided;
+    private Map<String, ProvidedValue<?>> provided;
 
-    public ProvideArgsContext(Set<String> names, Map<String, Object> current, Map<String, ArgProvidedValue<?>> provided) {
+    public ProvideArgsContext(Set<String> names, Map<String, Object> current, Map<String, ProvidedValue<?>> provided) {
         this.names = names;
         this.current = current;
         this.provided = provided;
@@ -60,11 +62,11 @@ public class ProvideArgsContext {
         this.current = current;
     }
 
-    public Map<String, ArgProvidedValue<?>> getProvided() {
+    public Map<String, ProvidedValue<?>> getProvided() {
         return provided;
     }
 
-    public void setProvided(Map<String, ArgProvidedValue<?>> provided) {
+    public void setProvided(Map<String, ProvidedValue<?>> provided) {
         this.provided = provided;
     }
 }

@@ -19,52 +19,54 @@ package org.openksavi.sponge.action;
 import java.util.List;
 
 import org.openksavi.sponge.ProcessorMeta;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * An action metadata.
  */
+@SuppressWarnings("rawtypes")
 public interface ActionMeta extends ProcessorMeta {
 
     /**
-     * Returns the arguments metadata or {@code null} in not specified.
+     * Returns the argument types or {@code null} in not specified.
      *
-     * @return the arguments metadata.
+     * @return the argument types.
      */
-    List<ArgMeta> getArgsMeta();
+    List<DataType> getArgs();
 
     /**
-     * Sets the (optional) arguments metadata.
+     * Sets the (optional) argument types.
      *
-     * @param argsMeta the arguments metadata.
+     * @param args the argument types.
      */
-    void setArgsMeta(List<ArgMeta> argsMeta);
+    void setArgs(List<DataType> args);
 
     /**
-     * Adds the (optional) arguments metadata.
+     * Adds the (optional) argument type.
      *
-     * @param argsMeta the arguments metadata.
+     * @param args the argument type.
      */
-    void addArgsMeta(List<ArgMeta> argsMeta);
+    void addArgs(List<DataType> args);
 
     /**
-     * Returns the argument metadata. Throws exception if not found.
+     * Returns the argument type. Throws exception if not found. Supports sub-arguments specified using the dot notation.
      *
      * @param name the argument name.
-     * @return the argument metadata.
+     * @return the argument type.
      */
-    ArgMeta getArgMeta(String name);
+    DataType getArg(String name);
 
     /**
-     * Returns the result metadata or {@code null} in not specified.
+     * Returns the result type or {@code null} in not specified.
      *
-     * @return the result metadata.
+     * @return the result type.
      */
-    ResultMeta<?> getResultMeta();
+    DataType getResult();
 
     /**
-     * Sets the (optional) result metadata.
+     * Sets the (optional) result type.
      *
-     * @param resultMeta the result metadata.
+     * @param result the result type.
      */
-    void setResultMeta(ResultMeta<?> resultMeta);
+    void setResult(DataType result);
 }

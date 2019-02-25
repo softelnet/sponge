@@ -32,11 +32,6 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ArgProvidedMeta;
-import org.openksavi.sponge.action.ArgProvidedValue;
-import org.openksavi.sponge.action.ResultMeta;
-import org.openksavi.sponge.action.ValueSetMeta;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
@@ -55,7 +50,9 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.type.DateTimeKind;
-import org.openksavi.sponge.type.RecordTypeField;
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.type.provided.ValueSetMeta;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
 
@@ -266,8 +263,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                ArgMeta.class, ResultMeta.class, ArgProvidedMeta.class, ArgProvidedValue.class, AnnotatedValue.class, DynamicValue.class,
-                CategoryMeta.class, DateTimeKind.class, RecordTypeField.class, ValueSetMeta.class,
+                ProvidedMeta.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class,
+                CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class));
         //@formatter:on
 

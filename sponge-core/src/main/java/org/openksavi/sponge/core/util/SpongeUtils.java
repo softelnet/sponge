@@ -85,6 +85,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorOperations;
 import org.openksavi.sponge.ProcessorQualifiedName;
+import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
@@ -99,12 +100,10 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
-import org.openksavi.sponge.type.AnnotatedType;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
-import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.DynamicType;
 import org.openksavi.sponge.type.IntegerType;
@@ -140,9 +139,9 @@ public abstract class SpongeUtils {
     }
 
     @SuppressWarnings("rawtypes")
-    private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnnotatedType.class, AnyType.class,
-            BinaryType.class, BooleanType.class, DateTimeType.class, DynamicType.class, IntegerType.class, ListType.class, MapType.class,
-            NumberType.class, ObjectType.class, RecordType.class, StringType.class, TypeType.class, VoidType.class);
+    private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnyType.class, BinaryType.class, BooleanType.class,
+            DateTimeType.class, DynamicType.class, IntegerType.class, ListType.class, MapType.class, NumberType.class, ObjectType.class,
+            RecordType.class, StringType.class, TypeType.class, VoidType.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {
@@ -362,7 +361,7 @@ public abstract class SpongeUtils {
     }
 
     public static String createControlEventName(Class<? extends ControlEvent> controlEventClass) {
-        return EngineConstants.CONTROL_EVENT_PREFIX + StringUtils.uncapitalize(controlEventClass.getSimpleName());
+        return SpongeConstants.CONTROL_EVENT_PREFIX + StringUtils.uncapitalize(controlEventClass.getSimpleName());
     }
 
     public static int calculateInitialDynamicThreadPoolSize(SpongeEngine engine, int maxPoolSize) {
@@ -623,13 +622,14 @@ public abstract class SpongeUtils {
 
     @SuppressWarnings("rawtypes")
     public static void validateType(DataType type, String valueName) {
+        if (type.getName() != null) {
+            Validate.isTrue(!type.getName().trim().isEmpty() &&
+                    !StringUtils.containsWhitespace(type.getName())
+                            && !StringUtils.containsAny(type.getName(), SpongeConstants.ACTION_SUB_ARG_SEPARATOR),
+                    "The type name is invalid in the %s", valueName);
+        }
+
         switch (type.getKind()) {
-        case ANNOTATED:
-            Validate.isInstanceOf(AnnotatedType.class, type, "The type should be an instance of %s", AnnotatedType.class);
-            Validate.isTrue(((AnnotatedType) type).getValueType().getKind() != DataTypeKind.ANNOTATED, "Annotated types cannot be nested");
-            validateType(Validate.notNull(((AnnotatedType) type).getValueType(), "Annotated value type not specified in the %s", valueName),
-                    valueName);
-            break;
         case OBJECT:
             Validate.isInstanceOf(ObjectType.class, type, "The type should be an instance of %s", ObjectType.class);
             String className = ((ObjectType) type).getClassName();
@@ -651,9 +651,9 @@ public abstract class SpongeUtils {
             Validate.isTrue(((RecordType) type).getFields() != null && !((RecordType) type).getFields().isEmpty(),
                     "The record type must define fields");
             ((RecordType) type).getFields().forEach(field -> {
+                Validate.notNull(field, "Record field type not specified in the %s", valueName);
                 validateRecordFieldName(field.getName(), valueName);
-                Validate.notNull(field.getType(), "Record field type not specified in the %s", valueName);
-                validateType(field.getType(), valueName);
+                validateType(field, valueName);
             });
             break;
         default:
@@ -727,14 +727,14 @@ public abstract class SpongeUtils {
 
     public static void validateEventName(String name) {
         Validate.isTrue(name != null && !name.trim().isEmpty(), "Event name must not be null or empty");
-        Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, EngineConstants.EVENT_NAME_RESERVED_CHARS),
-                "Event name must not contain whitespaces or reserved characters %s", EngineConstants.EVENT_NAME_RESERVED_CHARS);
+        Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, SpongeConstants.EVENT_NAME_RESERVED_CHARS),
+                "Event name must not contain whitespaces or reserved characters %s", SpongeConstants.EVENT_NAME_RESERVED_CHARS);
 
     }
 
     public static void validateRecordFieldName(String name, String valueName) {
         Validate.isTrue(name != null && !name.trim().isEmpty(), "Record field name not specified in the %s", valueName);
-        Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, EngineConstants.ACTION_SUB_ARG_SEPARATOR),
+        Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, SpongeConstants.ACTION_SUB_ARG_SEPARATOR),
                 "The record field name is invalid in the %s", valueName);
     }
 }

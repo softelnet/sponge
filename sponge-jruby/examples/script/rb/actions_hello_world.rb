@@ -4,8 +4,8 @@
 class HelloWorldAction < Action
     def onConfigure
         self.withLabel("Hello world").withDescription("Returns a greeting text.")
-        self.withArg(ArgMeta.new("name", StringType.new()).withLabel("Your name").withDescription("Type your name."))
-        self.withResult(ResultMeta.new(StringType.new()).withLabel("Greeting").withDescription("The greeting text."))
+        self.withArg(StringType.new("name").withLabel("Your name").withDescription("Type your name."))
+        self.withResult(StringType.new().withLabel("Greeting").withDescription("The greeting text."))
     end
     def onCall(name)
         return "Hello World! Hello %s!" % [name]

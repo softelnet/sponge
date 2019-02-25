@@ -6,7 +6,7 @@ Digits recognition library
 class DigitsPredict(Action):
     def onConfigure(self):
         self.withLabel("Recognize a digit").withDescription("Recognizes a handwritten digit")
-        self.withArg(createImageArgMeta()).withResult(ResultMeta(IntegerType()).withLabel("Recognized digit"))
+        self.withArg(createImageType("image")).withResult(IntegerType().withLabel("Recognized digit"))
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
         prediction = max(predictions, key=predictions.get)
@@ -24,7 +24,7 @@ class DigitsPredict(Action):
 class DigitsPredictProbabilities(Action):
     def onConfigure(self):
         self.withLabel("Recognize a digit (probabilities)").withDescription("Recognizes a handwritten digit returning probabilities")
-        self.withArg(createImageArgMeta()).withResult(ResultMeta(MapType(StringType(), NumberType())).withLabel("Digit probabilities"))
+        self.withArg(createImageType("image")).withResult(MapType(StringType(), NumberType()).withLabel("Digit probabilities"))
     def onCall(self, image):
         return py4j.facade.predict(image)
 

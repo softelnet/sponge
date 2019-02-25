@@ -6,9 +6,9 @@ Optional action argument
 class OptionalArgAction(Action):
     def onConfigure(self):
         self.withArgs([
-            ArgMeta("mandatoryText", StringType()),
-            ArgMeta("optionalText", StringType()).withOptional()
+            StringType("mandatoryText"),
+            StringType("optionalText").withOptional()
         ])
-        self.withResult(ResultMeta(StringType()))
+        self.withResult(StringType())
     def onCall(self, mandatoryText, optionalText = None):
         return mandatoryText + (optionalText if optionalText is not None else "")

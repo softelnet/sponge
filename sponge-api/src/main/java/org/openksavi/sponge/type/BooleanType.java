@@ -18,13 +18,44 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A boolean type.
  */
 public class BooleanType extends DataType<Boolean> {
 
     public BooleanType() {
-        super(DataTypeKind.BOOLEAN);
+        this(null);
+    }
+
+    public BooleanType(String name) {
+        super(DataTypeKind.BOOLEAN, name);
+    }
+
+    @Override
+    public BooleanType withName(String name) {
+        return (BooleanType) super.withName(name);
+    }
+
+    @Override
+    public BooleanType withLabel(String label) {
+        return (BooleanType) super.withLabel(label);
+    }
+
+    @Override
+    public BooleanType withDescription(String description) {
+        return (BooleanType) super.withDescription(description);
+    }
+
+    @Override
+    public BooleanType withAnnotated(boolean annotated) {
+        return (BooleanType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public BooleanType withAnnotated() {
+        return (BooleanType) super.withAnnotated();
     }
 
     @Override
@@ -55,5 +86,15 @@ public class BooleanType extends DataType<Boolean> {
     @Override
     public BooleanType withNullable() {
         return (BooleanType) super.withNullable();
+    }
+
+    @Override
+    public BooleanType withOptional() {
+        return (BooleanType) super.withOptional();
+    }
+
+    @Override
+    public BooleanType withProvided(ProvidedMeta provided) {
+        return (BooleanType) super.withProvided(provided);
     }
 }

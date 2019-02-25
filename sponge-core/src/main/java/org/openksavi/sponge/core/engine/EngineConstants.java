@@ -28,9 +28,6 @@ import org.openksavi.sponge.event.EventName;
  */
 public final class EngineConstants {
 
-    /** Control event name prefix. */
-    public static final String CONTROL_EVENT_PREFIX = "$";
-
     public static final String IGNORED_EVENTS_LOGGER_NAME = "sponge.event.ignored";
 
     /** Predefined events names, e.g. system event names. */
@@ -39,10 +36,6 @@ public final class EngineConstants {
     public static final Boolean DEFAULT_ON_RUN_FUNCTION_RESULT = true;
 
     public static final String MATCH_ALL_REGEXP = ".*";
-
-    public static final String EVENT_NAME_RESERVED_CHARS = ":";
-
-    public static final String ACTION_SUB_ARG_SEPARATOR = ".";
 
     private EngineConstants() {
         //

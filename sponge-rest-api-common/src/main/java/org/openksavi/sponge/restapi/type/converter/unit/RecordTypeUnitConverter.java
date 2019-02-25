@@ -26,7 +26,6 @@ import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.RecordType;
-import org.openksavi.sponge.type.RecordTypeField;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, Object>, RecordType> {
@@ -37,7 +36,7 @@ public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, O
 
     @Override
     public Object marshal(TypeConverter converter, RecordType type, Map<String, Object> value) {
-        Map<String, RecordTypeField> fieldMap = createFieldMap(type);
+        Map<String, DataType> fieldMap = createFieldMap(type);
 
         return value.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(),
                 entry -> converter.marshal(getFieldType(fieldMap, type, entry.getKey()), entry.getValue())));
@@ -47,18 +46,18 @@ public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, O
     public Map<String, Object> unmarshal(TypeConverter converter, RecordType type, Object value) {
         Validate.isInstanceOf(Map.class, value, "Expected map but got %s", value.getClass());
 
-        Map<String, RecordTypeField> fieldMap = createFieldMap(type);
+        Map<String, DataType> fieldMap = createFieldMap(type);
 
         return (Map<String, Object>) ((Map) value).entrySet().stream().collect(Collectors.toMap((Map.Entry entry) -> entry.getKey(),
                 (Map.Entry entry) -> converter.unmarshal(getFieldType(fieldMap, type, (String) entry.getKey()), entry.getValue())));
     }
 
-    protected DataType<?> getFieldType(Map<String, RecordTypeField> fieldMap, RecordType type, String fieldName) {
+    protected DataType<?> getFieldType(Map<String, DataType> fieldMap, RecordType type, String fieldName) {
         return Validate.notNull(fieldMap.get(fieldName), "Field %s is not defined in the record type %s", fieldName,
-                type.getName() != null ? type.getName() : "").getType();
+                type.getName() != null ? type.getName() : "");
     }
 
-    protected Map<String, RecordTypeField> createFieldMap(RecordType type) {
+    protected Map<String, DataType> createFieldMap(RecordType type) {
         return type.getFields().stream().collect(Collectors.toMap(field -> field.getName(), field -> field));
     }
 }

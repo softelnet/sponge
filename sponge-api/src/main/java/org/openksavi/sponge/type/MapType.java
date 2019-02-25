@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A map type. This type requires two parameters: a type of keys and a type of values in the map.
  *
@@ -25,7 +27,7 @@ import java.util.Map;
  * @param <V> a map value type.
  */
 @SuppressWarnings("unchecked")
-public class MapType<K, V> extends DataType<Map<K, V>> {
+public class MapType<K, V> extends CollectionType<Map<K, V>> {
 
     /** The map key type. */
     private DataType<?> keyType;
@@ -34,15 +36,46 @@ public class MapType<K, V> extends DataType<Map<K, V>> {
     private DataType<?> valueType;
 
     public MapType() {
-        super(DataTypeKind.MAP);
-        this.keyType = new AnyType();
-        this.valueType = new AnyType();
+        this(null);
+    }
+
+    public MapType(String name) {
+        this(name, (DataType<K>) new AnyType(), (DataType<V>) new AnyType());
     }
 
     public MapType(DataType<K> keyType, DataType<V> valueType) {
-        super(DataTypeKind.MAP);
+        this(null, keyType, valueType);
+    }
+
+    public MapType(String name, DataType<K> keyType, DataType<V> valueType) {
+        super(DataTypeKind.MAP, name);
         this.keyType = keyType;
         this.valueType = valueType;
+    }
+
+    @Override
+    public MapType<K, V> withName(String name) {
+        return (MapType<K, V>) super.withName(name);
+    }
+
+    @Override
+    public MapType<K, V> withLabel(String label) {
+        return (MapType<K, V>) super.withLabel(label);
+    }
+
+    @Override
+    public MapType<K, V> withDescription(String description) {
+        return (MapType<K, V>) super.withDescription(description);
+    }
+
+    @Override
+    public MapType<K, V> withAnnotated(boolean annotated) {
+        return (MapType<K, V>) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public MapType<K, V> withAnnotated() {
+        return (MapType<K, V>) super.withAnnotated();
     }
 
     @Override
@@ -73,6 +106,26 @@ public class MapType<K, V> extends DataType<Map<K, V>> {
     @Override
     public MapType<K, V> withNullable() {
         return (MapType<K, V>) super.withNullable();
+    }
+
+    @Override
+    public MapType<K, V> withOptional() {
+        return (MapType<K, V>) super.withOptional();
+    }
+
+    @Override
+    public MapType<K, V> withProvided(ProvidedMeta provided) {
+        return (MapType<K, V>) super.withProvided(provided);
+    }
+
+    public MapType<K, V> withKey(DataType<K> keyType) {
+        this.keyType = keyType;
+        return this;
+    }
+
+    public MapType<K, V> withValue(DataType<V> valueType) {
+        this.valueType = valueType;
+        return this;
     }
 
     public DataType<K> getKeyType() {

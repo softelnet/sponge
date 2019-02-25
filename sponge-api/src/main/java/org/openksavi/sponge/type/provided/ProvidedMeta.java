@@ -14,67 +14,67 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.action;
+package org.openksavi.sponge.type.provided;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * A provided argument metadata.
+ * A provided object metadata.
  */
-public class ArgProvidedMeta {
+public class ProvidedMeta {
 
-    /** The flag specifying if this argument value is provided. */
+    /** The flag specifying if the value is provided. */
     private boolean value;
 
-    /** The metadata specifying if this argument value set is provided. Defaults to {@code null}. */
+    /** The metadata specifying if the value set is provided. Defaults to {@code null}. */
     private ValueSetMeta valueSet;
 
-    /** The list of attribute names that this provided attribute depends on. */
+    /** The list of names that this provided object depends on. */
     private List<String> dependencies = new ArrayList<>();
 
-    /** The flag specifying if this provided argument is read only. Defaults to {@code false}. */
+    /** The flag specifying if this provided object is read only. Defaults to {@code false}. */
     private boolean readOnly = false;
 
     /**
-     * The flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to
-     * {@code false}. This flag should be handled by a client code.
+     * The flag specifying if the provided value of this object should overwrite the value set in a client code. Defaults to {@code false}.
+     * This flag should be handled by a client code.
      */
     private boolean overwrite = false;
 
-    public ArgProvidedMeta() {
+    public ProvidedMeta() {
     }
 
-    public ArgProvidedMeta withValue() {
+    public ProvidedMeta withValue() {
         value = true;
         return this;
     }
 
-    public ArgProvidedMeta withValueSet() {
+    public ProvidedMeta withValueSet() {
         return withValueSet(new ValueSetMeta());
     }
 
-    public ArgProvidedMeta withValueSet(ValueSetMeta valueSet) {
+    public ProvidedMeta withValueSet(ValueSetMeta valueSet) {
         this.valueSet = valueSet;
         return this;
     }
 
-    public ArgProvidedMeta withDependencies(List<String> dependencies) {
+    public ProvidedMeta withDependencies(List<String> dependencies) {
         this.dependencies.addAll(dependencies);
         return this;
     }
 
-    public ArgProvidedMeta withDependency(String dependency) {
+    public ProvidedMeta withDependency(String dependency) {
         return withDependencies(Arrays.asList(dependency));
     }
 
-    public ArgProvidedMeta withReadOnly() {
+    public ProvidedMeta withReadOnly() {
         readOnly = true;
         return this;
     }
 
-    public ArgProvidedMeta withOverwrite() {
+    public ProvidedMeta withOverwrite() {
         overwrite = true;
         return this;
     }

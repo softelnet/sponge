@@ -21,7 +21,6 @@ package org.openksavi.sponge.type;
  */
 @SuppressWarnings("rawtypes")
 public enum DataTypeKind {
-    ANNOTATED(AnnotatedType.class),
     ANY(AnyType.class),
     BINARY(BinaryType.class),
     BOOLEAN(BooleanType.class),
@@ -36,8 +35,6 @@ public enum DataTypeKind {
     STRING(StringType.class),
     TYPE(TypeType.class),
     VOID(VoidType.class);
-
-    public static final String CODE_ANNOTATED = "ANNOTATED";
 
     public static final String CODE_ANY = "ANY";
 

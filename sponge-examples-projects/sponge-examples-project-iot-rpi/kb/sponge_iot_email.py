@@ -10,12 +10,11 @@ class SendNotificationEmail(Action):
     def onConfigure(self):
         self.withLabel("Send a notification email").withDescription("Sends a notification email.")
         self.withArgs([
-            ArgMeta("subject", StringType()).withLabel("Subject").withDescription("The email subject."),
-            ArgMeta("message", StringType().withFeatures({"maxLines":5})).withLabel(
-                "Message").withDescription("The email message.")
+            StringType("subject").withLabel("Subject").withDescription("The email subject."),
+            StringType("message").withFeatures({"maxLines":5}).withLabel("Message").withDescription("The email message.")
             # The attachmentFiles attribute won't be visible in the UI.
         ])
-        self.withResult(ResultMeta(VoidType()))
+        self.withNoResult()
     def onCall(self, subject, message, attachmentFiles = []):
         email = SimpleEmail() if len(attachmentFiles) == 0 else MultiPartEmail()
         email.setHostName(sponge.getProperty("mail.host"))

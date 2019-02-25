@@ -91,13 +91,13 @@ class MpdSetAndPlayPlaylist(Action):
     def onConfigure(self):
         self.withLabel("Set and play a playlist").withDescription("Sets a playlist according to the arguments and starts playing it immediately. Uses mpc")
         self.withArgs([
-            ArgMeta("artist", StringType().withNullable(True)).withLabel("Artist").withDescription("The artist"),
-            ArgMeta("album", StringType().withNullable(True)).withLabel("Album").withDescription("The album"),
-            ArgMeta("genre", StringType().withNullable(True)).withLabel("Genre").withDescription("The genre"),
-            ArgMeta("minYear", IntegerType().withNullable(True)).withLabel("Release year (since)").withDescription("The album minimum release year."),
-            ArgMeta("maxYear", IntegerType().withNullable(True)).withLabel("Release year (to)").withDescription("The album maximum release year."),
-            ArgMeta("autoPlay", BooleanType().withDefaultValue(True)).withLabel("Auto play").withDescription("Plays the playlist automatically.")
-        ]).withResult(ResultMeta(StringType()).withLabel("Info").withDescription("A short info of the status of the action call."))
+            StringType("artist").withNullable().withLabel("Artist").withDescription("The artist"),
+            StringType("album").withNullable().withLabel("Album").withDescription("The album"),
+            StringType("genre").withNullable().withLabel("Genre").withDescription("The genre"),
+            IntegerType("minYear").withNullable().withLabel("Release year (since)").withDescription("The album minimum release year."),
+            IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("The album maximum release year."),
+            BooleanType("autoPlay").withDefaultValue(True).withLabel("Auto play").withDescription("Plays the playlist automatically.")
+        ]).withResult(StringType().withLabel("Info").withDescription("A short info of the status of the action call."))
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         mpc = Mpc()
         sponge.logger.info("Setting the playlist...")

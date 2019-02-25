@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.action;
+package org.openksavi.sponge.type.provided;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 
 /**
- * A provided argument value and a possible value set.
+ * A provided object value and a possible value set.
  */
-public class ArgProvidedValue<T> {
+public class ProvidedValue<T> {
 
     /** The value. */
     private T value;
@@ -38,7 +38,7 @@ public class ArgProvidedValue<T> {
      */
     private List<AnnotatedValue<T>> annotatedValueSet;
 
-    public ArgProvidedValue() {
+    public ProvidedValue() {
         //
     }
 
@@ -76,18 +76,18 @@ public class ArgProvidedValue<T> {
                 .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
 
-    public ArgProvidedValue<T> withValue(T value) {
+    public ProvidedValue<T> withValue(T value) {
         setValue(value);
         setValuePresent(true);
         return this;
     }
 
-    public ArgProvidedValue<T> withAnnotatedValueSet(List<AnnotatedValue<T>> annotatedValueSet) {
+    public ProvidedValue<T> withAnnotatedValueSet(List<AnnotatedValue<T>> annotatedValueSet) {
         setAnnotatedValueSet(annotatedValueSet);
         return this;
     }
 
-    public ArgProvidedValue<T> withValueSet(List<T> valueSet) {
+    public ProvidedValue<T> withValueSet(List<T> valueSet) {
         return withAnnotatedValueSet(
                 valueSet != null ? valueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()) : null);
     }

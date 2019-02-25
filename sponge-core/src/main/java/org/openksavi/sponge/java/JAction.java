@@ -20,13 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.action.BaseAction;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * Java-specific implementation of the action.
  */
+@SuppressWarnings("rawtypes")
 public abstract class JAction extends BaseAction {
 
     @Override
@@ -65,17 +65,17 @@ public abstract class JAction extends BaseAction {
     }
 
     @Override
-    public final JAction withArgs(List<ArgMeta> argsMeta) {
-        return (JAction) super.withArgs(argsMeta);
+    public final JAction withArgs(List<DataType> args) {
+        return (JAction) super.withArgs(args);
     }
 
-    public final JAction withArgs(ArgMeta... argsMeta) {
-        return withArgs(Arrays.asList(argsMeta));
+    public final JAction withArgs(DataType... args) {
+        return withArgs(Arrays.asList(args));
     }
 
     @Override
-    public final JAction withArg(ArgMeta argMeta) {
-        return (JAction) super.withArg(argMeta);
+    public final JAction withArg(DataType arg) {
+        return (JAction) super.withArg(arg);
     }
 
     @Override
@@ -84,8 +84,8 @@ public abstract class JAction extends BaseAction {
     }
 
     @Override
-    public final JAction withResult(ResultMeta<?> resultMeta) {
-        return (JAction) super.withResult(resultMeta);
+    public final JAction withResult(DataType result) {
+        return (JAction) super.withResult(result);
     }
 
     @Override

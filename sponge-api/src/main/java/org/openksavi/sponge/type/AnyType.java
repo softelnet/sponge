@@ -18,13 +18,44 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * Any type. It may be used in situations when type is not important.
  */
 public class AnyType extends DataType<Object> {
 
     public AnyType() {
-        super(DataTypeKind.ANY);
+        this(null);
+    }
+
+    public AnyType(String name) {
+        super(DataTypeKind.ANY, name);
+    }
+
+    @Override
+    public AnyType withName(String name) {
+        return (AnyType) super.withName(name);
+    }
+
+    @Override
+    public AnyType withLabel(String label) {
+        return (AnyType) super.withLabel(label);
+    }
+
+    @Override
+    public AnyType withDescription(String description) {
+        return (AnyType) super.withDescription(description);
+    }
+
+    @Override
+    public AnyType withAnnotated(boolean annotated) {
+        return (AnyType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public AnyType withAnnotated() {
+        return (AnyType) super.withAnnotated();
     }
 
     @Override
@@ -55,5 +86,15 @@ public class AnyType extends DataType<Object> {
     @Override
     public AnyType withNullable() {
         return (AnyType) super.withNullable();
+    }
+
+    @Override
+    public AnyType withOptional() {
+        return (AnyType) super.withOptional();
+    }
+
+    @Override
+    public AnyType withProvided(ProvidedMeta provided) {
+        return (AnyType) super.withProvided(provided);
     }
 }

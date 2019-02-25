@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * An integer type that supports long as well (internally uses {@code Number}).
  */
@@ -36,7 +38,36 @@ public class IntegerType extends DataType<Number> {
     private boolean exclusiveMax = false;
 
     public IntegerType() {
-        super(DataTypeKind.INTEGER);
+        this(null);
+    }
+
+    public IntegerType(String name) {
+        super(DataTypeKind.INTEGER, name);
+    }
+
+    @Override
+    public IntegerType withName(String name) {
+        return (IntegerType) super.withName(name);
+    }
+
+    @Override
+    public IntegerType withLabel(String label) {
+        return (IntegerType) super.withLabel(label);
+    }
+
+    @Override
+    public IntegerType withDescription(String description) {
+        return (IntegerType) super.withDescription(description);
+    }
+
+    @Override
+    public IntegerType withAnnotated(boolean annotated) {
+        return (IntegerType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public IntegerType withAnnotated() {
+        return (IntegerType) super.withAnnotated();
     }
 
     @Override
@@ -67,6 +98,16 @@ public class IntegerType extends DataType<Number> {
     @Override
     public IntegerType withNullable() {
         return (IntegerType) super.withNullable();
+    }
+
+    @Override
+    public IntegerType withOptional() {
+        return (IntegerType) super.withOptional();
+    }
+
+    @Override
+    public IntegerType withProvided(ProvidedMeta provided) {
+        return (IntegerType) super.withProvided(provided);
     }
 
     public IntegerType withMinValue(Long minValue) {

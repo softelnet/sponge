@@ -36,11 +36,9 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
-import org.openksavi.sponge.restapi.model.RestActionArgMeta;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -68,6 +66,7 @@ import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
  * A base Sponge REST API client.
@@ -372,33 +371,32 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void unmarshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
-            if (actionMeta.getArgsMeta() != null) {
-                actionMeta.getArgsMeta().forEach(argMeta -> {
-                    DataType type = argMeta.getType();
-                    type.setDefaultValue(typeConverter.unmarshal(type, argMeta.getType().getDefaultValue()));
+            if (actionMeta.getArgs() != null) {
+                actionMeta.getArgs().forEach(argType -> {
+                    argType.setDefaultValue(typeConverter.unmarshal(argType, argType.getDefaultValue()));
                 });
             }
 
-            if (actionMeta.getResultMeta() != null) {
-                DataType type = actionMeta.getResultMeta().getType();
-                type.setDefaultValue(typeConverter.unmarshal(type, type.getDefaultValue()));
+            if (actionMeta.getResult() != null) {
+                DataType resultType = actionMeta.getResult();
+                resultType.setDefaultValue(typeConverter.unmarshal(resultType, resultType.getDefaultValue()));
             }
         }
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected void unmarshalProvidedActionArgValues(RestActionMeta actionMeta, Map<String, ArgProvidedValue<?>> argValues) {
-        if (argValues == null || actionMeta.getArgsMeta() == null) {
+    protected void unmarshalProvidedActionArgValues(RestActionMeta actionMeta, Map<String, ProvidedValue<?>> argValues) {
+        if (argValues == null || actionMeta.getArgs() == null) {
             return;
         }
 
         argValues.forEach((argName, argValue) -> {
-            RestActionArgMeta argMeta = actionMeta.getArgMeta(argName);
-            ((ArgProvidedValue) argValue).setValue(typeConverter.unmarshal(argMeta.getType(), argValue.getValue()));
+            DataType argType = actionMeta.getArg(argName);
+            ((ProvidedValue) argValue).setValue(typeConverter.unmarshal(argType, argValue.getValue()));
 
             if (argValue.getAnnotatedValueSet() != null) {
-                argValue.getAnnotatedValueSet().stream().filter(Objects::nonNull).forEach(
-                        annotatedValue -> annotatedValue.setValue(typeConverter.unmarshal(argMeta.getType(), annotatedValue.getValue())));
+                argValue.getAnnotatedValueSet().stream().filter(Objects::nonNull)
+                        .forEach(annotatedValue -> annotatedValue.setValue(typeConverter.unmarshal(argType, annotatedValue.getValue())));
             }
         });
     }
@@ -494,12 +492,12 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     @SuppressWarnings("rawtypes")
     public void validateCallArgs(RestActionMeta actionMeta, List args) {
-        if (actionMeta == null || actionMeta.getArgsMeta() == null) {
+        if (actionMeta == null || actionMeta.getArgs() == null) {
             return;
         }
 
-        int expectedAllArgCount = actionMeta.getArgsMeta().size();
-        int expectedNonOptionalArgCount = (int) actionMeta.getArgsMeta().stream().filter(argMeta -> !argMeta.isOptional()).count();
+        int expectedAllArgCount = actionMeta.getArgs().size();
+        int expectedNonOptionalArgCount = (int) actionMeta.getArgs().stream().filter(argType -> !argType.isOptional()).count();
         int actualArgCount = args != null ? args.size() : 0;
 
         if (expectedNonOptionalArgCount == expectedAllArgCount) {
@@ -512,43 +510,43 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
 
         // Validate non-nullable arguments.
-        for (int i = 0; i < actionMeta.getArgsMeta().size(); i++) {
-            RestActionArgMeta meta = actionMeta.getArgsMeta().get(i);
-            Validate.isTrue(meta.isOptional() || meta.getType().isNullable() || args.get(i) != null, "Action argument '%s' is not set",
-                    meta.getLabel() != null ? meta.getLabel() : meta.getName());
+        for (int i = 0; i < actionMeta.getArgs().size(); i++) {
+            DataType argType = actionMeta.getArgs().get(i);
+            Validate.isTrue(argType.isOptional() || argType.isNullable() || args.get(i) != null, "Action argument '%s' is not set",
+                    argType.getLabel() != null ? argType.getLabel() : argType.getName());
         }
     }
 
     protected List<Object> marshalActionCallArgs(RestActionMeta actionMeta, List<Object> args) {
-        if (args == null || actionMeta == null || actionMeta.getArgsMeta() == null) {
+        if (args == null || actionMeta == null || actionMeta.getArgs() == null) {
             return args;
         }
 
         List<Object> result = new ArrayList<>(args.size());
         for (int i = 0; i < args.size(); i++) {
-            result.add(typeConverter.marshal(actionMeta.getArgsMeta().get(i).getType(), args.get(i)));
+            result.add(typeConverter.marshal(actionMeta.getArgs().get(i), args.get(i)));
         }
 
         return result;
     }
 
     protected Map<String, Object> marshalProvideActionArgsCurrent(RestActionMeta actionMeta, Map<String, Object> current) {
-        if (current == null || actionMeta == null || actionMeta.getArgsMeta() == null) {
+        if (current == null || actionMeta == null || actionMeta.getArgs() == null) {
             return current;
         }
 
         Map<String, Object> marshalled = new LinkedHashMap<>();
-        current.forEach((name, value) -> marshalled.put(name, typeConverter.marshal(actionMeta.getArgMeta(name).getType(), value)));
+        current.forEach((name, value) -> marshalled.put(name, typeConverter.marshal(actionMeta.getArg(name), value)));
 
         return marshalled;
     }
 
     protected void unmarshalCallResult(RestActionMeta actionMeta, ActionCallResponse response) {
-        if (actionMeta == null || actionMeta.getResultMeta() == null || response.getResult() == null) {
+        if (actionMeta == null || actionMeta.getResult() == null || response.getResult() == null) {
             return;
         }
 
-        response.setResult(typeConverter.unmarshal(actionMeta.getResultMeta().getType(), response.getResult()));
+        response.setResult(typeConverter.unmarshal(actionMeta.getResult(), response.getResult()));
     }
 
     @Override
@@ -631,12 +629,12 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
-    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
         return provideActionArgs(new ProvideActionArgsRequest(actionName, argNames, current)).getProvided();
     }
 
     @Override
-    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName) {
         return provideActionArgs(actionName, null, null);
     }
 

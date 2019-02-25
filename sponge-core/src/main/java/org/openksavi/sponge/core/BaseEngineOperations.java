@@ -27,7 +27,6 @@ import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
-import org.openksavi.sponge.action.ArgProvidedValue;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -41,6 +40,7 @@ import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.trigger.TriggerMeta;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
@@ -115,7 +115,7 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
         ActionAdapter actionAdapter =
                 Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
         try {
@@ -126,12 +126,12 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames) {
         return provideActionArgs(actionName, argNames, null);
     }
 
     @Override
-    public Map<String, ArgProvidedValue<?>> provideActionArgs(String actionName) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName) {
         return provideActionArgs(actionName, null);
     }
 

@@ -20,14 +20,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.action.BaseAction;
 import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
+import org.openksavi.sponge.type.DataType;
 
 /**
  * Kotlin-specific implementation of the action.
  */
+@SuppressWarnings("rawtypes")
 public abstract class KAction extends BaseAction {
 
     /**
@@ -76,17 +76,17 @@ public abstract class KAction extends BaseAction {
     }
 
     @Override
-    public final KAction withArgs(List<ArgMeta> argsMeta) {
-        return (KAction) super.withArgs(argsMeta);
+    public final KAction withArgs(List<DataType> args) {
+        return (KAction) super.withArgs(args);
     }
 
-    public final KAction withArgs(ArgMeta... argsMeta) {
-        return withArgs(Arrays.asList(argsMeta));
+    public final KAction withArgs(DataType... args) {
+        return withArgs(Arrays.asList(args));
     }
 
     @Override
-    public final KAction withArg(ArgMeta argMeta) {
-        return (KAction) super.withArg(argMeta);
+    public final KAction withArg(DataType arg) {
+        return (KAction) super.withArg(arg);
     }
 
     @Override
@@ -95,8 +95,8 @@ public abstract class KAction extends BaseAction {
     }
 
     @Override
-    public final KAction withResult(ResultMeta<?> resultMeta) {
-        return (KAction) super.withResult(resultMeta);
+    public final KAction withResult(DataType result) {
+        return (KAction) super.withResult(result);
     }
 
     @Override

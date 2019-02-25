@@ -18,6 +18,8 @@ package org.openksavi.sponge.type;
 
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A date/time type.
  */
@@ -27,13 +29,42 @@ public class DateTimeType extends DataType<Object> {
     private DateTimeKind dateTimeKind;
 
     public DateTimeType() {
-        this(DateTimeKind.DATE_TIME);
+        this(null);
     }
 
-    public DateTimeType(DateTimeKind dateTimeKind) {
-        super(DataTypeKind.DATE_TIME);
+    public DateTimeType(String name) {
+        this(name, DateTimeKind.DATE_TIME);
+    }
+
+    public DateTimeType(String name, DateTimeKind dateTimeKind) {
+        super(DataTypeKind.DATE_TIME, name);
 
         this.dateTimeKind = dateTimeKind;
+    }
+
+    @Override
+    public DateTimeType withName(String name) {
+        return (DateTimeType) super.withName(name);
+    }
+
+    @Override
+    public DateTimeType withLabel(String label) {
+        return (DateTimeType) super.withLabel(label);
+    }
+
+    @Override
+    public DateTimeType withDescription(String description) {
+        return (DateTimeType) super.withDescription(description);
+    }
+
+    @Override
+    public DateTimeType withAnnotated(boolean annotated) {
+        return (DateTimeType) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public DateTimeType withAnnotated() {
+        return (DateTimeType) super.withAnnotated();
     }
 
     @Override
@@ -64,6 +95,16 @@ public class DateTimeType extends DataType<Object> {
     @Override
     public DateTimeType withNullable() {
         return (DateTimeType) super.withNullable();
+    }
+
+    @Override
+    public DateTimeType withOptional() {
+        return (DateTimeType) super.withOptional();
+    }
+
+    @Override
+    public DateTimeType withProvided(ProvidedMeta provided) {
+        return (DateTimeType) super.withProvided(provided);
     }
 
     public DateTimeKind getDateTimeKind() {

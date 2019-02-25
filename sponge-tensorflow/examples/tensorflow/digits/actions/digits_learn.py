@@ -7,29 +7,29 @@ class DigitsAddToLearn(Action):
     def onConfigure(self):
         self.withLabel("Add a digit to learn").withDescription("Adds a digit to learn")
         self.withArgs([
-            createImageArgMeta(),
-            ArgMeta("digit", StringType()).withLabel("Digit").withProvided(ArgProvidedMeta().withValueSet())
+            createImageType("image"),
+            StringType("digit").withLabel("Digit").withProvided(ProvidedMeta().withValueSet())
         ]).withNoResult()
     def onCall(self, image, digit):
         py4j.facade.addToLearn(image, digit)
         return None
     def onProvideArgs(self, context):
         if "digit" in context.names:
-            context.provided["digit"] = ArgProvidedValue().withValueSet(py4j.facade.getLabels())
+            context.provided["digit"] = ProvidedValue().withValueSet(py4j.facade.getLabels())
 
 class DigitsLearn(Action):
     def onConfigure(self):
         self.withLabel("Learn a digit").withDescription("Learns a digit")
         self.withArgs([
-            createImageArgMeta(),
-            ArgMeta("digit", StringType()).withLabel("Digit").withProvided(ArgProvidedMeta().withValueSet())
+            createImageType("image"),
+            StringType("digit").withLabel("Digit").withProvided(ProvidedMeta().withValueSet())
         ]).withNoResult()
     def onCall(self, image, digit):
         py4j.facade.learn(image, digit)
         return None
     def onProvideArgs(self, context):
         if "digit" in context.names:
-            context.provided["digit"] = ArgProvidedValue().withValueSet(py4j.facade.getLabels())
+            context.provided["digit"] = ProvidedValue().withValueSet(py4j.facade.getLabels())
 
 class MnistResetModel(Action):
     def onConfigure(self):

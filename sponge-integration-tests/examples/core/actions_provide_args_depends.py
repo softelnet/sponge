@@ -14,11 +14,11 @@ class SetActuator(Action):
     def onConfigure(self):
         self.withLabel("Set actuator").withDescription("Sets the actuator state.")
         self.withArgs([
-            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
-            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
-            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
+            StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet()),
+            BooleanType("actuator2").withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue()),
+            IntegerType("actuator3").withNullable().withLabel("Actuator 3 state").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            IntegerType("actuator4").withLabel("Actuator 4 state"),
+            StringType("actuator5").withLabel("Actuator 5 state").withProvided(ProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
         ]).withNoResult()
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)
@@ -28,14 +28,14 @@ class SetActuator(Action):
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, context):
         if "actuator1" in context.names:
-            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
+            context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
         if "actuator2" in context.names:
-            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+            context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
         if "actuator3" in context.names:
-            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+            context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
         if "actuator5" in context.names:
-            context.provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
+            context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
                 "X", "Y", "Z", context.current["actuator1"]])
 
 def onStartup():

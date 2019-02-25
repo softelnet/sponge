@@ -19,84 +19,52 @@ package org.openksavi.sponge.core.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.Validate;
-
 import org.openksavi.sponge.action.ActionMeta;
-import org.openksavi.sponge.action.ArgMeta;
-import org.openksavi.sponge.action.ResultMeta;
 import org.openksavi.sponge.core.BaseProcessorMeta;
-import org.openksavi.sponge.type.AnnotatedType;
-import org.openksavi.sponge.type.RecordType;
-import org.openksavi.sponge.util.ValueHolder;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
  * A base action metadata.
  */
+@SuppressWarnings("rawtypes")
 public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
 
-    private List<ArgMeta> argsMeta;
+    private List<DataType> args;
 
-    private ResultMeta<?> resultMeta;
+    private DataType result;
 
     @Override
-    public List<ArgMeta> getArgsMeta() {
-        return argsMeta;
+    public List<DataType> getArgs() {
+        return args;
     }
 
     @Override
-    public void setArgsMeta(List<ArgMeta> argsMeta) {
-        this.argsMeta = argsMeta != null ? new ArrayList<>(argsMeta) : null;
+    public void setArgs(List<DataType> args) {
+        this.args = args != null ? new ArrayList<>(args) : null;
     }
 
     @Override
-    public void addArgsMeta(List<ArgMeta> argsMeta) {
-        if (this.argsMeta != null) {
-            this.argsMeta.addAll(argsMeta);
+    public void addArgs(List<DataType> args) {
+        if (this.args != null) {
+            this.args.addAll(args);
         } else {
-            setArgsMeta(argsMeta);
+            setArgs(args);
         }
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public ArgMeta getArgMeta(String name) {
-        Validate.notNull(argsMeta, "Arguments metadata not defined");
-
-        List<String> elements = ActionUtils.getArgNameElements(name);
-
-        ValueHolder<ArgMeta> argMetaHolder = new ValueHolder<>(argsMeta.get(getArgIndex(elements.get(0))));
-        elements.stream().skip(1).forEach(element -> {
-            ArgMeta argMeta = argMetaHolder.getValue();
-            // Verify Record/Map type.
-            Validate.isTrue(
-                    argMeta.getType() instanceof RecordType || argMeta.getType() instanceof AnnotatedType
-                            && ((AnnotatedType) argMeta.getType()).getValueType() instanceof RecordType,
-                    "The argument %s doesn't containt a record", name);
-            argMetaHolder.setValue(
-                    argMeta.getSubArgs().stream().filter(subArgMeta -> subArgMeta.getName().equals(element)).findFirst().orElse(null));
-            Validate.notNull(argMeta, "Metadata for argument '%s' not found", name);
-        });
-
-        return argMetaHolder.getValue();
-    }
-
-    public int getArgIndex(String argName) {
-        for (int i = 0; i < argsMeta.size(); i++) {
-            if (argsMeta.get(i).getName().equals(argName)) {
-                return i;
-            }
-        }
-
-        return -1;
+    public DataType getArg(String name) {
+        return SpongeApiUtils.getActionArgType(args, name);
     }
 
     @Override
-    public ResultMeta<?> getResultMeta() {
-        return resultMeta;
+    public DataType getResult() {
+        return result;
     }
 
     @Override
-    public void setResultMeta(ResultMeta<?> resultMeta) {
-        this.resultMeta = resultMeta;
+    public void setResult(DataType result) {
+        this.result = result;
     }
 }

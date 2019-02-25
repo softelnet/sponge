@@ -19,24 +19,59 @@ package org.openksavi.sponge.type;
 import java.util.List;
 import java.util.Map;
 
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+
 /**
  * A list type. This type requires an {@code elementType} parameter, which is is a type of list elements.
  *
  * @param <E> element type.
  */
-public class ListType<E> extends DataType<List<E>> {
+public class ListType<E> extends CollectionType<List<E>> {
 
     /** The list element type. */
     private DataType<?> elementType;
 
     public ListType() {
-        super(DataTypeKind.LIST);
-        this.elementType = new AnyType();
+        this((String) null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ListType(String name) {
+        this(name, (DataType<E>) new AnyType());
     }
 
     public ListType(DataType<E> elementType) {
-        super(DataTypeKind.LIST);
+        this(null, elementType);
+    }
+
+    public ListType(String name, DataType<E> elementType) {
+        super(DataTypeKind.LIST, name);
         this.elementType = elementType;
+    }
+
+    @Override
+    public ListType<E> withName(String name) {
+        return (ListType<E>) super.withName(name);
+    }
+
+    @Override
+    public ListType<E> withLabel(String label) {
+        return (ListType<E>) super.withLabel(label);
+    }
+
+    @Override
+    public ListType<E> withDescription(String description) {
+        return (ListType<E>) super.withDescription(description);
+    }
+
+    @Override
+    public ListType<E> withAnnotated(boolean annotated) {
+        return (ListType<E>) super.withAnnotated(annotated);
+    }
+
+    @Override
+    public ListType<E> withAnnotated() {
+        return (ListType<E>) super.withAnnotated();
     }
 
     @Override
@@ -67,6 +102,21 @@ public class ListType<E> extends DataType<List<E>> {
     @Override
     public ListType<E> withNullable() {
         return (ListType<E>) super.withNullable();
+    }
+
+    @Override
+    public ListType<E> withOptional() {
+        return (ListType<E>) super.withOptional();
+    }
+
+    @Override
+    public ListType<E> withProvided(ProvidedMeta provided) {
+        return (ListType<E>) super.withProvided(provided);
+    }
+
+    public ListType<E> withElement(DataType<E> elementType) {
+        this.elementType = elementType;
+        return this;
     }
 
     @SuppressWarnings("unchecked")

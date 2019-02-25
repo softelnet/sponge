@@ -18,20 +18,19 @@ package org.openksavi.sponge.restapi.model;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.apache.commons.lang3.Validate;
-
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 @ApiModel(value = "ActionMeta", description = "An action metadata")
+@SuppressWarnings("rawtypes")
 public class RestActionMeta {
 
     private String name;
@@ -46,9 +45,9 @@ public class RestActionMeta {
 
     private Map<String, Object> features;
 
-    private List<RestActionArgMeta> argsMeta;
+    private List<DataType> args;
 
-    private RestActionResultMeta resultMeta;
+    private DataType result;
 
     private ProcessorQualifiedVersion qualifiedVersion;
 
@@ -56,16 +55,15 @@ public class RestActionMeta {
     }
 
     public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, CategoryMeta category,
-            Map<String, Object> features, List<RestActionArgMeta> argsMeta, RestActionResultMeta resultMeta,
-            ProcessorQualifiedVersion qualifiedVersion) {
+            Map<String, Object> features, List<DataType> args, DataType result, ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.label = label;
         this.description = description;
         this.knowledgeBase = knowledgeBase;
         this.category = category;
         this.features = features;
-        this.argsMeta = argsMeta;
-        this.resultMeta = resultMeta;
+        this.args = args;
+        this.result = result;
         this.qualifiedVersion = qualifiedVersion;
     }
 
@@ -123,22 +121,22 @@ public class RestActionMeta {
         this.features = features;
     }
 
-    @ApiModelProperty(value = "The action arguments metadata", required = false)
-    public List<RestActionArgMeta> getArgsMeta() {
-        return argsMeta;
+    @ApiModelProperty(value = "The action argument types", required = false)
+    public List<DataType> getArgs() {
+        return args;
     }
 
-    public void setArgsMeta(List<RestActionArgMeta> argsMeta) {
-        this.argsMeta = argsMeta;
+    public void setArgs(List<DataType> args) {
+        this.args = args;
     }
 
-    @ApiModelProperty(value = "The action result metadata", required = false)
-    public RestActionResultMeta getResultMeta() {
-        return resultMeta;
+    @ApiModelProperty(value = "The action result type", required = false)
+    public DataType getResult() {
+        return result;
     }
 
-    public void setResultMeta(RestActionResultMeta resultMeta) {
-        this.resultMeta = resultMeta;
+    public void setResult(DataType result) {
+        this.result = result;
     }
 
     @ApiModelProperty(value = "The action qualified version", required = false)
@@ -151,10 +149,7 @@ public class RestActionMeta {
     }
 
     @JsonIgnore
-    public RestActionArgMeta getArgMeta(String argName) {
-        Optional<RestActionArgMeta> argMetaO = argsMeta.stream().filter(argMeta -> Objects.equals(argMeta.getName(), argName)).findFirst();
-        Validate.isTrue(argMetaO.isPresent(), "Metadata for argument %s not found", argName);
-
-        return argMetaO.get();
+    public DataType getArg(String argName) {
+        return SpongeApiUtils.getActionArgType(args, argName);
     }
 }
