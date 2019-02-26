@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.util.Descriptive;
@@ -232,7 +234,11 @@ public class DataType<T> implements Descriptive, Cloneable {
     @Override
     public DataType<T> clone() {
         try {
-            return (DataType<T>) super.clone();
+            DataType<T> cloned = (DataType<T>) super.clone();
+            cloned.defaultValue = defaultValue instanceof Cloneable ? ObjectUtils.clone(defaultValue) : defaultValue;
+            cloned.features = features != null ? new LinkedHashMap<>(features) : null;
+
+            return cloned;
         } catch (CloneNotSupportedException e) {
             throw new SpongeException(e);
         }

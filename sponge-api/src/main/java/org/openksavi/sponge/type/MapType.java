@@ -135,4 +135,13 @@ public class MapType<K, V> extends CollectionType<Map<K, V>> {
     public DataType<V> getValueType() {
         return (DataType<V>) valueType;
     }
+
+    @Override
+    public MapType<K, V> clone() {
+        MapType<K, V> cloned = (MapType<K, V>) super.clone();
+        cloned.keyType = keyType != null ? keyType.clone() : null;
+        cloned.valueType = valueType != null ? valueType.clone() : null;
+
+        return cloned;
+    }
 }

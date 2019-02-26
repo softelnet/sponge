@@ -123,4 +123,12 @@ public class ListType<E> extends CollectionType<List<E>> {
     public DataType<E> getElementType() {
         return (DataType<E>) elementType;
     }
+
+    @Override
+    public ListType<E> clone() {
+        ListType<E> cloned = (ListType<E>) super.clone();
+        cloned.elementType = elementType != null ? elementType.clone() : null;
+
+        return cloned;
+    }
 }

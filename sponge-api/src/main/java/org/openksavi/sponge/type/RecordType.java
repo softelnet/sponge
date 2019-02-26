@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 
@@ -145,5 +146,14 @@ public class RecordType extends DataType<Map<String, Object>> {
 
     public void setFields(List<DataType> fields) {
         this.fields = new ArrayList<>(fields);
+    }
+
+    @Override
+    public RecordType clone() {
+        RecordType cloned = (RecordType) super.clone();
+        cloned.fields = fields != null
+                ? new ArrayList<>(fields.stream().map(field -> field != null ? field.clone() : null).collect(Collectors.toList())) : null;
+
+        return cloned;
     }
 }

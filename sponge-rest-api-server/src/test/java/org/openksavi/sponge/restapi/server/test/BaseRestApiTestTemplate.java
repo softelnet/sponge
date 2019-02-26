@@ -111,14 +111,14 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
-    public void testActionsParamArgMetadataRequiredTrue() {
+    public void testActionsArgRequiredTrue() {
         try (SpongeRestClient client = createRestClient()) {
             assertEquals(RestApiTestConstants.ANONYMOUS_ACTIONS_WITH_METADATA_COUNT, client.getActions(null, true).size());
         }
     }
 
     @Test
-    public void testActionsParamArgMetadataRequiredFalse() {
+    public void testActionsArgRequiredFalse() {
         try (SpongeRestClient client = createRestClient()) {
             List<RestActionMeta> actions = client.getActions(null, false);
 
