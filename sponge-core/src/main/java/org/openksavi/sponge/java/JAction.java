@@ -92,4 +92,9 @@ public abstract class JAction extends BaseAction {
     public final JAction withNoResult() {
         return (JAction) super.withNoResult();
     }
+
+    @Override
+    public final JAction withCallable(boolean callable) {
+        return (JAction) super.withCallable(callable);
+    }
 }

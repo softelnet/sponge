@@ -107,4 +107,9 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     public BaseAction withNoResult() {
         return withResult(new VoidType());
     }
+
+    public BaseAction withCallable(boolean callable) {
+        getMeta().setCallable(callable);
+        return this;
+    }
 }

@@ -49,13 +49,16 @@ public class RestActionMeta {
 
     private DataType result;
 
+    private boolean callable = true;
+
     private ProcessorQualifiedVersion qualifiedVersion;
 
     public RestActionMeta() {
     }
 
     public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, CategoryMeta category,
-            Map<String, Object> features, List<DataType> args, DataType result, ProcessorQualifiedVersion qualifiedVersion) {
+            Map<String, Object> features, List<DataType> args, DataType result, boolean callable,
+            ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.label = label;
         this.description = description;
@@ -64,6 +67,7 @@ public class RestActionMeta {
         this.features = features;
         this.args = args;
         this.result = result;
+        this.callable = callable;
         this.qualifiedVersion = qualifiedVersion;
     }
 
@@ -137,6 +141,15 @@ public class RestActionMeta {
 
     public void setResult(DataType result) {
         this.result = result;
+    }
+
+    @ApiModelProperty(value = "The action callable flag.", required = false)
+    public boolean isCallable() {
+        return callable;
+    }
+
+    public void setCallable(boolean callable) {
+        this.callable = callable;
     }
 
     @ApiModelProperty(value = "The action qualified version", required = false)

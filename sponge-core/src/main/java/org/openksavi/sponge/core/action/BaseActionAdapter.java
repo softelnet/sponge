@@ -32,7 +32,6 @@ import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.type.DataType;
-import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
@@ -78,12 +77,12 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 finalNames.add(name);
             }
         } else {
-            // Use all provided argument names.
-            SpongeApiUtils.createNamedActionArgTypesMap(getMeta()).forEach((qName, argType) -> {
-                if (argType.getProvided() != null) {
-                    finalNames.add(qName);
+            // Use all named arguments that are configured to be provided, including sub-arguments.
+            SpongeApiUtils.traverseActionArguments(getMeta(), qType -> {
+                if (qType.getType().getProvided() != null) {
+                    finalNames.add(qType.getPath());
                 }
-            });
+            }, true);
         }
 
         if (current == null) {
@@ -94,8 +93,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         getProcessor().onProvideArgs(new ProvideArgsContext(finalNames, current, provided));
 
         provided.keySet().forEach(providedArg -> {
-            Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null, "The argument '%s' that has been provided is not configured as provided",
-                    providedArg);
+            Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null,
+                    "The argument '%s' that has been provided is not configured as provided", providedArg);
         });
 
         return provided;
@@ -138,25 +137,24 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     private void validateArgProvided() {
         Map<String, DataType> fullArgTypesMap = SpongeApiUtils.createNamedActionArgTypesMap(getMeta());
 
-        getMeta().getArgs().forEach(argType -> validateArgProvided(fullArgTypesMap, argType));
-        // TODO Has provided but is not in fullArgTypesMap.
-    }
+        SpongeApiUtils.traverseActionArguments(getMeta(), qType -> {
+            DataType type = qType.getType();
 
-    private void validateArgProvided(Map<String, DataType> fullArgTypesMap, DataType type) {
-        if (type.getProvided() != null) {
-            type.getProvided().getDependencies().forEach(dependency -> {
-                Validate.isTrue(fullArgTypesMap.containsKey(dependency),
-                        "The argument '%s' depends on an argument '%s' that is not defined", type.getName(), dependency);
-            });
-            Validate.isTrue(!type.getProvided().isReadOnly() || type.isNullable(), "The provided, read only argument '%s' must be nullable",
-                    type.getName());
-        }
-
-        if (type instanceof RecordType) {
-            ((RecordType) type).getFields().forEach(field -> validateArgProvided(fullArgTypesMap, field));
-        }
-
-        // TODO Validate provided - other cases - collections
+            if (qType.getPath() != null) { // If it's named.
+                if (type.getProvided() != null) {
+                    type.getProvided().getDependencies().forEach(dependency -> {
+                        Validate.isTrue(fullArgTypesMap.containsKey(dependency),
+                                "The argument '%s' depends on an argument '%s' that is not defined or is not allowed", qType.getPath(),
+                                dependency);
+                    });
+                    Validate.isTrue(!type.getProvided().isReadOnly() || type.isNullable(),
+                            "The provided, read only argument '%s' must be nullable", qType.getPath());
+                }
+            } else { // If it's unnamed.
+                Validate.isTrue(type.getProvided() == null, "The %s argument is set as provided but doesn't have a complete name path",
+                        type.getKind().name());
+            }
+        }, false);
     }
 
     private static boolean isArgProvided(DataType argType) {

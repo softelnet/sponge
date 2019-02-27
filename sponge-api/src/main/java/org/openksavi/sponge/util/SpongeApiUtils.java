@@ -20,18 +20,20 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 
 /**
  * A Sponge API utility methods.
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class SpongeApiUtils {
 
     private SpongeApiUtils() {
@@ -74,29 +76,50 @@ public abstract class SpongeApiUtils {
     // Sub-arguments only for records.
     public static Map<String, DataType> createNamedActionArgTypesMap(ActionMeta actionMeta) {
         Map<String, DataType> argTypesMap = new LinkedHashMap<>();
-        actionMeta.getArgs().forEach(argType -> populateNamedActionArgTypesMap(argTypesMap, null, argType));
 
-        return argTypesMap;
-    }
-
-    protected static Map<String, DataType> populateNamedActionArgTypesMap(Map<String, DataType> argTypesMap, String parentArgName,
-            DataType argType) {
-        if (argType.getName() == null) {
-            return argTypesMap;
-        }
-
-        String thisArgName = (parentArgName != null ? parentArgName + SpongeConstants.ACTION_SUB_ARG_SEPARATOR : "") + argType.getName();
-        argTypesMap.put(thisArgName, argType);
-
-        // Sub-arguments only for records.
-        if (argType instanceof RecordType) {
-            ((RecordType) argType).getFields().forEach(subArgType -> populateNamedActionArgTypesMap(argTypesMap, thisArgName, subArgType));
-        }
+        traverseActionArguments(actionMeta, qType -> argTypesMap.put(qType.getPath(), qType.getType()), true);
 
         return argTypesMap;
     }
 
     public static List<String> getActionArgNameElements(String name) {
         return Arrays.asList(name.split("\\" + SpongeConstants.ACTION_SUB_ARG_SEPARATOR));
+    }
+
+    /**
+     * Traverses the action argument types but only through record types.
+     *
+     * @param actionMeta the action metadata.
+     * @param onType the qualified type callback.
+     * @param namedOnly traverse only through named types.
+     */
+    public static void traverseActionArguments(ActionMeta actionMeta, Consumer<QualifiedDataType> onType, boolean namedOnly) {
+        if (actionMeta.getArgs() != null) {
+            actionMeta.getArgs().forEach(argType -> traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
+        }
+    }
+
+    /**
+     * Traverses the data type but only through record types.
+     *
+     * @param dataType the type.
+     * @param onType the qualified type callback.
+     * @param namedOnly traverse only through named types.
+     */
+    public static void traverseDataType(QualifiedDataType qType, Consumer<QualifiedDataType> onType, boolean namedOnly) {
+        if (namedOnly && qType.getType().getName() == null) {
+            return;
+        }
+
+        onType.accept(qType);
+
+        // Traverses only through record types.
+        switch (qType.getType().getKind()) {
+        case RECORD:
+            ((RecordType) qType.getType()).getFields().forEach(field -> traverseDataType(qType.createChild(field), onType, namedOnly));
+            break;
+        default:
+            break;
+        }
     }
 }

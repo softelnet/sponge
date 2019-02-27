@@ -34,6 +34,8 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
 
     private DataType result;
 
+    private boolean callable = true;
+
     @Override
     public List<DataType> getArgs() {
         return args;
@@ -66,5 +68,15 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
     @Override
     public void setResult(DataType result) {
         this.result = result;
+    }
+
+    @Override
+    public boolean isCallable() {
+        return callable;
+    }
+
+    @Override
+    public void setCallable(boolean callable) {
+        this.callable = callable;
     }
 }

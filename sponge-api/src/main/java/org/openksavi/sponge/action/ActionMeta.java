@@ -69,4 +69,18 @@ public interface ActionMeta extends ProcessorMeta {
      * @param result the result type.
      */
     void setResult(DataType result);
+
+    /**
+     * Tells if this action is callable. A callable action must have an {@code onCall} method defined. Defaults to {@code true}.
+     *
+     * @return {@code true} if this action is callable.
+     */
+    boolean isCallable();
+
+    /**
+     * Sets the callable flag.
+     *
+     * @param callable the callable flag.
+     */
+    void setCallable(boolean callable);
 }

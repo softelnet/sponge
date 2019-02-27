@@ -1107,4 +1107,27 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testProvidedArgNoCallAction() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args.py").build();
+        engine.startup();
+
+        ActionMeta actionMeta = engine.getActionMeta("ProvidedArgNoCallAction");
+
+        try {
+            assertFalse(actionMeta.isCallable());
+
+            try {
+                engine.getOperations().call(actionMeta.getName(), Arrays.asList("value1"));
+            } catch (SpongeException e) {
+                assertTrue(ExceptionUtils.indexOfThrowable(e, NoSuchMethodException.class) > -1);
+            }
+
+            assertTrue(engine.getActionMeta("SetActuator").isCallable());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }
