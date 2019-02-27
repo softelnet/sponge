@@ -24,7 +24,7 @@ class RecordLibraryForm(Action):
                 }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withElement(
                         createBookRecordType("book").withAnnotated()
                 )
-        ]).withNoResult()
+        ]).withNoResult().withCallable(False)
         self.withFeatures({
             "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
@@ -66,7 +66,7 @@ class RecordReadBook(Action):
     def onConfigure(self):
         self.withLabel("Read a book")
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(ProvidedMeta().withValue().withDependency("book.id")))
-        self.withNoResult()
+        self.withNoResult().withCallable(False)
         self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close"})
     def onCall(self, book):
         pass

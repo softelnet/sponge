@@ -62,15 +62,24 @@ include::includes/user-guide-knowledge-bases.adoc[leveloffset=+1]
 
 [[types]]
 == Types
-Types are represented by classes in the `org.openksavi.sponge.type` package. In order to provide more flexibility in a client code a type specification may be extended by basic properties. Types are used for example in action metadata.
+Types are represented by classes (in the `org.openksavi.sponge.type` package). In order to provide more flexibility in a client code a type specification may be extended by basic properties. Types are used for example in action metadata.
 
 .Basic type properties
 [cols="1,3"]
 |===
 |Property |Description
 
-|`nullable`
-|Tells if a value of this type can be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
+|`name`
+|A type location name. It is required if a type is used to specify an action argument metadata. In that case a type name is a name of an action argument. It is also required if a type is used to specify a record type field. A type location name has to set in a type constructor.
+
+|`label`
+|An optional type location label. For example an action argument label or a record field label.
+
+|`description`
+|An optional type location description.
+
+|`annotated`
+|A flag that tells if a value of this type is annotated, i.e. wrapped by an instance of `AnnotatedValue`. Defaults to `false`. An annotated value allows dynamic passing a label, a description and features along with the value, e.g. `AnnotatedValue(imageBytes).withLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the label and the third is the features map that may be used in a client code.
 
 |`format`
 |An optional format.
@@ -78,17 +87,48 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |`defaultValue`
 |An optional default value.
 
+|`nullable`
+|Tells if a value of this type can be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
+
 |`features` (or `feature`)
 |Optional features as a map of names to values (as the `Object` type).
+
+|`optional`
+|An optional flag specifying if a value in a location corresponding to this type is optional. Defaults to `false`. It is used in action arguments.
+
+|`provided`
+|The _provided_ type specification as an instance of the `ProvidedMeta` class. Defaults to `null`. A provided value has to be an instance of `ProvidedValue`.
 |===
+
+A type properties should be set using the builder-style methods, e.g. `StringType("id").withLabel("Identifier")`.
+
+.Provided type specification properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`value`
+|A flag specifying if this type value is provided.
+
+|`valueSet`
+|The flag specifying if this type value set is provided. A value set is a list of allowed values. This list may be limited (the default setting) or not limited. A limited set means that the type value can be chosen only from the value set.
+
+|`depends`
+|A list of type names of name paths that this type depends on.
+
+|`readOnly`
+|A flag specifying if this type is read only. Defaults to `false`.
+
+|`overwrite`
+|A flag specifying if the provided value of this type should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
+|===
+
+See the <<provided_arguments,provided action arguments>> as an example of using provided types.
 
 .Supported types
 [cols="1,5"]
 |===
 |Type |Description
-
-|`AnnotatedType`
-|An annotated type. This type requires a `DataType` parameter, which is is a type of an annotated value. A value of this type has to be an instance of `AnnotatedValue`. For example: `AnnotatedType(BinaryType().withMimeType("image/png"))`. A value of this type should be an instance of the `AnnotatedValue` class, e.g. `AnnotatedValue(imageBytes).withFeatures({"filename":imageFilename})`, where the first property is the annotated value and the second is the features map that may be used in a client code.
 
 |`AnyType`
 |An any type. It may be used in situations when type is not important.
@@ -109,16 +149,16 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |An integer type (commonly used integer type or long). Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `IntegerType().withMinValue(1).withMinValue(100)`.
 
 |`ListType`
-|A list type. This type requires a `DataType` parameter, which is is a type of list elements. For example: `ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
+|A list type. This type requires a `DataType` parameter, which is is a type of list elements. For example: `ListType().withElement(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))`.
 
 |`MapType`
-|A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType(StringType(), ObjectType("org.openksavi.sponge.examples.CustomObject"))`.
+|A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType().withKey(StringType()).withValue(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))`.
 
 |`NumberType`
 |A number type, that include both integer and floating-point numbers. Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `NumberType()`.
 
 |`ObjectType`
-|An object. This type requires a class name (typically a Java class name) as a constructor parameter. For example: `ObjectType("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType("org.openksavi.sponge.examples.CustomObject[]")`.
+|An object. This type requires a class name (typically a Java class name). For example: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject[]")`.
 
 |`StringType`
 |A string type. Provides optional properties `minLength` and `maxLength`, e.g.: `StringType().withMaxLength(10)`.
@@ -127,20 +167,21 @@ Types are represented by classes in the `org.openksavi.sponge.type` package. In 
 |A type representing a data type. A value of this type has to be an instance of `DataType`.
 
 |`VoidType`
-|A void type that may be used to specify that an action returns no meaningful result.
+|A void type that may be used to specify that an action returns no result.
 |===
 
 .Type examples
 [source,python]
 ----
 StringType().withMaxLength(10).withFormat("ipAddress")
+StringType("ip").withMaxLength(10).withFormat("ipAddress")
 IntegerType().withMinValue(1).withMaxValue(100).withDefaultValue(50)
 AnyType().withNullable(True)
 ListType(StringType())
-ListType(ObjectType("java.math.BigDecimal"))
-ObjectType("java.lang.String[]")
-ObjectType("org.openksavi.sponge.examples.CustomObject")
-ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))
+ListType(ObjectType().withClassName("java.math.BigDecimal"))
+ObjectType().withClassName("java.lang.String[]")
+ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")
+ListType(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))
 BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "color":"white"})
 ----
 

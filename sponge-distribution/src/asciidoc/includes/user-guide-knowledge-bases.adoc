@@ -127,7 +127,7 @@ For each plugin a global variable will be created. The name of this variable is 
 |`ValueHolder<Object> callIfExists(String actionName, List<Object> args)`
 |Calls the action if it exists. Returns the action result wrapped in a value holder or `null` if the action is not registered.
 
-|`Map<String, ArgProvidedValue> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current)`
+|`Map<String, ProvidedValue> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current)`
 |Returns the provided values along with value sets of the action arguments.
 
 |`shutdown()`

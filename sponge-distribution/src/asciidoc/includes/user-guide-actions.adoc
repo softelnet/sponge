@@ -11,23 +11,26 @@ In addition to the inherited <<processor-methods,processor properties and method
 |===
 |Property / Method |Description
 
-|`withArgs(List<ArgMeta> argsMeta)`
-|Sets action arguments metadata. The action arguments metadata can be read using `self.meta.argsMeta`.
+|`withArgs(List<DataType> argTypes)`
+|Sets action arguments metadata as data types. The action argument types can be read using `self.meta.args`. Each argument data type must have a name. The same name should be used as a name of a corresponding argument in an `onCall` method. Arguments that have the `optional` flag set in their type are optional. Optional arguments can be specified only as last in the argument list and are not required to be passed when calling an action.
 
-|`withArg(ArgMeta argMeta)`
-|Sets a single action argument metadata. The action arguments metadata can be read using `self.meta.argsMeta`.
+|`withArg(DataType argType)`
+|Sets a single action argument metadata as a type.
 
 |`withNoArgs()`
 |Defines that an action has no arguments.
 
-|`withResult(ResultMeta resultMeta)`
-|Sets an action result metadata. The action result metadata can be read using `self.meta.resultMeta`.
+|`withResult(DataType resultType)`
+|Sets an action result type. The action result type can be read using `self.meta.result`.
 
 |`withNoResult()`
 |Defines that an action has no result, i.e. it's result is of `VoidType`.
 
+|`withCallable(boolean callable)`
+|Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used as an _action form_ with provided arguments.
+
 |`Object onCall(_dynamic arguments_)`
-|The dynamic callback method that should be defined in an action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`. The implementation of this method is mandatory.
+|A dynamic callback method that should be defined in a callable action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`.
 
 |`void onProvideArgs(ProvideArgsContext context)`
 |A callback method that provides argument values along with argument value sets (i.e. possible values of an argument). The provided arguments are explained later in this document.
@@ -86,70 +89,7 @@ sponge.enableJava(JavaEchoAction)
 == Arguments and result metadata
 Actions may have metadata specified in the `onConfigure` method. Metadata may describe action arguments and a result. Metadata are not verified by the engine while performing an action call but could be interpreted by a client code or {sponge} plugins. For example they could be useful in a generic GUI that calls {sponge} actions. Metadata can be specified using the builder-style methods.
 
-Metadata for arguments and a result support <<types, types>>.
-
-.Argument metadata properties
-[cols="1,3"]
-|===
-|Property |Description
-
-|`name`
-|A mandatory argument name.
-
-|`type`
-|A mandatory argument type.
-
-|`label`
-|An optional argument label.
-
-|`description`
-|An optional argument description.
-
-|`optional`
-|A not mandatory flag specifying if this argument is optional. Defaults to `false`. Optional arguments can be specified only as last in the argument list. Optional arguments are not required to be passed when calling an action.
-
-|`provided`
-|The _provided_ argument specification as an instance of the `ArgProvidedMeta` class. Defaults to `null`.
-
-|`features` (or `feature`)
-|Optional features as a map of names to values (as the `Object` type).
-|===
-
-.Provided argument specification properties
-[cols="1,3"]
-|===
-|Property |Description
-
-|`value`
-|A flag specifying if this argument value is provided.
-
-|`valueSet`
-|The flag specifying if this argument value set is provided.
-
-|`depends`
-|A list of attribute names that this attribute depends on.
-
-|`readOnly`
-|A flag specifying if this argument is read only. Defaults to `false`.
-
-|`overwrite`
-|A flag specifying if the provided value of this argument should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
-|===
-
-.Result metadata properties
-[cols="1,3"]
-|===
-|Property |Description
-
-|`type`
-|A mandatory result type.
-
-|`label`
-|An optional result label.
-
-|`description`
-|An optional result description.
-|===
+Metadata for arguments and a result are specified by <<types, types>>.
 
 .Action metadata example
 [source,python]
@@ -177,10 +117,10 @@ class MultipleArgumentsAction(Action):
             ArgMeta("integerArg", IntegerType().withMinValue(1).withMaxValue(100).withDefaultValue(50)),
             ArgMeta("anyArg", AnyType().withNullable(True)),
             ArgMeta("stringListArg", ListType(StringType())),
-            ArgMeta("decimalListArg", ListType(ObjectType("java.math.BigDecimal"))),
-            ArgMeta("stringArrayArg", ObjectType("java.lang.String[]")),
-            ArgMeta("javaClassArg", ObjectType("org.openksavi.sponge.examples.CustomObject")),
-            ArgMeta("javaClassListArg", ListType(ObjectType("org.openksavi.sponge.examples.CustomObject"))),
+            ArgMeta("decimalListArg", ListType(ObjectType().withClassName("java.math.BigDecimal"))),
+            ArgMeta("stringArrayArg", ObjectType().withClassName("java.lang.String[]")),
+            ArgMeta("javaClassArg", ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")),
+            ArgMeta("javaClassListArg", ListType(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))),
             ArgMeta("binaryArg", BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "background":"black", "color":"white"})),
             ArgMeta("typeArg", TypeType()),
             ArgMeta("dynamicArg", DynamicType())
@@ -204,8 +144,9 @@ class UpperEchoAction(Action):
 
 For more information see `ArgMeta` and `ResultMeta`.
 
+[[provided_arguments]]
 == Provided arguments
-An action argument can be _provided_, i.e. its value and possible value set may be computed and returned to a client code any time before calling an action. A provided argument gives more flexibility than the `defaultValue` in the argument data type.
+An action argument can be _provided_, i.e. its value and possible value set may be computed and returned to a client code any time before calling an action. A provided argument gives more flexibility than the `defaultValue` in the argument data type. Nested values of action arguments can be provided as well. In that case both a type being provided and a dependency path have to be named and can't contain collections (lists or maps) as intermediate path elements.
 
 The `onProvideArgs(ProvideArgsContext context)` method is used to provide action argument values.
 
@@ -220,7 +161,7 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 |`Map<String, Object> current`
 |The not null map of argument names and their current values passed from a client code. The map is required to contain values of those arguments that the arguments specified in the `names` depend on.
 
-|`Map<String, ArgProvidedValue> provided`
+|`Map<String, ProvidedValue> provided`
 |An initially empty map of argument names and values (value sets) that is to be set up in be provided.
 |===
 
@@ -240,11 +181,11 @@ class SetActuator(Action):
     def onConfigure(self):
         self.withLabel("Set actuator").withDescription("Sets the actuator state.")
         self.withArgs([
-            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ArgProvidedMeta().withValue().withValueSet()),
-            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ArgProvidedMeta().withValue()),
-            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet()),
+            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue()),
+            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ProvidedMeta().withValue().withReadOnly()),
             ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ArgProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
+            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
         ]).withNoResult()
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)
@@ -254,14 +195,14 @@ class SetActuator(Action):
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, context):
         if "actuator1" in context.names:
-            context.provided["actuator1"] = ArgProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
+            context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
         if "actuator2" in context.names:
-            context.provided["actuator2"] = ArgProvidedValue().withValue(sponge.getVariable("actuator2", None))
+            context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
         if "actuator3" in context.names:
-            context.provided["actuator3"] = ArgProvidedValue().withValue(sponge.getVariable("actuator3", None))
+            context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
         if "actuator5" in context.names:
-            context.provided["actuator5"] = ArgProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", context.current["actuator1"]])
+            context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", context.current["actuator1"]])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

@@ -6,7 +6,7 @@ The {sponge} mobile client application is a https://flutter.io[Flutter] applicat
 
 One of many use cases of the application is to connect to IoT devices that have {sponge} installed and execute available actions. Different types of such devices provide different sets of actions that are specific to a device features. For example one device could have a camera and provide an action to take a picture. Another device could have a temperature sensor and provide its readings.
 
-NOTE: The application is currently under development. It will be released as an open source. The beta version will be released in the first quarter of 2019.
+NOTE: The application is currently under development. It will be released as an open source.
 
 == Features
 The following chapters show the key features of the mobile application.
@@ -58,11 +58,11 @@ class ManageLcd(Action):
         self.withDescription("Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property.")
         self.withArgs([
             ArgMeta("currentText", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
-                .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
+                .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ProvidedMeta().withValue().withReadOnly()),
             ArgMeta("text", StringType().withMaxLength(256).withNullable(True).withFeatures({"maxLines":2}))
-                .withLabel("Text to display").withDescription("The text that will be displayed in the LCD.").withProvided(ArgProvidedMeta().withValue()),
+                .withLabel("Text to display").withDescription("The text that will be displayed in the LCD.").withProvided(ProvidedMeta().withValue()),
             ArgMeta("color", StringType().withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"}))
-                .withLabel("LCD color").withDescription("The LCD color.").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
+                .withLabel("LCD color").withDescription("The LCD color.").withProvided(ProvidedMeta().withValue().withOverwrite()),
             ArgMeta("clearText", BooleanType().withNullable(True).withDefaultValue(False))
                 .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
         ]).withNoResult()
@@ -71,11 +71,11 @@ class ManageLcd(Action):
     def onProvideArgs(self, context):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         if "currentText" in context.names:
-            context.provided["currentText"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
+            context.provided["currentText"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
         if "text" in context.names:
-            context.provided["text"] = ArgProvidedValue().withValue(grovePiDevice.getLcdText())
+            context.provided["text"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
         if "color" in context.names:
-            context.provided["color"] = ArgProvidedValue().withValue(grovePiDevice.getLcdColor())
+            context.provided["color"] = ProvidedValue().withValue(grovePiDevice.getLcdColor())
 
 class SetLcd(Action):
     def onCall(self, text, color, clearText = None):
@@ -93,14 +93,14 @@ class ManageSensorActuatorValues(Action):
     def onConfigure(self):
         self.withLabel("Manage the sensor and actuator values").withDescription("Provides management of the sensor and actuator values.")
         self.withArgs([
-            ArgMeta("temperatureSensor", NumberType().withNullable()).withLabel(u"Temperature sensor (°C)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("humiditySensor", NumberType().withNullable()).withLabel(u"Humidity sensor (%)").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("lightSensor", NumberType().withNullable()).withLabel(u"Light sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("rotarySensor", NumberType().withNullable()).withLabel(u"Rotary sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("soundSensor", NumberType().withNullable()).withLabel(u"Sound sensor").withProvided(ArgProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("redLed", BooleanType()).withLabel("Red LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
-            ArgMeta("blueLed", IntegerType().withMinValue(0).withMaxValue(255)).withLabel("Blue LED").withProvided(ArgProvidedMeta().withValue().withOverwrite()),
-            ArgMeta("buzzer", BooleanType()).withLabel("Buzzer").withProvided(ArgProvidedMeta().withValue().withOverwrite())
+            ArgMeta("temperatureSensor", NumberType().withNullable()).withLabel(u"Temperature sensor (°C)").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("humiditySensor", NumberType().withNullable()).withLabel(u"Humidity sensor (%)").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("lightSensor", NumberType().withNullable()).withLabel(u"Light sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("rotarySensor", NumberType().withNullable()).withLabel(u"Rotary sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("soundSensor", NumberType().withNullable()).withLabel(u"Sound sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            ArgMeta("redLed", BooleanType()).withLabel("Red LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
+            ArgMeta("blueLed", IntegerType().withMinValue(0).withMaxValue(255)).withLabel("Blue LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
+            ArgMeta("buzzer", BooleanType()).withLabel("Buzzer").withProvided(ProvidedMeta().withValue().withOverwrite())
         ]).withNoResult()
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
         grovePiDevice = sponge.getVariable("grovePiDevice")
@@ -110,7 +110,7 @@ class ManageSensorActuatorValues(Action):
     def onProvideArgs(self, context):
         values = sponge.call("GetSensorActuatorValues", [context.names])
         for name, value in values.iteritems():
-            context.provided[name] = ArgProvidedValue().withValue(value)
+            context.provided[name] = ProvidedValue().withValue(value)
 
 class GetSensorActuatorValues(Action):
     def onCall(self, names):
@@ -247,18 +247,18 @@ class DependingArgumentsAction(Action):
     def onConfigure(self):
         self.withLabel("Action with depending arguments")
         self.withArgs([
-            ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ArgProvidedMeta().withValueSet()),
-            ArgMeta("country", StringType()).withLabel("Country").withProvided(ArgProvidedMeta().withValueSet().withDependency("continent")),
-            ArgMeta("city", StringType()).withLabel("City").withProvided(ArgProvidedMeta().withValueSet().withDependency("country")),
-            ArgMeta("river", StringType()).withLabel("River").withProvided(ArgProvidedMeta().withValueSet().withDependency("continent")),
-            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ArgProvidedMeta().withValueSet())
+            ArgMeta("continent", StringType()).withLabel("Continent").withProvided(ProvidedMeta().withValueSet()),
+            ArgMeta("country", StringType()).withLabel("Country").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
+            ArgMeta("city", StringType()).withLabel("City").withProvided(ProvidedMeta().withValueSet().withDependency("country")),
+            ArgMeta("river", StringType()).withLabel("River").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
+            ArgMeta("weather", StringType()).withLabel("Weather").withProvided(ProvidedMeta().withValueSet())
         ])
         self.withResult(ResultMeta(StringType()).withLabel("Sentences"))
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, context):
         if "continent" in context.names:
-            context.provided["continent"] = ArgProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
+            context.provided["continent"] = ProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
         if "country" in context.names:
             continent = context.current["continent"]
             if continent == "Africa":
@@ -269,7 +269,7 @@ class DependingArgumentsAction(Action):
                 countries = ["Russia", "Germany", "Turkey"]
             else:
                 countries = []
-            context.provided["country"] = ArgProvidedValue().withValueSet(countries)
+            context.provided["country"] = ProvidedValue().withValueSet(countries)
         if "city" in context.names:
             country = context.current["country"]
             if country == "Nigeria":
@@ -292,7 +292,7 @@ class DependingArgumentsAction(Action):
                 cities = ["Istanbul", "Ankara", "Izmir"]
             else:
                 cities = []
-            context.provided["city"] = ArgProvidedValue().withValueSet(cities)
+            context.provided["city"] = ProvidedValue().withValueSet(cities)
         if "river" in context.names:
             continent = context.current["continent"]
             if continent == "Africa":
@@ -303,9 +303,9 @@ class DependingArgumentsAction(Action):
                 rivers = ["Volga", "Danube", "Dnepr"]
             else:
                 rivers = []
-            context.provided["river"] = ArgProvidedValue().withValueSet(rivers)
+            context.provided["river"] = ProvidedValue().withValueSet(rivers)
         if "weather" in context.names:
-            context.provided["weather"] = ArgProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+            context.provided["weather"] = ProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
 ----
 
 image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]

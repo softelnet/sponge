@@ -16,7 +16,7 @@ class ArgLibraryForm(Action):
             }).withElement(
                 IntegerType().withAnnotated()
             )
-        ]).withNoResult()
+        ]).withNoResult().withCallable(False)
         self.withFeatures({
             "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
@@ -64,7 +64,7 @@ class ArgAbstractReadUpdateBook(Action):
 class ArgReadBook(ArgAbstractReadUpdateBook):
     def onConfigure(self):
         ArgAbstractReadUpdateBook.onConfigure(self)
-        self.withLabel("Read a book")
+        self.withLabel("Read a book").withCallable(False)
         self.withFeatures({"callLabel":None, "cancelLabel":"Close"})
 
     def onCall(self, bookId, author, title):
