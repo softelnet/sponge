@@ -102,7 +102,7 @@ public abstract class SpongeApiUtils {
     /**
      * Traverses the data type but only through record types.
      *
-     * @param dataType the type.
+     * @param qType the qualified type.
      * @param onType the qualified type callback.
      * @param namedOnly traverse only through named types.
      */

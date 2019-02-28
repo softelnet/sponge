@@ -17,7 +17,7 @@
     <Match>
         <Class name="org.openksavi.sponge.core.action.BaseActionDefinition" />
         <Or>
-            <Method name="getArgsMeta" />
+            <Method name="getArgs" />
         </Or>
         <Bug pattern="EI_EXPOSE_REP" />
     </Match>

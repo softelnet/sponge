@@ -367,12 +367,12 @@ __optional__|The error message|string
 |**detailedErrorMessage** +
 __optional__|The detailed error message|string
 |**provided** +
-__required__|The provided action arguments|< string, <<_swagger_argvalueobject,ArgValueObject>> > map
+__required__|The provided action arguments|< string, <<_swagger_providedvalueobject,ProvidedValueObject>> > map
 |===
 
 
-[[_swagger_argvalue]]
-=== ArgValue
+[[_swagger_providedvalue]]
+=== ProvidedValue
 
 [options="header", cols=".^3a,.^4a"]
 |===
@@ -405,8 +405,8 @@ __optional__|< string, object > map
 |===
 
 
-[[_swagger_argvalueobject]]
-=== ArgValueObject
+[[_swagger_providedvalueobject]]
+=== ProvidedValueObject
 
 [options="header", cols=".^3a,.^4a"]
 |===
@@ -462,6 +462,36 @@ __optional__|The metadata required flag|boolean
 |===
 
 
+[[_swagger_providedmeta]]
+=== ProvidedMeta
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**value** +
+__optional__|boolean
+|**valueSet** +
+__optional__|<<_swagger_valuesetmeta,ValueSetMeta>>
+|**dependencies** +
+__optional__|< string > array
+|**readOnly** +
+__optional__|boolean
+|**overwrite** +
+__optional__|boolean
+|===
+
+
+[[_swagger_valuesetmeta]]
+=== ValueSetMeta
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**limited** +
+__optional__|boolean
+|===
+
+
 [[_swagger_knowledgebasemeta]]
 === KnowledgeBaseMeta
 A knowledge base metadata
@@ -497,56 +527,18 @@ __optional__|The action label|string
 __optional__|The action description|string
 |**knowledgeBase** +
 __required__|The action knowledge base metadata|<<_swagger_knowledgebasemeta,KnowledgeBaseMeta>>
+|**category** +
+__optional__|The action category metadata|<<_swagger_categorymeta,CategoryMeta>>
 |**features** +
 __required__|The action features|< string, object > map
-|**argsMeta** +
-__optional__|The action arguments metadata|< <<_swagger_actionargmeta,ActionArgMeta>> > array
-|**resultMeta** +
-__optional__|The action result metadata|<<_swagger_actionresultmeta,ActionResultMeta>>
+|**args** +
+__optional__|The action argument types|< <<_swagger_datatype,DataType>> > array
+|**result** +
+__optional__|The action result type|<<_swagger_datatype,DataType>>
+|**callable** +
+__optional__|The action callable flag.|boolean
 |**qualifiedVersion** +
 __optional__|The action qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
-|===
-
-
-[[_swagger_argprovided]]
-=== ArgProvided
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|boolean
-|**valueSet** +
-__optional__|boolean
-|**depends** +
-__optional__|< string > array
-|**readOnly** +
-__optional__|boolean
-|**overwrite** +
-__optional__|boolean
-|===
-
-
-[[_swagger_actionargmeta]]
-=== ActionArgMeta
-An action argument metadata
-
-
-[options="header", cols=".^3a,.^11a,.^4a"]
-|===
-|Name|Description|Schema
-|**name** +
-__required__|The action argument name|string
-|**type** +
-__required__|The action argument type|<<_swagger_datatype,DataType>>
-|**label** +
-__optional__|The action argument label|string
-|**description** +
-__optional__|The action argument description|string
-|**optional** +
-__optional__|Optional argument|boolean
-|**provided** +
-__optional__|The provided argument specification|<<_swagger_argprovided,ArgProvided>>
 |===
 
 
@@ -578,7 +570,15 @@ __required__|The available actions|< <<_swagger_actionmeta,ActionMeta>> > array
 |===
 |Name|Schema
 |**kind** +
-__optional__|enum (STRING, NUMBER, INTEGER, BOOLEAN, BINARY, ANY, VOID, OBJECT, LIST, MAP, ANNOTATED)
+__optional__|enum (ANY, BINARY, BOOLEAN, DATE_TIME, DYNAMIC, INTEGER, LIST, MAP, NUMBER, OBJECT, RECORD, STRING, TYPE, VOID)
+|**name** +
+__optional__|string
+|**label** +
+__optional__|string
+|**description** +
+__optional__|string
+|**annotated** +
+__optional__|boolean
 |**format** +
 __optional__|string
 |**defaultValue** +
@@ -587,23 +587,25 @@ __optional__|object
 __optional__|boolean
 |**features** +
 __optional__|< string, object > map
+|**optional** +
+__optional__|boolean
+|**provided** +
+__optional__|<<_swagger_providedmeta,ProvidedMeta>>
 |===
 
 
-[[_swagger_actionresultmeta]]
-=== ActionResultMeta
-An action result metadata
+[[_swagger_categorymeta]]
+=== CategoryMeta
 
-
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3a,.^4a"]
 |===
-|Name|Description|Schema
-|**type** +
-__required__|The action result type|<<_swagger_datatype,DataType>>
+|Name|Schema
+|**name** +
+__optional__|string
 |**label** +
-__optional__|The action result label|string
+__optional__|string
 |**description** +
-__optional__|The action result description|string
+__optional__|string
 |===
 
 

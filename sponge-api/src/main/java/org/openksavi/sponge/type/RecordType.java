@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 
 /**
- * A record type. This type requires a list of record field types. A value of this type has to be an instance of Map<String, Object> with
- * elements corresponding to the field names and values.
+ * A record type. This type requires a list of record field types. A value of this type has to be an instance of Map with elements
+ * corresponding to the field names and values.
  */
 @SuppressWarnings("rawtypes")
 public class RecordType extends DataType<Map<String, Object>> {

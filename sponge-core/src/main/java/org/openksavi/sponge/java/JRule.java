@@ -133,6 +133,8 @@ public abstract class JRule extends BaseRule {
      *
      * @param eventAlias an event alias.
      * @param condition an event condition.
+     *
+     * @return this rule.
      */
     public final JRule withCondition(String eventAlias, EventCondition condition) {
         return withEventCondition(eventAlias, condition);
@@ -143,6 +145,8 @@ public abstract class JRule extends BaseRule {
      *
      * @param eventAlias an event alias.
      * @param methodName an event condition method name.
+     *
+     * @return this rule.
      */
     public final JRule withCondition(String eventAlias, String methodName) {
         return withConditions(eventAlias, methodName);
@@ -153,6 +157,8 @@ public abstract class JRule extends BaseRule {
      *
      * @param eventAlias event alias.
      * @param conditions event conditions.
+     *
+     * @return this rule.
      */
     public final JRule withConditions(String eventAlias, List<EventCondition> conditions) {
         return withEventConditions(eventAlias, conditions);
@@ -163,6 +169,8 @@ public abstract class JRule extends BaseRule {
      *
      * @param eventAlias event alias.
      * @param conditions event conditions.
+     *
+     * @return this rule.
      */
     public final JRule withConditions(String eventAlias, EventCondition... conditions) {
         return withEventConditions(eventAlias, Arrays.asList(conditions));
@@ -176,6 +184,8 @@ public abstract class JRule extends BaseRule {
      * Adds event conditions for all events.
      *
      * @param conditions event conditions.
+     *
+     * @return this rule.
      */
     public final JRule withAllConditions(List<EventCondition> conditions) {
         return withAllEventConditions(conditions);
@@ -193,6 +203,8 @@ public abstract class JRule extends BaseRule {
      * Adds event condition for all events.
      *
      * @param condition the event condition.
+     *
+     * @return this rule.
      */
     public final JRule withAllCondition(EventCondition condition) {
         return withAllConditions(Arrays.asList(condition));
@@ -202,6 +214,8 @@ public abstract class JRule extends BaseRule {
      * Adds event condition for all events.
      *
      * @param methodName the event condition method name.
+     *
+     * @return this rule.
      */
     public final JRule withAllCondition(String methodName) {
         return withAllConditions(methodName);

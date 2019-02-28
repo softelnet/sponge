@@ -62,7 +62,7 @@ include::includes/user-guide-knowledge-bases.adoc[leveloffset=+1]
 
 [[types]]
 == Types
-Types are represented by classes (in the `org.openksavi.sponge.type` package). In order to provide more flexibility in a client code a type specification may be extended by basic properties. Types are used for example in action metadata.
+Types are represented by instances of classes. The type classes are located in the `org.openksavi.sponge.type` package. Types are used for example as action arguments and result metadata.
 
 .Basic type properties
 [cols="1,3"]
@@ -70,7 +70,7 @@ Types are represented by classes (in the `org.openksavi.sponge.type` package). I
 |Property |Description
 
 |`name`
-|A type location name. It is required if a type is used to specify an action argument metadata. In that case a type name is a name of an action argument. It is also required if a type is used to specify a record type field. A type location name has to set in a type constructor.
+|A type location name. It is required if a type is used to specify an action argument metadata. In that case a type name is a name of an action argument. It is also required if a type is used to specify a record type field. A type location name has to be set in a type constructor.
 
 |`label`
 |An optional type location label. For example an action argument label or a record field label.
@@ -79,7 +79,7 @@ Types are represented by classes (in the `org.openksavi.sponge.type` package). I
 |An optional type location description.
 
 |`annotated`
-|A flag that tells if a value of this type is annotated, i.e. wrapped by an instance of `AnnotatedValue`. Defaults to `false`. An annotated value allows dynamic passing a label, a description and features along with the value, e.g. `AnnotatedValue(imageBytes).withLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the label and the third is the features map that may be used in a client code.
+|A flag that tells if a value of this type is annotated, i.e. wrapped by an instance of `AnnotatedValue`. Defaults to `false`. An annotated value allows passing a value label, a value description and value features along with the value, e.g. `AnnotatedValue(imageBytes).withLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the label and the third is the features map that may be used in a client code.
 
 |`format`
 |An optional format.
@@ -94,7 +94,7 @@ Types are represented by classes (in the `org.openksavi.sponge.type` package). I
 |Optional features as a map of names to values (as the `Object` type).
 
 |`optional`
-|An optional flag specifying if a value in a location corresponding to this type is optional. Defaults to `false`. It is used in action arguments.
+|A flag specifying if a value in a location corresponding to this type is optional. Defaults to `false`. It is used in action arguments.
 
 |`provided`
 |The _provided_ type specification as an instance of the `ProvidedMeta` class. Defaults to `null`. A provided value has to be an instance of `ProvidedValue`.
@@ -111,7 +111,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |A flag specifying if this type value is provided.
 
 |`valueSet`
-|The flag specifying if this type value set is provided. A value set is a list of allowed values. This list may be limited (the default setting) or not limited. A limited set means that the type value can be chosen only from the value set.
+|Metadata specifying if a value set is provided. Defaults to `null`. A value set is a list of allowed values. This list of values may be limited (the default setting) or not limited. A limited set means that the type value can be chosen only from the value set. To configure a not limited value set use `withValueSet(ValueSetMeta().withNotLimited())`.
 
 |`depends`
 |A list of type names of name paths that this type depends on.
@@ -123,7 +123,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |A flag specifying if the provided value of this type should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
 |===
 
-See the <<provided_arguments,provided action arguments>> as an example of using provided types.
+See the <<provided_arguments,provided action arguments>> as a use case of provided types.
 
 .Supported types
 [cols="1,5"]

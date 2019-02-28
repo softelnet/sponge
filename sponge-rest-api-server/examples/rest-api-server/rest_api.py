@@ -246,6 +246,21 @@ class RecordAsArgAction(Action):
     def onCall(self, book):
         return book["id"]
 
+class NestedRecordAsArgAction(Action):
+    def onConfigure(self):
+        self.withArg(
+            RecordType("book").withLabel("Book").withFields([
+                IntegerType("id").withNullable().withLabel("Identifier"),
+                RecordType("author").withLabel("Author").withFields([
+                    IntegerType("id").withNullable().withLabel("Identifier"),
+                    StringType("firstName").withLabel("First name"),
+                    StringType("surname").withLabel("Surname")
+                ]),
+                StringType("title").withLabel("Title"),
+            ])).withResult(StringType())
+    def onCall(self, book):
+        return "{} {} - {}".format(book["author"]["firstName"], book["author"]["surname"], book["title"])
+
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RestApi"))

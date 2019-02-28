@@ -313,8 +313,8 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 class HelloWorldAction(Action): # <1>
     def onConfigure(self): # <2>
         self.withLabel("Hello world").withDescription("Returns a greeting text.") # <3>
-        self.withArg(ArgMeta("name", StringType()).withLabel("Your name").withDescription("Type your name.")) # <4>
-        self.withResult(ResultMeta(StringType()).withLabel("Greeting").withDescription("The greeting text.")) # <5>
+        self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name.")) # <4>
+        self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text.")) # <5>
     def onCall(self, name): # <6>
         return "Hello World! Hello {}!".format(name)
 
@@ -362,8 +362,8 @@ NOTE: All callouts placed in the source code in the examples below remain the sa
 class HelloWorldAction < Action # <1>
     def onConfigure # <2>
         self.withLabel("Hello world").withDescription("Returns a greeting text.")" # <3>
-        self.withArg(ArgMeta.new("name", StringType.new()).withLabel("Your name").withDescription("Type your name.")) # <4>
-        self.withResult(ResultMeta.new(StringType.new()).withLabel("Greeting").withDescription("The greeting text.")) # <5>
+        self.withArg(StringType.new("name").withLabel("Your name").withDescription("Type your name.")) # <4>
+        self.withResult(StringType.new().withLabel("Greeting").withDescription("The greeting text.")) # <5>
     end
     def onCall(name) # <6>
         return "Hello World! Hello %s!" % [name]
@@ -393,8 +393,8 @@ Press `CTRL+C` to exit the {sponge} standalone command-line application.
 class HelloWorldAction extends Action { // <1>
     void onConfigure() { // <2>
         this.withLabel("Hello world").withDescription("Returns a greeting text.") // <3>
-        this.withArg(new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")) // <4>
-        this.withResult(new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text.")) // <5>
+        this.withArg(new StringType("name").withLabel("Your name").withDescription("Type your name.")) // <4>
+        this.withResult(new StringType().withLabel("Greeting").withDescription("The greeting text.")) // <5>
     }
 
     String onCall(String name) { // <6>
@@ -425,8 +425,8 @@ Press `CTRL+C` to exit the {sponge} standalone command-line application.
 var HelloWorldAction = Java.extend(Action, { // <1>
     onConfigure: function(self) { // <2>
         self.withLabel("Hello world").withDescription("Returns a greeting text."); // <3>
-        self.withArg(new ArgMeta("name", new StringType()).withLabel("Your name").withDescription("Type your name.")); // <4>
-        self.withResult(new ResultMeta(new StringType()).withLabel("Greeting").withDescription("The greeting text."));// <5>
+        self.withArg(new StringType("name").withLabel("Your name").withDescription("Type your name.")); // <4>
+        self.withResult(new StringType().withLabel("Greeting").withDescription("The greeting text.")); // <5>
     },
     onCall: function(self, args) { // <6>
         // The onCall method in JS always gets an array of arguments. Dynamic onCall callback methods are not supported.

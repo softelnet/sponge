@@ -33,6 +33,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -56,11 +57,13 @@ import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
+import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -394,6 +397,51 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
+    public void testNestedRecordAsArgAction() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("NestedRecordAsArgAction");
+            assertEquals(1, actionMeta.getArgs().size());
+            RecordType argType = (RecordType) actionMeta.getArgs().get(0);
+            assertEquals(DataTypeKind.RECORD, argType.getKind());
+            assertEquals("book", argType.getName());
+            assertEquals("Book", argType.getLabel());
+            assertEquals(3, argType.getFields().size());
+
+            assertEquals(DataTypeKind.INTEGER, argType.getFields().get(0).getKind());
+            assertEquals("id", argType.getFields().get(0).getName());
+            assertEquals("Identifier", argType.getFields().get(0).getLabel());
+
+            RecordType authorType = (RecordType) argType.getFields().get(1);
+            assertEquals("author", authorType.getName());
+            assertEquals("Author", authorType.getLabel());
+            assertEquals(3, authorType.getFields().size());
+
+            assertEquals(DataTypeKind.INTEGER, authorType.getFields().get(0).getKind());
+            assertEquals("id", authorType.getFields().get(0).getName());
+            assertEquals("Identifier", authorType.getFields().get(0).getLabel());
+
+            assertEquals(DataTypeKind.STRING, authorType.getFields().get(1).getKind());
+            assertEquals("firstName", authorType.getFields().get(1).getName());
+            assertEquals("First name", authorType.getFields().get(1).getLabel());
+
+            assertEquals(DataTypeKind.STRING, authorType.getFields().get(2).getKind());
+            assertEquals("surname", authorType.getFields().get(2).getName());
+            assertEquals("Surname", authorType.getFields().get(2).getLabel());
+
+            assertEquals(DataTypeKind.STRING, argType.getFields().get(2).getKind());
+            assertEquals("title", argType.getFields().get(2).getName());
+            assertEquals("Title", argType.getFields().get(2).getLabel());
+
+            String bookSummary = client.call(String.class, actionMeta.getName(), Arrays.asList(SpongeUtils.immutableMapOf("author",
+                    SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce"), "title", "Ulysses")));
+
+            assertEquals("James Joyce - Ulysses", bookSummary);
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
     public void testProvideActionArgs() {
         try (SpongeRestClient client = createRestClient()) {
             String actionName = "SetActuator";
@@ -585,6 +633,42 @@ public abstract class BaseRestApiTestTemplate {
             RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
             List<String> values = (List<String>) client.provideActionArgs(actionMeta.getName()).get("value").getValueSet();
             assertEquals("value3", client.call(actionMeta.getName(), Arrays.asList(values.get(values.size() - 1))));
+        }
+    }
+
+    @Test
+    public void testTraverseActionArguments() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta meta = client.getActionMeta("NestedRecordAsArgAction");
+            RecordType bookType = (RecordType) meta.getArgs().get(0);
+            RecordType authorType = (RecordType) bookType.getFields().get(1);
+
+            assertEquals(meta.getArg("book"), bookType);
+            assertEquals(meta.getArg("book.id"), bookType.getFields().get(0));
+            assertEquals(meta.getArg("book.author"), authorType);
+            assertEquals(meta.getArg("book.author.id"), authorType.getFields().get(0));
+            assertEquals(meta.getArg("book.author.firstName"), authorType.getFields().get(1));
+            assertEquals(meta.getArg("book.author.surname"), authorType.getFields().get(2));
+            assertEquals(meta.getArg("book.title"), bookType.getFields().get(2));
+
+            List<QualifiedDataType> namedQTypes = new ArrayList<>();
+            RestApiUtils.traverseActionArguments(meta, qType -> namedQTypes.add(qType), true);
+            assertEquals(namedQTypes.get(0).getPath(), "book");
+            assertEquals(namedQTypes.get(0).getType(), meta.getArg("book"));
+            assertEquals(namedQTypes.get(1).getPath(), "book.id");
+            assertEquals(namedQTypes.get(1).getType(), meta.getArg("book.id"));
+            assertEquals(namedQTypes.get(2).getPath(), "book.author");
+            assertEquals(namedQTypes.get(2).getType(), meta.getArg("book.author"));
+            assertEquals(namedQTypes.get(3).getPath(), "book.author.id");
+            assertEquals(namedQTypes.get(3).getType(), meta.getArg("book.author.id"));
+            assertEquals(namedQTypes.get(4).getPath(), "book.author.firstName");
+            assertEquals(namedQTypes.get(4).getType(), meta.getArg("book.author.firstName"));
+            assertEquals(namedQTypes.get(5).getPath(), "book.author.surname");
+            assertEquals(namedQTypes.get(5).getType(), meta.getArg("book.author.surname"));
+            assertEquals(namedQTypes.get(6).getPath(), "book.title");
+            assertEquals(namedQTypes.get(6).getType(), meta.getArg("book.title"));
+
+            assertFalse(engine.isError());
         }
     }
 

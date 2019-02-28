@@ -27,7 +27,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Defines that an action has no result, i.e. it's result is of `VoidType`.
 
 |`withCallable(boolean callable)`
-|Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used as an _action form_ with provided arguments.
+|Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used with provided arguments.
 
 |`Object onCall(_dynamic arguments_)`
 |A dynamic callback method that should be defined in a callable action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`.
@@ -97,13 +97,12 @@ Metadata for arguments and a result are specified by <<types, types>>.
 class UpperCase(Action):
     def onConfigure(self):
         self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")
-        self.withArgs([
-            ArgMeta("text", StringType()).withLabel("Text to upper case").withDescription("The text that will be converted to upper case."),
-            ArgMeta("suffix", AnyType().withNullable(True)).withLabel("Text suffix").withDescription("Not used")
-        ]).withResult(ResultMeta(StringType()).withLabel("Upper case text"))
-    def onCall(self, text, optionalText = None):
-        self.logger.info("Action {} called", self.meta.name)
-        return text.upper() + ( " " + optionalText.upper() if optionalText is not None else "")
+        self.withArg(
+            StringType("text").withMaxLength(256).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
+        )
+        self.withResult(StringType().withLabel("Upper case text"))
+    def onCall(self, text):
+        return text.upper()
 ----
 
 .Action metadata example with multiple arguments
@@ -113,19 +112,19 @@ class MultipleArgumentsAction(Action):
     def onConfigure(self):
         self.withLabel("Multiple arguments action").withDescription("Multiple arguments action.")
         self.withArgs([
-            ArgMeta("stringArg", StringType().withMaxLength(10).withFormat("ipAddress")),
-            ArgMeta("integerArg", IntegerType().withMinValue(1).withMaxValue(100).withDefaultValue(50)),
-            ArgMeta("anyArg", AnyType().withNullable(True)),
-            ArgMeta("stringListArg", ListType(StringType())),
-            ArgMeta("decimalListArg", ListType(ObjectType().withClassName("java.math.BigDecimal"))),
-            ArgMeta("stringArrayArg", ObjectType().withClassName("java.lang.String[]")),
-            ArgMeta("javaClassArg", ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")),
-            ArgMeta("javaClassListArg", ListType(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))),
-            ArgMeta("binaryArg", BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "background":"black", "color":"white"})),
-            ArgMeta("typeArg", TypeType()),
-            ArgMeta("dynamicArg", DynamicType())
+            StringType("stringArg").withMaxLength(10).withFormat("ipAddress"),
+            IntegerType("integerArg").withMinValue(1).withMaxValue(100).withDefaultValue(50),
+            AnyType("anyArg").withNullable(),
+            ListType("stringListArg", StringType()),
+            ListType("decimalListArg", ObjectType().withClassName("java.math.BigDecimal")),
+            ObjectType("stringArrayArg").withClassName("java.lang.String[]"),
+            ObjectType("javaClassArg").withClassName("org.openksavi.sponge.examples.CustomObject"),
+            ListType("javaClassListArg", ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")),
+            BinaryType("binaryArg").withMimeType("image/png").withFeatures({"width":28, "height":28, "background":"black", "color":"white"}),
+            TypeType("typeArg"),
+            DynamicType("dynamicArg")
         ])
-        self.withResult(ResultMeta(BooleanType()).withLabel("Boolean result"))
+        self.withResult(BooleanType().withLabel("Boolean result"))
     def onCall(self, stringArg, integerArg, anyArg, stringListArg, decimalListArg, stringArrayArg, javaClassArg, javaClassListArg, binaryArg, typeArg, dynamicArg):
         return True
 ----
@@ -135,14 +134,12 @@ class MultipleArgumentsAction(Action):
 ----
 class UpperEchoAction(Action):
     def onConfigure(self):
-        self.withLabel("Echo Action").withDescription("Returns the upper case string").withArgsMeta([
-            ArgMeta("text", StringType()).withLabel("Argument 1").withDescription("Argument 1 description")
-        ]).withResultMeta(ResultMeta(StringType()).withLabel("Upper case string").withDescription("Result description"))
+        self.withLabel("Echo Action").withDescription("Returns the upper case string").withArg(
+            StringType("text").withLabel("Argument 1").withDescription("Argument 1 description")
+        ).withResult(StringType().withLabel("Upper case string").withDescription("Result description"))
     def onCall(self, text):
-        return self.label + " returns: " + text.upper()
+        return self.meta.label + " returns: " + text.upper()
 ----
-
-For more information see `ArgMeta` and `ResultMeta`.
 
 [[provided_arguments]]
 == Provided arguments
@@ -156,13 +153,13 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 |Property |Description
 
 |`Set<String> names`
-|A not null set of argument names that are to be provided.
+|A not null set of argument names (or name paths) that are to be provided. A name path is a dot-separated sequence of names of parent types, e.g. `"book.author.surname"`.
 
 |`Map<String, Object> current`
-|The not null map of argument names and their current values passed from a client code. The map is required to contain values of those arguments that the arguments specified in the `names` depend on.
+|The not null map of argument names (or name paths) and their current values passed from a client code. The map is required to contain values of those arguments that the arguments specified in the `names` depend on.
 
 |`Map<String, ProvidedValue> provided`
-|An initially empty map of argument names and values (value sets) that is to be set up in be provided.
+|An initially empty map of argument names (or name paths) and their provided values (value sets) that is to be set up in an `onProvideArgs` callback method implementation.
 |===
 
 This feature makes easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
@@ -181,11 +178,11 @@ class SetActuator(Action):
     def onConfigure(self):
         self.withLabel("Set actuator").withDescription("Sets the actuator state.")
         self.withArgs([
-            ArgMeta("actuator1", StringType()).withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet()),
-            ArgMeta("actuator2", BooleanType()).withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue()),
-            ArgMeta("actuator3", IntegerType().withNullable()).withLabel("Actuator 3 state").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            ArgMeta("actuator4", IntegerType()).withLabel("Actuator 4 state"),
-            ArgMeta("actuator5", StringType()).withLabel("Actuator 5 state").withProvided(ProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
+            StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet()),
+            BooleanType("actuator2").withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue()),
+            IntegerType("actuator3").withNullable().withLabel("Actuator 3 state").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            IntegerType("actuator4").withLabel("Actuator 4 state"),
+            StringType("actuator5").withLabel("Actuator 5 state").withProvided(ProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
         ]).withNoResult()
     def onCall(self, actuator1, actuator2, actuator3, actuator4, actuator5):
         sponge.setVariable("actuator1", actuator1)
@@ -202,7 +199,8 @@ class SetActuator(Action):
         if "actuator3" in context.names:
             context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
         if "actuator5" in context.names:
-            context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet(["X", "Y", "Z", context.current["actuator1"]])
+            context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
+                "X", "Y", "Z", context.current["actuator1"]])
 
 def onStartup():
     sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

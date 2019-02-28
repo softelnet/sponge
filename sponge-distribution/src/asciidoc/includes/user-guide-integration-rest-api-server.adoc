@@ -273,7 +273,7 @@ For more information see examples in the source code.
 == HTTPS
 In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
 
-include::user-guide-rest-api.adoc[leveloffset=+2]
+include::user-guide-rest-api.adoc[leveloffset=+1]
 
 == Environment
 

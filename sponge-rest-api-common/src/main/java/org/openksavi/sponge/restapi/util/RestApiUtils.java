@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.util;
 
+import java.util.function.Consumer;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -23,8 +25,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.ClassUtils;
 
+import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestDataType;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.QualifiedDataType;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
  * A set of common REST API utility methods.
@@ -66,5 +71,21 @@ public abstract class RestApiUtils {
 
     public static String obfuscatePassword(String request) {
         return request != null ? request.replaceAll("\"password\":\".*?\"", "\"password\":\"***\"") : null;
+    }
+
+    /**
+     * Traverses the action argument types but only through record types.
+     *
+     * @param actionMeta the action metadata.
+     * @param onType the qualified type callback.
+     * @param namedOnly traverse only through named types.
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void traverseActionArguments(RestActionMeta actionMeta, Consumer<QualifiedDataType> onType, boolean namedOnly) {
+
+        if (actionMeta.getArgs() != null) {
+            actionMeta.getArgs().forEach(
+                    argType -> SpongeApiUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
+        }
     }
 }

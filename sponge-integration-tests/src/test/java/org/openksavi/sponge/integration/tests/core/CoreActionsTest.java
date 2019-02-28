@@ -1074,17 +1074,17 @@ public class CoreActionsTest {
 
             assertEquals(3, argType.getFields().size());
 
-            DataType bookIdArgMeta = argType.getFields().get(0);
-            assertEquals(DataTypeKind.INTEGER, bookIdArgMeta.getKind());
-            assertEquals("id", bookIdArgMeta.getName());
+            DataType bookIdType = argType.getFields().get(0);
+            assertEquals(DataTypeKind.INTEGER, bookIdType.getKind());
+            assertEquals("id", bookIdType.getName());
 
-            DataType bookAuthorArgMeta = argType.getFields().get(1);
-            assertEquals(DataTypeKind.STRING, bookAuthorArgMeta.getKind());
-            assertEquals("author", bookAuthorArgMeta.getName());
+            DataType bookAuthorType = argType.getFields().get(1);
+            assertEquals(DataTypeKind.STRING, bookAuthorType.getKind());
+            assertEquals("author", bookAuthorType.getName());
 
-            DataType bookTitleArgMeta = argType.getFields().get(2);
-            assertEquals(DataTypeKind.STRING, bookTitleArgMeta.getKind());
-            assertEquals("title", bookTitleArgMeta.getName());
+            DataType bookTitleType = argType.getFields().get(2);
+            assertEquals(DataTypeKind.STRING, bookTitleType.getKind());
+            assertEquals("title", bookTitleType.getName());
 
             Map<String, Object> book =
                     new LinkedHashMap<>(SpongeUtils.immutableMapOf("id", 1, "author", "James Joyce", "title", "Ulysses"));

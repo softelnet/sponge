@@ -19,8 +19,8 @@ class SetGrovePiMode(Action):
         sponge.setVariable("grovePiMode", mode)
     def onProvideArgs(self, context):
         if "mode" in context.names:
-            context.provided["mode"] = ProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([AnnotatedValue("auto").withLabel("Auto"),
-                                                                                                          AnnotatedValue("manual").withLabel("Manual")])
+            context.provided["mode"] = ProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([
+                AnnotatedValue("auto").withLabel("Auto"), AnnotatedValue("manual").withLabel("Manual")])
 
 class ManageLcd(Action):
     def onConfigure(self):

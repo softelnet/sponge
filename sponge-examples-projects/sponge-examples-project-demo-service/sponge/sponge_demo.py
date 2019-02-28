@@ -202,7 +202,7 @@ class DateTimeAction(Action):
         self.withArg(DateTimeType("dateTime").withDateTime().withFormat("yyyy-MM-dd HH:mm").withLabel("Date and time"))
         self.withResult(StringType().withLabel("Formatted text"))
     def onCall(self, dateTime):
-        return dateTime.format(DateTimeFormatter.ofPattern(self.meta.argsMeta[0].type.format))
+        return dateTime.format(DateTimeFormatter.ofPattern(self.meta.args[0].format))
 
 class ManyArgumentsAction(Action):
     def onConfigure(self):
