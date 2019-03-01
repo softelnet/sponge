@@ -1,7 +1,7 @@
 = Architecture
 The figure below presents the architecture of the {sponge} system.
 
-image::engine_architecture.svg[title="Architecture",width=587,height=402]
+image::engine_architecture.svg[title="The system architecture",width=587,height=402]
 
 The {sponge} engine consists of the following components.
 
