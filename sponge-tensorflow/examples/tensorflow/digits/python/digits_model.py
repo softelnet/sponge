@@ -26,6 +26,7 @@ class DigitsModel:
         # input image dimensions
         self.img_rows, self.img_cols = 28, 28
         self.labels = list(map(str, range(10)))
+        self.session = None
 
     def configure(self, model_file):
         self.model_file = model_file
@@ -107,6 +108,10 @@ class DigitsModel:
 
         self.evaluate(self.model, self.x_test, self.y_test)
 
+        # Save and set the session later to avoid the multithreading related problems
+        # that cause 'The Session graph is empty.  Add operations to the graph before calling run().' exception.
+        self.session = K.get_session()
+
     def _preprocess_image_data(self, image_data):
         image = preprocessing.image.load_img(BytesIO(image_data), color_mode = 'grayscale', target_size=(self.img_rows, self.img_cols))
         image_tensor = preprocessing.image.img_to_array(image)
@@ -118,16 +123,18 @@ class DigitsModel:
         return self.labels
 
     def predict(self, image_data):
-        image_tensor, image = self._preprocess_image_data(image_data)
+        # Set a session for the current thread.
+        K.set_session(self.session)
 
+        image_tensor, image = self._preprocess_image_data(image_data)
         prediction_tensor = self.model.predict(image_tensor)[0]
-        #prediction = np.argmax(prediction_tensor)
-        #prediction_prob = np.amax(prediction_tensor)
-        #print("Prediction: {}, probability: {:.5f}".format(prediction, np.amax(prediction_tensor)), flush=True)
 
         return prediction_tensor
 
     def learn(self, image_data, digit):
+        # Set a session for the current thread.
+        K.set_session(self.session)
+
         x, image = self._preprocess_image_data(image_data)
         self.model.fit(x,
                        keras.utils.to_categorical([digit], self.num_classes),

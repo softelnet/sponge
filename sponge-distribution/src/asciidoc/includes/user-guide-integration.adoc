@@ -718,6 +718,8 @@ The default name of the Pi4J plugin (which can be used in knowledge bases) is `p
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/rpi/pi4j/Pi4JPlugin.html[`Pi4JPlugin` Javadoc].
 
+NOTE: The Pi4J documentation states that _You must now have WiringPi installed on your target Raspberry Pi system separately from Pi4J. WiringPi is now included be default in the latest Raspbian builds._
+
 The following example shows how to turn on/off a Grove LED connected to the Raspberry Pi GPIO. The hardware setup for this example includes Raspberry Pi 3, a ribbon cable, a ribbon cable socket, a breadboard, a 4-pin male jumper to Grove 4 pin conversion cable and a Grove LED. Before setting up the hardware make sure that your Raspberry Pi is not powered! The Grove LED should be connected to GPIO via a 4-pin connector: the black wire goes on PIN#14 (Ground), the red wire goes on PIN#02 (DC Power 5V), the yellow wire goes on PIN#12 (GPIO18/GPIO_GEN1), the white wire goes on PIN#06 (Ground).
 
 .Example Python knowledge base - Blinking LED
