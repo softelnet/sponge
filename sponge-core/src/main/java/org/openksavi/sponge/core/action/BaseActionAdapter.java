@@ -130,8 +130,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     private void validateArg(DataType argType) {
         Validate.notNull(argType, "Null argument type in the '%s' action", getMeta().getName());
         Validate.notNull(argType.getName(), "Argument has no name");
-        String errorSource = String.format("argument '%s' in the action '%s'", argType.getName(), getMeta().getName());
-        SpongeUtils.validateType(argType, errorSource);
+        SpongeUtils.validateType(argType, String.format("argument '%s'", argType.getName()));
     }
 
     private void validateArgProvided() {

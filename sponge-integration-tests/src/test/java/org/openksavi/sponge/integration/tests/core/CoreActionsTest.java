@@ -1130,4 +1130,19 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testActionsMetadataTypeLoop() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_loop.py").build();
+
+        try {
+            engine.startup();
+            fail("Execption expected");
+        } catch (SpongeException e) {
+            assertEquals(e.getMessage(), "A loop in the type specification has been found in the argument 'listArg' in kb.TypeLoopAction");
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

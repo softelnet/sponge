@@ -44,8 +44,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -622,12 +624,22 @@ public abstract class SpongeUtils {
 
     @SuppressWarnings("rawtypes")
     public static void validateType(DataType type, String valueName) {
+        doValidateType(type, valueName, new LinkedList<DataType>());
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected static void doValidateType(DataType type, String valueName, Deque<DataType> stack) {
         if (type.getName() != null) {
-            Validate.isTrue(!type.getName().trim().isEmpty() &&
-                    !StringUtils.containsWhitespace(type.getName())
+            Validate.isTrue(
+                    !type.getName().trim().isEmpty() && !StringUtils.containsWhitespace(type.getName())
                             && !StringUtils.containsAny(type.getName(), SpongeConstants.ACTION_SUB_ARG_SEPARATOR),
                     "The type name is invalid in the %s", valueName);
         }
+
+        Validate.isTrue(!stack.stream().anyMatch(ancestorType -> ancestorType == type),
+                "A loop in the type specification has been found in the %s", valueName);
+
+        stack.push(type);
 
         switch (type.getKind()) {
         case OBJECT:
@@ -638,13 +650,15 @@ public abstract class SpongeUtils {
             break;
         case LIST:
             Validate.isInstanceOf(ListType.class, type, "The type should be an instance of %s", ListType.class);
-            validateType(Validate.notNull(((ListType) type).getElementType(), "List element type not specified in the %s", valueName),
-                    valueName);
+            doValidateType(Validate.notNull(((ListType) type).getElementType(), "List element type not specified in the %s", valueName),
+                    valueName, stack);
             break;
         case MAP:
             Validate.isInstanceOf(MapType.class, type, "The type should be an instance of %s", MapType.class);
-            validateType(Validate.notNull(((MapType) type).getKeyType(), "Map key type not specified in the %s", valueName), valueName);
-            validateType(Validate.notNull(((MapType) type).getValueType(), "Map value type not specified in the %s", valueName), valueName);
+            doValidateType(Validate.notNull(((MapType) type).getKeyType(), "Map key type not specified in the %s", valueName), valueName,
+                    stack);
+            doValidateType(Validate.notNull(((MapType) type).getValueType(), "Map value type not specified in the %s", valueName),
+                    valueName, stack);
             break;
         case RECORD:
             Validate.isInstanceOf(RecordType.class, type, "The type should be an instance of %s", RecordType.class);
@@ -653,12 +667,14 @@ public abstract class SpongeUtils {
             ((RecordType) type).getFields().forEach(field -> {
                 Validate.notNull(field, "Record field type not specified in the %s", valueName);
                 validateRecordFieldName(field.getName(), valueName);
-                validateType(field, valueName);
+                doValidateType(field, valueName, stack);
             });
             break;
         default:
             break;
         }
+
+        stack.pop();
     }
 
     @SuppressWarnings("rawtypes")
