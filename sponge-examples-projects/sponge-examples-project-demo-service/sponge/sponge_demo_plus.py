@@ -15,6 +15,7 @@ class DrawAndUploadDoodle(Action):
                    .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5})\
         )
         self.withResult(StringType().withLabel("Status"))
+        self.withFeatures({"icon":"brush"})
     def onCall(self, image):
         fileName = str(System.currentTimeMillis()) + ".png"
         SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + fileName)
@@ -33,6 +34,7 @@ class ViewDoodle(Action):
         self.withLabel("View a doodle").withDescription("Views a doodle")
         self.withArg(StringType("image").withLabel("Doodle name").withProvided(ProvidedMeta().withValue().withValueSet()))
         self.withResult(BinaryType().withAnnotated().withMimeType("image/png").withLabel("Doodle image"))
+        self.withFeature("icon", "drawing")
     def onCall(self, name):
         return AnnotatedValue(SpongeUtils.readFileToByteArray(sponge.getProperty("doodlesDir") + "/" + name)).withFeatures({"filename":"doodle_" + name})
     def onProvideArgs(self, context):

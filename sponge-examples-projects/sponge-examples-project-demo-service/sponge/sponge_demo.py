@@ -13,8 +13,8 @@ class UpperCase(Action):
         self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")
         self.withArg(
             StringType("text").withMaxLength(256).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
-        )
-        self.withResult(StringType().withLabel("Upper case text"))
+        ).withResult(StringType().withLabel("Upper case text"))
+        self.withFeature("icon", "format-letter-case-upper")
     def onCall(self, text):
         return text.upper()
 
@@ -23,6 +23,7 @@ class LowerCase(Action):
         self.withLabel("Convert to lower case").withDescription("Converts a string to lower case.")
         self.withArg(StringType("text").withLabel("Text to lower case").withDescription("The text that will be changed to lower case"))
         self.withResult(StringType().withLabel("Lower case text"))
+        self.withFeature("icon", "format-letter-case-lower")
     def onCall(self, text):
         return text.lower()
 
@@ -53,8 +54,8 @@ class ChooseColor(Action):
         self.withArg(
             StringType("color").withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"})
                 .withLabel("Color").withDescription("The color.")
-        )
-        self.withResult(StringType())
+        ).withResult(StringType())
+        self.withFeatures({"icon":"format-color-fill"})
     def onCall(self, color):
         return ("The chosen color is " + color) if color else "No color chosen"
 
@@ -62,6 +63,7 @@ class ConsoleOutput(Action):
     def onConfigure(self):
         self.withLabel("Console output").withDescription("Returns the console output.")
         self.withNoArgs().withResult(StringType().withFormat("console").withLabel("Console output"))
+        self.withFeatures({"icon":"console"})
     def onCall(self):
         result = ""
         for i in range(30):
@@ -72,6 +74,7 @@ class MarkdownText(Action):
     def onConfigure(self):
         self.withLabel("Markdown text").withDescription("Returns the markdown text.")
         self.withNoArgs().withResult(StringType().withFormat("markdown").withLabel("Markdown text"))
+        self.withFeatures({"icon":"markdown"})
     def onCall(self):
         return """Heading
 =======
@@ -109,6 +112,7 @@ class HtmlFileOutput(Action):
     def onConfigure(self):
         self.withLabel("HTML file output").withDescription("Returns the HTML file.")
         self.withNoArgs().withResult(BinaryType().withMimeType("text/html").withLabel("HTML file"))
+        self.withFeatures({"icon":"web"})
     def onCall(self):
         return String("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -128,6 +132,7 @@ class PdfFileOutput(Action):
     def onConfigure(self):
         self.withLabel("PDF file output").withDescription("Returns the PDF file.")
         self.withNoArgs().withResult(BinaryType().withMimeType("application/pdf").withLabel("PDF file"))
+        self.withFeatures({"icon":"file-pdf"})
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary
@@ -141,8 +146,8 @@ class DependingArgumentsAction(Action):
             StringType("city").withLabel("City").withProvided(ProvidedMeta().withValueSet().withDependency("country")),
             StringType("river").withLabel("River").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
             StringType("weather").withLabel("Weather").withProvided(ProvidedMeta().withValueSet())
-        ])
-        self.withResult(StringType().withLabel("Sentences"))
+        ]).withResult(StringType().withLabel("Sentences"))
+        self.withFeature("icon", "flag")
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, context):
@@ -201,6 +206,7 @@ class DateTimeAction(Action):
         self.withLabel("Action with a date/time argument")
         self.withArg(DateTimeType("dateTime").withDateTime().withFormat("yyyy-MM-dd HH:mm").withLabel("Date and time"))
         self.withResult(StringType().withLabel("Formatted text"))
+        self.withFeature("icon", "timer")
     def onCall(self, dateTime):
         return dateTime.format(DateTimeFormatter.ofPattern(self.meta.args[0].format))
 
@@ -209,6 +215,7 @@ class ManyArgumentsAction(Action):
         self.withLabel("Many arguments action")
         self.withArgs(map(lambda i:  StringType("a" + str(i + 1)).withNullable().withLabel("Argument " + str(i + 1)), range(30)))
         self.withNoResult()
+        self.withFeature("icon", "fan")
     def onCall(self, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30):
         return None
 
@@ -216,6 +223,7 @@ class DynamicResultAction(Action):
     def onConfigure(self):
         self.withLabel("Action returning a dynamic result")
         self.withArg(StringType("type").withProvided(ProvidedMeta().withValueSet())).withResult(DynamicType())
+        self.withFeature("icon", "fan")
     def onCall(self, type):
         if type == "string":
             return DynamicValue("text", StringType())
@@ -237,5 +245,6 @@ class RecordResultAction(Action):
                 StringType("author").withLabel("Author"),
                 StringType("title").withLabel("Title"),
             ]))
+        self.withFeature("icon", "fan")
     def onCall(self):
         return {"author":"James Joyce", "title":"Ulysses"}

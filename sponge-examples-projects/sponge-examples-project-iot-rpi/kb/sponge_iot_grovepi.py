@@ -13,6 +13,7 @@ class SetGrovePiMode(Action):
         self.withLabel("Set the GrovePi mode").withDescription("Sets the GrovePi mode.")
         self.withArg(StringType("mode").withLabel("The GrovePi mode").withProvided(ProvidedMeta().withValue().withValueSet().withOverwrite()))
         self.withNoResult()
+        self.withFeature("icon", "settings")
     def onCall(self, mode):
         if mode not in ["auto", "manual"]:
             raise Exception("Unsupported GrovePi mode: " + mode)
@@ -36,6 +37,7 @@ class ManageLcd(Action):
             BooleanType("clearText").withNullable(True).withDefaultValue(False)
                 .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
         ]).withNoResult()
+        self.withFeature("icon", "monitor")
     def onCall(self, currentText, text, color, clearText = None):
         sponge.call("SetLcd", [text, color, clearText])
     def onProvideArgs(self, context):
@@ -55,6 +57,7 @@ class GetLcdText(Action):
     def onConfigure(self):
         self.withLabel("Get the LCD text").withDescription("Returns the LCD text.")
         self.withNoArgs().withResult(StringType().withFeatures({"maxLines":5}).withLabel("LCD Text"))
+        self.withFeature("icon", "monitor-dashboard")
     def onCall(self):
         return sponge.getVariable("grovePiDevice").getLcdText()
 
@@ -95,6 +98,7 @@ class ManageSensorActuatorValues(Action):
             IntegerType("blueLed").withMinValue(0).withMaxValue(255).withLabel("Blue LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
             BooleanType("buzzer").withLabel("Buzzer").withProvided(ProvidedMeta().withValue().withOverwrite())
         ]).withNoResult()
+        self.withFeature("icon", "thermometer")
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         grovePiDevice.setRedLed(redLed)

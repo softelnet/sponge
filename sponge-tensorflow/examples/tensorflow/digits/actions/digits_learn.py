@@ -10,6 +10,7 @@ class DigitsAddToLearn(Action):
             createImageType("image"),
             StringType("digit").withLabel("Digit").withProvided(ProvidedMeta().withValueSet())
         ]).withNoResult()
+        self.withFeature("icon", "brain")
     def onCall(self, image, digit):
         py4j.facade.addToLearn(image, digit)
         return None
@@ -24,6 +25,7 @@ class DigitsLearn(Action):
             createImageType("image"),
             StringType("digit").withLabel("Digit").withProvided(ProvidedMeta().withValueSet())
         ]).withNoResult()
+        self.withFeature("icon", "brain")
     def onCall(self, image, digit):
         py4j.facade.learn(image, digit)
         return None
@@ -35,6 +37,7 @@ class MnistResetModel(Action):
     def onConfigure(self):
         self.withLabel("Reset the model").withDescription("Resets the model by loading the state before manual learning").withFeatures({"confirmation":True})
         self.withNoArgs().withNoResult()
+        self.withFeature("icon", "brain")
     def onCall(self):
         py4j.facade.reset()
         return None

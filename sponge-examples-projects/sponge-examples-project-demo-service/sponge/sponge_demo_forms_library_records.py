@@ -28,6 +28,7 @@ class RecordLibraryForm(Action):
         self.withFeatures({
             "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
+        self.withFeature("icon", "library-books")
     def onCall(self, search, order, books):
         return None
     def onProvideArgs(self, context):

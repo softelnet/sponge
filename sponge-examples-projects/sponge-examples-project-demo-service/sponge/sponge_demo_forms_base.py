@@ -13,6 +13,7 @@ class ChangedButtonLabelsForm(Action):
             StringType("text").withMaxLength(256).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
         ]).withResult(StringType().withLabel("Upper case text"))
         self.withFeatures({"callLabel":"Call", "refreshLabel":"Reload", "clearLabel":"Reset", "cancelLabel":"Close"})
+        self.withFeature("icon", "file-document")
     def onCall(self, version, text):
         return text.upper()
     def onProvideArgs(self, context):
@@ -27,6 +28,7 @@ class HiddenButtonsForm(Action):
             StringType("text").withMaxLength(256).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
         ]).withResult(StringType().withLabel("Upper case text"))
         self.withFeatures({"callLabel":"Call", "refreshLabel":None, "clearLabel":None, "cancelLabel":None})
+        self.withFeature("icon", "file-document")
     def onCall(self, version, text):
         return text.upper()
     def onProvideArgs(self, context):
@@ -41,6 +43,7 @@ class DefaultCallButtonForm(Action):
             StringType("text").withMaxLength(256).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
         ]).withResult(StringType().withLabel("Upper case text"))
         self.withFeatures({"refreshLabel":None, "clearLabel":None, "cancelLabel":None})
+        self.withFeature("icon", "file-document")
     def onCall(self, version, text):
         return text.upper()
     def onProvideArgs(self, context):

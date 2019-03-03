@@ -20,6 +20,7 @@ class ArgLibraryForm(Action):
         self.withFeatures({
             "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
+        self.withFeature("icon", "library-books")
     def onCall(self, search, order, books):
         pass
     def onProvideArgs(self, context):

@@ -13,8 +13,8 @@ class SendNotificationEmail(Action):
             StringType("subject").withLabel("Subject").withDescription("The email subject."),
             StringType("message").withFeatures({"maxLines":5}).withLabel("Message").withDescription("The email message.")
             # The attachmentFiles attribute won't be visible in the UI.
-        ])
-        self.withNoResult()
+        ]).withNoResult()
+        self.withFeature("icon", "email")
     def onCall(self, subject, message, attachmentFiles = []):
         email = SimpleEmail() if len(attachmentFiles) == 0 else MultiPartEmail()
         email.setHostName(sponge.getProperty("mail.host"))

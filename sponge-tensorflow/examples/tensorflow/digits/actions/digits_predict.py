@@ -7,6 +7,7 @@ class DigitsPredict(Action):
     def onConfigure(self):
         self.withLabel("Recognize a digit").withDescription("Recognizes a handwritten digit")
         self.withArg(createImageType("image")).withResult(IntegerType().withLabel("Recognized digit"))
+        self.withFeature("icon", "brain")
     def onCall(self, image):
         predictions = py4j.facade.predict(image)
         prediction = max(predictions, key=predictions.get)
@@ -25,6 +26,7 @@ class DigitsPredictProbabilities(Action):
     def onConfigure(self):
         self.withLabel("Recognize a digit (probabilities)").withDescription("Recognizes a handwritten digit returning probabilities")
         self.withArg(createImageType("image")).withResult(MapType(StringType(), NumberType()).withLabel("Digit probabilities"))
+        self.withFeature("icon", "brain")
     def onCall(self, image):
         return py4j.facade.predict(image)
 
