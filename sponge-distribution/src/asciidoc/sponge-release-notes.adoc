@@ -15,6 +15,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Removed `AnnotatedType`. Use `DataType.withAnnotated()` instead.
 * Added support for categories. Processors may be assigned to registered categories.
 * Added new types: `DynamicType`, `TypeType`, `DateTimeType`.
+* Added `CategoryMeta.features` and a dynamic category selection for processors.
 * Fixed the bug that caused an error when sending an empty body in the REST API request.
 * Dependencies upgrade.
 

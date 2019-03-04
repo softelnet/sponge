@@ -16,6 +16,11 @@
 
 package org.openksavi.sponge;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.util.Descriptive;
 
 /**
@@ -31,6 +36,9 @@ public class CategoryMeta implements Descriptive {
 
     /** The category description. */
     private String description;
+
+    /** The category features. */
+    private Map<String, Object> features = new LinkedHashMap<>();
 
     @SuppressWarnings("unused")
     private CategoryMeta() {
@@ -70,6 +78,15 @@ public class CategoryMeta implements Descriptive {
         this.description = description;
     }
 
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        Validate.notNull(features, "The category features cannot be null");
+        this.features = new LinkedHashMap<>(features);
+    }
+
     public CategoryMeta withLabel(String label) {
         setLabel(label);
         return this;
@@ -77,6 +94,16 @@ public class CategoryMeta implements Descriptive {
 
     public CategoryMeta withDescription(String description) {
         setDescription(description);
+        return this;
+    }
+
+    public CategoryMeta withFeatures(Map<String, Object> features) {
+        getFeatures().putAll(features);
+        return this;
+    }
+
+    public CategoryMeta withFeature(String name, Object value) {
+        getFeatures().put(name, value);
         return this;
     }
 }

@@ -40,6 +40,7 @@ import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.util.PatternMatcher;
+import org.openksavi.sponge.util.ProcessorPredicate;
 
 /**
  * The Sponge engine. This is the main interface of the system. An instance of this interface manages all main components.
@@ -163,6 +164,9 @@ public interface SpongeEngine extends EngineModule {
      * @return the list of action adapters.
      */
     List<ActionAdapter> getActions();
+
+    @SuppressWarnings("rawtypes")
+    List<ProcessorAdapter> getProcessors();
 
     /**
      * Handles the error.
@@ -429,6 +433,23 @@ public interface SpongeEngine extends EngineModule {
      * @return the categories.
      */
     List<CategoryMeta> getCategories();
+
+    /**
+     * Dynamically selects processors that are to assigned to the category.
+     *
+     * @param categoryName the category name.
+     * @param processorType the processor type. If {@code null}, all processor types will be considered.
+     * @param predicate the processor predicate.
+     */
+    void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate);
+
+    /**
+     * Dynamically selects processors of all types that are to assigned to the category.
+     *
+     * @param categoryName the category name.
+     * @param predicate the processor predicate.
+     */
+    void selectCategory(String categoryName, ProcessorPredicate predicate);
 
     /**
      * Returns the action metadata.

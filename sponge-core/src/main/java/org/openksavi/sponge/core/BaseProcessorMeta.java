@@ -94,7 +94,6 @@ public abstract class BaseProcessorMeta implements ProcessorMeta {
     @Override
     public void setFeatures(Map<String, Object> features) {
         Validate.notNull(features, "The processor features cannot be null");
-
         this.features = new LinkedHashMap<>(features);
     }
 

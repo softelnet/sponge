@@ -87,6 +87,7 @@ import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.util.PatternMatcher;
+import org.openksavi.sponge.util.ProcessorPredicate;
 
 /**
  * Base Sponge engine implementation.
@@ -643,6 +644,19 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         return new ArrayList<>(actionManager.getRegisteredActionAdapterMap().values());
     }
 
+    @Override
+    @SuppressWarnings("rawtypes")
+    public List<ProcessorAdapter> getProcessors() {
+        List<ProcessorAdapter> adapters = new ArrayList<>();
+        adapters.addAll(getActions());
+        adapters.addAll(getFilters());
+        adapters.addAll(getTriggers());
+        adapters.addAll(getRuleGroups());
+        adapters.addAll(getCorrelatorGroups());
+
+        return adapters;
+    }
+
     /**
      * Reloads script-based knowledge bases.
      */
@@ -886,6 +900,20 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public List<CategoryMeta> getCategories() {
         return new ArrayList<>(categories.values());
+    }
+
+    @Override
+    public void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate) {
+        Validate.notNull(getCategory(categoryName), "Category %s not found", categoryName);
+
+        getProcessors().stream()
+                .filter(adapter -> (processorType == null || processorType == adapter.getType()) && predicate.test(adapter.getProcessor()))
+                .forEach(adapter -> adapter.getMeta().setCategory(categoryName));
+    }
+
+    @Override
+    public void selectCategory(String categoryName, ProcessorPredicate predicate) {
+        selectCategory(categoryName, null, predicate);
     }
 
     @Override

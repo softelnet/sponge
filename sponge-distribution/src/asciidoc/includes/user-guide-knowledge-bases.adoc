@@ -78,7 +78,38 @@ The following predefined global variables are available in all knowledge bases.
 
 For each plugin a global variable will be created. The name of this variable is the plugin name (i.e. the value configured as the plugin `name` attribute in the configuration).
 
-=== Engine facade
+== User variables
+A user variable could be defined in one of the two scopes:
+
+* the engine scope,
+* the knowledge base scope.
+
+=== Engine scope
+The engine scope variables could be accessed in any knowledge base.
+
+.The engine scope variable examples
+[source,python]
+----
+sponge.setVariable("soundTheAlarm", AtomicBoolean(False))
+sponge.getVariable("soundTheAlarm").set(True)
+----
+
+TIP: The engine scope is the same as a {sponge} internal session scope. This is because currently there is only one session per a single {sponge} engine instance.
+
+=== Knowledge base scope
+The knowledge base scope variables may be accessed only in the knowledge base they are defined in.
+
+.The knowledge base scope variable examples
+[source,python]
+----
+hearbeatEventEntry = None
+
+def onStartup():
+    global hearbeatEventEntry
+    hearbeatEventEntry = sponge.event("heartbeat").sendAfter(100, 1000)
+----
+
+== Engine facade
 
 .Important engine facade properties and methods
 [cols="1,3"]
@@ -201,40 +232,15 @@ For each plugin a global variable will be created. The name of this variable is 
 
 |`get<_Processor_>Meta(String processorName)`
 A set of methods that return processor metadata.
+
+|`void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate)`
+|Dynamically selects processors that are to assigned to the category.
+
+|`void selectCategory(String categoryName, ProcessorPredicate predicate)`
+|Dynamically selects processors of all types that are to assigned to the category.
 |===
 
 For a complete list of available methods see the {spongeJavaDocUrl}/org/openksavi/sponge/EngineOperations.html[`EngineOperations`] and the {spongeJavaDocUrl}/org/openksavi/sponge/kb/KnowledgeBaseEngineOperations.html[`KnowledgeBaseEngineOperations`] Javadoc.
-
-== User variables
-A user variable could be defined in one of the two scopes:
-
-* the engine scope,
-* the knowledge base scope.
-
-=== Engine scope
-The engine scope variables could be accessed in any knowledge base.
-
-.The engine scope variable examples
-[source,python]
-----
-sponge.setVariable("soundTheAlarm", AtomicBoolean(False))
-sponge.getVariable("soundTheAlarm").set(True)
-----
-
-TIP: The engine scope is the same as a {sponge} internal session scope. This is because currently there is only one session per a single {sponge} engine instance.
-
-=== Knowledge base scope
-The knowledge base scope variables may be accessed only in the knowledge base they are defined in.
-
-.The knowledge base scope variable examples
-[source,python]
-----
-hearbeatEventEntry = None
-
-def onStartup():
-    global hearbeatEventEntry
-    hearbeatEventEntry = sponge.event("heartbeat").sendAfter(100, 1000)
-----
 
 == Loading knowledge base from an additional file
 {sponge} gives the possibility to define a knowledge base in a few files. In order to do that, in the configuration file in the `<engine>` section you may define which files should be loaded by adding `<file>` tags to `<knowledgeBase>`. Additional files could also be loaded from a knowledge base level.
@@ -447,15 +453,20 @@ The builder-style methods in the metadata classes follow the naming convention `
 == Categories
 Processors may be assigned to registered categories. Categories could be used in a client code to group processors independently of knowledge bases. This feature be useful if you don't want to group processor by knowledge bases which requires more resources because each knowledge base has its own interpreter.
 
-.Example of registering a category.
+A registered category can be manually assigned to a processor a the processor configuration callback method `onConfigure` or dynamically by selecting processors that are to assigned to the category. The latter option could assign for example all processors defined in several knowledge bases to a single category in one line. Dynamic selection overwrites manual assigning.
+
+.Example of registering categories and dynamically selecting processor categories by knowledge bases.
 [source,python]
 ----
 def onInit():
-    sponge.addCategories(CategoryMeta("myActions").withLabel("My actions").withDescription("My actions description"),
-                         CategoryMeta("yourActions").withLabel("Your actions").withDescription("Your actions description"))
+    sponge.addCategories(CategoryMeta("basic").withLabel("Basic"), CategoryMeta("extra").withLabel("Extra"))
+
+def onLoad():
+    sponge.selectCategory("basic", lambda processor: processor.kb.name in ("demo", "engine"))
+    sponge.selectCategory("extra", ProcessorType.ACTION, lambda processor: processor.kb.name in ("demoExtra"))
 ----
 
-.Example of assigning a processor to a category.
+.Example of manually assigning a processor to a category in a processor configuration.
 [source,python]
 ----
 class MyAction1(Action):

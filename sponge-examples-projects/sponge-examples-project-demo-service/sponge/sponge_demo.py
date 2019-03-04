@@ -8,6 +8,22 @@ from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.time.format import DateTimeFormatter
 from java.time import LocalDateTime
 
+def onInit():
+    sponge.addCategories(
+        CategoryMeta("basic").withLabel("Basic"),
+        CategoryMeta("forms").withLabel("Forms"),
+        CategoryMeta("digits").withLabel("Digits"),
+        CategoryMeta("admin").withLabel("Admin"),
+        CategoryMeta("plus").withLabel("Extra")
+    )
+
+def onLoad():
+    sponge.selectCategory("basic", lambda processor: processor.kb.name in ("demo", "engine"))
+    sponge.selectCategory("forms", lambda processor: processor.kb.name in ("demoForms", "demoFormsLibraryArgs", "demoFormsLibraryRecord"))
+    sponge.selectCategory("digits", lambda processor: processor.kb.name in ("digits"))
+    sponge.selectCategory("admin", lambda processor: processor.kb.name in ("admin"))
+    sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
+
 class UpperCase(Action):
     def onConfigure(self):
         self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")

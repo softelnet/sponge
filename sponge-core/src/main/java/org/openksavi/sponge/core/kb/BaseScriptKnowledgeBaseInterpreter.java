@@ -37,6 +37,7 @@ import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
+import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -261,7 +262,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     protected List<Class<?>> getStandardImportClasses() {
         List<Class<?>> classes = new ArrayList<>();
         //@formatter:off
-        classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class,
+        classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class, ProcessorType.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
                 ProvidedMeta.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class,
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,

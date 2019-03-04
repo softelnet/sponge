@@ -863,6 +863,26 @@ public class CoreActionsTest {
     }
 
     @Test
+    public void testActionCategorySelection() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_category_selection.py").build();
+        engine.startup();
+
+        try {
+            assertEquals("myActions", engine.getActionMeta("MyAction1").getCategory());
+            assertEquals("myActions", engine.getActionMeta("MyAction2").getCategory());
+            assertEquals("yourActions", engine.getActionMeta("YourAction1").getCategory());
+            assertNull(engine.getActionMeta("OtherAction").getCategory());
+
+            assertEquals(3, engine.getCategories().size());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
     public void testActionCategoryInvalid() {
         SpongeEngine engine =
                 DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_category_invalid.py").build();

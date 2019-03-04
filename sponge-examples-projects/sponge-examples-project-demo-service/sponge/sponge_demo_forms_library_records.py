@@ -13,7 +13,7 @@ def createBookRecordType(name):
 
 class RecordLibraryForm(Action):
     def onConfigure(self):
-        self.withLabel("Library")
+        self.withLabel("Library (books as records)")
         self.withArgs([
             StringType("search").withNullable().withLabel("Search"),
             StringType("order").withLabel("Sort by").withProvided(ProvidedMeta().withValue().withValueSet()),
