@@ -606,6 +606,8 @@ __optional__|string
 __optional__|string
 |**description** +
 __optional__|string
+|**features** +
+__optional__|< string, object > map
 |===
 
 
