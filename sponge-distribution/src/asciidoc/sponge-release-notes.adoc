@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.7.1 (not released yet)
+== 1.8.0 (2019-03-04)
 
 * API change: Action arguments and result metadata are now specified as data types. `ArgMeta` and `ResultMeta` classes have been removed.
 * API change: The processor metadata properties, data type properties have to be specified using the builder-style methods, e.g. `self.withLabel("Label").withDescription("Description")`. The builder-style methods in the metadata classes follow the naming convention `with<Property>`, e.g. `BinaryType().mimeType("image/png")` is now `BinaryType().withMimeType("image/png")`.

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>1.7.1-SNAPSHOT</version>
+    <version>1.8.0</version>
     <name>Sponge - Parent</name>
     <description>Sponge Parent POM</description>
     <url>https://sponge.openksavi.org</url>
@@ -55,8 +55,8 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.7.0</release.version>
-        <release.date>2019-02-01</release.date>
+        <release.version>1.8.0</release.version>
+        <release.date>2019-03-04</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
