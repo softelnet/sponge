@@ -11,8 +11,8 @@ class DrawAndUploadDoodle(Action):
     def onConfigure(self):
         self.withLabel("Draw and upload a doodle").withDescription("Shows a canvas to draw a doodle and uploads it to the server")
         self.withArg(
-            BinaryType("image").withLabel("Doodle").withMimeType("image/png")
-                   .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5})\
+              BinaryType("image").withLabel("Doodle").withMimeType("image/png")
+                     .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":1})
         )
         self.withResult(StringType().withLabel("Status"))
         self.withFeatures({"icon":"brush"})

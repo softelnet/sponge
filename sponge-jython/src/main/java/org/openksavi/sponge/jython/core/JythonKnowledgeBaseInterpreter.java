@@ -54,6 +54,7 @@ import org.openksavi.sponge.jython.JythonPlugin;
 import org.openksavi.sponge.jython.JythonRule;
 import org.openksavi.sponge.jython.JythonTrigger;
 import org.openksavi.sponge.jython.PythonConstants;
+import org.openksavi.sponge.jython.util.PyPredicate;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
@@ -92,19 +93,20 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         setPythonPath(getEngineOperations().getEngine());
 
         String scripEngineName = SCRIPT_ENGINE_NAME;
-        ScriptEngine result = new ScriptEngineManager().getEngineByName(scripEngineName);
+        ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName(scripEngineName);
 
-        Validate.isInstanceOf(Compilable.class, result, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
-        Validate.isInstanceOf(Invocable.class, result, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
+        Validate.isInstanceOf(Compilable.class, scriptEngine, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
+        Validate.isInstanceOf(Invocable.class, scriptEngine, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
-        PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
-        addImport(result, JythonPlugin.class, Plugin.class.getSimpleName());
+        PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(scriptEngine, scriptClass, interfaceClass.getSimpleName()));
+        addImport(scriptEngine, JythonPlugin.class, Plugin.class.getSimpleName());
 
-        getStandardImportClasses().forEach(cls -> addImport(result, cls));
+        getStandardImportClasses().forEach(cls -> addImport(scriptEngine, cls));
+        addImport(scriptEngine, PyPredicate.class);
 
-        result.put(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());
+        scriptEngine.put(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());
 
-        return result;
+        return scriptEngine;
     }
 
     private void setPythonPath(SpongeEngine engine) {

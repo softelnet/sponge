@@ -360,37 +360,43 @@ public abstract class BaseRestApiTestTemplate {
             RecordType recordType = (RecordType) actionMeta.getResult();
             assertEquals(DataTypeKind.RECORD, recordType.getKind());
             assertEquals("book", recordType.getName());
-            assertEquals(3, recordType.getFields().size());
+            assertEquals(4, recordType.getFields().size());
             assertEquals("id", recordType.getFields().get(0).getName());
             assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getKind());
             assertEquals("author", recordType.getFields().get(1).getName());
             assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getKind());
             assertEquals("title", recordType.getFields().get(2).getName());
             assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getKind());
+            assertEquals("comment", recordType.getFields().get(3).getName());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(3).getKind());
 
             Map<String, Object> book1 = client.call(Map.class, actionMeta.getName(), Arrays.asList(1));
-            assertEquals(3, book1.size());
+            assertEquals(4, book1.size());
             assertEquals(1, book1.get("id"));
             assertEquals("James Joyce", book1.get("author"));
             assertEquals("Ulysses", book1.get("title"));
+            assertTrue(book1.containsKey("comment"));
+            assertNull(book1.get("comment"));
 
             actionMeta = client.getActionMeta("RecordAsArgAction");
             recordType = (RecordType) actionMeta.getArgs().get(0);
             assertEquals(DataTypeKind.RECORD, recordType.getKind());
-            assertEquals(3, recordType.getFields().size());
+            assertEquals(4, recordType.getFields().size());
             assertEquals("id", recordType.getFields().get(0).getName());
             assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getKind());
             assertEquals("author", recordType.getFields().get(1).getName());
             assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getKind());
             assertEquals("title", recordType.getFields().get(2).getName());
             assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getKind());
+            assertEquals("comment", recordType.getFields().get(3).getName());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(3).getKind());
 
-            Map<String, Object> book2 =
-                    SpongeUtils.immutableMapOf("id", 5, "author", "Arthur Conan Doyle", "title", "Adventures of Sherlock Holmes");
-
-            Number bookId = client.call(Number.class, "RecordAsArgAction", Arrays.asList(book2));
-
-            assertEquals(5, bookId.intValue());
+            Map<String, Object> book2 = SpongeUtils.immutableMapOf("id", 5, "author", "Arthur Conan Doyle", "title",
+                    "Adventures of Sherlock Holmes", "comment", null);
+            Map<String, Object> book3 = client.call(Map.class, "RecordAsArgAction", Arrays.asList(book2));
+            assertEquals(4, book3.size());
+            book2.forEach((key, value) -> assertEquals(value, book3.get(key)));
+            assertTrue(book3.containsKey("comment"));
 
             assertFalse(engine.isError());
         }

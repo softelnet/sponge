@@ -65,7 +65,6 @@ import javax.net.ssl.TrustManagerFactory;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
@@ -412,23 +411,48 @@ public abstract class SpongeUtils {
     }
 
     public static <K, V> Map<K, V> immutableMapOf(K k1, V v1) {
-        return ImmutableMap.of(k1, v1);
+        Map<K, V> map = new LinkedHashMap<>();
+        map.put(k1, v1);
+
+        return Collections.unmodifiableMap(map);
     }
 
     public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2) {
-        return ImmutableMap.of(k1, v1, k2, v2);
+        Map<K, V> map = new LinkedHashMap<>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+
+        return Collections.unmodifiableMap(map);
     }
 
     public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2, K k3, V v3) {
-        return ImmutableMap.of(k1, v1, k2, v2, k3, v3);
+        Map<K, V> map = new LinkedHashMap<>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+        map.put(k3, v3);
+
+        return Collections.unmodifiableMap(map);
     }
 
     public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-        return ImmutableMap.of(k1, v1, k2, v2, k3, v3, k4, v4);
+        Map<K, V> map = new LinkedHashMap<>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+        map.put(k3, v3);
+        map.put(k4, v4);
+
+        return Collections.unmodifiableMap(map);
     }
 
     public static <K, V> Map<K, V> immutableMapOf(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-        return ImmutableMap.of(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5);
+        Map<K, V> map = new LinkedHashMap<>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+        map.put(k3, v3);
+        map.put(k4, v4);
+        map.put(k5, v5);
+
+        return Collections.unmodifiableMap(map);
     }
 
     public static <T> Stream<T> stream(Iterator<T> iterator) {

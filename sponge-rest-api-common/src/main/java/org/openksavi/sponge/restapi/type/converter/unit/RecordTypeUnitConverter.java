@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.type.converter.unit;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,8 +39,11 @@ public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, O
     public Object marshal(TypeConverter converter, RecordType type, Map<String, Object> value) {
         Map<String, DataType> fieldMap = createFieldMap(type);
 
-        return value.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(),
-                entry -> converter.marshal(getFieldType(fieldMap, type, entry.getKey()), entry.getValue())));
+        Map<String, Object> marshalled = new LinkedHashMap<>(value.size());
+        value.entrySet().stream().forEach(
+                entry -> marshalled.put(entry.getKey(), converter.marshal(getFieldType(fieldMap, type, entry.getKey()), entry.getValue())));
+
+        return marshalled;
     }
 
     @Override
@@ -48,8 +52,11 @@ public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, O
 
         Map<String, DataType> fieldMap = createFieldMap(type);
 
-        return (Map<String, Object>) ((Map) value).entrySet().stream().collect(Collectors.toMap((Map.Entry entry) -> entry.getKey(),
-                (Map.Entry entry) -> converter.unmarshal(getFieldType(fieldMap, type, (String) entry.getKey()), entry.getValue())));
+        Map<String, Object> unmarshalled = new LinkedHashMap<>(((Map) value).size());
+        ((Map<String, Object>) value).entrySet().stream().forEach(entry -> unmarshalled.put(entry.getKey(),
+                converter.unmarshal(getFieldType(fieldMap, type, (String) entry.getKey()), entry.getValue())));
+
+        return unmarshalled;
     }
 
     protected DataType<?> getFieldType(Map<String, DataType> fieldMap, RecordType type, String fieldName) {

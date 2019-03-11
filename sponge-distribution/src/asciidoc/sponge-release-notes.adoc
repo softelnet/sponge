@@ -6,6 +6,10 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
+== 1.8.1 (not released yet)
+* Fixed the bug that caused a `NullPointerException` when sending a record with a `null` value of a field in the REST API request.
+
+[discrete]
 == 1.8.0 (2019-03-04)
 
 * API change: Action arguments and result metadata are now specified as data types. `ArgMeta` and `ResultMeta` classes have been removed.

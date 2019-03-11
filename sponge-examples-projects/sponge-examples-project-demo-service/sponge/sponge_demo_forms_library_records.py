@@ -29,8 +29,6 @@ class RecordLibraryForm(Action):
             "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
         self.withFeature("icon", "library-books")
-    def onCall(self, search, order, books):
-        return None
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.names:
@@ -45,7 +43,7 @@ class RecordCreateBook(Action):
     def onConfigure(self):
         self.withLabel("Add a book")
         self.withArg(
-            createBookRecordType("book").withLabel("Book").withFields([
+            createBookRecordType("book").withLabel("Book").withProvided(ProvidedMeta().withValue()).withFields([
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()
@@ -69,8 +67,6 @@ class RecordReadBook(Action):
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(ProvidedMeta().withValue().withDependency("book.id")))
         self.withNoResult().withCallable(False)
         self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close"})
-    def onCall(self, book):
-        pass
     def onProvideArgs(self, context):
         global LIBRARY
         if "book" in context.names:

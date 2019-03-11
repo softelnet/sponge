@@ -6,7 +6,7 @@ REST API security
 from org.openksavi.sponge.restapi.server.security import User
 
 # Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "anonymous":["demo", "digits"]}
+ROLES_TO_KB = { "admin":[".*"], "anonymous":["demo", "digits", "demoForms.*"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):

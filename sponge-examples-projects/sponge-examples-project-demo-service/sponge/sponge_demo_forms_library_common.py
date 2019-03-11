@@ -5,7 +5,6 @@ Demo Forms - Library common
 
 from java.util.concurrent.atomic import AtomicInteger
 from java.util.concurrent import CopyOnWriteArrayList
-from java.util.function import Predicate
 import re
 
 def onInit():
@@ -43,11 +42,6 @@ class Book:
         return {"id":self.id, "author":self.author, "title":self.title}
     def fromMap(bookAsMap):
         return Book(bookAsMap["id"], bookAsMap["author"], bookAsMap["title"])
-
-# Jython hack [https://stackoverflow.com/questions/43970506/how-to-use-java-8-lambdas-in-jython]
-class PyPredicate(Predicate):
-   def __init__(self, fn):
-       self.test = fn
 
 # Sample data
 class Library:
