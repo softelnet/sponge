@@ -98,4 +98,9 @@ public class AnnotatedValue<T> {
         this.features.putAll(features);
         return this;
     }
+
+    public AnnotatedValue<T> withFeature(String name, Object value) {
+        this.features.put(name, value);
+        return this;
+    }
 }

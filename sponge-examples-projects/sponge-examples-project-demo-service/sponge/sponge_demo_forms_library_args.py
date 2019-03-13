@@ -12,7 +12,6 @@ class ArgLibraryForm(Action):
             # Provided with overwrite to allow GUI refresh.
             ListType("books").withLabel("Books").withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withFeatures({
                 "createAction":"ArgCreateBook", "readAction":"ArgReadBook", "updateAction":"ArgUpdateBook", "deleteAction":"ArgDeleteBook",
-                "createLabel":"Add", "readLabel":"View", "updateLabel":"Edit", "deleteLabel":"Remove",
             }).withElement(
                 IntegerType().withAnnotated()
             )
@@ -33,7 +32,7 @@ class ArgLibraryForm(Action):
 
 class ArgCreateBook(Action):
     def onConfigure(self):
-        self.withLabel("Add a book")
+        self.withLabel("Add a new book")
         self.withArgs([
             StringType("author").withLabel("Author"),
             StringType("title").withLabel("Title")
@@ -63,7 +62,7 @@ class ArgAbstractReadUpdateBook(Action):
 class ArgReadBook(ArgAbstractReadUpdateBook):
     def onConfigure(self):
         ArgAbstractReadUpdateBook.onConfigure(self)
-        self.withLabel("Read a book").withCallable(False)
+        self.withLabel("View the book").withCallable(False)
         self.withFeatures({"callLabel":None, "cancelLabel":"Close"})
 
     def onCall(self, bookId, author, title):
@@ -72,7 +71,7 @@ class ArgReadBook(ArgAbstractReadUpdateBook):
 class ArgUpdateBook(ArgAbstractReadUpdateBook):
     def onConfigure(self):
         ArgAbstractReadUpdateBook.onConfigure(self)
-        self.withLabel("Modify a book")
+        self.withLabel("Modify the book")
         self.withFeatures({"callLabel":"Save", "cancelLabel":"Cancel"})
 
     def onCall(self, bookId, author, title):
@@ -81,7 +80,7 @@ class ArgUpdateBook(ArgAbstractReadUpdateBook):
 
 class ArgDeleteBook(Action):
     def onConfigure(self):
-        self.withLabel("Remove a book")
+        self.withLabel("Remove the book")
         self.withArgs([
             IntegerType("bookId").withAnnotated().withFeature("visible", False),
         ]).withNoResult()

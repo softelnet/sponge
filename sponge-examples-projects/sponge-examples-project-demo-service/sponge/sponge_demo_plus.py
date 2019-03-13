@@ -32,7 +32,7 @@ class ListDoodles(Action):
 class ViewDoodle(Action):
     def onConfigure(self):
         self.withLabel("View a doodle").withDescription("Views a doodle")
-        self.withArg(StringType("image").withLabel("Doodle name").withProvided(ProvidedMeta().withValue().withValueSet()))
+        self.withArg(StringType("image").withLabel("Doodle name").withProvided(ProvidedMeta().withValue().withValueSet().withOverwrite()))
         self.withResult(BinaryType().withAnnotated().withMimeType("image/png").withLabel("Doodle image"))
         self.withFeature("icon", "drawing")
     def onCall(self, name):
