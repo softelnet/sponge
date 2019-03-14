@@ -657,7 +657,7 @@ public abstract class SpongeUtils {
             Validate.isTrue(
                     !type.getName().trim().isEmpty() && !StringUtils.containsWhitespace(type.getName())
                             && !StringUtils.containsAny(type.getName(), SpongeConstants.ACTION_SUB_ARG_SEPARATOR),
-                    "The type name is invalid in the %s", valueName);
+                    "Invalid type name '%s' in the %s", type.getName(), valueName);
         }
 
         Validate.isTrue(!stack.stream().anyMatch(ancestorType -> ancestorType == type),
