@@ -77,7 +77,7 @@ public abstract class SpongeApiUtils {
     public static Map<String, DataType> createNamedActionArgTypesMap(ActionMeta actionMeta) {
         Map<String, DataType> argTypesMap = new LinkedHashMap<>();
 
-        traverseActionArguments(actionMeta, qType -> argTypesMap.put(qType.getPath(), qType.getType()), true);
+        traverseActionArguments(actionMeta, qualifiedType -> argTypesMap.put(qualifiedType.getPath(), qualifiedType.getType()), true);
 
         return argTypesMap;
     }

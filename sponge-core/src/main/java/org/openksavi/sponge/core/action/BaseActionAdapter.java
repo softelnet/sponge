@@ -78,9 +78,9 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
             }
         } else {
             // Use all named arguments that are configured to be provided, including sub-arguments.
-            SpongeApiUtils.traverseActionArguments(getMeta(), qType -> {
-                if (qType.getType().getProvided() != null) {
-                    finalNames.add(qType.getPath());
+            SpongeApiUtils.traverseActionArguments(getMeta(), qualifiedType -> {
+                if (qualifiedType.getType().getProvided() != null) {
+                    finalNames.add(qualifiedType.getPath());
                 }
             }, true);
         }
@@ -136,18 +136,18 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     private void validateArgProvided() {
         Map<String, DataType> fullArgTypesMap = SpongeApiUtils.createNamedActionArgTypesMap(getMeta());
 
-        SpongeApiUtils.traverseActionArguments(getMeta(), qType -> {
-            DataType type = qType.getType();
+        SpongeApiUtils.traverseActionArguments(getMeta(), qualifiedType -> {
+            DataType type = qualifiedType.getType();
 
-            if (qType.getPath() != null) { // If it's named.
+            if (qualifiedType.getPath() != null) { // If it's named.
                 if (type.getProvided() != null) {
                     type.getProvided().getDependencies().forEach(dependency -> {
                         Validate.isTrue(fullArgTypesMap.containsKey(dependency),
-                                "The argument '%s' depends on an argument '%s' that is not defined or is not allowed", qType.getPath(),
-                                dependency);
+                                "The argument '%s' depends on an argument '%s' that is not defined or is not allowed",
+                                qualifiedType.getPath(), dependency);
                     });
                     Validate.isTrue(!type.getProvided().isReadOnly() || type.isNullable(),
-                            "The provided, read only argument '%s' must be nullable", qType.getPath());
+                            "The provided, read only argument '%s' must be nullable", qualifiedType.getPath());
                 }
             } else { // If it's unnamed.
                 Validate.isTrue(type.getProvided() == null, "The %s argument is set as provided but doesn't have a complete name path",

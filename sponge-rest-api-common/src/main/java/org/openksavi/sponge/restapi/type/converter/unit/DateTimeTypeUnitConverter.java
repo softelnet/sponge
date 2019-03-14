@@ -65,9 +65,9 @@ public class DateTimeTypeUnitConverter<T> extends BaseUnitTypeConverter<Object, 
         case INSTANT:
             // Formatter not used.
             return Instant.parse(stringValue);
+        default:
+            throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());
         }
-
-        throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());
     }
 
     protected static DateTimeFormatter getFormatter(DateTimeType type) {
@@ -86,8 +86,8 @@ public class DateTimeTypeUnitConverter<T> extends BaseUnitTypeConverter<Object, 
             return DateTimeFormatter.ISO_TIME;
         case INSTANT:
             return DateTimeFormatter.ISO_INSTANT;
+        default:
+            throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());
         }
-
-        throw new SpongeException("Unsupported DateTime kind " + type.getDateTimeKind());
     }
 }

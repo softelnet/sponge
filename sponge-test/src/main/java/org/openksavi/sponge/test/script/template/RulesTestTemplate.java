@@ -72,8 +72,6 @@ public class RulesTestTemplate {
     }
 
     public static void doTestRulesEvents(KnowledgeBaseType type, SpongeEngine engine, long timeout) {
-        CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
-
         Map<String, String[][]> expected = new LinkedHashMap<>();
         expected.put("RuleF", new String[][] { { "1" } });
         expected.put("RuleFFF", new String[][] { { "1", "2", "5" } });
@@ -104,6 +102,8 @@ public class RulesTestTemplate {
         } catch (InterruptedException e) {
             throw SpongeUtils.wrapException(e);
         }
+
+        CorrelationEventsLog eventsLog = engine.getOperations().getVariable(CorrelationEventsLog.class, CorrelationEventsLog.VARIABLE_NAME);
 
         expected.forEach((rule, sequences) -> {
             try {
