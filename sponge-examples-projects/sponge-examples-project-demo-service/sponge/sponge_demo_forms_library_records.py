@@ -47,7 +47,7 @@ class RecordCreateBook(Action):
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel", "icon":"plus-box"})
 
     def onCall(self, book):
         global LIBRARY
@@ -66,7 +66,7 @@ class RecordReadBook(Action):
         self.withLabel("View the book")
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(ProvidedMeta().withValue().withDependency("book.id")))
         self.withNoResult().withCallable(False)
-        self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close"})
+        self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
         global LIBRARY
         if "book" in context.names:
@@ -80,7 +80,7 @@ class RecordUpdateBook(Action):
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()
-        self.withFeatures({"visible":False, "clearLabel":None, "callLabel":"Save", "cancelLabel":"Cancel"})
+        self.withFeatures({"visible":False, "clearLabel":None, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"square-edit-outline"})
     def onCall(self, book):
         global LIBRARY
         LIBRARY.updateBook(book.value["id"], book.value["author"], book.value["title"])
@@ -95,7 +95,7 @@ class RecordDeleteBook(Action):
     def onConfigure(self):
         self.withLabel("Remove the book")
         self.withArg(createBookRecordType("book").withAnnotated()).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel", "icon":"delete"})
 
     def onCall(self, book):
         global LIBRARY
@@ -108,7 +108,7 @@ class RecordBookContextBinaryResult(Action):
         self.withArg(
             createBookRecordType("book").withAnnotated().withFeature("visible", False)
         ).withResult(BinaryType().withAnnotated().withMimeType("application/pdf").withLabel("PDF"))
-        self.withFeatures({"visible":False})
+        self.withFeatures({"visible":False, "icon":"file-pdf"})
     def onCall(self, book):
         return AnnotatedValue(sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
                               .outputAsBinary()).run().outputBinary)
@@ -118,7 +118,7 @@ class RecordBookContextNoResult(Action):
         self.withLabel("Return the book")
         self.withArg(
             createBookRecordType("book").withAnnotated().withFeature("visible", False)
-        ).withNoResult().withFeatures({"visible":False})
+        ).withNoResult().withFeatures({"visible":False, "icon":"arrow-left-bold"})
     def onCall(self, book):
         pass
 
@@ -129,6 +129,6 @@ class RecordBookContextAdditionalArgs(Action):
             createBookRecordType("book").withAnnotated().withFeature("visible", False),
             StringType("comment").withLabel("Comment").withFeatures({"multiline":True, "maxLines":2})
         ]).withResult(StringType().withLabel("Added comment (uppercase)"))
-        self.withFeatures({"visible":False})
+        self.withFeatures({"visible":False, "icon":"comment-outline"})
     def onCall(self, book, message):
         return message.upper()
