@@ -32,6 +32,7 @@ public class CorrelatorsTestTemplate {
         SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators");
 
         try {
+            assertEquals(2, engine.getCorrelatorGroups().size());
             await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue() >= 1
                             && engine.getOperations().getVariable(Number.class, "hardwareFailureJavaFinishCount").intValue() >= 1);

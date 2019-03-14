@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.examples.PowerEchoAction;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 import org.openksavi.sponge.type.DataType;
@@ -51,11 +52,10 @@ public class ActionsTestTemplate {
             assertEquals(1, ((Number) scriptResult.get(0)).intValue());
             assertEquals("test", scriptResult.get(1));
 
-            Object[] javaResult = (Object[]) engine.getOperations().getVariable("javaActionResult");
-            assertEquals(2, javaResult.length);
-            // Note, that different scripting engines may map numbers to different types.
-            assertEquals(2, ((Number) javaResult[0]).intValue());
-            assertEquals("TEST", javaResult[1]);
+            List javaResult = engine.getOperations().getVariable(List.class, "javaActionResult");
+            assertEquals(2, javaResult.size());
+            assertEquals(2, ((Number) javaResult.get(0)).intValue());
+            assertEquals("TEST", javaResult.get(1));
 
             assertEquals(3, engine.getOperations()
                     .call(Number.class, "ArrayArgumentAction", Arrays.asList((Object) new Object[] { 1, 2, "text" })).intValue());
@@ -90,6 +90,32 @@ public class ActionsTestTemplate {
 
             String name = "Sponge user";
             assertEquals(String.format("Hello World! Hello %s!", name), engine.getOperations().call(actionName, Arrays.asList(name)));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testActionJavaInheritance(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_java_inheritance");
+
+        try {
+            assertEquals(1, engine.getActions().size());
+            List result = engine.getOperations().call(List.class, "ExtendedFromAction", Arrays.asList(1, "Text"));
+
+            assertEquals(2, result.size());
+            assertEquals(11, ((Number) result.get(0)).intValue());
+            assertEquals("text", result.get(1));
+
+            engine.getOperations().enableJava(PowerEchoAction.class);
+            assertEquals(2, engine.getActions().size());
+
+            List result2 = engine.getOperations().call(List.class, "PowerEchoAction", Arrays.asList(1, "Text"));
+
+            assertEquals(2, result2.size());
+            assertEquals(2, ((Number) result2.get(0)).intValue());
+            assertEquals("TEXT", result2.get(1));
 
             assertFalse(engine.isError());
         } finally {

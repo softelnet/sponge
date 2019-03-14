@@ -23,7 +23,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -65,6 +67,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     private static final Logger logger = LoggerFactory.getLogger(BaseScriptKnowledgeBaseInterpreter.class);
 
     public static final String PROP_PATH_SEPARATOR = ", \t";
+
+    private Map<Class<?>, Class<?>> processorClasses = new LinkedHashMap<>(EngineConstants.BASE_PROCESSOR_CLASSES);
 
     /** Synchronization processor. */
     protected Object interpteterSynchro = new Object();
@@ -285,5 +289,13 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         String name = knowledgeBase.getInterpreter().getScriptKnowledgeBaseProcessorClassName(processorClass);
 
         return name != null ? new GenericProcessorInstanceHolder(createProcessorInstance(name, (Class) javaClass), name, false) : null;
+    }
+
+    protected Map<Class<?>, Class<?>> getProcessorClasses() {
+        return processorClasses;
+    }
+
+    protected void overwriteProcessorClass(Class<?> interfaceCls, Class<?> processorCls) {
+        processorClasses.put(interfaceCls, processorCls);
     }
 }

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.script.Compilable;
@@ -32,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.python.core.Py;
 import org.python.core.PyException;
+import org.python.core.PyJavaType;
 import org.python.core.PyObject;
 import org.python.core.PySystemState;
 import org.python.core.PyType;
@@ -40,19 +40,12 @@ import org.python.jsr223.PyScriptEngineScope.ScopeIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.filter.Filter;
-import org.openksavi.sponge.jython.JythonAction;
-import org.openksavi.sponge.jython.JythonCorrelator;
-import org.openksavi.sponge.jython.JythonFilter;
-import org.openksavi.sponge.jython.JythonPlugin;
 import org.openksavi.sponge.jython.JythonRule;
-import org.openksavi.sponge.jython.JythonTrigger;
 import org.openksavi.sponge.jython.PythonConstants;
 import org.openksavi.sponge.jython.util.PyPredicate;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -60,7 +53,6 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.Rule;
-import org.openksavi.sponge.trigger.Trigger;
 
 /**
  * Knowledge base interpreter supporting knowledge base to be defined in the Jython (Python) language.
@@ -73,23 +65,14 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
     public static final String SCRIPT_ENGINE_NAME = "python";
 
-    @SuppressWarnings("rawtypes")
-    //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
-            Action.class, JythonAction.class,
-            Filter.class, JythonFilter.class,
-            Trigger.class, JythonTrigger.class,
-            Rule.class, JythonRule.class,
-            Correlator.class, JythonCorrelator.class
-            );
-    //@formatter:on
-
     public JythonKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(new JythonKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), PythonConstants.TYPE);
     }
 
     @Override
     protected ScriptEngine createScriptEngine() {
+        overwriteProcessorClass(Rule.class, JythonRule.class);
+
         setPythonPath(getEngineOperations().getEngine());
 
         String scripEngineName = SCRIPT_ENGINE_NAME;
@@ -98,8 +81,9 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         Validate.isInstanceOf(Compilable.class, scriptEngine, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, scriptEngine, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
-        PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(scriptEngine, scriptClass, interfaceClass.getSimpleName()));
-        addImport(scriptEngine, JythonPlugin.class, Plugin.class.getSimpleName());
+        getProcessorClasses()
+                .forEach((interfaceClass, scriptClass) -> addImport(scriptEngine, scriptClass, interfaceClass.getSimpleName()));
+        addImport(scriptEngine, BasePlugin.class, Plugin.class.getSimpleName());
 
         getStandardImportClasses().forEach(cls -> addImport(scriptEngine, cls));
         addImport(scriptEngine, PyPredicate.class);
@@ -163,21 +147,22 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         PyScriptEngineScope scope = eval("globals()");
 
         List<PyType> processorPyTypes =
-                PROCESSOR_CLASSES.values().stream().map(cls -> (PyType) Py.java2py(cls)).collect(Collectors.toList());
+                getProcessorClasses().values().stream().map(cls -> (PyType) Py.java2py(cls)).collect(Collectors.toList());
 
         List<Object> autoEnabled = new ArrayList<>();
         SpongeUtils.stream(((ScopeIterator) scope.__iter__()).iterator()).forEachOrdered(element -> {
             String name = element.toString();
             PyObject pyObject = scope.__finditem__(name);
 
-            if (pyObject != null && pyObject instanceof PyType) {
+            // Java-based processor classes (extending PyJavaType) are not auto-enabled.
+            if (pyObject != null && pyObject instanceof PyType && !(pyObject instanceof PyJavaType)) {
                 PyType pyType = (PyType) pyObject;
-                if (processorPyTypes.stream().filter(processorClass -> !pyType.equals(processorClass) && pyType.isSubType(processorClass))
-                        .findFirst().isPresent()) {
-                    if (!isProcessorAbstract(name)) {
-                        autoEnabled.add(name);
-                        ((JythonKnowledgeBaseEngineOperations) getEngineOperations()).enable(pyType);
-                    }
+                boolean extendsProcessorType = processorPyTypes.stream()
+                        .filter(processorClass -> !pyType.equals(processorClass) && pyType.isSubType(processorClass)).findFirst()
+                        .isPresent();
+                if (extendsProcessorType && !isProcessorAbstract(name)) {
+                    autoEnabled.add(name);
+                    ((JythonKnowledgeBaseEngineOperations) getEngineOperations()).enable(pyType);
                 }
             }
         });

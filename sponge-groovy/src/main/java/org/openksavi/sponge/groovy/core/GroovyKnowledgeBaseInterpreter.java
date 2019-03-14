@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,29 +47,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
+import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.filter.Filter;
-import org.openksavi.sponge.groovy.GroovyAction;
 import org.openksavi.sponge.groovy.GroovyConstants;
-import org.openksavi.sponge.groovy.GroovyCorrelator;
-import org.openksavi.sponge.groovy.GroovyFilter;
-import org.openksavi.sponge.groovy.GroovyPlugin;
 import org.openksavi.sponge.groovy.GroovyRule;
-import org.openksavi.sponge.groovy.GroovyTrigger;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.Rule;
-import org.openksavi.sponge.trigger.Trigger;
 
 /**
  * Knowledge base interpreter supporting knowledge base to be defined in the Groovy language.
@@ -80,17 +71,6 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     private static final Logger logger = LoggerFactory.getLogger(GroovyKnowledgeBaseInterpreter.class);
 
     public static final String PROP_CLASSPATH = "groovy.classpath";
-
-    @SuppressWarnings("rawtypes")
-    //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
-            Action.class, GroovyAction.class,
-            Filter.class, GroovyFilter.class,
-            Trigger.class, GroovyTrigger.class,
-            Rule.class, GroovyRule.class,
-            Correlator.class, GroovyCorrelator.class
-            );
-    //@formatter:on
 
     /** Groovy shell. This is the interface to Groovy used by the engine. */
     private GroovyShell shell;
@@ -105,11 +85,13 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @Override
     protected void prepareInterpreter() {
+        overwriteProcessorClass(Rule.class, GroovyRule.class);
+
         ImportCustomizer importCustomizer = new ImportCustomizer();
 
-        PROCESSOR_CLASSES
+        getProcessorClasses()
                 .forEach((interfaceClass, scriptClass) -> addImport(importCustomizer, scriptClass, interfaceClass.getSimpleName()));
-        addImport(importCustomizer, GroovyPlugin.class, Plugin.class.getSimpleName());
+        addImport(importCustomizer, BasePlugin.class, Plugin.class.getSimpleName());
 
         getStandardImportClasses().forEach(cls -> addImport(importCustomizer, cls));
 
@@ -389,8 +371,10 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     @Override
     public void scanToAutoEnable() {
         List<String> autoEnabled = new ArrayList<>();
+
+        // Java-based processor classes (not returned by shell.getClassLoader().getLoadedClasses()) are not auto-enabled.
         Stream.of(shell.getClassLoader().getLoadedClasses()).forEachOrdered(cls -> {
-            if (PROCESSOR_CLASSES.values().stream().filter(processorClass -> ClassUtils.isAssignable(cls, processorClass)).findFirst()
+            if (getProcessorClasses().values().stream().filter(processorClass -> ClassUtils.isAssignable(cls, processorClass)).findFirst()
                     .isPresent()) {
                 String name = cls.getName();
                 if (!isProcessorAbstract(name)) {

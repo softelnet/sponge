@@ -102,21 +102,22 @@ public abstract class SpongeApiUtils {
     /**
      * Traverses the data type but only through record types.
      *
-     * @param qType the qualified type.
+     * @param qualifiedType the qualified type.
      * @param onType the qualified type callback.
      * @param namedOnly traverse only through named types.
      */
-    public static void traverseDataType(QualifiedDataType qType, Consumer<QualifiedDataType> onType, boolean namedOnly) {
-        if (namedOnly && qType.getType().getName() == null) {
+    public static void traverseDataType(QualifiedDataType qualifiedType, Consumer<QualifiedDataType> onType, boolean namedOnly) {
+        if (namedOnly && qualifiedType.getType().getName() == null) {
             return;
         }
 
-        onType.accept(qType);
+        onType.accept(qualifiedType);
 
         // Traverses only through record types.
-        switch (qType.getType().getKind()) {
+        switch (qualifiedType.getType().getKind()) {
         case RECORD:
-            ((RecordType) qType.getType()).getFields().forEach(field -> traverseDataType(qType.createChild(field), onType, namedOnly));
+            ((RecordType) qualifiedType.getType()).getFields()
+                    .forEach(field -> traverseDataType(qualifiedType.createChild(field), onType, namedOnly));
             break;
         default:
             break;

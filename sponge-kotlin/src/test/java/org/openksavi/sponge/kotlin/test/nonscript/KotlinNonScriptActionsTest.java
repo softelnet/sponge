@@ -34,4 +34,10 @@ public class KotlinNonScriptActionsTest extends KotlinNonScriptTest implements A
     public void testHelloWorldAction() {
         ActionsTestTemplate.testHelloWorldAction(getType());
     }
+
+    @Override
+    @Test
+    public void testActionJavaInheritance() {
+        ActionsTestTemplate.testActionJavaInheritance(getType());
+    }
 }

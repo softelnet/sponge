@@ -41,20 +41,20 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.core.action.BaseAction;
+import org.openksavi.sponge.core.correlator.BaseCorrelator;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
+import org.openksavi.sponge.core.filter.BaseFilter;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
+import org.openksavi.sponge.core.plugin.BasePlugin;
+import org.openksavi.sponge.core.trigger.BaseTrigger;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.filter.Filter;
-import org.openksavi.sponge.jruby.JRubyAction;
-import org.openksavi.sponge.jruby.JRubyCorrelator;
-import org.openksavi.sponge.jruby.JRubyFilter;
-import org.openksavi.sponge.jruby.JRubyPlugin;
 import org.openksavi.sponge.jruby.JRubyRule;
-import org.openksavi.sponge.jruby.JRubyTrigger;
 import org.openksavi.sponge.jruby.RubyConstants;
 import org.openksavi.sponge.jruby.RubyUtils;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -73,17 +73,6 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     public static final String PROP_RUBY_PATH = "ruby.path";
 
-    @SuppressWarnings("rawtypes")
-    //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
-            Action.class, JRubyAction.class,
-            Filter.class, JRubyFilter.class,
-            Trigger.class, JRubyTrigger.class,
-            Rule.class, JRubyRule.class,
-            Correlator.class, JRubyCorrelator.class
-            );
-    //@formatter:on
-
     /** JRuby scripting container. This is the interface to JRuby used by the engine. */
     private ScriptingContainer container;
 
@@ -93,13 +82,15 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     @Override
     protected void prepareInterpreter() {
+        overwriteProcessorClass(Rule.class, JRubyRule.class);
+
         container = new ScriptingContainer(LocalContextScope.SINGLETHREAD, LocalVariableBehavior.PERSISTENT);
         setLoadPaths(getEngineOperations() != null ? getEngineOperations().getEngine() : null);
 
         addSpecific();
 
-        PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(scriptClass, interfaceClass.getSimpleName()));
-        addImport(JRubyPlugin.class, Plugin.class.getSimpleName());
+        getProcessorClasses().forEach((interfaceClass, scriptClass) -> addImport(scriptClass, interfaceClass.getSimpleName()));
+        addImport(BasePlugin.class, Plugin.class.getSimpleName());
 
         getStandardImportClasses().forEach(cls -> addImport(cls));
 
@@ -286,7 +277,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
             return;
         }
 
-        List processorRubyTypes = PROCESSOR_CLASSES.values().stream().map(processorClass -> eval(processorClass.getSimpleName()))
+        List processorRubyTypes = getProcessorClasses().values().stream().map(processorClass -> eval(processorClass.getSimpleName()))
                 .collect(Collectors.toList());
 
         List<Object> autoEnabled = new ArrayList<>();
@@ -301,8 +292,10 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
             if (symbol != null && symbol instanceof RubyClass) {
                 RubyClass rubyClass = (RubyClass) symbol;
-                if (!processorRubyTypes.contains(rubyClass)
-                        && CollectionUtils.containsAny(rubyClass.getAncestorList(), processorRubyTypes)) {
+
+                // Java-based processor classes (that have getJavaProxy) are not auto-enabled.
+                if (!processorRubyTypes.contains(rubyClass) && CollectionUtils.containsAny(rubyClass.getAncestorList(), processorRubyTypes)
+                        && !rubyClass.getJavaProxy()) {
                     if (!isProcessorAbstract(rubyClass.getName())) {
                         autoEnabled.add(rubyClass);
                         ((JRubyKnowledgeBaseEngineOperations) getEngineOperations()).enable(rubyClass);

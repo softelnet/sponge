@@ -34,4 +34,10 @@ public class JythonActionsTest extends JythonTest implements ActionsTest {
     public void testHelloWorldAction() {
         ActionsTestTemplate.testHelloWorldAction(getType());
     }
+
+    @Override
+    @Test
+    public void testActionJavaInheritance() {
+        ActionsTestTemplate.testActionJavaInheritance(getType());
+    }
 }

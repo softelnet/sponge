@@ -475,3 +475,19 @@ class MyAction1(Action):
     def onCall(self, text):
         return None
 ----
+
+== Extending Java-based processors and plugins in non-Java knowledge bases
+Processors and plugins defined in non-Java languages can extend respectively Java-based processors and Java-based plugins. However this functionality is limited in different scripting languages.
+
+.Support for extending Java-based processors and plugins in non-Java knowledge bases
+[cols="1,5"]
+|===
+|Entity     |Python |Ruby |Groovy |JavaScript |Kotlin
+
+|Action     |Yes    |Yes  |Yes    |No         |Yes
+|Filter     |Yes    |Yes  |Yes    |No         |Yes
+|Trigger    |Yes    |Yes  |Yes    |No         |Yes
+|Rule       |No     |No   |No     |No         |No
+|Correlator |Yes    |Yes  |Yes    |No         |Yes
+|Plugin     |Yes    |Yes  |Yes    |No         |Yes
+|===

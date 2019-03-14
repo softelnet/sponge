@@ -28,6 +28,8 @@ import kotlin.reflect.KFunction;
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 
+import org.openksavi.sponge.core.engine.EngineConstants;
+
 /**
  * Kotlin utility methods.
  */
@@ -65,7 +67,7 @@ public abstract class KotlinUtils {
     }
 
     public static boolean isAutoEnableCandidate(KClass<?> kclass) {
-        return !kclass.isAbstract() && KotlinConstants.PROCESSOR_CLASSES.values().stream()
+        return !kclass.isAbstract() && EngineConstants.BASE_PROCESSOR_CLASSES.values().stream()
                 .filter(processorClass -> ClassUtils.isAssignable(JvmClassMappingKt.getJavaClass(kclass), processorClass)).findFirst()
                 .isPresent();
     }

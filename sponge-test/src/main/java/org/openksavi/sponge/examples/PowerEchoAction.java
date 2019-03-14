@@ -16,11 +16,15 @@
 
 package org.openksavi.sponge.examples;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.openksavi.sponge.java.JAction;
 
 public class PowerEchoAction extends JAction {
 
-    public Object onCall(Number value, String text) {
-        return new Object[] { value.intValue() + 1, text.toUpperCase() };
+    @SuppressWarnings("rawtypes")
+    public List onCall(Number value, String text) {
+        return Arrays.asList(value.intValue() + 1, text.toUpperCase());
     }
 }

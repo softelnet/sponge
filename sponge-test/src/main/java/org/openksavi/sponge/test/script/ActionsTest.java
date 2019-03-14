@@ -21,4 +21,6 @@ public interface ActionsTest extends ScriptTest {
     void testActions();
 
     void testHelloWorldAction();
+
+    void testActionJavaInheritance();
 }

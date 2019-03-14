@@ -6,7 +6,6 @@
 package org.openksavi.sponge.kotlin.examples
 
 import org.openksavi.sponge.event.Event
-import org.openksavi.sponge.examples.PowerEchoAction
 import org.openksavi.sponge.kotlin.KFilter
 import org.openksavi.sponge.kotlin.KKnowledgeBase
 import org.openksavi.sponge.kotlin.KTrigger

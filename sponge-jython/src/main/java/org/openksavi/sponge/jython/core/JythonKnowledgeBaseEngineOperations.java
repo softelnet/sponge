@@ -33,13 +33,17 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
         super(engine, knowledgeBase);
     }
 
+    protected PyType validateProcessorClass(PyType processorClass) {
+        return processorClass;
+    }
+
     /**
      * Enables a processor.
      *
      * @param processorClass a processor class.
      */
     public void enable(PyType processorClass) {
-        engine.getProcessorManager().enable(getKnowledgeBase(), processorClass);
+        engine.getProcessorManager().enable(getKnowledgeBase(), validateProcessorClass(processorClass));
     }
 
     /**
@@ -65,7 +69,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      * @param filterClass filter class.
      */
     public void enableFilter(PyType filterClass) {
-        engine.getProcessorManager().enableFilter(getKnowledgeBase(), filterClass);
+        engine.getProcessorManager().enableFilter(getKnowledgeBase(), validateProcessorClass(filterClass));
     }
 
     /**
@@ -94,7 +98,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      * @param triggerClass trigger class.
      */
     public void enableTrigger(PyType triggerClass) {
-        engine.getProcessorManager().enableTrigger(getKnowledgeBase(), triggerClass);
+        engine.getProcessorManager().enableTrigger(getKnowledgeBase(), validateProcessorClass(triggerClass));
     }
 
     public void enableTriggers(PyType... triggerClasses) {
@@ -118,7 +122,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      * @param ruleClass rule class.
      */
     public void enableRule(PyType ruleClass) {
-        engine.getProcessorManager().enableRule(getKnowledgeBase(), ruleClass);
+        engine.getProcessorManager().enableRule(getKnowledgeBase(), validateProcessorClass(ruleClass));
     }
 
     /**
@@ -142,7 +146,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
     }
 
     public void enableCorrelator(PyType correlatorClass) {
-        engine.getProcessorManager().enableCorrelator(getKnowledgeBase(), correlatorClass);
+        engine.getProcessorManager().enableCorrelator(getKnowledgeBase(), validateProcessorClass(correlatorClass));
     }
 
     public void enableCorrelators(PyType... correlatorClasses) {
@@ -161,7 +165,7 @@ public class JythonKnowledgeBaseEngineOperations extends BaseKnowledgeBaseEngine
      * @param actionClass action class.
      */
     public void enableAction(PyType actionClass) {
-        engine.getProcessorManager().enableAction(getKnowledgeBase(), actionClass);
+        engine.getProcessorManager().enableAction(getKnowledgeBase(), validateProcessorClass(actionClass));
     }
 
     /**

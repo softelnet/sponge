@@ -17,11 +17,23 @@
 package org.openksavi.sponge.core.engine;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.core.action.BaseAction;
+import org.openksavi.sponge.core.correlator.BaseCorrelator;
+import org.openksavi.sponge.core.filter.BaseFilter;
+import org.openksavi.sponge.core.rule.BaseRule;
+import org.openksavi.sponge.core.trigger.BaseTrigger;
+import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.event.EventName;
+import org.openksavi.sponge.filter.Filter;
+import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.trigger.Trigger;
 
 /**
  * Engine constants.
@@ -36,6 +48,16 @@ public final class EngineConstants {
     public static final Boolean DEFAULT_ON_RUN_FUNCTION_RESULT = true;
 
     public static final String MATCH_ALL_REGEXP = ".*";
+
+    //@formatter:off
+    public static final Map<Class<?>, Class<?>> BASE_PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
+            Action.class, BaseAction.class,
+            Filter.class, BaseFilter.class,
+            Trigger.class, BaseTrigger.class,
+            Rule.class, BaseRule.class,
+            Correlator.class, BaseCorrelator.class
+            );
+    //@formatter:on
 
     private EngineConstants() {
         //

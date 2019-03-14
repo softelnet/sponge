@@ -18,7 +18,6 @@ package org.openksavi.sponge.nashorn.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.script.Compilable;
 import javax.script.Invocable;
@@ -35,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
-import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.filter.Filter;
@@ -65,23 +63,18 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
 
     public static final String INITIAL_SCRIPT = "sponge_nashorn_init.js";
 
-    @SuppressWarnings("rawtypes")
-    //@formatter:off
-    protected static final Map<Class, Class> PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
-            Action.class, NashornAction.class,
-            Filter.class, NashornFilter.class,
-            Trigger.class, NashornTrigger.class,
-            Rule.class, NashornRule.class,
-            Correlator.class, NashornCorrelator.class
-            );
-    //@formatter:on
-
     public NashornKnowledgeBaseInterpreter(SpongeEngine engine, KnowledgeBase knowledgeBase) {
         super(new NashornKnowledgeBaseEngineOperations((BaseSpongeEngine) engine, knowledgeBase), JavaScriptConstants.TYPE);
     }
 
     @Override
     protected ScriptEngine createScriptEngine() {
+        overwriteProcessorClass(Action.class, NashornAction.class);
+        overwriteProcessorClass(Filter.class, NashornFilter.class);
+        overwriteProcessorClass(Trigger.class, NashornTrigger.class);
+        overwriteProcessorClass(Rule.class, NashornRule.class);
+        overwriteProcessorClass(Correlator.class, NashornCorrelator.class);
+
         String scripEngineName = SCRIPT_ENGINE_NAME;
         // ScriptEngine result = new ScriptEngineManager().getEngineByName(scripEngineName);
         NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
@@ -90,7 +83,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
         Validate.isInstanceOf(Compilable.class, result, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, result, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
-        PROCESSOR_CLASSES.forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
+        getProcessorClasses().forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
         addImport(result, NashornPlugin.class, Plugin.class.getSimpleName());
 
         getStandardImportClasses().forEach(cls -> addImport(result, cls));
@@ -143,7 +136,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
             if (evalResult != null && evalResult instanceof Class) {
                 Class cls = (Class) evalResult;
 
-                if (PROCESSOR_CLASSES.values().stream()
+                if (getProcessorClasses().values().stream()
                         .filter(processorClass -> !cls.equals(processorClass) && ClassUtils.isAssignable(cls, processorClass)).findFirst()
                         .isPresent()) {
                     if (!isProcessorAbstract(key)) {

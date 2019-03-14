@@ -34,4 +34,10 @@ public class NashornActionsTest extends NashornTest implements ActionsTest {
     public void testHelloWorldAction() {
         ActionsTestTemplate.testHelloWorldAction(getType());
     }
+
+    @Override
+    @Test
+    public void testActionJavaInheritance() {
+        // Extending Java-based processor classes by JavaScript-based processors in not supported.
+    }
 }
