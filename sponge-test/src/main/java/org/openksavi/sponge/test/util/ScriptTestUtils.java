@@ -20,6 +20,7 @@ import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.java.core.JavaConstants;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -32,7 +33,9 @@ public class ScriptTestUtils {
         if (type.isScript()) {
             return "examples/script/" + type.getFileExtensions().get(0) + "/" + config + ".xml";
         } else {
-            return "org/openksavi/sponge/" + type.getLanguage() + "/examples/" + config + ".xml";
+            return type.getLanguage().equals(JavaConstants.TYPE.getLanguage())
+                    ? ("org/openksavi/sponge/integration/tests/" + type.getLanguage() + "/examples/" + config + ".xml")
+                    : ("org/openksavi/sponge/" + type.getLanguage() + "/examples/" + config + ".xml");
         }
     }
 
@@ -44,8 +47,10 @@ public class ScriptTestUtils {
         return getScriptKnowledgeBaseDir(type) + "/" + knowledgeBaseFile + "." + type.getFileExtensions().get(0);
     }
 
-    public static String getNoScriptKnowledgeBaseClassName(KnowledgeBaseType type, String knowledgeBaseSimpleClassNameUnderscore) {
-        return "org.openksavi.sponge." + type.getLanguage() + ".examples."
+    public static String getNonScriptKnowledgeBaseClassName(KnowledgeBaseType type, String knowledgeBaseSimpleClassNameUnderscore) {
+        return (type.getLanguage().equals(JavaConstants.TYPE.getLanguage())
+                ? "org.openksavi.sponge.integration.tests." + type.getLanguage() + ".examples."
+                : "org.openksavi.sponge." + type.getLanguage() + ".examples.")
                 + SpongeUtils.toUpperCamelCaseFromUnderscore(knowledgeBaseSimpleClassNameUnderscore);
     }
 
@@ -54,8 +59,12 @@ public class ScriptTestUtils {
         if (type.isScript()) {
             builder.knowledgeBase(TestUtils.DEFAULT_KB, type, getScriptKnowledgeBaseFileName(type, knowledgeBaseFile));
         } else {
-            builder.knowledgeBase(
-                    SpongeUtils.createInstance(getNoScriptKnowledgeBaseClassName(type, knowledgeBaseFile), KnowledgeBase.class));
+            KnowledgeBase knowledgeBase =
+                    SpongeUtils.createInstance(getNonScriptKnowledgeBaseClassName(type, knowledgeBaseFile), KnowledgeBase.class);
+            if (knowledgeBase.getName() == null) {
+                knowledgeBase.setName(TestUtils.DEFAULT_KB);
+            }
+            builder.knowledgeBase(knowledgeBase);
         }
         return builder.build();
     }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" class="org.openksavi.sponge.integration.tests.java.examples.KnowledgeBaseLibrary" />
+    </knowledgeBases>
+</sponge>
+

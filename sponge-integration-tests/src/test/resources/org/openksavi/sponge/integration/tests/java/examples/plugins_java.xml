@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="kb" class="org.openksavi.sponge.integration.tests.java.examples.PluginsJava" />
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="connectionPlugin" class="org.openksavi.sponge.examples.ConnectionPlugin">
+            <configuration>
+                <connection>
+                    <name>Example connection</name>
+                </connection>
+            </configuration>
+        </plugin>
+        <plugin name="echoPlugin" class="org.openksavi.sponge.examples.EchoPlugin">
+            <configuration>
+                <echo>Echo test!</echo>
+                <count>2</count>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+
