@@ -253,6 +253,23 @@ class DynamicResultAction(Action):
         if "type" in context.names:
             context.provided["type"] = ProvidedValue().withValueSet(["string", "boolean", "datetime"])
 
+class DynamicProvidedArgAction(Action):
+    def onConfigure(self):
+        self.withLabel("Action with a provided, dynamic argument")
+        self.withArg(DynamicType("dynamic").withLabel("Dynamic argument").withProvided(ProvidedMeta().withValue()))
+        self.withResult(StringType().withLabel("Dynamic type"))
+        self.withFeature("icon", "fan")
+    def onCall(self, dynamic):
+        return str(dynamic.type.kind)
+    def onProvideArgs(self, context):
+        if "dynamic" in context.names:
+            context.provided["dynamic"] = ProvidedValue().withValue(DynamicValue(
+                {"firstName":"James", "surname":"Joyce"},
+                RecordType().withFields([
+                    StringType("firstName").withLabel("First name"),
+                    StringType("surname").withLabel("Surname")
+                ])
+            ))
 
 class RecordResultAction(Action):
     def onConfigure(self):
