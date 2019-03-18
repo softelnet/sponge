@@ -37,6 +37,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.RestApiOperationType;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -194,8 +195,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + operation;
     }
 
-    protected abstract <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operation, T request, Class<R> responseClass,
-            SpongeRequestContext context);
+    protected abstract <T extends SpongeRequest, R extends SpongeResponse> R doExecute(RestApiOperationType operationType, T request,
+            Class<R> responseClass, SpongeRequestContext context);
 
     protected <T extends SpongeRequest> T setupRequest(T request) {
         if (configuration.isUseRequestId()) {
@@ -249,14 +250,14 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return response;
     }
 
-    protected <T extends SpongeRequest, R extends SpongeResponse> R execute(String operation, T request, Class<R> responseClass,
-            SpongeRequestContext context) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R execute(RestApiOperationType operationType, T request,
+            Class<R> responseClass, SpongeRequestContext context) {
         if (context == null) {
             context = SpongeRequestContext.builder().build();
         }
 
         try {
-            return setupResponse(doExecute(operation, setupRequest(request), responseClass, context));
+            return setupResponse(doExecute(operationType, setupRequest(request), responseClass, context));
         } catch (InvalidAuthTokenException e) {
             // Relogin if set up and necessary.
             if (currentAuthToken.get() != null && configuration.isRelogin()) {
@@ -265,7 +266,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 // Clear the request auth token.
                 request.setAuthToken(null);
 
-                return setupResponse(doExecute(operation, setupRequest(request), responseClass, context));
+                return setupResponse(doExecute(operationType, setupRequest(request), responseClass, context));
             } else {
                 throw e;
             }
@@ -274,7 +275,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public GetVersionResponse getVersion(GetVersionRequest request, SpongeRequestContext context) {
-        return execute(RestApiConstants.OPERATION_VERSION, request, GetVersionResponse.class, context);
+        return execute(RestApiOperationType.VERSION, request, GetVersionResponse.class, context);
     }
 
     @Override
@@ -294,7 +295,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
         try {
             currentAuthToken.set(null);
-            response = execute(RestApiConstants.OPERATION_LOGIN, request, LoginResponse.class, context);
+            response = execute(RestApiOperationType.LOGIN, request, LoginResponse.class, context);
             currentAuthToken.set(response.getAuthToken());
         } finally {
             lock.unlock();
@@ -319,7 +320,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         lock.lock();
 
         try {
-            response = execute(RestApiConstants.OPERATION_LOGOUT, request, LogoutResponse.class, context);
+            response = execute(RestApiOperationType.LOGOUT, request, LogoutResponse.class, context);
             currentAuthToken.set(null);
         } finally {
             lock.unlock();
@@ -340,7 +341,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request, SpongeRequestContext context) {
-        return execute(RestApiConstants.OPERATION_KNOWLEDGE_BASES, request, GetKnowledgeBasesResponse.class, context);
+        return execute(RestApiOperationType.KNOWLEDGE_BASES, request, GetKnowledgeBasesResponse.class, context);
     }
 
     @Override
@@ -354,7 +355,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache, SpongeRequestContext context) {
-        GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class, context);
+        GetActionsResponse response = execute(RestApiOperationType.ACTIONS, request, GetActionsResponse.class, context);
 
         if (response.getActions() != null) {
             response.getActions().forEach(actionMeta -> unmarshalActionMeta(actionMeta));
@@ -482,7 +483,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
         request.setArgs(marshalActionCallArgs(actionMeta, request.getArgs()));
 
-        ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class, context);
+        ActionCallResponse response = execute(RestApiOperationType.CALL, request, ActionCallResponse.class, context);
 
         unmarshalCallResult(actionMeta, response);
 
@@ -593,7 +594,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public SendEventResponse send(SendEventRequest request, SpongeRequestContext context) {
-        return execute(RestApiConstants.OPERATION_SEND, request, SendEventResponse.class, context);
+        return execute(RestApiOperationType.SEND, request, SendEventResponse.class, context);
     }
 
     @Override
@@ -613,8 +614,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
         request.setCurrent(marshalProvideActionArgsCurrent(actionMeta, request.getCurrent()));
 
-        ProvideActionArgsResponse response =
-                execute(RestApiConstants.OPERATION_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
+        ProvideActionArgsResponse response = execute(RestApiOperationType.ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
 
         if (actionMeta != null) {
             unmarshalProvidedActionArgValues(actionMeta, response.getProvided());
@@ -640,7 +640,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public ReloadResponse reload(ReloadRequest request, SpongeRequestContext context) {
-        return execute(RestApiConstants.OPERATION_RELOAD, request, ReloadResponse.class, context);
+        return execute(RestApiOperationType.RELOAD, request, ReloadResponse.class, context);
     }
 
     @Override

@@ -35,7 +35,7 @@ class RecordLibraryForm(Action):
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
         if "books" in context.names:
             context.provided["books"] = ProvidedValue().withValue(
-                map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)).withFeature("actions", [
+                map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)).withFeature("contextActions", [
                         "RecordBookContextBinaryResult", "RecordBookContextNoResult", "RecordBookContextAdditionalArgs"]),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 
@@ -64,7 +64,9 @@ class RecordCreateBook(Action):
 class RecordReadBook(Action):
     def onConfigure(self):
         self.withLabel("View the book")
-        self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(ProvidedMeta().withValue().withDependency("book.id")))
+        # Must be withOverwrite to replace with the current value. .withOverwrite()
+        self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
+            ProvidedMeta().withValue().withDependency("book.id")))
         self.withNoResult().withCallable(False)
         self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
@@ -76,7 +78,9 @@ class RecordUpdateBook(Action):
     def onConfigure(self):
         self.withLabel("Modify the book")
         self.withArg(
-            createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(ProvidedMeta().withValue().withDependency("book.id")).withFields([
+            # Must be withOverwrite to replace with the current value. .withOverwrite()
+            createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
+                    ProvidedMeta().withValue().withDependency("book.id")).withFields([
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()
@@ -128,7 +132,7 @@ class RecordBookContextAdditionalArgs(Action):
         self.withArgs([
             createBookRecordType("book").withAnnotated().withFeature("visible", False),
             StringType("comment").withLabel("Comment").withFeatures({"multiline":True, "maxLines":2})
-        ]).withResult(StringType().withLabel("Added comment (uppercase)"))
+        ]).withResult(StringType().withLabel("Added comment"))
         self.withFeatures({"visible":False, "icon":"comment-outline"})
     def onCall(self, book, message):
-        return message.upper()
+        return message

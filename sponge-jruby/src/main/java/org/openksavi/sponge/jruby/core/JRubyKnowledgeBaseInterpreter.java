@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -40,20 +39,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.action.Action;
-import org.openksavi.sponge.core.action.BaseAction;
-import org.openksavi.sponge.core.correlator.BaseCorrelator;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
-import org.openksavi.sponge.core.filter.BaseFilter;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.plugin.BasePlugin;
-import org.openksavi.sponge.core.trigger.BaseTrigger;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.jruby.JRubyRule;
 import org.openksavi.sponge.jruby.RubyConstants;
 import org.openksavi.sponge.jruby.RubyUtils;
@@ -62,7 +54,6 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.Rule;
-import org.openksavi.sponge.trigger.Trigger;
 
 /**
  * Knowledge base interpreter supporting knowledge base to be defined in the JRuby (Ruby) language.

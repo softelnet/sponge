@@ -24,7 +24,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestDefinition;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.RestApiOperationType;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
@@ -138,7 +141,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         }
     }
 
-    protected void setupResponse(String operation, Exchange exchange, Object response) {
+    protected void setupResponse(RestApiOperationType operationType, Exchange exchange, Object response) {
         try {
             String responseBody = getObjectMapper().writeValueAsString(response);
 
@@ -146,69 +149,90 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, RestApiConstants.CONTENT_TYPE_JSON);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} response: {})", operation, RestApiUtils.obfuscatePassword(responseBody));
+                logger.debug("REST API {} response: {})", operationType.getCode(), RestApiUtils.obfuscatePassword(responseBody));
             }
         } catch (JsonProcessingException e) {
             throw SpongeUtils.wrapException(e);
         }
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void createOperation(RestDefinition restDefinition, String operation,
-            String operationDescription, Class<I> requestClass, String requestDescription, Class<O> responseClass,
-            String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        restDefinition.post(operation).description(operationDescription).type(requestClass).outType(responseClass).param().name("body")
-                .type(body).description(requestDescription).endParam().responseMessage().code(200).message(responseDescription)
-                .endResponseMessage().route().id("sponge-" + operation).process(exchange -> {
-                    String requestBody = exchange.getIn().getBody(String.class);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("REST API {} request: {}", operation, RestApiUtils.obfuscatePassword(requestBody));
-                    }
+    protected <I extends SpongeRequest, O extends SpongeResponse> void createOperation(RestDefinition restDefinition,
+            RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
+            Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
+        RouteDefinition operationRouteDefinition =
+                restDefinition.post(operationType.getCode()).description(operationDescription).type(requestClass).outType(responseClass)
+                        .param().name("body").type(body).description(requestDescription).endParam().responseMessage().code(200)
+                        .message(responseDescription).endResponseMessage().route().id("sponge-" + operationType.getCode());
 
-                    // Allow empty body.
-                    if (StringUtils.isBlank(requestBody)) {
-                        requestBody = "{}";
-                    }
+        setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
+        operationRouteDefinition.process(createOperationExecutionProcessor(operationType, requestClass, responseClass, operationHandler));
+        setupOperationRouteAfterExecution(operationRouteDefinition, operationType, requestClass, responseClass);
 
-                    try {
-                        setupResponse(operation, exchange,
-                                operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange));
-                    } catch (Throwable processingException) {
-                        logger.info("REST API error", processingException);
-                        try {
-                            setupResponse(operation, exchange, apiService.createGenericErrorResponse(processingException, exchange));
-                        } catch (Throwable e) {
-                            logger.error("REST API send error response failure", e);
-                            throw e;
-                        }
-                    }
-                }).endRest();
+        operationRouteDefinition.endRest();
+    }
+
+    protected <I extends SpongeRequest, O extends SpongeResponse> void setupOperationRouteBeforeExecution(
+            RouteDefinition operationRouteDefinition, RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass) {
+    }
+
+    protected <I extends SpongeRequest, O extends SpongeResponse> void setupOperationRouteAfterExecution(
+            RouteDefinition operationRouteDefinition, RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass) {
+    }
+
+    protected <I extends SpongeRequest, O extends SpongeResponse> Processor createOperationExecutionProcessor(
+            RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass,
+            BiFunction<I, Exchange, O> operationHandler) {
+        return exchange -> {
+            String requestBody = exchange.getIn().getBody(String.class);
+            if (logger.isDebugEnabled()) {
+                logger.debug("REST API {} request: {}", operationType.getCode(), RestApiUtils.obfuscatePassword(requestBody));
+            }
+
+            // Allow empty body.
+            if (StringUtils.isBlank(requestBody)) {
+                requestBody = "{}";
+            }
+
+            try {
+                setupResponse(operationType, exchange,
+                        operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange));
+            } catch (Throwable processingException) {
+                logger.info("REST API error", processingException);
+                try {
+                    setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException, exchange));
+                } catch (Throwable e) {
+                    logger.error("REST API send error response failure", e);
+                    throw e;
+                }
+            }
+        };
     }
 
     protected void createRestDefinition() {
         RestDefinition restDefinition = rest(getSettings().getPath()).description("Sponge REST API");
 
-        createOperation(restDefinition, RestApiConstants.OPERATION_VERSION, "Get the Sponge version", GetVersionRequest.class,
+        createOperation(restDefinition, RestApiOperationType.VERSION, "Get the Sponge version", GetVersionRequest.class,
                 "Get Sponge version request", GetVersionResponse.class, "The Sponge version response",
                 (request, exchange) -> apiService.getVersion(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_LOGIN, "Login", LoginRequest.class, "Login request", LoginResponse.class,
+        createOperation(restDefinition, RestApiOperationType.LOGIN, "Login", LoginRequest.class, "Login request", LoginResponse.class,
                 "The login response", (request, exchange) -> apiService.login(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "Logout request",
-                LogoutResponse.class, "The logout response", (request, exchange) -> apiService.logout(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_KNOWLEDGE_BASES, "Get knowledge bases", GetKnowledgeBasesRequest.class,
+        createOperation(restDefinition, RestApiOperationType.LOGOUT, "Logout", LogoutRequest.class, "Logout request", LogoutResponse.class,
+                "The logout response", (request, exchange) -> apiService.logout(request, exchange));
+        createOperation(restDefinition, RestApiOperationType.KNOWLEDGE_BASES, "Get knowledge bases", GetKnowledgeBasesRequest.class,
                 "Get knowledge bases request", GetKnowledgeBasesResponse.class, "The get knowledge bases response",
                 (request, exchange) -> apiService.getKnowledgeBases(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_ACTIONS, "Get actions", GetActionsRequest.class, "Get actions request",
+        createOperation(restDefinition, RestApiOperationType.ACTIONS, "Get actions", GetActionsRequest.class, "Get actions request",
                 GetActionsResponse.class, "The get actions response", (request, exchange) -> apiService.getActions(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_CALL, "Call an action", ActionCallRequest.class, "Call action request",
+        createOperation(restDefinition, RestApiOperationType.CALL, "Call an action", ActionCallRequest.class, "Call action request",
                 ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class, "Send event request",
+        createOperation(restDefinition, RestApiOperationType.SEND, "Send a new event", SendEventRequest.class, "Send event request",
                 SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request, exchange));
-        createOperation(restDefinition, RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments", ProvideActionArgsRequest.class,
+        createOperation(restDefinition, RestApiOperationType.ACTION_ARGS, "Provide action arguments", ProvideActionArgsRequest.class,
                 "The provide action arguments request", ProvideActionArgsResponse.class, "The provide action arguments response",
                 (request, exchange) -> apiService.provideActionArgs(request, exchange));
 
         if (getSettings().isPublishReload()) {
-            createOperation(restDefinition, RestApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,
+            createOperation(restDefinition, RestApiOperationType.RELOAD, "Reload knowledge bases", ReloadRequest.class,
                     "Reload knowledge bases request", ReloadResponse.class, "The reload response",
                     (request, exchange) -> apiService.reload(request, exchange));
         }
