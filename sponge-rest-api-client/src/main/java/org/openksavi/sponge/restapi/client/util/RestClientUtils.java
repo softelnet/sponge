@@ -19,6 +19,7 @@ package org.openksavi.sponge.restapi.client.util;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.function.Consumer;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -73,10 +74,20 @@ public abstract class RestClientUtils {
     }
 
     public static OkHttpClient createOkHttpClient() {
+        return createOkHttpClient(null);
+    }
+
+    public static OkHttpClient createOkHttpClient(Consumer<OkHttpClient.Builder> okHttpClientBuilderConsumer) {
         SSLContext sslContext = RestClientUtils.createTrustAllSslContext();
 
-        return new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestClientUtils.createTrustAllTrustManager())
-                .hostnameVerifier((String hostname, SSLSession session) -> true).build();
+        OkHttpClient.Builder builder =
+                new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestClientUtils.createTrustAllTrustManager())
+                        .hostnameVerifier((String hostname, SSLSession session) -> true);
+
+        if (okHttpClientBuilderConsumer != null) {
+            okHttpClientBuilderConsumer.accept(builder);
+        }
+        return builder.build();
     }
 
     /**

@@ -32,6 +32,7 @@ public enum DataTypeKind {
     NUMBER(NumberType.class),
     OBJECT(ObjectType.class),
     RECORD(RecordType.class),
+    STREAM(StreamType.class),
     STRING(StringType.class),
     TYPE(TypeType.class),
     VOID(VoidType.class);
@@ -57,6 +58,8 @@ public enum DataTypeKind {
     public static final String CODE_OBJECT = "OBJECT";
 
     public static final String CODE_RECORD = "RECORD";
+
+    public static final String CODE_STREAM = "STREAM";
 
     public static final String CODE_STRING = "STRING";
 

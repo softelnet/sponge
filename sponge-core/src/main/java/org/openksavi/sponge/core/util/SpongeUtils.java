@@ -113,6 +113,7 @@ import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.type.StreamType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
@@ -142,7 +143,7 @@ public abstract class SpongeUtils {
     @SuppressWarnings("rawtypes")
     private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnyType.class, BinaryType.class, BooleanType.class,
             DateTimeType.class, DynamicType.class, IntegerType.class, ListType.class, MapType.class, NumberType.class, ObjectType.class,
-            RecordType.class, StringType.class, TypeType.class, VoidType.class);
+            RecordType.class, StreamType.class, StringType.class, TypeType.class, VoidType.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {

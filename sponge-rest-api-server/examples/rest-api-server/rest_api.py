@@ -4,6 +4,7 @@ Used for testing a REST API server and clients.
 """
 
 from java.util.concurrent.atomic import AtomicBoolean
+from org.apache.commons.io import IOUtils
 
 def onInit():
     # Variables for assertions only.
@@ -261,6 +262,13 @@ class NestedRecordAsArgAction(Action):
             ])).withResult(StringType())
     def onCall(self, book):
         return "{} {} - {}".format(book["author"]["firstName"], book["author"]["surname"], book["title"])
+
+class OutputStreamResultAction(Action):
+    def onConfigure(self):
+        self.withNoArgs().withResult(StreamType())
+    def onCall(self):
+        return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"").withHeaders({
+            })
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

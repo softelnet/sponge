@@ -211,6 +211,8 @@ Each request may contain base properties.
 |An authentication token that may be used in a token-based authentication mode.
 |===
 
+The {sponge} REST API supports both POST and GET methods.
+
 .Examples of REST API requests
 [source,bash]
 ----
@@ -222,6 +224,10 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
+
+curl http://localhost:1836/sponge.json/v1/version
+curl http://localhost:1836/sponge.json/v1/knowledgeBases
+curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"name":"OutputStreamResultAction","args":[]}'
 ----
 
 == Security

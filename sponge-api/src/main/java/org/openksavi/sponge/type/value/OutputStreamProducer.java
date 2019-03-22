@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.gsmmodem.serial;
+package org.openksavi.sponge.type.value;
 
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
 
 /**
- * Serial port GSM modem constants.
+ * And output stream producer.
  */
-public final class SerialPortGsmModemConstants {
+@FunctionalInterface
+public interface OutputStreamProducer {
 
-    public static final String DEFAULT_CHARSET_NAME = StandardCharsets.UTF_8.name();
-
-    public static final String TAG_PORT_DESCRIPTOR = "portDescriptor";
-
-    private SerialPortGsmModemConstants() {
-        //
-    }
+    void produce(OutputStream output);
 }

@@ -58,6 +58,7 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.provided.ValueSetMeta;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
+import org.openksavi.sponge.type.value.OutputStreamValue;
 
 /**
  * Script based knowledge base interpreter.
@@ -268,7 +269,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class, ProcessorType.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                ProvidedMeta.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class,
+                ProvidedMeta.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class, OutputStreamValue.class,
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class));
         //@formatter:on

@@ -160,6 +160,9 @@ See the <<provided_arguments,provided action arguments>> as a use case of provid
 |`ObjectType`
 |An object. This type requires a class name (typically a Java class name). For example: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject[]")`.
 
+|`StreamType`
+|A stream type. Supports only output streams. It can be used only as a result of an action. A value of this type has to be an instance of `OutputStreamValue`.
+
 |`StringType`
 |A string type. Provides optional properties `minLength` and `maxLength`, e.g.: `StringType().withMaxLength(10)`.
 
@@ -183,6 +186,7 @@ ObjectType().withClassName("java.lang.String[]")
 ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")
 ListType(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))
 BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "color":"white"})
+OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"").withHeaders({})
 ----
 
 == Events

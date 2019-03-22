@@ -17,15 +17,26 @@
 package org.openksavi.sponge.restapi.server;
 
 import static org.apache.camel.model.rest.RestParamType.body;
+import static org.apache.camel.model.rest.RestParamType.query;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.common.HttpMessage;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
@@ -58,6 +69,7 @@ import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.value.OutputStreamValue;
 
 public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiService {
 
@@ -156,16 +168,73 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         }
     }
 
+    protected void setupStreamResponse(RestApiOperationType operationType, Exchange exchange, OutputStreamValue streamValue) {
+        try {
+            HttpServletResponse httpResponse = exchange.getIn(HttpMessage.class).getResponse();
+            streamValue.getHeaders().forEach((name, value) -> {
+                if (value != null) {
+                    httpResponse.setHeader(name, String.valueOf(value));
+                }
+            });
+
+            if (streamValue.getContentType() != null) {
+                httpResponse.setContentType(streamValue.getContentType());
+            }
+
+            ServletOutputStream output = httpResponse.getOutputStream();
+            if (streamValue.getOutputProducer() != null) {
+                streamValue.getOutputProducer().produce(output);
+            }
+
+            output.flush();
+        } catch (IOException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
     protected <I extends SpongeRequest, O extends SpongeResponse> void createOperation(RestDefinition restDefinition,
+            RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
+            Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
+        createPostOperation(restDefinition, operationType, operationDescription, requestClass, requestDescription, responseClass,
+                responseDescription, operationHandler);
+        createGetOperation(restDefinition, operationType, operationDescription, requestClass, requestDescription, responseClass,
+                responseDescription, operationHandler);
+    }
+
+    protected <I extends SpongeRequest, O extends SpongeResponse> void createPostOperation(RestDefinition restDefinition,
             RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
             Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
         RouteDefinition operationRouteDefinition =
                 restDefinition.post(operationType.getCode()).description(operationDescription).type(requestClass).outType(responseClass)
                         .param().name("body").type(body).description(requestDescription).endParam().responseMessage().code(200)
-                        .message(responseDescription).endResponseMessage().route().id("sponge-" + operationType.getCode());
+                        .message(responseDescription).endResponseMessage().route().routeId("sponge-post-" + operationType.getCode());
 
         setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
-        operationRouteDefinition.process(createOperationExecutionProcessor(operationType, requestClass, responseClass, operationHandler));
+        operationRouteDefinition.process(createOperationExecutionProcessor(message -> message.getBody(String.class), operationType,
+                requestClass, responseClass, operationHandler));
+        setupOperationRouteAfterExecution(operationRouteDefinition, operationType, requestClass, responseClass);
+
+        operationRouteDefinition.endRest();
+    }
+
+    protected <I extends SpongeRequest, O extends SpongeResponse> void createGetOperation(RestDefinition restDefinition,
+            RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
+            Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
+        RouteDefinition operationRouteDefinition = restDefinition.get(operationType.getCode()).description(operationDescription)
+                .outType(responseClass).param().name("request").type(query).description(requestDescription).endParam().responseMessage()
+                .code(200).message(responseDescription).endResponseMessage().route().routeId("sponge-get-" + operationType.getCode());
+
+        setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
+        operationRouteDefinition.process(createOperationExecutionProcessor(message -> {
+            try {
+                String requestParam = message.getHeader("request", String.class);
+
+                // Decode the JSON url-encoded request parameter.
+                return requestParam != null ? URLDecoder.decode(requestParam, StandardCharsets.UTF_8.name()) : "";
+            } catch (UnsupportedEncodingException e) {
+                throw SpongeUtils.wrapException(e);
+            }
+        }, operationType, requestClass, responseClass, operationHandler));
         setupOperationRouteAfterExecution(operationRouteDefinition, operationType, requestClass, responseClass);
 
         operationRouteDefinition.endRest();
@@ -179,11 +248,23 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             RouteDefinition operationRouteDefinition, RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass) {
     }
 
+    private <O extends SpongeResponse> OutputStreamValue getActionCallOutputStreamResponse(O response) {
+        if (response instanceof ActionCallResponse) {
+            Object actionCallResult = ((ActionCallResponse) response).getResult();
+            if (actionCallResult instanceof OutputStreamValue) {
+                return (OutputStreamValue) actionCallResult;
+            }
+        }
+
+        return null;
+    }
+
     protected <I extends SpongeRequest, O extends SpongeResponse> Processor createOperationExecutionProcessor(
-            RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass,
-            BiFunction<I, Exchange, O> operationHandler) {
+            Function<Message, String> requestBodyProvider, RestApiOperationType operationType, Class<I> requestClass,
+            Class<O> responseClass, BiFunction<I, Exchange, O> operationHandler) {
         return exchange -> {
-            String requestBody = exchange.getIn().getBody(String.class);
+            String requestBody = requestBodyProvider.apply(exchange.getIn());
+
             if (logger.isDebugEnabled()) {
                 logger.debug("REST API {} request: {}", operationType.getCode(), RestApiUtils.obfuscatePassword(requestBody));
             }
@@ -194,8 +275,15 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             }
 
             try {
-                setupResponse(operationType, exchange,
-                        operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange));
+                O response = operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange);
+
+                // Handle an action call that returns a stream.
+                OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
+                if (streamValue == null) {
+                    setupResponse(operationType, exchange, response);
+                } else {
+                    setupStreamResponse(operationType, exchange, streamValue);
+                }
             } catch (Throwable processingException) {
                 logger.info("REST API error", processingException);
                 try {

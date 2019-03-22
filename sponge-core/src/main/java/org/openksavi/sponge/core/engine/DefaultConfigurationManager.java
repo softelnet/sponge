@@ -19,12 +19,11 @@ package org.openksavi.sponge.core.engine;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Charsets;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -332,11 +331,10 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         FallbackBasePathLocationStrategy propertiesLocationStrategy =
                 new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
         try {
-            propertiesConfiguration =
-                    new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
-                            .configure(new Parameters().properties().setLocationStrategy(propertiesLocationStrategy)
-                                    .setFileName(propertiesFileName).setEncoding(Charsets.UTF_8.name()).setThrowExceptionOnMissing(false))
-                            .getConfiguration();
+            propertiesConfiguration = new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
+                    .configure(new Parameters().properties().setLocationStrategy(propertiesLocationStrategy).setFileName(propertiesFileName)
+                            .setEncoding(StandardCharsets.UTF_8.name()).setThrowExceptionOnMissing(false))
+                    .getConfiguration();
         } catch (ConfigurationException e) {
             // Ignoring the exception if the optional properties file hasn't been found.
             if (propertiesLocationStrategy.isNotFound() || ExceptionUtils.hasCause(e, FileNotFoundException.class)) {

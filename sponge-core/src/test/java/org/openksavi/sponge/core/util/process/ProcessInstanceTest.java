@@ -20,6 +20,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import org.apache.commons.io.FileUtils;
@@ -195,7 +196,7 @@ public class ProcessInstanceTest {
 
         File resultFile = new File(outputFileName);
         try {
-            assertEquals("123", FileUtils.readFileToString(resultFile, "UTF-8"));
+            assertEquals("123", FileUtils.readFileToString(resultFile, StandardCharsets.UTF_8.name()));
         } finally {
             FileUtils.deleteQuietly(resultFile);
         }
