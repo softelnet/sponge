@@ -25,6 +25,18 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
  */
 public class IntegerType extends DataType<Number> {
 
+    /** The feature name for the exclusiveMax. */
+    public static final String FEATURE_MIN_VALUE = "minValue";
+
+    /** The feature name for the maxValue. */
+    public static final String FEATURE_MAX_VALUE = "maxValue";
+
+    /** The feature name for the exclusiveMin. */
+    public static final String FEATURE_EXCLUSIVE_MIN = "exclusiveMin";
+
+    /** The feature name for the exclusiveMax. */
+    public static final String FEATURE_EXCLUSIVE_MAX = "exclusiveMax";
+
     /** The minimum value (optional). */
     private Long minValue;
 

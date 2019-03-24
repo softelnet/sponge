@@ -31,6 +31,9 @@ import org.openksavi.sponge.util.Descriptive;
  */
 public class DataType<T> implements Descriptive, Cloneable {
 
+    /** The feature name for the format. */
+    public static final String FEATURE_FORMAT = "format";
+
     /** The data type kind. */
     private DataTypeKind kind;
 

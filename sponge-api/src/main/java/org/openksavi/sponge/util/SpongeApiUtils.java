@@ -95,32 +95,8 @@ public abstract class SpongeApiUtils {
      */
     public static void traverseActionArguments(ActionMeta actionMeta, Consumer<QualifiedDataType> onType, boolean namedOnly) {
         if (actionMeta.getArgs() != null) {
-            actionMeta.getArgs().forEach(argType -> traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
-        }
-    }
-
-    /**
-     * Traverses the data type but only through record types.
-     *
-     * @param qualifiedType the qualified type.
-     * @param onType the qualified type callback.
-     * @param namedOnly traverse only through named types.
-     */
-    public static void traverseDataType(QualifiedDataType qualifiedType, Consumer<QualifiedDataType> onType, boolean namedOnly) {
-        if (namedOnly && qualifiedType.getType().getName() == null) {
-            return;
-        }
-
-        onType.accept(qualifiedType);
-
-        // Traverses only through record types.
-        switch (qualifiedType.getType().getKind()) {
-        case RECORD:
-            ((RecordType) qualifiedType.getType()).getFields()
-                    .forEach(field -> traverseDataType(qualifiedType.createChild(field), onType, namedOnly));
-            break;
-        default:
-            break;
+            actionMeta.getArgs().forEach(
+                    argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
         }
     }
 }

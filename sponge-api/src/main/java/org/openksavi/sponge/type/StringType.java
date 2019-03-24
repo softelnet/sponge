@@ -25,6 +25,12 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
  */
 public class StringType extends DataType<String> {
 
+    /** The feature name for the minLength. */
+    public static final String FEATURE_MIN_LENGTH = "minLength";
+
+    /** The feature name for the maxLength. */
+    public static final String FEATURE_MAX_LENGTH = "maxLength";
+
     /** The minimum length (optional). */
     private Integer minLength;
 

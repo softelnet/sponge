@@ -25,6 +25,9 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
  */
 public class BinaryType extends DataType<byte[]> {
 
+    /** The feature name for the mimeType. */
+    public static final String FEATURE_MIME_TYPE = "mimeType";
+
     /** The binary data mime type. */
     private String mimeType;
 

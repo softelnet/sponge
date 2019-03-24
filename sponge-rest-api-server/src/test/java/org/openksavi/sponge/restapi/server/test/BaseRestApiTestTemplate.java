@@ -58,6 +58,7 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
@@ -208,6 +209,10 @@ public abstract class BaseRestApiTestTemplate {
     @Test
     public void testCallBinaryArgAndResult() throws IOException {
         try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("EchoImage");
+            assertEquals(1, actionMeta.getArgs().size());
+            assertEquals("image/png", ((BinaryType) actionMeta.getArgs().get(0)).getMimeType());
+
             byte[] image = IOUtils.toByteArray(getClass().getResourceAsStream("/image.png"));
             byte[] resultImage = client.call(byte[].class, "EchoImage", Arrays.asList(image));
             assertEquals(image.length, resultImage.length);

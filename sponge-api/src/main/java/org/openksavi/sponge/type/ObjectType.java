@@ -27,6 +27,9 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
  */
 public class ObjectType<T> extends DataType<T> {
 
+    /** The feature name for the className. */
+    public static final String FEATURE_CLASS_NAME = "className";
+
     /** The class name. */
     private String className;
 

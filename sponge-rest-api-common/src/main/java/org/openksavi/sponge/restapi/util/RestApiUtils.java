@@ -29,7 +29,7 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestDataType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.QualifiedDataType;
-import org.openksavi.sponge.util.SpongeApiUtils;
+import org.openksavi.sponge.util.DataTypeUtils;
 
 /**
  * A set of common REST API utility methods.
@@ -85,7 +85,7 @@ public abstract class RestApiUtils {
 
         if (actionMeta.getArgs() != null) {
             actionMeta.getArgs().forEach(
-                    argType -> SpongeApiUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
+                    argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
         }
     }
 }

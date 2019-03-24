@@ -25,6 +25,9 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
  */
 public class DateTimeType extends DataType<Object> {
 
+    /** The feature name for the dateTimeKind. */
+    public static final String FEATURE_DATE_TIME_KIND = "dateTimeKind";
+
     /** The date/time kind. */
     private DateTimeKind dateTimeKind;
 
