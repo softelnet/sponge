@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.openksavi.sponge</groupId>
+        <artifactId>sponge-parent</artifactId>
+        <version>1.8.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>sponge-examples-project-user-management</artifactId>
+    <name>Sponge - Examples - Project - User Management</name>
+    <packaging>war</packaging>
+
+    <properties>
+        <sponge.root>${basedir}/../..</sponge.root>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-jython</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-rest-api-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jcl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-rest-api-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

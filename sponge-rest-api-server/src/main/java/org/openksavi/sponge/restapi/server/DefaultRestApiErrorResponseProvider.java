@@ -48,6 +48,8 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
             response.setErrorCode(RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
         } else if (exception instanceof RestApiIncorrectKnowledgeBaseVersionServerException) {
             response.setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION);
+        } else if (exception instanceof RestApiIncorrectUsernamePasswordServerException) {
+            response.setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_USERNAME_PASSWORD);
         }
     }
 }

@@ -27,7 +27,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
 import org.openksavi.sponge.restapi.server.security.BaseInMemoryKnowledgeBaseProvidedSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
 
@@ -58,7 +58,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
 
             return user;
         } catch (AuthenticationException e) {
-            throw SpongeUtils.wrapException("authenticateUser", e);
+            throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
                         user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()));
             }
 
-            throw new BadCredentialsException("Incorrent username/password");
+            throw new BadCredentialsException("Incorrect username or password");
         }
     }
 }

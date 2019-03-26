@@ -36,6 +36,8 @@ public final class RestApiConstants {
 
     public static final String ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION = "SPONGE003";
 
+    public static final String ERROR_CODE_INCORRECT_USERNAME_PASSWORD = "SPONGE004";
+
     private RestApiConstants() {
         //
     }

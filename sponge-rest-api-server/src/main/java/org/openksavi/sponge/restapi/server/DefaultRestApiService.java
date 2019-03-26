@@ -385,7 +385,8 @@ public class DefaultRestApiService implements RestApiService {
         }
     }
 
-    protected User authenticateUser(String username, String password, Exchange exchange) {
+    protected User authenticateUser(String username, String password, Exchange exchange)
+            throws RestApiIncorrectUsernamePasswordServerException {
         return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password, exchange);
     }
 

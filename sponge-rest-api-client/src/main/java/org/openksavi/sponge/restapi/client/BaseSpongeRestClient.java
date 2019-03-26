@@ -236,6 +236,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 case RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION:
                     exception = new IncorrectKnowledgeBaseVersionException(message);
                     break;
+                case RestApiConstants.ERROR_CODE_INCORRECT_USERNAME_PASSWORD:
+                    exception = new IncorrectUsernamePasswordException(message);
+                    break;
                 default:
                     exception = new ErrorResponseException(message);
                 }
@@ -651,5 +654,16 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public void reload() {
         reload(new ReloadRequest());
+    }
+
+    @Override
+    public void clearSession() {
+        lock.lock();
+
+        try {
+            currentAuthToken.set(null);
+        } finally {
+            lock.unlock();
+        }
     }
 }

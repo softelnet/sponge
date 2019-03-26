@@ -17,7 +17,8 @@
 package org.openksavi.sponge.restapi.server.security;
 
 import org.apache.camel.Exchange;
-import org.apache.commons.lang3.Validate;
+
+import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
 
 public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
 
@@ -28,7 +29,9 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
     @Override
     public User authenticateUser(String username, String password, Exchange exchange) {
         User user = verifyInMemory(username, password);
-        Validate.isTrue(user != null, "Incorrent username/password");
+        if (user == null) {
+            throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password");
+        }
 
         return user;
     }

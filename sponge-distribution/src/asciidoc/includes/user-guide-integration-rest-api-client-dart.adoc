@@ -1,5 +1,5 @@
 = {sponge} REST API client for Dart
-The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API service from applications written in Dart. It could be used in a https://flutter.io[Flutter] mobile application or an https://webdev.dartlang.org/angular[AngularDart] web application to connect to a {sponge} based back-end.
+The {sponge} REST API client for Dart simplifies connecting to a remote {sponge} REST API service from applications written in Dart. It could be used in a https://flutter.io[Flutter] mobile application or an https://webdev.dartlang.org/angular[AngularDart] web application to connect to a {sponge} based back-end. The REST API client uses POST methods.
 
 .REST API client example
 [source,dart]

@@ -72,7 +72,7 @@ public class DemoServiceTest {
                 Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_DIGITS_HOME), "data/5_0.png").toString());
 
         try (SpongeRestClient client = createRestClient()) {
-            assertEquals(5, createRestClient().call(Number.class, "DigitsPredict", Arrays.asList(imageData)));
+            assertEquals(5, client.call(Number.class, "DigitsPredict", Arrays.asList(imageData)));
         }
     }
 }
