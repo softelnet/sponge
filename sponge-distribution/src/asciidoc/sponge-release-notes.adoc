@@ -11,6 +11,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new type `StreamType`.
 * Added a new REST API error code `ERROR_CODE_INCORRECT_USERNAME_PASSWORD ("SPONGE004")`.
 * Fixed the bug that caused a `NullPointerException` when sending a record with a `null` value of a field in the REST API request.
+* Dependencies upgrade.
 
 [discrete]
 == 1.8.0 (2019-03-04)

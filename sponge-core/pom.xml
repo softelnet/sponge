@@ -99,8 +99,8 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.google.guava:guava</include>
-                                    <include>org.reflections:reflections</include>
+                                    <include>com.google.guava:*</include>
+                                    <include>org.reflections:*</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -117,7 +117,6 @@
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer" />
                             </transformers>
-                            <createDependencyReducedPom>true</createDependencyReducedPom>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <!-- <createSourcesJar>true</createSourcesJar> -->
                             <!-- <shadeTestJar>true</shadeTestJar> -->

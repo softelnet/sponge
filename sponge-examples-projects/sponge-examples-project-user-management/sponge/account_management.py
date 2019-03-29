@@ -12,7 +12,7 @@ class Login(Action):
         self.withArgs([
             StringType("email").withFormat("email").withLabel("Email").withDescription("The user email.").withFeature("intent", "username"),
             StringType("password").withMinLength(8).withLabel("Password").withDescription("The password.").withFeature("obscure", True),
-        ]).withNoResult().withFeature("intent", "login")
+        ]).withNoResult().withFeatures({"intent":"login", "callLabel":"Log in"})
         self.withFeature("icon", "login")
     def onCall(self, email, password):
         pass
@@ -34,7 +34,7 @@ class SignUp(Action):
                 "The password.").withFeature("obscure", True),
             StringType("passwordConfirmation").withMinLength(8).withLabel("Password confirmation").withDescription(
                 "The password confirmation.").withFeature("obscure", True),
-        ]).withNoResult().withFeature("intent", "signUp")
+        ]).withNoResult().withFeatures({"intent":"signUp", "callLabel":"Sign up"})
         self.withFeature("icon", "face")
     def onCall(self, email, firstName, lastName, password, passwordConfirmation):
         if password != passwordConfirmation:
