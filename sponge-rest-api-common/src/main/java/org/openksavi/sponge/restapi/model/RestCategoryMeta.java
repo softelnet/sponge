@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,44 @@
 
 package org.openksavi.sponge.restapi.model;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.util.Descriptive;
 
-@ApiModel(value = "KnowledgeBaseMeta", description = "A knowledge base metadata")
-public class RestKnowledgeBaseMeta implements Descriptive {
+@ApiModel(value = "CategoryMeta", description = "A category metadata")
+public class RestCategoryMeta implements Descriptive {
 
+    /** The category name. */
     private String name;
 
+    /** The category label. */
     private String label;
 
+    /** The category description. */
     private String description;
 
-    private Integer version;
+    /** The category features. */
+    private Map<String, Object> features = new LinkedHashMap<>();
 
     private Integer sequenceNumber;
 
-    public RestKnowledgeBaseMeta() {
+    public RestCategoryMeta() {
     }
 
-    public RestKnowledgeBaseMeta(String name, String label, String description, Integer version, Integer sequenceNumber) {
+    public RestCategoryMeta(String name, String label, String description, Map<String, Object> features, Integer sequenceNumber) {
         this.name = name;
         this.label = label;
         this.description = description;
-        this.version = version;
+        this.features = features;
         this.sequenceNumber = sequenceNumber;
     }
 
     @Override
-    @ApiModelProperty(value = "The knowledge base name", required = true)
+    @ApiModelProperty(value = "The category name", required = true)
     public String getName() {
         return name;
     }
@@ -57,7 +64,7 @@ public class RestKnowledgeBaseMeta implements Descriptive {
     }
 
     @Override
-    @ApiModelProperty(value = "The knowledge base label", required = false)
+    @ApiModelProperty(value = "The category label", required = false)
     public String getLabel() {
         return label;
     }
@@ -68,7 +75,7 @@ public class RestKnowledgeBaseMeta implements Descriptive {
     }
 
     @Override
-    @ApiModelProperty(value = "The knowledge base description", required = false)
+    @ApiModelProperty(value = "The category description", required = false)
     public String getDescription() {
         return description;
     }
@@ -78,16 +85,16 @@ public class RestKnowledgeBaseMeta implements Descriptive {
         this.description = description;
     }
 
-    @ApiModelProperty(value = "The knowledge base version", required = false)
-    public Integer getVersion() {
-        return version;
+    @ApiModelProperty(value = "The category features", required = true)
+    public Map<String, Object> getFeatures() {
+        return features;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 
-    @ApiModelProperty(value = "The knowledge base sequence number", required = false)
+    @ApiModelProperty(value = "The category sequence number", required = false)
     public Integer getSequenceNumber() {
         return sequenceNumber;
     }

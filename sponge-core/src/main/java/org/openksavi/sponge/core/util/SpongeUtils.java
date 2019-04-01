@@ -83,6 +83,7 @@ import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorOperations;
 import org.openksavi.sponge.ProcessorQualifiedName;
@@ -117,6 +118,7 @@ import org.openksavi.sponge.type.StreamType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
+import org.openksavi.sponge.util.Descriptive;
 
 /**
  * This class defines a set of utility methods. It also wraps some of the external dependencies like Guava to avoid version conflicts in the
@@ -777,5 +779,17 @@ public abstract class SpongeUtils {
         Validate.isTrue(name != null && !name.trim().isEmpty(), "Record field name not specified in the %s", valueName);
         Validate.isTrue(!StringUtils.containsWhitespace(name) && !StringUtils.containsAny(name, SpongeConstants.ACTION_SUB_ARG_SEPARATOR),
                 "The record field name is invalid in the %s", valueName);
+    }
+
+    public static int getKnowledgeBaseIndex(SpongeEngine engine, KnowledgeBase kb) {
+        return engine.getKnowledgeBaseManager().getKnowledgeBases().indexOf(kb);
+    }
+
+    public static int getCategoryIndex(SpongeEngine engine, CategoryMeta category) {
+        return engine.getCategories().indexOf(category);
+    }
+
+    public static String getDisplayLabel(Descriptive descriptive) {
+        return descriptive != null ? (descriptive.getLabel() != null ? descriptive.getLabel() : descriptive.getName()) : null;
     }
 }

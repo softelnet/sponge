@@ -7,6 +7,7 @@ from java.lang import String
 from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.time.format import DateTimeFormatter
 from java.time import LocalDateTime
+from org.apache.commons.io import IOUtils
 
 def onInit():
     sponge.addCategories(
@@ -359,3 +360,10 @@ class ActionWithContextActionsContextAction5(Action):
         self.withFeatures({"visible":False, "icon":"tortoise"})
     def onCall(self, arg, additionalText):
         return arg["arg1"] + " " + additionalText
+
+# Unsupported by the mobile client application.
+class OutputStreamResultAction(Action):
+    def onConfigure(self):
+        self.withLabel("Unsupported action using a stream").withNoArgs().withResult(StreamType())
+    def onCall(self):
+        return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"")

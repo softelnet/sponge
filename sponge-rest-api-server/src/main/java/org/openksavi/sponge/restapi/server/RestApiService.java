@@ -16,8 +16,11 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.util.Comparator;
+
 import org.apache.camel.Exchange;
 
+import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
@@ -85,4 +88,8 @@ public interface RestApiService extends HasEngine, Initializable {
     SpongeResponse createGenericErrorResponse(Throwable e, Exchange exchange);
 
     TypeConverter getTypeConverter();
+
+    Comparator<RestActionMeta> getActionsOrderComparator();
+
+    void setActionsOrderComparator(Comparator<RestActionMeta> actionsOrderComparator);
 }

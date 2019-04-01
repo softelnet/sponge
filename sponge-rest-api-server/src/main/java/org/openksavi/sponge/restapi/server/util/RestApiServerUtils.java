@@ -18,6 +18,7 @@ package org.openksavi.sponge.restapi.server.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.apache.camel.Exchange;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -151,5 +153,56 @@ public abstract class RestApiServerUtils {
         jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(actionAdapter.getMeta().getArg(name), value)));
 
         return unmarshalled;
+    }
+
+    /**
+     * Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence
+     * number reflects the order in which categories or knowledge bases have been added to the engine.
+     *
+     * @return the comparator.
+     */
+    public static Comparator<RestActionMeta> createActionsOrderComparator() {
+        return (action1, action2) -> {
+            if (action1.getCategory() != null && action2.getCategory() == null) {
+                return -1;
+            }
+            if (action1.getCategory() == null && action2.getCategory() != null) {
+                return 1;
+            }
+
+            if (action1.getCategory() != null && action2.getCategory() != null) {
+                Integer catSeq1 = action1.getCategory().getSequenceNumber();
+                Integer catSeq2 = action2.getCategory().getSequenceNumber();
+
+                if (catSeq1 != null && catSeq2 == null) {
+                    return -1;
+                }
+                if (catSeq1 == null && catSeq2 != null) {
+                    return 1;
+                }
+
+                int categoryComparison = (catSeq1 != null && catSeq2 != null) ? catSeq1.compareTo(catSeq2) : 0;
+                if (categoryComparison != 0) {
+                    return categoryComparison;
+                }
+            }
+
+            Integer kbSeq1 = action1.getKnowledgeBase().getSequenceNumber();
+            Integer kbSeq2 = action2.getKnowledgeBase().getSequenceNumber();
+
+            if (kbSeq1 != null && kbSeq2 == null) {
+                return -1;
+            }
+            if (kbSeq1 == null && kbSeq2 != null) {
+                return 1;
+            }
+
+            int kbComparison = (kbSeq1 != null && kbSeq2 != null) ? kbSeq1.compareTo(kbSeq2) : 0;
+            if (kbComparison != 0) {
+                return kbComparison;
+            }
+
+            return SpongeUtils.getDisplayLabel(action1).compareTo(SpongeUtils.getDisplayLabel(action2));
+        };
     }
 }

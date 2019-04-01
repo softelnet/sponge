@@ -24,14 +24,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.util.Descriptive;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
 @ApiModel(value = "ActionMeta", description = "An action metadata")
 @SuppressWarnings("rawtypes")
-public class RestActionMeta {
+public class RestActionMeta implements Descriptive {
 
     private String name;
 
@@ -41,7 +41,7 @@ public class RestActionMeta {
 
     private RestKnowledgeBaseMeta knowledgeBase;
 
-    private CategoryMeta category;
+    private RestCategoryMeta category;
 
     private Map<String, Object> features;
 
@@ -56,7 +56,7 @@ public class RestActionMeta {
     public RestActionMeta() {
     }
 
-    public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, CategoryMeta category,
+    public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, RestCategoryMeta category,
             Map<String, Object> features, List<DataType> args, DataType result, boolean callable,
             ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
@@ -71,29 +71,35 @@ public class RestActionMeta {
         this.qualifiedVersion = qualifiedVersion;
     }
 
+    @Override
     @ApiModelProperty(value = "The action name", required = true)
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     @ApiModelProperty(value = "The action label", required = false)
     public String getLabel() {
         return label;
     }
 
+    @Override
     public void setLabel(String label) {
         this.label = label;
     }
 
+    @Override
     @ApiModelProperty(value = "The action description", required = false)
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -108,11 +114,11 @@ public class RestActionMeta {
     }
 
     @ApiModelProperty(value = "The action category metadata", required = false)
-    public CategoryMeta getCategory() {
+    public RestCategoryMeta getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryMeta category) {
+    public void setCategory(RestCategoryMeta category) {
         this.category = category;
     }
 

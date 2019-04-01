@@ -17,6 +17,7 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -28,15 +29,18 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
+import org.openksavi.sponge.restapi.model.RestCategoryMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
@@ -87,6 +91,8 @@ public class DefaultRestApiService implements RestApiService {
     private TypeConverter typeConverter;
 
     private TypeTypeUnitConverter defaultTypeTypeUnitConverter = new TypeTypeUnitConverter();
+
+    private Comparator<RestActionMeta> actionsOrderComparator = RestApiServerUtils.createActionsOrderComparator();
 
     public DefaultRestApiService() {
         //
@@ -201,13 +207,15 @@ public class DefaultRestApiService implements RestApiService {
             Predicate<ActionAdapter> isSelectedByNameRegExp =
                     action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true;
 
-            return setupSuccessResponse(new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp)
-                    .filter(isPublicByAction).filter(isPublicBySettings)
-                    .filter(action -> actualMetadataRequired ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null
-                            : true)
-                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                    .filter(action -> canCallAction(user, action)).map(action -> createRestActionMeta(action))
-                    .map(action -> marshalActionMeta(action)).collect(Collectors.toList())), request);
+            return setupSuccessResponse(
+                    new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
+                            .filter(isPublicBySettings)
+                            .filter(action -> actualMetadataRequired
+                                    ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null : true)
+                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                            .filter(action -> canCallAction(user, action)).map(action -> createRestActionMeta(action))
+                            .sorted(actionsOrderComparator).map(action -> marshalActionMeta(action)).collect(Collectors.toList())),
+                    request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new GetActionsResponse(), request, e);
@@ -217,8 +225,8 @@ public class DefaultRestApiService implements RestApiService {
     protected RestActionMeta createRestActionMeta(ActionAdapter actionAdapter) {
         ActionMeta meta = actionAdapter.getMeta();
         return new RestActionMeta(meta.getName(), meta.getLabel(), meta.getDescription(),
-                createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), getEngine().getCategory(meta.getCategory()), meta.getFeatures(),
-                meta.getArgs(), meta.getResult(), meta.isCallable(), actionAdapter.getQualifiedVersion());
+                createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), createRestCategory(getEngine().getCategory(meta.getCategory())),
+                meta.getFeatures(), meta.getArgs(), meta.getResult(), meta.isCallable(), actionAdapter.getQualifiedVersion());
 
     }
 
@@ -430,7 +438,20 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected RestKnowledgeBaseMeta createRestKnowledgeBase(KnowledgeBase kb) {
-        return new RestKnowledgeBaseMeta(kb.getName(), kb.getLabel(), kb.getDescription(), kb.getVersion());
+        int kbIndex = SpongeUtils.getKnowledgeBaseIndex(getEngine(), kb);
+
+        return new RestKnowledgeBaseMeta(kb.getName(), kb.getLabel(), kb.getDescription(), kb.getVersion(), kbIndex > -1 ? kbIndex : null);
+    }
+
+    protected RestCategoryMeta createRestCategory(CategoryMeta category) {
+        if (category == null) {
+            return null;
+        }
+
+        int categoryIndex = SpongeUtils.getCategoryIndex(getEngine(), category);
+
+        return new RestCategoryMeta(category.getName(), category.getLabel(), category.getDescription(), category.getFeatures(),
+                categoryIndex > -1 ? categoryIndex : null);
     }
 
     @Override
@@ -500,5 +521,15 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public void setErrorResponseProvider(RestApiErrorResponseProvider errorResponseProvider) {
         this.errorResponseProvider = errorResponseProvider;
+    }
+
+    @Override
+    public Comparator<RestActionMeta> getActionsOrderComparator() {
+        return actionsOrderComparator;
+    }
+
+    @Override
+    public void setActionsOrderComparator(Comparator<RestActionMeta> actionsOrderComparator) {
+        this.actionsOrderComparator = actionsOrderComparator;
     }
 }

@@ -51,6 +51,7 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
 
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
+        plugin.getSettings().setPrettyPrint(true);
 
         plugin.setCamelContext(camelContext.get());
 
