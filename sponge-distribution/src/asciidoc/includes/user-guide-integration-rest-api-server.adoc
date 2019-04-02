@@ -179,6 +179,8 @@ The following table contains a summary of the REST API operations. For a complet
 |Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
 |===
 
+The OpenAPI specification of the REST API is included in the Appendix A of the {sponge} Reference Documentation.
+
 == JSON/Java mapping
 The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.
 
@@ -278,8 +280,6 @@ For more information see examples in the source code.
 
 == HTTPS
 In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
-
-include::user-guide-rest-api.adoc[leveloffset=+1]
 
 == Environment
 

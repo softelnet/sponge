@@ -56,14 +56,17 @@ class ProvideByAction(Action):
         self.withLabel("Action with provided arguments")
         self.withArg(StringType("valueLimited").withLabel("Value limited").withProvided(ProvidedMeta().withValueSet()))
         self.withArg(StringType("valueNotLimited").withLabel("Value not limited").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())))
+        self.withArg(StringType("valueLimitedNullable").withLabel("Value limited nullable").withNullable().withProvided(ProvidedMeta().withValueSet()))
         self.withResult(StringType().withLabel("Same value"))
-    def onCall(self, valueLimited, valueNotLimited):
-        return valueLimited + "/" + valueNotLimited
+    def onCall(self, valueLimited, valueNotLimited, valueLimitedNullable):
+        return valueLimited + "/" + valueNotLimited + "/" + str(valueLimitedNullable)
     def onProvideArgs(self, context):
         if "valueLimited" in context.names:
             context.provided["valueLimited"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
         if "valueNotLimited" in context.names:
             context.provided["valueNotLimited"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
+        if "valueLimitedNullable" in context.names:
+            context.provided["valueLimitedNullable"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
 
 class ChooseColor(Action):
     def onConfigure(self):

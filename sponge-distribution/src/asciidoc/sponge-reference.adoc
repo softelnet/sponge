@@ -9,4 +9,8 @@ include::sponge-user-guide.adoc[leveloffset=+1]
 
 include::sponge-mobile-client.adoc[leveloffset=+1]
 
+[appendix]
+include::includes/user-guide-rest-api.adoc[leveloffset=+1]
+
+[appendix]
 include::sponge-release-notes.adoc[leveloffset=+1]
