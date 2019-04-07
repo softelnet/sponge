@@ -233,6 +233,10 @@ public class RestApiServerPlugin extends JPlugin {
         ((DefaultCamelContext) camelContext).setRegistry(new CompositeRegistry(Arrays.asList(simpleRegistry, camelContext.getRegistry())));
     }
 
+    public RestApiSession getSession() {
+        return service.getSession();
+    }
+
     public boolean isAutoStart() {
         return autoStart;
     }

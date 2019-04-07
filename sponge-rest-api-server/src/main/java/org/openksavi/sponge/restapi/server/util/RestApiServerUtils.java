@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.camel.Exchange;
-
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -75,8 +73,7 @@ public abstract class RestApiServerUtils {
                 role -> roleToKnowledgeBases.get(role).stream().filter(Objects::nonNull).anyMatch(kbRegexp -> kbName.matches(kbRegexp)));
     }
 
-    public static List<Object> unmarshalActionCallArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs,
-            Exchange exchange) {
+    public static List<Object> unmarshalActionCallArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {
             return null;
@@ -111,8 +108,7 @@ public abstract class RestApiServerUtils {
         return finalArgs;
     }
 
-    public static Object marshalActionCallResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result,
-            Exchange exchange) {
+    public static Object marshalActionCallResult(TypeConverter typeConverter, ActionAdapter actionAdapter, Object result) {
         if (result == null || actionAdapter.getMeta().getResult() == null) {
             return result;
         }
@@ -138,7 +134,7 @@ public abstract class RestApiServerUtils {
     }
 
     public static Map<String, Object> unmarshalProvideActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter,
-            Map<String, Object> jsonArgs, Exchange exchange) {
+            Map<String, Object> jsonArgs) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {
             return null;

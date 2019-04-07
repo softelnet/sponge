@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.CategoryMeta;
@@ -94,6 +93,8 @@ public class DefaultRestApiService implements RestApiService {
 
     private Comparator<RestActionMeta> actionsOrderComparator = RestApiServerUtils.createActionsOrderComparator();
 
+    private ThreadLocal<RestApiSession> session = new ThreadLocal<>();
+
     public DefaultRestApiService() {
         //
     }
@@ -112,11 +113,11 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public GetVersionResponse getVersion(GetVersionRequest request, Exchange exchange) {
+    public GetVersionResponse getVersion(GetVersionRequest request) {
         try {
             // Privileges not checked here.
             if (request != null) {
-                authenticateRequest(request, exchange);
+                authenticateRequest(request);
             }
 
             return setupSuccessResponse(new GetVersionResponse(getEngine().getVersion()), request);
@@ -127,13 +128,13 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest request, Exchange exchange) {
+    public LoginResponse login(LoginRequest request) {
         try {
             Validate.notNull(request, "The request must not be null");
             Validate.notNull(request.getUsername(), "The username must not be null");
 
-            User user = authenticateUser(request.getUsername(), request.getPassword(), exchange);
-            String authToken = authTokenService != null ? authTokenService.createAuthToken(user, exchange) : null;
+            User user = authenticateUser(request.getUsername(), request.getPassword());
+            String authToken = authTokenService != null ? authTokenService.createAuthToken(user) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
         } catch (Exception e) {
@@ -143,14 +144,14 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public LogoutResponse logout(LogoutRequest request, Exchange exchange) {
+    public LogoutResponse logout(LogoutRequest request) {
         try {
             Validate.notNull(request, "The request must not be null");
 
-            authenticateRequest(request, exchange);
+            authenticateRequest(request);
 
             if (request.getAuthToken() != null) {
-                getSafeAuthTokenService().removeAuthToken(request.getAuthToken(), exchange);
+                getSafeAuthTokenService().removeAuthToken(request.getAuthToken());
             }
 
             return setupSuccessResponse(new LogoutResponse(), request);
@@ -161,13 +162,13 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request, Exchange exchange) {
+    public GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request) {
         if (request == null) {
             request = new GetKnowledgeBasesRequest();
         }
 
         try {
-            User user = authenticateRequest(request, exchange);
+            User user = authenticateRequest(request);
 
             return setupSuccessResponse(new GetKnowledgeBasesResponse(getEngine().getKnowledgeBaseManager().getKnowledgeBases().stream()
                     .filter(kb -> securityService.canUseKnowledgeBase(user, kb))
@@ -180,13 +181,13 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public GetActionsResponse getActions(GetActionsRequest request, Exchange exchange) {
+    public GetActionsResponse getActions(GetActionsRequest request) {
         try {
             if (request == null) {
                 request = new GetActionsRequest();
             }
 
-            User user = authenticateRequest(request, exchange);
+            User user = authenticateRequest(request);
 
             boolean actualMetadataRequired = request.getMetadataRequired() != null ? request.getMetadataRequired()
                     : RestApiServerConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
@@ -262,18 +263,17 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public ActionCallResponse call(ActionCallRequest request, Exchange exchange) {
+    public ActionCallResponse call(ActionCallRequest request) {
         ActionAdapter actionAdapter = null;
 
         try {
             Validate.notNull(request, "The request must not be null");
-            User user = authenticateRequest(request, exchange);
+            User user = authenticateRequest(request);
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
-            Object actionResult =
-                    getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request, exchange));
+            Object actionResult = getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request));
 
-            return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult, exchange)), request);
+            return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
         } catch (Exception e) {
             if (actionAdapter != null) {
                 getEngine().handleError(actionAdapter, e);
@@ -285,20 +285,20 @@ public class DefaultRestApiService implements RestApiService {
         }
     }
 
-    protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request, Exchange exchange) {
-        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, request.getArgs(), exchange);
+    protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request) {
+        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, request.getArgs());
     }
 
-    protected Object marshalActionResult(ActionAdapter actionAdapter, Object result, Exchange exchange) {
-        return RestApiServerUtils.marshalActionCallResult(typeConverter, actionAdapter, result, exchange);
+    protected Object marshalActionResult(ActionAdapter actionAdapter, Object result) {
+        return RestApiServerUtils.marshalActionCallResult(typeConverter, actionAdapter, result);
     }
 
     @Override
-    public SendEventResponse send(SendEventRequest request, Exchange exchange) {
+    public SendEventResponse send(SendEventRequest request) {
         try {
             Validate.notNull(request, "The request must not be null");
 
-            User user = authenticateRequest(request, exchange);
+            User user = authenticateRequest(request);
             Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event named '%s'",
                     request.getName());
             Validate.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
@@ -316,18 +316,17 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, Exchange exchange) {
+    public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request) {
         ActionAdapter actionAdapter = null;
 
         try {
             Validate.notNull(request, "The request must not be null");
-            User user = authenticateRequest(request, exchange);
+            User user = authenticateRequest(request);
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
 
-            Map<String,
-                    ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
-                            request.getArgNames(),
-                            RestApiServerUtils.unmarshalProvideActionArgs(typeConverter, actionAdapter, request.getCurrent(), exchange));
+            Map<String, ProvidedValue<?>> provided =
+                    getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(), request.getArgNames(),
+                            RestApiServerUtils.unmarshalProvideActionArgs(typeConverter, actionAdapter, request.getCurrent()));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
@@ -343,13 +342,13 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public ReloadResponse reload(ReloadRequest request, Exchange exchange) {
+    public ReloadResponse reload(ReloadRequest request) {
         try {
             if (request == null) {
                 request = new ReloadRequest();
             }
 
-            User user = authenticateRequest(request, exchange);
+            User user = authenticateRequest(request);
 
             Validate.isTrue(user.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
 
@@ -373,29 +372,38 @@ public class DefaultRestApiService implements RestApiService {
      * @param exchange the exchange.
      * @return the user.
      */
-    protected User authenticateRequest(SpongeRequest request, Exchange exchange) {
+    protected User authenticateRequest(SpongeRequest request) {
+        User user;
         if (request.getAuthToken() != null) {
             Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
             Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
 
-            String username = getSafeAuthTokenService().validateAuthToken(request.getAuthToken(), exchange);
-            return securityService.getUser(username);
+            String username = getSafeAuthTokenService().validateAuthToken(request.getAuthToken());
+
+            user = securityService.getUser(username);
         } else {
             if (request.getUsername() == null) {
                 if (settings.isAllowAnonymous()) {
-                    return RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole());
+                    user = RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole());
                 } else {
                     throw new SpongeException("Anonymous access is not allowed");
                 }
+            } else {
+                user = authenticateUser(request.getUsername(), request.getPassword());
             }
-
-            return authenticateUser(request.getUsername(), request.getPassword(), exchange);
         }
+
+        // Set the user in the thread local session.
+        RestApiSession session = getSession();
+        if (session instanceof DefaultRestApiSession) {
+            ((DefaultRestApiSession) session).setUser(user);
+        }
+
+        return user;
     }
 
-    protected User authenticateUser(String username, String password, Exchange exchange)
-            throws RestApiIncorrectUsernamePasswordServerException {
-        return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password, exchange);
+    protected User authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
+        return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password);
     }
 
     protected boolean isEventPublic(String eventName) {
@@ -455,7 +463,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public SpongeResponse createGenericErrorResponse(Throwable e, Exchange exchange) {
+    public SpongeResponse createGenericErrorResponse(Throwable e) {
         Validate.notNull(e, "Exception should be not null");
         SpongeResponse response = new SpongeResponse();
 
@@ -531,5 +539,15 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public void setActionsOrderComparator(Comparator<RestActionMeta> actionsOrderComparator) {
         this.actionsOrderComparator = actionsOrderComparator;
+    }
+
+    @Override
+    public RestApiSession getSession() {
+        return session.get();
+    }
+
+    @Override
+    public void setSession(RestApiSession session) {
+        this.session.set(session);
     }
 }

@@ -30,8 +30,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
-import org.apache.camel.Exchange;
-
 import org.openksavi.sponge.core.util.LocalCache;
 import org.openksavi.sponge.core.util.LocalCacheBuilder;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -84,7 +82,7 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
     }
 
     @Override
-    public String createAuthToken(User user, Exchange exchange) {
+    public String createAuthToken(User user) {
         Long authSessionId = currentAuthSessionId.incrementAndGet();
 
         JwtBuilder builder = Jwts.builder();
@@ -98,7 +96,7 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
     }
 
     @Override
-    public String validateAuthToken(String authToken, Exchange exchange) {
+    public String validateAuthToken(String authToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
             String username = claims.getBody().getSubject();
@@ -115,7 +113,7 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
     }
 
     @Override
-    public void removeAuthToken(String authToken, Exchange exchange) {
+    public void removeAuthToken(String authToken) {
         Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
         Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
 

@@ -18,7 +18,6 @@ package org.openksavi.sponge.restapi.server.security.spring;
 
 import java.util.stream.Collectors;
 
-import org.apache.camel.Exchange;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,7 +47,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     }
 
     @Override
-    public User authenticateUser(String username, String password, Exchange exchange) {
+    public User authenticateUser(String username, String password) {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);

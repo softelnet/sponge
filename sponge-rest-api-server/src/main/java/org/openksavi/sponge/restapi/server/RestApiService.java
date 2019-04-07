@@ -18,8 +18,6 @@ package org.openksavi.sponge.restapi.server;
 
 import java.util.Comparator;
 
-import org.apache.camel.Exchange;
-
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
@@ -67,29 +65,43 @@ public interface RestApiService extends HasEngine, Initializable {
 
     void setErrorResponseProvider(RestApiErrorResponseProvider errorResponseProvider);
 
-    LoginResponse login(LoginRequest request, Exchange exchange);
+    LoginResponse login(LoginRequest request);
 
-    LogoutResponse logout(LogoutRequest request, Exchange exchange);
+    LogoutResponse logout(LogoutRequest request);
 
-    ActionCallResponse call(ActionCallRequest request, Exchange exchange);
+    ActionCallResponse call(ActionCallRequest request);
 
-    SendEventResponse send(SendEventRequest request, Exchange exchange);
+    SendEventResponse send(SendEventRequest request);
 
-    ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, Exchange exchange);
+    ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request);
 
-    GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request, Exchange exchange);
+    GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request);
 
-    GetActionsResponse getActions(GetActionsRequest request, Exchange exchange);
+    GetActionsResponse getActions(GetActionsRequest request);
 
-    GetVersionResponse getVersion(GetVersionRequest request, Exchange exchange);
+    GetVersionResponse getVersion(GetVersionRequest request);
 
-    ReloadResponse reload(ReloadRequest request, Exchange exchange);
+    ReloadResponse reload(ReloadRequest request);
 
-    SpongeResponse createGenericErrorResponse(Throwable e, Exchange exchange);
+    SpongeResponse createGenericErrorResponse(Throwable e);
 
     TypeConverter getTypeConverter();
 
     Comparator<RestActionMeta> getActionsOrderComparator();
 
     void setActionsOrderComparator(Comparator<RestActionMeta> actionsOrderComparator);
+
+    /**
+     * Returns a thread local session.
+     *
+     * @return the session.
+     */
+    RestApiSession getSession();
+
+    /**
+     * Sets a thread local session.
+     *
+     * @param session the session.
+     */
+    void setSession(RestApiSession session);
 }

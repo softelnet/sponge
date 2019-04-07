@@ -370,3 +370,10 @@ class OutputStreamResultAction(Action):
         self.withLabel("Unsupported action using a stream").withNoArgs().withResult(StreamType())
     def onCall(self):
         return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"")
+
+class LowerCaseHello(Action):
+    def onConfigure(self):
+        self.withLabel("Hello with lower case")
+        self.withArg(StringType("text").withLabel("Text to lower case")).withResult(StringType().withLabel("Lower case text"))
+    def onCall(self, text):
+        return "Hello " + restApiServer.session.user.name + ": " + text.lower()

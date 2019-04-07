@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.security;
+package org.openksavi.sponge.restapi.server;
 
-import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
+import org.openksavi.sponge.restapi.server.security.User;
 
-public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
+/**
+ * A default REST API session.
+ */
+public class DefaultRestApiSession implements RestApiSession {
 
-    public SimpleInMemorySecurityService() {
-        //
+    private User user;
+
+    public DefaultRestApiSession(User user) {
+        this.user = user;
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
-        User user = verifyInMemory(username, password);
-        if (user == null) {
-            throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password");
-        }
-
+    public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -275,6 +275,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             }
 
             try {
+                // Set a default session. The actual session with a user will be set in the service.
+                apiService.setSession(new CamelRestApiSession(null, exchange));
+
                 O response = operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange);
 
                 // Handle an action call that returns a stream.
@@ -287,11 +290,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             } catch (Throwable processingException) {
                 logger.info("REST API error", processingException);
                 try {
-                    setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException, exchange));
+                    setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException));
                 } catch (Throwable e) {
                     logger.error("REST API send error response failure", e);
                     throw e;
                 }
+            } finally {
+                // Clear the session.
+                apiService.setSession(null);
             }
         };
     }
@@ -301,28 +307,28 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
         createOperation(restDefinition, RestApiOperationType.VERSION, "Get the Sponge version", GetVersionRequest.class,
                 "Get Sponge version request", GetVersionResponse.class, "The Sponge version response",
-                (request, exchange) -> apiService.getVersion(request, exchange));
+                (request, exchange) -> apiService.getVersion(request));
         createOperation(restDefinition, RestApiOperationType.LOGIN, "Login", LoginRequest.class, "Login request", LoginResponse.class,
-                "The login response", (request, exchange) -> apiService.login(request, exchange));
+                "The login response", (request, exchange) -> apiService.login(request));
         createOperation(restDefinition, RestApiOperationType.LOGOUT, "Logout", LogoutRequest.class, "Logout request", LogoutResponse.class,
-                "The logout response", (request, exchange) -> apiService.logout(request, exchange));
+                "The logout response", (request, exchange) -> apiService.logout(request));
         createOperation(restDefinition, RestApiOperationType.KNOWLEDGE_BASES, "Get knowledge bases", GetKnowledgeBasesRequest.class,
                 "Get knowledge bases request", GetKnowledgeBasesResponse.class, "The get knowledge bases response",
-                (request, exchange) -> apiService.getKnowledgeBases(request, exchange));
+                (request, exchange) -> apiService.getKnowledgeBases(request));
         createOperation(restDefinition, RestApiOperationType.ACTIONS, "Get actions", GetActionsRequest.class, "Get actions request",
-                GetActionsResponse.class, "The get actions response", (request, exchange) -> apiService.getActions(request, exchange));
+                GetActionsResponse.class, "The get actions response", (request, exchange) -> apiService.getActions(request));
         createOperation(restDefinition, RestApiOperationType.CALL, "Call an action", ActionCallRequest.class, "Call action request",
-                ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request, exchange));
+                ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request));
         createOperation(restDefinition, RestApiOperationType.SEND, "Send a new event", SendEventRequest.class, "Send event request",
-                SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request, exchange));
+                SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request));
         createOperation(restDefinition, RestApiOperationType.ACTION_ARGS, "Provide action arguments", ProvideActionArgsRequest.class,
                 "The provide action arguments request", ProvideActionArgsResponse.class, "The provide action arguments response",
-                (request, exchange) -> apiService.provideActionArgs(request, exchange));
+                (request, exchange) -> apiService.provideActionArgs(request));
 
         if (getSettings().isPublishReload()) {
             createOperation(restDefinition, RestApiOperationType.RELOAD, "Reload knowledge bases", ReloadRequest.class,
                     "Reload knowledge bases request", ReloadResponse.class, "The reload response",
-                    (request, exchange) -> apiService.reload(request, exchange));
+                    (request, exchange) -> apiService.reload(request));
         }
     }
 }

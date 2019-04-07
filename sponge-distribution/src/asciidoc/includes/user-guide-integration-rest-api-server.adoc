@@ -232,6 +232,20 @@ curl http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"name":"OutputStreamResultAction","args":[]}'
 ----
 
+== Session
+For each request the REST API service creates a thread local session. The session provides access to a logged user and a Camel exchange for a thread handling the request. The session can be accessed in an action via the REST API server plugin.
+
+.Accessing the REST API session
+[source,python]
+----
+class LowerCaseHello(Action):
+    def onConfigure(self):
+        self.withLabel("Hello with lower case")
+        self.withArg(StringType("text").withLabel("Text to lower case")).withResult(StringType().withLabel("Lower case text"))
+    def onCall(self, text):
+        return "Hello " + restApiServer.session.user.name + ": " + text.lower()
+----
+
 == Security
 The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed. A user may have roles.
 
