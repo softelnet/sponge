@@ -50,6 +50,21 @@
             <artifactId>sponge-standalone-extensions</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- Included here because the GrovePi dependency is not published in the Maven Central. -->
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-rpi-grovepi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Selected Sponge external artifacts available in the standalone application out of the box: -->
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-mpd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-test</artifactId>

@@ -19,28 +19,8 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-jython</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rpi-pi4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-rpi-grovepi</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-gsm-modem</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-logging</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
@@ -49,7 +29,6 @@
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-standalone-extensions</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>

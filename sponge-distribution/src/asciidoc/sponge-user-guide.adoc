@@ -1619,7 +1619,11 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 
 |`sponge-standalone`
 |Yes
-|The standalone distribution of {sponge}.
+|The standalone version of {sponge}.
+
+|`sponge-standalone-extensions`
+|Yes
+|Dependencies for external libraries used by the standalone command-line application.
 
 |`sponge-logging`
 |Yes
@@ -1644,10 +1648,6 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |`sponge-integration-tests`
 |No
 |{sponge} integration tests.
-
-|`sponge-standalone-extensions`
-|No
-|Dependencies for external libraries used by the standalone command-line application.
 |===
 
 The following optional artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality.

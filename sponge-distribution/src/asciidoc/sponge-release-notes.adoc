@@ -12,6 +12,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new REST API error code `ERROR_CODE_INCORRECT_USERNAME_PASSWORD ("SPONGE004")`.
 * Added a thread local session to the REST API service. The session provides access to a logged user and a Camel exchange.
 * Fixed the bug that caused a `NullPointerException` when sending a record with a `null` value of a field in the REST API request.
+* Moved the `sponge-mpd` dependency (GPL) from `sponge-standalone-extensions` to `sponge-distribution` and changed the `sponge-standalone-extensions` license to Apache.
 * Dependencies upgrade.
 
 [discrete]
