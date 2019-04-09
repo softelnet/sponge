@@ -68,17 +68,6 @@ class ProvideByAction(Action):
         if "valueLimitedNullable" in context.names:
             context.provided["valueLimitedNullable"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
 
-class ChooseColor(Action):
-    def onConfigure(self):
-        self.withLabel("Choose a color").withDescription("Shows a color argument.")
-        self.withArg(
-            StringType("color").withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"})
-                .withLabel("Color").withDescription("The color.")
-        ).withResult(StringType())
-        self.withFeatures({"icon":"format-color-fill"})
-    def onCall(self, color):
-        return ("The chosen color is " + color) if color else "No color chosen"
-
 class ConsoleOutput(Action):
     def onConfigure(self):
         self.withLabel("Console output").withDescription("Returns the console output.")
@@ -127,99 +116,6 @@ Numbered list:
 source code example
 ```
 """
-
-class HtmlFileOutput(Action):
-    def onConfigure(self):
-        self.withLabel("HTML file output").withDescription("Returns the HTML file.")
-        self.withNoArgs().withResult(BinaryType().withMimeType("text/html").withLabel("HTML file"))
-        self.withFeatures({"icon":"web"})
-    def onCall(self):
-        return String("""
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-    <head>
-      <title>HTML page</title>
-    </head>
-    <body>
-        <!-- Main content -->
-        <h1>Header</h1>
-        <p>Some text
-    </body>
-</html>
-""").getBytes("UTF-8")
-
-class PdfFileOutput(Action):
-    def onConfigure(self):
-        self.withLabel("PDF file output").withDescription("Returns the PDF file.")
-        self.withNoArgs().withResult(BinaryType().withMimeType("application/pdf").withLabel("PDF file"))
-        self.withFeatures({"icon":"file-pdf"})
-    def onCall(self):
-        return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
-                              .outputAsBinary()).run().outputBinary
-
-class DependingArgumentsAction(Action):
-    def onConfigure(self):
-        self.withLabel("Action with depending arguments")
-        self.withArgs([
-            StringType("continent").withLabel("Continent").withProvided(ProvidedMeta().withValueSet()),
-            StringType("country").withLabel("Country").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
-            StringType("city").withLabel("City").withProvided(ProvidedMeta().withValueSet().withDependency("country")),
-            StringType("river").withLabel("River").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
-            StringType("weather").withLabel("Weather").withProvided(ProvidedMeta().withValueSet())
-        ]).withResult(StringType().withLabel("Sentences"))
-        self.withFeature("icon", "flag")
-    def onCall(self, continent, country, city, river, weather):
-        return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
-    def onProvideArgs(self, context):
-        if "continent" in context.names:
-            context.provided["continent"] = ProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
-        if "country" in context.names:
-            continent = context.current["continent"]
-            if continent == "Africa":
-                countries = ["Nigeria", "Ethiopia", "Egypt"]
-            elif continent == "Asia":
-                countries = ["China", "India", "Indonesia"]
-            elif continent == "Europe":
-                countries = ["Russia", "Germany", "Turkey"]
-            else:
-                countries = []
-            context.provided["country"] = ProvidedValue().withValueSet(countries)
-        if "city" in context.names:
-            country = context.current["country"]
-            if country == "Nigeria":
-                cities = ["Lagos", "Kano", "Ibadan"]
-            elif country == "Ethiopia":
-                cities = ["Addis Ababa", "Gondar", "Mek'ele"]
-            elif country == "Egypt":
-                cities = ["Cairo", "Alexandria", "Giza"]
-            elif country == "China":
-                cities = ["Guangzhou", "Shanghai", "Chongqing"]
-            elif country == "India":
-                cities = ["Mumbai", "Delhi", "Bangalore"]
-            elif country == "Indonesia":
-                cities = ["Jakarta", "Surabaya", "Medan"]
-            elif country == "Russia":
-                cities = ["Moscow", "Saint Petersburg", "Novosibirsk"]
-            elif country == "Germany":
-                cities = ["Berlin", "Hamburg", "Munich"]
-            elif country == "Turkey":
-                cities = ["Istanbul", "Ankara", "Izmir"]
-            else:
-                cities = []
-            context.provided["city"] = ProvidedValue().withValueSet(cities)
-        if "river" in context.names:
-            continent = context.current["continent"]
-            if continent == "Africa":
-                rivers = ["Nile", "Chambeshi", "Niger"]
-            elif continent == "Asia":
-                rivers = ["Yangtze", "Yellow River", "Mekong"]
-            elif continent == "Europe":
-                rivers = ["Volga", "Danube", "Dnepr"]
-            else:
-                rivers = []
-            context.provided["river"] = ProvidedValue().withValueSet(rivers)
-        if "weather" in context.names:
-            context.provided["weather"] = ProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
 
 class DateTimeAction(Action):
     def onConfigure(self):
@@ -294,75 +190,6 @@ class ObscuredTextArgAction(Action):
         ]).withResult(StringType().withLabel("Obscured text").withFeature("obscure", True))
     def onCall(self, plainText, obscuredText):
         return obscuredText
-
-class ActionWithContextActions(Action):
-    def onConfigure(self):
-        self.withLabel("Action with context actions").withArgs([
-            StringType("arg1").withLabel("Argument 1"),
-            StringType("arg2").withLabel("Argument 2")
-        ]).withNoResult().withFeature("contextActions", [
-            "ActionWithContextActionsContextAction1", "ActionWithContextActionsContextAction2(arg2)", "ActionWithContextActionsContextAction3(arg2=arg2)",
-            "ActionWithContextActionsContextAction4(arg1)", "ActionWithContextActionsContextAction5"
-        ])
-        self.withFeature("icon", "attachment")
-    def onCall(self, arg1, arg2):
-        pass
-
-class ActionWithContextActionsContextAction1(Action):
-    def onConfigure(self):
-        self.withLabel("Context action 1").withArgs([
-            RecordType("arg").withFields([
-                StringType("arg1").withLabel("Argument 1"),
-                StringType("arg2").withLabel("Argument 2")
-            ])
-        ]).withResult(StringType())
-        self.withFeatures({"visible":False, "icon":"tortoise"})
-    def onCall(self, arg):
-        return arg["arg1"]
-
-class ActionWithContextActionsContextAction2(Action):
-    def onConfigure(self):
-        self.withLabel("Context action 2").withArgs([
-            StringType("arg").withLabel("Argument"),
-            StringType("additionalText").withLabel("Additional text"),
-        ]).withResult(StringType())
-        self.withFeatures({"visible":False, "icon":"tortoise"})
-    def onCall(self, arg, additionalText):
-        return arg + " " + additionalText
-
-class ActionWithContextActionsContextAction3(Action):
-    def onConfigure(self):
-        self.withLabel("Context action 3").withArgs([
-            StringType("arg1").withLabel("Argument 1"),
-            StringType("arg2").withLabel("Argument 2"),
-            StringType("additionalText").withLabel("Additional text"),
-        ]).withResult(StringType())
-        self.withFeatures({"visible":False, "icon":"tortoise"})
-    def onCall(self, arg1, arg2, additionalText):
-        return arg1 + " " + arg2 + " " + additionalText
-
-class ActionWithContextActionsContextAction4(Action):
-    def onConfigure(self):
-        self.withLabel("Context action 4").withArgs([
-            StringType("arg1NotVisible").withLabel("Argument 1 not visible").withFeatures({"visible":False}),
-            StringType("arg2").withLabel("Argument 2"),
-        ]).withResult(StringType())
-        self.withFeatures({"visible":False, "icon":"tortoise"})
-    def onCall(self, arg1NotVisible, arg2):
-        return arg1NotVisible + " " + arg2
-
-class ActionWithContextActionsContextAction5(Action):
-    def onConfigure(self):
-        self.withLabel("Context action 5").withArgs([
-            RecordType("arg").withFields([
-                StringType("arg1").withLabel("Argument 1"),
-                StringType("arg2").withLabel("Argument 2")
-            ]).withFeatures({"visible":False}),
-            StringType("additionalText").withLabel("Additional text")
-        ]).withResult(StringType())
-        self.withFeatures({"visible":False, "icon":"tortoise"})
-    def onCall(self, arg, additionalText):
-        return arg["arg1"] + " " + additionalText
 
 # Unsupported by the mobile client application.
 class OutputStreamResultAction(Action):

@@ -16,6 +16,11 @@
     <knowledgeBases>
         <knowledgeBase name="demo" label="Demo">
             <file>sponge_demo.py</file>
+            <file>sponge_demo_choose_color.py</file>
+            <file>sponge_demo_depending.py</file>
+            <file>sponge_demo_binary_result.py</file>
+            <file>sponge_demo_context_actions_action.py</file>
+            <file>sponge_demo_context_actions_record.py</file>
         </knowledgeBase>
         <knowledgeBase name="demoForms" label="Action forms/Base">
             <file>sponge_demo_forms_base.py</file>
@@ -29,11 +34,12 @@
             <file>sponge_demo_forms_library_records.py</file>
         </knowledgeBase>
         <knowledgeBase name="demoPlus" label="Demo plus">
-            <file>sponge_demo_plus.py</file>
+            <file>sponge_demo_doodles.py</file>
         </knowledgeBase>
         <knowledgeBase name="digits" label="Digits">
             <file>${digits.home}/actions/digits_common.py</file>
             <file>${digits.home}/actions/digits_predict.py</file>
+            <file>${digits.home}/actions/digits_predict_probabilities.py</file>
             <file>sponge_demo_digits.py</file>
         </knowledgeBase>
         <knowledgeBase name="digitsLearn" label="Digits learn">

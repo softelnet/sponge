@@ -22,13 +22,5 @@ class DigitsPredict(Action):
             self.logger.debug("Prediction: {}, probability: {}", prediction, probability)
             return int(prediction)
 
-class DigitsPredictProbabilities(Action):
-    def onConfigure(self):
-        self.withLabel("Recognize a digit (probabilities)").withDescription("Recognizes a handwritten digit returning probabilities")
-        self.withArg(createImageType("image")).withResult(MapType(StringType(), NumberType()).withLabel("Digit probabilities"))
-        self.withFeature("icon", "brain")
-    def onCall(self, image):
-        return py4j.facade.predict(image)
-
 def imageClassifierServiceInit(py4jPlugin):
     SpongeUtils.awaitUntil(lambda: py4jPlugin.facade.isReady())

@@ -10,14 +10,18 @@
 
     <knowledgeBases>
         <knowledgeBase name="grovepi" label="Grove Pi">
-            <file>sponge_iot_grovepi.py</file>
             <file>sponge_iot_grovepi_device.py</file>
+            <file>sponge_iot_grovepi.py</file>
+            <file>sponge_iot_grovepi_manage_lcd.py</file>
+            <file>sponge_iot_grovepi_manage_sensors.py</file>
+            <file>sponge_iot_grovepi_listeners.py</file>
         </knowledgeBase>
         <knowledgeBase name="email" label="Email">
             <file>sponge_iot_email.py</file>
         </knowledgeBase>
         <knowledgeBase name="sms" label="SMS">
             <file>sponge_iot_sms.py</file>
+            <file>sponge_iot_sms_notification.py</file>
         </knowledgeBase>
         <knowledgeBase name="camera" label="Camera">
             <file>sponge_iot_camera.py</file>

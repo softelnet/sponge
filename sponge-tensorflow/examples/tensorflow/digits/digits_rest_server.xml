@@ -5,6 +5,7 @@
         <knowledgeBase name="digits" label="Digits">
             <file>${sponge.configDir}/actions/digits_common.py</file>
             <file>${sponge.configDir}/actions/digits_predict.py</file>
+            <file>${sponge.configDir}/actions/digits_predict_probabilities.py</file>
             <file>${sponge.configDir}/actions/digits_learn.py</file>
             <file>digits_rest_server.py</file>
         </knowledgeBase>

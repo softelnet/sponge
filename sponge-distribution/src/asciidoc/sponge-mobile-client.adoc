@@ -12,10 +12,12 @@ image::mobile_architecture.svg[title="The mobile application architecture",width
 
 One of many use cases of the application is to connect to IoT devices that have {sponge} installed and execute available actions. Different types of such devices provide different sets of actions that are specific to a device features. For example one device could have a camera and provide an action to take a picture. Another device could have a temperature sensor and provide its readings or have a machine learning model and provide predictions.
 
-The mobile application uses several {sponge} concepts such as actions and action arguments metadata, data types metadata, action and data type features, annotated values, provided action arguments and categories. It supports the https://en.wikipedia.org/wiki/Convention_over_configuration[convention over configuration] paradigm.
+The mobile application uses several {sponge} concepts such as actions and action arguments metadata, data types metadata, action and data type features, annotated values, provided action arguments and categories. It supports the convention over configuration paradigm.
 
-== Features
-The following chapters show the key features of the mobile application.
+You could build a customized GUI using your own Flutter code that will call the same {sponge} actions. In that case the generic {sponge} mobile client would be used as a Flutter library in your Flutter project.
+
+== Functionalities
+The following chapters show the key functionalities of the mobile application.
 
 === Connections
 
@@ -58,34 +60,7 @@ Actions may have read only, provided arguments only to show a data from the serv
 .The definition of the action that manages the Raspberry Pi LCD display
 [source,python]
 ----
-class ManageLcd(Action):
-    def onConfigure(self):
-        self.withLabel("Manage the LCD text and color")
-        self.withDescription("Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property.")
-        self.withArgs([
-            StringType("currentText").withMaxLength(256).withNullable(True).withFeatures({"maxLines":2})
-                .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            StringType("text").withMaxLength(256).withNullable(True).withFeatures({"maxLines":2})
-                .withLabel("Text to display").withDescription("The text that will be displayed in the LCD.").withProvided(ProvidedMeta().withValue()),
-            StringType("color").withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"})
-                .withLabel("LCD color").withDescription("The LCD color.").withProvided(ProvidedMeta().withValue().withOverwrite()),
-            BooleanType("clearText").withNullable(True).withDefaultValue(False)
-                .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
-        ]).withNoResult()
-    def onCall(self, currentText, text, color, clearText = None):
-        sponge.call("SetLcd", [text, color, clearText])
-    def onProvideArgs(self, context):
-        grovePiDevice = sponge.getVariable("grovePiDevice")
-        if "currentText" in context.names:
-            context.provided["currentText"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "text" in context.names:
-            context.provided["text"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "color" in context.names:
-            context.provided["color"] = ProvidedValue().withValue(grovePiDevice.getLcdColor())
-
-class SetLcd(Action):
-    def onCall(self, text, color, clearText = None):
-        sponge.getVariable("grovePiDevice").setLcd("" if (clearText or text is None) else text, color)
+include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_grovepi_manage_lcd.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_manage_sensors.jpg[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -95,52 +70,7 @@ The action call screen allows editing the action arguments.
 .The definition of the action that manages the Grove Pi sensors and actuators
 [source,python]
 ----
-class ManageSensorActuatorValues(Action):
-    def onConfigure(self):
-        self.withLabel("Manage the sensor and actuator values").withDescription("Provides management of the sensor and actuator values.")
-        self.withArgs([
-            NumberType("temperatureSensor").withNullable().withLabel(u"Temperature sensor (°C)").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("humiditySensor").withNullable().withLabel(u"Humidity sensor (%)").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("lightSensor").withNullable().withLabel(u"Light sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("rotarySensor").withNullable().withLabel(u"Rotary sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("soundSensor").withNullable().withLabel(u"Sound sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            BooleanType("redLed").withLabel("Red LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
-            IntegerType("blueLed").withMinValue(0).withMaxValue(255).withLabel("Blue LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
-            BooleanType("buzzer").withLabel("Buzzer").withProvided(ProvidedMeta().withValue().withOverwrite())
-        ]).withNoResult()
-    def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
-        grovePiDevice = sponge.getVariable("grovePiDevice")
-        grovePiDevice.setRedLed(redLed)
-        grovePiDevice.setBlueLed(blueLed)
-        grovePiDevice.setBuzzer(buzzer)
-    def onProvideArgs(self, context):
-        values = sponge.call("GetSensorActuatorValues", [context.names])
-        for name, value in values.iteritems():
-            context.provided[name] = ProvidedValue().withValue(value)
-
-class GetSensorActuatorValues(Action):
-    def onCall(self, names):
-        values = {}
-        grovePiDevice = sponge.getVariable("grovePiDevice")
-        if "temperatureSensor" or "humiditySensor" in names:
-            th = grovePiDevice.getTemperatureHumiditySensor()
-            if "temperatureSensor" in names:
-                values["temperatureSensor"] = th.temperature if th else None
-            if "humiditySensor" in names:
-                values["humiditySensor"] = th.humidity if th else None
-        if "lightSensor" in names:
-            values["lightSensor"] = grovePiDevice.getLightSensor()
-        if "rotarySensor" in names:
-            values["rotarySensor"] = grovePiDevice.getRotarySensor().factor
-        if "soundSensor" in names:
-            values["soundSensor"] = grovePiDevice.getSoundSensor()
-        if "redLed" in names:
-            values["redLed"] = grovePiDevice.getRedLed()
-        if "blueLed" in names:
-            values["blueLed"] = grovePiDevice.getBlueLed()
-        if "buzzer" in names:
-            values["buzzer"] = grovePiDevice.getBuzzer()
-        return values
+include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_grovepi_manage_sensors.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_send_sms.jpg[title="The action call that sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -150,15 +80,7 @@ Actions arguments may be edited in multiline text fields.
 .The definition of the action that sends an SMS from the Raspberry Pi
 [source,python]
 ----
-class SendSms(Action):
-    def onConfigure(self):
-        self.withLabel("Send an SMS").withDescription("Sends a new SMS.")
-        self.withArgs([
-            StringType("recipient").withFormat("phone").withLabel("Recipient").withDescription("The SMS recipient."),
-            StringType("message").withMaxLength(160).withFeatures({"maxLines":5}).withLabel("Message").withDescription("The SMS message.")
-        ]).withNoResult()
-    def onCall(self, recipient, message):
-        gsm.sendSms(recipient, message)
+include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_sms.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_color.jpg[title="The action call argument editor for a color type",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -168,16 +90,7 @@ The color picker widget allows a user to choose a color as an argument value.
 .The definition of the action that takes a color argument
 [source,python]
 ----
-class ChooseColor(Action):
-    def onConfigure(self):
-        self.withLabel("Choose a color").withDescription("Shows a color argument.")
-        self.withArg(
-            StringType("color").withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"})
-                .withLabel("Color").withDescription("The color.")
-        )
-        self.withResult(StringType())
-    def onCall(self, color):
-        return ("The chosen color is " + color) if color else "No color chosen"
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_choose_color.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_digit_drawing.jpg[title="The action call argument editor for a digit drawing",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -187,23 +100,7 @@ The drawing panel allows a user to paint an image that will be set as an argumen
 .The definition of the action that recognizes a handwritten digit
 [source,python]
 ----
-class DigitsPredict(Action):
-    def onConfigure(self):
-        self.withLabel("Recognize a digit").withDescription("Recognizes a handwritten digit")
-        self.withArg(createImageType("image")).withResult(IntegerType().withLabel("Recognized digit"))
-    def onCall(self, image):
-        predictions = py4j.facade.predict(image)
-        prediction = max(predictions, key=predictions.get)
-        probability = predictions[prediction]
-
-        # Handle the optional predictionThreshold Sponge variable.
-        predictionThreshold = sponge.getVariable("predictionThreshold", None)
-        if predictionThreshold and probability < float(predictionThreshold):
-            self.logger.debug("The prediction {} probability {} is lower than the threshold {}.", prediction, probability, predictionThreshold)
-            return None
-        else:
-            self.logger.debug("Prediction: {}, probability: {}", prediction, probability)
-            return int(prediction)
+include::{rootDir}/sponge-tensorflow/examples/tensorflow/digits/actions/digits_predict.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_digit.jpg[title="The action call for an attribute of type drawing",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -218,21 +115,10 @@ image::screens/mobile/action_call_doodle_drawing.jpg[title="The action call argu
 
 Drawing panels can be configured in a corresponding action definition, where a color, a background color etc. could be specified.
 
-.The definition of the action that requires drawing a doodle
+.The definitions of actions that represent drawing and viewing a doodle
 [source,python]
 ----
-class DrawAndUploadDoodle(Action):
-    def onConfigure(self):
-        self.withLabel("Draw and upload a doodle").withDescription("Shows a canvas to draw a doodle and uploads it to the server")
-        self.withArg(
-            BinaryType("image").withLabel("Doodle").withMimeType("image/png")
-                   .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":5})\
-        )
-        self.withResult(StringType().withLabel("Status"))
-    def onCall(self, image):
-        fileName = str(System.currentTimeMillis()) + ".png"
-        SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + fileName)
-        return "Uploaded as " + fileName
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_doodles.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_doodle.jpg[title="The action call for a doodle drawing as an argument",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -246,69 +132,7 @@ Action arguments may depend on each other. Argument dependencies are supported i
 .The definition of the action that provides arguments with dependencies
 [source,python]
 ----
-class DependingArgumentsAction(Action):
-    def onConfigure(self):
-        self.withLabel("Action with depending arguments")
-        self.withArgs([
-            StringType("continent").withLabel("Continent").withProvided(ProvidedMeta().withValueSet()),
-            StringType("country").withLabel("Country").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
-            StringType("city").withLabel("City").withProvided(ProvidedMeta().withValueSet().withDependency("country")),
-            StringType("river").withLabel("River").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
-            StringType("weather").withLabel("Weather").withProvided(ProvidedMeta().withValueSet())
-        ])
-        self.withResult(StringType().withLabel("Sentences"))
-    def onCall(self, continent, country, city, river, weather):
-        return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
-    def onProvideArgs(self, context):
-        if "continent" in context.names:
-            context.provided["continent"] = ProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
-        if "country" in context.names:
-            continent = context.current["continent"]
-            if continent == "Africa":
-                countries = ["Nigeria", "Ethiopia", "Egypt"]
-            elif continent == "Asia":
-                countries = ["China", "India", "Indonesia"]
-            elif continent == "Europe":
-                countries = ["Russia", "Germany", "Turkey"]
-            else:
-                countries = []
-            context.provided["country"] = ProvidedValue().withValueSet(countries)
-        if "city" in context.names:
-            country = context.current["country"]
-            if country == "Nigeria":
-                cities = ["Lagos", "Kano", "Ibadan"]
-            elif country == "Ethiopia":
-                cities = ["Addis Ababa", "Gondar", "Mek'ele"]
-            elif country == "Egypt":
-                cities = ["Cairo", "Alexandria", "Giza"]
-            elif country == "China":
-                cities = ["Guangzhou", "Shanghai", "Chongqing"]
-            elif country == "India":
-                cities = ["Mumbai", "Delhi", "Bangalore"]
-            elif country == "Indonesia":
-                cities = ["Jakarta", "Surabaya", "Medan"]
-            elif country == "Russia":
-                cities = ["Moscow", "Saint Petersburg", "Novosibirsk"]
-            elif country == "Germany":
-                cities = ["Berlin", "Hamburg", "Munich"]
-            elif country == "Turkey":
-                cities = ["Istanbul", "Ankara", "Izmir"]
-            else:
-                cities = []
-            context.provided["city"] = ProvidedValue().withValueSet(cities)
-        if "river" in context.names:
-            continent = context.current["continent"]
-            if continent == "Africa":
-                rivers = ["Nile", "Chambeshi", "Niger"]
-            elif continent == "Asia":
-                rivers = ["Yangtze", "Yellow River", "Mekong"]
-            elif continent == "Europe":
-                rivers = ["Volga", "Danube", "Dnepr"]
-            else:
-                rivers = []
-            context.provided["river"] = ProvidedValue().withValueSet(rivers)
-        if "weather" in context.names:
-            context.provided["weather"] = ProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_depending.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -324,63 +148,103 @@ Actions may return contents that can be viewed for example as a HTML or a PDF fi
 .The definitions of the actions that return a HTML and a PDF file respectively
 [source,python]
 ----
-class HtmlFileOutput(Action):
-    def onConfigure(self):
-        self.withLabel("HTML file output").withDescription("Returns the HTML file.")
-        self.withNoArgs().withResult(BinaryType().withMimeType("text/html").withLabel("HTML file"))
-    def onCall(self):
-        return String("""
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-    <head>
-      <title>HTML page</title>
-    </head>
-    <body>
-        <!-- Main content -->
-        <h1>Header</h1>
-        <p>Some text
-    </body>
-</html>
-""").getBytes("UTF-8")
-
-class PdfFileOutput(Action):
-    def onConfigure(self):
-        self.withLabel("PDF file output").withDescription("Returns the PDF file.")
-        self.withNoArgs().withResult(BinaryType().withMimeType("application/pdf").withLabel("PDF file"))
-    def onCall(self):
-        return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
-                              .outputAsBinary()).run().outputBinary
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_binary_result.py[lines=5..-1]
 ----
 
 image::screens/mobile/actions_console_result.jpg[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return a console output, for example the result of running the `df -h` command on the server.
 
-.The definition of the action that returns an OS command output
+.The definitions of the actions that returns OS commands output
 [source,python]
 ----
-class OsGetDiskSpaceInfo(Action):
-    def onConfigure(self):
-        self.withLabel("Get disk space info").withDescription("Returns the disk space info.")
-        self.withNoArgs().withResult(StringType().withFormat("console").withLabel("Disk space info"))
-    def onCall(self):
-        return sponge.process(ProcessConfiguration.builder("df", "-h").outputAsString()).run().outputString
+include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_os.py[lines=5..-1]
 ----
 
 image::screens/mobile/actions_markdown_result.jpg[title="The action Markdown formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return a https://en.wikipedia.org/wiki/Markdown[Markdown] formatted text.
 
-=== User experience
+== Advanced use cases
+
+=== Context actions
+Context actions can be specified for actions, record arguments and list elements (see the list-details) to provide related, customized sub-actions. Context actions should be specified as the `contextActions` feature statically for a type or an action or dynamically for an annotated value. The latter option takes precedence.
+
+image::screens/mobile/action_context_actions.jpg[title="The action with context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+
+.The definition of the action with context actions
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_context_actions_action.py[lines=5..-1]
+----
+
+Modes of passing arguments to a context action:
+
+* Default (e.g. `"ContextAction"`). In case of a context action for an action, all action arguments as a record (represented as a map) will be passed as the first argument of the context action. In case of a record argument or a list element, the record or the list element value will be passed as the first argument respectively.
+* Explicit substitution (format `"ContextAction(targetArgName=sourceArgName,...)"`, e.g. `"ContextAction(contextArg1=arg1,contextArg2=arg2)"`). In case of a context action for an action, the argument `contextArg1` of the context action will be set to a value of the argument `arg1` of the parent action and the argument `contextArg2` of the context action will be set to a value of the argument `arg2`.
+* Implicit substitution (format `"ContextAction(sourceArgName,...)"`, e.g. `"ContextAction(arg1)"`). In case of a context action for an action, the first argument of the context action will be set to a value of the argument `arg1` of the parent action.
+* No arguments passed (e.g. `"ContextAction()"`).
+
+The target argument must be have the same type as the source value.
+
+A source argument name could be a path if a source value is a record, e.g. `"ContextAction(contextArg1: arg1.field1)"`. The `this` keyword can be used as the source argument name. In case of a context action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
+
+If a context action requires more arguments than passed from a parent action, a new action call screen will be shown. If a context value is an annotated value, the screen will show a header containing a label of the annotated value.
+
+The context actions feature is not propagated in an annotated value feature to sub-actions.
+
+=== List-details
+
+image::screens/mobile/action_form_list_actions_list.jpg[title="The list-details action in the action list",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_main_action.jpg[title="The list-details main action screen",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subactions.jpg[title="The CRUD and context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_create.jpg[title="The create/add sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_read.jpg[title="The read/view sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_update.jpg[title="The update/modify sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_delete.jpg[title="The delete/remove sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_context_binary.jpg[title="The context action returning a binary result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_context_no_result.jpg[title="The context action with no result",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_context_args.jpg[title="The context action with an additional argument",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_form_list_details_subaction_context_args_result.jpg[title="The result of the context action with an additional argument",width=300,pdfwidth=35%,scaledwidth=35%]
+
+.The definitions of actions implementing the list-details
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_forms_library_records.py[lines=5..-1]
+----
+
+The main action should have a list argument that is provided with the overwrite option. The action shouldn't be callable. The list argument type can be annotated and the provided list elements may have labels (`AnnotatedValue().withLabel()`) and descriptions. The list argument may have the following features: `createAction`, `readAction`, `updateAction`, `deleteAction`. Their values are the sub-action names that will be called to perform the CRUD operations.
+
+There are two types of sub-actions: CRUD actions and context actions. CRUD actions implement _create_, _read_, _update_ and _delete_ operations. Context actions implement customized operations related to a list element.
+
+The CRUD actions should not be visible in the actions list so they should have the `visible` feature set to `False`.
+
+In the default scenario _read_, _update_ and _delete_ actions should have the first argument corresponding to the value of the list element. In most cases the argument `visible` feature should be set to `False` to hide it. Its type should be the same as the list element's type. The value of the list element will be passed as this argument. In the case of a _create_ action, no argument corresponding to any list element is necessary.
+
+The result of a _create_, an _update_ and a _delete_ action is ignored and should be set to `withNoResult`.
+
+After calling a CRUD action the main action arguments are refreshed.
+
+== User experience
 
 image::screens/mobile/dark_theme.jpg[title="The application dart theme",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The application may be switched to the dark theme in the settings.
 
-=== Included demos
+== Included demos
 The access to actions in the mobile application is generic. However the application may include demos that use a customized UI.
 
-==== Handwritten digit recognition
+=== Handwritten digit recognition
 
 image::screens/mobile/drawer_digits.jpg[title="The navigation drawer if connected to a Sponge instance that supports a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
 

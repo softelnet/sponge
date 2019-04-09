@@ -5,6 +5,8 @@ Demo Forms - Library as records
 from org.openksavi.sponge.util.process import ProcessConfiguration
 
 def createBookRecordType(name):
+    """ Creates a book record type.
+    """
     return RecordType(name).withFields([
         IntegerType("id").withLabel("ID").withNullable().withFeature("visible", False),
         StringType("author").withLabel("Author"),
@@ -25,7 +27,7 @@ class RecordLibraryForm(Action):
                 )
         ]).withNoResult().withCallable(False)
         self.withFeatures({
-            "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
+            "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
         })
         self.withFeature("icon", "library-books")
     def onProvideArgs(self, context):
@@ -64,9 +66,9 @@ class RecordCreateBook(Action):
 class RecordReadBook(Action):
     def onConfigure(self):
         self.withLabel("View the book")
-        # Must be withOverwrite to replace with the current value. .withOverwrite()
+        # Must set withOverwrite to replace with the current value.
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
-            ProvidedMeta().withValue().withDependency("book.id")))
+            ProvidedMeta().withValue().withOverwrite().withDependency("book.id")))
         self.withNoResult().withCallable(False)
         self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
@@ -78,9 +80,9 @@ class RecordUpdateBook(Action):
     def onConfigure(self):
         self.withLabel("Modify the book")
         self.withArg(
-            # Must be withOverwrite to replace with the current value. .withOverwrite()
+            # Must set withOverwrite to replace with the current value.
             createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
-                    ProvidedMeta().withValue().withDependency("book.id")).withFields([
+                    ProvidedMeta().withValue().withOverwrite().withDependency("book.id")).withFields([
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()

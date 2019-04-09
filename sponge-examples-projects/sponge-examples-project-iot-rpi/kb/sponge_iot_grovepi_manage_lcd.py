@@ -1,0 +1,34 @@
+"""
+Sponge Knowledge base
+GrovePi
+"""
+
+class ManageLcd(Action):
+    def onConfigure(self):
+        self.withLabel("Manage the LCD text and color")
+        self.withDescription("Provides management of the LCD properties (display text and color). A null value doesn't change an LCD property.")
+        self.withArgs([
+            StringType("currentText").withMaxLength(256).withNullable(True).withFeatures({"maxLines":2})
+                .withLabel("Current LCD text").withDescription("The currently displayed LCD text.").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            StringType("text").withMaxLength(256).withNullable(True).withFeatures({"maxLines":2})
+                .withLabel("Text to display").withDescription("The text that will be displayed in the LCD.").withProvided(ProvidedMeta().withValue()),
+            StringType("color").withMaxLength(6).withNullable(True).withFeatures({"characteristic":"color"})
+                .withLabel("LCD color").withDescription("The LCD color.").withProvided(ProvidedMeta().withValue().withOverwrite()),
+            BooleanType("clearText").withNullable(True).withDefaultValue(False)
+                .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
+        ]).withNoResult()
+        self.withFeature("icon", "monitor")
+    def onCall(self, currentText, text, color, clearText = None):
+        sponge.call("SetLcd", [text, color, clearText])
+    def onProvideArgs(self, context):
+        grovePiDevice = sponge.getVariable("grovePiDevice")
+        if "currentText" in context.names:
+            context.provided["currentText"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
+        if "text" in context.names:
+            context.provided["text"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
+        if "color" in context.names:
+            context.provided["color"] = ProvidedValue().withValue(grovePiDevice.getLcdColor())
+
+class SetLcd(Action):
+    def onCall(self, text, color, clearText = None):
+        sponge.getVariable("grovePiDevice").setLcd("" if (clearText or text is None) else text, color)
