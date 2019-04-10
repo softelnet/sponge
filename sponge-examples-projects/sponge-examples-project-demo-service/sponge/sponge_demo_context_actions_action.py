@@ -10,7 +10,7 @@ class ActionWithContextActions(Action):
             StringType("arg2").withLabel("Argument 2")
         ]).withNoResult().withFeature("contextActions", [
             "ActionWithContextActionsContextAction1", "ActionWithContextActionsContextAction2(arg2)", "ActionWithContextActionsContextAction3(arg2=arg2)",
-            "ActionWithContextActionsContextAction4(arg1)", "ActionWithContextActionsContextAction5"
+            "ActionWithContextActionsContextAction4(arg1)", "ActionWithContextActionsContextAction5", "MarkdownText()"
         ])
         self.withFeature("icon", "attachment")
     def onCall(self, arg1, arg2):

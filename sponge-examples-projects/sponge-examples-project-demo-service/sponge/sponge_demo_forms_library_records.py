@@ -101,7 +101,7 @@ class RecordDeleteBook(Action):
     def onConfigure(self):
         self.withLabel("Remove the book")
         self.withArg(createBookRecordType("book").withAnnotated()).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel", "icon":"delete"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel", "icon":"delete", "confirmation":True})
 
     def onCall(self, book):
         global LIBRARY

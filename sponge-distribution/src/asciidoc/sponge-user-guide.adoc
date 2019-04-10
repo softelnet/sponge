@@ -125,7 +125,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 
 See the <<provided_arguments,provided action arguments>> as a use case of provided types.
 
-.Supported types
+.Data types
 [cols="1,5"]
 |===
 |Type |Description
@@ -159,6 +159,9 @@ See the <<provided_arguments,provided action arguments>> as a use case of provid
 
 |`ObjectType`
 |An object. This type requires a class name (typically a Java class name). For example: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject[]")`.
+
+|`RecordType`
+|A record type. This type requires a list of named record field types. A value of this type has to be an instance of Map with elements corresponding to the field names and values. E.g.: `RecordType("book").withFields([StringType("author").withLabel("Author"), StringType("title").withLabel("Title")])`.
 
 |`StreamType`
 |A stream type. Supports only output streams. It can be used only as a result of an action. A value of this type has to be an instance of `OutputStreamValue`.
