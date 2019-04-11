@@ -519,10 +519,10 @@ public class MidiPlugin extends JPlugin {
     /**
      * Starts playing the MIDI file using the sequencer.
      *
-     * @param midiFileName the MIDI file name.
+     * @param midiFilename the MIDI filename.
      */
-    public void startPlay(String midiFileName) {
-        startPlay(new File(midiFileName));
+    public void startPlay(String midiFilename) {
+        startPlay(new File(midiFilename));
     }
 
     /**

@@ -43,13 +43,13 @@ public class FileKnowledgeBaseScriptProvider extends BaseKnowledgeBaseScriptProv
         Charset charset = script.getCharset() != null ? script.getCharset() : Charset.defaultCharset();
 
         logger.debug("Using knowledge base file provider: {}", engine.getKnowledgeBaseFileProvider().getClass());
-        List<KnowledgeBaseReaderHolder> readers = engine.getKnowledgeBaseFileProvider().getReaders(engine, script.getFileName(), charset);
+        List<KnowledgeBaseReaderHolder> readers = engine.getKnowledgeBaseFileProvider().getReaders(engine, script.getFilename(), charset);
 
         if (readers.isEmpty()) {
             if (script.isRequired()) {
-                throw new ConfigException("Knowledge base file(s) " + script.getFileName() + " not found");
+                throw new ConfigException("Knowledge base file(s) " + script.getFilename() + " not found");
             } else {
-                logger.info("The optional knowledge base file(s) " + script.getFileName() + " not found.");
+                logger.info("The optional knowledge base file(s) " + script.getFilename() + " not found.");
             }
         }
 

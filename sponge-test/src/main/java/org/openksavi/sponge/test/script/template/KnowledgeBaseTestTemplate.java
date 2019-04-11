@@ -57,7 +57,7 @@ public class KnowledgeBaseTestTemplate {
 
     public static void testLoad(KnowledgeBaseType type) {
         SpongeEngine engine = DefaultSpongeEngine.builder()
-                .knowledgeBase(TestUtils.DEFAULT_KB, ScriptTestUtils.getScriptKnowledgeBaseFileName(type, "knowledge_base_load")).build();
+                .knowledgeBase(TestUtils.DEFAULT_KB, ScriptTestUtils.getScriptKnowledgeBaseFilename(type, "knowledge_base_load")).build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 
@@ -145,7 +145,7 @@ public class KnowledgeBaseTestTemplate {
 
     public static void testScriptOverriding(KnowledgeBaseType type) {
         SpongeEngine engine =
-                DefaultSpongeEngine.builder().config(ScriptTestUtils.getConfigFileName(type, "knowledge_base_script_overriding")).build();
+                DefaultSpongeEngine.builder().config(ScriptTestUtils.getConfigFilename(type, "knowledge_base_script_overriding")).build();
         engine.getConfigurationManager().setAutoEnable(false);
         engine.startup();
 

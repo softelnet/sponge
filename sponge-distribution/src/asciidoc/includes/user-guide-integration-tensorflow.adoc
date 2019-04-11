@@ -37,7 +37,7 @@ source ./bin/activate
 .The main components
 [cols="1,4"]
 |===
-|File name |Description
+|Filename |Description
 
 |{sourcesUrl}/sponge-tensorflow/sponge-tensorflow/src/main/java/org/openksavi/sponge/tensorflow/ImageClassifierService.java[`ImageClassifierService.java`]
 |The Java interface of the image classifier Python service. This interface is used by Py4J to expose Python functionality to a Java process.

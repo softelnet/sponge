@@ -154,15 +154,15 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
 
         List<KnowledgeBaseScript> scripts = new ArrayList<>();
         for (Configuration fileNode : fileNodes) {
-            String fileName = fileNode.getValue();
+            String filename = fileNode.getValue();
 
-            if (StringUtils.isEmpty(fileName)) {
-                throw new SpongeException("Knowledge base file name must not be empty");
+            if (StringUtils.isEmpty(filename)) {
+                throw new SpongeException("Knowledge base filename must not be empty");
             }
 
             String charset = fileNode.getAttribute(CFG_KB_FILE_ATTR_CHARSET, null);
 
-            scripts.add(new FileKnowledgeBaseScript(fileName, charset != null ? Charset.forName(charset) : null,
+            scripts.add(new FileKnowledgeBaseScript(filename, charset != null ? Charset.forName(charset) : null,
                     fileNode.getBooleanAttribute(CFG_KB_FILE_ATTR_REQUIRED, FileKnowledgeBaseScript.DEFAULT_REQUIRED)));
         }
 
@@ -426,8 +426,8 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             throw new SpongeException("Cannot infer knowledge base '" + knowledgeBaseName + "' type because it has no file-based scripts");
         }
 
-        String fileName = firstFileKnowledgeBaseScriptO.get().getFileName();
-        String extension = FilenameUtils.getExtension(fileName);
+        String filename = firstFileKnowledgeBaseScriptO.get().getFilename();
+        String extension = FilenameUtils.getExtension(filename);
 
         Optional<KnowledgeBaseType> typeO = knowledgeBaseInterpreterFactories.values().stream()
                 .filter(factory -> factory.getSupportedType().getFileExtensions().stream()
@@ -435,7 +435,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
                 .map(factory -> factory.getSupportedType()).findFirst();
 
         if (!typeO.isPresent()) {
-            throw new SpongeException("Unsupported file extension '" + extension + "' for file '" + fileName + "' in knowledge base '"
+            throw new SpongeException("Unsupported file extension '" + extension + "' for file '" + filename + "' in knowledge base '"
                     + knowledgeBaseName + "'");
         }
 
@@ -453,7 +453,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         if (!scriptKnowledgeBase.getScripts().stream().filter(FileKnowledgeBaseScript.class::isInstance)
                 .map(FileKnowledgeBaseScript.class::cast)
                 .allMatch(script -> extensions.stream()
-                        .filter(ext -> StringUtils.equalsIgnoreCase(ext, FilenameUtils.getExtension(script.getFileName()))).findFirst()
+                        .filter(ext -> StringUtils.equalsIgnoreCase(ext, FilenameUtils.getExtension(script.getFilename()))).findFirst()
                         .isPresent())) {
             logger.warn("Incompatible file extensions found for files in knowledge base '" + scriptKnowledgeBase.getName() + "'");
         }

@@ -27,13 +27,13 @@ import org.openksavi.sponge.engine.SpongeEngine;
 public interface KnowledgeBaseFileProvider {
 
     /**
-     * Returns readers for the specified knowledge base file name (or wildcard). Returns an empty list if none found.
+     * Returns readers for the specified knowledge base filename (or wildcard). Returns an empty list if none found.
      *
      * @param engine the engine.
-     * @param fileName a knowledge base file name.
+     * @param filename a knowledge base filename.
      * @param charset a knowledge base file charset.
      *
-     * @return readers for the specified knowledge base file name.
+     * @return readers for the specified knowledge base filename.
      */
-    List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String fileName, Charset charset);
+    List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String filename, Charset charset);
 }

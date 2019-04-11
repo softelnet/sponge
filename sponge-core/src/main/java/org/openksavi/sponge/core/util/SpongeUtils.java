@@ -168,17 +168,17 @@ public abstract class SpongeUtils {
         return SerializationUtils.clone(source);
     }
 
-    public static Reader getReader(String fileName) {
-        return getReader(fileName, Charset.defaultCharset());
+    public static Reader getReader(String filename) {
+        return getReader(filename, Charset.defaultCharset());
     }
 
-    public static Reader getReader(String fileName, Charset charset) {
+    public static Reader getReader(String filename, Charset charset) {
         try {
-            if (Files.isRegularFile(Paths.get(fileName))) {
-                return Files.newBufferedReader(Paths.get(fileName), charset);
+            if (Files.isRegularFile(Paths.get(filename))) {
+                return Files.newBufferedReader(Paths.get(filename), charset);
             }
 
-            URL url = getUrlFromClasspath(fileName);
+            URL url = getUrlFromClasspath(filename);
 
             if (url != null) {
                 return new BufferedReader(new InputStreamReader(url.openStream(), charset));
@@ -186,7 +186,7 @@ public abstract class SpongeUtils {
 
             return null;
         } catch (IOException e) {
-            throw new SpongeException("Error reading " + fileName, e);
+            throw new SpongeException("Error reading " + filename, e);
         }
     }
 
@@ -744,17 +744,17 @@ public abstract class SpongeUtils {
         return UUID.randomUUID().toString();
     }
 
-    public static byte[] readFileToByteArray(String fileName) {
+    public static byte[] readFileToByteArray(String filename) {
         try {
-            return FileUtils.readFileToByteArray(new File(fileName));
+            return FileUtils.readFileToByteArray(new File(filename));
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);
         }
     }
 
-    public static void writeByteArrayToFile(byte[] bytes, String fileName) {
+    public static void writeByteArrayToFile(byte[] bytes, String filename) {
         try {
-            FileUtils.writeByteArrayToFile(new File(fileName), bytes != null ? bytes : new byte[0]);
+            FileUtils.writeByteArrayToFile(new File(filename), bytes != null ? bytes : new byte[0]);
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);
         }

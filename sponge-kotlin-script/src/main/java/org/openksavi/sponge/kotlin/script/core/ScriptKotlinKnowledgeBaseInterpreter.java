@@ -205,12 +205,12 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
     }
 
     @Override
-    protected void doLoad(Reader reader, String fileName) {
+    protected void doLoad(Reader reader, String filename) {
         Bindings bindings = getScriptEngine().getBindings(ScriptContext.ENGINE_SCOPE);
-        Object prevFileName = bindings.get(ScriptEngine.FILENAME);
+        Object prevFilename = bindings.get(ScriptEngine.FILENAME);
 
         try {
-            bindings.put(ScriptEngine.FILENAME, fileName);
+            bindings.put(ScriptEngine.FILENAME, filename);
 
             CompiledKotlinScript script = (CompiledKotlinScript) ((Compilable) getScriptEngine()).compile(reader);
             script.eval();
@@ -218,9 +218,9 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
             // Add the last script as the first.
             scripts.add(0, script);
         } catch (ScriptException e) {
-            throw SpongeUtils.wrapException(fileName, this, e);
+            throw SpongeUtils.wrapException(filename, this, e);
         } finally {
-            bindings.put(ScriptEngine.FILENAME, prevFileName);
+            bindings.put(ScriptEngine.FILENAME, prevFilename);
         }
     }
 

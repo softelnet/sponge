@@ -147,9 +147,9 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     }
 
     /**
-     * Sets the configuration file name.
+     * Sets the configuration filename.
      *
-     * @param configFilename the configuration file name.
+     * @param configFilename the configuration filename.
      * @return this Engine Builder.
      */
     public EngineBuilder<T> config(String configFilename) {

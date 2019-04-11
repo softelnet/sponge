@@ -30,6 +30,9 @@ public class OutputStreamValue {
     /** The stream content type. */
     private String contentType;
 
+    /** The stream filename. */
+    private String filename;
+
     /** The stream headers. */
     private Map<String, Object> headers = new LinkedHashMap<>();
 
@@ -56,6 +59,14 @@ public class OutputStreamValue {
         this.contentType = contentType;
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     public Map<String, Object> getHeaders() {
         return headers;
     }
@@ -66,6 +77,11 @@ public class OutputStreamValue {
 
     public OutputStreamValue withContentType(String contentType) {
         setContentType(contentType);
+        return this;
+    }
+
+    public OutputStreamValue withFilename(String filename) {
+        setFilename(filename);
         return this;
     }
 

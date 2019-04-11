@@ -118,32 +118,32 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName file name.
+     * @param filename filename.
      */
     @Override
-    public final void load(String fileName) {
-        load(fileName, Charset.defaultCharset());
+    public final void load(String filename) {
+        load(filename, Charset.defaultCharset());
     }
 
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param charset charset.
      */
     @Override
-    public final void load(String fileName, String charset) {
-        load(fileName, Charset.forName(charset));
+    public final void load(String filename, String charset) {
+        load(filename, Charset.forName(charset));
     }
 
     @Override
-    public final void load(String fileName, Charset charset) {
-        load(fileName, charset, true);
+    public final void load(String filename, Charset charset) {
+        load(filename, charset, true);
     }
 
     @Override
-    public final void load(String fileName, Charset charset, boolean required) {
-        load(new FileKnowledgeBaseScript(fileName, charset, required));
+    public final void load(String filename, Charset charset, boolean required) {
+        load(new FileKnowledgeBaseScript(filename, charset, required));
     }
 
     @Override
@@ -158,15 +158,15 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 readers = engine.getKnowledgeBaseManager().getKnowledgeBaseScriptProvider(script).getReaders();
                 readers.forEach(reader -> {
                     if (script != null && script.getKnowledgeBase() != null) {
-                        logger.info("Loading '{}' knowledge base file: {}.", script.getKnowledgeBase().getName(), reader.getFileName());
+                        logger.info("Loading '{}' knowledge base file: {}.", script.getKnowledgeBase().getName(), reader.getFilename());
                     } else {
-                        logger.info("Loading knowledge base file: {}.", reader.getFileName());
+                        logger.info("Loading knowledge base file: {}.", reader.getFilename());
                     }
 
                     try {
-                        doLoad(reader.getReader(), reader.getFileName());
+                        doLoad(reader.getReader(), reader.getFilename());
                     } catch (Throwable e) {
-                        throw SpongeUtils.wrapException(reader.getFileName(), this, e);
+                        throw SpongeUtils.wrapException(reader.getFilename(), this, e);
                     }
                 });
             } catch (Throwable e) {
@@ -260,7 +260,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         return eval(expression);
     }
 
-    public abstract <T> T eval(Reader reader, String fileName);
+    public abstract <T> T eval(Reader reader, String filename);
 
     protected abstract ScriptKnowledgeBaseInterpreter createInterpreterInstance(SpongeEngine engine, KnowledgeBase knowledgeBase);
 

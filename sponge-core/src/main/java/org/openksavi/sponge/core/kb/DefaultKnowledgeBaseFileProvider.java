@@ -41,16 +41,16 @@ import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 /**
  * A default knowledge base file provider. Search order: relative to the current directory or classpath, in the XML configuration file
- * directory, in the Sponge home directory. Supports wildcards in file names (not directories) according to the glob pattern.
+ * directory, in the Sponge home directory. Supports wildcards in filenames (not directories) according to the glob pattern.
  */
 public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvider {
 
     @Override
-    public List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String fileName, Charset charset) {
-        Validate.notBlank(fileName, "A file name or pattern cannot be empty");
-        Path filePath = Validate.notNull(Paths.get(fileName), "A file path is null");
+    public List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String filename, Charset charset) {
+        Validate.notBlank(filename, "A filename or pattern cannot be empty");
+        Path filePath = Validate.notNull(Paths.get(filename), "A file path is null");
         Validate.notBlank(filePath.getFileName() != null ? filePath.getFileName().toString() : null,
-                "A file name or pattern cannot be empty");
+                "A filename or pattern cannot be empty");
         // Absolute path won't be looked in the config directory or the Sponge home (handled below) for wildcards.
         boolean isAbsolutePath = filePath.getParent() != null && filePath.getParent().isAbsolute();
 
@@ -58,12 +58,12 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
 
         // 1. Try to read relative to the current directory or classpath.
         // 1.1. As a non wildcard.
-        if (!(readers = getNonWildcardReaders(null, fileName, charset)).isEmpty()) {
+        if (!(readers = getNonWildcardReaders(null, filename, charset)).isEmpty()) {
             return readers;
         }
 
         // 1.2. As a wildcard.
-        if (!(readers = getWildcardReaders(filePath.getParent(), fileName, charset)).isEmpty()) {
+        if (!(readers = getWildcardReaders(filePath.getParent(), filename, charset)).isEmpty()) {
             return readers;
         }
 
@@ -71,13 +71,13 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
         String configDir = SpongeUtils.getConfigurationFileDir(engine);
         if (configDir != null) {
             // 2.1. As a non wildcard.
-            if (!(readers = getNonWildcardReaders(configDir, fileName, charset)).isEmpty()) {
+            if (!(readers = getNonWildcardReaders(configDir, filename, charset)).isEmpty()) {
                 return readers;
             }
 
             // 2.2. As a wildcard.
             if (!isAbsolutePath && !(readers = getWildcardReaders(
-                    filePath.getParent() != null ? Paths.get(configDir, filePath.getParent().toString()) : Paths.get(configDir), fileName,
+                    filePath.getParent() != null ? Paths.get(configDir, filePath.getParent().toString()) : Paths.get(configDir), filename,
                     charset)).isEmpty()) {
                 return readers;
             }
@@ -87,13 +87,13 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
         String home = engine.getConfigurationManager().getHome();
         if (home != null) {
             // 3.1. As a non wildcard.
-            if (!(readers = getNonWildcardReaders(home, fileName, charset)).isEmpty()) {
+            if (!(readers = getNonWildcardReaders(home, filename, charset)).isEmpty()) {
                 return readers;
             }
 
             // 3.2. As a wildcard.
             if (!isAbsolutePath && !(readers = getWildcardReaders(
-                    filePath.getParent() != null ? Paths.get(home, filePath.getParent().toString()) : Paths.get(home), fileName, charset))
+                    filePath.getParent() != null ? Paths.get(home, filePath.getParent().toString()) : Paths.get(home), filename, charset))
                             .isEmpty()) {
                 return readers;
             }
@@ -102,19 +102,19 @@ public class DefaultKnowledgeBaseFileProvider implements KnowledgeBaseFileProvid
         return Collections.emptyList();
     }
 
-    protected List<KnowledgeBaseReaderHolder> getNonWildcardReaders(String dir, String fileName, Charset charset) {
-        String fullFileName = dir != null ? Paths.get(dir, fileName).toString() : fileName;
-        Reader reader = SpongeUtils.getReader(fullFileName, charset);
+    protected List<KnowledgeBaseReaderHolder> getNonWildcardReaders(String dir, String filename, Charset charset) {
+        String fullFilename = dir != null ? Paths.get(dir, filename).toString() : filename;
+        Reader reader = SpongeUtils.getReader(fullFilename, charset);
 
-        return reader != null ? Arrays.asList(new KnowledgeBaseReaderHolder(reader, fullFileName)) : Collections.emptyList();
+        return reader != null ? Arrays.asList(new KnowledgeBaseReaderHolder(reader, fullFilename)) : Collections.emptyList();
     }
 
-    protected List<KnowledgeBaseReaderHolder> getWildcardReaders(Path dir, String fileName, Charset charset) {
+    protected List<KnowledgeBaseReaderHolder> getWildcardReaders(Path dir, String filename, Charset charset) {
         Path finalDir = dir != null ? dir : Paths.get(".");
-        String fileNamePattern = Paths.get(fileName).getFileName().toString();
+        String filenamePattern = Paths.get(filename).getFileName().toString();
         List<Path> files = new ArrayList<>();
 
-        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(finalDir, fileNamePattern)) {
+        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(finalDir, filenamePattern)) {
             dirStream.forEach(files::add);
         } catch (NotDirectoryException | NoSuchFileException e) {
             // Not directory or non-existing directory.

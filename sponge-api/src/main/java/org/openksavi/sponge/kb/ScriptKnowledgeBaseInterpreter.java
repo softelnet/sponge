@@ -34,34 +34,34 @@ public interface ScriptKnowledgeBaseInterpreter extends KnowledgeBaseInterpreter
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName file name.
+     * @param filename filename.
      */
-    void load(String fileName);
+    void load(String filename);
 
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param charset charset.
      */
-    void load(String fileName, String charset);
+    void load(String filename, String charset);
 
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param charset charset.
      */
-    void load(String fileName, Charset charset);
+    void load(String filename, Charset charset);
 
     /**
      * Loads the knowledge base from the file.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param charset charset.
      * @param required {@code true} if the file is required.
      */
-    void load(String fileName, Charset charset, boolean required);
+    void load(String filename, Charset charset, boolean required);
 
     /**
      * Loads the knowledge base from the script.

@@ -41,27 +41,27 @@ public class SpringKnowledgeBaseFileProvider implements KnowledgeBaseFileProvide
     private KnowledgeBaseFileProvider defaultKnowledgeBaseFileProvider = new DefaultKnowledgeBaseFileProvider();
 
     @Override
-    public List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String fileName, Charset charset) {
+    public List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String filename, Charset charset) {
         try {
             File file = null;
             try {
-                file = ResourceUtils.getFile(fileName);
+                file = ResourceUtils.getFile(filename);
             } catch (FileNotFoundException e) {
                 // Handled hereafter.
             }
 
             if (file != null && file.exists()) {
-                return Arrays.asList(new KnowledgeBaseReaderHolder(new InputStreamReader(new FileInputStream(file), charset), fileName));
+                return Arrays.asList(new KnowledgeBaseReaderHolder(new InputStreamReader(new FileInputStream(file), charset), filename));
             }
 
-            List<KnowledgeBaseReaderHolder> springResolverReaders = SpringUtils.getReadersFromResourcePatternResolver(fileName, charset);
+            List<KnowledgeBaseReaderHolder> springResolverReaders = SpringUtils.getReadersFromResourcePatternResolver(filename, charset);
             if (!springResolverReaders.isEmpty()) {
                 return springResolverReaders;
             }
 
-            return defaultKnowledgeBaseFileProvider.getReaders(engine, fileName, charset);
+            return defaultKnowledgeBaseFileProvider.getReaders(engine, filename, charset);
         } catch (IOException e) {
-            throw new SpongeException("Error reading " + fileName, e);
+            throw new SpongeException("Error reading " + filename, e);
         }
     }
 }

@@ -293,11 +293,11 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T eval(Reader reader, String fileName) {
+    public <T> T eval(Reader reader, String filename) {
         try {
-            return (T) shell.evaluate(reader, fileName);
+            return (T) shell.evaluate(reader, filename);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(fileName, this, e);
+            throw SpongeUtils.wrapException(filename, this, e);
         }
     }
 

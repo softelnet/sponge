@@ -22,7 +22,7 @@ public enum InputRedirect {
 
     /**
      * Sets the subprocess input as the {@link org.openksavi.sponge.util.process.ProcessConfiguration#getInputFile()} file specified as the
-     * file name.
+     * filename.
      */
     FILE,
 

@@ -327,9 +327,9 @@ public interface SpongeEngine extends EngineModule {
     // void setEventIdGenerator(EventIdGenerator eventIdGenerator);
 
     /**
-     * Sets the configuration file name.
+     * Sets the configuration filename.
      *
-     * @param configurationFilename the configuration file name.
+     * @param configurationFilename the configuration filename.
      */
     void setConfigurationFilename(String configurationFilename);
 

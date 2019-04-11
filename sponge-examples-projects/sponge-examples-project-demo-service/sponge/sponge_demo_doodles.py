@@ -17,13 +17,13 @@ class DrawAndUploadDoodle(Action):
         self.withResult(StringType().withLabel("Status"))
         self.withFeatures({"icon":"brush"})
     def onCall(self, image):
-        fileName = str(System.currentTimeMillis()) + ".png"
-        SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + fileName)
-        return "Uploaded as " + fileName
+        filename = str(System.currentTimeMillis()) + ".png"
+        SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + filename)
+        return "Uploaded as " + filename
 
 class ListDoodles(Action):
     def onConfigure(self):
-        self.withLabel("List doodles").withDescription("Returns a list of doodle file names").withFeatures({"visible":False})
+        self.withLabel("List doodles").withDescription("Returns a list of doodle filenames").withFeatures({"visible":False})
         self.withNoArgs().withResult(ListType(StringType()).withLabel("Doodles"))
     def onCall(self):
         dir = sponge.getProperty("doodlesDir")

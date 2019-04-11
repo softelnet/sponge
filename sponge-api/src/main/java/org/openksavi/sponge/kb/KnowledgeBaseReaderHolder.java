@@ -19,17 +19,17 @@ package org.openksavi.sponge.kb;
 import java.io.Reader;
 
 /**
- * Knowledge base reader holder. Holds an open reader and a knowledge base file name.
+ * Knowledge base reader holder. Holds an open reader and a knowledge base filename.
  */
 public class KnowledgeBaseReaderHolder {
 
     private Reader reader;
 
-    private String fileName;
+    private String filename;
 
-    public KnowledgeBaseReaderHolder(Reader reader, String fileName) {
+    public KnowledgeBaseReaderHolder(Reader reader, String filename) {
         this.reader = reader;
-        this.fileName = fileName;
+        this.filename = filename;
     }
 
     public Reader getReader() {
@@ -40,11 +40,11 @@ public class KnowledgeBaseReaderHolder {
         this.reader = reader;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

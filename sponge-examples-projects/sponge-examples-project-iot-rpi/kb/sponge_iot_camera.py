@@ -34,14 +34,14 @@ class TakePictureAsFile(Action):
         if not os.path.exists(cameraDir):
             os.makedirs(cameraDir)
 
-        pictureFileName = "{}/{}.{}".format(cameraDir, str(System.currentTimeMillis()), sponge.getVariable("pictureFormat"))
+        pictureFilename = "{}/{}.{}".format(cameraDir, str(System.currentTimeMillis()), sponge.getVariable("pictureFormat"))
         CAMERA_LOCK.lock()
         try:
-            sponge.process(createRaspistillBuilder().arguments("--output", pictureFileName).errorAsException()).run().waitFor()
+            sponge.process(createRaspistillBuilder().arguments("--output", pictureFilename).errorAsException()).run().waitFor()
         finally:
             CAMERA_LOCK.unlock()
 
-        return pictureFileName
+        return pictureFilename
 
 def createRaspistillBuilder():
     return ProcessConfiguration.builder("raspistill", "--width", "500", "--height", "500","--encoding",

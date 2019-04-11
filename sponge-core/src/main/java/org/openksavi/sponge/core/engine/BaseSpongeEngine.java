@@ -153,7 +153,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     /** Remembered exception. */
     private AtomicReference<Throwable> rememberedException = new AtomicReference<>();
 
-    /** Configuration file name. */
+    /** Configuration filename. */
     private String configurationFilename;
 
     private AtomicBoolean initialized = new AtomicBoolean(false);

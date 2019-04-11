@@ -173,12 +173,12 @@ public class ProcessInstanceTest {
     public void testProcessInputStringOutputFile() throws Exception {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        String outputFileName = "target/testProcessInputStringOutputFile_output.txt";
+        String outputFilename = "target/testProcessInputStringOutputFile_output.txt";
         engine.getOperations()
-                .process(ProcessConfiguration.builder("base64").arguments("--decode").inputAsString("MTIz").outputAsFile(outputFileName))
+                .process(ProcessConfiguration.builder("base64").arguments("--decode").inputAsString("MTIz").outputAsFile(outputFilename))
                 .run();
 
-        File resultFile = new File(outputFileName);
+        File resultFile = new File(outputFilename);
         try {
             assertArrayEquals(new byte[] { '1', '2', '3' }, FileUtils.readFileToByteArray(resultFile));
         } finally {
@@ -190,11 +190,11 @@ public class ProcessInstanceTest {
     public void testProcessInputFileOutputFile() throws Exception {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        String outputFileName = "target/testProcessInputFileOutputFile_output.txt";
+        String outputFilename = "target/testProcessInputFileOutputFile_output.txt";
         engine.getOperations().process(ProcessConfiguration.builder("cat").arguments("-")
-                .inputAsFile("src/test/resources/process_instance_test_input.txt").outputAsFile(outputFileName)).run();
+                .inputAsFile("src/test/resources/process_instance_test_input.txt").outputAsFile(outputFilename)).run();
 
-        File resultFile = new File(outputFileName);
+        File resultFile = new File(outputFilename);
         try {
             assertEquals("123", FileUtils.readFileToString(resultFile, StandardCharsets.UTF_8.name()));
         } finally {

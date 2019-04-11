@@ -29,7 +29,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
  */
 public class ScriptTestUtils {
 
-    public static String getConfigFileName(KnowledgeBaseType type, String config) {
+    public static String getConfigFilename(KnowledgeBaseType type, String config) {
         if (type.isScript()) {
             return "examples/script/" + type.getFileExtensions().get(0) + "/" + config + ".xml";
         } else {
@@ -43,7 +43,7 @@ public class ScriptTestUtils {
         return "examples/script/" + type.getFileExtensions().get(0);
     }
 
-    public static String getScriptKnowledgeBaseFileName(KnowledgeBaseType type, String knowledgeBaseFile) {
+    public static String getScriptKnowledgeBaseFilename(KnowledgeBaseType type, String knowledgeBaseFile) {
         return getScriptKnowledgeBaseDir(type) + "/" + knowledgeBaseFile + "." + type.getFileExtensions().get(0);
     }
 
@@ -57,7 +57,7 @@ public class ScriptTestUtils {
     public static SpongeEngine buildWithKnowledgeBase(KnowledgeBaseType type, String knowledgeBaseFile) {
         EngineBuilder<DefaultSpongeEngine> builder = DefaultSpongeEngine.builder();
         if (type.isScript()) {
-            builder.knowledgeBase(TestUtils.DEFAULT_KB, type, getScriptKnowledgeBaseFileName(type, knowledgeBaseFile));
+            builder.knowledgeBase(TestUtils.DEFAULT_KB, type, getScriptKnowledgeBaseFilename(type, knowledgeBaseFile));
         } else {
             KnowledgeBase knowledgeBase =
                     SpongeUtils.createInstance(getNonScriptKnowledgeBaseClassName(type, knowledgeBaseFile), KnowledgeBase.class);
@@ -76,7 +76,7 @@ public class ScriptTestUtils {
     }
 
     public static SpongeEngine startWithConfig(KnowledgeBaseType type, String config) {
-        SpongeEngine engine = DefaultSpongeEngine.builder().config(getConfigFileName(type, config)).build();
+        SpongeEngine engine = DefaultSpongeEngine.builder().config(getConfigFilename(type, config)).build();
         engine.startup();
         return engine;
     }

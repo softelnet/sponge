@@ -37,12 +37,12 @@ public abstract class SpringUtils {
     private static final ResourcePatternResolver RESOURCE_RESOLVER =
             new PathMatchingResourcePatternResolver(SpringKnowledgeBaseFileProvider.class.getClassLoader());
 
-    public static List<KnowledgeBaseReaderHolder> getReadersFromResourcePatternResolver(String fileName, Charset charset)
+    public static List<KnowledgeBaseReaderHolder> getReadersFromResourcePatternResolver(String filename, Charset charset)
             throws IOException {
         Resource[] resources = null;
 
         try {
-            resources = RESOURCE_RESOLVER.getResources(fileName);
+            resources = RESOURCE_RESOLVER.getResources(filename);
         } catch (FileNotFoundException e) {
             return Collections.emptyList();
         }

@@ -231,11 +231,11 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T eval(Reader reader, String fileName) {
+    public <T> T eval(Reader reader, String filename) {
         try {
-            return (T) container.runScriptlet(reader, fileName);
+            return (T) container.runScriptlet(reader, filename);
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException(fileName, this, e);
+            throw SpongeUtils.wrapException(filename, this, e);
         }
     }
 

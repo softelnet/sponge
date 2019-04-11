@@ -130,18 +130,18 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
     }
 
     @Override
-    public void load(String fileName) {
-        getInterpreter().load(fileName);
+    public void load(String filename) {
+        getInterpreter().load(filename);
     }
 
     @Override
-    public void load(String fileName, String charset) {
-        getInterpreter().load(fileName, charset);
+    public void load(String filename, String charset) {
+        getInterpreter().load(filename, charset);
     }
 
     @Override
-    public void load(String fileName, Charset charset) {
-        getInterpreter().load(fileName, charset);
+    public void load(String filename, Charset charset) {
+        getInterpreter().load(filename, charset);
     }
 
     @Override

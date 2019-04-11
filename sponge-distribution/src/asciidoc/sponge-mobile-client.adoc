@@ -357,7 +357,7 @@ The application may be switched to the dark theme in the settings.
 
 |`filename`
 |`BinaryType`
-|A file name associated with a binary value.
+|A filename associated with a binary value.
 
 |`intent`
 |Action

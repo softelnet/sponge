@@ -38,7 +38,7 @@ public interface EngineModuleProvider {
      * Creates a new configuration manager.
      *
      * @param engine the engine.
-     * @param configurationFilename configuration file name.
+     * @param configurationFilename configuration filename.
      * @return a new configuration manager.
      */
     ConfigurationManager createConfigurationManager(SpongeEngine engine, String configurationFilename);

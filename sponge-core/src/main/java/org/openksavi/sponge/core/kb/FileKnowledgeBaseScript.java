@@ -19,48 +19,48 @@ public class FileKnowledgeBaseScript extends BaseKnowledgeBaseScript {
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName the knowledge base script file name.
+     * @param filename the knowledge base script filename.
      */
-    public FileKnowledgeBaseScript(String fileName) {
-        this(fileName, null);
+    public FileKnowledgeBaseScript(String filename) {
+        this(filename, null);
 
     }
 
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param charset charset.
      */
-    public FileKnowledgeBaseScript(String fileName, Charset charset) {
-        this(fileName, charset, DEFAULT_REQUIRED);
+    public FileKnowledgeBaseScript(String filename, Charset charset) {
+        this(filename, charset, DEFAULT_REQUIRED);
     }
 
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param required required.
      */
-    public FileKnowledgeBaseScript(String fileName, boolean required) {
-        this(fileName, null, required);
+    public FileKnowledgeBaseScript(String filename, boolean required) {
+        this(filename, null, required);
     }
 
     /**
      * Creates a new knowledge base script instance.
      *
-     * @param fileName file name.
+     * @param filename filename.
      * @param charset charset.
      * @param required required.
      */
-    public FileKnowledgeBaseScript(String fileName, Charset charset, boolean required) {
-        super(fileName);
+    public FileKnowledgeBaseScript(String filename, Charset charset, boolean required) {
+        super(filename);
 
         this.charset = charset;
         this.required = required;
     }
 
-    public String getFileName() {
+    public String getFilename() {
         return getName();
     }
 

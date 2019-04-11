@@ -134,7 +134,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      * Creates a new configuration manager.
      *
      * @param engine the engine.
-     * @param configurationFilename configuration file name.
+     * @param configurationFilename configuration filename.
      */
     public DefaultConfigurationManager(SpongeEngine engine, String configurationFilename) {
         super("ConfigurationManager", engine);
@@ -310,29 +310,29 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
     }
 
-    protected Triple<XMLConfiguration, URL, PropertiesConfiguration> createXmlConfiguration(String fileName) {
+    protected Triple<XMLConfiguration, URL, PropertiesConfiguration> createXmlConfiguration(String filename) {
         FallbackBasePathLocationStrategy locationStrategy =
                 new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
         FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
-                .configure(new Parameters().xml().setLocationStrategy(locationStrategy).setFileName(fileName).setSchemaValidation(true)
+                .configure(new Parameters().xml().setLocationStrategy(locationStrategy).setFileName(filename).setSchemaValidation(true)
                         .setEntityResolver(new ResourceSchemaResolver()));
 
         XMLConfiguration xmlConfiguration = null;
         try {
             xmlConfiguration = builder.getConfiguration();
         } catch (ConfigurationException e) {
-            throw new ConfigException(locationStrategy.isNotFound() ? "Configuration file " + fileName + " not found"
-                    : "Error reading configuration file " + fileName, e);
+            throw new ConfigException(locationStrategy.isNotFound() ? "Configuration file " + filename + " not found"
+                    : "Error reading configuration file " + filename, e);
         }
 
-        String propertiesFileName =
-                FilenameUtils.concat(FilenameUtils.getFullPath(fileName), FilenameUtils.getBaseName(fileName)) + ".properties";
+        String propertiesFilename =
+                FilenameUtils.concat(FilenameUtils.getFullPath(filename), FilenameUtils.getBaseName(filename)) + ".properties";
         PropertiesConfiguration propertiesConfiguration = null;
         FallbackBasePathLocationStrategy propertiesLocationStrategy =
                 new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
         try {
             propertiesConfiguration = new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
-                    .configure(new Parameters().properties().setLocationStrategy(propertiesLocationStrategy).setFileName(propertiesFileName)
+                    .configure(new Parameters().properties().setLocationStrategy(propertiesLocationStrategy).setFileName(propertiesFilename)
                             .setEncoding(StandardCharsets.UTF_8.name()).setThrowExceptionOnMissing(false))
                     .getConfiguration();
         } catch (ConfigurationException e) {
@@ -340,7 +340,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
             if (propertiesLocationStrategy.isNotFound() || ExceptionUtils.hasCause(e, FileNotFoundException.class)) {
                 propertiesConfiguration = new PropertiesConfiguration();
             } else {
-                throw new ConfigException("Error reading configuration properties file " + propertiesFileName, e);
+                throw new ConfigException("Error reading configuration properties file " + propertiesFilename, e);
             }
         }
 

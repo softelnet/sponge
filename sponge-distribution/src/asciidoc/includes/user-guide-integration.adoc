@@ -167,7 +167,7 @@ In general, an external process can be executed using:
 
 |`BINARY` |Sets the subprocess input as the `ProcessConfiguration.inputBinary` bytes.
 
-|`FILE` |Sets the subprocess input as the `ProcessConfiguration.inputFile` file specified as the file name.
+|`FILE` |Sets the subprocess input as the `ProcessConfiguration.inputFile` file specified as the filename.
 
 |`STREAM` |Sets the subprocess input as a stream. This is a special case of `PIPE` that makes easier writing to and closing the subprocess standard input `ProcessInstance.getInput()` after start. Then you should invoke manually `ProcessInstance.waitForReady()`.
 |===

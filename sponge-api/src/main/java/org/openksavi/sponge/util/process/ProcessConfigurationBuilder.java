@@ -313,7 +313,7 @@ public class ProcessConfigurationBuilder {
     /**
      * A convenience method to set the input redirect type {@link org.openksavi.sponge.util.process.InputRedirect#FILE FILE}.
      *
-     * @param inputFile the input file name.
+     * @param inputFile the input filename.
      * @return this builder.
      */
     public ProcessConfigurationBuilder inputAsFile(String inputFile) {
@@ -361,7 +361,7 @@ public class ProcessConfigurationBuilder {
     /**
      * A convenience method to set the output redirect type {@link org.openksavi.sponge.util.process.OutputRedirect#FILE FILE}.
      *
-     * @param outputFile the output file name.
+     * @param outputFile the output filename.
      * @return this builder.
      */
     public ProcessConfigurationBuilder outputAsFile(String outputFile) {

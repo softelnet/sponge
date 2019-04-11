@@ -296,7 +296,7 @@ public class ProcessConfiguration implements Cloneable {
     /**
      * Returns a new process configuration builder.
      *
-     * @param executable the executable file name.
+     * @param executable the executable filename.
      * @param arguments the optional arguments.
      * @return the builder.
      */

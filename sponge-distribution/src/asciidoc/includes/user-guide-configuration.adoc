@@ -149,7 +149,7 @@ Each `<knowledgeBase>` tag contains:
 
 |`file`
 |Element
-|The file name of the knowledge base. A single knowledge base may use many files but all of them have to be written in one language.
+|The filename of the knowledge base. A single knowledge base may use many files but all of them have to be written in one language.
 |===
 
 The `file` element may have the following optional attributes.
