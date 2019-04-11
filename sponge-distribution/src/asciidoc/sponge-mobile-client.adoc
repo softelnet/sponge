@@ -244,6 +244,8 @@ The application may be switched to the dark theme in the settings.
 
 == Supported {sponge} concepts
 
+=== Data types
+
 .Data types
 [cols="1,5"]
 |===
@@ -294,6 +296,31 @@ The application may be switched to the dark theme in the settings.
 |`VoidType`
 |Only viewing supported.
 |===
+
+=== Data type formats
+
+.Supported data type formats
+[cols="1,3"]
+|===
+|Format |Description
+
+|`phone`
+|A phone number format. Applicable for `StringType`.
+
+|`email`
+|An email format. Applicable for `StringType`.
+
+|`url`
+|A URL format. Applicable for `StringType`.
+
+|`console`
+|A console format. Text is presented using a monospaced font. Applicable for `StringType`.
+
+|`markdown`
+|A https://en.wikipedia.org/wiki/Markdown[Markdown] format. Applicable for `StringType`.
+|===
+
+=== Features
 
 .Supported features
 [cols="1,1,3"]
@@ -407,21 +434,26 @@ The application may be switched to the dark theme in the settings.
 |`deleteAction`
 |`ListType` action argument
 |A _delete_ sub-action for a list element.
-|===
 
-.Supported data type formats
-[cols="1,3"]
-|===
-|Format |Description
+|`width`
+|`BinaryType` drawing
+|An image width.
 
-|`phone`
-|A phone number format. Applicable only for `StringType`.
+|`height`
+|`BinaryType` drawing
+|An image height.
 
-|`email`
-|An email format. Applicable only for `StringType`.
+|`strokeWidth`
+|`BinaryType` drawing
+|A drawing stroke width.
 
-|`url`
-|An URL format. Applicable only for `StringType`.
+|`color`
+|`BinaryType` drawing
+|A drawing pen color.
+
+|`background`
+|`BinaryType` drawing
+|A drawing background color.
 |===
 
 A data type property can be dynamically overwritten by a corresponding feature in an `AnnotatedValue`. The feature name has to be exactly the same as the data type property name. The overwrite is handled by the {sponge} mobile client application.
