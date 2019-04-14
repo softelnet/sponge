@@ -20,6 +20,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
@@ -30,9 +31,27 @@ public class NoSecuritySecurityService extends BaseRestApiSecurityService {
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
+    public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
         Validate.isTrue(username == null && password == null, "Only anonymous access is allowed in the no-security configuration");
-        return createAnonymousUser();
+        return new UserAuthentication(createAnonymousUser());
+    }
+
+    @Override
+    public UserAuthentication authenticateAnonymous(User anonymous) {
+        return new UserAuthentication(anonymous);
+    }
+
+    @Override
+    public UserAuthentication getStoredUserAuthentication(String username) {
+        return new UserAuthentication(createAnonymousUser());
+    }
+
+    @Override
+    public void openUserContext(UserAuthentication userAuthentication) {
+    }
+
+    @Override
+    public void closeUserContext() {
     }
 
     @Override
@@ -48,10 +67,5 @@ public class NoSecuritySecurityService extends BaseRestApiSecurityService {
     @Override
     public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
         return true;
-    }
-
-    @Override
-    public User getUser(String username) {
-        return createAnonymousUser();
     }
 }

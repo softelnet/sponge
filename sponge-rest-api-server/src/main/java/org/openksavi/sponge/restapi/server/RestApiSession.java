@@ -16,12 +16,12 @@
 
 package org.openksavi.sponge.restapi.server;
 
-import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 
 /**
  * A REST API session.
  */
 public interface RestApiSession {
 
-    User getUser();
+    UserAuthentication getUserAuthentication();
 }

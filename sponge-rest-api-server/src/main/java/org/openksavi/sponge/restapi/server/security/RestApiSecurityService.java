@@ -24,9 +24,15 @@ import org.openksavi.sponge.util.Initializable;
 
 public interface RestApiSecurityService extends HasRestApiService, Initializable {
 
-    User authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException;
+    UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException;
 
-    User getUser(String username);
+    UserAuthentication authenticateAnonymous(User anonymous);
+
+    void openUserContext(UserAuthentication userAuthentication);
+
+    void closeUserContext();
+
+    UserAuthentication getStoredUserAuthentication(String username);
 
     boolean canCallAction(User user, ActionAdapter actionAdapter);
 

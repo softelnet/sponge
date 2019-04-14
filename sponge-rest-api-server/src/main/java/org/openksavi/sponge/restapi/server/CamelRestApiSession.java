@@ -18,7 +18,7 @@ package org.openksavi.sponge.restapi.server;
 
 import org.apache.camel.Exchange;
 
-import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 
 /**
  * A Camel-based REST API session.
@@ -27,8 +27,8 @@ public class CamelRestApiSession extends DefaultRestApiSession {
 
     private Exchange exchange;
 
-    public CamelRestApiSession(User user, Exchange exchange) {
-        super(user);
+    public CamelRestApiSession(UserAuthentication userAuthentication, Exchange exchange) {
+        super(userAuthentication);
         this.exchange = exchange;
     }
 

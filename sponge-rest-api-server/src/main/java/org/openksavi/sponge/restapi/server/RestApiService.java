@@ -99,9 +99,14 @@ public interface RestApiService extends HasEngine, Initializable {
     RestApiSession getSession();
 
     /**
-     * Sets a thread local session.
+     * Opens the thread local session.
      *
      * @param session the session.
      */
-    void setSession(RestApiSession session);
+    void openSession(RestApiSession session);
+
+    /**
+     * Closes the thread local session.
+     */
+    void closeSession();
 }

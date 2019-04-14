@@ -25,12 +25,30 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
+    public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
         User user = verifyInMemory(username, password);
         if (user == null) {
             throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password");
         }
 
-        return user;
+        return new UserAuthentication(user);
+    }
+
+    @Override
+    public UserAuthentication authenticateAnonymous(User anonymous) {
+        return new UserAuthentication(anonymous);
+    }
+
+    @Override
+    public UserAuthentication getStoredUserAuthentication(String username) {
+        return new UserAuthentication(getUser(username));
+    }
+
+    @Override
+    public void openUserContext(UserAuthentication userAuthentication) {
+    }
+
+    @Override
+    public void closeUserContext() {
     }
 }

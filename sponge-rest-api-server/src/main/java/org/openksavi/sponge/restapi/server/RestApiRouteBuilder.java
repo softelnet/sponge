@@ -259,6 +259,10 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         return null;
     }
 
+    protected RestApiSession createSession(Exchange exchange) {
+        return new CamelRestApiSession(null, exchange);
+    }
+
     protected <I extends SpongeRequest, O extends SpongeResponse> Processor createOperationExecutionProcessor(
             Function<Message, String> requestBodyProvider, RestApiOperationType operationType, Class<I> requestClass,
             Class<O> responseClass, BiFunction<I, Exchange, O> operationHandler) {
@@ -275,8 +279,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             }
 
             try {
-                // Set a default session. The actual session with a user will be set in the service.
-                apiService.setSession(new CamelRestApiSession(null, exchange));
+                // Open a new session. The user will be set in the service.
+                apiService.openSession(createSession(exchange));
 
                 O response = operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange);
 
@@ -296,8 +300,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                     throw e;
                 }
             } finally {
-                // Clear the session.
-                apiService.setSession(null);
+                // Close the session.
+                apiService.closeSession();
             }
         };
     }

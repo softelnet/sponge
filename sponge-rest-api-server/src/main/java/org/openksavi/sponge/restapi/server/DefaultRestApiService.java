@@ -64,6 +64,7 @@ import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -133,8 +134,8 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(request, "The request must not be null");
             Validate.notNull(request.getUsername(), "The username must not be null");
 
-            User user = authenticateUser(request.getUsername(), request.getPassword());
-            String authToken = authTokenService != null ? authTokenService.createAuthToken(user) : null;
+            UserAuthentication userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
+            String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication.getUser()) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
         } catch (Exception e) {
@@ -373,36 +374,38 @@ public class DefaultRestApiService implements RestApiService {
      * @return the user.
      */
     protected User authenticateRequest(SpongeRequest request) {
-        User user;
+        UserAuthentication userAuthentication;
         if (request.getAuthToken() != null) {
             Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
             Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
 
             String username = getSafeAuthTokenService().validateAuthToken(request.getAuthToken());
 
-            user = securityService.getUser(username);
+            userAuthentication = securityService.getStoredUserAuthentication(username);
         } else {
             if (request.getUsername() == null) {
                 if (settings.isAllowAnonymous()) {
-                    user = RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole());
+                    userAuthentication =
+                            securityService.authenticateAnonymous(RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole()));
                 } else {
                     throw new SpongeException("Anonymous access is not allowed");
                 }
             } else {
-                user = authenticateUser(request.getUsername(), request.getPassword());
+                userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
             }
         }
 
         // Set the user in the thread local session.
         RestApiSession session = getSession();
-        if (session instanceof DefaultRestApiSession) {
-            ((DefaultRestApiSession) session).setUser(user);
-        }
+        Validate.isTrue(session instanceof DefaultRestApiSession, "The session class should extend %s", DefaultRestApiSession.class);
+        ((DefaultRestApiSession) session).setUserAuthentication(userAuthentication);
 
-        return user;
+        securityService.openUserContext(userAuthentication);
+
+        return userAuthentication.getUser();
     }
 
-    protected User authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
+    protected UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
         return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password);
     }
 
@@ -547,7 +550,16 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public void setSession(RestApiSession session) {
+    public void openSession(RestApiSession session) {
         this.session.set(session);
+    }
+
+    @Override
+    public void closeSession() {
+        try {
+            securityService.closeUserContext();
+        } finally {
+            session.set(null);
+        }
     }
 }

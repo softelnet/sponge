@@ -18,6 +18,7 @@ package org.openksavi.sponge.restapi.server.security.spring;
 
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
 import org.openksavi.sponge.restapi.server.security.BaseInMemoryKnowledgeBaseProvidedSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 
 public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
 
@@ -47,18 +49,52 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
+    public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            User user = new User(username, password);
-            authentication.getAuthorities().stream().map(a -> a.getAuthority()).forEach(user::addRole);
-
-            return user;
+            return new SimpleSpringUserAuthentication(applyAuthentication(new User(username, password), authentication), authentication);
         } catch (AuthenticationException e) {
             throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password", e);
         }
+    }
+
+    protected User applyAuthentication(User user, Authentication authentication) {
+        authentication.getAuthorities().stream().map(a -> a.getAuthority()).forEach(user::addRole);
+
+        return user;
+    }
+
+    @Override
+    public UserAuthentication authenticateAnonymous(User anonymous) {
+        return new SimpleSpringUserAuthentication(anonymous, createAuthentication(anonymous));
+    }
+
+    @Override
+    public UserAuthentication getStoredUserAuthentication(String username) {
+        User user = getUser(username);
+
+        return new SimpleSpringUserAuthentication(user, createAuthentication(user));
+    }
+
+    @Override
+    public void openUserContext(UserAuthentication userAuthentication) {
+        Validate.isTrue(userAuthentication instanceof SimpleSpringUserAuthentication, "The user authentication class should extend %s",
+                SimpleSpringUserAuthentication.class);
+        SimpleSpringUserAuthentication customUserAuthentication = (SimpleSpringUserAuthentication) userAuthentication;
+        if (customUserAuthentication.getAuthentication() != null) {
+            SecurityContextHolder.getContext().setAuthentication(customUserAuthentication.getAuthentication());
+        }
+    }
+
+    @Override
+    public void closeUserContext() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
+    protected Authentication createAuthentication(User user) {
+        return new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword(),
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()));
     }
 
     class SimpleAuthenticationManager implements AuthenticationManager {
@@ -68,8 +104,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
             User user = verifyInMemory(String.valueOf(auth.getPrincipal()), String.valueOf(auth.getCredentials()));
 
             if (user != null) {
-                return new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(),
-                        user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()));
+                return createAuthentication(user);
             }
 
             throw new BadCredentialsException("Incorrect username or password");

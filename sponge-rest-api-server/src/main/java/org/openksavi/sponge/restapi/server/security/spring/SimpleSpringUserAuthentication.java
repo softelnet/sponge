@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server;
+package org.openksavi.sponge.restapi.server.security.spring;
 
+import org.springframework.security.core.Authentication;
+
+import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 
-/**
- * A default REST API session.
- */
-public class DefaultRestApiSession implements RestApiSession {
+public class SimpleSpringUserAuthentication extends UserAuthentication {
 
-    private UserAuthentication userAuthentication;
+    private Authentication authentication;
 
-    public DefaultRestApiSession(UserAuthentication userAuthentication) {
-        this.userAuthentication = userAuthentication;
+    public SimpleSpringUserAuthentication(User user, Authentication authentication) {
+        super(user);
+
+        this.authentication = authentication;
     }
 
-    @Override
-    public UserAuthentication getUserAuthentication() {
-        return userAuthentication;
-    }
-
-    public void setUserAuthentication(UserAuthentication userAuthentication) {
-        this.userAuthentication = userAuthentication;
+    public Authentication getAuthentication() {
+        return authentication;
     }
 }

@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.8.1 (not released yet)
 * API change: Renamed `fileName` to `filename`.
+* API change: Introduced `RestApiSession` and `UserAuthentication` in the REST API server.
 * Added a limited support for extending Java-based processors and plugins in non-Java knowledge bases.
 * Added a new type `StreamType`.
 * Added a new REST API error code `ERROR_CODE_INCORRECT_USERNAME_PASSWORD ("SPONGE004")`.

@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server;
-
-import org.openksavi.sponge.restapi.server.security.UserAuthentication;
+package org.openksavi.sponge.restapi.server.security;
 
 /**
- * A default REST API session.
+ * A user authentication.
  */
-public class DefaultRestApiSession implements RestApiSession {
+public class UserAuthentication {
 
-    private UserAuthentication userAuthentication;
+    private User user;
 
-    public DefaultRestApiSession(UserAuthentication userAuthentication) {
-        this.userAuthentication = userAuthentication;
+    public UserAuthentication(User user) {
+        this.user = user;
     }
 
-    @Override
-    public UserAuthentication getUserAuthentication() {
-        return userAuthentication;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserAuthentication(UserAuthentication userAuthentication) {
-        this.userAuthentication = userAuthentication;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
