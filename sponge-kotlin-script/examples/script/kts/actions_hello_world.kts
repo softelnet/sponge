@@ -3,8 +3,6 @@
  * Hello World action
  */
 
-package org.openksavi.sponge.kotlin.examples
-
 import org.openksavi.sponge.kotlin.KAction
 import org.openksavi.sponge.kotlin.KKnowledgeBase
 import org.openksavi.sponge.type.StringType
@@ -21,6 +19,6 @@ class HelloWorldAction : KAction() {
     }
 }
 
-override fun onStartup() {
+fun onStartup() {
     sponge.logger.info("{}", sponge.call("HelloWorldAction", listOf("Sponge user")))
 }

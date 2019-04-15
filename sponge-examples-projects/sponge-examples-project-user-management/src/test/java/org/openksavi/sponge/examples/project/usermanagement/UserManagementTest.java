@@ -72,7 +72,7 @@ public class UserManagementTest {
         try (SpongeRestClient client = createRestClient()) {
             // Anonymous.
             List<RestActionMeta> anonymousActions = client.getActions();
-            assertEquals(3, anonymousActions.size());
+            assertEquals(2, anonymousActions.size());
 
             RestActionMeta loginAction = anonymousActions.stream()
                     .filter(action -> Objects.equals(action.getFeatures().get("intent"), "login")).findFirst().get();
@@ -101,7 +101,7 @@ public class UserManagementTest {
 
             // Anonymous.
             anonymousActions = client.getActions();
-            assertEquals(3, anonymousActions.size());
+            assertEquals(2, anonymousActions.size());
 
             loginAction = anonymousActions.stream().filter(action -> Objects.equals(action.getFeatures().get("intent"), "login"))
                     .findFirst().get();
