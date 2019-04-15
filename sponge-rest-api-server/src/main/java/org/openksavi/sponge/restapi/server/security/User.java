@@ -17,6 +17,7 @@
 package org.openksavi.sponge.restapi.server.security;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -35,6 +36,12 @@ public class User {
     }
 
     public User(String name, String password, String... newRoles) {
+        this(name, password);
+
+        addRoles(newRoles);
+    }
+
+    public User(String name, String password, Collection<String> newRoles) {
         this(name, password);
 
         addRoles(newRoles);
@@ -66,6 +73,10 @@ public class User {
 
     public void addRoles(String... newRoles) {
         Arrays.stream(newRoles).forEach(role -> addRole(role));
+    }
+
+    public void addRoles(Collection<String> newRoles) {
+        newRoles.forEach(role -> addRole(role));
     }
 
     public void addRole(String role) {
