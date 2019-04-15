@@ -11,3 +11,5 @@ pom.xml.versionsBackup
 dependency-reduced-pom.xml
 __pycache__/
 _*_/
+.vscode/settings.json
+sponge-kotlin-script/.factorypath

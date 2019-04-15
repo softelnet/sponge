@@ -370,7 +370,6 @@ public class DefaultRestApiService implements RestApiService {
      * Throws exception if the request can't be successfully authenticated.
      *
      * @param request the request.
-     * @param exchange the exchange.
      * @return the user.
      */
     protected User authenticateRequest(SpongeRequest request) {
