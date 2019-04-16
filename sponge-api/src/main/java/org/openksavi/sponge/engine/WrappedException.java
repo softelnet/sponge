@@ -25,7 +25,10 @@ public class WrappedException extends SpongeException {
 
     private static final long serialVersionUID = -7842020620067616297L;
 
-    protected static final String WRAPPED_MESSAGE_PREFIX = WrappedException.class.getName() + ": ";
+    private static final String EXCEPTION_CLASS_MESSAGE_PREFIX_FORMAT = "%s: ";
+
+    protected static final String WRAPPED_MESSAGE_PREFIX =
+            String.format(EXCEPTION_CLASS_MESSAGE_PREFIX_FORMAT, WrappedException.class.getName());
 
     private String sourceName;
 
@@ -34,7 +37,7 @@ public class WrappedException extends SpongeException {
     }
 
     public WrappedException(String sourceName, String message, Throwable throwable) {
-        super(normalizeMessage(message), throwable);
+        super(getCoreExceptionMessage(message, throwable), throwable);
 
         this.sourceName = sourceName;
     }
@@ -48,14 +51,31 @@ public class WrappedException extends SpongeException {
         return super.getMessage() + " in " + sourceName;
     }
 
-    protected static String normalizeMessage(String message) {
+    protected static String getCoreExceptionMessage(String message, Throwable e) {
+        if (e == null) {
+            return message;
+        }
+
         if (message != null) {
-            // Remove unnecessary prefixes from the message.
-            while (message.startsWith(WRAPPED_MESSAGE_PREFIX)) {
+            // Remove wrapped exception prefixes from the message.
+            while (message.startsWith(WRAPPED_MESSAGE_PREFIX) && message.length() > WRAPPED_MESSAGE_PREFIX.length()) {
                 message = message.substring(WRAPPED_MESSAGE_PREFIX.length());
             }
+
+            String prefix = String.format(EXCEPTION_CLASS_MESSAGE_PREFIX_FORMAT, e.getClass().getName());
+
+            // Remove prefixes from the message.
+            while (message.startsWith(prefix) && message.length() > prefix.length()) {
+                message = message.substring(prefix.length());
+            }
+        } else {
+            message = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
         }
 
         return message;
+    }
+
+    public static String getCoreExceptionMessage(Throwable e) {
+        return getCoreExceptionMessage(e.getMessage(), e);
     }
 }
