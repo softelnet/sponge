@@ -32,8 +32,6 @@ public interface RestApiSecurityService extends HasRestApiService, Initializable
 
     void closeUserContext();
 
-    UserAuthentication getStoredUserAuthentication(String username);
-
     boolean canCallAction(User user, ActionAdapter actionAdapter);
 
     boolean canSendEvent(User user, String eventName);

@@ -426,4 +426,8 @@ public interface SpongeRestClient extends Closeable {
      * Clears the session, i.e. the auth token.
      */
     void clearSession();
+
+    Long getCurrentRequestId();
+
+    String getCurrentAuthToken();
 }

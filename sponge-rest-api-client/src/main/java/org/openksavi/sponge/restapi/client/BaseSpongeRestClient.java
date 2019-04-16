@@ -260,7 +260,11 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
 
         try {
-            return setupResponse(doExecute(operationType, setupRequest(request), responseClass, context));
+            if (configuration.isAutoUseAuthToken() && currentAuthToken.get() == null && request.getAuthToken() == null) {
+                login();
+            }
+
+            return executeDelegate(operationType, request, responseClass, context);
         } catch (InvalidAuthTokenException e) {
             // Relogin if set up and necessary.
             if (currentAuthToken.get() != null && configuration.isRelogin()) {
@@ -269,11 +273,20 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 // Clear the request auth token.
                 request.setAuthToken(null);
 
-                return setupResponse(doExecute(operationType, setupRequest(request), responseClass, context));
+                return executeDelegate(operationType, request, responseClass, context);
             } else {
                 throw e;
             }
         }
+    }
+
+    protected <T extends SpongeRequest, R extends SpongeResponse> R executeDelegate(RestApiOperationType operationType, T request,
+            Class<R> responseClass, SpongeRequestContext context) {
+        if (context == null) {
+            context = SpongeRequestContext.builder().build();
+        }
+
+        return setupResponse(doExecute(operationType, setupRequest(request), responseClass, context));
     }
 
     @Override
@@ -298,7 +311,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
         try {
             currentAuthToken.set(null);
-            response = execute(RestApiOperationType.LOGIN, request, LoginResponse.class, context);
+            response = executeDelegate(RestApiOperationType.LOGIN, request, LoginResponse.class, context);
             currentAuthToken.set(response.getAuthToken());
         } finally {
             lock.unlock();
@@ -665,5 +678,15 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public Long getCurrentRequestId() {
+        return currentRequestId.get();
+    }
+
+    @Override
+    public String getCurrentAuthToken() {
+        return currentAuthToken.get();
     }
 }

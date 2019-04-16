@@ -42,11 +42,6 @@ public class NoSecuritySecurityService extends BaseRestApiSecurityService {
     }
 
     @Override
-    public UserAuthentication getStoredUserAuthentication(String username) {
-        return new UserAuthentication(createAnonymousUser());
-    }
-
-    @Override
     public void openUserContext(UserAuthentication userAuthentication) {
     }
 

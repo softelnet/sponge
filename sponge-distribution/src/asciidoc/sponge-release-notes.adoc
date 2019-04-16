@@ -6,7 +6,12 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
+== 1.9.1 (not released yet)
+* Added support for automatic use of auth tokens in the REST API client.
+
+[discrete]
 == 1.9.0 (2019-04-15)
+
 * API change: Renamed `fileName` to `filename`.
 * API change: Introduced `RestApiSession` and `UserAuthentication` in the REST API server.
 * Added a limited support for extending Java-based processors and plugins in non-Java knowledge bases.

@@ -135,7 +135,7 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(request.getUsername(), "The username must not be null");
 
             UserAuthentication userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
-            String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication.getUser()) : null;
+            String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
         } catch (Exception e) {
@@ -378,9 +378,7 @@ public class DefaultRestApiService implements RestApiService {
             Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
             Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
 
-            String username = getSafeAuthTokenService().validateAuthToken(request.getAuthToken());
-
-            userAuthentication = securityService.getStoredUserAuthentication(username);
+            userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getAuthToken());
         } else {
             if (request.getUsername() == null) {
                 if (settings.isAllowAnonymous()) {

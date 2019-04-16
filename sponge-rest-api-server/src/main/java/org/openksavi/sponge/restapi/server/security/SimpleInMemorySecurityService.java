@@ -40,11 +40,6 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
     }
 
     @Override
-    public UserAuthentication getStoredUserAuthentication(String username) {
-        return new UserAuthentication(getUser(username));
-    }
-
-    @Override
     public void openUserContext(UserAuthentication userAuthentication) {
     }
 

@@ -50,17 +50,17 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
 
     protected static class AuthTokenSession {
 
-        private String username;
+        private UserAuthentication userAuthentication;
 
         private Instant creationTime;
 
-        public AuthTokenSession(String username) {
-            this.username = username;
+        public AuthTokenSession(UserAuthentication userAuthentication) {
+            this.userAuthentication = userAuthentication;
             creationTime = Instant.now();
         }
 
-        public String getUsername() {
-            return username;
+        public UserAuthentication getUserAuthentication() {
+            return userAuthentication;
         }
 
         public Instant getCreationTime() {
@@ -82,31 +82,35 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
     }
 
     @Override
-    public String createAuthToken(User user) {
+    public String createAuthToken(UserAuthentication userAuthentication) {
         Long authSessionId = currentAuthSessionId.incrementAndGet();
 
         JwtBuilder builder = Jwts.builder();
-        builder.setSubject(user.getName()).claim(CLAIM_AUTH_SESSION_ID, authSessionId).signWith(SignatureAlgorithm.HS512, key)
-                .compressWith(CompressionCodecs.DEFLATE);
+        builder.setSubject(userAuthentication.getUser().getName()).claim(CLAIM_AUTH_SESSION_ID, authSessionId)
+                .signWith(SignatureAlgorithm.HS512, key).compressWith(CompressionCodecs.DEFLATE);
         String token = builder.compact();
 
-        authTokenSessions.put(authSessionId, new AuthTokenSession(user.getName()));
+        authTokenSessions.put(authSessionId, new AuthTokenSession(userAuthentication));
 
         return token;
     }
 
     @Override
-    public String validateAuthToken(String authToken) {
+    public UserAuthentication validateAuthToken(String authToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
-            String username = claims.getBody().getSubject();
             Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
 
-            if (authSessionId == null || authTokenSessions.getIfPresent(authSessionId) == null) {
+            if (authSessionId == null) {
                 throw new RestApiInvalidAuthTokenServerException("Invalid or expired authentication token");
             }
 
-            return username;
+            AuthTokenSession authSession = authTokenSessions.getIfPresent(authSessionId);
+            if (authSession == null) {
+                throw new RestApiInvalidAuthTokenServerException("Invalid or expired authentication token");
+            }
+
+            return authSession.getUserAuthentication();
         } catch (JwtException e) {
             throw new RestApiInvalidAuthTokenServerException(e.getMessage(), e);
         }

@@ -24,18 +24,18 @@ public interface RestApiAuthTokenService extends HasRestApiService, Initializabl
     /**
      * Creates a new auth token.
      *
-     * @param user the user.
+     * @param userAuthentication the user authentication.
      * @return the auth token.
      */
-    String createAuthToken(User user);
+    String createAuthToken(UserAuthentication userAuthentication);
 
     /**
      * Validates the auth token. Throws exception if it is invalid.
      *
      * @param authToken the auth token,
-     * @return the authenticated user name.
+     * @return the authenticated user authentication.
      */
-    String validateAuthToken(String authToken);
+    UserAuthentication validateAuthToken(String authToken);
 
     void removeAuthToken(String authToken);
 }

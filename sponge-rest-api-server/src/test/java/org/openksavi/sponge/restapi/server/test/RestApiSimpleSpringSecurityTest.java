@@ -19,6 +19,7 @@ package org.openksavi.sponge.restapi.server.test;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -170,6 +171,28 @@ public class RestApiSimpleSpringSecurityTest {
     public void testReloadUser2() {
         try (SpongeRestClient client = createRestClient("joe", "password")) {
             client.reload();
+        }
+    }
+
+    @Test
+    public void testAutoUseAuthTokenTrue() {
+        try (SpongeRestClient client = createRestClient("joe", "password")) {
+            client.getConfiguration().setAutoUseAuthToken(true);
+
+            assertNull(client.getCurrentAuthToken());
+            client.getActions();
+            assertNotNull(client.getCurrentAuthToken());
+        }
+    }
+
+    @Test
+    public void testAutoUseAuthTokenFalse() {
+        try (SpongeRestClient client = createRestClient("joe", "password")) {
+            client.getConfiguration().setAutoUseAuthToken(false);
+
+            assertNull(client.getCurrentAuthToken());
+            client.getActions();
+            assertNull(client.getCurrentAuthToken());
         }
     }
 }

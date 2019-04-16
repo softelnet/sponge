@@ -31,6 +31,8 @@ public class SpongeRestClientConfiguration {
 
     private boolean useRequestId = false;
 
+    private boolean autoUseAuthToken = false;
+
     private boolean relogin = true;
 
     private boolean verifyProcessorVersion = true;
@@ -75,6 +77,14 @@ public class SpongeRestClientConfiguration {
 
     public void setUseRequestId(boolean useRequestId) {
         this.useRequestId = useRequestId;
+    }
+
+    public boolean isAutoUseAuthToken() {
+        return autoUseAuthToken;
+    }
+
+    public void setAutoUseAuthToken(boolean autoUseAuthToken) {
+        this.autoUseAuthToken = autoUseAuthToken;
     }
 
     public boolean isRelogin() {
@@ -207,6 +217,18 @@ public class SpongeRestClientConfiguration {
          */
         public Builder useRequestId(boolean useRequestId) {
             configuration.setUseRequestId(useRequestId);
+            return this;
+        }
+
+        /**
+         * Sets the flag telling if the client should automatically use auth token authentication (i.e. the login operation won't be
+         * required to use the auth token authentication). The default value is {@code false}.
+         *
+         * @param autoUseAuthToken the flag to automatically use auth token authentication.
+         * @return the builder.
+         */
+        public Builder autoUseAuthToken(boolean autoUseAuthToken) {
+            configuration.setAutoUseAuthToken(autoUseAuthToken);
             return this;
         }
 

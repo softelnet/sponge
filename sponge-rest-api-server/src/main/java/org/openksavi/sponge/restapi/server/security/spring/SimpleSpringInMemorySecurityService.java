@@ -71,13 +71,6 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     }
 
     @Override
-    public UserAuthentication getStoredUserAuthentication(String username) {
-        User user = getUser(username);
-
-        return new SimpleSpringUserAuthentication(user, createAuthentication(user));
-    }
-
-    @Override
     public void openUserContext(UserAuthentication userAuthentication) {
         Validate.isTrue(userAuthentication instanceof SimpleSpringUserAuthentication, "The user authentication class should extend %s",
                 SimpleSpringUserAuthentication.class);
