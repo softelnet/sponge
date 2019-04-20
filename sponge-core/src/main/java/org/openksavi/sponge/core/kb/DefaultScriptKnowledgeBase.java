@@ -71,8 +71,18 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
     }
 
     @Override
+    public final void onBeforeLoad() {
+        getInterpreter().onBeforeLoad();
+    }
+
+    @Override
     public final void onLoad() {
         getInterpreter().onLoad();
+    }
+
+    @Override
+    public final void onAfterLoad() {
+        getInterpreter().onAfterLoad();
     }
 
     /**

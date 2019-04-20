@@ -16,7 +16,9 @@ class ReloadTrigger(Trigger):
 def onInit():
     # Variables for assertions only
     sponge.setVariable("onInitCalled", AtomicBoolean(False))
+    sponge.setVariable("onBeforeLoadCalled", AtomicInteger(0))
     sponge.setVariable("onLoadCalled", AtomicInteger(0))
+    sponge.setVariable("onAfterLoadCalled", AtomicInteger(0))
     sponge.setVariable("onStartupCalled", AtomicBoolean(False))
     sponge.setVariable("onBeforeReloadCalled", AtomicBoolean(False))
     sponge.setVariable("onAfterReloadCalled", AtomicBoolean(False))
@@ -24,9 +26,17 @@ def onInit():
     sponge.logger.debug("onInit")
     sponge.getVariable("onInitCalled").set(True)
 
+def onBeforeLoad():
+    sponge.logger.debug("onBeforeLoad")
+    sponge.getVariable("onBeforeLoadCalled").incrementAndGet()
+
 def onLoad():
     sponge.logger.debug("onLoad")
     sponge.getVariable("onLoadCalled").incrementAndGet()
+
+def onAfterLoad():
+    sponge.logger.debug("onAfterLoad")
+    sponge.getVariable("onAfterLoadCalled").incrementAndGet()
 
 def onStartup():
     sponge.logger.debug("onStartup")

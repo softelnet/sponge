@@ -20,7 +20,9 @@ end
 def onInit
     # Variables for assertions only
     $sponge.setVariable("onInitCalled", AtomicBoolean.new(false))
+    $sponge.setVariable("onBeforeLoadCalled", AtomicInteger.new(0))
     $sponge.setVariable("onLoadCalled", AtomicInteger.new(0))
+    $sponge.setVariable("onAfterLoadCalled", AtomicInteger.new(0))
     $sponge.setVariable("onStartupCalled", AtomicBoolean.new(false))
     $sponge.setVariable("onBeforeReloadCalled", AtomicBoolean.new(false))
     $sponge.setVariable("onAfterReloadCalled", AtomicBoolean.new(false))
@@ -29,9 +31,19 @@ def onInit
     $sponge.getVariable("onInitCalled").set(true)
 end
 
+def onBeforeLoad
+    $sponge.logger.debug("onBeforeLoad")
+    $sponge.getVariable("onBeforeLoadCalled").incrementAndGet()
+end
+
 def onLoad
     $sponge.logger.debug("onLoad")
     $sponge.getVariable("onLoadCalled").incrementAndGet()
+end
+
+def onAfterLoad
+    $sponge.logger.debug("onAfterLoad")
+    $sponge.getVariable("onAfterLoadCalled").incrementAndGet()
 end
 
 def onStartup

@@ -27,9 +27,19 @@ public interface KnowledgeBaseOperations {
     void onInit();
 
     /**
+     * Calls onBeforeLoad method in the knowledge base. Called just before onLoad. The implementation could for example register data types.
+     */
+    void onBeforeLoad();
+
+    /**
      * Calls onLoad method in the knowledge base. The implementation could for example manually enable filters, triggers, etc.
      */
     void onLoad();
+
+    /**
+     * Calls onAfterLoad method in the knowledge base. Called just after onLoad.
+     */
+    void onAfterLoad();
 
     /**
      * Calls onStartup method in the knowledge base. An implementation could for example send events, etc.

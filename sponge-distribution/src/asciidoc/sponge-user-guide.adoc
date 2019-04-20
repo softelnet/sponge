@@ -61,8 +61,10 @@ Shutting down doesn't guarantee that all events sent to the engine will be proce
 include::includes/user-guide-knowledge-bases.adoc[leveloffset=+1]
 
 [[types]]
-== Types
-Types are represented by instances of classes. The type classes are located in the `org.openksavi.sponge.type` package. Types are used for example as action arguments and result metadata.
+== Data types
+
+=== Supported data types
+Data types are represented by instances of classes. The type classes are located in the `org.openksavi.sponge.type` package. Types are used for example as action arguments and result metadata.
 
 .Basic type properties
 [cols="1,3"]
@@ -190,6 +192,49 @@ ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")
 ListType(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))
 BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "color":"white"})
 OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"").withHeaders({})
+----
+
+=== Registered data types
+A data type can be registered in the engine in order to be accessed later by its registered type name.
+
+.Engine facade methods for registered types
+[cols="1,3"]
+|===
+|Method |Description
+
+|`addType(String registeredTypeName, DataTypeSupplier<T> typeSupplier)`
+|Registers a data type by providing a type supplier that will create a new instance of the registered type each time, e.g. `sponge.addType("Author", lambda: RecordType([StringType("firstName").withLabel("First name"), StringType("surname").withLabel("Surname")]))`.
+
+|`getType(String registeredTypeName)`
+|Returns a new instance of the registered data type.
+
+|`getType(String registeredTypeName, String locationName)`
+|Returns a new instance of the registered data type setting the returned type location name as well.
+
+|`Map<String, DataType> getTypes()`
+|Returns the unmodifiable map of registered data types.
+|===
+
+Data types should be registered in the `onBeforeLoad`, because it is invoked before scanning processors.
+
+.The registered data type example
+[source,python]
+----
+def onBeforeLoad():
+    sponge.addType("Author", lambda: RecordType([
+                StringType("firstName").withLabel("First name"),
+                StringType("surname").withLabel("Surname")
+            ]))
+    sponge.addType("Book", lambda: RecordType([
+                sponge.getType("Author", "author").withLabel("Author"),
+                StringType("title").withLabel("Title")
+            ]))
+
+class GetBookAuthorSurname(Action):
+    def onConfigure(self):
+        self.withLabel("Get a book author").withArg(sponge.getType("Book").withName("book")).withResult(sponge.getType("Author"))
+    def onCall(self, book):
+        return book["author"]["surname"]
 ----
 
 == Events

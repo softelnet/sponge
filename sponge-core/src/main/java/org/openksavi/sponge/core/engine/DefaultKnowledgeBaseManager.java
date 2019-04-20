@@ -221,7 +221,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             }
         });
 
+        onBeforeLoad();
         onLoad();
+        onAfterLoad();
 
         onAfterReload();
     }
@@ -232,7 +234,9 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     @Override
     public void doStartup() {
         onInit();
+        onBeforeLoad();
         onLoad();
+        onAfterLoad();
     }
 
     /**
@@ -251,6 +255,11 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     }
 
     @Override
+    public void onBeforeLoad() {
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onBeforeLoad(), "onBeforeLoad"));
+    }
+
+    @Override
     public void onLoad() {
         // Before invoking onLoad callback method, scan to auto-enable processors if this functionality is turned on.
         if (getEngine().getConfigurationManager().getAutoEnable()) {
@@ -258,7 +267,11 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         }
 
         knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onLoad(), "onLoad"));
+    }
 
+    @Override
+    public void onAfterLoad() {
+        knowledgeBases.values().forEach(kb -> SpongeUtils.doInWrappedException(kb, () -> kb.onAfterLoad(), "onAfterLoad"));
     }
 
     @Override

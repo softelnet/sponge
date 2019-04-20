@@ -41,7 +41,9 @@ import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.trigger.TriggerMeta;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
@@ -398,5 +400,31 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public RuleMeta getRuleMeta(String ruleName) {
         return engine.getRuleMeta(ruleName);
+    }
+
+    @Override
+    public <T extends DataType<?>> void addType(String registeredTypeName, DataTypeSupplier<T> typeSupplier) {
+        engine.addType(registeredTypeName, typeSupplier);
+    }
+
+    @Override
+    public <T extends DataType<?>> T getType(String registeredTypeName) {
+        return engine.getType(registeredTypeName);
+    }
+
+    @Override
+    public <T extends DataType<?>> T getType(String registeredTypeName, String locationName) {
+        return engine.getType(registeredTypeName, locationName);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Map<String, DataType> getTypes() {
+        return engine.getTypes();
+    }
+
+    @Override
+    public boolean removeType(String registeredTypeName) {
+        return engine.removeType(registeredTypeName);
     }
 }

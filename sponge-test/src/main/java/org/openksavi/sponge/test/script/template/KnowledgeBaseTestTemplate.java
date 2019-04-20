@@ -46,7 +46,11 @@ public class KnowledgeBaseTestTemplate {
             await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> ((AtomicBoolean) engine.getOperations().getVariable("onAfterReloadCalled")).get());
             await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "onBeforeLoadCalled").intValue() == 2);
+            await().atMost(30, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "onLoadCalled").intValue() == 2);
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "onAfterLoadCalled").intValue() == 2);
             TestStatus.onShutdownCalled = false;
             assertFalse(engine.isError());
         } finally {

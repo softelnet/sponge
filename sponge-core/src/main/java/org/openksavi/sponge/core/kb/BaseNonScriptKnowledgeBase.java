@@ -46,7 +46,17 @@ public abstract class BaseNonScriptKnowledgeBase extends BaseKnowledgeBase {
     }
 
     @Override
+    public void onBeforeLoad() {
+        //
+    }
+
+    @Override
     public void onLoad() {
+        //
+    }
+
+    @Override
+    public void onAfterLoad() {
         //
     }
 

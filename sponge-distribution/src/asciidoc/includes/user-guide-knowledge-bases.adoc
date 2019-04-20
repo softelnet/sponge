@@ -14,18 +14,26 @@ Generally, script knowledge base files consist of a few parts:
 
 . Import of modules and packages (from the scripting language or Java).
 . Definitions of knowledge base processors (actions, filters, triggers, rules and correlators).
-. Definitions of callback functions that will be invoked in particular situations:
-+
+. Definitions of callback functions that will be invoked in particular situations.
+
+== Callback functions
+
 .Callback functions
 [cols="1,4"]
 |===
 |Function |Description
 
 |`onInit()`
-|Called once on the initialization of a knowledge base.
+|Called once on the initialization of a knowledge base after the knowledge base files have been read.
+
+|`onBeforeLoad()`
+|Called just before `onLoad` and also every time a knowledge base is reloaded. The implementation could for example register data types before scanning processors.
 
 |`onLoad()`
 |Called on the loading of a knowledge base and also every time a knowledge base is reloaded. Before invoking an `onLoad` callback method, the engine scans to auto-enable processors (if this functionality is turned on). You may manually disable some of the auto enabled processors in this callback function if necessary.
+
+|`onAfterLoad()`
+|Called just after `onLoad` and also every time a knowledge base is reloaded.
 
 |`onStartup()`
 |Called once after the startup of the engine (after `onInit()` and initial `onLoad()`).
@@ -51,7 +59,9 @@ When {sponge} is starting, callback functions are invoked in the following order
 
 . executing all knowledge base files as scripts, i.e. executing the main body of the script files,
 . `onInit()`,
+. `onBeforeLoad()`,
 . `onLoad()`,
+. `onAfterLoad()`,
 . `onStartup()`,
 . `onRun()`.
 
@@ -61,7 +71,9 @@ When a knowledge base is reloaded, the callback functions are invoked in the fol
 
 . `onBeforeReload()` executed in the previous version of the reloaded knowledge base,
 . executing all knowledge base files as scripts, i.e. executing the main body of the script files,
+. `onBeforeLoad()` executed in the new version of the reloaded knowledge base,
 . `onLoad()` executed in the new version of the reloaded knowledge base,
+. `onAfterLoad()` executed in the new version of the reloaded knowledge base,
 . `onAfterReload()` executed in the new version of the reloaded knowledge base.
 
 == Global variables

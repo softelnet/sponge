@@ -47,7 +47,9 @@ public class KnowledgeBaseCallbacks extends JKnowledgeBase {
     public void onInit() {
         // Variables for assertions only
         getSponge().setVariable("onInitCalled", new AtomicBoolean(false));
+        getSponge().setVariable("onBeforeLoadCalled", new AtomicInteger(0));
         getSponge().setVariable("onLoadCalled", new AtomicInteger(0));
+        getSponge().setVariable("onAfterLoadCalled", new AtomicInteger(0));
         getSponge().setVariable("onStartupCalled", new AtomicBoolean(false));
         getSponge().setVariable("onBeforeReloadCalled", new AtomicBoolean(false));
         getSponge().setVariable("onAfterReloadCalled", new AtomicBoolean(false));
@@ -57,9 +59,21 @@ public class KnowledgeBaseCallbacks extends JKnowledgeBase {
     }
 
     @Override
+    public void onBeforeLoad() {
+        getLogger().debug("onBeforeLoad");
+        getSponge().getVariable(AtomicInteger.class, "onBeforeLoadCalled").incrementAndGet();
+    }
+
+    @Override
     public void onLoad() {
         getLogger().debug("onLoad");
         getSponge().getVariable(AtomicInteger.class, "onLoadCalled").incrementAndGet();
+    }
+
+    @Override
+    public void onAfterLoad() {
+        getLogger().debug("onAfterLoad");
+        getSponge().getVariable(AtomicInteger.class, "onAfterLoadCalled").incrementAndGet();
     }
 
     @Override

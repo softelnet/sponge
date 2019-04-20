@@ -32,7 +32,9 @@ import org.openksavi.sponge.filter.FilterMeta;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.trigger.TriggerMeta;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
@@ -512,4 +514,48 @@ public interface EngineOperations {
      * @return the rule metadata.
      */
     RuleMeta getRuleMeta(String ruleName);
+
+    /**
+     * Registers a data type.
+     *
+     * @param <T> a data type.
+     * @param registeredTypeName the registered type name.
+     * @param typeSupplier the type supplier.
+     */
+    <T extends DataType<?>> void addType(String registeredTypeName, DataTypeSupplier<T> typeSupplier);
+
+    /**
+     * Returns a new instance of the registered data type.
+     *
+     * @param <T> a data type.
+     * @param registeredTypeName the registered type name.
+     * @return the data type.
+     */
+    <T extends DataType<?>> T getType(String registeredTypeName);
+
+    /**
+     * Returns a new instance of the registered data type.
+     *
+     * @param <T> a data type.
+     * @param registeredTypeName the registered type name.
+     * @param locationName the returned type location name (corresponds to the {@code withName} type method).
+     * @return the data type.
+     */
+    <T extends DataType<?>> T getType(String registeredTypeName, String locationName);
+
+    /**
+     * Returns the unmodifiable map of registered data types.
+     *
+     * @return the unmodifiable map of registered data types.
+     */
+    @SuppressWarnings("rawtypes")
+    Map<String, DataType> getTypes();
+
+    /**
+     * Removes the registered data type.
+     *
+     * @param registeredTypeName the registered type name.
+     * @return {@code true} if the data type was registered.
+     */
+    boolean removeType(String registeredTypeName);
 }

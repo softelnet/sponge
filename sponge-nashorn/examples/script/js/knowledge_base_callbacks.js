@@ -20,7 +20,9 @@ var ReloadTrigger = Java.extend(Trigger, {
 function onInit() {
     // Variables for assertions only
     sponge.setVariable("onInitCalled", new AtomicBoolean(false));
+    sponge.setVariable("onBeforeLoadCalled", new AtomicInteger(0));
     sponge.setVariable("onLoadCalled", new AtomicInteger(0));
+    sponge.setVariable("onAfterLoadCalled", new AtomicInteger(0));
     sponge.setVariable("onStartupCalled", new AtomicBoolean(false));
     sponge.setVariable("onBeforeReloadCalled", new AtomicBoolean(false));
     sponge.setVariable("onAfterReloadCalled", new AtomicBoolean(false));
@@ -29,9 +31,19 @@ function onInit() {
     sponge.getVariable("onInitCalled").set(true);
 }
 
+function onBeforeLoad() {
+    sponge.logger.debug("onBeforeLoad");
+    sponge.getVariable("onBeforeLoadCalled").incrementAndGet();
+}
+
 function onLoad() {
     sponge.logger.debug("onLoad");
     sponge.getVariable("onLoadCalled").incrementAndGet();
+}
+
+function onAfterLoad() {
+    sponge.logger.debug("onAfterLoad");
+    sponge.getVariable("onAfterLoadCalled").incrementAndGet();
 }
 
 function onStartup() {

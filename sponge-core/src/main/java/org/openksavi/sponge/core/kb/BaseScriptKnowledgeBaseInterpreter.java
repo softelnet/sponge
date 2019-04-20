@@ -204,8 +204,18 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     }
 
     @Override
+    public void onBeforeLoad() {
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_BEFORE_LOAD, null);
+    }
+
+    @Override
     public void onLoad() {
         invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_LOAD, null);
+    }
+
+    @Override
+    public void onAfterLoad() {
+        invokeOptionalFunction(KnowledgeBaseConstants.FUN_ON_AFTER_LOAD, null);
     }
 
     /**

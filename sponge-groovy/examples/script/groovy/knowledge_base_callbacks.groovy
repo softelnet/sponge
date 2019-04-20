@@ -19,7 +19,9 @@ class ReloadTrigger extends Trigger {
 void onInit() {
     // Variables for assertions only
     sponge.setVariable("onInitCalled", new AtomicBoolean(false))
+    sponge.setVariable("onBeforeLoadCalled", new AtomicInteger(0))
     sponge.setVariable("onLoadCalled", new AtomicInteger(0))
+    sponge.setVariable("onAfterLoadCalled", new AtomicInteger(0))
     sponge.setVariable("onStartupCalled", new AtomicBoolean(false))
     sponge.setVariable("onBeforeReloadCalled", new AtomicBoolean(false))
     sponge.setVariable("onAfterReloadCalled", new AtomicBoolean(false))
@@ -28,9 +30,19 @@ void onInit() {
     sponge.getVariable("onInitCalled").set(true)
 }
 
+void onBeforeLoad() {
+    sponge.logger.debug("onBeforeLoad")
+    sponge.getVariable("onBeforeLoadCalled").incrementAndGet()
+}
+
 void onLoad() {
     sponge.logger.debug("onLoad")
     sponge.getVariable("onLoadCalled").incrementAndGet()
+}
+
+void onAfterLoad() {
+    sponge.logger.debug("onAfterLoad")
+    sponge.getVariable("onAfterLoadCalled").incrementAndGet()
 }
 
 void onStartup() {

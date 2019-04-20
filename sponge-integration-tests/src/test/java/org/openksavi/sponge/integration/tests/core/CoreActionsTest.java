@@ -1165,4 +1165,67 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testActionsMetadataRegisteredType() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_registered_type.py").build();
+        engine.startup();
+
+        try {
+            ActionMeta actionMeta = engine.getActionMeta("GetBookAuthorSurname");
+            assertEquals(1, actionMeta.getArgs().size());
+
+            RecordType bookType = (RecordType) actionMeta.getArgs().get(0);
+
+            assertEquals(DataTypeKind.RECORD, bookType.getKind());
+            assertEquals("Book", bookType.getRegisteredType());
+            assertEquals("book", bookType.getName());
+            assertEquals(2, bookType.getFields().size());
+            assertEquals(DataTypeKind.RECORD, bookType.getFields().get(0).getKind());
+            assertEquals(DataTypeKind.STRING, bookType.getFields().get(1).getKind());
+
+            RecordType authorType = (RecordType) bookType.getFields().get(0);
+            assertEquals("Author", authorType.getRegisteredType());
+            assertEquals("author", authorType.getName());
+            assertEquals(2, authorType.getFields().size());
+
+            StringType firstNameType = (StringType) authorType.getFields().get(0);
+            assertEquals("firstName", firstNameType.getName());
+            assertEquals("First name", firstNameType.getLabel());
+
+            StringType surnameType = (StringType) authorType.getFields().get(1);
+            assertEquals("surname", surnameType.getName());
+            assertEquals("Surname", surnameType.getLabel());
+
+            RecordType registeredBookType = engine.getType("Book");
+            assertEquals("Book", bookType.getRegisteredType());
+            assertNull(registeredBookType.getName());
+            assertEquals(2, registeredBookType.getFields().size());
+            assertEquals(DataTypeKind.RECORD, registeredBookType.getFields().get(0).getKind());
+            assertEquals(DataTypeKind.STRING, registeredBookType.getFields().get(1).getKind());
+
+            RecordType registeredAuthorType = engine.getType("Author");
+            assertEquals("Author", authorType.getRegisteredType());
+            assertNull(registeredAuthorType.getName());
+            assertEquals(2, registeredAuthorType.getFields().size());
+
+            // Test different instances.
+            assertTrue(registeredBookType != bookType);
+            assertTrue(registeredAuthorType != authorType);
+
+            String authorSurname = engine.getOperations().call(String.class, actionMeta.getName(), Arrays.asList(SpongeUtils
+                    .immutableMapOf("author", SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce"), "title", "Ulysses")));
+            assertEquals("Joyce", authorSurname);
+
+            assertEquals(2, engine.getTypes().size());
+            assertEquals(DataTypeKind.RECORD, engine.getTypes().get("Book").getKind());
+            assertEquals(DataTypeKind.RECORD, engine.getTypes().get("Author").getKind());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
 }

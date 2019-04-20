@@ -27,7 +27,9 @@ class KnowledgeBaseCallbacks : KKnowledgeBase() {
     override fun onInit() {
         // Variables for assertions only
         sponge.setVariable("onInitCalled", AtomicBoolean(false))
+        sponge.setVariable("onBeforeLoadCalled", AtomicInteger(0))
         sponge.setVariable("onLoadCalled", AtomicInteger(0))
+        sponge.setVariable("onAfterLoadCalled", AtomicInteger(0))
         sponge.setVariable("onStartupCalled", AtomicBoolean(false))
         sponge.setVariable("onBeforeReloadCalled", AtomicBoolean(false))
         sponge.setVariable("onAfterReloadCalled", AtomicBoolean(false))
@@ -36,9 +38,19 @@ class KnowledgeBaseCallbacks : KKnowledgeBase() {
         sponge.getVariable<AtomicBoolean>("onInitCalled").set(true)
     }
 
+    override fun onBeforeLoad() {
+        logger.debug("onBeforeLoad")
+        sponge.getVariable<AtomicInteger>("onBeforeLoadCalled").incrementAndGet()
+    }
+
     override fun onLoad() {
         logger.debug("onLoad")
         sponge.getVariable<AtomicInteger>("onLoadCalled").incrementAndGet()
+    }
+
+    override fun onAfterLoad() {
+        logger.debug("onAfterLoad")
+        sponge.getVariable<AtomicInteger>("onAfterLoadCalled").incrementAndGet()
     }
 
     override fun onStartup() {

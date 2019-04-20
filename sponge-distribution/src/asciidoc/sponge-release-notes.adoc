@@ -7,6 +7,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.9.1 (not released yet)
+* Added new callback functions in knowledge bases: `onBeforeLoad` and `onAfterLoad`.
+* Added support for registering data types (`EngineOperations` methods `addType`, `getType` and `getTypes`). A registered data type instance has its property `DataType.registeredType` set to a name of a registered type.
 * Added support for automatic use of auth tokens in the REST API client.
 
 [discrete]

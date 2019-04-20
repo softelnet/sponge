@@ -37,6 +37,9 @@ public class DataType<T> implements Descriptive, Cloneable {
     /** The data type kind. */
     private DataTypeKind kind;
 
+    /** The optional corresponding registered data type name. */
+    private String registeredType;
+
     /** The data type location name. */
     private String name;
 
@@ -145,6 +148,14 @@ public class DataType<T> implements Descriptive, Cloneable {
 
     public DataTypeKind getKind() {
         return kind;
+    }
+
+    public String getRegisteredType() {
+        return registeredType;
+    }
+
+    public void setRegisteredType(String registeredType) {
+        this.registeredType = registeredType;
     }
 
     @Override

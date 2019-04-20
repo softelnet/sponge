@@ -24,8 +24,14 @@ public final class KnowledgeBaseConstants {
     /** Initialization function name. */
     public static final String FUN_ON_INIT = "onInit";
 
+    /** On before load function name. */
+    public static final String FUN_ON_BEFORE_LOAD = "onBeforeLoad";
+
     /** On load function name. */
     public static final String FUN_ON_LOAD = "onLoad";
+
+    /** On after load function name. */
+    public static final String FUN_ON_AFTER_LOAD = "onAfterLoad";
 
     /** On startup function name. */
     public static final String FUN_ON_STARTUP = "onStartup";

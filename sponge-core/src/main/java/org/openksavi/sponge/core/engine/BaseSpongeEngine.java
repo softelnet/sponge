@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.engine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -86,6 +88,8 @@ import org.openksavi.sponge.spi.KnowledgeBaseInterpreterFactoryProvider;
 import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 import org.openksavi.sponge.trigger.TriggerMeta;
+import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
 import org.openksavi.sponge.util.ProcessorPredicate;
 
@@ -189,7 +193,11 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     private PatternMatcher patternMatcher = new RegexPatternMatcher();
 
     /** Registered categories. */
-    private Map<String, CategoryMeta> categories = new LinkedHashMap<>();
+    private Map<String, CategoryMeta> categories = Collections.synchronizedMap(new LinkedHashMap<>());
+
+    /** Registered types. */
+    @SuppressWarnings("rawtypes")
+    private Map<String, DataTypeSupplier> types = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
@@ -960,5 +968,45 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         Validate.isTrue(adapter.getType() == ProcessorType.RULE_GROUP, "Processor %s is not a rule", ruleName);
 
         return (RuleMeta) adapter.getMeta();
+    }
+
+    @Override
+    public <T extends DataType<?>> void addType(String registeredTypeName, DataTypeSupplier<T> typeSupplier) {
+        Validate.notNull(typeSupplier, "The supplier for type %s is null", registeredTypeName);
+        Validate.notNull(typeSupplier.supply(), "The supplied type %s is null", registeredTypeName);
+
+        types.put(registeredTypeName, typeSupplier);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends DataType<?>> T getType(String registeredTypeName) {
+        DataTypeSupplier<?> supplier = Validate.notNull(types.get(registeredTypeName), "Type %s is not registered", registeredTypeName);
+        DataType<?> type = Validate.notNull(supplier.supply(), "The supplied type %s is null", registeredTypeName);
+
+        // Set the registered type name in the new instance.
+        type.setRegisteredType(registeredTypeName);
+
+        return (T) type;
+    }
+
+    @Override
+    public <T extends DataType<?>> T getType(String registeredTypeName, String locationName) {
+        T type = getType(registeredTypeName);
+        type.setName(locationName);
+
+        return type;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Map<String, DataType> getTypes() {
+        return Collections.unmodifiableMap(
+                types.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().supply())));
+    }
+
+    @Override
+    public boolean removeType(String registeredTypeName) {
+        return types.remove(registeredTypeName) != null;
     }
 }
