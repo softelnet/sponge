@@ -1,16 +1,33 @@
 #!/bin/bash
 
-if [ -z $JAVA_HOME ]; then
+function set_java_version_options() {
+    case $1 in
+    1.8*)
+        ;;
+    *)
+        # Prevent most common Java illegal reflective access operation warnings, e.g. caused by Jython [https://bugs.jython.org/issue2656].
+        JAVA_VERSION_OPTIONS="--illegal-access=warn --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED"
+        ;;
+    esac
+}
+
+if [ -z "$JAVA_HOME" ]; then
     JAVA_CMD=java
 else
     JAVA_CMD=$JAVA_HOME/bin/java
 fi
 
-if [ -z $JAVA_OPTIONS ]; then
+if [ -z "$JAVA_OPTIONS" ]; then
     JAVA_OPTIONS="-Xmx1024m -XX:+UseG1GC -XX:+UseStringDeduplication"
+    JAVA_VERSION=`$JAVA_CMD -version 2>&1 | awk -F '"' 'NR==1 {print \$2}'`
+
+    set_java_version_options $JAVA_VERSION
+    if [ ! -z "$JAVA_VERSION_OPTIONS" ]; then
+        JAVA_OPTIONS="$JAVA_OPTIONS $JAVA_VERSION_OPTIONS"
+    fi
 fi
 
-if [ -z $SPONGE_HOME ]; then
+if [ -z "$SPONGE_HOME" ]; then
     SPONGE_HOME=`dirname $BASH_SOURCE`/..
 fi
 
@@ -20,4 +37,4 @@ if [ -z $COLUMNS ]; then
     fi
 fi
 
-$JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml ${mainClass} "$@"
+$JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml org.openksavi.sponge.standalone.StandaloneEngineMain "$@"

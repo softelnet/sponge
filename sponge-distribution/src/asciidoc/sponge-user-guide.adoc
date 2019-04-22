@@ -958,6 +958,8 @@ Maven users will need to add the following dependency to their `pom.xml`:
 === JavaScript
 JavaScript interpreter supports https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/shell.html[shell scripting extensions in Nashorn] to provide simpler shell integration.
 
+NOTE: Current support for JavaScript in {sponge} is deprecated because Nashorn engine is planned to be removed from future JDK releases.
+
 ==== Limitations
 
 ===== Custom class attributes and methods

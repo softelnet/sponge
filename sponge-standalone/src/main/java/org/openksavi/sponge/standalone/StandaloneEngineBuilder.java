@@ -144,7 +144,7 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
             if (!commandLine.hasOption(StandaloneConstants.OPTION_CONFIG)
                     && !commandLine.hasOption(StandaloneConstants.OPTION_KNOWLEDGE_BASE)) {
                 throw new StandaloneInitializationException(
-                        "An Sponge XML configuration file or a knowledge base file(s) should be provided.");
+                        "A Sponge XML configuration file or a knowledge base file(s) should be provided.");
             }
 
             // Apply standard parameters.

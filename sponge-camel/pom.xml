@@ -40,6 +40,12 @@
             <artifactId>camel-spring-javaconfig</artifactId>
         </dependency>
 
+        <!-- Required by Java 11. -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-test</artifactId>

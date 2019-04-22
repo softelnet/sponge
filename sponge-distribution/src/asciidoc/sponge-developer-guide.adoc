@@ -1,5 +1,7 @@
 = Sponge Developer Guide
 
+Sponge sources can be built with Java 8.
+
 == Maven
 
 === Settings
