@@ -51,6 +51,7 @@ public abstract class BaseHttpsRestApiTest extends BaseRestApiTestTemplate {
 
             plugin.getSettings().setPort(spongeRestApiPort());
             plugin.getSettings().setIncludeDetailedErrorMessage(true);
+            plugin.getSettings().setPrettyPrint(true);
 
             SslConfiguration sslConfiguration = new SslConfiguration();
             sslConfiguration.setKeyStore("keystore/rest_api_selfsigned.jks");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.test;
+package org.openksavi.sponge.restapi.type.converter.unit;
 
-public final class RestApiTestConstants {
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 
-    public static final int ADMIN_ACTIONS_COUNT = 26;
+/**
+ * An object type unit converter mapper.
+ */
+@FunctionalInterface
+public interface ObjectTypeConverterMapper {
 
-    public static final int ANONYMOUS_ACTIONS_COUNT = ADMIN_ACTIONS_COUNT - 1;
-
-    public static final int ANONYMOUS_ACTIONS_WITH_METADATA_COUNT = ANONYMOUS_ACTIONS_COUNT - 1;
-
-    private RestApiTestConstants() {
-        //
-    }
+    Object map(TypeConverter converter, Object value);
 }

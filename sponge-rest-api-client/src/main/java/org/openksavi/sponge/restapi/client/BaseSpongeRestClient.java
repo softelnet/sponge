@@ -382,21 +382,26 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             }
         }
 
+        if (response.getTypes() != null) {
+            response.getTypes().values().forEach(type -> unmarshalDataType(type));
+        }
+
         return response;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected void unmarshalDataType(DataType type) {
+        type.setDefaultValue(typeConverter.unmarshal(type, type.getDefaultValue()));
+    }
+
     protected void unmarshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
             if (actionMeta.getArgs() != null) {
-                actionMeta.getArgs().forEach(argType -> {
-                    argType.setDefaultValue(typeConverter.unmarshal(argType, argType.getDefaultValue()));
-                });
+                actionMeta.getArgs().forEach(argType -> unmarshalDataType(argType));
             }
 
             if (actionMeta.getResult() != null) {
-                DataType resultType = actionMeta.getResult();
-                resultType.setDefaultValue(typeConverter.unmarshal(resultType, resultType.getDefaultValue()));
+                unmarshalDataType(actionMeta.getResult());
             }
         }
     }

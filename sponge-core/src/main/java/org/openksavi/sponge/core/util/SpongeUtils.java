@@ -705,6 +705,84 @@ public abstract class SpongeUtils {
     }
 
     @SuppressWarnings("rawtypes")
+    public static void setupType(DataType type) {
+        if (type instanceof RecordType) {
+            mergeInheritedRecordType((RecordType) type);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static void mergeInheritedRecordType(RecordType type) {
+        RecordType baseType = type.getBaseType();
+
+        if (baseType == null || type.isInheritationApplied()) {
+            return;
+        }
+
+        // Types have been validated earlier.
+
+        mergeTypes(baseType, type);
+
+        List<DataType> mergedFields = new ArrayList<>(baseType.getFields());
+        type.getFields().forEach(subTypeField -> {
+            Validate.isTrue(!mergedFields.stream().anyMatch(mergedField -> Objects.equals(mergedField.getName(), subTypeField.getName())),
+                    "The field '%s' already exists in the base type", subTypeField.getName());
+            mergedFields.add(subTypeField);
+        });
+
+        type.setFields(mergedFields);
+
+        type.setInheritationApplied(true);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected static void mergeTypes(DataType baseType, DataType subType) {
+        Validate.isTrue(Objects.equals(baseType.getKind(), subType.getKind()), "The types to be merged %s and %s are incompatible",
+                baseType.getKind(), subType.getKind());
+
+        // Overwrite defaults in the subType properties.
+        if (subType.getName() == null) {
+            subType.setName(baseType.getName());
+        }
+
+        if (subType.getLabel() == null) {
+            subType.setLabel(baseType.getLabel());
+        }
+
+        if (subType.getDescription() == null) {
+            subType.setDescription(baseType.getDescription());
+        }
+
+        if (!subType.isAnnotated()) {
+            subType.setAnnotated(baseType.isAnnotated());
+        }
+
+        if (subType.getFormat() == null) {
+            subType.setFormat(baseType.getFormat());
+        }
+
+        if (subType.getDefaultValue() == null) {
+            subType.setDefaultValue(baseType.getDefaultValue());
+        }
+
+        if (!subType.isNullable()) {
+            subType.setNullable(baseType.isNullable());
+        }
+
+        Map<String, Object> mergedFeatures = new LinkedHashMap<>(baseType.getFeatures());
+        mergedFeatures.putAll(subType.getFeatures());
+        subType.setFeatures(mergedFeatures);
+
+        if (!subType.isOptional()) {
+            subType.setOptional(baseType.isOptional());
+        }
+
+        if (subType.getProvided() == null) {
+            subType.setProvided(baseType.getProvided());
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
     public static List<Class<? extends DataType>> getSupportedTypes() {
         return SUPPORTED_TYPES;
     }

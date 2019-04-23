@@ -21,6 +21,16 @@ def onInit():
 
     sponge.addCategories(CategoryMeta("category1").withLabel("Category 1").withDescription("Category 1 description"),
                          CategoryMeta("category2").withLabel("Category 2").withDescription("Category 2 description"))
+
+def onBeforeLoad():
+    sponge.addType("Person", lambda: RecordType().withFields([
+        StringType("firstName").withLabel("First name"),
+        StringType("surname").withLabel("Surname")
+    ]))
+    sponge.addType("Citizen", lambda: RecordType().withBaseType(sponge.getType("Person")).withFields([
+        StringType("country").withLabel("Country")
+    ]))
+
 def onLoad():
     sponge.kb.version = 2
 
@@ -269,6 +279,18 @@ class OutputStreamResultAction(Action):
     def onCall(self):
         return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"").withHeaders({
             })
+
+class RegisteredTypeArgAction(Action):
+    def onConfigure(self):
+        self.withLabel("Registered type argument action").withArg(sponge.getType("Person").withName("person")).withResult(StringType())
+    def onCall(self, person):
+        return person["surname"]
+
+class InheritedRegisteredTypeArgAction(Action):
+    def onConfigure(self):
+        self.withLabel("Inherited, registered type argument action").withArg(sponge.getType("Citizen").withName("citizen")).withResult(StringType())
+    def onCall(self, citizen):
+        return citizen["firstName"] + " comes from " + citizen["country"]
 
 class RestApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

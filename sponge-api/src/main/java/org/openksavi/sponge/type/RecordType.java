@@ -34,6 +34,12 @@ public class RecordType extends DataType<Map<String, Object>> {
     /** The field types. */
     private List<DataType> fields;
 
+    /** The base record type. */
+    private RecordType baseType;
+
+    /** The flag that tells if inheritance has been applied to this type. */
+    private boolean inheritationApplied = false;
+
     public RecordType() {
         this((String) null);
     }
@@ -140,6 +146,17 @@ public class RecordType extends DataType<Map<String, Object>> {
         return this;
     }
 
+    /**
+     * Sets a base record type for this type. Used for inheritance.
+     *
+     * @param baseType the base record type.
+     * @return this type.
+     */
+    public RecordType withBaseType(RecordType baseType) {
+        setBaseType(baseType);
+        return this;
+    }
+
     public List<DataType> getFields() {
         return fields;
     }
@@ -148,11 +165,30 @@ public class RecordType extends DataType<Map<String, Object>> {
         this.fields = new ArrayList<>(fields);
     }
 
+    public RecordType getBaseType() {
+        return baseType;
+    }
+
+    public void setBaseType(RecordType baseType) {
+        this.baseType = baseType;
+    }
+
+    public boolean isInheritationApplied() {
+        return inheritationApplied;
+    }
+
+    public void setInheritationApplied(boolean inheritationApplied) {
+        this.inheritationApplied = inheritationApplied;
+    }
+
     @Override
     public RecordType clone() {
         RecordType cloned = (RecordType) super.clone();
         cloned.fields = fields != null
                 ? new ArrayList<>(fields.stream().map(field -> field != null ? field.clone() : null).collect(Collectors.toList())) : null;
+        if (baseType != null) {
+            cloned.baseType = baseType.clone();
+        }
 
         return cloned;
     }

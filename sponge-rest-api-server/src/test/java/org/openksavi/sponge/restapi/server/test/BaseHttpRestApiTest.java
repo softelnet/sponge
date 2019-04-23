@@ -50,6 +50,7 @@ public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
 
             plugin.getSettings().setPort(spongeRestApiPort());
             plugin.getSettings().setIncludeDetailedErrorMessage(true);
+            plugin.getSettings().setPrettyPrint(true);
             // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 
             plugin.getSettings().setAllowAnonymous(true);

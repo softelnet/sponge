@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.util;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -69,5 +71,25 @@ public abstract class DataTypeUtils {
         }
 
         return property != null ? property : orElse.get();
+    }
+
+    public static Set<String> getRegisteredTypeNames(DataType type) {
+        Set<String> types = new LinkedHashSet<>();
+
+        traverseDataType(new QualifiedDataType(type), qType -> {
+            if (qType.getType().getRegisteredType() != null) {
+                types.add(qType.getType().getRegisteredType());
+            }
+
+            // Walk through record base types.
+            if (qType.getType() instanceof RecordType) {
+                RecordType recordType = (RecordType) qType.getType();
+                if (recordType.getBaseType() != null) {
+                    types.addAll(getRegisteredTypeNames(recordType.getBaseType()));
+                }
+            }
+        }, false);
+
+        return types;
     }
 }

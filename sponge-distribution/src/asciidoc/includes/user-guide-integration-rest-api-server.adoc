@@ -160,7 +160,7 @@ The following table contains a summary of the REST API operations. For a complet
 
 |Get actions
 |`actions`
-|Returns the metadata of actions that are available to the user. If you want to get metadata for specified actions, set the request property `name` to an action name or a Java-compatible regular expression. If you want to get only actions that have argument and result metadata specified in their configuration, set the request property `metadataRequired` to `true` (defaults to `false`). Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence number reflects the order in which categories or knowledge bases have been added to the engine.
+|Returns the metadata of actions that are available to the user. If you want to get metadata for specified actions, set the request property `name` to an action name or a Java-compatible regular expression. If you want to get only actions that have argument and result metadata specified in their configuration, set the request property `metadataRequired` to `true` (defaults to `false`). Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence number reflects the order in which categories or knowledge bases have been added to the engine. The optional request property `registeredTypes` is a flag for requesting registered types used in the actions in the result (defaults to `false`).
 
 |Call an action
 |`call`

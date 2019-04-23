@@ -18,8 +18,10 @@ package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -70,6 +72,7 @@ import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.TypeTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
@@ -209,14 +212,24 @@ public class DefaultRestApiService implements RestApiService {
             Predicate<ActionAdapter> isSelectedByNameRegExp =
                     action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true;
 
-            return setupSuccessResponse(
-                    new GetActionsResponse(getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
-                            .filter(isPublicBySettings)
-                            .filter(action -> actualMetadataRequired
-                                    ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null : true)
-                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                            .filter(action -> canCallAction(user, action)).map(action -> createRestActionMeta(action))
-                            .sorted(actionsOrderComparator).map(action -> marshalActionMeta(action)).collect(Collectors.toList())),
+            List<ActionAdapter> actions = getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
+                    .filter(isPublicBySettings)
+                    .filter(action -> actualMetadataRequired ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null
+                            : true)
+                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                    .filter(action -> canCallAction(user, action)).collect(Collectors.toList());
+
+            Map<String, DataType<?>> registeredTypes = null;
+            if (request.getRegisteredTypes() != null && request.getRegisteredTypes()) {
+                final Set<String> typeNames = new LinkedHashSet<>();
+                actions.stream().forEach(action -> typeNames.addAll(action.getRegisteredTypeNames()));
+
+                registeredTypes = typeNames.stream().collect(Collectors.toMap(registeredTypeName -> registeredTypeName,
+                        registeredTypeName -> marshalDataType(getEngine().getType(registeredTypeName))));
+            }
+
+            return setupSuccessResponse(new GetActionsResponse(actions.stream().map(action -> createRestActionMeta(action))
+                    .sorted(actionsOrderComparator).map(action -> marshalActionMeta(action)).collect(Collectors.toList()), registeredTypes),
                     request);
         } catch (Exception e) {
             getEngine().handleError("REST getActions", e);
@@ -232,12 +245,15 @@ public class DefaultRestApiService implements RestApiService {
 
     }
 
+    @SuppressWarnings("rawtypes")
+    protected DataType marshalDataType(DataType type) {
+        return defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), type);
+    }
+
     protected RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
             if (actionMeta.getArgs() != null) {
-                actionMeta.setArgs(actionMeta.getArgs().stream()
-                        .map(argType -> defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), argType))
-                        .collect(Collectors.toList()));
+                actionMeta.setArgs(actionMeta.getArgs().stream().map(argType -> marshalDataType(argType)).collect(Collectors.toList()));
             }
 
             if (actionMeta.getResult() != null) {

@@ -33,6 +33,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.util.DataTypeUtils;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
@@ -40,6 +41,8 @@ import org.openksavi.sponge.util.SpongeApiUtils;
  */
 @SuppressWarnings("rawtypes")
 public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements ActionAdapter {
+
+    private Set<String> registeredTypeNames = new LinkedHashSet<>();
 
     /**
      * Creates a new action adapter.
@@ -125,6 +128,10 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         }
 
         validateResult(getMeta().getResult());
+
+        mergeInheritedTypes();
+
+        registeredTypeNames = calculateRegisteredTypeNames();
     }
 
     private void validateArg(DataType argType) {
@@ -164,6 +171,35 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         if (resultType != null) {
             String errorSource = String.format("result of the action '%s'", getMeta().getName());
             SpongeUtils.validateType(resultType, errorSource);
+        }
+    }
+
+    @Override
+    public Set<String> getRegisteredTypeNames() {
+        return registeredTypeNames;
+    }
+
+    protected Set<String> calculateRegisteredTypeNames() {
+        Set<String> typeNames = new LinkedHashSet<>();
+
+        if (getMeta().getArgs() != null) {
+            getMeta().getArgs().forEach(type -> typeNames.addAll(DataTypeUtils.getRegisteredTypeNames(type)));
+        }
+
+        if (getMeta().getResult() != null) {
+            typeNames.addAll(DataTypeUtils.getRegisteredTypeNames(getMeta().getResult()));
+        }
+
+        return typeNames;
+    }
+
+    protected void mergeInheritedTypes() {
+        if (getMeta().getArgs() != null) {
+            getMeta().getArgs().forEach(SpongeUtils::setupType);
+        }
+
+        if (getMeta().getResult() != null) {
+            SpongeUtils.setupType(getMeta().getResult());
         }
     }
 }

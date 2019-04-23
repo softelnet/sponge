@@ -26,6 +26,8 @@ public class GetActionsRequest extends SpongeRequest {
 
     private Boolean metadataRequired;
 
+    private Boolean registeredTypes;
+
     public GetActionsRequest() {
     }
 
@@ -47,5 +49,15 @@ public class GetActionsRequest extends SpongeRequest {
 
     public void setMetadataRequired(Boolean metadataRequired) {
         this.metadataRequired = metadataRequired;
+    }
+
+    @ApiModelProperty(value = "The flag for requesting registered types used in the actions in the result (defaults to false)",
+            required = false)
+    public Boolean getRegisteredTypes() {
+        return registeredTypes;
+    }
+
+    public void setRegisteredTypes(Boolean registeredTypes) {
+        this.registeredTypes = registeredTypes;
     }
 }

@@ -17,22 +17,27 @@
 package org.openksavi.sponge.restapi.model.response;
 
 import java.util.List;
+import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.restapi.model.RestActionMeta;
+import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "GetActionsResponse", description = "A get actions response")
 public class GetActionsResponse extends SpongeResponse {
 
     private List<RestActionMeta> actions;
 
+    private Map<String, DataType<?>> types;
+
     public GetActionsResponse() {
     }
 
-    public GetActionsResponse(List<RestActionMeta> actions) {
+    public GetActionsResponse(List<RestActionMeta> actions, Map<String, DataType<?>> types) {
         this.actions = actions;
+        this.types = types;
     }
 
     @ApiModelProperty(value = "The available actions", required = true)
@@ -42,5 +47,14 @@ public class GetActionsResponse extends SpongeResponse {
 
     public void setActions(List<RestActionMeta> actions) {
         this.actions = actions;
+    }
+
+    @ApiModelProperty(value = "The registered types used in the actions", required = false)
+    public Map<String, DataType<?>> getTypes() {
+        return types;
+    }
+
+    public void setTypes(Map<String, DataType<?>> types) {
+        this.types = types;
     }
 }

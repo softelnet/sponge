@@ -42,6 +42,10 @@ public class QualifiedDataType<T> {
         this(path, type, true);
     }
 
+    public QualifiedDataType(DataType<T> type) {
+        this(null, type);
+    }
+
     public String getPath() {
         return path;
     }

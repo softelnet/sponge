@@ -18,13 +18,13 @@ package org.openksavi.sponge.action;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
  * Action adapter.
- *
  */
 public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperations {
 
@@ -37,4 +37,11 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
      * @return the map of argument names and values (value sets).
      */
     Map<String, ProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current);
+
+    /**
+     * Returns the registered type names used in this action.
+     * 
+     * @return the registered type names.
+     */
+    Set<String> getRegisteredTypeNames();
 }

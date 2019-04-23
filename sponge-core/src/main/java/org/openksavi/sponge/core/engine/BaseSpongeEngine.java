@@ -973,7 +973,13 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public <T extends DataType<?>> void addType(String registeredTypeName, DataTypeSupplier<T> typeSupplier) {
         Validate.notNull(typeSupplier, "The supplier for type %s is null", registeredTypeName);
-        Validate.notNull(typeSupplier.supply(), "The supplied type %s is null", registeredTypeName);
+
+        DataType<?> prototype = typeSupplier.supply();
+        Validate.notNull(prototype, "The supplied type %s is null", registeredTypeName);
+        SpongeUtils.validateType(prototype, registeredTypeName);
+
+        // For verification only.
+        SpongeUtils.setupType(prototype);
 
         types.put(registeredTypeName, typeSupplier);
     }
@@ -984,10 +990,17 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         DataTypeSupplier<?> supplier = Validate.notNull(types.get(registeredTypeName), "Type %s is not registered", registeredTypeName);
         DataType<?> type = Validate.notNull(supplier.supply(), "The supplied type %s is null", registeredTypeName);
 
+        return (T) setupRegisteredTypeInstance(registeredTypeName, type);
+    }
+
+    protected <T extends DataType<?>> T setupRegisteredTypeInstance(String registeredTypeName, T type) {
         // Set the registered type name in the new instance.
         type.setRegisteredType(registeredTypeName);
 
-        return (T) type;
+        // A type is set up every get to allow dynamic behavior.
+        SpongeUtils.setupType(type);
+
+        return type;
     }
 
     @Override
@@ -1001,8 +1014,8 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @SuppressWarnings("rawtypes")
     @Override
     public Map<String, DataType> getTypes() {
-        return Collections.unmodifiableMap(
-                types.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().supply())));
+        return Collections.unmodifiableMap(types.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(),
+                entry -> setupRegisteredTypeInstance(entry.getKey(), entry.getValue().supply()))));
     }
 
     @Override

@@ -163,7 +163,7 @@ See the <<provided_arguments,provided action arguments>> as a use case of provid
 |An object. This type requires a class name (typically a Java class name). For example: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")`. It also supports an array notation: `ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject[]")`.
 
 |`RecordType`
-|A record type. This type requires a list of named record field types. A value of this type has to be an instance of Map with elements corresponding to the field names and values. E.g.: `RecordType("book").withFields([StringType("author").withLabel("Author"), StringType("title").withLabel("Title")])`.
+|A record type. This type requires a list of named record field types. A value of this type has to be an instance of Map with elements corresponding to the field names and values. E.g.: `RecordType("book").withFields([StringType("author").withLabel("Author"), StringType("title").withLabel("Title")])`. A record type supports inheritance.
 
 |`StreamType`
 |A stream type. Supports only output streams. It can be used only as a result of an action. A value of this type has to be an instance of `OutputStreamValue`.
@@ -194,7 +194,7 @@ BinaryType().withMimeType("image/png").withFeatures({"width":28, "height":28, "c
 OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"").withHeaders({})
 ----
 
-=== Registered data types
+=== Registering data types
 A data type can be registered in the engine in order to be accessed later by its registered type name.
 
 .Engine facade methods for registered types
@@ -235,6 +235,22 @@ class GetBookAuthorSurname(Action):
         self.withLabel("Get a book author").withArg(sponge.getType("Book").withName("book")).withResult(sponge.getType("Author"))
     def onCall(self, book):
         return book["author"]["surname"]
+----
+
+=== Record type inheritance
+A record type supports inheritance by setting its base type. Fields in a base type can't be overwritten in a sub-type. Other record type properties are merged. Properties in a sub-type take precedence if they are not set to default values.
+
+.The record inheritance example
+[source,python]
+----
+def onBeforeLoad():
+    sponge.addType("Person", lambda: RecordType().withFields([
+        StringType("firstName").withLabel("First name"),
+        StringType("surname").withLabel("Surname")
+    ]))
+    sponge.addType("Citizen", lambda: RecordType().withBaseType(sponge.getType("Person")).withFields([
+        StringType("country").withLabel("Country")
+    ]))
 ----
 
 == Events
