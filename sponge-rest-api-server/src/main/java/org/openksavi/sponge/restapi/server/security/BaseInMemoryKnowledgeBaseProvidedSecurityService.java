@@ -28,6 +28,10 @@ import org.apache.commons.lang3.Validate;
 
 public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends KnowledgeBaseProvidedSecurityService {
 
+    public static final String DEFAULT_PASSWORD_ENTRY_FORMAT = "%s-%s";
+
+    private String passwordEntryFormat = DEFAULT_PASSWORD_ENTRY_FORMAT;
+
     protected Set<User> users = Collections.synchronizedSet(new LinkedHashSet<>());
 
     protected BaseInMemoryKnowledgeBaseProvidedSecurityService() {
@@ -57,8 +61,10 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
         getUser(user.getName()).copyFrom(user);
     }
 
-    protected String hashPassword(String username, String password) {
-        return password != null ? DigestUtils.sha256Hex((username != null ? username.toLowerCase() : "") + password) : null;
+    public String hashPassword(String username, String password) {
+        return password != null
+                ? DigestUtils.sha512Hex(String.format(passwordEntryFormat, username != null ? username.toLowerCase() : "", password))
+                : null;
     }
 
     /**
@@ -74,5 +80,13 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
 
         return users.stream().filter(user -> Objects.equals(user.getName(), username))
                 .filter(user -> Objects.equals(user.getPassword(), hashedPassword)).findAny().orElse(null);
+    }
+
+    public String getPasswordEntryFormat() {
+        return passwordEntryFormat;
+    }
+
+    public void setPasswordEntryFormat(String passwordEntryFormat) {
+        this.passwordEntryFormat = passwordEntryFormat;
     }
 }

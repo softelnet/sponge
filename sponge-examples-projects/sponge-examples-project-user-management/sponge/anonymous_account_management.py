@@ -33,5 +33,5 @@ class SignUp(Action):
     def onCall(self, email, firstName, lastName, password, passwordConfirmation):
         if password != passwordConfirmation:
             raise Exception("Passwords don't match")
-        encryptedPassword = DigestUtils.sha256Hex(email + password)
+        encryptedPassword = restApiServer.service.securityService.hashPassword(email, password)
         restApiServer.service.securityService.addUser(User(email, encryptedPassword, ["standard"]))

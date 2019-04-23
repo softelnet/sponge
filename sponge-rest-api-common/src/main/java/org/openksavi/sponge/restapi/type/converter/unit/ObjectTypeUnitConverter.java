@@ -48,7 +48,7 @@ public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectT
     }
 
     @Override
-    public Object marshal(TypeConverter converter, ObjectType type, O value) {
+    public Object marshal(TypeConverter converter, ObjectType<O> type, O value) {
         // Use marshaler if registered.
         if (marshalers.containsKey(type.getClassName())) {
             return marshalers.get(type.getClassName()).map(converter, value);

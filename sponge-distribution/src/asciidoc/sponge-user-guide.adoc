@@ -1202,7 +1202,7 @@ The sample file `password.txt` contains the hashed, insecure password `password`
 [source,bash]
 ----
 # Create the password file.
-sudo echo -n <username><password> | shasum -a 256 | awk '{ print $1 }' > /opt/tomcat/sponge/password.txt
+sudo echo -n username-password | shasum -a 512 | awk '{ print $1 }' > /opt/tomcat/sponge/password.txt
 
 # Setup privileges.
 cd /opt/tomcat
