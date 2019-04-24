@@ -21,6 +21,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.restapi.RestApiConstants;
 
 public class UserManagementTestEnvironment {
 
@@ -38,7 +39,7 @@ public class UserManagementTestEnvironment {
             server = new Server(port);
             server.setStopAtShutdown(true);
             WebAppContext webAppContext = new WebAppContext();
-            webAppContext.setContextPath("/");
+            webAppContext.setContextPath("/" + RestApiConstants.DEFAULT_PATH);
             webAppContext.setResourceBase("src/main/webapp");
             webAppContext.setClassLoader(getClass().getClassLoader());
             server.setHandler(webAppContext);

@@ -121,9 +121,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             .bindingMode(RestBindingMode.off)
             .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
             .enableCORS(true)
-            .contextPath("/")
+            .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
             // Add swagger api-doc out of the box.
-            .apiContextPath("/api-doc").apiProperty("api.title", "Sponge REST API")
+            .apiContextPath("/doc").apiProperty("api.title", "Sponge REST API").apiHost("sponge")
                 .apiProperty("api.version", String.valueOf(getSettings().getVersion()));
         // @formatter:on
 
@@ -204,10 +204,10 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
     protected <I extends SpongeRequest, O extends SpongeResponse> void createPostOperation(RestDefinition restDefinition,
             RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
             Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        RouteDefinition operationRouteDefinition =
-                restDefinition.post(operationType.getCode()).description(operationDescription).type(requestClass).outType(responseClass)
-                        .param().name("body").type(body).description(requestDescription).endParam().responseMessage().code(200)
-                        .message(responseDescription).endResponseMessage().route().routeId("sponge-post-" + operationType.getCode());
+        RouteDefinition operationRouteDefinition = restDefinition.post("/" + operationType.getCode()).description(operationDescription)
+                .type(requestClass).outType(responseClass).param().name("body").type(body).description(requestDescription).endParam()
+                .responseMessage().code(200).message(responseDescription).endResponseMessage().route()
+                .routeId("sponge-post-" + operationType.getCode());
 
         setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
         operationRouteDefinition.process(createOperationExecutionProcessor(message -> message.getBody(String.class), operationType,
@@ -220,7 +220,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
     protected <I extends SpongeRequest, O extends SpongeResponse> void createGetOperation(RestDefinition restDefinition,
             RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
             Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        RouteDefinition operationRouteDefinition = restDefinition.get(operationType.getCode()).description(operationDescription)
+        RouteDefinition operationRouteDefinition = restDefinition.get("/" + operationType.getCode()).description(operationDescription)
                 .outType(responseClass).param().name("request").type(query).description(requestDescription).endParam().responseMessage()
                 .code(200).message(responseDescription).endResponseMessage().route().routeId("sponge-get-" + operationType.getCode());
 
@@ -307,7 +307,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
     }
 
     protected void createRestDefinition() {
-        RestDefinition restDefinition = rest(getSettings().getPath()).description("Sponge REST API");
+        RestDefinition restDefinition = rest().description("Sponge REST API");
 
         createOperation(restDefinition, RestApiOperationType.VERSION, "Get the Sponge version", GetVersionRequest.class,
                 "Get Sponge version request", GetVersionResponse.class, "The Sponge version response",
