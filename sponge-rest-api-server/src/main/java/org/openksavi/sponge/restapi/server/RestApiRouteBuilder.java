@@ -42,6 +42,7 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestDefinition;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,8 +112,31 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         //
     }
 
+    protected Processor createDefaultOnExceptionProcessor() {
+        return exchange -> {
+            try {
+                Throwable processingException =
+                        exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_EXCEPTION, Throwable.class);
+                if (processingException == null) {
+                    processingException = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
+                }
+
+                logger.info("REST API error", processingException);
+
+                RestApiOperationType operationType = Validate.notNull(
+                        exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, RestApiOperationType.class),
+                        "The operation type is not set in the Camel route");
+
+                setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException));
+            } catch (Throwable e) {
+                logger.error("REST API send error response failure", e);
+                throw e;
+            }
+        };
+    }
+
     protected void createOnException() {
-        //
+        onException(Throwable.class).process(createDefaultOnExceptionProcessor()).handled(true);
     }
 
     protected void createRestConfiguration() {
@@ -201,6 +225,10 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 responseDescription, operationHandler);
     }
 
+    protected void initializeOperationRouteDefinition(RouteDefinition operationRouteDefinition, RestApiOperationType operationType) {
+        operationRouteDefinition.setHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, constant(operationType));
+    }
+
     protected <I extends SpongeRequest, O extends SpongeResponse> void createPostOperation(RestDefinition restDefinition,
             RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
             Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
@@ -209,6 +237,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 .responseMessage().code(200).message(responseDescription).endResponseMessage().route()
                 .routeId("sponge-post-" + operationType.getCode());
 
+        initializeOperationRouteDefinition(operationRouteDefinition, operationType);
         setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
         operationRouteDefinition.process(createOperationExecutionProcessor(message -> message.getBody(String.class), operationType,
                 requestClass, responseClass, operationHandler));
@@ -224,6 +253,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 .outType(responseClass).param().name("request").type(query).description(requestDescription).endParam().responseMessage()
                 .code(200).message(responseDescription).endResponseMessage().route().routeId("sponge-get-" + operationType.getCode());
 
+        initializeOperationRouteDefinition(operationRouteDefinition, operationType);
         setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
         operationRouteDefinition.process(createOperationExecutionProcessor(message -> {
             try {
@@ -279,7 +309,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             }
 
             try {
-                // Open a new session. The user will be set in the service.
+                // Open a new session. The user will be set later in the service.
                 apiService.openSession(createSession(exchange));
 
                 O response = operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange);
@@ -290,14 +320,6 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                     setupResponse(operationType, exchange, response);
                 } else {
                     setupStreamResponse(operationType, exchange, streamValue);
-                }
-            } catch (Throwable processingException) {
-                logger.info("REST API error", processingException);
-                try {
-                    setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException));
-                } catch (Throwable e) {
-                    logger.error("REST API send error response failure", e);
-                    throw e;
                 }
             } finally {
                 // Close the session.

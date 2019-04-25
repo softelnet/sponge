@@ -87,6 +87,10 @@ public final class RestApiServerConstants {
 
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 
+    public static final String EXCHANGE_HEADER_OPERATION_TYPE = "spongeOperationType";
+
+    public static final String EXCHANGE_HEADER_EXCEPTION = "spongeException";
+
     private RestApiServerConstants() {
         //
     }
