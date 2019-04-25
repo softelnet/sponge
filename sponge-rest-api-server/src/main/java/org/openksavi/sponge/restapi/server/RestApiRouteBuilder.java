@@ -122,7 +122,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
             .enableCORS(true)
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
-            // Add swagger api-doc out of the box.
+            // Add swagger api doc out of the box.
             .apiContextPath("/doc").apiProperty("api.title", "Sponge REST API").apiHost("sponge")
                 .apiProperty("api.version", String.valueOf(getSettings().getVersion()));
         // @formatter:on

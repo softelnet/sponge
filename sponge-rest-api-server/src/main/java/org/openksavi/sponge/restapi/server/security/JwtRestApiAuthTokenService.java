@@ -42,7 +42,9 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
 
     protected static final String CLAIM_AUTH_SESSION_ID = "authSessionId";
 
-    private Key key = MacProvider.generateKey();
+    protected static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+
+    private Key key = MacProvider.generateKey(SIGNATURE_ALGORITHM);
 
     private LocalCache<Long, AuthTokenSession> authTokenSessions;
 
@@ -73,6 +75,9 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
         super.init();
 
         Duration expirationDuration = getRestApiService().getSettings().getAuthTokenExpirationDuration();
+        if (expirationDuration != null && (expirationDuration.isZero() || expirationDuration.isNegative())) {
+            expirationDuration = null;
+        }
 
         LocalCacheBuilder cacheBuilder = SpongeUtils.cacheBuilder();
         if (expirationDuration != null) {
@@ -86,8 +91,7 @@ public class JwtRestApiAuthTokenService extends BaseRestApiAuthTokenService {
         Long authSessionId = currentAuthSessionId.incrementAndGet();
 
         JwtBuilder builder = Jwts.builder();
-        builder.setSubject(userAuthentication.getUser().getName()).claim(CLAIM_AUTH_SESSION_ID, authSessionId)
-                .signWith(SignatureAlgorithm.HS512, key).compressWith(CompressionCodecs.DEFLATE);
+        builder.claim(CLAIM_AUTH_SESSION_ID, authSessionId).signWith(SIGNATURE_ALGORITHM, key).compressWith(CompressionCodecs.DEFLATE);
         String token = builder.compact();
 
         authTokenSessions.put(authSessionId, new AuthTokenSession(userAuthentication));

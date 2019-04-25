@@ -69,8 +69,8 @@ public class RestApiSettings {
 
     private boolean includeDetailedErrorMessage = RestApiServerConstants.DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE;
 
-    /** The duration after which an authentication token will expire. The default value is {@code null} which means infinity. */
-    private Duration authTokenExpirationDuration;
+    /** The duration after which an authentication token will expire. The value {@code null} means infinity. Defaults to 30 minutes. */
+    private Duration authTokenExpirationDuration = Duration.ofMinutes(30);
 
     public String getRestComponentId() {
         return restComponentId;

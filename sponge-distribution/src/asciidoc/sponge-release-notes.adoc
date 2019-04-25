@@ -12,6 +12,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added support for `RecordType` inheritance.
 * Added support for automatic use of auth tokens in the REST API client.
 * Changed password hashing SHA-256 to SHA-512 in the REST API `BaseInMemoryKnowledgeBaseProvidedSecurityService`.
+* Changed the default auth token expiration time from infinity to 30 minutes in the REST API.
 
 [discrete]
 == 1.9.0 (2019-04-15)

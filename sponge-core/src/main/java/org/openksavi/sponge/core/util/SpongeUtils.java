@@ -159,7 +159,9 @@ public abstract class SpongeUtils {
     public static Object invokeMethod(Object target, String name, Object... args) {
         try {
             return MethodUtils.invokeMethod(target, name, args);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
+            throw new SpongeException(e.getTargetException());
+        } catch (NoSuchMethodException | IllegalAccessException e) {
             throw new SpongeException(e);
         }
     }

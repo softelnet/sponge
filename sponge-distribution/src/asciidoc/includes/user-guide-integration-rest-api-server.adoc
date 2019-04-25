@@ -58,11 +58,11 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 
 |`authTokenServiceClass`
 |`String`
-|The `RestApiAuthTokenService` implementation class name. The default implementation is `JwtRestApiAuthTokenService` that uses JSON Web Token (JWT) for Java https://github.com/jwtk/jjwt[JJWT] library.
+|The `RestApiAuthTokenService` implementation class name. The default implementation is `JwtRestApiAuthTokenService` that uses JSON Web Token (JWT) for Java https://github.com/jwtk/jjwt[JJWT] library. Note that tokens used by the default implementation are signed but not encrypted.
 
 |`authTokenExpirationDurationSeconds`
 |`Long`
-|The duration (in seconds) after which an authentication token will expire. Defaults to `null` which means infinity.
+|The duration (in seconds) after which an authentication token will expire. The value `null` or less than or equal to 0 means infinity. Defaults to 30 minutes.
 |===
 
 .The REST API server plugin XML configuration example
