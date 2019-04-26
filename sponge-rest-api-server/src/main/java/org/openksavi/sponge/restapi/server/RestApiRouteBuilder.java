@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.function.BiFunction;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import javax.servlet.ServletOutputStream;
@@ -48,7 +50,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.RestApiOperationType;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
@@ -77,6 +78,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
     private static final Logger logger = LoggerFactory.getLogger(RestApiRouteBuilder.class);
 
     private RestApiService apiService;
+
+    private List<RestApiOperation<?, ?>> operations = new ArrayList<>();
 
     public RestApiRouteBuilder() {
         //
@@ -123,9 +126,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
                 logger.info("REST API error", processingException);
 
-                RestApiOperationType operationType = Validate.notNull(
-                        exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, RestApiOperationType.class),
-                        "The operation type is not set in the Camel route");
+                String operationType =
+                        Validate.notNull(exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, String.class),
+                                "The operation type is not set in the Camel route");
 
                 setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException));
             } catch (Throwable e) {
@@ -148,7 +151,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
             // Add swagger api doc out of the box.
             .apiContextPath("/doc").apiProperty("api.title", "Sponge REST API").apiHost("sponge")
-                .apiProperty("api.version", String.valueOf(getSettings().getVersion()));
+                .apiProperty("api.version", String.valueOf(getSettings().getVersion())).apiVendorExtension(false);
         // @formatter:on
 
         if (getSettings().getPort() != null) {
@@ -177,7 +180,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         }
     }
 
-    protected void setupResponse(RestApiOperationType operationType, Exchange exchange, Object response) {
+    protected void setupResponse(String operationType, Exchange exchange, Object response) {
         try {
             String responseBody = getObjectMapper().writeValueAsString(response);
 
@@ -185,14 +188,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, RestApiConstants.CONTENT_TYPE_JSON);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} response: {})", operationType.getCode(), RestApiUtils.obfuscatePassword(responseBody));
+                logger.debug("REST API {} response: {})", operationType, RestApiUtils.obfuscatePassword(responseBody));
             }
         } catch (JsonProcessingException e) {
             throw SpongeUtils.wrapException(e);
         }
     }
 
-    protected void setupStreamResponse(RestApiOperationType operationType, Exchange exchange, OutputStreamValue streamValue) {
+    protected void setupStreamResponse(String operationType, Exchange exchange, OutputStreamValue streamValue) {
         try {
             HttpServletResponse httpResponse = exchange.getIn(HttpMessage.class).getResponse();
             streamValue.getHeaders().forEach((name, value) -> {
@@ -217,44 +220,40 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
     }
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void createOperation(RestDefinition restDefinition,
-            RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
-            Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        createPostOperation(restDefinition, operationType, operationDescription, requestClass, requestDescription, responseClass,
-                responseDescription, operationHandler);
-        createGetOperation(restDefinition, operationType, operationDescription, requestClass, requestDescription, responseClass,
-                responseDescription, operationHandler);
+            RestApiOperation<I, O> operation) {
+        createPostOperation(restDefinition, operation);
+        createGetOperation(restDefinition, operation);
     }
 
-    protected void initializeOperationRouteDefinition(RouteDefinition operationRouteDefinition, RestApiOperationType operationType) {
-        operationRouteDefinition.setHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, constant(operationType));
+    protected <I extends SpongeRequest, O extends SpongeResponse> void
+            initializeOperationRouteDefinition(RouteDefinition operationRouteDefinition, RestApiOperation<I, O> operation) {
+        operationRouteDefinition.setHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, constant(operation.getType()));
     }
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void createPostOperation(RestDefinition restDefinition,
-            RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
-            Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        RouteDefinition operationRouteDefinition = restDefinition.post("/" + operationType.getCode()).description(operationDescription)
-                .type(requestClass).outType(responseClass).param().name("body").type(body).description(requestDescription).endParam()
-                .responseMessage().code(200).message(responseDescription).endResponseMessage().route()
-                .routeId("sponge-post-" + operationType.getCode());
+            RestApiOperation<I, O> operation) {
+        RouteDefinition operationRouteDefinition = restDefinition.post("/" + operation.getType()).description(operation.getDescription())
+                .type(operation.getRequestClass()).outType(operation.getResponseClass()).param().name("body").type(body)
+                .description(operation.getRequestDescription()).endParam().responseMessage().code(200)
+                .message(operation.getResponseDescription()).endResponseMessage().route().routeId("sponge-post-" + operation.getType());
 
-        initializeOperationRouteDefinition(operationRouteDefinition, operationType);
-        setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
-        operationRouteDefinition.process(createOperationExecutionProcessor(message -> message.getBody(String.class), operationType,
-                requestClass, responseClass, operationHandler));
-        setupOperationRouteAfterExecution(operationRouteDefinition, operationType, requestClass, responseClass);
+        initializeOperationRouteDefinition(operationRouteDefinition, operation);
+        setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
+        operationRouteDefinition.process(createOperationExecutionProcessor(message -> message.getBody(String.class), operation));
+        setupOperationRouteAfterExecution(operationRouteDefinition, operation);
 
         operationRouteDefinition.endRest();
     }
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void createGetOperation(RestDefinition restDefinition,
-            RestApiOperationType operationType, String operationDescription, Class<I> requestClass, String requestDescription,
-            Class<O> responseClass, String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        RouteDefinition operationRouteDefinition = restDefinition.get("/" + operationType.getCode()).description(operationDescription)
-                .outType(responseClass).param().name("request").type(query).description(requestDescription).endParam().responseMessage()
-                .code(200).message(responseDescription).endResponseMessage().route().routeId("sponge-get-" + operationType.getCode());
+            RestApiOperation<I, O> operation) {
+        RouteDefinition operationRouteDefinition = restDefinition.get("/" + operation.getType()).description(operation.getDescription())
+                .outType(operation.getResponseClass()).param().name("request").type(query).description(operation.getRequestDescription())
+                .endParam().responseMessage().code(200).message(operation.getResponseDescription()).endResponseMessage().route()
+                .routeId("sponge-get-" + operation.getType());
 
-        initializeOperationRouteDefinition(operationRouteDefinition, operationType);
-        setupOperationRouteBeforeExecution(operationRouteDefinition, operationType, requestClass, responseClass);
+        initializeOperationRouteDefinition(operationRouteDefinition, operation);
+        setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
         operationRouteDefinition.process(createOperationExecutionProcessor(message -> {
             try {
                 String requestParam = message.getHeader("request", String.class);
@@ -264,18 +263,18 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             } catch (UnsupportedEncodingException e) {
                 throw SpongeUtils.wrapException(e);
             }
-        }, operationType, requestClass, responseClass, operationHandler));
-        setupOperationRouteAfterExecution(operationRouteDefinition, operationType, requestClass, responseClass);
+        }, operation));
+        setupOperationRouteAfterExecution(operationRouteDefinition, operation);
 
         operationRouteDefinition.endRest();
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void setupOperationRouteBeforeExecution(
-            RouteDefinition operationRouteDefinition, RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass) {
+    protected <I extends SpongeRequest, O extends SpongeResponse> void
+            setupOperationRouteBeforeExecution(RouteDefinition operationRouteDefinition, RestApiOperation<I, O> operation) {
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void setupOperationRouteAfterExecution(
-            RouteDefinition operationRouteDefinition, RestApiOperationType operationType, Class<I> requestClass, Class<O> responseClass) {
+    protected <I extends SpongeRequest, O extends SpongeResponse> void
+            setupOperationRouteAfterExecution(RouteDefinition operationRouteDefinition, RestApiOperation<I, O> operation) {
     }
 
     private <O extends SpongeResponse> OutputStreamValue getActionCallOutputStreamResponse(O response) {
@@ -293,14 +292,13 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         return new CamelRestApiSession(null, exchange);
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> Processor createOperationExecutionProcessor(
-            Function<Message, String> requestBodyProvider, RestApiOperationType operationType, Class<I> requestClass,
-            Class<O> responseClass, BiFunction<I, Exchange, O> operationHandler) {
+    protected <I extends SpongeRequest, O extends SpongeResponse> Processor
+            createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RestApiOperation<I, O> operation) {
         return exchange -> {
             String requestBody = requestBodyProvider.apply(exchange.getIn());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} request: {}", operationType.getCode(), RestApiUtils.obfuscatePassword(requestBody));
+                logger.debug("REST API {} request: {}", operation.getType(), RestApiUtils.obfuscatePassword(requestBody));
             }
 
             // Allow empty body.
@@ -312,14 +310,15 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 // Open a new session. The user will be set later in the service.
                 apiService.openSession(createSession(exchange));
 
-                O response = operationHandler.apply(getObjectMapper().readValue(requestBody, requestClass), exchange);
+                O response = operation.getOperationHandler().apply(getObjectMapper().readValue(requestBody, operation.getRequestClass()),
+                        exchange);
 
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
                 if (streamValue == null) {
-                    setupResponse(operationType, exchange, response);
+                    setupResponse(operation.getType(), exchange, response);
                 } else {
-                    setupStreamResponse(operationType, exchange, streamValue);
+                    setupStreamResponse(operation.getType(), exchange, streamValue);
                 }
             } finally {
                 // Close the session.
@@ -328,33 +327,56 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         };
     }
 
-    protected void createRestDefinition() {
-        RestDefinition restDefinition = rest().description("Sponge REST API");
+    protected <I extends SpongeRequest, O extends SpongeResponse> void addOperation(RestApiOperation<I, O> operation) {
+        Validate.isTrue(operations.stream().allMatch(o -> !Objects.equals(o.getType(), operation.getType())),
+                "The operation '%s' has already been defined", operation.getType());
 
-        createOperation(restDefinition, RestApiOperationType.VERSION, "Get the Sponge version", GetVersionRequest.class,
+        operations.add(operation);
+    }
+
+    protected void createDefaultOperations() {
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_VERSION, "Get the Sponge version", GetVersionRequest.class,
                 "Get Sponge version request", GetVersionResponse.class, "The Sponge version response",
-                (request, exchange) -> apiService.getVersion(request));
-        createOperation(restDefinition, RestApiOperationType.LOGIN, "Login", LoginRequest.class, "Login request", LoginResponse.class,
-                "The login response", (request, exchange) -> apiService.login(request));
-        createOperation(restDefinition, RestApiOperationType.LOGOUT, "Logout", LogoutRequest.class, "Logout request", LogoutResponse.class,
-                "The logout response", (request, exchange) -> apiService.logout(request));
-        createOperation(restDefinition, RestApiOperationType.KNOWLEDGE_BASES, "Get knowledge bases", GetKnowledgeBasesRequest.class,
-                "Get knowledge bases request", GetKnowledgeBasesResponse.class, "The get knowledge bases response",
-                (request, exchange) -> apiService.getKnowledgeBases(request));
-        createOperation(restDefinition, RestApiOperationType.ACTIONS, "Get actions", GetActionsRequest.class, "Get actions request",
-                GetActionsResponse.class, "The get actions response", (request, exchange) -> apiService.getActions(request));
-        createOperation(restDefinition, RestApiOperationType.CALL, "Call an action", ActionCallRequest.class, "Call action request",
-                ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request));
-        createOperation(restDefinition, RestApiOperationType.SEND, "Send a new event", SendEventRequest.class, "Send event request",
-                SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request));
-        createOperation(restDefinition, RestApiOperationType.ACTION_ARGS, "Provide action arguments", ProvideActionArgsRequest.class,
-                "The provide action arguments request", ProvideActionArgsResponse.class, "The provide action arguments response",
-                (request, exchange) -> apiService.provideActionArgs(request));
+                (request, exchange) -> apiService.getVersion(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGIN, "Login", LoginRequest.class, "Login request",
+                LoginResponse.class, "The login response", (request, exchange) -> apiService.login(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "Logout request",
+                LogoutResponse.class, "The logout response", (request, exchange) -> apiService.logout(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_KNOWLEDGE_BASES, "Get knowledge bases",
+                GetKnowledgeBasesRequest.class, "Get knowledge bases request", GetKnowledgeBasesResponse.class,
+                "The get knowledge bases response", (request, exchange) -> apiService.getKnowledgeBases(request)));
+        addOperation(
+                new RestApiOperation<>(RestApiConstants.OPERATION_ACTIONS, "Get actions", GetActionsRequest.class, "Get actions request",
+                        GetActionsResponse.class, "The get actions response", (request, exchange) -> apiService.getActions(request)));
+        addOperation(
+                new RestApiOperation<>(RestApiConstants.OPERATION_CALL, "Call an action", ActionCallRequest.class, "Call action request",
+                        ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class,
+                "Send event request", SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments",
+                ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
+                "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request)));
 
         if (getSettings().isPublishReload()) {
-            createOperation(restDefinition, RestApiOperationType.RELOAD, "Reload knowledge bases", ReloadRequest.class,
+            addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,
                     "Reload knowledge bases request", ReloadResponse.class, "The reload response",
-                    (request, exchange) -> apiService.reload(request));
+                    (request, exchange) -> apiService.reload(request)));
         }
+    }
+
+    /**
+     * Overwrite this method to add custom operations.
+     */
+    protected void createCustomOperations() {
+        //
+    }
+
+    protected void createRestDefinition() {
+        RestDefinition restDefinition = rest().description(getSettings().getDescription());
+
+        createDefaultOperations();
+        createCustomOperations();
+
+        operations.forEach(operation -> createOperation(restDefinition, operation));
     }
 }

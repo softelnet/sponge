@@ -43,6 +43,9 @@ public class RestApiSettings {
     /** The API version. */
     private int version = RestApiConstants.API_VERSION;
 
+    /** The API description. */
+    private String description = RestApiConstants.DEFAULT_DESCRIPTION;
+
     /** The pretty print option. */
     private boolean prettyPrint = RestApiServerConstants.DEFAULT_PRETTY_PRINT;
 
@@ -106,6 +109,14 @@ public class RestApiSettings {
 
     public int getVersion() {
         return version;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setVersion(int version) {
