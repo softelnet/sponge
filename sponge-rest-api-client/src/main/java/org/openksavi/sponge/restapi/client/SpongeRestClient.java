@@ -33,6 +33,7 @@ import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
@@ -42,6 +43,7 @@ import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
+import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
@@ -195,7 +197,7 @@ public interface SpongeRestClient extends Closeable {
     /**
      * Sends the {@code actions} request to the server. See {@link #getActions(GetActionsRequest,SpongeRequestContext)}.
      *
-     * @return the list of available actions metadata..
+     * @return the list of available actions metadata.
      */
     List<RestActionMeta> getActions();
 
@@ -410,6 +412,32 @@ public interface SpongeRestClient extends Closeable {
      * Sends the {@code reload} request to the server.
      */
     void reload();
+
+    /**
+     * Sends the request to the server.
+     *
+     * @param the operationType.
+     * @param request the request.
+     * @param responseClass the response class.
+     * @param context the context.
+     * @return the response.
+     * @param <T> a request type.
+     * @param <R> a response type.
+     */
+    <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass,
+            SpongeRequestContext context);
+
+    /**
+     * Sends the request to the server.
+     *
+     * @param the operationType.
+     * @param request the request.
+     * @param responseClass the response class.
+     * @return the response.
+     * @param <T> a request type.
+     * @param <R> a response type.
+     */
+    <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass);
 
     /**
      * Clears the action metadata cache.

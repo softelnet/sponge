@@ -30,6 +30,15 @@ In order to skip tests, run:
 
 NOTE: The assertions in some tests heavily depend on the values of timeouts, durations, etc. and the speed of the test environment, therefore running the tests on a very slow machine may cause assertion failures that (in most cases) would not indicate bugs.
 
+=== Generate OpenAPI documentation
+
+ # Run the `RestApiServerMain` (located in `sponge-rest-api-server`).
+ cd sponge-distribution
+ mvn -Popenapi generate-sources
+ # Stop the `RestApiServerMain`.
+
+The generated file will be placed in `sponge-distribution/src/asciidoc/includes/user-guide-rest-api.adoc`. It will be automatically included in the main documentation.
+ 
 === Generate documentation only
 
  cd sponge-distribution

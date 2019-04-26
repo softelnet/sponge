@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.RestApiOperationType;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRequestContext;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
@@ -96,15 +95,15 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     }
 
     @Override
-    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(RestApiOperationType operationType, T request,
-            Class<R> responseClass, SpongeRequestContext context) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request, Class<R> responseClass,
+            SpongeRequestContext context) {
         Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build();
 
         try {
             String requestBody = getObjectMapper().writeValueAsString(request);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} request: {}", operationType.getCode(), RestApiUtils.obfuscatePassword(requestBody));
+                logger.debug("REST API {} request: {}", operationType, RestApiUtils.obfuscatePassword(requestBody));
             }
 
             Stream.concat(Stream.of(context.getOnRequestSerializedListener()), onRequestSerializedListeners.stream())
@@ -112,13 +111,13 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
 
             Response httpResponse =
                     getOrCreateOkHttpClient()
-                            .newCall(new Request.Builder().url(getUrl(operationType.getCode())).headers(headers)
+                            .newCall(new Request.Builder().url(getUrl(operationType)).headers(headers)
                                     .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
                             .execute();
 
             String responseBody = httpResponse.body() != null ? httpResponse.body().string() : null;
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} response: {})", operationType.getCode(), RestApiUtils.obfuscatePassword(responseBody));
+                logger.debug("REST API {} response: {})", operationType, RestApiUtils.obfuscatePassword(responseBody));
             }
 
             Validate.isTrue(RestApiUtils.isHttpSuccess(httpResponse.code()), "HTTP status code is %s", httpResponse.code());

@@ -1,5 +1,5 @@
 = {sponge} REST API server
-The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API server plugin (`RestApiServerPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service. After starting the plugin, the online API specification in the https://swagger.io[OpenAPI (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/sponge.json/v1/doc`.
+The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API server plugin (`RestApiServerPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service.
 
 The default name of the REST API plugin (which can be used in knowledge bases) is `restApiServer`.
 
@@ -180,6 +180,13 @@ The following table contains a summary of the REST API operations. For a complet
 |===
 
 The OpenAPI specification of the REST API is included in the Appendix A of the {sponge} Reference Documentation.
+
+You can define a custom REST API operation (using the `ActionDelegateRestApiOperation` class in the route builder) that delegates a REST API request to an action call (e.g. to allow implementing an operation body in a scripting language but keeping a static REST interface).
+
+== OpenAPI specification
+After starting the plugin, the online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/sponge.json/v1/doc`.
+
+NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for simple customized operations.
 
 == JSON/Java mapping
 The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.

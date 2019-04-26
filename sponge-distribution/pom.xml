@@ -37,6 +37,9 @@
         <downloadUrl>${homepage}/download/${standalonePackage}.zip</downloadUrl>
         <javaSeJavaDocUrl>https://docs.oracle.com/javase/8/docs/api</javaSeJavaDocUrl>
         <spongeJavaDocUrl>${homepage}/docs/javadoc</spongeJavaDocUrl>
+
+        <openapi.dir>${project.build.directory}/openapi</openapi.dir>
+        <openapi.basename>user-guide-rest-api</openapi.basename>
     </properties>
 
     <dependencies>
@@ -73,6 +76,60 @@
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>openapi</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>download-openapi-json</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <url>http://localhost:1836/sponge.json/v1/doc</url>
+                                    <outputDirectory>${openapi.dir}</outputDirectory>
+                                    <outputFileName>${openapi.basename}.json</outputFileName>
+                                    <overwrite>true</overwrite>
+                                    <failOnError>true</failOnError>
+                                    <skipCache>true</skipCache>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.github.swagger2markup</groupId>
+                        <artifactId>swagger2markup-maven-plugin</artifactId>
+                        <configuration>
+                            <swaggerInput>${openapi.dir}/${openapi.basename}.json</swaggerInput>
+                            <outputFile>src/asciidoc/includes/${openapi.basename}</outputFile>
+                            <config>
+                                <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+                                <swagger2markup.pathSecuritySectionEnabled>false</swagger2markup.pathSecuritySectionEnabled>
+                                <swagger2markup.anchorPrefix>swagger_</swagger2markup.anchorPrefix>
+                                <swagger2markup.propertyOrderBy>AS_IS</swagger2markup.propertyOrderBy>
+                                <swagger2markup.parameterOrderBy>AS_IS</swagger2markup.parameterOrderBy>
+                                <swagger2markup.operationOrderBy>AS_IS</swagger2markup.operationOrderBy>
+                                <swagger2markup.definitionOrderBy>NATURAL</swagger2markup.definitionOrderBy>
+                                <swagger2markup.responseOrderBy>AS_IS</swagger2markup.responseOrderBy>
+                            </config>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>convertSwagger2markup</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>documentation</id>
             <build>

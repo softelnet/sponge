@@ -11,8 +11,9 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added support for registering data types (`EngineOperations` methods `addType`, `getType` and `getTypes`). A registered data type instance has its property `DataType.registeredType` set to a name of a registered type.
 * Added support for `RecordType` inheritance.
 * Added support for automatic use of auth tokens in the REST API client.
-* Changed password hashing SHA-256 to SHA-512 in the REST API `BaseInMemoryKnowledgeBaseProvidedSecurityService`.
+* Changed password hashing SHA-256 to SHA-512 in the REST API `BaseInMemoryKnowledgeBaseProvidedSecurityService` class.
 * Changed the default auth token expiration time from infinity to 30 minutes in the REST API.
+* Support for custom REST API operations.
 
 [discrete]
 == 1.9.0 (2019-04-15)

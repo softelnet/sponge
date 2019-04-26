@@ -29,6 +29,26 @@ public final class RestApiConstants {
 
     public static final String DEFAULT_PATH = String.format("sponge.json/v%d", API_VERSION);
 
+    public static final String DEFAULT_DESCRIPTION = "Sponge REST API";
+
+    public static final String OPERATION_VERSION = "version";
+
+    public static final String OPERATION_LOGIN = "login";
+
+    public static final String OPERATION_LOGOUT = "logout";
+
+    public static final String OPERATION_KNOWLEDGE_BASES = "knowledgeBases";
+
+    public static final String OPERATION_ACTIONS = "actions";
+
+    public static final String OPERATION_CALL = "call";
+
+    public static final String OPERATION_SEND = "send";
+
+    public static final String OPERATION_ACTION_ARGS = "actionArgs";
+
+    public static final String OPERATION_RELOAD = "reload";
+
     /** A generic error code. */
     public static final String DEFAULT_ERROR_CODE = "SPONGE001";
 

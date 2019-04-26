@@ -12,13 +12,8 @@ __Version__ : 1
 === URI scheme
 [%hardbreaks]
 __Host__ : localhost:1836
-__BasePath__ : /
+__BasePath__ : /sponge.json/v1
 __Schemes__ : HTTP
-
-
-=== Tags
-
-* sponge.json/v1 : Sponge REST API
 
 
 
@@ -29,13 +24,13 @@ __Schemes__ : HTTP
 [[_swagger_sponge-get-actionargs]]
 === Provide action arguments
 ....
-GET sponge.json/v1/actionArgs
+GET /actionArgs
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -45,28 +40,23 @@ __required__|The provide action arguments request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The provide action arguments response|<<_swagger_provideactionargsresponse,ProvideActionArgsResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-actionargs]]
 === Provide action arguments
 ....
-POST sponge.json/v1/actionArgs
+POST /actionArgs
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -76,28 +66,23 @@ __required__|The provide action arguments request|<<_swagger_provideactionargsre
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The provide action arguments response|<<_swagger_provideactionargsresponse,ProvideActionArgsResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-actions]]
 === Get actions
 ....
-GET sponge.json/v1/actions
+GET /actions
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -107,28 +92,23 @@ __required__|Get actions request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The get actions response|<<_swagger_getactionsresponse,GetActionsResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-actions]]
 === Get actions
 ....
-POST sponge.json/v1/actions
+POST /actions
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -138,28 +118,23 @@ __required__|Get actions request|<<_swagger_getactionsrequest,GetActionsRequest>
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The get actions response|<<_swagger_getactionsresponse,GetActionsResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-call]]
 === Call an action
 ....
-GET sponge.json/v1/call
+GET /call
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -169,28 +144,23 @@ __required__|Call action request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The action call response|<<_swagger_actioncallresponse,ActionCallResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-call]]
 === Call an action
 ....
-POST sponge.json/v1/call
+POST /call
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -200,28 +170,23 @@ __required__|Call action request|<<_swagger_actioncallrequest,ActionCallRequest>
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The action call response|<<_swagger_actioncallresponse,ActionCallResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-knowledgebases]]
 === Get knowledge bases
 ....
-GET sponge.json/v1/knowledgeBases
+GET /knowledgeBases
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -231,28 +196,23 @@ __required__|Get knowledge bases request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The get knowledge bases response|<<_swagger_getknowledgebasesresponse,GetKnowledgeBasesResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-knowledgebases]]
 === Get knowledge bases
 ....
-POST sponge.json/v1/knowledgeBases
+POST /knowledgeBases
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -262,28 +222,23 @@ __required__|Get knowledge bases request|<<_swagger_getknowledgebasesrequest,Get
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The get knowledge bases response|<<_swagger_getknowledgebasesresponse,GetKnowledgeBasesResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-login]]
 === Login
 ....
-GET sponge.json/v1/login
+GET /login
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -293,28 +248,23 @@ __required__|Login request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The login response|<<_swagger_loginresponse,LoginResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-login]]
 === Login
 ....
-POST sponge.json/v1/login
+POST /login
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -324,28 +274,23 @@ __required__|Login request|<<_swagger_loginrequest,LoginRequest>>
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The login response|<<_swagger_loginresponse,LoginResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-logout]]
 === Logout
 ....
-GET sponge.json/v1/logout
+GET /logout
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -355,28 +300,23 @@ __required__|Logout request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The logout response|<<_swagger_logoutresponse,LogoutResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-logout]]
 === Logout
 ....
-POST sponge.json/v1/logout
+POST /logout
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -386,28 +326,23 @@ __required__|Logout request|<<_swagger_logoutrequest,LogoutRequest>>
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The logout response|<<_swagger_logoutresponse,LogoutResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-reload]]
 === Reload knowledge bases
 ....
-GET sponge.json/v1/reload
+GET /reload
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -417,28 +352,23 @@ __required__|Reload knowledge bases request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The reload response|<<_swagger_reloadresponse,ReloadResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-reload]]
 === Reload knowledge bases
 ....
-POST sponge.json/v1/reload
+POST /reload
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -448,28 +378,23 @@ __required__|Reload knowledge bases request|<<_swagger_reloadrequest,ReloadReque
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The reload response|<<_swagger_reloadresponse,ReloadResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-send]]
 === Send a new event
 ....
-GET sponge.json/v1/send
+GET /send
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -479,28 +404,23 @@ __required__|Send event request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The send event response|<<_swagger_sendeventresponse,SendEventResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-send]]
 === Send a new event
 ....
-POST sponge.json/v1/send
+POST /send
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -510,28 +430,23 @@ __required__|Send event request|<<_swagger_sendeventrequest,SendEventRequest>>
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The send event response|<<_swagger_sendeventresponse,SendEventResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-get-version]]
 === Get the Sponge version
 ....
-GET sponge.json/v1/version
+GET /version
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
@@ -541,28 +456,23 @@ __required__|Get Sponge version request|string
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The Sponge version response|<<_swagger_getversionresponse,GetVersionResponse>>
 |===
 
 
-==== Tags
-
-* sponge.json/v1
-
-
 [[_swagger_sponge-post-version]]
 === Get the Sponge version
 ....
-POST sponge.json/v1/version
+POST /version
 ....
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
@@ -572,16 +482,11 @@ __required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionR
 
 ==== Responses
 
-[options="header", cols=".^2a,.^14a,.^4a"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |**200**|The Sponge version response|<<_swagger_getversionresponse,GetVersionResponse>>
 |===
-
-
-==== Tags
-
-* sponge.json/v1
 
 
 
@@ -589,114 +494,12 @@ __required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionR
 [[_swagger_definitions]]
 == Definitions
 
-[[_swagger_provideactionargsresponse]]
-=== ProvideActionArgsResponse
-A provide action arguments response
+[[_swagger_actioncallrequest]]
+=== ActionCallRequest
+An action call request
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
-|===
-|Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
-|**provided** +
-__required__|The provided action arguments|< string, <<_swagger_providedvalueobject,ProvidedValueObject>> > map
-|===
-
-
-[[_swagger_providedvalue]]
-=== ProvidedValue
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|object
-|**valuePresent** +
-__optional__|boolean
-|**annotatedValueSet** +
-__optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
-|**valueSet** +
-__optional__|< object > array
-|===
-
-
-[[_swagger_annotatedvalue]]
-=== AnnotatedValue
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|object
-|**label** +
-__optional__|string
-|**description** +
-__optional__|string
-|**features** +
-__optional__|< string, object > map
-|===
-
-
-[[_swagger_providedvalueobject]]
-=== ProvidedValueObject
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|object
-|**valuePresent** +
-__optional__|boolean
-|**annotatedValueSet** +
-__optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
-|**valueSet** +
-__optional__|< object > array
-|===
-
-
-[[_swagger_annotatedvalueobject]]
-=== AnnotatedValueObject
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|object
-|**label** +
-__optional__|string
-|**description** +
-__optional__|string
-|**features** +
-__optional__|< string, object > map
-|===
-
-
-[[_swagger_processorqualifiedversion]]
-=== ProcessorQualifiedVersion
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**knowledgeBaseVersion** +
-__optional__|integer (int32)
-|**processorVersion** +
-__optional__|integer (int32)
-|===
-
-
-[[_swagger_provideactionargsrequest]]
-=== ProvideActionArgsRequest
-A provide action arguments request
-
-
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -709,63 +512,31 @@ __optional__|The user password|string
 __optional__|The authentication token|string
 |**name** +
 __required__|The action name|string
-|**argNames** +
-__optional__|The names of action arguments to provide|< string > array
-|**current** +
-__optional__|The current values of action arguments in a client code|< string, object > map
+|**args** +
+__optional__|The action arguments|< object > array
 |**qualifiedVersion** +
 __optional__|The action expected qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
 |===
 
 
-[[_swagger_providedmeta]]
-=== ProvidedMeta
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**value** +
-__optional__|boolean
-|**valueSet** +
-__optional__|<<_swagger_valuesetmeta,ValueSetMeta>>
-|**dependencies** +
-__optional__|< string > array
-|**readOnly** +
-__optional__|boolean
-|**overwrite** +
-__optional__|boolean
-|===
+[[_swagger_actioncallresponse]]
+=== ActionCallResponse
+An action call response
 
 
-[[_swagger_valuesetmeta]]
-=== ValueSetMeta
-
-[options="header", cols=".^3a,.^4a"]
-|===
-|Name|Schema
-|**limited** +
-__optional__|boolean
-|===
-
-
-[[_swagger_knowledgebasemeta]]
-=== KnowledgeBaseMeta
-A knowledge base metadata
-
-
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**name** +
-__required__|The knowledge base name|string
-|**label** +
-__optional__|The knowledge base label|string
-|**description** +
-__optional__|The knowledge base description|string
-|**version** +
-__optional__|The knowledge base version|integer (int32)
-|**sequenceNumber** +
-__optional__|The knowledge base sequence number|integer (int32)
+|**id** +
+__optional__|The corresponding request id|string
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**result** +
+__required__|The action result|object
 |===
 
 
@@ -774,7 +545,7 @@ __optional__|The knowledge base sequence number|integer (int32)
 An action metadata
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**name** +
@@ -800,35 +571,71 @@ __optional__|The action qualified version|<<_swagger_processorqualifiedversion,P
 |===
 
 
-[[_swagger_getactionsresponse]]
-=== GetActionsResponse
-A get actions response
+[[_swagger_annotatedvalue]]
+=== AnnotatedValue
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**label** +
+__optional__|string
+|**description** +
+__optional__|string
+|**features** +
+__optional__|< string, object > map
+|===
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[[_swagger_annotatedvalueobject]]
+=== AnnotatedValueObject
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**label** +
+__optional__|string
+|**description** +
+__optional__|string
+|**features** +
+__optional__|< string, object > map
+|===
+
+
+[[_swagger_categorymeta]]
+=== CategoryMeta
+A category metadata
+
+
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
-|**actions** +
-__required__|The available actions|< <<_swagger_actionmeta,ActionMeta>> > array
+|**name** +
+__required__|The category name|string
+|**label** +
+__optional__|The category label|string
+|**description** +
+__optional__|The category description|string
+|**features** +
+__required__|The category features|< string, object > map
+|**sequenceNumber** +
+__optional__|The category sequence number|integer (int32)
 |===
 
 
 [[_swagger_datatype]]
 === DataType
 
-[options="header", cols=".^3a,.^4a"]
+[options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
 |**kind** +
 __optional__|enum (ANY, BINARY, BOOLEAN, DATE_TIME, DYNAMIC, INTEGER, LIST, MAP, NUMBER, OBJECT, RECORD, STREAM, STRING, TYPE, VOID)
+|**registeredType** +
+__optional__|string
 |**name** +
 __optional__|string
 |**label** +
@@ -852,24 +659,36 @@ __optional__|<<_swagger_providedmeta,ProvidedMeta>>
 |===
 
 
-[[_swagger_categorymeta]]
-=== CategoryMeta
-A category metadata
+[[_swagger_datatypeobject]]
+=== DataTypeObject
 
-
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
+|**kind** +
+__optional__|enum (ANY, BINARY, BOOLEAN, DATE_TIME, DYNAMIC, INTEGER, LIST, MAP, NUMBER, OBJECT, RECORD, STREAM, STRING, TYPE, VOID)
+|**registeredType** +
+__optional__|string
 |**name** +
-__required__|The category name|string
+__optional__|string
 |**label** +
-__optional__|The category label|string
+__optional__|string
 |**description** +
-__optional__|The category description|string
+__optional__|string
+|**annotated** +
+__optional__|boolean
+|**format** +
+__optional__|string
+|**defaultValue** +
+__optional__|object
+|**nullable** +
+__optional__|boolean
 |**features** +
-__required__|The category features|< string, object > map
-|**sequenceNumber** +
-__optional__|The category sequence number|integer (int32)
+__optional__|< string, object > map
+|**optional** +
+__optional__|boolean
+|**provided** +
+__optional__|<<_swagger_providedmeta,ProvidedMeta>>
 |===
 
 
@@ -878,7 +697,7 @@ __optional__|The category sequence number|integer (int32)
 A get actions request
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -893,15 +712,17 @@ __optional__|The authentication token|string
 __optional__|The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
 |**metadataRequired** +
 __optional__|The metadata required flag|boolean
+|**registeredTypes** +
+__optional__|The flag for requesting registered types used in the actions in the result (defaults to false)|boolean
 |===
 
 
-[[_swagger_actioncallresponse]]
-=== ActionCallResponse
-An action call response
+[[_swagger_getactionsresponse]]
+=== GetActionsResponse
+A get actions response
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -912,17 +733,19 @@ __optional__|The error code|string
 __optional__|The error message|string
 |**detailedErrorMessage** +
 __optional__|The detailed error message|string
-|**result** +
-__required__|The action result|object
+|**actions** +
+__required__|The available actions|< <<_swagger_actionmeta,ActionMeta>> > array
+|**types** +
+__optional__|The registered types used in the actions|< string, <<_swagger_datatypeobject,DataTypeObject>> > map
 |===
 
 
-[[_swagger_actioncallrequest]]
-=== ActionCallRequest
-An action call request
+[[_swagger_getknowledgebasesrequest]]
+=== GetKnowledgeBasesRequest
+A get knowledge bases request
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -933,12 +756,6 @@ __optional__|The user name|string
 __optional__|The user password|string
 |**authToken** +
 __optional__|The authentication token|string
-|**name** +
-__required__|The action name|string
-|**args** +
-__optional__|The action arguments|< object > array
-|**qualifiedVersion** +
-__optional__|The action expected qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
 |===
 
 
@@ -947,7 +764,7 @@ __optional__|The action expected qualified version|<<_swagger_processorqualified
 A get knowledge bases response
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -963,12 +780,73 @@ __required__|The available knowledge bases|< <<_swagger_knowledgebasemeta,Knowle
 |===
 
 
-[[_swagger_getknowledgebasesrequest]]
-=== GetKnowledgeBasesRequest
-A get knowledge bases request
+[[_swagger_getversionrequest]]
+=== GetVersionRequest
+A get version request
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The request id|string
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|**authToken** +
+__optional__|The authentication token|string
+|===
+
+
+[[_swagger_getversionresponse]]
+=== GetVersionResponse
+A get version response
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The corresponding request id|string
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**version** +
+__required__|The Sponge version|string
+|===
+
+
+[[_swagger_knowledgebasemeta]]
+=== KnowledgeBaseMeta
+A knowledge base metadata
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**name** +
+__required__|The knowledge base name|string
+|**label** +
+__optional__|The knowledge base label|string
+|**description** +
+__optional__|The knowledge base description|string
+|**version** +
+__optional__|The knowledge base version|integer (int32)
+|**sequenceNumber** +
+__optional__|The knowledge base sequence number|integer (int32)
+|===
+
+
+[[_swagger_loginrequest]]
+=== LoginRequest
+A login request
+
+
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -987,7 +865,7 @@ __optional__|The authentication token|string
 A login response
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1003,12 +881,12 @@ __required__|The authentication token|string
 |===
 
 
-[[_swagger_loginrequest]]
-=== LoginRequest
-A login request
+[[_swagger_logoutrequest]]
+=== LogoutRequest
+A logout request
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1027,7 +905,7 @@ __optional__|The authentication token|string
 A logout response
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1041,12 +919,126 @@ __optional__|The detailed error message|string
 |===
 
 
-[[_swagger_logoutrequest]]
-=== LogoutRequest
-A logout request
+[[_swagger_processorqualifiedversion]]
+=== ProcessorQualifiedVersion
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**knowledgeBaseVersion** +
+__optional__|integer (int32)
+|**processorVersion** +
+__optional__|integer (int32)
+|===
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[[_swagger_provideactionargsrequest]]
+=== ProvideActionArgsRequest
+A provide action arguments request
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The request id|string
+|**username** +
+__optional__|The user name|string
+|**password** +
+__optional__|The user password|string
+|**authToken** +
+__optional__|The authentication token|string
+|**name** +
+__required__|The action name|string
+|**argNames** +
+__optional__|The names of action arguments to provide|< string > array
+|**current** +
+__optional__|The current values of action arguments in a client code|< string, object > map
+|**qualifiedVersion** +
+__optional__|The action expected qualified version|<<_swagger_processorqualifiedversion,ProcessorQualifiedVersion>>
+|===
+
+
+[[_swagger_provideactionargsresponse]]
+=== ProvideActionArgsResponse
+A provide action arguments response
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The corresponding request id|string
+|**errorCode** +
+__optional__|The error code|string
+|**errorMessage** +
+__optional__|The error message|string
+|**detailedErrorMessage** +
+__optional__|The detailed error message|string
+|**provided** +
+__required__|The provided action arguments|< string, <<_swagger_providedvalueobject,ProvidedValueObject>> > map
+|===
+
+
+[[_swagger_providedmeta]]
+=== ProvidedMeta
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**value** +
+__optional__|boolean
+|**valueSet** +
+__optional__|<<_swagger_valuesetmeta,ValueSetMeta>>
+|**dependencies** +
+__optional__|< string > array
+|**readOnly** +
+__optional__|boolean
+|**overwrite** +
+__optional__|boolean
+|===
+
+
+[[_swagger_providedvalue]]
+=== ProvidedValue
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**valuePresent** +
+__optional__|boolean
+|**annotatedValueSet** +
+__optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
+|**valueSet** +
+__optional__|< object > array
+|===
+
+
+[[_swagger_providedvalueobject]]
+=== ProvidedValueObject
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**value** +
+__optional__|object
+|**valuePresent** +
+__optional__|boolean
+|**annotatedValueSet** +
+__optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
+|**valueSet** +
+__optional__|< object > array
+|===
+
+
+[[_swagger_reloadrequest]]
+=== ReloadRequest
+A reload request
+
+
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1065,7 +1057,7 @@ __optional__|The authentication token|string
 A reload response
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1076,46 +1068,6 @@ __optional__|The error code|string
 __optional__|The error message|string
 |**detailedErrorMessage** +
 __optional__|The detailed error message|string
-|===
-
-
-[[_swagger_reloadrequest]]
-=== ReloadRequest
-A reload request
-
-
-[options="header", cols=".^3a,.^11a,.^4a"]
-|===
-|Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
-|===
-
-
-[[_swagger_sendeventresponse]]
-=== SendEventResponse
-A send event response
-
-
-[options="header", cols=".^3a,.^11a,.^4a"]
-|===
-|Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
-|**eventId** +
-__required__|The event id|string
 |===
 
 
@@ -1124,7 +1076,7 @@ __required__|The event id|string
 A send event request
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1142,12 +1094,12 @@ __optional__|The event attributes|< string, object > map
 |===
 
 
-[[_swagger_getversionresponse]]
-=== GetVersionResponse
-A get version response
+[[_swagger_sendeventresponse]]
+=== SendEventResponse
+A send event response
 
 
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -1158,27 +1110,19 @@ __optional__|The error code|string
 __optional__|The error message|string
 |**detailedErrorMessage** +
 __optional__|The detailed error message|string
-|**version** +
-__required__|The Sponge version|string
+|**eventId** +
+__required__|The event id|string
 |===
 
 
-[[_swagger_getversionrequest]]
-=== GetVersionRequest
-A get version request
+[[_swagger_valuesetmeta]]
+=== ValueSetMeta
 
-
-[options="header", cols=".^3a,.^11a,.^4a"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|Name|Schema
+|**limited** +
+__optional__|boolean
 |===
 
 
