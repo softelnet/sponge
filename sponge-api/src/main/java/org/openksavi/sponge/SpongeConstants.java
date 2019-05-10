@@ -21,13 +21,13 @@ package org.openksavi.sponge;
  */
 public final class SpongeConstants {
 
-    private SpongeConstants() {
-    }
-
     public static final String EVENT_NAME_RESERVED_CHARS = ":";
 
     public static final String ACTION_SUB_ARG_SEPARATOR = ".";
 
     /** Control event name prefix. */
     public static final String CONTROL_EVENT_PREFIX = "$";
+
+    private SpongeConstants() {
+    }
 }

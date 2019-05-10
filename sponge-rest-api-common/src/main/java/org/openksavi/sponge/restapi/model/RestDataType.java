@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.swagger.annotations.ApiModel;
+
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -37,6 +39,7 @@ import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
 
+@ApiModel(value = "DataType", description = "A data type")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "kind")
 @JsonSubTypes({ @Type(value = AnyType.class, name = DataTypeKind.CODE_ANY),
         @Type(value = BinaryType.class, name = DataTypeKind.CODE_BINARY),

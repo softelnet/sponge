@@ -14,6 +14,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Changed password hashing SHA-256 to SHA-512 in the REST API `BaseInMemoryKnowledgeBaseProvidedSecurityService` class.
 * Changed the default auth token expiration time from infinity to 30 minutes in the REST API.
 * Support for custom REST API operations.
+* Dependencies upgrade.
 
 [discrete]
 == 1.9.0 (2019-04-15)

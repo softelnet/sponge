@@ -125,7 +125,7 @@ public class DefaultRestApiService implements RestApiService {
             }
 
             return setupSuccessResponse(new GetVersionResponse(getEngine().getVersion()), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST getVersion", e);
             return setupErrorResponse(new GetVersionResponse(), request, e);
         }
@@ -141,7 +141,7 @@ public class DefaultRestApiService implements RestApiService {
             String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST login", e);
             return setupErrorResponse(new LoginResponse(), request, e);
         }
@@ -159,7 +159,7 @@ public class DefaultRestApiService implements RestApiService {
             }
 
             return setupSuccessResponse(new LogoutResponse(), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST logout", e);
             return setupErrorResponse(new LogoutResponse(), request, e);
         }
@@ -178,7 +178,7 @@ public class DefaultRestApiService implements RestApiService {
                     .filter(kb -> securityService.canUseKnowledgeBase(user, kb))
                     .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRestKnowledgeBase(kb))
                     .collect(Collectors.toList())), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST getKnowledgeBases", e);
             return setupErrorResponse(new GetKnowledgeBasesResponse(), request, e);
         }
@@ -231,7 +231,7 @@ public class DefaultRestApiService implements RestApiService {
             return setupSuccessResponse(new GetActionsResponse(actions.stream().map(action -> createRestActionMeta(action))
                     .sorted(actionsOrderComparator).map(action -> marshalActionMeta(action)).collect(Collectors.toList()), registeredTypes),
                     request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST getActions", e);
             return setupErrorResponse(new GetActionsResponse(), request, e);
         }
@@ -291,7 +291,7 @@ public class DefaultRestApiService implements RestApiService {
             Object actionResult = getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request));
 
             return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (actionAdapter != null) {
                 getEngine().handleError(actionAdapter, e);
             } else {
@@ -326,7 +326,7 @@ public class DefaultRestApiService implements RestApiService {
             }
 
             return setupSuccessResponse(new SendEventResponse(definition.send().getId()), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST send", e);
             return setupErrorResponse(new SendEventResponse(), request, e);
         }
@@ -347,7 +347,7 @@ public class DefaultRestApiService implements RestApiService {
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (actionAdapter != null) {
                 getEngine().handleError(actionAdapter, e);
             } else {
@@ -372,7 +372,7 @@ public class DefaultRestApiService implements RestApiService {
             getEngine().reload();
 
             return setupSuccessResponse(new ReloadResponse(), request);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getEngine().handleError("REST reload", e);
             return setupErrorResponse(new ReloadResponse(), request, e);
         }

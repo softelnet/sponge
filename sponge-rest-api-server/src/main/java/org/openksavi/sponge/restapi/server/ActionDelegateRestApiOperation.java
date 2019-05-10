@@ -16,43 +16,69 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 
 /**
- * A REST API operation that delegates a custom REST API request to an action call (e.g. to allow implementing operation body in a scripting
- * language but keeping a static REST interface).
+ * A REST API operation that delegates a custom REST API request to an action call (e.g. to allow implementing an operation body in a
+ * scripting language but keeping a static REST interface).
+ *
+ * @param <I> a request.
+ * @param <O> a response.
+ * @param <A> an action result.
  */
-public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends SpongeResponse> extends RestApiOperation<I, O> {
+public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends SpongeResponse, A> extends RestApiOperation<I, O> {
 
+    @SuppressWarnings("unchecked")
     public ActionDelegateRestApiOperation(String type, String description, Class<I> requestClass, String requestDescription,
-            Class<O> responseClass, String responseDescription, String delegateActionName, RestApiService service) {
+            Class<O> responseClass, String responseDescription, String delegateActionName, RestApiService service,
+            Function<I, List<Object>> argsMapper, BiConsumer<O, A> resultMapper) {
         super(type, description, requestClass, requestDescription, responseClass, responseDescription, (request, exchange) -> {
             ActionCallRequest actionCallRequest = new ActionCallRequest();
             // The default naming convention for an action name if not provided.
             String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(type);
-
-            actionCallRequest.setName(actionName);
-            actionCallRequest.setArgs(Arrays.asList(request));
 
             actionCallRequest.setId(request.getId());
             actionCallRequest.setUsername(request.getUsername());
             actionCallRequest.setPassword(request.getPassword());
             actionCallRequest.setAuthToken(request.getAuthToken());
 
+            actionCallRequest.setName(actionName);
+            actionCallRequest.setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
+
             ActionCallResponse actionCallResponse = service.call(actionCallRequest);
 
-            @SuppressWarnings("unchecked")
-            O response = (O) actionCallResponse.getResult();
-            Validate.isInstanceOf(responseClass, response, "The %s action result class is %s but should be %s", actionName,
-                    response != null ? response.getClass() : null, responseClass);
+            Object rawResult = actionCallResponse.getResult();
+            O response;
+            if (resultMapper != null) {
+                try {
+                    response = ConstructorUtils.invokeConstructor(responseClass);
+                } catch (NoSuchMethodException | IllegalAccessException | InstantiationException e) {
+                    throw SpongeUtils.wrapException(e);
+                } catch (InvocationTargetException e) {
+                    throw SpongeUtils.wrapException(e.getTargetException());
+                }
+
+                resultMapper.accept(response, (A) rawResult);
+            } else {
+                Validate.isInstanceOf(responseClass, rawResult, "The %s action result class is %s but should be %s", actionName,
+                        rawResult != null ? rawResult.getClass() : null, responseClass);
+
+                response = (O) rawResult;
+            }
 
             // An action shouldn't set the base response properties.
             response.setId(actionCallResponse.getId());
@@ -62,5 +88,11 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
 
             return response;
         });
+    }
+
+    public ActionDelegateRestApiOperation(String type, String description, Class<I> requestClass, String requestDescription,
+            Class<O> responseClass, String responseDescription, String delegateActionName, RestApiService service) {
+        this(type, description, requestClass, requestDescription, responseClass, responseDescription, delegateActionName, service, null,
+                null);
     }
 }
