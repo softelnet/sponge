@@ -416,7 +416,7 @@ public interface SpongeRestClient extends Closeable {
     /**
      * Sends the request to the server.
      *
-     * @param the operationType.
+     * @param operationType the operationType.
      * @param request the request.
      * @param responseClass the response class.
      * @param context the context.
@@ -430,7 +430,7 @@ public interface SpongeRestClient extends Closeable {
     /**
      * Sends the request to the server.
      *
-     * @param the operationType.
+     * @param operationType the operationType.
      * @param request the request.
      * @param responseClass the response class.
      * @return the response.
