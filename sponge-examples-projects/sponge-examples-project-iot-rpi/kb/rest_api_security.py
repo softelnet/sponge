@@ -12,7 +12,6 @@ class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):
         return restApiServer.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
 
-
 def onStartup():
     # Set up users. To hash a password use (on Mac): echo -n username-password | shasum -a 512 | awk '{ print $1 }'
     # Note that the user name must be lower case.

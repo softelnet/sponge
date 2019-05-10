@@ -21,7 +21,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.restapi.RestApiConstants;
 
 public class DemoServiceTestEnvironment {
 
@@ -47,7 +46,7 @@ public class DemoServiceTestEnvironment {
             server = new Server(port);
             server.setStopAtShutdown(true);
             WebAppContext webAppContext = new WebAppContext();
-            webAppContext.setContextPath("/" + RestApiConstants.DEFAULT_PATH);
+            webAppContext.setContextPath("/");
             webAppContext.setResourceBase("src/main/webapp");
             webAppContext.setClassLoader(getClass().getClassLoader());
             server.setHandler(webAppContext);
