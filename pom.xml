@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>1.10.0</version>
+    <version>1.10.1-SNAPSHOT</version>
     <name>Sponge - Parent</name>
     <description>Sponge Parent POM</description>
     <url>https://sponge.openksavi.org</url>
@@ -1093,7 +1093,6 @@
                 <module>sponge-gsm-modem</module>
                 <module>sponge-standalone</module>
                 <module>sponge-standalone-extensions</module>
-                <module>sponge-external</module>
                 <module>sponge-bom</module>
             </modules>
             <build>
