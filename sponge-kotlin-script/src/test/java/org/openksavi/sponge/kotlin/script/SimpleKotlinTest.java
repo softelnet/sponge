@@ -21,11 +21,12 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.junit.Test;
+import org.openksavi.sponge.Experimental;
 
+@Experimental
 public class SimpleKotlinTest {
 
-    @Test
+    // @Test
     public void testKotlin() throws ScriptException {
         ScriptEngineFactory factory = new ScriptEngineManager().getEngineByExtension("kts").getFactory();
         ScriptEngine engine = factory.getScriptEngine();
