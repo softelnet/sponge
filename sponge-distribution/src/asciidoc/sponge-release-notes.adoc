@@ -7,6 +7,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.10.1 (not released yet)
+* The Docker container is based on OpenJDK 11 now.
 * Dependencies upgrade.
 
 [discrete]

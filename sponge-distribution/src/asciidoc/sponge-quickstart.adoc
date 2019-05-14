@@ -263,7 +263,7 @@ docker run -it openksavi/sponge:latest
 exit
 ----
 
-The Docker container provides Oracle Java 8 as well as `mc` for convenience.
+The Docker container is based on OpenJDK 11.
 
 If you want to mount a host directory containing for example {sponge} knowledge bases or configuration files you may use Docker volumes or mount features.
 
