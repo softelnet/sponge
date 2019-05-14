@@ -110,6 +110,9 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
 
     public BaseAction withCallable(boolean callable) {
         getMeta().setCallable(callable);
+        if (!callable && getMeta().getResult() == null) {
+            withNoResult();
+        }
         return this;
     }
 }
