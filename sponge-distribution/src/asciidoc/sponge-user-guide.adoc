@@ -974,7 +974,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 === JavaScript
 JavaScript interpreter supports https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/shell.html[shell scripting extensions in Nashorn] to provide simpler shell integration.
 
-NOTE: Current support for JavaScript in {sponge} is deprecated because Nashorn engine is planned to be removed from future JDK releases.
+NOTE: Support for JavaScript in {sponge} is deprecated because Nashorn engine is planned to be removed from future JDK releases.
 
 ==== Limitations
 
@@ -1177,10 +1177,73 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 
 [[rest-api-demo-service]]
 ==== REST API Demo Service
-The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>. There are a few options to run the demo.
 
 [discrete]
-===== Running
+===== Using the hosted Demo Service
+The Demo Service hosted at `https://spongedemoapi.openksavi.org` provides an anonymous access to the {sponge} demo. It is used by the {sponge} mobile client application as a predefined connection. You can also connect to the service using command line tools.
+
+[source,bash,subs="verbatim,attributes"]
+----
+curl -H "Content-type:application/json" https://spongedemoapi.openksavi.org/version
+----
+
+[discrete]
+===== Running in Docker
+The Docker image `openksavi/sponge-demo` contains a predefined REST API Demo Service running in Tomcat. I can be used as a {sponge} mobile client application playground in your local environment.
+
+NOTE: The predefined file `password.txt` contains the hashed, insecure password `password` for the user `admin`. You should change it or use this demo only for tests in a secure network.
+
+.Initialization and configuration
+[source,bash,subs="verbatim,attributes"]
+----
+# Run the demo in Docker using the predefined {sponge} configuration.
+docker run --name sponge-demo -it --rm -p 8080:8080 openksavi/sponge-demo
+
+# Copy the predefined {sponge} configuration to the host in order to modify knowledge base files.
+docker cp sponge-demo:/opt/sponge/ .
+
+# Stop the running container.
+docker stop sponge-demo
+
+# Start a new container using a new {sponge} configuration located in the host filesystem.
+# The configurtion directory is expected to have the sponge.xml file.
+docker run --name sponge-demo -it --rm -p 8080:8080 --mount type=bind,source="$(pwd)/sponge",target=/opt/sponge openksavi/sponge-demo
+----
+
+.Verification
+[source,bash,subs="verbatim,attributes"]
+----
+# Test the service.
+curl http://localhost:8080/sponge.json/v1/version
+
+# Invoke shell in the container.
+docker exec -it sponge-demo /bin/bash
+----
+
+.Development process
+[source,bash,subs="verbatim,attributes"]
+----
+# Modify the {sponge} configuration in the host.
+vi sponge_demo.py
+# For example add a new action.
+class HelloWorld(Action):
+    def onConfigure(self):
+        self.withLabel("Hello World").withDescription("The action created in a running Docker container.")
+        self.withNoArgs().withResult(StringType().withLabel("Greeting"))
+        self.withFeature("icon", "human-greeting")
+    def onCall(self):
+        return "Hello World!"
+
+# Reload the knowledge bases as admin via a commandline tool or the {sponge} mobile client application.
+curl -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/reload -d '{"username":"admin","password":"password"}'
+
+# Refresh actions in the {sponge} mobile client application.
+# The new action will be visible in the action list.
+----
+
+[discrete]
+===== Setting up manually and deploying in Tomcat
 First, you have to create the web application and {sponge} scripts.
 [source,bash,subs="verbatim,attributes"]
 ----
@@ -1216,9 +1279,11 @@ Deploy the web application as `sponge-demo-api` using the Tomcat Web Application
 
 [source,bash]
 ----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/sponge-demo-api/sponge.json/v1/version
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/version
 ----
 
+[discrete]
+===== Running in Jetty
 You may also run this example using the Jetty server started by the maven command:
 
 .Example of the REST API servlet

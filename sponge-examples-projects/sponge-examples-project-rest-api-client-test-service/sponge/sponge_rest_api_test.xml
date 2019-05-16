@@ -3,7 +3,7 @@
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <properties>
-        <property name="commonkbDir">${sponge.home}/../../sponge-rest-api-server/examples/rest-api-server</property>
+        <property name="commonkbDir">${sponge.home}/../../../sponge-rest-api-server/examples/rest-api-server</property>
     </properties>
 
     <knowledgeBases>

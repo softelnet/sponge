@@ -21,10 +21,12 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.apache.camel.CamelContext;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
+import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -39,7 +41,12 @@ public class UserManagementSpringConfig extends SpongeCamelConfiguration {
 
     @Bean
     public SpongeEngine spongeEngine() {
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin()).config("sponge/user_management.xml").build();
+        String spongeHome = System.getProperty(ConfigurationConstants.PROP_HOME);
+        if (StringUtils.isBlank(spongeHome)) {
+            spongeHome = "sponge";
+        }
+
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin()).config(spongeHome + "/sponge.xml").build();
     }
 
     @Bean

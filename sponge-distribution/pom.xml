@@ -382,21 +382,34 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <configuration>
+                            <repository>openksavi/sponge</repository>
+                            <dockerfile>src/docker/Dockerfile</dockerfile>
+                            <skipPush>true</skipPush>
+                            <verbose>true</verbose>
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>docker</id>
-                                <phase>package</phase>
+                                <id>docker-tag-latest</id>
+                                <phase>install</phase>
                                 <goals>
-                                    <goal>single</goal>
+                                    <goal>build</goal>
+                                    <goal>tag</goal>
                                 </goals>
                                 <configuration>
-                                    <finalName>docker</finalName>
-                                    <appendAssemblyId>false</appendAssemblyId>
-                                    <descriptors>
-                                        <descriptor>src/assembly/docker.xml</descriptor>
-                                    </descriptors>
+                                    <tag>latest</tag>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>docker-tag-version</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>tag</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>${release.version}</tag>
                                 </configuration>
                             </execution>
                         </executions>

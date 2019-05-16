@@ -38,7 +38,7 @@ class DigitsModel:
         if K.image_data_format() == 'channels_first':
             x_train = x_train.reshape(x_train.shape[0], 1, self.img_rows, self.img_cols)
             x_test = x_test.reshape(x_test.shape[0], 1, self.img_rows, self.img_cols)
-            input_shape = (1, img_rows, img_cols)
+            input_shape = (1, self.img_rows, self.img_cols)
         else:
             x_train = x_train.reshape(x_train.shape[0], self.img_rows, self.img_cols, 1)
             x_test = x_test.reshape(x_test.shape[0], self.img_rows, self.img_cols, 1)

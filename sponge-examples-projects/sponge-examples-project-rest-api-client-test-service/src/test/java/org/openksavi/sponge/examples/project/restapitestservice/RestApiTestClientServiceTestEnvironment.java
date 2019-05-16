@@ -27,7 +27,7 @@ public class RestApiTestClientServiceTestEnvironment {
     protected Server server;
 
     public void init() {
-        System.setProperty(ConfigurationConstants.PROP_HOME, ".");
+        System.setProperty(ConfigurationConstants.PROP_HOME, "sponge");
     }
 
     public void clear() {

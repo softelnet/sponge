@@ -31,7 +31,7 @@ public class DemoServiceTestEnvironment {
     protected Server server;
 
     public void init() {
-        System.setProperty(ConfigurationConstants.PROP_HOME, ".");
+        System.setProperty(ConfigurationConstants.PROP_HOME, "sponge");
         System.setProperty(PROPERTY_DIGITS_HOME, "../../sponge-tensorflow/examples/tensorflow/digits");
         System.setProperty(PROPERTY_PASSWORD_FILE, "password.txt");
     }

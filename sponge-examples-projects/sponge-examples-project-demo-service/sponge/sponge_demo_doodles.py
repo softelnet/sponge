@@ -27,7 +27,8 @@ class ListDoodles(Action):
         self.withNoArgs().withResult(ListType(StringType()).withLabel("Doodles"))
     def onCall(self):
         dir = sponge.getProperty("doodlesDir")
-        return [f for f in listdir(dir) if isfile(join(dir, f)) and f.endswith(".png")] if isdir(dir) else []
+        doodles = [f for f in listdir(dir) if isfile(join(dir, f)) and f.endswith(".png")] if isdir(dir) else []
+        return sorted(doodles, reverse=True)
 
 class ViewDoodle(Action):
     def onConfigure(self):
@@ -40,7 +41,7 @@ class ViewDoodle(Action):
     def onProvideArgs(self, context):
         if "image" in context.names:
             doodles = sponge.call("ListDoodles")
-            context.provided["image"] = ProvidedValue().withValue(doodles[len(doodles)-1] if doodles else None).withValueSet(doodles)
+            context.provided["image"] = ProvidedValue().withValue(doodles[0] if doodles else None).withValueSet(doodles)
 
 def onStartup():
     sponge.logger.info(str(sponge.call("ListDoodles")))
