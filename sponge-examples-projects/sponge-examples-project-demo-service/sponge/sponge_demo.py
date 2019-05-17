@@ -210,4 +210,6 @@ class DrawDoodle(Action):
         self.withLabel("Draw a doodle").withDescription("Shows a canvas to draw a doodle")
         self.withArg(BinaryType("image").withLabel("Doodle").withMimeType("image/png")
                      .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":2}))
-        self.withCallable(False).withFeatures({"icon":"brush", "cancelLabel":"Close"})
+        self.withNoResult().withFeatures({"icon":"brush", "callLabel":"OK"})
+    def onCall(self, image):
+        pass

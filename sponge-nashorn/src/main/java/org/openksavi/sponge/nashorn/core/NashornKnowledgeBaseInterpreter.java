@@ -52,7 +52,7 @@ import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.trigger.Trigger;
 
 /**
- * Knowledge base interpreter supporting knowledge base to be defined in the Jython (Python) language.
+ * Knowledge base interpreter supporting knowledge base to be defined in the JavaScript (Nashorn) language.
  */
 @SuppressWarnings("restriction")
 public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInterpreter {
