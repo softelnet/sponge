@@ -21,6 +21,7 @@ import java.util.Comparator;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -30,6 +31,7 @@ import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -80,6 +82,8 @@ public interface RestApiService extends HasEngine, Initializable {
     GetActionsResponse getActions(GetActionsRequest request);
 
     GetVersionResponse getVersion(GetVersionRequest request);
+
+    GetEventTypesResponse getEventTypes(GetEventTypesRequest request);
 
     ReloadResponse reload(ReloadRequest request);
 

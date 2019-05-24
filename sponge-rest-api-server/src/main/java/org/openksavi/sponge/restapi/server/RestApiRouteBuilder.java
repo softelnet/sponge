@@ -52,6 +52,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -62,6 +63,7 @@ import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -343,24 +345,27 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "Logout request",
                 LogoutResponse.class, "The logout response", (request, exchange) -> apiService.logout(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_KNOWLEDGE_BASES, "Get knowledge bases",
-                GetKnowledgeBasesRequest.class, "Get knowledge bases request", GetKnowledgeBasesResponse.class,
+                GetKnowledgeBasesRequest.class, "The get knowledge bases request", GetKnowledgeBasesResponse.class,
                 "The get knowledge bases response", (request, exchange) -> apiService.getKnowledgeBases(request)));
-        addOperation(
-                new RestApiOperation<>(RestApiConstants.OPERATION_ACTIONS, "Get actions", GetActionsRequest.class, "Get actions request",
-                        GetActionsResponse.class, "The get actions response", (request, exchange) -> apiService.getActions(request)));
-        addOperation(
-                new RestApiOperation<>(RestApiConstants.OPERATION_CALL, "Call an action", ActionCallRequest.class, "Call action request",
-                        ActionCallResponse.class, "The action call response", (request, exchange) -> apiService.call(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_ACTIONS, "Get actions", GetActionsRequest.class,
+                "The get actions request", GetActionsResponse.class, "The get actions response",
+                (request, exchange) -> apiService.getActions(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_CALL, "Call an action", ActionCallRequest.class,
+                "The call action request", ActionCallResponse.class, "The action call response",
+                (request, exchange) -> apiService.call(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class,
-                "Send event request", SendEventResponse.class, "The send event response", (request, exchange) -> apiService.send(request)));
+                "The send event request", SendEventResponse.class, "The send event response",
+                (request, exchange) -> apiService.send(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments",
                 ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
                 "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
+                "The get event types request", GetEventTypesResponse.class, "The get event types response",
+                (request, exchange) -> apiService.getEventTypes(request)));
 
         if (getSettings().isPublishReload()) {
             addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,
-                    "Reload knowledge bases request", ReloadResponse.class, "The reload response",
-                    (request, exchange) -> apiService.reload(request)));
+                    "The reload request", ReloadResponse.class, "The reload response", (request, exchange) -> apiService.reload(request)));
         }
     }
 

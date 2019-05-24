@@ -1,0 +1,90 @@
+/*
+ * Copyright 2016-2019 The Sponge authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.openksavi.sponge.grpcapi.server;
+
+import java.util.Collections;
+import java.util.List;
+
+import io.grpc.stub.StreamObserver;
+
+import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
+
+public class Subscription {
+
+    private long id;
+
+    private List<String> eventNames;
+
+    private StreamObserver<SubscribeResponse> responseObserver;
+
+    // private String requestId;
+
+    private boolean active;
+
+    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, // String requestId,
+            boolean active) {
+        this.id = id;
+        setEventNames(eventNames);
+        this.responseObserver = responseObserver;
+        // this.requestId = requestId;
+        this.active = active;
+    }
+
+    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver/* , String requestId */) {
+        this(id, eventNames, responseObserver, /* requestId, */ true);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<String> getEventNames() {
+        return eventNames;
+    }
+
+    public void setEventNames(List<String> eventNames) {
+        this.eventNames = Collections.unmodifiableList(eventNames);
+    }
+
+    public StreamObserver<SubscribeResponse> getResponseObserver() {
+        return responseObserver;
+    }
+
+    public void setResponseObserver(StreamObserver<SubscribeResponse> responseObserver) {
+        this.responseObserver = responseObserver;
+    }
+
+    // public String getRequestId() {
+    // return requestId;
+    // }
+    //
+    // public void setRequestId(String requestId) {
+    // this.requestId = requestId;
+    // }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+}

@@ -45,6 +45,7 @@ import org.openksavi.sponge.restapi.model.RestCategoryMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -55,6 +56,7 @@ import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -73,6 +75,7 @@ import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.TypeTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
@@ -355,6 +358,30 @@ public class DefaultRestApiService implements RestApiService {
             }
 
             return setupErrorResponse(new ProvideActionArgsResponse(), request, e);
+        }
+    }
+
+    @Override
+    public GetEventTypesResponse getEventTypes(GetEventTypesRequest request) {
+        try {
+            if (request == null) {
+                request = new GetEventTypesRequest();
+            }
+
+            authenticateRequest(request);
+
+            // Match all events types if the name pattern is null.
+            String eventNameRegExp = request.getName() != null ? request.getName() : ".*";
+
+            Map<String,
+                    RecordType> marshalledEventTypes = getEngine().getEventTypes().entrySet().stream()
+                            .filter(entry -> getEngine().getPatternMatcher().matches(eventNameRegExp, entry.getKey()))
+                            .collect(Collectors.toMap(entry -> entry.getKey(), entry -> (RecordType) marshalDataType(entry.getValue())));
+
+            return setupSuccessResponse(new GetEventTypesResponse(marshalledEventTypes), request);
+        } catch (Throwable e) {
+            getEngine().handleError("REST getEventTypes", e);
+            return setupErrorResponse(new GetEventTypesResponse(), request, e);
         }
     }
 

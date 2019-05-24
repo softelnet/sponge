@@ -31,6 +31,11 @@ def onBeforeLoad():
         StringType("country").withLabel("Country")
     ]))
 
+    sponge.addEventType("alarm", RecordType().withFields([
+        StringType("source").withLabel("Source"),
+        IntegerType("severity").withLabel("Severity").withNullable()
+    ]))
+
 def onLoad():
     sponge.kb.version = 2
 

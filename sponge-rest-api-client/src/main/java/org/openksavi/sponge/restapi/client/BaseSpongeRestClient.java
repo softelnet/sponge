@@ -44,6 +44,7 @@ import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.ActionExecutionRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -54,6 +55,7 @@ import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -66,6 +68,7 @@ import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
@@ -663,6 +666,27 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public Map<String, ProvidedValue<?>> provideActionArgs(String actionName) {
         return provideActionArgs(actionName, null, null);
+    }
+
+    @Override
+    public GetEventTypesResponse getEventTypes(GetEventTypesRequest request, SpongeRequestContext context) {
+        GetEventTypesResponse response = execute(RestApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
+
+        if (response != null && response.getEventTypes() != null) {
+            response.getEventTypes().values().forEach(this::unmarshalDataType);
+        }
+
+        return response;
+    }
+
+    @Override
+    public GetEventTypesResponse getEventTypes(GetEventTypesRequest request) {
+        return getEventTypes(request, null);
+    }
+
+    @Override
+    public Map<String, RecordType> getEventTypes(String eventName) {
+        return getEventTypes(new GetEventTypesRequest(eventName)).getEventTypes();
     }
 
     @Override

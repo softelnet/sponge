@@ -33,6 +33,7 @@ import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.ProcessorPredicate;
@@ -444,6 +445,14 @@ public interface EngineOperations {
     CategoryMeta getCategory(String categoryName);
 
     /**
+     * Returns {@code true} if the category is registered.
+     *
+     * @param categoryName the category name.
+     * @return {@code true} if the category is registered.
+     */
+    boolean hasCategory(String categoryName);
+
+    /**
      * Removes a category. Throws an exception if this category is being used.
      *
      * @param categoryName the category name.
@@ -525,7 +534,7 @@ public interface EngineOperations {
     <T extends DataType<?>> void addType(String registeredTypeName, DataTypeSupplier<T> typeSupplier);
 
     /**
-     * Returns a new instance of the registered data type.
+     * Returns a new instance of the registered data type. Throws exception if not found.
      *
      * @param <T> a data type.
      * @param registeredTypeName the registered type name.
@@ -534,7 +543,7 @@ public interface EngineOperations {
     <T extends DataType<?>> T getType(String registeredTypeName);
 
     /**
-     * Returns a new instance of the registered data type.
+     * Returns a new instance of the registered data type. Throws exception if not found.
      *
      * @param <T> a data type.
      * @param registeredTypeName the registered type name.
@@ -552,10 +561,57 @@ public interface EngineOperations {
     Map<String, DataType> getTypes();
 
     /**
+     * Returns {@code true} if the type is registered.
+     *
+     * @param registeredTypeName the type name.
+     * @return {@code true} if the type is registered.
+     */
+    boolean hasType(String registeredTypeName);
+
+    /**
      * Removes the registered data type.
      *
      * @param registeredTypeName the registered type name.
      * @return {@code true} if the data type was registered.
      */
     boolean removeType(String registeredTypeName);
+
+    /**
+     * Registers an event type as a record.
+     *
+     * @param eventTypeName the registered event type name.
+     * @param dataType the event data type.
+     */
+    void addEventType(String eventTypeName, RecordType dataType);
+
+    /**
+     * Returns an event type. Throws exception if not found.
+     *
+     * @param eventTypeName the registered event type name.
+     * @return the event type.
+     */
+    RecordType getEventType(String eventTypeName);
+
+    /**
+     * Returns {@code true} if the event type is registered.
+     *
+     * @param eventTypeName the event type name.
+     * @return {@code true} if the event type is registered.
+     */
+    boolean hasEventType(String eventTypeName);
+
+    /**
+     * Returns all registered event types.
+     *
+     * @return the registered event types.
+     */
+    Map<String, RecordType> getEventTypes();
+
+    /**
+     * Removes the registered event type.
+     *
+     * @param eventTypeName the registered event type name.
+     * @return {@code true} if the event type was registered.
+     */
+    boolean removeEventType(String eventTypeName);
 }

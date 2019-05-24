@@ -83,7 +83,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections4.version>4.3</commons-collections4.version>
-        <commons-configuration2.version>2.4</commons-configuration2.version>
+        <commons-configuration2.version>2.5</commons-configuration2.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.12</commons-codec.version>
@@ -111,19 +111,22 @@
         <jserialcomm.version>2.5.1</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
+        <grpc.version>1.21.0</grpc.version>
+        <protobuf.version>3.7.1</protobuf.version>
+        <protoc.version>3.7.1</protoc.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <swagger-ui.version>3.22.1</swagger-ui.version>
+        <swagger-ui.version>3.22.2</swagger-ui.version>
         <webjars-locator.version>0.36</webjars-locator.version>
         <jetty.version>9.4.18.v20190429</jetty.version>
 
         <slf4j.version>1.7.26</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.27.0</mockito.version>
+        <mockito.version>2.28.1</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
 
@@ -340,6 +343,16 @@
                     <groupId>com.spotify</groupId>
                     <artifactId>dockerfile-maven-plugin</artifactId>
                     <version>1.4.10</version>
+                </plugin>
+                <plugin>
+                    <groupId>kr.motd.maven</groupId>
+                    <artifactId>os-maven-plugin</artifactId>
+                    <version>1.6.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.xolstice.maven.plugins</groupId>
+                    <artifactId>protobuf-maven-plugin</artifactId>
+                    <version>0.5.1</version>
                 </plugin>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
@@ -882,6 +895,13 @@
                 <artifactId>jetty-webapp</artifactId>
                 <version>${jetty.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>junit</groupId>
@@ -985,6 +1005,7 @@
                 <module>sponge-rest-api-test-base</module>
                 <module>sponge-rest-api-client</module>
                 <module>sponge-rest-api-server</module>
+                <module>sponge-grpc-api-server</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-integration-tests</module>
@@ -999,7 +1020,7 @@
         <profile>
             <id>review</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <plugins>
@@ -1099,6 +1120,7 @@
                 <module>sponge-rest-api-common</module>
                 <module>sponge-rest-api-client</module>
                 <module>sponge-rest-api-server</module>
+                <module>sponge-grpc-api-server</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-standalone</module>

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -89,6 +90,7 @@ import org.openksavi.sponge.spi.ProcessingUnitProvider;
 import org.openksavi.sponge.trigger.TriggerAdapter;
 import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
 import org.openksavi.sponge.util.ProcessorPredicate;
@@ -192,12 +194,15 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     /** Pattern matcher. */
     private PatternMatcher patternMatcher = new RegexPatternMatcher();
 
-    /** Registered categories. */
+    /** Registered categories. The underlying map preserves the insertion order. */
     private Map<String, CategoryMeta> categories = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /** Registered types. */
     @SuppressWarnings("rawtypes")
-    private Map<String, DataTypeSupplier> types = Collections.synchronizedMap(new LinkedHashMap<>());
+    private Map<String, DataTypeSupplier> types = new ConcurrentSkipListMap<>();
+
+    /** Registered event types. */
+    private Map<String, RecordType> eventTypes = new ConcurrentSkipListMap<>();
 
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
@@ -897,6 +902,11 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     @Override
+    public boolean hasCategory(String categoryName) {
+        return categories.containsKey(categoryName);
+    }
+
+    @Override
     public CategoryMeta removeCategory(String categoryName) {
         Validate.isTrue(
                 !getProcessorManager().getAllProcessorAdapters().stream().map(adapter -> adapter.getMeta().getCategory())
@@ -1019,7 +1029,37 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     @Override
+    public boolean hasType(String registeredTypeName) {
+        return types.containsKey(registeredTypeName);
+    }
+
+    @Override
     public boolean removeType(String registeredTypeName) {
         return types.remove(registeredTypeName) != null;
+    }
+
+    @Override
+    public void addEventType(String eventTypeName, RecordType dataType) {
+        eventTypes.put(eventTypeName, dataType);
+    }
+
+    @Override
+    public RecordType getEventType(String eventTypeName) {
+        return Validate.notNull(eventTypes.get(eventTypeName), "Event type %s is not registered", eventTypeName);
+    }
+
+    @Override
+    public boolean hasEventType(String eventTypeName) {
+        return eventTypes.containsKey(eventTypeName);
+    }
+
+    @Override
+    public Map<String, RecordType> getEventTypes() {
+        return Collections.unmodifiableMap(eventTypes);
+    }
+
+    @Override
+    public boolean removeEventType(String eventTypeName) {
+        return eventTypes.remove(eventTypeName) != null;
     }
 }

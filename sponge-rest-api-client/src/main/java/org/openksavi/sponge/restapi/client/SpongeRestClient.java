@@ -26,6 +26,7 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -36,6 +37,7 @@ import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -44,6 +46,7 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
@@ -390,6 +393,38 @@ public interface SpongeRestClient extends Closeable {
      * @return the provided action arguments.
      */
     Map<String, ProvidedValue<?>> provideActionArgs(String actionName);
+
+    /**
+     * Sends the {@code eventTypes} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     */
+    GetEventTypesResponse getEventTypes(GetEventTypesRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code eventTypes} request to the server.
+     *
+     * @param request the request.
+     */
+    GetEventTypesResponse getEventTypes(GetEventTypesRequest request);
+
+    /**
+     * Returns the registered event types mathing the event name pattern.
+     *
+     * @param eventName the event name pattern or {@code null} to get event types.
+     * @return the event types map.
+     */
+    Map<String, RecordType> getEventTypes(String eventName);
+
+    /**
+     * Returns the registered event types.
+     *
+     * @return the event types map.
+     */
+    default Map<String, RecordType> getEventTypes() {
+        return getEventTypes((String) null);
+    }
 
     /**
      * Sends the {@code reload} request to the server.

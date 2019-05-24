@@ -42,6 +42,7 @@ import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.RuleMeta;
 import org.openksavi.sponge.trigger.TriggerMeta;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.ProcessorPredicate;
@@ -358,6 +359,11 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
+    public boolean hasCategory(String categoryName) {
+        return engine.hasCategory(categoryName);
+    }
+
+    @Override
     public CategoryMeta removeCategory(String categoryName) {
         return engine.removeCategory(categoryName);
     }
@@ -424,7 +430,37 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
+    public boolean hasType(String registeredTypeName) {
+        return engine.hasType(registeredTypeName);
+    }
+
+    @Override
     public boolean removeType(String registeredTypeName) {
         return engine.removeType(registeredTypeName);
+    }
+
+    @Override
+    public void addEventType(String eventTypeName, RecordType dataType) {
+        engine.addEventType(eventTypeName, dataType);
+    }
+
+    @Override
+    public RecordType getEventType(String eventTypeName) {
+        return engine.getEventType(eventTypeName);
+    }
+
+    @Override
+    public boolean hasEventType(String eventTypeName) {
+        return engine.hasEventType(eventTypeName);
+    }
+
+    @Override
+    public Map<String, RecordType> getEventTypes() {
+        return engine.getEventTypes();
+    }
+
+    @Override
+    public boolean removeEventType(String eventTypeName) {
+        return engine.removeEventType(eventTypeName);
     }
 }

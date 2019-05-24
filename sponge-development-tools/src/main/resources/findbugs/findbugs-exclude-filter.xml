@@ -91,6 +91,12 @@
         <Bug pattern="DM_EXIT" />
     </Match>
 
+    <!-- Reason: Generated -->
+    <Match>
+        <Package name="org.openksavi.sponge.grpcapi.proto" />
+        <Bug pattern="UCF_USELESS_CONTROL_FLOW,SE_BAD_FIELD" />
+    </Match>
+
     <!-- Reason: Used only in tests -->
     <Match>
         <Class name="org.openksavi.sponge.test.util.TestStatus" />

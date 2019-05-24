@@ -47,6 +47,8 @@ public final class RestApiConstants {
 
     public static final String OPERATION_ACTION_ARGS = "actionArgs";
 
+    public static final String OPERATION_EVENT_TYPES = "eventTypes";
+
     public static final String OPERATION_RELOAD = "reload";
 
     /** A generic error code. */
