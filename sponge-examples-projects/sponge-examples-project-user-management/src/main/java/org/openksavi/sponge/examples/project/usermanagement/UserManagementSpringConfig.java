@@ -59,8 +59,6 @@ public class UserManagementSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
 
-        plugin.setCamelContext(camelContext.get());
-
         plugin.setSecurityService(restApiSecurityService());
 
         return plugin;

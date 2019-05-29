@@ -43,6 +43,12 @@ public class SpongeRestClientConfiguration {
 
     private long actionMetaCacheExpireSeconds = -1;
 
+    private boolean useEventTypeCache = true;
+
+    private int eventTypeCacheMaxSize = -1;
+
+    private long eventTypeCacheExpireSeconds = -1;
+
     private boolean throwExceptionOnErrorResponse = true;
 
     private boolean prettyPrint = false;
@@ -134,6 +140,30 @@ public class SpongeRestClientConfiguration {
 
     public void setActionMetaCacheExpireSeconds(long actionMetaCacheExpireSeconds) {
         this.actionMetaCacheExpireSeconds = actionMetaCacheExpireSeconds;
+    }
+
+    public boolean isUseEventTypeCache() {
+        return useEventTypeCache;
+    }
+
+    public void setUseEventTypeCache(boolean useEventTypeCache) {
+        this.useEventTypeCache = useEventTypeCache;
+    }
+
+    public int getEventTypeCacheMaxSize() {
+        return eventTypeCacheMaxSize;
+    }
+
+    public void setEventTypeCacheMaxSize(int eventTypeCacheMaxSize) {
+        this.eventTypeCacheMaxSize = eventTypeCacheMaxSize;
+    }
+
+    public long getEventTypeCacheExpireSeconds() {
+        return eventTypeCacheExpireSeconds;
+    }
+
+    public void setEventTypeCacheExpireSeconds(long eventTypeCacheExpireSeconds) {
+        this.eventTypeCacheExpireSeconds = eventTypeCacheExpireSeconds;
     }
 
     public boolean isThrowExceptionOnErrorResponse() {
@@ -284,6 +314,39 @@ public class SpongeRestClientConfiguration {
          */
         public Builder actionMetaCacheExpireSeconds(long actionMetaCacheExpireSeconds) {
             configuration.setActionMetaCacheExpireSeconds(actionMetaCacheExpireSeconds);
+            return this;
+        }
+
+        /**
+         * Sets the flag to use the event type cache. The default value is {@code true}.
+         *
+         * @param useEventTypeCache the flag to use the event type cache.
+         * @return the builder.
+         */
+        public Builder useEventTypeCache(boolean useEventTypeCache) {
+            configuration.setUseEventTypeCache(useEventTypeCache);
+            return this;
+        }
+
+        /**
+         * Sets the maximum size of the event type cache. The default value ({@code -1}) implies that there is no maximum size.
+         *
+         * @param eventTypeCacheMaxSize the maximum size of the event type cache.
+         * @return the builder.
+         */
+        public Builder eventTypeCacheMaxSize(int eventTypeCacheMaxSize) {
+            configuration.setEventTypeCacheMaxSize(eventTypeCacheMaxSize);
+            return this;
+        }
+
+        /**
+         * Sets the expire time (in seconds) of the event type cache. The default value ({@code -1}) implies that there is no expire time.
+         *
+         * @param eventTypeCacheExpireSeconds the expire time (in seconds) of the event type cache.
+         * @return the builder.
+         */
+        public Builder eventTypeCacheExpireSeconds(long eventTypeCacheExpireSeconds) {
+            configuration.setEventTypeCacheExpireSeconds(eventTypeCacheExpireSeconds);
             return this;
         }
 

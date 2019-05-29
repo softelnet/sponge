@@ -35,10 +35,11 @@ import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
+import org.openksavi.sponge.test.util.TestUtils;
 
 public class MpdRestServerTestMain {
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
+    protected static final int PORT = TestUtils.findAvailablePairOfNeighbouringTcpPorts();
 
     @Configuration
     public static class TestConfig extends SpongeCamelConfiguration {

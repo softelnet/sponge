@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
@@ -89,5 +90,32 @@ public class TestUtils {
             logger.error("ERROR key=" + key + ", expcted=" + expectedSequenceReport + ", real=" + realSequenceReport, e);
             throw e;
         }
+    }
+
+    /**
+     * Finds two available neighbouring ports.
+     *
+     * @return the base available port. The next port (i.e. base port + 1) is available too.
+     */
+    public static int findAvailablePairOfNeighbouringTcpPorts() {
+        return findAvailablePairOfNeighbouringTcpPorts(20000, 60000, 1000);
+    }
+
+    public static int findAvailablePairOfNeighbouringTcpPorts(int minPort, int maxPort, int maxAttempts) {
+        for (int i = 0; i < maxAttempts; i++) {
+            int basePort = SocketUtils.findAvailableTcpPort(minPort, maxPort);
+            int neighbourPort = -1;
+            try {
+                neighbourPort = SocketUtils.findAvailableTcpPort(basePort + 1, basePort + 1);
+            } catch (IllegalStateException e) {
+                // Ignore.
+            }
+
+            if (neighbourPort == basePort + 1) {
+                return basePort;
+            }
+        }
+
+        throw new IllegalStateException("No two available neighbouring ports found");
     }
 }

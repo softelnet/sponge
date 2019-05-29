@@ -32,7 +32,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -43,6 +42,7 @@ import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
+import org.openksavi.sponge.test.util.TestUtils;
 
 @net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
@@ -50,7 +50,7 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @DirtiesContext
 public class DigitsRestServerTest {
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
+    protected static final int PORT = TestUtils.findAvailablePairOfNeighbouringTcpPorts();
 
     @Inject
     protected SpongeEngine engine;

@@ -16,51 +16,27 @@
 
 package org.openksavi.sponge.examples.project.demoservice;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
+import org.openksavi.sponge.restapi.test.base.RemoteApiTestEnvironment;
 
-import org.openksavi.sponge.core.engine.ConfigurationConstants;
-import org.openksavi.sponge.core.util.SpongeUtils;
-
-public class DemoServiceTestEnvironment {
+public class DemoServiceTestEnvironment extends RemoteApiTestEnvironment {
 
     public static final String PROPERTY_DIGITS_HOME = "digits.home";
 
     public static final String PROPERTY_PASSWORD_FILE = "password.file";
 
-    protected Server server;
-
+    @Override
     public void init() {
-        System.setProperty(ConfigurationConstants.PROP_HOME, "sponge");
+        super.init();
+
         System.setProperty(PROPERTY_DIGITS_HOME, "../../sponge-tensorflow/examples/tensorflow/digits");
         System.setProperty(PROPERTY_PASSWORD_FILE, "password.txt");
     }
 
+    @Override
     public void clear() {
+        super.clear();
+
         System.clearProperty(PROPERTY_DIGITS_HOME);
         System.clearProperty(PROPERTY_PASSWORD_FILE);
-    }
-
-    public void start(int port) {
-        try {
-            server = new Server(port);
-            server.setStopAtShutdown(true);
-            WebAppContext webAppContext = new WebAppContext();
-            webAppContext.setContextPath("/");
-            webAppContext.setResourceBase("src/main/webapp");
-            webAppContext.setClassLoader(getClass().getClassLoader());
-            server.setHandler(webAppContext);
-            server.start();
-        } catch (Exception e) {
-            SpongeUtils.wrapException(e);
-        }
-    }
-
-    public void stop() {
-        try {
-            server.stop();
-        } catch (Exception e) {
-            SpongeUtils.wrapException(e);
-        }
     }
 }

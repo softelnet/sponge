@@ -16,37 +16,11 @@
 
 package org.openksavi.sponge.examples.project.restapitestservice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.openksavi.sponge.logging.LoggingUtils;
+import org.openksavi.sponge.restapi.test.base.RemoteApiTestEnvironment;
 
 public class RestApiClientTestServiceMain {
 
-    private static final Logger logger = LoggerFactory.getLogger(RestApiClientTestServiceMain.class);
-
-    public void run() {
-        LoggingUtils.initLoggingBridge();
-
-        RestApiTestClientServiceTestEnvironment environment = new RestApiTestClientServiceTestEnvironment();
-        environment.init();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                environment.stop();
-            } catch (Throwable e) {
-                logger.error("Shutdown hook error", e);
-            }
-        }));
-        environment.start(8888);
-    }
-
-    /**
-     * Main method.
-     *
-     * @param args arguments.
-     */
     public static void main(String... args) {
-        new RestApiClientTestServiceMain().run();
+        new RemoteApiTestEnvironment().run();
     }
 }

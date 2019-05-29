@@ -485,7 +485,7 @@ public interface EngineOperations {
     void selectCategory(String categoryName, ProcessorPredicate predicate);
 
     /**
-     * Returns the action metadata.
+     * Returns the action metadata. Throws exception if not found.
      *
      * @param actionName the action name.
      * @return the action metadata.
@@ -493,7 +493,7 @@ public interface EngineOperations {
     ActionMeta getActionMeta(String actionName);
 
     /**
-     * Returns the filter metadata.
+     * Returns the filter metadata. Throws exception if not found.
      *
      * @param filterName the filter name.
      * @return the filter metadata.
@@ -501,7 +501,7 @@ public interface EngineOperations {
     FilterMeta getFilterMeta(String filterName);
 
     /**
-     * Returns the trigger metadata.
+     * Returns the trigger metadata. Throws exception if not found.
      *
      * @param triggerName the trigger name.
      * @return the trigger metadata.
@@ -509,7 +509,7 @@ public interface EngineOperations {
     TriggerMeta getTriggerMeta(String triggerName);
 
     /**
-     * Returns the correlator metadata.
+     * Returns the correlator metadata. Throws exception if not found.
      *
      * @param correlatorName the correlator name.
      * @return the correlator metadata.
@@ -517,7 +517,7 @@ public interface EngineOperations {
     CorrelatorMeta getCorrelatorMeta(String correlatorName);
 
     /**
-     * Returns the rule metadata.
+     * Returns the rule metadata. Throws exception if not found.
      *
      * @param ruleName the rule name.
      * @return the rule metadata.
