@@ -427,6 +427,33 @@ public interface SpongeRestClient extends Closeable {
     }
 
     /**
+     * Returns the event type for the specified event type name.
+     *
+     * @param eventTypeName the event type name.
+     * @param allowFetchEventType the flag that allows fetching the event type from the server.
+     * @param context the context as the record type.
+     * @return the event type or {@code null}.
+     */
+    RecordType getEventType(String eventTypeName, boolean allowFetchEventType, SpongeRequestContext context);
+
+    /**
+     * Returns the event type for the specified event type name.
+     *
+     * @param eventTypeName the event type name.
+     * @param allowFetchEventType the flag that allows fetching the event type from the server.
+     * @return the event type or {@code null}.
+     */
+    RecordType getEventType(String eventTypeName, boolean allowFetchEventType);
+
+    /**
+     * Returns the event type for the specified event type name. Fetches from the server if not cached.
+     *
+     * @param eventTypeName the event type name.
+     * @return the event type or {@code null}.
+     */
+    RecordType getEventType(String eventTypeName);
+
+    /**
      * Sends the {@code reload} request to the server.
      *
      * @param request the request.
@@ -475,9 +502,19 @@ public interface SpongeRestClient extends Closeable {
     <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass);
 
     /**
-     * Clears the action metadata cache.
+     * Clears caches.
      */
     void clearCache();
+
+    /**
+     * Clears the action metadata cache.
+     */
+    void clearActionMetaCache();
+
+    /**
+     * Clears the event type cache.
+     */
+    void clearEventTypeCache();
 
     /**
      * Closes the client.

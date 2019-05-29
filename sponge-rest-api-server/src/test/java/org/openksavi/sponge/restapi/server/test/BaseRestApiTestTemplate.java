@@ -776,4 +776,18 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals("Severity", recordType.getFields().get(1).getLabel());
         }
     }
+
+    @Test
+    public void testGetEventType() {
+        try (SpongeRestClient client = createRestClient()) {
+            RecordType recordType = client.getEventType("alarm");
+            assertEquals(2, recordType.getFields().size());
+            assertEquals(DataTypeKind.STRING, recordType.getFields().get(0).getKind());
+            assertEquals("source", recordType.getFields().get(0).getName());
+            assertEquals("Source", recordType.getFields().get(0).getLabel());
+            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(1).getKind());
+            assertEquals("severity", recordType.getFields().get(1).getName());
+            assertEquals("Severity", recordType.getFields().get(1).getLabel());
+        }
+    }
 }

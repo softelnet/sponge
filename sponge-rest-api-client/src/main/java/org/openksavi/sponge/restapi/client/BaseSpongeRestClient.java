@@ -78,6 +78,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     protected static final boolean DEFAULT_ALLOW_FETCH_METADATA = true;
 
+    protected static final boolean DEFAULT_ALLOW_FETCH_EVENT_TYPE = true;
+
     private SpongeRestClientConfiguration configuration;
 
     private AtomicLong currentRequestId = new AtomicLong(0);
@@ -89,6 +91,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     private Lock lock = new ReentrantLock(true);
 
     private LoadingCache<String, RestActionMeta> actionMetaCache;
+
+    private LoadingCache<String, RecordType> eventTypeCache;
 
     protected List<OnRequestSerializedListener> onRequestSerializedListeners = new CopyOnWriteArrayList<>();
 
@@ -109,6 +113,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         applyConfiguration();
 
         initActionMetaCache();
+        initEventTypeCache();
     }
 
     private void applyConfiguration() {
@@ -167,13 +172,57 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
     }
 
+    private void initEventTypeCache() {
+        lock.lock();
+        try {
+            if (!configuration.isUseEventTypeCache()) {
+                eventTypeCache = null;
+            } else {
+                Caffeine<Object, Object> builder = Caffeine.newBuilder();
+                if (configuration.getEventTypeCacheMaxSize() > -1) {
+                    builder.maximumSize(configuration.getEventTypeCacheMaxSize());
+                }
+                if (configuration.getEventTypeCacheExpireSeconds() > -1) {
+                    builder.expireAfterWrite(configuration.getEventTypeCacheExpireSeconds(), TimeUnit.SECONDS);
+                }
+
+                eventTypeCache = builder.build(eventTypeName -> fetchEventType(eventTypeName, null));
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
     @Override
-    public void clearCache() {
+    public void clearActionMetaCache() {
         lock.lock();
         try {
             if (actionMetaCache != null) {
                 actionMetaCache.invalidateAll();
             }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void clearEventTypeCache() {
+        lock.lock();
+        try {
+            if (eventTypeCache != null) {
+                eventTypeCache.invalidateAll();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void clearCache() {
+        lock.lock();
+        try {
+            clearActionMetaCache();
+            clearEventTypeCache();
         } finally {
             lock.unlock();
         }
@@ -185,6 +234,14 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     public void setActionMetaCache(LoadingCache<String, RestActionMeta> actionMetaCache) {
         this.actionMetaCache = actionMetaCache;
+    }
+
+    public LoadingCache<String, RecordType> getEventTypeCache() {
+        return eventTypeCache;
+    }
+
+    public void setEventTypeCache(LoadingCache<String, RecordType> eventTypeCache) {
+        this.eventTypeCache = eventTypeCache;
     }
 
     public ObjectMapper getObjectMapper() {
@@ -668,15 +725,24 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return provideActionArgs(actionName, null, null);
     }
 
-    @Override
-    public GetEventTypesResponse getEventTypes(GetEventTypesRequest request, SpongeRequestContext context) {
+    protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {
         GetEventTypesResponse response = execute(RestApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
 
         if (response != null && response.getEventTypes() != null) {
             response.getEventTypes().values().forEach(this::unmarshalDataType);
+
+            // Populate the cache.
+            if (populateCache && configuration.isUseEventTypeCache() && eventTypeCache != null) {
+                response.getEventTypes().entrySet().forEach(entry -> eventTypeCache.put(entry.getKey(), entry.getValue()));
+            }
         }
 
         return response;
+    }
+
+    @Override
+    public GetEventTypesResponse getEventTypes(GetEventTypesRequest request, SpongeRequestContext context) {
+        return doGetEventTypes(request, true, context);
     }
 
     @Override
@@ -687,6 +753,34 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public Map<String, RecordType> getEventTypes(String eventName) {
         return getEventTypes(new GetEventTypesRequest(eventName)).getEventTypes();
+    }
+
+    protected RecordType fetchEventType(String eventTypeName, SpongeRequestContext context) {
+        return doGetEventTypes(new GetEventTypesRequest(eventTypeName), false, context).getEventTypes().get(eventTypeName);
+    }
+
+    @Override
+    public RecordType getEventType(String eventTypeName, boolean allowFetchEventType, SpongeRequestContext context) {
+        if (configuration.isUseEventTypeCache() && eventTypeCache != null) {
+            RecordType eventType = eventTypeCache.getIfPresent(eventTypeName);
+            if (eventType != null) {
+                return eventType;
+            }
+
+            return allowFetchEventType ? eventTypeCache.get(eventTypeName) : null;
+        } else {
+            return allowFetchEventType ? fetchEventType(eventTypeName, context) : null;
+        }
+    }
+
+    @Override
+    public RecordType getEventType(String eventTypeName, boolean allowFetchEventType) {
+        return getEventType(eventTypeName, allowFetchEventType, null);
+    }
+
+    @Override
+    public RecordType getEventType(String eventTypeName) {
+        return getEventType(eventTypeName, DEFAULT_ALLOW_FETCH_EVENT_TYPE);
     }
 
     @Override
