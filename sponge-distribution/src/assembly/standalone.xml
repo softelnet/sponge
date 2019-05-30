@@ -130,6 +130,20 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>../sponge-remote-api-client</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-remote-api-server</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>../sponge-tensorflow</directory>
             <outputDirectory></outputDirectory>
             <includes>

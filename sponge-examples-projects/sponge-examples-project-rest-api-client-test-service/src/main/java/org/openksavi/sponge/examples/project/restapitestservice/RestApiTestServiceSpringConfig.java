@@ -29,6 +29,8 @@ import org.springframework.context.annotation.Configuration;
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
+import org.openksavi.sponge.grpcapi.server.kb.GrpcApiServerSupportKb;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
@@ -47,8 +49,8 @@ public class RestApiTestServiceSpringConfig extends SpongeCamelConfiguration {
             spongeHome = "sponge";
         }
 
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin()).config(spongeHome + "/sponge_rest_api_test.xml")
-                .build();
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
+                .knowledgeBase(new GrpcApiServerSupportKb()).config(spongeHome + "/sponge_rest_api_test.xml").build();
     }
 
     @Bean
@@ -65,8 +67,6 @@ public class RestApiTestServiceSpringConfig extends SpongeCamelConfiguration {
 
         plugin.getSettings().setPrettyPrint(true);
 
-        plugin.setCamelContext(camelContext.get());
-
         plugin.setSecurityService(restApiSecurityService());
 
         return plugin;
@@ -75,5 +75,10 @@ public class RestApiTestServiceSpringConfig extends SpongeCamelConfiguration {
     @Bean
     public RestApiSecurityService restApiSecurityService() {
         return new SimpleSpringInMemorySecurityService();
+    }
+
+    @Bean
+    public GrpcApiServerPlugin spongeGrpcApiPlugin() {
+        return new GrpcApiServerPlugin();
     }
 }

@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-server</artifactId>
+            <artifactId>sponge-remote-api-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
@@ -59,16 +59,6 @@
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-rest-api-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

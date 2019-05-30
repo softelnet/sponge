@@ -19,6 +19,11 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-grpc-api-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-rest-api-server</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -51,12 +56,6 @@
     </dependencies>
 
     <build>
-        <!-- <extensions> -->
-        <!-- <extension> -->
-        <!-- <groupId>kr.motd.maven</groupId> -->
-        <!-- <artifactId>os-maven-plugin</artifactId> -->
-        <!-- </extension> -->
-        <!-- </extensions> -->
         <plugins>
             <plugin>
                 <groupId>kr.motd.maven</groupId>

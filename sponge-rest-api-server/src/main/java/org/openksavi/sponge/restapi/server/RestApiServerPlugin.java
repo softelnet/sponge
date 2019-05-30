@@ -78,7 +78,11 @@ public class RestApiServerPlugin extends JPlugin {
     private Lock lock = new ReentrantLock(true);
 
     public RestApiServerPlugin() {
-        setName(NAME);
+        this(NAME);
+    }
+
+    public RestApiServerPlugin(String name) {
+        super(name);
     }
 
     @Override
@@ -140,10 +144,6 @@ public class RestApiServerPlugin extends JPlugin {
         if (isAutoStart()) {
             start();
         }
-    }
-
-    public RestApiServerPlugin(String name) {
-        super(name);
     }
 
     public RestApiSettings getSettings() {

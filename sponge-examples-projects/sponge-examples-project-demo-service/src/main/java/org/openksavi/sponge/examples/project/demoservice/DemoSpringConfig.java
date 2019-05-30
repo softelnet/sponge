@@ -61,8 +61,6 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
         plugin.getSettings().setPrettyPrint(true);
 
-        plugin.setCamelContext(camelContext.get());
-
         plugin.setSecurityService(restApiSecurityService());
 
         return plugin;

@@ -16,37 +16,11 @@
 
 package org.openksavi.sponge.examples.project.usermanagement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.openksavi.sponge.logging.LoggingUtils;
+import org.openksavi.sponge.restapi.test.base.RemoteApiTestEnvironment;
 
 public class UserManagementMain {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserManagementMain.class);
-
-    public void run() {
-        LoggingUtils.initLoggingBridge();
-
-        UserManagementTestEnvironment environment = new UserManagementTestEnvironment();
-        environment.init();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                environment.stop();
-            } catch (Throwable e) {
-                logger.error("Shutdown hook error", e);
-            }
-        }));
-        environment.start(8081);
-    }
-
-    /**
-     * Main method.
-     *
-     * @param args arguments.
-     */
     public static void main(String... args) {
-        new UserManagementMain().run();
+        new RemoteApiTestEnvironment().run();
     }
 }

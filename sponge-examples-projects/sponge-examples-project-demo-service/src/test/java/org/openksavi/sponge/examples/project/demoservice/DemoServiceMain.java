@@ -16,37 +16,9 @@
 
 package org.openksavi.sponge.examples.project.demoservice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.openksavi.sponge.logging.LoggingUtils;
-
 public class DemoServiceMain {
 
-    private static final Logger logger = LoggerFactory.getLogger(DemoServiceMain.class);
-
-    public void run() {
-        LoggingUtils.initLoggingBridge();
-
-        DemoServiceTestEnvironment environment = new DemoServiceTestEnvironment();
-        environment.init();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                environment.stop();
-            } catch (Throwable e) {
-                logger.error("Shutdown hook error", e);
-            }
-        }));
-        environment.start(8080);
-    }
-
-    /**
-     * Main method.
-     *
-     * @param args arguments.
-     */
     public static void main(String... args) {
-        new DemoServiceMain().run();
+        new DemoServiceTestEnvironment().run();
     }
 }

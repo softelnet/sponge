@@ -36,7 +36,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -45,13 +44,14 @@ import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.test.util.TestUtils;
 
 @net.jcip.annotations.NotThreadSafe
 public class DemoServiceLoadTest {
 
     private static final Logger logger = LoggerFactory.getLogger(DemoServiceLoadTest.class);
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
+    protected static final int PORT = TestUtils.findAvailablePairOfNeighbouringTcpPorts();
 
     protected static final DemoServiceTestEnvironment environment = new DemoServiceTestEnvironment();
 

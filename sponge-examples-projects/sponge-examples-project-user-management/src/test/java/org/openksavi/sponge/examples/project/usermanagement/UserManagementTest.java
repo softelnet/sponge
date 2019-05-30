@@ -27,20 +27,21 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
+import org.openksavi.sponge.restapi.test.base.RemoteApiTestEnvironment;
+import org.openksavi.sponge.test.util.TestUtils;
 
 @net.jcip.annotations.NotThreadSafe
 public class UserManagementTest {
 
-    protected static final int PORT = SocketUtils.findAvailableTcpPort(RestApiConstants.DEFAULT_PORT);
+    protected static final int PORT = TestUtils.findAvailablePairOfNeighbouringTcpPorts();
 
-    protected static final UserManagementTestEnvironment environment = new UserManagementTestEnvironment();
+    protected static final RemoteApiTestEnvironment environment = new RemoteApiTestEnvironment();
 
     @BeforeClass
     public static void beforeClass() {

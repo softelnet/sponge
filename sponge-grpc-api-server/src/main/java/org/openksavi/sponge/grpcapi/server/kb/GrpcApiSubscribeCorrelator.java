@@ -40,7 +40,8 @@ public class GrpcApiSubscribeCorrelator extends JCorrelator {
 
     @Override
     public void onEvent(Event event) {
-        // getLogger().debug("Event: {}, {}", event.getName(), event.getId());
-        plugin.getService().pushEvent(event);
+        if (plugin != null) {
+            plugin.getService().pushEvent(event);
+        }
     }
 }
