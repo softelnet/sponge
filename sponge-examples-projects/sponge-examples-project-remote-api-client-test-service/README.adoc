@@ -1,0 +1,3 @@
+= Sponge Remote API client test service
+
+This project is used for testing Sponge Remote API clients.

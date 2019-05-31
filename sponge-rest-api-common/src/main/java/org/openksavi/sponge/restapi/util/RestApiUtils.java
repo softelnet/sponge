@@ -18,6 +18,7 @@ package org.openksavi.sponge.restapi.util;
 
 import java.util.function.Consumer;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -44,6 +45,7 @@ public abstract class RestApiUtils {
         ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
 
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
 
         // Ensure a proper Type inheritance hierarchy deserialization from JSON to Java.
         mapper.addMixIn(DataType.class, RestDataType.class);

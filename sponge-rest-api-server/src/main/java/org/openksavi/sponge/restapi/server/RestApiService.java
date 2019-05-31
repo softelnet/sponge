@@ -43,6 +43,7 @@ import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.util.HasEngine;
 import org.openksavi.sponge.util.Initializable;
 
@@ -113,4 +114,9 @@ public interface RestApiService extends HasEngine, Initializable {
      * Closes the thread local session.
      */
     void closeSession();
+
+    @SuppressWarnings("rawtypes")
+    DataType marshalDataType(DataType type);
+
+    RestActionMeta marshalActionMeta(RestActionMeta actionMeta);
 }

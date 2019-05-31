@@ -35,12 +35,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
+import org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
-import org.openksavi.sponge.restapi.test.base.CompoundComplexObject;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 @net.jcip.annotations.NotThreadSafe

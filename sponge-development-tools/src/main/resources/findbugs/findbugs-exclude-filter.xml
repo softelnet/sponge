@@ -108,7 +108,7 @@
         <Bug pattern="UC_USELESS_OBJECT" />
     </Match>
     <Match>
-        <Class name="org.openksavi.sponge.restapi.test.base.ComplexObject" />
+        <Class name="org.openksavi.sponge.remoteapi.test.base.ComplexObject" />
         <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
     </Match>
 </FindBugsFilter>

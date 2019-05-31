@@ -55,7 +55,6 @@ import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
-import org.openksavi.sponge.grpcapi.server.kb.GrpcApiServerSupportKb;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
@@ -91,7 +90,7 @@ public class GrpcApiServerTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
-                    .knowledgeBase(new GrpcApiServerSupportKb()).config("examples/remote-api-server/remote_api.xml").build();
+                    .config("examples/remote-api-server/remote_api.xml").build();
         }
 
         @Bean

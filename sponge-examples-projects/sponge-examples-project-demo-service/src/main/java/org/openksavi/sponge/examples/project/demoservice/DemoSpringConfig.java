@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
@@ -46,7 +47,8 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
             spongeHome = "sponge";
         }
 
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin()).config(spongeHome + "/sponge.xml").build();
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
+                .config(spongeHome + "/sponge.xml").build();
     }
 
     @Bean
@@ -69,5 +71,10 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
     @Bean
     public RestApiSecurityService restApiSecurityService() {
         return new SimpleSpringInMemorySecurityService();
+    }
+
+    @Bean
+    public GrpcApiServerPlugin spongeGrpcApiPlugin() {
+        return new GrpcApiServerPlugin();
     }
 }

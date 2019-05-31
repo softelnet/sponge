@@ -28,12 +28,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
-import org.openksavi.sponge.restapi.test.base.RemoteApiTestEnvironment;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @net.jcip.annotations.NotThreadSafe

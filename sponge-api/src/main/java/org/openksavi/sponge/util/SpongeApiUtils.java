@@ -21,6 +21,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -98,5 +101,12 @@ public abstract class SpongeApiUtils {
             actionMeta.getArgs().forEach(
                     argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
         }
+    }
+
+    public static <T, K, V> Collector<T, ?, Map<K, V>> collectorToLinkedMap(Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends V> valueMapper) {
+        return Collectors.toMap(keyMapper, valueMapper, (u, v) -> {
+            throw new IllegalStateException(String.format("Duplicate key %s", u));
+        }, LinkedHashMap::new);
     }
 }

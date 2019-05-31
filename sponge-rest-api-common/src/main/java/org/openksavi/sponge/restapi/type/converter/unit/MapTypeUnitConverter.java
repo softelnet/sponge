@@ -17,7 +17,6 @@
 package org.openksavi.sponge.restapi.type.converter.unit;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -25,6 +24,7 @@ import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.MapType;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class MapTypeUnitConverter<K, V> extends BaseUnitTypeConverter<Map<K, V>, MapType<K, V>> {
@@ -35,8 +35,9 @@ public class MapTypeUnitConverter<K, V> extends BaseUnitTypeConverter<Map<K, V>,
 
     @Override
     public Object marshal(TypeConverter converter, MapType<K, V> type, Map<K, V> value) {
-        return value.entrySet().stream().collect(Collectors.toMap(entry -> converter.marshal(type.getKeyType(), entry.getKey()),
-                entry -> converter.marshal(type.getValueType(), entry.getValue())));
+        return value.entrySet().stream()
+                .collect(SpongeApiUtils.collectorToLinkedMap(entry -> converter.marshal(type.getKeyType(), entry.getKey()),
+                        entry -> converter.marshal(type.getValueType(), entry.getValue())));
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MapTypeUnitConverter<K, V> extends BaseUnitTypeConverter<Map<K, V>,
         Validate.isInstanceOf(Map.class, value, "Expected map but got %s", value.getClass());
 
         return (Map<K, V>) ((Map) value).entrySet().stream()
-                .collect(Collectors.toMap((Map.Entry entry) -> converter.unmarshal(type.getKeyType(), entry.getKey()),
+                .collect(SpongeApiUtils.collectorToLinkedMap((Map.Entry entry) -> converter.unmarshal(type.getKeyType(), entry.getKey()),
                         (Map.Entry entry) -> converter.unmarshal(type.getValueType(), entry.getValue())));
     }
 }

@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
-import org.openksavi.sponge.restapi.test.base.ComplexObject;
-import org.openksavi.sponge.restapi.test.base.CompoundComplexObject;
+import org.openksavi.sponge.remoteapi.test.base.ComplexObject;
+import org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 public class ObjectMapperDateTest {

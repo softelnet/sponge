@@ -78,6 +78,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
  * Default Sponge REST service.
@@ -227,7 +228,7 @@ public class DefaultRestApiService implements RestApiService {
                 final Set<String> typeNames = new LinkedHashSet<>();
                 actions.stream().forEach(action -> typeNames.addAll(action.getRegisteredTypeNames()));
 
-                registeredTypes = typeNames.stream().collect(Collectors.toMap(registeredTypeName -> registeredTypeName,
+                registeredTypes = typeNames.stream().collect(SpongeApiUtils.collectorToLinkedMap(registeredTypeName -> registeredTypeName,
                         registeredTypeName -> marshalDataType(getEngine().getType(registeredTypeName))));
             }
 
@@ -248,12 +249,14 @@ public class DefaultRestApiService implements RestApiService {
 
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
-    protected DataType marshalDataType(DataType type) {
+    public DataType marshalDataType(DataType type) {
         return defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), type);
     }
 
-    protected RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
+    @Override
+    public RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
             if (actionMeta.getArgs() != null) {
                 actionMeta.setArgs(actionMeta.getArgs().stream().map(argType -> marshalDataType(argType)).collect(Collectors.toList()));
@@ -373,10 +376,9 @@ public class DefaultRestApiService implements RestApiService {
             // Match all events types if the name pattern is null.
             String eventNameRegExp = request.getName() != null ? request.getName() : ".*";
 
-            Map<String,
-                    RecordType> marshalledEventTypes = getEngine().getEventTypes().entrySet().stream()
-                            .filter(entry -> getEngine().getPatternMatcher().matches(eventNameRegExp, entry.getKey()))
-                            .collect(Collectors.toMap(entry -> entry.getKey(), entry -> (RecordType) marshalDataType(entry.getValue())));
+            Map<String, RecordType> marshalledEventTypes = getEngine().getEventTypes().entrySet().stream()
+                    .filter(entry -> getEngine().getPatternMatcher().matches(eventNameRegExp, entry.getKey())).collect(SpongeApiUtils
+                            .collectorToLinkedMap(entry -> entry.getKey(), entry -> (RecordType) marshalDataType(entry.getValue())));
 
             return setupSuccessResponse(new GetEventTypesResponse(marshalledEventTypes), request);
         } catch (Throwable e) {

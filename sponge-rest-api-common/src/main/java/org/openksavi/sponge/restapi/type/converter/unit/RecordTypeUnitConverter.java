@@ -18,13 +18,11 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
-import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.RecordType;
 
@@ -37,11 +35,9 @@ public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, O
 
     @Override
     public Object marshal(TypeConverter converter, RecordType type, Map<String, Object> value) {
-        Map<String, DataType> fieldMap = createFieldMap(type);
-
         Map<String, Object> marshalled = new LinkedHashMap<>(value.size());
-        value.entrySet().stream().forEach(
-                entry -> marshalled.put(entry.getKey(), converter.marshal(getFieldType(fieldMap, type, entry.getKey()), entry.getValue())));
+        value.entrySet().stream()
+                .forEach(entry -> marshalled.put(entry.getKey(), converter.marshal(type.getFieldType(entry.getKey()), entry.getValue())));
 
         return marshalled;
     }
@@ -50,21 +46,10 @@ public class RecordTypeUnitConverter extends BaseUnitTypeConverter<Map<String, O
     public Map<String, Object> unmarshal(TypeConverter converter, RecordType type, Object value) {
         Validate.isInstanceOf(Map.class, value, "Expected map but got %s", value.getClass());
 
-        Map<String, DataType> fieldMap = createFieldMap(type);
-
         Map<String, Object> unmarshalled = new LinkedHashMap<>(((Map) value).size());
         ((Map<String, Object>) value).entrySet().stream().forEach(entry -> unmarshalled.put(entry.getKey(),
-                converter.unmarshal(getFieldType(fieldMap, type, (String) entry.getKey()), entry.getValue())));
+                converter.unmarshal(type.getFieldType((String) entry.getKey()), entry.getValue())));
 
         return unmarshalled;
-    }
-
-    protected DataType<?> getFieldType(Map<String, DataType> fieldMap, RecordType type, String fieldName) {
-        return Validate.notNull(fieldMap.get(fieldName), "Field %s is not defined in the record type %s", fieldName,
-                type.getName() != null ? type.getName() : "");
-    }
-
-    protected Map<String, DataType> createFieldMap(RecordType type) {
-        return type.getFields().stream().collect(Collectors.toMap(field -> field.getName(), field -> field));
     }
 }

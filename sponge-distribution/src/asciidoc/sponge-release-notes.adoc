@@ -6,7 +6,9 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.10.1 (not released yet)
+== 1.11.0 (not released yet)
+* Added support for registering event types.
+* Added a new gRPC API service for remote {sponge} event subscriptions.
 * The Docker container is based on OpenJDK 11 now.
 * Dependencies upgrade.
 

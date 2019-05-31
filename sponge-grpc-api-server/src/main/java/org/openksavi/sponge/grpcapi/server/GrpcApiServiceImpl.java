@@ -45,9 +45,10 @@ import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
-import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
+import org.openksavi.sponge.restapi.server.RestApiService;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
-import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 // TODO Authorization like in the REST API service (but handle username or authToken that can be changes).
 public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
@@ -60,11 +61,7 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
     private Map<Long, Subscription> subscriptions = new ConcurrentHashMap<>();
 
-    // TODO Delegate to BaseRemoteApiService
-    // private DefaultRestApiService targetApiService;
-
-    // TODO Use targetApiService.
-    private TypeConverter typeConverter = new DefaultTypeConverter(RestApiUtils.createObjectMapper());
+    private RestApiService restApiService;
 
     public GrpcApiServiceImpl() {
     }
@@ -77,13 +74,21 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
         this.engine = engine;
     }
 
-    // public DefaultRestApiService getTargetApiService() {
-    // return targetApiService;
-    // }
-    //
-    // public void setTargetApiService(DefaultRestApiService targetApiService) {
-    // this.targetApiService = targetApiService;
-    // }
+    public RestApiService getRestApiService() {
+        return restApiService;
+    }
+
+    public void setRestApiService(RestApiService restApiService) {
+        this.restApiService = restApiService;
+    }
+
+    public AtomicLong getCurrentSubscriptionId() {
+        return currentSubscriptionId;
+    }
+
+    public Map<Long, Subscription> getSubscriptions() {
+        return subscriptions;
+    }
 
     @Override
     public void getVersion(VersionRequest request, StreamObserver<VersionResponse> responseObserver) {
@@ -118,7 +123,6 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
             @Override
             public void onNext(SubscribeRequest request) {
-                // TODO Use concurrent map?
                 Subscription previousSubscription = subscriptions.get(subscriptionId);
 
                 // Handle keep alive requests.
@@ -126,19 +130,12 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
                         previousSubscription != null && request.getEventNamesList().equals(previousSubscription.getEventNames());
                 if (previousSubscription == null && !isKeepAlive) {
                     logger.debug("New subscription {}", subscriptionId);
-                    subscriptions.put(subscriptionId, new Subscription(subscriptionId, request.getEventNamesList(),
-                            responseObserver/*
-                                             * , request.getHeader() != null ? request.getHeader().getId() : null
-                                             */));
+                    subscriptions.put(subscriptionId, new Subscription(subscriptionId, request.getEventNamesList(), responseObserver));
                 }
 
                 if (isKeepAlive) {
                     logger.debug("Keep alive for id {}", subscriptionId);
                 }
-                // if (previousSubscription == null) {
-                // // Push the initial response with no event.
-                // responseObserver.onNext(SubscribeResponse.newBuilder().setSubscriptionId(subscriptionId).build());
-                // }
             }
 
             @Override
@@ -156,13 +153,7 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
         };
 
-        // List<String> eventNames = request.getEventNamesList();
-        //
-        // long subscriptionId = currentSubscriptionId.incrementAndGet();
-        // subscriptions.put(subscriptionId, new Subscription(subscriptionId, eventNames, responseObserver,
-        // request.getHeader() != null ? request.getHeader().getId() : null));
-
-        // The stream will be provides by the pushEvent method called by the correlator.
+        // The stream will be provided by the pushEvent method called by the correlator.
     }
 
     public void pushEvent(org.openksavi.sponge.event.Event event) {
@@ -196,12 +187,10 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
         inactiveSubscriptionIds.forEach(subscriptions::remove);
     }
 
-    // TODO MapStruct.
     protected SubscribeResponse createSubscribeResponse(Subscription subscription, org.openksavi.sponge.event.Event event) {
         return SubscribeResponse.newBuilder().setSubscriptionId(subscription.getId()).setEvent(createEvent(event)).build();
     }
 
-    // TODO MapStruct.
     protected Event createEvent(org.openksavi.sponge.event.Event event) {
         Event.Builder eventBuilder = Event.newBuilder().setId(event.getId()).setName(event.getName()).setPriority(event.getPriority())
                 .setTime(Timestamp.newBuilder().setSeconds(event.getTime().getEpochSecond()).setNanos(event.getTime().getNano()));
@@ -211,31 +200,20 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
         if (attributes != null) {
             ObjectValue.Builder attributesValueBuilder = ObjectValue.newBuilder();
             try {
-                attributesValueBuilder.setValueJson(typeConverter.getObjectMapper().writeValueAsString(attributes));
+                RecordType eventType = engine.getEventType(event.getName());
+                TypeConverter typeConverter = restApiService.getTypeConverter();
+
+                Map<String, Object> marshalledAttributes =
+                        attributes.entrySet().stream().collect(SpongeApiUtils.collectorToLinkedMap(entry -> entry.getKey(),
+                                entry -> typeConverter.marshal(eventType.getFieldType(entry.getKey()), entry.getValue())));
+
+                attributesValueBuilder.setValueJson(typeConverter.getObjectMapper().writeValueAsString(marshalledAttributes));
             } catch (JsonProcessingException e) {
                 throw SpongeUtils.wrapException(e);
             }
             eventBuilder.setAttributes(attributesValueBuilder.build());
         }
 
-        // event.getAll().forEach((name, value) -> {
-        // try {
-        // });
-
         return eventBuilder.build();
     }
-
-    // TODO Could be unnecessary. Unsubscribing can be done by changing: rpc Subscribe (stream SubscribeRequest) returns (stream
-    // SubscribeResponse) {}
-    // and pass SubscribeRequest.cancelled = true at a specific time.
-    // @Override
-    // public void unsubscribe(UnsubscribeRequest request, StreamObserver<UnsubscribeResponse> responseObserver) {
-    // // TODO Request header, id, user.
-    // // TODO Prevent unsubscribe of a subscription initiated by other party.
-    // // Subscription subscription = subscriptions.remove(request.getSubscriptionId());
-    // //
-    // // if (subscription != null) {
-    // // subscription.getResponseObserver().onCompleted();
-    // // }
-    // }
 }

@@ -1007,12 +1007,12 @@
                 <module>sponge-reactivex</module>
                 <module>sponge-signal</module>
                 <module>sponge-rest-api-common</module>
-                <module>sponge-rest-api-test-base</module>
                 <module>sponge-rest-api-client</module>
                 <module>sponge-rest-api-server</module>
                 <module>sponge-grpc-api-common</module>
                 <module>sponge-grpc-api-server</module>
                 <module>sponge-remote-api-server</module>
+                <module>sponge-remote-api-test-base</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-integration-tests</module>

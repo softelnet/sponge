@@ -31,7 +31,10 @@ import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.grpcapi.GrpcApiConstants;
+import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
+import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiCreateSubscription;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 
 /**
@@ -42,6 +45,10 @@ public class GrpcApiServerPlugin extends JPlugin {
     private static final Logger logger = LoggerFactory.getLogger(GrpcApiServerPlugin.class);
 
     public static final String NAME = "grpcApiServer";
+
+    public static final String KB_CORE_PACKAGE_TO_SCAN = GrpcApiSubscribeCorrelator.class.getPackage().getName();
+
+    public static final String KB_SUPPORT_PACKAGE_TO_SCAN = GrpcApiCreateSubscription.class.getPackage().getName();
 
     private RestApiServerPlugin restApiServerPlugin;
 
@@ -90,6 +97,7 @@ public class GrpcApiServerPlugin extends JPlugin {
 
         startServer();
 
+        getSponge().enableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
     }
 
     protected int resolverServerPort() {
@@ -114,6 +122,7 @@ public class GrpcApiServerPlugin extends JPlugin {
         try {
             GrpcApiServiceImpl service = new GrpcApiServiceImpl();
             service.setEngine(getEngine());
+            service.setRestApiService(restApiServerPlugin.getService());
             setService(service);
 
             int port = resolverServerPort();
@@ -130,6 +139,8 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     public void stop() {
+        getSponge().disableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
+
         stopServer();
     }
 
@@ -149,6 +160,15 @@ public class GrpcApiServerPlugin extends JPlugin {
             server = null;
             lock.unlock();
         }
+    }
+
+    /**
+     * Enables support processors (e.g. subscription actions) in the knowledge base.
+     *
+     * @param engineOperations the engine operations assosiated with the knowledge base.
+     */
+    public void enableSupport(KnowledgeBaseEngineOperations engineOperations) {
+        engineOperations.enableJavaByScan(KB_SUPPORT_PACKAGE_TO_SCAN);
     }
 
     public RestApiServerPlugin getRestApiServerPlugin() {
@@ -174,13 +194,4 @@ public class GrpcApiServerPlugin extends JPlugin {
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
     }
-
-    // TODO Register here.
-    // public void start() {
-    // getSponge().enableJava(GrpcApiSubscribeCorrelator.class);
-    // }
-    //
-    // public void stop() {
-    // getSponge().disableJava(GrpcApiSubscribeCorrelator.class);
-    // }
 }

@@ -43,8 +43,8 @@ public class NullEventQueue extends BaseEventQueue {
      */
     @Override
     public void put(Event event) throws QueueFullException {
-        if (ignoredEventsLogger.isInfoEnabled() && !SpongeUtils.isSystemEvent(event)) {
-            ignoredEventsLogger.info("Ignored event: {}", event);
+        if (ignoredEventsLogger.isDebugEnabled() && !SpongeUtils.isSystemEvent(event)) {
+            ignoredEventsLogger.debug("Ignored event: {}", event);
         }
     }
 

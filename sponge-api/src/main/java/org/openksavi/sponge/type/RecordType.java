@@ -17,10 +17,14 @@
 package org.openksavi.sponge.type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 
@@ -40,6 +44,8 @@ public class RecordType extends DataType<Map<String, Object>> {
     /** The flag that tells if inheritance has been applied to this type. */
     private boolean inheritationApplied = false;
 
+    private transient Map<String, DataType> _fieldLookupMap;
+
     public RecordType() {
         this((String) null);
     }
@@ -54,7 +60,7 @@ public class RecordType extends DataType<Map<String, Object>> {
 
     public RecordType(String name, List<DataType> fields) {
         super(DataTypeKind.RECORD, name);
-        this.fields = new ArrayList<>(fields);
+        setFields(fields);
     }
 
     @Override
@@ -143,6 +149,8 @@ public class RecordType extends DataType<Map<String, Object>> {
             }
         });
 
+        refreshFieldLookupMap();
+
         return this;
     }
 
@@ -162,7 +170,9 @@ public class RecordType extends DataType<Map<String, Object>> {
     }
 
     public void setFields(List<DataType> fields) {
-        this.fields = new ArrayList<>(fields);
+        this.fields = fields != null ? new ArrayList<>(fields) : null;
+
+        refreshFieldLookupMap();
     }
 
     public RecordType getBaseType() {
@@ -181,11 +191,21 @@ public class RecordType extends DataType<Map<String, Object>> {
         this.inheritationApplied = inheritationApplied;
     }
 
+    protected void refreshFieldLookupMap() {
+        _fieldLookupMap =
+                fields != null ? fields.stream().collect(Collectors.toMap(DataType::getName, Function.identity())) : new HashMap<>();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends DataType<?>> T getFieldType(String fieldName) {
+        return (T) Validate.notNull(_fieldLookupMap.get(fieldName), "Field %s not found in the record type", fieldName);
+    }
+
     @Override
     public RecordType clone() {
         RecordType cloned = (RecordType) super.clone();
-        cloned.fields = fields != null
-                ? new ArrayList<>(fields.stream().map(field -> field != null ? field.clone() : null).collect(Collectors.toList())) : null;
+        cloned.setFields(fields != null
+                ? new ArrayList<>(fields.stream().map(field -> field != null ? field.clone() : null).collect(Collectors.toList())) : null);
         if (baseType != null) {
             cloned.baseType = baseType.clone();
         }

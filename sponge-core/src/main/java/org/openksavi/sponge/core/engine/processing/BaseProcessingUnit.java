@@ -49,6 +49,7 @@ import org.openksavi.sponge.engine.event.EventQueue;
 import org.openksavi.sponge.engine.processing.ProcessingUnit;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.util.Processable;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
  * Base Processing Unit. This is the abstract class for all processing units.
@@ -269,7 +270,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     @Override
     public Map<String, T> getRegisteredProcessorAdapterMap() {
         return registeredProcessorAdapterMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().get()));
+                .collect(SpongeApiUtils.collectorToLinkedMap(Map.Entry::getKey, entry -> entry.getValue().get()));
     }
 
     @Override

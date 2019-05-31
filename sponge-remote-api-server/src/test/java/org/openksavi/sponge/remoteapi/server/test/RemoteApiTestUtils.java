@@ -16,11 +16,16 @@
 
 package org.openksavi.sponge.remoteapi.server.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.openksavi.sponge.restapi.test.base.ComplexObject;
-import org.openksavi.sponge.restapi.test.base.CompoundComplexObject;
+import org.openksavi.sponge.remoteapi.test.base.ComplexObject;
+import org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject;
+import org.openksavi.sponge.type.DataTypeKind;
+import org.openksavi.sponge.type.RecordType;
 
 public abstract class RemoteApiTestUtils {
 
@@ -41,6 +46,53 @@ public abstract class RemoteApiTestUtils {
         compoundObject.setComplexObject(createComplexObject());
 
         return compoundObject;
+    }
+
+    public static void assertBookRecordType(RecordType bookType) {
+        assertEquals(DataTypeKind.RECORD, bookType.getKind());
+        assertEquals("book", bookType.getName());
+        assertEquals(4, bookType.getFields().size());
+        assertEquals("id", bookType.getFields().get(0).getName());
+        assertEquals(DataTypeKind.INTEGER, bookType.getFields().get(0).getKind());
+        assertEquals("author", bookType.getFields().get(1).getName());
+        assertEquals(DataTypeKind.STRING, bookType.getFields().get(1).getKind());
+        assertEquals("title", bookType.getFields().get(2).getName());
+        assertEquals(DataTypeKind.STRING, bookType.getFields().get(2).getKind());
+        assertEquals("comment", bookType.getFields().get(3).getName());
+        assertEquals(DataTypeKind.STRING, bookType.getFields().get(3).getKind());
+    }
+
+    public static void assertPersonRecordType(RecordType personType) {
+        assertNotNull(personType);
+        assertEquals(2, personType.getFields().size());
+        assertEquals("firstName", personType.getFields().get(0).getName());
+        assertEquals(DataTypeKind.STRING, personType.getFields().get(0).getKind());
+        assertEquals("surname", personType.getFields().get(1).getName());
+        assertEquals(DataTypeKind.STRING, personType.getFields().get(1).getKind());
+    }
+
+    public static void assertCitizenRecordType(RecordType citizenType) {
+        assertNotNull(citizenType);
+        assertEquals(3, citizenType.getFields().size());
+        assertEquals("firstName", citizenType.getFields().get(0).getName());
+        assertEquals(DataTypeKind.STRING, citizenType.getFields().get(0).getKind());
+        assertEquals("surname", citizenType.getFields().get(1).getName());
+        assertEquals(DataTypeKind.STRING, citizenType.getFields().get(1).getKind());
+        assertEquals("country", citizenType.getFields().get(2).getName());
+        assertEquals(DataTypeKind.STRING, citizenType.getFields().get(2).getKind());
+    }
+
+    public static void assertNotificationRecordType(RecordType notificationType) {
+        assertNotNull(notificationType);
+        assertEquals(3, notificationType.getFields().size());
+        assertEquals(DataTypeKind.STRING, notificationType.getFields().get(0).getKind());
+        assertEquals("source", notificationType.getFields().get(0).getName());
+        assertEquals("Source", notificationType.getFields().get(0).getLabel());
+        assertEquals(DataTypeKind.INTEGER, notificationType.getFields().get(1).getKind());
+        assertEquals("severity", notificationType.getFields().get(1).getName());
+        assertEquals("Severity", notificationType.getFields().get(1).getLabel());
+
+        assertPersonRecordType(notificationType.getFieldType("person"));
     }
 
     private RemoteApiTestUtils() {

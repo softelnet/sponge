@@ -99,8 +99,8 @@ class LangErrorAction(Action):
 
 class ComplexObjectAction(Action):
     def onConfigure(self):
-        self.withArg(ObjectType("arg").withClassName("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))
-        self.withResult(ObjectType().withClassName("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))
+        self.withArg(ObjectType("arg").withClassName("org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject"))
+        self.withResult(ObjectType().withClassName("org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject"))
     def onCall(self, arg):
         arg.id += 1
         return arg
@@ -108,10 +108,10 @@ class ComplexObjectAction(Action):
 class ComplexObjectListAction(Action):
     def onConfigure(self):
         self.withArg(ListType("arg").withElement(
-            ObjectType().withClassName("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")
+            ObjectType().withClassName("org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject")
         ).withLabel("Text to upper case"))
         self.withResult(ListType().withElement(
-            ObjectType().withClassName("org.openksavi.sponge.restapi.test.base.CompoundComplexObject")
+            ObjectType().withClassName("org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject")
         ))
     def onCall(self, arg):
         arg[0].id += 1
@@ -125,7 +125,7 @@ class ComplexObjectHierarchyAction(Action):
             ListType("stringListArg", StringType()),
             ListType("decimalListArg", ObjectType().withClassName("java.math.BigDecimal")),
             ObjectType("stringArrayArg").withClassName("java.lang.String[]"),
-            MapType("mapArg", StringType(), ObjectType().withClassName("org.openksavi.sponge.restapi.test.base.CompoundComplexObject"))
+            MapType("mapArg", StringType(), ObjectType().withClassName("org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject"))
         ]).withResult(ListType(AnyType()))
     def onCall(self, stringArg, anyArg, stringListArg, decimalListArg, stringArrayArg, mapArg):
         self.logger.info("Action {} called: {}, {}, {}, {}, {}, {}", self.meta.name, stringArg, anyArg, stringListArg, decimalListArg, stringArrayArg, mapArg)

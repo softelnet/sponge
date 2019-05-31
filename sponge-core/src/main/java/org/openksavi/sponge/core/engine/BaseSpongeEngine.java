@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -94,6 +93,7 @@ import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
 import org.openksavi.sponge.util.ProcessorPredicate;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
  * Base Sponge engine implementation.
@@ -1024,7 +1024,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @SuppressWarnings("rawtypes")
     @Override
     public Map<String, DataType> getTypes() {
-        return Collections.unmodifiableMap(types.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(),
+        return Collections.unmodifiableMap(types.entrySet().stream().collect(SpongeApiUtils.collectorToLinkedMap(entry -> entry.getKey(),
                 entry -> setupRegisteredTypeInstance(entry.getKey(), entry.getValue().supply()))));
     }
 

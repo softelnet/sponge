@@ -51,6 +51,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
+import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.IncorrectKnowledgeBaseVersionException;
@@ -364,18 +365,7 @@ public abstract class BaseRestApiTestTemplate {
     public void testCallRecordType() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("RecordAsResultAction");
-            RecordType recordType = (RecordType) actionMeta.getResult();
-            assertEquals(DataTypeKind.RECORD, recordType.getKind());
-            assertEquals("book", recordType.getName());
-            assertEquals(4, recordType.getFields().size());
-            assertEquals("id", recordType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getKind());
-            assertEquals("author", recordType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getKind());
-            assertEquals("title", recordType.getFields().get(2).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getKind());
-            assertEquals("comment", recordType.getFields().get(3).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(3).getKind());
+            RemoteApiTestUtils.assertBookRecordType((RecordType) actionMeta.getResult());
 
             Map<String, Object> book1 = client.call(Map.class, actionMeta.getName(), Arrays.asList(1));
             assertEquals(4, book1.size());
@@ -386,17 +376,7 @@ public abstract class BaseRestApiTestTemplate {
             assertNull(book1.get("comment"));
 
             actionMeta = client.getActionMeta("RecordAsArgAction");
-            recordType = (RecordType) actionMeta.getArgs().get(0);
-            assertEquals(DataTypeKind.RECORD, recordType.getKind());
-            assertEquals(4, recordType.getFields().size());
-            assertEquals("id", recordType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(0).getKind());
-            assertEquals("author", recordType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(1).getKind());
-            assertEquals("title", recordType.getFields().get(2).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(2).getKind());
-            assertEquals("comment", recordType.getFields().get(3).getName());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(3).getKind());
+            RemoteApiTestUtils.assertBookRecordType((RecordType) actionMeta.getArgs().get(0));
 
             Map<String, Object> book2 = SpongeUtils.immutableMapOf("id", 5, "author", "Arthur Conan Doyle", "title",
                     "Adventures of Sherlock Holmes", "comment", null);
@@ -418,13 +398,7 @@ public abstract class BaseRestApiTestTemplate {
 
             Map<String, DataType<?>> types = client.getActions(request).getTypes();
             assertEquals(1, types.size());
-            RecordType personType = (RecordType) types.get("Person");
-            assertNotNull(personType);
-            assertEquals(2, personType.getFields().size());
-            assertEquals("firstName", personType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.STRING, personType.getFields().get(0).getKind());
-            assertEquals("surname", personType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, personType.getFields().get(1).getKind());
+            RemoteApiTestUtils.assertPersonRecordType((RecordType) types.get("Person"));
 
             String surname = client.call(String.class, "RegisteredTypeArgAction",
                     Arrays.asList(SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce")));
@@ -443,23 +417,8 @@ public abstract class BaseRestApiTestTemplate {
 
             Map<String, DataType<?>> types = client.getActions(request).getTypes();
             assertEquals(2, types.size());
-            RecordType personType = (RecordType) types.get("Person");
-            assertNotNull(personType);
-            assertEquals(2, personType.getFields().size());
-            assertEquals("firstName", personType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.STRING, personType.getFields().get(0).getKind());
-            assertEquals("surname", personType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, personType.getFields().get(1).getKind());
-
-            RecordType citizenType = (RecordType) types.get("Citizen");
-            assertNotNull(citizenType);
-            assertEquals(3, citizenType.getFields().size());
-            assertEquals("firstName", citizenType.getFields().get(0).getName());
-            assertEquals(DataTypeKind.STRING, citizenType.getFields().get(0).getKind());
-            assertEquals("surname", citizenType.getFields().get(1).getName());
-            assertEquals(DataTypeKind.STRING, citizenType.getFields().get(1).getKind());
-            assertEquals("country", citizenType.getFields().get(2).getName());
-            assertEquals(DataTypeKind.STRING, citizenType.getFields().get(2).getKind());
+            RemoteApiTestUtils.assertPersonRecordType((RecordType) types.get("Person"));
+            RemoteApiTestUtils.assertCitizenRecordType((RecordType) types.get("Citizen"));
 
             String sentence = client.call(String.class, "InheritedRegisteredTypeArgAction",
                     Arrays.asList(SpongeUtils.immutableMapOf("firstName", "John", "surname", "Brown", "country", "UK")));
@@ -767,28 +726,14 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             Map<String, RecordType> eventTypes = client.getEventTypes();
             assertEquals(1, eventTypes.size());
-            RecordType recordType = eventTypes.get("notification");
-            assertEquals(2, recordType.getFields().size());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(0).getKind());
-            assertEquals("source", recordType.getFields().get(0).getName());
-            assertEquals("Source", recordType.getFields().get(0).getLabel());
-            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(1).getKind());
-            assertEquals("severity", recordType.getFields().get(1).getName());
-            assertEquals("Severity", recordType.getFields().get(1).getLabel());
+            RemoteApiTestUtils.assertNotificationRecordType(eventTypes.get("notification"));
         }
     }
 
     @Test
     public void testGetEventType() {
         try (SpongeRestClient client = createRestClient()) {
-            RecordType recordType = client.getEventType("notification");
-            assertEquals(2, recordType.getFields().size());
-            assertEquals(DataTypeKind.STRING, recordType.getFields().get(0).getKind());
-            assertEquals("source", recordType.getFields().get(0).getName());
-            assertEquals("Source", recordType.getFields().get(0).getLabel());
-            assertEquals(DataTypeKind.INTEGER, recordType.getFields().get(1).getKind());
-            assertEquals("severity", recordType.getFields().get(1).getName());
-            assertEquals("Severity", recordType.getFields().get(1).getLabel());
+            RemoteApiTestUtils.assertNotificationRecordType(client.getEventType("notification"));
         }
     }
 }

@@ -39,7 +39,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.grpcapi.server.kb.GrpcApiServerSupportKb;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
@@ -71,7 +70,7 @@ public class RestApiSimpleSpringSecurityTest {
         @Bean
         public SpongeEngine spongeEngine() {
             return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
-                    .config("examples/remote-api-server/rest_api_security.xml").knowledgeBase(new GrpcApiServerSupportKb()).build();
+                    .config("examples/remote-api-server/rest_api_security.xml").build();
         }
 
         @Bean
@@ -149,7 +148,7 @@ public class RestApiSimpleSpringSecurityTest {
     @Test
     public void testKnowledgeBasesUser1() {
         try (SpongeRestClient client = createRestClient("john", "password")) {
-            assertEquals(5, client.getKnowledgeBases().size());
+            assertEquals(4, client.getKnowledgeBases().size());
         }
     }
 

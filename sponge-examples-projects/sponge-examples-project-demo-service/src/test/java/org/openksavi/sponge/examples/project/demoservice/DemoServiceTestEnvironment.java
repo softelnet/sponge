@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.examples.project.demoservice;
 
-import org.openksavi.sponge.restapi.test.base.RemoteApiTestEnvironment;
+import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
 
 public class DemoServiceTestEnvironment extends RemoteApiTestEnvironment {
 
