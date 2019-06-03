@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.event;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Map;
 import java.util.Objects;
 
 import org.openksavi.sponge.SpongeException;
@@ -46,6 +47,12 @@ public abstract class BaseEvent implements Event {
     /** Event clone policy. */
     protected EventClonePolicy clonePolicy;
 
+    /** Event label. */
+    protected String label;
+
+    /** Event description. */
+    protected String description;
+
     /**
      * Creates a new event that has no ID and time set (both are 0).
      *
@@ -68,6 +75,11 @@ public abstract class BaseEvent implements Event {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -120,6 +132,26 @@ public abstract class BaseEvent implements Event {
         return DEFAULT_PRIORITY;
     }
 
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     protected abstract <T> T doGet(String name, boolean useDefault, T defaultValue);
 
     protected final <T> T getDefaultAttributeValue(String name, boolean useDefault, T defaultValue) {
@@ -155,6 +187,17 @@ public abstract class BaseEvent implements Event {
         return doGet(name, true, defaultValue);
     }
 
+    @Override
+    public Event set(Map<String, Object> attributes) {
+        if (attributes != null) {
+            // First, validate all attributes.
+            attributes.forEach((name, value) -> validateAttribute(name, value));
+
+            attributes.forEach((name, value) -> set(name, value));
+        }
+        return this;
+    }
+
     /**
      * Compares events by ID.
      *
@@ -185,7 +228,7 @@ public abstract class BaseEvent implements Event {
         return Objects.equals(name, event.getName()) && getAll().equals(event.getAll());
     }
 
-    protected void valudateAttribute(String name, Object value) {
+    protected void validateAttribute(String name, Object value) {
         if (clonePolicy == EventClonePolicy.DEEP && !(value instanceof Serializable)) {
             throw new SpongeException("Not serializable attribute can't be deep cloned.");
         }

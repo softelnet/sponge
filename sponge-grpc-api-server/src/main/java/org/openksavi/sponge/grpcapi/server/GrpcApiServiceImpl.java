@@ -192,11 +192,26 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
     }
 
     protected Event createEvent(org.openksavi.sponge.event.Event event) {
-        Event.Builder eventBuilder = Event.newBuilder().setId(event.getId()).setName(event.getName()).setPriority(event.getPriority())
-                .setTime(Timestamp.newBuilder().setSeconds(event.getTime().getEpochSecond()).setNanos(event.getTime().getNano()));
+        Event.Builder eventBuilder = Event.newBuilder();
+
+        if (event.getId() != null) {
+            eventBuilder.setId(event.getId());
+        }
+        if (event.getName() != null) {
+            eventBuilder.setName(event.getName());
+        }
+        eventBuilder.setPriority(event.getPriority());
+        if (event.getTime() != null) {
+            eventBuilder.setTime(Timestamp.newBuilder().setSeconds(event.getTime().getEpochSecond()).setNanos(event.getTime().getNano()));
+        }
+        if (event.getLabel() != null) {
+            eventBuilder.setLabel(event.getLabel());
+        }
+        if (event.getDescription() != null) {
+            eventBuilder.setDescription(event.getDescription());
+        }
 
         Map<String, Object> attributes = event.getAll();
-
         if (attributes != null) {
             ObjectValue.Builder attributesValueBuilder = ObjectValue.newBuilder();
             try {

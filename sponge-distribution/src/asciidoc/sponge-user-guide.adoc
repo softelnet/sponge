@@ -274,6 +274,12 @@ Events are the basic element of processing in {sponge}. They have properties suc
 |`time`
 |A property that is a send time of an event, i.e. a time of adding an event to the Input Event Queue. The time is represented as `java.time.Instant`. This is a shortcut for `getTime()`/`setTime(instant)` methods.
 
+|`label`
+|An optional event label.
+
+|`description`
+|An optional event description.
+
 |`set(attributeName, value)`
 |A method that allows setting an attribute of an event.
 
@@ -385,6 +391,9 @@ An event may be sent as:
 
 |`sendAt(crontabSpec)`
 |Sends events at time specified by Cron compatible time entry.
+
+|`sendEvery(interval)`
+|Periodically sends events every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
 
 |`Event make()`
 |Only returns the newly created event without sending.

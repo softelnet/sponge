@@ -249,7 +249,7 @@ A set of methods that return processor metadata.
 |Dynamically selects processors that are to assigned to the category.
 
 |`void selectCategory(String categoryName, ProcessorPredicate predicate)`
-|Dynamically selects processors of all types that are to assigned to the category.
+|Dynamically selects processors of supported types that are to assigned to the category.
 |===
 
 For a complete list of available methods see the {spongeJavaDocUrl}/org/openksavi/sponge/EngineOperations.html[`EngineOperations`] and the {spongeJavaDocUrl}/org/openksavi/sponge/kb/KnowledgeBaseEngineOperations.html[`KnowledgeBaseEngineOperations`] Javadoc.
@@ -463,9 +463,11 @@ def onLoad():
 The builder-style methods in the metadata classes follow the naming convention `with<Property>`, e.g. `BinaryType().withMimeType("image/png")`.
 
 == Categories
-Processors may be assigned to registered categories. Categories could be used in a client code to group processors independently of knowledge bases. This feature be useful if you don't want to group processor by knowledge bases which requires more resources because each knowledge base has its own interpreter.
+Processors may be assigned to registered categories. Categories could be used in a client code to group processors independently of knowledge bases. This feature can be useful if you don't want to group processor by knowledge bases which requires more resources because each knowledge base has its own interpreter.
 
-A registered category can be manually assigned to a processor a the processor configuration callback method `onConfigure` or dynamically by selecting processors that are to assigned to the category. The latter option could assign for example all processors defined in several knowledge bases to a single category in one line. Dynamic selection overwrites manual assigning.
+A registered category can be manually assigned to a processor in the processor configuration callback method `onConfigure` or dynamically by selecting processors that are to assigned to the category. The latter option could assign for example all processors defined in several knowledge bases to a single category in one line. Dynamic selection overwrites manual assigning.
+
+NOTE: The dynamic selection of processors is supported only for actions, filters and triggers. It is not supported for event set processors.
 
 .Example of registering categories and dynamically selecting processor categories by knowledge bases.
 [source,python]

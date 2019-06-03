@@ -18,11 +18,28 @@ package org.openksavi.sponge.event;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 
 /**
  * An event definition providing a fluent API for creating and sending events.
  */
 public interface EventDefinition {
+
+    /**
+     * Sets the event label.
+     *
+     * @param label the event label.
+     * @return @return this event definition for fluent API.
+     */
+    EventDefinition label(String label);
+
+    /**
+     * Sets the event description.
+     *
+     * @param description the event description.
+     * @return @return this event definition for fluent API.
+     */
+    EventDefinition description(String description);
 
     /**
      * Sets event attribute.
@@ -32,6 +49,14 @@ public interface EventDefinition {
      * @return this event definition for fluent API.
      */
     EventDefinition set(String name, Object value);
+
+    /**
+     * Sets attributes.
+     *
+     * @param attributes the attributes as the map.
+     * @return this event for fluent API.
+     */
+    EventDefinition set(Map<String, Object> attributes);
 
     /**
      * Modifies the underlying event.
@@ -123,6 +148,22 @@ public interface EventDefinition {
      * @return scheduled event entry.
      */
     EventSchedulerEntry sendAt(String crontabSpec);
+
+    /**
+     * Sends the event to the Input Event Queue periodically.
+     *
+     * @param interval interval in milliseconds.
+     * @return scheduled event entry.
+     */
+    EventSchedulerEntry sendEvery(long interval);
+
+    /**
+     * Sends the event to the Input Event Queue periodically.
+     *
+     * @param interval interval as Duration.
+     * @return scheduled event entry.
+     */
+    EventSchedulerEntry sendEvery(Duration interval);
 
     /**
      * Returns the event.

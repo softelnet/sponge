@@ -46,8 +46,10 @@ message Event {
   string name = 2;
   google.protobuf.Timestamp time = 3;
   int32 priority = 4;
+  string label = 5;
+  string description = 6;
   // Event attributes as a JSON string containing event aributes map corresponding a registered event record type.
-  ObjectValue attributes = 5;
+  ObjectValue attributes = 7;
 }
 
 message RequestHeader {

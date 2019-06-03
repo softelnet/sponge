@@ -9,6 +9,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.11.0 (not released yet)
 * Added support for registering event types.
 * Added a new gRPC API service for remote {sponge} event subscriptions.
+* Added a convenience method `EventDefinition.sendEvery`.
+* Added new properties `label` and `description` to events.
 * The Docker container is based on OpenJDK 11 now.
 * Dependencies upgrade.
 

@@ -19,5 +19,5 @@ def onStartup():
     # Enable support processors in this knowledge base.
     grpcApiServer.enableSupport(sponge)
 
-    sponge.event("notification").set("source", "Sponge").set("severity", 10).set("person", {"firstName":"James", "surname":"Joyce"}).sendAfter(
-        Duration.ZERO, Duration.ofSeconds(10))
+    sponge.event("notification").set({"source":"Sponge", "severity":10,
+            "person":{"firstName":"James", "surname":"Joyce"}}).label("The notification").description("The new event notification").sendEvery(Duration.ofSeconds(10))

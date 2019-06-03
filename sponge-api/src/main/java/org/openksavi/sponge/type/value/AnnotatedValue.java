@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * An annotated value.
+ * An annotated value. The class is not thread safe.
  */
 public class AnnotatedValue<T> {
 

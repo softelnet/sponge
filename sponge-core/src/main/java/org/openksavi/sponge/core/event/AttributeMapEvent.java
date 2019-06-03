@@ -69,7 +69,7 @@ public class AttributeMapEvent extends BaseEvent {
      */
     @Override
     public Event set(String name, Object value) {
-        valudateAttribute(name, value);
+        validateAttribute(name, value);
 
         attributes.put(name, value);
 

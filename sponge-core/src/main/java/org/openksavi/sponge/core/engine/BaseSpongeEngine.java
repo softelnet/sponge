@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EventProcessorAdapter;
+import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
@@ -925,8 +926,9 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         Validate.notNull(getCategory(categoryName), "Category %s not found", categoryName);
 
         getProcessors().stream()
-                .filter(adapter -> (processorType == null || processorType == adapter.getType()) && predicate.test(adapter.getProcessor()))
-                .forEach(adapter -> adapter.getMeta().setCategory(categoryName));
+                .filter(adapter -> (processorType == null || processorType == adapter.getType())
+                        && !(adapter instanceof EventSetProcessorAdapterGroup))
+                .filter(adapter -> predicate.test(adapter.getProcessor())).forEach(adapter -> adapter.getMeta().setCategory(categoryName));
     }
 
     @Override

@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.event;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.event.Event;
@@ -56,8 +57,26 @@ public class DefaultEventDefinition implements EventDefinition {
     }
 
     @Override
+    public DefaultEventDefinition label(String label) {
+        event.setLabel(label);
+        return this;
+    }
+
+    @Override
+    public DefaultEventDefinition description(String description) {
+        event.setDescription(description);
+        return this;
+    }
+
+    @Override
     public DefaultEventDefinition set(String name, Object value) {
         event.set(name, value);
+        return this;
+    }
+
+    @Override
+    public DefaultEventDefinition set(Map<String, Object> attributes) {
+        event.set(attributes);
         return this;
     }
 
@@ -117,6 +136,16 @@ public class DefaultEventDefinition implements EventDefinition {
     @Override
     public EventSchedulerEntry sendAt(String crontabSpec) {
         return engineOperations.getEngine().getEventScheduler().scheduleAt(event, crontabSpec);
+    }
+
+    @Override
+    public EventSchedulerEntry sendEvery(long interval) {
+        return sendAfter(0, interval);
+    }
+
+    @Override
+    public EventSchedulerEntry sendEvery(Duration interval) {
+        return sendEvery(interval.toMillis());
     }
 
     @Override

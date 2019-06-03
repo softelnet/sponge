@@ -20,53 +20,55 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
 
+import org.openksavi.sponge.util.Descriptive;
 import org.openksavi.sponge.util.HasPriority;
 
 /**
- * An event. Event has the following standard attributes: name (type), id, time, priority.
+ * An event. Event has the following standard attributes: name (type), id, time, priority, label and description.
  */
-public interface Event extends Cloneable, Serializable, HasPriority<Event> {
+public interface Event extends Cloneable, Serializable, HasPriority<Event>, Descriptive {
 
     /**
-     * Returns event name.
+     * Returns the event name.
      *
-     * @return event name.
+     * @return the event name.
      */
+    @Override
     String getName();
 
     /**
-     * Returns event time.
+     * Returns the event time.
      *
-     * @return event time.
+     * @return the event time.
      */
     Instant getTime();
 
     /**
-     * Sets event time.
+     * Sets the event time.
      *
-     * @param time event time.
+     * @param time the event time.
      */
     void setTime(Instant time);
 
     /**
-     * Returns event ID.
+     * Returns the event ID.
      *
-     * @return event ID.
+     * @return the event ID.
      */
     String getId();
 
     /**
-     * Sets event ID.
+     * Sets the event ID.
      *
-     * @param id event ID.
+     * @param id the event ID.
      */
     void setId(String id);
 
     /**
      * Returns the attribute value or throws {@code IllegalArgumentException} if it does't exist.
      *
-     * @param name attribute name.
-     * @return attribute value.
+     * @param name the attribute name.
+     * @return the attribute value.
      * @param <T> attribute.
      */
     <T> T get(String name);
@@ -74,9 +76,9 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     /**
      * Returns the attribute value or throws {@code IllegalArgumentException} if it does't exist.
      *
-     * @param cls attribute class.
-     * @param name attribute name.
-     * @return attribute value.
+     * @param cls the attribute class.
+     * @param name the attribute name.
+     * @return the attribute value.
      * @param <T> attribute.
      */
     <T> T get(Class<T> cls, String name);
@@ -84,9 +86,9 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     /**
      * Returns the attribute value or {@code defaultValue} if it does't exist.
      *
-     * @param name attribute name.
+     * @param name the attribute name.
      * @param defaultValue the default value.
-     * @return attribute value.
+     * @return the attribute value.
      * @param <T> attribute.
      */
     <T> T get(String name, T defaultValue);
@@ -94,31 +96,39 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     /**
      * Sets attribute value.
      *
-     * @param name attribute name.
-     * @param value attribute value.
+     * @param name the attribute name.
+     * @param value the attribute value.
      * @return this event for fluent API.
      */
     Event set(String name, Object value);
 
     /**
+     * Sets attributes.
+     *
+     * @param attributes the attributes as the map.
+     * @return this event for fluent API.
+     */
+    Event set(Map<String, Object> attributes);
+
+    /**
      * Checks whether this event has an attribute with the specified name.
      *
-     * @param name attribute name.
+     * @param name the attribute name.
      * @return {@code true} if there is such attribute.
      */
     boolean has(String name);
 
     /**
-     * Returns attribute map.
+     * Returns the attribute map.
      *
-     * @return attribute map.
+     * @return the attribute map.
      */
     Map<String, Object> getAll();
 
     /**
      * Compares events by ID.
      *
-     * @param event compared event.
+     * @param event the compared event.
      * @return {@code true} if both events are equal by ID.
      */
     boolean equalsById(Event event);
@@ -126,15 +136,15 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event> {
     /**
      * Compares events by attributes.
      *
-     * @param event compared event.
+     * @param event the compared event.
      * @return {@code true} if both events are equal by attributes.
      */
     boolean equalsByAttributes(Event event);
 
     /**
-     * Clones this event. Attributes are deeply cloned.
+     * Clones this event.
      *
-     * @return cloned event.
+     * @return a cloned event.
      */
     Event clone();
 }
