@@ -965,7 +965,7 @@ void onLoad() {
 
 For every knowledge base file there is a new Groovy `Script` instance created. For example when reloading, a new Groovy `Script` instance is created for each knowledge base file and they are placed in a list (in a reverse order) to be used by the {sponge} Groovy interpreter internally.
 
-It seems that a Groovy-based knowledge base must have at east one function (may be empty). Otherwise you may get `org.codehaus.groovy.runtime.metaclass.MissingMethodExceptionNoStack` exception.
+It seems that a Groovy-based knowledge base must have at east one function (may be empty). Otherwise you may get a Groovy exception.
 
 [discrete]
 ==== Maven configuration

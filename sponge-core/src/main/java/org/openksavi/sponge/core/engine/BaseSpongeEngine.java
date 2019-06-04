@@ -918,7 +918,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     @Override
     public List<CategoryMeta> getCategories() {
-        return new ArrayList<>(categories.values());
+        return Collections.unmodifiableList(new ArrayList<>(categories.values()));
     }
 
     @Override

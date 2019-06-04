@@ -21,8 +21,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -108,7 +108,7 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     protected Binding createBinding() {
-        return new Binding(Collections.synchronizedMap(new HashMap<>()));
+        return new Binding(new ConcurrentHashMap<>());
     }
 
     /**

@@ -123,7 +123,7 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public GetVersionResponse getVersion(GetVersionRequest request) {
         try {
-            // Privileges not checked here.
+            // Privileges checked only if the request is provided.
             if (request != null) {
                 authenticateRequest(request);
             }
