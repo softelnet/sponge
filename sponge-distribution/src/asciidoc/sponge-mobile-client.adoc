@@ -270,7 +270,7 @@ The application may be switched to the dark theme in the settings.
 |Supported.
 
 |`ListType`
-|Editing is supported with limitations (see the <<mobile-advanced-use-cases,Advanced use cases>> chapter). Viewing not supported. This functionality is experimental.
+|Editing is supported with limitations (see the <<mobile-advanced-use-cases,Advanced use cases>> chapter). A unique list with a provided element value set is represented as a multichoice widget. Viewing is not supported. This functionality is experimental.
 
 |`MapType`
 |Not supported.
@@ -337,7 +337,7 @@ The application may be switched to the dark theme in the settings.
 
 |`icon`
 |Action
-|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/3.4.93/[material design icons (currently v3.4.93)].
+|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/3.6.95/[material design icons (currently v3.6.95)].
 
 |`confirmation`
 |Action

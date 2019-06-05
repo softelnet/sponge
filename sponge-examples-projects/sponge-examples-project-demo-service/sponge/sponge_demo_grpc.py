@@ -13,7 +13,7 @@ def onBeforeLoad():
         StringType("source").withLabel("Source"),
         IntegerType("severity").withLabel("Severity").withNullable(),
         sponge.getType("Person", "person").withNullable()
-    ]))
+    ]).withLabel("Notification"))
 
 def onStartup():
     # Enable support processors in this knowledge base.

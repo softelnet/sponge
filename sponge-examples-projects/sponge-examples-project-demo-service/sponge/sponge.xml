@@ -46,7 +46,7 @@
             <file>${digits.home}/actions/digits_common.py</file>
             <file>${digits.home}/actions/digits_learn.py</file>
         </knowledgeBase>
-        <knowledgeBase name="gRPC" label="gRPC">
+        <knowledgeBase name="events" label="Events">
             <file>sponge_demo_grpc.py</file>
         </knowledgeBase>
         <knowledgeBase name="engine" label="Engine">

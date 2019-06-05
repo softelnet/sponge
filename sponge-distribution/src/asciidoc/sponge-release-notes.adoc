@@ -11,6 +11,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new gRPC API service for remote {sponge} event subscriptions.
 * Added a convenience method `EventDefinition.sendEvery`.
 * Added new properties `label` and `description` to events.
+* Added a new property `unique` to the `ListType`.
+* Added support for providing element value set in list data types.
 * The Docker container is based on OpenJDK 11 now.
 * Dependencies upgrade.
 

@@ -41,7 +41,10 @@ public class GrpcApiSubscribeCorrelator extends JCorrelator {
     @Override
     public void onEvent(Event event) {
         if (plugin != null) {
-            plugin.getService().pushEvent(event);
+            // Push only events which type name is registred.
+            if (getSponge().hasEventType(event.getName())) {
+                plugin.getService().pushEvent(event);
+            }
         }
     }
 }

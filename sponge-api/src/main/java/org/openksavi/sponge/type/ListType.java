@@ -31,6 +31,9 @@ public class ListType<E> extends CollectionType<List<E>> {
     /** The list element type. */
     private DataType<?> elementType;
 
+    /** The flag specifying if the list should contain unique values. Defaults to {@code false}. */
+    private boolean unique = false;
+
     public ListType() {
         this((String) null);
     }
@@ -119,9 +122,26 @@ public class ListType<E> extends CollectionType<List<E>> {
         return this;
     }
 
+    public ListType<E> withUnique(boolean unique) {
+        this.unique = unique;
+        return this;
+    }
+
+    public ListType<E> withUnique() {
+        return withUnique(true);
+    }
+
     @SuppressWarnings("unchecked")
     public DataType<E> getElementType() {
         return (DataType<E>) elementType;
+    }
+
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public void setUnique(boolean unique) {
+        this.unique = unique;
     }
 
     @Override

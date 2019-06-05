@@ -50,7 +50,7 @@ import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
-// TODO Authorization like in the REST API service (but handle username or authToken that can be changes).
+// TODO Authorization like in the REST API service (but handle username or authToken that can be changed).
 public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
     private static final Logger logger = LoggerFactory.getLogger(GrpcApiServiceImpl.class);
@@ -140,6 +140,17 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
             @Override
             public void onError(Throwable e) {
+                if (e instanceof StatusRuntimeException) {
+                    io.grpc.Status status = ((StatusRuntimeException) e).getStatus();
+                    if (status != null && status.getCode() == io.grpc.Status.Code.CANCELLED) {
+                        // Cancelled by the caller.
+                        subscriptions.remove(subscriptionId);
+
+                        return;
+                    }
+
+                }
+
                 logger.error("subscribe() request stream error", e);
             }
 

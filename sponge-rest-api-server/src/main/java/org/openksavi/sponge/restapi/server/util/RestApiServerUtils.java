@@ -32,8 +32,10 @@ import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
+import org.openksavi.sponge.util.DataTypeUtils;
 
 /**
  * A set of REST API server utility methods.
@@ -127,6 +129,14 @@ public abstract class RestApiServerUtils {
             if (argValue.getAnnotatedValueSet() != null) {
                 ((ProvidedValue) argValue).setAnnotatedValueSet(argValue.getAnnotatedValueSet().stream()
                         .map(annotatedValue -> new AnnotatedValue(typeConverter.marshal(argType, annotatedValue.getValue()),
+                                annotatedValue.getLabel(), annotatedValue.getDescription(), annotatedValue.getFeatures()))
+                        .collect(Collectors.toList()));
+            }
+
+            if (argValue.getAnnotatedElementValueSet() != null && DataTypeUtils.supportsElementValueSet(argType)) {
+                ((ProvidedValue) argValue).setAnnotatedElementValueSet(argValue.getAnnotatedElementValueSet().stream()
+                        .map(annotatedValue -> new AnnotatedValue(
+                                typeConverter.marshal(((ListType) argType).getElementType(), annotatedValue.getValue()),
                                 annotatedValue.getLabel(), annotatedValue.getDescription(), annotatedValue.getFeatures()))
                         .collect(Collectors.toList()));
             }

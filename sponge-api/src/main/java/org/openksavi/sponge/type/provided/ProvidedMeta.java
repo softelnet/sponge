@@ -25,8 +25,8 @@ import java.util.List;
  */
 public class ProvidedMeta {
 
-    /** The flag specifying if the value is provided. */
-    private boolean value;
+    /** The flag specifying if the value is provided. Defaults to {@code false}. */
+    private boolean value = false;
 
     /** The metadata specifying if the value set is provided. Defaults to {@code null}. */
     private ValueSetMeta valueSet;
@@ -42,6 +42,9 @@ public class ProvidedMeta {
      * This flag should be handled by a client code.
      */
     private boolean overwrite = false;
+
+    /** The flag specifying if the list element value set is provided. Applicable only for list types. Defaults to {@code false}. */
+    private boolean elementValueSet = false;
 
     public ProvidedMeta() {
     }
@@ -76,6 +79,11 @@ public class ProvidedMeta {
 
     public ProvidedMeta withOverwrite() {
         overwrite = true;
+        return this;
+    }
+
+    public ProvidedMeta withElementValueSet() {
+        elementValueSet = true;
         return this;
     }
 
@@ -121,5 +129,13 @@ public class ProvidedMeta {
 
     public void setOverwrite(boolean overwrite) {
         this.overwrite = overwrite;
+    }
+
+    public boolean isElementValueSet() {
+        return elementValueSet;
+    }
+
+    public void setElementValueSet(boolean elementValueSet) {
+        this.elementValueSet = elementValueSet;
     }
 }
