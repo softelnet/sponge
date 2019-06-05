@@ -68,6 +68,19 @@ class ProvideByAction(Action):
         if "valueLimitedNullable" in context.names:
             context.provided["valueLimitedNullable"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
 
+class FruitsElementValueSetAction(Action):
+    def onConfigure(self):
+        self.withLabel("Fruits action with argument element value set")
+        self.withArg(ListType("fruits", StringType()).withLabel("Fruits").withProvided(ProvidedMeta().withValue().withElementValueSet())).withResult(IntegerType())
+        self.withFeature("icon", "apple")
+    def onCall(self, fruits):
+        return len(fruits)
+    def onProvideArgs(self, context):
+        if "fruits" in context.names:
+            context.provided["fruits"] = ProvidedValue().withValue([]).withAnnotatedElementValueSet([
+                AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
+            ])
+
 class ConsoleOutput(Action):
     def onConfigure(self):
         self.withLabel("Console output").withDescription("Returns the console output.")

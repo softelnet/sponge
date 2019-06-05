@@ -67,6 +67,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
+import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
@@ -665,6 +666,33 @@ public abstract class BaseRestApiTestTemplate {
             RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
             List<String> values = (List<String>) client.provideActionArgs(actionMeta.getName()).get("value").getValueSet();
             assertEquals("value3", client.call(actionMeta.getName(), Arrays.asList(values.get(values.size() - 1))));
+        }
+    }
+
+    @Test
+    public void testProvideActionArgsElementValueSet() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "FruitsElementValueSetAction";
+
+            ListType fruitsType = (ListType) client.getActionMeta(actionName).getArgs().get(0);
+            assertNotNull(fruitsType.getProvided());
+            assertFalse(fruitsType.getProvided().isValue());
+            assertFalse(fruitsType.getProvided().hasValueSet());
+            assertTrue(fruitsType.getProvided().isElementValueSet());
+
+            Map<String, ProvidedValue<?>> provided = client.provideActionArgs(actionName);
+            List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
+            assertEquals(3, elementValueSet.size());
+            assertEquals("apple", elementValueSet.get(0).getValue());
+            assertEquals("Apple", elementValueSet.get(0).getLabel());
+            assertEquals("banana", elementValueSet.get(1).getValue());
+            assertEquals("Banana", elementValueSet.get(1).getLabel());
+            assertEquals("lemon", elementValueSet.get(2).getValue());
+            assertEquals("Lemon", elementValueSet.get(2).getLabel());
+
+            assertEquals(2, client.call(actionName, Arrays.asList(Arrays.asList("apple", "lemon"))));
+
+            assertFalse(engine.isError());
         }
     }
 

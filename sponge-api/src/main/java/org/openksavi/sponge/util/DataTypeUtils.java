@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -91,5 +92,9 @@ public abstract class DataTypeUtils {
         }, false);
 
         return types;
+    }
+
+    public static boolean supportsElementValueSet(DataType<?> dataType) {
+        return dataType instanceof ListType;
     }
 }

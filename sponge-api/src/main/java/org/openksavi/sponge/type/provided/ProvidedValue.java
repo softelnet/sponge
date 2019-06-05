@@ -24,6 +24,7 @@ import org.openksavi.sponge.type.value.AnnotatedValue;
 /**
  * A provided object value and a possible value set.
  */
+@SuppressWarnings("rawtypes")
 public class ProvidedValue<T> {
 
     /** The value. */
@@ -33,10 +34,16 @@ public class ProvidedValue<T> {
     private boolean valuePresent = false;
 
     /**
-     * The possible value set with optional annotations. For example it may be a list of string values to choose from. If there is no value
-     * set for this argument, this property is {@code null}.
+     * The possible value set (with optional annotations). For example it may be a list of string values to choose from. If there is no
+     * value set, this property is {@code null}.
      */
     private List<AnnotatedValue<T>> annotatedValueSet;
+
+    /**
+     * The possible element value set (with optional annotations) for a list type. For example it may be a list of string values to multiple
+     * choice. Applicable only for list types. If there is no element value set, this property is {@code null}.
+     */
+    private List<AnnotatedValue> annotatedElementValueSet;
 
     public ProvidedValue() {
         //
@@ -66,6 +73,14 @@ public class ProvidedValue<T> {
         this.annotatedValueSet = annotatedValueSet;
     }
 
+    public List<AnnotatedValue> getAnnotatedElementValueSet() {
+        return annotatedElementValueSet;
+    }
+
+    public <E> void setAnnotatedElementValueSet(List<AnnotatedValue> annotatedElementValueSet) {
+        this.annotatedElementValueSet = annotatedElementValueSet;
+    }
+
     /**
      * The utility getter for the possible value set without annotations.
      *
@@ -73,6 +88,16 @@ public class ProvidedValue<T> {
      */
     public List<T> getValueSet() {
         return annotatedValueSet != null ? annotatedValueSet.stream()
+                .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
+    }
+
+    /**
+     * The utility getter for the possible element value set without annotations.
+     *
+     * @return the element value set.
+     */
+    public List<?> getElementValueSet() {
+        return annotatedElementValueSet != null ? annotatedElementValueSet.stream()
                 .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
 
@@ -90,5 +115,15 @@ public class ProvidedValue<T> {
     public ProvidedValue<T> withValueSet(List<T> valueSet) {
         return withAnnotatedValueSet(
                 valueSet != null ? valueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()) : null);
+    }
+
+    public <E> ProvidedValue<T> withAnnotatedElementValueSet(List<AnnotatedValue<E>> annotatedElementValueSet) {
+        setAnnotatedElementValueSet(annotatedElementValueSet.stream().collect(Collectors.toList()));
+        return this;
+    }
+
+    public <E> ProvidedValue<T> withElementValueSet(List<E> elementValueSet) {
+        return withAnnotatedElementValueSet(elementValueSet != null
+                ? elementValueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()) : null);
     }
 }

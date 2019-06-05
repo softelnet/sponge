@@ -638,6 +638,39 @@ public class CoreActionsTest {
     }
 
     @Test
+    public void testActionsProvideArgsElementValueSet() {
+        SpongeEngine engine = DefaultSpongeEngine.builder()
+                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_element_value_set.py").build();
+        engine.startup();
+
+        try {
+            String actionName = "FruitsElementValueSetAction";
+
+            ListType fruitsType = (ListType) engine.getOperations().getActionMeta(actionName).getArgs().get(0);
+            assertNotNull(fruitsType.getProvided());
+            assertFalse(fruitsType.getProvided().isValue());
+            assertFalse(fruitsType.getProvided().hasValueSet());
+            assertTrue(fruitsType.getProvided().isElementValueSet());
+
+            Map<String, ProvidedValue<?>> provided = engine.getOperations().provideActionArgs(actionName);
+            List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
+            assertEquals(3, elementValueSet.size());
+            assertEquals("apple", elementValueSet.get(0).getValue());
+            assertEquals("Apple", elementValueSet.get(0).getLabel());
+            assertEquals("banana", elementValueSet.get(1).getValue());
+            assertEquals("Banana", elementValueSet.get(1).getLabel());
+            assertEquals("lemon", elementValueSet.get(2).getValue());
+            assertEquals("Lemon", elementValueSet.get(2).getLabel());
+
+            assertEquals(2, engine.getOperations().call(actionName, Arrays.asList(Arrays.asList("apple", "lemon"))));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
     public void testActionsCallListArg() {
         SpongeEngine engine =
                 DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call_list_arg.py").build();

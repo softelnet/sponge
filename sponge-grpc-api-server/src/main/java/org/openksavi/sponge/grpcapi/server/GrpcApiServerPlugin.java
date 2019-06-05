@@ -32,7 +32,7 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.grpcapi.GrpcApiConstants;
 import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
-import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiCreateSubscription;
+import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
@@ -48,7 +48,7 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     public static final String KB_CORE_PACKAGE_TO_SCAN = GrpcApiSubscribeCorrelator.class.getPackage().getName();
 
-    public static final String KB_SUPPORT_PACKAGE_TO_SCAN = GrpcApiCreateSubscription.class.getPackage().getName();
+    public static final String KB_SUPPORT_PACKAGE_TO_SCAN = GrpcApiManageSubscription.class.getPackage().getName();
 
     private RestApiServerPlugin restApiServerPlugin;
 
