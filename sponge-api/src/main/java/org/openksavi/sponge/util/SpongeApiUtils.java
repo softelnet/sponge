@@ -32,6 +32,7 @@ import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 /**
  * A Sponge API utility methods.
@@ -108,5 +109,10 @@ public abstract class SpongeApiUtils {
         return Collectors.toMap(keyMapper, valueMapper, (u, v) -> {
             throw new IllegalStateException(String.format("Duplicate key %s", u));
         }, LinkedHashMap::new);
+    }
+
+    public static <T> List<T> unwrapAnnotatedValueList(List<AnnotatedValue<T>> annotatedValueList) {
+        return annotatedValueList != null ? annotatedValueList.stream()
+                .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
 }

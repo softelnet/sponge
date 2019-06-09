@@ -115,6 +115,9 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |`valueSet`
 |Metadata specifying if a value set is provided. Defaults to `null`. A value set is a list of allowed values. This list of values may be limited (the default setting) or not limited. A limited set means that the type value can be chosen only from the value set. To configure a not limited value set use `withValueSet(ValueSetMeta().withNotLimited())`.
 
+|`elementValueSet`
+|A flag specifying if the list element value set is provided. Applicable only for list types. Defaults to `false`. Along with `ListType.unique` it can represent multichoice.
+
 |`depends`
 |A list of type names of name paths that this type depends on.
 
@@ -151,7 +154,7 @@ See the <<provided_arguments,provided action arguments>> as a use case of provid
 |An integer type (commonly used integer type or long). Provides optional properties `minValue`, `maxValue`, `exclusiveMin` and `exclusiveMax`, e.g.: `IntegerType().withMinValue(1).withMinValue(100)`.
 
 |`ListType`
-|A list type. This type requires a `DataType` parameter, which is is a type of list elements. For example: `ListType().withElement(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))`.
+|A list type. This type requires a `DataType` parameter, which is is a type of list elements. Provides optional property `unique` specifying if the list should contain unique values (defaults to `false`). For example: `ListType().withElement(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))`.
 
 |`MapType`
 |A map type. This type requires two `DataType` parameters: a type of keys and a type of values in the map. For example: `MapType().withKey(StringType()).withValue(ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject"))`.

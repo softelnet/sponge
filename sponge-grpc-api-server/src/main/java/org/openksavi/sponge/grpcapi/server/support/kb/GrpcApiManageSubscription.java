@@ -19,8 +19,11 @@ package org.openksavi.sponge.grpcapi.server.support.kb;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.ListType;
@@ -34,16 +37,19 @@ public class GrpcApiManageSubscription extends JAction {
     @Override
     public void onConfigure() {
         withLabel("Manage events subscription").withDescription("Manages event notifications.");
-        // TODO Provided arg for event types.
         withArgs(
-                new ListType<>("eventNames", new StringType()).withLabel("Event types").withDescription("Event types.")
+                new ListType<>("eventNames", new StringType()).withLabel("Event types").withDescription("Event types.").withUnique()
                         .withProvided(new ProvidedMeta().withElementValueSet()),
-                new BooleanType("subscribe").withLabel("Subscribe").withDescription("Turns on/off event subscriptions."));
-        withNoResult();// new IntegerType().withLabel("Subscription ID").withDescription("The subscription ID."));
-        withFeatures(SpongeUtils.immutableMapOf("intent", "subscription", "callLabel", "Save"));
+                new BooleanType("subscribe").withLabel("Subscribe").withDescription("Turns on/off event subscriptions.")
+                        .withDefaultValue(true));
+        withNoResult();
+        withFeatures(
+                SpongeUtils.immutableMapOf("intent", "subscription", "clearLabel", null, "callLabel", "Save", "icon", "cellphone-message"));
     }
 
     public void onCall(List<String> eventNames, Boolean subscribe) {
+        GrpcApiServerPlugin plugin = getSponge().getPlugin(GrpcApiServerPlugin.class);
+        Validate.isTrue(plugin != null && plugin.isServerRunning(), "The gRPC service is not runnning");
     }
 
     @Override

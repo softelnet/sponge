@@ -118,6 +118,7 @@ import org.openksavi.sponge.type.StreamType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
+import org.openksavi.sponge.util.DataTypeUtils;
 import org.openksavi.sponge.util.Descriptive;
 
 /**
@@ -667,6 +668,11 @@ public abstract class SpongeUtils {
 
         Validate.isTrue(!stack.stream().anyMatch(ancestorType -> ancestorType == type),
                 "A loop in the type specification has been found in the %s", valueName);
+
+        if (type.getProvided() != null) {
+            Validate.isTrue(!type.getProvided().isElementValueSet() || DataTypeUtils.supportsElementValueSet(type),
+                    "Element value set is applicable only for list types in the %s", valueName);
+        }
 
         stack.push(type);
 

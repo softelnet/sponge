@@ -82,16 +82,6 @@ public class ProvidedValue<T> {
     }
 
     /**
-     * The utility getter for the possible value set without annotations.
-     *
-     * @return the value set.
-     */
-    public List<T> getValueSet() {
-        return annotatedValueSet != null ? annotatedValueSet.stream()
-                .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
-    }
-
-    /**
      * The utility getter for the possible element value set without annotations.
      *
      * @return the element value set.

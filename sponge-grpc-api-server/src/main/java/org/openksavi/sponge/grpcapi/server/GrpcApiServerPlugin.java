@@ -162,6 +162,10 @@ public class GrpcApiServerPlugin extends JPlugin {
         }
     }
 
+    public boolean isServerRunning() {
+        return server != null && !server.isShutdown() && !server.isTerminated();
+    }
+
     /**
      * Enables support processors (e.g. subscription actions) in the knowledge base.
      *

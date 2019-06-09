@@ -43,9 +43,7 @@ public class ProvidedMeta {
      */
     private boolean overwrite = false;
 
-    /**
-     * The flag specifying if the list element value set is provided. Applicable only for list types. Defaults to {@code false}.
-     */
+    /** The flag specifying if the list element value set is provided. Applicable only for list types. Defaults to {@code false}. */
     private boolean elementValueSet = false;
 
     public ProvidedMeta() {

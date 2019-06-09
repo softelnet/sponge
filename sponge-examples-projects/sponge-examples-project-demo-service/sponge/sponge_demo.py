@@ -71,7 +71,9 @@ class ProvideByAction(Action):
 class FruitsElementValueSetAction(Action):
     def onConfigure(self):
         self.withLabel("Fruits action with argument element value set")
-        self.withArg(ListType("fruits", StringType()).withLabel("Fruits").withProvided(ProvidedMeta().withValue().withElementValueSet())).withResult(IntegerType())
+        self.withArg(ListType("fruits", StringType()).withLabel("Fruits").withUnique().withProvided(
+            ProvidedMeta().withValue().withElementValueSet()))
+        self.withResult(IntegerType())
         self.withFeature("icon", "apple")
     def onCall(self, fruits):
         return len(fruits)

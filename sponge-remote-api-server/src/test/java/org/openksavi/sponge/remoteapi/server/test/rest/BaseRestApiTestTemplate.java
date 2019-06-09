@@ -74,6 +74,7 @@ import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 @SuppressWarnings("rawtypes")
 public abstract class BaseRestApiTestTemplate {
@@ -503,17 +504,18 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("A", providedArgs.get("actuator1").getValue());
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(false, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             // The value of actuator3 should not be asserted because it is read only in this test. Other tests may change its value.
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
@@ -524,17 +526,18 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(true, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             // The value of actuator3 should not be asserted because it is read only in this test. Other tests may change its value.
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
@@ -590,7 +593,8 @@ public abstract class BaseRestApiTestTemplate {
             assertNotNull(providedArgs.get("actuator1"));
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
@@ -608,19 +612,20 @@ public abstract class BaseRestApiTestTemplate {
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(false, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             assertEquals(1, providedArgs.get("actuator3").getValue());
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
 
             assertNotNull(providedArgs.get("actuator5"));
             assertEquals("X", providedArgs.get("actuator5").getValue());
-            assertEquals(Arrays.asList("X", "Y", "Z", "A"), providedArgs.get("actuator5").getValueSet());
+            assertEquals(Arrays.asList("X", "Y", "Z", "A"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator5").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
             client.call(actionName, Arrays.asList("B", true, 5, 10, "Y"));
@@ -630,7 +635,8 @@ public abstract class BaseRestApiTestTemplate {
             assertNotNull(providedArgs.get("actuator1"));
             actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("B", actuator1value);
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator2", "actuator3", "actuator5"),
@@ -640,19 +646,20 @@ public abstract class BaseRestApiTestTemplate {
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(true, providedArgs.get("actuator2").getValue());
-            assertNull(providedArgs.get("actuator2").getValueSet());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator3"));
             assertEquals(5, providedArgs.get("actuator3").getValue());
-            assertNull(providedArgs.get("actuator3").getValueSet());
+            assertNull(providedArgs.get("actuator3").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator3").isValuePresent());
 
             assertNull(providedArgs.get("actuator4"));
 
             assertNotNull(providedArgs.get("actuator5"));
             assertEquals("Y", providedArgs.get("actuator5").getValue());
-            assertEquals(Arrays.asList("X", "Y", "Z", "B"), providedArgs.get("actuator5").getValueSet());
+            assertEquals(Arrays.asList("X", "Y", "Z", "B"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator5").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
             assertFalse(engine.isError());
@@ -664,7 +671,8 @@ public abstract class BaseRestApiTestTemplate {
     public void testProvideActionArgByAction() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
-            List<String> values = (List<String>) client.provideActionArgs(actionMeta.getName()).get("value").getValueSet();
+            List<String> values = (List<String>) SpongeApiUtils
+                    .unwrapAnnotatedValueList(client.provideActionArgs(actionMeta.getName()).get("value").getAnnotatedValueSet());
             assertEquals("value3", client.call(actionMeta.getName(), Arrays.asList(values.get(values.size() - 1))));
         }
     }
@@ -675,6 +683,7 @@ public abstract class BaseRestApiTestTemplate {
             String actionName = "FruitsElementValueSetAction";
 
             ListType fruitsType = (ListType) client.getActionMeta(actionName).getArgs().get(0);
+            assertTrue(fruitsType.isUnique());
             assertNotNull(fruitsType.getProvided());
             assertFalse(fruitsType.getProvided().isValue());
             assertFalse(fruitsType.getProvided().hasValueSet());

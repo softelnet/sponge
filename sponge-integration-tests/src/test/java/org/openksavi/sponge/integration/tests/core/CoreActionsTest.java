@@ -71,6 +71,7 @@ import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
+import org.openksavi.sponge.util.SpongeApiUtils;
 import org.openksavi.sponge.util.ValueHolder;
 
 @SuppressWarnings("rawtypes")
@@ -392,7 +393,8 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("A", providedArgs.get("actuator1").getValue());
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             assertNotNull(providedArgs.get("actuator2"));
@@ -413,7 +415,8 @@ public class CoreActionsTest {
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
 
             assertNotNull(providedArgs.get("actuator2"));
             assertEquals(true, providedArgs.get("actuator2").getValue());
@@ -542,7 +545,8 @@ public class CoreActionsTest {
             assertNotNull(providedArgs.get("actuator1"));
             Object actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("A", actuator1value);
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
@@ -572,7 +576,8 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator5"));
             assertEquals("X", providedArgs.get("actuator5").getValue());
-            assertEquals(Arrays.asList("X", "Y", "Z", "A"), providedArgs.get("actuator5").getValueSet());
+            assertEquals(Arrays.asList("X", "Y", "Z", "A"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator5").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
             engine.getOperations().call(actionMeta.getName(), Arrays.asList("B", true, null, 10, "Y"));
@@ -583,7 +588,8 @@ public class CoreActionsTest {
             assertNotNull(providedArgs.get("actuator1"));
             actuator1value = providedArgs.get("actuator1").getValue();
             assertEquals("B", actuator1value);
-            assertEquals(Arrays.asList("A", "B", "C"), providedArgs.get("actuator1").getValueSet());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
             providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(),
@@ -605,7 +611,8 @@ public class CoreActionsTest {
 
             assertNotNull(providedArgs.get("actuator5"));
             assertEquals("Y", providedArgs.get("actuator5").getValue());
-            assertEquals(Arrays.asList("X", "Y", "Z", "B"), providedArgs.get("actuator5").getValueSet());
+            assertEquals(Arrays.asList("X", "Y", "Z", "B"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator5").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator5").isValuePresent());
 
             assertFalse(engine.isError());
@@ -626,8 +633,8 @@ public class CoreActionsTest {
             assertEquals(1, actionMeta.getArgs().size());
             DataType sensorNameArgType = actionMeta.getArgs().get(0);
             assertTrue(sensorNameArgType instanceof StringType);
-            List<String> availableSensors =
-                    (List<String>) engine.getOperations().provideActionArgs(actionMeta.getName()).get("sensorName").getValueSet();
+            List<String> availableSensors = (List<String>) SpongeApiUtils.unwrapAnnotatedValueList(
+                    engine.getOperations().provideActionArgs(actionMeta.getName()).get("sensorName").getAnnotatedValueSet());
 
             assertTrue(engine.getOperations().call(Boolean.class, "ProvideByAction", Arrays.asList(availableSensors.get(0))));
 
@@ -647,6 +654,7 @@ public class CoreActionsTest {
             String actionName = "FruitsElementValueSetAction";
 
             ListType fruitsType = (ListType) engine.getOperations().getActionMeta(actionName).getArgs().get(0);
+            assertTrue(fruitsType.isUnique());
             assertNotNull(fruitsType.getProvided());
             assertFalse(fruitsType.getProvided().isValue());
             assertFalse(fruitsType.getProvided().hasValueSet());
@@ -1143,7 +1151,7 @@ public class CoreActionsTest {
                     new LinkedHashMap<>(SpongeUtils.immutableMapOf("id", 1, "author", "James Joyce", "title", "Ulysses"));
             Map<String, ProvidedValue<?>> provideActionArgs = engine.getOperations().provideActionArgs("UpdateBook",
                     Arrays.asList("book", "book.author"), SpongeUtils.immutableMapOf("book.id", 5));
-            List authorValueSet = provideActionArgs.get("book.author").getValueSet();
+            List authorValueSet = SpongeApiUtils.unwrapAnnotatedValueList(provideActionArgs.get("book.author").getAnnotatedValueSet());
             assertEquals("James Joyce", authorValueSet.get(0));
             assertEquals("Arthur Conan Doyle", authorValueSet.get(1));
 
