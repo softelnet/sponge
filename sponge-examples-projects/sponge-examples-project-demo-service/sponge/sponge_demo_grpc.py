@@ -7,7 +7,7 @@ def onBeforeLoad():
     sponge.addType("Person", lambda: RecordType().withFields([
         StringType("firstName").withLabel("First name"),
         StringType("surname").withLabel("Surname")
-    ]))
+    ]).withLabel("Person"))
 
     sponge.addEventType("notification", RecordType().withFields([
         StringType("source").withLabel("Source"),

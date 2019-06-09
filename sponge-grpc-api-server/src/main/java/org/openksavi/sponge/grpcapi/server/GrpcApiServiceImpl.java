@@ -229,9 +229,8 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
                 RecordType eventType = engine.getEventType(event.getName());
                 TypeConverter typeConverter = restApiService.getTypeConverter();
 
-                Map<String, Object> marshalledAttributes =
-                        attributes.entrySet().stream().collect(SpongeApiUtils.collectorToLinkedMap(entry -> entry.getKey(),
-                                entry -> typeConverter.marshal(eventType.getFieldType(entry.getKey()), entry.getValue())));
+                Map<String, Object> marshalledAttributes = SpongeApiUtils.collectToLinkedMap(attributes, entry -> entry.getKey(),
+                        entry -> typeConverter.marshal(eventType.getFieldType(entry.getKey()), entry.getValue()));
 
                 attributesValueBuilder.setValueJson(typeConverter.getObjectMapper().writeValueAsString(marshalledAttributes));
             } catch (JsonProcessingException e) {

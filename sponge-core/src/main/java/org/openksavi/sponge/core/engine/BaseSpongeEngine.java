@@ -1026,8 +1026,8 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @SuppressWarnings("rawtypes")
     @Override
     public Map<String, DataType> getTypes() {
-        return Collections.unmodifiableMap(types.entrySet().stream().collect(SpongeApiUtils.collectorToLinkedMap(entry -> entry.getKey(),
-                entry -> setupRegisteredTypeInstance(entry.getKey(), entry.getValue().supply()))));
+        return SpongeApiUtils.collectToLinkedMap(types, entry -> entry.getKey(),
+                entry -> setupRegisteredTypeInstance(entry.getKey(), entry.getValue().supply()));
     }
 
     @Override

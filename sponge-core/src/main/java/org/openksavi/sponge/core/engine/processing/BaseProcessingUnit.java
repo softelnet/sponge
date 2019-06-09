@@ -269,8 +269,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
      */
     @Override
     public Map<String, T> getRegisteredProcessorAdapterMap() {
-        return registeredProcessorAdapterMap.entrySet().stream()
-                .collect(SpongeApiUtils.collectorToLinkedMap(Map.Entry::getKey, entry -> entry.getValue().get()));
+        return SpongeApiUtils.collectToLinkedMap(registeredProcessorAdapterMap, Map.Entry::getKey, entry -> entry.getValue().get());
     }
 
     @Override

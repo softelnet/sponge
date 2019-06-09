@@ -104,6 +104,18 @@ public abstract class SpongeApiUtils {
         }
     }
 
+    public static <K1, V1, K2, V2> Map<K2, V2> collectToLinkedMap(Map<K1, V1> source, Function<Map.Entry<K1, V1>, ? extends K2> keyMapper,
+            Function<Map.Entry<K1, V1>, ? extends V2> valueMapper) {
+        if (source == null) {
+            return null;
+        }
+
+        Map<K2, V2> result = new LinkedHashMap<>();
+        source.entrySet().forEach(entry -> result.put(keyMapper.apply(entry), valueMapper.apply(entry)));
+
+        return result;
+    }
+
     public static <T, K, V> Collector<T, ?, Map<K, V>> collectorToLinkedMap(Function<? super T, ? extends K> keyMapper,
             Function<? super T, ? extends V> valueMapper) {
         return Collectors.toMap(keyMapper, valueMapper, (u, v) -> {

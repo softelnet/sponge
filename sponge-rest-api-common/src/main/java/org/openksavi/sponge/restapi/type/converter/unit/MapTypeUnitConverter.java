@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.type.converter.unit;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
@@ -35,17 +36,17 @@ public class MapTypeUnitConverter<K, V> extends BaseUnitTypeConverter<Map<K, V>,
 
     @Override
     public Object marshal(TypeConverter converter, MapType<K, V> type, Map<K, V> value) {
-        return value.entrySet().stream()
-                .collect(SpongeApiUtils.collectorToLinkedMap(entry -> converter.marshal(type.getKeyType(), entry.getKey()),
-                        entry -> converter.marshal(type.getValueType(), entry.getValue())));
+        return SpongeApiUtils.collectToLinkedMap(value, entry -> converter.marshal(type.getKeyType(), entry.getKey()),
+                entry -> converter.marshal(type.getValueType(), entry.getValue()));
     }
 
     @Override
     public Map<K, V> unmarshal(TypeConverter converter, MapType<K, V> type, Object value) {
         Validate.isInstanceOf(Map.class, value, "Expected map but got %s", value.getClass());
 
-        return (Map<K, V>) ((Map) value).entrySet().stream()
-                .collect(SpongeApiUtils.collectorToLinkedMap((Map.Entry entry) -> converter.unmarshal(type.getKeyType(), entry.getKey()),
-                        (Map.Entry entry) -> converter.unmarshal(type.getValueType(), entry.getValue())));
+        Map<K, V> result = new LinkedHashMap<>();
+        ((Map) value).forEach((k, v) -> result.put(converter.unmarshal(type.getKeyType(), k), converter.unmarshal(type.getValueType(), v)));
+
+        return result;
     }
 }
