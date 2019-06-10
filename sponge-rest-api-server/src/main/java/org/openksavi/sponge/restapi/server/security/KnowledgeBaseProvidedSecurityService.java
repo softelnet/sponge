@@ -17,12 +17,11 @@
 package org.openksavi.sponge.restapi.server.security;
 
 import java.util.Arrays;
-import java.util.Objects;
 
-import org.openksavi.sponge.ProcessorNotFoundException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
+import org.openksavi.sponge.util.ValueHolder;
 
 public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSecurityService {
 
@@ -37,29 +36,22 @@ public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSe
 
     @Override
     public boolean canSendEvent(User user, String eventName) {
-        try {
-            return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_SEND_EVENT,
-                    Arrays.asList(user, eventName));
-        } catch (ProcessorNotFoundException e) {
-            if (Objects.equals(e.getProcessorName(), RestApiServerConstants.ACTION_CAN_SEND_EVENT)) {
-                return false;
-            } else {
-                throw e;
-            }
-        }
+        ValueHolder<Boolean> holder = getRestApiService().getEngine().getOperations().callIfExists(Boolean.class,
+                RestApiServerConstants.ACTION_CAN_SEND_EVENT, Arrays.asList(user, eventName));
+        return holder != null ? holder.getValue() : false;
+    }
+
+    @Override
+    public boolean canSubscribeEvent(User user, String eventName) {
+        ValueHolder<Boolean> holder = getRestApiService().getEngine().getOperations().callIfExists(Boolean.class,
+                RestApiServerConstants.ACTION_CAN_SUBSCRIBE_EVENT, Arrays.asList(user, eventName));
+        return holder != null ? holder.getValue() : false;
     }
 
     @Override
     public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
-        try {
-            return getRestApiService().getEngine().getOperations().call(Boolean.class, RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE,
-                    Arrays.asList(user, knowledgeBase.getName()));
-        } catch (ProcessorNotFoundException e) {
-            if (Objects.equals(e.getProcessorName(), RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE)) {
-                return false;
-            } else {
-                throw e;
-            }
-        }
+        ValueHolder<Boolean> holder = getRestApiService().getEngine().getOperations().callIfExists(Boolean.class,
+                RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE, Arrays.asList(user, knowledgeBase.getName()));
+        return holder != null ? holder.getValue() : false;
     }
 }

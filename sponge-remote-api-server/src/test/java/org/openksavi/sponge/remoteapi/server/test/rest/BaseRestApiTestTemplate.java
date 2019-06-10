@@ -88,6 +88,14 @@ public abstract class BaseRestApiTestTemplate {
 
     protected abstract SpongeRestClient createRestClient();
 
+    protected SpongeRestClient createGuestRestClient() {
+        SpongeRestClient client = createRestClient();
+        client.getConfiguration().setUsername("joe");
+        client.getConfiguration().setPassword("password");
+
+        return client;
+    }
+
     @Test
     public void testVersion() {
         try (SpongeRestClient client = createRestClient()) {
@@ -103,12 +111,12 @@ public abstract class BaseRestApiTestTemplate {
             GetVersionRequest request = new GetVersionRequest();
             GetVersionResponse response = client.getVersion(request);
 
-            assertEquals(null, response.getErrorCode());
-            assertEquals(null, response.getErrorMessage());
-            assertEquals(null, response.getDetailedErrorMessage());
+            assertEquals(null, response.getHeader().getErrorCode());
+            assertEquals(null, response.getHeader().getErrorMessage());
+            assertEquals(null, response.getHeader().getDetailedErrorMessage());
             assertEquals(engine.getVersion(), response.getVersion());
-            assertEquals("1", response.getId());
-            assertEquals(response.getId(), request.getId());
+            assertEquals("1", response.getHeader().getId());
+            assertEquals(response.getHeader().getId(), request.getHeader().getId());
         }
     }
 
@@ -743,7 +751,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testSend() {
-        try (SpongeRestClient client = createRestClient()) {
+        try (SpongeRestClient client = createGuestRestClient()) {
             assertNotNull(client.send("alarm", SpongeUtils.immutableMapOf("attr1", "Test")));
 
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());

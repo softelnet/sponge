@@ -1264,7 +1264,7 @@ class HelloWorld(Action):
         return "Hello World!"
 
 # Reload the knowledge bases as admin via a commandline tool or the {sponge} mobile client application.
-curl -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/reload -d '{"username":"admin","password":"password"}'
+curl -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/reload -d '{"header":{"username":"admin","password":"password"}}'
 
 # Refresh actions in the {sponge} mobile client application.
 # The new action will be visible in the action list.

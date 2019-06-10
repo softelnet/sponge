@@ -25,7 +25,11 @@ public class LoginRequest extends SpongeRequest {
     }
 
     public LoginRequest(String username, String password) {
-        setUsername(username);
-        setPassword(password);
+        if (getHeader() == null) {
+            setHeader(new RequestHeader());
+        }
+
+        getHeader().setUsername(username);
+        getHeader().setPassword(password);
     }
 }

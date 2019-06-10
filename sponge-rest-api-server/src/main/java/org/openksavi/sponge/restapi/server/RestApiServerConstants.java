@@ -49,6 +49,8 @@ public final class RestApiServerConstants {
 
     public static final String ACTION_CAN_SEND_EVENT = PRIVATE_ACTION_NAME_PREFIX + "CanSendEvent";
 
+    public static final String ACTION_CAN_SUBSCRIBE_EVENT = PRIVATE_ACTION_NAME_PREFIX + "CanSubscribeEvent";
+
     public static final String TAG_REST_COMPONENT_ID = "restComponentId";
 
     public static final String TAG_HOST = "host";

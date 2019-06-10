@@ -59,20 +59,20 @@ public abstract class RestApiServerUtils {
     }
 
     /**
-     * Verifies if a user can use a knowledge base.
+     * Verifies if a user can access a resource (e.g. a knowledge base, an event).
      *
-     * @param roleToKnowledgeBases the map of (role name to knowledge base names regexps).
+     * @param roleToResources the map of (role name to resource names regexps).
      * @param user the user.
-     * @param kbName the knowledge base name.
-     * @return {@code true} if this user can use the knowledge base.
+     * @param resourceName the resource name.
+     * @return {@code true} if the user can access the resource.
      */
-    public static boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {
-        if (roleToKnowledgeBases == null) {
+    public static boolean canAccessResource(Map<String, Collection<String>> roleToResources, User user, String resourceName) {
+        if (roleToResources == null) {
             return false;
         }
 
-        return user.getRoles().stream().filter(role -> roleToKnowledgeBases.containsKey(role)).anyMatch(
-                role -> roleToKnowledgeBases.get(role).stream().filter(Objects::nonNull).anyMatch(kbRegexp -> kbName.matches(kbRegexp)));
+        return user.getRoles().stream().filter(role -> roleToResources.containsKey(role)).anyMatch(role -> roleToResources.get(role)
+                .stream().filter(Objects::nonNull).anyMatch(resourceRegexp -> resourceName.matches(resourceRegexp)));
     }
 
     public static List<Object> unmarshalActionCallArgs(TypeConverter typeConverter, ActionAdapter actionAdapter, List<Object> jsonArgs) {

@@ -38,6 +38,7 @@ import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -139,9 +140,9 @@ public class DefaultRestApiService implements RestApiService {
     public LoginResponse login(LoginRequest request) {
         try {
             Validate.notNull(request, "The request must not be null");
-            Validate.notNull(request.getUsername(), "The username must not be null");
+            Validate.notNull(request.getHeader().getUsername(), "The username must not be null");
 
-            UserAuthentication userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
+            UserAuthentication userAuthentication = authenticateUser(request.getHeader().getUsername(), request.getHeader().getPassword());
             String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
@@ -158,8 +159,8 @@ public class DefaultRestApiService implements RestApiService {
 
             authenticateRequest(request);
 
-            if (request.getAuthToken() != null) {
-                getSafeAuthTokenService().removeAuthToken(request.getAuthToken());
+            if (request.getHeader().getAuthToken() != null) {
+                getSafeAuthTokenService().removeAuthToken(request.getHeader().getAuthToken());
             }
 
             return setupSuccessResponse(new LogoutResponse(), request);
@@ -201,27 +202,13 @@ public class DefaultRestApiService implements RestApiService {
                     : RestApiServerConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
             String actionNameRegExp = request.getName();
 
-            String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
-            Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().hasAction(isPublicActionActionName)
-                    ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, Arrays.asList(action)).booleanValue()
-                    : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
-
-            Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
-                    ? settings.getPublicActions().stream()
-                            .filter(qn -> action.getKnowledgeBase().getName().matches(qn.getKnowledgeBaseName())
-                                    && action.getMeta().getName().matches(qn.getName()))
-                            .findAny().isPresent()
-                    : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
-
-            Predicate<ActionAdapter> isSelectedByNameRegExp =
-                    action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true;
-
-            List<ActionAdapter> actions = getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
-                    .filter(isPublicBySettings)
-                    .filter(action -> actualMetadataRequired ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null
-                            : true)
-                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                    .filter(action -> canCallAction(user, action)).collect(Collectors.toList());
+            List<ActionAdapter> actions =
+                    getEngine().getActions().stream()
+                            .filter(action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true)
+                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                            .filter(action -> actualMetadataRequired
+                                    ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null : true)
+                            .filter(action -> canCallAction(action, user)).collect(Collectors.toList());
 
             Map<String, DataType<?>> registeredTypes = null;
             if (request.getRegisteredTypes() != null && request.getRegisteredTypes()) {
@@ -274,7 +261,7 @@ public class DefaultRestApiService implements RestApiService {
         ActionAdapter actionAdapter = getEngine().getActionManager().getActionAdapter(actionName);
 
         Validate.notNull(actionAdapter, "The action %s doesn't exist", actionName);
-        Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", actionName);
+        Validate.isTrue(canCallAction(actionAdapter, user), "No privileges to call action %s", actionName);
 
         if (qualifiedVersion != null && !qualifiedVersion.equals(actionAdapter.getQualifiedVersion())) {
             throw new RestApiIncorrectKnowledgeBaseVersionServerException(
@@ -322,20 +309,35 @@ public class DefaultRestApiService implements RestApiService {
             Validate.notNull(request, "The request must not be null");
 
             User user = authenticateRequest(request);
-            Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event named '%s'",
-                    request.getName());
-            Validate.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
 
-            EventDefinition definition = getEngine().getOperations().event(request.getName());
-            if (request.getAttributes() != null) {
-                request.getAttributes().forEach((name, value) -> definition.set(name, value));
+            String eventName = request.getName();
+            Map<String, Object> attributes = request.getAttributes();
+
+            // Unmarshal attributes if there is an event type registered.
+            RecordType eventType = getEngine().getEventTypes().get(eventName);
+            if (eventType != null) {
+                attributes = typeConverter.unmarshal(eventType, attributes);
             }
 
-            return setupSuccessResponse(new SendEventResponse(definition.send().getId()), request);
+            Event event = sendEvent(eventName, attributes, user);
+
+            return setupSuccessResponse(new SendEventResponse(event.getId()), request);
         } catch (Throwable e) {
             getEngine().handleError("REST send", e);
             return setupErrorResponse(new SendEventResponse(), request, e);
         }
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, User user) {
+        Validate.isTrue(canSendEvent(eventName, user), "No privileges to send the '%s' event", eventName);
+
+        EventDefinition definition = getEngine().getOperations().event(eventName);
+        if (attributes != null) {
+            definition.set(attributes);
+        }
+
+        return definition.send();
     }
 
     @Override
@@ -417,15 +419,16 @@ public class DefaultRestApiService implements RestApiService {
      * @param request the request.
      * @return the user.
      */
-    protected User authenticateRequest(SpongeRequest request) {
+    @Override
+    public User authenticateRequest(SpongeRequest request) {
         UserAuthentication userAuthentication;
-        if (request.getAuthToken() != null) {
-            Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
-            Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
+        if (request.getHeader().getAuthToken() != null) {
+            Validate.isTrue(request.getHeader().getUsername() == null, "No username is allowed when using a token-based auhentication");
+            Validate.isTrue(request.getHeader().getPassword() == null, "No password is allowed when using a token-based auhentication");
 
-            userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getAuthToken());
+            userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getHeader().getAuthToken());
         } else {
-            if (request.getUsername() == null) {
+            if (request.getHeader().getUsername() == null) {
                 if (settings.isAllowAnonymous()) {
                     userAuthentication =
                             securityService.authenticateAnonymous(RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole()));
@@ -433,12 +436,12 @@ public class DefaultRestApiService implements RestApiService {
                     throw new SpongeException("Anonymous access is not allowed");
                 }
             } else {
-                userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
+                userAuthentication = authenticateUser(request.getHeader().getUsername(), request.getHeader().getPassword());
             }
         }
 
         // Set the user in the thread local session.
-        RestApiSession session = getSession();
+        RestApiSession session = Validate.notNull(getSession(), "The session is not set");
         Validate.isTrue(session instanceof DefaultRestApiSession, "The session class should extend %s", DefaultRestApiSession.class);
         ((DefaultRestApiSession) session).setUserAuthentication(userAuthentication);
 
@@ -451,30 +454,54 @@ public class DefaultRestApiService implements RestApiService {
         return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password);
     }
 
+    protected boolean isActionPublic(ActionAdapter actionAdapter) {
+        String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
+        Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().hasAction(isPublicActionActionName)
+                ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, Arrays.asList(action)).booleanValue()
+                : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
+
+        Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
+                ? settings.getPublicActions().stream()
+                        .filter(qn -> action.getKnowledgeBase().getName().matches(qn.getKnowledgeBaseName())
+                                && action.getMeta().getName().matches(qn.getName()))
+                        .findAny().isPresent()
+                : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
+
+        return isPublicByAction.test(actionAdapter) && isPublicBySettings.test(actionAdapter)
+                && !RestApiServerUtils.isActionPrivate(actionAdapter.getMeta().getName());
+    }
+
     protected boolean isEventPublic(String eventName) {
         boolean publicBySettings = settings.getPublicEvents() != null
                 ? settings.getPublicEvents().stream().filter(name -> eventName.matches(name)).findAny().isPresent()
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
-        String isEventPlubliActionName = RestApiServerConstants.ACTION_IS_EVENT_PUBLIC;
-        boolean publicByAction = getEngine().getOperations().hasAction(isEventPlubliActionName)
-                ? getEngine().getOperations().call(Boolean.class, isEventPlubliActionName, Arrays.asList(eventName)).booleanValue()
+        String isEventPublicActionName = RestApiServerConstants.ACTION_IS_EVENT_PUBLIC;
+        boolean publicByAction = getEngine().getOperations().hasAction(isEventPublicActionName)
+                ? getEngine().getOperations().call(Boolean.class, isEventPublicActionName, Arrays.asList(eventName)).booleanValue()
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         return publicBySettings && publicByAction;
     }
 
-    protected boolean canCallAction(User user, ActionAdapter actionAdapter) {
-        if (RestApiServerUtils.isActionPrivate(actionAdapter.getMeta().getName())) {
-            return false;
-        }
+    @Override
+    public boolean canCallAction(ActionAdapter actionAdapter, User user) {
+        return isActionPublic(actionAdapter) && securityService.canCallAction(user, actionAdapter);
+    }
 
-        return securityService.canCallAction(user, actionAdapter);
+    @Override
+    public boolean canSendEvent(String eventName, User user) {
+        return isEventPublic(eventName) && securityService.canSendEvent(user, eventName);
+    }
+
+    @Override
+    public boolean canSubscribeEvent(String eventName, User user) {
+        return isEventPublic(eventName) && securityService.canSubscribeEvent(user, eventName);
     }
 
     protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
-        if (request != null && request.getId() != null) {
-            response.setId(request.getId());
+        if (request != null && request.getHeader().getId() != null) {
+            response.getHeader().setId(request.getHeader().getId());
         }
 
         return response;

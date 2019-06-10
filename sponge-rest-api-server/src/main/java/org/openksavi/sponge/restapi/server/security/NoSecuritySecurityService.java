@@ -60,6 +60,11 @@ public class NoSecuritySecurityService extends BaseRestApiSecurityService {
     }
 
     @Override
+    public boolean canSubscribeEvent(User user, String eventName) {
+        return true;
+    }
+
+    @Override
     public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
         return true;
     }

@@ -51,10 +51,10 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             // The default naming convention for an action name if not provided.
             String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(type);
 
-            actionCallRequest.setId(request.getId());
-            actionCallRequest.setUsername(request.getUsername());
-            actionCallRequest.setPassword(request.getPassword());
-            actionCallRequest.setAuthToken(request.getAuthToken());
+            actionCallRequest.getHeader().setId(request.getHeader().getId());
+            actionCallRequest.getHeader().setUsername(request.getHeader().getUsername());
+            actionCallRequest.getHeader().setPassword(request.getHeader().getPassword());
+            actionCallRequest.getHeader().setAuthToken(request.getHeader().getAuthToken());
 
             actionCallRequest.setName(actionName);
             actionCallRequest.setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
@@ -81,10 +81,10 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             }
 
             // An action shouldn't set the base response properties.
-            response.setId(actionCallResponse.getId());
-            response.setErrorMessage(actionCallResponse.getErrorMessage());
-            response.setErrorCode(actionCallResponse.getErrorCode());
-            response.setDetailedErrorMessage(actionCallResponse.getDetailedErrorMessage());
+            response.getHeader().setId(actionCallResponse.getHeader().getId());
+            response.getHeader().setErrorMessage(actionCallResponse.getHeader().getErrorMessage());
+            response.getHeader().setErrorCode(actionCallResponse.getHeader().getErrorCode());
+            response.getHeader().setDetailedErrorMessage(actionCallResponse.getHeader().getDetailedErrorMessage());
 
             return response;
         });

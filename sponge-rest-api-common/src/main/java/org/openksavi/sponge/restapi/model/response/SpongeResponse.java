@@ -23,47 +23,14 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class SpongeResponse {
 
-    private String id;
+    private ResponseHeader header = new ResponseHeader();
 
-    private String errorCode;
-
-    private String errorMessage;
-
-    private String detailedErrorMessage;
-
-    @ApiModelProperty(value = "The corresponding request id", required = false)
-    public String getId() {
-        return id;
+    @ApiModelProperty(value = "The response header", required = false)
+    public ResponseHeader getHeader() {
+        return header;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @ApiModelProperty(value = "The error code", required = false)
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    @ApiModelProperty(value = "The error message", required = false)
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    @ApiModelProperty(value = "The detailed error message", required = false)
-    public String getDetailedErrorMessage() {
-        return detailedErrorMessage;
-    }
-
-    public void setDetailedErrorMessage(String detailedErrorMessage) {
-        this.detailedErrorMessage = detailedErrorMessage;
+    public void setHeader(ResponseHeader header) {
+        this.header = header;
     }
 }

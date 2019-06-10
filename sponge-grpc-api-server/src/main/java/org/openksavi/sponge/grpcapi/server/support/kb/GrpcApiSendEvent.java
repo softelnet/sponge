@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JAction;
+import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
+import org.openksavi.sponge.restapi.server.RestApiService;
+import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.type.DynamicType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
@@ -34,6 +37,8 @@ import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
 
 public class GrpcApiSendEvent extends JAction {
+
+    private RestApiServerPlugin plugin;
 
     @Override
     public void onConfigure() {
@@ -47,14 +52,26 @@ public class GrpcApiSendEvent extends JAction {
         withFeatures(SpongeUtils.immutableMapOf("callLabel", "Send", "icon", "send"));
     }
 
+    @Override
+    public void onInit() {
+        plugin = getSponge().getPlugin(RestApiServerPlugin.class);
+    }
+
     public void onCall(String name, DynamicValue<Map<String, Object>> attributes) {
+        plugin.getService().sendEvent(name, attributes.getValue(), getRestApiService().getSession().getUserAuthentication().getUser());
+
         getSponge().event(name).set(attributes.getValue()).send();
     }
 
     @Override
     public void onProvideArgs(ProvideArgsContext context) {
         if (context.getNames().contains("name")) {
+            // Get the user from the current thread local session.
+            User user = getRestApiService().getSession().getUserAuthentication().getUser();
+
             List<AnnotatedValue<String>> annotatedValueSet = getSponge().getEventTypes().entrySet().stream()
+                    // Check permissions.
+                    .filter(entry -> getRestApiService().canSendEvent(entry.getKey(), user))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
                             .withLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());
@@ -67,5 +84,9 @@ public class GrpcApiSendEvent extends JAction {
             attributes.put("person", Collections.emptyMap());
             context.getProvided().put("attributes", new ProvidedValue<>().withValue(new DynamicValue<>(attributes, eventType)));
         }
+    }
+
+    private RestApiService getRestApiService() {
+        return plugin.getService();
     }
 }

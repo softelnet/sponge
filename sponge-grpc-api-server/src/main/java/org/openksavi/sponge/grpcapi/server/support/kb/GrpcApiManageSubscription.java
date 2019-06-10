@@ -25,6 +25,8 @@ import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.java.JAction;
+import org.openksavi.sponge.restapi.server.RestApiService;
+import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.StringType;
@@ -33,6 +35,8 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 
 public class GrpcApiManageSubscription extends JAction {
+
+    private GrpcApiServerPlugin plugin;
 
     @Override
     public void onConfigure() {
@@ -47,19 +51,32 @@ public class GrpcApiManageSubscription extends JAction {
                 SpongeUtils.immutableMapOf("intent", "subscription", "clearLabel", null, "callLabel", "Save", "icon", "cellphone-message"));
     }
 
+    @Override
+    public void onInit() {
+        plugin = getSponge().getPlugin(GrpcApiServerPlugin.class);
+    }
+
     public void onCall(List<String> eventNames, Boolean subscribe) {
-        GrpcApiServerPlugin plugin = getSponge().getPlugin(GrpcApiServerPlugin.class);
         Validate.isTrue(plugin.isServerRunning(), "The gRPC service is not runnning");
     }
 
     @Override
     public void onProvideArgs(ProvideArgsContext context) {
         if (context.getNames().contains("eventNames")) {
+            // Get the user from the current thread local session.
+            User user = getRestApiService().getSession().getUserAuthentication().getUser();
+
             List<AnnotatedValue<String>> annotatedElementValueSet = getSponge().getEventTypes().entrySet().stream()
+                    // Check permissions.
+                    .filter(entry -> getRestApiService().canSubscribeEvent(entry.getKey(), user))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
                             .withLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());
             context.getProvided().put("eventNames", new ProvidedValue<>().withAnnotatedElementValueSet(annotatedElementValueSet));
         }
+    }
+
+    private RestApiService getRestApiService() {
+        return plugin.getRestApiServerPlugin().getService();
     }
 }

@@ -51,6 +51,7 @@ import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
+import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
@@ -62,6 +63,7 @@ import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
+import org.openksavi.sponge.restapi.model.response.ResponseHeader;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
@@ -260,23 +262,30 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             Class<R> responseClass, SpongeRequestContext context);
 
     protected <T extends SpongeRequest> T setupRequest(T request) {
+        // Set empty header if none.
+        if (request.getHeader() == null) {
+            request.setHeader(new RequestHeader());
+        }
+
+        RequestHeader header = request.getHeader();
+
         if (configuration.isUseRequestId()) {
-            request.setId(String.valueOf(currentRequestId.incrementAndGet()));
+            header.setId(String.valueOf(currentRequestId.incrementAndGet()));
         }
 
         // Must be thread-safe.
         String authToken = currentAuthToken.get();
         if (authToken != null) {
-            if (request.getAuthToken() == null) {
-                request.setAuthToken(authToken);
+            if (header.getAuthToken() == null) {
+                header.setAuthToken(authToken);
             }
         } else {
-            if (configuration.getUsername() != null && request.getUsername() == null) {
-                request.setUsername(configuration.getUsername());
+            if (configuration.getUsername() != null && header.getUsername() == null) {
+                header.setUsername(configuration.getUsername());
             }
 
-            if (configuration.getPassword() != null && request.getPassword() == null) {
-                request.setPassword(configuration.getPassword());
+            if (configuration.getPassword() != null && header.getPassword() == null) {
+                header.setPassword(configuration.getPassword());
             }
         }
 
@@ -284,13 +293,20 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     protected <T extends SpongeResponse> T setupResponse(T response) {
-        if (response.getErrorCode() != null) {
+        // Set empty header if none.
+        if (response.getHeader() == null) {
+            response.setHeader(new ResponseHeader());
+        }
+
+        ResponseHeader header = response.getHeader();
+
+        if (header.getErrorCode() != null) {
             if (configuration.isThrowExceptionOnErrorResponse()) {
-                String message = response.getErrorMessage() != null ? response.getErrorMessage()
-                        : String.format("Error code: %s", response.getErrorCode());
+                String message = header.getErrorMessage() != null ? header.getErrorMessage()
+                        : String.format("Error code: %s", header.getErrorCode());
 
                 ErrorResponseException exception;
-                switch (response.getErrorCode()) {
+                switch (header.getErrorCode()) {
                 case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
                     exception = new InvalidAuthTokenException(message);
                     break;
@@ -304,8 +320,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                     exception = new ErrorResponseException(message);
                 }
 
-                exception.setErrorCode(response.getErrorCode());
-                exception.setDetailedErrorMessage(response.getDetailedErrorMessage());
+                exception.setErrorCode(header.getErrorCode());
+                exception.setDetailedErrorMessage(header.getDetailedErrorMessage());
 
                 throw exception;
             }
@@ -321,8 +337,13 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             context = SpongeRequestContext.builder().build();
         }
 
+        // Set empty header if none.
+        if (request.getHeader() == null) {
+            request.setHeader(new RequestHeader());
+        }
+
         try {
-            if (configuration.isAutoUseAuthToken() && currentAuthToken.get() == null && request.getAuthToken() == null) {
+            if (configuration.isAutoUseAuthToken() && currentAuthToken.get() == null && request.getHeader().getAuthToken() == null) {
                 login();
             }
 
@@ -333,7 +354,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 login();
 
                 // Clear the request auth token.
-                request.setAuthToken(null);
+                request.getHeader().setAuthToken(null);
 
                 return executeDelegate(operationType, request, responseClass, context);
             } else {

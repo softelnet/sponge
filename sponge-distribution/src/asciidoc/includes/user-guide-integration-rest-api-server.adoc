@@ -178,7 +178,6 @@ The following table contains a summary of the REST API operations. For a complet
 |`eventTypes`
 |Returns the registered event types.
 
-|
 |Reload knowledge bases
 |`reload`
 |Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
@@ -200,7 +199,7 @@ The default Jackson configuration for the REST API sets the ISO8601 format for d
 
 NOTE: A `BinaryType` value is marshalled to a base64 encoded string. This encoding adds significant overhead and should be used only for relatively small binary data.
 
-== Requests and responses
+== Request
 Each request may contain base properties.
 
 .Base request properties
@@ -208,9 +207,19 @@ Each request may contain base properties.
 |===
 |Name |Required |Description
 
+|`header`
+|No
+|A request header.
+|===
+
+.Request header properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
 |`id`
 |No
-|A request identifier. If it is present, the response will contain the same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
+|A request identifier. If it is present, the response will contain a header with same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
 
 |`username`
 |No
@@ -233,7 +242,7 @@ The {sponge} REST API supports both POST and GET methods.
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/version
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"username":"john","password":"password"}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"header":{"username":"john","password":"password"}}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"name":".*Case"}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
@@ -243,6 +252,41 @@ curl http://localhost:1836/sponge.json/v1/version
 curl http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"name":"OutputStreamResultAction","args":[]}'
 ----
+
+== Response
+Each response may contain base properties.
+
+.Base response properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`header`
+|No
+|A response header.
+|===
+
+.Response header properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`id`
+|No
+|A corresponding request id.
+
+|`errorCode`
+|No
+|An optional error code in case of server side error.
+
+|`errorMessage`
+|No
+|An optional error message in case of server side error.
+
+|`detailedErrorMessage`
+|No
+|An optional detailed error message in case of server side error.
+|===
 
 == Session
 For each request the REST API service creates a thread local session. The session provides access to a logged user and a Camel exchange for a thread handling the request. The session can be accessed in an action via the REST API server plugin.
@@ -288,18 +332,28 @@ The simple security strategy uses in-memory user data. User privileges and acces
 from org.openksavi.sponge.restapi.server.security import User
 
 # Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"], "anonymous":["mpd"]}
+ROLES_TO_KB = { "admin":[".*"], "anonymous":["demo", "digits", "demoForms.*"]}
+# Simple access configuration: role -> event names regexps.
+ROLES_TO_SEND_EVENT = { "admin":[".*"], "anonymous":[]}
+ROLES_TO_SUBSCRIBE_EVENT = { "admin":[".*"], "anonymous":["notification.*"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):
-        return restApiServer.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
+        return restApiServer.canAccessResource(ROLES_TO_KB, user, kbName)
+
+class RestApiCanSendEvent(Action):
+    def onCall(self, user, eventName):
+        return restApiServer.canAccessResource(ROLES_TO_SEND_EVENT, user, eventName)
+
+class RestApiCanSubscribeEvent(Action):
+    def onCall(self, user, eventName):
+        return restApiServer.canAccessResource(ROLES_TO_SUBSCRIBE_EVENT, user, eventName)
 
 def onStartup():
-    # Set up users. To hash a password use (on Mac): echo -n username-password | shasum -a 512 | awk '{ print $1 }'
+    # Setup users. To hash a password use (on Mac): echo -n username-password | shasum -a 512 | awk '{ print $1 }'
     # Note that the user name must be lower case.
     securityService = restApiServer.service.securityService
     securityService.addUser(User("john", "f4f28d85c27f6038bbdd2c8c73c4c2d2ca21350b368431b641999d3f6e1a38a474bae4b6856556532b30fc36a72272be4922ebe3d3b720ee3224b6bb7ced79b4", ["admin"]))
-    securityService.addUser(User("joe", "babe834270d043648d757e2db838429a3eedd455cb9cd64b22b8e3914e1b4dd5f98fdd12f7fbd4556b45f82bf79f7d8e66798827a303bdac65eb93da75da9fc3", ["guest"]))
 ----
 
 For more information see examples in the source code.

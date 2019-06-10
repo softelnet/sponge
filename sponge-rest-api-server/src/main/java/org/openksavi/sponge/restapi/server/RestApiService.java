@@ -17,7 +17,10 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.Comparator;
+import java.util.Map;
 
+import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
@@ -29,6 +32,7 @@ import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -42,6 +46,7 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
+import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.util.HasEngine;
@@ -119,4 +124,22 @@ public interface RestApiService extends HasEngine, Initializable {
     DataType marshalDataType(DataType type);
 
     RestActionMeta marshalActionMeta(RestActionMeta actionMeta);
+
+    User authenticateRequest(SpongeRequest request);
+
+    /**
+     * Sends a new event. The attributes map should be unmarshalled first.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes map.
+     * @param user the user.
+     * @return the sent event.
+     */
+    Event sendEvent(String eventName, Map<String, Object> attributes, User user);
+
+    boolean canCallAction(ActionAdapter actionAdapter, User user);
+
+    boolean canSendEvent(String eventName, User user);
+
+    boolean canSubscribeEvent(String eventName, User user);
 }

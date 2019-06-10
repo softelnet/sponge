@@ -36,5 +36,7 @@ public interface RestApiSecurityService extends HasRestApiService, Initializable
 
     boolean canSendEvent(User user, String eventName);
 
+    boolean canSubscribeEvent(User user, String eventName);
+
     boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase);
 }

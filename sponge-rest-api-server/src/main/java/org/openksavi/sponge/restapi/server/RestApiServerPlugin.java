@@ -275,8 +275,8 @@ public class RestApiServerPlugin extends JPlugin {
         this.authTokenService = authTokenService;
     }
 
-    public boolean canUseKnowledgeBase(Map<String, Collection<String>> roleToKnowledgeBases, User user, String kbName) {
-        return RestApiServerUtils.canUseKnowledgeBase(roleToKnowledgeBases, user, kbName);
+    public boolean canAccessResource(Map<String, Collection<String>> roleToResources, User user, String resourceName) {
+        return RestApiServerUtils.canAccessResource(roleToResources, user, resourceName);
     }
 
     public CamelContext getCamelContext() {

@@ -10,7 +10,7 @@ ROLES_TO_KB = { "admin":[".*"], "guest":["mpd"], "anonymous":["mpd"]}
 
 class RestApiCanUseKnowledgeBase(Action):
     def onCall(self, user, kbName):
-        return restApiServer.canUseKnowledgeBase(ROLES_TO_KB, user, kbName)
+        return restApiServer.canAccessResource(ROLES_TO_KB, user, kbName)
 
 def onStartup():
     # Set up users.

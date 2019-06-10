@@ -22,6 +22,7 @@ import java.util.List;
 import io.grpc.stub.StreamObserver;
 
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
+import org.openksavi.sponge.restapi.server.security.User;
 
 public class Subscription {
 
@@ -31,21 +32,20 @@ public class Subscription {
 
     private StreamObserver<SubscribeResponse> responseObserver;
 
-    // private String requestId;
+    private User user;
 
     private boolean active;
 
-    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, // String requestId,
-            boolean active) {
+    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, User user, boolean active) {
         this.id = id;
         setEventNames(eventNames);
         this.responseObserver = responseObserver;
-        // this.requestId = requestId;
+        this.user = user;
         this.active = active;
     }
 
-    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver/* , String requestId */) {
-        this(id, eventNames, responseObserver, /* requestId, */ true);
+    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, User user) {
+        this(id, eventNames, responseObserver, user, true);
     }
 
     public long getId() {
@@ -72,16 +72,16 @@ public class Subscription {
         this.responseObserver = responseObserver;
     }
 
-    // public String getRequestId() {
-    // return requestId;
-    // }
-    //
-    // public void setRequestId(String requestId) {
-    // this.requestId = requestId;
-    // }
-
     public boolean isActive() {
         return active;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setActive(boolean active) {
