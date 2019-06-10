@@ -734,7 +734,7 @@ public abstract class SpongeUtils {
         List<DataType> mergedFields = new ArrayList<>(baseType.getFields());
         type.getFields().forEach(subTypeField -> {
             Validate.isTrue(!mergedFields.stream().anyMatch(mergedField -> Objects.equals(mergedField.getName(), subTypeField.getName())),
-                    "The field '%s' already exists in the base type", subTypeField.getName());
+                    "The field '%s' has already been defined in the base type", subTypeField.getName());
             mergedFields.add(subTypeField);
         });
 

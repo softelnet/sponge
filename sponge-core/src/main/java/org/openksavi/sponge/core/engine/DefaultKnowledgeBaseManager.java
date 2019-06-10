@@ -344,7 +344,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     @Override
     public void addKnowledgeBase(KnowledgeBase knowledgeBase) {
         if (knowledgeBases.containsKey(knowledgeBase.getName())) {
-            throw new SpongeException("Knowledge base '" + knowledgeBase.getName() + "' already exists");
+            throw new SpongeException("Knowledge base '" + knowledgeBase.getName() + "' has already been registered");
         }
 
         knowledgeBases.put(knowledgeBase.getName(), knowledgeBase);

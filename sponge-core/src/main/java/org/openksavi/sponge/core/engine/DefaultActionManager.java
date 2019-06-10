@@ -101,7 +101,7 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     }
 
     @Override
-    public boolean existsAction(String name) {
+    public boolean hasAction(String name) {
         return registeredActions.containsKey(name);
     }
 

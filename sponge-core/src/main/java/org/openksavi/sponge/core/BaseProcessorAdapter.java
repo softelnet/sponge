@@ -154,9 +154,10 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     @Override
     public void validate() {
         Validate.isTrue(getMeta().getName() != null, "Invalid %s. Name must not be empty.", getType().getName());
-        Validate.isTrue(
-                getMeta().getCategory() == null || getKnowledgeBase().getEngineOperations().getCategory(getMeta().getCategory()) != null,
-                "Category %s is not registered", getMeta().getCategory());
+        if (getMeta().getCategory() != null) {
+            // Throw exception if category not found.
+            getKnowledgeBase().getEngineOperations().getCategory(getMeta().getCategory());
+        }
     }
 
     @Override

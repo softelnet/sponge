@@ -84,12 +84,12 @@ public interface Session extends Serializable {
     void removeVariable(String name);
 
     /**
-     * Returns {@code true} if a session variable named {@code name} exists.
+     * Returns {@code true} if a session variable named {@code name} is defined.
      *
      * @param name variable name.
-     * @return {@code true} if a session variable named {@code name} exists.
+     * @return {@code true} if a session variable named {@code name} is defined.
      */
-    boolean existsVariable(String name);
+    boolean hasVariable(String name);
 
     /**
      * Sets the session variable if not set already.

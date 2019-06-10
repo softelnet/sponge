@@ -174,6 +174,11 @@ The following table contains a summary of the REST API operations. For a complet
 |`send`
 |Sends a new event.
 
+|Get event types
+|`eventTypes`
+|Returns the registered event types.
+
+|
 |Reload knowledge bases
 |`reload`
 |Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.

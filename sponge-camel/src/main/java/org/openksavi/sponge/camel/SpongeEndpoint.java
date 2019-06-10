@@ -156,18 +156,15 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
     }
 
     protected void configurePlugin() {
-        CamelPlugin camelPlugin = engine.getPluginManager().getPlugin(CamelPlugin.class, CamelPlugin.NAME);
-
-        if (camelPlugin == null) {
-            camelPlugin = new CamelPlugin(getCamelContext());
-            engine.getPluginManager().addPlugin(camelPlugin);
+        if (engine.getOperations().hasPlugin(CamelPlugin.class, CamelPlugin.NAME)) {
+            engine.getOperations().getPlugin(CamelPlugin.class, CamelPlugin.NAME).setContext(getCamelContext());
         } else {
-            camelPlugin.setContext(getCamelContext());
+            engine.getPluginManager().addPlugin(new CamelPlugin(getCamelContext()));
         }
     }
 
     protected void configureAction() {
-        if (!engine.getOperations().existsAction(CamelProducerAction.NAME)) {
+        if (!engine.getOperations().hasAction(CamelProducerAction.NAME)) {
             engine.getOperations().enableJava(CamelProducerAction.class);
         }
     }

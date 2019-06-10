@@ -60,13 +60,13 @@ public interface MainProcessingUnit extends ProcessingUnit<EventProcessorAdapter
     List<CorrelatorAdapterGroup> getCorrelatorAdapterGroups();
 
     /**
-     * Returns {@code true} if a processor of type {@code type} named {@code name} exists.
+     * Returns {@code true} if a processor of type {@code type} named {@code name} is registered.
      *
      * @param name processor name.
      * @param type processor type.
-     * @return {@code true} if a processor of type {@code type} named {@code name} exists.
+     * @return {@code true} if a processor of type {@code type} named {@code name} is registered.
      */
-    boolean existsProcessor(String name, ProcessorType type);
+    boolean hasProcessor(String name, ProcessorType type);
 
     /**
      * Returns the thread pool used by the Main Processing Unit for worker threads.

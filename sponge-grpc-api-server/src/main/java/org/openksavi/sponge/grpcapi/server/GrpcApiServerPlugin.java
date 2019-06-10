@@ -27,7 +27,6 @@ import io.grpc.ServerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.grpcapi.GrpcApiConstants;
@@ -87,12 +86,8 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     public void start() {
         if (restApiServerPlugin == null) {
-            RestApiServerPlugin restPlugin = getEngine().getPluginManager().getPlugin(RestApiServerPlugin.class);
-            if (restPlugin == null) {
-                throw new ConfigException("The REST API server plugin is not registered but it is required by the Sponge gRPC API");
-            }
-
-            setRestApiServerPlugin(restPlugin);
+            // The REST API server plugin is required by the Sponge gRPC API.
+            setRestApiServerPlugin(getEngine().getOperations().getPlugin(RestApiServerPlugin.class));
         }
 
         startServer();

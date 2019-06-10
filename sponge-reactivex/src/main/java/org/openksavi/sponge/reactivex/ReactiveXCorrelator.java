@@ -39,8 +39,6 @@ public class ReactiveXCorrelator extends JCorrelator {
 
     @Override
     public void onEvent(Event event) {
-        if (plugin != null) {
-            plugin.getSubject().onNext(event);
-        }
+        plugin.getSubject().onNext(event);
     }
 }

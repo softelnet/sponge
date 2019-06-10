@@ -99,7 +99,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
 
         Plugin plugin = createPluginStub(pluginName, knowledgeBaseName, className);
 
-        Validate.isTrue(!existsPlugin(plugin.getName()), "Plugin '%s' already exists.", plugin.getName());
+        Validate.isTrue(!hasPlugin(plugin.getName()), "Plugin '%s' has already been registered.", plugin.getName());
         Validate.isTrue(isValidPluginName(plugin.getName()), "Invalid plugin name '%s'", plugin.getName());
 
         plugin.setLabel(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_LABEL, null));
@@ -110,14 +110,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
         return plugin;
     }
 
-    /**
-     * Checks whether a plugin with the specified name exists.
-     *
-     * @param name plugin name.
-     * @return {@code true} if the plugin exists.
-     */
     @Override
-    public boolean existsPlugin(String name) {
+    public boolean hasPlugin(String name) {
         return pluginMap.containsKey(name);
     }
 
@@ -131,7 +125,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
         String name = plugin.getName();
 
         if (pluginMap.containsKey(name)) {
-            throw new SpongeException("Plugin '" + name + "' already exists");
+            throw new SpongeException("Plugin '" + name + "' has already been registered");
         }
 
         logger.debug("Adding plugin '{}'.", name);

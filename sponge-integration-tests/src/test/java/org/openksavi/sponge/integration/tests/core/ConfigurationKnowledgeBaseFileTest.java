@@ -47,7 +47,7 @@ public class ConfigurationKnowledgeBaseFileTest {
         engine.startup();
 
         try {
-            assertFalse(engine.getOperations().existsVariable("loaded"));
+            assertFalse(engine.getOperations().hasVariable("loaded"));
             assertFalse(engine.isError());
         } finally {
             engine.shutdown();

@@ -416,10 +416,10 @@ public interface SpongeEngine extends EngineModule {
     void addCategories(CategoryMeta... categoryMeta);
 
     /**
-     * Returns a category.
+     * Returns a category. Throws exception if not found.
      *
      * @param categoryName the category name.
-     * @return the category metadata or {@code null}.
+     * @return the category metadata.
      */
     CategoryMeta getCategory(String categoryName);
 

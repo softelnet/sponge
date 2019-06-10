@@ -121,19 +121,19 @@ public class CoreProcessorsTest {
         try {
             assertEquals(2, engine.getActions().size());
             assertEquals(2, engine.getTriggers().size());
-            assertTrue(engine.getOperations().existsAction("ScannedAction1"));
-            assertTrue(engine.getOperations().existsAction("ScannedAction2"));
-            assertTrue(engine.getOperations().existsTrigger("ScannedTrigger1"));
-            assertTrue(engine.getOperations().existsTrigger("ScannedTrigger2"));
+            assertTrue(engine.getOperations().hasAction("ScannedAction1"));
+            assertTrue(engine.getOperations().hasAction("ScannedAction2"));
+            assertTrue(engine.getOperations().hasTrigger("ScannedTrigger1"));
+            assertTrue(engine.getOperations().hasTrigger("ScannedTrigger2"));
 
             engine.getOperations().disableJavaByScan(ScannedAction1.class.getPackage().getName());
 
             assertEquals(0, engine.getActions().size());
             assertEquals(0, engine.getTriggers().size());
-            assertFalse(engine.getOperations().existsAction("ScannedAction1"));
-            assertFalse(engine.getOperations().existsAction("ScannedAction2"));
-            assertFalse(engine.getOperations().existsTrigger("ScannedTrigger1"));
-            assertFalse(engine.getOperations().existsTrigger("ScannedTrigger2"));
+            assertFalse(engine.getOperations().hasAction("ScannedAction1"));
+            assertFalse(engine.getOperations().hasAction("ScannedAction2"));
+            assertFalse(engine.getOperations().hasTrigger("ScannedTrigger1"));
+            assertFalse(engine.getOperations().hasTrigger("ScannedTrigger2"));
         } finally {
             engine.shutdown();
         }

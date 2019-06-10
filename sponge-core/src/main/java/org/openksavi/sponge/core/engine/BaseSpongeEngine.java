@@ -899,7 +899,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     @Override
     public CategoryMeta getCategory(String categoryName) {
-        return categories.get(categoryName);
+        return Validate.notNull(categories.get(categoryName), "Category %s is not registered", categoryName);
     }
 
     @Override

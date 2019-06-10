@@ -27,12 +27,12 @@ import org.openksavi.sponge.plugin.Plugin;
 public interface PluginManager extends Configurable, EngineModule {
 
     /**
-     * Checks whether a plugin with the specified name exists.
+     * Checks whether a plugin with the specified name is registered.
      *
      * @param name plugin name.
-     * @return {@code true} if the plugin exists.
+     * @return {@code true} if the plugin is registered.
      */
-    boolean existsPlugin(String name);
+    boolean hasPlugin(String name);
 
     /**
      * Adds the specified plugin.

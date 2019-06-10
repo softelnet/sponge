@@ -161,15 +161,15 @@ public class MidiMetaMessageEvent extends MidiMessageEvent<MetaMessage> {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.META;
+    public MidiEventCategory getMidiCategory() {
+        return MidiEventCategory.META;
     }
 
     @Override
     public String getMessageString() {
         //@formatter:off
         return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
-                .append("category", getCategory().getCode())
+                .append("category", getMidiCategory().getCode())
                 .append(ATTR_MESSAGE_TYPE, getMessageType())
                 .append(ATTR_DATA, Hex.encodeHex(getData()))
                 .append(ATTR_TIME_STAMP, getTimeStamp())

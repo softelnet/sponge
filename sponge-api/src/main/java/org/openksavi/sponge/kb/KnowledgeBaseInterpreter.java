@@ -70,12 +70,12 @@ public interface KnowledgeBaseInterpreter {
     <T> T getVariable(String name, Class<T> cls);
 
     /**
-     * Returns {@code true} if a variable named {@code name} exists.
+     * Returns {@code true} if a variable named {@code name} is defined.
      *
      * @param name variable name.
-     * @return {@code true} if a variable named {@code name} exists.
+     * @return {@code true} if a variable named {@code name} is defined.
      */
-    boolean existsVariable(String name);
+    boolean hasVariable(String name);
 
     /**
      * Creates a new processor instance.

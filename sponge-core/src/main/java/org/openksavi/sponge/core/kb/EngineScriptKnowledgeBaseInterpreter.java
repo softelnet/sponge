@@ -133,7 +133,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
     }
 
     @Override
-    public boolean existsVariable(String name) {
+    public boolean hasVariable(String name) {
         try {
             return scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).containsKey(name);
         } catch (Throwable e) {
@@ -143,7 +143,7 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
 
     @Override
     public Object getVariable(String name) {
-        if (!existsVariable(name)) {
+        if (!hasVariable(name)) {
             throw new SpongeException("Variable '" + name + "' not found");
         }
 

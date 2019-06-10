@@ -64,8 +64,8 @@ public class DefaultSession implements Session {
     }
 
     @Override
-    public boolean existsVariable(String name) {
-        return variables.exists(name);
+    public boolean hasVariable(String name) {
+        return variables.has(name);
     }
 
     @Override

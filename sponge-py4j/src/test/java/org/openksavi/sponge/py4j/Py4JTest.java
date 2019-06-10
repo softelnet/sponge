@@ -39,7 +39,7 @@ public class Py4JTest {
         engine.startup();
 
         try {
-            ProcessInstance processInstance = engine.getPluginManager().getPlugin(BasePy4JPlugin.class).getScriptProcess();
+            ProcessInstance processInstance = engine.getOperations().getPlugin(BasePy4JPlugin.class).getScriptProcess();
 
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);
@@ -62,7 +62,7 @@ public class Py4JTest {
         engine.startup();
 
         try {
-            ProcessInstance processInstance = engine.getPluginManager().getPlugin(BasePy4JPlugin.class).getScriptProcess();
+            ProcessInstance processInstance = engine.getOperations().getPlugin(BasePy4JPlugin.class).getScriptProcess();
 
             await().atMost(60, TimeUnit.SECONDS)
                     .until(() -> engine.getOperations().getVariable(Number.class, "eventCounter").intValue() > 0);

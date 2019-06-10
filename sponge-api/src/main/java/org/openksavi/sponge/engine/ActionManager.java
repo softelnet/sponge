@@ -79,12 +79,12 @@ public interface ActionManager extends EngineModule {
     Map<String, ActionAdapter> getRegisteredActionAdapterMap();
 
     /**
-     * Returns {@code true} if an action named {@code name} exists.
+     * Returns {@code true} if an action named {@code name} is registered.
      *
      * @param name action name.
-     * @return {@code true} if an action named {@code name} exists.
+     * @return {@code true} if an action named {@code name} is registered.
      */
-    boolean existsAction(String name);
+    boolean hasAction(String name);
 
     /**
      * Returns an action adapter or {@code null} if action named {@code actionName} doesn't exist.

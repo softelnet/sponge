@@ -49,7 +49,7 @@ public class GrpcApiManageSubscription extends JAction {
 
     public void onCall(List<String> eventNames, Boolean subscribe) {
         GrpcApiServerPlugin plugin = getSponge().getPlugin(GrpcApiServerPlugin.class);
-        Validate.isTrue(plugin != null && plugin.isServerRunning(), "The gRPC service is not runnning");
+        Validate.isTrue(plugin.isServerRunning(), "The gRPC service is not runnning");
     }
 
     @Override

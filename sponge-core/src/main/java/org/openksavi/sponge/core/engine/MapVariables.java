@@ -82,14 +82,14 @@ public class MapVariables implements Variables {
     }
 
     @Override
-    public boolean exists(String name) {
+    public boolean has(String name) {
         return variables.containsKey(normalizeName(name));
     }
 
     @Override
     public <T> void setIfNone(String name, Supplier<T> supplier) {
         synchronized (variables) {
-            if (!exists(name)) {
+            if (!has(name)) {
                 set(name, supplier.get());
             }
         }

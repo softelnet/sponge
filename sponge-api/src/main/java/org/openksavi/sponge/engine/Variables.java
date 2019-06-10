@@ -82,12 +82,12 @@ public interface Variables extends Serializable {
     void remove(String name);
 
     /**
-     * Returns {@code true} if the variable exists.
+     * Returns {@code true} if the variable is defined.
      *
      * @param name variable name.
      * @return variable value.
      */
-    boolean exists(String name);
+    boolean has(String name);
 
     /**
      * Sets the variable if there is none (i.e. doesn't exist).

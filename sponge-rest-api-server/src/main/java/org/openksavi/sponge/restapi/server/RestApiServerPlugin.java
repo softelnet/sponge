@@ -29,6 +29,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.impl.CompositeRegistry;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.camel.CamelPlugin;
 import org.openksavi.sponge.camel.CamelUtils;
@@ -153,13 +154,10 @@ public class RestApiServerPlugin extends JPlugin {
     public void start() {
         CamelContext finalCamelContext = camelContext;
         if (finalCamelContext == null) {
-            CamelPlugin camelPlugin = getEngine().getPluginManager().getPlugin(CamelPlugin.class);
-            if (camelPlugin == null) {
-                throw new ConfigException(
-                        "Camel plugin is not registered but it is required by the Sponge REST API if no Camel context is set");
-            }
+            Validate.isTrue(getEngine().getOperations().hasPlugin(CamelPlugin.class),
+                    "The Camel plugin is not registered but it is required by the Sponge REST API if no Camel context is set");
 
-            finalCamelContext = camelPlugin.getCamelContext();
+            finalCamelContext = getEngine().getOperations().getPlugin(CamelPlugin.class).getCamelContext();
         }
 
         start(finalCamelContext);

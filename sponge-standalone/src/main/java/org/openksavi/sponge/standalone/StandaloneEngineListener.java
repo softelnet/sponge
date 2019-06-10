@@ -145,7 +145,7 @@ public class StandaloneEngineListener implements OnStartupListener, OnShutdownLi
      */
     private void setupCamelPlugin() {
         if (context.containsBeanDefinition(CamelPlugin.NAME)) {
-            if (!engine.getPluginManager().existsPlugin(CamelPlugin.NAME)) {
+            if (!engine.getPluginManager().hasPlugin(CamelPlugin.NAME)) {
                 engine.getPluginManager().addPlugin(context.getBean(CamelPlugin.class, CamelPlugin.NAME));
             }
         }

@@ -23,7 +23,6 @@ import org.apache.camel.util.jsse.KeyStoreParameters;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.camel.util.jsse.TrustManagersParameters;
 
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
@@ -64,12 +63,7 @@ public abstract class CamelUtils {
     }
 
     public static CamelPlugin getPlugin(SpongeEngine engine) {
-        CamelPlugin plugin = engine.getPluginManager().getPlugin(CamelPlugin.class, CamelPlugin.NAME);
-        if (plugin == null) {
-            throw new SpongeException("Camel plugin not found");
-        }
-
-        return plugin;
+        return engine.getOperations().getPlugin(CamelPlugin.class, CamelPlugin.NAME);
     }
 
     public static SSLContextParameters createSslContextParameters(SslConfiguration security) {

@@ -187,11 +187,11 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     }
 
     @Override
-    public boolean existsVariable(String name) {
+    public boolean hasVariable(String name) {
         try {
             return doGetVariable(name) != null;
         } catch (Throwable e) {
-            throw SpongeUtils.wrapException("existsVariable", this, e);
+            throw SpongeUtils.wrapException("hasVariable", this, e);
         }
     }
 

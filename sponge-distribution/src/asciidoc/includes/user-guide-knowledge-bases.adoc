@@ -189,13 +189,13 @@ def onStartup():
 |Removes the scheduled event.
 
 |`getPlugin(String name)`
-|Returns the plugin that has the specified name or `null` if there is no such plugin.
+|Returns the plugin that has the specified name. Throws exception if not found.
 
 |`getPlugin(Class<T> cls, String name)`
-|Returns the plugin that has the specified name and type or `null` if there is no such plugin.
+|Returns the plugin that has the specified name and type. Throws exception if not found.
 
 |`getPlugin(Class<T> cls)`
-|Returns the plugin that has the specified type or `null` if there is no such plugin.
+|Returns the plugin that has the specified type. Throws exception if not found.
 
 |`EventDefinition event(String name)`
 |Creates a new event definition.
@@ -206,8 +206,8 @@ def onStartup():
 |`EventDefinition event(Event event)`
 |Creates a new event definition.
 
-|`boolean exists<Processor>(String name)`
-|A set of methods returning `true` if a processor named `name` exists. The actual methods are: `existsFilter`, `existsTrigger`, `existsRule`, `existsCorrelator`, `existsAction`.
+|`boolean has<Processor>(String name)`
+|A set of methods returning `true` if a processor named `name` is registered. The actual methods are: `hasFilter`, `hasTrigger`, `hasRule`, `hasCorrelator`, `hasAction`.
 
 |`setVariable(String name, Object value)`
 |Sets the engine scope variable.
@@ -227,8 +227,8 @@ def onStartup():
 |`removeVariable(String name)`
 |Removes the engine scope variable.
 
-|`boolean existsVariable(String name)`
-|Returns `true` if the engine scope variable named `name` exists.
+|`boolean hasVariable(String name)`
+|Returns `true` if the engine scope variable named `name` is defined.
 
 |`setVariableIfNone(String name, Supplier<T> supplier)`
 |Sets the engine scope variable if not set already.
@@ -250,6 +250,9 @@ A set of methods that return processor metadata.
 
 |`void selectCategory(String categoryName, ProcessorPredicate predicate)`
 |Dynamically selects processors of supported types that are to assigned to the category.
+
+|`void addEventType(String eventTypeName, RecordType dataType)`
+|Registers an event type as a record.
 |===
 
 For a complete list of available methods see the {spongeJavaDocUrl}/org/openksavi/sponge/EngineOperations.html[`EngineOperations`] and the {spongeJavaDocUrl}/org/openksavi/sponge/kb/KnowledgeBaseEngineOperations.html[`KnowledgeBaseEngineOperations`] Javadoc.

@@ -154,26 +154,35 @@ public class BaseEngineOperations implements EngineOperations {
         return engine.getEventScheduler().remove(entry);
     }
 
-    /**
-     * Returns the plugin that has the specified name or {@code null} if there is no such plugin.
-     *
-     * @param name plugin name.
-     * @return plugin.
-     */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Plugin> T getPlugin(String name) {
-        return (T) engine.getPluginManager().getPlugin(name);
+        return Validate.notNull((T) engine.getPluginManager().getPlugin(name), "Plugin named %s is not registered", name);
     }
 
     @Override
     public <T extends Plugin> T getPlugin(Class<T> cls, String name) {
-        return engine.getPluginManager().getPlugin(cls, name);
+        return Validate.notNull(engine.getPluginManager().getPlugin(cls, name), "Plugin named %s of class %s is not registered", name, cls);
     }
 
     @Override
     public <T extends Plugin> T getPlugin(Class<T> cls) {
-        return engine.getPluginManager().getPlugin(cls);
+        return Validate.notNull(engine.getPluginManager().getPlugin(cls), "Plugin of class %s is not registered", cls);
+    }
+
+    @Override
+    public boolean hasPlugin(String name) {
+        return engine.getPluginManager().getPlugin(name) != null;
+    }
+
+    @Override
+    public <T extends Plugin> boolean hasPlugin(Class<T> cls, String name) {
+        return engine.getPluginManager().getPlugin(cls, name) != null;
+    }
+
+    @Override
+    public <T extends Plugin> boolean hasPlugin(Class<T> cls) {
+        return engine.getPluginManager().getPlugin(cls) != null;
     }
 
     /**
@@ -242,28 +251,28 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public boolean existsAction(String name) {
-        return engine.getActionManager().existsAction(name);
+    public boolean hasAction(String name) {
+        return engine.getActionManager().hasAction(name);
     }
 
     @Override
-    public boolean existsFilter(String name) {
-        return engine.getFilterProcessingUnit().existsProcessor(name);
+    public boolean hasFilter(String name) {
+        return engine.getFilterProcessingUnit().hasProcessor(name);
     }
 
     @Override
-    public boolean existsTrigger(String name) {
-        return engine.getMainProcessingUnit().existsProcessor(name);
+    public boolean hasTrigger(String name) {
+        return engine.getMainProcessingUnit().hasProcessor(name);
     }
 
     @Override
-    public boolean existsRule(String name) {
-        return engine.getMainProcessingUnit().existsProcessor(name);
+    public boolean hasRule(String name) {
+        return engine.getMainProcessingUnit().hasProcessor(name);
     }
 
     @Override
-    public boolean existsCorrelator(String name) {
-        return engine.getMainProcessingUnit().existsProcessor(name);
+    public boolean hasCorrelator(String name) {
+        return engine.getMainProcessingUnit().hasProcessor(name);
     }
 
     @Override
@@ -292,8 +301,8 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public boolean existsVariable(String name) {
-        return engine.getSession().existsVariable(name);
+    public boolean hasVariable(String name) {
+        return engine.getSession().hasVariable(name);
     }
 
     @Override
@@ -326,6 +335,11 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public String getProperty(String name, String defaultValue) {
         return getProperty(name, defaultValue, false);
+    }
+
+    @Override
+    public boolean hasProperty(String name) {
+        return engine.getConfigurationManager().getProperty(name) != null;
     }
 
     @Override

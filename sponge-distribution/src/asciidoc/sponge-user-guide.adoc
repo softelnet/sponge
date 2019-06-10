@@ -429,6 +429,22 @@ sponge.event("alarm").sendAt("0-59 * * * * ?")
 ----
 Sends an event at the time specified by Cron notation.
 
+=== Registered event types
+Event type may be registered in the engine. The registered event type is a `RecordType` that describes event attributes. The name of an event instance is also a registration name of a registered event type. Event types are are not verified by the engine but could be interpreted by a client code or {sponge} plugins. For example they could be useful in a generic GUI that sends or subscribes to events.
+
+.Example of registering event types
+[source,python]
+----
+def onBeforeLoad():
+    sponge.addEventType("notification", RecordType().withFields([
+        StringType("source").withLabel("Source"),
+        IntegerType("severity").withLabel("Severity").withNullable()
+    ]).withLabel("Notification"))
+
+def onStartup():
+    sponge.event("notification").set({"source":"Sponge", "severity":10}).label("The notification").description("The new event notification").send()
+----
+
 === Event priorities
 A priority may be assigned only to control events, that are used internally by the engine. For standard events the priority always equals to `0` and cannot be modified.
 

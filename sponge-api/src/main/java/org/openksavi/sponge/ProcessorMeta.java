@@ -41,7 +41,7 @@ public interface ProcessorMeta extends Descriptive, HasVersion {
     void setFeatures(Map<String, Object> features);
 
     /**
-     * Returns the optional category name.
+     * Returns the optional category name or {@code null} if not set.
      *
      * @return the category name.
      */

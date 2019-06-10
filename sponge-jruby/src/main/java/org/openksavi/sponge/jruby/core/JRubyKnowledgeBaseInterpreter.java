@@ -136,7 +136,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     }
 
     @Override
-    public boolean existsVariable(String name) {
+    public boolean hasVariable(String name) {
         try {
             return container.getProvider().getRuntime().getGlobalVariables().isDefined(createVariableName(name));
         } catch (Throwable e) {
@@ -146,7 +146,7 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     @Override
     public Object getVariable(String name) {
-        if (!existsVariable(name)) {
+        if (!hasVariable(name)) {
             throw new SpongeException("Variable '" + name + "' not found");
         }
 

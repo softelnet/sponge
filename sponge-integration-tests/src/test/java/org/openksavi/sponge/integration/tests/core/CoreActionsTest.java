@@ -931,7 +931,9 @@ public class CoreActionsTest {
             engine.startup();
             fail("Exception expected");
         } catch (Throwable e) {
-            assertTrue(ExceptionUtils.indexOfThrowable(e, IllegalArgumentException.class) > -1);
+            int exceptionIndex = ExceptionUtils.indexOfThrowable(e, NullPointerException.class);
+            assertTrue(exceptionIndex > -1);
+            assertEquals("Category yourActions is not registered", ExceptionUtils.getThrowableList(e).get(exceptionIndex).getMessage());
         }
     }
 

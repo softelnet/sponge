@@ -54,12 +54,12 @@ public interface ProcessingUnit<T extends EventProcessorAdapter<?>> extends Engi
     void removeAllProcessors();
 
     /**
-     * Returns {@code true} if a processor named {@code name} exists.
+     * Returns {@code true} if a processor named {@code name} is registered.
      *
      * @param name processor name.
-     * @return {@code true} if a processor named {@code name} exists.
+     * @return {@code true} if a processor named {@code name} is registered.
      */
-    boolean existsProcessor(String name);
+    boolean hasProcessor(String name);
 
     /**
      * Returns {@code true} if this processing unit supports thread pool to listen to an event queue concurrently instead of only one

@@ -56,7 +56,7 @@ public abstract class BaseNonScriptKnowledgeBaseInterpreter extends BaseKnowledg
     }
 
     @Override
-    public boolean existsVariable(String name) {
+    public boolean hasVariable(String name) {
         return variables.containsKey(name);
     }
 

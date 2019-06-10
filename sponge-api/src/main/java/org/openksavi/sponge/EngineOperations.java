@@ -187,7 +187,7 @@ public interface EngineOperations {
     boolean removeEvent(EventSchedulerEntry entry);
 
     /**
-     * Returns the plugin that has the specified name or {@code null} if there is no such plugin.
+     * Returns the plugin that has the specified name. Throws exception if not found.
      *
      * @param name plugin name.
      * @return plugin.
@@ -196,7 +196,7 @@ public interface EngineOperations {
     <T extends Plugin> T getPlugin(String name);
 
     /**
-     * Returns the plugin that has the specified name and type or {@code null} if there is no such plugin.
+     * Returns the plugin that has the specified name and type. Throws exception if not found.
      *
      * @param cls plugin class.
      * @param name plugin name.
@@ -206,13 +206,38 @@ public interface EngineOperations {
     <T extends Plugin> T getPlugin(Class<T> cls, String name);
 
     /**
-     * Returns the plugin that has the specified type or {@code null} if there is no such plugin.
+     * Returns the plugin that has the specified type. Throws exception if not found.
      *
      * @param cls plugin class.
      * @return plugin.
      * @param <T> Plugin type.
      */
     <T extends Plugin> T getPlugin(Class<T> cls);
+
+    /**
+     * Returns {@code true} if the plugin is registered.
+     *
+     * @param name the plugin name.
+     * @return {@code true} if the plugin is registered.
+     */
+    boolean hasPlugin(String name);
+
+    /**
+     * Returns {@code true} if the plugin is registered.
+     *
+     * @param cls the plugin class.
+     * @param name the plugin name.
+     * @return {@code true} if the plugin is registered.
+     */
+    <T extends Plugin> boolean hasPlugin(Class<T> cls, String name);
+
+    /**
+     * Returns {@code true} if the plugin is registered.
+     *
+     * @param cls the plugin class.
+     * @return {@code true} if the plugin is registered.
+     */
+    <T extends Plugin> boolean hasPlugin(Class<T> cls);
 
     /**
      * Returns the engine version.
@@ -261,44 +286,44 @@ public interface EngineOperations {
     EventDefinition event(Event event);
 
     /**
-     * Returns {@code true} if an action named {@code name} exists.
+     * Returns {@code true} if an action named {@code name} is registered.
      *
      * @param name action name.
-     * @return {@code true} if an action named {@code name} exists.
+     * @return {@code true} if an action named {@code name} is registered.
      */
-    boolean existsAction(String name);
+    boolean hasAction(String name);
 
     /**
-     * Returns {@code true} if a filter named {@code name} exists.
+     * Returns {@code true} if a filter named {@code name} is registered.
      *
      * @param name filter name.
-     * @return {@code true} if a filter named {@code name} exists.
+     * @return {@code true} if a filter named {@code name} is registered.
      */
-    boolean existsFilter(String name);
+    boolean hasFilter(String name);
 
     /**
-     * Returns {@code true} if a trigger named {@code name} exists.
+     * Returns {@code true} if a trigger named {@code name} is registered.
      *
      * @param name trigger name.
-     * @return {@code true} if a trigger named {@code name} exists.
+     * @return {@code true} if a trigger named {@code name} is registered.
      */
-    boolean existsTrigger(String name);
+    boolean hasTrigger(String name);
 
     /**
-     * Returns {@code true} if a rule named {@code name} exists.
+     * Returns {@code true} if a rule named {@code name} is registered.
      *
      * @param name rule name.
-     * @return {@code true} if a rule named {@code name} exists.
+     * @return {@code true} if a rule named {@code name} is registered.
      */
-    boolean existsRule(String name);
+    boolean hasRule(String name);
 
     /**
-     * Returns {@code true} if a correlator named {@code name} exists.
+     * Returns {@code true} if a correlator named {@code name} is registered.
      *
      * @param name correlator name.
-     * @return {@code true} if a correlator named {@code name} exists.
+     * @return {@code true} if a correlator named {@code name} is registered.
      */
-    boolean existsCorrelator(String name);
+    boolean hasCorrelator(String name);
 
     /**
      * Sets the engine scope variable.
@@ -359,12 +384,12 @@ public interface EngineOperations {
     void removeVariable(String name);
 
     /**
-     * Returns {@code true} if the engine scope variable named {@code name} exists.
+     * Returns {@code true} if the engine scope variable named {@code name} is defined.
      *
      * @param name variable name.
-     * @return {@code true} if the engine scope variable named {@code name} exists.
+     * @return {@code true} if the engine scope variable named {@code name} is defined.
      */
-    boolean existsVariable(String name);
+    boolean hasVariable(String name);
 
     /**
      * Sets the engine scope variable if not set already.
@@ -398,6 +423,14 @@ public interface EngineOperations {
      * @return the configuration property value.
      */
     String getProperty(String name, String defaultValue);
+
+    /**
+     * Returns {@code true} if the property is defined.
+     *
+     * @param name the property name.
+     * @return {@code true} if the property is defined.
+     */
+    boolean hasProperty(String name);
 
     /**
      * Returns the home directory for the engine.
@@ -437,10 +470,10 @@ public interface EngineOperations {
     void addCategories(CategoryMeta... categoryMeta);
 
     /**
-     * Returns a category.
+     * Returns a category. Throws exception if not found.
      *
      * @param categoryName the category name.
-     * @return the category metadata or {@code null}.
+     * @return the category metadata.
      */
     CategoryMeta getCategory(String categoryName);
 

@@ -414,7 +414,7 @@ public abstract class BaseProcessingUnit<T extends EventProcessorAdapter<?>> ext
     }
 
     @Override
-    public boolean existsProcessor(String name) {
+    public boolean hasProcessor(String name) {
         return registeredProcessorAdapterMap.containsKey(name);
     }
 

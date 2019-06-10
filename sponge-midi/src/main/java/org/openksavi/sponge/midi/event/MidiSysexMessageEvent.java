@@ -124,15 +124,15 @@ public class MidiSysexMessageEvent extends MidiMessageEvent<SysexMessage> {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.SYSEX;
+    public MidiEventCategory getMidiCategory() {
+        return MidiEventCategory.SYSEX;
     }
 
     @Override
     public String getMessageString() {
         //@formatter:off
         return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
-                .append("category", getCategory().getCode())
+                .append("category", getMidiCategory().getCode())
                 .append(ATTR_DATA, Hex.encodeHex(getData()))
                 .append(ATTR_TIME_STAMP, getTimeStamp())
                 .toString();

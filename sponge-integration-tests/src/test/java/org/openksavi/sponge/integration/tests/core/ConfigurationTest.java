@@ -111,7 +111,7 @@ public class ConfigurationTest {
             assertEquals("Sample knowledge base", kb.getLabel());
             assertEquals("Sample knowledge base description", kb.getDescription());
 
-            Plugin plugin = engine.getPluginManager().getPlugin("echoPlugin");
+            Plugin plugin = engine.getOperations().getPlugin("echoPlugin");
             assertEquals("echoPlugin", plugin.getName());
             assertEquals("Echo plugin", plugin.getLabel());
             assertEquals("Echo plugin description", plugin.getDescription());

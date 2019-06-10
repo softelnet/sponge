@@ -42,12 +42,12 @@ public class KnowledgeBaseScriptProviderTest {
         engine.startup();
 
         try {
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().existsVariable(startingVariableName)
+            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().hasVariable(startingVariableName)
                     && engine.getOperations().getVariable(Boolean.class, startingVariableName));
 
             engine.reload();
 
-            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().existsVariable(reloadingVariableName)
+            await().atMost(20, TimeUnit.SECONDS).until(() -> engine.getOperations().hasVariable(reloadingVariableName)
                     && engine.getOperations().getVariable(Boolean.class, reloadingVariableName));
 
             assertFalse(engine.isError());

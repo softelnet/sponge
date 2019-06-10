@@ -66,29 +66,29 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         ProcessorType.ACTION, new RegistrationHandler(
             (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
             (adapter) -> getEngine().getActionManager().removeAction(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getActionManager().existsAction(adapter.getMeta().getName())),
+            (adapter) -> getEngine().getActionManager().hasAction(adapter.getMeta().getName())),
         ProcessorType.FILTER, new RegistrationHandler(
             (adapter) -> getEngine().getFilterProcessingUnit().addProcessor((FilterAdapter) adapter),
             (adapter) -> getEngine().getFilterProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getFilterProcessingUnit().existsProcessor(adapter.getMeta().getName())),
+            (adapter) -> getEngine().getFilterProcessingUnit().hasProcessor(adapter.getMeta().getName())),
         ProcessorType.TRIGGER, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor((TriggerAdapter) adapter),
             (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getMeta().getName(), adapter.getType())),
+            (adapter) -> getEngine().getMainProcessingUnit().hasProcessor(adapter.getMeta().getName(), adapter.getType())),
         ProcessorType.RULE, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
                         new BaseRuleAdapterGroup((BaseRuleAdapter) adapter,
                         (EventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter>) getEngine()
                                 .getMainProcessingUnit().getHandler(ProcessorType.RULE_GROUP))),
             (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getMeta().getName(), ProcessorType.RULE_GROUP)),
+            (adapter) -> getEngine().getMainProcessingUnit().hasProcessor(adapter.getMeta().getName(), ProcessorType.RULE_GROUP)),
         ProcessorType.CORRELATOR, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
                         new BaseCorrelatorAdapterGroup((BaseCorrelatorAdapter) adapter,
                         (EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>) getEngine()
                                 .getMainProcessingUnit().getHandler(ProcessorType.CORRELATOR_GROUP))),
             (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getMainProcessingUnit().existsProcessor(adapter.getMeta().getName(), ProcessorType.CORRELATOR_GROUP))
+            (adapter) -> getEngine().getMainProcessingUnit().hasProcessor(adapter.getMeta().getName(), ProcessorType.CORRELATOR_GROUP))
         );
     //@formatter:on
 

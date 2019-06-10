@@ -225,15 +225,15 @@ public class MidiShortMessageEvent extends MidiMessageEvent<ShortMessage> {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.SHORT;
+    public MidiEventCategory getMidiCategory() {
+        return MidiEventCategory.SHORT;
     }
 
     @Override
     public String getMessageString() {
         //@formatter:off
         return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
-                .append("category", getCategory().getCode())
+                .append("category", getMidiCategory().getCode())
                 .append(ATTR_COMMAND, getCommand())
                 .append(ATTR_CHANNEL, getChannel())
                 .append(ATTR_DATA1, getData1())

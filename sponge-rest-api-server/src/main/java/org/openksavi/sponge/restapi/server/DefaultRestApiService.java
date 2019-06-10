@@ -202,7 +202,7 @@ public class DefaultRestApiService implements RestApiService {
             String actionNameRegExp = request.getName();
 
             String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
-            Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().existsAction(isPublicActionActionName)
+            Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().hasAction(isPublicActionActionName)
                     ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, Arrays.asList(action)).booleanValue()
                     : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
 
@@ -244,8 +244,8 @@ public class DefaultRestApiService implements RestApiService {
     protected RestActionMeta createRestActionMeta(ActionAdapter actionAdapter) {
         ActionMeta meta = actionAdapter.getMeta();
         return new RestActionMeta(meta.getName(), meta.getLabel(), meta.getDescription(),
-                createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), createRestCategory(getEngine().getCategory(meta.getCategory())),
-                meta.getFeatures(), meta.getArgs(), meta.getResult(), meta.isCallable(), actionAdapter.getQualifiedVersion());
+                createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), createRestCategory(meta.getCategory()), meta.getFeatures(),
+                meta.getArgs(), meta.getResult(), meta.isCallable(), actionAdapter.getQualifiedVersion());
 
     }
 
@@ -457,7 +457,7 @@ public class DefaultRestApiService implements RestApiService {
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         String isEventPlubliActionName = RestApiServerConstants.ACTION_IS_EVENT_PUBLIC;
-        boolean publicByAction = getEngine().getOperations().existsAction(isEventPlubliActionName)
+        boolean publicByAction = getEngine().getOperations().hasAction(isEventPlubliActionName)
                 ? getEngine().getOperations().call(Boolean.class, isEventPlubliActionName, Arrays.asList(eventName)).booleanValue()
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
@@ -496,10 +496,12 @@ public class DefaultRestApiService implements RestApiService {
         return new RestKnowledgeBaseMeta(kb.getName(), kb.getLabel(), kb.getDescription(), kb.getVersion(), kbIndex > -1 ? kbIndex : null);
     }
 
-    protected RestCategoryMeta createRestCategory(CategoryMeta category) {
-        if (category == null) {
+    protected RestCategoryMeta createRestCategory(String categoryName) {
+        if (categoryName == null || !getEngine().hasCategory(categoryName)) {
             return null;
         }
+
+        CategoryMeta category = getEngine().getCategory(categoryName);
 
         int categoryIndex = SpongeUtils.getCategoryIndex(getEngine(), category);
 

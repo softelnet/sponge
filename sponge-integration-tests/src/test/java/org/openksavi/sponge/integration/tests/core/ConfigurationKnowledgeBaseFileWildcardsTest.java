@@ -38,10 +38,10 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
 
         try {
             assertEquals(3, engine.getActions().size());
-            assertTrue(engine.getOperations().existsAction("Action1"));
-            assertTrue(engine.getOperations().existsAction("Action2"));
-            assertTrue(engine.getOperations().existsAction("Action3"));
-            assertFalse(engine.getOperations().existsAction("Action0"));
+            assertTrue(engine.getOperations().hasAction("Action1"));
+            assertTrue(engine.getOperations().hasAction("Action2"));
+            assertTrue(engine.getOperations().hasAction("Action3"));
+            assertFalse(engine.getOperations().hasAction("Action0"));
 
             assertFalse(engine.isError());
         } finally {
@@ -56,10 +56,10 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
 
         try {
             assertEquals(4, engine.getActions().size());
-            assertTrue(engine.getOperations().existsAction("Action1"));
-            assertTrue(engine.getOperations().existsAction("Action2"));
-            assertTrue(engine.getOperations().existsAction("Action3"));
-            assertTrue(engine.getOperations().existsAction("Action0"));
+            assertTrue(engine.getOperations().hasAction("Action1"));
+            assertTrue(engine.getOperations().hasAction("Action2"));
+            assertTrue(engine.getOperations().hasAction("Action3"));
+            assertTrue(engine.getOperations().hasAction("Action0"));
 
             assertFalse(engine.isError());
         } finally {
@@ -75,10 +75,10 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
 
         try {
             assertEquals(4, engine.getActions().size());
-            assertTrue(engine.getOperations().existsAction("Action1"));
-            assertTrue(engine.getOperations().existsAction("Action2"));
-            assertTrue(engine.getOperations().existsAction("Action3"));
-            assertTrue(engine.getOperations().existsAction("Action0"));
+            assertTrue(engine.getOperations().hasAction("Action1"));
+            assertTrue(engine.getOperations().hasAction("Action2"));
+            assertTrue(engine.getOperations().hasAction("Action3"));
+            assertTrue(engine.getOperations().hasAction("Action0"));
 
             assertFalse(engine.isError());
         } finally {
@@ -136,10 +136,10 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
 
         try {
             assertEquals(3, engine.getActions().size());
-            assertTrue(engine.getOperations().existsAction("Action1"));
-            assertTrue(engine.getOperations().existsAction("Action2"));
-            assertTrue(engine.getOperations().existsAction("Action3"));
-            assertFalse(engine.getOperations().existsAction("Action0"));
+            assertTrue(engine.getOperations().hasAction("Action1"));
+            assertTrue(engine.getOperations().hasAction("Action2"));
+            assertTrue(engine.getOperations().hasAction("Action3"));
+            assertFalse(engine.getOperations().hasAction("Action0"));
 
             assertFalse(engine.isError());
         } finally {
@@ -155,10 +155,10 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
 
         try {
             assertEquals(3, engine.getActions().size());
-            assertTrue(engine.getOperations().existsAction("Action1"));
-            assertTrue(engine.getOperations().existsAction("Action2"));
-            assertTrue(engine.getOperations().existsAction("Action3"));
-            assertFalse(engine.getOperations().existsAction("Action0"));
+            assertTrue(engine.getOperations().hasAction("Action1"));
+            assertTrue(engine.getOperations().hasAction("Action2"));
+            assertTrue(engine.getOperations().hasAction("Action3"));
+            assertFalse(engine.getOperations().hasAction("Action0"));
 
             assertFalse(engine.isError());
         } finally {

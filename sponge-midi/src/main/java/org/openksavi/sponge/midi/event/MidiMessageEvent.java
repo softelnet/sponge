@@ -47,12 +47,12 @@ public abstract class MidiMessageEvent<M extends MidiMessage> extends BaseEvent 
     /**
      * A MIDI-based Sponge event category.
      */
-    public static enum Category {
+    public static enum MidiEventCategory {
         SHORT("short"), META("meta"), SYSEX("sysex");
 
         private String code;
 
-        private Category(String code) {
+        private MidiEventCategory(String code) {
             this.code = code;
         }
 
@@ -172,7 +172,7 @@ public abstract class MidiMessageEvent<M extends MidiMessage> extends BaseEvent 
         return Collections.unmodifiableMap(result);
     }
 
-    public abstract Category getCategory();
+    public abstract MidiEventCategory getMidiCategory();
 
     public abstract String getMessageString();
 }
