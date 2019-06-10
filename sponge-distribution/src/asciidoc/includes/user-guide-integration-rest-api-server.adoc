@@ -178,7 +178,6 @@ The following table contains a summary of the REST API operations. For a complet
 |`eventTypes`
 |Returns the registered event types.
 
-|
 |Reload knowledge bases
 |`reload`
 |Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
@@ -200,7 +199,7 @@ The default Jackson configuration for the REST API sets the ISO8601 format for d
 
 NOTE: A `BinaryType` value is marshalled to a base64 encoded string. This encoding adds significant overhead and should be used only for relatively small binary data.
 
-== Requests and responses
+== Request
 Each request may contain base properties.
 
 .Base request properties
@@ -208,9 +207,19 @@ Each request may contain base properties.
 |===
 |Name |Required |Description
 
+|`header`
+|No
+|A request header.
+|===
+
+.Request header properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
 |`id`
 |No
-|A request identifier. If it is present, the response will contain the same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
+|A request identifier. If it is present, the response will contain a header with same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
 
 |`username`
 |No
@@ -233,7 +242,7 @@ The {sponge} REST API supports both POST and GET methods.
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/version
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"username":"john","password":"password"}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"header":{"username":"john","password":"password"}}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"name":".*Case"}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
@@ -243,6 +252,41 @@ curl http://localhost:1836/sponge.json/v1/version
 curl http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"name":"OutputStreamResultAction","args":[]}'
 ----
+
+== Response
+Each response may contain base properties.
+
+.Base response properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`header`
+|No
+|A response header.
+|===
+
+.Response header properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`id`
+|No
+|A corresponding request id.
+
+|`errorCode`
+|No
+|An optional error code in case of server side error.
+
+|`errorMessage`
+|No
+|An optional error message in case of server side error.
+
+|`detailedErrorMessage`
+|No
+|An optional detailed error message in case of server side error.
+|===
 
 == Session
 For each request the REST API service creates a thread local session. The session provides access to a logged user and a Camel exchange for a thread handling the request. The session can be accessed in an action via the REST API server plugin.

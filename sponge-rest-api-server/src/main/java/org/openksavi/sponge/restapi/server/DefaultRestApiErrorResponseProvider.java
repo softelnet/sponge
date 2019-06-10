@@ -29,14 +29,14 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
 
     @Override
     public void applyException(RestApiService service, SpongeResponse response, Throwable exception) {
-        response.setErrorCode(RestApiConstants.DEFAULT_ERROR_CODE);
+        response.getHeader().setErrorCode(RestApiConstants.DEFAULT_ERROR_CODE);
 
         // There is a possibility that exceptions thrown in Camel would contain a full request with a password, so it must be hidden
         // here because it could be sent to a client.
-        response.setErrorMessage(RestApiUtils.obfuscatePassword(exception.getMessage()));
+        response.getHeader().setErrorMessage(RestApiUtils.obfuscatePassword(exception.getMessage()));
 
         if (service.getSettings().isIncludeDetailedErrorMessage()) {
-            response.setDetailedErrorMessage(RestApiUtils.obfuscatePassword(ExceptionUtils.getStackTrace(exception)));
+            response.getHeader().setDetailedErrorMessage(RestApiUtils.obfuscatePassword(ExceptionUtils.getStackTrace(exception)));
         }
 
         // Specific error codes.
@@ -45,11 +45,11 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
 
     protected void applySpecificErrorCodes(RestApiService service, SpongeResponse response, Throwable exception) {
         if (exception instanceof RestApiInvalidAuthTokenServerException) {
-            response.setErrorCode(RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
+            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
         } else if (exception instanceof RestApiIncorrectKnowledgeBaseVersionServerException) {
-            response.setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION);
+            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION);
         } else if (exception instanceof RestApiIncorrectUsernamePasswordServerException) {
-            response.setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_USERNAME_PASSWORD);
+            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_USERNAME_PASSWORD);
         }
     }
 }

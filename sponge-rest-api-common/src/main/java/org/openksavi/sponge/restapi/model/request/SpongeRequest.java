@@ -23,50 +23,17 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public abstract class SpongeRequest {
 
-    private String id;
-
-    private String username;
-
-    private String password;
-
-    private String authToken;
+    private RequestHeader header = new RequestHeader();
 
     protected SpongeRequest() {
     }
 
-    @ApiModelProperty(value = "The request id", required = false)
-    public String getId() {
-        return id;
+    @ApiModelProperty(value = "The request header", required = false)
+    public RequestHeader getHeader() {
+        return header;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @ApiModelProperty(value = "The user name", required = false)
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @ApiModelProperty(value = "The user password", required = false)
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @ApiModelProperty(value = "The authentication token", required = false)
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    public void setHeader(RequestHeader header) {
+        this.header = header;
     }
 }

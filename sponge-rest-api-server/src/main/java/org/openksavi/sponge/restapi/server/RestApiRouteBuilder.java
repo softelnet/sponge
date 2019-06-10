@@ -59,6 +59,7 @@ import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
+import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
@@ -312,8 +313,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 // Open a new session. The user will be set later in the service.
                 apiService.openSession(createSession(exchange));
 
-                O response = operation.getOperationHandler().apply(getObjectMapper().readValue(requestBody, operation.getRequestClass()),
-                        exchange);
+                I request = getObjectMapper().readValue(requestBody, operation.getRequestClass());
+
+                // Set empty header if none.
+                if (request != null && request.getHeader() == null) {
+                    request.setHeader(new RequestHeader());
+                }
+
+                O response = operation.getOperationHandler().apply(request, exchange);
 
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);

@@ -68,8 +68,9 @@ public class ClientListenerTest extends BasicTestTemplate {
             assertEquals(engine.getVersion(), version);
             assertEquals(3, requestStringList.size());
             assertEquals(3, responseStringList.size());
-            assertEquals("{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}", normalizeJson(requestStringList.get(0)));
-            assertEquals("{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"version\":\""
+            assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}}",
+                    normalizeJson(requestStringList.get(0)));
+            assertEquals("{\"header\":{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null},\"version\":\""
                     + engine.getVersion() + "\"}", normalizeJson(responseStringList.get(0)));
         }
     }
@@ -92,8 +93,9 @@ public class ClientListenerTest extends BasicTestTemplate {
 
             client.getVersion();
 
-            assertEquals("{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}", normalizeJson(requestStringHolder.get()));
-            assertEquals("{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"version\":\""
+            assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}}",
+                    normalizeJson(requestStringHolder.get()));
+            assertEquals("{\"header\":{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null},\"version\":\""
                     + engine.getVersion() + "\"}", normalizeJson(responseStringHolder.get()));
         }
     }

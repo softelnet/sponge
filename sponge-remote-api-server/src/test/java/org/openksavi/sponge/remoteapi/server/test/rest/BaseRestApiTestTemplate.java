@@ -103,12 +103,12 @@ public abstract class BaseRestApiTestTemplate {
             GetVersionRequest request = new GetVersionRequest();
             GetVersionResponse response = client.getVersion(request);
 
-            assertEquals(null, response.getErrorCode());
-            assertEquals(null, response.getErrorMessage());
-            assertEquals(null, response.getDetailedErrorMessage());
+            assertEquals(null, response.getHeader().getErrorCode());
+            assertEquals(null, response.getHeader().getErrorMessage());
+            assertEquals(null, response.getHeader().getDetailedErrorMessage());
             assertEquals(engine.getVersion(), response.getVersion());
-            assertEquals("1", response.getId());
-            assertEquals(response.getId(), request.getId());
+            assertEquals("1", response.getHeader().getId());
+            assertEquals(response.getHeader().getId(), request.getHeader().getId());
         }
     }
 

@@ -139,9 +139,9 @@ public class DefaultRestApiService implements RestApiService {
     public LoginResponse login(LoginRequest request) {
         try {
             Validate.notNull(request, "The request must not be null");
-            Validate.notNull(request.getUsername(), "The username must not be null");
+            Validate.notNull(request.getHeader().getUsername(), "The username must not be null");
 
-            UserAuthentication userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
+            UserAuthentication userAuthentication = authenticateUser(request.getHeader().getUsername(), request.getHeader().getPassword());
             String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
@@ -158,8 +158,8 @@ public class DefaultRestApiService implements RestApiService {
 
             authenticateRequest(request);
 
-            if (request.getAuthToken() != null) {
-                getSafeAuthTokenService().removeAuthToken(request.getAuthToken());
+            if (request.getHeader().getAuthToken() != null) {
+                getSafeAuthTokenService().removeAuthToken(request.getHeader().getAuthToken());
             }
 
             return setupSuccessResponse(new LogoutResponse(), request);
@@ -419,13 +419,13 @@ public class DefaultRestApiService implements RestApiService {
      */
     protected User authenticateRequest(SpongeRequest request) {
         UserAuthentication userAuthentication;
-        if (request.getAuthToken() != null) {
-            Validate.isTrue(request.getUsername() == null, "No username is allowed when using a token-based auhentication");
-            Validate.isTrue(request.getPassword() == null, "No password is allowed when using a token-based auhentication");
+        if (request.getHeader().getAuthToken() != null) {
+            Validate.isTrue(request.getHeader().getUsername() == null, "No username is allowed when using a token-based auhentication");
+            Validate.isTrue(request.getHeader().getPassword() == null, "No password is allowed when using a token-based auhentication");
 
-            userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getAuthToken());
+            userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getHeader().getAuthToken());
         } else {
-            if (request.getUsername() == null) {
+            if (request.getHeader().getUsername() == null) {
                 if (settings.isAllowAnonymous()) {
                     userAuthentication =
                             securityService.authenticateAnonymous(RestApiServerUtils.createAnonymousUser(settings.getAnonymousRole()));
@@ -433,7 +433,7 @@ public class DefaultRestApiService implements RestApiService {
                     throw new SpongeException("Anonymous access is not allowed");
                 }
             } else {
-                userAuthentication = authenticateUser(request.getUsername(), request.getPassword());
+                userAuthentication = authenticateUser(request.getHeader().getUsername(), request.getHeader().getPassword());
             }
         }
 
@@ -473,8 +473,8 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
-        if (request != null && request.getId() != null) {
-            response.setId(request.getId());
+        if (request != null && request.getHeader().getId() != null) {
+            response.getHeader().setId(request.getHeader().getId());
         }
 
         return response;
