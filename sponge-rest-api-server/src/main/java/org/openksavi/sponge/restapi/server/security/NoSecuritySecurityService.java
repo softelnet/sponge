@@ -26,46 +26,46 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
 public class NoSecuritySecurityService extends BaseRestApiSecurityService {
 
-    private User createAnonymousUser() {
-        return RestApiServerUtils.createAnonymousUser(RestApiServerConstants.DEFAULT_ROLE_ANONYMOUS);
+    private UserContext createAnonymousUserContext() {
+        return RestApiServerUtils.createAnonymousUserContext(RestApiServerConstants.DEFAULT_ROLE_ANONYMOUS);
     }
 
     @Override
     public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
-        Validate.isTrue(username == null && password == null, "Only anonymous access is allowed in the no-security configuration");
-        return new UserAuthentication(createAnonymousUser());
+        Validate.isTrue(username == null && password == null, "Only anonymous access is allowed with the no-security configuration");
+        return new UserAuthentication(createAnonymousUserContext());
     }
 
     @Override
     public UserAuthentication authenticateAnonymous(User anonymous) {
-        return new UserAuthentication(anonymous);
+        return new UserAuthentication(new UserContext(anonymous.getName(), anonymous.getRoles()));
     }
 
     @Override
-    public void openUserContext(UserAuthentication userAuthentication) {
+    public void openSecurityContext(UserAuthentication userAuthentication) {
     }
 
     @Override
-    public void closeUserContext() {
+    public void closeSecurityContext() {
     }
 
     @Override
-    public boolean canCallAction(User user, ActionAdapter actionAdapter) {
+    public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {
         return true;
     }
 
     @Override
-    public boolean canSendEvent(User user, String eventName) {
+    public boolean canSendEvent(UserContext userContext, String eventName) {
         return true;
     }
 
     @Override
-    public boolean canSubscribeEvent(User user, String eventName) {
+    public boolean canSubscribeEvent(UserContext userContext, String eventName) {
         return true;
     }
 
     @Override
-    public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
+    public boolean canUseKnowledgeBase(UserContext userContext, KnowledgeBase knowledgeBase) {
         return true;
     }
 }

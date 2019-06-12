@@ -41,7 +41,7 @@ import org.openksavi.sponge.restapi.server.security.JwtRestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.NoSecuritySecurityService;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
 /**
@@ -275,8 +275,8 @@ public class RestApiServerPlugin extends JPlugin {
         this.authTokenService = authTokenService;
     }
 
-    public boolean canAccessResource(Map<String, Collection<String>> roleToResources, User user, String resourceName) {
-        return RestApiServerUtils.canAccessResource(roleToResources, user, resourceName);
+    public boolean canAccessResource(Map<String, Collection<String>> roleToResources, UserContext userContext, String resourceName) {
+        return RestApiServerUtils.canAccessResource(roleToResources, userContext, resourceName);
     }
 
     public CamelContext getCamelContext() {

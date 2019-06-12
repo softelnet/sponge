@@ -8,20 +8,20 @@ from org.openksavi.sponge.restapi.server.security import User
 # Simple access configuration: role -> knowledge base names regexps.
 ROLES_TO_KB = { "admin":[".*"], "normal":["iot", "grovepi", "email", "sms", "camera"]}
 # Simple access configuration: role -> event names regexps.
-ROLES_TO_SEND_EVENT = { "admin":[".*"], "normal":[".*"]]}
+ROLES_TO_SEND_EVENT = { "admin":[".*"], "normal":[".*"]}
 ROLES_TO_SUBSCRIBE_EVENT = { "admin":[".*"], "normal":[".*"]}
 
-class RestApiCanUseKnowledgeBase(Action):
-    def onCall(self, user, kbName):
-        return restApiServer.canAccessResource(ROLES_TO_KB, user, kbName)
+class RemoteApiCanUseKnowledgeBase(Action):
+    def onCall(self, userContext, kbName):
+        return restApiServer.canAccessResource(ROLES_TO_KB, userContext, kbName)
 
-class RestApiCanSendEvent(Action):
-    def onCall(self, user, eventName):
-        return restApiServer.canAccessResource(ROLES_TO_SEND_EVENT, user, eventName)
+class RemoteApiCanSendEvent(Action):
+    def onCall(self, userContext, eventName):
+        return restApiServer.canAccessResource(ROLES_TO_SEND_EVENT, userContext, eventName)
 
-class RestApiCanSubscribeEvent(Action):
-    def onCall(self, user, eventName):
-        return restApiServer.canAccessResource(ROLES_TO_SUBSCRIBE_EVENT, user, eventName)
+class RemoteApiCanSubscribeEvent(Action):
+    def onCall(self, userContext, eventName):
+        return restApiServer.canAccessResource(ROLES_TO_SUBSCRIBE_EVENT, userContext, eventName)
 
 def onStartup():
     # Setup users. To hash a password use (on Mac): echo -n username-password | shasum -a 512 | awk '{ print $1 }'

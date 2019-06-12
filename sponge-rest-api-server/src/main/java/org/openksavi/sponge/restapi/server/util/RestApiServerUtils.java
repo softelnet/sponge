@@ -30,6 +30,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.ListType;
@@ -47,31 +48,32 @@ public abstract class RestApiServerUtils {
         //
     }
 
-    public static User createAnonymousUser(String guestRole) {
-        User user = new User(RestApiServerConstants.DEFAULT_ANONYMOUS_USERNAME, null);
-        user.addRoles(guestRole);
-
-        return user;
+    public static User createAnonymousUser(String anonymousRole) {
+        return new User(RestApiServerConstants.DEFAULT_ANONYMOUS_USERNAME, null, anonymousRole);
     }
 
-    public static boolean isActionPrivate(String actionName) {
-        return actionName.startsWith(RestApiServerConstants.PRIVATE_ACTION_NAME_PREFIX);
+    public static UserContext createAnonymousUserContext(String anonymousRole) {
+        return new UserContext(RestApiServerConstants.DEFAULT_ANONYMOUS_USERNAME, anonymousRole);
+    }
+
+    public static boolean isActionInternal(String actionName) {
+        return actionName.startsWith(RestApiServerConstants.INTERNAL_ACTION_NAME_PREFIX);
     }
 
     /**
      * Verifies if a user can access a resource (e.g. a knowledge base, an event).
      *
      * @param roleToResources the map of (role name to resource names regexps).
-     * @param user the user.
+     * @param userContext the user context.
      * @param resourceName the resource name.
      * @return {@code true} if the user can access the resource.
      */
-    public static boolean canAccessResource(Map<String, Collection<String>> roleToResources, User user, String resourceName) {
+    public static boolean canAccessResource(Map<String, Collection<String>> roleToResources, UserContext userContext, String resourceName) {
         if (roleToResources == null) {
             return false;
         }
 
-        return user.getRoles().stream().filter(role -> roleToResources.containsKey(role)).anyMatch(role -> roleToResources.get(role)
+        return userContext.getRoles().stream().filter(role -> roleToResources.containsKey(role)).anyMatch(role -> roleToResources.get(role)
                 .stream().filter(Objects::nonNull).anyMatch(resourceRegexp -> resourceName.matches(resourceRegexp)));
     }
 

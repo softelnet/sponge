@@ -26,7 +26,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.restapi.server.RestApiService;
-import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.StringType;
@@ -64,11 +64,11 @@ public class GrpcApiManageSubscription extends JAction {
     public void onProvideArgs(ProvideArgsContext context) {
         if (context.getNames().contains("eventNames")) {
             // Get the user from the current thread local session.
-            User user = getRestApiService().getSession().getUserAuthentication().getUser();
+            UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
 
             List<AnnotatedValue<String>> annotatedElementValueSet = getSponge().getEventTypes().entrySet().stream()
                     // Check permissions.
-                    .filter(entry -> getRestApiService().canSubscribeEvent(entry.getKey(), user))
+                    .filter(entry -> getRestApiService().canSubscribeEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
                             .withLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());

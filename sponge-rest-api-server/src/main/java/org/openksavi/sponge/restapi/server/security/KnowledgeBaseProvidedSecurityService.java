@@ -30,28 +30,28 @@ public abstract class KnowledgeBaseProvidedSecurityService extends BaseRestApiSe
     }
 
     @Override
-    public boolean canCallAction(User user, ActionAdapter actionAdapter) {
-        return canUseKnowledgeBase(user, actionAdapter.getKnowledgeBase());
+    public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {
+        return canUseKnowledgeBase(userContext, actionAdapter.getKnowledgeBase());
     }
 
     @Override
-    public boolean canSendEvent(User user, String eventName) {
+    public boolean canSendEvent(UserContext userContext, String eventName) {
         ValueHolder<Boolean> holder = getRestApiService().getEngine().getOperations().callIfExists(Boolean.class,
-                RestApiServerConstants.ACTION_CAN_SEND_EVENT, Arrays.asList(user, eventName));
+                RestApiServerConstants.ACTION_CAN_SEND_EVENT, Arrays.asList(userContext, eventName));
         return holder != null ? holder.getValue() : false;
     }
 
     @Override
-    public boolean canSubscribeEvent(User user, String eventName) {
+    public boolean canSubscribeEvent(UserContext userContext, String eventName) {
         ValueHolder<Boolean> holder = getRestApiService().getEngine().getOperations().callIfExists(Boolean.class,
-                RestApiServerConstants.ACTION_CAN_SUBSCRIBE_EVENT, Arrays.asList(user, eventName));
+                RestApiServerConstants.ACTION_CAN_SUBSCRIBE_EVENT, Arrays.asList(userContext, eventName));
         return holder != null ? holder.getValue() : false;
     }
 
     @Override
-    public boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase) {
+    public boolean canUseKnowledgeBase(UserContext userContext, KnowledgeBase knowledgeBase) {
         ValueHolder<Boolean> holder = getRestApiService().getEngine().getOperations().callIfExists(Boolean.class,
-                RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE, Arrays.asList(user, knowledgeBase.getName()));
+                RestApiServerConstants.ACTION_CAN_USE_KNOWLEDGE_BASE, Arrays.asList(userContext, knowledgeBase.getName()));
         return holder != null ? holder.getValue() : false;
     }
 }

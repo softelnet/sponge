@@ -51,7 +51,7 @@ import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.server.RestApiService;
-import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.SpongeApiUtils;
@@ -208,14 +208,14 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
                         restApiService.openSession(createSession());
 
                         // Check user credentials.
-                        User user = authenticateRequest(request);
+                        UserContext userContext = authenticateRequest(request);
 
                         // TODO Should throw Status Exception e.g. throw Status.CANCELLED.withDescription("call already
                         // cancelled").asRuntimeException();?
 
                         logger.debug("New subscription {}", subscriptionId);
                         subscriptions.put(subscriptionId,
-                                new Subscription(subscriptionId, request.getEventNamesList(), responseObserver, user));
+                                new Subscription(subscriptionId, request.getEventNamesList(), responseObserver, userContext));
                     } finally {
                         // Close the session.
                         restApiService.closeSession();
@@ -263,7 +263,7 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
                 // TODO Error handling - server side log.
 
                 // Check subscribe privileges for the event instance.
-                if (restApiService.getSecurityService().canSubscribeEvent(subscription.getUser(), event.getName())) {
+                if (restApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName())) {
                     try {
                         synchronized (subscription.getResponseObserver()) {
                             subscription.getResponseObserver().onNext(createSubscribeResponse(subscription, event));
@@ -338,7 +338,7 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
         return new GrpcApiSession(null);
     }
 
-    protected User authenticateRequest(SubscribeRequest request) {
+    protected UserContext authenticateRequest(SubscribeRequest request) {
         return restApiService.authenticateRequest(createRestRequest(request));
     }
 }

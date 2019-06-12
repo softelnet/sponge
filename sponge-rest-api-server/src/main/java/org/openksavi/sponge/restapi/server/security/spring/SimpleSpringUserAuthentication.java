@@ -18,15 +18,15 @@ package org.openksavi.sponge.restapi.server.security.spring;
 
 import org.springframework.security.core.Authentication;
 
-import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 
 public class SimpleSpringUserAuthentication extends UserAuthentication {
 
     private Authentication authentication;
 
-    public SimpleSpringUserAuthentication(User user, Authentication authentication) {
-        super(user);
+    public SimpleSpringUserAuthentication(UserContext userContext, Authentication authentication) {
+        super(userContext);
 
         this.authentication = authentication;
     }

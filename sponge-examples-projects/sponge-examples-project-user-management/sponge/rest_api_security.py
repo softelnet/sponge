@@ -8,9 +8,9 @@ from org.openksavi.sponge.restapi.server.security import User
 # Simple access configuration: role -> knowledge base names regexps.
 ROLES_TO_KB = { "admin":[".*"], "anonymous":["public"], "standard":["public", "account", "service"]}
 
-class RestApiCanUseKnowledgeBase(Action):
-    def onCall(self, user, kbName):
-        return restApiServer.canAccessResource(ROLES_TO_KB, user, kbName)
+class RemoteApiCanUseKnowledgeBase(Action):
+    def onCall(self, userContext, kbName):
+        return restApiServer.canAccessResource(ROLES_TO_KB, userContext, kbName)
 
 
 def onStartup():

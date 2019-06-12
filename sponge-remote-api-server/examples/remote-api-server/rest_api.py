@@ -304,11 +304,11 @@ class FruitsElementValueSetAction(Action):
                 AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
             ])
 
-class RestApiIsActionPublic(Action):
+class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
-        return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RestApi"))
+        return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RemoteApi"))
 
-class RestApiIsEventPublic(Action):
+class RemoteApiIsEventPublic(Action):
     def onCall(self, eventName):
         return True
 

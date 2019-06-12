@@ -46,7 +46,7 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.server.security.User;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.util.HasEngine;
@@ -125,21 +125,21 @@ public interface RestApiService extends HasEngine, Initializable {
 
     RestActionMeta marshalActionMeta(RestActionMeta actionMeta);
 
-    User authenticateRequest(SpongeRequest request);
+    UserContext authenticateRequest(SpongeRequest request);
 
     /**
      * Sends a new event. The attributes map should be unmarshalled first.
      *
      * @param eventName the event name.
      * @param attributes the event attributes map.
-     * @param user the user.
+     * @param userContext the user context.
      * @return the sent event.
      */
-    Event sendEvent(String eventName, Map<String, Object> attributes, User user);
+    Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext);
 
-    boolean canCallAction(ActionAdapter actionAdapter, User user);
+    boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter);
 
-    boolean canSendEvent(String eventName, User user);
+    boolean canSendEvent(UserContext userContext, String eventName);
 
-    boolean canSubscribeEvent(String eventName, User user);
+    boolean canSubscribeEvent(UserContext userContext, String eventName);
 }

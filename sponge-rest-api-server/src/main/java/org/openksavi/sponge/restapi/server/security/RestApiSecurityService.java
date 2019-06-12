@@ -28,15 +28,15 @@ public interface RestApiSecurityService extends HasRestApiService, Initializable
 
     UserAuthentication authenticateAnonymous(User anonymous);
 
-    void openUserContext(UserAuthentication userAuthentication);
+    void openSecurityContext(UserAuthentication userAuthentication);
 
-    void closeUserContext();
+    void closeSecurityContext();
 
-    boolean canCallAction(User user, ActionAdapter actionAdapter);
+    boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter);
 
-    boolean canSendEvent(User user, String eventName);
+    boolean canSendEvent(UserContext userContext, String eventName);
 
-    boolean canSubscribeEvent(User user, String eventName);
+    boolean canSubscribeEvent(UserContext userContext, String eventName);
 
-    boolean canUseKnowledgeBase(User user, KnowledgeBase knowledgeBase);
+    boolean canUseKnowledgeBase(UserContext userContext, KnowledgeBase knowledgeBase);
 }
