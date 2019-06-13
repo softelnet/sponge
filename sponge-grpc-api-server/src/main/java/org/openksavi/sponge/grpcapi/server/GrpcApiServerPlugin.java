@@ -22,13 +22,16 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyServerBuilder;
+import io.netty.handler.ssl.SslContextBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.grpcapi.GrpcApiConstants;
 import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
 import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
@@ -57,7 +60,7 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     private Server server;
 
-    private Lock lock = new ReentrantLock(true);
+    private final Lock lock = new ReentrantLock(true);
 
     public GrpcApiServerPlugin() {
         setName(NAME);
@@ -109,21 +112,30 @@ public class GrpcApiServerPlugin extends JPlugin {
      * Starts the gRPC server.
      */
     protected void startServer() {
-        if (server != null) {
-            return;
-        }
-
         lock.lock();
         try {
+            if (server != null) {
+                return;
+            }
+
             GrpcApiServiceImpl service = new GrpcApiServiceImpl();
             service.setEngine(getEngine());
             service.setRestApiService(restApiServerPlugin.getService());
             setService(service);
 
             int port = resolverServerPort();
-            server = ServerBuilder.forPort(port).addService(service).build();
+            NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
 
-            logger.info("Starting the gRPC server on port {}", port);
+            SslConfiguration sslConfiguration = restApiServerPlugin.getService().getSettings().getSslConfiguration();
+            if (sslConfiguration != null) {
+                // Use the TLS configuration from the REST API server.
+                builder.sslContext(GrpcSslContexts
+                        .configure(SslContextBuilder.forServer(SpongeUtils.createKeyManagerFactory(sslConfiguration))).build());
+            }
+
+            server = builder.build();
+
+            logger.info("Starting the {} gRPC server on port {}", sslConfiguration != null ? "secure" : "insecure", port);
 
             server.start();
         } catch (IOException e) {
@@ -140,12 +152,12 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     protected void stopServer() {
-        if (server == null) {
-            return;
-        }
-
         lock.lock();
         try {
+            if (server == null) {
+                return;
+            }
+
             logger.info("Stopping the gRPC server");
             server.shutdown();
             server.awaitTermination(30, TimeUnit.SECONDS);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.remoteapi.server.test.rest;
+package org.openksavi.sponge.remoteapi.server.test;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +25,7 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.logging.LoggingUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -32,7 +33,7 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 /**
  * This example program starts Sponge REST API HTTPS server.
  */
-public class RestApiHttpsServerMain {
+public class SecureRemoteApiServerMain {
 
     private GenericApplicationContext context;
 
@@ -41,7 +42,7 @@ public class RestApiHttpsServerMain {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
+            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
                     .config("examples/remote-api-server/remote_api.xml").build();
         }
 
@@ -50,7 +51,7 @@ public class RestApiHttpsServerMain {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
 
             SslConfiguration sslConfiguration = new SslConfiguration();
-            sslConfiguration.setKeyStore("keystore/rest_api_selfsigned.jks");
+            sslConfiguration.setKeyStore("security/remote_api_selfsigned.jks");
             sslConfiguration.setKeyStorePassword("sponge");
             sslConfiguration.setKeyPassword("sponge");
             plugin.getSettings().setSslConfiguration(sslConfiguration);
@@ -58,6 +59,11 @@ public class RestApiHttpsServerMain {
             plugin.getSettings().setPublishReload(true);
 
             return plugin;
+        }
+
+        @Bean
+        public GrpcApiServerPlugin spongeGrpcApiPlugin() {
+            return new GrpcApiServerPlugin();
         }
     }
 
@@ -75,6 +81,6 @@ public class RestApiHttpsServerMain {
      * @param args arguments.
      */
     public static void main(String... args) {
-        new RestApiHttpsServerMain().run();
+        new SecureRemoteApiServerMain().run();
     }
 }

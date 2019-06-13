@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.core.util;
 
+import org.openksavi.sponge.core.engine.EngineConstants;
+
 /**
  * SSL security configuration.
  */
@@ -27,7 +29,7 @@ public class SslConfiguration {
 
     private String keyPassword;
 
-    private String algorithm;
+    private String algorithm = EngineConstants.DEFAULT_SECURITY_ALGORITHM;
 
     public String getKeyStore() {
         return keyStore;

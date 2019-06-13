@@ -49,6 +49,8 @@ public final class EngineConstants {
 
     public static final String MATCH_ALL_REGEXP = ".*";
 
+    public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
+
     //@formatter:off
     public static final Map<Class<?>, Class<?>> BASE_PROCESSOR_CLASSES = SpongeUtils.immutableMapOf(
             Action.class, BaseAction.class,

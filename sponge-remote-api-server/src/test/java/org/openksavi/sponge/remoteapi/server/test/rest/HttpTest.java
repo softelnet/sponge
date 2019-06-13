@@ -41,7 +41,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.client.util.RestClientUtils;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
@@ -51,9 +50,13 @@ import org.openksavi.sponge.restapi.util.RestApiUtils;
 @DirtiesContext
 public class HttpTest extends BasicTestTemplate {
 
+    private OkHttpClient createOkHttpClient() {
+        return new OkHttpClient.Builder().callTimeout(Duration.ofMinutes(5)).readTimeout(Duration.ofMinutes(5)).build();
+    }
+
     @Test
     public void testHttpErrorInJsonParser() throws IOException {
-        OkHttpClient client = RestClientUtils.createOkHttpClient();
+        OkHttpClient client = createOkHttpClient();
 
         String requestBody = "{\"error_property\":\"\"}";
         Response okHttpResponse = client
@@ -70,7 +73,7 @@ public class HttpTest extends BasicTestTemplate {
 
     @Test
     public void testHttpContentTypeCharset() throws IOException {
-        OkHttpClient client = RestClientUtils.createOkHttpClient();
+        OkHttpClient client = createOkHttpClient();
 
         Response okHttpResponse = client
                 .newCall(new Request.Builder().url(String.format("http://localhost:%d/%s/actions", port, RestApiConstants.DEFAULT_PATH))
@@ -83,8 +86,7 @@ public class HttpTest extends BasicTestTemplate {
 
     @Test
     public void testOutputStreamResultActionGet() throws IOException {
-        OkHttpClient client = RestClientUtils
-                .createOkHttpClient(builder -> builder.callTimeout(Duration.ofMinutes(5)).readTimeout(Duration.ofMinutes(5)));
+        OkHttpClient client = createOkHttpClient();
 
         Response okHttpResponse = client.newCall(new Request.Builder()
                 .url(new HttpUrl.Builder().scheme("http").host("localhost").port(port).addPathSegment(RestApiConstants.DEFAULT_PATH)
@@ -99,7 +101,7 @@ public class HttpTest extends BasicTestTemplate {
 
     @Test
     public void testOutputStreamResultActionPost() throws IOException {
-        OkHttpClient client = RestClientUtils.createOkHttpClient();
+        OkHttpClient client = createOkHttpClient();
 
         Response okHttpResponse = client.newCall(new Request.Builder()
                 .url(String.format("http://localhost:%d/%s/call", port, RestApiConstants.DEFAULT_PATH))

@@ -58,31 +58,21 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     /** If {@code true}, the underlying OkHttpClient will be closed aggressively. */
     private boolean closeAggressively = false;
 
-    public OkHttpSpongeRestClient(SpongeRestClientConfiguration configuration) {
+    public OkHttpSpongeRestClient(SpongeRestClientConfiguration configuration, OkHttpClient okHttpClient) {
         super(configuration);
+
+        this.okHttpClient = okHttpClient;
+    }
+
+    public OkHttpSpongeRestClient(SpongeRestClientConfiguration configuration) {
+        this(configuration, new OkHttpClient.Builder().build());
     }
 
     public void setOkHttpClient(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
     }
 
-    protected OkHttpClient getOkHttpClient() {
-        return okHttpClient;
-    }
-
-    protected OkHttpClient getOrCreateOkHttpClient() {
-        if (okHttpClient == null) {
-            // Initialize in a thread-safe manner.
-            lock.lock();
-            try {
-                if (okHttpClient == null) {
-                    okHttpClient = RestClientUtils.createOkHttpClient();
-                }
-            } finally {
-                lock.unlock();
-            }
-        }
-
+    public OkHttpClient getOkHttpClient() {
         return okHttpClient;
     }
 
@@ -110,7 +100,7 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                     .filter(Objects::nonNull).forEach(listener -> listener.onRequestSerialized(request, requestBody));
 
             Response httpResponse =
-                    getOrCreateOkHttpClient()
+                    okHttpClient
                             .newCall(new Request.Builder().url(getUrl(operationType)).headers(headers)
                                     .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
                             .execute();

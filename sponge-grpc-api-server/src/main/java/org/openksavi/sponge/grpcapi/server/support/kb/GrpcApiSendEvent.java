@@ -60,8 +60,6 @@ public class GrpcApiSendEvent extends JAction {
     public void onCall(String name, DynamicValue<Map<String, Object>> attributes) {
         plugin.getService().sendEvent(name, attributes.getValue(),
                 getRestApiService().getSession().getUserAuthentication().getUserContext());
-
-        getSponge().event(name).set(attributes.getValue()).send();
     }
 
     @Override

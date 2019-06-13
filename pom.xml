@@ -92,8 +92,8 @@
         <quartz.version>2.3.1</quartz.version>
         <guava.version>28.0-jre</guava.version>
         <caffeine.version>2.7.0</caffeine.version>
-        <spring.version>5.1.7.RELEASE</spring.version>
-        <spring-integration.version>5.1.5.RELEASE</spring-integration.version>
+        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring-integration.version>5.1.6.RELEASE</spring-integration.version>
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
         <camel.version>2.24.0</camel.version>
         <awaitility.version>3.1.6</awaitility.version>
@@ -114,6 +114,7 @@
         <grpc.version>1.21.0</grpc.version>
         <protobuf.version>3.7.1</protobuf.version>
         <protoc.version>3.7.1</protoc.version>
+        <netty-tcnative.version>2.0.25.Final</netty-tcnative.version>
 
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
@@ -906,6 +907,11 @@
                 <version>${grpc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-tcnative-boringssl-static</artifactId>
+                <version>${netty-tcnative.version}</version>
             </dependency>
 
             <dependency>
