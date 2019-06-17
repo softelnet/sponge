@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.security;
+package org.openksavi.sponge.restapi.model.request;
 
-/**
- * A user authentication.
- */
-public class UserAuthentication {
+import io.swagger.annotations.ApiModel;
 
-    private UserContext userContext;
+@ApiModel(value = "GetFeaturesRequest", description = "A get features request")
+public class GetFeaturesRequest extends SpongeRequest {
 
-    public UserAuthentication(UserContext userContext) {
-        this.userContext = userContext;
-    }
-
-    public UserContext getUserContext() {
-        return userContext;
-    }
-
-    public void setUserContext(UserContext userContext) {
-        this.userContext = userContext;
+    public GetFeaturesRequest() {
     }
 }

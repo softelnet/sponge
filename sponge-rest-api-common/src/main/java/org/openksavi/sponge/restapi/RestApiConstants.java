@@ -33,6 +33,8 @@ public final class RestApiConstants {
 
     public static final String OPERATION_VERSION = "version";
 
+    public static final String OPERATION_FEATURES = "features";
+
     public static final String OPERATION_LOGIN = "login";
 
     public static final String OPERATION_LOGOUT = "logout";
@@ -59,6 +61,8 @@ public final class RestApiConstants {
     public static final String ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION = "SPONGE003";
 
     public static final String ERROR_CODE_INCORRECT_USERNAME_PASSWORD = "SPONGE004";
+
+    public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 
     private RestApiConstants() {
         //

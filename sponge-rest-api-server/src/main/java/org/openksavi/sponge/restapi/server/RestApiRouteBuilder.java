@@ -53,6 +53,7 @@ import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
+import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -65,6 +66,7 @@ import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
+import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -345,11 +347,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
     protected void createDefaultOperations() {
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_VERSION, "Get the Sponge version", GetVersionRequest.class,
-                "Get Sponge version request", GetVersionResponse.class, "The Sponge version response",
+                "The get Sponge version request", GetVersionResponse.class, "The Sponge version response",
                 (request, exchange) -> apiService.getVersion(request)));
-        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGIN, "Login", LoginRequest.class, "Login request",
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_FEATURES, "Get the API features", GetFeaturesRequest.class,
+                "The get API features request", GetFeaturesResponse.class, "The API features response",
+                (request, exchange) -> apiService.getFeatures(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGIN, "Login", LoginRequest.class, "The login request",
                 LoginResponse.class, "The login response", (request, exchange) -> apiService.login(request)));
-        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "Logout request",
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "The logout request",
                 LogoutResponse.class, "The logout response", (request, exchange) -> apiService.logout(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_KNOWLEDGE_BASES, "Get knowledge bases",
                 GetKnowledgeBasesRequest.class, "The get knowledge bases request", GetKnowledgeBasesResponse.class,

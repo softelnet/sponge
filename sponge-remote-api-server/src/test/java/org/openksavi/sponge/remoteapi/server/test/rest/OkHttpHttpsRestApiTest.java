@@ -16,17 +16,28 @@
 
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
+import javax.net.ssl.SSLSession;
+
+import okhttp3.OkHttpClient;
+
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
+import org.openksavi.sponge.restapi.client.util.RestClientUtils;
 
 @net.jcip.annotations.NotThreadSafe
 public class OkHttpHttpsRestApiTest extends BaseHttpsRestApiTest {
 
     @Override
     protected SpongeRestClient createRestClient() {
-        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder()
-                .url(String.format("https://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
+        return new OkHttpSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("https://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+                        .build(),
+                // Insecure connection only for tests.
+                new OkHttpClient.Builder()
+                        .sslSocketFactory(RestClientUtils.createTrustAllSslContext().getSocketFactory(),
+                                RestClientUtils.createTrustAllTrustManager())
+                        .hostnameVerifier((String hostname, SSLSession session) -> true).build());
     }
 }

@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server.security.spring;
+package org.openksavi.sponge.grpcapi.server;
 
-import org.springframework.security.core.Authentication;
-
+import org.openksavi.sponge.restapi.server.DefaultRestApiSession;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
-import org.openksavi.sponge.restapi.server.security.UserContext;
 
-public class SimpleSpringUserAuthentication extends UserAuthentication {
+/**
+ * A gRPC-based REST API session.
+ */
+public class GrpcApiSession extends DefaultRestApiSession {
 
-    private Authentication authentication;
-
-    public SimpleSpringUserAuthentication(UserContext userContext, Authentication authentication) {
-        super(userContext);
-
-        this.authentication = authentication;
-    }
-
-    public Authentication getAuthentication() {
-        return authentication;
+    public GrpcApiSession(UserAuthentication userAuthentication) {
+        super(userAuthentication);
     }
 }

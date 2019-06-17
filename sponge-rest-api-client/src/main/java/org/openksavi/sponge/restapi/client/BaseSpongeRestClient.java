@@ -45,6 +45,7 @@ import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.ActionExecutionRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
+import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -57,6 +58,7 @@ import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
+import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -97,6 +99,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     private LoadingCache<String, RestActionMeta> actionMetaCache;
 
     private LoadingCache<String, RecordType> eventTypeCache;
+
+    private Map<String, Object> featuresCache;
 
     protected List<OnRequestSerializedListener> onRequestSerializedListeners = new CopyOnWriteArrayList<>();
 
@@ -222,11 +226,22 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
+    public void clearFeaturesCache() {
+        lock.lock();
+        try {
+            featuresCache = null;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
     public void clearCache() {
         lock.lock();
         try {
             clearActionMetaCache();
             clearEventTypeCache();
+            clearFeaturesCache();
         } finally {
             lock.unlock();
         }
@@ -390,6 +405,32 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public String getVersion() {
         return getVersion(new GetVersionRequest()).getVersion();
+    }
+
+    @Override
+    public GetFeaturesResponse getFeatures(GetFeaturesRequest request, SpongeRequestContext context) {
+        return execute(RestApiConstants.OPERATION_FEATURES, request, GetFeaturesResponse.class, context);
+    }
+
+    @Override
+    public GetFeaturesResponse getFeatures(GetFeaturesRequest request) {
+        return getFeatures(request, null);
+    }
+
+    @Override
+    public Map<String, Object> getFeatures() {
+        if (featuresCache == null) {
+            lock.lock();
+            try {
+                if (featuresCache == null) {
+                    featuresCache = getFeatures(new GetFeaturesRequest()).getFeatures();
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        return featuresCache;
     }
 
     @Override

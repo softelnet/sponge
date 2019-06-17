@@ -17,7 +17,9 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +40,17 @@ import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestCategoryMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
+import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -57,6 +62,7 @@ import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
+import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -67,8 +73,8 @@ import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -103,8 +109,14 @@ public class DefaultRestApiService implements RestApiService {
 
     private ThreadLocal<RestApiSession> session = new ThreadLocal<>();
 
+    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
+
     public DefaultRestApiService() {
-        //
+        setupDefaultFeatures();
+    }
+
+    protected void setupDefaultFeatures() {
+        setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
     }
 
     @Override
@@ -132,6 +144,21 @@ public class DefaultRestApiService implements RestApiService {
         } catch (Throwable e) {
             getEngine().handleError("REST getVersion", e);
             return setupErrorResponse(new GetVersionResponse(), request, e);
+        }
+    }
+
+    @Override
+    public GetFeaturesResponse getFeatures(GetFeaturesRequest request) {
+        try {
+            // Privileges checked only if the request is provided.
+            if (request != null) {
+                authenticateRequest(request);
+            }
+
+            return setupSuccessResponse(new GetFeaturesResponse(features), request);
+        } catch (Throwable e) {
+            getEngine().handleError("REST getFeatures", e);
+            return setupErrorResponse(new GetFeaturesResponse(), request, e);
         }
     }
 
@@ -176,10 +203,10 @@ public class DefaultRestApiService implements RestApiService {
         }
 
         try {
-            User user = authenticateRequest(request);
+            UserContext userContext = authenticateRequest(request);
 
             return setupSuccessResponse(new GetKnowledgeBasesResponse(getEngine().getKnowledgeBaseManager().getKnowledgeBases().stream()
-                    .filter(kb -> securityService.canUseKnowledgeBase(user, kb))
+                    .filter(kb -> securityService.canUseKnowledgeBase(userContext, kb))
                     .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRestKnowledgeBase(kb))
                     .collect(Collectors.toList())), request);
         } catch (Throwable e) {
@@ -195,33 +222,19 @@ public class DefaultRestApiService implements RestApiService {
                 request = new GetActionsRequest();
             }
 
-            User user = authenticateRequest(request);
+            UserContext userContext = authenticateRequest(request);
 
             boolean actualMetadataRequired = request.getMetadataRequired() != null ? request.getMetadataRequired()
                     : RestApiServerConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
             String actionNameRegExp = request.getName();
 
-            String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
-            Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().hasAction(isPublicActionActionName)
-                    ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, Arrays.asList(action)).booleanValue()
-                    : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
-
-            Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
-                    ? settings.getPublicActions().stream()
-                            .filter(qn -> action.getKnowledgeBase().getName().matches(qn.getKnowledgeBaseName())
-                                    && action.getMeta().getName().matches(qn.getName()))
-                            .findAny().isPresent()
-                    : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
-
-            Predicate<ActionAdapter> isSelectedByNameRegExp =
-                    action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true;
-
-            List<ActionAdapter> actions = getEngine().getActions().stream().filter(isSelectedByNameRegExp).filter(isPublicByAction)
-                    .filter(isPublicBySettings)
-                    .filter(action -> actualMetadataRequired ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null
-                            : true)
-                    .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                    .filter(action -> canCallAction(user, action)).collect(Collectors.toList());
+            List<ActionAdapter> actions =
+                    getEngine().getActions().stream()
+                            .filter(action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true)
+                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                            .filter(action -> actualMetadataRequired
+                                    ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null : true)
+                            .filter(action -> canCallAction(userContext, action)).collect(Collectors.toList());
 
             Map<String, DataType<?>> registeredTypes = null;
             if (request.getRegisteredTypes() != null && request.getRegisteredTypes()) {
@@ -270,11 +283,12 @@ public class DefaultRestApiService implements RestApiService {
         return actionMeta;
     }
 
-    protected ActionAdapter getActionAdapterForRequest(String actionName, ProcessorQualifiedVersion qualifiedVersion, User user) {
+    protected ActionAdapter getActionAdapterForRequest(String actionName, ProcessorQualifiedVersion qualifiedVersion,
+            UserContext userContext) {
         ActionAdapter actionAdapter = getEngine().getActionManager().getActionAdapter(actionName);
 
         Validate.notNull(actionAdapter, "The action %s doesn't exist", actionName);
-        Validate.isTrue(canCallAction(user, actionAdapter), "No privileges to call action %s", actionName);
+        Validate.isTrue(canCallAction(userContext, actionAdapter), "No privileges to call action %s", actionName);
 
         if (qualifiedVersion != null && !qualifiedVersion.equals(actionAdapter.getQualifiedVersion())) {
             throw new RestApiIncorrectKnowledgeBaseVersionServerException(
@@ -291,8 +305,8 @@ public class DefaultRestApiService implements RestApiService {
 
         try {
             Validate.notNull(request, "The request must not be null");
-            User user = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
+            UserContext userContext = authenticateRequest(request);
+            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
 
             Object actionResult = getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request));
 
@@ -321,21 +335,36 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
 
-            User user = authenticateRequest(request);
-            Validate.isTrue(securityService.canSendEvent(user, request.getName()), "No privileges to send the event named '%s'",
-                    request.getName());
-            Validate.isTrue(isEventPublic(request.getName()), "There is no public event named '%s'", request.getName());
+            UserContext userContext = authenticateRequest(request);
 
-            EventDefinition definition = getEngine().getOperations().event(request.getName());
-            if (request.getAttributes() != null) {
-                request.getAttributes().forEach((name, value) -> definition.set(name, value));
+            String eventName = request.getName();
+            Map<String, Object> attributes = request.getAttributes();
+
+            // Unmarshal attributes if there is an event type registered.
+            RecordType eventType = getEngine().getEventTypes().get(eventName);
+            if (eventType != null) {
+                attributes = typeConverter.unmarshal(eventType, attributes);
             }
 
-            return setupSuccessResponse(new SendEventResponse(definition.send().getId()), request);
+            Event event = sendEvent(eventName, attributes, userContext);
+
+            return setupSuccessResponse(new SendEventResponse(event.getId()), request);
         } catch (Throwable e) {
             getEngine().handleError("REST send", e);
             return setupErrorResponse(new SendEventResponse(), request, e);
         }
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext) {
+        Validate.isTrue(canSendEvent(userContext, eventName), "No privileges to send the '%s' event", eventName);
+
+        EventDefinition definition = getEngine().getOperations().event(eventName);
+        if (attributes != null) {
+            definition.set(attributes);
+        }
+
+        return definition.send();
     }
 
     @Override
@@ -344,8 +373,8 @@ public class DefaultRestApiService implements RestApiService {
 
         try {
             Validate.notNull(request, "The request must not be null");
-            User user = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), user);
+            UserContext userContext = authenticateRequest(request);
+            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
 
             Map<String, ProvidedValue<?>> provided =
                     getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(), request.getArgNames(),
@@ -394,9 +423,9 @@ public class DefaultRestApiService implements RestApiService {
                 request = new ReloadRequest();
             }
 
-            User user = authenticateRequest(request);
+            UserContext userContext = authenticateRequest(request);
 
-            Validate.isTrue(user.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
+            Validate.isTrue(userContext.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
 
             getEngine().reload();
 
@@ -415,9 +444,10 @@ public class DefaultRestApiService implements RestApiService {
      * Throws exception if the request can't be successfully authenticated.
      *
      * @param request the request.
-     * @return the user.
+     * @return the user context.
      */
-    protected User authenticateRequest(SpongeRequest request) {
+    @Override
+    public UserContext authenticateRequest(SpongeRequest request) {
         UserAuthentication userAuthentication;
         if (request.getHeader().getAuthToken() != null) {
             Validate.isTrue(request.getHeader().getUsername() == null, "No username is allowed when using a token-based auhentication");
@@ -438,17 +468,34 @@ public class DefaultRestApiService implements RestApiService {
         }
 
         // Set the user in the thread local session.
-        RestApiSession session = getSession();
+        RestApiSession session = Validate.notNull(getSession(), "The session is not set");
         Validate.isTrue(session instanceof DefaultRestApiSession, "The session class should extend %s", DefaultRestApiSession.class);
         ((DefaultRestApiSession) session).setUserAuthentication(userAuthentication);
 
-        securityService.openUserContext(userAuthentication);
+        securityService.openSecurityContext(userAuthentication);
 
-        return userAuthentication.getUser();
+        return userAuthentication.getUserContext();
     }
 
     protected UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
         return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password);
+    }
+
+    protected boolean isActionPublic(ActionAdapter actionAdapter) {
+        String isPublicActionActionName = RestApiServerConstants.ACTION_IS_ACTION_PUBLIC;
+        Predicate<ActionAdapter> isPublicByAction = action -> getEngine().getOperations().hasAction(isPublicActionActionName)
+                ? getEngine().getOperations().call(Boolean.class, isPublicActionActionName, Arrays.asList(action)).booleanValue()
+                : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
+
+        Predicate<ActionAdapter> isPublicBySettings = action -> settings.getPublicActions() != null
+                ? settings.getPublicActions().stream()
+                        .filter(qn -> action.getKnowledgeBase().getName().matches(qn.getKnowledgeBaseName())
+                                && action.getMeta().getName().matches(qn.getName()))
+                        .findAny().isPresent()
+                : RestApiServerConstants.DEFAULT_IS_ACTION_PUBLIC;
+
+        return isPublicByAction.test(actionAdapter) && isPublicBySettings.test(actionAdapter)
+                && !RestApiServerUtils.isActionInternal(actionAdapter.getMeta().getName());
     }
 
     protected boolean isEventPublic(String eventName) {
@@ -456,20 +503,27 @@ public class DefaultRestApiService implements RestApiService {
                 ? settings.getPublicEvents().stream().filter(name -> eventName.matches(name)).findAny().isPresent()
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
-        String isEventPlubliActionName = RestApiServerConstants.ACTION_IS_EVENT_PUBLIC;
-        boolean publicByAction = getEngine().getOperations().hasAction(isEventPlubliActionName)
-                ? getEngine().getOperations().call(Boolean.class, isEventPlubliActionName, Arrays.asList(eventName)).booleanValue()
+        String isEventPublicActionName = RestApiServerConstants.ACTION_IS_EVENT_PUBLIC;
+        boolean publicByAction = getEngine().getOperations().hasAction(isEventPublicActionName)
+                ? getEngine().getOperations().call(Boolean.class, isEventPublicActionName, Arrays.asList(eventName)).booleanValue()
                 : RestApiServerConstants.DEFAULT_IS_EVENT_PUBLIC;
 
         return publicBySettings && publicByAction;
     }
 
-    protected boolean canCallAction(User user, ActionAdapter actionAdapter) {
-        if (RestApiServerUtils.isActionPrivate(actionAdapter.getMeta().getName())) {
-            return false;
-        }
+    @Override
+    public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {
+        return isActionPublic(actionAdapter) && securityService.canCallAction(userContext, actionAdapter);
+    }
 
-        return securityService.canCallAction(user, actionAdapter);
+    @Override
+    public boolean canSendEvent(UserContext userContext, String eventName) {
+        return isEventPublic(eventName) && securityService.canSendEvent(userContext, eventName);
+    }
+
+    @Override
+    public boolean canSubscribeEvent(UserContext userContext, String eventName) {
+        return isEventPublic(eventName) && securityService.canSubscribeEvent(userContext, eventName);
     }
 
     protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
@@ -601,9 +655,43 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public void closeSession() {
         try {
-            securityService.closeUserContext();
+            securityService.closeSecurityContext();
         } finally {
             session.set(null);
         }
+    }
+
+    @Override
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    @Override
+    public void setFeature(String name, Object value) {
+        features.put(name, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getFeature(String name) {
+        return Validate.notNull((T) features.get(name), "Feature %s not found", name);
+    }
+
+    @Override
+    public <T> T getFeature(Class<T> cls, String name) {
+        return getFeature(name);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getFeature(String name, T defaultValue) {
+        T feature = (T) features.get(name);
+
+        return feature != null ? feature : defaultValue;
+    }
+
+    @Override
+    public <T> T getFeature(Class<T> cls, String name, T defaultValue) {
+        return getFeature(name, defaultValue);
     }
 }

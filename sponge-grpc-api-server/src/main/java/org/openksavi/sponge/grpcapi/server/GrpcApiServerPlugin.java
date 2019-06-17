@@ -20,20 +20,25 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyServerBuilder;
+import io.netty.handler.ssl.SslContextBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.grpcapi.GrpcApiConstants;
 import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
 import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 
 /**
@@ -51,13 +56,15 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     private RestApiServerPlugin restApiServerPlugin;
 
-    private GrpcApiServiceImpl service;
+    private DefaultGrpcApiService service;
 
     private boolean autoStart = GrpcApiServerConstants.DEFAULT_AUTO_START;
 
     private Server server;
 
-    private Lock lock = new ReentrantLock(true);
+    private Consumer<NettyServerBuilder> serverConfigurator;
+
+    private final Lock lock = new ReentrantLock(true);
 
     public GrpcApiServerPlugin() {
         setName(NAME);
@@ -92,16 +99,18 @@ public class GrpcApiServerPlugin extends JPlugin {
 
         startServer();
 
+        restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, true);
+
         getSponge().enableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
     }
 
-    protected int resolverServerPort() {
+    protected int resolveServerPort() {
         String portProperty = getEngine().getConfigurationManager().getProperty(GrpcApiConstants.PROPERTY_GRPC_PORT);
         if (portProperty != null) {
             return Integer.parseInt(portProperty.trim());
         }
 
-        // Convention.
+        // Port convention.
         return restApiServerPlugin.getSettings().getPort() + 1;
     }
 
@@ -109,21 +118,34 @@ public class GrpcApiServerPlugin extends JPlugin {
      * Starts the gRPC server.
      */
     protected void startServer() {
-        if (server != null) {
-            return;
-        }
-
         lock.lock();
         try {
-            GrpcApiServiceImpl service = new GrpcApiServiceImpl();
+            if (server != null) {
+                return;
+            }
+
+            DefaultGrpcApiService service = new DefaultGrpcApiService();
             service.setEngine(getEngine());
             service.setRestApiService(restApiServerPlugin.getService());
             setService(service);
 
-            int port = resolverServerPort();
-            server = ServerBuilder.forPort(port).addService(service).build();
+            int port = resolveServerPort();
+            NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
 
-            logger.info("Starting the gRPC server on port {}", port);
+            SslConfiguration sslConfiguration = restApiServerPlugin.getService().getSettings().getSslConfiguration();
+            if (sslConfiguration != null) {
+                // Use the TLS configuration from the REST API server.
+                builder.sslContext(GrpcSslContexts
+                        .configure(SslContextBuilder.forServer(SpongeUtils.createKeyManagerFactory(sslConfiguration))).build());
+            }
+
+            if (serverConfigurator != null) {
+                serverConfigurator.accept(builder);
+            }
+
+            server = builder.build();
+
+            logger.info("Starting the {} gRPC server on port {}", sslConfiguration != null ? "secure" : "insecure", port);
 
             server.start();
         } catch (IOException e) {
@@ -134,18 +156,20 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     public void stop() {
+        restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
+
         getSponge().disableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
 
         stopServer();
     }
 
     protected void stopServer() {
-        if (server == null) {
-            return;
-        }
-
         lock.lock();
         try {
+            if (server == null) {
+                return;
+            }
+
             logger.info("Stopping the gRPC server");
             server.shutdown();
             server.awaitTermination(30, TimeUnit.SECONDS);
@@ -178,11 +202,11 @@ public class GrpcApiServerPlugin extends JPlugin {
         this.restApiServerPlugin = restApiServerPlugin;
     }
 
-    public GrpcApiServiceImpl getService() {
+    public DefaultGrpcApiService getService() {
         return service;
     }
 
-    public void setService(GrpcApiServiceImpl service) {
+    public void setService(DefaultGrpcApiService service) {
         this.service = service;
     }
 
@@ -192,5 +216,13 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
+    }
+
+    public Consumer<NettyServerBuilder> getServerConfigurator() {
+        return serverConfigurator;
+    }
+
+    public void setServerConfigurator(Consumer<NettyServerBuilder> serverConfigurator) {
+        this.serverConfigurator = serverConfigurator;
     }
 }

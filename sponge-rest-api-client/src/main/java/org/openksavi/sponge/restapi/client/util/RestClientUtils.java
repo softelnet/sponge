@@ -17,12 +17,11 @@
 package org.openksavi.sponge.restapi.client.util;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.function.Consumer;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -44,6 +43,11 @@ public abstract class RestClientUtils {
         return e instanceof SpongeException ? (SpongeException) e : new SpongeClientException(e);
     }
 
+    /**
+     * Creates a new trust manager that trusts all. WARNING: Use only in tests.
+     *
+     * @return a new trust manager.
+     */
     public static X509TrustManager createTrustAllTrustManager() {
         return new X509TrustManager() {
 
@@ -62,32 +66,20 @@ public abstract class RestClientUtils {
         };
     }
 
+    /**
+     * Creates a new SSL context that trusts all. WARNING: Use only in tests.
+     *
+     * @return a new trust manager.
+     */
     public static SSLContext createTrustAllSslContext() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, new TrustManager[] { createTrustAllTrustManager() }, new java.security.SecureRandom());
+            sslContext.init(null, new TrustManager[] { createTrustAllTrustManager() }, new SecureRandom());
 
             return sslContext;
         } catch (Exception e) {
             throw RestClientUtils.wrapException(e);
         }
-    }
-
-    public static OkHttpClient createOkHttpClient() {
-        return createOkHttpClient(null);
-    }
-
-    public static OkHttpClient createOkHttpClient(Consumer<OkHttpClient.Builder> okHttpClientBuilderConsumer) {
-        SSLContext sslContext = RestClientUtils.createTrustAllSslContext();
-
-        OkHttpClient.Builder builder =
-                new OkHttpClient.Builder().sslSocketFactory(sslContext.getSocketFactory(), RestClientUtils.createTrustAllTrustManager())
-                        .hostnameVerifier((String hostname, SSLSession session) -> true);
-
-        if (okHttpClientBuilderConsumer != null) {
-            okHttpClientBuilderConsumer.accept(builder);
-        }
-        return builder.build();
     }
 
     /**

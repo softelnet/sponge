@@ -18,7 +18,6 @@ package org.openksavi.sponge.core.util;
 
 import static org.awaitility.Awaitility.await;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -137,8 +136,6 @@ public abstract class SpongeUtils {
 
     public static final String TAG_SECURITY_ALGORITHM = "algorithm";
 
-    public static final String DEFAULT_SECURITY_ALGORITHM = "SunX509";
-
     protected SpongeUtils() {
         //
     }
@@ -171,20 +168,44 @@ public abstract class SpongeUtils {
         return SerializationUtils.clone(source);
     }
 
+    /**
+     * Opens a reader for a file. The file search order is: the file system, the classpath.
+     *
+     * @param filename the filename.
+     * @return a reader or {@code null} if not found.
+     */
     public static Reader getReader(String filename) {
         return getReader(filename, Charset.defaultCharset());
     }
 
+    /**
+     * Opens a reader for a file. The file search order is: the file system, the classpath.
+     *
+     * @param filename the filename.
+     * @param charset the charset.
+     * @return a reader or {@code null} if not found.
+     */
     public static Reader getReader(String filename, Charset charset) {
+        InputStream is = getInputStream(filename);
+        return is != null ? new InputStreamReader(is, charset) : null;
+    }
+
+    /**
+     * Opens an input stream for a file. The file search order is: the file system, the classpath.
+     *
+     * @param filename the filename.
+     * @return an input stream or {@code null} if not found.
+     */
+    public static InputStream getInputStream(String filename) {
         try {
             if (Files.isRegularFile(Paths.get(filename))) {
-                return Files.newBufferedReader(Paths.get(filename), charset);
+                return Files.newInputStream(Paths.get(filename));
             }
 
             URL url = getUrlFromClasspath(filename);
 
             if (url != null) {
-                return new BufferedReader(new InputStreamReader(url.openStream(), charset));
+                return url.openStream();
             }
 
             return null;
@@ -578,26 +599,48 @@ public abstract class SpongeUtils {
         return Arrays.stream(namesSpec.split(",")).map(String::trim).collect(Collectors.toList());
     }
 
-    public static SSLContext createSslContext(SslConfiguration security) {
+    protected static KeyStore getKeyStoreInstance() {
+        try {
+            return KeyStore.getInstance("JKS");
+        } catch (KeyStoreException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
+    public static KeyManagerFactory createKeyManagerFactory(KeyStore ks, SslConfiguration sslConfiguration) {
         InputStream fis = null;
 
         try {
-            KeyStore ks = KeyStore.getInstance("JKS");
-
-            URL keystoreUrl = SpongeUtils.getUrlFromClasspath(security.getKeyStore());
-            if (keystoreUrl == null) {
-                throw new SpongeException("Expected a '" + security.getKeyStore() + "' keystore file on the classpath");
+            fis = SpongeUtils.getInputStream(sslConfiguration.getKeyStore());
+            if (fis == null) {
+                throw new SpongeException("Expected a '" + sslConfiguration.getKeyStore() + "' keystore file on the classpath");
             }
-            fis = keystoreUrl.openStream();
 
-            ks.load(fis, security.getKeyStorePassword().toCharArray());
+            ks.load(fis, sslConfiguration.getKeyStorePassword().toCharArray());
 
             // Setup the key manager factory.
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance(security.getAlgorithm());
-            kmf.init(ks, security.getKeyPassword().toCharArray());
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(sslConfiguration.getAlgorithm());
+            kmf.init(ks, sslConfiguration.getKeyPassword().toCharArray());
+
+            return kmf;
+        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableKeyException e) {
+            throw SpongeUtils.wrapException(e);
+        } finally {
+            SpongeUtils.close(fis);
+        }
+    }
+
+    public static KeyManagerFactory createKeyManagerFactory(SslConfiguration sslConfiguration) {
+        return createKeyManagerFactory(getKeyStoreInstance(), sslConfiguration);
+    }
+
+    public static SSLContext createSslContext(SslConfiguration sslConfiguration) {
+        try {
+            KeyStore ks = getKeyStoreInstance();
+            KeyManagerFactory kmf = createKeyManagerFactory(ks, sslConfiguration);
 
             // Setup the trust manager factory.
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(security.getAlgorithm());
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(sslConfiguration.getAlgorithm());
             tmf.init(ks);
 
             SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -606,11 +649,8 @@ public abstract class SpongeUtils {
             sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
             return sslContext;
-        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableKeyException
-                | KeyManagementException e) {
+        } catch (KeyStoreException | NoSuchAlgorithmException | KeyManagementException e) {
             throw SpongeUtils.wrapException(e);
-        } finally {
-            SpongeUtils.close(fis);
         }
     }
 
@@ -619,7 +659,7 @@ public abstract class SpongeUtils {
         sslConfiguration.setKeyStore(SpongeUtils.getRequiredConfigurationString(configuration, TAG_SECURITY_KEY_STORE));
         sslConfiguration.setKeyStorePassword(SpongeUtils.getRequiredConfigurationString(configuration, TAG_SECURITY_KEY_STORE_PASSWORD));
         sslConfiguration.setKeyPassword(SpongeUtils.getRequiredConfigurationString(configuration, TAG_SECURITY_KEY_PASSWORD));
-        sslConfiguration.setAlgorithm(configuration.getString(TAG_SECURITY_ALGORITHM, DEFAULT_SECURITY_ALGORITHM));
+        sslConfiguration.setAlgorithm(configuration.getString(TAG_SECURITY_ALGORITHM, EngineConstants.DEFAULT_SECURITY_ALGORITHM));
 
         return sslConfiguration;
     }

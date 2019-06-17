@@ -21,12 +21,9 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * A base request.
  */
-public abstract class SpongeRequest {
+public class SpongeRequest {
 
     private RequestHeader header = new RequestHeader();
-
-    protected SpongeRequest() {
-    }
 
     @ApiModelProperty(value = "The request header", required = false)
     public RequestHeader getHeader() {

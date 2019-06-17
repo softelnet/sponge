@@ -88,10 +88,27 @@ public abstract class BaseRestApiTestTemplate {
 
     protected abstract SpongeRestClient createRestClient();
 
+    protected SpongeRestClient createGuestRestClient() {
+        SpongeRestClient client = createRestClient();
+        client.getConfiguration().setUsername("joe");
+        client.getConfiguration().setPassword("password");
+
+        return client;
+    }
+
     @Test
     public void testVersion() {
         try (SpongeRestClient client = createRestClient()) {
             assertEquals(engine.getVersion(), client.getVersion());
+        }
+    }
+
+    @Test
+    public void testFeatures() {
+        try (SpongeRestClient client = createRestClient()) {
+            Map<String, Object> features = client.getFeatures();
+            assertEquals(1, features.size());
+            assertFalse((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
         }
     }
 
@@ -743,7 +760,7 @@ public abstract class BaseRestApiTestTemplate {
 
     @Test
     public void testSend() {
-        try (SpongeRestClient client = createRestClient()) {
+        try (SpongeRestClient client = createGuestRestClient()) {
             assertNotNull(client.send("alarm", SpongeUtils.immutableMapOf("attr1", "Test")));
 
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "eventSent").get());
