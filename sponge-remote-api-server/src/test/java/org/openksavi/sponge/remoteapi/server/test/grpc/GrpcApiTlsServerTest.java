@@ -16,8 +16,13 @@
 
 package org.openksavi.sponge.remoteapi.server.test.grpc;
 
+import java.io.File;
+
+import javax.net.ssl.SSLException;
+
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyChannelBuilder;
 
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
@@ -27,6 +32,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
+import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
@@ -39,12 +46,12 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @net.jcip.annotations.NotThreadSafe
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { GrpcApiServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { GrpcApiTlsServerTest.TlsTestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @DirtiesContext
-public class GrpcApiServerTest extends GrpcApiServerBaseTest {
+public class GrpcApiTlsServerTest extends GrpcApiServerBaseTest {
 
     @Configuration
-    public static class TestConfig extends PortTestConfig {
+    public static class TlsTestConfig extends PortTestConfig {
 
         @Bean
         public SpongeEngine spongeEngine() {
@@ -57,6 +64,12 @@ public class GrpcApiServerTest extends GrpcApiServerBaseTest {
             RestApiServerPlugin plugin = new RestApiServerPlugin();
             plugin.getSettings().setPort(spongeRestApiPort());
             plugin.getSettings().setPrettyPrint(true);
+
+            SslConfiguration sslConfiguration = new SslConfiguration();
+            sslConfiguration.setKeyStore("security/remote_api_selfsigned.jks");
+            sslConfiguration.setKeyStorePassword("sponge");
+            sslConfiguration.setKeyPassword("sponge");
+            plugin.getSettings().setSslConfiguration(sslConfiguration);
 
             return plugin;
         }
@@ -75,7 +88,16 @@ public class GrpcApiServerTest extends GrpcApiServerBaseTest {
 
     @Override
     protected ManagedChannel createManagedChannel() {
-        // Insecure connection only for tests.
-        return ManagedChannelBuilder.forTarget("dns:///localhost:" + getGrpcPort()).usePlaintext().build();
+        // Use the self signed certificate in the PEM format. Created from remote_api_selfsigned.jks by the command:
+        // keytool -exportcert -rfc -file remote_api_selfsigned.pem -keystore remote_api_selfsigned.jks -alias rest_api -keypass sponge
+        // -storepass sponge
+        try {
+            return NettyChannelBuilder
+                    .forTarget("dns:///localhost:" + getGrpcPort()).sslContext(GrpcSslContexts.forClient()
+                            .trustManager(new File("src/test/resources/security/remote_api_selfsigned.pem")).build())
+                    .overrideAuthority("sponge").build();
+        } catch (SSLException e) {
+            throw new SpongeException("SSL error", e);
+        }
     }
 }

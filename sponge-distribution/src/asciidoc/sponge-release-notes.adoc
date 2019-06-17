@@ -9,6 +9,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.11.0 (not released yet)
 * API change: Renamed `exists*` methods to `has*` in the `EngineOperations`. Methods `getPlugin` and `getCategory` now throw exception if not found. They have the corresponsing `has*` methods.
 * REST API change: Base request and response properties have been moved to headers.
+* REST API changes reflecting the refactoring of user privileges.
 * Added support for registering event types.
 * Added a new gRPC API service for remote {sponge} event subscriptions.
 * Added a convenience method `EventDefinition.sendEvery`.

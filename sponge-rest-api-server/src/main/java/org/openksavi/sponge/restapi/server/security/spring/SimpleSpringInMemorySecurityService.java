@@ -31,6 +31,7 @@ import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServe
 import org.openksavi.sponge.restapi.server.security.BaseInMemoryKnowledgeBaseProvidedSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 
 public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
 
@@ -52,26 +53,23 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            UserContext userContext = new UserContext(username,
+                    authentication.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toList()));
 
-            return new SimpleSpringUserAuthentication(applyAuthentication(new User(username, password), authentication), authentication);
+            return new SimpleSpringUserAuthentication(userContext, authentication);
         } catch (AuthenticationException e) {
             throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password", e);
         }
     }
 
-    protected User applyAuthentication(User user, Authentication authentication) {
-        authentication.getAuthorities().stream().map(a -> a.getAuthority()).forEach(user::addRole);
-
-        return user;
-    }
-
     @Override
     public UserAuthentication authenticateAnonymous(User anonymous) {
-        return new SimpleSpringUserAuthentication(anonymous, createAuthentication(anonymous));
+        return new SimpleSpringUserAuthentication(new UserContext(anonymous.getName(), anonymous.getRoles()),
+                createAuthentication(anonymous));
     }
 
     @Override
-    public void openUserContext(UserAuthentication userAuthentication) {
+    public void openSecurityContext(UserAuthentication userAuthentication) {
         Validate.isTrue(userAuthentication instanceof SimpleSpringUserAuthentication, "The user authentication class should extend %s",
                 SimpleSpringUserAuthentication.class);
         SimpleSpringUserAuthentication customUserAuthentication = (SimpleSpringUserAuthentication) userAuthentication;
@@ -81,7 +79,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     }
 
     @Override
-    public void closeUserContext() {
+    public void closeSecurityContext() {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 

@@ -22,6 +22,7 @@ import java.util.List;
 import io.grpc.stub.StreamObserver;
 
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 
 public class Subscription {
 
@@ -31,21 +32,25 @@ public class Subscription {
 
     private StreamObserver<SubscribeResponse> responseObserver;
 
-    // private String requestId;
+    private UserContext userContext;
+
+    private String requestId;
 
     private boolean active;
 
-    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, // String requestId,
-            boolean active) {
+    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, UserContext userContext,
+            String requestId, boolean active) {
         this.id = id;
         setEventNames(eventNames);
         this.responseObserver = responseObserver;
-        // this.requestId = requestId;
+        this.userContext = userContext;
+        this.requestId = requestId;
         this.active = active;
     }
 
-    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver/* , String requestId */) {
-        this(id, eventNames, responseObserver, /* requestId, */ true);
+    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, UserContext userContext,
+            String requestId) {
+        this(id, eventNames, responseObserver, userContext, requestId, true);
     }
 
     public long getId() {
@@ -72,19 +77,27 @@ public class Subscription {
         this.responseObserver = responseObserver;
     }
 
-    // public String getRequestId() {
-    // return requestId;
-    // }
-    //
-    // public void setRequestId(String requestId) {
-    // this.requestId = requestId;
-    // }
-
     public boolean isActive() {
         return active;
     }
 
+    public UserContext getUserContext() {
+        return userContext;
+    }
+
+    public void setUserContext(UserContext userContext) {
+        this.userContext = userContext;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 }

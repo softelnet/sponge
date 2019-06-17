@@ -39,15 +39,17 @@ public final class RestApiServerConstants {
 
     public static final Boolean REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT = false;
 
-    public static final String PRIVATE_ACTION_NAME_PREFIX = "RestApi";
+    public static final String INTERNAL_ACTION_NAME_PREFIX = "RemoteApi";
 
-    public static final String ACTION_IS_ACTION_PUBLIC = PRIVATE_ACTION_NAME_PREFIX + "IsActionPublic";
+    public static final String ACTION_IS_ACTION_PUBLIC = INTERNAL_ACTION_NAME_PREFIX + "IsActionPublic";
 
-    public static final String ACTION_IS_EVENT_PUBLIC = PRIVATE_ACTION_NAME_PREFIX + "IsEventPublic";
+    public static final String ACTION_IS_EVENT_PUBLIC = INTERNAL_ACTION_NAME_PREFIX + "IsEventPublic";
 
-    public static final String ACTION_CAN_USE_KNOWLEDGE_BASE = PRIVATE_ACTION_NAME_PREFIX + "CanUseKnowledgeBase";
+    public static final String ACTION_CAN_USE_KNOWLEDGE_BASE = INTERNAL_ACTION_NAME_PREFIX + "CanUseKnowledgeBase";
 
-    public static final String ACTION_CAN_SEND_EVENT = PRIVATE_ACTION_NAME_PREFIX + "CanSendEvent";
+    public static final String ACTION_CAN_SEND_EVENT = INTERNAL_ACTION_NAME_PREFIX + "CanSendEvent";
+
+    public static final String ACTION_CAN_SUBSCRIBE_EVENT = INTERNAL_ACTION_NAME_PREFIX + "CanSubscribeEvent";
 
     public static final String TAG_REST_COMPONENT_ID = "restComponentId";
 

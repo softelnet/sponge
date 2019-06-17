@@ -21,17 +21,17 @@ package org.openksavi.sponge.restapi.server.security;
  */
 public class UserAuthentication {
 
-    private User user;
+    private UserContext userContext;
 
-    public UserAuthentication(User user) {
-        this.user = user;
+    public UserAuthentication(UserContext userContext) {
+        this.userContext = userContext;
     }
 
-    public User getUser() {
-        return user;
+    public UserContext getUserContext() {
+        return userContext;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserContext(UserContext userContext) {
+        this.userContext = userContext;
     }
 }

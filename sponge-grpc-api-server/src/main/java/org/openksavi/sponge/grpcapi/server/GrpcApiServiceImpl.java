@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.protobuf.Any;
 import com.google.protobuf.Timestamp;
 import com.google.rpc.Code;
 import com.google.rpc.Status;
@@ -32,6 +31,7 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.protobuf.StatusProto;
 import io.grpc.stub.StreamObserver;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,18 +39,22 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.proto.Event;
 import org.openksavi.sponge.grpcapi.proto.ObjectValue;
+import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiImplBase;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
+import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.server.RestApiService;
+import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
-// TODO Authorization like in the REST API service (but handle username or authToken that can be changed).
 public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
     private static final Logger logger = LoggerFactory.getLogger(GrpcApiServiceImpl.class);
@@ -90,28 +94,86 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
         return subscriptions;
     }
 
+    protected <T extends SpongeRequest> T setupRestRequestHeader(T restRequest, RequestHeader header) {
+        if (header != null) {
+            if (!StringUtils.isEmpty(header.getId())) {
+                restRequest.getHeader().setId(header.getId());
+            }
+            if (!StringUtils.isEmpty(header.getUsername())) {
+                restRequest.getHeader().setUsername(header.getUsername());
+            }
+            if (!StringUtils.isEmpty(header.getPassword())) {
+                restRequest.getHeader().setPassword(header.getPassword());
+            }
+            if (!StringUtils.isEmpty(header.getAuthToken())) {
+                restRequest.getHeader().setAuthToken(header.getAuthToken());
+            }
+        }
+
+        return restRequest;
+    }
+
+    protected GetVersionRequest createRestRequest(VersionRequest request) {
+        return setupRestRequestHeader(new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
+    }
+
+    protected SpongeRequest createRestRequest(SubscribeRequest request) {
+        return setupRestRequestHeader(new SpongeRequest(), request.hasHeader() ? request.getHeader() : null);
+    }
+
+    protected ResponseHeader createResponseHeader(org.openksavi.sponge.restapi.model.response.ResponseHeader restHeader) {
+        ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
+        if (restHeader.getId() != null) {
+            headerBuilder.setId(restHeader.getId());
+        }
+        if (restHeader.getErrorCode() != null) {
+            headerBuilder.setErrorCode(restHeader.getErrorCode());
+        }
+        if (restHeader.getErrorMessage() != null) {
+            headerBuilder.setErrorMessage(restHeader.getErrorMessage());
+        }
+        if (restHeader.getDetailedErrorMessage() != null) {
+            headerBuilder.setDetailedErrorMessage(restHeader.getDetailedErrorMessage());
+        }
+
+        return headerBuilder.build();
+    }
+
+    protected VersionResponse createResponse(GetVersionResponse restResponse) {
+        VersionResponse.Builder builder = VersionResponse.newBuilder().setHeader(createResponseHeader(restResponse.getHeader()));
+
+        if (restResponse.getVersion() != null) {
+            builder.setVersion(restResponse.getVersion());
+        }
+
+        return builder.build();
+    }
+
+    protected StatusRuntimeException createInternalException(Throwable e) {
+        return StatusProto.toStatusRuntimeException(Status.newBuilder().setCode(Code.INTERNAL.getNumber())
+                .setMessage(e.getMessage() != null ? e.getMessage() : e.toString()).build());
+    }
+
     @Override
     public void getVersion(VersionRequest request, StreamObserver<VersionResponse> responseObserver) {
         try {
-            // TODO Delegate to BaseRemoteApiService.
+            GetVersionRequest restRequest = createRestRequest(request);
 
-            VersionResponse.Builder responseBuilder = VersionResponse.newBuilder().setVersion(engine.getVersion());
-            if (request.getHeader() != null && request.getHeader().getId() != null) {
-                responseBuilder.setHeader(ResponseHeader.newBuilder().setId(request.getHeader().getId()));
-            }
+            // Open a new session. The user will be set later in the service.
+            restApiService.openSession(createSession());
+            GetVersionResponse restResponse = restApiService.getVersion(restRequest);
 
-            responseObserver.onNext(responseBuilder.build());
+            VersionResponse response = createResponse(restResponse);
+
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (Throwable e) {
-            // TODO Error handling compose from BaseRemoteApiService.
-            VersionResponse response = VersionResponse.newBuilder()
-                    .setHeader(ResponseHeader.newBuilder().setId(request.getHeader() != null ? request.getHeader().getId() : null)
-                            .setErrorCode("?").setErrorMessage("?").setDetailedErrorMessage("?").build())
-                    .build();
-
-            Status status = Status.newBuilder().setCode(Code.INTERNAL.getNumber()).setMessage(response.getHeader().getErrorMessage())
-                    .addDetails(Any.pack(response)).build();
-            responseObserver.onError(StatusProto.toStatusRuntimeException(status));
+            // The internal error.
+            logger.error("getVersion internal error", e);
+            responseObserver.onError(createInternalException(e));
+        } finally {
+            // Close the session.
+            restApiService.closeSession();
         }
     }
 
@@ -128,9 +190,25 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
                 // Handle keep alive requests.
                 boolean isKeepAlive =
                         previousSubscription != null && request.getEventNamesList().equals(previousSubscription.getEventNames());
+
+                // The first request in the client stream creates a new subscription.
                 if (previousSubscription == null && !isKeepAlive) {
-                    logger.debug("New subscription {}", subscriptionId);
-                    subscriptions.put(subscriptionId, new Subscription(subscriptionId, request.getEventNamesList(), responseObserver));
+                    try {
+                        // Open a new session. The user will be set later in the REST API service.
+                        restApiService.openSession(createSession());
+
+                        // Check user credentials.
+                        UserContext userContext = authenticateRequest(request);
+
+                        logger.debug("New subscription {}", subscriptionId);
+                        subscriptions.put(subscriptionId,
+                                new Subscription(subscriptionId, request.getEventNamesList(), responseObserver, userContext,
+                                        request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId())
+                                                ? request.getHeader().getId() : null));
+                    } finally {
+                        // Close the session.
+                        restApiService.closeSession();
+                    }
                 }
 
                 if (isKeepAlive) {
@@ -148,7 +226,6 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
 
                         return;
                     }
-
                 }
 
                 logger.error("subscribe() request stream error", e);
@@ -161,32 +238,32 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
                     responseObserver.onCompleted();
                 }
             }
-
         };
 
-        // The stream will be provided by the pushEvent method called by the correlator.
+        // The event stream to the client will be provided by the pushEvent method called by the correlator.
     }
 
     public void pushEvent(org.openksavi.sponge.event.Event event) {
         subscriptions.values().forEach(subscription -> {
             if (subscription.isActive() && subscription.getEventNames().stream()
                     .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))) {
-                // TODO Request header, id.
-                // TODO Error handling - server side log.
-                try {
-                    synchronized (subscription.getResponseObserver()) {
-                        subscription.getResponseObserver().onNext(createSubscribeResponse(subscription, event));
+                // Check subscribe privileges for the event instance.
+                if (restApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName())) {
+                    try {
+                        synchronized (subscription.getResponseObserver()) {
+                            subscription.getResponseObserver().onNext(createSubscribeResponse(subscription, event));
+                        }
+                    } catch (StatusRuntimeException e) {
+                        if (!e.getStatus().isOk()) {
+                            logger.debug("Setting subscription {} as inactive because the status code is {}", subscription.getId(),
+                                    e.getStatus().getCode());
+                            subscription.setActive(false);
+                        } else {
+                            logger.error("pushEvent() StatusRuntimeException", e);
+                        }
+                    } catch (Throwable e) {
+                        logger.error("pushEvent() error", e);
                     }
-                } catch (StatusRuntimeException e) {
-                    if (!e.getStatus().isOk()) {// Objects.equals(e.getStatus().getCode(), io.grpc.Status.Code.CANCELLED)) {
-                        logger.debug("Setting subscription {} as inactive because the status code is {}", subscription.getId(),
-                                e.getStatus().getCode());
-                        subscription.setActive(false);
-                    } else {
-                        logger.error("pushEvent() StatusRuntimeException", e);
-                    }
-                } catch (Throwable e) {
-                    logger.error("pushEvent() error", e);
                 }
             }
         });
@@ -199,7 +276,13 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
     }
 
     protected SubscribeResponse createSubscribeResponse(Subscription subscription, org.openksavi.sponge.event.Event event) {
-        return SubscribeResponse.newBuilder().setSubscriptionId(subscription.getId()).setEvent(createEvent(event)).build();
+        ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
+        if (subscription.getRequestId() != null) {
+            headerBuilder.setId(subscription.getRequestId());
+        }
+
+        return SubscribeResponse.newBuilder().setHeader(headerBuilder.build()).setSubscriptionId(subscription.getId())
+                .setEvent(createEvent(event)).build();
     }
 
     protected Event createEvent(org.openksavi.sponge.event.Event event) {
@@ -240,5 +323,13 @@ public class GrpcApiServiceImpl extends SpongeGrpcApiImplBase {
         }
 
         return eventBuilder.build();
+    }
+
+    protected GrpcApiSession createSession() {
+        return new GrpcApiSession(null);
+    }
+
+    protected UserContext authenticateRequest(SubscribeRequest request) {
+        return restApiService.authenticateRequest(createRestRequest(request));
     }
 }

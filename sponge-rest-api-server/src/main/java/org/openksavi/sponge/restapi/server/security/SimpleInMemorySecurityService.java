@@ -31,19 +31,19 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
             throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password");
         }
 
-        return new UserAuthentication(user);
+        return new UserAuthentication(new UserContext(user.getName(), user.getRoles()));
     }
 
     @Override
     public UserAuthentication authenticateAnonymous(User anonymous) {
-        return new UserAuthentication(anonymous);
+        return new UserAuthentication(new UserContext(anonymous.getName(), anonymous.getRoles()));
     }
 
     @Override
-    public void openUserContext(UserAuthentication userAuthentication) {
+    public void openSecurityContext(UserAuthentication userAuthentication) {
     }
 
     @Override
-    public void closeUserContext() {
+    public void closeSecurityContext() {
     }
 }
