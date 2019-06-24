@@ -21,7 +21,7 @@ import org.openksavi.sponge.type.DataType;
 /**
  * A dynamic value that specifies its type.
  */
-public class DynamicValue<T> {
+public class DynamicValue<T> implements DecoratedValue<T> {
 
     /** The value. */
     private T value;
@@ -38,10 +38,12 @@ public class DynamicValue<T> {
         this.type = type;
     }
 
+    @Override
     public T getValue() {
         return value;
     }
 
+    @Override
     public void setValue(T value) {
         this.value = value;
     }
