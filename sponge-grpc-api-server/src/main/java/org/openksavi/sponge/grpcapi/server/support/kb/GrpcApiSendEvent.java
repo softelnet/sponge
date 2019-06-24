@@ -47,7 +47,9 @@ public class GrpcApiSendEvent extends JAction {
                 new StringType("name").withLabel("Event type").withDescription("Event type.")
                         .withProvided(new ProvidedMeta().withValueSet()),
                 new DynamicType("attributes").withLabel("Attributes").withDescription("Event attributes.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("name")));
+                        .withProvided(new ProvidedMeta().withValue().withDependency("name")),
+                new StringType("label").withNullable().withLabel("Event label").withDescription("Event label."),
+                new StringType("description").withNullable().withLabel("Event description").withDescription("Event description."));
         withNoResult();
         withFeatures(SpongeUtils.immutableMapOf("callLabel", "Send", "icon", "send"));
     }
@@ -57,8 +59,8 @@ public class GrpcApiSendEvent extends JAction {
         plugin = getSponge().getPlugin(RestApiServerPlugin.class);
     }
 
-    public void onCall(String name, DynamicValue<Map<String, Object>> attributes) {
-        plugin.getService().sendEvent(name, attributes.getValue(),
+    public void onCall(String name, DynamicValue<Map<String, Object>> attributes, String label, String description) {
+        plugin.getService().sendEvent(name, attributes.getValue(), label, description,
                 getRestApiService().getSession().getUserAuthentication().getUserContext());
     }
 

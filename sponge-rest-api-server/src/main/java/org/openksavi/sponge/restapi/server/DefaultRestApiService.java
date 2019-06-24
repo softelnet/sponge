@@ -356,7 +356,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext) {
+    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, UserContext userContext) {
         Validate.isTrue(canSendEvent(userContext, eventName), "No privileges to send the '%s' event", eventName);
 
         EventDefinition definition = getEngine().getOperations().event(eventName);
@@ -364,7 +364,19 @@ public class DefaultRestApiService implements RestApiService {
             definition.set(attributes);
         }
 
+        definition.label(label).description(description);
+
         return definition.send();
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, UserContext userContext) {
+        return sendEvent(eventName, attributes, label, null, userContext);
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext) {
+        return sendEvent(eventName, attributes, null, null, userContext);
     }
 
     @Override

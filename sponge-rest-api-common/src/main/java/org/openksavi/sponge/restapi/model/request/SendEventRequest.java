@@ -28,12 +28,18 @@ public class SendEventRequest extends SpongeRequest {
 
     private Map<String, Object> attributes;
 
+    private String label;
+
+    private String description;
+
     public SendEventRequest() {
     }
 
-    public SendEventRequest(String name, Map<String, Object> attributes) {
+    public SendEventRequest(String name, Map<String, Object> attributes, String label, String description) {
         this.name = name;
         this.attributes = attributes;
+        this.label = label;
+        this.description = description;
     }
 
     @ApiModelProperty(value = "The event name", required = true)
@@ -52,5 +58,23 @@ public class SendEventRequest extends SpongeRequest {
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
+    }
+
+    @ApiModelProperty(value = "The event label", required = false)
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @ApiModelProperty(value = "The event description", required = false)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

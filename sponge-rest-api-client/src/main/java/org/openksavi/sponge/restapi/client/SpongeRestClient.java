@@ -386,6 +386,27 @@ public interface SpongeRestClient extends Closeable {
     String send(String eventName, Map<String, Object> attributes);
 
     /**
+     * Sends the event to the server.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes.
+     * @param label the event label.
+     * @return the event ID.
+     */
+    String send(String eventName, Map<String, Object> attributes, String label);
+
+    /**
+     * Sends the event to the server.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes.
+     * @param label the event label.
+     * @param description the event description.
+     * @return the event ID.
+     */
+    String send(String eventName, Map<String, Object> attributes, String label, String description);
+
+    /**
      * Sends the {@code actionArgs} request to the server. Fetches the provided action arguments from the server.
      *
      * @param request the request.

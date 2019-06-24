@@ -758,8 +758,18 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
+    public String send(String eventName, Map<String, Object> attributes, String label, String description) {
+        return send(new SendEventRequest(eventName, attributes, label, description)).getEventId();
+    }
+
+    @Override
+    public String send(String eventName, Map<String, Object> attributes, String label) {
+        return send(eventName, attributes, label, null);
+    }
+
+    @Override
     public String send(String eventName, Map<String, Object> attributes) {
-        return send(new SendEventRequest(eventName, attributes)).getEventId();
+        return send(eventName, attributes, null, null);
     }
 
     @Override

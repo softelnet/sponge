@@ -136,6 +136,29 @@ public interface RestApiService extends HasEngine, Initializable {
      *
      * @param eventName the event name.
      * @param attributes the event attributes map.
+     * @param label the event label.
+     * @param description the event description.
+     * @param userContext the user context.
+     * @return the sent event.
+     */
+    Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, UserContext userContext);
+
+    /**
+     * Sends a new event. The attributes map should be unmarshalled first.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes map.
+     * @param label the event label.
+     * @param userContext the user context.
+     * @return the sent event.
+     */
+    Event sendEvent(String eventName, Map<String, Object> attributes, String label, UserContext userContext);
+
+    /**
+     * Sends a new event. The attributes map should be unmarshalled first.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes map.
      * @param userContext the user context.
      * @return the sent event.
      */
