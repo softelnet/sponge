@@ -103,6 +103,14 @@ The following table contains a summary of the gRPC API operations.
 |Subscribes to {sponge} events and returns a stream of events.
 |===
 
+== Interface specification
+
+.The protobuf file for the gRPC API
+[source]
+----
+include::{rootDir}/sponge-grpc-api-common/src/main/proto/sponge.proto[lines=17..-1]
+----
+
 == Configuration
 The gRPC server port can be set by a Java system property `sponge.grpc.port` or by setting the `port` property of the plugin or by a convention. The convention is that the gRPC server port is the REST API port plus `1`, e.g. if the REST API port is `8080` then the gRPC API port will be `8081`.
 
