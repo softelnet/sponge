@@ -86,7 +86,7 @@ GET /actions
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Get actions request|string
+__required__|The get actions request|string
 |===
 
 
@@ -112,7 +112,7 @@ POST /actions
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Get actions request|<<_swagger_getactionsrequest,GetActionsRequest>>
+__required__|The get actions request|<<_swagger_getactionsrequest,GetActionsRequest>>
 |===
 
 
@@ -138,7 +138,7 @@ GET /call
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Call action request|string
+__required__|The call action request|string
 |===
 
 
@@ -164,7 +164,7 @@ POST /call
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Call action request|<<_swagger_actioncallrequest,ActionCallRequest>>
+__required__|The call action request|<<_swagger_actioncallrequest,ActionCallRequest>>
 |===
 
 
@@ -174,6 +174,110 @@ __required__|Call action request|<<_swagger_actioncallrequest,ActionCallRequest>
 |===
 |HTTP Code|Description|Schema
 |**200**|The action call response|<<_swagger_actioncallresponse,ActionCallResponse>>
+|===
+
+
+[[_swagger_sponge-get-eventtypes]]
+=== Get event types
+....
+GET /eventTypes
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**request** +
+__required__|The get event types request|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The get event types response|<<_swagger_geteventtypesresponse,GetEventTypesResponse>>
+|===
+
+
+[[_swagger_sponge-post-eventtypes]]
+=== Get event types
+....
+POST /eventTypes
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|The get event types request|<<_swagger_geteventtypesrequest,GetEventTypesRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The get event types response|<<_swagger_geteventtypesresponse,GetEventTypesResponse>>
+|===
+
+
+[[_swagger_sponge-get-features]]
+=== Get the API features
+....
+GET /features
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**request** +
+__required__|The get API features request|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The API features response|<<_swagger_getfeaturesresponse,GetFeaturesResponse>>
+|===
+
+
+[[_swagger_sponge-post-features]]
+=== Get the API features
+....
+POST /features
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__required__|The get API features request|<<_swagger_getfeaturesrequest,GetFeaturesRequest>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|The API features response|<<_swagger_getfeaturesresponse,GetFeaturesResponse>>
 |===
 
 
@@ -190,7 +294,7 @@ GET /knowledgeBases
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Get knowledge bases request|string
+__required__|The get knowledge bases request|string
 |===
 
 
@@ -216,7 +320,7 @@ POST /knowledgeBases
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Get knowledge bases request|<<_swagger_getknowledgebasesrequest,GetKnowledgeBasesRequest>>
+__required__|The get knowledge bases request|<<_swagger_getknowledgebasesrequest,GetKnowledgeBasesRequest>>
 |===
 
 
@@ -242,7 +346,7 @@ GET /login
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Login request|string
+__required__|The login request|string
 |===
 
 
@@ -268,7 +372,7 @@ POST /login
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Login request|<<_swagger_loginrequest,LoginRequest>>
+__required__|The login request|<<_swagger_loginrequest,LoginRequest>>
 |===
 
 
@@ -294,7 +398,7 @@ GET /logout
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Logout request|string
+__required__|The logout request|string
 |===
 
 
@@ -320,7 +424,7 @@ POST /logout
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Logout request|<<_swagger_logoutrequest,LogoutRequest>>
+__required__|The logout request|<<_swagger_logoutrequest,LogoutRequest>>
 |===
 
 
@@ -346,7 +450,7 @@ GET /reload
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Reload knowledge bases request|string
+__required__|The reload request|string
 |===
 
 
@@ -372,7 +476,7 @@ POST /reload
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Reload knowledge bases request|<<_swagger_reloadrequest,ReloadRequest>>
+__required__|The reload request|<<_swagger_reloadrequest,ReloadRequest>>
 |===
 
 
@@ -398,7 +502,7 @@ GET /send
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Send event request|string
+__required__|The send event request|string
 |===
 
 
@@ -424,7 +528,7 @@ POST /send
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Send event request|<<_swagger_sendeventrequest,SendEventRequest>>
+__required__|The send event request|<<_swagger_sendeventrequest,SendEventRequest>>
 |===
 
 
@@ -450,7 +554,7 @@ GET /version
 |===
 |Type|Name|Description|Schema
 |**Query**|**request** +
-__required__|Get Sponge version request|string
+__required__|The get Sponge version request|string
 |===
 
 
@@ -476,7 +580,7 @@ POST /version
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|Get Sponge version request|<<_swagger_getversionrequest,GetVersionRequest>>
+__required__|The get Sponge version request|<<_swagger_getversionrequest,GetVersionRequest>>
 |===
 
 
@@ -502,14 +606,8 @@ An action call request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |**name** +
 __required__|The action name|string
 |**args** +
@@ -527,14 +625,8 @@ An action call response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**result** +
 __required__|The action result|object
 |===
@@ -700,14 +792,8 @@ A get actions request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |**name** +
 __optional__|The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
 |**metadataRequired** +
@@ -725,18 +811,70 @@ A get actions response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**actions** +
 __required__|The available actions|< <<_swagger_actionmeta,ActionMeta>> > array
 |**types** +
 __optional__|The registered types used in the actions|< string, <<_swagger_datatypeobject,DataTypeObject>> > map
+|===
+
+
+[[_swagger_geteventtypesrequest]]
+=== GetEventTypesRequest
+A get event types request
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
+|**name** +
+__optional__|The event name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)|string
+|===
+
+
+[[_swagger_geteventtypesresponse]]
+=== GetEventTypesResponse
+A get event types response
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
+|**eventTypes** +
+__required__|The available event types|< string, <<_swagger_recordtype,RecordType>> > map
+|===
+
+
+[[_swagger_getfeaturesrequest]]
+=== GetFeaturesRequest
+A get features request
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
+|===
+
+
+[[_swagger_getfeaturesresponse]]
+=== GetFeaturesResponse
+A get features response
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
+|**features** +
+__required__|The API features|< string, object > map
 |===
 
 
@@ -748,14 +886,8 @@ A get knowledge bases request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |===
 
 
@@ -767,14 +899,8 @@ A get knowledge bases response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**knowledgeBases** +
 __required__|The available knowledge bases|< <<_swagger_knowledgebasemeta,KnowledgeBaseMeta>> > array
 |===
@@ -788,14 +914,8 @@ A get version request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |===
 
 
@@ -807,14 +927,8 @@ A get version response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**version** +
 __required__|The Sponge version|string
 |===
@@ -849,14 +963,8 @@ A login request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |===
 
 
@@ -868,14 +976,8 @@ A login response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**authToken** +
 __required__|The authentication token|string
 |===
@@ -889,14 +991,8 @@ A logout request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |===
 
 
@@ -908,14 +1004,8 @@ A logout response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |===
 
 
@@ -940,14 +1030,8 @@ A provide action arguments request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |**name** +
 __required__|The action name|string
 |**argNames** +
@@ -967,14 +1051,8 @@ A provide action arguments response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**provided** +
 __required__|The provided action arguments|< string, <<_swagger_providedvalueobject,ProvidedValueObject>> > map
 |===
@@ -996,6 +1074,8 @@ __optional__|< string > array
 __optional__|boolean
 |**overwrite** +
 __optional__|boolean
+|**elementValueSet** +
+__optional__|boolean
 |===
 
 
@@ -1011,7 +1091,9 @@ __optional__|object
 __optional__|boolean
 |**annotatedValueSet** +
 __optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
-|**valueSet** +
+|**annotatedElementValueSet** +
+__optional__|< <<_swagger_annotatedvalue,AnnotatedValue>> > array
+|**elementValueSet** +
 __optional__|< object > array
 |===
 
@@ -1028,8 +1110,49 @@ __optional__|object
 __optional__|boolean
 |**annotatedValueSet** +
 __optional__|< <<_swagger_annotatedvalueobject,AnnotatedValueObject>> > array
-|**valueSet** +
+|**annotatedElementValueSet** +
+__optional__|< <<_swagger_annotatedvalue,AnnotatedValue>> > array
+|**elementValueSet** +
 __optional__|< object > array
+|===
+
+
+[[_swagger_recordtype]]
+=== RecordType
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**kind** +
+__optional__|enum (ANY, BINARY, BOOLEAN, DATE_TIME, DYNAMIC, INTEGER, LIST, MAP, NUMBER, OBJECT, RECORD, STREAM, STRING, TYPE, VOID)
+|**registeredType** +
+__optional__|string
+|**name** +
+__optional__|string
+|**label** +
+__optional__|string
+|**description** +
+__optional__|string
+|**annotated** +
+__optional__|boolean
+|**format** +
+__optional__|string
+|**defaultValue** +
+__optional__|< string, object > map
+|**nullable** +
+__optional__|boolean
+|**features** +
+__optional__|< string, object > map
+|**optional** +
+__optional__|boolean
+|**provided** +
+__optional__|<<_swagger_providedmeta,ProvidedMeta>>
+|**fields** +
+__optional__|< <<_swagger_datatype,DataType>> > array
+|**baseType** +
+__optional__|<<_swagger_recordtype,RecordType>>
+|**inheritationApplied** +
+__optional__|boolean
 |===
 
 
@@ -1041,14 +1164,8 @@ A reload request
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The request id|string
-|**username** +
-__optional__|The user name|string
-|**password** +
-__optional__|The user password|string
-|**authToken** +
-__optional__|The authentication token|string
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |===
 
 
@@ -1060,20 +1177,14 @@ A reload response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |===
 
 
-[[_swagger_sendeventrequest]]
-=== SendEventRequest
-A send event request
+[[_swagger_requestheader]]
+=== RequestHeader
+A request header
 
 
 [options="header", cols=".^3,.^11,.^4"]
@@ -1087,10 +1198,46 @@ __optional__|The user name|string
 __optional__|The user password|string
 |**authToken** +
 __optional__|The authentication token|string
+|===
+
+
+[[_swagger_responseheader]]
+=== ResponseHeader
+A response header
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|The corresponding request id|string
+|**errorCode** +
+__optional__|The optional error code in case of server side error|string
+|**errorMessage** +
+__optional__|The optional error message in case of server side error|string
+|**detailedErrorMessage** +
+__optional__|The optional detailed error message in case of server side error|string
+|===
+
+
+[[_swagger_sendeventrequest]]
+=== SendEventRequest
+A send event request
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**header** +
+__optional__|The request header|<<_swagger_requestheader,RequestHeader>>
 |**name** +
 __required__|The event name|string
 |**attributes** +
 __optional__|The event attributes|< string, object > map
+|**label** +
+__optional__|The event label|string
+|**description** +
+__optional__|The event description|string
 |===
 
 
@@ -1102,14 +1249,8 @@ A send event response
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|**id** +
-__optional__|The corresponding request id|string
-|**errorCode** +
-__optional__|The error code|string
-|**errorMessage** +
-__optional__|The error message|string
-|**detailedErrorMessage** +
-__optional__|The detailed error message|string
+|**header** +
+__optional__|The response header|<<_swagger_responseheader,ResponseHeader>>
 |**eventId** +
 __required__|The event id|string
 |===

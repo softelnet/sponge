@@ -32,10 +32,10 @@ NOTE: The assertions in some tests heavily depend on the values of timeouts, dur
 
 === Generate OpenAPI documentation
 
- # Run the `RestApiServerMain` (located in `sponge-rest-api-server`).
+ # Run the `RemoteApiServerMain` (located in `sponge-remote-api-server`).
  cd sponge-distribution
  mvn -Popenapi generate-sources
- # Stop the `RestApiServerMain`.
+ # Stop the `RemoteApiServerMain`.
 
 The generated file will be placed in `sponge-distribution/src/asciidoc/includes/user-guide-rest-api.adoc`. It will be automatically included in the main documentation.
  
