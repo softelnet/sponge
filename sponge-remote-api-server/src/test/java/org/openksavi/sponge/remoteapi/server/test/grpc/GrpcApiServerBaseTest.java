@@ -126,7 +126,8 @@ public abstract class GrpcApiServerBaseTest {
         };
 
         StreamObserver<SubscribeRequest> requestObserver = stub.subscribe(responseObserver);
-        requestObserver.onNext(SubscribeRequest.newBuilder().addAllEventNames(Arrays.asList("notification.*")).build());
+        requestObserver.onNext(
+                SubscribeRequest.newBuilder().addAllEventNames(Arrays.asList("notification.*")).setRegisteredTypeRequired(true).build());
 
         if (!finishLatch.await(20, TimeUnit.SECONDS)) {
             fail("Timeout while waiting for responses.");

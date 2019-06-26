@@ -60,6 +60,8 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     private boolean autoStart = GrpcApiServerConstants.DEFAULT_AUTO_START;
 
+    private Integer port;
+
     private Server server;
 
     private Consumer<NettyServerBuilder> serverConfigurator;
@@ -76,7 +78,8 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     @Override
     public void onConfigure(Configuration configuration) {
-        // TODO
+        autoStart = configuration.getBoolean(GrpcApiServerConstants.TAG_AUTO_START, autoStart);
+        port = configuration.getInteger(GrpcApiServerConstants.TAG_PORT, port);
     }
 
     @Override
@@ -110,7 +113,11 @@ public class GrpcApiServerPlugin extends JPlugin {
             return Integer.parseInt(portProperty.trim());
         }
 
-        // Port convention.
+        if (port != null) {
+            return port;
+        }
+
+        // Default port convention.
         return restApiServerPlugin.getSettings().getPort() + 1;
     }
 
@@ -124,10 +131,12 @@ public class GrpcApiServerPlugin extends JPlugin {
                 return;
             }
 
-            DefaultGrpcApiService service = new DefaultGrpcApiService();
+            if (service == null) {
+                // Use the default service.
+                service = new DefaultGrpcApiService();
+            }
             service.setEngine(getEngine());
             service.setRestApiService(restApiServerPlugin.getService());
-            setService(service);
 
             int port = resolveServerPort();
             NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
@@ -216,6 +225,14 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
     public Consumer<NettyServerBuilder> getServerConfigurator() {

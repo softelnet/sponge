@@ -21,6 +21,10 @@ package org.openksavi.sponge.grpcapi.server;
  */
 public final class GrpcApiServerConstants {
 
+    public static final String TAG_AUTO_START = "autoStart";
+
+    public static final String TAG_PORT = "port";
+
     public static final boolean DEFAULT_AUTO_START = true;
 
     private GrpcApiServerConstants() {

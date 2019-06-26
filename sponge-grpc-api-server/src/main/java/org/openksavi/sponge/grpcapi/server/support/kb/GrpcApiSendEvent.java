@@ -81,6 +81,8 @@ public class GrpcApiSendEvent extends JAction {
 
         if (context.getNames().contains("attributes")) {
             RecordType eventType = getSponge().getEventType((String) context.getCurrent().get("name"));
+            // TODO Initialization to empty map for attributes and person shouldn't be necessary but is currently required by the client
+            // GUI.
             Map<String, Object> attributes = new LinkedHashMap<>();
             attributes.put("person", Collections.emptyMap());
             context.getProvided().put("attributes", new ProvidedValue<>().withValue(new DynamicValue<>(attributes, eventType)));

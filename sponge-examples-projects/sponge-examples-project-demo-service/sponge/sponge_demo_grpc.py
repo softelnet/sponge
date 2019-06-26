@@ -28,7 +28,7 @@ class NotificationSender(Trigger):
             "The notification " + eventNo).description("The new event " + eventNo + " notification").send()
 
 def onStartup():
-    # Enable support processors in this knowledge base.
+    # Enable support actions in this knowledge base.
     grpcApiServer.enableSupport(sponge)
 
     sponge.event("notificationSender").sendEvery(Duration.ofSeconds(10))

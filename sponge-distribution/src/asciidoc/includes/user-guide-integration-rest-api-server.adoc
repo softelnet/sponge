@@ -342,7 +342,7 @@ Only a username/password authentication mode is currently supported by the defau
 === Simple security strategy
 The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RemoteApiIsActionPublic`, `RemoteApiIsEventPublic`, `RemoteApiCanUseKnowledgeBase`, `RemoteApiCanSendEvent`, `RemoteApiCanSubscribeEvent`). Passwords are stored as SHA-512 hashes.
 
-.Example of the REST API simple security
+.Example of the Remote API simple security
 [source,python]
 ----
 from org.openksavi.sponge.restapi.server.security import User

@@ -202,7 +202,8 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
                         logger.debug("New subscription {}", subscriptionId);
                         subscriptions.put(subscriptionId,
-                                new Subscription(subscriptionId, request.getEventNamesList(), responseObserver, userContext,
+                                new Subscription(subscriptionId, request.getEventNamesList(), request.getRegisteredTypeRequired(),
+                                        responseObserver, userContext,
                                         request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId())
                                                 ? request.getHeader().getId() : null));
                     } finally {
@@ -243,27 +244,32 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
         // The event stream to the client will be provided by the pushEvent method called by the correlator.
     }
 
+    protected boolean eventMatchesSubscription(org.openksavi.sponge.event.Event event, Subscription subscription) {
+        return subscription.isActive()
+                && subscription.getEventNames().stream()
+                        .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))
+                && (!subscription.isRegisteredTypeRequired() || engine.hasEventType(event.getName()))
+                // Check subscribe privileges for the event instance.
+                && restApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName());
+    }
+
     public void pushEvent(org.openksavi.sponge.event.Event event) {
         subscriptions.values().forEach(subscription -> {
-            if (subscription.isActive() && subscription.getEventNames().stream()
-                    .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))) {
-                // Check subscribe privileges for the event instance.
-                if (restApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName())) {
-                    try {
-                        synchronized (subscription.getResponseObserver()) {
-                            subscription.getResponseObserver().onNext(createSubscribeResponse(subscription, event));
-                        }
-                    } catch (StatusRuntimeException e) {
-                        if (!e.getStatus().isOk()) {
-                            logger.debug("Setting subscription {} as inactive because the status code is {}", subscription.getId(),
-                                    e.getStatus().getCode());
-                            subscription.setActive(false);
-                        } else {
-                            logger.error("pushEvent() StatusRuntimeException", e);
-                        }
-                    } catch (Throwable e) {
-                        logger.error("pushEvent() error", e);
+            if (eventMatchesSubscription(event, subscription)) {
+                try {
+                    synchronized (subscription.getResponseObserver()) {
+                        subscription.getResponseObserver().onNext(createSubscribeResponse(subscription, event));
                     }
+                } catch (StatusRuntimeException e) {
+                    if (!e.getStatus().isOk()) {
+                        logger.debug("Setting subscription {} as inactive because the status code is {}", subscription.getId(),
+                                e.getStatus().getCode());
+                        subscription.setActive(false);
+                    } else {
+                        logger.error("pushEvent() StatusRuntimeException", e);
+                    }
+                } catch (Throwable e) {
+                    logger.error("pushEvent() error", e);
                 }
             }
         });
@@ -307,18 +313,25 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
         Map<String, Object> attributes = event.getAll();
         if (attributes != null) {
+            TypeConverter typeConverter = restApiService.getTypeConverter();
             ObjectValue.Builder attributesValueBuilder = ObjectValue.newBuilder();
+
             try {
-                RecordType eventType = engine.getEventType(event.getName());
-                TypeConverter typeConverter = restApiService.getTypeConverter();
+                Map<String, Object> transportAttributes = attributes;
 
-                Map<String, Object> marshalledAttributes = SpongeApiUtils.collectToLinkedMap(attributes, entry -> entry.getKey(),
-                        entry -> typeConverter.marshal(eventType.getFieldType(entry.getKey()), entry.getValue()));
+                // Marshal attributes if an event has a registered type.
+                if (engine.hasEventType(event.getName())) {
+                    RecordType eventType = engine.getEventType(event.getName());
 
-                attributesValueBuilder.setValueJson(typeConverter.getObjectMapper().writeValueAsString(marshalledAttributes));
+                    transportAttributes = SpongeApiUtils.collectToLinkedMap(attributes, entry -> entry.getKey(),
+                            entry -> typeConverter.marshal(eventType.getFieldType(entry.getKey()), entry.getValue()));
+                }
+
+                attributesValueBuilder.setValueJson(typeConverter.getObjectMapper().writeValueAsString(transportAttributes));
             } catch (JsonProcessingException e) {
                 throw SpongeUtils.wrapException(e);
             }
+
             eventBuilder.setAttributes(attributesValueBuilder.build());
         }
 
