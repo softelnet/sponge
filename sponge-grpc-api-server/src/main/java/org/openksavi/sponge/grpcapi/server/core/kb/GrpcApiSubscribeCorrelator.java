@@ -40,6 +40,6 @@ public class GrpcApiSubscribeCorrelator extends JCorrelator {
 
     @Override
     public void onEvent(Event event) {
-        plugin.getService().pushEvent(event);
+        plugin.pushEvent(event);
     }
 }

@@ -137,6 +137,7 @@ public class GrpcApiServerPlugin extends JPlugin {
             }
             service.setEngine(getEngine());
             service.setRestApiService(restApiServerPlugin.getService());
+            service.setSubscriptionManager(new SubscriptionManager(getEngine(), restApiServerPlugin.getService()));
 
             int port = resolveServerPort();
             NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
@@ -201,6 +202,10 @@ public class GrpcApiServerPlugin extends JPlugin {
      */
     public void enableSupport(KnowledgeBaseEngineOperations engineOperations) {
         engineOperations.enableJavaByScan(KB_SUPPORT_PACKAGE_TO_SCAN);
+    }
+
+    public void pushEvent(org.openksavi.sponge.event.Event event) {
+        service.pushEvent(event);
     }
 
     public RestApiServerPlugin getRestApiServerPlugin() {

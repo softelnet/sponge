@@ -82,6 +82,8 @@ include::user-guide-integration-rest-api-client-dart.adoc[leveloffset=+1]
 
 include::user-guide-integration-grpc-api-server.adoc[leveloffset=+1]
 
+include::user-guide-integration-grpc-api-client-dart.adoc[leveloffset=+1]
+
 [[integration-external-subprocess]]
 == Running external processes
 {sponge} provides the `ProcessInstance` API to run an external executable as a subprocess of the {sponge} Java process. This feature is used by some of the plugins, for example by the Py4J integration plugin to execute an external Python script.

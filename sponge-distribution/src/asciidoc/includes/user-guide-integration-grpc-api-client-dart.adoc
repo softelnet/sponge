@@ -1,0 +1,32 @@
+= {sponge} gRPC API client for Dart
+The {sponge} gRPC API client for Dart simplifies connecting to a remote {sponge} gRPC API service from applications written in Dart.
+
+.gRPC API client example
+[source,dart]
+----
+import 'package:grpc/grpc.dart';
+import 'package:sponge_client_dart/sponge_client_dart.dart';
+import 'package:sponge_grpc_client_dart/sponge_grpc_client_dart.dart';
+
+void main() async {
+  // Create a new Sponge REST API client.
+  var restClient = SpongeRestClient(
+      SpongeRestClientConfiguration('http://localhost:8888/sponge.json/v1'));
+
+  // Create a new Sponge gRPC API client associated with the REST API client.
+  // Don't use insecure channel in production.
+  var grpcClient = SpongeGrpcClient(restClient,
+      channelOptions:
+          ChannelOptions(credentials: const ChannelCredentials.insecure()));
+
+  // Get the Sponge version.
+  var version = await grpcClient.getVersion();
+
+  print('Version: $version');
+
+  // Close the client connection.
+  await grpcClient.close();
+}
+----
+
+Unless noted otherwise in the release notes, versions of the gRPC API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
