@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 
 import io.grpc.Server;
 import io.grpc.netty.GrpcSslContexts;
@@ -37,6 +38,7 @@ import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
 import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 
 /**
@@ -54,11 +56,15 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     private RestApiServerPlugin restApiServerPlugin;
 
-    private GrpcApiServiceImpl service;
+    private DefaultGrpcApiService service;
 
     private boolean autoStart = GrpcApiServerConstants.DEFAULT_AUTO_START;
 
+    private Integer port;
+
     private Server server;
+
+    private Consumer<NettyServerBuilder> serverConfigurator;
 
     private final Lock lock = new ReentrantLock(true);
 
@@ -72,7 +78,8 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     @Override
     public void onConfigure(Configuration configuration) {
-        // TODO
+        autoStart = configuration.getBoolean(GrpcApiServerConstants.TAG_AUTO_START, autoStart);
+        port = configuration.getInteger(GrpcApiServerConstants.TAG_PORT, port);
     }
 
     @Override
@@ -95,16 +102,22 @@ public class GrpcApiServerPlugin extends JPlugin {
 
         startServer();
 
+        restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, true);
+
         getSponge().enableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
     }
 
-    protected int resolverServerPort() {
+    protected int resolveServerPort() {
         String portProperty = getEngine().getConfigurationManager().getProperty(GrpcApiConstants.PROPERTY_GRPC_PORT);
         if (portProperty != null) {
             return Integer.parseInt(portProperty.trim());
         }
 
-        // Convention.
+        if (port != null) {
+            return port;
+        }
+
+        // Default port convention.
         return restApiServerPlugin.getSettings().getPort() + 1;
     }
 
@@ -118,12 +131,15 @@ public class GrpcApiServerPlugin extends JPlugin {
                 return;
             }
 
-            GrpcApiServiceImpl service = new GrpcApiServiceImpl();
+            if (service == null) {
+                // Use the default service.
+                service = new DefaultGrpcApiService();
+            }
             service.setEngine(getEngine());
             service.setRestApiService(restApiServerPlugin.getService());
-            setService(service);
+            service.setSubscriptionManager(new SubscriptionManager(getEngine(), restApiServerPlugin.getService()));
 
-            int port = resolverServerPort();
+            int port = resolveServerPort();
             NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
 
             SslConfiguration sslConfiguration = restApiServerPlugin.getService().getSettings().getSslConfiguration();
@@ -131,6 +147,10 @@ public class GrpcApiServerPlugin extends JPlugin {
                 // Use the TLS configuration from the REST API server.
                 builder.sslContext(GrpcSslContexts
                         .configure(SslContextBuilder.forServer(SpongeUtils.createKeyManagerFactory(sslConfiguration))).build());
+            }
+
+            if (serverConfigurator != null) {
+                serverConfigurator.accept(builder);
             }
 
             server = builder.build();
@@ -146,6 +166,8 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     public void stop() {
+        restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
+
         getSponge().disableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
 
         stopServer();
@@ -182,6 +204,10 @@ public class GrpcApiServerPlugin extends JPlugin {
         engineOperations.enableJavaByScan(KB_SUPPORT_PACKAGE_TO_SCAN);
     }
 
+    public void pushEvent(org.openksavi.sponge.event.Event event) {
+        service.pushEvent(event);
+    }
+
     public RestApiServerPlugin getRestApiServerPlugin() {
         return restApiServerPlugin;
     }
@@ -190,11 +216,11 @@ public class GrpcApiServerPlugin extends JPlugin {
         this.restApiServerPlugin = restApiServerPlugin;
     }
 
-    public GrpcApiServiceImpl getService() {
+    public DefaultGrpcApiService getService() {
         return service;
     }
 
-    public void setService(GrpcApiServiceImpl service) {
+    public void setService(DefaultGrpcApiService service) {
         this.service = service;
     }
 
@@ -204,5 +230,21 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public Consumer<NettyServerBuilder> getServerConfigurator() {
+        return serverConfigurator;
+    }
+
+    public void setServerConfigurator(Consumer<NettyServerBuilder> serverConfigurator) {
+        this.serverConfigurator = serverConfigurator;
     }
 }

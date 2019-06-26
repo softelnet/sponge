@@ -69,8 +69,9 @@ public class GrpcApiServerTest extends GrpcApiServerBaseTest {
 
     @Override
     protected BaseSpongeRestClient createRestClient(boolean useEventTypeCache) {
-        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder()
-                .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
+        return new OkHttpSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+                        .useEventTypeCache(useEventTypeCache).build());
     }
 
     @Override

@@ -27,6 +27,7 @@ import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
+import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -38,6 +39,7 @@ import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
+import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -85,6 +87,30 @@ public interface SpongeRestClient extends Closeable {
      * @return the {@code version} response.
      */
     GetVersionResponse getVersion(GetVersionRequest request);
+
+    /**
+     * Returns the Sponge API features by sending the {@code features} request to the server and returning the features or using the cache.
+     *
+     * @return the API features.
+     */
+    Map<String, Object> getFeatures();
+
+    /**
+     * Sends the {@code features} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the {@code features} response.
+     */
+    GetFeaturesResponse getFeatures(GetFeaturesRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code features} request to the server.
+     *
+     * @param request the request.
+     * @return the {@code features} response.
+     */
+    GetFeaturesResponse getFeatures(GetFeaturesRequest request);
 
     /**
      * Sends the {@code version} request to the server.
@@ -360,6 +386,27 @@ public interface SpongeRestClient extends Closeable {
     String send(String eventName, Map<String, Object> attributes);
 
     /**
+     * Sends the event to the server.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes.
+     * @param label the event label.
+     * @return the event ID.
+     */
+    String send(String eventName, Map<String, Object> attributes, String label);
+
+    /**
+     * Sends the event to the server.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes.
+     * @param label the event label.
+     * @param description the event description.
+     * @return the event ID.
+     */
+    String send(String eventName, Map<String, Object> attributes, String label, String description);
+
+    /**
      * Sends the {@code actionArgs} request to the server. Fetches the provided action arguments from the server.
      *
      * @param request the request.
@@ -515,6 +562,11 @@ public interface SpongeRestClient extends Closeable {
      * Clears the event type cache.
      */
     void clearEventTypeCache();
+
+    /**
+     * Clears the API features cache.
+     */
+    void clearFeaturesCache();
 
     /**
      * Closes the client.

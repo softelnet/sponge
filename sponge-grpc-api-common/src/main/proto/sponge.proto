@@ -78,6 +78,7 @@ message VersionResponse {
 message SubscribeRequest {
   RequestHeader header = 1;
   repeated string event_names = 2;
+  bool registered_type_required = 3;
 }
 
 message SubscribeResponse {

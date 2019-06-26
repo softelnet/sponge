@@ -17,6 +17,7 @@
 package org.openksavi.sponge.remoteapi.server.test.grpc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -48,7 +49,9 @@ import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
+import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
@@ -123,7 +126,8 @@ public abstract class GrpcApiServerBaseTest {
         };
 
         StreamObserver<SubscribeRequest> requestObserver = stub.subscribe(responseObserver);
-        requestObserver.onNext(SubscribeRequest.newBuilder().addAllEventNames(Arrays.asList("notification.*")).build());
+        requestObserver.onNext(
+                SubscribeRequest.newBuilder().addAllEventNames(Arrays.asList("notification.*")).setRegisteredTypeRequired(true).build());
 
         if (!finishLatch.await(20, TimeUnit.SECONDS)) {
             fail("Timeout while waiting for responses.");
@@ -137,5 +141,14 @@ public abstract class GrpcApiServerBaseTest {
                 .readValue(responses.get(1).getEvent().getAttributes().getValueJson(), Map.class).get("source"));
 
         channel.shutdown();
+    }
+
+    @Test
+    public void testRemoteApiFeatures() {
+        try (SpongeRestClient client = createRestClient(false)) {
+            Map<String, Object> features = client.getFeatures();
+            assertEquals(1, features.size());
+            assertTrue((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
+        }
     }
 }

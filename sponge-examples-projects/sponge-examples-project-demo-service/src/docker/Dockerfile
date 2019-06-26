@@ -28,7 +28,8 @@ RUN echo >> $CATALINA_PROPERTIES \
     && echo "# Sponge system properties" >> $CATALINA_PROPERTIES \
     && echo "sponge.home=/opt/sponge" >> $CATALINA_PROPERTIES \
     && echo "digits.home=/opt/sponge/digits" >> $CATALINA_PROPERTIES \
-    && echo "password.file=/opt/sponge/password.txt" >> $CATALINA_PROPERTIES
+    && echo "password.file=/opt/sponge/password.txt" >> $CATALINA_PROPERTIES \
+    && echo "sponge.grpc.port=8081" >> $CATALINA_PROPERTIES
 
 WORKDIR /opt/sponge
 

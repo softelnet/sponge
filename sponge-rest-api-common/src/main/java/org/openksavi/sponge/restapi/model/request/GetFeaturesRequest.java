@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.grpcapi.server;
+package org.openksavi.sponge.restapi.model.request;
 
-/**
- * Sponge gRPC API server constants.
- */
-public final class GrpcApiServerConstants {
+import io.swagger.annotations.ApiModel;
 
-    public static final String TAG_AUTO_START = "autoStart";
+@ApiModel(value = "GetFeaturesRequest", description = "A get features request")
+public class GetFeaturesRequest extends SpongeRequest {
 
-    public static final String TAG_PORT = "port";
-
-    public static final boolean DEFAULT_AUTO_START = true;
-
-    private GrpcApiServerConstants() {
-        //
+    public GetFeaturesRequest() {
     }
 }

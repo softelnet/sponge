@@ -47,7 +47,9 @@ public class GrpcApiSendEvent extends JAction {
                 new StringType("name").withLabel("Event type").withDescription("Event type.")
                         .withProvided(new ProvidedMeta().withValueSet()),
                 new DynamicType("attributes").withLabel("Attributes").withDescription("Event attributes.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("name")));
+                        .withProvided(new ProvidedMeta().withValue().withDependency("name")),
+                new StringType("label").withNullable().withLabel("Event label").withDescription("Event label."),
+                new StringType("description").withNullable().withLabel("Event description").withDescription("Event description."));
         withNoResult();
         withFeatures(SpongeUtils.immutableMapOf("callLabel", "Send", "icon", "send"));
     }
@@ -57,8 +59,8 @@ public class GrpcApiSendEvent extends JAction {
         plugin = getSponge().getPlugin(RestApiServerPlugin.class);
     }
 
-    public void onCall(String name, DynamicValue<Map<String, Object>> attributes) {
-        plugin.getService().sendEvent(name, attributes.getValue(),
+    public void onCall(String name, DynamicValue<Map<String, Object>> attributes, String label, String description) {
+        plugin.getService().sendEvent(name, attributes.getValue(), label, description,
                 getRestApiService().getSession().getUserAuthentication().getUserContext());
     }
 
@@ -79,6 +81,8 @@ public class GrpcApiSendEvent extends JAction {
 
         if (context.getNames().contains("attributes")) {
             RecordType eventType = getSponge().getEventType((String) context.getCurrent().get("name"));
+            // TODO Initialization to empty map for attributes and person shouldn't be necessary but is currently required by the client
+            // GUI.
             Map<String, Object> attributes = new LinkedHashMap<>();
             attributes.put("person", Collections.emptyMap());
             context.getProvided().put("attributes", new ProvidedValue<>().withValue(new DynamicValue<>(attributes, eventType)));

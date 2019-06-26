@@ -30,6 +30,8 @@ public class Subscription {
 
     private List<String> eventNames;
 
+    private boolean registeredTypeRequired;
+
     private StreamObserver<SubscribeResponse> responseObserver;
 
     private UserContext userContext;
@@ -38,19 +40,20 @@ public class Subscription {
 
     private boolean active;
 
-    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, UserContext userContext,
-            String requestId, boolean active) {
+    public Subscription(long id, List<String> eventNames, boolean registeredTypeRequired,
+            StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, String requestId, boolean active) {
         this.id = id;
         setEventNames(eventNames);
+        this.registeredTypeRequired = registeredTypeRequired;
         this.responseObserver = responseObserver;
         this.userContext = userContext;
         this.requestId = requestId;
         this.active = active;
     }
 
-    public Subscription(long id, List<String> eventNames, StreamObserver<SubscribeResponse> responseObserver, UserContext userContext,
-            String requestId) {
-        this(id, eventNames, responseObserver, userContext, requestId, true);
+    public Subscription(long id, List<String> eventNames, boolean registeredTypeRequired,
+            StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, String requestId) {
+        this(id, eventNames, registeredTypeRequired, responseObserver, userContext, requestId, true);
     }
 
     public long getId() {
@@ -67,6 +70,14 @@ public class Subscription {
 
     public void setEventNames(List<String> eventNames) {
         this.eventNames = Collections.unmodifiableList(eventNames);
+    }
+
+    public boolean isRegisteredTypeRequired() {
+        return registeredTypeRequired;
+    }
+
+    public void setRegisteredTypeRequired(boolean registeredTypeRequired) {
+        this.registeredTypeRequired = registeredTypeRequired;
     }
 
     public StreamObserver<SubscribeResponse> getResponseObserver() {

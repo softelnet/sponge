@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.grpcapi.server;
+package org.openksavi.sponge.type.value;
 
 /**
- * Sponge gRPC API server constants.
+ * A decorated value.
  */
-public final class GrpcApiServerConstants {
+public interface DecoratedValue<T> {
 
-    public static final String TAG_AUTO_START = "autoStart";
+    T getValue();
 
-    public static final String TAG_PORT = "port";
-
-    public static final boolean DEFAULT_AUTO_START = true;
-
-    private GrpcApiServerConstants() {
-        //
-    }
+    void setValue(T value);
 }

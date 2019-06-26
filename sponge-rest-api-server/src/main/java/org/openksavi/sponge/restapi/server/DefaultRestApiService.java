@@ -17,7 +17,9 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +43,14 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestCategoryMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
+import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
@@ -58,6 +62,7 @@ import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
+import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
@@ -104,8 +109,14 @@ public class DefaultRestApiService implements RestApiService {
 
     private ThreadLocal<RestApiSession> session = new ThreadLocal<>();
 
+    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
+
     public DefaultRestApiService() {
-        //
+        setupDefaultFeatures();
+    }
+
+    protected void setupDefaultFeatures() {
+        setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
     }
 
     @Override
@@ -133,6 +144,21 @@ public class DefaultRestApiService implements RestApiService {
         } catch (Throwable e) {
             getEngine().handleError("REST getVersion", e);
             return setupErrorResponse(new GetVersionResponse(), request, e);
+        }
+    }
+
+    @Override
+    public GetFeaturesResponse getFeatures(GetFeaturesRequest request) {
+        try {
+            // Privileges checked only if the request is provided.
+            if (request != null) {
+                authenticateRequest(request);
+            }
+
+            return setupSuccessResponse(new GetFeaturesResponse(features), request);
+        } catch (Throwable e) {
+            getEngine().handleError("REST getFeatures", e);
+            return setupErrorResponse(new GetFeaturesResponse(), request, e);
         }
     }
 
@@ -330,7 +356,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext) {
+    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, UserContext userContext) {
         Validate.isTrue(canSendEvent(userContext, eventName), "No privileges to send the '%s' event", eventName);
 
         EventDefinition definition = getEngine().getOperations().event(eventName);
@@ -338,7 +364,19 @@ public class DefaultRestApiService implements RestApiService {
             definition.set(attributes);
         }
 
+        definition.label(label).description(description);
+
         return definition.send();
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, UserContext userContext) {
+        return sendEvent(eventName, attributes, label, null, userContext);
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext) {
+        return sendEvent(eventName, attributes, null, null, userContext);
     }
 
     @Override
@@ -633,5 +671,39 @@ public class DefaultRestApiService implements RestApiService {
         } finally {
             session.set(null);
         }
+    }
+
+    @Override
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    @Override
+    public void setFeature(String name, Object value) {
+        features.put(name, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getFeature(String name) {
+        return Validate.notNull((T) features.get(name), "Feature %s not found", name);
+    }
+
+    @Override
+    public <T> T getFeature(Class<T> cls, String name) {
+        return getFeature(name);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getFeature(String name, T defaultValue) {
+        T feature = (T) features.get(name);
+
+        return feature != null ? feature : defaultValue;
+    }
+
+    @Override
+    public <T> T getFeature(Class<T> cls, String name, T defaultValue) {
+        return getFeature(name, defaultValue);
     }
 }

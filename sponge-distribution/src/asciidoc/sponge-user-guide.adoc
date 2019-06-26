@@ -1226,7 +1226,7 @@ NOTE: The predefined file `password.txt` contains the hashed, insecure password 
 [source,bash,subs="verbatim,attributes"]
 ----
 # Run the demo in Docker using the predefined {sponge} configuration.
-docker run --name sponge-demo -it --rm -p 8080:8080 openksavi/sponge-demo
+docker run --name sponge-demo -it --rm -p 8080:8080 -p 8081:8081 openksavi/sponge-demo
 
 # Copy the predefined {sponge} configuration to the host in order to modify knowledge base files.
 docker cp sponge-demo:/opt/sponge/ .
@@ -1236,8 +1236,10 @@ docker stop sponge-demo
 
 # Start a new container using a new {sponge} configuration located in the host filesystem.
 # The configurtion directory is expected to have the sponge.xml file.
-docker run --name sponge-demo -it --rm -p 8080:8080 --mount type=bind,source="$(pwd)/sponge",target=/opt/sponge openksavi/sponge-demo
+docker run --name sponge-demo -it --rm -p 8080:8080 -p 8081:8081 --mount type=bind,source="$(pwd)/sponge",target=/opt/sponge openksavi/sponge-demo
 ----
+
+The port `8080` is used by the REST API and the port `8081` is used by the gRPC API.
 
 .Verification
 [source,bash,subs="verbatim,attributes"]
@@ -1286,6 +1288,7 @@ Assuming that Tomcat is installed in `/opt/tomcat` and the Sponge script files a
 sponge.home=/opt/tomcat/sponge
 digits.home=/opt/tomcat/sponge/digits
 password.file=/opt/tomcat/sponge/password.txt
+sponge.grpc.port=8081
 ----
 
 The sample file `password.txt` contains the hashed, insecure password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. This simple password can be used only for development and tests. In the case of publishing the service, this file should contain the hashed, secret and strong password.
@@ -1771,6 +1774,14 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |`sponge-rest-api-server`
 |Yes
 |The Sponge REST API server.
+
+|`sponge-grpc-api-server`
+|Yes
+|The Sponge gRPC API server.
+
+|`sponge-remote-api-server`
+|Yes
+|The Sponge Remote API server (has dependencies on the REST and the gRPC API servers).
 
 |`sponge-tensorflow`
 |Yes

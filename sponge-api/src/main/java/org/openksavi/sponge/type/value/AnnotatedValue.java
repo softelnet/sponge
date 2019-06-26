@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * An annotated value. The class is not thread safe.
  */
-public class AnnotatedValue<T> {
+public class AnnotatedValue<T> implements DecoratedValue<T> {
 
     /** The value. */
     private T value;
@@ -52,10 +52,12 @@ public class AnnotatedValue<T> {
         this.value = value;
     }
 
+    @Override
     public T getValue() {
         return value;
     }
 
+    @Override
     public void setValue(T value) {
         this.value = value;
     }

@@ -104,6 +104,15 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
+    public void testFeatures() {
+        try (SpongeRestClient client = createRestClient()) {
+            Map<String, Object> features = client.getFeatures();
+            assertEquals(1, features.size());
+            assertFalse((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
+        }
+    }
+
+    @Test
     public void testVersionWithId() {
         try (SpongeRestClient client = createRestClient()) {
             client.getConfiguration().setUseRequestId(true);

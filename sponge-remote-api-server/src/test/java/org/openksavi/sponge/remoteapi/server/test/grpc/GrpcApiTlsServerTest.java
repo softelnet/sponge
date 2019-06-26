@@ -19,10 +19,13 @@ package org.openksavi.sponge.remoteapi.server.test.grpc;
 import java.io.File;
 
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
 
 import io.grpc.ManagedChannel;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
+
+import okhttp3.OkHttpClient;
 
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
@@ -41,6 +44,7 @@ import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
+import org.openksavi.sponge.restapi.client.util.RestClientUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -82,8 +86,14 @@ public class GrpcApiTlsServerTest extends GrpcApiServerBaseTest {
 
     @Override
     protected BaseSpongeRestClient createRestClient(boolean useEventTypeCache) {
-        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder()
-                .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
+        return new OkHttpSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("https://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+                        .useEventTypeCache(useEventTypeCache).build(),
+                // Insecure connection only for tests.
+                new OkHttpClient.Builder()
+                        .sslSocketFactory(RestClientUtils.createTrustAllSslContext().getSocketFactory(),
+                                RestClientUtils.createTrustAllTrustManager())
+                        .hostnameVerifier((String hostname, SSLSession session) -> true).build());
     }
 
     @Override

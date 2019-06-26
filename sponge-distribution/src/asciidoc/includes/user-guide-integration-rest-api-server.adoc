@@ -146,6 +146,10 @@ The following table contains a summary of the REST API operations. For a complet
 |`version`
 |Returns the Sponge version.
 
+|Get the API features
+|`features`
+|Returns the API features.
+
 |Login
 |`login`
 |User login. Used in a token-based authentication scenario.
@@ -302,6 +306,18 @@ class LowerCaseHello(Action):
         return "Hello " + restApiServer.session.user.name + ": " + text.lower()
 ----
 
+== API features
+
+.Remote API features
+[cols="2,1,4"]
+|===
+|Name |Type |Description
+
+|`grpcEnabled`
+|`Boolean`
+|Set to `true` if the optional {sponge} gRPC API service is enabled.
+|===
+
 == Security
 The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed. A user may have roles.
 
@@ -326,7 +342,7 @@ Only a username/password authentication mode is currently supported by the defau
 === Simple security strategy
 The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RemoteApiIsActionPublic`, `RemoteApiIsEventPublic`, `RemoteApiCanUseKnowledgeBase`, `RemoteApiCanSendEvent`, `RemoteApiCanSubscribeEvent`). Passwords are stored as SHA-512 hashes.
 
-.Example of the REST API simple security
+.Example of the Remote API simple security
 [source,python]
 ----
 from org.openksavi.sponge.restapi.server.security import User
