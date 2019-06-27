@@ -39,7 +39,7 @@ void main() async {
 
 Unless noted otherwise in the release notes, versions of the REST API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
 
-The REST API client for Dart is published at https://pub.dartlang.org/packages/sponge_client_dart[pub.dartlang.org].
+The REST API client for Dart is published as `sponge_client_dart` at https://pub.dartlang.org/packages/sponge_client_dart[pub.dartlang.org].
 
 For more information see the {dartClientDartdoc}/SpongeRestClient-class.html[`SpongeRestClient` Dartdoc] and the project {dartClientSourcesUrl}/[source code].
 

@@ -29,4 +29,8 @@ void main() async {
 }
 ----
 
+This project uses the https://pub.dev/packages/grpc[Dart implementation of gRPC] and doesn't support the web platform.
+
 Unless noted otherwise in the release notes, versions of the gRPC API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
+
+The gRPC API client for Dart is published as `sponge_grpc_client_dart` at https://pub.dartlang.org/packages/sponge_grpc_client_dart[pub.dartlang.org].

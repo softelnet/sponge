@@ -387,7 +387,7 @@ Behavior:
 * Every event that is relevant to the unordered rule causes a new instance of the rule to be created. This implicates that the event mode for an event that actually happens as the first is used by the engine only as a suggestion. So the actual order of events that happen has a significant impact on the behavior of unordered rules.
 * If at least one specified event has `none` mode, you probably should set a duration for such a rule to avoid superfluous instances of the rule.
 
-IMPORTANT: Unordered rules is a new feature that should be treated as an experimental one.
+IMPORTANT: Unordered rules should be treated as an experimental feature.
 
 === Event conditions
 A rule may define conditions for events that have to be met to consider an incoming event as corresponding to the rule:
