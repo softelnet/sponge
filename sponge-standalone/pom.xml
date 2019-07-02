@@ -81,6 +81,11 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-grpc-api-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-remote-api-server</artifactId>
             <version>${project.version}</version>
         </dependency>

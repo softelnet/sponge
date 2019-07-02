@@ -1,8 +1,6 @@
 = {sponge} REST API client for Java
 The {sponge} REST API client for Java simplifies connecting to a remote {sponge} REST API server from applications written in Java. The default implementation uses the http://square.github.io/okhttp/[OkHttp] library. The REST API client uses POST methods.
 
-NOTE: Currently the {sponge} REST API client for Java has less features that the {sponge} REST API client for Dart.
-
 .REST API client for an anonymous user
 [source,java]
 ----

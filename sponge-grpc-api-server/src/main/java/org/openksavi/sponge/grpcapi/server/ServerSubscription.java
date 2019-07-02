@@ -24,7 +24,7 @@ import io.grpc.stub.StreamObserver;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.restapi.server.security.UserContext;
 
-public class Subscription {
+public class ServerSubscription {
 
     private long id;
 
@@ -40,7 +40,7 @@ public class Subscription {
 
     private boolean active;
 
-    public Subscription(long id, List<String> eventNames, boolean registeredTypeRequired,
+    public ServerSubscription(long id, List<String> eventNames, boolean registeredTypeRequired,
             StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, String requestId, boolean active) {
         this.id = id;
         setEventNames(eventNames);
@@ -51,7 +51,7 @@ public class Subscription {
         this.active = active;
     }
 
-    public Subscription(long id, List<String> eventNames, boolean registeredTypeRequired,
+    public ServerSubscription(long id, List<String> eventNames, boolean registeredTypeRequired,
             StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, String requestId) {
         this(id, eventNames, registeredTypeRequired, responseObserver, userContext, requestId, true);
     }

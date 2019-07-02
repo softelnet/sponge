@@ -41,7 +41,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
     private SpongeEngine engine;
 
-    private SubscriptionManager subscriptionManager;
+    private ServerSubscriptionManager subscriptionManager;
 
     private RestApiService restApiService;
 
@@ -64,11 +64,11 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
         this.restApiService = restApiService;
     }
 
-    public SubscriptionManager getSubscriptionManager() {
+    public ServerSubscriptionManager getSubscriptionManager() {
         return subscriptionManager;
     }
 
-    public void setSubscriptionManager(SubscriptionManager subscriptionManager) {
+    public void setSubscriptionManager(ServerSubscriptionManager subscriptionManager) {
         this.subscriptionManager = subscriptionManager;
     }
 
@@ -103,7 +103,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
             @Override
             public void onNext(SubscribeRequest request) {
-                Subscription previousSubscription = subscriptionManager.getSubscription(subscriptionId);
+                ServerSubscription previousSubscription = subscriptionManager.getSubscription(subscriptionId);
 
                 // Handle keep alive requests.
                 boolean isKeepAlive =
@@ -119,7 +119,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
                         UserContext userContext = authenticateRequest(request);
 
                         logger.debug("New subscription {}", subscriptionId);
-                        subscriptionManager.putSubscription(new Subscription(subscriptionId, request.getEventNamesList(),
+                        subscriptionManager.putSubscription(new ServerSubscription(subscriptionId, request.getEventNamesList(),
                                 request.getRegisteredTypeRequired(), responseObserver, userContext,
                                 request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId()) ? request.getHeader().getId()
                                         : null));
@@ -151,7 +151,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
             @Override
             public synchronized void onCompleted() {
-                Subscription subscription = subscriptionManager.removeSubscription(subscriptionId);
+                ServerSubscription subscription = subscriptionManager.removeSubscription(subscriptionId);
                 if (subscription != null) {
                     responseObserver.onCompleted();
                 }

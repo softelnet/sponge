@@ -16,9 +16,6 @@
 
 package org.openksavi.sponge.remoteapi.server.test.grpc;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-
 import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.junit.runner.RunWith;
@@ -28,6 +25,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.grpcapi.client.DefaultSpongeGrpcClient;
+import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -75,8 +74,7 @@ public class GrpcApiServerTest extends GrpcApiServerBaseTest {
     }
 
     @Override
-    protected ManagedChannel createManagedChannel() {
-        // Insecure connection only for tests.
-        return ManagedChannelBuilder.forTarget("dns:///localhost:" + getGrpcPort()).usePlaintext().build();
+    protected SpongeGrpcClient createGrpcClient() {
+        return new DefaultSpongeGrpcClient(createRestClient(true), (builder) -> builder.usePlaintext());
     }
 }

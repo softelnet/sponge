@@ -1775,6 +1775,10 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |Yes
 |The Sponge REST API server.
 
+|`sponge-grpc-api-client`
+|Yes
+|The Sponge gRPC API client.
+
 |`sponge-grpc-api-server`
 |Yes
 |The Sponge gRPC API server.

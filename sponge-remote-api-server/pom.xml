@@ -42,6 +42,12 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-grpc-api-client</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-remote-api-test-base</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

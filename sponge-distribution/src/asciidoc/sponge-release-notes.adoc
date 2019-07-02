@@ -16,6 +16,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added new properties `label` and `description` to events.
 * Added a new property `unique` to the `ListType`.
 * Added support for providing element value set in list data types.
+* A new Sponge gRPC API Java client (`sponge-grpc-api-client`).
 * The Docker container is based on OpenJDK 11 now.
 * Dependencies upgrade.
 

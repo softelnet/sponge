@@ -19,6 +19,8 @@ package org.openksavi.sponge.restapi.client;
 import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
@@ -48,6 +50,7 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
@@ -582,4 +585,15 @@ public interface SpongeRestClient extends Closeable {
     Long getCurrentRequestId();
 
     String getCurrentAuthToken();
+
+    TypeConverter getTypeConverter();
+
+    void setTypeConverter(TypeConverter typeConverter);
+
+    <T extends SpongeRequest> T setupRequest(T request);
+
+    void handleResponseHeader(String operation, String errorCode, String errorMessage, String detailedErrorMessage);
+
+    <T, X> X executeWithAuthentication(T request, String requestUsername, String requestPassword, String requestAuthToken,
+            Function<T, X> onExecute, Supplier<T> onClearAuthToken);
 }

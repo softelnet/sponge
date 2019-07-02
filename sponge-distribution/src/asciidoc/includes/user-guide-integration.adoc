@@ -82,6 +82,8 @@ include::user-guide-integration-rest-api-client-dart.adoc[leveloffset=+1]
 
 include::user-guide-integration-grpc-api-server.adoc[leveloffset=+1]
 
+include::user-guide-integration-grpc-api-client-java.adoc[leveloffset=+1]
+
 include::user-guide-integration-grpc-api-client-dart.adoc[leveloffset=+1]
 
 [[integration-external-subprocess]]

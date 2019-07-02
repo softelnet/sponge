@@ -45,9 +45,9 @@ import org.openksavi.sponge.util.SpongeApiUtils;
 /**
  * A subscription manager.
  */
-public class SubscriptionManager {
+public class ServerSubscriptionManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(SubscriptionManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerSubscriptionManager.class);
 
     private SpongeEngine engine;
 
@@ -55,9 +55,9 @@ public class SubscriptionManager {
 
     private AtomicLong currentSubscriptionId = new AtomicLong(0);
 
-    private Map<Long, Subscription> subscriptions = new ConcurrentHashMap<>();
+    private Map<Long, ServerSubscription> subscriptions = new ConcurrentHashMap<>();
 
-    public SubscriptionManager(SpongeEngine engine, RestApiService restApiService) {
+    public ServerSubscriptionManager(SpongeEngine engine, RestApiService restApiService) {
         this.engine = engine;
         this.restApiService = restApiService;
     }
@@ -82,7 +82,7 @@ public class SubscriptionManager {
         return currentSubscriptionId;
     }
 
-    public Map<Long, Subscription> getSubscriptions() {
+    public Map<Long, ServerSubscription> getSubscriptions() {
         return subscriptions;
     }
 
@@ -90,19 +90,19 @@ public class SubscriptionManager {
         return currentSubscriptionId.incrementAndGet();
     }
 
-    public Subscription getSubscription(long subscriptionId) {
+    public ServerSubscription getSubscription(long subscriptionId) {
         return subscriptions.get(subscriptionId);
     }
 
-    public void putSubscription(Subscription subscription) {
+    public void putSubscription(ServerSubscription subscription) {
         subscriptions.put(Validate.notNull(subscription.getId(), "The subscription should have the id"), subscription);
     }
 
-    public Subscription removeSubscription(long subscriptionId) {
+    public ServerSubscription removeSubscription(long subscriptionId) {
         return subscriptions.remove(subscriptionId);
     }
 
-    protected boolean eventMatchesSubscription(org.openksavi.sponge.event.Event event, Subscription subscription) {
+    protected boolean eventMatchesSubscription(org.openksavi.sponge.event.Event event, ServerSubscription subscription) {
         return subscription.isActive()
                 && subscription.getEventNames().stream()
                         .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))
@@ -139,7 +139,7 @@ public class SubscriptionManager {
         inactiveSubscriptionIds.forEach(subscriptions::remove);
     }
 
-    protected SubscribeResponse createSubscribeResponse(Subscription subscription, org.openksavi.sponge.event.Event event) {
+    protected SubscribeResponse createSubscribeResponse(ServerSubscription subscription, org.openksavi.sponge.event.Event event) {
         ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
         if (subscription.getRequestId() != null) {
             headerBuilder.setId(subscription.getRequestId());

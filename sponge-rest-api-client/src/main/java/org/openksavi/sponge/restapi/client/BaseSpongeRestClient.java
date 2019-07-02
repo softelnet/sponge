@@ -28,6 +28,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -131,10 +133,12 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         typeConverter = new DefaultTypeConverter(mapper);
     }
 
+    @Override
     public TypeConverter getTypeConverter() {
         return typeConverter;
     }
 
+    @Override
     public void setTypeConverter(TypeConverter typeConverter) {
         this.typeConverter = typeConverter;
     }
@@ -276,7 +280,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     protected abstract <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request,
             Class<R> responseClass, SpongeRequestContext context);
 
-    protected <T extends SpongeRequest> T setupRequest(T request) {
+    @Override
+    public <T extends SpongeRequest> T setupRequest(T request) {
         // Set empty header if none.
         if (request.getHeader() == null) {
             request.setHeader(new RequestHeader());
@@ -307,21 +312,26 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return request;
     }
 
-    protected <T extends SpongeResponse> T setupResponse(T response) {
+    protected <T extends SpongeResponse> T setupResponse(String operation, T response) {
         // Set empty header if none.
         if (response.getHeader() == null) {
             response.setHeader(new ResponseHeader());
         }
 
         ResponseHeader header = response.getHeader();
+        handleResponseHeader(operation, header.getErrorCode(), header.getErrorMessage(), header.getDetailedErrorMessage());
 
-        if (header.getErrorCode() != null) {
+        return response;
+    }
+
+    @Override
+    public void handleResponseHeader(String operation, String errorCode, String errorMessage, String detailedErrorMessage) {
+        if (errorCode != null) {
             if (configuration.isThrowExceptionOnErrorResponse()) {
-                String message = header.getErrorMessage() != null ? header.getErrorMessage()
-                        : String.format("Error code: %s", header.getErrorCode());
+                String message = errorMessage != null ? errorMessage : String.format("Error code: %s", errorCode);
 
                 ErrorResponseException exception;
-                switch (header.getErrorCode()) {
+                switch (errorCode) {
                 case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
                     exception = new InvalidAuthTokenException(message);
                     break;
@@ -335,14 +345,12 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                     exception = new ErrorResponseException(message);
                 }
 
-                exception.setErrorCode(header.getErrorCode());
-                exception.setDetailedErrorMessage(header.getDetailedErrorMessage());
+                exception.setErrorCode(errorCode);
+                exception.setDetailedErrorMessage(detailedErrorMessage);
 
                 throw exception;
             }
         }
-
-        return response;
     }
 
     @Override
@@ -357,30 +365,48 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             request.setHeader(new RequestHeader());
         }
 
-        try {
-            if (configuration.isAutoUseAuthToken() && currentAuthToken.get() == null && request.getHeader().getAuthToken() == null) {
-                login();
-            }
+        final SpongeRequestContext finalContext = context;
 
-            return executeDelegate(operationType, request, responseClass, context);
-        } catch (InvalidAuthTokenException e) {
-            // Relogin if set up and necessary.
-            if (currentAuthToken.get() != null && configuration.isRelogin()) {
-                login();
-
-                // Clear the request auth token.
-                request.getHeader().setAuthToken(null);
-
-                return executeDelegate(operationType, request, responseClass, context);
-            } else {
-                throw e;
-            }
-        }
+        return executeWithAuthentication(request, request.getHeader().getUsername(), request.getHeader().getPassword(),
+                request.getHeader().getAuthToken(), (req) -> executeDelegate(operationType, req, responseClass, finalContext), () -> {
+                    request.getHeader().setAuthToken(null);
+                    return request;
+                });
     }
 
     @Override
     public <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass) {
         return execute(operationType, request, responseClass, null);
+    }
+
+    protected boolean isRequestAnonymous(String requestUsername, String requestPassword) {
+        return configuration.getUsername() == null && requestUsername == null && configuration.getPassword() == null
+                && requestPassword == null;
+    }
+
+    @Override
+    public <T, X> X executeWithAuthentication(T request, String requestUsername, String requestPassword, String requestAuthToken,
+            Function<T, X> onExecute, Supplier<T> onClearAuthToken) {
+        try {
+            if (configuration.isAutoUseAuthToken() && currentAuthToken.get() == null && requestAuthToken == null
+                    && !isRequestAnonymous(requestUsername, requestPassword)) {
+                login();
+            }
+
+            return onExecute.apply(request);
+        } catch (InvalidAuthTokenException e) {
+            // Relogin if set up and necessary.
+            if (currentAuthToken.get() != null && configuration.isRelogin()) {
+                login();
+
+                // Clear the request auth token and setup a new request.
+                T newRequest = onClearAuthToken.get();
+
+                return onExecute.apply(newRequest);
+            } else {
+                throw e;
+            }
+        }
     }
 
     protected <T extends SpongeRequest, R extends SpongeResponse> R executeDelegate(String operationType, T request, Class<R> responseClass,
@@ -389,7 +415,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             context = SpongeRequestContext.builder().build();
         }
 
-        return setupResponse(doExecute(operationType, setupRequest(request), responseClass, context));
+        return setupResponse(operationType, doExecute(operationType, setupRequest(request), responseClass, context));
     }
 
     @Override

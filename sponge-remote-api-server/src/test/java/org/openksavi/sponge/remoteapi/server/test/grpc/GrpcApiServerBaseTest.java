@@ -17,6 +17,7 @@
 package org.openksavi.sponge.remoteapi.server.test.grpc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,8 +32,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
@@ -41,17 +40,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc;
-import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiBlockingStub;
-import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiStub;
-import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
-import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
-import org.openksavi.sponge.grpcapi.proto.VersionRequest;
-import org.openksavi.sponge.grpcapi.proto.VersionResponse;
+import org.openksavi.sponge.grpcapi.client.ClientSubscription;
+import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.client.model.RemoteEvent;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
@@ -67,80 +62,66 @@ public abstract class GrpcApiServerBaseTest {
     @Named(PortTestConfig.PORT_BEAN_NAME)
     protected Integer port;
 
-    @Deprecated
-    private TypeConverter typeConverter = new DefaultTypeConverter(RestApiUtils.createObjectMapper());
-
     protected abstract BaseSpongeRestClient createRestClient(boolean useEventTypeCache);
 
-    protected int getGrpcPort() {
-        return port.intValue() + 1;
-    }
-
-    protected ManagedChannel createManagedChannel() {
-        return ManagedChannelBuilder.forTarget("dns:///localhost:" + getGrpcPort()).usePlaintext().build();
-    }
+    protected abstract SpongeGrpcClient createGrpcClient();
 
     @Test
     public void testVersion() {
-        ManagedChannel channel = createManagedChannel();
-        SpongeGrpcApiBlockingStub stub = SpongeGrpcApiGrpc.newBlockingStub(channel);
-        VersionResponse response = stub.getVersion(VersionRequest.newBuilder().build());
-
-        // TODO Dynamic version.
-        assertEquals("1.10.0", response.getVersion());
-
-        channel.shutdown();
+        try (SpongeGrpcClient grpcClient = createGrpcClient()) {
+            assertEquals(grpcClient.getRestClient().getVersion(), grpcClient.getVersion());
+        }
     }
 
     @Test
     public void testSubscribe() throws Exception {
-        ManagedChannel channel = createManagedChannel();
-        SpongeGrpcApiStub stub = SpongeGrpcApiGrpc.newStub(channel);
-
         int maxEvents = 3;
         final CountDownLatch finishLatch = new CountDownLatch(1);
-        final List<SubscribeResponse> responses = Collections.synchronizedList(new ArrayList<>());
+        final List<RemoteEvent> events = Collections.synchronizedList(new ArrayList<>());
+        ClientSubscription subscription;
 
-        StreamObserver<SubscribeResponse> responseObserver = new StreamObserver<SubscribeResponse>() {
+        try (SpongeGrpcClient grpcClient = createGrpcClient()) {
+            StreamObserver<RemoteEvent> eventObserver = new StreamObserver<RemoteEvent>() {
 
-            @Override
-            public void onNext(SubscribeResponse response) {
-                logger.info("Response event: {}", response.hasEvent() ? response.getEvent().getName() : null);
-                responses.add(response);
+                @Override
+                public void onNext(RemoteEvent event) {
+                    logger.info("Response event: {}", event.getName());
+                    events.add(event);
 
-                if (responses.size() >= maxEvents) {
+                    if (events.size() >= maxEvents) {
+                        finishLatch.countDown();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    logger.warn("Error: {}", Status.fromThrowable(t));
                     finishLatch.countDown();
                 }
+
+                @Override
+                public void onCompleted() {
+                    finishLatch.countDown();
+                }
+            };
+
+            List<String> eventNames = Arrays.asList("notification.*");
+            subscription = grpcClient.subscribe(eventNames, true, eventObserver);
+            assertEquals(eventNames, subscription.getEventNames());
+            assertTrue(subscription.isRegisteredTypeRequired());
+            assertTrue(subscription.isSubscribed());
+
+            if (!finishLatch.await(20, TimeUnit.SECONDS)) {
+                fail("Timeout while waiting for responses.");
             }
 
-            @Override
-            public void onError(Throwable t) {
-                logger.warn("Error: {}", Status.fromThrowable(t));
-                finishLatch.countDown();
-            }
-
-            @Override
-            public void onCompleted() {
-                finishLatch.countDown();
-            }
-        };
-
-        StreamObserver<SubscribeRequest> requestObserver = stub.subscribe(responseObserver);
-        requestObserver.onNext(
-                SubscribeRequest.newBuilder().addAllEventNames(Arrays.asList("notification.*")).setRegisteredTypeRequired(true).build());
-
-        if (!finishLatch.await(20, TimeUnit.SECONDS)) {
-            fail("Timeout while waiting for responses.");
+            subscription.close();
         }
 
-        requestObserver.onCompleted();
+        assertFalse(subscription.isSubscribed());
+        assertEquals(maxEvents, events.size());
 
-        assertEquals(maxEvents, responses.size());
-
-        assertEquals("Sponge", typeConverter.getObjectMapper()
-                .readValue(responses.get(1).getEvent().getAttributes().getValueJson(), Map.class).get("source"));
-
-        channel.shutdown();
+        assertEquals("Sponge", events.get(1).getAttributes().get("source"));
     }
 
     @Test

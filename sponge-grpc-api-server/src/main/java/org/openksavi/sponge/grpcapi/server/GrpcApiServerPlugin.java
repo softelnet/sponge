@@ -137,7 +137,7 @@ public class GrpcApiServerPlugin extends JPlugin {
             }
             service.setEngine(getEngine());
             service.setRestApiService(restApiServerPlugin.getService());
-            service.setSubscriptionManager(new SubscriptionManager(getEngine(), restApiServerPlugin.getService()));
+            service.setSubscriptionManager(new ServerSubscriptionManager(getEngine(), restApiServerPlugin.getService()));
 
             int port = resolveServerPort();
             NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);

@@ -1,0 +1,34 @@
+= {sponge} gRPC API client for Java
+The {sponge} gRPC API client for Java simplifies connecting to a remote {sponge} gRPC API service from applications written in Java.
+
+.gRPC API client
+[source,java]
+----
+// Create a new Sponge REST API client.
+try (SpongeRestClient restClient = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
+        .url("http://localhost:8080/sponge.json/v1")
+        .build())) {
+    // Create a new Sponge gRPC API client associated with the REST API client.
+    // Don't use insecure channel in production.
+    try (SpongeGrpcClient grpcClient = new DefaultSpongeGrpcClient(restClient, (builder) -> builder.usePlaintext())) {
+        // Get the Sponge version.
+        String version = grpcClient.getVersion();
+    }
+}
+----
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/grpcapi/client/DefaultSpongeGrpcClient.html[`DefaultSpongeGrpcClient` Javadoc] and examples in the source code.
+
+[discrete]
+== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-grpc-api-client</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
