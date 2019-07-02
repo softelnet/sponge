@@ -56,17 +56,17 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     private ManagedChannel channel;
 
-    private Lock lock = new ReentrantLock(true);
-
     private SpongeGrpcApiStub serviceAsyncStub;
 
     private SpongeGrpcApiBlockingStub serviceBlockingStub;
 
-    private long channelShutdownTimeout = -1;
-
     private long keepAliveTime = 15 * 60;
 
     private long keepAliveTimeout = 5 * 60;
+
+    private long channelShutdownTimeout = -1;
+
+    private Lock lock = new ReentrantLock(true);
 
     protected BaseSpongeGrpcClient(SpongeRestClient restClient, Consumer<T> channelBuilderConfigurer) {
         this.restClient = restClient;
@@ -94,6 +94,23 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
         return serviceBlockingStub;
     }
 
+    public long getKeepAliveTime() {
+        return keepAliveTime;
+    }
+
+    public void setKeepAliveTime(long keepAliveTime) {
+        this.keepAliveTime = keepAliveTime;
+    }
+
+    public long getKeepAliveTimeout() {
+        return keepAliveTimeout;
+    }
+
+    public void setKeepAliveTimeout(long keepAliveTimeout) {
+        this.keepAliveTimeout = keepAliveTimeout;
+    }
+
+    @Override
     public long getChannelShutdownTimeout() {
         return channelShutdownTimeout;
     }

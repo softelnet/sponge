@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-grpc-api-common</artifactId>
+            <artifactId>sponge-grpc-api-server</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

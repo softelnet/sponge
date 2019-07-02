@@ -21,8 +21,6 @@ package org.openksavi.sponge.grpcapi;
  */
 public final class GrpcApiConstants {
 
-    public static final String PROPERTY_GRPC_PORT = "sponge.grpc.port";
-
     private GrpcApiConstants() {
         //
     }

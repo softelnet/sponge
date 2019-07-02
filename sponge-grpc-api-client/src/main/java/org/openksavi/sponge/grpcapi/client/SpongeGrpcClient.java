@@ -37,16 +37,26 @@ public interface SpongeGrpcClient extends Closeable {
 
     ClientSubscription subscribe(List<String> eventNames, StreamObserver<RemoteEvent> eventStreamObserver);
 
-    void close(boolean terminate);
-
-    @Override
-    void close();
-
-    void setChannelShutdownTimeout(long channelShutdownTimeout);
-
     SpongeGrpcApiBlockingStub getServiceBlockingStub();
 
     SpongeGrpcApiStub getServiceAsyncStub();
 
     SpongeRestClient getRestClient();
+
+    long getKeepAliveTime();
+
+    void setKeepAliveTime(long keepAliveTime);
+
+    long getKeepAliveTimeout();
+
+    void setKeepAliveTimeout(long keepAliveTimeout);
+
+    long getChannelShutdownTimeout();
+
+    void setChannelShutdownTimeout(long channelShutdownTimeout);
+
+    void close(boolean terminate);
+
+    @Override
+    void close();
 }

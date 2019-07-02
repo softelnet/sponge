@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.grpcapi.GrpcApiConstants;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerConstants;
 import org.openksavi.sponge.logging.LoggingUtils;
 
 public class RemoteApiTestEnvironment {
@@ -44,7 +44,7 @@ public class RemoteApiTestEnvironment {
 
     public void start(int port) {
         // Sponge gRPC API server port convention.
-        System.setProperty(GrpcApiConstants.PROPERTY_GRPC_PORT, String.valueOf(port + 1));
+        System.setProperty(GrpcApiServerConstants.PROPERTY_GRPC_PORT, String.valueOf(port + 1));
 
         try {
             server = new Server(port);

@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.SslConfiguration;
-import org.openksavi.sponge.grpcapi.GrpcApiConstants;
 import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
 import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
 import org.openksavi.sponge.java.JPlugin;
@@ -108,7 +107,7 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     protected int resolveServerPort() {
-        String portProperty = getEngine().getConfigurationManager().getProperty(GrpcApiConstants.PROPERTY_GRPC_PORT);
+        String portProperty = getEngine().getConfigurationManager().getProperty(GrpcApiServerConstants.PROPERTY_GRPC_PORT);
         if (portProperty != null) {
             return Integer.parseInt(portProperty.trim());
         }

@@ -27,6 +27,8 @@ public final class GrpcApiServerConstants {
 
     public static final boolean DEFAULT_AUTO_START = true;
 
+    public static final String PROPERTY_GRPC_PORT = "sponge.grpc.port";
+
     private GrpcApiServerConstants() {
         //
     }
