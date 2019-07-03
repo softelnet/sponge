@@ -44,7 +44,7 @@ public class RecordType extends DataType<Map<String, Object>> {
     /** The flag that tells if inheritance has been applied to this type. */
     private boolean inheritationApplied = false;
 
-    private transient Map<String, DataType> _fieldLookupMap;
+    private transient Map<String, DataType> fieldLookupMap;
 
     public RecordType() {
         this((String) null);
@@ -192,13 +192,13 @@ public class RecordType extends DataType<Map<String, Object>> {
     }
 
     protected void refreshFieldLookupMap() {
-        _fieldLookupMap =
+        fieldLookupMap =
                 fields != null ? fields.stream().collect(Collectors.toMap(DataType::getName, Function.identity())) : new HashMap<>();
     }
 
     @SuppressWarnings("unchecked")
     public <T extends DataType<?>> T getFieldType(String fieldName) {
-        return (T) Validate.notNull(_fieldLookupMap.get(fieldName), "Field %s not found in the record type", fieldName);
+        return (T) Validate.notNull(fieldLookupMap.get(fieldName), "Field %s not found in the record type", fieldName);
     }
 
     @Override

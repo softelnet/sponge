@@ -1005,20 +1005,20 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         return (T) setupRegisteredTypeInstance(registeredTypeName, type);
     }
 
+    @Override
+    public <T extends DataType<?>> T getType(String registeredTypeName, String locationName) {
+        T type = getType(registeredTypeName);
+        type.setName(locationName);
+
+        return type;
+    }
+
     protected <T extends DataType<?>> T setupRegisteredTypeInstance(String registeredTypeName, T type) {
         // Set the registered type name in the new instance.
         type.setRegisteredType(registeredTypeName);
 
         // A type is set up every get to allow dynamic behavior.
         SpongeUtils.setupType(type);
-
-        return type;
-    }
-
-    @Override
-    public <T extends DataType<?>> T getType(String registeredTypeName, String locationName) {
-        T type = getType(registeredTypeName);
-        type.setName(locationName);
 
         return type;
     }

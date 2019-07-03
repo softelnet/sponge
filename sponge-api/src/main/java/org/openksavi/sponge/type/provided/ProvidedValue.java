@@ -113,7 +113,7 @@ public class ProvidedValue<T> {
     }
 
     public <E> ProvidedValue<T> withElementValueSet(List<E> elementValueSet) {
-        return withAnnotatedElementValueSet(elementValueSet != null
-                ? elementValueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()) : null);
+        return withAnnotatedElementValueSet(
+                elementValueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()));
     }
 }

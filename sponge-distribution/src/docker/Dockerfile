@@ -10,7 +10,7 @@ RUN apt-get -qq update \
     && pip3 install py4j \
     && mkdir -p /opt
 
-COPY target/standalone/sponge-${SPONGE_VERSION}-standalone.zip /opt/
+COPY sponge-${SPONGE_VERSION}-standalone.zip /opt/
 
 RUN cd /opt \
     && unzip -q sponge-${SPONGE_VERSION}-standalone.zip \

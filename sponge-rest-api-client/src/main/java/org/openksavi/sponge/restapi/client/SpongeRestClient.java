@@ -449,6 +449,7 @@ public interface SpongeRestClient extends Closeable {
      *
      * @param request the request.
      * @param context the context.
+     * @return the response.
      */
     GetEventTypesResponse getEventTypes(GetEventTypesRequest request, SpongeRequestContext context);
 
@@ -456,6 +457,7 @@ public interface SpongeRestClient extends Closeable {
      * Sends the {@code eventTypes} request to the server.
      *
      * @param request the request.
+     * @return the response.
      */
     GetEventTypesResponse getEventTypes(GetEventTypesRequest request);
 

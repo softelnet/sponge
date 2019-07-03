@@ -77,14 +77,14 @@ public abstract class DataTypeUtils {
     public static Set<String> getRegisteredTypeNames(DataType type) {
         Set<String> types = new LinkedHashSet<>();
 
-        traverseDataType(new QualifiedDataType(type), qType -> {
-            if (qType.getType().getRegisteredType() != null) {
-                types.add(qType.getType().getRegisteredType());
+        traverseDataType(new QualifiedDataType(type), qualifiedType -> {
+            if (qualifiedType.getType().getRegisteredType() != null) {
+                types.add(qualifiedType.getType().getRegisteredType());
             }
 
             // Walk through record base types.
-            if (qType.getType() instanceof RecordType) {
-                RecordType recordType = (RecordType) qType.getType();
+            if (qualifiedType.getType() instanceof RecordType) {
+                RecordType recordType = (RecordType) qualifiedType.getType();
                 if (recordType.getBaseType() != null) {
                     types.addAll(getRegisteredTypeNames(recordType.getBaseType()));
                 }

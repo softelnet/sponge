@@ -191,7 +191,7 @@ public interface EngineOperations {
      *
      * @param name plugin name.
      * @return plugin.
-     * @param <T> Plugin type.
+     * @param <T> plugin type.
      */
     <T extends Plugin> T getPlugin(String name);
 
@@ -201,7 +201,7 @@ public interface EngineOperations {
      * @param cls plugin class.
      * @param name plugin name.
      * @return plugin.
-     * @param <T> Plugin type.
+     * @param <T> plugin type.
      */
     <T extends Plugin> T getPlugin(Class<T> cls, String name);
 
@@ -210,7 +210,7 @@ public interface EngineOperations {
      *
      * @param cls plugin class.
      * @return plugin.
-     * @param <T> Plugin type.
+     * @param <T> plugin type.
      */
     <T extends Plugin> T getPlugin(Class<T> cls);
 
@@ -228,6 +228,7 @@ public interface EngineOperations {
      * @param cls the plugin class.
      * @param name the plugin name.
      * @return {@code true} if the plugin is registered.
+     * @param <T> plugin type.
      */
     <T extends Plugin> boolean hasPlugin(Class<T> cls, String name);
 
@@ -236,6 +237,7 @@ public interface EngineOperations {
      *
      * @param cls the plugin class.
      * @return {@code true} if the plugin is registered.
+     * @param <T> plugin type.
      */
     <T extends Plugin> boolean hasPlugin(Class<T> cls);
 

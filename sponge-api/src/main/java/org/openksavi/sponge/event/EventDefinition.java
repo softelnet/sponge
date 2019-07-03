@@ -29,7 +29,7 @@ public interface EventDefinition {
      * Sets the event label.
      *
      * @param label the event label.
-     * @return @return this event definition for fluent API.
+     * @return this event definition for fluent API.
      */
     EventDefinition label(String label);
 
@@ -37,7 +37,7 @@ public interface EventDefinition {
      * Sets the event description.
      *
      * @param description the event description.
-     * @return @return this event definition for fluent API.
+     * @return this event definition for fluent API.
      */
     EventDefinition description(String description);
 
