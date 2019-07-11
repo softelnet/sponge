@@ -108,7 +108,7 @@ The following table contains a summary of the gRPC API operations.
 .The protobuf file for the gRPC API
 [source]
 ----
-include::{rootDir}/sponge-grpc-api-common/src/main/proto/sponge.proto[lines=17..-1]
+include::{includesRootDir}/sponge-grpc-api-common/src/main/proto/sponge.proto[lines=17..-1]
 ----
 
 == Configuration
