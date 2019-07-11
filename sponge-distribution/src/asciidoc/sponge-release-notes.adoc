@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.11.0 (not released yet)
+== 1.11.0 (2019-07-11)
 * API change: Renamed `exists*` methods to `has*` in the `EngineOperations`. Methods `getPlugin` and `getCategory` now throw exception if not found. They have the corresponsing `has*` methods.
 * REST API change: Base request and response properties have been moved to headers.
 * REST API changes reflecting the refactoring of user privileges.
