@@ -82,7 +82,7 @@
 
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
-        <commons-collections4.version>4.3</commons-collections4.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
         <commons-configuration2.version>2.5</commons-configuration2.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
@@ -97,7 +97,7 @@
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
         <camel.version>2.24.1</camel.version>
         <awaitility.version>3.1.6</awaitility.version>
-        <jline.version>3.12.0</jline.version>
+        <jline.version>3.12.1</jline.version>
         <py4j.version>0.10.8.1</py4j.version>
         <tensorflow.version>1.13.1</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
@@ -111,7 +111,7 @@
         <jserialcomm.version>2.5.1</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.22.0</grpc.version>
+        <grpc.version>1.22.1</grpc.version>
         <protobuf.version>3.7.1</protobuf.version>
         <protoc.version>3.7.1</protoc.version>
         <netty-tcnative.version>2.0.25.Final</netty-tcnative.version>
