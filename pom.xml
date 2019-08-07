@@ -76,25 +76,25 @@
         <!-- The newest version of Jython (2.7.1) is not used in Sponge. As stated on the Jython home page (http://www.jython.org/downloads.html): -->
         <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
         <jython.version>2.7.0</jython.version>
-        <jruby.version>9.2.7.0</jruby.version>
-        <groovy.version>2.5.7</groovy.version>
+        <jruby.version>9.2.8.0</jruby.version>
+        <groovy.version>2.5.8</groovy.version>
         <kotlin.version>1.3.41</kotlin.version>
 
         <commons-lang3.version>3.9</commons-lang3.version>
-        <commons-beanutils.version>1.9.3</commons-beanutils.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-configuration2.version>2.5</commons-configuration2.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
-        <commons-codec.version>1.12</commons-codec.version>
+        <commons-codec.version>1.13</commons-codec.version>
         <commons-crypto.version>1.0.0</commons-crypto.version>
         <commons-email.version>1.5</commons-email.version>
         <quartz.version>2.3.1</quartz.version>
         <guava.version>28.0-jre</guava.version>
-        <caffeine.version>2.7.0</caffeine.version>
-        <spring.version>5.1.8.RELEASE</spring.version>
-        <spring-integration.version>5.1.6.RELEASE</spring-integration.version>
-        <spring-security.version>5.1.5.RELEASE</spring-security.version>
+        <caffeine.version>2.8.0</caffeine.version>
+        <spring.version>5.1.9.RELEASE</spring.version>
+        <spring-integration.version>5.1.7.RELEASE</spring-integration.version>
+        <spring-security.version>5.1.6.RELEASE</spring-security.version>
         <camel.version>2.24.1</camel.version>
         <awaitility.version>3.1.6</awaitility.version>
         <jline.version>3.12.1</jline.version>
@@ -102,7 +102,7 @@
         <tensorflow.version>1.13.1</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
-        <rxjava2.version>2.2.10</rxjava2.version>
+        <rxjava2.version>2.2.11</rxjava2.version>
         <okhttp.version> 3.14.2</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.9</jackson.version>
@@ -111,7 +111,7 @@
         <jserialcomm.version>2.5.1</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.22.1</grpc.version>
+        <grpc.version>1.23.0</grpc.version>
         <protobuf.version>3.7.1</protobuf.version>
         <protoc.version>3.7.1</protoc.version>
         <netty-tcnative.version>2.0.25.Final</netty-tcnative.version>
@@ -120,14 +120,14 @@
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <swagger-ui.version>3.22.2</swagger-ui.version>
-        <webjars-locator.version>0.36</webjars-locator.version>
-        <jetty.version>9.4.19.v20190610</jetty.version>
+        <swagger-ui.version>3.23.5</swagger-ui.version>
+        <webjars-locator.version>0.37</webjars-locator.version>
+        <jetty.version>9.4.20.v20190813</jetty.version>
 
-        <slf4j.version>1.7.26</slf4j.version>
+        <slf4j.version>1.7.28</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>2.28.2</mockito.version>
+        <mockito.version>3.0.0</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
 
@@ -259,7 +259,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.22</version>
+                            <version>8.23</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -833,11 +833,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>

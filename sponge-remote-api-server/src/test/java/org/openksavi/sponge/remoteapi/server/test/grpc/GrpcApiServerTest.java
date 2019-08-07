@@ -75,6 +75,6 @@ public class GrpcApiServerTest extends GrpcApiServerBaseTest {
 
     @Override
     protected SpongeGrpcClient createGrpcClient() {
-        return new DefaultSpongeGrpcClient(createRestClient(true), (builder) -> builder.usePlaintext());
+        return new DefaultSpongeGrpcClient(createRestClient(true));
     }
 }

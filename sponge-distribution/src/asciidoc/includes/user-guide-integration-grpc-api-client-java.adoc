@@ -9,8 +9,8 @@ try (SpongeRestClient restClient = new DefaultSpongeRestClient(SpongeRestClientC
         .url("http://localhost:8080/sponge.json/v1")
         .build())) {
     // Create a new Sponge gRPC API client associated with the REST API client.
-    // Don't use insecure channel in production.
-    try (SpongeGrpcClient grpcClient = new DefaultSpongeGrpcClient(restClient, (builder) -> builder.usePlaintext())) {
+    // It is assumed that this gRPC service is insecure because the REST API is published as HTTP.
+    try (SpongeGrpcClient grpcClient = new DefaultSpongeGrpcClient(restClient)) {
         // Get the Sponge version.
         String version = grpcClient.getVersion();
     }

@@ -94,18 +94,22 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
         return serviceBlockingStub;
     }
 
+    @Override
     public long getKeepAliveTime() {
         return keepAliveTime;
     }
 
+    @Override
     public void setKeepAliveTime(long keepAliveTime) {
         this.keepAliveTime = keepAliveTime;
     }
 
+    @Override
     public long getKeepAliveTimeout() {
         return keepAliveTimeout;
     }
 
+    @Override
     public void setKeepAliveTimeout(long keepAliveTimeout) {
         this.keepAliveTimeout = keepAliveTimeout;
     }
@@ -137,10 +141,17 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
             String host = restUri.getHost();
             // Sponge gRPC API service port convention: REST API port + 1.
-            int port = (restUri.getPort() > -1 ? restUri.getPort() : 80) + 1;
+            int restPort = restUri.getPort() > -1 ? restUri.getPort() : (restClient.getConfiguration().isSsl() ? 443 : 80);
+            int port = restPort + 1;
             logger.info("Creating a new client to the Sponge gRPC API service on {}:{}", host, port);
 
             T channelBuilder = createChannelBuilder(host, port);
+
+            // If the REST API service is not HTTPS, use insecure gRPC.
+            if (!restClient.getConfiguration().isSsl()) {
+                channelBuilder.usePlaintext();
+            }
+
             if (keepAliveTime >= 0) {
                 channelBuilder.keepAliveTime(keepAliveTime, TimeUnit.SECONDS);
             }

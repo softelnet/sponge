@@ -218,7 +218,7 @@ class LowerCaseHello(Action):
         self.withLabel("Hello with lower case")
         self.withArg(StringType("text").withLabel("Text to lower case")).withResult(StringType().withLabel("Lower case text"))
     def onCall(self, text):
-        return "Hello " + restApiServer.session.user.name + ": " + text.lower()
+        return "Hello " + restApiServer.session.userAuthentication.userContext.name + ": " + text.lower()
 
 class DrawDoodle(Action):
     def onConfigure(self):
