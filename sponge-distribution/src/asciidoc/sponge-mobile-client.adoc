@@ -16,6 +16,8 @@ The mobile application uses several {sponge} concepts such as actions and action
 
 You could build a customized GUI using your own Flutter code that will call the same {sponge} actions. In that case the generic {sponge} mobile client would be used as a Flutter library in your Flutter project.
 
+_There is also a draft of an additional, experimental functionality that will allow users to subscribe to {sponge} events in the mobile application. In case of a new event a notification will be displayed. The subscribed events will be shown in the list. By tapping on an event the user will be directed to a screen presenting an action associated with this event._
+
 == Functionalities
 The following chapters show the key functionalities of the mobile application.
 

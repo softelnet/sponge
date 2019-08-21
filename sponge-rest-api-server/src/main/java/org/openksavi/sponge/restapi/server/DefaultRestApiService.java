@@ -346,7 +346,7 @@ public class DefaultRestApiService implements RestApiService {
                 attributes = typeConverter.unmarshal(eventType, attributes);
             }
 
-            Event event = sendEvent(eventName, attributes, userContext);
+            Event event = sendEvent(eventName, attributes, request.getLabel(), request.getDescription(), userContext);
 
             return setupSuccessResponse(new SendEventResponse(event.getId()), request);
         } catch (Throwable e) {
