@@ -48,7 +48,7 @@ class LightSensorListener(Correlator):
         self.withEvent("lightSensorListener").withMaxInstances(1)
     def onInit(self):
         self.light = None
-        self.darkThreshold = 20.0
+        self.darkThreshold = 100.0
         self.publishOnlyChanges = True
     def onEvent(self, event):
         try:
@@ -58,7 +58,7 @@ class LightSensorListener(Correlator):
                 sponge.event("sensorChange").set("light", newLight).send()
             self.light = newLight
             if sponge.getVariable("grovePiMode", None) == "auto":
-                # Set red led.
+                # Set the red led.
                 grovePiDevice.setRedLed(newLight < self.darkThreshold)
         finally:
             # Continue the event chain.

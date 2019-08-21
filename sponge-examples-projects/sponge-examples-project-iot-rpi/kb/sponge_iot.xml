@@ -33,6 +33,9 @@
         <knowledgeBase name="os" label="OS">
             <file>sponge_iot_os.py</file>
         </knowledgeBase>
+        <knowledgeBase name="events" label="Events">
+            <file>sponge_iot_grpc.py</file>
+        </knowledgeBase>
         <knowledgeBase name="admin" label="Admin">
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
         </knowledgeBase>
@@ -57,6 +60,11 @@
                 <autoStart>false</autoStart>
                 <allowAnonymous>false</allowAnonymous>
                 <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+            </configuration>
+        </plugin>
+        <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin">
+            <configuration>
+                <autoStart>false</autoStart>
             </configuration>
         </plugin>
     </plugins>

@@ -87,6 +87,7 @@ def onStartup():
     camel.waitForContextFullyStarted()
     camel.context.addRoutes(IoTRouteBuilder())
     restApiServer.start()
+    grpcApiServer.start()
 
     sponge.call("SetLcd", ["Sponge started", "00f767"])
 
