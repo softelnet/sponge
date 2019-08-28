@@ -11,5 +11,7 @@ def onBeforeLoad():
     ]))
 
 def onStartup():
+    # Enable support actions in this knowledge base.
+    grpcApiServer.enableSupport(sponge)
     sponge.event("notification").set("source", "Sponge").set("severity", 10).set("person", {"firstName":"James", "surname":"Joyce"}).sendAfter(
         Duration.ZERO, Duration.ofSeconds(1))

@@ -78,6 +78,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.awaitility.Durations;
 import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -563,7 +564,7 @@ public abstract class SpongeUtils {
 
     public static boolean awaitUntil(Callable<Boolean> callable) {
         try {
-            await().atMost(org.awaitility.Duration.FOREVER).until(callable);
+            await().atMost(Durations.FOREVER).until(callable);
             return true;
         } catch (ConditionTimeoutException e) {
             return false;

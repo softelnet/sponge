@@ -16,7 +16,6 @@
 
 package org.openksavi.sponge.grpcapi.server.support.kb;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,10 +80,8 @@ public class GrpcApiSendEvent extends JAction {
 
         if (context.getNames().contains("attributes")) {
             RecordType eventType = getSponge().getEventType((String) context.getCurrent().get("name"));
-            // TODO Initialization to empty map for attributes and person shouldn't be necessary but is currently required by the client
-            // GUI.
+            // Initialize an empty attributes map.
             Map<String, Object> attributes = new LinkedHashMap<>();
-            attributes.put("person", Collections.emptyMap());
             context.getProvided().put("attributes", new ProvidedValue<>().withValue(new DynamicValue<>(attributes, eventType)));
         }
     }

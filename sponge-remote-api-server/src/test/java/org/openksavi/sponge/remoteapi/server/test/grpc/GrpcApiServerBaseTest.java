@@ -18,16 +18,19 @@ package org.openksavi.sponge.remoteapi.server.test.grpc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,6 +42,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.client.ClientSubscription;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
@@ -47,9 +51,9 @@ import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.model.RemoteEvent;
-import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
-import org.openksavi.sponge.restapi.type.converter.TypeConverter;
-import org.openksavi.sponge.restapi.util.RestApiUtils;
+import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.type.value.DynamicValue;
 
 public abstract class GrpcApiServerBaseTest {
 
@@ -130,6 +134,77 @@ public abstract class GrpcApiServerBaseTest {
             Map<String, Object> features = client.getFeatures();
             assertEquals(1, features.size());
             assertTrue((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSendEventAction() {
+        String eventName = "notification";
+        String eventLabel = "NOTIFICATION LABEL";
+        Map<String, Object> eventAttributes = SpongeUtils.immutableMapOf("source", "SOURCE", "severity", 5, "person",
+                SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce"));
+
+        try (SpongeGrpcClient grpcClient = createGrpcClient()) {
+            // Subscribe to events of types equal to the one that will be sent.
+            final CountDownLatch finishLatch = new CountDownLatch(1);
+            AtomicBoolean receivedEvent = new AtomicBoolean(false);
+
+            StreamObserver<RemoteEvent> eventObserver = new StreamObserver<RemoteEvent>() {
+
+                @Override
+                public void onNext(RemoteEvent event) {
+                    if (event.getName().equals(eventName) && event.getAttributes().equals(eventAttributes)
+                            && event.getLabel().equals(eventLabel)) {
+                        receivedEvent.set(true);
+                        finishLatch.countDown();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    logger.warn("Error: {}", Status.fromThrowable(t));
+                    finishLatch.countDown();
+                }
+
+                @Override
+                public void onCompleted() {
+                    finishLatch.countDown();
+                }
+            };
+
+            ClientSubscription subscription = grpcClient.subscribe(Arrays.asList(eventName), true, eventObserver);
+            try {
+                String sendEventActionName = "GrpcApiSendEvent";
+                SpongeRestClient restClient = grpcClient.getRestClient();
+                Map<String, ProvidedValue<?>> providedArgs =
+                        restClient.provideActionArgs(sendEventActionName, Arrays.asList("name"), new LinkedHashMap<>());
+                assertEquals(1, providedArgs.size());
+                assertEquals(1, providedArgs.get("name").getAnnotatedValueSet().size());
+
+                providedArgs = restClient.provideActionArgs(sendEventActionName, Arrays.asList("attributes"),
+                        SpongeUtils.immutableMapOf("name", eventName));
+                Map<String, Object> providedAttributes =
+                        (Map<String, Object>) ((DynamicValue<?>) providedArgs.get("attributes").getValue()).getValue();
+                assertEquals(0, providedAttributes.size());
+
+                RecordType eventType = restClient.getEventType(eventName);
+                assertNotNull(eventType);
+
+                // Send a new event by the action.
+                restClient.call(sendEventActionName,
+                        Arrays.asList(eventName, new DynamicValue<Map<String, Object>>(eventAttributes, eventType), eventLabel, null));
+
+                if (!finishLatch.await(20, TimeUnit.SECONDS)) {
+                    fail("Timeout while waiting for the event.");
+                }
+
+                assertTrue(receivedEvent.get());
+
+            } catch (InterruptedException e) {
+                throw SpongeUtils.wrapException(e);
+            } finally {
+                subscription.close();
+            }
         }
     }
 }

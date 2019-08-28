@@ -21,7 +21,7 @@ import java.io.File;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 
-import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
 
 import okhttp3.OkHttpClient;
 

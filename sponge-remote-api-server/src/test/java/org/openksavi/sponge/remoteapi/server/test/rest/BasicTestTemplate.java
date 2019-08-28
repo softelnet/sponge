@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -41,7 +42,7 @@ public class BasicTestTemplate {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
+            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
                     .config("examples/remote-api-server/remote_api.xml").build();
         }
 
@@ -52,6 +53,11 @@ public class BasicTestTemplate {
             plugin.getSettings().setPrettyPrint(true);
 
             return plugin;
+        }
+
+        @Bean
+        public GrpcApiServerPlugin spongeGrpcApiPlugin() {
+            return new GrpcApiServerPlugin();
         }
     }
 }

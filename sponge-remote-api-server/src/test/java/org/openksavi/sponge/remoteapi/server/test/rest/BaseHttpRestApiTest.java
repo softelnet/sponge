@@ -25,6 +25,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -41,7 +42,7 @@ public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin())
+            return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
                     .config("examples/remote-api-server/rest_api_security.xml").build();
         }
 
@@ -59,6 +60,11 @@ public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
             plugin.setSecurityService(restApiSecurityService());
 
             return plugin;
+        }
+
+        @Bean
+        public GrpcApiServerPlugin spongeGrpcApiPlugin() {
+            return new GrpcApiServerPlugin();
         }
 
         @Bean

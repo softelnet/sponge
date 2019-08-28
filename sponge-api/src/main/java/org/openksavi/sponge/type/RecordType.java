@@ -198,7 +198,7 @@ public class RecordType extends DataType<Map<String, Object>> {
 
     @SuppressWarnings("unchecked")
     public <T extends DataType<?>> T getFieldType(String fieldName) {
-        return (T) Validate.notNull(fieldLookupMap.get(fieldName), "Field %s not found in the record type", fieldName);
+        return (T) Validate.notNull(fieldLookupMap.get(fieldName), "Field '%s' not found in the record type", fieldName);
     }
 
     @Override

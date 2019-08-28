@@ -8,5 +8,6 @@
         <ignoreVersion type="regex">.*(rc|RC|CR|Beta)[\d].*</ignoreVersion>
         <ignoreVersion type="regex">.*(-M)[\d].*</ignoreVersion>
         <ignoreVersion type="regex">.*(.pr)[\d].*</ignoreVersion>
+        <ignoreVersion type="regex">.*(-b)[\d].*</ignoreVersion>
     </ignoreVersions>
 </ruleset>

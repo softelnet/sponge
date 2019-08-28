@@ -55,6 +55,8 @@ public abstract class BaseTypeConverter implements TypeConverter {
             return null;
         }
 
+        Validate.notNull(type, "The type must not be null");
+
         if (type.isAnnotated()) {
             AnnotatedValue<T> annotatedValue = (AnnotatedValue) value;
             return new AnnotatedValue<>(getUnitConverter(type).marshal(this, type, annotatedValue.getValue()), annotatedValue.getLabel(),
@@ -69,6 +71,8 @@ public abstract class BaseTypeConverter implements TypeConverter {
         if (value == null) {
             return null;
         }
+
+        Validate.notNull(type, "The type must not be null");
 
         if (type.isAnnotated()) {
             Validate.isInstanceOf(Map.class, value, "Expected an annotated value as a map but got %s", value.getClass());

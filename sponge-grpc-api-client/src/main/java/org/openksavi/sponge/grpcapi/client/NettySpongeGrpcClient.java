@@ -18,7 +18,7 @@ package org.openksavi.sponge.grpcapi.client;
 
 import java.util.function.Consumer;
 
-import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 

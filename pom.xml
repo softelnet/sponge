@@ -71,14 +71,13 @@
         <sponge.root>${basedir}</sponge.root>
 
         <javax.inject.version>1</javax.inject.version>
-        <javax.transaction.version>1.2</javax.transaction.version>
 
         <!-- The newest version of Jython (2.7.1) is not used in Sponge. As stated on the Jython home page (http://www.jython.org/downloads.html): -->
         <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.2.8.0</jruby.version>
         <groovy.version>2.5.8</groovy.version>
-        <kotlin.version>1.3.41</kotlin.version>
+        <kotlin.version>1.3.50</kotlin.version>
 
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -90,23 +89,23 @@
         <commons-crypto.version>1.0.0</commons-crypto.version>
         <commons-email.version>1.5</commons-email.version>
         <quartz.version>2.3.1</quartz.version>
-        <guava.version>28.0-jre</guava.version>
+        <guava.version>28.1-jre</guava.version>
         <caffeine.version>2.8.0</caffeine.version>
         <spring.version>5.1.9.RELEASE</spring.version>
         <spring-integration.version>5.1.7.RELEASE</spring-integration.version>
         <spring-security.version>5.1.6.RELEASE</spring-security.version>
         <camel.version>2.24.1</camel.version>
-        <awaitility.version>3.1.6</awaitility.version>
+        <awaitility.version>4.0.0</awaitility.version>
         <jline.version>3.12.1</jline.version>
         <py4j.version>0.10.8.1</py4j.version>
         <tensorflow.version>1.13.1</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
-        <rxjava2.version>2.2.11</rxjava2.version>
-        <okhttp.version> 3.14.2</okhttp.version>
+        <rxjava2.version>2.2.12</rxjava2.version>
+        <okhttp.version> 4.1.0</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.9</jackson.version>
-        <swagger.version>1.5.22</swagger.version>
+        <swagger.version>1.5.23</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jserialcomm.version>2.5.1</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
@@ -259,7 +258,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.23</version>
+                            <version>8.24</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -550,11 +549,6 @@
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>${javax.inject.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.transaction</groupId>
-                <artifactId>javax.transaction-api</artifactId>
-                <version>${javax.transaction.version}</version>
             </dependency>
 
             <!-- <dependency> -->
