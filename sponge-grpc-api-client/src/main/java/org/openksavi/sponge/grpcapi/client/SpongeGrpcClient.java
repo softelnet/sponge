@@ -24,7 +24,7 @@ import io.grpc.stub.StreamObserver;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiBlockingStub;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiStub;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.model.RemoteEvent;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 
 /**
  * A Sponge gRPC API client.

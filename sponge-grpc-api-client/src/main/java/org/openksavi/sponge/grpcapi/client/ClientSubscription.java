@@ -25,7 +25,7 @@ import io.grpc.stub.StreamObserver;
 import org.openksavi.sponge.grpcapi.client.util.GrpcClientUtils;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
-import org.openksavi.sponge.restapi.client.model.RemoteEvent;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 
 /**
  * A client side event subscription.

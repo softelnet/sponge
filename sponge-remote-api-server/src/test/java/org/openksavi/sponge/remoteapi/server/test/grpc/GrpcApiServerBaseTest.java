@@ -50,7 +50,7 @@ import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.model.RemoteEvent;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.DynamicValue;

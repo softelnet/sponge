@@ -41,7 +41,7 @@ import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.restapi.client.SpongeClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.model.RemoteEvent;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 
 /**
  * A base Sponge gRPC API client.

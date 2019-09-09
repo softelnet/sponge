@@ -38,13 +38,17 @@ public class ObjectType<T> extends DataType<T> {
     }
 
     public ObjectType(String name) {
-        this(name, null);
+        this(name, (String) null);
     }
 
     public ObjectType(String name, String className) {
         super(DataTypeKind.OBJECT, name);
 
         this.className = className;
+    }
+
+    public ObjectType(String name, Class<T> objectClass) {
+        this(name, objectClass != null ? objectClass.getName() : null);
     }
 
     @Override

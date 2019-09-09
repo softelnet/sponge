@@ -153,8 +153,6 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                                 "The argument '%s' depends on an argument '%s' that is not defined or is not allowed",
                                 qualifiedType.getPath(), dependency);
                     });
-                    Validate.isTrue(!type.getProvided().isReadOnly() || type.isNullable(),
-                            "The provided, read only argument '%s' must be nullable", qualifiedType.getPath());
                 }
             } else { // If it's unnamed.
                 Validate.isTrue(type.getProvided() == null, "The %s argument is set as provided but doesn't have a complete name path",

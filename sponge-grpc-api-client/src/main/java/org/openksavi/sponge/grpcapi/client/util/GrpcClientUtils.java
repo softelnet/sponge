@@ -29,7 +29,7 @@ import org.openksavi.sponge.grpcapi.proto.RequestHeader.Builder;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.restapi.client.SpongeClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.model.RemoteEvent;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;

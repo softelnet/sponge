@@ -95,19 +95,19 @@
         <spring-integration.version>5.1.7.RELEASE</spring-integration.version>
         <spring-security.version>5.1.6.RELEASE</spring-security.version>
         <camel.version>2.24.1</camel.version>
-        <awaitility.version>4.0.0</awaitility.version>
+        <awaitility.version>4.0.1</awaitility.version>
         <jline.version>3.12.1</jline.version>
         <py4j.version>0.10.8.1</py4j.version>
         <tensorflow.version>1.13.1</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
         <rxjava2.version>2.2.12</rxjava2.version>
-        <okhttp.version> 4.1.0</okhttp.version>
+        <okhttp.version> 4.1.1</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.9</jackson.version>
         <swagger.version>1.5.23</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <jserialcomm.version>2.5.1</jserialcomm.version>
+        <jserialcomm.version>2.5.2</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
         <grpc.version>1.23.0</grpc.version>
@@ -119,8 +119,6 @@
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <swagger-ui.version>3.23.5</swagger-ui.version>
-        <webjars-locator.version>0.37</webjars-locator.version>
         <jetty.version>9.4.20.v20190813</jetty.version>
 
         <slf4j.version>1.7.28</slf4j.version>
@@ -869,16 +867,6 @@
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>swagger-ui</artifactId>
-                <version>${swagger-ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>webjars-locator</artifactId>
-                <version>${webjars-locator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>

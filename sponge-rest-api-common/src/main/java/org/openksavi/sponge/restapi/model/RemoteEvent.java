@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.client.model;
+package org.openksavi.sponge.restapi.model;
 
 import java.time.Instant;
 import java.util.Collections;
