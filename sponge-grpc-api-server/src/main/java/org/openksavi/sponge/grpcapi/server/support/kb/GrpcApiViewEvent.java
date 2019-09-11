@@ -33,7 +33,7 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
 
-public class GrpcApiShowEvent extends JAction {
+public class GrpcApiViewEvent extends JAction {
 
     @Override
     public void onConfigure() {

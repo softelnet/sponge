@@ -102,7 +102,7 @@
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
         <rxjava2.version>2.2.12</rxjava2.version>
-        <okhttp.version> 4.1.1</okhttp.version>
+        <okhttp.version> 4.2.0</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.9.9</jackson.version>
         <swagger.version>1.5.23</swagger.version>
