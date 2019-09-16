@@ -12,16 +12,15 @@ class LightNotificationSender(Trigger):
     def onConfigure(self):
         self.withEvent("sensorChange")
     def onInit(self):
-        self.darkThreshold = 100.0
-        self.lastDark = None
+        self.lastLightOn = None
     def onRun(self, event):
-        light = event.get("light", None)
+        lightSensorValue = event.get("light", None)
 
-        if light:
-            dark = light < self.darkThreshold
-            if self.lastDark is None or self.lastDark != dark:
-                self.lastDark = dark
-                sponge.event("lightNotification").set({"light":(not dark)}).label("Light " + ("off" if dark else "on") + "(" + str(light) + ")").send()
+        if lightSensorValue:
+            lightOn = sponge.call("IsLight", [lightSensorValue])
+            if self.lastLightOn is None or self.lastLightOn != lightOn:
+                self.lastLightOn = lightOn
+                sponge.event("lightNotification").set({"light":lightOn}).label("Light " + ("on" if lightOn else "off") + "(" + str(lightSensorValue) + ")").send()
 
 def onStartup():
     # Enable support actions in this knowledge base.

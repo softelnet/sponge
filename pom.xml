@@ -989,6 +989,7 @@
                 <module>sponge-rpi-grovepi</module>
                 <module>sponge-reactivex</module>
                 <module>sponge-signal</module>
+                <module>sponge-features</module>
                 <module>sponge-rest-api-common</module>
                 <module>sponge-rest-api-client</module>
                 <module>sponge-rest-api-server</module>
@@ -1108,6 +1109,7 @@
                 <module>sponge-signal</module>
                 <module>sponge-rpi-pi4j</module>
                 <module>sponge-reactivex</module>
+                <module>sponge-features</module>
                 <module>sponge-rest-api-common</module>
                 <module>sponge-rest-api-client</module>
                 <module>sponge-rest-api-server</module>

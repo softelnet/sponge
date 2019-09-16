@@ -47,7 +47,16 @@
             <file>${digits.home}/actions/digits_learn.py</file>
         </knowledgeBase>
         <knowledgeBase name="events" label="Events">
-            <file>sponge_demo_grpc.py</file>
+            <file>sponge_demo_events.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsNotification" label="Notification">
+            <file>sponge_demo_events_notification.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsMemo" label="Memo">
+            <file>sponge_demo_events_memo.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsCounter" label="Counter">
+            <file>sponge_demo_events_counter.py</file>
         </knowledgeBase>
         <knowledgeBase name="engine" label="Engine">
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>

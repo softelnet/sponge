@@ -9,6 +9,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.12.0 (not released yet)
 * Changed `grpc-netty` to `grpc-netty-shaded` in the `sponge-grpc-api-client`.
 * A new `Show event` action in the gRPC support knowledge base.
+* A new `sponge-features` artifact that contains the list of the predefined action and type features.
 * Fixed the REST API `send` operation bug that prevented setting an event label and description.
 * Dependencies upgrade.
 

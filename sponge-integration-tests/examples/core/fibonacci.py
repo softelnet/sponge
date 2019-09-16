@@ -3,7 +3,7 @@ Sponge Knowledge base
 Fibonacci numbers
 
 Note that this example is intended ONLY to show how to send a chain of events (each carrying a Fibonacci number as an attribute).
-If you need to generate Fibonacci numbers you should use a simpler method.
+If you need to generate the Fibonacci numbers you should use a simpler method.
 """
 maxIndex = 100
 

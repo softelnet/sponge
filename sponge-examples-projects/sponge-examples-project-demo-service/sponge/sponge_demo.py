@@ -15,7 +15,8 @@ def onInit():
         CategoryMeta("forms").withLabel("Forms"),
         CategoryMeta("digits").withLabel("Digits"),
         CategoryMeta("admin").withLabel("Admin"),
-        CategoryMeta("plus").withLabel("Extra")
+        CategoryMeta("plus").withLabel("Extra"),
+        CategoryMeta("events").withLabel("Events")
     )
 
 def onLoad():
@@ -24,6 +25,7 @@ def onLoad():
     sponge.selectCategory("digits", lambda processor: processor.kb.name in ("digits"))
     sponge.selectCategory("admin", lambda processor: processor.kb.name in ("admin"))
     sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
+    sponge.selectCategory("events", lambda processor: processor.kb.name in ("events", "eventsNotification", "eventsMemo", "eventsCounter"))
 
 class UpperCase(Action):
     def onConfigure(self):

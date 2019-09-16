@@ -15,6 +15,7 @@
             <file>sponge_iot_grovepi_manage_lcd.py</file>
             <file>sponge_iot_grovepi_manage_sensors.py</file>
             <file>sponge_iot_grovepi_listeners.py</file>
+            <file>sponge_iot_grovepi_light.py</file>
         </knowledgeBase>
         <knowledgeBase name="email" label="Email">
             <file>sponge_iot_email.py</file>

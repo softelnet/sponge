@@ -24,6 +24,8 @@ Instances of event processors, depending on their type, may be created:
 |No
 |===
 
+Filters and triggers are singletons, i.e. there is only one instance of one processor in the engine. However there can be many instances of one rule or one correlator in the engine.
+
 When configuring an event processor, each event name can be specified as a regular expression thus creating a pattern matching more event names. The regular expression has to be compatible with {javaSeJavaDocUrl}/java/util/regex/Pattern.html[`java.util.regex.Pattern`].
 
 .Event name pattern example

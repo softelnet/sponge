@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.RestApiService;
@@ -70,6 +71,8 @@ public class GrpcApiSendEvent extends JAction {
             UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
 
             List<AnnotatedValue<String>> annotatedValueSet = getSponge().getEventTypes().entrySet().stream()
+                    // Get only visible event types.
+                    .filter(entry -> ((Boolean) entry.getValue().getFeatures().getOrDefault(Features.VISIBLE, Boolean.TRUE)))
                     // Check permissions.
                     .filter(entry -> getRestApiService().canSendEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
