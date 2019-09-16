@@ -256,6 +256,11 @@ def onBeforeLoad():
     ]))
 ----
 
+== Features
+Features are represented by a map of names to values. They provide additional information to data types and processors. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].
+
+Features can be used in a client code to provide specialized behavior.
+
 == Events
 Events are the basic element of processing in {sponge}. They have properties such as id, name and send time. The name of an event is also the type of this event. All events than have the same name belong to the same type. Event names should follow Java naming conventions for variable names. Events may have any number of attributes. These attributes will be available, for example, in event processors.
 
