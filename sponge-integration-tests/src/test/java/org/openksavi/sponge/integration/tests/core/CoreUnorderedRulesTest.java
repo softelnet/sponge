@@ -17,14 +17,14 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,8 @@ public class CoreUnorderedRulesTest {
 
     @Test
     public void testUnorderedRulesEvents() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_events.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_events.py").build();
         engine.startup();
 
         try {
@@ -152,7 +153,8 @@ public class CoreUnorderedRulesTest {
 
     @Test
     public void testUnorderedRulesInstances() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_instances.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/unordered_rules_instances.py").build();
         engine.startup();
 
         try {

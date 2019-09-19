@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.kotlin.script.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.test.script.template.TriggersTestTemplate;
 

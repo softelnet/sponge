@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.core.event;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
@@ -23,9 +24,8 @@ import static org.mockito.Mockito.withSettings;
 import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.event.PriorityEventQueueComparator;
@@ -38,7 +38,7 @@ public class PriorityEventQueueTest {
 
     private DefaultSpongeEngine engine;
 
-    @Before
+    @BeforeEach
     public void beforeTest() {
         engine = new DefaultSpongeEngine();
         engine.init();
@@ -90,18 +90,18 @@ public class PriorityEventQueueTest {
         Event e31p5 = addEvent(queue, 31, 5);
 
         // First event should have the greatest priority and the lowest id
-        Assert.assertEquals(e31p5, queue.take());
+        assertEquals(e31p5, queue.take());
 
-        Assert.assertEquals(e5p2, queue.take());
-        Assert.assertEquals(e6p2, queue.take());
-        Assert.assertEquals(e7p2, queue.take());
-        Assert.assertEquals(e8p2, queue.take());
+        assertEquals(e5p2, queue.take());
+        assertEquals(e6p2, queue.take());
+        assertEquals(e7p2, queue.take());
+        assertEquals(e8p2, queue.take());
 
-        Assert.assertEquals(e1p1, queue.take());
-        Assert.assertEquals(e2p1, queue.take());
-        Assert.assertEquals(e3p1, queue.take());
-        Assert.assertEquals(e4p1, queue.take());
+        assertEquals(e1p1, queue.take());
+        assertEquals(e2p1, queue.take());
+        assertEquals(e3p1, queue.take());
+        assertEquals(e4p1, queue.take());
 
-        Assert.assertEquals(e21p0, queue.take());
+        assertEquals(e21p0, queue.take());
     }
 }

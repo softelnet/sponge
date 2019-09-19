@@ -17,13 +17,14 @@
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -45,7 +46,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -208,7 +209,7 @@ public abstract class BaseRestApiTestTemplate {
         }
     }
 
-    @Test(expected = IncorrectKnowledgeBaseVersionException.class)
+    @Test
     public void testCallWithWrongExpectedKnowledgeBaseVersion() {
         try (SpongeRestClient client = createRestClient()) {
             String arg1 = "test1";
@@ -216,15 +217,10 @@ public abstract class BaseRestApiTestTemplate {
             RestActionMeta actionMeta = client.getActionMeta("UpperCase");
             actionMeta.setQualifiedVersion(new ProcessorQualifiedVersion(1, 1));
 
-            try {
-                client.call("UpperCase", Arrays.asList(arg1));
-                fail("Exception expected");
-            } catch (IncorrectKnowledgeBaseVersionException e) {
-                assertEquals("The expected action qualified version (1.1) differs from the actual (2.2)", e.getMessage());
-                throw e;
-            } finally {
-                engine.clearError();
-            }
+            assertThrows(IncorrectKnowledgeBaseVersionException.class, () -> client.call("UpperCase", Arrays.asList(arg1)),
+                    "The expected action qualified version (1.1) differs from the actual (2.2)");
+        } finally {
+            engine.clearError();
         }
     }
 

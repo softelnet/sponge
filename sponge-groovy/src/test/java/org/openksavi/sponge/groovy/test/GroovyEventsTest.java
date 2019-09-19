@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.groovy.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.test.script.EventsTest;
 import org.openksavi.sponge.test.script.template.EventsTestTemplate;

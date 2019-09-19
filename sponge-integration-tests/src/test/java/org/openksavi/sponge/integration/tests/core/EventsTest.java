@@ -16,10 +16,11 @@
 
 package org.openksavi.sponge.integration.tests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -48,25 +49,25 @@ public class EventsTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEventNameIncorrectWhitespace() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
         engine.startup();
 
         try {
-            engine.getOperations().event("e ").send();
+            assertThrows(IllegalArgumentException.class, () -> engine.getOperations().event("e ").send());
         } finally {
             engine.shutdown();
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEventNameIncorrectColon() {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
         engine.startup();
 
         try {
-            engine.getOperations().event("e:1").send();
+            assertThrows(IllegalArgumentException.class, () -> engine.getOperations().event("e:1").send());
         } finally {
             engine.shutdown();
         }

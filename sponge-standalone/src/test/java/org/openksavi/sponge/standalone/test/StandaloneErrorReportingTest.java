@@ -16,14 +16,15 @@
 
 package org.openksavi.sponge.standalone.test;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
@@ -37,13 +38,13 @@ import org.openksavi.sponge.standalone.StandaloneEngineMain;
 @net.jcip.annotations.NotThreadSafe
 public class StandaloneErrorReportingTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         System.setProperty(ConfigurationConstants.PROP_HOME, ".");
         StandaloneTestUtils.reloadLogback("../sponge-distribution/src/release/logback.xml");
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() {
         System.clearProperty(ConfigurationConstants.PROP_HOME);
         StandaloneTestUtils.reloadLogback("../sponge-test/src/main/resources/logback.xml");
@@ -104,7 +105,7 @@ public class StandaloneErrorReportingTest {
             }
 
             if (!engineMain.getEngine().isError()) {
-                Assert.fail("Expected exception");
+                fail("Expected exception");
             }
         } catch (SpongeException e) {
             // Ignore expected exception.

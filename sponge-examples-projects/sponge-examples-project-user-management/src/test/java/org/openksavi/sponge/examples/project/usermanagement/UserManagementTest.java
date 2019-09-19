@@ -16,17 +16,17 @@
 
 package org.openksavi.sponge.examples.project.usermanagement;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -43,22 +43,22 @@ public class UserManagementTest {
 
     protected static final RemoteApiTestEnvironment environment = new RemoteApiTestEnvironment();
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         environment.init();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() {
         environment.clear();
     }
 
-    @Before
+    @BeforeEach
     public void start() {
         environment.start(PORT);
     }
 
-    @After
+    @AfterEach
     public void stop() {
         environment.stop();
     }

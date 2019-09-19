@@ -11,6 +11,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * A new `Show event` action in the gRPC support knowledge base.
 * A new `sponge-features` artifact that contains the list of the predefined action and type features.
 * Fixed the REST API `send` operation bug that prevented setting an event label and description.
+* Unit tests migrated from JUnit4 to JUnit 5.
 * Dependencies upgrade.
 
 [discrete]

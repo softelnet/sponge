@@ -17,7 +17,7 @@
 package org.openksavi.sponge.standalone.test;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import java.io.PipedOutputStream;
 import java.util.concurrent.TimeUnit;
 
 import org.jline.terminal.TerminalBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.standalone.StandaloneSpongeEngine;

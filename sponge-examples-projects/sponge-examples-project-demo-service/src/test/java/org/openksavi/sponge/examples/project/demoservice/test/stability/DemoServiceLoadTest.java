@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.examples.project.demoservice.test.stability;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -29,11 +29,11 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,22 +59,22 @@ public class DemoServiceLoadTest {
 
     protected static final int TEST_COUNT = 2000;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         environment.init();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() {
         environment.clear();
     }
 
-    @Before
+    @BeforeEach
     public void start() {
         environment.start(PORT);
     }
 
-    @After
+    @AfterEach
     public void stop() {
         environment.stop();
     }

@@ -16,10 +16,10 @@
 
 package org.openksavi.sponge.spring.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,8 @@ public class SpringAutoStartupTest {
 
         @Bean
         public SpongeEngine spongeEngine() {
-            return SpringSpongeEngine.builder().autoStartup(true).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py").build();
+            return SpringSpongeEngine.builder().autoStartup(true).plugin(springPlugin()).knowledgeBase("kb", "examples/spring/spring.py")
+                    .build();
         }
 
         @Bean

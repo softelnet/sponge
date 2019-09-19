@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.jruby.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.test.script.ProcessorsTest;
 import org.openksavi.sponge.test.script.template.ProcessorsTestTemplate;

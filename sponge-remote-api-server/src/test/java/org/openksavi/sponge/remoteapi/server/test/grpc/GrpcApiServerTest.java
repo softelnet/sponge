@@ -16,13 +16,12 @@
 
 package org.openksavi.sponge.remoteapi.server.test.grpc;
 
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
-import org.apache.camel.test.spring.CamelSpringRunner;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.client.DefaultSpongeGrpcClient;
@@ -37,8 +36,8 @@ import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @net.jcip.annotations.NotThreadSafe
-@RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { GrpcApiServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { GrpcApiServerTest.TestConfig.class })
 @DirtiesContext
 public class GrpcApiServerTest extends GrpcApiServerBaseTest {
 

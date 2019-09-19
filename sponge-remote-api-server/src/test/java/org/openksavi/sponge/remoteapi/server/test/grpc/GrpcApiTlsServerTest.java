@@ -25,13 +25,12 @@ import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
 
 import okhttp3.OkHttpClient;
 
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
-import org.apache.camel.test.spring.CamelSpringRunner;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SslConfiguration;
@@ -49,8 +48,8 @@ import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @net.jcip.annotations.NotThreadSafe
-@RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { GrpcApiTlsServerTest.TlsTestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { GrpcApiTlsServerTest.TlsTestConfig.class })
 @DirtiesContext
 public class GrpcApiTlsServerTest extends GrpcApiServerBaseTest {
 

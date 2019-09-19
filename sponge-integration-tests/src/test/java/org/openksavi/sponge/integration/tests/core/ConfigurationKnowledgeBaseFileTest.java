@@ -16,10 +16,11 @@
 
 package org.openksavi.sponge.integration.tests.core;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
@@ -69,9 +70,9 @@ public class ConfigurationKnowledgeBaseFileTest {
         }
     }
 
-    @Test(expected = ConfigException.class)
+    @Test
     public void testKnowledgeBaseFileRequiredNonExisting() {
-        doTestNonExistingRequired("configuration_kb_file_required_non_existing.xml");
+        assertThrows(ConfigException.class, () -> doTestNonExistingRequired("configuration_kb_file_required_non_existing.xml"));
     }
 
     @Test
@@ -79,9 +80,9 @@ public class ConfigurationKnowledgeBaseFileTest {
         doTestExisting("configuration_kb_file_required_existing.xml");
     }
 
-    @Test(expected = ConfigException.class)
+    @Test
     public void testKnowledgeBaseFileDefaultNonExisting() {
-        doTestNonExistingRequired("configuration_kb_file_default_non_existing.xml");
+        assertThrows(ConfigException.class, () -> doTestNonExistingRequired("configuration_kb_file_default_non_existing.xml"));
     }
 
     @Test

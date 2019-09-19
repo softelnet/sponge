@@ -19,12 +19,12 @@ package org.openksavi.sponge.reactivex;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.reactivex.schedulers.Schedulers;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.java.JKnowledgeBase;
-
-import io.reactivex.schedulers.Schedulers;
 
 public class ReactiveXTestKnowledgeBase extends JKnowledgeBase {
 

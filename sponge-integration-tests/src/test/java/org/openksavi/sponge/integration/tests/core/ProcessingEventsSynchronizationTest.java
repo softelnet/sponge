@@ -17,12 +17,12 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.engine.EngineBuilder;
@@ -32,8 +32,8 @@ public class ProcessingEventsSynchronizationTest {
 
     @Test
     public void testProcessingEventsSynchronizationDecomposedQueueNotAllowConcurrentEventTypes() {
-        EngineBuilder<DefaultSpongeEngine> builder =
-                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/processing_events_sync_not_allow_concurrent_event_types.py");
+        EngineBuilder<DefaultSpongeEngine> builder = DefaultSpongeEngine.builder().knowledgeBase("kb",
+                "examples/core/processing_events_sync_not_allow_concurrent_event_types.py");
         builder.getEngineDefaultParameters().setAllowConcurrentEventTypeProcessingByEventSetProcessors(false);
 
         doTestProcessingEventsSynchronization(builder.build());

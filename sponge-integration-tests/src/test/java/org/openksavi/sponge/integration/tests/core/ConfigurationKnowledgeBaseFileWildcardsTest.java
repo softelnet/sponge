@@ -16,11 +16,12 @@
 
 package org.openksavi.sponge.integration.tests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.ConfigException;
@@ -86,14 +87,12 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
         }
     }
 
-    @Test(expected = ConfigException.class)
+    @Test
     public void testKnowledgeBaseFileWildcardBuilderNonOptionalNonExistingFile() {
         SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/wildcards/nonexisting_*.py").build();
 
         try {
-            engine.startup();
-
-            assertFalse(engine.isError());
+            assertThrows(ConfigException.class, () -> engine.startup());
         } finally {
             engine.shutdown();
         }
@@ -115,15 +114,13 @@ public class ConfigurationKnowledgeBaseFileWildcardsTest {
         }
     }
 
-    @Test(expected = SpongeException.class)
+    @Test
     public void testKnowledgeBaseFileWildcardBuilderOptionalNonExistingFileUnsupportedExtension() {
         SpongeEngine engine = DefaultSpongeEngine.builder()
                 .knowledgeBase("kb", new FileKnowledgeBaseScript("examples/core/wildcards/nonexisting_*.*", false)).build();
 
         try {
-            engine.startup();
-
-            assertFalse(engine.isError());
+            assertThrows(SpongeException.class, () -> engine.startup());
         } finally {
             engine.shutdown();
         }

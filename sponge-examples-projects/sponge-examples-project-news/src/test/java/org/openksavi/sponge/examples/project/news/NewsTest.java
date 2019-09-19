@@ -17,12 +17,12 @@
 package org.openksavi.sponge.examples.project.news;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 
@@ -40,7 +40,7 @@ public class NewsTest {
             TimeUnit.SECONDS.sleep(2);
 
             if (engine.isError()) {
-                Assert.fail(engine.getError().toString());
+                fail(engine.getError().toString());
             }
         } finally {
             example.shutdown();

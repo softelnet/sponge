@@ -17,13 +17,14 @@
 package org.openksavi.sponge.integration.tests.core;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
@@ -33,7 +34,8 @@ public class KnowledgeBaseOnRunTest {
 
     @Test
     public void testOnRunReturnsFalse() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_false.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_false.py").build();
         engine.startup();
 
         try {
@@ -49,7 +51,8 @@ public class KnowledgeBaseOnRunTest {
 
     @Test
     public void testOnRunReturnsTrue() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_true.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_returns_true.py").build();
         engine.startup();
 
         try {
@@ -66,7 +69,8 @@ public class KnowledgeBaseOnRunTest {
 
     @Test
     public void testOnRunNotPresent() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_not_present.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_not_present.py").build();
         engine.startup();
 
         try {
@@ -80,12 +84,13 @@ public class KnowledgeBaseOnRunTest {
         }
     }
 
-    @Test(expected = SpongeException.class)
+    @Test
     public void testOnRunIncorrectResult() {
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_incorrect_result.py").build();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase("kb", "examples/core/knowledge_base_on_run_incorrect_result.py").build();
 
         try {
-            engine.startup();
+            assertThrows(SpongeException.class, () -> engine.startup());
         } finally {
             engine.shutdown();
         }

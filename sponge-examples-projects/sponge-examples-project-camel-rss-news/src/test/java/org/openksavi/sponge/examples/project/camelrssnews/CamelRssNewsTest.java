@@ -17,12 +17,12 @@
 package org.openksavi.sponge.examples.project.camelrssnews;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public class CamelRssNewsTest {
                             && engine.getOperations().getVariable(AtomicBoolean.class, "sourceRoutesStopped").get());
 
             if (engine.isError()) {
-                Assert.fail(engine.getError().toString());
+                fail(engine.getError().toString());
             }
         } finally {
             example.shutdown();

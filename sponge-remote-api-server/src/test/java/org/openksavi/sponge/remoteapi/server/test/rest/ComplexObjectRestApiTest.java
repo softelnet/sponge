@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -27,12 +27,11 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
-import org.apache.camel.test.spring.CamelSpringRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject;
@@ -44,8 +43,8 @@ import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 @net.jcip.annotations.NotThreadSafe
-@RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { ComplexObjectRestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { ComplexObjectRestApiTest.TestConfig.class })
 @DirtiesContext
 public class ComplexObjectRestApiTest extends BasicTestTemplate {
 

@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.integration.tests.java;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.test.script.PluginsTest;
 import org.openksavi.sponge.test.script.template.PluginsTestTemplate;

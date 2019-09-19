@@ -17,11 +17,11 @@
 package org.openksavi.sponge.examples.standalone;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;

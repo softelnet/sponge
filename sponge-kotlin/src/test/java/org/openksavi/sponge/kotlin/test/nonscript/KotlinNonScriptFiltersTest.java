@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.kotlin.test.nonscript;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.test.script.FiltersTest;
 import org.openksavi.sponge.test.script.template.FiltersTestTemplate;

@@ -16,22 +16,21 @@
 
 package org.openksavi.sponge.tensorflow;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Arrays;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
-import org.apache.camel.test.spring.CamelSpringRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -45,8 +44,8 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @net.jcip.annotations.NotThreadSafe
-@RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { DigitsRestServerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { DigitsRestServerTest.TestConfig.class })
 @DirtiesContext
 public class DigitsRestServerTest {
 

@@ -16,13 +16,12 @@
 
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
-import org.apache.camel.test.spring.CamelSpringRunner;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
@@ -32,8 +31,8 @@ import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
-@RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { BaseHttpRestApiTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { BaseHttpRestApiTest.TestConfig.class })
 @DirtiesContext
 public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
 

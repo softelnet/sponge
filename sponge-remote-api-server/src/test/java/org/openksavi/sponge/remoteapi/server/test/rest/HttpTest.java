@@ -16,8 +16,8 @@
 
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -32,21 +32,20 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
-import org.apache.camel.test.spring.CamelSpringRunner;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 @net.jcip.annotations.NotThreadSafe
-@RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { HttpTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { HttpTest.TestConfig.class })
 @DirtiesContext
 public class HttpTest extends BasicTestTemplate {
 

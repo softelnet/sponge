@@ -20,14 +20,14 @@ import static org.awaitility.Awaitility.await;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import io.reactivex.Flowable;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
-
-import io.reactivex.Flowable;
 
 public class ReactiveXTest {
 

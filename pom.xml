@@ -123,7 +123,7 @@
 
         <slf4j.version>1.7.28</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <junit.version>4.12</junit.version>
+        <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <mockito.version>3.0.0</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
@@ -217,9 +217,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.0</version>
+                    <version>2.22.2</version>
                     <configuration>
-                        <argLine>-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication -Dlogback.configurationFile=${sponge.root}/sponge-test/src/main/resources/logback-quiet.xml</argLine>
+                        <argLine>-Xmx1536m -XX:+UseG1GC -XX:+UseStringDeduplication
+                            -Dlogback.configurationFile=${sponge.root}/sponge-test/src/main/resources/logback-quiet.xml</argLine>
                         <excludes>
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
                             <exclude>*/sponge/integration/tests/stability/*</exclude>
@@ -892,9 +893,9 @@
             </dependency>
 
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>

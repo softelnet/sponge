@@ -16,8 +16,9 @@
 
 package org.openksavi.sponge.core.util.process;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -25,7 +26,7 @@ import java.util.Base64;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
@@ -86,18 +87,15 @@ public class ProcessInstanceTest {
         process.destroy();
     }
 
-    @Test(expected = SpongeException.class)
+    @Test
     public void testProcessWaitForErrorOutput() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        try {
+        assertThrows(SpongeException.class, () -> {
             engine.getOperations().process(
                     ProcessConfiguration.builder("echo").arguments("ERROR").outputAsConsumer().waitForNegativeLineRegexp(".*ERROR.*"))
                     .run();
-        } catch (SpongeException e) {
-            assertEquals("Error in the subprocess: ERROR", e.getMessage());
-            throw e;
-        }
+        });
     }
 
     @Test

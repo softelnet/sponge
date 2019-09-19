@@ -16,16 +16,16 @@
 
 package org.openksavi.sponge.examples.project.demoservice;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -41,22 +41,22 @@ public class DemoServiceTest {
 
     protected static final DemoServiceTestEnvironment environment = new DemoServiceTestEnvironment();
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         environment.init();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() {
         environment.clear();
     }
 
-    @Before
+    @BeforeEach
     public void start() {
         environment.start(PORT);
     }
 
-    @After
+    @AfterEach
     public void stop() {
         environment.stop();
     }

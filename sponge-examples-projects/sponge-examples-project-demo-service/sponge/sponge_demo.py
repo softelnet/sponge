@@ -59,7 +59,7 @@ class ProvideByAction(Action):
         self.withArg(StringType("valueLimited").withLabel("Value limited").withProvided(ProvidedMeta().withValueSet()))
         self.withArg(StringType("valueNotLimited").withLabel("Value not limited").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())))
         self.withArg(StringType("valueLimitedNullable").withLabel("Value limited nullable").withNullable().withProvided(ProvidedMeta().withValueSet()))
-        self.withResult(StringType().withLabel("Same value"))
+        self.withResult(StringType().withLabel("Values"))
     def onCall(self, valueLimited, valueNotLimited, valueLimitedNullable):
         return valueLimited + "/" + valueNotLimited + "/" + str(valueLimitedNullable)
     def onProvideArgs(self, context):
