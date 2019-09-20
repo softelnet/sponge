@@ -3,10 +3,6 @@ A knowledge base is used mainly to define processors. A knowledge base may be wr
 
 There is a global namespace for all processors, regardless of the knowledge base they are defined in. When there is more than one processor of the same name in the engine, only the last enabled one will be registered. However, you can't enable a processor if an another one that has the same name and is of a different type has already been enabled.
 
-Script knowledge base files are looked up in the file system as a relative or absolute path, then in the classpath, then in the file system relative to the XML configuration file parent directory and then in the file system relative to the {sponge} home directory. A knowledge base filename may contain wildcards (for files only, not directories), according to the https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob[glob pattern]. Wildcards are not supported for classpath resources. This default behavior can be changed by providing a custom implementation of `KnowledgeBaseFileProvider` and passing it to the `setKnowledgeBaseFileProvider` method on the engine. For example the `SpringEngineBuilder` uses the `SpringKnowledgeBaseFileProvider` that supports the Spring `classpath*:` notation for loading resources.
-
-The order of loading knowledge bases preserves the order specified in the configuration. Likewise the order of loading files of the same knowledge base preserves the order specified in the configuration. 
-
 Scripting knowledge bases are read by interpreters. For every knowledge base there is one instance of an interpreter.
 
 == Knowledge base file structure
@@ -256,6 +252,34 @@ A set of methods that return processor metadata.
 |===
 
 For a complete list of available methods see the {spongeJavaDocUrl}/org/openksavi/sponge/EngineOperations.html[`EngineOperations`] and the {spongeJavaDocUrl}/org/openksavi/sponge/kb/KnowledgeBaseEngineOperations.html[`KnowledgeBaseEngineOperations`] Javadoc.
+
+== Loading knowledge base files
+The order of loading knowledge bases preserves the order specified in the configuration. Likewise the order of loading files of the same knowledge base preserves the order specified in the configuration.
+
+A strategy of loading knowledge base files is provided by an instance of `KnowledgeBaseFileProvider`.
+
+=== Default provider
+The default provider is implemented by the `DefaultKnowledgeBaseFileProvider`.
+
+Script knowledge base files are looked up in the file system as a relative or absolute path, then in the classpath, then in the file system relative to the XML configuration file parent directory and then in the file system relative to the {sponge} home directory. A knowledge base filename may contain wildcards (for files only, not directories), according to the https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob[glob pattern].
+
+Wildcards are not supported for classpath resources by default.
+
+This default behavior can be changed by providing a custom implementation of `KnowledgeBaseFileProvider` and passing it to the `setKnowledgeBaseFileProvider` method of the engine.
+
+=== Spring based provider
+The Spring based provider is implemented by the `SpringKnowledgeBaseFileProvider`. It will be automatically set if the `SpringEngineBuilder` is used. It additionally supports:
+
+* the Spring `classpath*:` URL protocol for loading resources as well as other protocols supported by the Spring `PathMatchingResourcePatternResolver`,
+* the {sponge} `spar` URL protocol for loading script knowledge base files from JAR archives located in a filesystem.
+
+The `spar` protocol name is an acronym for *SP*onge *AR*chive. The `spar` protocol accepts wildcards.
+
+.Example of loading knowledge base files from a JAR archive using the `spar` protocol
+[source,java]
+----
+SpongeEngine engine = SpringSpongeEngine.builder().knowledgeBase("kb", "spar:kb-archive.jar!/*.py").build();
+----
 
 == Loading knowledge base from an additional file
 {sponge} gives the possibility to define a knowledge base in a few files. In order to do that, in the configuration file in the `<engine>` section you may define which files should be loaded by adding `<file>` tags to `<knowledgeBase>`. Additional files could also be loaded from a knowledge base level.
