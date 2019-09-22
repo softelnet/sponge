@@ -16,89 +16,21 @@
 
 package org.openksavi.sponge.spring;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.jar.JarFile;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 import org.springframework.core.io.Resource;
 
-import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 public abstract class SpringUtils {
 
-    private static final SpringResourcePatternResolver RESOURCE_RESOLVER =
-            new SpringResourcePatternResolver(SpringUtils.class.getClassLoader());
-
     public static List<KnowledgeBaseReaderHolder> getReadersFromResourcePatternResolver(String filename, Charset charset)
             throws IOException {
-        Resource[] resources = null;
-
-        try {
-            resources = RESOURCE_RESOLVER.getResources(filename);
-        } catch (FileNotFoundException e) {
-            return Collections.emptyList();
-        }
-
-        return Arrays.stream(resources).map(resource -> {
-            try {
-                InputStream is = null;
-                if (resource.exists()) {
-                    is = resource.getInputStream();
-                } else {
-                    is = tryCreateSparEntryInputStream(resource);
-                }
-
-                return is != null ? new KnowledgeBaseReaderHolder(new InputStreamReader(is),
-                        resource.getURL() != null ? resource.getURL().toString() : resource.toString()) : null;
-            } catch (IOException e) {
-                throw new ConfigException("Error reading " + resource, e);
-            }
-        }).filter(Objects::nonNull).collect(Collectors.toList());
-    }
-
-    public static InputStream tryCreateSparEntryInputStream(Resource resource) throws IOException {
-        if (!resource.isFile()) {
-            return null;
-        }
-
-        String spec = resource.getFile().getCanonicalPath();
-
-        int sparSeparatorIndex = spec.lastIndexOf(SpringConstants.SPAR_CONTENTS_SEPARATOR);
-        if (sparSeparatorIndex < 0) {
-            return null;
-        }
-
-        String archive = spec.substring(0, sparSeparatorIndex);
-        File archiveFile = new File(archive);
-        if (!archiveFile.isFile()) {
-            return null;
-        }
-
-        String kbFile = spec.substring(archive.length() + SpringConstants.SPAR_CONTENTS_SEPARATOR.length());
-
-        JarFile jar = new JarFile(archiveFile);
-        try {
-            ZipEntry entry = Validate.notNull(jar.getEntry(kbFile), "The JAR entry %s not found", kbFile);
-
-            return new ByteArrayInputStream(IOUtils.readFully(jar.getInputStream(entry), (int) entry.getSize()));
-        } finally {
-            jar.close();
-        }
+        return new SpringKnowledgeBaseReaderResolver(filename, charset).resolve();
     }
 
     public static boolean isSparArchive(Resource resource) {

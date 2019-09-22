@@ -333,11 +333,11 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         try {
             propertiesConfiguration = new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
                     .configure(new Parameters().properties().setLocationStrategy(propertiesLocationStrategy).setFileName(propertiesFilename)
-                            .setEncoding(StandardCharsets.UTF_8.name()).setThrowExceptionOnMissing(false))
+                            .setEncoding(StandardCharsets.UTF_8.name()))
                     .getConfiguration();
         } catch (ConfigurationException e) {
             // Ignoring the exception if the optional properties file hasn't been found.
-            if (propertiesLocationStrategy.isNotFound() || ExceptionUtils.hasCause(e, FileNotFoundException.class)) {
+            if (propertiesLocationStrategy.isNotFound() || ExceptionUtils.indexOfType(e, FileNotFoundException.class) > -1) {
                 propertiesConfiguration = new PropertiesConfiguration();
             } else {
                 throw new ConfigException("Error reading configuration properties file " + propertiesFilename, e);
