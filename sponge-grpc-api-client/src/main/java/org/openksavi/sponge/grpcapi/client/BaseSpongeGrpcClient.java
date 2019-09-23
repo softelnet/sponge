@@ -52,6 +52,8 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     private SpongeRestClient restClient;
 
+    private SpongeGrpcClientConfiguration configuration;
+
     private Consumer<T> channelBuilderConfigurer;
 
     private ManagedChannel channel;
@@ -68,20 +70,35 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     private Lock lock = new ReentrantLock(true);
 
-    protected BaseSpongeGrpcClient(SpongeRestClient restClient, Consumer<T> channelBuilderConfigurer) {
+    protected BaseSpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration,
+            Consumer<T> channelBuilderConfigurer) {
         this.restClient = restClient;
+        this.configuration = configuration;
         this.channelBuilderConfigurer = channelBuilderConfigurer;
 
         open();
     }
 
+    protected BaseSpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration) {
+        this(restClient, configuration, null);
+    }
+
+    protected BaseSpongeGrpcClient(SpongeRestClient restClient, Consumer<T> channelBuilderConfigurer) {
+        this(restClient, null, channelBuilderConfigurer);
+    }
+
     protected BaseSpongeGrpcClient(SpongeRestClient restClient) {
-        this(restClient, null);
+        this(restClient, null, null);
     }
 
     @Override
     public SpongeRestClient getRestClient() {
         return restClient;
+    }
+
+    @Override
+    public SpongeGrpcClientConfiguration getConfiguration() {
+        return configuration;
     }
 
     @Override
@@ -140,9 +157,14 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
             URI restUri = new URI(restClient.getConfiguration().getUrl());
 
             String host = restUri.getHost();
-            // Sponge gRPC API service port convention: REST API port + 1.
-            int restPort = restUri.getPort() > -1 ? restUri.getPort() : (restClient.getConfiguration().isSsl() ? 443 : 80);
-            int port = restPort + 1;
+
+            Integer port = configuration != null ? configuration.getPort() : null;
+            if (port == null) {
+                // If the port is not configured explicitly, use the Sponge gRPC API service port convention: REST API port + 1.
+                int restPort = restUri.getPort() > -1 ? restUri.getPort() : (restClient.getConfiguration().isSsl() ? 443 : 80);
+                port = restPort + 1;
+            }
+
             logger.info("Creating a new client to the Sponge gRPC API service on {}:{}", host, port);
 
             T channelBuilder = createChannelBuilder(host, port);

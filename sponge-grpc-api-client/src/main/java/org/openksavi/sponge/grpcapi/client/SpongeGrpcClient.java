@@ -31,6 +31,8 @@ import org.openksavi.sponge.restapi.model.RemoteEvent;
  */
 public interface SpongeGrpcClient extends Closeable {
 
+    SpongeGrpcClientConfiguration getConfiguration();
+
     String getVersion();
 
     ClientSubscription subscribe(List<String> eventNames, boolean registeredTypeRequired, StreamObserver<RemoteEvent> eventStreamObserver);

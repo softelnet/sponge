@@ -26,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.client.DefaultSpongeGrpcClient;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
+import org.openksavi.sponge.grpcapi.client.SpongeGrpcClientConfiguration;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -73,7 +74,7 @@ public class GrpcApiServerTest extends GrpcApiServerBaseTest {
     }
 
     @Override
-    protected SpongeGrpcClient createGrpcClient() {
-        return new DefaultSpongeGrpcClient(createRestClient(true));
+    protected SpongeGrpcClient createGrpcClient(SpongeGrpcClientConfiguration configuration) {
+        return new DefaultSpongeGrpcClient(createRestClient(true), configuration);
     }
 }

@@ -27,11 +27,20 @@ import org.openksavi.sponge.restapi.client.SpongeRestClient;
  */
 public class DefaultSpongeGrpcClient extends NettySpongeGrpcClient {
 
+    public DefaultSpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration,
+            Consumer<NettyChannelBuilder> channelBuilderConfigurer) {
+        super(restClient, configuration, channelBuilderConfigurer);
+    }
+
+    public DefaultSpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration) {
+        super(restClient, configuration);
+    }
+
     public DefaultSpongeGrpcClient(SpongeRestClient restClient, Consumer<NettyChannelBuilder> channelBuilderConfigurer) {
         super(restClient, channelBuilderConfigurer);
     }
 
     public DefaultSpongeGrpcClient(SpongeRestClient restClient) {
-        super(restClient, null);
+        super(restClient);
     }
 }

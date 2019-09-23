@@ -19,6 +19,7 @@ package org.openksavi.sponge.remoteapi.server.test.grpc;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -36,6 +37,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.grpc.Status;
+import io.grpc.Status.Code;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import org.junit.jupiter.api.Test;
@@ -46,6 +49,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.client.ClientSubscription;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
+import org.openksavi.sponge.grpcapi.client.SpongeGrpcClientConfiguration;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
@@ -68,7 +72,11 @@ public abstract class GrpcApiServerBaseTest {
 
     protected abstract BaseSpongeRestClient createRestClient(boolean useEventTypeCache);
 
-    protected abstract SpongeGrpcClient createGrpcClient();
+    protected abstract SpongeGrpcClient createGrpcClient(SpongeGrpcClientConfiguration configuration);
+
+    protected final SpongeGrpcClient createGrpcClient() {
+        return createGrpcClient(null);
+    }
 
     @Test
     public void testVersion() {
@@ -134,6 +142,14 @@ public abstract class GrpcApiServerBaseTest {
             Map<String, Object> features = client.getFeatures();
             assertEquals(1, features.size());
             assertTrue((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
+        }
+    }
+
+    @Test
+    public void testPortChange() {
+        try (SpongeGrpcClient grpcClient = createGrpcClient(SpongeGrpcClientConfiguration.builder().port(9000).build())) {
+            StatusRuntimeException e = assertThrows(StatusRuntimeException.class, () -> grpcClient.getVersion());
+            assertEquals(Code.UNAVAILABLE, e.getStatus().getCode());
         }
     }
 

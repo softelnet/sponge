@@ -37,6 +37,7 @@ import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.client.DefaultSpongeGrpcClient;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
+import org.openksavi.sponge.grpcapi.client.SpongeGrpcClientConfiguration;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -96,11 +97,11 @@ public class GrpcApiTlsServerTest extends GrpcApiServerBaseTest {
     }
 
     @Override
-    protected SpongeGrpcClient createGrpcClient() {
+    protected SpongeGrpcClient createGrpcClient(SpongeGrpcClientConfiguration configuration) {
         // Use the self signed certificate in the PEM format. Created from remote_api_selfsigned.jks by the command:
         // keytool -exportcert -rfc -file remote_api_selfsigned.pem -keystore remote_api_selfsigned.jks -alias rest_api -keypass sponge
         // -storepass sponge
-        return new DefaultSpongeGrpcClient(createRestClient(true), (builder) -> {
+        return new DefaultSpongeGrpcClient(createRestClient(true), configuration, (builder) -> {
             try {
                 builder.sslContext(
                         GrpcSslContexts.forClient().trustManager(new File("src/test/resources/security/remote_api_selfsigned.pem")).build())

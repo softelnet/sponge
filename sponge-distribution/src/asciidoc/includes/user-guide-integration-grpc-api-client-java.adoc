@@ -17,6 +17,14 @@ try (SpongeRestClient restClient = new DefaultSpongeRestClient(SpongeRestClientC
 }
 ----
 
+The client follows the convention that a gRPC service port is a REST API port plus `1`. If the gRPC service uses a different port, set this port in the client configuration.
+
+.Setting port in a gRPC API client
+[source,java]
+----
+new DefaultSpongeGrpcClient(restClient, SpongeGrpcClientConfiguration.builder().port(9000).build())
+----
+
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/grpcapi/client/DefaultSpongeGrpcClient.html[`DefaultSpongeGrpcClient` Javadoc] and examples in the source code.
 
 [discrete]
