@@ -24,10 +24,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class StandaloneTest {
 

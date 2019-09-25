@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseReaderHolder;
 
 /**
- * A Spring based knowledge base reader resolver.
+ * A Spring based knowledge base reader resolver. Handles SPAR archives.
  */
 public class SpringKnowledgeBaseReaderResolver {
 
@@ -59,19 +59,24 @@ public class SpringKnowledgeBaseReaderResolver {
     }
 
     public List<KnowledgeBaseReaderHolder> resolve() throws IOException {
-        Resource[] resources = null;
+        List<Resource> resources = new ArrayList<>();
 
-        try {
-            resources = RESOURCE_RESOLVER.getResources(filename);
-        } catch (FileNotFoundException e) {
-            return Collections.emptyList();
-        }
+        creatEffectiveFilenames().forEach(effectiveFilename -> {
+            try {
+                resources.addAll(Arrays.asList(RESOURCE_RESOLVER.getResources(effectiveFilename)));
+            } catch (IOException e) {
+                // Ignore FileNotFoundException.
+                if (!(e instanceof FileNotFoundException)) {
+                    throw SpongeUtils.wrapException(e);
+                }
+            }
+        });
 
         // Cache SPAR JAR files to read all knowledge base files from one archive without closing the archive.
         Map<String, JarFile> sparJarFileCache = new LinkedHashMap<>();
 
         try {
-            return Arrays.stream(resources).map(resource -> {
+            return resources.stream().map(resource -> {
                 try {
                     InputStream is = null;
                     if (resource.exists()) {
@@ -97,13 +102,54 @@ public class SpringKnowledgeBaseReaderResolver {
         }
     }
 
+    /**
+     * Handles SPAR archives that have wildcards in an archive path itself.
+     *
+     * @return the effective filenames.
+     * @throws IOException on error.
+     */
+    protected List<String> creatEffectiveFilenames() throws IOException {
+        List<String> effectiveFilenames = new ArrayList<>();
+
+        // Handle SPAR archives that have wildcards in an archive path itself.
+        if (filename != null && filename.startsWith(SpringConstants.URL_PROTOCOL_SPAR_WITH_SEPARATOR)) {
+            int sparArchiveSeparatorIndex = filename.lastIndexOf(SpringConstants.SPAR_CONTENTS_SEPARATOR);
+            if (sparArchiveSeparatorIndex > -1) {
+                String archiveSpec = filename.substring(0, sparArchiveSeparatorIndex);
+                String archiveContentsSpec = filename.substring(sparArchiveSeparatorIndex);
+
+                // If wildcards used in for an archive itself.
+                if (archiveSpec.contains("*")) {
+                    Arrays.asList(RESOURCE_RESOLVER.getResources(archiveSpec)).forEach(resource -> {
+                        try {
+                            effectiveFilenames.add(SpringConstants.URL_PROTOCOL_SPAR_WITH_SEPARATOR + resource.getFile().getAbsolutePath()
+                                    + archiveContentsSpec);
+                        } catch (FileNotFoundException e) {
+                            // Ignore.
+                        } catch (IOException e) {
+                            throw SpongeUtils.wrapException(e);
+                        }
+                    });
+                }
+            }
+        }
+
+        if (effectiveFilenames.isEmpty()) {
+            effectiveFilenames.add(filename);
+        }
+
+        return effectiveFilenames;
+    }
+
     protected InputStream tryCreateSparEntryInputStream(Resource resource, Map<String, JarFile> sparJarFileCache) throws IOException {
-        if (!resource.isFile()) {
+        File file = null;
+        try {
+            file = resource.getFile();
+        } catch (FileNotFoundException e) {
             return null;
         }
 
-        String spec = resource.getFile().getCanonicalPath();
-
+        String spec = file.getCanonicalPath();
         int sparSeparatorIndex = spec.lastIndexOf(SpringConstants.SPAR_CONTENTS_SEPARATOR);
         if (sparSeparatorIndex < 0) {
             return null;

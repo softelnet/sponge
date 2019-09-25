@@ -27,11 +27,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.jline.terminal.TerminalBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.standalone.StandaloneSpongeEngine;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class InteractiveModeStandaloneTest {
 

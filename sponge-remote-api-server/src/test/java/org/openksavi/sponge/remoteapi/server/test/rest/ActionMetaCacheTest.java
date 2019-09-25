@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -32,6 +34,7 @@ import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ActionMetaCacheTest.TestConfig.class })

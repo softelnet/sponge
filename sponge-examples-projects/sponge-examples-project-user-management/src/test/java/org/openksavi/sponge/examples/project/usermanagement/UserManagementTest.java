@@ -27,6 +27,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -36,6 +38,7 @@ import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.test.util.TestUtils;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class UserManagementTest {
 

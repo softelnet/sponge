@@ -51,6 +51,10 @@ public class KnowledgeBaseLoadFromArchive {
 
     private static final String KB_FILE_2_DIR = "file2";
 
+    private static final String ARCHIVE_FILE_2 = ARCHIVE_LOCATION_DIR + "/kb-archive2.jar";
+
+    private static final String KB_FILE_3 = "knowledge_base_from_archive_3.py";
+
     private static final String ACTION_ARG = "Action arg";
 
     private void addKbFile(ArchiveOutputStream o, String kbFile, String entryName) throws IOException {
@@ -77,15 +81,16 @@ public class KnowledgeBaseLoadFromArchive {
         }
     }
 
-    private void deleteArchive() throws IOException {
+    private void deleteArchives() throws IOException {
         FileUtils.deleteQuietly(new File(ARCHIVE_FILE));
+        FileUtils.deleteQuietly(new File(ARCHIVE_FILE_2));
     }
 
     private void finish(SpongeEngine engine) throws IOException {
         assertFalse(engine.isError());
         assertTrue(engine.isRunning());
         engine.shutdown();
-        deleteArchive();
+        deleteArchives();
     }
 
     @Test
@@ -177,6 +182,34 @@ public class KnowledgeBaseLoadFromArchive {
             assertFalse(engine.getOperations().hasAction("Action1FromArchive"));
             assertEquals(ACTION_ARG.toLowerCase(),
                     engine.getOperations().call(String.class, "Action2FromArchive", Arrays.asList(ACTION_ARG)));
+        } finally {
+            finish(engine);
+        }
+    }
+
+    private void createSecondArchive() throws IOException {
+        Files.createDirectories(Paths.get(ARCHIVE_LOCATION_DIR));
+
+        OutputStream fo = Files.newOutputStream(Paths.get(ARCHIVE_FILE_2));
+        try (ArchiveOutputStream o = new JarArchiveOutputStream(fo)) {
+            addKbFile(o, KB_FILE_3);
+            o.finish();
+        }
+    }
+
+    @Test
+    public void testLoadFromTwoLevelArchiveByWildcardLevelAndArchiveFileWildcard() throws IOException {
+        createTwoLevelArchive();
+        createSecondArchive();
+
+        SpongeEngine engine = SpringSpongeEngine.builder().knowledgeBase("kb", "spar:" + ARCHIVE_LOCATION_DIR + "/kb-*.jar!/*.py").build();
+        engine.startup();
+
+        try {
+            assertEquals(ACTION_ARG.toUpperCase(),
+                    engine.getOperations().call(String.class, "Action1FromArchive", Arrays.asList(ACTION_ARG)));
+            assertFalse(engine.getOperations().hasAction("Action2FromArchive"));
+            assertEquals(ACTION_ARG, engine.getOperations().call(String.class, "Action3FromArchive", Arrays.asList(ACTION_ARG)));
         } finally {
             finish(engine);
         }

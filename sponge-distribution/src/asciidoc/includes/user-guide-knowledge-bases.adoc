@@ -273,7 +273,7 @@ The Spring based provider is implemented by the `SpringKnowledgeBaseFileProvider
 * the Spring `classpath*:` URL protocol for loading resources as well as other protocols supported by the Spring `PathMatchingResourcePatternResolver`,
 * the {sponge} `spar` URL protocol for loading script knowledge base files from JAR archives located in a filesystem.
 
-The `spar` protocol name is an acronym for *SP*onge *AR*chive. The `spar` protocol accepts wildcards in an archive content path but not in an archive file path itself.
+The `spar` protocol name is an acronym for *SP*onge *AR*chive. The `spar` protocol accepts wildcards both in an archive content path and in an archive file path itself.
 
 .Example of loading knowledge base files from a JAR archive using the `spar` protocol
 [source,java]

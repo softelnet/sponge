@@ -16,11 +16,15 @@
 
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class OkHttpHttpRestApiTest extends BaseHttpRestApiTest {
 

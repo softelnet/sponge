@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.RegExUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,6 +38,7 @@ import org.openksavi.sponge.restapi.client.SpongeRequestContext;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ClientListenerTest.TestConfig.class })

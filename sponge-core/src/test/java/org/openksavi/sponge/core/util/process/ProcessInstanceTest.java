@@ -27,6 +27,8 @@ import java.util.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
@@ -35,6 +37,7 @@ import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
 
 @net.jcip.annotations.NotThreadSafe
+@Execution(ExecutionMode.SAME_THREAD)
 public class ProcessInstanceTest {
 
     @Test

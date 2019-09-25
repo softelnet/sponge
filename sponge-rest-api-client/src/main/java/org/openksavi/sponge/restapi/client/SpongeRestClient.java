@@ -75,23 +75,6 @@ public interface SpongeRestClient extends Closeable {
     boolean removeOnResponseDeserializedListener(OnResponseDeserializedListener listener);
 
     /**
-     * Sends the {@code version} request to the server.
-     *
-     * @param request the request.
-     * @param context the context.
-     * @return the {@code version} response.
-     */
-    GetVersionResponse getVersion(GetVersionRequest request, SpongeRequestContext context);
-
-    /**
-     * Sends the {@code version} request to the server.
-     *
-     * @param request the request.
-     * @return the {@code version} response.
-     */
-    GetVersionResponse getVersion(GetVersionRequest request);
-
-    /**
      * Returns the Sponge API features by sending the {@code features} request to the server and returning the features or using the cache.
      *
      * @return the API features.
@@ -114,6 +97,23 @@ public interface SpongeRestClient extends Closeable {
      * @return the {@code features} response.
      */
     GetFeaturesResponse getFeatures(GetFeaturesRequest request);
+
+    /**
+     * Sends the {@code version} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the {@code version} response.
+     */
+    GetVersionResponse getVersion(GetVersionRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code version} request to the server.
+     *
+     * @param request the request.
+     * @return the {@code version} response.
+     */
+    GetVersionResponse getVersion(GetVersionRequest request);
 
     /**
      * Sends the {@code version} request to the server.

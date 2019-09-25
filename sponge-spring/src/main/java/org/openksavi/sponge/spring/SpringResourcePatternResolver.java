@@ -17,6 +17,8 @@
 package org.openksavi.sponge.spring;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -42,10 +44,15 @@ public class SpringResourcePatternResolver extends PathMatchingResourcePatternRe
                 return null;
             }
 
+            String path = location.substring(SpringConstants.URL_PROTOCOL_SPAR_WITH_SEPARATOR.length());
+
             if (location.contains(".jar" + SpringConstants.SPAR_CONTENTS_SEPARATOR)) {
                 // Resolve a JAR archive as a file.
-                return BASE_RESOURCE_RESOLVER
-                        .getResource("file:" + location.substring(SpringConstants.URL_PROTOCOL_SPAR_WITH_SEPARATOR.length()));
+                return BASE_RESOURCE_RESOLVER.getResource("file:" + path);
+            }
+
+            if (Files.isDirectory(Paths.get(path))) {
+                return BASE_RESOURCE_RESOLVER.getResource("file:" + path);
             }
 
             return null;

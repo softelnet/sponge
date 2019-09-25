@@ -19,6 +19,8 @@ package org.openksavi.sponge.integration.tests.performance;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +32,7 @@ import org.openksavi.sponge.test.script.template.RulesTestTemplate;
 import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.TestUtils;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class LoadTest {
 

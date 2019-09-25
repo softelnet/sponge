@@ -25,6 +25,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 import org.openksavi.sponge.SpongeException;
@@ -96,9 +97,10 @@ public abstract class RestClientUtils {
             okHttpClient.connectionPool().evictAll();
         }
 
-        if (okHttpClient.cache() != null) {
+        Cache cache = okHttpClient.cache();
+        if (cache != null) {
             try {
-                okHttpClient.cache().close();
+                cache.close();
             } catch (IOException e) {
                 throw new SpongeException(e);
             }

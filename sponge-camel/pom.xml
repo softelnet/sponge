@@ -80,5 +80,11 @@
             <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Run JUnit4 tests that require Camel test support. -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

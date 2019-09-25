@@ -25,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
@@ -35,6 +37,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.nashorn.JavaScriptConstants;
 import org.openksavi.sponge.standalone.StandaloneEngineMain;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class StandaloneErrorReportingTest {
 

@@ -20,12 +20,16 @@ import javax.net.ssl.SSLSession;
 
 import okhttp3.OkHttpClient;
 
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
 import org.openksavi.sponge.restapi.client.util.RestClientUtils;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @net.jcip.annotations.NotThreadSafe
 public class OkHttpHttpsRestApiTest extends BaseHttpsRestApiTest {
 

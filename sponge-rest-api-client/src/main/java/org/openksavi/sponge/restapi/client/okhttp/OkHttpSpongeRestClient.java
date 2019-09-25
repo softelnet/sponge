@@ -27,6 +27,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -105,7 +106,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                                     .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
                             .execute();
 
-            String responseBody = httpResponse.body() != null ? httpResponse.body().string() : null;
+            ResponseBody httpResponseBody = httpResponse.body();
+            String responseBody = httpResponseBody != null ? httpResponseBody.string() : null;
             if (logger.isDebugEnabled()) {
                 logger.debug("REST API {} response: {})", operationType, RestApiUtils.obfuscatePassword(responseBody));
             }
