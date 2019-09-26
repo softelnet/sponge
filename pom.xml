@@ -1013,7 +1013,6 @@
                 <module>sponge-gsm-modem</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
-                <module>sponge-external</module>
                 <module>sponge-bom</module>
                 <module>sponge-examples-projects</module>
                 <module>sponge-standalone-extensions</module>

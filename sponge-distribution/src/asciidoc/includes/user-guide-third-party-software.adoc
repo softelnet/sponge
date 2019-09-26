@@ -83,15 +83,5 @@
 |JSON Web Token for Java.
 |===
 
-.Key third party software used by Sponge external modules
-[cols="1,1,2"]
-|===
-|Package |License |Description
-
-|https://github.com/finnyb/javampd[JavaMPD]
-|http://www.gnu.org/copyleft/gpl.html[GNU GPL Version 3]
-|Used for integration with MPD (Music Player Daemon) server. Note that this library is *GPL licensed* therefore it is not fully compatible with the Apache License, Version 2.0.
-|===
-
 The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution.
 

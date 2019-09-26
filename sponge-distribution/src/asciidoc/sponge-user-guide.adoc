@@ -10,7 +10,6 @@
 :camelSourcesUrl: {sourcesUrl}/sponge-camel/examples/camel/
 :py4jSourcesUrl: {sourcesUrl}/sponge-py4j/examples/py4j/
 :midiSourcesUrl: {sourcesUrl}/sponge-midi/examples/midi/
-:mpdSourcesUrl: {sourcesUrl}/sponge-external/sponge-mpd/examples/mpd/
 :tensorflowSourcesUrl: {sourcesUrl}/sponge-tensorflow/examples/tensorflow/
 
 == Introduction
@@ -1665,14 +1664,6 @@ ifdef::useReferences[({midiSourcesUrl}/midi_input.py[py])]
 |`midi_play_file`
 ifdef::useReferences[({midiSourcesUrl}/midi_play_file.py[py])]
 |Shows how MIDI messages created by a MIDI sequencer playing a MIDI file could be processed in a {sponge} knowledge base.
-
-|`mpd_events`
-ifdef::useReferences[({mpdSourcesUrl}/mpd_events.py[py])]
-|Shows MPD events.
-
-|`mpd_set_playlist`
-ifdef::useReferences[({mpdSourcesUrl}/mpd_set_playlist.py[py])]
-|Shows how to set an MPD playlist.
 |===
 
 === Standalone examples
@@ -1832,20 +1823,6 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |No
 |{sponge} integration tests.
 |===
-
-The following optional artifacts are not part of the standard {sponge} distribution and are available under a variety of licenses (incompatible with Apache 2.0) but can be used to extend {sponge} functionality.
-
-.{sponge} optional external Maven artifacts
-[cols="2,2,1,5"]
-|===
-|ArtifactId |License |Central Maven Repository |Description
-
-|`sponge-mpd`
-|GNU GPL 3.0
-|Yes
-|MPD (Music Player Daemon) integration.
-|===
-
 
 include::includes/user-guide-standalone.adoc[leveloffset=+1]
 

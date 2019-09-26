@@ -58,11 +58,9 @@ public class ProcessInstanceRuntime {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessInstanceRuntime.class);
 
-    private static final Logger processOutputLogger =
-            LoggerFactory.getLogger(ProcessInstanceRuntime.class.getPackage().getName() + ".Output");
+    private Logger processOutputLogger;
 
-    private static final Logger processErrorLogger =
-            LoggerFactory.getLogger(ProcessInstanceRuntime.class.getPackage().getName() + ".Error");
+    private Logger processErrorLogger;
 
     private SpongeEngine engine;
 
@@ -91,12 +89,21 @@ public class ProcessInstanceRuntime {
     }
 
     protected void initState() {
+        initLoggers();
+
         semaphore.drainPermits();
         errorLine.set(null);
         inputStreamLineConsumerRunnableFutures.clear();
         executor = null;
 
         instance.setStartTime(Instant.now());
+    }
+
+    protected void initLoggers() {
+        String loggerCode = configuration.getName() != null ? configuration.getName() : configuration.getExecutable();
+
+        processOutputLogger = LoggerFactory.getLogger(ProcessInstanceRuntime.class.getPackage().getName() + ".Output." + loggerCode);
+        processErrorLogger = LoggerFactory.getLogger(ProcessInstanceRuntime.class.getPackage().getName() + ".Error." + loggerCode);
     }
 
     protected ProcessBuilder createAndConfigureProcessBuilder() {
@@ -305,9 +312,9 @@ public class ProcessInstanceRuntime {
     }
 
     protected void startProcess(ProcessBuilder builder) {
-        logger.info("Running a new subprocess: {} {}", configuration.getExecutable(), getArgsString());
+        logger.debug("Running a new subprocess: {} {}", configuration.getExecutable(), getArgsString());
         if (!configuration.getEnv().isEmpty()) {
-            logger.debug("The subprocess additional environment: {}", configuration.getEnv());
+            logger.trace("The subprocess additional environment: {}", configuration.getEnv());
         }
 
         try {

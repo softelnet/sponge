@@ -8,7 +8,7 @@ image:https://img.shields.io/maven-central/v/org.openksavi.sponge/sponge-core.sv
 
 This is the source code repository for the open source, Java-based Action and Event Processing System.
 
-The {sponge} standard libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license]. However some optional {sponge} libraries and the {sponge} standalone command-line application are licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3] because they use optional, third-party libraries that require it.
+The {sponge} standard libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license]. However the {sponge} standalone command-line application is licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3].
 
 If you want to build the project, please read the {github}/blob/master/sponge-distribution/src/asciidoc/sponge-developer-guide.adoc[{sponge} Developer Guide] first.
 

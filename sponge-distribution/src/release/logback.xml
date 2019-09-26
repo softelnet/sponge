@@ -51,7 +51,6 @@
     <logger name="org.quartz" level="error" />
     <logger name="org.apache.camel" level="error" />
     <logger name="org.springframework" level="error" />
-    <logger name="org.bff.javampd" level="error" />
     <logger name="org.iot.raspberry.grovepi" level="error" />
     <logger name="GrovePi" level="error" />
     <logger name="org.reflections" level="error" />
