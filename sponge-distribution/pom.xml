@@ -61,13 +61,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- Selected Sponge external artifacts available in the standalone application out of the box: -->
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-mpd</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-test</artifactId>

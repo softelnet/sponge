@@ -194,13 +194,6 @@
         </fileSet>
 
         <fileSet>
-            <directory>../sponge-external/sponge-mpd</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>examples/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
             <directory>src/release</directory>
             <outputDirectory>config</outputDirectory>
             <includes>

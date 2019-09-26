@@ -39,7 +39,7 @@ The main features of {sponge}:
 * Allows *embedding in a custom Java application* (using Maven) or could be used as a *standalone command-line application*.
 * Supports connecting to many types of external systems by using *http://camel.apache.org[Apache Camel] integration*.
 * Provides *own Apache Camel component* for including {sponge} engine in a Camel route.
-* Provides plugins for integration with *Spring*, *Camel*, *CPython*, *MIDI*, *MPD* and *Raspberry Pi*.
+* Provides plugins for integration with *Spring*, *Camel*, *CPython*, *MIDI* and *Raspberry Pi*.
 * Supports creation of *custom plugins*.
 * Supports *deployment in enterprise environments* by integration with Spring framework.
 * The standalone command-line application allows, for example, *management of Camel routes without the need of writing Java code* (you may use any of the supported scripting languages or XML).

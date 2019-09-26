@@ -25,6 +25,7 @@
                 <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
             </configuration>
         </plugin>
+        <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin"/>
     </plugins>
 </sponge>
 

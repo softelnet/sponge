@@ -47,7 +47,10 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.jython.JythonRule;
 import org.openksavi.sponge.jython.PythonConstants;
+import org.openksavi.sponge.jython.util.PyBiConsumer;
+import org.openksavi.sponge.jython.util.PyConsumer;
 import org.openksavi.sponge.jython.util.PyPredicate;
+import org.openksavi.sponge.jython.util.PySupplier;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
@@ -87,6 +90,9 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
         getStandardImportClasses().forEach(cls -> addImport(scriptEngine, cls));
         addImport(scriptEngine, PyPredicate.class);
+        addImport(scriptEngine, PyConsumer.class);
+        addImport(scriptEngine, PyBiConsumer.class);
+        addImport(scriptEngine, PySupplier.class);
 
         scriptEngine.put(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());
 

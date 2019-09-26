@@ -224,6 +224,16 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
+     * Sets the logging consumer for the process standard output to none. Applicable only if the output redirect type is CONSUMER.
+     *
+     * @return this builder.
+     */
+    public ProcessConfigurationBuilder outputLoggingConsumerNone() {
+        return outputLoggingConsumer((logger, line) -> {
+        });
+    }
+
+    /**
      * The logging consumer for the process error output. Applicable only if the error redirect type is CONSUMER. The default logging level
      * is {@code WARN}.
      *
