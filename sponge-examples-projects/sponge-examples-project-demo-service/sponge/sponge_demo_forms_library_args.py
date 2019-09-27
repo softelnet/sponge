@@ -7,7 +7,7 @@ class ArgLibraryForm(Action):
     def onConfigure(self):
         self.withLabel("Library (books as arguments)")
         self.withArgs([
-            StringType("search").withNullable().withLabel("Search"),
+            StringType("search").withNullable().withLabel("Search").withFeature("responsive", True),
             StringType("order").withLabel("Sort by").withProvided(ProvidedMeta().withValue().withValueSet()),
             # Provided with overwrite to allow GUI refresh.
             ListType("books").withLabel("Books").withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withFeatures({

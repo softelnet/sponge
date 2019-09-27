@@ -17,7 +17,7 @@ class RecordLibraryForm(Action):
     def onConfigure(self):
         self.withLabel("Library (books as records)")
         self.withArgs([
-            StringType("search").withNullable().withLabel("Search"),
+            StringType("search").withNullable().withLabel("Search").withFeature("responsive", True),
             StringType("order").withLabel("Sort by").withProvided(ProvidedMeta().withValue().withValueSet()),
             ListType("books").withLabel("Books").withFeatures({
                     "createAction":"RecordCreateBook", "readAction":"RecordReadBook", "updateAction":"RecordUpdateBook", "deleteAction":"RecordDeleteBook",
@@ -37,6 +37,7 @@ class RecordLibraryForm(Action):
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
         if "books" in context.names:
             context.provided["books"] = ProvidedValue().withValue(
+                # Context actions are provided dynamically in an annotated value.
                 map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)).withFeature("contextActions", [
                         "RecordBookContextBinaryResult", "RecordBookContextNoResult", "RecordBookContextAdditionalArgs"]),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
@@ -46,6 +47,7 @@ class RecordCreateBook(Action):
         self.withLabel("Add a new book")
         self.withArg(
             createBookRecordType("book").withLabel("Book").withProvided(ProvidedMeta().withValue()).withFields([
+                # Overwrite the author field.
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()

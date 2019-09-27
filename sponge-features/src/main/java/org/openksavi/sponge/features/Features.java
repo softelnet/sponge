@@ -80,6 +80,8 @@ public final class Features {
 
     public static final String STRING_OBSCURE = "obscure";
 
+    public static final String STRING_RESPONSIVE = "responsive";
+
     public static final String ACTION_CALL_LABEL = "callLabel";
 
     public static final String ACTION_REFRESH_LABEL = "refreshLabel";

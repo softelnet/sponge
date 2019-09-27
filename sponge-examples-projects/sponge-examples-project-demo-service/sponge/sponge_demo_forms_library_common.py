@@ -51,7 +51,7 @@ class Library:
 
     def addBook(self, author, title):
         if list(filter(lambda book: book.author == author and book.title == title, self.books)):
-            raise Exception("This book has been added to the library")
+            raise Exception("This book has already been added to the library")
         self.books.add(Book(self.currentId.incrementAndGet(), author, title))
 
     def getBook(self, bookId):
