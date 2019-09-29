@@ -6,7 +6,7 @@ REST API security
 from org.openksavi.sponge.restapi.server.security import User
 
 # Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "normal":["mpd"], "anonymous":["mpd"]}
+ROLES_TO_KB = { "admin":[".*"], "normal":[".*"], "anonymous":[".*"]}
 # Simple access configuration: role -> event names regexps.
 ROLES_TO_SEND_EVENT = { "admin":[".*"], "normal":[".*"]}
 ROLES_TO_SUBSCRIBE_EVENT = { "admin":[".*"], "normal":[".*"], "anonymous":[".*"]}

@@ -128,13 +128,26 @@ class ViewCurrentSong(Action):
     def onConfigure(self):
         self.withLabel("Current song").withDescription("View the current song.")
         self.withArgs([
-            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(ProvidedMeta().withValue().withReadOnly())
+            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
+                ProvidedMeta().withValue().withReadOnly()),
+            StringType("lyrics").withLabel("Lyrics").withProvided(
+                ProvidedMeta().withValue().withReadOnly().withDependency("song")),
         ]).withNoResult().withCallable(False)
         self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["mpdNotification"]})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
         if "song" in context.names:
-            context.provided["song"] =  ProvidedValue().withValue(mpc.getCurrentSong())
+            context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
+        if "lyrics" in context.names:
+            (artist, title) = tuple(context.current["song"].split(" - ", 2))
+            musixmatchApiKey = sponge.getProperty("musixmatchApiKey", None)
+            if musixmatchApiKey:
+                lyrics = getLyrics(musixmatchApiKey, artist, title)
+                print(lyrics)
+            else:
+                lyrics = "*** LYRICS SERVICE NOT CONFIGURED ***"
+
+            context.provided["lyrics"] = ProvidedValue().withValue(lyrics[:200])
 
 class ViewMpdStatus(Action):
     def onConfigure(self):

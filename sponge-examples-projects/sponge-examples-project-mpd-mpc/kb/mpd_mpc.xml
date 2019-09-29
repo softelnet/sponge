@@ -8,6 +8,7 @@
     <knowledgeBases>
         <knowledgeBase name="mpd" label="MPD">
             <file>mpd_mpc.py</file>
+            <file>mpd_lyrics.py</file>
         </knowledgeBase>
         <knowledgeBase name="administration" label="Administration">
             <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
