@@ -92,7 +92,7 @@
         <quartz.version>2.3.1</quartz.version>
         <guava.version>28.1-jre</guava.version>
         <caffeine.version>2.8.0</caffeine.version>
-        <spring.version>5.1.9.RELEASE</spring.version>
+        <spring.version>5.1.10.RELEASE</spring.version>
         <spring-integration.version>5.1.7.RELEASE</spring-integration.version>
         <spring-security.version>5.1.6.RELEASE</spring-security.version>
         <camel.version>2.24.2</camel.version>
@@ -105,13 +105,13 @@
         <rxjava2.version>2.2.12</rxjava2.version>
         <okhttp.version> 4.2.0</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
-        <jackson.version>2.9.10</jackson.version>
+        <jackson.version>2.10.0</jackson.version>
         <swagger.version>1.5.23</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jserialcomm.version>2.5.2</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.23.0</grpc.version>
+        <grpc.version>1.24.0</grpc.version>
         <protobuf.version>3.7.1</protobuf.version>
         <protoc.version>3.7.1</protoc.version>
         <netty-tcnative.version>2.0.26.Final</netty-tcnative.version>

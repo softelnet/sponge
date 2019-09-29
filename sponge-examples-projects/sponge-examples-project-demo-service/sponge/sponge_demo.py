@@ -203,7 +203,7 @@ class ObscuredTextArgAction(Action):
     def onConfigure(self):
         self.withLabel("Action with an obscured text argument").withArgs([
             StringType("plainText").withLabel("Plain text"),
-            StringType("obscuredText").withLabel("Obscured same text").withFeature("obscure", True)
+            StringType("obscuredText").withLabel("Obscured text").withFeature("obscure", True)
         ]).withResult(StringType().withLabel("Obscured text").withFeature("obscure", True))
     def onCall(self, plainText, obscuredText):
         return obscuredText

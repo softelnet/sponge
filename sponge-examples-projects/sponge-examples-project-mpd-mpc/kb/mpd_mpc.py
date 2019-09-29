@@ -139,15 +139,18 @@ class ViewCurrentSong(Action):
         if "song" in context.names:
             context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
         if "lyrics" in context.names:
-            (artist, title) = tuple(context.current["song"].split(" - ", 2))
-            musixmatchApiKey = sponge.getProperty("musixmatchApiKey", None)
-            if musixmatchApiKey:
-                lyrics = getLyrics(musixmatchApiKey, artist, title)
-                print(lyrics)
+            if context.current["song"] and " - " in context.current["song"]:
+                (artist, title) = tuple(context.current["song"].split(" - ", 2))
+                musixmatchApiKey = sponge.getProperty("musixmatchApiKey", None)
+                if musixmatchApiKey:
+                    lyrics = getLyrics(musixmatchApiKey, artist, title)
+                    print(lyrics)
+                else:
+                    lyrics = "*** LYRICS SERVICE NOT CONFIGURED ***"
             else:
-                lyrics = "*** LYRICS SERVICE NOT CONFIGURED ***"
+                lyrics = ""
 
-            context.provided["lyrics"] = ProvidedValue().withValue(lyrics[:200])
+            context.provided["lyrics"] = ProvidedValue().withValue(lyrics)
 
 class ViewMpdStatus(Action):
     def onConfigure(self):
