@@ -93,6 +93,8 @@ public interface RestApiService extends HasEngine, Initializable {
 
     GetFeaturesResponse getFeatures(GetFeaturesRequest request);
 
+    Map<String, Object> getFeatures();
+
     GetEventTypesResponse getEventTypes(GetEventTypesRequest request);
 
     ReloadResponse reload(ReloadRequest request);
@@ -169,8 +171,6 @@ public interface RestApiService extends HasEngine, Initializable {
     boolean canSendEvent(UserContext userContext, String eventName);
 
     boolean canSubscribeEvent(UserContext userContext, String eventName);
-
-    Map<String, Object> getFeatures();
 
     void setFeature(String name, Object value);
 

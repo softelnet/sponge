@@ -48,13 +48,14 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             Function<I, List<Object>> argsMapper, BiConsumer<O, A> resultMapper) {
         super(type, description, requestClass, requestDescription, responseClass, responseDescription, (request, exchange) -> {
             ActionCallRequest actionCallRequest = new ActionCallRequest();
-            // The default naming convention for an action name if not provided.
-            String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(type);
 
             actionCallRequest.getHeader().setId(request.getHeader().getId());
             actionCallRequest.getHeader().setUsername(request.getHeader().getUsername());
             actionCallRequest.getHeader().setPassword(request.getHeader().getPassword());
             actionCallRequest.getHeader().setAuthToken(request.getHeader().getAuthToken());
+
+            // The default naming convention for an action name if not provided.
+            final String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(type);
 
             actionCallRequest.setName(actionName);
             actionCallRequest.setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));

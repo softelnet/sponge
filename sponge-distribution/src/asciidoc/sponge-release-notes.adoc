@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.12.0 (not released yet)
+== 1.12.0 (2019-09-30)
 * Changed `grpc-netty` to `grpc-netty-shaded` in the `sponge-grpc-api-client`.
 * A new `Show event` action in the gRPC support knowledge base.
 * A new `sponge-features` artifact that contains the list of the predefined action and type features.

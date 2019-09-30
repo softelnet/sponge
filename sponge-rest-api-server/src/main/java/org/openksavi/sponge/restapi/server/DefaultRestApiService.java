@@ -163,6 +163,11 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    @Override
     public LoginResponse login(LoginRequest request) {
         try {
             Validate.notNull(request, "The request must not be null");
@@ -671,11 +676,6 @@ public class DefaultRestApiService implements RestApiService {
         } finally {
             session.set(null);
         }
-    }
-
-    @Override
-    public Map<String, Object> getFeatures() {
-        return features;
     }
 
     @Override
