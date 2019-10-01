@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import io.grpc.Server;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 import io.netty.handler.ssl.SslContextBuilder;
 
 import org.slf4j.Logger;
@@ -140,6 +141,10 @@ public class GrpcApiServerPlugin extends JPlugin {
 
             int port = resolveServerPort();
             NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
+
+            // Turn on the gRPC Server Reflection
+            // [https://github.com/grpc/grpc-java/blob/master/documentation/server-reflection-tutorial.md].
+            builder.addService(ProtoReflectionService.newInstance());
 
             SslConfiguration sslConfiguration = restApiServerPlugin.getService().getSettings().getSslConfiguration();
             if (sslConfiguration != null) {
