@@ -67,7 +67,7 @@ class ImageClassifierService:
         print('Learning label {:s}'.format(label), flush=True)
         with self.lock.gen_wlock():
             self.model.learn(image_data, label)
-            self.addToLearn(image_data, label)
+        self.addToLearn(image_data, label)
 
     def reset(self):
         print('Resetting the model', flush=True)

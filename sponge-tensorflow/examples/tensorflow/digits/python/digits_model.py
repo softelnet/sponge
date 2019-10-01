@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import tensorflow as tf
 from tensorflow import keras
@@ -13,8 +13,8 @@ print('Keras version', keras.__version__)
 
 # The model is based on https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py
 # and http://nbviewer.jupyter.org/github/fchollet/deep-learning-with-python-notebooks/blob/master/5.1-introduction-to-convnets.ipynb.
-# Test loss: 0.0215
-# Test accuracy: 0.9932
+# Test loss: 0.0197
+# Test accuracy: 0.9936
 # This model is used only for the purpose of showing how to invoke machine learning prediction via a Sponge action.
 class DigitsModel:
     def __init__(self):
@@ -23,16 +23,16 @@ class DigitsModel:
         self.batch_size = 128
         self.num_classes = 10
         self.epochs = 12
-        # input image dimensions
+        self.manualLearnEpochs = 6
+        # Input image dimensions.
         self.img_rows, self.img_cols = 28, 28
         self.labels = list(map(str, range(10)))
-        self.session = None
 
     def configure(self, model_file):
         self.model_file = model_file
 
     def _load_mnist_data(self):
-        # the data, split between train and test sets
+        # The data, split between train and test sets.
         (x_train, y_train), (x_test, y_test) = datasets.mnist.load_data()
 
         if K.image_data_format() == 'channels_first':
@@ -52,10 +52,10 @@ class DigitsModel:
         print(x_train.shape[0], 'train samples')
         print(x_test.shape[0], 'test samples')
 
-        # convert class vectors to binary class matrices
+        # Convert class vectors to binary class matrices.
         y_train = keras.utils.to_categorical(y_train, self.num_classes)
         y_test = keras.utils.to_categorical(y_test, self.num_classes)
-        
+
         return (x_train, y_train, x_test, y_test, input_shape)
 
     def _create_model_and_train(self):
@@ -71,8 +71,8 @@ class DigitsModel:
         model.add(layers.Dense(self.num_classes, activation='softmax'))
 
         model.compile(loss=keras.losses.categorical_crossentropy,
-                      optimizer=keras.optimizers.Adadelta(),
-                      metrics=['accuracy'])
+                      optimizer='adam',
+                      metrics=['acc'])
 
         history = model.fit(self.x_train, self.y_train,
                   batch_size=self.batch_size,
@@ -93,9 +93,6 @@ class DigitsModel:
     def load(self, create_new = False):
         (self.x_train, self.y_train, self.x_test, self.y_test, self.input_shape) = self._load_mnist_data()
 
-        # Keras hack [https://github.com/tensorflow/tensorflow/issues/14356]
-        K.clear_session()
-
         if not create_new and os.path.exists(self.model_file):
             print('Loading model')
             self.model = models.load_model(self.model_file)
@@ -103,14 +100,7 @@ class DigitsModel:
             print('Creating and training a new model')
             self._create_model_and_train()
 
-        # Have to initialize before threading (https://stackoverflow.com/questions/40850089/is-keras-thread-safe)
-        self.model._make_predict_function()
-
         self.evaluate(self.model, self.x_test, self.y_test)
-
-        # Save and set the session later to avoid the multithreading related problems
-        # that cause 'The Session graph is empty.  Add operations to the graph before calling run().' exception.
-        self.session = K.get_session()
 
     def _preprocess_image_data(self, image_data):
         image = preprocessing.image.load_img(BytesIO(image_data), color_mode = 'grayscale', target_size=(self.img_rows, self.img_cols))
@@ -123,21 +113,15 @@ class DigitsModel:
         return self.labels
 
     def predict(self, image_data):
-        # Set a session for the current thread.
-        K.set_session(self.session)
-
         image_tensor, image = self._preprocess_image_data(image_data)
         prediction_tensor = self.model.predict(image_tensor)[0]
 
         return prediction_tensor
 
     def learn(self, image_data, digit):
-        # Set a session for the current thread.
-        K.set_session(self.session)
-
         x, image = self._preprocess_image_data(image_data)
         self.model.fit(x,
                        keras.utils.to_categorical([digit], self.num_classes),
-                       epochs=self.epochs,
+                       epochs=self.manualLearnEpochs,
                        verbose=0,
                        validation_data=(self.x_test, self.y_test))
