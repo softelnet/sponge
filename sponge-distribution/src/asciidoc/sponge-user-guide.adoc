@@ -767,6 +767,8 @@ An access to the plugin could be achieved in two ways:
 * directly using the name `echoPlugin` as any other scripting language variable (this is the preferred way),
 * by using the `sponge` API, e.g. `plugin = sponge.getPlugin("echoPlugin")`.
 
+NOTE: A plugin is not accessible in a main body of a script knowledge base because it still won't be initialized when knowledge bases are being loaded. It should be referenced in processors or callback functions.
+
 Because `echoPlugin` implements the method `getEcho()`, you may invoke it in two ways:
 
 * `sponge.getPlugin("echoPlugin").echo`

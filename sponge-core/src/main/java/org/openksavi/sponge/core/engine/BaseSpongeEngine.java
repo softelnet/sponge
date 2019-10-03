@@ -369,7 +369,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
                 // Creates an event scheduler.
                 eventScheduler.startup();
 
-                // Sends the first event: startup.
+                // Enqueue the first event (startup) to be sent.
                 operations.event(EventName.STARTUP).send();
 
                 // Read knowledge bases files and invoke onInit and onLoad for each knowledge base.
