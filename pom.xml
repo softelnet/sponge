@@ -93,8 +93,8 @@
         <guava.version>28.1-jre</guava.version>
         <caffeine.version>2.8.0</caffeine.version>
         <spring.version>5.2.0.RELEASE</spring.version>
-        <spring-integration.version>5.1.7.RELEASE</spring-integration.version>
-        <spring-security.version>5.1.6.RELEASE</spring-security.version>
+        <spring-integration.version>5.2.0.RELEASE</spring-integration.version>
+        <spring-security.version>5.2.0.RELEASE</spring-security.version>
         <camel.version>2.24.2</camel.version>
         <awaitility.version>4.0.1</awaitility.version>
         <jline.version>3.12.1</jline.version>
@@ -102,8 +102,8 @@
         <tensorflow.version>1.13.1</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
-        <rxjava2.version>2.2.12</rxjava2.version>
-        <okhttp.version> 4.2.0</okhttp.version>
+        <rxjava2.version>2.2.13</rxjava2.version>
+        <okhttp.version> 4.2.1</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.10.0</jackson.version>
         <swagger.version>1.5.23</swagger.version>
@@ -120,13 +120,13 @@
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <jetty.version>9.4.20.v20190813</jetty.version>
+        <jetty.version>9.4.21.v20190926</jetty.version>
 
         <slf4j.version>1.7.28</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <junit-platform.version>1.5.2</junit-platform.version>
-        <mockito.version>3.0.0</mockito.version>
+        <mockito.version>3.1.0</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
 

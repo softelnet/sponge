@@ -103,10 +103,11 @@ public class ServerSubscriptionManager {
     }
 
     protected boolean eventMatchesSubscription(org.openksavi.sponge.event.Event event, ServerSubscription subscription) {
+        boolean hasEventType = engine.hasEventType(event.getName());
         return subscription.isActive()
                 && subscription.getEventNames().stream()
                         .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))
-                && (!subscription.isRegisteredTypeRequired() || engine.hasEventType(event.getName()))
+                && (!subscription.isRegisteredTypeRequired() || hasEventType)
                 // Check subscribe privileges for the event instance.
                 && restApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName());
     }

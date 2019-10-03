@@ -23,6 +23,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.restapi.server.RestApiService;
@@ -67,6 +68,8 @@ public class GrpcApiManageSubscription extends JAction {
             UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
 
             List<AnnotatedValue<String>> annotatedElementValueSet = getSponge().getEventTypes().entrySet().stream()
+                    // Get only visible event types.
+                    .filter(entry -> ((Boolean) entry.getValue().getFeatures().getOrDefault(Features.VISIBLE, Boolean.TRUE)))
                     // Check permissions.
                     .filter(entry -> getRestApiService().canSubscribeEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())

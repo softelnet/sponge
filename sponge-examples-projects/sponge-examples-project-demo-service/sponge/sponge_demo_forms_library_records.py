@@ -70,7 +70,7 @@ class RecordReadBook(Action):
         self.withLabel("View the book")
         # Must set withOverwrite to replace with the current value.
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
-            ProvidedMeta().withValue().withOverwrite().withDependency("book.id")))
+            ProvidedMeta().withValue().withOverwrite().withDependency("book.id").withReadOnly()))
         self.withNoResult().withCallable(False)
         self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):

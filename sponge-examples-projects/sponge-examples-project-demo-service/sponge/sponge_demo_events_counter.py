@@ -49,4 +49,4 @@ class ViewCounter(Action):
             context.provided["counter"] = ProvidedValue().withValue(sponge.getVariable("counter").get())
 
 def onStartup():
-    sponge.event("counterSender").sendEvery(Duration.ofSeconds(10))
+    sponge.event("counterSender").sendEvery(Duration.ofSeconds(5))
