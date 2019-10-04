@@ -146,7 +146,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
      */
     @Override
     public void doStartup() {
-        home = System.getProperty(ConfigurationConstants.PROP_HOME);
+        resolveHome();
 
         readConfiguration();
 
@@ -169,9 +169,8 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         engineDescription = engineConfig.getString(ConfigurationConstants.TAG_ENGINE_DESCRIPTION, null);
         setupEngineParameters();
 
-        if (home == null) {
-            home = getProperty(ConfigurationConstants.PROP_HOME);
-        }
+        // Home can be set in a configuration file. In that case it has to be resolved again.
+        resolveHome();
 
         logger.debug(toString());
     }
@@ -495,6 +494,10 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public String getHome() {
         return home;
+    }
+
+    protected void resolveHome() {
+        home = getProperty(ConfigurationConstants.PROP_HOME);
     }
 
     @Override

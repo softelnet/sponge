@@ -399,6 +399,8 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
                     logger.debug("Sponge completed a run once mode");
                 }
             } catch (Throwable e) {
+                tryRememberException(e);
+
                 safelyShutdownIfStartupError(processingUnitManager, threadPoolManager, knowledgeBaseManager, pluginManager, eventScheduler,
                         eventQueueManager, configurationManager);
                 throw SpongeUtils.wrapException("startup", e);

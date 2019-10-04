@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -191,6 +192,35 @@ public class ConfigurationTest {
             }
 
             assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testConfigurationFileInHomeDirectory() {
+        String home = "examples/core/configuration/config_in_home";
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().config("config_in_home.xml").property(ConfigurationConstants.PROP_HOME, home).build();
+        engine.startup();
+
+        try {
+            assertEquals(home, engine.getConfigurationManager().getHome());
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testConfigurationFileInHomeDirectoryNoHome() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().config("config_in_home.xml").property(ConfigurationConstants.PROP_HOME, null).build();
+
+        assertThrows(ConfigException.class, () -> engine.startup(), "Configuration file config_in_home.xml not found");
+
+        try {
+            assertTrue(engine.isError());
         } finally {
             engine.shutdown();
         }
