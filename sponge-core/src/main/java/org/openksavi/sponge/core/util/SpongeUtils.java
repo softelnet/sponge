@@ -863,8 +863,6 @@ public abstract class SpongeUtils {
             File configFile = FileLocatorUtils.fileFromURL(fileUrl);
             if (configFile != null) {
                 return configFile.getParent();
-            } else {
-                logger.warn("URL {} cannot be converted to File", fileUrl);
             }
         }
 

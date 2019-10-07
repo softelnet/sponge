@@ -364,7 +364,12 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
             propertiesConfig = configurationResult.getRight();
 
             cc.addConfiguration(xmlConfiguration);
-            xmlConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, SpongeUtils.getFileDir(configurationFileUrl));
+            String configFileDir = SpongeUtils.getFileDir(configurationFileUrl);
+            if (configFileDir != null) {
+                xmlConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, configFileDir);
+            } else {
+                xmlConfiguration.clearProperty(ConfigurationConstants.PROP_CONFIG_DIR);
+            }
         }
 
         // Add default configuration.
