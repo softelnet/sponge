@@ -38,8 +38,9 @@
         <javaSeJavaDocUrl>https://docs.oracle.com/javase/8/docs/api</javaSeJavaDocUrl>
         <spongeJavaDocUrl>${homepage}/docs/javadoc</spongeJavaDocUrl>
 
-        <openapi.dir>${project.build.directory}/openapi</openapi.dir>
-        <openapi.basename>user-guide-rest-api</openapi.basename>
+        <openApiDir>${project.build.directory}/openapi</openApiDir>
+        <openApiBasename>rest-api-openapi-specification</openApiBasename>
+        <documentationCopyDir>${project.build.directory}/documentation-copy/documentation-copy</documentationCopyDir>
     </properties>
 
     <dependencies>
@@ -70,36 +71,60 @@
 
     <profiles>
         <profile>
-            <id>openapi</id>
+            <id>documentation</id>
             <build>
                 <plugins>
+                    <!-- Copy documentation file sources to the target. -->
                     <plugin>
-                        <groupId>com.googlecode.maven-download-plugin</groupId>
-                        <artifactId>download-maven-plugin</artifactId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>download-openapi-json</id>
-                                <phase>generate-sources</phase>
+                                <id>documentation-copy</id>
+                                <phase>prepare-package</phase>
                                 <goals>
-                                    <goal>wget</goal>
+                                    <goal>single</goal>
                                 </goals>
                                 <configuration>
-                                    <url>http://localhost:1836/sponge.json/v1/doc</url>
-                                    <outputDirectory>${openapi.dir}</outputDirectory>
-                                    <outputFileName>${openapi.basename}.json</outputFileName>
-                                    <overwrite>true</overwrite>
-                                    <failOnError>true</failOnError>
-                                    <skipCache>true</skipCache>
+                                    <finalName>documentation-copy</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <descriptors>
+                                        <descriptor>src/assembly/documentation-copy.xml</descriptor>
+                                    </descriptors>
+                                    <tarLongFileMode>gnu</tarLongFileMode>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- Generate a REST API OpenAPI specification JSON. -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <mainClass>org.openksavi.sponge.distribution.tools.RestApiServiceGenerateOpenApiSpecificationMain</mainClass>
+                            <arguments>
+                                <argument>${openApiDir}/${openApiBasename}.json</argument>
+                            </arguments>
+                            <classpathScope>test</classpathScope>
+                            <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Generate Asciidoc form the REST API OpenAPI specification JSON. -->
                     <plugin>
                         <groupId>io.github.swagger2markup</groupId>
                         <artifactId>swagger2markup-maven-plugin</artifactId>
                         <configuration>
-                            <swaggerInput>${openapi.dir}/${openapi.basename}.json</swaggerInput>
-                            <outputFile>src/asciidoc/includes/${openapi.basename}</outputFile>
+                            <swaggerInput>${openApiDir}/${openApiBasename}.json</swaggerInput>
+                            <outputFile>${documentationCopyDir}/includes/${openApiBasename}</outputFile>
                             <config>
                                 <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
                                 <swagger2markup.pathSecuritySectionEnabled>false</swagger2markup.pathSecuritySectionEnabled>
@@ -113,26 +138,20 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <phase>generate-sources</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>convertSwagger2markup</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>documentation</id>
-            <build>
-                <plugins>
+                    <!-- Generate documentation files (PDF and HTML). -->
                     <plugin>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctor-maven-plugin</artifactId>
                         <configuration>
                             <sourceHighlighter>coderay</sourceHighlighter>
-                            <sourceDirectory>src/asciidoc</sourceDirectory>
+                            <sourceDirectory>${documentationCopyDir}</sourceDirectory>
 
                             <attributes>
                                 <toclevels>5</toclevels>
@@ -164,7 +183,7 @@
                         <executions>
                             <execution>
                                 <id>output-html-reference</id>
-                                <phase>generate-resources</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>process-asciidoc</goal>
                                 </goals>
@@ -180,7 +199,7 @@
 
                             <execution>
                                 <id>output-pdf-reference</id>
-                                <phase>generate-resources</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>process-asciidoc</goal>
                                 </goals>
@@ -197,7 +216,7 @@
                             </execution>
                             <execution>
                                 <id>output-pdf-developer-guide</id>
-                                <phase>generate-resources</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>process-asciidoc</goal>
                                 </goals>

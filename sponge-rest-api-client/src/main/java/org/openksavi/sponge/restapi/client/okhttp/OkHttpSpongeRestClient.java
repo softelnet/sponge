@@ -122,6 +122,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                 Stream.concat(Stream.of(context.getOnResponseDeserializedListener()), onResponseDeserializedListeners.stream())
                         .filter(Objects::nonNull)
                         .forEach(listener -> listener.onResponseDeserialized(request, finalResponse, responseBody));
+
+                httpResponse.close();
             }
 
             return response;

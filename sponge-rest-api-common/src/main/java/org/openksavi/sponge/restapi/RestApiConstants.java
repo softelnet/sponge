@@ -53,6 +53,8 @@ public final class RestApiConstants {
 
     public static final String OPERATION_RELOAD = "reload";
 
+    public static final String OPERATION_DOC = "doc";
+
     /** A generic error code. */
     public static final String DEFAULT_ERROR_CODE = "SPONGE001";
 

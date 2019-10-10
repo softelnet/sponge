@@ -155,8 +155,10 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             .enableCORS(true)
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
             // Add swagger api doc out of the box.
-            .apiContextPath("/doc").apiProperty("api.title", getSettings().getDescription())
-                .apiProperty("api.version", String.valueOf(getSettings().getVersion())).apiVendorExtension(false);
+            .apiContextPath("/" + RestApiConstants.OPERATION_DOC)
+                .apiProperty("api.title", getSettings().getDescription())
+                .apiProperty("api.version", String.valueOf(getSettings().getVersion()))
+                .apiVendorExtension(false);
         // @formatter:on
 
         if (getSettings().getPort() != null) {

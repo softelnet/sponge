@@ -20,16 +20,26 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import okhttp3.Cache;
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeClientException;
+import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
  * A set of REST API client utility methods.
@@ -104,6 +114,31 @@ public abstract class RestClientUtils {
             } catch (IOException e) {
                 throw new SpongeException(e);
             }
+        }
+    }
+
+    public static String fetchOpenApiJson(String baseRestApiUrl) {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        try {
+            Response okHttpResponse = client
+                    .newCall(new Request.Builder().url(baseRestApiUrl + "/" + RestApiConstants.OPERATION_DOC)
+                            .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build()).get().build())
+                    .execute();
+
+            Validate.isTrue(okHttpResponse.code() == 200, "HTTP response is %s", okHttpResponse.code());
+            ObjectMapper mapper = RestApiUtils.createObjectMapper();
+            String json = okHttpResponse.body().string();
+
+            Map<?, ?> jsonMap = mapper.readValue(json, Map.class);
+
+            Validate.isTrue(jsonMap.containsKey("swagger"), "The response doesn't seem to be an OpenAPI JSON specification");
+
+            return json;
+        } catch (IOException e) {
+            throw new SpongeException(e);
+        } finally {
+            RestClientUtils.closeOkHttpClient(client);
         }
     }
 }
