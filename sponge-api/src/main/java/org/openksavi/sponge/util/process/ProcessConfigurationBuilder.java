@@ -277,7 +277,7 @@ public class ProcessConfigurationBuilder {
     }
 
     /**
-     * If {@code true}, throws exception if the process exit code is not {@code 0}. Defaults to {@code false}.
+     * If {@code true}, throws exception if the process exit code is not {@code 0}. Defaults to {@code true}.
      *
      * @param exceptionOnExitCode exception on exit code flag.
      * @return this builder.
