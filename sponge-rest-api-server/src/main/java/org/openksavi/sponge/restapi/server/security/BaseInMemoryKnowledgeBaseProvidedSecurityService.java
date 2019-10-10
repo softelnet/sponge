@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.server.security;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -23,14 +25,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.Validate;
+
+import org.openksavi.sponge.restapi.server.util.RestApiInMemorySecurityUtils;
 
 public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends KnowledgeBaseProvidedSecurityService {
 
-    public static final String DEFAULT_PASSWORD_ENTRY_FORMAT = "%s-%s";
-
-    private String passwordEntryFormat = DEFAULT_PASSWORD_ENTRY_FORMAT;
+    private String passwordEntryFormat;
 
     protected Set<User> users = Collections.synchronizedSet(new LinkedHashSet<>());
 
@@ -62,9 +63,8 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     }
 
     public String hashPassword(String username, String password) {
-        return password != null
-                ? DigestUtils.sha512Hex(String.format(passwordEntryFormat, username != null ? username.toLowerCase() : "", password))
-                : null;
+        return passwordEntryFormat != null ? RestApiInMemorySecurityUtils.hashPassword(username, password, passwordEntryFormat)
+                : RestApiInMemorySecurityUtils.hashPassword(username, password);
     }
 
     /**
@@ -88,5 +88,17 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
 
     public void setPasswordEntryFormat(String passwordEntryFormat) {
         this.passwordEntryFormat = passwordEntryFormat;
+    }
+
+    public void loadUsers() {
+        loadUsers(RestApiInMemorySecurityUtils.getPasswordFile(getRestApiService().getEngine()));
+    }
+
+    public void loadUsers(String filename) {
+        loadUsers(filename, StandardCharsets.UTF_8);
+    }
+
+    public void loadUsers(String filename, Charset charset) {
+        RestApiInMemorySecurityUtils.readUsers(filename, charset).forEach(this::addUser);
     }
 }
