@@ -57,6 +57,7 @@ import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -70,6 +71,7 @@ import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.ResponseHeader;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
@@ -335,11 +337,11 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
                     exception = new InvalidAuthTokenException(message);
                     break;
-                case RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION:
-                    exception = new IncorrectKnowledgeBaseVersionException(message);
+                case RestApiConstants.ERROR_CODE_INVALID_KB_VERSION:
+                    exception = new InvalidKnowledgeBaseVersionException(message);
                     break;
-                case RestApiConstants.ERROR_CODE_INCORRECT_USERNAME_PASSWORD:
-                    exception = new IncorrectUsernamePasswordException(message);
+                case RestApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD:
+                    exception = new InvalidUsernamePasswordException(message);
                     break;
                 default:
                     exception = new ErrorResponseException(message);
@@ -712,7 +714,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return result;
     }
 
-    protected Map<String, Object> marshalProvideActionArgsCurrent(RestActionMeta actionMeta, Map<String, Object> current) {
+    protected Map<String, Object> marshalAuxiliaryActionArgsCurrent(RestActionMeta actionMeta, Map<String, Object> current) {
         if (current == null || actionMeta == null || actionMeta.getArgs() == null) {
             return current;
         }
@@ -803,10 +805,10 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         RestActionMeta actionMeta = getActionMeta(request.getName());
         setupActionExecutionRequest(actionMeta, request);
 
-        request.setCurrent(marshalProvideActionArgsCurrent(actionMeta, request.getCurrent()));
+        request.setCurrent(marshalAuxiliaryActionArgsCurrent(actionMeta, request.getCurrent()));
 
         ProvideActionArgsResponse response =
-                execute(RestApiConstants.OPERATION_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
+                execute(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
 
         if (actionMeta != null) {
             unmarshalProvidedActionArgValues(actionMeta, response.getProvided());
@@ -828,6 +830,26 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public Map<String, ProvidedValue<?>> provideActionArgs(String actionName) {
         return provideActionArgs(actionName, null, null);
+    }
+
+    @Override
+    public SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request, SpongeRequestContext context) {
+        RestActionMeta actionMeta = getActionMeta(request.getName());
+        setupActionExecutionRequest(actionMeta, request);
+
+        request.setCurrent(marshalAuxiliaryActionArgsCurrent(actionMeta, request.getCurrent()));
+
+        return execute(RestApiConstants.OPERATION_SUBMIT_ACTION_ARGS, request, SubmitActionArgsResponse.class, context);
+    }
+
+    @Override
+    public SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request) {
+        return submitActionArgs(request, null);
+    }
+
+    @Override
+    public void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+        submitActionArgs(new SubmitActionArgsRequest(actionName, argNames, current));
     }
 
     protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {

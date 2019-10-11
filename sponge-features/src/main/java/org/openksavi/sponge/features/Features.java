@@ -42,6 +42,8 @@ public final class Features {
 
     public static final String ICON = "icon";
 
+    public static final String WIDGET = "widget";
+
     public static final String ACTION_CONFIRMATION = "confirmation";
 
     public static final String TYPE_CHARACTERISTIC = "characteristic";
@@ -109,6 +111,8 @@ public final class Features {
     public static final String BINARY_COLOR = "color";
 
     public static final String BINARY_BACKGROUND = "background";
+
+    public static final String WIDGET_SLIDER = "slider";
 
     public static final class Formats {
 

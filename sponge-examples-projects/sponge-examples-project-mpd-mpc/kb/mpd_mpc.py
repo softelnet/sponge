@@ -4,6 +4,8 @@ Uses mpc (MPD client).
 """
 
 from org.openksavi.sponge.util.process import ProcessConfiguration
+from java.util.concurrent.locks import ReentrantLock
+import re
 
 class Mpc:
     def __init__(self, mpcExec = "mpc", host = None, port = None):
@@ -13,6 +15,7 @@ class Mpc:
         self.host = host
         self.port = port
         self.eventLoopProcess = None
+        self.lock = ReentrantLock(True)
 
     def createProcessBuilder(self):
         args = []
@@ -102,6 +105,33 @@ class Mpc:
             self.eventLoopProcess.destroy()
             self.eventLoopProcess = None
 
+    def seekByPercentage(self, value):
+        self.lock.lock()
+        try:
+            return sponge.process(self.createProcessBuilder().arguments("seek", str(value) + "%").outputAsString().errorAsException()).run().outputString
+        finally:
+            self.lock.unlock()
+
+    # Returns a 3-element tuple.
+    def getPositionTuple(self, status):
+        lines = status.splitlines();
+        if len(lines) == 3:
+            matched = re.match(r".+ (.*)/(.*) \((.*)%\)", lines[1])
+            if matched and len(matched.groups()) == 3:
+                return matched.groups()
+        return None
+
+    def getPositionByPercentage(self):
+        return self.getPositionByPercentage(self.getStatus())
+
+    def getPositionByPercentage(self, status):
+        position = self.getPositionTuple(status)
+        return int(position[2]) if position else None
+
+    def getTimeStatus(self, status):
+        position = self.getPositionTuple(status)
+        return position[0] + "/" + position[1] if position else None
+
 class MpdSetAndPlayPlaylist(Action):
     def onConfigure(self):
         self.withLabel("Set and play a playlist").withDescription("Sets a playlist according to the arguments and starts playing it immediately. Uses mpc")
@@ -154,7 +184,7 @@ class ViewCurrentSong(Action):
 
 class ViewMpdStatus(Action):
     def onConfigure(self):
-        self.withLabel("Player").withDescription("Provides the player status.")
+        self.withLabel("MPD status").withDescription("Provides the player status.")
         self.withArgs([
             StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withProvided(ProvidedMeta().withValue().withReadOnly())
         ]).withNoResult().withCallable(False)
@@ -164,6 +194,38 @@ class ViewMpdStatus(Action):
         if "status" in context.names:
             context.provided["status"] =  ProvidedValue().withValue(mpc.getStatus())
 
+class MpdPlayer(Action):
+    def onConfigure(self):
+        self.withLabel("Player").withDescription("The MPD player.")
+        self.withArgs([
+            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
+                ProvidedMeta().withValue().withReadOnly()),
+            IntegerType("position").withLabel("Position").withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider", "responsive":True}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmit()),
+            StringType("time").withLabel("Time").withProvided(
+                ProvidedMeta().withValue().withReadOnly())#.withDependency("position")),
+        ]).withNoResult().withCallable(False)
+        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification"]})
+    def onProvideArgs(self, context):
+        mpc = sponge.getVariable("mpc")
+        status = None
+
+        # TODO Unnecessary?
+        status = mpc.getStatus()
+
+        if "song" in context.names:
+            context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
+
+        if "position" in context.names:
+            context.provided["position"] = ProvidedValue().withValue(mpc.getPositionByPercentage(status))
+
+        if "time" in context.names:
+            context.provided["time"] = ProvidedValue().withValue(mpc.getTimeStatus(status))
+    def onSubmitArgs(self, context):
+        mpc = sponge.getVariable("mpc")
+
+        if "position" in context.names:
+            status = mpc.seekByPercentage(context.current["position"])
 
 def onStartup():
     sponge.setVariable("mpc", Mpc())

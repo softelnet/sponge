@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.12.1 (not released yet)
 * REST API change: Renamed error codes.
+* Added support for submitting data type values to the server in the REST API.
 * Fixed the bug causing an error when loading a configuration file from a Sponge home directory set as a non system property.
 * Dependencies upgrade.
 

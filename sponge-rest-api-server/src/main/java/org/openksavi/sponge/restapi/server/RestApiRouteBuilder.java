@@ -63,6 +63,7 @@ import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -75,6 +76,7 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.value.OutputStreamValue;
 
@@ -379,9 +381,12 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class,
                 "The send event request", SendEventResponse.class, "The send event response",
                 (request, exchange) -> apiService.send(request)));
-        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_ACTION_ARGS, "Provide action arguments",
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, "Provide action arguments",
                 ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
                 "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_SUBMIT_ACTION_ARGS, "Submit action arguments",
+                SubmitActionArgsRequest.class, "The submit action arguments request", SubmitActionArgsResponse.class,
+                "The submit action arguments response", (request, exchange) -> apiService.submitActionArgs(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
                 "The get event types request", GetEventTypesResponse.class, "The get event types response",
                 (request, exchange) -> apiService.getEventTypes(request)));

@@ -46,6 +46,9 @@ public class ProvidedMeta {
     /** The flag specifying if the list element value set is provided. Applicable only for list types. Defaults to {@code false}. */
     private boolean elementValueSet = false;
 
+    /** The flag specifying if the value can be submitted by a client. */
+    private boolean submit = false;
+
     public ProvidedMeta() {
     }
 
@@ -84,6 +87,11 @@ public class ProvidedMeta {
 
     public ProvidedMeta withElementValueSet() {
         elementValueSet = true;
+        return this;
+    }
+
+    public ProvidedMeta withSubmit() {
+        submit = true;
         return this;
     }
 
@@ -137,5 +145,13 @@ public class ProvidedMeta {
 
     public void setElementValueSet(boolean elementValueSet) {
         this.elementValueSet = elementValueSet;
+    }
+
+    public boolean isSubmit() {
+        return submit;
+    }
+
+    public void setSubmit(boolean submit) {
+        this.submit = submit;
     }
 }

@@ -49,7 +49,9 @@ public final class RestApiConstants {
 
     public static final String OPERATION_SEND = "send";
 
-    public static final String OPERATION_ACTION_ARGS = "actionArgs";
+    public static final String OPERATION_PROVIDE_ACTION_ARGS = "provideActionArgs";
+
+    public static final String OPERATION_SUBMIT_ACTION_ARGS = "submitActionArgs";
 
     public static final String OPERATION_EVENT_TYPES = "eventTypes";
 

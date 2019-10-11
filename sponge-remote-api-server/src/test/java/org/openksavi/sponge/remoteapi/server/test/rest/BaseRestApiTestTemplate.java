@@ -55,7 +55,7 @@ import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
-import org.openksavi.sponge.restapi.client.IncorrectKnowledgeBaseVersionException;
+import org.openksavi.sponge.restapi.client.InvalidKnowledgeBaseVersionException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
@@ -217,7 +217,7 @@ public abstract class BaseRestApiTestTemplate {
             RestActionMeta actionMeta = client.getActionMeta("UpperCase");
             actionMeta.setQualifiedVersion(new ProcessorQualifiedVersion(1, 1));
 
-            assertThrows(IncorrectKnowledgeBaseVersionException.class, () -> client.call("UpperCase", Arrays.asList(arg1)),
+            assertThrows(InvalidKnowledgeBaseVersionException.class, () -> client.call("UpperCase", Arrays.asList(arg1)),
                     "The expected action qualified version (1.1) differs from the actual (2.2)");
         } finally {
             engine.clearError();

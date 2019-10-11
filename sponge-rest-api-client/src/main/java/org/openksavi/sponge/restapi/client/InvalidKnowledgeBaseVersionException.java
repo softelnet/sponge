@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 The Sponge authors.
+ * Copyright 2016-2018 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package org.openksavi.sponge.restapi.client;
 
-public class IncorrectUsernamePasswordException extends ErrorResponseException {
+public class InvalidKnowledgeBaseVersionException extends ErrorResponseException {
 
-    private static final long serialVersionUID = -851651702111467494L;
+    private static final long serialVersionUID = 8896830720187264248L;
 
     /**
      * Creates a new exception.
      *
      * @param message exception message.
      */
-    public IncorrectUsernamePasswordException(String message) {
+    public InvalidKnowledgeBaseVersionException(String message) {
         super(message);
     }
 
@@ -34,7 +34,7 @@ public class IncorrectUsernamePasswordException extends ErrorResponseException {
      *
      * @param throwable source throwable.
      */
-    public IncorrectUsernamePasswordException(Throwable throwable) {
+    public InvalidKnowledgeBaseVersionException(Throwable throwable) {
         super(throwable);
     }
 
@@ -44,7 +44,7 @@ public class IncorrectUsernamePasswordException extends ErrorResponseException {
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public IncorrectUsernamePasswordException(String message, Throwable throwable) {
+    public InvalidKnowledgeBaseVersionException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

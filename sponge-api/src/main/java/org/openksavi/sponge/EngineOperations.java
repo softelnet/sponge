@@ -136,7 +136,7 @@ public interface EngineOperations {
      * @param actionName the action name.
      * @param argNames the list of argument names that are to be provided.
      * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        those arguments that the arguments specified in the {@code names} depend on.
+     *        those arguments that the arguments specified in the {@code argNames} depend on.
      * @return the map of argument names and values (value sets).
      */
     Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
@@ -157,6 +157,16 @@ public interface EngineOperations {
      * @return the map of argument names and values (value sets).
      */
     Map<String, ProvidedValue<?>> provideActionArgs(String actionName);
+
+    /**
+     * Submits action arguments.
+     *
+     * @param actionName the action name.
+     * @param argNames the list of argument names that are submitted.
+     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
+     *        {@code argNames} and those arguments that the arguments specified in the {@code argNames} depend on.
+     */
+    void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Shuts down the engine using the current thread.

@@ -145,7 +145,7 @@ public abstract class RestApiServerUtils {
         });
     }
 
-    public static Map<String, Object> unmarshalProvideActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter,
+    public static Map<String, Object> unmarshalAuxiliaryActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter,
             Map<String, Object> jsonArgs) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {

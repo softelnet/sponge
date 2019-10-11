@@ -140,6 +140,17 @@ public class BaseEngineOperations implements EngineOperations {
         return provideActionArgs(actionName, null);
     }
 
+    @Override
+    public void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+        ActionAdapter actionAdapter =
+                Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
+        try {
+            actionAdapter.submitActionArgs(argNames, current);
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
+        }
+    }
+
     /**
      * Removes event from Event Scheduler.
      *

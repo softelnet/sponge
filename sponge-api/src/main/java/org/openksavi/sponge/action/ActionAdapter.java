@@ -32,6 +32,7 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
      * Returns the provided values along with value sets of the action arguments.
      *
      * @param names the list of argument names.
+     * @param submitted the list of submitted argument names.
      * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
      *        those arguments that the arguments specified in the {@code names} depend on.
      * @return the map of argument names and values (value sets).
@@ -39,8 +40,17 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
     Map<String, ProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current);
 
     /**
+     * Submits action arguments.
+     *
+     * @param names the list of argument names that are submitted.
+     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
+     *        {@code argNames} and those arguments that the arguments specified in the {@code argNames} depend on.
+     */
+    void submitActionArgs(List<String> names, Map<String, Object> current);
+
+    /**
      * Returns the registered type names used in this action.
-     * 
+     *
      * @return the registered type names.
      */
     Set<String> getRegisteredTypeNames();

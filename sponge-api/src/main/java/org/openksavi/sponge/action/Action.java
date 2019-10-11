@@ -30,4 +30,11 @@ public interface Action extends Processor<ActionAdapter>, ActionOperations {
      * @param context the provided action arguments context. The {@code context.provided} map must be set up with the provided values.
      */
     void onProvideArgs(ProvideArgsContext context);
+
+    /**
+     * A callback method that submits argument values.
+     *
+     * @param context the submitted action arguments context.
+     */
+    void onSubmitArgs(SubmitArgsContext context);
 }

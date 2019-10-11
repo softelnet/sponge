@@ -28,6 +28,7 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ProvideArgsContext;
+import org.openksavi.sponge.action.SubmitArgsContext;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -68,12 +69,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         return (BaseActionMeta) super.getMeta();
     }
 
-    @Override
-    public Map<String, ProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
-        Validate.notNull(getMeta().getArgs(), "Arguments not defined");
-
+    protected Set<String> buildProvideArgsNames(List<String> names) {
         Set<String> finalNames = new LinkedHashSet<>();
-
         if (names != null) {
             for (String name : names) {
                 Validate.isTrue(isArgProvided(getMeta().getArg(name)), "Argument '%s' is not defined as provided", name);
@@ -88,12 +85,31 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
             }, true);
         }
 
+        return finalNames;
+    }
+
+    protected Set<String> buildSubmittedArgsNames(List<String> submitted) {
+        Set<String> finalSubmitted = new LinkedHashSet<>();
+        if (submitted != null) {
+            for (String name : submitted) {
+                Validate.isTrue(isArgSubmit(getMeta().getArg(name)), "Argument '%s' is not defined as submitted", name);
+                finalSubmitted.add(name);
+            }
+        }
+
+        return finalSubmitted;
+    }
+
+    @Override
+    public Map<String, ProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
+        Validate.notNull(getMeta().getArgs(), "Arguments not defined");
+
         if (current == null) {
             current = Collections.emptyMap();
         }
 
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
-        getProcessor().onProvideArgs(new ProvideArgsContext(finalNames, current, provided));
+        getProcessor().onProvideArgs(new ProvideArgsContext(buildProvideArgsNames(names), current, provided));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null,
@@ -101,6 +117,16 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         });
 
         return provided;
+    }
+
+    @Override
+    public void submitActionArgs(List<String> names, Map<String, Object> current) {
+        Validate.notNull(getMeta().getArgs(), "Arguments not defined");
+
+        Validate.isTrue(names.stream().allMatch(name -> current != null && current.containsKey(name)),
+                "Current values for all submitted arguments have to be set");
+
+        getProcessor().onSubmitArgs(new SubmitArgsContext(buildSubmittedArgsNames(names), current));
     }
 
     @Override
@@ -163,6 +189,10 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
     private static boolean isArgProvided(DataType argType) {
         return argType.getProvided() != null;
+    }
+
+    private static boolean isArgSubmit(DataType argType) {
+        return argType.getProvided() != null && argType.getProvided().isSubmit();
     }
 
     private void validateResult(DataType resultType) {

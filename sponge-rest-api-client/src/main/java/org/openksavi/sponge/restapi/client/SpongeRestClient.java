@@ -38,6 +38,7 @@ import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -50,6 +51,7 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -410,7 +412,7 @@ public interface SpongeRestClient extends Closeable {
     String send(String eventName, Map<String, Object> attributes, String label, String description);
 
     /**
-     * Sends the {@code actionArgs} request to the server. Fetches the provided action arguments from the server.
+     * Sends the {@code provideActionArgs} request to the server. Fetches the provided action arguments from the server.
      *
      * @param request the request.
      * @param context the context.
@@ -419,7 +421,7 @@ public interface SpongeRestClient extends Closeable {
     ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, SpongeRequestContext context);
 
     /**
-     * Sends the {@code actionArgs} request to the server. Fetches the provided action arguments from the server.
+     * Sends the {@code provideActionArgs} request to the server. Fetches the provided action arguments from the server.
      *
      * @param request the request.
      * @return the response.
@@ -443,6 +445,32 @@ public interface SpongeRestClient extends Closeable {
      * @return the provided action arguments.
      */
     Map<String, ProvidedValue<?>> provideActionArgs(String actionName);
+
+    /**
+     * Sends the {@code submitActionArgs} request to the server to submit action arguments.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the response.
+     */
+    SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code submitActionArgs} request to the server to submit action arguments.
+     *
+     * @param request the request.
+     * @return the response.
+     */
+    SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request);
+
+    /**
+     * Submits action arguments.
+     *
+     * @param actionName the action name.
+     * @param argNames the names of submitted arguments.
+     * @param current the current values of arguments from a client code.
+     */
+    void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
 
     /**
      * Sends the {@code eventTypes} request to the server.

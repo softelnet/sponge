@@ -24,6 +24,7 @@ import java.util.Map;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ProvideArgsContext;
+import org.openksavi.sponge.action.SubmitArgsContext;
 import org.openksavi.sponge.core.BaseProcessor;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.VoidType;
@@ -49,6 +50,11 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     @Override
     public void onProvideArgs(ProvideArgsContext context) {
         // The default implementation doesn't modify the provided map.
+    }
+
+    @Override
+    public void onSubmitArgs(SubmitArgsContext context) {
+        // The default implementation doesn't nothing.
     }
 
     @Override

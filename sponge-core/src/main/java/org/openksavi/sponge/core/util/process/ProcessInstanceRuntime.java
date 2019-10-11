@@ -341,7 +341,7 @@ public class ProcessInstanceRuntime {
     }
 
     protected void optionallyValidateExitCode() {
-        if (!instance.isAlive() && instance.getExitCode() != 0) {
+        if (!instance.isAlive() && instance.getExitCode() != 0 && configuration.isExceptionOnExitCode()) {
             throw new SpongeException("The subprocess exit code is " + instance.getExitCode());
         }
     }
