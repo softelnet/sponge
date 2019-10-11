@@ -29,6 +29,8 @@ public final class RestApiConstants {
 
     public static final String DEFAULT_PATH = String.format("sponge.json/v%d", API_VERSION);
 
+    public static final String DEFAULT_TITLE = "Sponge REST API";
+
     public static final String DEFAULT_DESCRIPTION = "Sponge REST API";
 
     public static final String OPERATION_VERSION = "version";
@@ -56,13 +58,13 @@ public final class RestApiConstants {
     public static final String OPERATION_DOC = "doc";
 
     /** A generic error code. */
-    public static final String DEFAULT_ERROR_CODE = "SPONGE001";
+    public static final String ERROR_CODE_GENERIC = "GENERIC";
 
-    public static final String ERROR_CODE_INVALID_AUTH_TOKEN = "SPONGE002";
+    public static final String ERROR_CODE_INVALID_AUTH_TOKEN = "INVALID_AUTH_TOKEN";
 
-    public static final String ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION = "SPONGE003";
+    public static final String ERROR_CODE_INVALID_KB_VERSION = "INVALID_KB_VERSION";
 
-    public static final String ERROR_CODE_INCORRECT_USERNAME_PASSWORD = "SPONGE004";
+    public static final String ERROR_CODE_INVALID_USERNAME_PASSWORD = "INVALID_USERNAME_PASSWORD";
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 

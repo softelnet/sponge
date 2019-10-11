@@ -34,3 +34,6 @@ RUN echo >> $CATALINA_PROPERTIES \
 WORKDIR /opt/sponge
 
 CMD ["catalina.sh", "run"]
+
+EXPOSE 8080
+EXPOSE 8081

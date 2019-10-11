@@ -29,7 +29,7 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
 
     @Override
     public void applyException(RestApiService service, SpongeResponse response, Throwable exception) {
-        response.getHeader().setErrorCode(RestApiConstants.DEFAULT_ERROR_CODE);
+        response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_GENERIC);
 
         // There is a possibility that exceptions thrown in Camel would contain a full request with a password, so it must be hidden
         // here because it could be sent to a client.
@@ -46,10 +46,10 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
     protected void applySpecificErrorCodes(RestApiService service, SpongeResponse response, Throwable exception) {
         if (exception instanceof RestApiInvalidAuthTokenServerException) {
             response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
-        } else if (exception instanceof RestApiIncorrectKnowledgeBaseVersionServerException) {
-            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_KNOWLEDGE_BASE_VERSION);
-        } else if (exception instanceof RestApiIncorrectUsernamePasswordServerException) {
-            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INCORRECT_USERNAME_PASSWORD);
+        } else if (exception instanceof RestApiInvalidKnowledgeBaseVersionServerException) {
+            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INVALID_KB_VERSION);
+        } else if (exception instanceof RestApiInvalidUsernamePasswordServerException) {
+            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD);
         }
     }
 }

@@ -296,7 +296,7 @@ public class DefaultRestApiService implements RestApiService {
         Validate.isTrue(canCallAction(userContext, actionAdapter), "No privileges to call action %s", actionName);
 
         if (qualifiedVersion != null && !qualifiedVersion.equals(actionAdapter.getQualifiedVersion())) {
-            throw new RestApiIncorrectKnowledgeBaseVersionServerException(
+            throw new RestApiInvalidKnowledgeBaseVersionServerException(
                     String.format("The expected action qualified version (%s) differs from the actual (%s)", qualifiedVersion.toString(),
                             actionAdapter.getQualifiedVersion().toString()));
         }
@@ -494,7 +494,7 @@ public class DefaultRestApiService implements RestApiService {
         return userAuthentication.getUserContext();
     }
 
-    protected UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
+    protected UserAuthentication authenticateUser(String username, String password) throws RestApiInvalidUsernamePasswordServerException {
         return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password);
     }
 

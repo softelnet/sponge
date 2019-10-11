@@ -69,7 +69,7 @@ public class HttpTest extends BasicTestTemplate {
         assertEquals(200, okHttpResponse.code());
         ObjectMapper mapper = RestApiUtils.createObjectMapper();
         SpongeResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), SpongeResponse.class);
-        assertEquals(RestApiConstants.DEFAULT_ERROR_CODE, apiResponse.getHeader().getErrorCode());
+        assertEquals(RestApiConstants.ERROR_CODE_GENERIC, apiResponse.getHeader().getErrorCode());
         assertTrue(apiResponse.getHeader().getErrorMessage().contains("Unrecognized field \"error_property\""));
     }
 

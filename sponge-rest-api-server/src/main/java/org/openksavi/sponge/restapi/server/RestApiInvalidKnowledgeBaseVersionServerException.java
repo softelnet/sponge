@@ -18,7 +18,7 @@ package org.openksavi.sponge.restapi.server;
 
 import org.openksavi.sponge.SpongeException;
 
-public class RestApiIncorrectKnowledgeBaseVersionServerException extends SpongeException {
+public class RestApiInvalidKnowledgeBaseVersionServerException extends SpongeException {
 
     private static final long serialVersionUID = 5429837374793138193L;
 
@@ -27,7 +27,7 @@ public class RestApiIncorrectKnowledgeBaseVersionServerException extends SpongeE
      *
      * @param message exception message.
      */
-    public RestApiIncorrectKnowledgeBaseVersionServerException(String message) {
+    public RestApiInvalidKnowledgeBaseVersionServerException(String message) {
         super(message);
     }
 
@@ -36,7 +36,7 @@ public class RestApiIncorrectKnowledgeBaseVersionServerException extends SpongeE
      *
      * @param throwable source throwable.
      */
-    public RestApiIncorrectKnowledgeBaseVersionServerException(Throwable throwable) {
+    public RestApiInvalidKnowledgeBaseVersionServerException(Throwable throwable) {
         super(throwable);
     }
 
@@ -46,7 +46,7 @@ public class RestApiIncorrectKnowledgeBaseVersionServerException extends SpongeE
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public RestApiIncorrectKnowledgeBaseVersionServerException(String message, Throwable throwable) {
+    public RestApiInvalidKnowledgeBaseVersionServerException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

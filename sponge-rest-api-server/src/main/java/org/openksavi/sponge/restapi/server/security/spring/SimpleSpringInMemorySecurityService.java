@@ -27,7 +27,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
+import org.openksavi.sponge.restapi.server.RestApiInvalidUsernamePasswordServerException;
 import org.openksavi.sponge.restapi.server.security.BaseInMemoryKnowledgeBaseProvidedSecurityService;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
@@ -50,7 +50,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     }
 
     @Override
-    public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
+    public UserAuthentication authenticateUser(String username, String password) throws RestApiInvalidUsernamePasswordServerException {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             UserContext userContext = new UserContext(username,
@@ -58,7 +58,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
 
             return new SimpleSpringUserAuthentication(userContext, authentication);
         } catch (AuthenticationException e) {
-            throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password", e);
+            throw new RestApiInvalidUsernamePasswordServerException("Incorrect username or password", e);
         }
     }
 

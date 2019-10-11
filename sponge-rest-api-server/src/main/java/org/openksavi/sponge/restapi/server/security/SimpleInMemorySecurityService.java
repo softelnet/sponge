@@ -16,7 +16,7 @@
 
 package org.openksavi.sponge.restapi.server.security;
 
-import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
+import org.openksavi.sponge.restapi.server.RestApiInvalidUsernamePasswordServerException;
 
 public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
 
@@ -25,10 +25,10 @@ public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProv
     }
 
     @Override
-    public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
+    public UserAuthentication authenticateUser(String username, String password) throws RestApiInvalidUsernamePasswordServerException {
         User user = verifyInMemory(username, password);
         if (user == null) {
-            throw new RestApiIncorrectUsernamePasswordServerException("Incorrect username or password");
+            throw new RestApiInvalidUsernamePasswordServerException("Invalid username or password");
         }
 
         return new UserAuthentication(new UserContext(user.getName(), user.getRoles()));

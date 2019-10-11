@@ -18,7 +18,7 @@ package org.openksavi.sponge.restapi.server;
 
 import org.openksavi.sponge.SpongeException;
 
-public class RestApiIncorrectUsernamePasswordServerException extends SpongeException {
+public class RestApiInvalidUsernamePasswordServerException extends SpongeException {
 
     private static final long serialVersionUID = 5920757216003601488L;
 
@@ -27,7 +27,7 @@ public class RestApiIncorrectUsernamePasswordServerException extends SpongeExcep
      *
      * @param message exception message.
      */
-    public RestApiIncorrectUsernamePasswordServerException(String message) {
+    public RestApiInvalidUsernamePasswordServerException(String message) {
         super(message);
     }
 
@@ -36,7 +36,7 @@ public class RestApiIncorrectUsernamePasswordServerException extends SpongeExcep
      *
      * @param throwable source throwable.
      */
-    public RestApiIncorrectUsernamePasswordServerException(Throwable throwable) {
+    public RestApiInvalidUsernamePasswordServerException(Throwable throwable) {
         super(throwable);
     }
 
@@ -46,7 +46,7 @@ public class RestApiIncorrectUsernamePasswordServerException extends SpongeExcep
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public RestApiIncorrectUsernamePasswordServerException(String message, Throwable throwable) {
+    public RestApiInvalidUsernamePasswordServerException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

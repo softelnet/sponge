@@ -20,7 +20,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.restapi.server.RestApiIncorrectUsernamePasswordServerException;
+import org.openksavi.sponge.restapi.server.RestApiInvalidUsernamePasswordServerException;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
@@ -31,7 +31,7 @@ public class NoSecuritySecurityService extends BaseRestApiSecurityService {
     }
 
     @Override
-    public UserAuthentication authenticateUser(String username, String password) throws RestApiIncorrectUsernamePasswordServerException {
+    public UserAuthentication authenticateUser(String username, String password) throws RestApiInvalidUsernamePasswordServerException {
         Validate.isTrue(username == null && password == null, "Only anonymous access is allowed with the no-security configuration");
         return new UserAuthentication(createAnonymousUserContext());
     }

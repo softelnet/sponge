@@ -17,7 +17,10 @@
 package org.openksavi.sponge.restapi.server;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.core.util.SslConfiguration;
@@ -42,6 +45,9 @@ public class RestApiSettings {
 
     /** The API version. */
     private int version = RestApiConstants.API_VERSION;
+
+    /** The API title. */
+    private String title = RestApiConstants.DEFAULT_TITLE;
 
     /** The API description. */
     private String description = RestApiConstants.DEFAULT_DESCRIPTION;
@@ -74,6 +80,8 @@ public class RestApiSettings {
 
     /** The duration after which an authentication token will expire. The value {@code null} means infinity. Defaults to 30 minutes. */
     private Duration authTokenExpirationDuration = Duration.ofMinutes(30);
+
+    private Map<String, String> openApiProperties = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public String getRestComponentId() {
         return restComponentId;
@@ -109,6 +117,14 @@ public class RestApiSettings {
 
     public int getVersion() {
         return version;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -209,5 +225,25 @@ public class RestApiSettings {
 
     public void setAuthTokenExpirationDuration(Duration authTokenExpirationDuration) {
         this.authTokenExpirationDuration = authTokenExpirationDuration;
+    }
+
+    public Map<String, String> getOpenApiProperties() {
+        return openApiProperties;
+    }
+
+    public void setOpenApiProperties(Map<String, String> openApiProperties) {
+        this.openApiProperties = openApiProperties;
+    }
+
+    /**
+     * Adds an OpenAPI property. Supports the Swagger Java Component String options that start with {@code "api."}.
+     *
+     * @see <a href="https://camel.apache.org/components/latest/swagger-java.html">Swagger Java Component options</a>
+     *
+     * @param name the property name.
+     * @param value the property value.
+     */
+    public void addOpenApiProperty(String name, String value) {
+        openApiProperties.put(name, value);
     }
 }

@@ -1,5 +1,5 @@
 = {sponge} REST API server
-The {sponge} REST API provides users a remote access to the key {sponge} functionalities. The REST API server plugin (`RestApiServerPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service.
+The REST API server provides a {sponge} REST API service. The server plugin (`RestApiServerPlugin`) uses Apache Camel REST DSL in order to configure the JSON/REST service.
 
 The default name of the REST API plugin (which can be used in knowledge bases) is `restApiServer`.
 
@@ -134,67 +134,11 @@ Maven users will need to add the following dependency to their `pom.xml`:
 
 Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
 
-== Operations summary
-The following table contains a summary of the REST API operations. For a complete list of operations see the <<_swagger_overview, specification>> generated using Swagger and http://swagger2markup.github.io/swagger2markup/1.3.3/[Swagger2Markup].
-
-.The REST API operations summary
-[cols="2,1,4"]
-|===
-|Name |URI |Description
-
-|Get the Sponge version
-|`version`
-|Returns the Sponge version.
-
-|Get the API features
-|`features`
-|Returns the API features.
-
-|Login
-|`login`
-|User login. Used in a token-based authentication scenario.
-
-|Logout
-|`logout`
-|User logout. Used in a token-based authentication scenario.
-
-|Get knowledge bases
-|`knowledgeBases`
-|Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge basses).
-
-|Get actions
-|`actions`
-|Returns the metadata of actions that are available to the user. If you want to get metadata for specified actions, set the request property `name` to an action name or a Java-compatible regular expression. If you want to get only actions that have argument and result metadata specified in their configuration, set the request property `metadataRequired` to `true` (defaults to `false`). Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence number reflects the order in which categories or knowledge bases have been added to the engine. The optional request property `registeredTypes` is a flag for requesting registered types used in the actions in the result (defaults to `false`).
-
-|Call an action
-|`call`
-|Calls an action.
-
-|Provide action arguments
-|`actionArgs`
-|Returns _provided arguments_, i.e. values along with value sets of action arguments. The request accepts the following properties: `name` - the action name, `argNames` -  the optional list of argument names that are to be provided (if `null`, all provided arguments will be produced), `current` - the optional map of argument names and their current values passed from a client code.
-
-|Send a new event
-|`send`
-|Sends a new event.
-
-|Get event types
-|`eventTypes`
-|Returns the registered event types.
-
-|Reload knowledge bases
-|`reload`
-|Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
-|===
-
-The OpenAPI specification of the REST API is included in the Appendix A of the {sponge} Reference Documentation.
-
+== Custom operations
 You can define a custom REST API operation (using the `ActionDelegateRestApiOperation` class in the route builder) that delegates a REST API request to an action call (e.g. to allow implementing an operation body in a scripting language but keeping a static REST interface).
 
 == OpenAPI specification
-After starting the plugin, the online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/sponge.json/v1/doc`.
-
-NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for simple customized operations.
+After starting the plugin, the online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be accesible.
 
 == JSON/Java mapping
 The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.
@@ -202,95 +146,6 @@ The REST API uses the https://github.com/FasterXML/jackson[Jackson] library to p
 The default Jackson configuration for the REST API sets the ISO8601 format for dates.
 
 NOTE: A `BinaryType` value is marshalled to a base64 encoded string. This encoding adds significant overhead and should be used only for relatively small binary data.
-
-== Request
-Each request may contain base properties.
-
-.Base request properties
-[cols="2,1,4"]
-|===
-|Name |Required |Description
-
-|`header`
-|No
-|A request header.
-|===
-
-.Request header properties
-[cols="2,1,4"]
-|===
-|Name |Required |Description
-
-|`id`
-|No
-|A request identifier. If it is present, the response will contain a header with same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
-
-|`username`
-|No
-|A user name that may be used in a user/password authentication mode. In that case, if there is no user name present, the _anonumous_ user is assumed.
-
-|`password`
-|No
-|A user password that may be used in a user/password authentication mode.
-
-|`authToken`
-|No
-|An authentication token that may be used in a token-based authentication mode.
-|===
-
-The {sponge} REST API supports both POST and GET methods.
-
-.Examples of REST API requests
-[source,bash]
-----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/version
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"header":{"username":"john","password":"password"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"name":".*Case"}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
-
-curl http://localhost:1836/sponge.json/v1/version
-curl http://localhost:1836/sponge.json/v1/knowledgeBases
-curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"name":"OutputStreamResultAction","args":[]}'
-----
-
-== Response
-Each response may contain base properties.
-
-.Base response properties
-[cols="2,1,4"]
-|===
-|Name |Required |Description
-
-|`header`
-|No
-|A response header.
-|===
-
-.Response header properties
-[cols="2,1,4"]
-|===
-|Name |Required |Description
-
-|`id`
-|No
-|A corresponding request id.
-
-|`errorCode`
-|No
-|An optional error code in case of server side error.
-
-|`errorMessage`
-|No
-|An optional error message in case of server side error.
-
-|`detailedErrorMessage`
-|No
-|An optional detailed error message in case of server side error.
-|===
 
 == Session
 For each request the REST API service creates a thread local session. The session provides access to a logged user and a Camel exchange for a thread handling the request. The session can be accessed in an action via the REST API server plugin.
@@ -319,24 +174,11 @@ class LowerCaseHello(Action):
 |===
 
 == Security
-The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed. A user may have roles.
+The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed.
+
+A user may have roles.
 
 You may set a security strategy by providing an implementation of the `RestApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
-
-=== Authentication mode
-Only a username/password authentication mode is currently supported by the default REST API service implementation.
-
-.Authentication modes
-[cols="1,4"]
-|===
-|Name |Description
-
-|Username/password
-|Every request has to contain a username and a password. Invoking the `login` operation switches to the authentication token mode.
-
-|Authentication token
-|Every request has to contain an authentication token, returned by the `login` operation. It may not contain neither username nor password.
-|===
 
 [[rest-api-server-simple-security-strategy]]
 === Simple security strategy
@@ -375,7 +217,7 @@ def onStartup():
 For more information see examples in the source code.
 
 == HTTPS
-In production mode you should configure HTTPS, preferably using a signed certificate. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
+In production mode you should configure HTTPS. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
 
 == Environment
 
