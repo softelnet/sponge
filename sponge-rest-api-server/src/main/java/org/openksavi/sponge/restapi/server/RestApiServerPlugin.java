@@ -138,6 +138,9 @@ public class RestApiServerPlugin extends JPlugin {
         if (authTokenExpirationDurationSeconds != null) {
             settings.setAuthTokenExpirationDuration(Duration.ofSeconds(authTokenExpirationDurationSeconds));
         }
+
+        settings.setIncludeResponseTimes(
+                configuration.getBoolean(RestApiServerConstants.TAG_INCLUDE_RESPONSE_TIMES, settings.isIncludeResponseTimes()));
     }
 
     @Override

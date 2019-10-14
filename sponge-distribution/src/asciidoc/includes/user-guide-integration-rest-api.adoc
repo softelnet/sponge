@@ -150,6 +150,14 @@ Each response may contain base properties.
 |`detailedErrorMessage`
 |No
 |An optional detailed error message in case of server side error.
+
+|`requestTime`
+|No
+|An optional request time, i.e. a server time (as Java Instant) of starting processing a request.
+
+|`responseTime`
+|No
+|An optional response time, i.e. a server time (as Java Instant) of finishing processing a request.
 |===
 
 == Security

@@ -120,35 +120,30 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
+            Map<String, Object> current) {
         ActionAdapter actionAdapter =
                 Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
         try {
-            return actionAdapter.provideArgs(argNames, current);
+            return actionAdapter.provideArgs(provide, submit, current);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
         }
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames) {
-        return provideActionArgs(actionName, argNames, null);
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current) {
+        return provideActionArgs(actionName, provide, null, current);
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName) {
-        return provideActionArgs(actionName, null);
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide) {
+        return provideActionArgs(actionName, provide, null, null);
     }
 
     @Override
-    public void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
-        ActionAdapter actionAdapter =
-                Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
-        try {
-            actionAdapter.submitActionArgs(argNames, current);
-        } catch (Throwable e) {
-            throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
-        }
+    public void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current) {
+        provideActionArgs(actionName, null, submit, current);
     }
 
     /**

@@ -74,7 +74,7 @@ class ProvideByAction(Action):
     def onCall(self, value):
         return value
     def onProvideArgs(self, context):
-        if "value" in context.names:
+        if "value" in context.provide:
             context.provided["value"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
 
 class PrivateAction(Action):
@@ -146,11 +146,11 @@ class SetActuator(Action):
         # actuator3 is read only in this action.
         sponge.setVariable("actuator4", actuator4)
     def onProvideArgs(self, context):
-        if "actuator1" in context.names:
+        if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
-        if "actuator2" in context.names:
+        if "actuator2" in context.provide:
             context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in context.names:
+        if "actuator3" in context.provide:
             context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
 
 class SetActuatorNotLimitedValueSet(Action):
@@ -162,7 +162,7 @@ class SetActuatorNotLimitedValueSet(Action):
     def onCall(self, actuator1):
         pass
     def onProvideArgs(self, context):
-        if "actuator1" in context.names:
+        if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
 
 class SetActuatorDepends(Action):
@@ -182,16 +182,36 @@ class SetActuatorDepends(Action):
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, context):
-        if "actuator1" in context.names:
+        if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
-        if "actuator2" in context.names:
+        if "actuator2" in context.provide:
             context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in context.names:
+        if "actuator3" in context.provide:
             context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
-        if "actuator5" in context.names:
+        if "actuator5" in context.provide:
             context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
                 "X", "Y", "Z", context.current["actuator1"]])
+
+class SetActuatorSubmit(Action):
+    def onConfigure(self):
+        self.withLabel("Set actuator with submit").withDescription("Sets the actuator state with submit.")
+        self.withArgs([
+            StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet().withSubmittable()),
+            BooleanType("actuator2").withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue())
+        ]).withNoResult()
+    def onCall(self, actuator1, actuator2):
+        sponge.setVariable("actuator1", actuator1)
+        sponge.setVariable("actuator2", actuator2)
+    def onProvideArgs(self, context):
+        if "actuator1" in context.submit:
+            # Set an actuator value with submit.
+            sponge.setVariable("actuator1", context.current["actuator1"])
+
+        if "actuator1" in context.provide:
+            context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+        if "actuator2" in context.provide:
+            context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
 
 class AnnotatedTypeAction(Action):
     def onConfigure(self):
@@ -299,7 +319,7 @@ class FruitsElementValueSetAction(Action):
     def onCall(self, fruits):
         return len(fruits)
     def onProvideArgs(self, context):
-        if "fruits" in context.names:
+        if "fruits" in context.provide:
             context.provided["fruits"] = ProvidedValue().withAnnotatedElementValueSet([
                 AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
             ])

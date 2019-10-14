@@ -66,7 +66,7 @@ public class GrpcApiSendEvent extends JAction {
 
     @Override
     public void onProvideArgs(ProvideArgsContext context) {
-        if (context.getNames().contains("name")) {
+        if (context.getProvide().contains("name")) {
             // Get the user from the current thread local session.
             UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
 
@@ -81,7 +81,7 @@ public class GrpcApiSendEvent extends JAction {
             context.getProvided().put("name", new ProvidedValue<String>().withAnnotatedValueSet(annotatedValueSet));
         }
 
-        if (context.getNames().contains("attributes")) {
+        if (context.getProvide().contains("attributes")) {
             RecordType eventType = getSponge().getEventType((String) context.getCurrent().get("name"));
             // Initialize an empty attributes map.
             Map<String, Object> attributes = new LinkedHashMap<>();

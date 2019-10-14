@@ -83,6 +83,9 @@ public class RestApiSettings {
 
     private Map<String, String> openApiProperties = Collections.synchronizedMap(new LinkedHashMap<>());
 
+    /** The flag specifying if a response header should have request and response time set. Defaults to {@code true}. */
+    private boolean includeResponseTimes = RestApiServerConstants.DEFAULT_INCLUDE_RESPONSE_TIMES;
+
     public String getRestComponentId() {
         return restComponentId;
     }
@@ -245,5 +248,13 @@ public class RestApiSettings {
      */
     public void addOpenApiProperty(String name, String value) {
         openApiProperties.put(name, value);
+    }
+
+    public boolean isIncludeResponseTimes() {
+        return includeResponseTimes;
+    }
+
+    public void setIncludeResponseTimes(boolean includeResponseTimes) {
+        this.includeResponseTimes = includeResponseTimes;
     }
 }

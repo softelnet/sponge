@@ -22,6 +22,6 @@ class ViewMemoEvent(Action):
     def onCall(self, event, uppercaseMessage):
         pass
     def onProvideArgs(self, context):
-        if "uppercaseMessage" in context.names:
+        if "uppercaseMessage" in context.provide:
             message = context.current["event"].attributes["message"]
             context.provided["uppercaseMessage"] = ProvidedValue().withValue(message.upper() if message else "NO MESSAGE")

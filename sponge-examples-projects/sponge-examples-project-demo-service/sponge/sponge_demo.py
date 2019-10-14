@@ -63,11 +63,11 @@ class ProvideByAction(Action):
     def onCall(self, valueLimited, valueNotLimited, valueLimitedNullable):
         return valueLimited + "/" + valueNotLimited + "/" + str(valueLimitedNullable)
     def onProvideArgs(self, context):
-        if "valueLimited" in context.names:
+        if "valueLimited" in context.provide:
             context.provided["valueLimited"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
-        if "valueNotLimited" in context.names:
+        if "valueNotLimited" in context.provide:
             context.provided["valueNotLimited"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
-        if "valueLimitedNullable" in context.names:
+        if "valueLimitedNullable" in context.provide:
             context.provided["valueLimitedNullable"] = ProvidedValue().withValueSet(sponge.call("ListValues"))
 
 class FruitsElementValueSetAction(Action):
@@ -80,7 +80,7 @@ class FruitsElementValueSetAction(Action):
     def onCall(self, fruits):
         return len(fruits)
     def onProvideArgs(self, context):
-        if "fruits" in context.names:
+        if "fruits" in context.provide:
             context.provided["fruits"] = ProvidedValue().withValue([]).withAnnotatedElementValueSet([
                 AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
             ])
@@ -167,7 +167,7 @@ class DynamicResultAction(Action):
         else:
             return None
     def onProvideArgs(self, context):
-        if "type" in context.names:
+        if "type" in context.provide:
             context.provided["type"] = ProvidedValue().withValueSet(["string", "boolean", "datetime"])
 
 class DynamicProvidedArgAction(Action):
@@ -179,7 +179,7 @@ class DynamicProvidedArgAction(Action):
     def onCall(self, dynamic):
         return str(dynamic.type.kind)
     def onProvideArgs(self, context):
-        if "dynamic" in context.names:
+        if "dynamic" in context.provide:
             context.provided["dynamic"] = ProvidedValue().withValue(DynamicValue(
                 {"firstName":"James", "surname":"Joyce"},
                 RecordType().withFields([

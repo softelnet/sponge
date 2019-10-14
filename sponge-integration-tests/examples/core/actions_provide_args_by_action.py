@@ -17,5 +17,5 @@ class ProvideByAction(Action):
     def onCall(self, sensorName):
         return sensorName == "sensor1"
     def onProvideArgs(self, context):
-        if "sensorName" in context.names:
+        if "sensorName" in context.provide:
             context.provided["sensorName"] = ProvidedValue().withValueSet(sponge.call("GetAvailableSensorNames"))

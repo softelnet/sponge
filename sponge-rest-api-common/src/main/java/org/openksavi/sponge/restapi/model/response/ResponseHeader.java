@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model.response;
 
+import java.time.Instant;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -32,6 +34,10 @@ public class ResponseHeader {
     private String errorMessage;
 
     private String detailedErrorMessage;
+
+    private Instant requestTime;
+
+    private Instant responseTime;
 
     @ApiModelProperty(value = "The corresponding request id", required = false)
     public String getId() {
@@ -67,5 +73,23 @@ public class ResponseHeader {
 
     public void setDetailedErrorMessage(String detailedErrorMessage) {
         this.detailedErrorMessage = detailedErrorMessage;
+    }
+
+    @ApiModelProperty(value = "The optional request time", required = false)
+    public Instant getRequestTime() {
+        return requestTime;
+    }
+
+    public void setRequestTime(Instant requestTime) {
+        this.requestTime = requestTime;
+    }
+
+    @ApiModelProperty(value = "The optional response time", required = false)
+    public Instant getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(Instant responseTime) {
+        this.responseTime = responseTime;
     }
 }

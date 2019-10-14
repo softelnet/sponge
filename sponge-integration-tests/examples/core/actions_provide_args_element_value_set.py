@@ -11,7 +11,7 @@ class FruitsElementValueSetAction(Action):
     def onCall(self, fruits):
         return len(fruits)
     def onProvideArgs(self, context):
-        if "fruits" in context.names:
+        if "fruits" in context.provide:
             context.provided["fruits"] = ProvidedValue().withAnnotatedElementValueSet([
                 AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
             ])

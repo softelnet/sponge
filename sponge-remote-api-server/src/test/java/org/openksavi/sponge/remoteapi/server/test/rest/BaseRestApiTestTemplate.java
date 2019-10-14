@@ -105,6 +105,16 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
+    public void testResponseTimes() {
+        try (SpongeRestClient client = createRestClient()) {
+            GetVersionResponse response = client.getVersion(new GetVersionRequest());
+            assertNotNull(response.getHeader().getRequestTime());
+            assertNotNull(response.getHeader().getResponseTime());
+            assertFalse(response.getHeader().getResponseTime().isBefore(response.getHeader().getRequestTime()));
+        }
+    }
+
+    @Test
     public void testFeatures() {
         try (SpongeRestClient client = createRestClient()) {
             Map<String, Object> features = client.getFeatures();
@@ -513,7 +523,8 @@ public abstract class BaseRestApiTestTemplate {
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false, null, 1));
 
-            Map<String, ProvidedValue<?>> providedArgs = client.provideActionArgs(actionName);
+            Map<String, ProvidedValue<?>> providedArgs =
+                    client.provideActionArgs(actionName, Arrays.asList("actuator1", "actuator2", "actuator3"));
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("A", providedArgs.get("actuator1").getValue());
@@ -535,7 +546,7 @@ public abstract class BaseRestApiTestTemplate {
 
             client.call(actionName, Arrays.asList("B", true, null, 10));
 
-            providedArgs = client.provideActionArgs(actionName);
+            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1", "actuator2", "actuator3"));
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
@@ -684,8 +695,8 @@ public abstract class BaseRestApiTestTemplate {
     public void testProvideActionArgByAction() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
-            List<String> values = (List<String>) SpongeApiUtils
-                    .unwrapAnnotatedValueList(client.provideActionArgs(actionMeta.getName()).get("value").getAnnotatedValueSet());
+            List<String> values = (List<String>) SpongeApiUtils.unwrapAnnotatedValueList(
+                    client.provideActionArgs(actionMeta.getName(), Arrays.asList("value")).get("value").getAnnotatedValueSet());
             assertEquals("value3", client.call(actionMeta.getName(), Arrays.asList(values.get(values.size() - 1))));
         }
     }
@@ -702,7 +713,7 @@ public abstract class BaseRestApiTestTemplate {
             assertFalse(fruitsType.getProvided().hasValueSet());
             assertTrue(fruitsType.getProvided().isElementValueSet());
 
-            Map<String, ProvidedValue<?>> provided = client.provideActionArgs(actionName);
+            Map<String, ProvidedValue<?>> provided = client.provideActionArgs(actionName, Arrays.asList("fruits"));
             List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
             assertEquals(3, elementValueSet.size());
             assertEquals("apple", elementValueSet.get(0).getValue());
@@ -713,6 +724,58 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals("Lemon", elementValueSet.get(2).getLabel());
 
             assertEquals(2, client.call(actionName, Arrays.asList(Arrays.asList("apple", "lemon"))));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testProvideActionArgsSubmit() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "SetActuatorSubmit";
+
+            // Reset the test state.
+            client.call(actionName, Arrays.asList("A", false));
+
+            List<DataType> argTypes = client.getActionMeta(actionName).getArgs();
+
+            assertNotNull(argTypes.get(0).getProvided());
+            assertTrue(argTypes.get(0).getProvided().isValue());
+            assertTrue(argTypes.get(0).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
+            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertTrue(argTypes.get(0).getProvided().isSubmittable());
+            assertNotNull(argTypes.get(1).getProvided());
+            assertTrue(argTypes.get(1).getProvided().isValue());
+            assertFalse(argTypes.get(1).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
+            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+            assertFalse(argTypes.get(1).getProvided().isSubmittable());
+
+            Map<String, ProvidedValue<?>> providedArgs;
+
+            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1", "actuator2"));
+            assertEquals(2, providedArgs.size());
+
+            assertNotNull(providedArgs.get("actuator1"));
+            assertEquals("A", providedArgs.get("actuator1").getValue());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals(false, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            client.submitActionArgs(actionName, Arrays.asList("actuator1"), SpongeUtils.immutableMapOf("actuator1", "B"));
+            assertEquals("B", client.provideActionArgs(actionName, Arrays.asList("actuator1")).get("actuator1").getValue());
+
+            client.call(actionName, Arrays.asList("C", true));
+            assertEquals("C", client.provideActionArgs(actionName, Arrays.asList("actuator1")).get("actuator1").getValue());
+
+            // Reset the test state.
+            client.call(actionName, Arrays.asList("A", false));
 
             assertFalse(engine.isError());
         }

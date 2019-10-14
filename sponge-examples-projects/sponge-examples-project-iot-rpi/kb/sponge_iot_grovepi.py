@@ -19,7 +19,7 @@ class SetGrovePiMode(Action):
             raise Exception("Unsupported GrovePi mode: " + mode)
         sponge.setVariable("grovePiMode", mode)
     def onProvideArgs(self, context):
-        if "mode" in context.names:
+        if "mode" in context.provide:
             context.provided["mode"] = ProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([
                 AnnotatedValue("auto").withLabel("Auto"), AnnotatedValue("manual").withLabel("Manual")])
 

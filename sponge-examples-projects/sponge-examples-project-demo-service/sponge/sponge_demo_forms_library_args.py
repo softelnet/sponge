@@ -22,10 +22,10 @@ class ArgLibraryForm(Action):
         self.withFeature("icon", "library-books")
     def onProvideArgs(self, context):
         global LIBRARY
-        if "order" in context.names:
+        if "order" in context.provide:
             context.provided["order"] = ProvidedValue().withValue("author").withAnnotatedValueSet([
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
-        if "books" in context.names:
+        if "books" in context.provide:
             context.provided["books"] = ProvidedValue().withValue(
                 map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)).withDescription("Sample description (ID: " + str(book.id) +")"),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
@@ -54,7 +54,7 @@ class ArgAbstractReadUpdateBook(Action):
 
     def onProvideArgs(self, context):
         global LIBRARY
-        if "author" or "title" in context.names:
+        if "author" in context.provide or "title" in context.provide:
             book = LIBRARY.getBook(context.current["bookId"].value)
             context.provided["author"] = ProvidedValue().withValue(book.author)
             context.provided["title"] = ProvidedValue().withValue(book.title)

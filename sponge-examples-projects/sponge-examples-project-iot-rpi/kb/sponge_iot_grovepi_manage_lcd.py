@@ -22,11 +22,11 @@ class ManageLcd(Action):
         sponge.call("SetLcd", [text, color, clearText])
     def onProvideArgs(self, context):
         grovePiDevice = sponge.getVariable("grovePiDevice")
-        if "currentText" in context.names:
+        if "currentText" in context.provide:
             context.provided["currentText"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "text" in context.names:
+        if "text" in context.provide:
             context.provided["text"] = ProvidedValue().withValue(grovePiDevice.getLcdText())
-        if "color" in context.names:
+        if "color" in context.provide:
             context.provided["color"] = ProvidedValue().withValue(grovePiDevice.getLcdColor())
 
 class SetLcd(Action):

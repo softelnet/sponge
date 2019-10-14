@@ -22,7 +22,7 @@ class Library(Action):
     def onCall(self, search, order, books):
         return None
     def onProvideArgs(self, context):
-        if "books" in context.names:
+        if "books" in context.provide:
             context.provided["books"] = ProvidedValue().withValue([
                 {"id":1, "author":"James Joyce", "title":"Ulysses"},
                 {"id":2, "author":"Arthur Conan Doyle", "title":"Adventures of Sherlock Holmes"}
@@ -38,7 +38,7 @@ class CreateBook(Action):
     def onCall(self, book):
         pass
     def onProvideArgs(self, context):
-        if "book.author" in context.names:
+        if "book.author" in context.provide:
             context.provided["book.author"] = ProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
 
 class UpdateBook(Action):
@@ -49,9 +49,9 @@ class UpdateBook(Action):
             ])
         ).withNoResult()
     def onProvideArgs(self, context):
-        if "book" in context.names:
+        if "book" in context.provide:
             context.provided["book"] = ProvidedValue().withValue(AnnotatedValue({"id":context.current["book.id"], "author":"James Joyce", "title":"Ulysses"}))
-        if "book.author" in context.names:
+        if "book.author" in context.provide:
             context.provided["book.author"] = ProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
     def onCall(self, book):
         pass

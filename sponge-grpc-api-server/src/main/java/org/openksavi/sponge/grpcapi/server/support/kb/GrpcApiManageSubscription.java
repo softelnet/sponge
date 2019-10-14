@@ -63,7 +63,7 @@ public class GrpcApiManageSubscription extends JAction {
 
     @Override
     public void onProvideArgs(ProvideArgsContext context) {
-        if (context.getNames().contains("eventNames")) {
+        if (context.getProvide().contains("eventNames")) {
             // Get the user from the current thread local session.
             UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
 

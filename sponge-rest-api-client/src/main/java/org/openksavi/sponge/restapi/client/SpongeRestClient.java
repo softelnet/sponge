@@ -38,7 +38,6 @@ import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
-import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -51,7 +50,6 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
-import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -429,48 +427,44 @@ public interface SpongeRestClient extends Closeable {
     ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request);
 
     /**
-     * Fetches the provided action arguments from the server.
+     * Submits action arguments to the server and/or fetches action arguments from the server.
      *
      * @param actionName the action name.
-     * @param argNames the names of arguments to fetch.
+     * @param provide the names of arguments to fetch.
+     * @param submit the names of arguments to submit.
      * @param current the current values of arguments from a client code.
      * @return the provided action arguments.
      */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
+            Map<String, Object> current);
 
     /**
-     * Fetches all provided action arguments from the server ignoring current values (set by a client code).
+     * Fetches action arguments from the server.
      *
      * @param actionName the action name.
+     * @param provide the names of arguments to fetch.
+     * @param current the current values of arguments from a client code.
      * @return the provided action arguments.
      */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current);
 
     /**
-     * Sends the {@code submitActionArgs} request to the server to submit action arguments.
-     *
-     * @param request the request.
-     * @param context the context.
-     * @return the response.
-     */
-    SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request, SpongeRequestContext context);
-
-    /**
-     * Sends the {@code submitActionArgs} request to the server to submit action arguments.
-     *
-     * @param request the request.
-     * @return the response.
-     */
-    SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request);
-
-    /**
-     * Submits action arguments.
+     * Fetches action arguments from the server.
      *
      * @param actionName the action name.
-     * @param argNames the names of submitted arguments.
+     * @param provide the names of arguments to fetch.
+     * @return the provided action arguments.
+     */
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide);
+
+    /**
+     * Submits action arguments. Internally invokes {@code provideActionArgs}.
+     *
+     * @param actionName the action name.
+     * @param submit the names of submitted arguments.
      * @param current the current values of arguments from a client code.
      */
-    void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current);
+    void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current);
 
     /**
      * Sends the {@code eventTypes} request to the server.

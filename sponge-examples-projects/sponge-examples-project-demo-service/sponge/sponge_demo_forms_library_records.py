@@ -32,10 +32,10 @@ class RecordLibraryForm(Action):
         self.withFeature("icon", "library-books")
     def onProvideArgs(self, context):
         global LIBRARY
-        if "order" in context.names:
+        if "order" in context.provide:
             context.provided["order"] = ProvidedValue().withValue("author").withAnnotatedValueSet([
                 AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
-        if "books" in context.names:
+        if "books" in context.provide:
             context.provided["books"] = ProvidedValue().withValue(
                 # Context actions are provided dynamically in an annotated value.
                 map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)).withFeature("contextActions", [
@@ -59,10 +59,10 @@ class RecordCreateBook(Action):
 
     def onProvideArgs(self, context):
         global LIBRARY
-        if "book" in context.names:
+        if "book" in context.provide:
             # Create an initial, blank instance of a book and provide it to GUI.
             context.provided["book"] = ProvidedValue().withValue({})
-        if "book.author" in context.names:
+        if "book.author" in context.provide:
             context.provided["book.author"] = ProvidedValue().withValueSet(LIBRARY.getAuthors())
 
 class RecordReadBook(Action):
@@ -75,7 +75,7 @@ class RecordReadBook(Action):
         self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
         global LIBRARY
-        if "book" in context.names:
+        if "book" in context.provide:
             context.provided["book"] = ProvidedValue().withValue(AnnotatedValue(LIBRARY.getBook(context.current["book.id"]).toMap()))
 
 class RecordUpdateBook(Action):
@@ -94,9 +94,9 @@ class RecordUpdateBook(Action):
         LIBRARY.updateBook(book.value["id"], book.value["author"], book.value["title"])
     def onProvideArgs(self, context):
         global LIBRARY
-        if "book" in context.names:
+        if "book" in context.provide:
             context.provided["book"] = ProvidedValue().withValue(AnnotatedValue(LIBRARY.getBook(context.current["book.id"]).toMap()))
-        if "book.author" in context.names:
+        if "book.author" in context.provide:
             context.provided["book.author"] = ProvidedValue().withValueSet(LIBRARY.getAuthors())
 
 class RecordDeleteBook(Action):

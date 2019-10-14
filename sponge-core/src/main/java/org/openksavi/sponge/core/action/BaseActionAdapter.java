@@ -28,7 +28,6 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ProvideArgsContext;
-import org.openksavi.sponge.action.SubmitArgsContext;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -76,23 +75,16 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 Validate.isTrue(isArgProvided(getMeta().getArg(name)), "Argument '%s' is not defined as provided", name);
                 finalNames.add(name);
             }
-        } else {
-            // Use all named arguments that are configured to be provided, including sub-arguments.
-            SpongeApiUtils.traverseActionArguments(getMeta(), qualifiedType -> {
-                if (qualifiedType.getType().getProvided() != null) {
-                    finalNames.add(qualifiedType.getPath());
-                }
-            }, true);
         }
 
         return finalNames;
     }
 
-    protected Set<String> buildSubmittedArgsNames(List<String> submitted) {
+    protected Set<String> buildSubmitArgsNames(List<String> submitted) {
         Set<String> finalSubmitted = new LinkedHashSet<>();
         if (submitted != null) {
             for (String name : submitted) {
-                Validate.isTrue(isArgSubmit(getMeta().getArg(name)), "Argument '%s' is not defined as submitted", name);
+                Validate.isTrue(isArgSubmittable(getMeta().getArg(name)), "Argument '%s' is not defined as submittable", name);
                 finalSubmitted.add(name);
             }
         }
@@ -101,7 +93,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current) {
+    public Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current) {
         Validate.notNull(getMeta().getArgs(), "Arguments not defined");
 
         if (current == null) {
@@ -109,7 +101,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         }
 
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
-        getProcessor().onProvideArgs(new ProvideArgsContext(buildProvideArgsNames(names), current, provided));
+        getProcessor()
+                .onProvideArgs(new ProvideArgsContext(buildProvideArgsNames(provide), buildSubmitArgsNames(submit), current, provided));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null,
@@ -117,16 +110,6 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         });
 
         return provided;
-    }
-
-    @Override
-    public void submitActionArgs(List<String> names, Map<String, Object> current) {
-        Validate.notNull(getMeta().getArgs(), "Arguments not defined");
-
-        Validate.isTrue(names.stream().allMatch(name -> current != null && current.containsKey(name)),
-                "Current values for all submitted arguments have to be set");
-
-        getProcessor().onSubmitArgs(new SubmitArgsContext(buildSubmittedArgsNames(names), current));
     }
 
     @Override
@@ -191,8 +174,8 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         return argType.getProvided() != null;
     }
 
-    private static boolean isArgSubmit(DataType argType) {
-        return argType.getProvided() != null && argType.getProvided().isSubmit();
+    private static boolean isArgSubmittable(DataType argType) {
+        return argType.getProvided() != null && argType.getProvided().isSubmittable();
     }
 
     private void validateResult(DataType resultType) {

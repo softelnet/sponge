@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +64,6 @@ import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
-import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -76,7 +76,6 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
-import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.value.OutputStreamValue;
 
@@ -198,8 +197,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         }
     }
 
-    protected void setupResponse(String operationType, Exchange exchange, Object response) {
+    protected void setupResponse(String operationType, Exchange exchange, SpongeResponse response) {
         try {
+            if (apiService.getSettings().isIncludeResponseTimes()) {
+                response.getHeader()
+                        .setRequestTime(exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.class));
+                response.getHeader().setResponseTime(Instant.now());
+            }
+
             String responseBody = getObjectMapper().writeValueAsString(response);
 
             exchange.getIn().setBody(responseBody);
@@ -335,6 +340,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                     request.setHeader(new RequestHeader());
                 }
 
+                exchange.getIn().setHeader(RestApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.now());
+
                 O response = operation.getOperationHandler().apply(request, exchange);
 
                 // Handle an action call that returns a stream.
@@ -384,9 +391,6 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, "Provide action arguments",
                 ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
                 "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request)));
-        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_SUBMIT_ACTION_ARGS, "Submit action arguments",
-                SubmitActionArgsRequest.class, "The submit action arguments request", SubmitActionArgsResponse.class,
-                "The submit action arguments response", (request, exchange) -> apiService.submitActionArgs(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
                 "The get event types request", GetEventTypesResponse.class, "The get event types response",
                 (request, exchange) -> apiService.getEventTypes(request)));

@@ -33,7 +33,7 @@ In addition to the inherited <<processor-methods,processor properties and method
 |A dynamic callback method that should be defined in a callable action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`.
 
 |`void onProvideArgs(ProvideArgsContext context)`
-|A callback method that provides argument values along with argument value sets (i.e. possible values of an argument). The provided arguments are explained later in this document.
+|A callback method that provides argument values along with argument value sets (i.e. possible values of an argument) and/or submits arguments. The provided arguments are explained later in this document.
 |===
 
 The `onConfigure` method in actions is not mandatory.
@@ -145,6 +145,8 @@ class UpperEchoAction(Action):
 == Provided arguments
 An action argument can be _provided_, i.e. its value and possible value set may be computed and returned to a client code any time before calling an action. A provided argument gives more flexibility than the `defaultValue` in the argument data type. Nested values of action arguments can be provided as well. In that case both a type being provided and a dependency path have to be named and can't contain collections (lists or maps) as intermediate path elements.
 
+An action argument can also be _submitted_ by a client code (i.e. written ad hoc), irrespectively of an action call.
+
 The `onProvideArgs(ProvideArgsContext context)` method is used to provide action argument values.
 
 .`ProvideArgsContext` properties
@@ -152,11 +154,14 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 |===
 |Property |Description
 
-|`Set<String> names`
-|A not null set of argument names (or name paths) that are to be provided. A name path is a dot-separated sequence of names of parent types, e.g. `"book.author.surname"`.
+|`Set<String> provide`
+|A not null set of argument names (or name paths) that are to be provided (i.e. read). A name path is a dot-separated sequence of names of parent types, e.g. `"book.author.surname"`.
+
+|`Set<String> submit`
+|A not null set of argument names (or name paths) that are to be submitted (i.e. written). A name path is a dot-separated sequence of names of parent types, e.g. `"book.author.surname"`.
 
 |`Map<String, Object> current`
-|The not null map of argument names (or name paths) and their current values passed from a client code. The map is required to contain values of those arguments that the arguments specified in the `names` depend on.
+|The not null map of argument names (or name paths) and their current values passed from a client code. The map is required to contain values of those arguments that the arguments specified in the `provide` and `submit` depend on and all arguments specified `submit`. A current value means the value used in a client code, for example entered by a user into an UI before calling the action.
 
 |`Map<String, ProvidedValue> provided`
 |An initially empty map of argument names (or name paths) and their provided values (value sets) that is to be set up in an `onProvideArgs` callback method implementation.
@@ -191,14 +196,14 @@ class SetActuator(Action):
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, context):
-        if "actuator1" in context.names:
+        if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
-        if "actuator2" in context.names:
+        if "actuator2" in context.provide:
             context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in context.names:
+        if "actuator3" in context.provide:
             context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
-        if "actuator5" in context.names:
+        if "actuator5" in context.provide:
             context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
                 "X", "Y", "Z", context.current["actuator1"]])
 
@@ -211,13 +216,50 @@ def onStartup():
 The provided value of actuator1 is: A
 ----
 
+.Example of an action with a submittable argument
+[source,python]
+----
+def onInit():
+    sponge.setVariable("actuator1", "A")
+    sponge.setVariable("actuator2", False)
+
+class SetActuator(Action):
+    def onConfigure(self):
+        self.withLabel("Set actuator").withDescription("Sets the actuator state.")
+        self.withArgs([
+            StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet().withSubmittable()),
+            BooleanType("actuator2").withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue())
+        ]).withNoResult()
+    def onCall(self, actuator1, actuator2):
+        sponge.setVariable("actuator1", actuator1)
+        sponge.setVariable("actuator2", actuator2)
+    def onProvideArgs(self, context):
+        if "actuator1" in context.submit:
+            # Set an actuator value with submit.
+            sponge.setVariable("actuator1", context.current["actuator1"])
+
+        if "actuator1" in context.provide:
+            context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
+        if "actuator2" in context.provide:
+            context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
+
+def onStartup():
+    sponge.submitActionArgs("SetActuator", ["actuator1"], {"actuator1":"B"})
+    sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())
+----
+
+.Console output
+----
+The provided value of actuator1 is: B
+----
+
 A provided argument can be `readOnly`. In that case its value in the `onCall` method should be ignored. A read only argument type has to be nullable.
 
 A provided argument can _depend_ on other arguments but only those that are specified earlier. In the example argument `actuator5` depends on `actuator1`. Its possible value set contains the value of `actuator1`.
 
-Arguments configured as provided have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `withValue` method sets the provided value. The optional `withAnnotatedValueSet` method sets the value set along with annotations (e.g. labels) where each element is an instance of the `AnnotatedValue` class. The optional `withValueSet` method sets the possible value set with no annotations.
+Arguments configured as provided with a value, a value set or a element value set have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `withValue` method sets the provided value. The optional `withAnnotatedValueSet` method sets the value set along with annotations (e.g. labels) where each element is an instance of the `AnnotatedValue` class. The optional `withValueSet` method sets the possible value set with no annotations.
 
-The parameter `names` in the `onProvideArgs` is a set of argument names that are to be provided. The `current` parameter is a not null map of argument names and their current values passed from a client code. The current value means the value used in a client code, for example entered by a user into an UI before calling the action. This map is required to contain values of those arguments that the arguments specified in the `names` depend on.
+Arguments configured as provided with submit should be handled in the `onProvideArgs` callback method.
 
 == Implementing interfaces
 Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.

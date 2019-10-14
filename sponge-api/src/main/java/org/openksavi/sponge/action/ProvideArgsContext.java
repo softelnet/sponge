@@ -26,8 +26,11 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
  */
 public class ProvideArgsContext {
 
-    /** The not null set of argument names that are to be provided. */
-    private Set<String> names;
+    /** The not null set of argument names that are to be provided (i.e. read). */
+    private Set<String> provide;
+
+    /** The not null set of argument names that are to be submitted (i.e. written). */
+    private Set<String> submit;
 
     /**
      * The not null map of argument names and their current values passed from a client code. The map is required to contain values of those
@@ -36,22 +39,32 @@ public class ProvideArgsContext {
     private Map<String, Object> current;
 
     /**
-     * The initially empty map of argument names and values (value sets) that is to be set up in be provided.
+     * The initially empty map of argument names and values (value sets) that is to be set up with provided values.
      */
     private Map<String, ProvidedValue<?>> provided;
 
-    public ProvideArgsContext(Set<String> names, Map<String, Object> current, Map<String, ProvidedValue<?>> provided) {
-        this.names = names;
+    public ProvideArgsContext(Set<String> provide, Set<String> submit, Map<String, Object> current,
+            Map<String, ProvidedValue<?>> provided) {
+        this.provide = provide;
+        this.submit = submit;
         this.current = current;
         this.provided = provided;
     }
 
-    public Set<String> getNames() {
-        return names;
+    public Set<String> getProvide() {
+        return provide;
     }
 
-    public void setNames(Set<String> names) {
-        this.names = names;
+    public void setProvide(Set<String> provide) {
+        this.provide = provide;
+    }
+
+    public Set<String> getSubmit() {
+        return submit;
+    }
+
+    public void setSubmit(Set<String> submit) {
+        this.submit = submit;
     }
 
     public Map<String, Object> getCurrent() {

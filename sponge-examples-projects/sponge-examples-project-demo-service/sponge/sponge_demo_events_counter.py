@@ -33,7 +33,7 @@ class ViewCounterEvent(Action):
     def onCall(self, event, counter):
         pass
     def onProvideArgs(self, context):
-        if "counter" in context.names:
+        if "counter" in context.provide:
             context.provided["counter"] = ProvidedValue().withValue(context.current["event"].attributes["counter"])
 
 class ViewCounter(Action):
@@ -45,7 +45,7 @@ class ViewCounter(Action):
         self.withCallable(False)
         self.withFeatures({"callLabel":"Dismiss", "refreshLabel":None, "clearLabel":None, "cancelLabel":"Close", "refreshEvents":["counterNotification"]})
     def onProvideArgs(self, context):
-        if "counter" in context.names:
+        if "counter" in context.provide:
             context.provided["counter"] = ProvidedValue().withValue(sponge.getVariable("counter").get())
 
 def onStartup():

@@ -59,7 +59,6 @@ import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
-import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -72,7 +71,6 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
-import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
@@ -395,8 +393,9 @@ public class DefaultRestApiService implements RestApiService {
             UserContext userContext = authenticateRequest(request);
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
 
-            Map<String, ProvidedValue<?>> provided =
-                    getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(), request.getArgNames(),
+            Map<String,
+                    ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
+                            request.getProvide(), request.getSubmit(),
                             RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getCurrent()));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
 
@@ -409,30 +408,6 @@ public class DefaultRestApiService implements RestApiService {
             }
 
             return setupErrorResponse(new ProvideActionArgsResponse(), request, e);
-        }
-    }
-
-    @Override
-    public SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request) {
-        ActionAdapter actionAdapter = null;
-
-        try {
-            Validate.notNull(request, "The request must not be null");
-            UserContext userContext = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
-
-            getEngine().getOperations().submitActionArgs(actionAdapter.getMeta().getName(), request.getArgNames(),
-                    RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getCurrent()));
-
-            return setupSuccessResponse(new SubmitActionArgsResponse(), request);
-        } catch (Throwable e) {
-            if (actionAdapter != null) {
-                getEngine().handleError(actionAdapter, e);
-            } else {
-                getEngine().handleError("REST submitActionArgs", e);
-            }
-
-            return setupErrorResponse(new SubmitActionArgsResponse(), request, e);
         }
     }
 

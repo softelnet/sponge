@@ -5,7 +5,7 @@ Uses mpc (MPD client).
 
 from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.util.concurrent.locks import ReentrantLock
-import re
+import re, sys
 
 class Mpc:
     def __init__(self, mpcExec = "mpc", host = None, port = None):
@@ -105,19 +105,27 @@ class Mpc:
             self.eventLoopProcess.destroy()
             self.eventLoopProcess = None
 
-    def seekByPercentage(self, value):
+    def __execute(self, *argv):
         self.lock.lock()
         try:
-            return sponge.process(self.createProcessBuilder().arguments("seek", str(value) + "%").outputAsString().errorAsException()).run().outputString
+            process = sponge.process(self.createProcessBuilder().arguments(argv).outputAsString().errorAsException()).run()
+            #process = sponge.process(self.createProcessBuilder().arguments(argv).outputAsString().errorAsString().exceptionOnExitCode(False)).run()
+            #if process.errorString:
+            #     sponge.logger.warn(process.errorString)
+
+            return process.outputString
         finally:
             self.lock.unlock()
+
+    def seekByPercentage(self, value):
+        return self.__execute("seek", str(value) + "%")
 
     # Returns a 3-element tuple.
     def getPositionTuple(self, status):
         lines = status.splitlines();
         if len(lines) == 3:
             matched = re.match(r".+ (.*)/(.*) \((.*)%\)", lines[1])
-            if matched and len(matched.groups()) == 3:
+            if matched is not None and len(matched.groups()) == 3:
                 return matched.groups()
         return None
 
@@ -132,6 +140,52 @@ class Mpc:
         position = self.getPositionTuple(status)
         return position[0] + "/" + position[1] if position else None
 
+    def getVolume(self):
+        return self.getVolume(self.getStatus())
+
+    def getVolume(self, status):
+        lines = status.splitlines();
+        if len(lines) > 0:
+            matched = re.match(r"volume:\s*(.+)% .*", lines[-1])
+            if matched is not None and len(matched.groups()) == 1:
+                volume = matched.groups()[0]
+                return int(volume) if volume else None
+        return None
+
+    def setVolume(self, volume):
+        return self.__execute("volume", str(volume))
+
+    def getPlay(self, status):
+        lines = status.splitlines();
+        return len(lines) == 3 and re.match(r"\[playing\] .*", lines[1]) is not None
+
+    def togglePlay(self, play):
+        return self.__execute("play" if play else "pause")
+
+    def prev(self):
+        status = self.__execute("prev")
+        if self.isStatusNotPlaying(status):
+            return None
+        return status
+
+    def next(self):
+        status = self.__execute("next")
+        if self.isStatusNotPlaying(status):
+            return None
+        return status
+
+    def isStatusNotPlaying(self, status):
+        lines = status.splitlines()
+        return len(lines) == 1 and re.match(r".* Not playing .*", lines[0]) is not None
+
+    def isStatusOk(self, status):
+        if not status or len(status.strip()) == 0 or self.isStatusNotPlaying(status):
+            return False
+        return True
+
+    def getStats(self):
+        return self.__execute("stats")
+
 class MpdSetAndPlayPlaylist(Action):
     def onConfigure(self):
         self.withLabel("Set and play a playlist").withDescription("Sets a playlist according to the arguments and starts playing it immediately. Uses mpc")
@@ -143,6 +197,7 @@ class MpdSetAndPlayPlaylist(Action):
             IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("The album maximum release year."),
             BooleanType("autoPlay").withDefaultValue(True).withLabel("Auto play").withDescription("Plays the playlist automatically.")
         ]).withResult(StringType().withLabel("Info").withDescription("A short info of the status of the action call."))
+        self.withFeatures({"icon":"view-headline"})
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         mpc = sponge.getVariable("mpc")
         sponge.logger.info("Setting the playlist...")
@@ -154,45 +209,51 @@ class MpdSetAndPlayPlaylist(Action):
         else:
             return "No matching files found"
 
-class ViewCurrentSong(Action):
+class ViewSongLyrics(Action):
     def onConfigure(self):
-        self.withLabel("Current song").withDescription("View the current song.")
+        self.withLabel("Song lyrics").withDescription("View the current song lyrics.")
         self.withArgs([
             StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
             StringType("lyrics").withLabel("Lyrics").withProvided(
                 ProvidedMeta().withValue().withReadOnly().withDependency("song")),
         ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["mpdNotification"]})
+        self.withFeatures({"icon":"script-text-outline", "clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["mpdNotification"]})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
-        if "song" in context.names:
+        if "song" in context.provide:
             context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
-        if "lyrics" in context.names:
-            if context.current["song"] and " - " in context.current["song"]:
-                (artist, title) = tuple(context.current["song"].split(" - ", 2))
-                musixmatchApiKey = sponge.getProperty("musixmatchApiKey", None)
-                if musixmatchApiKey:
-                    lyrics = getLyrics(musixmatchApiKey, artist, title)
-                    print(lyrics)
+        if "lyrics" in context.provide:
+            try:
+                if context.current["song"] and " - " in context.current["song"]:
+                    (artist, title) = tuple(context.current["song"].split(" - ", 2))
+                    musixmatchApiKey = sponge.getProperty("musixmatchApiKey", None)
+                    if musixmatchApiKey:
+                        lyrics = getLyrics(musixmatchApiKey, artist, title)
+                    else:
+                        lyrics = "LYRICS SERVICE NOT CONFIGURED"
                 else:
-                    lyrics = "*** LYRICS SERVICE NOT CONFIGURED ***"
-            else:
-                lyrics = ""
+                    lyrics = ""
+            except:
+                lyrics = "LYRICS ERROR: " + str(sys.exc_info()[0])
 
             context.provided["lyrics"] = ProvidedValue().withValue(lyrics)
 
 class ViewMpdStatus(Action):
     def onConfigure(self):
-        self.withLabel("MPD status").withDescription("Provides the player status.")
+        self.withLabel("MPD status").withDescription("Provides the MPD status and stats.")
         self.withArgs([
-            StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withProvided(ProvidedMeta().withValue().withReadOnly())
+            StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withProvided(ProvidedMeta().withValue().withReadOnly()),
+            StringType("stats").withLabel("Stats").withProvided(ProvidedMeta().withValue().withReadOnly())
         ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification"]})
+        self.withFeatures({"icon":"console", "clearLabel":None, "cancelLabel":"Close", "refreshLabel":None,
+                           "refreshEvents":["statusPolling", "mpdNotification"]})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
-        if "status" in context.names:
+        if "status" in context.provide:
             context.provided["status"] =  ProvidedValue().withValue(mpc.getStatus())
+        if "stats" in context.provide:
+            context.provided["stats"] =  ProvidedValue().withValue(mpc.getStats())
 
 class MpdPlayer(Action):
     def onConfigure(self):
@@ -200,32 +261,61 @@ class MpdPlayer(Action):
         self.withArgs([
             StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
-            IntegerType("position").withLabel("Position").withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider", "responsive":True}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmit()),
-            StringType("time").withLabel("Time").withProvided(
-                ProvidedMeta().withValue().withReadOnly())#.withDependency("position")),
+            IntegerType("position").withLabel("Position").withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
+            StringType("time").withLabel("Time").withNullable().withProvided(
+                ProvidedMeta().withValue().withReadOnly()),#.withDependency("position").withLazyUpdate()
+            IntegerType("volume").withLabel("Volume (%)").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
+            VoidType("prev").withLabel("Previous").withProvided(ProvidedMeta().withSubmittable()),
+            BooleanType("play").withLabel("Play").withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable()).withFeatures({"widget":"switch"}),
+            VoidType("next").withLabel("Next").withProvided(ProvidedMeta().withSubmittable())
         ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification"]})
+        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification"],
+                           "icon":"music"})
+        self.withFeature("contextActions", [
+            "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "ViewMpdStatus()",
+        ])
+
+    def __ensureStatus(self, mpc, status):
+        return status if mpc.isStatusOk(status) else mpc.getStatus()
+
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
         status = None
 
-        # TODO Unnecessary?
-        status = mpc.getStatus()
+        mpc.lock.lock()
+        try:
+            if "position" in context.submit:
+                status = mpc.seekByPercentage(context.current["position"])
+            if "volume" in context.submit:
+                status = mpc.setVolume(context.current["volume"].value)
+            if "play" in context.submit:
+                status = mpc.togglePlay(context.current["play"])
+            if "prev" in context.submit:
+                status = mpc.prev()
+            if "next" in context.submit:
+                status = mpc.next()
 
-        if "song" in context.names:
-            context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
-
-        if "position" in context.names:
-            context.provided["position"] = ProvidedValue().withValue(mpc.getPositionByPercentage(status))
-
-        if "time" in context.names:
-            context.provided["time"] = ProvidedValue().withValue(mpc.getTimeStatus(status))
-    def onSubmitArgs(self, context):
-        mpc = sponge.getVariable("mpc")
-
-        if "position" in context.names:
-            status = mpc.seekByPercentage(context.current["position"])
+            if "song" in context.provide:
+                context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
+            if "position" in context.provide or "context" in context.submit:
+                status = self.__ensureStatus(mpc, status)
+                context.provided["position"] = ProvidedValue().withValue(mpc.getPositionByPercentage(status))
+            if "time" in context.provide:
+                status = self.__ensureStatus(mpc, status)
+                context.provided["time"] = ProvidedValue().withValue(mpc.getTimeStatus(status))
+            # Provide an annotated volume value at once if submitted.
+            if "volume" in context.provide or "volume" in context.submit:
+                status = self.__ensureStatus(mpc, status)
+                volume = mpc.getVolume(status)
+                context.provided["volume"] = ProvidedValue().withValue(AnnotatedValue(volume).withLabel("Volume (" + str(volume) + "%)"))
+            if "play" in context.provide:
+                status = self.__ensureStatus(mpc, status)
+                context.provided["play"] = ProvidedValue().withValue(mpc.getPlay(status))
+        finally:
+            mpc.lock.unlock()
 
 def onStartup():
     sponge.setVariable("mpc", Mpc())

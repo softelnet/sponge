@@ -9,7 +9,7 @@ class ProvideArgNoOverwrite(Action):
     def onCall(self, value):
         return
     def onProvideArgs(self, context):
-        if "value" in context.names:
+        if "value" in context.provide:
             context.provided["value"] = ProvidedValue().withValue("PROVIDED")
 
 class ProvideArgOverwrite(Action):
@@ -18,5 +18,5 @@ class ProvideArgOverwrite(Action):
     def onCall(self, value):
         return
     def onProvideArgs(self, context):
-        if "value" in context.names:
+        if "value" in context.provide:
             context.provided["value"] = ProvidedValue().withValue("PROVIDED")

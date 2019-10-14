@@ -23,7 +23,7 @@ class ManageSensorActuatorValues(Action):
         grovePiDevice.setBlueLed(blueLed)
         grovePiDevice.setBuzzer(buzzer)
     def onProvideArgs(self, context):
-        values = sponge.call("GetSensorActuatorValues", [context.names])
+        values = sponge.call("GetSensorActuatorValues", [context.provide])
         for name, value in values.iteritems():
             context.provided[name] = ProvidedValue().withValue(value)
 

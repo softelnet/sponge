@@ -29,24 +29,16 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
 public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperations {
 
     /**
-     * Returns the provided values along with value sets of the action arguments.
+     * Provides action arguments. Submits arguments and/or returns provided values along with value sets.
      *
-     * @param names the list of argument names.
-     * @param submitted the list of submitted argument names.
+     * @param provide the list of argument names to provide.
+     * @param submit the list of submitted argument names.
      * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        those arguments that the arguments specified in the {@code names} depend on.
+     *        those arguments that the arguments specified in the {@code provide} and {@code submit} depend on and all arguments specified
+     *        by {@code submit}.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ProvidedValue<?>> provideArgs(List<String> names, Map<String, Object> current);
-
-    /**
-     * Submits action arguments.
-     *
-     * @param names the list of argument names that are submitted.
-     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        {@code argNames} and those arguments that the arguments specified in the {@code argNames} depend on.
-     */
-    void submitActionArgs(List<String> names, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current);
 
     /**
      * Returns the registered type names used in this action.

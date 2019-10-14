@@ -17,9 +17,9 @@ class DependingArgumentsAction(Action):
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, context):
-        if "continent" in context.names:
+        if "continent" in context.provide:
             context.provided["continent"] = ProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
-        if "country" in context.names:
+        if "country" in context.provide:
             continent = context.current["continent"]
             if continent == "Africa":
                 countries = ["Nigeria", "Ethiopia", "Egypt"]
@@ -30,7 +30,7 @@ class DependingArgumentsAction(Action):
             else:
                 countries = []
             context.provided["country"] = ProvidedValue().withValueSet(countries)
-        if "city" in context.names:
+        if "city" in context.provide:
             country = context.current["country"]
             if country == "Nigeria":
                 cities = ["Lagos", "Kano", "Ibadan"]
@@ -53,7 +53,7 @@ class DependingArgumentsAction(Action):
             else:
                 cities = []
             context.provided["city"] = ProvidedValue().withValueSet(cities)
-        if "river" in context.names:
+        if "river" in context.provide:
             continent = context.current["continent"]
             if continent == "Africa":
                 rivers = ["Nile", "Chambeshi", "Niger"]
@@ -64,5 +64,5 @@ class DependingArgumentsAction(Action):
             else:
                 rivers = []
             context.provided["river"] = ProvidedValue().withValueSet(rivers)
-        if "weather" in context.names:
+        if "weather" in context.provide:
             context.provided["weather"] = ProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])

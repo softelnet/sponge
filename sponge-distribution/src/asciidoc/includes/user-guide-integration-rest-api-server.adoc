@@ -63,6 +63,10 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 |`authTokenExpirationDurationSeconds`
 |`Long`
 |The duration (in seconds) after which an authentication token will expire. The value `null` or less than or equal to 0 means infinity. Defaults to 30 minutes.
+
+|`includeResponseTimes`
+|`boolean`
+|The flag specifying if a response header should have request and response time set. Defaults to `true`.
 |===
 
 .The REST API server plugin XML configuration example

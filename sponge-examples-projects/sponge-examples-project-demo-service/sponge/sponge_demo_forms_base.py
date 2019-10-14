@@ -17,7 +17,7 @@ class ChangedButtonLabelsForm(Action):
     def onCall(self, version, text):
         return text.upper()
     def onProvideArgs(self, context):
-        if "version" in context.names:
+        if "version" in context.provide:
             context.provided["version"] = ProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
 
 class HiddenButtonsForm(Action):
@@ -32,7 +32,7 @@ class HiddenButtonsForm(Action):
     def onCall(self, version, text):
         return text.upper()
     def onProvideArgs(self, context):
-        if "version" in context.names:
+        if "version" in context.provide:
             context.provided["version"] = ProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))
 
 class DefaultCallButtonForm(Action):
@@ -47,5 +47,5 @@ class DefaultCallButtonForm(Action):
     def onCall(self, version, text):
         return text.upper()
     def onProvideArgs(self, context):
-        if "version" in context.names:
+        if "version" in context.provide:
             context.provided["version"] = ProvidedValue().withValue("{} [{}]".format(sponge.version, System.currentTimeMillis()))

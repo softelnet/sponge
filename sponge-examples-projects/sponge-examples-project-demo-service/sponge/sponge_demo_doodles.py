@@ -39,7 +39,7 @@ class ViewDoodle(Action):
     def onCall(self, name):
         return AnnotatedValue(SpongeUtils.readFileToByteArray(sponge.getProperty("doodlesDir") + "/" + name)).withFeatures({"filename":"doodle_" + name})
     def onProvideArgs(self, context):
-        if "image" in context.names:
+        if "image" in context.provide:
             doodles = sponge.call("ListDoodles")
             context.provided["image"] = ProvidedValue().withValue(doodles[0] if doodles else None).withValueSet(doodles)
 

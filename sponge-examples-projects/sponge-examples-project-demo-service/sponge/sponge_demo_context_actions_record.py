@@ -16,7 +16,7 @@ class RecordWithContextActions(Action):
     def onCall(self, book):
         pass
     def onProvideArgs(self, context):
-        if "book" in context.names:
+        if "book" in context.provide:
             context.provided["book"] = ProvidedValue().withValue({})
 
 class RecordWithContextActionsAction1(Action):

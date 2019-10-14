@@ -44,6 +44,8 @@ public final class Features {
 
     public static final String WIDGET = "widget";
 
+    public static final String RESPONSIVE = "responsive";
+
     public static final String ACTION_CONFIRMATION = "confirmation";
 
     public static final String TYPE_CHARACTERISTIC = "characteristic";
@@ -82,8 +84,6 @@ public final class Features {
 
     public static final String STRING_OBSCURE = "obscure";
 
-    public static final String STRING_RESPONSIVE = "responsive";
-
     public static final String ACTION_CALL_LABEL = "callLabel";
 
     public static final String ACTION_REFRESH_LABEL = "refreshLabel";
@@ -113,6 +113,8 @@ public final class Features {
     public static final String BINARY_BACKGROUND = "background";
 
     public static final String WIDGET_SLIDER = "slider";
+
+    public static final String WIDGET_SWITCH = "switch";
 
     public static final class Formats {
 

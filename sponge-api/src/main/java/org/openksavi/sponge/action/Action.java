@@ -25,16 +25,11 @@ import org.openksavi.sponge.Processor;
 public interface Action extends Processor<ActionAdapter>, ActionOperations {
 
     /**
-     * A callback method that provides argument values along with argument value sets (i.e. possible values of an argument).
+     * A callback method that provides argument values along with argument value sets (i.e. possible values of an argument) and/or submits
+     * arguments.
      *
-     * @param context the provided action arguments context. The {@code context.provided} map must be set up with the provided values.
+     * @param context the provided action arguments context. The {@code context.provided} map should be set up with the provided values if
+     *        necessary.
      */
     void onProvideArgs(ProvideArgsContext context);
-
-    /**
-     * A callback method that submits argument values.
-     *
-     * @param context the submitted action arguments context.
-     */
-    void onSubmitArgs(SubmitArgsContext context);
 }

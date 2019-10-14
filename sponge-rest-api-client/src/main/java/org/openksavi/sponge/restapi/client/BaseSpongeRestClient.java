@@ -57,7 +57,6 @@ import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
-import org.openksavi.sponge.restapi.model.request.SubmitActionArgsRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
@@ -71,7 +70,6 @@ import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.ResponseHeader;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
-import org.openksavi.sponge.restapi.model.response.SubmitActionArgsResponse;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
@@ -823,33 +821,24 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
-        return provideActionArgs(new ProvideActionArgsRequest(actionName, argNames, current)).getProvided();
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
+            Map<String, Object> current) {
+        return provideActionArgs(new ProvideActionArgsRequest(actionName, provide, submit, current)).getProvided();
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName) {
-        return provideActionArgs(actionName, null, null);
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current) {
+        return provideActionArgs(actionName, provide, null, current);
     }
 
     @Override
-    public SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request, SpongeRequestContext context) {
-        RestActionMeta actionMeta = getActionMeta(request.getName());
-        setupActionExecutionRequest(actionMeta, request);
-
-        request.setCurrent(marshalAuxiliaryActionArgsCurrent(actionMeta, request.getCurrent()));
-
-        return execute(RestApiConstants.OPERATION_SUBMIT_ACTION_ARGS, request, SubmitActionArgsResponse.class, context);
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide) {
+        return provideActionArgs(actionName, provide, null, null);
     }
 
     @Override
-    public SubmitActionArgsResponse submitActionArgs(SubmitActionArgsRequest request) {
-        return submitActionArgs(request, null);
-    }
-
-    @Override
-    public void submitActionArgs(String actionName, List<String> argNames, Map<String, Object> current) {
-        submitActionArgs(new SubmitActionArgsRequest(actionName, argNames, current));
+    public void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current) {
+        provideActionArgs(actionName, null, submit, current);
     }
 
     protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {

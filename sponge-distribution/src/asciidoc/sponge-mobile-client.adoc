@@ -296,7 +296,7 @@ The application may be switched to the dark theme in the settings.
 |Not supported.
 
 |`VoidType`
-|Only viewing supported.
+|Supported. A https://material.io/components/chips/[`chip`] widget is presented as an editor. A user can tap the chip widget to submit an argument if it is configured as submittable.
 |===
 
 === Data type formats
@@ -340,6 +340,14 @@ The application may be switched to the dark theme in the settings.
 |`icon`
 |Action
 |An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/3.6.95/[material design icons (currently v3.6.95)].
+
+|`widget`
+|Widget
+|A GUI widget type. See the table below for supported values. Support for this feature is limited. In most cases a default, opinionated widget will be used.
+
+|`responsive`
+|Type
+|A responsive GUI widget. If this feature is set for a provided type, every change in GUI will cause invoking a `provideActionArgs` operation. This feature may be resource consuming (especially when used with an _argument submit_ option) because of possible many server roundtrips.
 
 |`confirmation`
 |Action
@@ -456,6 +464,15 @@ The application may be switched to the dark theme in the settings.
 |`background`
 |`BinaryType` drawing
 |A drawing background color.
+|===
+
+.Supported widget types for a `widget` feature
+[cols="1,5"]
+|===
+|Widget |Description
+
+|`slider`
+|Supported for an `IntegerType` but only if it has min and max values defined. The default behaviour of a slider is lazy, i.e. a value is set on an end of drag. If an integer type has a `responsive` feature set to `true`, the value will be set while dragging.
 |===
 
 A data type property can be dynamically overwritten by a corresponding feature in an `AnnotatedValue`. The feature name has to be exactly the same as the data type property name. The overwrite is handled by the {sponge} mobile client application.

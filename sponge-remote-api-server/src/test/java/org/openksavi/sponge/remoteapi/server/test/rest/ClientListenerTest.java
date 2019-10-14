@@ -17,6 +17,7 @@
 package org.openksavi.sponge.remoteapi.server.test.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +73,9 @@ public class ClientListenerTest extends BasicTestTemplate {
             assertEquals(3, responseStringList.size());
             assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}}",
                     normalizeJson(requestStringList.get(0)));
-            assertEquals("{\"header\":{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null},\"version\":\""
-                    + engine.getVersion() + "\"}", normalizeJson(responseStringList.get(0)));
+            assertTrue(normalizeJson(responseStringList.get(0)).matches(
+                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\"\\},\"version\":\""
+                            + engine.getVersion() + "\"\\}"));
         }
     }
 
@@ -97,8 +99,9 @@ public class ClientListenerTest extends BasicTestTemplate {
 
             assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}}",
                     normalizeJson(requestStringHolder.get()));
-            assertEquals("{\"header\":{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null},\"version\":\""
-                    + engine.getVersion() + "\"}", normalizeJson(responseStringHolder.get()));
+            assertTrue(normalizeJson(responseStringHolder.get()).matches(
+                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\"\\},\"version\":\""
+                            + engine.getVersion() + "\"\\}"));
         }
     }
 }

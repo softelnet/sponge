@@ -65,24 +65,24 @@ public class GrpcApiViewEvent extends JAction {
         RemoteEvent event = (RemoteEvent) context.getCurrent().get("event");
         RecordType eventType = getSponge().getEventType(event.getName());
 
-        if (context.getNames().contains("type")) {
+        if (context.getProvide().contains("type")) {
             context.getProvided().put("type",
                     new ProvidedValue<>().withValue(eventType.getLabel() != null ? eventType.getLabel() : eventType.getName()));
         }
 
-        if (context.getNames().contains("time")) {
+        if (context.getProvide().contains("time")) {
             context.getProvided().put("time", new ProvidedValue<>().withValue(event.getTime()));
         }
 
-        if (context.getNames().contains("attributes")) {
+        if (context.getProvide().contains("attributes")) {
             context.getProvided().put("attributes", new ProvidedValue<>().withValue(new DynamicValue<>(event.getAttributes(), eventType)));
         }
 
-        if (context.getNames().contains("label")) {
+        if (context.getProvide().contains("label")) {
             context.getProvided().put("label", new ProvidedValue<>().withValue(event.getLabel()));
         }
 
-        if (context.getNames().contains("description")) {
+        if (context.getProvide().contains("description")) {
             context.getProvided().put("description", new ProvidedValue<>().withValue(event.getDescription()));
         }
     }

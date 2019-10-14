@@ -14,7 +14,7 @@ class ViewLightStatusWithAutoRefresh(Action):
         self.withCallable(False)
     def onProvideArgs(self, context):
         grovePiDevice = sponge.getVariable("grovePiDevice")
-        if "light" in context.names:
+        if "light" in context.provide:
             context.provided["light"] =  ProvidedValue().withValue(sponge.call("IsLight", [grovePiDevice.getLightSensor()]))
 
 class IsLight(Action):

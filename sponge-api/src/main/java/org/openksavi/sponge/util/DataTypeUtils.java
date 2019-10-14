@@ -94,7 +94,16 @@ public abstract class DataTypeUtils {
         return types;
     }
 
-    public static boolean supportsElementValueSet(DataType<?> dataType) {
-        return dataType instanceof ListType;
+    public static boolean supportsElementValueSet(DataType<?> type) {
+        return type instanceof ListType;
+    }
+
+    public static boolean isProvidedRead(DataType<?> type) {
+        return type.getProvided() != null
+                && (type.getProvided().isValue() || type.getProvided().getValueSet() != null || type.getProvided().isElementValueSet());
+    }
+
+    public static boolean isProvidedWrite(DataType<?> type) {
+        return type.getProvided() != null && type.getProvided().isSubmittable();
     }
 }

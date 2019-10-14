@@ -29,7 +29,9 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
 
     private String name;
 
-    private List<String> argNames;
+    private List<String> provide;
+
+    private List<String> submit;
 
     private Map<String, Object> current;
 
@@ -38,16 +40,17 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
     public ProvideActionArgsRequest() {
     }
 
-    public ProvideActionArgsRequest(String name, List<String> argNames, Map<String, Object> current,
+    public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
             ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
-        this.argNames = argNames;
+        this.provide = provide;
+        this.submit = submit;
         this.current = current;
         this.qualifiedVersion = qualifiedVersion;
     }
 
-    public ProvideActionArgsRequest(String name, List<String> argNames, Map<String, Object> current) {
-        this(name, argNames, current, null);
+    public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current) {
+        this(name, provide, submit, current, null);
     }
 
     @Override
@@ -62,12 +65,21 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
     }
 
     @ApiModelProperty(value = "The names of action arguments to provide", required = false)
-    public List<String> getArgNames() {
-        return argNames;
+    public List<String> getProvide() {
+        return provide;
     }
 
-    public void setArgNames(List<String> argNames) {
-        this.argNames = argNames;
+    public void setProvide(List<String> provide) {
+        this.provide = provide;
+    }
+
+    @ApiModelProperty(value = "The names of action arguments to submit", required = false)
+    public List<String> getSubmit() {
+        return submit;
+    }
+
+    public void setSubmit(List<String> submit) {
+        this.submit = submit;
     }
 
     @ApiModelProperty(value = "The current values of action arguments in a client code", required = false)

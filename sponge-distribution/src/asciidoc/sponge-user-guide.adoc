@@ -125,6 +125,12 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 
 |`overwrite`
 |A flag specifying if the provided value of this type should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
+
+|`submittable`
+|A flag specifying if a value can be submitted (i.e. written ad hoc), for example in an action irrespectively of an action call.
+
+|`lazyUpdate`
+|A flag specifying if a provided value should be updated lazily in a client code when a dependency changes. This flag is experimental.
 |===
 
 See the <<provided_arguments,provided action arguments>> as a use case of provided types.

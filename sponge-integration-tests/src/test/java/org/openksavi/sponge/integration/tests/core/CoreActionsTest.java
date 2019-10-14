@@ -388,7 +388,8 @@ public class CoreActionsTest {
             assertTrue(argTypes.get(2).getProvided().isReadOnly());
             assertNull(argTypes.get(3).getProvided());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
+            providedArgs =
+                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1", "actuator2", "actuator3"));
             assertEquals(3, providedArgs.size());
 
             assertNotNull(providedArgs.get("actuator1"));
@@ -411,7 +412,8 @@ public class CoreActionsTest {
 
             engine.getOperations().call(actionMeta.getName(), Arrays.asList("B", true, null, 10));
 
-            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
+            providedArgs =
+                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1", "actuator2", "actuator3"));
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
@@ -452,7 +454,7 @@ public class CoreActionsTest {
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
             assertFalse(argTypes.get(0).getProvided().isReadOnly());
 
-            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuatorType"));
             assertEquals(1, providedArgs.size());
 
             ProvidedValue<?> argValue = providedArgs.get("actuatorType");
@@ -467,7 +469,7 @@ public class CoreActionsTest {
 
             engine.getOperations().call(actionMeta.getName(), Arrays.asList("manual"));
 
-            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName());
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuatorType"));
             assertEquals(1, providedArgs.size());
 
             argValue = providedArgs.get("actuatorType");
@@ -633,8 +635,8 @@ public class CoreActionsTest {
             assertEquals(1, actionMeta.getArgs().size());
             DataType sensorNameArgType = actionMeta.getArgs().get(0);
             assertTrue(sensorNameArgType instanceof StringType);
-            List<String> availableSensors = (List<String>) SpongeApiUtils.unwrapAnnotatedValueList(
-                    engine.getOperations().provideActionArgs(actionMeta.getName()).get("sensorName").getAnnotatedValueSet());
+            List<String> availableSensors = (List<String>) SpongeApiUtils.unwrapAnnotatedValueList(engine.getOperations()
+                    .provideActionArgs(actionMeta.getName(), Arrays.asList("sensorName")).get("sensorName").getAnnotatedValueSet());
 
             assertTrue(engine.getOperations().call(Boolean.class, "ProvideByAction", Arrays.asList(availableSensors.get(0))));
 
@@ -660,7 +662,7 @@ public class CoreActionsTest {
             assertFalse(fruitsType.getProvided().hasValueSet());
             assertTrue(fruitsType.getProvided().isElementValueSet());
 
-            Map<String, ProvidedValue<?>> provided = engine.getOperations().provideActionArgs(actionName);
+            Map<String, ProvidedValue<?>> provided = engine.getOperations().provideActionArgs(actionName, Arrays.asList("fruits"));
             List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
             assertEquals(3, elementValueSet.size());
             assertEquals("apple", elementValueSet.get(0).getValue());
@@ -715,7 +717,7 @@ public class CoreActionsTest {
             assertEquals(1, actionMeta.getArgs().size());
             DataType argType = actionMeta.getArgs().get(0);
             assertFalse(argType.getProvided().isOverwrite());
-            ProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName()).get("value");
+            ProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("value")).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
@@ -746,7 +748,7 @@ public class CoreActionsTest {
             assertEquals(1, actionMeta.getArgs().size());
             DataType argType = actionMeta.getArgs().get(0);
             assertTrue(argType.getProvided().isOverwrite());
-            ProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName()).get("value");
+            ProvidedValue<?> argValue = engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("value")).get("value");
             String providedValue = (String) argValue.getValue();
             assertEquals("PROVIDED", providedValue);
 
@@ -1264,6 +1266,58 @@ public class CoreActionsTest {
             assertEquals(2, engine.getTypes().size());
             assertEquals(DataTypeKind.RECORD, engine.getTypes().get("Book").getKind());
             assertEquals(DataTypeKind.RECORD, engine.getTypes().get("Author").getKind());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionsProvideArgsSubmit() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_submit.py").build();
+        engine.startup();
+
+        try {
+            ActionMeta actionMeta = engine.getActionMeta("SetActuator");
+            List<DataType> argTypes = actionMeta.getArgs();
+            Map<String, ProvidedValue<?>> providedArgs;
+
+            assertNotNull(argTypes.get(0).getProvided());
+            assertTrue(argTypes.get(0).getProvided().isValue());
+            assertTrue(argTypes.get(0).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
+            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertTrue(argTypes.get(0).getProvided().isSubmittable());
+            assertNotNull(argTypes.get(1).getProvided());
+            assertTrue(argTypes.get(1).getProvided().isValue());
+            assertFalse(argTypes.get(1).getProvided().hasValueSet());
+            assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
+            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+
+            providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1", "actuator2"));
+            assertEquals(2, providedArgs.size());
+
+            assertNotNull(providedArgs.get("actuator1"));
+            assertEquals("A", providedArgs.get("actuator1").getValue());
+            assertEquals(Arrays.asList("A", "B", "C"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
+            assertTrue(providedArgs.get("actuator1").isValuePresent());
+
+            assertNotNull(providedArgs.get("actuator2"));
+            assertEquals(false, providedArgs.get("actuator2").getValue());
+            assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
+            assertTrue(providedArgs.get("actuator2").isValuePresent());
+
+            engine.getOperations().submitActionArgs(actionMeta.getName(), Arrays.asList("actuator1"),
+                    SpongeUtils.immutableMapOf("actuator1", "B"));
+            assertEquals("B",
+                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1")).get("actuator1").getValue());
+
+            engine.getOperations().call(actionMeta.getName(), Arrays.asList("C", true));
+            assertEquals("C",
+                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("actuator1")).get("actuator1").getValue());
 
             assertFalse(engine.isError());
         } finally {

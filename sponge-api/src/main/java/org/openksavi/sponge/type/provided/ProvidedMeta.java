@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openksavi.sponge.Experimental;
+
 /**
  * A provided object metadata.
  */
@@ -46,8 +48,12 @@ public class ProvidedMeta {
     /** The flag specifying if the list element value set is provided. Applicable only for list types. Defaults to {@code false}. */
     private boolean elementValueSet = false;
 
-    /** The flag specifying if the value can be submitted by a client. */
-    private boolean submit = false;
+    /** The flag specifying if the value can be submitted (i.e. written). */
+    private boolean submittable = false;
+
+    /** The flag specifying if the provided value should be updated lazily in a client code when a dependency changes (experimental). */
+    @Experimental
+    private boolean lazyUpdate = false;
 
     public ProvidedMeta() {
     }
@@ -90,8 +96,13 @@ public class ProvidedMeta {
         return this;
     }
 
-    public ProvidedMeta withSubmit() {
-        submit = true;
+    public ProvidedMeta withSubmittable() {
+        submittable = true;
+        return this;
+    }
+
+    public ProvidedMeta withLazyUpdate() {
+        lazyUpdate = true;
         return this;
     }
 
@@ -147,11 +158,19 @@ public class ProvidedMeta {
         this.elementValueSet = elementValueSet;
     }
 
-    public boolean isSubmit() {
-        return submit;
+    public boolean isSubmittable() {
+        return submittable;
     }
 
-    public void setSubmit(boolean submit) {
-        this.submit = submit;
+    public void setSubmittable(boolean submittable) {
+        this.submittable = submittable;
+    }
+
+    public boolean isLazyUpdate() {
+        return lazyUpdate;
+    }
+
+    public void setLazyUpdate(boolean lazyUpdate) {
+        this.lazyUpdate = lazyUpdate;
     }
 }

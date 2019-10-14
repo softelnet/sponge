@@ -27,14 +27,14 @@ class SetActuator(Action):
         sponge.setVariable("actuator4", actuator4)
         sponge.setVariable("actuator5", actuator5)
     def onProvideArgs(self, context):
-        if "actuator1" in context.names:
+        if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
                 [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
-        if "actuator2" in context.names:
+        if "actuator2" in context.provide:
             context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
-        if "actuator3" in context.names:
+        if "actuator3" in context.provide:
             context.provided["actuator3"] = ProvidedValue().withValue(sponge.getVariable("actuator3", None))
-        if "actuator5" in context.names:
+        if "actuator5" in context.provide:
             context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
                 "X", "Y", "Z", context.current["actuator1"]])
 
