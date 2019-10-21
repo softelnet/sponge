@@ -14,7 +14,7 @@ class RemoteApiCanUseKnowledgeBase(Action):
 
 
 def onStartup():
-    # Setup users. To hash a password use (on Mac): echo -n username-password | shasum -a 512 | awk '{ print $1 }'
+    # Setup users. To hash a password use: echo -n username-password | shasum -a 512 | awk '{ print $1 }'
     # Note that the user name must be lower case.
     securityService = restApiServer.service.securityService
 

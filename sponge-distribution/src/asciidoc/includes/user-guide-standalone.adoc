@@ -39,6 +39,8 @@ Standalone command-line application doesn't support history of entered commands/
 |Set the Java system property.
 |===
 
+Any left-over non-recognized options and arguments are accessible in a knowledge base as a list of strings `sponge.engine.args`.
+
 == Default parameters
 Standalone command-line application sets its own default values for the following engine configuration parameters. You may change them in an XML configuration file.
 

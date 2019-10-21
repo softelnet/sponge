@@ -34,9 +34,9 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.server.security.User;
 
 /**
- * A set of REST API server utility methods for a simple in-memory security.
+ * A set of REST API server utility methods.
  */
-public abstract class RestApiInMemorySecurityUtils {
+public abstract class RestApiSecurityUtils {
 
     public static final String PROPERTY_PASSWORD_FILE = "password.file";
 
@@ -48,7 +48,7 @@ public abstract class RestApiInMemorySecurityUtils {
 
     public static final String DEFAULT_PASSWORD_ENTRY_FORMAT = "%s-%s";
 
-    private RestApiInMemorySecurityUtils() {
+    private RestApiSecurityUtils() {
         //
     }
 

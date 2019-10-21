@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.restapi.server.util.RestApiInMemorySecurityUtils;
+import org.openksavi.sponge.restapi.server.util.RestApiSecurityUtils;
 
 public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends KnowledgeBaseProvidedSecurityService {
 
@@ -63,8 +63,8 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     }
 
     public String hashPassword(String username, String password) {
-        return passwordEntryFormat != null ? RestApiInMemorySecurityUtils.hashPassword(username, password, passwordEntryFormat)
-                : RestApiInMemorySecurityUtils.hashPassword(username, password);
+        return passwordEntryFormat != null ? RestApiSecurityUtils.hashPassword(username, password, passwordEntryFormat)
+                : RestApiSecurityUtils.hashPassword(username, password);
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     }
 
     public void loadUsers() {
-        loadUsers(RestApiInMemorySecurityUtils.getPasswordFile(getRestApiService().getEngine()));
+        loadUsers(RestApiSecurityUtils.getPasswordFile(getRestApiService().getEngine()));
     }
 
     public void loadUsers(String filename) {
@@ -99,6 +99,6 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     }
 
     public void loadUsers(String filename, Charset charset) {
-        RestApiInMemorySecurityUtils.readUsers(filename, charset).forEach(this::addUser);
+        RestApiSecurityUtils.readUsers(filename, charset).forEach(this::addUser);
     }
 }

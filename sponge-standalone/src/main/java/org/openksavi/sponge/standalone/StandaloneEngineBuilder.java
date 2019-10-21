@@ -192,6 +192,8 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                 standaloneListener.setCamel(true);
             }
 
+            engine.setArgs(commandLine.getArgList());
+
             engine.addOnStartupListener(standaloneListener);
             engine.addOnShutdownListener(standaloneListener);
         } catch (ParseException e) {

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.standalone;
 
+import java.util.List;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -31,6 +33,8 @@ public class StandaloneSpongeEngine extends BaseSpongeEngine implements Applicat
     private ApplicationContext applicationContext;
 
     private InteractiveMode interactiveMode;
+
+    private List<String> args;
 
     public StandaloneSpongeEngine() {
         //
@@ -56,5 +60,13 @@ public class StandaloneSpongeEngine extends BaseSpongeEngine implements Applicat
 
     public ApplicationContext getApplicationContext() {
         return applicationContext;
+    }
+
+    public List<String> getArgs() {
+        return args;
+    }
+
+    public void setArgs(List<String> args) {
+        this.args = args;
     }
 }

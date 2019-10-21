@@ -186,13 +186,11 @@ You may set a security strategy by providing an implementation of the `RestApiSe
 
 [[rest-api-server-simple-security-strategy]]
 === Simple security strategy
-The simple security strategy uses in-memory user data. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RemoteApiIsActionPublic`, `RemoteApiIsEventPublic`, `RemoteApiCanUseKnowledgeBase`, `RemoteApiCanSendEvent`, `RemoteApiCanSubscribeEvent`). Passwords are stored as SHA-512 hashes.
+The simple security strategy uses in-memory user data or user data stored in a password file. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RemoteApiIsActionPublic`, `RemoteApiIsEventPublic`, `RemoteApiCanUseKnowledgeBase`, `RemoteApiCanSendEvent`, `RemoteApiCanSubscribeEvent`). Passwords are stored as SHA-512 hashes.
 
 .Example of the Remote API simple security
 [source,python]
 ----
-from org.openksavi.sponge.restapi.server.security import User
-
 # Simple access configuration: role -> knowledge base names regexps.
 ROLES_TO_KB = { "admin":[".*"], "anonymous":["demo", "digits", "demoForms.*"]}
 # Simple access configuration: role -> event names regexps.
@@ -212,13 +210,39 @@ class RemoteApiCanSubscribeEvent(Action):
         return restApiServer.canAccessResource(ROLES_TO_SUBSCRIBE_EVENT, userContext, eventName)
 
 def onStartup():
-    # Setup users. To hash a password use (on Mac): echo -n username-password | shasum -a 512 | awk '{ print $1 }'
-    # Note that the user name must be lower case.
-    securityService = restApiServer.service.securityService
-    securityService.addUser(User("john", "f4f28d85c27f6038bbdd2c8c73c4c2d2ca21350b368431b641999d3f6e1a38a474bae4b6856556532b30fc36a72272be4922ebe3d3b720ee3224b6bb7ced79b4", ["admin"]))
+    # Load users from a password file.
+    restApiServer.service.securityService.loadUsers()
 ----
 
+A password file is specified by a `password.file` configuration property.
+
 For more information see examples in the source code.
+
+=== Adding a REST API user to a password file
+A REST API user password file is a way to configure users for a {sponge} REST API simple security strategy. Each user has its entry in a separate line. The entry contains colon-separated: a username, a comma-separated list of groups and a hashed password.
+
+.Example of a password file
+[source,bash,subs="verbatim,attributes"]
+----
+admin:admin:86975030682e27eca6fa4fb90e9d4b4aa3b3efc381149385347c7573b0b7002d48b1462c7f2e20db7a48cffdcc329bb1b6868551b7372d19a2781571919cc831
+----
+
+The best way of adding a REST API user to a password file is to use a predefined knowledge base `kb_add_remote_api_user.py` in a Docker container. The knowledge base requires an argument specifying a password file.
+
+.Adding a REST API user
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm -v `pwd`:/opt/tmp openksavi/sponge:latest ./sponge -k "classpath*:/org/openksavi/sponge/restapi/server/kb_add_remote_api_user.py" /opt/tmp/password.txt
+----
+
+A password can be generated manually and added to a password file as well.
+
+.Generating a password hash manually
+[source,bash,subs="verbatim,attributes"]
+----
+# Note that the user name must be lower case.
+echo -n username-password | shasum -a 512 | awk '{ print $1 }'
+----
 
 == HTTPS
 In production mode you should configure HTTPS. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
