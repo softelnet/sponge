@@ -19,7 +19,7 @@ package org.openksavi.sponge.core.engine;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 
-public class GenericProcessorInstanceHolder implements ProcessorInstanceHolder {
+public class DefaultProcessorInstanceHolder implements ProcessorInstanceHolder {
 
     private Processor<?> processor;
 
@@ -27,7 +27,7 @@ public class GenericProcessorInstanceHolder implements ProcessorInstanceHolder {
 
     private boolean javaDefined;
 
-    public GenericProcessorInstanceHolder(Processor<?> processor, String name, boolean javaDefined) {
+    public DefaultProcessorInstanceHolder(Processor<?> processor, String name, boolean javaDefined) {
         this.processor = processor;
         this.name = name;
         this.javaDefined = javaDefined;

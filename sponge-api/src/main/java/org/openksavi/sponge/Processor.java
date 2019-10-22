@@ -18,6 +18,8 @@ package org.openksavi.sponge;
 
 import org.slf4j.Logger;
 
+import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
+
 /**
  * Processor.
  */
@@ -47,4 +49,11 @@ public interface Processor<T extends ProcessorAdapter<?>> extends ProcessorOpera
      * @return the logger.
      */
     Logger getLogger();
+
+    /**
+     * Returns the engine operations.
+     *
+     * @return the engine operations.
+     */
+    KnowledgeBaseEngineOperations getSponge();
 }

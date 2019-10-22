@@ -94,4 +94,18 @@ public class TriggersTestTemplate {
             engine.shutdown();
         }
     }
+
+    public static void testTriggersBuilder(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "triggers_builder");
+
+        try {
+            await().pollDelay(1, TimeUnit.SECONDS).atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "receivedEventA").get());
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "receivedEventBCount").intValue() > 2);
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

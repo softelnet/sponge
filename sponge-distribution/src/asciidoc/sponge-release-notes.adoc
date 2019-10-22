@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.12.1 (not released yet)
 * API change: Renamed `names` to `provide` in a provide action arguments context.
+* API change: Removed `makeEventSpec` methods from rules. Use one of `RuleEventSpec` class constructors instead.
 * REST API change: Renamed operation `actionArgs` to `provideActionArgs`.
 * REST API change: Renamed error codes.
 * REST API change: Added `requestTime` and `responseTime` to a response header.

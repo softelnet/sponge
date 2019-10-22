@@ -40,4 +40,33 @@ public class KotlinScriptActionsTest extends KotlinScriptTest implements Actions
     public void testActionJavaInheritance() {
         ActionsTestTemplate.testActionJavaInheritance(getType());
     }
+
+    @Override
+    @Test
+    public void testActionBuilder() {
+        ActionsTestTemplate.testActionBuilder(getType());
+    }
+
+    @Override
+    @Test
+    public void testActionBuilderMultiExpressionLambda() {
+        ActionsTestTemplate.testActionBuilderMultiExpressionLambda(getType());
+    }
+
+    @Override
+    @Test
+    public void testActionBuilderNoArgAndResult() {
+        ActionsTestTemplate.testActionBuilderNoArgAndResult(getType());
+    }
+
+    @Override
+    public void testActionBuilderProvidedArgs() {
+        ActionsTestTemplate.testActionBuilderProvidedArgs(getType());
+    }
+
+    @Override
+    @Test
+    public void testActionBuilderDisable() {
+        ActionsTestTemplate.testActionBuilderDisable(getType());
+    }
 }

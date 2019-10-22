@@ -46,4 +46,10 @@ public class NashornTriggersTest extends NashornTest implements TriggersTest {
     public void testHelloWorld() {
         TriggersTestTemplate.testHelloWorld(getType());
     }
+
+    @Override
+    @Test
+    public void testTriggersBuilder() {
+        TriggersTestTemplate.testTriggersBuilder(getType());
+    }
 }

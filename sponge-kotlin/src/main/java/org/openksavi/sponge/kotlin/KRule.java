@@ -29,6 +29,7 @@ import kotlin.reflect.KFunction;
 import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.BiFunctionEventCondition;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.kotlin.core.KotlinFunction2EventCondition;
 import org.openksavi.sponge.kotlin.core.KotlinKnowledgeBaseEngineOperations;
@@ -153,11 +154,11 @@ public abstract class KRule extends BaseRule {
 
     public final KRule withCondition(String eventAlias, KFunction<Boolean> kotlinObject) {
         return (KRule) super.withEventCondition(eventAlias,
-                createEventConditionForMethod(KotlinUtils.createEventConditionMethodName(kotlinObject)));
+                SpongeUtils.createRuleEventConditionForMethod(this, KotlinUtils.createEventConditionMethodName(kotlinObject)));
     }
 
     public final KRule withCondition(String eventAlias, String methodName) {
-        return (KRule) super.withEventCondition(eventAlias, createEventConditionForMethod(methodName));
+        return (KRule) super.withEventCondition(eventAlias, SpongeUtils.createRuleEventConditionForMethod(this, methodName));
     }
 
     public final KRule withCondition(String eventAlias, Function2<Rule, Event, Boolean> kotlinObject) {
@@ -170,11 +171,12 @@ public abstract class KRule extends BaseRule {
 
     public final KRule withConditions(String eventAlias, KFunction<Boolean>... kotlinObjects) {
         return (KRule) super.withEventCondition(eventAlias,
-                createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+                SpongeUtils.createRuleEventConditionForMethods(this, KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
     }
 
     public final KRule withConditions(String eventAlias, String... methodNames) {
-        return (KRule) super.withEventCondition(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
+        return (KRule) super.withEventCondition(eventAlias,
+                SpongeUtils.createRuleEventConditionForMethods(this, Arrays.asList(methodNames)));
     }
 
     public final KRule withConditions(String eventAlias, Function2<Rule, Event, Boolean>... kotlinObjects) {
@@ -187,11 +189,11 @@ public abstract class KRule extends BaseRule {
 
     public final KRule withAllConditions(KFunction<Boolean>... kotlinObjects) {
         return (KRule) super.withAllEventCondition(
-                createEventConditionForMethods(KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
+                SpongeUtils.createRuleEventConditionForMethods(this, KotlinUtils.createEventConditionMethodNames(kotlinObjects)));
     }
 
     public final KRule withAllConditions(String... methodNames) {
-        return (KRule) super.withAllEventCondition(createEventConditionForMethods(Arrays.asList(methodNames)));
+        return (KRule) super.withAllEventCondition(SpongeUtils.createRuleEventConditionForMethods(this, Arrays.asList(methodNames)));
     }
 
     public final KRule withAllConditions(Function2<Rule, Event, Boolean>... kotlinObjects) {

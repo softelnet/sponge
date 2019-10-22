@@ -22,6 +22,7 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.ProcessorBuilder;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.core.BaseEngineOperations;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
@@ -189,5 +190,15 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
 
     public Logger getLogger() {
         return ((BaseKnowledgeBaseInterpreter) getKnowledgeBase().getInterpreter()).getLogger();
+    }
+
+    @Override
+    public <T extends Processor<?>> void enable(ProcessorBuilder<T> processorBuilder) {
+        engine.getProcessorManager().enable(knowledgeBase, processorBuilder);
+    }
+
+    @Override
+    public void disable(String processorName) {
+        engine.getProcessorManager().disable(knowledgeBase, processorName);
     }
 }

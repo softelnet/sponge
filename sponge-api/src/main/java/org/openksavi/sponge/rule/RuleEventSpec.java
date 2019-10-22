@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,61 @@
 
 package org.openksavi.sponge.rule;
 
+import org.openksavi.sponge.SpongeConstants;
+
 /**
  * Rule event specification.
- *
  */
-public interface RuleEventSpec {
+public class RuleEventSpec {
+
+    private String name;
+
+    private String alias;
+
+    private EventMode mode;
+
+    public RuleEventSpec(String name, String alias, EventMode mode) {
+        this.name = name;
+        this.alias = alias != null ? alias : name;
+        this.mode = mode != null ? mode : SpongeConstants.DEFAULT_RULE_EVENT_MODE;
+    }
+
+    public RuleEventSpec(String name, String alias) {
+        this(name, alias, null);
+    }
+
+    public RuleEventSpec(String name, EventMode mode) {
+        this(name, null, mode);
+    }
+
+    public RuleEventSpec(String name) {
+        this(name, null, null);
+    }
 
     /**
      * Returns the event name.
      *
      * @return the event name.
      */
-    String getName();
+    public String getName() {
+        return name;
+    }
 
     /**
      * Returns the event alias.
      *
      * @return the event alias.
      */
-    String getAlias();
+    public String getAlias() {
+        return alias;
+    }
 
     /**
      * Returns the event mode.
      *
      * @return the event mode.
      */
-    EventMode getMode();
+    public EventMode getMode() {
+        return mode;
+    }
 }

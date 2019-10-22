@@ -30,7 +30,7 @@ import org.openksavi.sponge.jruby.core.JRubyProcEventCondition;
 import org.openksavi.sponge.rule.EventCondition;
 
 /**
- * JRuby-specific implementation of the rule.
+ * JRuby-specific implementation of a rule.
  */
 public abstract class JRubyRule extends BaseRule {
 

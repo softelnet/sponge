@@ -40,11 +40,13 @@ import org.python.jsr223.PyScriptEngineScope.ScopeIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.jython.JythonActionBuilder;
 import org.openksavi.sponge.jython.JythonRule;
 import org.openksavi.sponge.jython.PythonConstants;
 import org.openksavi.sponge.jython.util.PyBiConsumer;
@@ -75,6 +77,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     @Override
     protected ScriptEngine createScriptEngine() {
         overwriteProcessorClass(Rule.class, JythonRule.class);
+        overwriteProcessorBuilderClass(ActionBuilder.class, JythonActionBuilder.class);
 
         setPythonPath(getEngineOperations().getEngine());
 
@@ -84,7 +87,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         Validate.isInstanceOf(Compilable.class, scriptEngine, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, scriptEngine, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
-        getProcessorClasses()
+        getSimplifiedImportClasses()
                 .forEach((interfaceClass, scriptClass) -> addImport(scriptEngine, scriptClass, interfaceClass.getSimpleName()));
         addImport(scriptEngine, BasePlugin.class, Plugin.class.getSimpleName());
 

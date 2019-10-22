@@ -46,9 +46,10 @@ public class BaseEventProcessorMeta extends BaseProcessorMeta implements EventPr
      */
     @Override
     public void setEventNames(List<String> eventNames) {
-        this.eventNames = new ArrayList<>(eventNames);
+        this.eventNames = eventNames != null ? new ArrayList<>(eventNames) : null;
     }
 
+    @Override
     public void addEventNames(List<String> eventNames) {
         if (this.eventNames != null) {
             this.eventNames.addAll(eventNames);
@@ -60,5 +61,15 @@ public class BaseEventProcessorMeta extends BaseProcessorMeta implements EventPr
     @Override
     public String getEventName(int index) {
         return eventNames.get(index);
+    }
+
+    @Override
+    public void update(BaseProcessorMeta source) {
+        super.update(source);
+
+        if (source instanceof BaseEventProcessorMeta) {
+            BaseEventProcessorMeta sourceMeta = (BaseEventProcessorMeta) source;
+            setEventNames(sourceMeta.getEventNames());
+        }
     }
 }

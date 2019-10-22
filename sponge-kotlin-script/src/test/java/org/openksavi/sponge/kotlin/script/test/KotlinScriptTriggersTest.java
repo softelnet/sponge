@@ -39,6 +39,11 @@ public class KotlinScriptTriggersTest extends KotlinScriptTest /* implements Tri
     // public void testTriggersEventPatternIncorrect() {
     // TriggersTestTemplate.testTriggersEventPatternIncorrect(getType());
     // }
+    // @Override
+    // @Test
+    // public void testTriggersBuilder() {
+    // TriggersTestTemplate.testTriggersBuilder(getType());
+    // }
     //
     // @Override
     @Test

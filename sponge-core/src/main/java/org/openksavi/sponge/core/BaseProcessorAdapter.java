@@ -123,16 +123,6 @@ public abstract class BaseProcessorAdapter<T extends Processor<?>> implements Pr
     }
 
     /**
-     * Returns Java-defined flag.
-     *
-     * @return Java-defined flag.
-     */
-    @Override
-    public boolean isJavaDefined() {
-        return definition.isJavaDefined();
-    }
-
-    /**
      * Returns the logger.
      *
      * @return logger.

@@ -29,13 +29,6 @@ public interface ProcessorAdapterImplementor extends ProcessorOperations {
     void setKnowledgeBase(BaseKnowledgeBase knowledgeBase);
 
     /**
-     * Returns Java-defined flag.
-     *
-     * @return Java-defined flag.
-     */
-    boolean isJavaDefined();
-
-    /**
      * Sets processor definition.
      *
      * @param processorDef processor definition.

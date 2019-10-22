@@ -28,6 +28,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.java.JTrigger;
 import org.openksavi.sponge.rule.EventMode;
+import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.test.util.EventsLog;
 
 public class TestKnowledgeBase extends JKnowledgeBase {
@@ -127,7 +128,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            withEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.LAST));
+            withEventSpecs(new RuleEventSpec("e1"), new RuleEventSpec("e2", EventMode.LAST));
             withConditions("e2", "e2condition");
             withDuration(Duration.ofSeconds(2));
         }
@@ -147,7 +148,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            withEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.FIRST));
+            withEventSpecs(new RuleEventSpec("e1"), new RuleEventSpec("e2", EventMode.FIRST));
             withDuration(Duration.ofSeconds(2));
         }
 
@@ -162,7 +163,7 @@ public class TestKnowledgeBase extends JKnowledgeBase {
 
         @Override
         public void onConfigure() {
-            withEventSpecs(makeEventSpec("e1"), makeEventSpec("e2", EventMode.ALL));
+            withEventSpecs(new RuleEventSpec("e1"), new RuleEventSpec("e2", EventMode.ALL));
             withDuration(Duration.ofSeconds(2));
         }
 

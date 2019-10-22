@@ -93,6 +93,8 @@ import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.event.EventId;
 import org.openksavi.sponge.core.rule.BaseRule;
+import org.openksavi.sponge.core.rule.CompositeEventCondition;
+import org.openksavi.sponge.core.rule.ReflectionEventCondition;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.event.ControlEvent;
@@ -102,6 +104,9 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
+import org.openksavi.sponge.rule.EventCondition;
+import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -928,5 +933,22 @@ public abstract class SpongeUtils {
 
     public static String getDisplayLabel(Descriptive descriptive) {
         return descriptive != null ? (descriptive.getLabel() != null ? descriptive.getLabel() : descriptive.getName()) : null;
+    }
+
+    public static List<RuleEventSpec> convertRuleEventSpecs(KnowledgeBase knowledgeBase, List<String> eventStringSpecs) {
+        return eventStringSpecs.stream().map(spec -> convertRuleEventSpec(knowledgeBase, spec)).collect(Collectors.toList());
+    }
+
+    public static RuleEventSpec convertRuleEventSpec(KnowledgeBase knowledgeBase, String eventStringSpec) {
+        return knowledgeBase.getInterpreter().getRuleEventSpec(eventStringSpec);
+    }
+
+    public static EventCondition createRuleEventConditionForMethods(Rule rule, List<String> names) {
+        return names.size() == 1 ? createRuleEventConditionForMethod(rule, names.get(0)) : new CompositeEventCondition(
+                names.stream().map(name -> createRuleEventConditionForMethod(rule, name)).collect(Collectors.toList()));
+    }
+
+    public static EventCondition createRuleEventConditionForMethod(Rule rule, String name) {
+        return ReflectionEventCondition.create(rule, name);
     }
 }

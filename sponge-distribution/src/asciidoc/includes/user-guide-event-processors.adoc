@@ -263,13 +263,10 @@ In addition to the inherited <<processor-methods,processor properties and method
 |Adds a single condition for all events. This method must be invoked *after* the event specifications.
 
 |`withEventSpecs(List<RuleEventSpec> eventSpecs)` or `withEventSpec(RuleEventSpec eventSpec)`
-|Sets complete specifications of events whose sequence causes the rule to fire.
+|Sets complete specifications of events whose sequence causes the rule to fire. The preferred way is to use String-based specifications of events.
 
 |`withOrdered(boolean ordered)`
 |Sets a flag indicating that the rule should listen to ordered (ordered rule) or unordered (unordered rule) sequences of events. *Defaults to `true`, i.e. the rule would listen to ordered sequences of events.*
-
-|`RuleEventSpec makeEventSpec(args)` methods
-|Each `makeEventSpec` method creates a new event specification. The preferred way is to use String-based specifications of events in the rule configuration.
 
 |*`onRun(event)`*
 |The callback method invoked when a sequence of events specified by this rule has happened and all the conditions have been fulfilled. The argument `event` is the reference to the final event that caused this rule to fire. There could be many sequences of events fitting the rule definition. In order to access the events which fulfilled the conditions and caused the rule fire, the `getEvent(eventAlias)` method should be used. The `onRun` method is mandatory.
@@ -482,7 +479,7 @@ public class SameSourceJavaRule extends JRule { // <1>
 
     @Override
     public void onConfigure() {
-        withEventSpecs(makeEventSpec("filesystemFailure", "e1"), makeEventSpec("diskFailure", "e2", EventMode.ALL)); // <2>
+        withEventSpecs(new RuleEventSpec("filesystemFailure", "e1"), new RuleEventSpec("diskFailure", "e2", EventMode.ALL)); // <2>
         withAllConditions("severityCondition"); // <3>
         withConditions("e2", (rule, event) -> { // <4>
             Event event1 = rule.getEvent("e1");
@@ -504,7 +501,7 @@ public class SameSourceJavaRule extends JRule { // <1>
 }
 ----
 <1> The definition of the rule `SameSourceAllRule`. The rule is represented by a Java class of the same name.
-<2> The `makeEventSpec` method is used here to create event specifications instead of a formatted String. The same setting could be achieved by `withEvents("filesystemFailure e1", "diskFailure e2 :all")`. Java-based rules have convenience methods that accept varargs.
+<2> The `RuleEventSpec` class is used here to create event specifications instead of a formatted String. The same setting could be achieved by `withEvents("filesystemFailure e1", "diskFailure e2 :all")`.
 <3> Sets the condition checking an event severity for all events.
 <4> Sets conditions checking `"e2"` event source (as a Java lambda expression).
 <5> An event condition method `severityCondition`.

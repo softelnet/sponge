@@ -23,9 +23,6 @@ import org.openksavi.sponge.EventSetProcessorAdapter;
  */
 public interface RuleAdapter extends EventSetProcessorAdapter<Rule>, RuleOperations {
 
-    /** Default event mode: first. */
-    static final EventMode DEFAULT_MODE = EventMode.FIRST;
-
     /**
      * Returns event count.
      *

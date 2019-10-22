@@ -47,44 +47,4 @@ public interface Rule extends EventSetProcessor<RuleAdapter>, RuleOperations {
      * @return an event sequence.
      */
     List<Event> getEventSequence();
-
-    /**
-     * Creates a new rule event specification.
-     *
-     * @param eventName an event name.
-     * @param eventAlias an event alias.
-     * @param eventMode an event mode.
-     *
-     * @return a new rule event specification.
-     */
-    RuleEventSpec makeEventSpec(String eventName, String eventAlias, EventMode eventMode);
-
-    /**
-     * Creates a new rule event specification.
-     *
-     * @param eventName an event name.
-     * @param eventMode an event mode.
-     *
-     * @return a new rule event specification.
-     */
-    RuleEventSpec makeEventSpec(String eventName, EventMode eventMode);
-
-    /**
-     * Creates a new rule event specification.
-     *
-     * @param eventName an event name.
-     * @param eventAlias an event alias.
-     *
-     * @return a new rule event specification.
-     */
-    RuleEventSpec makeEventSpec(String eventName, String eventAlias);
-
-    /**
-     * Creates a new rule event specification.
-     *
-     * @param eventName an event name.
-     *
-     * @return a new rule event specification.
-     */
-    RuleEventSpec makeEventSpec(String eventName);
 }

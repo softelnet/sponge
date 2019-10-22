@@ -20,6 +20,7 @@ import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.ProcessorMeta;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.engine.ProcessorProvider;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
@@ -27,11 +28,8 @@ import org.openksavi.sponge.kb.KnowledgeBase;
  */
 public abstract class BaseProcessorDefinition implements ProcessorDefinition {
 
-    /** Is this processor defined in Java (not in the scripting knowledge base). */
-    private boolean javaDefined = false;
-
-    /** The processor class. */
-    private Class<?> processorClass;
+    @SuppressWarnings("rawtypes")
+    private ProcessorProvider processorProvider;
 
     /** Knowledge base reference. */
     private KnowledgeBase knowledgeBase;
@@ -72,40 +70,14 @@ public abstract class BaseProcessorDefinition implements ProcessorDefinition {
         }
     }
 
-    /**
-     * Sets Java-defined flag.
-     *
-     * @param javaDefined Java-defined flag.
-     */
-    public void setJavaDefined(boolean javaDefined) {
-        this.javaDefined = javaDefined;
+    @SuppressWarnings("rawtypes")
+    public ProcessorProvider getProcessorProvider() {
+        return processorProvider;
     }
 
-    /**
-     * Returns Java-defined flag.
-     *
-     * @return Java-defined flag.
-     */
-    public boolean isJavaDefined() {
-        return javaDefined;
-    }
-
-    /**
-     * Returns the optional processor class.
-     *
-     * @return the processor class or {@code null} if this processor has no corresponding Java class.
-     */
-    public Class<?> getProcessorClass() {
-        return processorClass;
-    }
-
-    /**
-     * Sets the processor class.
-     *
-     * @param processorClass the processor class.
-     */
-    public void setProcessorClass(Class<?> processorClass) {
-        this.processorClass = processorClass;
+    @SuppressWarnings("rawtypes")
+    public void setProcessorProvider(ProcessorProvider processorProvider) {
+        this.processorProvider = processorProvider;
     }
 
     @Override

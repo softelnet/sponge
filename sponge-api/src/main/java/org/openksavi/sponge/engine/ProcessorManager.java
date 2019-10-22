@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
+import org.openksavi.sponge.ProcessorBuilder;
 import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
 
@@ -37,12 +38,28 @@ public interface ProcessorManager extends EngineModule {
     void enable(KnowledgeBase knowledgeBase, Object processorClass);
 
     /**
+     * Enables a processor.
+     *
+     * @param knowledgeBase knowledge base.
+     * @param processorBuilder processor builder.
+     */
+    <T extends Processor<?>> void enable(KnowledgeBase knowledgeBase, ProcessorBuilder<T> processorBuilder);
+
+    /**
      * Disables a processor.
      *
      * @param knowledgeBase knowledge base.
      * @param processorClass processor class.
      */
     void disable(KnowledgeBase knowledgeBase, Object processorClass);
+
+    /**
+     * Disables a processor.
+     *
+     * @param knowledgeBase knowledge base.
+     * @param processorName processor name.
+     */
+    void disable(KnowledgeBase knowledgeBase, String processorName);
 
     /**
      * Enables an action.

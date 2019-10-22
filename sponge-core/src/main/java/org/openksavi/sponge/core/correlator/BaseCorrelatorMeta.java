@@ -17,6 +17,7 @@
 package org.openksavi.sponge.core.correlator;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorMeta;
+import org.openksavi.sponge.core.BaseProcessorMeta;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
 
 /**
@@ -52,5 +53,16 @@ public class BaseCorrelatorMeta extends BaseEventSetProcessorMeta implements Cor
     @Override
     public void setInstanceSynchronous(boolean instanceSynchronous) {
         this.instanceSynchronous = instanceSynchronous;
+    }
+
+    @Override
+    public void update(BaseProcessorMeta source) {
+        super.update(source);
+
+        if (source instanceof BaseCorrelatorMeta) {
+            BaseCorrelatorMeta sourceMeta = (BaseCorrelatorMeta) source;
+            setMaxInstances(sourceMeta.getMaxInstances());
+            setInstanceSynchronous(sourceMeta.isInstanceSynchronous());
+        }
     }
 }

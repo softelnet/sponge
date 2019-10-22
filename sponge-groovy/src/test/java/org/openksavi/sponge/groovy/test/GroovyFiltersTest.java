@@ -40,4 +40,10 @@ public class GroovyFiltersTest extends GroovyTest implements FiltersTest {
     public void testDeduplication() {
         FiltersTestTemplate.testDeduplication(getType());
     }
+
+    @Override
+    @Test
+    public void testFilterBuilder() {
+        FiltersTestTemplate.testFilterBuilder(getType());
+    }
 }

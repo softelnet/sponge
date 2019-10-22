@@ -30,7 +30,7 @@ import org.openksavi.sponge.groovy.core.GroovyClosureEventCondition;
 import org.openksavi.sponge.rule.EventCondition;
 
 /**
- * Groovy-specific implementation of the rule.
+ * Groovy-specific implementation of a rule.
  */
 public abstract class GroovyRule extends BaseRule {
 

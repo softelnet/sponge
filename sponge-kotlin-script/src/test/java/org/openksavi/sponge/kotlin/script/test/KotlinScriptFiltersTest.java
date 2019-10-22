@@ -40,4 +40,10 @@ public class KotlinScriptFiltersTest extends KotlinScriptTest implements Filters
     public void testDeduplication() {
         FiltersTestTemplate.testDeduplication(getType());
     }
+
+    @Override
+    @Test
+    public void testFilterBuilder() {
+        FiltersTestTemplate.testFilterBuilder(getType());
+    }
 }

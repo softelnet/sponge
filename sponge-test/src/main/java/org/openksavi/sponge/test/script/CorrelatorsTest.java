@@ -23,4 +23,6 @@ public interface CorrelatorsTest extends ScriptTest {
     void testCorrelatorsRepeated();
 
     void testCorrelatorsDuration();
+
+    void testCorrelatorsBuilder();
 }

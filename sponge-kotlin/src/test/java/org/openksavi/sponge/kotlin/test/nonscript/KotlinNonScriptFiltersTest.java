@@ -40,4 +40,10 @@ public class KotlinNonScriptFiltersTest extends KotlinNonScriptTest implements F
     public void testDeduplication() {
         FiltersTestTemplate.testDeduplication(getType());
     }
+
+    @Override
+    @Test
+    public void testFilterBuilder() {
+        FiltersTestTemplate.testFilterBuilder(getType());
+    }
 }

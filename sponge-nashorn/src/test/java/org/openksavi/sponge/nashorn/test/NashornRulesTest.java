@@ -70,4 +70,10 @@ public class NashornRulesTest extends NashornTest implements RulesTest {
     public void testRulesInstances() {
         RulesTestTemplate.testRulesInstances(getType());
     }
+
+    @Override
+    @Test
+    public void testRulesBuilder() {
+        RulesTestTemplate.testRulesBuilder(getType());
+    }
 }

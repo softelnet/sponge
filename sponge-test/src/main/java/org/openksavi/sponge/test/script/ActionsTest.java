@@ -23,4 +23,14 @@ public interface ActionsTest extends ScriptTest {
     void testHelloWorldAction();
 
     void testActionJavaInheritance();
+
+    void testActionBuilder();
+
+    void testActionBuilderMultiExpressionLambda();
+
+    void testActionBuilderNoArgAndResult();
+
+    void testActionBuilderProvidedArgs();
+
+    void testActionBuilderDisable();
 }

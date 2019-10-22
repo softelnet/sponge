@@ -70,4 +70,10 @@ public class JRubyRulesTest extends JRubyTest implements RulesTest {
     public void testRulesInstances() {
         RulesTestTemplate.testRulesInstances(getType());
     }
+
+    @Override
+    @Test
+    public void testRulesBuilder() {
+        RulesTestTemplate.testRulesBuilder(getType());
+    }
 }

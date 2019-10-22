@@ -57,6 +57,7 @@ public abstract class BaseProcessor<T extends ProcessorAdapter<?>> implements Pr
         return adapter.getKnowledgeBase();
     }
 
+    @Override
     public KnowledgeBaseEngineOperations getSponge() {
         return getKnowledgeBase().getEngineOperations();
     }

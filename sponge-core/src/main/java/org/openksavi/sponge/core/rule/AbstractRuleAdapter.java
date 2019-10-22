@@ -17,10 +17,8 @@
 package org.openksavi.sponge.core.rule;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorAdapter;
-import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.rule.RuleAdapter;
-import org.openksavi.sponge.rule.RuleEventSpec;
 
 /**
  * Abstract rule adapter.
@@ -56,21 +54,5 @@ public abstract class AbstractRuleAdapter<T extends Rule> extends BaseEventSetPr
     @Override
     public int getEventCount() {
         return getMeta().getEventNames().size();
-    }
-
-    public RuleEventSpec makeEventSpec(String eventName, String eventAlias, EventMode eventMode) {
-        return new GenericRuleEventSpec(eventName, eventAlias, eventMode);
-    }
-
-    public RuleEventSpec makeEventSpec(String eventName, EventMode eventMode) {
-        return new GenericRuleEventSpec(eventName, eventName, eventMode);
-    }
-
-    public RuleEventSpec makeEventSpec(String eventName, String eventAlias) {
-        return new GenericRuleEventSpec(eventName, eventAlias, DEFAULT_MODE);
-    }
-
-    public RuleEventSpec makeEventSpec(String eventName) {
-        return new GenericRuleEventSpec(eventName, eventName, DEFAULT_MODE);
     }
 }

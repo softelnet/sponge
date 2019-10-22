@@ -79,4 +79,16 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
     public void setCallable(boolean callable) {
         this.callable = callable;
     }
+
+    @Override
+    public void update(BaseProcessorMeta source) {
+        super.update(source);
+
+        if (source instanceof BaseActionMeta) {
+            BaseActionMeta sourceMeta = (BaseActionMeta) source;
+            setArgs(sourceMeta.getArgs());
+            setResult(sourceMeta.getResult());
+            setCallable(sourceMeta.isCallable());
+        }
+    }
 }

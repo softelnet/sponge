@@ -70,4 +70,10 @@ public class KotlinNonScriptRulesTest extends KotlinNonScriptTest implements Rul
     public void testRulesInstances() {
         RulesTestTemplate.testRulesInstances(getType());
     }
+
+    @Override
+    @Test
+    public void testRulesBuilder() {
+        RulesTestTemplate.testRulesBuilder(getType());
+    }
 }

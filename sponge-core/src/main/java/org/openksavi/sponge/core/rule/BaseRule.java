@@ -20,12 +20,11 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.openksavi.sponge.core.BaseEventSetProcessor;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
-import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.rule.RuleAdapter;
 import org.openksavi.sponge.rule.RuleEventSpec;
@@ -46,26 +45,6 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
         return getRuleAdapterImpl().getEvent(eventAlias);
     }
 
-    @Override
-    public final RuleEventSpec makeEventSpec(String eventName, String eventAlias, EventMode eventMode) {
-        return getRuleAdapterImpl().makeEventSpec(eventName, eventAlias, eventMode);
-    }
-
-    @Override
-    public final RuleEventSpec makeEventSpec(String eventName, EventMode eventMode) {
-        return getRuleAdapterImpl().makeEventSpec(eventName, eventMode);
-    }
-
-    @Override
-    public final RuleEventSpec makeEventSpec(String eventName, String eventAlias) {
-        return getRuleAdapterImpl().makeEventSpec(eventName, eventAlias);
-    }
-
-    @Override
-    public final RuleEventSpec makeEventSpec(String eventName) {
-        return getRuleAdapterImpl().makeEventSpec(eventName);
-    }
-
     public final Map<String, Event> getEventAliasMap() {
         return getRuleAdapterImpl().getEventAliasMap();
     }
@@ -78,15 +57,6 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
     @Override
     public final RuleAdapter createAdapter() {
         return new BaseRuleAdapter(new BaseRuleDefinition());
-    }
-
-    protected final EventCondition createEventConditionForMethods(List<String> names) {
-        return names.size() == 1 ? createEventConditionForMethod(names.get(0))
-                : new CompositeEventCondition(names.stream().map(name -> createEventConditionForMethod(name)).collect(Collectors.toList()));
-    }
-
-    protected final EventCondition createEventConditionForMethod(String name) {
-        return ReflectionEventCondition.create(this, name);
     }
 
     @Override
@@ -126,8 +96,7 @@ public abstract class BaseRule extends BaseEventSetProcessor<RuleAdapter> implem
 
     @Override
     public BaseRule withEvents(List<String> eventStringSpecs) {
-        getMeta().addEventSpecs(eventStringSpecs.stream().map((String spec) -> getKnowledgeBase().getInterpreter().getRuleEventSpec(spec))
-                .collect(Collectors.toList()));
+        getMeta().addEventSpecs(SpongeUtils.convertRuleEventSpecs(getKnowledgeBase(), eventStringSpecs));
         return this;
     }
 

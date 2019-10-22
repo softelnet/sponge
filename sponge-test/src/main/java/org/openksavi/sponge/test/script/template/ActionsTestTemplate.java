@@ -19,20 +19,26 @@ package org.openksavi.sponge.test.script.template;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.examples.PowerEchoAction;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.provided.ProvidedMeta;
+import org.openksavi.sponge.type.provided.ProvidedValue;
 
 @SuppressWarnings("rawtypes")
 public class ActionsTestTemplate {
@@ -116,6 +122,128 @@ public class ActionsTestTemplate {
             assertEquals(2, result2.size());
             assertEquals(2, ((Number) result2.get(0)).intValue());
             assertEquals("TEXT", result2.get(1));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testActionBuilder(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_builder");
+
+        try {
+            ActionAdapter upperActionAdapter = engine.getActionManager().getActionAdapter("UpperEchoAction");
+            assertEquals("Echo Action", upperActionAdapter.getMeta().getLabel());
+            assertEquals("Returns the upper case string", upperActionAdapter.getMeta().getDescription());
+
+            List<DataType> argTypes = upperActionAdapter.getMeta().getArgs();
+            assertEquals(1, argTypes.size());
+            assertEquals("text", argTypes.get(0).getName());
+            assertEquals(DataTypeKind.STRING, argTypes.get(0).getKind());
+            assertEquals(false, argTypes.get(0).isNullable());
+            assertEquals("Argument 1", argTypes.get(0).getLabel());
+            assertEquals("Argument 1 description", argTypes.get(0).getDescription());
+
+            assertEquals(DataTypeKind.STRING, upperActionAdapter.getMeta().getResult().getKind());
+            assertEquals("Upper case string", upperActionAdapter.getMeta().getResult().getLabel());
+            assertEquals("Result description", upperActionAdapter.getMeta().getResult().getDescription());
+
+            String arg = "test";
+            assertEquals(arg.toUpperCase(),
+                    engine.getOperations().call(String.class, upperActionAdapter.getMeta().getName(), Arrays.asList(arg)));
+
+            assertTrue(engine.getOperations().getVariable(Boolean.class, "initialized_UpperEchoAction"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testActionBuilderMultiExpressionLambda(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_builder");
+
+        try {
+            ActionAdapter upperActionAdapter = engine.getActionManager().getActionAdapter("UpperEchoActionMulti");
+            assertEquals("Echo Action", upperActionAdapter.getMeta().getLabel());
+            assertEquals("Returns the upper case string", upperActionAdapter.getMeta().getDescription());
+
+            List<DataType> argTypes = upperActionAdapter.getMeta().getArgs();
+            assertEquals(1, argTypes.size());
+            assertEquals("text", argTypes.get(0).getName());
+            assertEquals(DataTypeKind.STRING, argTypes.get(0).getKind());
+            assertEquals(false, argTypes.get(0).isNullable());
+            assertEquals("Argument 1", argTypes.get(0).getLabel());
+            assertEquals("Argument 1 description", argTypes.get(0).getDescription());
+
+            assertEquals(DataTypeKind.STRING, upperActionAdapter.getMeta().getResult().getKind());
+            assertEquals("Upper case string", upperActionAdapter.getMeta().getResult().getLabel());
+            assertEquals("Result description", upperActionAdapter.getMeta().getResult().getDescription());
+
+            assertFalse(engine.getOperations().getVariable(Boolean.class, "called_UpperEchoActionMulti"));
+
+            String arg = "test";
+            assertEquals(arg.toUpperCase(),
+                    engine.getOperations().call(String.class, upperActionAdapter.getMeta().getName(), Arrays.asList(arg)));
+
+            assertTrue(engine.getOperations().getVariable(Boolean.class, "called_UpperEchoActionMulti"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testActionBuilderNoArgAndResult(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_builder");
+
+        try {
+            String actionName = "NoArgAndResultAction";
+
+            assertFalse(engine.getOperations().getVariable(Boolean.class, "called_NoArgAndResultAction"));
+
+            engine.getOperations().call(actionName);
+
+            assertTrue(engine.getOperations().getVariable(Boolean.class, "called_NoArgAndResultAction"));
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testActionBuilderProvidedArgs(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_builder");
+
+        try {
+            ActionAdapter adapter = engine.getActionManager().getActionAdapter("ProvidedArgsAction");
+            ProvidedMeta providedMeta = adapter.getMeta().getArg("text").getProvided();
+            assertTrue(providedMeta.isValue());
+            assertFalse(providedMeta.isReadOnly());
+
+            Map<String, ProvidedValue<?>> providedArgs =
+                    engine.getOperations().provideActionArgs(adapter.getMeta().getName(), Arrays.asList("text"));
+            assertEquals(1, providedArgs.size());
+
+            assertNotNull(providedArgs.get("text"));
+            assertEquals("ABC", providedArgs.get("text").getValue());
+            assertTrue(providedArgs.get("text").isValuePresent());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static void testActionBuilderDisable(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "actions_builder");
+
+        try {
+            String actionName = "UpperEchoAction";
+            assertTrue(engine.getOperations().hasAction(actionName));
+            engine.getOperations().disable(actionName);
+            assertFalse(engine.getOperations().hasAction(actionName));
 
             assertFalse(engine.isError());
         } finally {

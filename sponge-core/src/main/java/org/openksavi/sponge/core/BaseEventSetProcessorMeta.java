@@ -55,4 +55,15 @@ public class BaseEventSetProcessorMeta extends BaseEventProcessorMeta implements
     public void setSynchronous(Boolean synchronous) {
         this.synchronous = synchronous;
     }
+
+    @Override
+    public void update(BaseProcessorMeta source) {
+        super.update(source);
+
+        if (source instanceof BaseEventSetProcessorMeta) {
+            BaseEventSetProcessorMeta sourceMeta = (BaseEventSetProcessorMeta) source;
+            setDuration(sourceMeta.getDuration());
+            setSynchronous(sourceMeta.isSynchronous());
+        }
+    }
 }

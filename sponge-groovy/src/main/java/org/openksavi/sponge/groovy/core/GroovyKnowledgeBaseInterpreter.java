@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
@@ -54,6 +55,7 @@ import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.groovy.GroovyActionBuilder;
 import org.openksavi.sponge.groovy.GroovyConstants;
 import org.openksavi.sponge.groovy.GroovyRule;
 import org.openksavi.sponge.kb.KnowledgeBase;
@@ -86,10 +88,11 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
     @Override
     protected void prepareInterpreter() {
         overwriteProcessorClass(Rule.class, GroovyRule.class);
+        overwriteProcessorBuilderClass(ActionBuilder.class, GroovyActionBuilder.class);
 
         ImportCustomizer importCustomizer = new ImportCustomizer();
 
-        getProcessorClasses()
+        getSimplifiedImportClasses()
                 .forEach((interfaceClass, scriptClass) -> addImport(importCustomizer, scriptClass, interfaceClass.getSimpleName()));
         addImport(importCustomizer, BasePlugin.class, Plugin.class.getSimpleName());
 

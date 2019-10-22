@@ -23,4 +23,6 @@ public interface FiltersTest extends ScriptTest {
     void testFilter();
 
     void testDeduplication();
+
+    void testFilterBuilder();
 }

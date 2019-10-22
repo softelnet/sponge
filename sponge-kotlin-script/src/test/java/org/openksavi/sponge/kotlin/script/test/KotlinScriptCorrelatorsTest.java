@@ -40,4 +40,10 @@ public class KotlinScriptCorrelatorsTest extends KotlinScriptTest implements Cor
     public void testCorrelatorsDuration() {
         CorrelatorsTestTemplate.testCorrelatorsDuration(getType());
     }
+
+    @Override
+    @Test
+    public void testCorrelatorsBuilder() {
+        CorrelatorsTestTemplate.testCorrelatorsBuilder(getType());
+    }
 }

@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.correlator.Correlator;
@@ -42,6 +43,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.nashorn.JavaScriptConstants;
 import org.openksavi.sponge.nashorn.NashornAction;
+import org.openksavi.sponge.nashorn.NashornActionBuilder;
 import org.openksavi.sponge.nashorn.NashornCorrelator;
 import org.openksavi.sponge.nashorn.NashornFilter;
 import org.openksavi.sponge.nashorn.NashornPlugin;
@@ -74,6 +76,7 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
         overwriteProcessorClass(Trigger.class, NashornTrigger.class);
         overwriteProcessorClass(Rule.class, NashornRule.class);
         overwriteProcessorClass(Correlator.class, NashornCorrelator.class);
+        overwriteProcessorBuilderClass(ActionBuilder.class, NashornActionBuilder.class);
 
         String scripEngineName = SCRIPT_ENGINE_NAME;
         // ScriptEngine result = new ScriptEngineManager().getEngineByName(scripEngineName);
@@ -83,7 +86,8 @@ public class NashornKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseIn
         Validate.isInstanceOf(Compilable.class, result, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, result, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
-        getProcessorClasses().forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
+        getSimplifiedImportClasses()
+                .forEach((interfaceClass, scriptClass) -> addImport(result, scriptClass, interfaceClass.getSimpleName()));
         addImport(result, NashornPlugin.class, Plugin.class.getSimpleName());
 
         getStandardImportClasses().forEach(cls -> addImport(result, cls));

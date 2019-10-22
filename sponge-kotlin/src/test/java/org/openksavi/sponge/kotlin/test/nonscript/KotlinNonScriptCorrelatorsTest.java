@@ -40,4 +40,10 @@ public class KotlinNonScriptCorrelatorsTest extends KotlinNonScriptTest implemen
     public void testCorrelatorsDuration() {
         CorrelatorsTestTemplate.testCorrelatorsDuration(getType());
     }
+
+    @Override
+    @Test
+    public void testCorrelatorsBuilder() {
+        CorrelatorsTestTemplate.testCorrelatorsBuilder(getType());
+    }
 }

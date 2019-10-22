@@ -40,4 +40,10 @@ public class JythonCorrelatorsTest extends JythonTest implements CorrelatorsTest
     public void testCorrelatorsDuration() {
         CorrelatorsTestTemplate.testCorrelatorsDuration(getType());
     }
+
+    @Override
+    @Test
+    public void testCorrelatorsBuilder() {
+        CorrelatorsTestTemplate.testCorrelatorsBuilder(getType());
+    }
 }

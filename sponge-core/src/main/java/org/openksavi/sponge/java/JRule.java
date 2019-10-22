@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openksavi.sponge.core.rule.BaseRule;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.RuleEventSpec;
 
@@ -177,7 +178,7 @@ public abstract class JRule extends BaseRule {
     }
 
     public final JRule withConditions(String eventAlias, String... methodNames) {
-        return withEventCondition(eventAlias, createEventConditionForMethods(Arrays.asList(methodNames)));
+        return withEventCondition(eventAlias, SpongeUtils.createRuleEventConditionForMethods(this, Arrays.asList(methodNames)));
     }
 
     /**
@@ -196,7 +197,7 @@ public abstract class JRule extends BaseRule {
     }
 
     public final JRule withAllConditions(String... methodNames) {
-        return withAllEventCondition(createEventConditionForMethods(Arrays.asList(methodNames)));
+        return withAllEventCondition(SpongeUtils.createRuleEventConditionForMethods(this, Arrays.asList(methodNames)));
     }
 
     /**

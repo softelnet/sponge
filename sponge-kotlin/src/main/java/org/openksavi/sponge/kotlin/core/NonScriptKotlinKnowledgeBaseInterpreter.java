@@ -22,7 +22,7 @@ import kotlin.reflect.KClass;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
-import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
+import org.openksavi.sponge.core.engine.DefaultProcessorInstanceHolder;
 import org.openksavi.sponge.core.kb.BaseNonScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
@@ -62,7 +62,7 @@ public class NonScriptKotlinKnowledgeBaseInterpreter extends BaseNonScriptKnowle
             }
 
             try {
-                return new GenericProcessorInstanceHolder((Processor) destJavaClass.newInstance(), KotlinUtils.createProcessorName(kclass),
+                return new DefaultProcessorInstanceHolder((Processor) destJavaClass.newInstance(), KotlinUtils.createProcessorName(kclass),
                         true);
             } catch (Throwable e) {
                 throw SpongeUtils.wrapException(destJavaClass.getName(), knowledgeBase.getInterpreter(), e);

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge;
 
+import org.openksavi.sponge.rule.EventMode;
+
 /**
  * Sponge constants.
  */
@@ -27,6 +29,9 @@ public final class SpongeConstants {
 
     /** Control event name prefix. */
     public static final String CONTROL_EVENT_PREFIX = "$";
+
+    /** Default rule event event mode: first. */
+    public static final EventMode DEFAULT_RULE_EVENT_MODE = EventMode.FIRST;
 
     private SpongeConstants() {
     }

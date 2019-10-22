@@ -18,6 +18,7 @@ package org.openksavi.sponge.kb;
 
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.ProcessorBuilder;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.correlator.Correlator;
 import org.openksavi.sponge.filter.Filter;
@@ -35,6 +36,13 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      * @return the knowledge base.
      */
     KnowledgeBase getKnowledgeBase();
+
+    /**
+     * Enables a processor.
+     *
+     * @param processorBuilder the processor builder.
+     */
+    <T extends Processor<?>> void enable(ProcessorBuilder<T> processorBuilder);
 
     /**
      * Enables the Java-based processor.
@@ -149,4 +157,11 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      * @param actionClass action Java class.
      */
     void disableJavaAction(Class<? extends Action> actionClass);
+
+    /**
+     * Disables a processor.
+     *
+     * @param processorName the processor name.
+     */
+    void disable(String processorName);
 }

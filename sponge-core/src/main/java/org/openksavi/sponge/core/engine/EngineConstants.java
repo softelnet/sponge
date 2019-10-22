@@ -23,17 +23,27 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import org.openksavi.sponge.action.Action;
+import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.core.action.BaseAction;
+import org.openksavi.sponge.core.action.BaseActionBuilder;
 import org.openksavi.sponge.core.correlator.BaseCorrelator;
+import org.openksavi.sponge.core.correlator.BaseCorrelatorBuilder;
 import org.openksavi.sponge.core.filter.BaseFilter;
+import org.openksavi.sponge.core.filter.BaseFilterBuilder;
 import org.openksavi.sponge.core.rule.BaseRule;
+import org.openksavi.sponge.core.rule.BaseRuleBuilder;
 import org.openksavi.sponge.core.trigger.BaseTrigger;
+import org.openksavi.sponge.core.trigger.BaseTriggerBuilder;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.Correlator;
+import org.openksavi.sponge.correlator.CorrelatorBuilder;
 import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.filter.Filter;
+import org.openksavi.sponge.filter.FilterBuilder;
 import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.rule.RuleBuilder;
 import org.openksavi.sponge.trigger.Trigger;
+import org.openksavi.sponge.trigger.TriggerBuilder;
 
 /**
  * Engine constants.
@@ -61,6 +71,15 @@ public final class EngineConstants {
             );
     //@formatter:on
 
+    //@formatter:off
+    public static final Map<Class<?>, Class<?>> BASE_PROCESSOR_BUILDER_CLASSES = SpongeUtils.immutableMapOf(
+            ActionBuilder.class, BaseActionBuilder.class,
+            FilterBuilder.class, BaseFilterBuilder.class,
+            TriggerBuilder.class, BaseTriggerBuilder.class,
+            RuleBuilder.class, BaseRuleBuilder.class,
+            CorrelatorBuilder.class, BaseCorrelatorBuilder.class
+            );
+    //@formatter:on
     private EngineConstants() {
         //
     }

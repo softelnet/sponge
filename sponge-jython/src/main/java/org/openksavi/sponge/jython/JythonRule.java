@@ -30,7 +30,7 @@ import org.openksavi.sponge.jython.core.JythonFunctionEventCondition;
 import org.openksavi.sponge.rule.EventCondition;
 
 /**
- * Jython-specific implementation of the rule.
+ * Jython-specific implementation of a rule.
  */
 public abstract class JythonRule extends BaseRule {
 

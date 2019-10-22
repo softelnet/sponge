@@ -35,8 +35,8 @@ import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.core.engine.DefaultProcessorInstanceHolder;
 import org.openksavi.sponge.core.engine.EngineConstants;
-import org.openksavi.sponge.core.engine.GenericProcessorInstanceHolder;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorInstanceHolder;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -53,6 +53,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseScript;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventMode;
+import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -71,6 +72,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
     public static final String PROP_PATH_SEPARATOR = ", \t";
 
     private Map<Class<?>, Class<?>> processorClasses = new LinkedHashMap<>(EngineConstants.BASE_PROCESSOR_CLASSES);
+
+    private Map<Class<?>, Class<?>> processorBuilderClasses = new LinkedHashMap<>(EngineConstants.BASE_PROCESSOR_BUILDER_CLASSES);
 
     /** Synchronization processor. */
     protected Object interpteterSynchro = new Object();
@@ -283,7 +286,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 ProvidedMeta.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class, OutputStreamValue.class,
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
-                Features.class));
+                Features.class,
+                RuleEventSpec.class));
         //@formatter:on
 
         classes.addAll(SpongeUtils.getSupportedTypes());
@@ -301,7 +305,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
             Class<?> javaClass) {
         String name = knowledgeBase.getInterpreter().getScriptKnowledgeBaseProcessorClassName(processorClass);
 
-        return name != null ? new GenericProcessorInstanceHolder(createProcessorInstance(name, (Class) javaClass), name, false) : null;
+        return name != null ? new DefaultProcessorInstanceHolder(createProcessorInstance(name, (Class) javaClass), name, false) : null;
     }
 
     protected Map<Class<?>, Class<?>> getProcessorClasses() {
@@ -310,5 +314,17 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     protected void overwriteProcessorClass(Class<?> interfaceCls, Class<?> processorCls) {
         processorClasses.put(interfaceCls, processorCls);
+    }
+
+    protected void overwriteProcessorBuilderClass(Class<?> interfaceCls, Class<?> processorBuilderCls) {
+        processorBuilderClasses.put(interfaceCls, processorBuilderCls);
+    }
+
+    protected Map<Class<?>, Class<?>> getSimplifiedImportClasses() {
+        Map<Class<?>, Class<?>> classes = new LinkedHashMap<>();
+        classes.putAll(processorClasses);
+        classes.putAll(processorBuilderClasses);
+
+        return classes;
     }
 }

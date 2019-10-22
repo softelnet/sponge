@@ -17,7 +17,6 @@
 package org.openksavi.sponge.jruby.core;
 
 import org.jruby.RubyProc;
-import org.jruby.embed.ScriptingContainer;
 
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.EventCondition;
@@ -49,9 +48,7 @@ public class JRubyProcEventCondition implements EventCondition {
      */
     @Override
     public boolean condition(Rule rule, Event event) {
-        ScriptingContainer scriptContainer =
-                ((JRubyKnowledgeBaseInterpreter) rule.getKnowledgeBase().getInterpreter()).getScriptContainer();
-        Object result = scriptContainer.callMethod(proc, "call", rule, event);
+        Object result = ((JRubyKnowledgeBaseInterpreter) rule.getKnowledgeBase().getInterpreter()).callRubyProc(proc, rule, event);
 
         if (!(result instanceof Boolean)) {
             throw new IllegalArgumentException("Condition method must return boolean value");

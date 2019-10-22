@@ -46,4 +46,10 @@ public class JavaTriggersTest extends JavaTest implements TriggersTest {
     public void testHelloWorld() {
         TriggersTestTemplate.testHelloWorld(getType());
     }
+
+    @Override
+    @Test
+    public void testTriggersBuilder() {
+        TriggersTestTemplate.testTriggersBuilder(getType());
+    }
 }

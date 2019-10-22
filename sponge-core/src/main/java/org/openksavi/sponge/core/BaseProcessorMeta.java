@@ -141,4 +141,13 @@ public abstract class BaseProcessorMeta implements ProcessorMeta {
         setCategory(category);
         return this;
     }
+
+    public void update(BaseProcessorMeta source) {
+        setName(source.getName());
+        setLabel(source.getLabel());
+        setDescription(source.getDescription());
+        setVersion(source.getVersion());
+        getFeatures().putAll(source.getFeatures());
+        setCategory(source.getCategory());
+    }
 }

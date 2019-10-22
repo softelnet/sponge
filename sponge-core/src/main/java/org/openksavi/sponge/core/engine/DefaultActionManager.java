@@ -26,13 +26,11 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.ProcessorNotFoundException;
 import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.action.ActionDefinition;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.util.ValueHolder;
 
 /**
@@ -71,15 +69,12 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
         return callAction(action, args);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object callAction(ActionAdapter actionAdapter, List<Object> args) {
-        KnowledgeBaseInterpreter interpreter = ((BaseProcessorDefinition) actionAdapter.getDefinition()).isJavaDefined()
-                ? getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
-                : actionAdapter.getKnowledgeBase().getInterpreter();
         try {
-            // Important casting to an array of objects.
-            return interpreter.invokeMethod(actionAdapter.getProcessor(), ActionDefinition.ON_CALL_METHOD_NAME,
-                    (Object[]) (args != null ? args.toArray(new Object[args.size()]) : new Object[0]));
+            return ((BaseProcessorDefinition) actionAdapter.getDefinition()).getProcessorProvider()
+                    .invokeActionOnCall(actionAdapter.getProcessor(), args);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
         }

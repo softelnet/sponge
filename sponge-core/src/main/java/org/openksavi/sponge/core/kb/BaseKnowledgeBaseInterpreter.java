@@ -26,15 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.core.rule.GenericRuleEventSpec;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.EventMode;
-import org.openksavi.sponge.rule.RuleAdapter;
 import org.openksavi.sponge.rule.RuleEventSpec;
 
 /**
@@ -133,7 +132,7 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
         }
 
         ImmutablePair<String, String> nameAlias = resolveEventNameAndAlias(mainList.get(0));
-        EventMode eventMode = RuleAdapter.DEFAULT_MODE;
+        EventMode eventMode = SpongeConstants.DEFAULT_RULE_EVENT_MODE;
         if (mainList.size() == 2) {
             try {
                 eventMode = EventMode.valueOf(mainList.get(1).toUpperCase());
@@ -142,7 +141,7 @@ public abstract class BaseKnowledgeBaseInterpreter implements KnowledgeBaseInter
             }
         }
 
-        return new GenericRuleEventSpec(nameAlias.getLeft(), nameAlias.getRight(), eventMode);
+        return new RuleEventSpec(nameAlias.getLeft(), nameAlias.getRight(), eventMode);
     }
 
     protected ImmutablePair<String, String> resolveEventNameAndAlias(String eventSpecString) {

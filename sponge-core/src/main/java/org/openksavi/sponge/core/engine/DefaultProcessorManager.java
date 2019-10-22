@@ -30,6 +30,7 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorAdapterFactory;
+import org.openksavi.sponge.ProcessorBuilder;
 import org.openksavi.sponge.ProcessorDefinition;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -43,8 +44,9 @@ import org.openksavi.sponge.core.rule.BaseRuleAdapterGroup;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorAdapter;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
-import org.openksavi.sponge.engine.ProcessorInstanceHolder;
+import org.openksavi.sponge.engine.InitialProcessorInstance;
 import org.openksavi.sponge.engine.ProcessorManager;
+import org.openksavi.sponge.engine.ProcessorProvider;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.processing.EventSetProcessorMainProcessingUnitHandler;
@@ -65,30 +67,30 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     protected Map<ProcessorType, RegistrationHandler> registrationHandlers = SpongeUtils.immutableMapOf(
         ProcessorType.ACTION, new RegistrationHandler(
             (adapter) -> getEngine().getActionManager().addAction((ActionAdapter) adapter),
-            (adapter) -> getEngine().getActionManager().removeAction(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getActionManager().hasAction(adapter.getMeta().getName())),
+            (name) -> getEngine().getActionManager().removeAction(name),
+            (name) -> getEngine().getActionManager().hasAction(name)),
         ProcessorType.FILTER, new RegistrationHandler(
             (adapter) -> getEngine().getFilterProcessingUnit().addProcessor((FilterAdapter) adapter),
-            (adapter) -> getEngine().getFilterProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getFilterProcessingUnit().hasProcessor(adapter.getMeta().getName())),
+            (name) -> getEngine().getFilterProcessingUnit().removeProcessor(name),
+            (name) -> getEngine().getFilterProcessingUnit().hasProcessor(name)),
         ProcessorType.TRIGGER, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor((TriggerAdapter) adapter),
-            (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getMainProcessingUnit().hasProcessor(adapter.getMeta().getName(), adapter.getType())),
+            (name) -> getEngine().getMainProcessingUnit().removeProcessor(name),
+            (name) -> getEngine().getMainProcessingUnit().hasProcessor(name, ProcessorType.TRIGGER)),
         ProcessorType.RULE, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
                         new BaseRuleAdapterGroup((BaseRuleAdapter) adapter,
                         (EventSetProcessorMainProcessingUnitHandler<RuleAdapterGroup, RuleAdapter>) getEngine()
                                 .getMainProcessingUnit().getHandler(ProcessorType.RULE_GROUP))),
-            (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getMainProcessingUnit().hasProcessor(adapter.getMeta().getName(), ProcessorType.RULE_GROUP)),
+            (name) -> getEngine().getMainProcessingUnit().removeProcessor(name),
+            (name) -> getEngine().getMainProcessingUnit().hasProcessor(name, ProcessorType.RULE_GROUP)),
         ProcessorType.CORRELATOR, new RegistrationHandler(
             (adapter) -> getEngine().getMainProcessingUnit().addProcessor(
                         new BaseCorrelatorAdapterGroup((BaseCorrelatorAdapter) adapter,
                         (EventSetProcessorMainProcessingUnitHandler<CorrelatorAdapterGroup, CorrelatorAdapter>) getEngine()
                                 .getMainProcessingUnit().getHandler(ProcessorType.CORRELATOR_GROUP))),
-            (adapter) -> getEngine().getMainProcessingUnit().removeProcessor(adapter.getMeta().getName()),
-            (adapter) -> getEngine().getMainProcessingUnit().hasProcessor(adapter.getMeta().getName(), ProcessorType.CORRELATOR_GROUP))
+            (name) -> getEngine().getMainProcessingUnit().removeProcessor(name),
+            (name) -> getEngine().getMainProcessingUnit().hasProcessor(name, ProcessorType.CORRELATOR_GROUP))
         );
     //@formatter:on
 
@@ -115,21 +117,41 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
     @Override
     public void enable(KnowledgeBase knowledgeBase, Object processorClass) {
-        doEnable(knowledgeBase, processorClass, null);
+        Validate.notNull(processorClass, "Processor class cannot be null");
+        doEnable(knowledgeBase, new ClassProcessorProvider(processorClass), null);
     }
 
-    protected void doEnable(KnowledgeBase knowledgeBase, Object processorClass, ProcessorType requiredType) {
+    @Override
+    public <T extends Processor<?>> void enable(KnowledgeBase knowledgeBase, ProcessorBuilder<T> processorBuilder) {
+        Validate.notNull(processorBuilder, "Processor builder cannot be null");
+        doEnable(knowledgeBase, new BuilderProcessorProvider(processorBuilder), null);
+    }
+
+    protected void doEnable(KnowledgeBase knowledgeBase, ProcessorProvider processorProvider, ProcessorType requiredType) {
         lock.lock();
         try {
             SpongeUtils.doInWrappedException(knowledgeBase, () -> {
-                ProcessorInstanceHolder instanceHolder =
-                        createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
-                BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
+                InitialProcessorInstance initialInstance = processorProvider.createInitialProcessorInstance(knowledgeBase, Processor.class);
+                BaseProcessorAdapter adapter = createAdapter(initialInstance.getProcessor(), requiredType, processorProvider);
+                bindAdapter(knowledgeBase, initialInstance.getName(), initialInstance.getProcessor(), adapter);
+                initializeProcessor(initialInstance.getProcessor(), adapter);
 
-                bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
-                initializeProcessor(instanceHolder, adapter);
                 getRegistrationHandler(adapter.getType()).register(adapter);
             }, "enable");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void disable(KnowledgeBase knowledgeBase, String processorName) {
+        lock.lock();
+        try {
+            registrationHandlers.forEach((type, handler) -> {
+                if (handler.exists(processorName)) {
+                    handler.deregister(processorName);
+                }
+            });
         } finally {
             lock.unlock();
         }
@@ -143,13 +165,14 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     protected void doDisable(KnowledgeBase knowledgeBase, Object processorClass, ProcessorType requiredType) {
         lock.lock();
         try {
+            ProcessorProvider processorProvider = new ClassProcessorProvider(processorClass);
             // Creating temporary instance of a processor to resolve its type.
-            ProcessorInstanceHolder instanceHolder =
-                    createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, Processor.class);
+            InitialProcessorInstance initialInstance = processorProvider.createInitialProcessorInstance(knowledgeBase, Processor.class);
 
-            BaseProcessorAdapter adapter = createAdapter(instanceHolder, requiredType);
-            bindAdapter(knowledgeBase, instanceHolder.getName(), instanceHolder.getProcessor(), adapter);
-            getRegistrationHandler(adapter.getType()).deregister(adapter);
+            BaseProcessorAdapter adapter = createAdapter(initialInstance.getProcessor(), requiredType, processorProvider);
+            bindAdapter(knowledgeBase, initialInstance.getName(), initialInstance.getProcessor(), adapter);
+
+            getRegistrationHandler(adapter.getType()).deregister(adapter.getMeta().getName());
         } finally {
             lock.unlock();
         }
@@ -160,57 +183,26 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         Validate.isInstanceOf(BaseProcessorDefinition.class, definition, "Processor definition must be or extend %s",
                 BaseProcessorDefinition.class);
         BaseProcessorDefinition baseDefinition = (BaseProcessorDefinition) definition;
-        if (baseDefinition.isJavaDefined()) {
-            try {
-                if (baseDefinition.getProcessorClass() == null) {
-                    throw new SpongeException("No corresponding Java class for processor: " + definition.getMeta().getName());
-                }
 
-                return (T) baseDefinition.getProcessorClass().newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw SpongeUtils.wrapException(definition.getMeta().getName(), e);
-            }
-        } else {
-            return definition.getKnowledgeBase().getInterpreter().createProcessorInstance(definition.getMeta().getName(), cls);
-        }
+        return (T) baseDefinition.getProcessorProvider().createAdditionalProcessorInstance(baseDefinition, cls);
     }
 
-    protected ProcessorInstanceHolder createProcessorInstanceByProcessorClass(KnowledgeBase knowledgeBase, Object processorClass,
-            Class javaClass) {
-        Validate.notNull(processorClass, "Processor class cannot be null");
-
-        ProcessorInstanceHolder result =
-                knowledgeBase.getInterpreter().createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, javaClass);
-        if (result == null) {
-            // Try to create an instance using the default (Java-based) knowledge base interpreter.
-            result = getEngine().getKnowledgeBaseManager().getDefaultKnowledgeBase().getInterpreter()
-                    .createProcessorInstanceByProcessorClass(knowledgeBase, processorClass, javaClass);
-        }
-
-        if (result == null) {
-            throw new SpongeException("Unsupported processor class: " + processorClass);
-        }
-
-        return result;
-    }
-
-    protected BaseProcessorAdapter createAdapter(ProcessorInstanceHolder instanceHolder, ProcessorType requiredType) {
-        Processor processor = instanceHolder.getProcessor();
+    protected BaseProcessorAdapter createAdapter(Processor processor, ProcessorType requiredType, ProcessorProvider processorProvider) {
         Validate.isInstanceOf(ProcessorAdapterFactory.class, processor, "Processor must implement %s", ProcessorAdapterFactory.class);
 
         ProcessorAdapter adapter = ((ProcessorAdapterFactory) processor).createAdapter();
         Validate.isInstanceOf(BaseProcessorAdapter.class, adapter, "Processor adapter must extend %s", BaseProcessorAdapter.class);
 
-        BaseProcessorAdapter result = (BaseProcessorAdapter) adapter;
-        result.getDefinition().setJavaDefined(instanceHolder.isJavaDefined());
-        result.getDefinition().setProcessorClass(processor.getClass());
+        BaseProcessorAdapter baseAdapter = (BaseProcessorAdapter) adapter;
+
+        baseAdapter.getDefinition().setProcessorProvider(processorProvider);
 
         if (requiredType != null) {
             Validate.isTrue(adapter.getType() == requiredType, "%s is %s but should be %s", adapter.getMeta().getName(),
                     adapter.getType().getLabel(), requiredType.getLabel());
         }
 
-        return result;
+        return baseAdapter;
     }
 
     protected void bindAdapter(KnowledgeBase knowledgeBase, String name, Processor processor, BaseProcessorAdapter adapter) {
@@ -219,9 +211,7 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         processor.getMeta().setName(name);
     }
 
-    protected void initializeProcessor(ProcessorInstanceHolder instanceHolder, BaseProcessorAdapter adapter) {
-        Processor processor = instanceHolder.getProcessor();
-
+    protected void initializeProcessor(Processor processor, BaseProcessorAdapter adapter) {
         SpongeUtils.doInWrappedException(adapter.getKnowledgeBase(), () -> processor.onConfigure(),
                 SpongeUtils.getProcessorQualifiedName(adapter) + ".onConfigure");
 
@@ -243,7 +233,8 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
     protected Optional<Map.Entry<ProcessorType, RegistrationHandler>> findAlreadyRegisteredByDifferentType(ProcessorAdapter adapter) {
         return registrationHandlers.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals(adapter.getType()) && entry.getValue().exists(adapter)).findFirst();
+                .filter(entry -> !entry.getKey().equals(adapter.getType()) && entry.getValue().exists(adapter.getMeta().getName()))
+                .findFirst();
     }
 
     protected RegistrationHandler getRegistrationHandler(ProcessorType type) {
@@ -252,27 +243,27 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
     @Override
     public void enableAction(KnowledgeBase knowledgeBase, Object actionClass) {
-        doEnable(knowledgeBase, actionClass, ProcessorType.ACTION);
+        doEnable(knowledgeBase, new ClassProcessorProvider(actionClass), ProcessorType.ACTION);
     }
 
     @Override
     public void enableFilter(KnowledgeBase knowledgeBase, Object filterClass) {
-        doEnable(knowledgeBase, filterClass, ProcessorType.FILTER);
+        doEnable(knowledgeBase, new ClassProcessorProvider(filterClass), ProcessorType.FILTER);
     }
 
     @Override
     public void enableTrigger(KnowledgeBase knowledgeBase, Object triggerClass) {
-        doEnable(knowledgeBase, triggerClass, ProcessorType.TRIGGER);
+        doEnable(knowledgeBase, new ClassProcessorProvider(triggerClass), ProcessorType.TRIGGER);
     }
 
     @Override
     public void enableRule(KnowledgeBase knowledgeBase, Object ruleClass) {
-        doEnable(knowledgeBase, ruleClass, ProcessorType.RULE);
+        doEnable(knowledgeBase, new ClassProcessorProvider(ruleClass), ProcessorType.RULE);
     }
 
     @Override
     public void enableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass) {
-        doEnable(knowledgeBase, correlatorClass, ProcessorType.CORRELATOR);
+        doEnable(knowledgeBase, new ClassProcessorProvider(correlatorClass), ProcessorType.CORRELATOR);
     }
 
     @Override
@@ -341,12 +332,11 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
         private Consumer<ProcessorAdapter> registration;
 
-        private Consumer<ProcessorAdapter> deregistration;
+        private Consumer<String> deregistration;
 
-        private Predicate<ProcessorAdapter> existence;
+        private Predicate<String> existence;
 
-        public RegistrationHandler(Consumer<ProcessorAdapter> registration, Consumer<ProcessorAdapter> deregistration,
-                Predicate<ProcessorAdapter> existence) {
+        public RegistrationHandler(Consumer<ProcessorAdapter> registration, Consumer<String> deregistration, Predicate<String> existence) {
             this.registration = registration;
             this.deregistration = deregistration;
             this.existence = existence;
@@ -356,12 +346,12 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
             registration.accept(adapter);
         }
 
-        public void deregister(ProcessorAdapter adapter) {
-            deregistration.accept(adapter);
+        public void deregister(String name) {
+            deregistration.accept(name);
         }
 
-        public boolean exists(ProcessorAdapter adapter) {
-            return existence.test(adapter);
+        public boolean exists(String name) {
+            return existence.test(name);
         }
     }
 }

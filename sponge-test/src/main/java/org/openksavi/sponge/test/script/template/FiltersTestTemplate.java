@@ -81,4 +81,21 @@ public class FiltersTestTemplate {
             engine.shutdown();
         }
     }
+
+    public static void testFilterBuilder(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "filters_builder");
+
+        try {
+            await().atMost(30, TimeUnit.SECONDS).until(() -> TestUtils.getEventCounter(engine, "blue") >= 1);
+
+            TimeUnit.SECONDS.sleep(1);
+
+            assertEquals(0, TestUtils.getEventCounter(engine, "red"));
+            assertFalse(engine.isError());
+        } catch (InterruptedException e) {
+            throw SpongeUtils.wrapException(e);
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

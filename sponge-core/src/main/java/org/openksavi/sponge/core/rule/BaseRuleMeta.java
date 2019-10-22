@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.core.BaseEventSetProcessorMeta;
+import org.openksavi.sponge.core.BaseProcessorMeta;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.rule.RuleMeta;
@@ -64,8 +65,12 @@ public class BaseRuleMeta extends BaseEventSetProcessorMeta implements RuleMeta 
 
     @Override
     public void setEventSpecs(List<RuleEventSpec> eventSpecs) {
-        this.eventSpecs = new ArrayList<>(eventSpecs);
-        setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
+        if (eventSpecs != null) {
+            this.eventSpecs = new ArrayList<>(eventSpecs);
+            setEventNames(eventSpecs.stream().map(RuleEventSpec::getName).collect(Collectors.toList()));
+        } else {
+            this.eventSpecs = null;
+        }
     }
 
     public void addEventSpecs(List<RuleEventSpec> eventSpecs) {
@@ -120,5 +125,21 @@ public class BaseRuleMeta extends BaseEventSetProcessorMeta implements RuleMeta 
     @Override
     public Map<String, List<EventCondition>> getEventConditions() {
         return conditions;
+    }
+
+    @Override
+    public void update(BaseProcessorMeta source) {
+        super.update(source);
+
+        if (source instanceof BaseRuleMeta) {
+            BaseRuleMeta sourceMeta = (BaseRuleMeta) source;
+            setOrdered(sourceMeta.isOrdered());
+            setEventSpecs(sourceMeta.getEventSpecs());
+
+            synchronized (conditions) {
+                conditions.clear();
+                conditions.putAll(sourceMeta.getEventConditions());
+            }
+        }
     }
 }

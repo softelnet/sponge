@@ -249,4 +249,21 @@ public class RulesTestTemplate {
             engine.shutdown();
         }
     }
+
+    public static void testRulesBuilder(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "rules_builder");
+
+        try {
+            await().atMost(60, TimeUnit.SECONDS).pollDelay(5, TimeUnit.SECONDS)
+                    .until(() -> ((Number) engine.getOperations().getVariable("hardwareFailureScriptCount")).intValue() >= 3);
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> ((Number) engine.getOperations().getVariable("sameSourceFirstFireCount")).intValue() >= 1);
+
+            assertEquals(3, ((Number) engine.getOperations().getVariable("hardwareFailureScriptCount")).intValue());
+            assertEquals(1, ((Number) engine.getOperations().getVariable("sameSourceFirstFireCount")).intValue());
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

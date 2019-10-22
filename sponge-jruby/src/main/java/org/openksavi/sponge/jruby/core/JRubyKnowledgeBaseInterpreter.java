@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jruby.RubyClass;
+import org.jruby.RubyProc;
 import org.jruby.RubySymbol;
 import org.jruby.embed.EmbedEvalUnit;
 import org.jruby.embed.LocalContextScope;
@@ -39,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.BaseScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
@@ -46,6 +48,7 @@ import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.jruby.JRubyActionBuilder;
 import org.openksavi.sponge.jruby.JRubyRule;
 import org.openksavi.sponge.jruby.RubyConstants;
 import org.openksavi.sponge.jruby.RubyUtils;
@@ -74,13 +77,14 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
     @Override
     protected void prepareInterpreter() {
         overwriteProcessorClass(Rule.class, JRubyRule.class);
+        overwriteProcessorBuilderClass(ActionBuilder.class, JRubyActionBuilder.class);
 
         container = new ScriptingContainer(LocalContextScope.SINGLETHREAD, LocalVariableBehavior.PERSISTENT);
         setLoadPaths(getEngineOperations() != null ? getEngineOperations().getEngine() : null);
 
         addSpecific();
 
-        getProcessorClasses().forEach((interfaceClass, scriptClass) -> addImport(scriptClass, interfaceClass.getSimpleName()));
+        getSimplifiedImportClasses().forEach((interfaceClass, scriptClass) -> addImport(scriptClass, interfaceClass.getSimpleName()));
         addImport(BasePlugin.class, Plugin.class.getSimpleName());
 
         getStandardImportClasses().forEach(cls -> addImport(cls));
@@ -258,6 +262,10 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     public ScriptingContainer getScriptContainer() {
         return container;
+    }
+
+    public Object callRubyProc(RubyProc proc, Object... args) {
+        return container.callMethod(proc, "call", args);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

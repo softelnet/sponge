@@ -62,4 +62,19 @@ public class CorrelatorsTestTemplate {
             engine.shutdown();
         }
     }
+
+    public static void testCorrelatorsBuilder(KnowledgeBaseType type) {
+        SpongeEngine engine = ScriptTestUtils.startWithKnowledgeBase(type, "correlators_builder");
+
+        try {
+            assertEquals(1, engine.getCorrelatorGroups().size());
+            await().atMost(30, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue() >= 1);
+            assertEquals(4, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptCount").intValue());
+            assertEquals(1, engine.getOperations().getVariable(Number.class, "hardwareFailureScriptFinishCount").intValue());
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }

@@ -46,4 +46,10 @@ public class KotlinNonScriptTriggersTest extends KotlinNonScriptTest implements 
     public void testHelloWorld() {
         TriggersTestTemplate.testHelloWorld(getType());
     }
+
+    @Override
+    @Test
+    public void testTriggersBuilder() {
+        TriggersTestTemplate.testTriggersBuilder(getType());
+    }
 }

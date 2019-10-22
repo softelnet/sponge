@@ -1324,5 +1324,4 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
-
 }

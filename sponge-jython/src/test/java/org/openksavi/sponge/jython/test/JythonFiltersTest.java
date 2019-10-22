@@ -40,4 +40,10 @@ public class JythonFiltersTest extends JythonTest implements FiltersTest {
     public void testDeduplication() {
         FiltersTestTemplate.testDeduplication(getType());
     }
+
+    @Override
+    @Test
+    public void testFilterBuilder() {
+        FiltersTestTemplate.testFilterBuilder(getType());
+    }
 }

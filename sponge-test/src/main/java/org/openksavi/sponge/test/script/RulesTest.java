@@ -33,4 +33,6 @@ public interface RulesTest extends ScriptTest {
     void testHeartbeat2();
 
     void testRulesInstances();
+
+    void testRulesBuilder();
 }
