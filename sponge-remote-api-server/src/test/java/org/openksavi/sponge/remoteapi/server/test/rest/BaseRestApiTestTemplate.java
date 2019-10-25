@@ -51,6 +51,7 @@ import org.junit.jupiter.api.Test;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -776,6 +777,160 @@ public abstract class BaseRestApiTestTemplate {
 
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testProvideActionArgsPagingMeta() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "ViewFruitsPaging";
+
+            RestActionMeta actionMeta = client.getActionMeta(actionName);
+            List<DataType> argTypes = actionMeta.getArgs();
+
+            assertNotNull(argTypes.get(0).getProvided());
+            assertTrue(argTypes.get(0).getProvided().isValue());
+            assertFalse(argTypes.get(0).getProvided().hasValueSet());
+            assertTrue((Boolean) argTypes.get(0).getFeatures().get(Features.PROVIDE_VALUE_PAGINABLE));
+            assertNull((Boolean) argTypes.get(0).getFeatures().get(Features.PROVIDE_VALUE_SET_PAGINABLE));
+
+            assertNotNull(argTypes.get(1).getProvided());
+            assertFalse(argTypes.get(1).getProvided().isValue());
+            assertTrue(argTypes.get(1).getProvided().hasValueSet());
+            assertNull((Boolean) argTypes.get(1).getFeatures().get(Features.PROVIDE_VALUE_PAGINABLE));
+            assertTrue((Boolean) argTypes.get(1).getFeatures().get(Features.PROVIDE_VALUE_SET_PAGINABLE));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testProvideActionArgsPagingValue() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "ViewFruitsPaging";
+
+            int valueLimit = 5;
+
+            ProvidedValue<?> providedFruits = client
+                    .provideActionArgs(actionName, Arrays.asList("fruits"), null, null,
+                            SpongeUtils.immutableMapOf("fruits",
+                                    SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET, 0, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
+                    .get("fruits");
+
+            List<String> fruits = (List<String>) providedFruits.getValue();
+            assertEquals(valueLimit, fruits.size());
+            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry"), fruits);
+            assertEquals(0, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+
+            providedFruits = client
+                    .provideActionArgs(actionName, Arrays.asList("fruits"), null, null, SpongeUtils.immutableMapOf("fruits", SpongeUtils
+                            .immutableMapOf(Features.PROVIDE_VALUE_OFFSET, valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
+                    .get("fruits");
+
+            fruits = (List<String>) providedFruits.getValue();
+            assertEquals(valueLimit, fruits.size());
+            assertEquals(Arrays.asList("grapes", "peach", "mango", "grapefruit", "kiwi"), fruits);
+            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+
+            providedFruits = client
+                    .provideActionArgs(actionName, Arrays.asList("fruits"), null, null, SpongeUtils.immutableMapOf("fruits", SpongeUtils
+                            .immutableMapOf(Features.PROVIDE_VALUE_OFFSET, 2 * valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
+                    .get("fruits");
+
+            fruits = (List<String>) providedFruits.getValue();
+            assertEquals(1, fruits.size());
+            assertEquals(Arrays.asList("plum"), fruits);
+            assertEquals(2 * valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+
+            // All without paging
+            providedFruits = client.provideActionArgs(actionName, Arrays.asList("fruits"), null, null).get("fruits");
+            fruits = (List<String>) providedFruits.getValue();
+            assertEquals(11, fruits.size());
+            assertEquals(
+                    Arrays.asList("apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi", "plum"),
+                    fruits);
+            assertNull(providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertNull(providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testActionsProvideArgsPagingValueSet() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "ViewFruitsPaging";
+
+            int valueSetLimit = 8;
+
+            ProvidedValue<
+                    ?> provided = client
+                            .provideActionArgs(actionName, Arrays.asList("favouriteFruit"), null, null,
+                                    SpongeUtils.immutableMapOf("favouriteFruit", SpongeUtils.immutableMapOf(
+                                            Features.PROVIDE_VALUE_SET_OFFSET, 0, Features.PROVIDE_VALUE_SET_LIMIT, valueSetLimit)))
+                            .get("favouriteFruit");
+            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(provided.getAnnotatedValueSet()));
+            assertEquals(0, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_OFFSET));
+            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_LIMIT));
+
+            provided = client.provideActionArgs(actionName, Arrays.asList("favouriteFruit"), null, null,
+                    SpongeUtils.immutableMapOf("favouriteFruit", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_SET_OFFSET,
+                            valueSetLimit, Features.PROVIDE_VALUE_SET_LIMIT, valueSetLimit)))
+                    .get("favouriteFruit");
+            assertEquals(Arrays.asList("grapefruit", "kiwi", "plum", "pear", "strawberry", "blackberry", "pineapple", "papaya"),
+                    SpongeApiUtils.unwrapAnnotatedValueList(provided.getAnnotatedValueSet()));
+            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_OFFSET));
+            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_LIMIT));
+
+            provided = client.provideActionArgs(actionName, Arrays.asList("favouriteFruit"), null, null,
+                    SpongeUtils.immutableMapOf("favouriteFruit", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_SET_OFFSET,
+                            2 * valueSetLimit, Features.PROVIDE_VALUE_SET_LIMIT, valueSetLimit)))
+                    .get("favouriteFruit");
+            assertEquals(Arrays.asList("melon"), SpongeApiUtils.unwrapAnnotatedValueList(provided.getAnnotatedValueSet()));
+            assertEquals(2 * valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_OFFSET));
+            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_LIMIT));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testActionsProvideArgsPagingElementValueSet() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "ViewFavouriteFruitsPaging";
+
+            int elementValueSetLimit = 10;
+
+            ProvidedValue<
+                    ?> provided = client
+                            .provideActionArgs(actionName, Arrays.asList("favouriteFruits"), null, null,
+                                    SpongeUtils.immutableMapOf("favouriteFruits",
+                                            SpongeUtils.immutableMapOf(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET, 0,
+                                                    Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT, elementValueSetLimit)))
+                            .get("favouriteFruits");
+            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi"),
+                    SpongeApiUtils.unwrapUnknownAnnotatedValueList(provided.getAnnotatedElementValueSet()));
+            assertEquals(0, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET));
+            assertEquals(elementValueSetLimit, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT));
+
+            provided = client
+                    .provideActionArgs(actionName, Arrays.asList("favouriteFruits"), null, null,
+                            SpongeUtils
+                                    .immutableMapOf("favouriteFruits",
+                                            SpongeUtils.immutableMapOf(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET, elementValueSetLimit,
+                                                    Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT, elementValueSetLimit)))
+                    .get("favouriteFruits");
+            assertEquals(Arrays.asList("plum", "pear", "strawberry", "blackberry", "pineapple", "papaya", "melon"),
+                    SpongeApiUtils.unwrapUnknownAnnotatedValueList(provided.getAnnotatedElementValueSet()));
+            assertEquals(elementValueSetLimit, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET));
+            assertEquals(elementValueSetLimit, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT));
 
             assertFalse(engine.isError());
         }

@@ -43,12 +43,19 @@ public class ProvideArgsContext {
      */
     private Map<String, ProvidedValue<?>> provided;
 
-    public ProvideArgsContext(Set<String> provide, Set<String> submit, Map<String, Object> current,
-            Map<String, ProvidedValue<?>> provided) {
+    /**
+     * The not null map of features for arguments in a context, set by a client code. Each argument specified in {@code provide} or
+     * {@code submit} has its (possibly empty) features map.
+     */
+    private Map<String, Map<String, Object>> features;
+
+    public ProvideArgsContext(Set<String> provide, Set<String> submit, Map<String, Object> current, Map<String, ProvidedValue<?>> provided,
+            Map<String, Map<String, Object>> features) {
         this.provide = provide;
         this.submit = submit;
         this.current = current;
         this.provided = provided;
+        this.features = features;
     }
 
     public Set<String> getProvide() {
@@ -81,5 +88,13 @@ public class ProvideArgsContext {
 
     public void setProvided(Map<String, ProvidedValue<?>> provided) {
         this.provided = provided;
+    }
+
+    public Map<String, Map<String, Object>> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Map<String, Object>> features) {
+        this.features = features;
     }
 }

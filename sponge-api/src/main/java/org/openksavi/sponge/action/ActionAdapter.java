@@ -36,9 +36,11 @@ public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperation
      * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
      *        those arguments that the arguments specified in the {@code provide} and {@code submit} depend on and all arguments specified
      *        by {@code submit}.
+     * @param features the features for arguments.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current,
+            Map<String, Map<String, Object>> features);
 
     /**
      * Returns the registered type names used in this action.

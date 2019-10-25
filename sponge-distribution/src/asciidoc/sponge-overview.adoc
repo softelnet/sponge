@@ -94,7 +94,7 @@ Because of {sponge} is a Java-based solution, at least basic knowledge of Java i
 The {sponge} mobile client application is intended for end users with no programming knowledge required.
 
 == License
-The {sponge} standard libraries are released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license]. However some optional {sponge} libraries and the {sponge} standalone command-line application are licensed under the https://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3] because they use optional, third-party libraries that require it.
+{sponge} is released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license].
 
 == Considerations
 

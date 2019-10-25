@@ -116,6 +116,24 @@ public final class Features {
 
     public static final String WIDGET_SWITCH = "switch";
 
+    public static final String PROVIDE_VALUE_PAGINABLE = "valuePaginable";
+
+    public static final String PROVIDE_VALUE_OFFSET = "valueOffset";
+
+    public static final String PROVIDE_VALUE_LIMIT = "valueLimit";
+
+    public static final String PROVIDE_VALUE_SET_PAGINABLE = "valueSetPaginable";
+
+    public static final String PROVIDE_VALUE_SET_OFFSET = "valueSetOffset";
+
+    public static final String PROVIDE_VALUE_SET_LIMIT = "valueSetLimit";
+
+    public static final String PROVIDE_ELEMENT_VALUE_SET_PAGINABLE = "elementValueSetPaginable";
+
+    public static final String PROVIDE_ELEMENT_VALUE_SET_OFFSET = "elementValueSetOffset";
+
+    public static final String PROVIDE_ELEMENT_VALUE_SET_LIMIT = "elementValueSetLimit";
+
     public static final class Formats {
 
         public static final String STRING_FORMAT_PHONE = "phone";

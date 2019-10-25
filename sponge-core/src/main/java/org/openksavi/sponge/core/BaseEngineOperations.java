@@ -121,14 +121,20 @@ public class BaseEngineOperations implements EngineOperations {
 
     @Override
     public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current) {
+            Map<String, Object> current, Map<String, Map<String, Object>> features) {
         ActionAdapter actionAdapter =
                 Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
         try {
-            return actionAdapter.provideArgs(provide, submit, current);
+            return actionAdapter.provideArgs(provide, submit, current, features);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
         }
+    }
+
+    @Override
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
+            Map<String, Object> current) {
+        return provideActionArgs(actionName, provide, submit, current, null);
     }
 
     @Override

@@ -63,7 +63,16 @@ In addition to the inherited <<processor-methods,processor properties and method
 |This method checks if an incoming event should be further processed. If `onAccept` method returns `false`, then the event will be discarded. Otherwise it will be processed by the other event processors. This method is mandatory.
 |===
 
-Every filter should implement abstract `onConfigure` and `onAccept` methods.
+Every filter defined by a class should implement the abstract `onConfigure` method. Every filter should implement  the `onAccept` method.
+
+.Filter builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`*withOnAccept(FilterOnAcceptCallback onAcceptCallback)*`
+|Configures the `onAccept()` callback function that takes arguments: the filter instance and an event, e.g. `withOnAccept(lambda filter, event: event.get("attr1") == 1)`.
+|===
 
 [discrete]
 === Example in a script language
@@ -80,7 +89,7 @@ class ColorFilter(Filter): # <1>
     def onAccept(self, event): # <4>
         self.logger.debug("Received event {}", event) # <5>
         color = event.get("color", None) # <6>
-        if (color is None or color != "blue"): # <7>
+        if color is None or color != "blue": # <7>
             self.logger.debug("rejected")
             return False
         else: # <8>
@@ -142,6 +151,23 @@ This Java-based filter can be enabled only manually, for example in a script kno
 sponge.enableJava(ShapeFilter)
 ----
 
+[discrete]
+== Example of a filter builder
+The code presented below defines and enables a filter named `ColorFilter`.
+
+.Filter builder example
+[source,python]
+----
+def onLoad():
+    def onAccept(filter, event):
+        color = event.get("color", None)
+        if color is None or color != "blue":
+            return False
+        else:
+            return True
+    sponge.enable(FilterBuilder("ColorFilter").withEvent("e1").withOnAccept(onAccept))
+----
+
 == Triggers
 Triggers run a specified code when an event happens.
 
@@ -167,9 +193,21 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 Every trigger should implement abstract `onConfigure` and `onRun` methods.
 
+.Trigger builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`*withOnRun(TriggerOnRunCallback onRunCallback)*`
+|Configures the `onRun()` callback function that takes arguments: the trigger instance and an event, e.g. `withOnRun(lambda trigger, event: trigger.logger.info("OK"))`.
+
+|`withOnAccept(TriggerOnAcceptCallback onAcceptCallback)`
+|Configures the `onAccept()` callback function that takes arguments: the trigger instance and an event, e.g. `withOnAccept(lambda trigger, event: event.get("attr1") == 1)`.
+|===
+
 [discrete]
 === Example in a script language
-The code presented below defines the trigger named `TriggerA` listening to events named `"a"`.
+The code presented below defines a trigger named `TriggerA` listening to events named `"a"`.
 
 .Trigger example
 [source,python]
@@ -190,7 +228,7 @@ The trigger `TriggerA` will be enabled automatically. The enabling creates an in
 
 [discrete]
 === Example in Java
-The code presented below defines the trigger named `SampleJavaTrigger` listening to events named `"e1"`.
+The code presented below defines a trigger named `SampleJavaTrigger` listening to events named `"e1"`.
 
 .Java trigger example
 [source,java]
@@ -218,6 +256,17 @@ public class SampleJavaTrigger extends JTrigger { // <1>
 [source,python]
 ----
 sponge.enableJava(SampleJavaTrigger)
+----
+
+[discrete]
+== Example of a trigger builder
+The code presented below defines and enables a trigger named `TriggerA`.
+
+.Trigger builder example
+[source,python]
+----
+def onLoad():
+    sponge.enable(TriggerBuilder("TriggerA").withEvent("a").withOnRun(lambda trigger, event: trigger.logger.debug("Received event: {}", event.name)))
 ----
 
 == Rules
@@ -286,6 +335,17 @@ Every rule should implement the abstract `onConfigure` and `onRun` methods.
 IMPORTANT: Because of rules are not singletons the `onConfigure()` method is invoked *only once*, while enabling the rule. So it should contain only basic configuration as stated before. The `onInit()` method *must not* contain such configuration because it is invoked every time the new instance of the rule is created.
 
 NOTE: A duration is relative to an internal clock of the engine, that is related to the time of events. When a duration timeout occurs, the engine sends a control event (`DurationControlEvent`) to the Input Event Queue so that the control event, before finishing the rule, goes the same route as all events. This is to ensure that no events will be skipped by a rule if the system is highly loaded. Note that this may cause the rule to last longer in terms of an external clock.
+
+.Rule builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`*withOnRun(RuleOnRunCallback onRunCallback)*`
+|Configures the `onRun()` callback function that takes arguments: the rule instance and an event, e.g. `withOnRun(lambda rule, event: rule.logger.info("OK"))`.
+|===
+
+NOTE: Rule builders don't support multi condition configuration methods, i.e. `withConditions` and `withAllConditions`. You have to invoke single condition versions of these methods.
 
 === Event specification
 Event specification for the rule consists of:
@@ -512,6 +572,29 @@ public class SameSourceJavaRule extends JRule { // <1>
 sponge.enableJava(SameSourceJavaRule)
 ----
 
+[discrete]
+== Example of a rule builder
+The code presented below defines and enables a rule named `SameSourceAllRule`. Note that Python doesn't support multi-expression lambda functions.
+
+.Rule builder example
+[source,python]
+----
+def onLoad():
+    def sameSourceAllRuleE2Condition(rule, event):
+        event1 = rule.getEvent("e1")
+        return event.get("source") == event1.get("source") and Duration.between(event1.time, event.time).seconds <= 4
+
+    def sameSourceAllRuleOnRun(rule, event):
+        rule.logger.info("Monitoring log [{}]: Critical failure in {}! Events: {}", event.time, event.get("source"),
+                                                                                          rule.eventSequence)
+        sponge.getVariable("hardwareFailureScriptCount").incrementAndGet()
+
+    sponge.enable(RuleBuilder("SameSourceAllRule").withEvents(["filesystemFailure e1", "diskFailure e2 :all"])
+                .withCondition("e1", lambda rule, event: int(event.get("severity")) > 5)
+                .withCondition("e2", sameSourceAllRuleE2Condition)
+                .withDuration(Duration.ofSeconds(8)).withOnRun(sameSourceAllRuleOnRun))
+----
+
 == Correlators
 Correlators could be viewed as a generalized form of rules. They detect correlations between events and could be used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 
@@ -575,9 +658,24 @@ Every correlator may implement the `onAcceptAsFirst` method and should implement
 
 IMPORTANT: Because of correlators are not singletons the `onConfigure` method is invoked *only once* while enabling the correlator. So it should contain only basic configuration as stated before. The `onInit` method *must not* contain such configuration because it is invoked later, every time a new instance of the correlator is created.
 
+.Correlator builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`*withOnEvent(CorrelatorOnEventCallback onEventCallback)*`
+|Configures the `onEvent()` callback function that takes arguments: the correlator instance and an event, e.g. `withOnEvent(lambda correlator, event: events.append(event))`.
+
+|`withOnAcceptAsFirst(CorrelatorOnAcceptAsFirstCallback onAcceptAsFirstCallback)`
+|Configures the `onAcceptAsFirst()` callback function that takes arguments: the correlator instance and an event and returns boolean, e.g. `withOnAcceptAsFirst(lambda correlator, event: event.name == "filesystemFailure")`.
+
+|`withOnDuration(CorrelatorOnDurationCallback onDurationCallback)`
+|Configures the `onDuration()` callback function that takes the correlator instance as an argument, e.g. `withOnDuration(lambda correlator: correlator.logger.info("Timeout"))`.
+|===
+
 [discrete]
 === Example in a script language
-The code presented below defines the correlator named `SampleCorrelator` that listens to events `"filesystemFailure"` and `"diskFailure"`.
+The code presented below defines a correlator named `SampleCorrelator` that listens to events `"filesystemFailure"` and `"diskFailure"`.
 The maximum number of concurrent instances allowed for this correlator is set to `1`. A `filesystemFailure` event will be accepted as the first event only when there is no instance of this correlator already running. When the `filesystemFailure` event is accepted as the first, a new instance of this correlator will be created. Each instance of this correlator adds to its internal event log list `eventLog` any suitable event. When `4` fitting events are collected the correlator instance will finish.
 
 .Correlator example
@@ -613,7 +711,7 @@ The correlator will be enabled automatically. Then, in case of acceptance of an 
 
 [discrete]
 === Example in Java
-The code presented below defines the correlator analogous to the one shown above but defined as a Java class.
+The code presented below defines a correlator analogous to the one shown above but defined as a Java class.
 
 .Java correlator example
 [source,java]
@@ -650,4 +748,24 @@ public class SampleJavaCorrelator extends JCorrelator { // <1>
 [source,python]
 ----
 sponge.enableJava(SampleJavaCorrelator)
+----
+
+[discrete]
+== Example of a correlator builder
+The code presented below defines and enables a correlator named `SampleCorrelator`. Note that Python doesn't support multi-expression lambda functions.
+
+.Correlator builder example
+[source,python]
+----
+def onLoad():
+    def onEvent(correlator, event):
+        counter = sponge.getVariable("counter")
+        if counter == 4:
+            correlator.finish()
+        sponge.setVariable("counter", counter + 1)
+
+    sponge.enable(CorrelatorBuilder("SampleCorrelator").withEvents(["filesystemFailure", "diskFailure"]).withMaxInstances(1)
+                .withOnAcceptAsFirst(lambda correlator, event: event.name == "filesystemFailure")
+                .withOnInit(lambda correlator: sponge.setVariable("counter", 0))
+                .withOnEvent(onEvent))
 ----

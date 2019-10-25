@@ -12,10 +12,13 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * REST API change: Renamed operation `actionArgs` to `provideActionArgs`.
 * REST API change: Renamed error codes.
 * REST API change: Added `requestTime` and `responseTime` to a response header.
+* Added support for processor builders.
 * Added support for submitting data type values to the server in the REST API in the `provideActionArgs` operation.
 * Added `ProvidedMeta.lazyUpdate`, a flag specifying if a provided value should be updated lazily in a client code when a dependency changes (experimental).
 * Added support for accessing left-over standalone command-line application arguments in knowledge bases via `sponge.engine.args`.
+* Added support for features in action arguments provision.
 * Fixed the bug causing an error when loading a configuration file from a Sponge home directory set as a non system property.
+* The {sponge} standalone command-line application is now released under the Apache 2.0 license.
 * Dependencies upgrade.
 
 [discrete]

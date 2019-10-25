@@ -352,6 +352,14 @@ class HelloWorldAction(Action):
 
 Press `CTRL+C` to exit the {sponge} standalone command-line application.
 
+All {sponge} processors can be defined and enabled using processor builders as well. Processor builders provide a more concise code for simple processors.
+
+.An action builder
+[source,python]
+----
+sponge.enable(ActionBuilder("HelloWorldAction").withOnCall(lambda action, name: "Hello World! Hello {}!".format(name)))
+----
+
 NOTE: All callouts placed in the source code in the examples below remain the same, because they are functionally equivalent.
 
 ==== Ruby

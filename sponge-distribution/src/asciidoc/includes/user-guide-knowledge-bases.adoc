@@ -433,7 +433,7 @@ There are some limitation in the interoperability between scripting knowledge ba
 * Data structures used for communicating between different knowledge bases should by rather Java types or simple types that would be handled smoothly by Java implementations of scripting languages. For example you shouldn't use a script-based plugin in knowledge bases other than the one in which this plugin has been defined.
 * Using more than one knowledge base written in the same scripting language may, in certain situations, also cause problems, due to the internal implementations of scripting language interpreters.
 
-== Useful knowledge base commands
+== Useful knowledge base functions
 
 .Make and send a new event.
 [source,python]

@@ -822,8 +822,14 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
+            Map<String, Object> current, Map<String, Map<String, Object>> features) {
+        return provideActionArgs(new ProvideActionArgsRequest(actionName, provide, submit, current, features)).getProvided();
+    }
+
+    @Override
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
             Map<String, Object> current) {
-        return provideActionArgs(new ProvideActionArgsRequest(actionName, provide, submit, current)).getProvided();
+        return provideActionArgs(actionName, provide, submit, current, null);
     }
 
     @Override

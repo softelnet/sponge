@@ -38,9 +38,27 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 The `onConfigure` method in actions is not mandatory.
 
+.Action builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`withOnCall(_callback with dynamic arguments_)`
+|Configures the `onCall()` callback function that accepts arguments: the action instance and dynamic action arguments, e.g. `withOnCall(lambda action, text: text.upper())`. This method is supported only for scripting languages. It is not supported for Java and Kotlin.
+
+|`withOnCallArgs(ActionOnCallResultCallback onCallCallback)`
+|Configures the `onCall()` callback function that accepts arguments: the action instance and action arguments as a list and returns a value, e.g. `withOnCallArgs(lambda action, args: args[0].upper())`. This method is supported for all languages.
+
+|`withOnCallArgsNoResult(ActionOnCallNoResultCallback onCallCallback)`
+|Configures the `onCall()` callback function that accepts arguments: the action instance and action arguments as a list and doesn't return any value, e.g. `withOnCallArgsNoResult((action, args) -> getSponge().setVariable("v1", true))` in Java. This method is supported for all languages.
+
+|`withOnProvideArgs(ActionOnProvideArgsCallback onProvideArgsCallback)`
+|Configures the `onProvideArgs()` callback function that accepts arguments: the action instance and the context to provide arguments.
+|===
+
 [discrete]
 == Example in a script language
-The code presented below defines the action named `EchoAction` that simply returns all arguments.
+The code presented below defines an action named `EchoAction` that simply returns all arguments.
 
 .Action example
 [source,python]
@@ -64,7 +82,7 @@ Action returned: test
 
 [discrete]
 == Example in Java
-The code presented below defines the Java-based action named `JavaEchoAction`.
+The code presented below defines a Java-based action named `JavaEchoAction`.
 
 .Java action example
 [source,java]
@@ -84,6 +102,17 @@ public class JavaEchoAction extends JAction { // <1>
 [source,python]
 ----
 sponge.enableJava(JavaEchoAction)
+----
+
+[discrete]
+== Example of an action builder
+The code presented below defines and enables an action named `EchoAction`.
+
+.Action builder example
+[source,python]
+----
+def onLoad():
+    sponge.enable(ActionBuilder("EchoAction").withOnCall(lambda action, text: text))
 ----
 
 == Arguments and result metadata
@@ -165,9 +194,12 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 
 |`Map<String, ProvidedValue> provided`
 |An initially empty map of argument names (or name paths) and their provided values (value sets) that is to be set up in an `onProvideArgs` callback method implementation.
+
+|`Map<String, Map<String, Object>> features`
+|A not null map of features for arguments in a context, set by a client code. Each argument specified in `provide` or `submit` has its (possibly empty) features map.
 |===
 
-This feature makes easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
+Provided arguments make easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
 
 .Example of an action with provided arguments
 [source,python]
@@ -260,6 +292,8 @@ A provided argument can _depend_ on other arguments but only those that are spec
 Arguments configured as provided with a value, a value set or a element value set have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `withValue` method sets the provided value. The optional `withAnnotatedValueSet` method sets the value set along with annotations (e.g. labels) where each element is an instance of the `AnnotatedValue` class. The optional `withValueSet` method sets the possible value set with no annotations.
 
 Arguments configured as provided with submit should be handled in the `onProvideArgs` callback method.
+
+Provided arguments support paging of a list value, a value set and an element value set, however this functionality is currently in an experimental state.
 
 == Implementing interfaces
 Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.
