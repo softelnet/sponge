@@ -12,13 +12,6 @@
     <artifactId>sponge-distribution</artifactId>
     <name>Sponge - Distribution</name>
 
-    <licenses>
-        <license>
-            <name>GNU General Public License v3.0</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
-        </license>
-    </licenses>
-
     <properties>
         <sponge.root>${basedir}/..</sponge.root>
         <rootDir>${basedir}/..</rootDir>

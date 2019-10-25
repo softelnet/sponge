@@ -38,9 +38,27 @@ In addition to the inherited <<processor-methods,processor properties and method
 
 The `onConfigure` method in actions is not mandatory.
 
+.Action builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`withOnCall(_callback with dynamic arguments_)`
+|Configures the `onCall()` callback function that accepts arguments: the action instance and dynamic action arguments, e.g. `withOnCall(lambda action, text: text.upper())`. This method is supported only for scripting languages. It is not supported for Java and Kotlin.
+
+|`withOnCallArgs(ActionOnCallResultCallback onCallCallback)`
+|Configures the `onCall()` callback function that accepts arguments: the action instance and action arguments as a list and returns a value, e.g. `withOnCallArgs(lambda action, args: args[0].upper())`. This method is supported for all languages.
+
+|`withOnCallArgsNoResult(ActionOnCallNoResultCallback onCallCallback)`
+|Configures the `onCall()` callback function that accepts arguments: the action instance and action arguments as a list and doesn't return any value, e.g. `withOnCallArgsNoResult((action, args) -> getSponge().setVariable("v1", true))` in Java. This method is supported for all languages.
+
+|`withOnProvideArgs(ActionOnProvideArgsCallback onProvideArgsCallback)`
+|Configures the `onProvideArgs()` callback function that accepts arguments: the action instance and the context to provide arguments.
+|===
+
 [discrete]
 == Example in a script language
-The code presented below defines the action named `EchoAction` that simply returns all arguments.
+The code presented below defines an action named `EchoAction` that simply returns all arguments.
 
 .Action example
 [source,python]
@@ -64,7 +82,7 @@ Action returned: test
 
 [discrete]
 == Example in Java
-The code presented below defines the Java-based action named `JavaEchoAction`.
+The code presented below defines a Java-based action named `JavaEchoAction`.
 
 .Java action example
 [source,java]
@@ -84,6 +102,17 @@ public class JavaEchoAction extends JAction { // <1>
 [source,python]
 ----
 sponge.enableJava(JavaEchoAction)
+----
+
+[discrete]
+== Example of an action builder
+The code presented below defines and enables an action named `EchoAction`.
+
+.Action builder example
+[source,python]
+----
+def onLoad():
+    sponge.enable(ActionBuilder("EchoAction").withOnCall(lambda action, text: text))
 ----
 
 == Arguments and result metadata

@@ -473,12 +473,16 @@ Types of processors:
 *** *Rules* - event set processors that detect sequences of events.
 *** *Correlators* - event set processors that detect any set of events and could be also used for implementing any complex event processing that isn't provided by filters, triggers or rules.
 
-=== Creating processors
+A processors can be defined by a class or by a processor builder.
+
+=== Processors defined by classes
+
+==== Definition
 In order to define your processor in a script knowledge base, you have to create a class extending the base class pointed by a specific alias (e.g. `Filter` for filters). In order to define your processor in a Java knowledge base, you have to create a class extending a specific class (e.g. `JFilter` for filters).
 
 A name of a processor is a name of a class defining this processor.
 
-=== Enabling processors
+==== Enabling
 The operation of registering a processor in the engine is called enabling. Registered processors are available to the engine to perform specific tasks. For example, after enabling an event processor starts listening to events it is interested in.
 
 Processors could be enabled:
@@ -486,10 +490,10 @@ Processors could be enabled:
 * by auto-enable (this is the default setting for script-based processors),
 * manually.
 
-==== Auto-enable
-{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base. Processor classes whose names start with the `Abstract` prefix are considered abstract and will not be automatically enabled.
+===== Auto-enable
+{sponge} automatically enables all processors (i.e. actions, filters, triggers, rules and correlators) defined as classes in a script knowledge base. This is done just before invoking the `onLoad` callback function in the knowledge base. Processor classes whose names start with the `Abstract` prefix are considered abstract and will not be automatically enabled.
 
-As previously mentioned, the auto-enable feature scans only for processors defined in the scripting knowledge base. Enabling Java-based processors has to be done manually.
+Enabling Java-based processors has to be done manually.
 
 For non script knowledge bases (Java or Kotlin based) the auto-enable feature will scan only for processor classes nested in a corresponding knowledge base class. Other processors have to be enabled manually.
 
@@ -509,7 +513,7 @@ class CalculateAction(AbstractCalculateAction):
 
 You may turn off auto-enable by setting the `autoEnable` engine configuration parameter to `false` (for example in the Sponge XML configuration file). In that case you have to enable processors manually.
 
-==== Manual enabling
+===== Manual enabling
 In most cases enabling processors manually should be done in the `onLoad` callback function.
 
 To manually enable any script-based processors in a script knowledge base you may use: `sponge.enable()` to enable one processor and `sponge.enableAll()` to enable many processors.
@@ -528,7 +532,7 @@ def onLoad:
     sponge.enableAll(Trigger1, Trigger3)
 ----
 
-To manually enable any Java-based processors in a script knowledge base you may use `sponge.enableJava()`, `sponge.enableJavaAll()` or `sponge.enableJavaByScan()`. The default name of a Java-based processor is its full Java class name. 
+To manually enable any Java-based processors in a script knowledge base you may use `sponge.enableJava()`, `sponge.enableJavaAll()` or `sponge.enableJavaByScan()`. The default name of a Java-based processor is its full Java class name.
 
 The `enableJavaByScan` method enables Java-based processors by scanning a given packages in search of all non abstract processor classes. The scanning is performed by the https://github.com/ronmamo/reflections[Reflections] library. The method parameters are compatible with the http://ronmamo.github.io/reflections/index.html?org/reflections/Reflections.html[`Reflections(Object...)`] constructor.
 
@@ -553,8 +557,8 @@ def onLoad():
     sponge.enableJavaByScan("org.openksavi.sponge.integration.tests.core.scanning")
 ----
 
-=== Disabling processors
-Processors could be disabled only manually. To disable any script-based processors in a script knowledge base you may use `sponge.disable()` to disable one processor and `sponge.disableAll()` to disable many processors.
+==== Disabling
+Processors can be disabled only manually. To disable any script-based processors in a script knowledge base you may use `sponge.disable()` to disable one processor and `sponge.disableAll()` to disable many processors.
 
 .Example of disabling a script-based processor
 [source,python]
@@ -572,6 +576,26 @@ def onLoad():
     sponge.disableJava(SameSourceJavaRule)
 ----
 
+Any processor can be disabled by its name.
+
+.Example of disabling a processor by its name
+[source,python]
+----
+sponge.disable("EchoAction")
+----
+
+=== Processors defined by processor builders
+In order to define your processor by a processor builder you have to configure it using a builder fluter API and manually enable in the engine. A name of a processor is a text passed to a builder constructor.
+
+.Definition and enabling an action using a builder
+[source,python]
+----
+def onLoad:
+    sponge.enable(ActionBuilder("HelloWorldAction").withOnCall(lambda action, name: "Hello World! Hello {}!".format(name)))
+----
+
+A processor defined by a processor builder can be disabled by its name.
+
 === Properties and methods
 
 [[processor-methods]]
@@ -581,7 +605,7 @@ def onLoad():
 |Property / Method |Description
 
 |*`onConfigure()`*
-|The configuration callback method that will be invoked when a processor is being enabled. This method is mandatory.
+|The configuration callback method that will be invoked when a processor is being enabled. This method is mandatory for processors defined as classes.
 
 |`onInit()`
 |The initialization callback method that will be invoked after `onConfigure()`, each time a new working instance of the processor is created.
@@ -618,6 +642,15 @@ def onLoad():
 |===
 
 Processors provide builder-style, fluent methods to set metadata properties, e.g. `self.withLabel("Label").withDescription("Description")`. In many scripting languages properties can be accessed using a dot notation rather than a direct method call. For example a processor metadata may be read using `self.meta` or `self.getMeta()`.
+
+.Processor builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`withOnInit(ProcessorOnInitCallback onInitCallback)`
+|Configures the `onInit()` callback function that accepts one argument - the processor instance, e.g. `withOnInit(lambda action: sponge.setVariable("v1", True))`.
+|===
 
 include::includes/user-guide-actions.adoc[leveloffset=+1]
 

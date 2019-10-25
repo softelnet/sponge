@@ -26,7 +26,7 @@ def onLoad():
     def onAccept(filter, event):
         sponge.logger.debug("Received event {}", event)
         color = event.get("color", None)
-        if (color is None or color != "blue"):
+        if color is None or color != "blue":
             sponge.logger.debug("rejected")
             return False
         else:

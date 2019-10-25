@@ -24,8 +24,8 @@ def onLoad():
             correlator.finish()
 
     sponge.enable(CorrelatorBuilder("SampleCorrelator").withEvents(["filesystemFailure", "diskFailure"]).withMaxInstances(1)
-                .withOnAcceptAsFirst(lambda  correlator, event: event.name == "filesystemFailure")
-                .withOnInit(lambda  correlator: sponge.getVariable("eventLogs").put(correlator.meta.name, []))
+                .withOnAcceptAsFirst(lambda correlator, event: event.name == "filesystemFailure")
+                .withOnInit(lambda correlator: sponge.getVariable("eventLogs").put(correlator.meta.name, []))
                 .withOnEvent(onEvent))
 
 def onStartup():
