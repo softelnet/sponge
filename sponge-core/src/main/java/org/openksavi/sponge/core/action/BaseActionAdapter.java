@@ -93,16 +93,28 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current) {
+    public Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current,
+            Map<String, Map<String, Object>> features) {
         Validate.notNull(getMeta().getArgs(), "Arguments not defined");
 
         if (current == null) {
             current = Collections.emptyMap();
         }
 
+        Map<String, Map<String, Object>> effectiveFeatures = new LinkedHashMap<>();
+        if (features != null) {
+            effectiveFeatures.putAll(features);
+        }
+
+        Set<String> provideSet = buildProvideArgsNames(provide);
+        Set<String> submitSet = buildSubmitArgsNames(submit);
+
+        // Setup features map.
+        provideSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
+        submitSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
+
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
-        getProcessor()
-                .onProvideArgs(new ProvideArgsContext(buildProvideArgsNames(provide), buildSubmitArgsNames(submit), current, provided));
+        getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, current, provided, effectiveFeatures));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null,

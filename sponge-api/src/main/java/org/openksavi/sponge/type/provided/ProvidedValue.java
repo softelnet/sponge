@@ -16,7 +16,9 @@
 
 package org.openksavi.sponge.type.provided;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -44,6 +46,9 @@ public class ProvidedValue<T> {
      * choice. Applicable only for list types. If there is no element value set, this property is {@code null}.
      */
     private List<AnnotatedValue> annotatedElementValueSet;
+
+    /** The optional provided features. Note that these features are not the same as those provided in annotated values. */
+    private Map<String, Object> features = new LinkedHashMap<>();
 
     public ProvidedValue() {
         //
@@ -81,14 +86,12 @@ public class ProvidedValue<T> {
         this.annotatedElementValueSet = annotatedElementValueSet;
     }
 
-    /**
-     * The utility getter for the possible element value set without annotations.
-     *
-     * @return the element value set.
-     */
-    public List<?> getElementValueSet() {
-        return annotatedElementValueSet != null ? annotatedElementValueSet.stream()
-                .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 
     public ProvidedValue<T> withValue(T value) {
@@ -115,5 +118,15 @@ public class ProvidedValue<T> {
     public <E> ProvidedValue<T> withElementValueSet(List<E> elementValueSet) {
         return withAnnotatedElementValueSet(
                 elementValueSet.stream().map(value -> new AnnotatedValue<>(value)).collect(Collectors.toList()));
+    }
+
+    public ProvidedValue<T> withFeatures(Map<String, Object> features) {
+        this.features.putAll(features);
+        return this;
+    }
+
+    public ProvidedValue<T> withFeature(String name, Object value) {
+        features.put(name, value);
+        return this;
     }
 }

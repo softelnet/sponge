@@ -35,22 +35,26 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
 
     private Map<String, Object> current;
 
+    private Map<String, Map<String, Object>> features;
+
     private ProcessorQualifiedVersion qualifiedVersion;
 
     public ProvideActionArgsRequest() {
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            ProcessorQualifiedVersion qualifiedVersion) {
+            Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.provide = provide;
         this.submit = submit;
         this.current = current;
+        this.features = features;
         this.qualifiedVersion = qualifiedVersion;
     }
 
-    public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current) {
-        this(name, provide, submit, current, null);
+    public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
+            Map<String, Map<String, Object>> features) {
+        this(name, provide, submit, current, features, null);
     }
 
     @Override
@@ -89,6 +93,15 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
 
     public void setCurrent(Map<String, Object> current) {
         this.current = current;
+    }
+
+    @ApiModelProperty(value = "The features for arguments", required = false)
+    public Map<String, Map<String, Object>> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Map<String, Object>> features) {
+        this.features = features;
     }
 
     @Override

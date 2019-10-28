@@ -127,4 +127,9 @@ public abstract class SpongeApiUtils {
         return annotatedValueList != null ? annotatedValueList.stream()
                 .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
+
+    public static List<?> unwrapUnknownAnnotatedValueList(List<AnnotatedValue> annotatedValueList) {
+        return annotatedValueList != null ? annotatedValueList.stream()
+                .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
+    }
 }

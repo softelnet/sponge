@@ -433,6 +433,19 @@ public interface SpongeRestClient extends Closeable {
      * @param provide the names of arguments to fetch.
      * @param submit the names of arguments to submit.
      * @param current the current values of arguments from a client code.
+     * @param features the features for arguments.
+     * @return the provided action arguments.
+     */
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
+            Map<String, Object> current, Map<String, Map<String, Object>> features);
+
+    /**
+     * Submits action arguments to the server and/or fetches action arguments from the server.
+     *
+     * @param actionName the action name.
+     * @param provide the names of arguments to fetch.
+     * @param submit the names of arguments to submit.
+     * @param current the current values of arguments from a client code.
      * @return the provided action arguments.
      */
     Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,

@@ -324,6 +324,54 @@ class FruitsElementValueSetAction(Action):
                 AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
             ])
 
+class ViewFruitsPaging(Action):
+    def onConfigure(self):
+        self.withLabel("Fruits with value paging").withArgs([
+            ListType("fruits", StringType()).withLabel("Fruits").withProvided(ProvidedMeta().withValue()).withFeatures({"valuePaginable":True}),
+            StringType("favouriteFruit").withLabel("Favourite fruit").withProvided(ProvidedMeta().withValueSet()).withFeatures({"valueSetPaginable":True})
+        ]).withNoResult().withCallable(False)
+    def onInit(self):
+        self.fruits = ["apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi", "plum"]
+        self.allFruits = ["apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango",
+                    "grapefruit", "kiwi", "plum", "pear", "strawberry", "blackberry", "pineapple", "papaya", "melon"]
+    def onProvideArgs(self, context):
+        if "fruits" in context.provide:
+            valueOffset = context.features["fruits"].get("valueOffset")
+            valueLimit = context.features["fruits"].get("valueLimit")
+            if valueOffset is not None and valueLimit is not None:
+                context.provided["fruits"] = ProvidedValue().withValue(self.fruits[valueOffset:(valueOffset + valueLimit)]).withFeatures(
+                    {"valueOffset":valueOffset, "valueLimit":valueLimit})
+            else:
+                context.provided["fruits"] = ProvidedValue().withValue(self.fruits)
+        if "favouriteFruit" in context.provide:
+            valueSetOffset = context.features["favouriteFruit"].get("valueSetOffset")
+            valueSetLimit = context.features["favouriteFruit"].get("valueSetLimit")
+            if valueSetOffset is not None and valueSetLimit is not None:
+                context.provided["favouriteFruit"] = ProvidedValue().withValueSet(
+                    self.allFruits[valueSetOffset:(valueSetOffset + valueSetLimit)]).withFeatures(
+                    {"valueSetOffset":valueSetOffset, "valueSetLimit":valueSetLimit})
+            else:
+                context.provided["favouriteFruit"] = ProvidedValue().withValueSet(self.allFruits)
+
+class ViewFavouriteFruitsPaging(Action):
+    def onConfigure(self):
+        self.withLabel("Favourite fruits with element value set paging").withArgs([
+            ListType("favouriteFruits", StringType()).withLabel("Favourite fruits").withProvided(
+                ProvidedMeta().withElementValueSet()).withFeatures({"elementValueSetPaginable":True})
+        ]).withNoResult().withCallable(False)
+    def onInit(self):
+        self.allFruits = ["apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango",
+                    "grapefruit", "kiwi", "plum", "pear", "strawberry", "blackberry", "pineapple", "papaya", "melon"]
+    def onProvideArgs(self, context):
+        if "favouriteFruits" in context.provide:
+            offset = context.features["favouriteFruits"].get("elementValueSetOffset")
+            limit = context.features["favouriteFruits"].get("elementValueSetLimit")
+            if offset is not None and limit is not None:
+                context.provided["favouriteFruits"] = ProvidedValue().withElementValueSet(
+                    self.allFruits[offset:(offset + limit)]).withFeatures({"elementValueSetOffset":offset, "elementValueSetLimit":limit})
+            else:
+                context.provided["favouriteFruits"] = ProvidedValue().withElementValueSet(self.allFruits)
+
 class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RemoteApi"))

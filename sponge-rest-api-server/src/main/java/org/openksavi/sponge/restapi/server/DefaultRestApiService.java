@@ -396,7 +396,8 @@ public class DefaultRestApiService implements RestApiService {
             Map<String,
                     ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
                             request.getProvide(), request.getSubmit(),
-                            RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getCurrent()));
+                            RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getCurrent()),
+                            request.getFeatures());
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);

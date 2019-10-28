@@ -194,9 +194,12 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 
 |`Map<String, ProvidedValue> provided`
 |An initially empty map of argument names (or name paths) and their provided values (value sets) that is to be set up in an `onProvideArgs` callback method implementation.
+
+|`Map<String, Map<String, Object>> features`
+|A not null map of features for arguments in a context, set by a client code. Each argument specified in `provide` or `submit` has its (possibly empty) features map.
 |===
 
-This feature makes easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
+Provided arguments make easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
 
 .Example of an action with provided arguments
 [source,python]
@@ -289,6 +292,8 @@ A provided argument can _depend_ on other arguments but only those that are spec
 Arguments configured as provided with a value, a value set or a element value set have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `withValue` method sets the provided value. The optional `withAnnotatedValueSet` method sets the value set along with annotations (e.g. labels) where each element is an instance of the `AnnotatedValue` class. The optional `withValueSet` method sets the possible value set with no annotations.
 
 Arguments configured as provided with submit should be handled in the `onProvideArgs` callback method.
+
+Provided arguments support paging of a list value, a value set and an element value set, however this functionality is currently in an experimental state.
 
 == Implementing interfaces
 Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.
