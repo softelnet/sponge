@@ -12,11 +12,9 @@ image::mobile_architecture.svg[title="The mobile application architecture",width
 
 One of many use cases of the application is to connect to IoT devices that have {sponge} installed and execute available actions. Different types of such devices provide different sets of actions that are specific to a device features. For example one device could have a camera and provide an action to take a picture. Another device could have a temperature sensor and provide its readings or have a machine learning model and provide predictions.
 
-The mobile application uses several {sponge} concepts such as actions and action arguments metadata, data types metadata, action and data type features, annotated values, provided action arguments and categories. It supports the convention over configuration paradigm.
+The mobile application uses several {sponge} concepts such as actions and action arguments metadata, data types metadata, action and data type features, annotated values, provided action arguments, categories and events. It supports a convention over configuration paradigm.
 
 You could build a customized GUI using your own Flutter code that will call the same {sponge} actions. In that case the generic {sponge} mobile client would be used as a Flutter library in your Flutter project.
-
-_There is also a draft of an additional, experimental functionality that will allow users to subscribe to {sponge} events in the mobile application. In case of a new event a notification will be displayed. The subscribed events will be shown in the list. By tapping on an event the user will be directed to a screen presenting an action associated with this event. The subscription uses a {sponge} gRPC service published on a default port (i.e. the REST API port plus `1`)._
 
 == Functionalities
 The following chapters show the key functionalities of the mobile application.
@@ -167,6 +165,62 @@ image::screens/mobile/actions_markdown_result.jpg[title="The action Markdown for
 
 Actions may return a https://en.wikipedia.org/wiki/Markdown[Markdown] formatted text.
 
+=== Events
+The application can subscribe to {sponge} events. The subscription uses a {sponge} gRPC service published on a default port (i.e. the REST API port plus `1`). A user must have priviliges to subscribe to events and to send events.
+
+There are a few places where {sponge} events are directly used in the application:
+
+* An event list screen (handles events subscribed globally for the application).
+* An action call screen for actions that have _refresh events_ configured (handles events subscribed locally for an action).
+
+==== Event subscription
+Events can be subscribed globally for the application. Subscription management is performed by a subscription action, i.e. an action that has the `intent` feature set to `subscription`. {sponge} provides a default subscription action `GrpcApiManageSubscription`.
+
+In case of a new event an operating system notification will be displayed.
+
+image::screens/mobile/event_subscription_management.jpg[title="Event subscription management",width=300,pdfwidth=35%,scaledwidth=35%]
+
+==== Event list
+The event list screen shows all events the application has subscribed for but only those that has been sent when the application is running.
+
+By tapping on an event the user will be directed to a screen presenting an action associated with this event. This action is called an _event handler action_ and is set up in the event type definition as a feature `handlerAction`. The action is required to have an `ObjectType` argument with object class `RemoteEvent`. An event instance will be passed to that argument. After the action is called, the event is automatically dismissed from the GUI.
+
+If there is no event handler action defined for a specific event type, a default event handler action will be shown. The default action is searched by its `intent` feature which has to be `defaultEventHandler`. {sponge} provides a default event handler action `GrpcApiViewEvent`.
+
+image::screens/mobile/event_list.jpg[title="Event list",width=300,pdfwidth=35%,scaledwidth=35%]
+
+.Event type with a default event handler action
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_notification.py[lines=5..-1]
+----
+
+image::screens/mobile/event_handler_action_notification.jpg[title="Default event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+.Event type with a custom event handler action
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_memo.py[lines=5..-1]
+----
+
+image::screens/mobile/event_handler_action_memo.jpg[title="Custom event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+==== Action with refresh events
+Every action can have _refresh events_ configured. When such an action is shown in the GUI, the application will subscribe to refresh events. When such event arrives, the action arguments will be automatically refreshed. Event arguments are ignored.
+
+.Action with refresh events
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_counter_viewer.py[lines=5..-1]
+----
+
+image::screens/mobile/actions_counter.jpg[title="Action with refresh events",width=300,pdfwidth=35%,scaledwidth=35%]
+
+==== Sending events
+Events can be sent by the application using an action. {sponge} provides a default, generic action for sending events `GrpcApiSendEvent`.
+
+image::screens/mobile/event_send.jpg[title="Action that sends events",width=300,pdfwidth=35%,scaledwidth=35%]
+
 [[mobile-advanced-use-cases]]
 == Advanced use cases
 
@@ -237,6 +291,21 @@ In the default scenario _read_, _update_ and _delete_ actions should have the fi
 The result of a _create_, an _update_ and a _delete_ action is ignored and should be set to `withNoResult`.
 
 After calling a CRUD action the main action arguments are refreshed.
+
+=== Interactive forms
+Interactive forms provide live updates in a GUI and an instant modifications of a server state. They can be implemented by actions with provided and submittable arguments and action refresh events. Interactive forms can be used for example to manage IoT devices.
+
+The following example shows a very simple MPD player implemented as a {sponge} action. A change in an MPD server state generates a {sponge} event. Such event is subscribed by the action in the mobile application and causes the action to refresh its arguments. On the other hand, a change made by a user in the GUI will cause such argument to be submitted to the server.
+
+.Interactive form example
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-mpd-mpc/kb/mpd_mpc_player.py[lines=5..-1]
+----
+
+image::screens/mobile/actions_mpd_player_main.jpg[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/actions_mpd_player_context_actions.jpg[title="The context actions",width=300,pdfwidth=35%,scaledwidth=35%]
 
 == User experience
 
@@ -385,17 +454,41 @@ The application may be switched to the dark theme in the settings.
 |Action
 |Should be set in an action that implements a user _sign up_ in the user management functionality.
 
+|`intent: subscription`
+|Action
+|Should be set in an action that manages event subscriptions.
+
+|`intent: defaultEventHandler`
+|Action
+|A default event handler action.
+
 |`intent`
 |Type
 |A type with an intent is handled by the application in a specific way.
 
 |`intent: username`
 |Action argument type
-|Indicates that the action argument represents a username. Applies only for actions that implement the user management functionality. This intent may be omitted if an action argument name is `username`.
+|Indicates that the action argument represents a username. Applies only to actions that implement the user management functionality. This intent may be omitted if an action argument name is `username`.
 
 |`intent: password`
 |Action argument type
-|Indicates that the action argument represents a password. Applies only for actions that implement the user management functionality. This intent may be omitted if an action argument name is `password`.
+|Indicates that the action argument represents a password. Applies only to actions that implement the user management functionality. This intent may be omitted if an action argument name is `password`.
+
+|`intent: eventNames`
+|Action argument type
+|Indicates that the action argument represents event names to subscribe. Applies only to event subscription actions.
+
+|`intent: subscribe`
+|Action argument type
+|Indicates that the action argument represents a flag telling if to turn on or off an event subscribtion. Applies only to event subscription actions.
+
+|`refreshEvents`
+|Action
+|Refresh event names for an action.
+
+|`handlerAction`
+|Event type
+|An event handler action name.
 
 |`multiline`
 |`StringType`
@@ -473,6 +566,9 @@ The application may be switched to the dark theme in the settings.
 
 |`slider`
 |Supported for an `IntegerType` but only if it has min and max values defined. The default behaviour of a slider is lazy, i.e. a value is set on an end of drag. If an integer type has a `responsive` feature set to `true`, the value will be set while dragging.
+
+|`switch`
+|Supported for a `BooleanType`. The default widget for `BooleanType` is a checkbox.
 |===
 
 A data type property can be dynamically overwritten by a corresponding feature in an `AnnotatedValue`. The feature name has to be exactly the same as the data type property name. The overwrite is handled by the {sponge} mobile client application.

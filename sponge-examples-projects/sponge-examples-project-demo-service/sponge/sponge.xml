@@ -58,7 +58,9 @@
             <file>sponge_demo_events_memo.py</file>
         </knowledgeBase>
         <knowledgeBase name="eventsCounter" label="Counter">
-            <file>sponge_demo_events_counter.py</file>
+            <file>sponge_demo_events_counter_event_handler.py</file>
+            <file>sponge_demo_events_counter_viewer.py</file>
+            <file>sponge_demo_events_counter_sender.py</file>
         </knowledgeBase>
         <knowledgeBase name="engine" label="Engine">
             <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>

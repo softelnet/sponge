@@ -2,6 +2,7 @@
 Sponge Knowledge base
 gRPC demo - Notification.
 """
+
 from java.util.concurrent.atomic import AtomicLong
 from org.openksavi.sponge.restapi.model import RemoteEvent
 

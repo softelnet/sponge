@@ -226,16 +226,16 @@ class ViewSongLyrics(Action):
         if "lyrics" in context.provide:
             try:
                 if context.current["song"] and " - " in context.current["song"]:
-                    (artist, title) = tuple(context.current["song"].split(" - ", 2))
-                    musixmatchApiKey = sponge.getProperty("musixmatchApiKey", None)
-                    if musixmatchApiKey:
-                        lyrics = getLyrics(musixmatchApiKey, artist, title)
+                    (artist, title) = tuple(context.current["song"].split(" - ", 2)[:2])
+                    lyricsService = sponge.getVariable("lyricsService")
+                    if lyricsService.configured:
+                        lyrics = lyricsService.getLyrics(artist, title)
                     else:
                         lyrics = "LYRICS SERVICE NOT CONFIGURED"
                 else:
                     lyrics = ""
             except:
-                lyrics = "LYRICS ERROR: " + str(sys.exc_info()[0])
+                lyrics = "LYRICS ERROR: " + str(sys.exc_info()[1])
 
             context.provided["lyrics"] = ProvidedValue().withValue(lyrics)
 
@@ -255,70 +255,10 @@ class ViewMpdStatus(Action):
         if "stats" in context.provide:
             context.provided["stats"] =  ProvidedValue().withValue(mpc.getStats())
 
-class MpdPlayer(Action):
-    def onConfigure(self):
-        self.withLabel("Player").withDescription("The MPD player.")
-        self.withArgs([
-            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
-                ProvidedMeta().withValue().withReadOnly()),
-            IntegerType("position").withLabel("Position").withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
-            StringType("time").withLabel("Time").withNullable().withProvided(
-                ProvidedMeta().withValue().withReadOnly()),#.withDependency("position").withLazyUpdate()
-            IntegerType("volume").withLabel("Volume (%)").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
-            VoidType("prev").withLabel("Previous").withProvided(ProvidedMeta().withSubmittable()),
-            BooleanType("play").withLabel("Play").withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable()).withFeatures({"widget":"switch"}),
-            VoidType("next").withLabel("Next").withProvided(ProvidedMeta().withSubmittable())
-        ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification"],
-                           "icon":"music"})
-        self.withFeature("contextActions", [
-            "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "ViewMpdStatus()",
-        ])
-
-    def __ensureStatus(self, mpc, status):
-        return status if mpc.isStatusOk(status) else mpc.getStatus()
-
-    def onProvideArgs(self, context):
-        mpc = sponge.getVariable("mpc")
-        status = None
-
-        mpc.lock.lock()
-        try:
-            if "position" in context.submit:
-                status = mpc.seekByPercentage(context.current["position"])
-            if "volume" in context.submit:
-                status = mpc.setVolume(context.current["volume"].value)
-            if "play" in context.submit:
-                status = mpc.togglePlay(context.current["play"])
-            if "prev" in context.submit:
-                status = mpc.prev()
-            if "next" in context.submit:
-                status = mpc.next()
-
-            if "song" in context.provide:
-                context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
-            if "position" in context.provide or "context" in context.submit:
-                status = self.__ensureStatus(mpc, status)
-                context.provided["position"] = ProvidedValue().withValue(mpc.getPositionByPercentage(status))
-            if "time" in context.provide:
-                status = self.__ensureStatus(mpc, status)
-                context.provided["time"] = ProvidedValue().withValue(mpc.getTimeStatus(status))
-            # Provide an annotated volume value at once if submitted.
-            if "volume" in context.provide or "volume" in context.submit:
-                status = self.__ensureStatus(mpc, status)
-                volume = mpc.getVolume(status)
-                context.provided["volume"] = ProvidedValue().withValue(AnnotatedValue(volume).withLabel("Volume (" + str(volume) + "%)"))
-            if "play" in context.provide:
-                status = self.__ensureStatus(mpc, status)
-                context.provided["play"] = ProvidedValue().withValue(mpc.getPlay(status))
-        finally:
-            mpc.lock.unlock()
 
 def onStartup():
     sponge.setVariable("mpc", Mpc())
+    sponge.setVariable("lyricsService", LyricsService(sponge.getProperty("musixmatchApiKey", None)))
     sponge.getVariable("mpc").startEventLoop()
     sponge.event("statusPolling").sendEvery(Duration.ofSeconds(1))
 
