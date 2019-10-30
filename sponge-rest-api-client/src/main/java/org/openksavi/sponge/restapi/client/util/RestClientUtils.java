@@ -33,6 +33,7 @@ import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import org.apache.commons.lang3.Validate;
 
@@ -68,11 +69,13 @@ public abstract class RestClientUtils {
             }
 
             @Override
-            public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+            public void checkServerTrusted(final X509Certificate[] chain, final String authType)
+                    throws CertificateException {
             }
 
             @Override
-            public void checkClientTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+            public void checkClientTrusted(final X509Certificate[] chain, final String authType)
+                    throws CertificateException {
             }
         };
     }
@@ -94,7 +97,8 @@ public abstract class RestClientUtils {
     }
 
     /**
-     * Closes aggressively a OkHttpClient according to the OkHttpClient documentation.
+     * Closes aggressively a OkHttpClient according to the OkHttpClient
+     * documentation.
      *
      * @param okHttpClient the OkHttpClient.
      */
@@ -121,18 +125,19 @@ public abstract class RestClientUtils {
         OkHttpClient client = new OkHttpClient.Builder().build();
 
         try {
-            Response okHttpResponse = client
-                    .newCall(new Request.Builder().url(baseRestApiUrl + "/" + RestApiConstants.OPERATION_DOC)
-                            .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build()).get().build())
-                    .execute();
+            Response okHttpResponse = client.newCall(new Request.Builder()
+                    .url(baseRestApiUrl + "/" + RestApiConstants.OPERATION_DOC)
+                    .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build())
+                    .get().build()).execute();
 
             Validate.isTrue(okHttpResponse.code() == 200, "HTTP response is %s", okHttpResponse.code());
             ObjectMapper mapper = RestApiUtils.createObjectMapper();
-            String json = okHttpResponse.body().string();
+            String json = Validate.notNull(okHttpResponse.body(), "The reponse body is empty").string();
 
             Map<?, ?> jsonMap = mapper.readValue(json, Map.class);
 
-            Validate.isTrue(jsonMap.containsKey("swagger"), "The response doesn't seem to be an OpenAPI JSON specification");
+            Validate.isTrue(jsonMap.containsKey("swagger"),
+                    "The response doesn't seem to be an OpenAPI JSON specification");
 
             return json;
         } catch (IOException e) {
