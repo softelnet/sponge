@@ -1,5 +1,6 @@
 = Mobile client application
 :page-permalink: /mobile/
+:toc:
 
 == Introduction
 The {sponge} mobile client application is a https://flutter.io[Flutter] application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} REST API. All business logic has to be placed in {sponge} actions, so the only requirement to have the application working is to create your own {sponge} service by writing a knowledge base that define actions that will be visible and ready to run in the application or to connect to an existing {sponge} service.
