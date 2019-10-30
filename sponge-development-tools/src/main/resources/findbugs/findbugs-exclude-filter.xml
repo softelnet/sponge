@@ -93,8 +93,7 @@
 
     <!-- Reason: Generated -->
     <Match>
-        <Package name="org.openksavi.sponge.grpcapi.proto" />
-        <Bug pattern="UCF_USELESS_CONTROL_FLOW,SE_BAD_FIELD" />
+        <Package name="org.openksavi.sponge.grpcapi.proto"/>
     </Match>
 
     <!-- Reason: Used only in tests -->
