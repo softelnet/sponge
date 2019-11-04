@@ -29,23 +29,32 @@ public class AnnotatedValue<T> implements DecoratedValue<T> {
     private T value;
 
     /** The optional value label. */
-    private String label;
+    private String valueLabel;
 
     /** The optional value description. */
-    private String description;
+    private String valueDescription;
 
-    /** The annotated type features as a map of names to values. */
+    /** The features as a map of names to values. */
     private Map<String, Object> features = new LinkedHashMap<>();
+
+    /** The optional type label. */
+    private String typeLabel;
+
+    /** The optional type description. */
+    private String typeDescription;
 
     protected AnnotatedValue() {
         //
     }
 
-    public AnnotatedValue(T value, String label, String description, Map<String, Object> features) {
+    public AnnotatedValue(T value, String valueLabel, String valueDescription, Map<String, Object> features, String typeLabel,
+            String typeDescription) {
         this.value = value;
-        this.label = label;
-        this.description = description;
+        this.valueLabel = valueLabel;
+        this.valueDescription = valueDescription;
         this.features = features;
+        this.typeLabel = typeLabel;
+        this.typeDescription = typeDescription;
     }
 
     public AnnotatedValue(T value) {
@@ -62,20 +71,20 @@ public class AnnotatedValue<T> implements DecoratedValue<T> {
         this.value = value;
     }
 
-    public String getLabel() {
-        return label;
+    public String getValueLabel() {
+        return valueLabel;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setValueLabel(String valueLabel) {
+        this.valueLabel = valueLabel;
     }
 
-    public String getDescription() {
-        return description;
+    public String getValueDescription() {
+        return valueDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setValueDescription(String valueDescription) {
+        this.valueDescription = valueDescription;
     }
 
     public Map<String, Object> getFeatures() {
@@ -86,13 +95,29 @@ public class AnnotatedValue<T> implements DecoratedValue<T> {
         this.features = new LinkedHashMap<>(features);
     }
 
-    public AnnotatedValue<T> withLabel(String label) {
-        setLabel(label);
+    public String getTypeLabel() {
+        return typeLabel;
+    }
+
+    public void setTypeLabel(String typeLabel) {
+        this.typeLabel = typeLabel;
+    }
+
+    public String getTypeDescription() {
+        return typeDescription;
+    }
+
+    public void setTypeDescription(String typeDescription) {
+        this.typeDescription = typeDescription;
+    }
+
+    public AnnotatedValue<T> withValueLabel(String valueLabel) {
+        setValueLabel(valueLabel);
         return this;
     }
 
-    public AnnotatedValue<T> withDescription(String description) {
-        setDescription(description);
+    public AnnotatedValue<T> withValueDescription(String valueDescription) {
+        setValueDescription(valueDescription);
         return this;
     }
 
@@ -103,6 +128,16 @@ public class AnnotatedValue<T> implements DecoratedValue<T> {
 
     public AnnotatedValue<T> withFeature(String name, Object value) {
         this.features.put(name, value);
+        return this;
+    }
+
+    public AnnotatedValue<T> withTypeLabel(String typeLabel) {
+        setTypeLabel(typeLabel);
+        return this;
+    }
+
+    public AnnotatedValue<T> withTypeDescription(String typeDescription) {
+        setTypeDescription(typeDescription);
         return this;
     }
 }

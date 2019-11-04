@@ -34,11 +34,11 @@ class RecordLibraryForm(Action):
         global LIBRARY
         if "order" in context.provide:
             context.provided["order"] = ProvidedValue().withValue("author").withAnnotatedValueSet([
-                AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
+                AnnotatedValue("author").withValueLabel("Author"), AnnotatedValue("title").withValueLabel("Title")])
         if "books" in context.provide:
             context.provided["books"] = ProvidedValue().withValue(
                 # Context actions are provided dynamically in an annotated value.
-                map(lambda book: AnnotatedValue(book.toMap()).withLabel("{} - {}".format(book.author, book.title)).withFeature("contextActions", [
+                map(lambda book: AnnotatedValue(book.toMap()).withValueLabel("{} - {}".format(book.author, book.title)).withFeature("contextActions", [
                         "RecordBookContextBinaryResult", "RecordBookContextNoResult", "RecordBookContextAdditionalArgs"]),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 

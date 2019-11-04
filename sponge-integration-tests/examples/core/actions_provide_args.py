@@ -43,7 +43,7 @@ class SetActuatorAnnotatedValueSet(Action):
     def onProvideArgs(self, context):
         if "actuatorType" in context.provide:
             context.provided["actuatorType"] = ProvidedValue().withValue(sponge.getVariable("actuatorType", None)).withAnnotatedValueSet(
-                [AnnotatedValue("auto").withLabel("Auto"), AnnotatedValue("manual").withLabel("Manual")])
+                [AnnotatedValue("auto").withValueLabel("Auto"), AnnotatedValue("manual").withValueLabel("Manual")])
 
 class SetActuatorNotLimitedValueSet(Action):
     def onConfigure(self):

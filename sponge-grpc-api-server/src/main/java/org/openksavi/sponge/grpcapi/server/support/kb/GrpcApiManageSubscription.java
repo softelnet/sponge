@@ -73,7 +73,7 @@ public class GrpcApiManageSubscription extends JAction {
                     // Check permissions.
                     .filter(entry -> getRestApiService().canSubscribeEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
-                            .withLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
+                            .withValueLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());
             context.getProvided().put("eventNames", new ProvidedValue<>().withAnnotatedElementValueSet(annotatedElementValueSet));
         }

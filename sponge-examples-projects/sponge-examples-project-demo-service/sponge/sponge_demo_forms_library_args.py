@@ -24,10 +24,10 @@ class ArgLibraryForm(Action):
         global LIBRARY
         if "order" in context.provide:
             context.provided["order"] = ProvidedValue().withValue("author").withAnnotatedValueSet([
-                AnnotatedValue("author").withLabel("Author"), AnnotatedValue("title").withLabel("Title")])
+                AnnotatedValue("author").withValueLabel("Author"), AnnotatedValue("title").withValueLabel("Title")])
         if "books" in context.provide:
             context.provided["books"] = ProvidedValue().withValue(
-                map(lambda book: AnnotatedValue(int(book.id)).withLabel("{} - {}".format(book.author, book.title)).withDescription("Sample description (ID: " + str(book.id) +")"),
+                map(lambda book: AnnotatedValue(int(book.id)).withValueLabel("{} - {}".format(book.author, book.title)).withValueDescription("Sample description (ID: " + str(book.id) +")"),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 
 class ArgCreateBook(Action):

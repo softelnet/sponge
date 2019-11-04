@@ -21,7 +21,7 @@ class SetGrovePiMode(Action):
     def onProvideArgs(self, context):
         if "mode" in context.provide:
             context.provided["mode"] = ProvidedValue().withValue(sponge.getVariable("grovePiMode", None)).withAnnotatedValueSet([
-                AnnotatedValue("auto").withLabel("Auto"), AnnotatedValue("manual").withLabel("Manual")])
+                AnnotatedValue("auto").withValueLabel("Auto"), AnnotatedValue("manual").withValueLabel("Manual")])
 
 class GetLcdText(Action):
     def onConfigure(self):

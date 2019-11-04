@@ -6,6 +6,12 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
+== 1.13.1 (not released yet)
+* API change: Renamed `label` to `valueLabel` and `description` to `valueDescription` in `AnnotatedValue`.
+* Added `AnnotatedValue.typeLabel` and `AnnotatedValue.typeDescription`.
+* Dependencies upgrade.
+
+[discrete]
 == 1.13.0 (2019-10-30)
 * API change: Renamed `names` to `provide` in a provide action arguments context.
 * API change: Removed `makeEventSpec` methods from rules. Use one of `RuleEventSpec` class constructors instead.

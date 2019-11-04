@@ -59,8 +59,9 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
         if (type.isAnnotated()) {
             AnnotatedValue<T> annotatedValue = (AnnotatedValue) value;
-            return new AnnotatedValue<>(getUnitConverter(type).marshal(this, type, annotatedValue.getValue()), annotatedValue.getLabel(),
-                    annotatedValue.getDescription(), annotatedValue.getFeatures());
+            return new AnnotatedValue<>(getUnitConverter(type).marshal(this, type, annotatedValue.getValue()),
+                    annotatedValue.getValueLabel(), annotatedValue.getValueDescription(), annotatedValue.getFeatures(),
+                    annotatedValue.getTypeLabel(), annotatedValue.getTypeDescription());
         }
 
         return getUnitConverter(type).marshal(this, type, value);

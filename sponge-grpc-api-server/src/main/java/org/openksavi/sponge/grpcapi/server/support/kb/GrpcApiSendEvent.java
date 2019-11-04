@@ -76,7 +76,7 @@ public class GrpcApiSendEvent extends JAction {
                     // Check permissions.
                     .filter(entry -> getRestApiService().canSendEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
-                            .withLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
+                            .withValueLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());
             context.getProvided().put("name", new ProvidedValue<String>().withAnnotatedValueSet(annotatedValueSet));
         }

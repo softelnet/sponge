@@ -13,17 +13,17 @@ class MpdPlayer(Action):
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()),
             StringType("time").withLabel("Time").withNullable().withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
-            IntegerType("volume").withLabel("Volume (%)").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
+            IntegerType("volume").withLabel("Volume").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
             VoidType("prev").withLabel("Previous").withProvided(ProvidedMeta().withSubmittable()),
             BooleanType("play").withLabel("Play").withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()).withFeatures({"widget":"switch"}),
             VoidType("next").withLabel("Next").withProvided(ProvidedMeta().withSubmittable())
         ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification"],
+        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification_.*"],
                            "icon":"music"})
         self.withFeature("contextActions", [
-            "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "ViewMpdStatus()",
+            "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "ViewMpdStatus()",
         ])
 
     def __ensureStatus(self, mpc, status):
@@ -58,7 +58,7 @@ class MpdPlayer(Action):
             if "volume" in context.provide or "volume" in context.submit:
                 status = self.__ensureStatus(mpc, status)
                 volume = mpc.getVolume(status)
-                context.provided["volume"] = ProvidedValue().withValue(AnnotatedValue(volume).withLabel("Volume (" + str(volume) + "%)"))
+                context.provided["volume"] = ProvidedValue().withValue(AnnotatedValue(volume).withTypeLabel("Volume (" + str(volume) + "%)"))
             if "play" in context.provide:
                 status = self.__ensureStatus(mpc, status)
                 context.provided["play"] = ProvidedValue().withValue(mpc.getPlay(status))

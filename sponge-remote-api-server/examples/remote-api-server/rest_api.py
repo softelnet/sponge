@@ -184,7 +184,8 @@ class SetActuatorDepends(Action):
     def onProvideArgs(self, context):
         if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withAnnotatedValueSet(
-                [AnnotatedValue("A").withLabel("Value A"), AnnotatedValue("B").withLabel("Value B"), AnnotatedValue("C").withLabel("Value C")])
+                [AnnotatedValue("A").withValueLabel("Value A"), AnnotatedValue("B").withValueLabel("Value B"),
+                 AnnotatedValue("C").withValueLabel("Value C")])
         if "actuator2" in context.provide:
             context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
         if "actuator3" in context.provide:
@@ -220,7 +221,8 @@ class AnnotatedTypeAction(Action):
     def onCall(self, arg1):
         features = {"feature1":"value1"}
         features.update(arg1.features)
-        return AnnotatedValue("RESULT").withFeatures(features)
+        return AnnotatedValue("RESULT").withValueLabel("Result value").withValueDescription("Result value description").withFeatures(
+            features).withTypeLabel("Result type").withTypeDescription("Result type description")
 
 class DynamicResultAction(Action):
     def onConfigure(self):
@@ -321,7 +323,8 @@ class FruitsElementValueSetAction(Action):
     def onProvideArgs(self, context):
         if "fruits" in context.provide:
             context.provided["fruits"] = ProvidedValue().withAnnotatedElementValueSet([
-                AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
+                AnnotatedValue("apple").withValueLabel("Apple"), AnnotatedValue("banana").withValueLabel("Banana"),
+                AnnotatedValue("lemon").withValueLabel("Lemon")
             ])
 
 class ViewFruitsPaging(Action):

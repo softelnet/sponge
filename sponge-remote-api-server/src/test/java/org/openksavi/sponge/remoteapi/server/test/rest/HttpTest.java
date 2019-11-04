@@ -50,6 +50,7 @@ import org.openksavi.sponge.restapi.util.RestApiUtils;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { HttpTest.TestConfig.class })
 @DirtiesContext
+@SuppressWarnings("deprecation")
 public class HttpTest extends BasicTestTemplate {
 
     private OkHttpClient createOkHttpClient() {

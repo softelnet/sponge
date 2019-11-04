@@ -131,7 +131,8 @@ public abstract class RestApiServerUtils {
             if (argValue.getAnnotatedValueSet() != null) {
                 ((ProvidedValue) argValue).setAnnotatedValueSet(argValue.getAnnotatedValueSet().stream()
                         .map(annotatedValue -> new AnnotatedValue(typeConverter.marshal(argType, annotatedValue.getValue()),
-                                annotatedValue.getLabel(), annotatedValue.getDescription(), annotatedValue.getFeatures()))
+                                annotatedValue.getValueLabel(), annotatedValue.getValueDescription(), annotatedValue.getFeatures(),
+                                annotatedValue.getTypeLabel(), annotatedValue.getTypeDescription()))
                         .collect(Collectors.toList()));
             }
 
@@ -139,7 +140,8 @@ public abstract class RestApiServerUtils {
                 ((ProvidedValue) argValue).setAnnotatedElementValueSet(argValue.getAnnotatedElementValueSet().stream()
                         .map(annotatedValue -> new AnnotatedValue(
                                 typeConverter.marshal(((ListType) argType).getElementType(), annotatedValue.getValue()),
-                                annotatedValue.getLabel(), annotatedValue.getDescription(), annotatedValue.getFeatures()))
+                                annotatedValue.getValueLabel(), annotatedValue.getValueDescription(), annotatedValue.getFeatures(),
+                                annotatedValue.getTypeLabel(), annotatedValue.getTypeDescription()))
                         .collect(Collectors.toList()));
             }
         });

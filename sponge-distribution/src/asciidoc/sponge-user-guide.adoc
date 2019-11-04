@@ -80,7 +80,7 @@ Data types are represented by instances of classes. The type classes are located
 |An optional type location description.
 
 |`annotated`
-|A flag that tells if a value of this type is annotated, i.e. wrapped by an instance of `AnnotatedValue`. Defaults to `false`. An annotated value allows passing a value label, a value description and value features along with the value, e.g. `AnnotatedValue(imageBytes).withLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the label and the third is the features map that may be used in a client code.
+|A flag that tells if a value of this type is annotated. Defaults to `false`.
 
 |`format`
 |An optional format.
@@ -260,6 +260,33 @@ def onBeforeLoad():
         StringType("country").withLabel("Country")
     ]))
 ----
+
+=== Annotated values
+Annotated values are wrapped by an instance of the `AnnotatedValue` class. An annotated value allows passing a value label, a value description, features, type label and type description along with the value, e.g. `AnnotatedValue(imageBytes).withValueLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the value label and the third is the features map that may be used in a client code.
+
+.Annotated value properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`value`
+|A value that is annotated.
+
+|`valueLabel`
+|An optional value label. It can be used as a string representation of the value in a GUI.
+
+|`valueDescription`
+|An optional value description. It can be used as a description of the value in a GUI.
+
+|`features`
+|Features as a map of names to values.
+
+|`typeLabel`
+|An optional type label. Overwrites the type label in a client code.
+
+|`typeDescription`
+|An optional type description. Overwrites the type description in a client code.
+|===
 
 == Features
 Features are represented by a map of names to values. They provide additional information to data types and processors. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].

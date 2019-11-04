@@ -102,6 +102,8 @@ public final class Features {
 
     public static final String ACTION_ARG_LIST_DELETE_ACTION = "deleteAction";
 
+    public static final String ACTION_ARG_LIST_ACTIVATE_ACTION = "activateAction";
+
     public static final String BINARY_WIDTH = "width";
 
     public static final String BINARY_HEIGHT = "height";
@@ -115,6 +117,8 @@ public final class Features {
     public static final String WIDGET_SLIDER = "slider";
 
     public static final String WIDGET_SWITCH = "switch";
+
+    public static final String SCROLL = "scroll";
 
     public static final String PROVIDE_VALUE_PAGINABLE = "valuePaginable";
 

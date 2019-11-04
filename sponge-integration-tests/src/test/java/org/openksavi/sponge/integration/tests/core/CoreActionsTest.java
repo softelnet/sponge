@@ -463,9 +463,9 @@ public class CoreActionsTest {
             assertEquals("auto", argValue.getValue());
             assertEquals(2, argValue.getAnnotatedValueSet().size());
             assertEquals("auto", argValue.getAnnotatedValueSet().get(0).getValue());
-            assertEquals("Auto", argValue.getAnnotatedValueSet().get(0).getLabel());
+            assertEquals("Auto", argValue.getAnnotatedValueSet().get(0).getValueLabel());
             assertEquals("manual", argValue.getAnnotatedValueSet().get(1).getValue());
-            assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getLabel());
+            assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getValueLabel());
             assertTrue(argValue.isValuePresent());
 
             engine.getOperations().call(actionMeta.getName(), Arrays.asList("manual"));
@@ -478,9 +478,9 @@ public class CoreActionsTest {
             assertEquals("manual", argValue.getValue());
             assertEquals(2, argValue.getAnnotatedValueSet().size());
             assertEquals("auto", argValue.getAnnotatedValueSet().get(0).getValue());
-            assertEquals("Auto", argValue.getAnnotatedValueSet().get(0).getLabel());
+            assertEquals("Auto", argValue.getAnnotatedValueSet().get(0).getValueLabel());
             assertEquals("manual", argValue.getAnnotatedValueSet().get(1).getValue());
-            assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getLabel());
+            assertEquals("Manual", argValue.getAnnotatedValueSet().get(1).getValueLabel());
             assertTrue(argValue.isValuePresent());
 
             assertFalse(engine.isError());
@@ -553,11 +553,11 @@ public class CoreActionsTest {
             List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
-            assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());
+            assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getValueLabel());
             assertEquals("B", actuator1AnnotatedValueSet.get(1).getValue());
-            assertEquals("Value B", actuator1AnnotatedValueSet.get(1).getLabel());
+            assertEquals("Value B", actuator1AnnotatedValueSet.get(1).getValueLabel());
             assertEquals("C", actuator1AnnotatedValueSet.get(2).getValue());
-            assertEquals("Value C", actuator1AnnotatedValueSet.get(2).getLabel());
+            assertEquals("Value C", actuator1AnnotatedValueSet.get(2).getValueLabel());
 
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
@@ -667,11 +667,11 @@ public class CoreActionsTest {
             List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
             assertEquals(3, elementValueSet.size());
             assertEquals("apple", elementValueSet.get(0).getValue());
-            assertEquals("Apple", elementValueSet.get(0).getLabel());
+            assertEquals("Apple", elementValueSet.get(0).getValueLabel());
             assertEquals("banana", elementValueSet.get(1).getValue());
-            assertEquals("Banana", elementValueSet.get(1).getLabel());
+            assertEquals("Banana", elementValueSet.get(1).getValueLabel());
             assertEquals("lemon", elementValueSet.get(2).getValue());
-            assertEquals("Lemon", elementValueSet.get(2).getLabel());
+            assertEquals("Lemon", elementValueSet.get(2).getValueLabel());
 
             assertEquals(2, engine.getOperations().call(actionName, Arrays.asList(Arrays.asList("apple", "lemon"))));
 
@@ -784,9 +784,15 @@ public class CoreActionsTest {
 
             AnnotatedValue<String> result = engine.getOperations().call(AnnotatedValue.class, actionMeta.getName());
             assertEquals("RESULT", result.getValue());
+            assertEquals("Result value", result.getValueLabel());
+            assertEquals("Result value description", result.getValueDescription());
+
             assertEquals(2, result.getFeatures().size());
             assertEquals("value1", result.getFeatures().get("feature1"));
             assertEquals("value2", result.getFeatures().get("feature2"));
+
+            assertEquals("Result type", result.getTypeLabel());
+            assertEquals("Result type description", result.getTypeDescription());
 
             assertFalse(engine.isError());
         } finally {

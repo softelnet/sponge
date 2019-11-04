@@ -10,7 +10,8 @@ class ActionWithContextActions(Action):
             StringType("arg2").withLabel("Argument 2")
         ]).withNoResult().withFeature("contextActions", [
             "ActionWithContextActionsContextAction1", "ActionWithContextActionsContextAction2(arg2)", "ActionWithContextActionsContextAction3(arg2=arg2)",
-            "ActionWithContextActionsContextAction4(arg1)", "ActionWithContextActionsContextAction5", "MarkdownText()"
+            "ActionWithContextActionsContextAction4(arg1)", "ActionWithContextActionsContextAction5", "ActionWithContextActionsContextAction6",
+            "MarkdownText()"
         ])
         self.withFeature("icon", "attachment")
     def onCall(self, arg1, arg2):
@@ -72,3 +73,14 @@ class ActionWithContextActionsContextAction5(Action):
     def onCall(self, arg, additionalText):
         return arg["arg1"] + " " + additionalText
 
+class ActionWithContextActionsContextAction6(Action):
+    def onConfigure(self):
+        self.withLabel("Context action 6").withArgs([
+            RecordType("arg").withFields([
+                StringType("arg1").withLabel("Argument 1"),
+                StringType("arg2").withLabel("Argument 2")
+            ])
+        ]).withNoResult()
+        self.withFeatures({"visible":False, "icon":"tortoise"})
+    def onCall(self, arg):
+        pass

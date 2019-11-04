@@ -13,5 +13,6 @@ class FruitsElementValueSetAction(Action):
     def onProvideArgs(self, context):
         if "fruits" in context.provide:
             context.provided["fruits"] = ProvidedValue().withAnnotatedElementValueSet([
-                AnnotatedValue("apple").withLabel("Apple"), AnnotatedValue("banana").withLabel("Banana"), AnnotatedValue("lemon").withLabel("Lemon")
+                AnnotatedValue("apple").withValueLabel("Apple"), AnnotatedValue("banana").withValueLabel("Banana"),
+                AnnotatedValue("lemon").withValueLabel("Lemon")
             ])

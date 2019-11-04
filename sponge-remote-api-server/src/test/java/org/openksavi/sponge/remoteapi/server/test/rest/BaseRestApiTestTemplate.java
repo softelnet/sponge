@@ -314,6 +314,11 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals("value1", result.getFeatures().get("feature1"));
             assertEquals("argFeature1Value1", result.getFeatures().get("argFeature1"));
 
+            assertEquals("Result value", result.getValueLabel());
+            assertEquals("Result value description", result.getValueDescription());
+            assertEquals("Result type", result.getTypeLabel());
+            assertEquals("Result type description", result.getTypeDescription());
+
             assertFalse(engine.isError());
         }
     }
@@ -623,11 +628,11 @@ public abstract class BaseRestApiTestTemplate {
             List<AnnotatedValue<?>> actuator1AnnotatedValueSet = ((ProvidedValue) providedArgs.get("actuator1")).getAnnotatedValueSet();
             assertEquals(3, actuator1AnnotatedValueSet.size());
             assertEquals("A", actuator1AnnotatedValueSet.get(0).getValue());
-            assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getLabel());
+            assertEquals("Value A", actuator1AnnotatedValueSet.get(0).getValueLabel());
             assertEquals("B", actuator1AnnotatedValueSet.get(1).getValue());
-            assertEquals("Value B", actuator1AnnotatedValueSet.get(1).getLabel());
+            assertEquals("Value B", actuator1AnnotatedValueSet.get(1).getValueLabel());
             assertEquals("C", actuator1AnnotatedValueSet.get(2).getValue());
-            assertEquals("Value C", actuator1AnnotatedValueSet.get(2).getLabel());
+            assertEquals("Value C", actuator1AnnotatedValueSet.get(2).getValueLabel());
 
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
@@ -718,11 +723,11 @@ public abstract class BaseRestApiTestTemplate {
             List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
             assertEquals(3, elementValueSet.size());
             assertEquals("apple", elementValueSet.get(0).getValue());
-            assertEquals("Apple", elementValueSet.get(0).getLabel());
+            assertEquals("Apple", elementValueSet.get(0).getValueLabel());
             assertEquals("banana", elementValueSet.get(1).getValue());
-            assertEquals("Banana", elementValueSet.get(1).getLabel());
+            assertEquals("Banana", elementValueSet.get(1).getValueLabel());
             assertEquals("lemon", elementValueSet.get(2).getValue());
-            assertEquals("Lemon", elementValueSet.get(2).getLabel());
+            assertEquals("Lemon", elementValueSet.get(2).getValueLabel());
 
             assertEquals(2, client.call(actionName, Arrays.asList(Arrays.asList("apple", "lemon"))));
 

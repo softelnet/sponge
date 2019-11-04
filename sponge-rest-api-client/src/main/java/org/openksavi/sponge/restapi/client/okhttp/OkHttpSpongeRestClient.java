@@ -86,6 +86,7 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request, Class<R> responseClass,
             SpongeRequestContext context) {
         Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build();
