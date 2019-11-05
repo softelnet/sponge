@@ -9,7 +9,7 @@ class MpdPlayer(Action):
         self.withArgs([
             StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
-            IntegerType("position").withLabel("Position").withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
+            IntegerType("position").withLabel("Position").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()),
             StringType("time").withLabel("Time").withNullable().withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
@@ -36,7 +36,7 @@ class MpdPlayer(Action):
         mpc.lock.lock()
         try:
             if "position" in context.submit:
-                status = mpc.seekByPercentage(context.current["position"])
+                status = mpc.seekByPercentage(context.current["position"].value)
             if "volume" in context.submit:
                 status = mpc.setVolume(context.current["volume"].value)
             if "play" in context.submit:
@@ -50,7 +50,8 @@ class MpdPlayer(Action):
                 context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
             if "position" in context.provide or "context" in context.submit:
                 status = self.__ensureStatus(mpc, status)
-                context.provided["position"] = ProvidedValue().withValue(mpc.getPositionByPercentage(status))
+                context.provided["position"] = ProvidedValue().withValue(AnnotatedValue(mpc.getPositionByPercentage(status)).withFeature(
+                    "enabled", mpc.isStatusPlayingOrPaused(status)))
             if "time" in context.provide:
                 status = self.__ensureStatus(mpc, status)
                 context.provided["time"] = ProvidedValue().withValue(mpc.getTimeStatus(status))
@@ -58,7 +59,8 @@ class MpdPlayer(Action):
             if "volume" in context.provide or "volume" in context.submit:
                 status = self.__ensureStatus(mpc, status)
                 volume = mpc.getVolume(status)
-                context.provided["volume"] = ProvidedValue().withValue(AnnotatedValue(volume).withTypeLabel("Volume (" + str(volume) + "%)"))
+                context.provided["volume"] = ProvidedValue().withValue(AnnotatedValue(volume).withTypeLabel(
+                    "Volume" + ((" (" + str(volume) + "%)") if volume else "")))
             if "play" in context.provide:
                 status = self.__ensureStatus(mpc, status)
                 context.provided["play"] = ProvidedValue().withValue(mpc.getPlay(status))

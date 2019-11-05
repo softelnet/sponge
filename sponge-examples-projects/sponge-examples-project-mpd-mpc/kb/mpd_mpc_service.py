@@ -185,6 +185,18 @@ class Mpc:
         lines = status.splitlines()
         return len(lines) == 1 and re.match(r".* Not playing .*", lines[0]) is not None
 
+    def getPlayingState(self, status):
+        lines = status.splitlines()
+        if len(lines) == 3:
+            matched = re.match(r"\[(.*)\]\s*#\d+/.*", lines[1])
+            if matched is not None and len(matched.groups()) == 1:
+                return matched.groups()[0]
+        return None
+
+    def isStatusPlayingOrPaused(self, status):
+        playingState = self.getPlayingState(status)
+        return playingState is not None and (playingState == "playing" or playingState == "paused")
+
     def isStatusOk(self, status):
         if not status or len(status.strip()) == 0 or self.isStatusNotPlaying(status):
             return False
