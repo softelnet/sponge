@@ -55,5 +55,5 @@ public interface UnitTypeConverter<T, D extends DataType> {
      * @param value the value. It will never be {@code null} here.
      * @return the converted value.
      */
-    T unmarshal(TypeConverter converter, D type, Object value);
+    Object unmarshal(TypeConverter converter, D type, Object value);
 }

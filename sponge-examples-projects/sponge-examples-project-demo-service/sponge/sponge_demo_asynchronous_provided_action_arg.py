@@ -19,5 +19,5 @@ class AsynchronousProvidedActionArg(Action):
         if "arg1" in context.provide:
             context.provided["arg1"] = ProvidedValue().withValue("v" + str(Random().nextInt(100) + 1))
         if "arg2" in context.provide:
-            TimeUnit.SECONDS.sleep(10)
+            TimeUnit.SECONDS.sleep(5)
             context.provided["arg2"] = ProvidedValue().withValue("First arg is " + context.current["arg1"])

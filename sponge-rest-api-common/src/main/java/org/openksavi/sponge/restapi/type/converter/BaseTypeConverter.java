@@ -27,6 +27,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -57,9 +58,10 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
         Validate.notNull(type, "The type must not be null");
 
-        if (type.isAnnotated()) {
+        if (type.isAnnotated() && value instanceof AnnotatedValue) {
             AnnotatedValue<T> annotatedValue = (AnnotatedValue) value;
-            return new AnnotatedValue<>(getUnitConverter(type).marshal(this, type, annotatedValue.getValue()),
+            return new AnnotatedValue<>(
+                    annotatedValue.getValue() != null ? getUnitConverter(type).marshal(this, type, annotatedValue.getValue()) : null,
                     annotatedValue.getValueLabel(), annotatedValue.getValueDescription(), annotatedValue.getFeatures(),
                     annotatedValue.getTypeLabel(), annotatedValue.getTypeDescription());
         }
@@ -68,23 +70,24 @@ public abstract class BaseTypeConverter implements TypeConverter {
     }
 
     @Override
-    public <T, D extends DataType> T unmarshal(D type, Object value) {
+    public <D extends DataType> Object unmarshal(D type, Object value) {
         if (value == null) {
             return null;
         }
 
         Validate.notNull(type, "The type must not be null");
 
-        if (type.isAnnotated()) {
-            Validate.isInstanceOf(Map.class, value, "Expected an annotated value as a map but got %s", value.getClass());
-
+        // Handle a wrapped annotated value.
+        if (type.isAnnotated() && RestApiUtils.isAnnotatedValueMap(value)) {
             AnnotatedValue annotatedValue = objectMapper.convertValue(value, AnnotatedValue.class);
-            annotatedValue.setValue(getUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
+            if (annotatedValue.getValue() != null) {
+                annotatedValue.setValue(getUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
+            }
 
-            return (T) annotatedValue;
+            return annotatedValue;
         }
 
-        return (T) getUnitConverter(type).unmarshal(this, type, value);
+        return getUnitConverter(type).unmarshal(this, type, value);
     }
 
     @Override

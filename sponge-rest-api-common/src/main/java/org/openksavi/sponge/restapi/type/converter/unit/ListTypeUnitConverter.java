@@ -40,10 +40,10 @@ public class ListTypeUnitConverter<E> extends BaseUnitTypeConverter<List<E>, Lis
     }
 
     @Override
-    public List<E> unmarshal(TypeConverter converter, ListType<E> type, Object value) {
+    public List unmarshal(TypeConverter converter, ListType<E> type, Object value) {
         Validate.isInstanceOf(Collection.class, value, "Expected list but got %s", value.getClass());
 
-        return (List<E>) ((Collection) value).stream().map((Object jsonElem) -> converter.unmarshal(type.getElementType(), jsonElem))
+        return (List) ((Collection) value).stream().map((Object jsonElem) -> converter.unmarshal(type.getElementType(), jsonElem))
                 .collect(Collectors.toList());
     }
 }

@@ -33,6 +33,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
@@ -92,14 +93,23 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         return finalSubmitted;
     }
 
+    protected Map<String, Object> buildCurrentArgs(Map<String, Object> current) {
+        if (current == null) {
+            return Collections.emptyMap();
+        }
+
+        // TODO Support wrapping nested annotated values.
+        Map<String, Object> result = new LinkedHashMap<>();
+        current.forEach((name, value) -> result.put(name,
+                getMeta().getArg(name).isAnnotated() && !(value instanceof AnnotatedValue) ? new AnnotatedValue<>(value) : value));
+
+        return result;
+    }
+
     @Override
     public Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current,
             Map<String, Map<String, Object>> features) {
         Validate.notNull(getMeta().getArgs(), "Arguments not defined");
-
-        if (current == null) {
-            current = Collections.emptyMap();
-        }
 
         Map<String, Map<String, Object>> effectiveFeatures = new LinkedHashMap<>();
         if (features != null) {
@@ -114,7 +124,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         submitSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
 
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
-        getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, current, provided, effectiveFeatures));
+        getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, buildCurrentArgs(current), provided, effectiveFeatures));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null,

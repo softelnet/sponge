@@ -47,11 +47,10 @@ public interface TypeConverter {
      *
      * @param type the type.
      * @param value the value.
-     * @param <T> instance type.
      * @param <D> data type.
      * @return the converted value.
      */
-    <T, D extends DataType> T unmarshal(D type, Object value);
+    <D extends DataType> Object unmarshal(D type, Object value);
 
     /**
      * Registers the unit type converter.

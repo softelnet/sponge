@@ -335,6 +335,7 @@ public class DefaultRestApiService implements RestApiService {
         return RestApiServerUtils.marshalActionCallResult(typeConverter, actionAdapter, result);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public SendEventResponse send(SendEventRequest request) {
         try {
@@ -348,7 +349,7 @@ public class DefaultRestApiService implements RestApiService {
             // Unmarshal attributes if there is an event type registered.
             RecordType eventType = getEngine().getEventTypes().get(eventName);
             if (eventType != null) {
-                attributes = typeConverter.unmarshal(eventType, attributes);
+                attributes = (Map<String, Object>) typeConverter.unmarshal(eventType, attributes);
             }
 
             Event event = sendEvent(eventName, attributes, request.getLabel(), request.getDescription(), userContext);

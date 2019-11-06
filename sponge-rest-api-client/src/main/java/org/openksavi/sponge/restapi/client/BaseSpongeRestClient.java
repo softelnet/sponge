@@ -77,6 +77,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 
 /**
@@ -573,7 +574,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
             if (argValue.getAnnotatedValueSet() != null) {
                 argValue.getAnnotatedValueSet().stream().filter(Objects::nonNull)
-                        .forEach(annotatedValue -> annotatedValue.setValue(typeConverter.unmarshal(argType, annotatedValue.getValue())));
+                        .forEach(annotatedValue -> ((AnnotatedValue) annotatedValue)
+                                .setValue(typeConverter.unmarshal(argType, annotatedValue.getValue())));
             }
 
             if (argValue.getAnnotatedElementValueSet() != null && DataTypeUtils.supportsElementValueSet(argType)) {

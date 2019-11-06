@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.util;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -30,6 +31,7 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestDataType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.QualifiedDataType;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 
 /**
@@ -89,5 +91,10 @@ public abstract class RestApiUtils {
             actionMeta.getArgs().forEach(
                     argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
         }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static boolean isAnnotatedValueMap(Object value) {
+        return value instanceof Map && AnnotatedValue.FIELDS.equals(((Map) value).keySet());
     }
 }

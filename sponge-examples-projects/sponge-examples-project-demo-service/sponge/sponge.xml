@@ -23,6 +23,8 @@
             <file>sponge_demo_context_actions_record.py</file>
             <file>sponge_demo_asynchronous_provided_action_arg.py</file>
             <file>sponge_demo_submittable_action_arg.py</file>
+            <file>sponge_demo_action_enabled_args.py</file>
+            <file>sponge_demo_action_annotated_with_default.py</file>
         </knowledgeBase>
         <knowledgeBase name="demoForms" label="Action forms/Base">
             <file>sponge_demo_forms_base.py</file>

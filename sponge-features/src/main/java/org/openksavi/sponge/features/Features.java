@@ -40,6 +40,8 @@ public final class Features {
 
     public static final String VISIBLE = "visible";
 
+    public static final String ENABLED = "enabled";
+
     public static final String ICON = "icon";
 
     public static final String WIDGET = "widget";

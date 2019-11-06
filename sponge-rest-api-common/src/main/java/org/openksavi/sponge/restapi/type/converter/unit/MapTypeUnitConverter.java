@@ -28,23 +28,23 @@ import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class MapTypeUnitConverter<K, V> extends BaseUnitTypeConverter<Map<K, V>, MapType<K, V>> {
+public class MapTypeUnitConverter<K, V> extends BaseUnitTypeConverter<Map, MapType<K, V>> {
 
     public MapTypeUnitConverter() {
         super(DataTypeKind.MAP);
     }
 
     @Override
-    public Object marshal(TypeConverter converter, MapType<K, V> type, Map<K, V> value) {
+    public Object marshal(TypeConverter converter, MapType<K, V> type, Map value) {
         return SpongeApiUtils.collectToLinkedMap(value, entry -> converter.marshal(type.getKeyType(), entry.getKey()),
                 entry -> converter.marshal(type.getValueType(), entry.getValue()));
     }
 
     @Override
-    public Map<K, V> unmarshal(TypeConverter converter, MapType<K, V> type, Object value) {
+    public Map unmarshal(TypeConverter converter, MapType<K, V> type, Object value) {
         Validate.isInstanceOf(Map.class, value, "Expected map but got %s", value.getClass());
 
-        Map<K, V> result = new LinkedHashMap<>();
+        Map result = new LinkedHashMap<>();
         ((Map) value).forEach((k, v) -> result.put(converter.unmarshal(type.getKeyType(), k), converter.unmarshal(type.getValueType(), v)));
 
         return result;

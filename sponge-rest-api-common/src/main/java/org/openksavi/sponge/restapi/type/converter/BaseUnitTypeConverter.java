@@ -20,7 +20,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 
 @SuppressWarnings({ "unchecked" })
-public abstract class BaseUnitTypeConverter<T, D extends DataType<T>> implements UnitTypeConverter<T, D> {
+public abstract class BaseUnitTypeConverter<T, D extends DataType<?>> implements UnitTypeConverter<T, D> {
 
     protected BaseUnitTypeConverter(DataTypeKind typeKind) {
         this.typeKind = typeKind;

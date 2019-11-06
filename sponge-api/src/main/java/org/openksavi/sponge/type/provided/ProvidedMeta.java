@@ -55,6 +55,9 @@ public class ProvidedMeta {
     @Experimental
     private boolean lazyUpdate = false;
 
+    /** The flag specifying if the current value in a client code should be passed to a server when its new value is to be provided. */
+    private boolean current = false;
+
     public ProvidedMeta() {
     }
 
@@ -103,6 +106,11 @@ public class ProvidedMeta {
 
     public ProvidedMeta withLazyUpdate() {
         lazyUpdate = true;
+        return this;
+    }
+
+    public ProvidedMeta withCurrent() {
+        current = true;
         return this;
     }
 
@@ -172,5 +180,13 @@ public class ProvidedMeta {
 
     public void setLazyUpdate(boolean lazyUpdate) {
         this.lazyUpdate = lazyUpdate;
+    }
+
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
     }
 }

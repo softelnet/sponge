@@ -16,14 +16,20 @@
 
 package org.openksavi.sponge.type.value;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * An annotated value. The class is not thread safe.
  */
 public class AnnotatedValue<T> implements DecoratedValue<T> {
+
+    public static Set<String> FIELDS =
+            new LinkedHashSet<>(Arrays.asList("value", "valueLabel", "valueDescription", "features", "typeLabel", "typeDescription"));
 
     /** The value. */
     private T value;
