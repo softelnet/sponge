@@ -111,9 +111,9 @@
         <jserialcomm.version>2.5.2</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.24.1</grpc.version>
-        <protobuf.version>3.7.1</protobuf.version>
-        <protoc.version>3.7.1</protoc.version>
+        <grpc.version>1.25.0</grpc.version>
+        <protobuf.version>3.10.0</protobuf.version>
+        <protoc.version>3.10.0</protoc.version>
         <netty-tcnative.version>2.0.26.Final</netty-tcnative.version>
 
         <activemq.version>5.14.5</activemq.version>
@@ -189,7 +189,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -895,6 +895,11 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-tcnative-boringssl-static</artifactId>
                 <version>${netty-tcnative.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
             </dependency>
 
             <dependency>
