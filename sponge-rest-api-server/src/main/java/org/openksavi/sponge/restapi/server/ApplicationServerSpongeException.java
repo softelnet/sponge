@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,21 @@
 
 package org.openksavi.sponge.restapi.server;
 
-public class RestApiInvalidAuthTokenServerException extends ApplicationServerSpongeException {
+import org.openksavi.sponge.SpongeException;
 
-    private static final long serialVersionUID = -9070276571660804800L;
+/**
+ * An application level server exception.
+ */
+public class ApplicationServerSpongeException extends SpongeException {
+
+    private static final long serialVersionUID = 1251735429394955342L;
 
     /**
      * Creates a new exception.
      *
      * @param message exception message.
      */
-    public RestApiInvalidAuthTokenServerException(String message) {
+    public ApplicationServerSpongeException(String message) {
         super(message);
     }
 
@@ -34,7 +39,7 @@ public class RestApiInvalidAuthTokenServerException extends ApplicationServerSpo
      *
      * @param throwable source throwable.
      */
-    public RestApiInvalidAuthTokenServerException(Throwable throwable) {
+    public ApplicationServerSpongeException(Throwable throwable) {
         super(throwable);
     }
 
@@ -44,7 +49,7 @@ public class RestApiInvalidAuthTokenServerException extends ApplicationServerSpo
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public RestApiInvalidAuthTokenServerException(String message, Throwable throwable) {
+    public ApplicationServerSpongeException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

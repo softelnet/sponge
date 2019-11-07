@@ -293,6 +293,8 @@ Annotated values can be used to alter a static, metadata-drived behavior of a cl
 |An optional type description. Overwrites the type description in a client code.
 |===
 
+If a data type is annotated and has a default value, the default value should be specified as a plain value (i.e. not wrapped in `AnnotatedValue`).
+
 == Features
 Features are represented by a map of names to values. They provide additional information to data types and processors. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].
 

@@ -942,6 +942,47 @@ public abstract class BaseRestApiTestTemplate {
     }
 
     @Test
+    public void testActionsAnnotatedWithDefaultValue() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "AnnotatedWithDefaultValue";
+
+            RestActionMeta actionMeta = client.getActionMeta(actionName);
+            List<DataType> argTypes = actionMeta.getArgs();
+
+            assertTrue(argTypes.get(0).isAnnotated());
+            assertEquals("Value", argTypes.get(0).getDefaultValue());
+
+            String newValue = "NEW VALUE";
+            assertEquals(newValue, client.call(String.class, actionName, Arrays.asList(new AnnotatedValue<>(newValue))));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testActionsProvidedWithCurrentAndLazyUpdate() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "ProvidedWithCurrentAndLazyUpdate";
+
+            RestActionMeta actionMeta = client.getActionMeta(actionName);
+            DataType argType = actionMeta.getArgs().get(0);
+
+            assertTrue(argType.isAnnotated());
+            assertTrue(argType.getProvided().isCurrent());
+            assertTrue(argType.getProvided().isLazyUpdate());
+
+            String currentValue = "NEW VALUE";
+
+            ProvidedValue<?> provided = client.provideActionArgs(actionName, Arrays.asList("arg"), null,
+                    SpongeUtils.immutableMapOf("arg", new AnnotatedValue<>(currentValue))).get("arg");
+
+            assertEquals(currentValue, ((AnnotatedValue) provided.getValue()).getValue());
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
     public void testTraverseActionArguments() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta meta = client.getActionMeta("NestedRecordAsArgAction");

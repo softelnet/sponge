@@ -7,18 +7,21 @@ class MpdPlayer(Action):
     def onConfigure(self):
         self.withLabel("Player").withDescription("The MPD player.")
         self.withArgs([
-            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
+            StringType("song").withLabel("Song").withNullable().withFeatures({"multiline":True, "maxLines":2}).withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
-            IntegerType("position").withLabel("Position").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
+            IntegerType("position").withLabel("Position").withNullable().withAnnotated().withMinValue(0).withMaxValue(100).withFeatures(
+                {"widget":"slider", "group":"position"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()),
-            StringType("time").withLabel("Time").withNullable().withProvided(
+            StringType("time").withLabel("Time").withNullable().withFeatures({"group":"position"}).withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
             IntegerType("volume").withLabel("Volume").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
-            VoidType("prev").withLabel("Previous").withProvided(ProvidedMeta().withSubmittable()),
-            BooleanType("play").withLabel("Play").withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable()).withFeatures({"widget":"switch"}),
-            VoidType("next").withLabel("Next").withProvided(ProvidedMeta().withSubmittable())
+            VoidType("prev").withLabel("Previous").withAnnotated().withFeatures({"icon":"skip-previous", "group":"navigation"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
+            BooleanType("play").withLabel("Play").withAnnotated().withFeatures({"group":"navigation"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
+            VoidType("next").withLabel("Next").withAnnotated().withFeatures({"icon":"skip-next", "group":"navigation"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable())
         ]).withNoResult().withCallable(False)
         self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification_.*"],
                            "icon":"music"})
@@ -32,15 +35,17 @@ class MpdPlayer(Action):
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
         status = None
+        (position, size) = (None, None)
 
         mpc.lock.lock()
         try:
             if "position" in context.submit:
-                status = mpc.seekByPercentage(context.current["position"].value)
+                if context.current["position"]:
+                    status = mpc.seekByPercentage(context.current["position"].value)
             if "volume" in context.submit:
                 status = mpc.setVolume(context.current["volume"].value)
             if "play" in context.submit:
-                status = mpc.togglePlay(context.current["play"])
+                status = mpc.togglePlay(context.current["play"].value)
             if "prev" in context.submit:
                 status = mpc.prev()
             if "next" in context.submit:
@@ -63,6 +68,16 @@ class MpdPlayer(Action):
                     "Volume" + ((" (" + str(volume) + "%)") if volume else "")))
             if "play" in context.provide:
                 status = self.__ensureStatus(mpc, status)
-                context.provided["play"] = ProvidedValue().withValue(mpc.getPlay(status))
+                playing = mpc.getPlay(status)
+                context.provided["play"] = ProvidedValue().withValue(AnnotatedValue(playing).withFeature("icon", "pause" if playing else "play"))
+
+            if "prev" in context.provide or "next" in context.provide:
+                status = self.__ensureStatus(mpc, status)
+                (position, size) = mpc.getCurrentPlaylistPositionAndSize(status)
+            if "prev" in context.provide:
+                context.provided["prev"] = ProvidedValue().withValue(AnnotatedValue(None).withFeature("enabled", position is not None))
+            if "next" in context.provide:
+                context.provided["next"] = ProvidedValue().withValue(AnnotatedValue(None).withFeature("enabled",
+                        position is not None and size is not None))
         finally:
             mpc.lock.unlock()

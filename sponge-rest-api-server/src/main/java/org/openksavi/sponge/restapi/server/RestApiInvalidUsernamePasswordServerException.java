@@ -16,9 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
-import org.openksavi.sponge.SpongeException;
-
-public class RestApiInvalidUsernamePasswordServerException extends SpongeException {
+public class RestApiInvalidUsernamePasswordServerException extends ApplicationServerSpongeException {
 
     private static final long serialVersionUID = 5920757216003601488L;
 

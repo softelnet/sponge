@@ -208,16 +208,19 @@ class Mpc:
     def getPlaylist(self):
         return self.__execute("playlist").splitlines()
 
-    def getCurrentPlaylistPosition(self, status = None):
+    def getCurrentPlaylistPositionAndSize(self, status = None):
         if status is None:
             status = self.getStatus()
         lines = status.splitlines()
         if len(lines) == 3:
-            matched = re.match(r"\[.*\]\s*#(\d+)/.*", lines[1])
-            if matched is not None and len(matched.groups()) == 1:
-                position = matched.groups()[0]
-                return int(position) if position else None
-        return None
+            matched = re.match(r"\[.*\]\s*#(\d+)/(\d+)\s*.*", lines[1])
+            if matched is not None and len(matched.groups()) == 2:
+                (position, size) = matched.groups()
+                return (int(position) if position else None, int(size) if size else None)
+        return (None, None)
+
+    def getCurrentPlaylistPosition(self, status = None):
+        return self.getCurrentPlaylistPositionAndSize(status)[0]
 
     def moveUpPlaylistEntry(self, position):
         if position > 1:

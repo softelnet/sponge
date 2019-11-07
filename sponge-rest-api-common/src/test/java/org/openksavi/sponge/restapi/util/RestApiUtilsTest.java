@@ -17,8 +17,21 @@
 package org.openksavi.sponge.restapi.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+
+import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 
 public class RestApiUtilsTest {
 
@@ -38,5 +51,17 @@ public class RestApiUtilsTest {
                         + "\"name\":\"TestAction\",\"args\":[\"TEST\",null],\"version\":null}",
                 RestApiUtils.obfuscatePassword("{\"id\":null,\"username\":\"test\",\"password\":\"password\",\"authToken\":null,"
                         + "\"name\":\"TestAction\",\"args\":[\"TEST\",null],\"version\":null}"));
+    }
+
+    @Test
+    public void testIsAnnotatedValueMap() {
+        Set<String> fieldNames = Arrays.asList(AnnotatedValue.class.getDeclaredFields()).stream()
+                .filter(field -> !Modifier.isStatic(field.getModifiers())).map(Field::getName).collect(Collectors.toSet());
+
+        Map<String, Object> exampleMap = new LinkedHashMap<>();
+        fieldNames.forEach(name -> exampleMap.put(name, null));
+        assertTrue(RestApiUtils.isAnnotatedValueMap(exampleMap));
+
+        assertFalse(RestApiUtils.isAnnotatedValueMap(SpongeUtils.immutableMapOf("value", null)));
     }
 }

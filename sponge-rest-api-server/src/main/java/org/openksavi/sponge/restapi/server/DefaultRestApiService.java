@@ -31,8 +31,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.CategoryMeta;
+import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
@@ -91,6 +94,8 @@ import org.openksavi.sponge.util.SpongeApiUtils;
  */
 public class DefaultRestApiService implements RestApiService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultRestApiService.class);
+
     private SpongeEngine engine;
 
     private RestApiSettings settings;
@@ -142,8 +147,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new GetVersionResponse(getEngine().getVersion()), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST getVersion", e);
-            return setupErrorResponse(new GetVersionResponse(), request, e);
+            return handleError("REST getVersion", e, new GetVersionResponse(), request);
         }
     }
 
@@ -157,8 +161,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new GetFeaturesResponse(features), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST getFeatures", e);
-            return setupErrorResponse(new GetFeaturesResponse(), request, e);
+            return handleError("REST getFeatures", e, new GetFeaturesResponse(), request);
         }
     }
 
@@ -178,8 +181,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST login", e);
-            return setupErrorResponse(new LoginResponse(), request, e);
+            return handleError("REST login", e, new LoginResponse(), request);
         }
     }
 
@@ -196,8 +198,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new LogoutResponse(), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST logout", e);
-            return setupErrorResponse(new LogoutResponse(), request, e);
+            return handleError("REST logout", e, new LogoutResponse(), request);
         }
     }
 
@@ -215,8 +216,7 @@ public class DefaultRestApiService implements RestApiService {
                     .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRestKnowledgeBase(kb))
                     .collect(Collectors.toList())), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST getKnowledgeBases", e);
-            return setupErrorResponse(new GetKnowledgeBasesResponse(), request, e);
+            return handleError("REST getKnowledgeBases", e, new GetKnowledgeBasesResponse(), request);
         }
     }
 
@@ -254,8 +254,7 @@ public class DefaultRestApiService implements RestApiService {
                     .sorted(actionsOrderComparator).map(action -> marshalActionMeta(action)).collect(Collectors.toList()), registeredTypes),
                     request);
         } catch (Throwable e) {
-            getEngine().handleError("REST getActions", e);
-            return setupErrorResponse(new GetActionsResponse(), request, e);
+            return handleError("REST getActions", e, new GetActionsResponse(), request);
         }
     }
 
@@ -318,13 +317,32 @@ public class DefaultRestApiService implements RestApiService {
             return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
         } catch (Throwable e) {
             if (actionAdapter != null) {
-                getEngine().handleError(actionAdapter, e);
+                return handleError(actionAdapter, e, new ActionCallResponse(), request);
             } else {
-                getEngine().handleError("REST call", e);
+                return handleError("REST call", e, new ActionCallResponse(), request);
             }
-
-            return setupErrorResponse(new ActionCallResponse(), request, e);
         }
+    }
+
+    protected <T extends SpongeResponse, R extends SpongeRequest> T handleError(ProcessorAdapter<?> processorAdapter, Throwable e,
+            T response, R request) {
+        if (!(e instanceof ApplicationServerSpongeException)) {
+            getEngine().handleError(processorAdapter, e);
+        } else {
+            logger.debug("REST API application error in " + (processorAdapter != null && processorAdapter.getMeta() != null ?processorAdapter.getMeta().getName() : "unknown"), e);
+        }
+
+        return setupErrorResponse(response, request, e);
+    }
+
+    protected <T extends SpongeResponse, R extends SpongeRequest> T handleError(String source, Throwable e, T response, R request) {
+        if (!(e instanceof ApplicationServerSpongeException)) {
+            getEngine().handleError(source, e);
+        }else {
+            logger.debug("REST API application error in " + source, e);
+        }
+
+        return setupErrorResponse(response, request, e);
     }
 
     protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request) {
@@ -356,8 +374,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new SendEventResponse(event.getId()), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST send", e);
-            return setupErrorResponse(new SendEventResponse(), request, e);
+            return handleError("REST send", e, new SendEventResponse(), request);
         }
     }
 
@@ -404,12 +421,10 @@ public class DefaultRestApiService implements RestApiService {
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
         } catch (Throwable e) {
             if (actionAdapter != null) {
-                getEngine().handleError(actionAdapter, e);
+                return handleError(actionAdapter, e, new ProvideActionArgsResponse(), request);
             } else {
-                getEngine().handleError("REST provideActionArgs", e);
+                return handleError("REST provideActionArgs", e, new ProvideActionArgsResponse(), request);
             }
-
-            return setupErrorResponse(new ProvideActionArgsResponse(), request, e);
         }
     }
 
@@ -431,8 +446,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new GetEventTypesResponse(marshalledEventTypes), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST getEventTypes", e);
-            return setupErrorResponse(new GetEventTypesResponse(), request, e);
+            return handleError("REST getEventTypes", e, new GetEventTypesResponse(), request);
         }
     }
 
@@ -451,8 +465,7 @@ public class DefaultRestApiService implements RestApiService {
 
             return setupSuccessResponse(new ReloadResponse(), request);
         } catch (Throwable e) {
-            getEngine().handleError("REST reload", e);
-            return setupErrorResponse(new ReloadResponse(), request, e);
+            return handleError("REST reload", e, new ReloadResponse(), request);
         }
     }
 

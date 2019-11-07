@@ -375,6 +375,24 @@ class ViewFavouriteFruitsPaging(Action):
             else:
                 context.provided["favouriteFruits"] = ProvidedValue().withElementValueSet(self.allFruits)
 
+class AnnotatedWithDefaultValue(Action):
+    def onConfigure(self):
+        self.withLabel("Action with annotated arg with default").withArgs([
+            StringType("annotated").withLabel("Annotated").withAnnotated().withDefaultValue("Value")
+        ]).withResult(StringType())
+    def onCall(self, annotated):
+        return annotated.value
+
+class ProvidedWithCurrentAndLazyUpdate(Action):
+    def onConfigure(self):
+        self.withLabel("Provided with current and lazy update").withArgs([
+            StringType("arg").withLabel("Arg").withAnnotated().withProvided(
+                ProvidedMeta().withValue().withOverwrite().withCurrent().withLazyUpdate()),
+        ]).withNoResult().withCallable(False)
+    def onProvideArgs(self, context):
+        if "arg" in context.provide:
+            context.provided["arg"] = ProvidedValue().withValue(AnnotatedValue(context.current["arg"].value))
+
 class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RemoteApi"))
