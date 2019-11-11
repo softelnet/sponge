@@ -10,6 +10,9 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed `label` to `valueLabel` and `description` to `valueDescription` in `AnnotatedValue`.
 * Added `AnnotatedValue.typeLabel` and `AnnotatedValue.typeDescription`.
 * Added `ProvidedMeta.current` - a flag specifying if a current value in a client code should be passed to a server when its new value is to be provided.
+* Added `ProvidedMeta.optional` - a flag specifying if a provided read is optional, i.e. a value may be provided implicitly, for example when other value is submitted.
+* Removed support for features in an action arguments provision result itself (`ProvidedValue`). Such features can be provided in an `AnnotatedValue`.
+* Removed experimental support for pageable value set and element value set.
 * Dependencies upgrade.
 
 [discrete]

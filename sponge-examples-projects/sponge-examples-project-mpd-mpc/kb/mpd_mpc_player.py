@@ -26,7 +26,7 @@ class MpdPlayer(Action):
         self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification_.*"],
                            "icon":"music"})
         self.withFeature("contextActions", [
-            "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "ViewMpdStatus()",
+            "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
         ])
 
     def __ensureStatus(self, mpc, status):

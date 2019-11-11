@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1345,14 +1347,7 @@ public class CoreActionsTest {
             assertNotNull(argTypes.get(0).getProvided());
             assertTrue(argTypes.get(0).getProvided().isValue());
             assertFalse(argTypes.get(0).getProvided().hasValueSet());
-            assertTrue((Boolean) argTypes.get(0).getFeatures().get(Features.PROVIDE_VALUE_PAGINABLE));
-            assertNull((Boolean) argTypes.get(0).getFeatures().get(Features.PROVIDE_VALUE_SET_PAGINABLE));
-
-            assertNotNull(argTypes.get(1).getProvided());
-            assertFalse(argTypes.get(1).getProvided().isValue());
-            assertTrue(argTypes.get(1).getProvided().hasValueSet());
-            assertNull((Boolean) argTypes.get(1).getFeatures().get(Features.PROVIDE_VALUE_PAGINABLE));
-            assertTrue((Boolean) argTypes.get(1).getFeatures().get(Features.PROVIDE_VALUE_SET_PAGINABLE));
+            assertTrue((Boolean) argTypes.get(0).getFeatures().get(Features.PROVIDE_VALUE_PAGEABLE));
 
             assertFalse(engine.isError());
         } finally {
@@ -1371,6 +1366,7 @@ public class CoreActionsTest {
             ActionMeta actionMeta = engine.getActionMeta("ViewFruits");
 
             int valueLimit = 5;
+            int fruitsSize = engine.getOperations().getVariable(Collection.class, "fruits").size();
 
             ProvidedValue<?> providedFruits = engine.getOperations()
                     .provideActionArgs(actionMeta.getName(), Arrays.asList("fruits"), null, null,
@@ -1378,11 +1374,12 @@ public class CoreActionsTest {
                                     SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET, 0, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
                     .get("fruits");
 
-            List<String> fruits = (List<String>) providedFruits.getValue();
-            assertEquals(valueLimit, fruits.size());
-            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry"), fruits);
-            assertEquals(0, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
-            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+            AnnotatedValue<List<String>> fruits = (AnnotatedValue<List<String>>) providedFruits.getValue();
+            assertEquals(valueLimit, fruits.getValue().size());
+            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry"), fruits.getValue());
+            assertEquals(0, fruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertEquals(valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+            assertEquals(fruitsSize, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
             providedFruits = engine.getOperations()
                     .provideActionArgs(actionMeta.getName(), Arrays.asList("fruits"), null, null,
@@ -1390,11 +1387,12 @@ public class CoreActionsTest {
                                     Features.PROVIDE_VALUE_LIMIT, valueLimit)))
                     .get("fruits");
 
-            fruits = (List<String>) providedFruits.getValue();
-            assertEquals(valueLimit, fruits.size());
-            assertEquals(Arrays.asList("grapes", "peach", "mango", "grapefruit", "kiwi"), fruits);
-            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
-            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+            fruits = (AnnotatedValue<List<String>>) providedFruits.getValue();
+            assertEquals(valueLimit, fruits.getValue().size());
+            assertEquals(Arrays.asList("grapes", "peach", "mango", "grapefruit", "kiwi"), fruits.getValue());
+            assertEquals(valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertEquals(valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+            assertEquals(fruitsSize, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
             providedFruits = engine.getOperations()
                     .provideActionArgs(actionMeta.getName(), Arrays.asList("fruits"), null, null,
@@ -1402,110 +1400,17 @@ public class CoreActionsTest {
                                     Features.PROVIDE_VALUE_LIMIT, valueLimit)))
                     .get("fruits");
 
-            fruits = (List<String>) providedFruits.getValue();
-            assertEquals(1, fruits.size());
-            assertEquals(Arrays.asList("plum"), fruits);
-            assertEquals(2 * valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
-            assertEquals(valueLimit, providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+            fruits = (AnnotatedValue<List<String>>) providedFruits.getValue();
+            assertEquals(1, fruits.getValue().size());
+            assertEquals(Arrays.asList("plum"), fruits.getValue());
+            assertEquals(2 * valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
+            assertEquals(valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
+            assertEquals(fruitsSize, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
-            // All without paging
-            providedFruits =
-                    engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("fruits"), null, null).get("fruits");
-            fruits = (List<String>) providedFruits.getValue();
-            assertEquals(11, fruits.size());
-            assertEquals(
-                    Arrays.asList("apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi", "plum"),
-                    fruits);
-            assertNull(providedFruits.getFeatures().get(Features.PROVIDE_VALUE_OFFSET));
-            assertNull(providedFruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
-
-            assertFalse(engine.isError());
-        } finally {
-            engine.shutdown();
-        }
-    }
-
-    @Test
-    public void testActionsProvideArgsPagingValueSet() {
-        SpongeEngine engine =
-                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_paging.py").build();
-        engine.startup();
-
-        try {
-            ActionMeta actionMeta = engine.getActionMeta("ViewFruits");
-
-            int valueSetLimit = 8;
-
-            ProvidedValue<?> provided =
-                    engine.getOperations()
-                            .provideActionArgs(actionMeta.getName(), Arrays.asList("favouriteFruit"), null, null,
-                                    SpongeUtils.immutableMapOf("favouriteFruit", SpongeUtils.immutableMapOf(
-                                            Features.PROVIDE_VALUE_SET_OFFSET, 0, Features.PROVIDE_VALUE_SET_LIMIT, valueSetLimit)))
-                            .get("favouriteFruit");
-            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango"),
-                    SpongeApiUtils.unwrapAnnotatedValueList(provided.getAnnotatedValueSet()));
-            assertEquals(0, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_OFFSET));
-            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_LIMIT));
-
-            provided = engine.getOperations()
-                    .provideActionArgs(actionMeta.getName(), Arrays.asList("favouriteFruit"), null, null,
-                            SpongeUtils.immutableMapOf("favouriteFruit", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_SET_OFFSET,
-                                    valueSetLimit, Features.PROVIDE_VALUE_SET_LIMIT, valueSetLimit)))
-                    .get("favouriteFruit");
-            assertEquals(Arrays.asList("grapefruit", "kiwi", "plum", "pear", "strawberry", "blackberry", "pineapple", "papaya"),
-                    SpongeApiUtils.unwrapAnnotatedValueList(provided.getAnnotatedValueSet()));
-            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_OFFSET));
-            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_LIMIT));
-
-            provided = engine.getOperations()
-                    .provideActionArgs(actionMeta.getName(), Arrays.asList("favouriteFruit"), null, null,
-                            SpongeUtils.immutableMapOf("favouriteFruit", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_SET_OFFSET,
-                                    2 * valueSetLimit, Features.PROVIDE_VALUE_SET_LIMIT, valueSetLimit)))
-                    .get("favouriteFruit");
-            assertEquals(Arrays.asList("melon"), SpongeApiUtils.unwrapAnnotatedValueList(provided.getAnnotatedValueSet()));
-            assertEquals(2 * valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_OFFSET));
-            assertEquals(valueSetLimit, provided.getFeatures().get(Features.PROVIDE_VALUE_SET_LIMIT));
-
-            assertFalse(engine.isError());
-        } finally {
-            engine.shutdown();
-        }
-    }
-
-    @Test
-    public void testActionsProvideArgsPagingElementValueSet() {
-        SpongeEngine engine = DefaultSpongeEngine.builder()
-                .knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_provide_args_paging_element_value_set.py").build();
-        engine.startup();
-
-        try {
-            ActionMeta actionMeta = engine.getActionMeta("ViewFavouriteFruits");
-
-            int elementValueSetLimit = 10;
-
-            ProvidedValue<?> provided =
-                    engine.getOperations()
-                            .provideActionArgs(actionMeta.getName(), Arrays.asList("favouriteFruits"), null, null,
-                                    SpongeUtils.immutableMapOf("favouriteFruits",
-                                            SpongeUtils.immutableMapOf(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET, 0,
-                                                    Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT, elementValueSetLimit)))
-                            .get("favouriteFruits");
-            assertEquals(Arrays.asList("apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi"),
-                    SpongeApiUtils.unwrapUnknownAnnotatedValueList(provided.getAnnotatedElementValueSet()));
-            assertEquals(0, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET));
-            assertEquals(elementValueSetLimit, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT));
-
-            provided =
-                    engine.getOperations()
-                            .provideActionArgs(actionMeta.getName(), Arrays.asList("favouriteFruits"), null, null,
-                                    SpongeUtils.immutableMapOf("favouriteFruits",
-                                            SpongeUtils.immutableMapOf(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET, elementValueSetLimit,
-                                                    Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT, elementValueSetLimit)))
-                            .get("favouriteFruits");
-            assertEquals(Arrays.asList("plum", "pear", "strawberry", "blackberry", "pineapple", "papaya", "melon"),
-                    SpongeApiUtils.unwrapUnknownAnnotatedValueList(provided.getAnnotatedElementValueSet()));
-            assertEquals(elementValueSetLimit, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_OFFSET));
-            assertEquals(elementValueSetLimit, provided.getFeatures().get(Features.PROVIDE_ELEMENT_VALUE_SET_LIMIT));
+            // Without paging.
+            Assertions.assertThrows(SpongeException.class,
+                    () -> engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("fruits"), null, null).get("fruits"),
+                    "The are are no features for argument fruits in kb.ViewFruits");
 
             assertFalse(engine.isError());
         } finally {

@@ -134,6 +134,9 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 
 |`current`
 |A flag specifying if a current value in a client code should be passed to a server when its new value is to be provided.
+
+|`optional`
+|A flag specifying if a provided read is optional, i.e. a value may be provided implicitly, for example when other value is submitted. It is not required to be provided at all.
 |===
 
 See the <<provided_arguments,provided action arguments>> as a use case of provided types.

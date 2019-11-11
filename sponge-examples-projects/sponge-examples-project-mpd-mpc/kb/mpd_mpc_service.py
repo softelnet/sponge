@@ -6,6 +6,7 @@ MPD/MPC service.
 from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.util.concurrent.locks import ReentrantLock
 import re
+import os
 
 class Mpc:
     def __init__(self, mpcExec = "mpc", host = None, port = None):
@@ -69,27 +70,33 @@ class Mpc:
 
         return selectedFiles
 
-    def play(self, waitFor = False):
-        process = sponge.process(self.createProcessBuilder().arguments("play")).run()
+    def play(self, position = 1, waitFor = False):
+        process = sponge.process(self.createProcessBuilder().arguments("play", str(position))).run()
         if waitFor:
             process.waitFor()
 
     def addFile(self, file):
-        sponge.process(self.createProcessBuilder().arguments("add", file["file"])).run().waitFor()
+        sponge.process(self.createProcessBuilder().arguments("add", file)).run().waitFor()
+
+    def addFileAsRecord(self, file):
+        self.addFile(file["file"])
 
     def addFiles(self, files):
+        sponge.process(self.createProcessBuilder().arguments("add").inputAsString("\n".join(files))).run().waitFor()
+
+    def addFilesAsRecords(self, files):
         sponge.process(self.createProcessBuilder().arguments("add").inputAsString("\n".join(list(map(lambda file: file["file"], files))))).run().waitFor()
 
     def setAndPlayFiles(self, files, autoPlay):
         if len(files) == 0:
             return
         self.clearPlaylist()
-        self.addFile(files[0])
+        self.addFileAsRecord(files[0])
         if autoPlay:
             # Play immediately after inserting the first file
             self.play()
         if len(files) > 1:
-            self.addFiles(files[1:])
+            self.addFilesAsRecords(files[1:])
 
     def playPlaylistEntry(self, position):
         self.__execute("play", str(position))
@@ -222,6 +229,9 @@ class Mpc:
     def getCurrentPlaylistPosition(self, status = None):
         return self.getCurrentPlaylistPositionAndSize(status)[0]
 
+    def getPlaylistSize(self, status = None):
+        return self.getCurrentPlaylistPositionAndSize(status)[1]
+
     def moveUpPlaylistEntry(self, position):
         if position > 1:
             self.__execute("move", str(position), str(position - 1))
@@ -231,3 +241,24 @@ class Mpc:
 
     def removePlaylistEntry(self, position):
         self.__execute("del", str(position))
+
+    def getFiles(self, parentDir = None):
+        """ Returns list of tuples (file, isDir)
+        """
+        format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), ["file", "title"])))
+        lines = sorted((self.__execute("-f", format, "ls", parentDir) if parentDir else self.__execute("ls")).splitlines())
+
+        def createEntry(line):
+            elements = line.split("\t")
+            if len(elements) == 2:
+                return (elements[0], False)
+            else:
+                return (elements[0], True)
+
+        return list(map(createEntry, lines))
+
+    def clearPlaylist(self):
+        self.__execute("clear")
+
+    def refreshDatabase(self):
+        self.__execute("update")

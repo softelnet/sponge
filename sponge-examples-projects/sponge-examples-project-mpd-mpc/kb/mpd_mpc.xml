@@ -11,6 +11,7 @@
             <file>mpd_mpc.py</file>
             <file>mpd_mpc_player.py</file>
             <file>mpd_mpc_playlist.py</file>
+            <file>mpd_mpc_library.py</file>
             <file>mpd_lyrics.py</file>
         </knowledgeBase>
         <knowledgeBase name="administration" label="Administration">

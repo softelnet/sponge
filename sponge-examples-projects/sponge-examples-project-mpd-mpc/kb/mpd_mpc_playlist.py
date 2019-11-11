@@ -16,12 +16,13 @@ class MpdPlaylist(Action):
         self.withLabel("Playlist").withDescription("The MPD playlist.")
         self.withArgs([
             ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures(
-                {"createAction":"MpdPlaylistAddEntry", "activateAction":"MpdPlaylistEntryPlay", "scroll":True}).withProvided(
+                {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "scroll":True, "pageable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withNoResult().withCallable(False)
         self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None,
                            "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
-                           "icon":"view-headline"})
+                           "contextActions":["MpdLibrary()", "MpdPlaylistClear()"],
+                           "icon":"playlist-edit"})
 
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []
@@ -40,19 +41,25 @@ class MpdPlaylist(Action):
         mpc.lock.lock()
         try:
             if "playlist" in context.provide:
+                offset = context.getFeature("playlist", "offset")
+                limit = context.getFeature("playlist", "limit")
+
+                allPlaylist = mpc.getPlaylist()
+                mpcPlaylist = allPlaylist[offset:(offset + limit)]
                 currentPosition = mpc.getCurrentPlaylistPosition()
-                mpcPlaylist = mpc.getPlaylist()
+
                 entries = list(map(lambda song: AnnotatedValue({"song":song}), mpcPlaylist))
                 for pos, entry in enumerate(entries):
-                    position = pos + 1
+                    position = offset + pos + 1
                     entry.value["position"] = position
                     entry.withValueLabel(str(position) + ". " + entry.value["song"])
-                    entry.withFeature("contextActions", self.__createContextActionsForEntry(position, len(mpcPlaylist)))
+                    entry.withFeature("contextActions", self.__createContextActionsForEntry(position, len(allPlaylist)))
                     if position == currentPosition:
                         entry.withFeature("icon", "play")
 
                 context.provided["playlist"] = ProvidedValue().withValue(AnnotatedValue(entries).withTypeLabel(
-                    "Playlist" + ((" (" + str(len(entries)) +")") if len(entries) > 0 else "")))
+                    "Playlist" + ((" (" + str(len(allPlaylist)) +")") if len(entries) > 0 else "")).withFeatures(
+                        {"offset":offset, "limit":limit, "count":len(allPlaylist)}))
         finally:
             mpc.lock.unlock()
 
@@ -76,6 +83,12 @@ class MpdPlaylistEntryDown(Action):
 
 class MpdPlaylistEntryRemove(Action):
     def onConfigure(self):
-        self.withLabel("Remove").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"delete"})
+        self.withLabel("Remove").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"playlist-remove"})
     def onCall(self, entry):
         sponge.getVariable("mpc").removePlaylistEntry(entry.value["position"])
+
+class MpdPlaylistClear(Action):
+    def onConfigure(self):
+        self.withLabel("Clear playlist").withNoArgs().withNoResult().withFeatures({"visible":False, "icon":"delete-empty"})
+    def onCall(self):
+        sponge.getVariable("mpc").clearPlaylist()
