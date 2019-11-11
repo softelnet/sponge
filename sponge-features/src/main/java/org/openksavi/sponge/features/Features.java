@@ -106,6 +106,8 @@ public final class Features {
 
     public static final String ACTION_ARG_LIST_ACTIVATE_ACTION = "activateAction";
 
+    public static final String ACTION_ARG_LIST_ACTIVATE_ACTION_VALUE_SUBMIT = "submit";
+
     public static final String BINARY_WIDTH = "width";
 
     public static final String BINARY_HEIGHT = "height";

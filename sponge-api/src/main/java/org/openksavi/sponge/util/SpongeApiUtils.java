@@ -28,8 +28,10 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeConstants;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -67,11 +69,14 @@ public abstract class SpongeApiUtils {
             Validate.notNull(argTypeHolder.getValue(), "Argument '%s' not found", argName);
             Validate.notNull(argType.getName(), "The sub-type nas no name");
 
-            // Verify Record/Map type.
-            Validate.isTrue(argType instanceof RecordType, "The element %s is not a record", argType.getName());
-
-            argTypeHolder.setValue(((RecordType) argType).getFields().stream().filter(fieldType -> fieldType.getName().equals(element))
-                    .findFirst().orElse(null));
+            if (argType instanceof RecordType) {
+                argTypeHolder.setValue(((RecordType) argType).getFieldType(element));
+            } else if (argType instanceof ListType) {
+                argTypeHolder.setValue(((ListType) argType).getElementType());
+            } else {
+                throw new SpongeException(String.format("The element %s is not a record or a list",
+                        argType.getName() != null ? argType.getName() : argType.getKind().name()));
+            }
         });
 
         return argTypeHolder.getValue();

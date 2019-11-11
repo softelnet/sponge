@@ -16,12 +16,13 @@ class MpdPlaylist(Action):
         self.withLabel("Playlist").withDescription("The MPD playlist.")
         self.withArgs([
             ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures(
-                {"createAction":"MpdPlaylistAddEntry", "activateAction":"MpdPlaylistEntryPlay", "scroll":True}).withProvided(
+                {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "scroll":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withNoResult().withCallable(False)
         self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None,
                            "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
-                           "icon":"view-headline"})
+                           "contextActions":["MpdLibrary()", "MpdPlaylistClear()"],
+                           "icon":"playlist-edit"})
 
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []
@@ -76,6 +77,12 @@ class MpdPlaylistEntryDown(Action):
 
 class MpdPlaylistEntryRemove(Action):
     def onConfigure(self):
-        self.withLabel("Remove").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"delete"})
+        self.withLabel("Remove").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"playlist-remove"})
     def onCall(self, entry):
         sponge.getVariable("mpc").removePlaylistEntry(entry.value["position"])
+
+class MpdPlaylistClear(Action):
+    def onConfigure(self):
+        self.withLabel("Clear playlist").withNoArgs().withNoResult().withFeatures({"visible":False, "icon":"delete-empty"})
+    def onCall(self):
+        sponge.getVariable("mpc").clearPlaylist()

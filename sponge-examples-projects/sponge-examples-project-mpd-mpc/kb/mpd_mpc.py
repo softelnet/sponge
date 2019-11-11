@@ -16,7 +16,7 @@ class MpdSetAndPlayPlaylist(Action):
             IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("The album maximum release year."),
             BooleanType("autoPlay").withDefaultValue(True).withLabel("Auto play").withDescription("Plays the playlist automatically.")
         ]).withResult(StringType().withLabel("Info").withDescription("A short info of the status of the action call."))
-        self.withFeatures({"icon":"view-headline"})
+        self.withFeatures({"icon":"playlist-star"})
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         mpc = sponge.getVariable("mpc")
         sponge.logger.info("Setting the playlist...")
@@ -90,9 +90,22 @@ class MpdSetServer(Action):
         if "host" in context.provide:
             context.provided["host"] =  ProvidedValue().withValue(mpc.host)
 
-def onStartup():
-    sponge.setVariable("mpc", Mpc())
+class MpdRefreshDatabase(Action):
+    def onConfigure(self):
+        self.withLabel("Refresh database").withDescription("Refreshes MPD database")
+        self.withNoArgs().withNoResult().withFeatures({"icon":"database-refresh", "confirmation":True})
+    def onCall(self):
+        sponge.getVariable("mpc").refreshDatabase()
+
+def onLoad():
+    mpc = None
+    if sponge.hasVariable("mpc"):
+        mpc = sponge.getVariable("mpc")
+    sponge.setVariable("mpc", Mpc(host=mpc.host if mpc else None, port=mpc.port if mpc else None))
+
     sponge.setVariable("lyricsService", LyricsService(sponge.getProperty("musixmatchApiKey", None)))
+
+def onStartup():
     sponge.getVariable("mpc").startEventLoop()
     sponge.event("statusPolling").sendEvery(Duration.ofSeconds(1))
 

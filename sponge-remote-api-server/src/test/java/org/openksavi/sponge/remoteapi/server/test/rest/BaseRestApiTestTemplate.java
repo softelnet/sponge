@@ -970,6 +970,7 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(argType.isAnnotated());
             assertTrue(argType.getProvided().isCurrent());
             assertTrue(argType.getProvided().isLazyUpdate());
+            assertFalse(argType.getProvided().isOptional());
 
             String currentValue = "NEW VALUE";
 
@@ -977,6 +978,27 @@ public abstract class BaseRestApiTestTemplate {
                     SpongeUtils.immutableMapOf("arg", new AnnotatedValue<>(currentValue))).get("arg");
 
             assertEquals(currentValue, ((AnnotatedValue) provided.getValue()).getValue());
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testActionsProvidedWithOptional() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "ProvidedWithOptional";
+
+            RestActionMeta actionMeta = client.getActionMeta(actionName);
+            DataType argType = actionMeta.getArgs().get(0);
+
+            assertFalse(argType.getProvided().isCurrent());
+            assertFalse(argType.getProvided().isLazyUpdate());
+            assertTrue(argType.getProvided().isOptional());
+
+            ProvidedValue<String> provided = (ProvidedValue<String>) client.provideActionArgs(actionName, Arrays.asList()).get("arg");
+
+            assertEquals("VALUE", provided.getValue());
 
             assertFalse(engine.isError());
         }

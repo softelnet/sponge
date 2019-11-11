@@ -58,6 +58,12 @@ public class ProvidedMeta {
     /** The flag specifying if the current value in a client code should be passed to a server when its new value is to be provided. */
     private boolean current = false;
 
+    /**
+     * The flag specifying if the provided read is optional, i.e. a value may be provided implicitly, for example when other value is
+     * submitted. It is not required to be provided at all.
+     */
+    private boolean optional = false;
+
     public ProvidedMeta() {
     }
 
@@ -111,6 +117,11 @@ public class ProvidedMeta {
 
     public ProvidedMeta withCurrent() {
         current = true;
+        return this;
+    }
+
+    public ProvidedMeta withOptional() {
+        optional = true;
         return this;
     }
 
@@ -188,5 +199,13 @@ public class ProvidedMeta {
 
     public void setCurrent(boolean current) {
         this.current = current;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 }

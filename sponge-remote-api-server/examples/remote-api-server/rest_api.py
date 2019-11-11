@@ -393,6 +393,14 @@ class ProvidedWithCurrentAndLazyUpdate(Action):
         if "arg" in context.provide:
             context.provided["arg"] = ProvidedValue().withValue(AnnotatedValue(context.current["arg"].value))
 
+class ProvidedWithOptional(Action):
+    def onConfigure(self):
+        self.withLabel("Provided with optional").withArgs([
+            StringType("arg").withLabel("Arg").withProvided(ProvidedMeta().withValue().withOptional()),
+        ]).withNoResult().withCallable(False)
+    def onProvideArgs(self, context):
+        context.provided["arg"] = ProvidedValue().withValue("VALUE")
+
 class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RemoteApi"))
