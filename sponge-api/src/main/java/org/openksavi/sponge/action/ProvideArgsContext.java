@@ -19,6 +19,8 @@ package org.openksavi.sponge.action;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.Validate;
+
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
@@ -96,5 +98,21 @@ public class ProvideArgsContext {
 
     public void setFeatures(Map<String, Map<String, Object>> features) {
         this.features = features;
+    }
+
+    public Object getFeature(String argName, String featureName) {
+        Validate.isTrue(features != null && features.get(argName) != null && features.get(argName).containsKey(featureName),
+                "There are no features for argument %s", argName);
+
+        return features.get(argName).get(featureName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getFeature(String argName, String featureName, T defaultValue) {
+        if (features == null || features.get(argName) == null || !features.get(argName).containsKey(featureName)) {
+            return defaultValue;
+        }
+
+        return (T) features.get(argName).get(featureName);
     }
 }

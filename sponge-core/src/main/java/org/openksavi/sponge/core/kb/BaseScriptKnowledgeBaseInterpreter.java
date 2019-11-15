@@ -56,6 +56,7 @@ import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
+import org.openksavi.sponge.type.provided.ProvidedMode;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.provided.ValueSetMeta;
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -283,7 +284,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class, ProcessorType.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                ProvidedMeta.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class, OutputStreamValue.class,
+                ProvidedMeta.class, ProvidedMode.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class, OutputStreamValue.class,
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,

@@ -72,12 +72,11 @@
 
         <javax.inject.version>1</javax.inject.version>
 
-        <!-- The newest version of Jython (2.7.1) is not used in Sponge. As stated on the Jython home page (http://www.jython.org/downloads.html): -->
-        <!-- "The most current stable release of Jython is 2.7.0. For production purposes, please use this version." -->
+        <!-- The newest version of Jython (2.7.1) is not used in Sponge. -->
         <jython.version>2.7.0</jython.version>
         <jruby.version>9.2.9.0</jruby.version>
         <groovy.version>2.5.8</groovy.version>
-        <kotlin.version>1.3.50</kotlin.version>
+        <kotlin.version>1.3.60</kotlin.version>
 
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -105,7 +104,7 @@
         <rxjava2.version>2.2.14</rxjava2.version>
         <okhttp.version> 4.2.2</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
-        <jackson.version>2.10.0</jackson.version>
+        <jackson.version>2.10.1</jackson.version>
         <swagger.version>1.5.24</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jserialcomm.version>2.5.2</jserialcomm.version>

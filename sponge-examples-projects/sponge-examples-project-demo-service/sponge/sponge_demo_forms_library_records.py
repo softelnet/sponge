@@ -21,6 +21,7 @@ class RecordLibraryForm(Action):
             StringType("order").withLabel("Sort by").withProvided(ProvidedMeta().withValue().withValueSet()),
             ListType("books").withLabel("Books").withFeatures({
                     "createAction":"RecordCreateBook", "readAction":"RecordReadBook", "updateAction":"RecordUpdateBook", "deleteAction":"RecordDeleteBook",
+                    "refreshable":True,
                 # Provided with overwrite to allow GUI refresh.
                 }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withElement(
                         createBookRecordType("book").withAnnotated()

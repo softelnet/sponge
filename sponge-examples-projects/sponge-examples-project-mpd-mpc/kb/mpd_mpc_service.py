@@ -6,6 +6,7 @@ MPD/MPC service.
 from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.util.concurrent.locks import ReentrantLock
 import re
+import os
 
 class Mpc:
     def __init__(self, mpcExec = "mpc", host = None, port = None):
@@ -69,8 +70,8 @@ class Mpc:
 
         return selectedFiles
 
-    def play(self, waitFor = False):
-        process = sponge.process(self.createProcessBuilder().arguments("play")).run()
+    def play(self, position = 1, waitFor = False):
+        process = sponge.process(self.createProcessBuilder().arguments("play", str(position))).run()
         if waitFor:
             process.waitFor()
 
@@ -228,6 +229,9 @@ class Mpc:
     def getCurrentPlaylistPosition(self, status = None):
         return self.getCurrentPlaylistPositionAndSize(status)[0]
 
+    def getPlaylistSize(self, status = None):
+        return self.getCurrentPlaylistPositionAndSize(status)[1]
+
     def moveUpPlaylistEntry(self, position):
         if position > 1:
             self.__execute("move", str(position), str(position - 1))
@@ -251,7 +255,6 @@ class Mpc:
             else:
                 return (elements[0], True)
 
-        print(list(map(createEntry, lines)))
         return list(map(createEntry, lines))
 
     def clearPlaylist(self):
