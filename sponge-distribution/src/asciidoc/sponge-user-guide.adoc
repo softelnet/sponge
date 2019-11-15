@@ -135,8 +135,8 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |`current`
 |A flag specifying if a current value in a client code should be passed to a server when its new value is to be provided.
 
-|`optional`
-|A flag specifying if a provided read is optional, i.e. a value may be provided implicitly, for example when other value is submitted. It is not required to be provided at all.
+|`mode`
+|A provided read mode: `explicit` (a value has to specified to be provided in `provideArgs`), `optional` (a value may or may not be specified to be provided in `provideArgs`) or `implicit` (a value shouldn't be specified to be provided in `provideArgs`). Defaults to `explicit`. For example a value can be provided optionally or implicitly when an other value is submitted. To set this property to a value other than a default, use the `withOptionalMode()` or the `withImplicitMode()` method.
 |===
 
 See the <<provided_arguments,provided action arguments>> as a use case of provided types.

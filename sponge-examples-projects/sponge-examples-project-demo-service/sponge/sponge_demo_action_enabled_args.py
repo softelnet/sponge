@@ -12,7 +12,7 @@ class EnableArgsAction(Action):
                 ProvidedMeta().withValue().withOverwrite().withDependency("enable").withCurrent().withLazyUpdate()),
             ListType("list").withLabel("List").withAnnotated().withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("enable")).withElement(
-                    StringType("element").withAnnotated()),
+                    StringType("element").withAnnotated()).withFeature("refreshable", True),
             RecordType("record").withLabel("Record").withAnnotated().withFields([
                 IntegerType("id").withLabel("ID").withNullable().withFeature("visible", False),
                 StringType("author").withLabel("Author"),
@@ -24,7 +24,7 @@ class EnableArgsAction(Action):
                         IntegerType("id").withLabel("ID").withNullable().withFeature("visible", False),
                         StringType("author").withLabel("Author"),
                         StringType("title").withLabel("Title")
-                    ])
+                    ]).withFeature("refreshable", True)
             ),
         ]).withNoResult().withCallable(False)
         self.withFeatures({"refreshLabel":None, "clearLabel":None, "cancelLabel":None})

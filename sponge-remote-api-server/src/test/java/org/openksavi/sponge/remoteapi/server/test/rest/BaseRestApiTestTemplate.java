@@ -75,6 +75,7 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.provided.ProvidedMode;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
@@ -893,7 +894,7 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(argType.isAnnotated());
             assertTrue(argType.getProvided().isCurrent());
             assertTrue(argType.getProvided().isLazyUpdate());
-            assertFalse(argType.getProvided().isOptional());
+            assertEquals(ProvidedMode.EXPLICIT, argType.getProvided().getMode());
 
             String currentValue = "NEW VALUE";
 
@@ -917,7 +918,7 @@ public abstract class BaseRestApiTestTemplate {
 
             assertFalse(argType.getProvided().isCurrent());
             assertFalse(argType.getProvided().isLazyUpdate());
-            assertTrue(argType.getProvided().isOptional());
+            assertEquals(ProvidedMode.OPTIONAL, argType.getProvided().getMode());
 
             ProvidedValue<String> provided = (ProvidedValue<String>) client.provideActionArgs(actionName, Arrays.asList()).get("arg");
 

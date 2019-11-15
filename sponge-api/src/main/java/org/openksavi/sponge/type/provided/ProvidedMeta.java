@@ -59,10 +59,12 @@ public class ProvidedMeta {
     private boolean current = false;
 
     /**
-     * The flag specifying if the provided read is optional, i.e. a value may be provided implicitly, for example when other value is
-     * submitted. It is not required to be provided at all.
+     * The provided read mode: {@code explicit} (a value has to specified to be provided in {@code provideArgs}), {@code optional} (a value
+     * may or may not be specified to be provided in {@code provideArgs}) or {@code implicit} (a value shouldn't be specified to be provided
+     * in {@code provideArgs}). Defaults to {@code explicit}. For example a value can be provided optionally or implicitly when an other
+     * value is submitted.
      */
-    private boolean optional = false;
+    private ProvidedMode mode = ProvidedMode.EXPLICIT;
 
     public ProvidedMeta() {
     }
@@ -120,9 +122,21 @@ public class ProvidedMeta {
         return this;
     }
 
-    public ProvidedMeta withOptional() {
-        optional = true;
+    public ProvidedMeta withMode(ProvidedMode mode) {
+        this.mode = mode;
         return this;
+    }
+
+    public ProvidedMeta withExplicitMode() {
+        return withMode(ProvidedMode.EXPLICIT);
+    }
+
+    public ProvidedMeta withOptionalMode() {
+        return withMode(ProvidedMode.OPTIONAL);
+    }
+
+    public ProvidedMeta withImplicitMode() {
+        return withMode(ProvidedMode.IMPLICIT);
     }
 
     public boolean isValue() {
@@ -201,11 +215,11 @@ public class ProvidedMeta {
         this.current = current;
     }
 
-    public boolean isOptional() {
-        return optional;
+    public ProvidedMode getMode() {
+        return mode;
     }
 
-    public void setOptional(boolean optional) {
-        this.optional = optional;
+    public void setMode(ProvidedMode mode) {
+        this.mode = mode;
     }
 }

@@ -16,7 +16,7 @@ class MpdPlaylist(Action):
         self.withLabel("Playlist").withDescription("The MPD playlist.")
         self.withArgs([
             ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures(
-                {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "scroll":True, "pageable":True}).withProvided(
+                {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "scroll":True, "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withNoResult().withCallable(False)
         self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None,

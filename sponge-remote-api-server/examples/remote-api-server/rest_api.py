@@ -363,7 +363,7 @@ class ProvidedWithCurrentAndLazyUpdate(Action):
 class ProvidedWithOptional(Action):
     def onConfigure(self):
         self.withLabel("Provided with optional").withArgs([
-            StringType("arg").withLabel("Arg").withProvided(ProvidedMeta().withValue().withOptional()),
+            StringType("arg").withLabel("Arg").withProvided(ProvidedMeta().withValue().withOptionalMode()),
         ]).withNoResult().withCallable(False)
     def onProvideArgs(self, context):
         context.provided["arg"] = ProvidedValue().withValue("VALUE")
