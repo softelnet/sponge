@@ -46,6 +46,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
@@ -57,6 +58,7 @@ import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.ErrorResponseException;
 import org.openksavi.sponge.restapi.client.InvalidKnowledgeBaseVersionException;
+import org.openksavi.sponge.restapi.client.SpongeClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
@@ -73,6 +75,7 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
+import org.openksavi.sponge.type.provided.ProvidedMode;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.type.value.DynamicValue;
@@ -891,7 +894,6 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(argType.isAnnotated());
             assertTrue(argType.getProvided().isCurrent());
             assertTrue(argType.getProvided().isLazyUpdate());
-            assertFalse(argType.getProvided().isOptional());
             assertEquals(ProvidedMode.EXPLICIT, argType.getProvided().getMode());
 
             String currentValue = "NEW VALUE";
@@ -900,27 +902,6 @@ public abstract class BaseRestApiTestTemplate {
                     SpongeUtils.immutableMapOf("arg", new AnnotatedValue<>(currentValue))).get("arg");
 
             assertEquals(currentValue, ((AnnotatedValue) provided.getValue()).getValue());
-
-            assertFalse(engine.isError());
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testActionsProvidedWithOptional() {
-        try (SpongeRestClient client = createRestClient()) {
-            String actionName = "ProvidedWithOptional";
-
-            RestActionMeta actionMeta = client.getActionMeta(actionName);
-            DataType argType = actionMeta.getArgs().get(0);
-
-            assertFalse(argType.getProvided().isCurrent());
-            assertFalse(argType.getProvided().isLazyUpdate());
-            assertTrue(argType.getProvided().isOptional());
-
-            ProvidedValue<String> provided = (ProvidedValue<String>) client.provideActionArgs(actionName, Arrays.asList()).get("arg");
-
-            assertEquals("VALUE", provided.getValue());
 
             assertFalse(engine.isError());
         }

@@ -249,7 +249,9 @@ A source argument name could be a path if a source value is a record, e.g. `"Con
 
 If a context action requires more arguments than passed from a parent action, a new action call screen will be shown. If a context value is an annotated value, the screen will show a header containing a label of the annotated value.
 
-The context actions feature is not propagated in an annotated value feature to sub-actions.
+The context actions feature is not propagated to sub-actions in an annotated value feature.
+
+Context actions can use globally saved (in a mobile application) action arguments but only if there is no argument substitutions (i.e. there are no arguments passed from the main action). It is necessary to avoid inconsistency.
 
 === List-details
 
@@ -407,13 +409,29 @@ The application may be switched to the dark theme in the settings.
 |Type
 |If `True`, an action argument or a record field is visible in the action call screen. Defaults to `true`.
 
+|`enabled`
+|Type
+|If `True`, an action argument or a record field is enabled for editing. Defaults to `true`.
+
+|`refreshable`
+|`ListType`
+|If `True`, a provided list will have a button to refresh (i.e. provide arguments from the server). Defaults to `false`.
+
 |`icon`
 |Action
-|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/3.6.95/[material design icons (currently v3.6.95)].
+|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/4.5.95/[material design icons (currently v4.5.95)].
+
+|`icon`
+|Type
+|An type icon name. Currently supported only for list elements.
 
 |`widget`
-|Widget
+|Type
 |A GUI widget type. See the table below for supported values. Support for this feature is limited. In most cases a default, opinionated widget will be used.
+
+|`group`
+|Type
+|A name of a group of action arguments or record fields. Grouped values will be placed in a compact GUI panel close to each other, if it is possible.
 
 |`responsive`
 |Type
@@ -539,6 +557,10 @@ The application may be switched to the dark theme in the settings.
 |`ListType` action argument
 |A _delete_ sub-action for a list element.
 
+|`activateAction`
+|`ListType` action argument
+|An action that will be called on list element tap. If the action string has the special value `submit`, then instead of calling an action, a `provideActionArgs` will be invoked with the submitted list element.
+
 |`width`
 |`BinaryType` drawing
 |An image width.
@@ -558,7 +580,13 @@ The application may be switched to the dark theme in the settings.
 |`background`
 |`BinaryType` drawing
 |A drawing background color.
+
+|`scroll`
+|`ListType`
+|A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists.
 |===
+
+==== Widgets
 
 .Supported widget types for a `widget` feature
 [cols="1,5"]
@@ -573,6 +601,36 @@ The application may be switched to the dark theme in the settings.
 |===
 
 A data type property can be dynamically overwritten by a corresponding feature in an `AnnotatedValue`. The feature name has to be exactly the same as the data type property name. The overwrite is handled by the {sponge} mobile client application.
+
+==== List pagination
+
+.List pagination features
+[cols="1,1,3"]
+|===
+|Feature |Applies to |Description
+
+|`pageable`
+|`ListType`
+|If `True`, a list will be pageable. Defaults to `false`. A pageable list type has to be annotated, because values of offset, limit and count are passed by features in an annotated list value.
+
+|`offset`
+|`ListType` annotated value
+|An offset of the first element of a page.
+
+|`limit`
+|`ListType` annotated value
+|A limit of a page, i.e. a maximum number of elements in a page.
+
+|`count`
+|`ListType` annotated value
+|A count of all available elements of a list. This value is optional.
+|===
+
+A pagination uses the `provideActionArgs` REST API operation. The features `offset` and `limit` have to be set when invoking `provideActionArgs`. A provided, annotated list must have the `offset` and the `limit` set and optionally the `count`. A client code is responsible for setting `offset` and `limit`. An action `onProvideArgs` callback method is not required to support `offset` or `limit` if they are not set in the request. A page size is established by a client code.
+
+The pagination is supported only for primary (i.e. not nested) action arguments and only for read provided annotated lists.
+
+A pageable list should also have the feature `scroll` set to true. The pagination works only _forward_, i.e. all previous list elements fetched from the server are stored in mobile device memory.
 
 == Included demos
 The access to actions in the mobile application is generic. However the application may include demos that use a customized UI.

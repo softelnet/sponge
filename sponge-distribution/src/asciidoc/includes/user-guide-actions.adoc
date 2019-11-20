@@ -294,7 +294,7 @@ Arguments configured as provided with a value, a value set or a element value se
 
 Arguments configured as provided with submit should be handled in the `onProvideArgs` callback method.
 
-Provided arguments support paging of a list value, a value set and an element value set, however this functionality is currently in an experimental state.
+Provided arguments can handle a pagination of list elements.
 
 == Implementing interfaces
 Actions may implement additional Java interfaces. It could be used to provide custom behavior of actions.
