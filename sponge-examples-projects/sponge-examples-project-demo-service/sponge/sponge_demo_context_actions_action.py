@@ -23,7 +23,7 @@ class ActionWithContextActionsContextAction1(Action):
             RecordType("arg").withFields([
                 StringType("arg1").withLabel("Argument 1"),
                 StringType("arg2").withLabel("Argument 2")
-            ])
+            ]).withFeature("visible", False)
         ]).withResult(StringType())
         self.withFeatures({"visible":False, "icon":"tortoise"})
     def onCall(self, arg):

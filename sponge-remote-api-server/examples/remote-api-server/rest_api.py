@@ -237,12 +237,17 @@ class DynamicResultAction(Action):
 
 class TypeResultAction(Action):
     def onConfigure(self):
-        self.withArg(StringType("type")).withResult(TypeType())
-    def onCall(self, type):
+        self.withArgs([
+            StringType("type"),
+            TypeType("arg").withNullable()
+        ]).withResult(TypeType())
+    def onCall(self, type, arg):
         if type == "string":
             return StringType()
         elif type == "boolean":
             return BooleanType()
+        elif type == "arg":
+            return arg
         else:
             return None
 

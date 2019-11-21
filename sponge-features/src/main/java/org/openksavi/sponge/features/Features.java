@@ -76,6 +76,8 @@ public final class Features {
 
     public static final String TYPE_INTENT_VALUE_SUBSCRIBE = "subscribe";
 
+    public static final String ACTION_INTENT_VALUE_RELOAD = "reload";
+
     public static final String ACTION_REFRESH_EVENTS = "refreshEvents";
 
     public static final String EVENT_HANDLER_ACTION = "handlerAction";
@@ -87,6 +89,14 @@ public final class Features {
     public static final String STRING_MAX_LINES = "maxLines";
 
     public static final String STRING_OBSCURE = "obscure";
+
+    public static final String ACTION_CALL_SHOW_CALL = "showCall";
+
+    public static final String ACTION_CALL_SHOW_REFRESH = "showRefresh";
+
+    public static final String ACTION_CALL_SHOW_CLEAR = "showClear";
+
+    public static final String ACTION_CALL_SHOW_CANCEL = "showCancel";
 
     public static final String ACTION_CALL_LABEL = "callLabel";
 

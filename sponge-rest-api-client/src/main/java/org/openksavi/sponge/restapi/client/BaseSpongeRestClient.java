@@ -76,6 +76,7 @@ import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
@@ -545,19 +546,23 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return response;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected void unmarshalDataType(DataType type) {
-        type.setDefaultValue(typeConverter.unmarshal(type, type.getDefaultValue()));
+    @SuppressWarnings({ "rawtypes" })
+    protected DataType unmarshalDataType(DataType type) {
+        return (DataType) typeConverter.unmarshal(new TypeType(), type);
     }
 
+    @SuppressWarnings("rawtypes")
     protected void unmarshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
-            if (actionMeta.getArgs() != null) {
-                actionMeta.getArgs().forEach(argType -> unmarshalDataType(argType));
+            List<DataType> args = actionMeta.getArgs();
+            if (args != null) {
+                for (int i = 0; i < args.size(); i++) {
+                    args.set(i, unmarshalDataType(args.get(i)));
+                }
             }
 
             if (actionMeta.getResult() != null) {
-                unmarshalDataType(actionMeta.getResult());
+                actionMeta.setResult(unmarshalDataType(actionMeta.getResult()));
             }
         }
     }
@@ -853,7 +858,10 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         GetEventTypesResponse response = execute(RestApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
 
         if (response != null && response.getEventTypes() != null) {
-            response.getEventTypes().values().forEach(this::unmarshalDataType);
+            Map<String, RecordType> eventTypes = response.getEventTypes();
+            for (String key : eventTypes.keySet()) {
+                eventTypes.put(key, (RecordType) unmarshalDataType(eventTypes.get(key)));
+            }
 
             // Populate the cache.
             if (populateCache && configuration.isUseEventTypeCache() && eventTypeCache != null) {

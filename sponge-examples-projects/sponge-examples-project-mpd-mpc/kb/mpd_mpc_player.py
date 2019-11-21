@@ -22,12 +22,10 @@ class MpdPlayer(Action):
                 ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
             VoidType("next").withLabel("Next").withAnnotated().withFeatures({"icon":"skip-next", "group":"navigation"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable())
-        ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["statusPolling", "mpdNotification_.*"],
-                           "icon":"music"})
-        self.withFeature("contextActions", [
+        ]).withCallable(False)
+        self.withFeatures({"cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
             "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
-        ])
+        ]})
 
     def __ensureStatus(self, mpc, status):
         return status if mpc.isStatusOk(status) else mpc.getStatus()

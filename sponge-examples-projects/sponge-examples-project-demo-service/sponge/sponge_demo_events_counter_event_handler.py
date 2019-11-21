@@ -22,7 +22,7 @@ class ViewCounterEvent(Action):
                     ProvidedMeta().withValue().withReadOnly().withDependency("event")),
         ]).withNoResult()
         # The action will not be shown in an action list in a GUI.
-        self.withFeatures({"visible":False, "callLabel":"Dismiss", "refreshLabel":None, "clearLabel":None, "cancelLabel":"Close"})
+        self.withFeatures({"visible":False, "callLabel":"Dismiss", "cancelLabel":"Close"})
     def onCall(self, event, counter):
         # Here some additional processing can be implemented on the server side on dismissing an event from an action.
         pass

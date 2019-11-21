@@ -89,7 +89,7 @@ public abstract class RestApiUtils {
 
         if (actionMeta.getArgs() != null) {
             actionMeta.getArgs().forEach(
-                    argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
+                    argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly, true));
         }
     }
 

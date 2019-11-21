@@ -19,10 +19,8 @@ class MpdPlaylist(Action):
                 {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "scroll":True, "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withNoResult().withCallable(False)
-        self.withFeatures({"clearLabel":None, "cancelLabel":"Close", "refreshLabel":None,
-                           "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
-                           "contextActions":["MpdLibrary()", "MpdPlaylistClear()"],
-                           "icon":"playlist-edit"})
+        self.withFeatures({"cancelLabel":"Close", "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
+                           "contextActions":["MpdLibrary()", "MpdPlaylistClear()"], "icon":"playlist-edit"})
 
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []

@@ -52,7 +52,7 @@ public class GrpcApiViewEvent extends JAction {
 
         withNoResult();
         withFeatures(SpongeUtils.immutableMapOf("visible", false, "intent", "defaultEventHandler", "callLabel", "Dismiss", "refreshLabel",
-                null, "clearLabel", null, "cancelLabel", null));
+                null));
     }
 
     public void onCall(RemoteEvent event, String type, Instant time, DynamicValue<Map<String, Object>> attributes, String label,

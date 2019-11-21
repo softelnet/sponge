@@ -48,8 +48,7 @@ public class GrpcApiManageSubscription extends JAction {
                 new BooleanType("subscribe").withLabel("Subscribe").withDescription("Turns on/off event subscriptions.")
                         .withDefaultValue(true));
         withNoResult();
-        withFeatures(
-                SpongeUtils.immutableMapOf("intent", "subscription", "clearLabel", null, "callLabel", "Save", "icon", "cellphone-message"));
+        withFeatures(SpongeUtils.immutableMapOf("intent", "subscription", "callLabel", "Save", "icon", "cellphone-message"));
     }
 
     @Override
