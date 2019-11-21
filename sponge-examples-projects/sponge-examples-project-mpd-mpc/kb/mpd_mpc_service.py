@@ -18,7 +18,7 @@ class Mpc:
         self.eventLoopProcess = None
         self.lock = ReentrantLock(True)
 
-    def createProcessBuilder(self):
+    def __createProcessBuilder(self):
         args = []
         if self.host:
             args.append("-h")
@@ -29,16 +29,19 @@ class Mpc:
 
         return ProcessConfiguration.builder(self.mpcExec).arguments(args)
 
-    def listAllFiles(self):
-        return sponge.process(self.createProcessBuilder().arguments("-f", "%file%", "search", "genre", "").outputAsString()).run().outputString.splitlines()
+    def __execute(self, *argv):
+        self.lock.lock()
+        try:
+            process = sponge.process(self.__createProcessBuilder().arguments(argv).outputAsString().errorAsException()).run()
+            #process = sponge.process(self.createProcessBuilder().arguments(argv).outputAsString().errorAsString().exceptionOnExitCode(False)).run()
+            #if process.errorString:
+            #     sponge.logger.warn(process.errorString)
 
-    def getServerVersion(self):
-        return sponge.process(self.createProcessBuilder().arguments("version").outputAsString()).run().outputString
+            return process.outputString
+        finally:
+            self.lock.unlock()
 
-    def clearPlaylist(self):
-        sponge.process(self.createProcessBuilder().arguments("clear")).run().waitFor()
-
-    def num(self, name, value, raiseOnError):
+    def __num(self, name, value, raiseOnError):
         try:
             return int(value) if value else None
         except ValueError:
@@ -47,45 +50,35 @@ class Mpc:
             else:
                 return None
 
-    def searchFiles(self, aArtist, aAlbum, aGenre, aMinYear, aMaxYear, useSimpleRegexp = False):
-        minYear = self.num("minYear", aMinYear, True)
-        maxYear = self.num("maxYear", aMaxYear, True)
-        selectedFiles = []
-        format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), self.tags)))
-        fileEntries = sponge.process(self.createProcessBuilder().arguments("-f", format, "search",
-                    "artist", aArtist if aArtist else "", "album", aAlbum if aAlbum else "", "genre", aGenre if aGenre else "")
-                      .outputAsString()).run().outputString.splitlines()
-        for fileEntry in fileEntries:
-            tagValues = fileEntry.split(self.separator)
-            file = {}
-            for i in range(len(self.tags)):
-                file[self.tags[i]] = tagValues[i]
-            file["date"] = self.num("date", file["date"], False) if ("date" in self.tags) else None
+    # Admin operations.
 
-            if (minYear is None or file["date"] and file["date"] >= minYear) and (maxYear is None or file["date"] and file["date"] <= maxYear):
-                selectedFiles.append(file)
+    def getServerVersion(self):
+        return self.__execute("version")
 
-        if ("file" in self.tags):
-            selectedFiles.sort(key=lambda file: file["file"])
+    def getStatus(self):
+        return self.__execute("status")
 
-        return selectedFiles
+    def isStatusOk(self, status):
+        if not status or len(status.strip()) == 0 or self.isStatusNotPlaying(status):
+            return False
+        return True
 
-    def play(self, position = 1, waitFor = False):
-        process = sponge.process(self.createProcessBuilder().arguments("play", str(position))).run()
-        if waitFor:
-            process.waitFor()
+    def getStats(self):
+        return self.__execute("stats")
+
+    # Playlist operations.
 
     def addFile(self, file):
-        sponge.process(self.createProcessBuilder().arguments("add", file)).run().waitFor()
+        self.__execute("add", file)
 
     def addFileAsRecord(self, file):
         self.addFile(file["file"])
 
     def addFiles(self, files):
-        sponge.process(self.createProcessBuilder().arguments("add").inputAsString("\n".join(files))).run().waitFor()
+        sponge.process(self.__createProcessBuilder().arguments("add").inputAsString("\n".join(files))).run().waitFor()
 
     def addFilesAsRecords(self, files):
-        sponge.process(self.createProcessBuilder().arguments("add").inputAsString("\n".join(list(map(lambda file: file["file"], files))))).run().waitFor()
+        sponge.process(self.__createProcessBuilder().arguments("add").inputAsString("\n".join(list(map(lambda file: file["file"], files))))).run().waitFor()
 
     def setAndPlayFiles(self, files, autoPlay):
         if len(files) == 0:
@@ -101,35 +94,92 @@ class Mpc:
     def playPlaylistEntry(self, position):
         self.__execute("play", str(position))
 
-    def getStatus(self):
-        return sponge.process(self.createProcessBuilder().arguments("status").outputAsString()).run().outputString
+    def clearPlaylist(self):
+        self.__execute("clear")
+
+    def getPlaylist(self):
+        return self.__execute("playlist").splitlines()
+
+    def getCurrentPlaylistPositionAndSize(self, status = None):
+        if status is None:
+            status = self.getStatus()
+        lines = status.splitlines()
+        if len(lines) == 3:
+            matched = re.match(r"\[.*\]\s*#(\d+)/(\d+)\s*.*", lines[1])
+            if matched is not None and len(matched.groups()) == 2:
+                (position, size) = matched.groups()
+                return (int(position) if position else None, int(size) if size else None)
+        return (None, None)
+
+    def getCurrentPlaylistPosition(self, status = None):
+        return self.getCurrentPlaylistPositionAndSize(status)[0]
+
+    def getPlaylistSize(self, status = None):
+        return self.getCurrentPlaylistPositionAndSize(status)[1]
+
+    def moveUpPlaylistEntry(self, position):
+        if position > 1:
+            self.__execute("move", str(position), str(position - 1))
+
+    def moveDownPlaylistEntry(self, position):
+        self.__execute("move", str(position), str(position + 1))
+
+    def removePlaylistEntry(self, position):
+        self.__execute("del", str(position))
+
+    # Library operations.
+    def listAllFiles(self):
+        return self.__execute("-f", "%file%", "search", "genre", "").splitlines()
+
+    def getFiles(self, parentDir = None):
+        """ Returns list of tuples (file, isDir)
+        """
+        format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), ["file", "title"])))
+        lines = sorted((self.__execute("-f", format, "ls", parentDir) if parentDir else self.__execute("ls")).splitlines())
+
+        def createEntry(line):
+            elements = line.split("\t")
+            if len(elements) == 2:
+                return (elements[0], False)
+            else:
+                return (elements[0], True)
+
+        return list(map(createEntry, lines))
+
+    def refreshDatabase(self):
+        self.__execute("update")
+
+    def searchFiles(self, aArtist, aAlbum, aGenre, aMinYear, aMaxYear, useSimpleRegexp = False):
+        minYear = self.__num("minYear", aMinYear, True)
+        maxYear = self.__num("maxYear", aMaxYear, True)
+        selectedFiles = []
+        format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), self.tags)))
+        fileEntries = self.__execute("-f", format, "search", "artist", aArtist if aArtist else "", "album", aAlbum if aAlbum else "", "genre",
+                                aGenre if aGenre else "").splitlines()
+        for fileEntry in fileEntries:
+            tagValues = fileEntry.split(self.separator)
+            file = {}
+            for i in range(len(self.tags)):
+                file[self.tags[i]] = tagValues[i]
+            file["date"] = self.__num("date", file["date"], False) if ("date" in self.tags) else None
+
+            if (minYear is None or file["date"] and file["date"] >= minYear) and (maxYear is None or file["date"] and file["date"] <= maxYear):
+                selectedFiles.append(file)
+
+        if ("file" in self.tags):
+            selectedFiles.sort(key=lambda file: file["file"])
+
+        return selectedFiles
+
+    # Player operations.
+
+    def play(self, position = 1, waitFor = False):
+        process = sponge.process(self.__createProcessBuilder().arguments("play", str(position))).run()
+        if waitFor:
+            process.waitFor()
 
     def getCurrentSong(self):
-        return sponge.process(self.createProcessBuilder().arguments("current").outputAsString()).run().outputString
-
-    def __onMpdEvent(self, event):
-        sponge.event("mpdNotification").send()
-        sponge.event("mpdNotification_" + event).send()
-
-    def startEventLoop(self):
-        self.eventLoopProcess = sponge.process(self.createProcessBuilder().arguments("idleloop").outputAsConsumer
-                                               (PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone()).run()
-    def stopEventLoop(self):
-        if self.eventLoopProcess:
-            self.eventLoopProcess.destroy()
-            self.eventLoopProcess = None
-
-    def __execute(self, *argv):
-        self.lock.lock()
-        try:
-            process = sponge.process(self.createProcessBuilder().arguments(argv).outputAsString().errorAsException()).run()
-            #process = sponge.process(self.createProcessBuilder().arguments(argv).outputAsString().errorAsString().exceptionOnExitCode(False)).run()
-            #if process.errorString:
-            #     sponge.logger.warn(process.errorString)
-
-            return process.outputString
-        finally:
-            self.lock.unlock()
+        return self.__execute("current")
 
     def seekByPercentage(self, value):
         return self.__execute("seek", str(value) + "%")
@@ -153,21 +203,6 @@ class Mpc:
     def getTimeStatus(self, status):
         position = self.getPositionTuple(status)
         return position[0] + "/" + position[1] if position else None
-
-    def getVolume(self):
-        return self.getVolume(self.getStatus())
-
-    def getVolume(self, status):
-        lines = status.splitlines()
-        if len(lines) > 0:
-            matched = re.match(r"volume:\s*(.+)% .*", lines[-1])
-            if matched is not None and len(matched.groups()) == 1:
-                volume = matched.groups()[0]
-                return int(volume) if volume else None
-        return None
-
-    def setVolume(self, volume):
-        return self.__execute("volume", str(volume))
 
     def getPlay(self, status):
         lines = status.splitlines();
@@ -204,61 +239,31 @@ class Mpc:
         playingState = self.getPlayingState(status)
         return playingState is not None and (playingState == "playing" or playingState == "paused")
 
-    def isStatusOk(self, status):
-        if not status or len(status.strip()) == 0 or self.isStatusNotPlaying(status):
-            return False
-        return True
+    def getVolume(self):
+        return self.getVolume(self.getStatus())
 
-    def getStats(self):
-        return self.__execute("stats")
-
-    def getPlaylist(self):
-        return self.__execute("playlist").splitlines()
-
-    def getCurrentPlaylistPositionAndSize(self, status = None):
-        if status is None:
-            status = self.getStatus()
+    def getVolume(self, status):
         lines = status.splitlines()
-        if len(lines) == 3:
-            matched = re.match(r"\[.*\]\s*#(\d+)/(\d+)\s*.*", lines[1])
-            if matched is not None and len(matched.groups()) == 2:
-                (position, size) = matched.groups()
-                return (int(position) if position else None, int(size) if size else None)
-        return (None, None)
+        if len(lines) > 0:
+            matched = re.match(r"volume:\s*(.+)% .*", lines[-1])
+            if matched is not None and len(matched.groups()) == 1:
+                volume = matched.groups()[0]
+                return int(volume) if volume else None
+        return None
 
-    def getCurrentPlaylistPosition(self, status = None):
-        return self.getCurrentPlaylistPositionAndSize(status)[0]
+    def setVolume(self, volume):
+        return self.__execute("volume", str(volume))
 
-    def getPlaylistSize(self, status = None):
-        return self.getCurrentPlaylistPositionAndSize(status)[1]
+    # Events.
 
-    def moveUpPlaylistEntry(self, position):
-        if position > 1:
-            self.__execute("move", str(position), str(position - 1))
+    def __onMpdEvent(self, event):
+        sponge.event("mpdNotification").send()
+        sponge.event("mpdNotification_" + event).send()
 
-    def moveDownPlaylistEntry(self, position):
-        self.__execute("move", str(position), str(position + 1))
-
-    def removePlaylistEntry(self, position):
-        self.__execute("del", str(position))
-
-    def getFiles(self, parentDir = None):
-        """ Returns list of tuples (file, isDir)
-        """
-        format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), ["file", "title"])))
-        lines = sorted((self.__execute("-f", format, "ls", parentDir) if parentDir else self.__execute("ls")).splitlines())
-
-        def createEntry(line):
-            elements = line.split("\t")
-            if len(elements) == 2:
-                return (elements[0], False)
-            else:
-                return (elements[0], True)
-
-        return list(map(createEntry, lines))
-
-    def clearPlaylist(self):
-        self.__execute("clear")
-
-    def refreshDatabase(self):
-        self.__execute("update")
+    def startEventLoop(self):
+        self.eventLoopProcess = sponge.process(self.__createProcessBuilder().arguments("idleloop").outputAsConsumer
+                                               (PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone()).run()
+    def stopEventLoop(self):
+        if self.eventLoopProcess:
+            self.eventLoopProcess.destroy()
+            self.eventLoopProcess = None

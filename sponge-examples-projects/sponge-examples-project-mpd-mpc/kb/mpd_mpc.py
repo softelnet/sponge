@@ -37,15 +37,18 @@ class ViewSongLyrics(Action):
             StringType("lyrics").withLabel("Lyrics").withProvided(
                 ProvidedMeta().withValue().withReadOnly().withDependency("song")),
         ]).withNoResult().withCallable(False)
-        self.withFeatures({"icon":"script-text-outline", "clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["mpdNotification"]})
+        self.withFeatures({"icon":"script-text-outline", "clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["mpdNotification_player"]})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
+
         if "song" in context.provide:
-            context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
+            song = mpc.getCurrentSong()
+            context.provided["song"] = ProvidedValue().withValue(song)
         if "lyrics" in context.provide:
+            song = context.current["song"]
             try:
-                if context.current["song"] and " - " in context.current["song"]:
-                    (artist, title) = tuple(context.current["song"].split(" - ", 2)[:2])
+                if song and " - " in song:
+                    (artist, title) = tuple(song.split(" - ", 2)[:2])
                     lyricsService = sponge.getVariable("lyricsService")
                     if lyricsService.configured:
                         lyrics = lyricsService.getLyrics(artist, title)

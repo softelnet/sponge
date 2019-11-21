@@ -100,7 +100,8 @@ class MpdLibraryAddAndPlay(Action):
 
         mpc.lock.lock()
         try:
+            position = len(mpc.getPlaylist())
             mpc.addFile(file.value["file"])
-            mpc.play(position=len(mpc.getPlaylist()))
+            mpc.play(position=position + 1)
         finally:
             mpc.lock.unlock()
