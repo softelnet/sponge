@@ -33,7 +33,7 @@ class UpperCase(Action):
         self.withArg(
             StringType("text").withMaxLength(256).withLabel("Text to upper case").withDescription("The text that will be converted to upper case.")
         ).withResult(StringType().withLabel("Upper case text"))
-        self.withFeature("icon", "format-letter-case-upper")
+        self.withFeatures({"icon":"format-letter-case-upper", "showClear":True, "showCancel":True})
     def onCall(self, text):
         return text.upper()
 
@@ -76,7 +76,7 @@ class FruitsElementValueSetAction(Action):
         self.withArg(ListType("fruits", StringType()).withLabel("Fruits").withUnique().withProvided(
             ProvidedMeta().withValue().withElementValueSet()))
         self.withResult(IntegerType())
-        self.withFeature("icon", "apple")
+        self.withFeatures({"icon":"apple", "showClear":True})
     def onCall(self, fruits):
         return len(fruits)
     def onProvideArgs(self, context):
@@ -157,7 +157,7 @@ class DynamicResultAction(Action):
     def onConfigure(self):
         self.withLabel("Action returning a dynamic result")
         self.withArg(StringType("type").withProvided(ProvidedMeta().withValueSet())).withResult(DynamicType())
-        self.withFeature("icon", "fan")
+        self.withFeatures({"icon":"fan", "showClear":True, "showCancel":True})
     def onCall(self, type):
         if type == "string":
             return DynamicValue("text", StringType())
@@ -228,6 +228,6 @@ class DrawDoodle(Action):
         self.withLabel("Draw a doodle").withDescription("Shows a canvas to draw a doodle")
         self.withArg(BinaryType("image").withLabel("Doodle").withMimeType("image/png")
                      .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":2}))
-        self.withNoResult().withFeatures({"icon":"brush", "callLabel":"OK"})
+        self.withNoResult().withFeatures({"icon":"brush", "callLabel":"OK", "showClear":True, "showCancel":True})
     def onCall(self, image):
         pass

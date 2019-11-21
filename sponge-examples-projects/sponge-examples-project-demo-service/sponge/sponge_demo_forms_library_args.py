@@ -17,11 +17,7 @@ class ArgLibraryForm(Action):
             }).withElement(
                 IntegerType().withAnnotated()
             )
-        ]).withNoResult().withCallable(False)
-        self.withFeatures({
-            "callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
-        })
-        self.withFeature("icon", "library-books")
+        ]).withCallable(False).withFeature("icon", "library-books")
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.provide:
@@ -39,7 +35,7 @@ class ArgCreateBook(Action):
             StringType("author").withLabel("Author"),
             StringType("title").withLabel("Title")
         ]).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel"})
 
     def onCall(self, author, title):
         global LIBRARY
@@ -52,7 +48,7 @@ class ArgAbstractReadUpdateBook(Action):
             StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValue().withDependency("bookId")),
             StringType("title").withLabel("Title").withProvided(ProvidedMeta().withValue().withDependency("bookId"))
         ]).withNoResult()
-        self.withFeatures({"visible":False, "clearLabel":None})
+        self.withFeatures({"visible":False})
 
     def onProvideArgs(self, context):
         global LIBRARY
@@ -65,7 +61,7 @@ class ArgReadBook(ArgAbstractReadUpdateBook):
     def onConfigure(self):
         ArgAbstractReadUpdateBook.onConfigure(self)
         self.withLabel("View the book").withCallable(False)
-        self.withFeatures({"callLabel":None, "cancelLabel":"Close"})
+        self.withFeatures({"cancelLabel":"Close"})
 
     def onCall(self, bookId, author, title):
         pass
@@ -86,7 +82,7 @@ class ArgDeleteBook(Action):
         self.withArgs([
             IntegerType("bookId").withAnnotated().withFeature("visible", False),
         ]).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel"})
 
     def onCall(self, bookId):
         global LIBRARY

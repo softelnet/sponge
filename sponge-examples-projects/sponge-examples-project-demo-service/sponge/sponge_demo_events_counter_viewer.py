@@ -11,7 +11,7 @@ class ViewCounter(Action):
         ]).withCallable(False)
         # This action when open in a GUI will subscribe to counterNotification events. When such event arrives, the action arguments
         # will be automatically refreshed, so the counter argument will be read from the variable and provided to a GUI.
-        self.withFeatures({"callLabel":None, "refreshLabel":None, "clearLabel":None, "cancelLabel":"Close", "refreshEvents":["counterNotification"]})
+        self.withFeatures({"cancelLabel":"Close", "refreshEvents":["counterNotification"]})
     def onProvideArgs(self, context):
         if "counter" in context.provide:
             context.provided["counter"] = ProvidedValue().withValue(sponge.getVariable("counter").get())

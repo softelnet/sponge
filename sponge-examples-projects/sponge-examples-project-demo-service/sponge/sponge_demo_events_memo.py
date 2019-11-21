@@ -18,7 +18,7 @@ class ViewMemoEvent(Action):
                     ProvidedMeta().withValue().withReadOnly().withDependency("event")),
         ])
         self.withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Dismiss", "refreshLabel":None, "clearLabel":None, "cancelLabel":"Close"})
+        self.withFeatures({"visible":False, "callLabel":"Dismiss", "cancelLabel":"Close"})
     def onCall(self, event, uppercaseMessage):
         pass
     def onProvideArgs(self, context):

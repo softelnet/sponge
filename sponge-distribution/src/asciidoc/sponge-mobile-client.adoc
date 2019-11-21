@@ -236,6 +236,7 @@ image::screens/mobile/action_context_actions.jpg[title="The action with context 
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_context_actions_action.py[lines=5..-1]
 ----
 
+==== Arguments substitution
 Modes of passing arguments to a context action:
 
 * Default (e.g. `"ContextAction"`). In case of a context action for an action, all action arguments as a record (represented as a map) will be passed as the first argument of the context action. In case of a record argument or a list element, the record or the list element value will be passed as the first argument respectively.
@@ -243,15 +244,22 @@ Modes of passing arguments to a context action:
 * Implicit substitution (format `"ContextAction(sourceArgName,...)"`, e.g. `"ContextAction(arg1)"`). In case of a context action for an action, the first argument of the context action will be set to a value of the argument `arg1` of the parent action.
 * No arguments passed (e.g. `"ContextAction()"`).
 
-The target argument must be have the same type as the source value.
+The target argument must have the same type as the source value.
 
-A source argument name could be a path if a source value is a record, e.g. `"ContextAction(contextArg1: arg1.field1)"`. The `this` keyword can be used as the source argument name. In case of a context action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
+A source argument name could be a path if a source value is a record, e.g. `"ContextAction(contextArg1=arg1.field1)"`. The `this` keyword can be used as the source argument name. In case of a context action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
 
-If a context action requires more arguments than passed from a parent action, a new action call screen will be shown. If a context value is an annotated value, the screen will show a header containing a label of the annotated value.
+If a context action has any visible arguments, a new action call screen will be shown. If a context value is an annotated value, the screen will show a header containing a label of the annotated value.
 
 The context actions feature is not propagated to sub-actions in an annotated value feature.
 
 Context actions can use globally saved (in a mobile application) action arguments but only if there is no argument substitutions (i.e. there are no arguments passed from the main action). It is necessary to avoid inconsistency.
+
+==== Result substitution
+A context action result can be assigned to a main action argument by using the notation `"parentArgName=ContextAction()"`. As a parent argument name you can use the `this` keyword which means all action arguments or all record value or a list element.
+
+For list elements only the `this` keyword as a result substitution is supported.
+
+If a context action returns `null` and the result substitution is `this`, the result will be ignored.
 
 === List-details
 
@@ -295,8 +303,8 @@ The result of a _create_, an _update_ and a _delete_ action is ignored and shoul
 
 After calling a CRUD action the main action arguments are refreshed.
 
-=== Interactive forms
-Interactive forms provide live updates in a GUI and an instant modifications of a server state. They can be implemented by actions with provided and submittable arguments and action refresh events. Interactive forms can be used for example to manage IoT devices.
+=== Interactive form
+An interactive form provides live update in a GUI and an instant modifications of a server state. It can be implemented by an action with provided and submittable arguments and action refresh events. Interactive forms can be used for example to manage IoT devices.
 
 The following example shows a very simple MPD player implemented as a {sponge} action. A change in an MPD server state generates a {sponge} event. Such event is subscribed by the action in the mobile application and causes the action to refresh its arguments. On the other hand, a change made by a user in the GUI will cause such argument to be submitted to the server.
 
@@ -309,6 +317,19 @@ include::{completeExamplesProject}/sponge-examples-project-mpd-mpc/kb/mpd_mpc_pl
 image::screens/mobile/actions_mpd_player_main.jpg[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]
 
 image::screens/mobile/actions_mpd_player_context_actions.jpg[title="The context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+
+=== Choose dialog
+A choose dialog can be used to pick a value and pass it as a result to a parent action argument.
+
+.Choose dialog example
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_setter_context_actions_list.py[lines=5..-1]
+----
+
+image::screens/mobile/actions_call_choose_dialog_parent.png[title="The choose dialog parent action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/actions_call_choose_dialog.png[title="The choose dialog action",width=300,pdfwidth=35%,scaledwidth=35%]
 
 == User experience
 
@@ -481,6 +502,10 @@ The application may be switched to the dark theme in the settings.
 |Action
 |A default event handler action.
 
+|`intent: reload`
+|Action
+|Should be set in an action that reloads knowledge bases. Refreshes actions cached in a mobile application.
+
 |`intent`
 |Type
 |A type with an intent is handled by the application in a specific way.
@@ -521,17 +546,33 @@ The application may be switched to the dark theme in the settings.
 |`StringType`
 |If `True`, a string will be obscured in the GUI, e.g. in case of passwords. Defaults to `false`.
 
+|`showCall`
+|Action
+|An action call button will be shown in the action call screen. Defaults to `true`.
+
+|`showRefresh`
+|Action
+|An action arguments refresh button will be shown in the action call screen. Defaults to `false`. The refresh button fetches provided action arguments from the server. Only arguments provided with read only or overwrite flags will be refreshed.
+
+|`showClear`
+|Action
+|An action arguments clear button will be shown in the action call screen. Defaults to `false`. The clear button resets the action argument values.
+
+|`showCancel`
+|Action
+|A cancel button will be shown in the action call screen. Defaults to `false`.
+
 |`callLabel`
 |Action
 |An action call button label in the action call screen. Defaults to `RUN` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`refreshLabel`
 |Action
-|An action refresh button label in the action call screen. Defaults to `REFRESH` if the feature is not set. If set to `None`, the button will not be shown. The refresh button fetches provided action arguments from the server. Only arguments provided with read only or overwrite flags will be refreshed.
+|An action refresh button label in the action call screen. Defaults to `REFRESH` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`clearLabel`
 |Action
-|An action clear button label in the action call screen. Defaults to `CLEAR` if the feature is not set. If set to `None`, the button will not be shown. The clear button resets the action argument values.
+|An action clear button label in the action call screen. Defaults to `CLEAR` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`cancelLabel`
 |Action
@@ -583,7 +624,7 @@ The application may be switched to the dark theme in the settings.
 
 |`scroll`
 |`ListType`
-|A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists.
+|A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists. This feature is only supported for main action arguments (i.e. not nested).
 |===
 
 ==== Widgets

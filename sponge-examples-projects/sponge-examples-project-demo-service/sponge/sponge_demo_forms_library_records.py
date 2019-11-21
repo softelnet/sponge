@@ -26,11 +26,7 @@ class RecordLibraryForm(Action):
                 }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withElement(
                         createBookRecordType("book").withAnnotated()
                 )
-        ]).withNoResult().withCallable(False)
-        self.withFeatures({
-            "refreshLabel":None, "clearLabel":None, "cancelLabel":None,
-        })
-        self.withFeature("icon", "library-books")
+        ]).withCallable(False).withFeature("icon", "library-books")
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.provide:
@@ -52,7 +48,7 @@ class RecordCreateBook(Action):
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel", "icon":"plus-box"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"plus-box"})
 
     def onCall(self, book):
         global LIBRARY
@@ -72,8 +68,7 @@ class RecordReadBook(Action):
         # Must set withOverwrite to replace with the current value.
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
             ProvidedMeta().withValue().withOverwrite().withDependency("book.id").withReadOnly()))
-        self.withNoResult().withCallable(False)
-        self.withFeatures({"visible":False, "clearLabel":None, "callLabel":None, "cancelLabel":"Close", "icon":"book-open"})
+        self.withCallable(False).withFeatures({"visible":False, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
         global LIBRARY
         if "book" in context.provide:
@@ -89,7 +84,7 @@ class RecordUpdateBook(Action):
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
             ])
         ).withNoResult()
-        self.withFeatures({"visible":False, "clearLabel":None, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"square-edit-outline"})
+        self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"square-edit-outline"})
     def onCall(self, book):
         global LIBRARY
         LIBRARY.updateBook(book.value["id"], book.value["author"], book.value["title"])
@@ -103,8 +98,8 @@ class RecordUpdateBook(Action):
 class RecordDeleteBook(Action):
     def onConfigure(self):
         self.withLabel("Remove the book")
-        self.withArg(createBookRecordType("book").withAnnotated()).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "clearLabel":None, "cancelLabel":"Cancel", "icon":"delete", "confirmation":True})
+        self.withArg(createBookRecordType("book").withAnnotated().withFeature("visible", False)).withNoResult()
+        self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"delete", "confirmation":True})
 
     def onCall(self, book):
         global LIBRARY

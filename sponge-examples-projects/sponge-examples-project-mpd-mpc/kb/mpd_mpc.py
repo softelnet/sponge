@@ -36,8 +36,8 @@ class ViewSongLyrics(Action):
                 ProvidedMeta().withValue().withReadOnly()),
             StringType("lyrics").withLabel("Lyrics").withProvided(
                 ProvidedMeta().withValue().withReadOnly().withDependency("song")),
-        ]).withNoResult().withCallable(False)
-        self.withFeatures({"icon":"script-text-outline", "clearLabel":None, "cancelLabel":"Close", "refreshLabel":None, "refreshEvents":["mpdNotification_player"]})
+        ]).withCallable(False)
+        self.withFeatures({"icon":"script-text-outline", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"]})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
 
@@ -67,9 +67,8 @@ class ViewMpdStatus(Action):
         self.withArgs([
             StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withProvided(ProvidedMeta().withValue().withReadOnly()),
             StringType("stats").withLabel("Stats").withProvided(ProvidedMeta().withValue().withReadOnly())
-        ]).withNoResult().withCallable(False)
-        self.withFeatures({"icon":"console", "clearLabel":None, "cancelLabel":"Close", "refreshLabel":None,
-                           "refreshEvents":["statusPolling", "mpdNotification"]})
+        ]).withCallable(False)
+        self.withFeatures({"icon":"console", "cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification"]})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
         if "status" in context.provide:

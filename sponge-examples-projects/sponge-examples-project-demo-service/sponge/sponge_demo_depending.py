@@ -13,7 +13,7 @@ class DependingArgumentsAction(Action):
             StringType("river").withLabel("River").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
             StringType("weather").withLabel("Weather").withProvided(ProvidedMeta().withValueSet())
         ]).withResult(StringType().withLabel("Sentences"))
-        self.withFeature("icon", "flag")
+        self.withFeatures({"icon":"flag", "showClear":True, "showCancel":True})
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
     def onProvideArgs(self, context):
