@@ -30,7 +30,6 @@ public class TypeTypeUnitConverter extends BaseUnitTypeConverter<DataType, TypeT
         super(DataTypeKind.TYPE);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public DataType marshal(TypeConverter converter, TypeType type, DataType value) {
         // Recursively marshal default values.
@@ -43,7 +42,6 @@ public class TypeTypeUnitConverter extends BaseUnitTypeConverter<DataType, TypeT
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public DataType unmarshal(TypeConverter converter, TypeType type, Object value) {
         DataType unmarshalled =

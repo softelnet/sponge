@@ -86,7 +86,7 @@ Data types are represented by instances of classes. The type classes are located
 |An optional format.
 
 |`defaultValue`
-|An optional default value.
+|An optional default value. A default value for an annotated type must be wrapped in an `AnnotatedValue(value)`.
 
 |`nullable`
 |Tells if a value of this type can be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
@@ -296,7 +296,7 @@ Annotated values can be used to alter a static, metadata-drived behavior of a cl
 |An optional type description. Overwrites the type description in a client code.
 |===
 
-If a data type is annotated and has a default value, the default value should be specified as a plain value (i.e. not wrapped in `AnnotatedValue`).
+If a data type is annotated and has a default value, the default value should be wrapped in an `AnnotatedValue`.
 
 == Features
 Features are represented by a map of names to values. They provide additional information to data types and processors. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].

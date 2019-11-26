@@ -362,8 +362,8 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(stringType.getName(), resultStringType.getName());
             assertEquals(stringType.getDefaultValue(), resultStringType.getDefaultValue());
 
-            RecordType recordType = new RecordType("record").withFields(
-                    Arrays.asList(new StringType("field1").withDefaultValue("DEF1"), new IntegerType("field2").withDefaultValue(0)));
+            RecordType recordType = new RecordType("record").withFields(Arrays.asList(new StringType("field1").withDefaultValue("DEF1"),
+                    new IntegerType("field2").withAnnotated().withDefaultValue(new AnnotatedValue<>(0))));
 
             RecordType resultRecordType = client.call(RecordType.class, actionMeta.getName(), Arrays.asList("arg", recordType));
             assertEquals(recordType.getName(), resultRecordType.getName());
@@ -375,7 +375,7 @@ public abstract class BaseRestApiTestTemplate {
 
             DataType resultField2Type = resultRecordType.getFieldType("field2");
             assertEquals("field2", resultField2Type.getName());
-            assertEquals(0, resultField2Type.getDefaultValue());
+            assertEquals(0, ((AnnotatedValue) resultField2Type.getDefaultValue()).getValue());
 
             assertFalse(engine.isError());
         }
@@ -896,7 +896,7 @@ public abstract class BaseRestApiTestTemplate {
             List<DataType> argTypes = actionMeta.getArgs();
 
             assertTrue(argTypes.get(0).isAnnotated());
-            assertEquals("Value", argTypes.get(0).getDefaultValue());
+            assertEquals("Value", ((AnnotatedValue) argTypes.get(0).getDefaultValue()).getValue());
 
             String newValue = "NEW VALUE";
             assertEquals(newValue, client.call(String.class, actionName, Arrays.asList(new AnnotatedValue<>(newValue))));

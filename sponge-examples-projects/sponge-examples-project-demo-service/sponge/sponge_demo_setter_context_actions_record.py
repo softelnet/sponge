@@ -7,7 +7,7 @@ def createNumberFilterRecordType(name = None):
     return RecordType(name).withLabel("Filter").withAnnotated().withFields([
                 IntegerType("first").withLabel("First").withMinValue(0).withMaxValue(20),
                 IntegerType("last").withLabel("Last").withMinValue(0).withMaxValue(20)
-            ]).withDefaultValue({"first":0, "last":10})
+            ]).withDefaultValue(AnnotatedValue({"first":0, "last":10}))
 
 class NumbersViewFilterInline(Action):
     def onConfigure(self):

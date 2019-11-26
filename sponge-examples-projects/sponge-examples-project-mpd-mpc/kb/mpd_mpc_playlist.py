@@ -63,25 +63,29 @@ class MpdPlaylist(Action):
 
 class MpdPlaylistEntryPlay(Action):
     def onConfigure(self):
-        self.withLabel("Play").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"play"})
+        self.withLabel("Play").withArg(createPlaylistEntry("entry").withAnnotated().withFeatures({"visible":False})).withNoResult()
+        self.withFeatures({"visible":False, "icon":"play"})
     def onCall(self, entry):
         sponge.getVariable("mpc").playPlaylistEntry(entry.value["position"])
 
 class MpdPlaylistEntryUp(Action):
     def onConfigure(self):
-        self.withLabel("Up").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"arrow-up-bold"})
+        self.withLabel("Up").withArg(createPlaylistEntry("entry").withAnnotated().withFeatures({"visible":False})).withNoResult()
+        self.withFeatures({"visible":False, "icon":"arrow-up-bold"})
     def onCall(self, entry):
         sponge.getVariable("mpc").moveUpPlaylistEntry(entry.value["position"])
 
 class MpdPlaylistEntryDown(Action):
     def onConfigure(self):
-        self.withLabel("Down").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"arrow-down-bold"})
+        self.withLabel("Down").withArg(createPlaylistEntry("entry").withAnnotated().withFeatures({"visible":False})).withNoResult()
+        self.withFeatures({"visible":False, "icon":"arrow-down-bold"})
     def onCall(self, entry):
         sponge.getVariable("mpc").moveDownPlaylistEntry(entry.value["position"])
 
 class MpdPlaylistEntryRemove(Action):
     def onConfigure(self):
-        self.withLabel("Remove").withArg(createPlaylistEntry("entry").withAnnotated()).withNoResult().withFeatures({"visible":False, "icon":"playlist-remove"})
+        self.withLabel("Remove").withArg(createPlaylistEntry("entry").withAnnotated().withFeatures({"visible":False})).withNoResult()
+        self.withFeatures({"visible":False, "icon":"playlist-remove"})
     def onCall(self, entry):
         sponge.getVariable("mpc").removePlaylistEntry(entry.value["position"])
 
