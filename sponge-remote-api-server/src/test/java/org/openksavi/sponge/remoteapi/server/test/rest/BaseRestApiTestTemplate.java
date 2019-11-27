@@ -36,7 +36,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -50,6 +49,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.features.Features;
@@ -71,6 +71,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
+import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
@@ -352,8 +353,29 @@ public abstract class BaseRestApiTestTemplate {
             DataType resultType = actionMeta.getResult();
             assertEquals(DataTypeKind.TYPE, resultType.getKind());
 
-            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string")) instanceof StringType);
-            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("boolean")) instanceof BooleanType);
+            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string", null)) instanceof StringType);
+            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("boolean", null)) instanceof BooleanType);
+
+            StringType stringType = new StringType("string").withDefaultValue("DEF");
+
+            StringType resultStringType = client.call(StringType.class, actionMeta.getName(), Arrays.asList("arg", stringType));
+            assertEquals(stringType.getName(), resultStringType.getName());
+            assertEquals(stringType.getDefaultValue(), resultStringType.getDefaultValue());
+
+            RecordType recordType = new RecordType("record").withFields(Arrays.asList(new StringType("field1").withDefaultValue("DEF1"),
+                    new IntegerType("field2").withAnnotated().withDefaultValue(new AnnotatedValue<>(0))));
+
+            RecordType resultRecordType = client.call(RecordType.class, actionMeta.getName(), Arrays.asList("arg", recordType));
+            assertEquals(recordType.getName(), resultRecordType.getName());
+            assertEquals(2, resultRecordType.getFields().size());
+
+            DataType resultField1Type = resultRecordType.getFieldType("field1");
+            assertEquals("field1", resultField1Type.getName());
+            assertEquals("DEF1", resultField1Type.getDefaultValue());
+
+            DataType resultField2Type = resultRecordType.getFieldType("field2");
+            assertEquals("field2", resultField2Type.getName());
+            assertEquals(0, ((AnnotatedValue) resultField2Type.getDefaultValue()).getValue());
 
             assertFalse(engine.isError());
         }
@@ -532,8 +554,8 @@ public abstract class BaseRestApiTestTemplate {
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false, null, 1));
 
-            Map<String, ProvidedValue<?>> providedArgs =
-                    client.provideActionArgs(actionName, Arrays.asList("actuator1", "actuator2", "actuator3"));
+            Map<String, ProvidedValue<?>> providedArgs = client.provideActionArgs(actionName,
+                    new ProvideArgsParameters().withProvide(Arrays.asList("actuator1", "actuator2", "actuator3")));
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("A", providedArgs.get("actuator1").getValue());
@@ -555,7 +577,8 @@ public abstract class BaseRestApiTestTemplate {
 
             client.call(actionName, Arrays.asList("B", true, null, 10));
 
-            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1", "actuator2", "actuator3"));
+            providedArgs = client.provideActionArgs(actionName,
+                    new ProvideArgsParameters().withProvide(Arrays.asList("actuator1", "actuator2", "actuator3")));
             assertEquals(3, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             assertEquals("B", providedArgs.get("actuator1").getValue());
@@ -621,7 +644,7 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(1, argTypes.get(4).getProvided().getDependencies().size());
             assertEquals("actuator1", argTypes.get(4).getProvided().getDependencies().get(0));
 
-            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1"), Collections.emptyMap());
+            providedArgs = client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("actuator1")));
             assertEquals(1, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             Object actuator1value = providedArgs.get("actuator1").getValue();
@@ -639,8 +662,9 @@ public abstract class BaseRestApiTestTemplate {
 
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
-            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator2", "actuator3", "actuator5"),
-                    SpongeUtils.immutableMapOf("actuator1", actuator1value));
+            providedArgs = client.provideActionArgs(actionName,
+                    new ProvideArgsParameters().withProvide(Arrays.asList("actuator2", "actuator3", "actuator5"))
+                            .withCurrent(SpongeUtils.immutableMapOf("actuator1", actuator1value)));
             assertEquals(3, providedArgs.size());
 
             assertNotNull(providedArgs.get("actuator2"));
@@ -663,7 +687,7 @@ public abstract class BaseRestApiTestTemplate {
 
             client.call(actionName, Arrays.asList("B", true, 5, 10, "Y"));
 
-            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1"), Collections.emptyMap());
+            providedArgs = client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("actuator1")));
             assertEquals(1, providedArgs.size());
             assertNotNull(providedArgs.get("actuator1"));
             actuator1value = providedArgs.get("actuator1").getValue();
@@ -672,8 +696,9 @@ public abstract class BaseRestApiTestTemplate {
                     SpongeApiUtils.unwrapAnnotatedValueList(providedArgs.get("actuator1").getAnnotatedValueSet()));
             assertTrue(providedArgs.get("actuator1").isValuePresent());
 
-            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator2", "actuator3", "actuator5"),
-                    SpongeUtils.immutableMapOf("actuator1", actuator1value));
+            providedArgs = client.provideActionArgs(actionName,
+                    new ProvideArgsParameters().withProvide(Arrays.asList("actuator2", "actuator3", "actuator5"))
+                            .withCurrent(SpongeUtils.immutableMapOf("actuator1", actuator1value)));
 
             assertEquals(3, providedArgs.size());
 
@@ -705,7 +730,8 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("ProvideByAction");
             List<String> values = (List<String>) SpongeApiUtils.unwrapAnnotatedValueList(
-                    client.provideActionArgs(actionMeta.getName(), Arrays.asList("value")).get("value").getAnnotatedValueSet());
+                    client.provideActionArgs(actionMeta.getName(), new ProvideArgsParameters().withProvide(Arrays.asList("value")))
+                            .get("value").getAnnotatedValueSet());
             assertEquals("value3", client.call(actionMeta.getName(), Arrays.asList(values.get(values.size() - 1))));
         }
     }
@@ -722,7 +748,8 @@ public abstract class BaseRestApiTestTemplate {
             assertFalse(fruitsType.getProvided().hasValueSet());
             assertTrue(fruitsType.getProvided().isElementValueSet());
 
-            Map<String, ProvidedValue<?>> provided = client.provideActionArgs(actionName, Arrays.asList("fruits"));
+            Map<String, ProvidedValue<?>> provided =
+                    client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("fruits")));
             List<AnnotatedValue> elementValueSet = provided.get("fruits").getAnnotatedElementValueSet();
             assertEquals(3, elementValueSet.size());
             assertEquals("apple", elementValueSet.get(0).getValue());
@@ -763,7 +790,8 @@ public abstract class BaseRestApiTestTemplate {
 
             Map<String, ProvidedValue<?>> providedArgs;
 
-            providedArgs = client.provideActionArgs(actionName, Arrays.asList("actuator1", "actuator2"));
+            providedArgs =
+                    client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("actuator1", "actuator2")));
             assertEquals(2, providedArgs.size());
 
             assertNotNull(providedArgs.get("actuator1"));
@@ -777,11 +805,14 @@ public abstract class BaseRestApiTestTemplate {
             assertNull(providedArgs.get("actuator2").getAnnotatedValueSet());
             assertTrue(providedArgs.get("actuator2").isValuePresent());
 
-            client.submitActionArgs(actionName, Arrays.asList("actuator1"), SpongeUtils.immutableMapOf("actuator1", "B"));
-            assertEquals("B", client.provideActionArgs(actionName, Arrays.asList("actuator1")).get("actuator1").getValue());
+            client.provideActionArgs(actionName, new ProvideArgsParameters().withSubmit(Arrays.asList("actuator1"))
+                    .withCurrent(SpongeUtils.immutableMapOf("actuator1", "B")));
+            assertEquals("B", client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("actuator1")))
+                    .get("actuator1").getValue());
 
             client.call(actionName, Arrays.asList("C", true));
-            assertEquals("C", client.provideActionArgs(actionName, Arrays.asList("actuator1")).get("actuator1").getValue());
+            assertEquals("C", client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("actuator1")))
+                    .get("actuator1").getValue());
 
             // Reset the test state.
             client.call(actionName, Arrays.asList("A", false));
@@ -815,11 +846,13 @@ public abstract class BaseRestApiTestTemplate {
 
             int valueLimit = 5;
 
-            ProvidedValue<?> providedFruits = client
-                    .provideActionArgs(actionName, Arrays.asList("fruits"), null, null,
-                            SpongeUtils.immutableMapOf("fruits",
-                                    SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET, 0, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
-                    .get("fruits");
+            ProvidedValue<
+                    ?> providedFruits = client
+                            .provideActionArgs(actionName,
+                                    new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
+                                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(
+                                                    Features.PROVIDE_VALUE_OFFSET, 0, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
+                            .get("fruits");
 
             AnnotatedValue<List<String>> fruits = (AnnotatedValue<List<String>>) providedFruits.getValue();
             assertEquals(valueLimit, fruits.getValue().size());
@@ -828,9 +861,10 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
             assertEquals(11, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
-            providedFruits = client
-                    .provideActionArgs(actionName, Arrays.asList("fruits"), null, null, SpongeUtils.immutableMapOf("fruits", SpongeUtils
-                            .immutableMapOf(Features.PROVIDE_VALUE_OFFSET, valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
+            providedFruits = client.provideActionArgs(actionName,
+                    new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
+                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
+                                    valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                     .get("fruits");
 
             fruits = (AnnotatedValue<List<String>>) providedFruits.getValue();
@@ -840,9 +874,10 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(valueLimit, fruits.getFeatures().get(Features.PROVIDE_VALUE_LIMIT));
             assertEquals(11, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
-            providedFruits = client
-                    .provideActionArgs(actionName, Arrays.asList("fruits"), null, null, SpongeUtils.immutableMapOf("fruits", SpongeUtils
-                            .immutableMapOf(Features.PROVIDE_VALUE_OFFSET, 2 * valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit)))
+            providedFruits = client.provideActionArgs(actionName,
+                    new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
+                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
+                                    2 * valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                     .get("fruits");
 
             fruits = (AnnotatedValue<List<String>>) providedFruits.getValue();
@@ -857,7 +892,8 @@ public abstract class BaseRestApiTestTemplate {
                 assertEquals("There are no features for argument fruits in example.ViewFruitsPaging",
                         Assertions
                                 .assertThrows(SpongeClientException.class,
-                                        () -> client.provideActionArgs(actionName, Arrays.asList("fruits"), null, null).get("fruits"))
+                                        () -> client.provideActionArgs(actionName,
+                                                new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))).get("fruits"))
                                 .getMessage());
             } finally {
                 engine.clearError();
@@ -874,7 +910,7 @@ public abstract class BaseRestApiTestTemplate {
             List<DataType> argTypes = actionMeta.getArgs();
 
             assertTrue(argTypes.get(0).isAnnotated());
-            assertEquals("Value", argTypes.get(0).getDefaultValue());
+            assertEquals("Value", ((AnnotatedValue) argTypes.get(0).getDefaultValue()).getValue());
 
             String newValue = "NEW VALUE";
             assertEquals(newValue, client.call(String.class, actionName, Arrays.asList(new AnnotatedValue<>(newValue))));
@@ -898,8 +934,8 @@ public abstract class BaseRestApiTestTemplate {
 
             String currentValue = "NEW VALUE";
 
-            ProvidedValue<?> provided = client.provideActionArgs(actionName, Arrays.asList("arg"), null,
-                    SpongeUtils.immutableMapOf("arg", new AnnotatedValue<>(currentValue))).get("arg");
+            ProvidedValue<?> provided = client.provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList("arg"))
+                    .withCurrent(SpongeUtils.immutableMapOf("arg", new AnnotatedValue<>(currentValue)))).get("arg");
 
             assertEquals(currentValue, ((AnnotatedValue) provided.getValue()).getValue());
 
@@ -920,7 +956,8 @@ public abstract class BaseRestApiTestTemplate {
             assertFalse(argType.getProvided().isLazyUpdate());
             assertEquals(ProvidedMode.OPTIONAL, argType.getProvided().getMode());
 
-            ProvidedValue<String> provided = (ProvidedValue<String>) client.provideActionArgs(actionName, Arrays.asList()).get("arg");
+            ProvidedValue<String> provided = (ProvidedValue<String>) client
+                    .provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList())).get("arg");
 
             assertEquals("VALUE", provided.getValue());
 

@@ -123,6 +123,7 @@ import org.openksavi.sponge.type.StreamType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 import org.openksavi.sponge.util.Descriptive;
 
@@ -726,6 +727,16 @@ public abstract class SpongeUtils {
 
         Validate.isTrue(!stack.stream().anyMatch(ancestorType -> ancestorType == type),
                 "A loop in the type specification has been found in the %s", valueName);
+
+        if (type.getDefaultValue() != null) {
+            if (type.isAnnotated()) {
+                Validate.isTrue(type.getDefaultValue() instanceof AnnotatedValue,
+                        "The default value for the annotated type '%s' should be annotated", type.getName());
+            } else {
+                Validate.isTrue(!(type.getDefaultValue() instanceof AnnotatedValue),
+                        "The default value for the type '%s' shouldn't be annotated", type.getName());
+            }
+        }
 
         if (type.getProvided() != null) {
             Validate.isTrue(!type.getProvided().isElementValueSet() || DataTypeUtils.supportsElementValueSet(type),

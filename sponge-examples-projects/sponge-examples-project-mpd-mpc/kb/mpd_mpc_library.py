@@ -9,7 +9,7 @@ class MpdLibrary(Action):
     def onConfigure(self):
         self.withLabel("Library").withDescription("The MPD library.")
         self.withArgs([
-            StringType("parentDir").withLabel("Directory").withAnnotated().withDefaultValue("/").withProvided(
+            StringType("parentDir").withLabel("Directory").withAnnotated().withDefaultValue(AnnotatedValue("/")).withProvided(
                 ProvidedMeta().withValue().withReadOnly().withImplicitMode()),
             ListType("files").withLabel("Files").withAnnotated().withFeatures({"scroll":True, "pageable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("parentDir").withOptionalMode()).withElement(
@@ -75,7 +75,7 @@ class MpdLibrary(Action):
 
                 context.provided["files"] = ProvidedValue().withValue(AnnotatedValue(files[offset:(offset + limit)]).withFeatures(
                         {"offset":offset, "limit":limit, "count":len(files)}))
-                context.provided["parentDir"] = ProvidedValue().withValue(parentDir)
+                context.provided["parentDir"] = ProvidedValue().withValue(AnnotatedValue(parentDir))
         finally:
             mpc.lock.unlock()
 
@@ -83,7 +83,7 @@ class MpdLibraryAdd(Action):
     def onConfigure(self):
         self.withLabel("Add to playlist").withArg(RecordType("file").withAnnotated().withFields([
             StringType("file"),
-            BooleanType("isDir")])
+            BooleanType("isDir")]).withFeatures({"visible":False})
         ).withNoResult().withFeatures({"visible":False, "icon":"playlist-plus"})
     def onCall(self, file):
         sponge.getVariable("mpc").addFile(file.value["file"])
@@ -92,7 +92,7 @@ class MpdLibraryAddAndPlay(Action):
     def onConfigure(self):
         self.withLabel("Add to playlist and play").withArg(RecordType("file").withAnnotated().withFields([
             StringType("file"),
-            BooleanType("isDir")])
+            BooleanType("isDir")]).withFeatures({"visible":False})
         ).withNoResult().withFeatures({"visible":False, "icon":"playlist-play"})
     def onCall(self, file):
         mpc = sponge.getVariable("mpc")

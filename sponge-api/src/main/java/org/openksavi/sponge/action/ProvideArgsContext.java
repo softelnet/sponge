@@ -21,11 +21,13 @@ import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
  * A provided action arguments context.
  */
+@SuppressWarnings("rawtypes")
 public class ProvideArgsContext {
 
     /** The not null set of argument names that are to be provided (i.e. read). */
@@ -45,6 +47,9 @@ public class ProvideArgsContext {
      */
     private Map<String, ProvidedValue<?>> provided;
 
+    /** The types of dynamic values used in {@code current} and {@code provide}. */
+    private Map<String, DataType> dynamicTypes;
+
     /**
      * The not null map of features for arguments in a context, set by a client code. Each argument specified in {@code provide} or
      * {@code submit} has its (possibly empty) features map.
@@ -52,11 +57,12 @@ public class ProvideArgsContext {
     private Map<String, Map<String, Object>> features;
 
     public ProvideArgsContext(Set<String> provide, Set<String> submit, Map<String, Object> current, Map<String, ProvidedValue<?>> provided,
-            Map<String, Map<String, Object>> features) {
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
         this.provide = provide;
         this.submit = submit;
         this.current = current;
         this.provided = provided;
+        this.dynamicTypes = dynamicTypes;
         this.features = features;
     }
 
@@ -90,6 +96,14 @@ public class ProvideArgsContext {
 
     public void setProvided(Map<String, ProvidedValue<?>> provided) {
         this.provided = provided;
+    }
+
+    public Map<String, DataType> getDynamicTypes() {
+        return dynamicTypes;
+    }
+
+    public void setDynamicTypes(Map<String, DataType> dynamicTypes) {
+        this.dynamicTypes = dynamicTypes;
     }
 
     public Map<String, Map<String, Object>> getFeatures() {

@@ -19,7 +19,6 @@ package org.openksavi.sponge.core.action;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,12 +27,12 @@ import org.apache.commons.lang3.Validate;
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ProvideArgsContext;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
-import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
@@ -69,11 +68,11 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         return (BaseActionMeta) super.getMeta();
     }
 
-    protected Set<String> buildProvideArgsNames(List<String> names) {
+    protected Set<String> buildProvideArgsNames(ProvideArgsParameters parameters) {
         Set<String> finalNames = new LinkedHashSet<>();
-        if (names != null) {
-            for (String name : names) {
-                Validate.isTrue(isArgProvided(getMeta().getArg(name)), "Argument '%s' is not defined as provided", name);
+        if (parameters.getProvide() != null) {
+            for (String name : parameters.getProvide()) {
+                Validate.isTrue(isArgProvided(resolveDataType(name, parameters)), "Argument '%s' is not defined as provided", name);
                 finalNames.add(name);
             }
         }
@@ -81,11 +80,16 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         return finalNames;
     }
 
-    protected Set<String> buildSubmitArgsNames(List<String> submitted) {
+    protected DataType resolveDataType(String argName, ProvideArgsParameters parameters) {
+        return parameters.getDynamicTypes() != null && parameters.getDynamicTypes().containsKey(argName)
+                ? parameters.getDynamicTypes().get(argName) : getMeta().getArg(argName);
+    }
+
+    protected Set<String> buildSubmitArgsNames(ProvideArgsParameters parameters) {
         Set<String> finalSubmitted = new LinkedHashSet<>();
-        if (submitted != null) {
-            for (String name : submitted) {
-                Validate.isTrue(isArgSubmittable(getMeta().getArg(name)), "Argument '%s' is not defined as submittable", name);
+        if (parameters.getSubmit() != null) {
+            for (String name : parameters.getSubmit()) {
+                Validate.isTrue(isArgSubmittable(resolveDataType(name, parameters)), "Argument '%s' is not defined as submittable", name);
                 finalSubmitted.add(name);
             }
         }
@@ -93,41 +97,35 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         return finalSubmitted;
     }
 
-    protected Map<String, Object> buildCurrentArgs(Map<String, Object> current) {
-        if (current == null) {
-            return Collections.emptyMap();
-        }
-
-        // TODO Support wrapping nested annotated values.
-        Map<String, Object> result = new LinkedHashMap<>();
-        current.forEach((name, value) -> result.put(name,
-                getMeta().getArg(name).isAnnotated() && !(value instanceof AnnotatedValue) ? new AnnotatedValue<>(value) : value));
-
-        return result;
+    protected Map<String, Object> buildCurrentArgs(ProvideArgsParameters parameters) {
+        return parameters.getCurrent() != null ? parameters.getCurrent() : Collections.emptyMap();
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideArgs(List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, Map<String, Object>> features) {
+    public Map<String, ProvidedValue<?>> provideArgs(ProvideArgsParameters parameters) {
         Validate.notNull(getMeta().getArgs(), "Arguments not defined");
 
         Map<String, Map<String, Object>> effectiveFeatures = new LinkedHashMap<>();
-        if (features != null) {
-            effectiveFeatures.putAll(features);
+        if (parameters.getFeatures() != null) {
+            effectiveFeatures.putAll(parameters.getFeatures());
         }
 
-        Set<String> provideSet = buildProvideArgsNames(provide);
-        Set<String> submitSet = buildSubmitArgsNames(submit);
+        Map<String, DataType> efefctiveDynamicTypes =
+                parameters.getDynamicTypes() != null ? parameters.getDynamicTypes() : Collections.emptyMap();
+
+        Set<String> provideSet = buildProvideArgsNames(parameters);
+        Set<String> submitSet = buildSubmitArgsNames(parameters);
 
         // Setup features map.
         provideSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
         submitSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
 
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
-        getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, buildCurrentArgs(current), provided, effectiveFeatures));
+        getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, buildCurrentArgs(parameters), provided,
+                efefctiveDynamicTypes, effectiveFeatures));
 
         provided.keySet().forEach(providedArg -> {
-            Validate.isTrue(getMeta().getArg(providedArg).getProvided() != null,
+            Validate.isTrue(resolveDataType(providedArg, parameters).getProvided() != null,
                     "The argument '%s' that has been provided is not configured as provided", providedArg);
         });
 

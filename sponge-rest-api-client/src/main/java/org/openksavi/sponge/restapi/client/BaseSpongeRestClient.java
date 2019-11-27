@@ -38,6 +38,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
@@ -76,6 +77,7 @@ import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.RecordType;
+import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
@@ -545,19 +547,23 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return response;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected void unmarshalDataType(DataType type) {
-        type.setDefaultValue(typeConverter.unmarshal(type, type.getDefaultValue()));
+    @SuppressWarnings({ "rawtypes" })
+    protected DataType unmarshalDataType(DataType type) {
+        return (DataType) typeConverter.unmarshal(new TypeType(), type);
     }
 
+    @SuppressWarnings("rawtypes")
     protected void unmarshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
-            if (actionMeta.getArgs() != null) {
-                actionMeta.getArgs().forEach(argType -> unmarshalDataType(argType));
+            List<DataType> args = actionMeta.getArgs();
+            if (args != null) {
+                for (int i = 0; i < args.size(); i++) {
+                    args.set(i, unmarshalDataType(args.get(i)));
+                }
             }
 
             if (actionMeta.getResult() != null) {
-                unmarshalDataType(actionMeta.getResult());
+                actionMeta.setResult(unmarshalDataType(actionMeta.getResult()));
             }
         }
     }
@@ -714,13 +720,20 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return result;
     }
 
-    protected Map<String, Object> marshalAuxiliaryActionArgsCurrent(RestActionMeta actionMeta, Map<String, Object> current) {
-        if (current == null || actionMeta == null || actionMeta.getArgs() == null) {
-            return current;
-        }
-
+    @SuppressWarnings("rawtypes")
+    protected Map<String, Object> marshalAuxiliaryActionArgsCurrent(RestActionMeta actionMeta, Map<String, Object> current,
+            Map<String, DataType> dynamicTypes) {
         Map<String, Object> marshalled = new LinkedHashMap<>();
-        current.forEach((name, value) -> marshalled.put(name, typeConverter.marshal(actionMeta.getArg(name), value)));
+
+        if (current != null) {
+            if (actionMeta == null || actionMeta.getArgs() == null) {
+                // Not marshalled.
+                marshalled.putAll(current);
+            } else {
+                current.forEach((name, value) -> marshalled.put(name, typeConverter.marshal(
+                        dynamicTypes != null && dynamicTypes.containsKey(name) ? dynamicTypes.get(name) : actionMeta.getArg(name), value)));
+            }
+        }
 
         return marshalled;
     }
@@ -805,7 +818,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         RestActionMeta actionMeta = getActionMeta(request.getName());
         setupActionExecutionRequest(actionMeta, request);
 
-        request.setCurrent(marshalAuxiliaryActionArgsCurrent(actionMeta, request.getCurrent()));
+        request.setCurrent(marshalAuxiliaryActionArgsCurrent(actionMeta, request.getCurrent(), request.getDynamicTypes()));
 
         ProvideActionArgsResponse response =
                 execute(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
@@ -823,37 +836,19 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current, Map<String, Map<String, Object>> features) {
-        return provideActionArgs(new ProvideActionArgsRequest(actionName, provide, submit, current, features)).getProvided();
-    }
-
-    @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current) {
-        return provideActionArgs(actionName, provide, submit, current, null);
-    }
-
-    @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current) {
-        return provideActionArgs(actionName, provide, null, current);
-    }
-
-    @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide) {
-        return provideActionArgs(actionName, provide, null, null);
-    }
-
-    @Override
-    public void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current) {
-        provideActionArgs(actionName, null, submit, current);
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, ProvideArgsParameters parameters) {
+        return provideActionArgs(new ProvideActionArgsRequest(actionName, parameters.getProvide(), parameters.getSubmit(),
+                parameters.getCurrent(), parameters.getDynamicTypes(), parameters.getFeatures())).getProvided();
     }
 
     protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {
         GetEventTypesResponse response = execute(RestApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
 
         if (response != null && response.getEventTypes() != null) {
-            response.getEventTypes().values().forEach(this::unmarshalDataType);
+            Map<String, RecordType> eventTypes = response.getEventTypes();
+            for (String key : eventTypes.keySet()) {
+                eventTypes.put(key, (RecordType) unmarshalDataType(eventTypes.get(key)));
+            }
 
             // Populate the cache.
             if (populateCache && configuration.isUseEventTypeCache() && eventTypeCache != null) {

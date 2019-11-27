@@ -23,8 +23,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
+import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ProvideActionArgsRequest", description = "A provide action arguments request")
+@SuppressWarnings("rawtypes")
 public class ProvideActionArgsRequest extends SpongeRequest implements ActionExecutionRequest {
 
     private String name;
@@ -35,6 +37,8 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
 
     private Map<String, Object> current;
 
+    private Map<String, DataType> dynamicTypes;
+
     private Map<String, Map<String, Object>> features;
 
     private ProcessorQualifiedVersion qualifiedVersion;
@@ -43,18 +47,20 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion) {
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features,
+            ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.provide = provide;
         this.submit = submit;
         this.current = current;
+        this.dynamicTypes = dynamicTypes;
         this.features = features;
         this.qualifiedVersion = qualifiedVersion;
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, Map<String, Object>> features) {
-        this(name, provide, submit, current, features, null);
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
+        this(name, provide, submit, current, dynamicTypes, features, null);
     }
 
     @Override
@@ -93,6 +99,15 @@ public class ProvideActionArgsRequest extends SpongeRequest implements ActionExe
 
     public void setCurrent(Map<String, Object> current) {
         this.current = current;
+    }
+
+    @ApiModelProperty(value = "The types of dynamic values for provide and current", required = false)
+    public Map<String, DataType> getDynamicTypes() {
+        return dynamicTypes;
+    }
+
+    public void setDynamicTypes(Map<String, DataType> dynamicTypes) {
+        this.dynamicTypes = dynamicTypes;
     }
 
     @ApiModelProperty(value = "The features for arguments", required = false)

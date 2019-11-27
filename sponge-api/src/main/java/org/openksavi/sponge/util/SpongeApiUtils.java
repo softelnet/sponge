@@ -105,7 +105,7 @@ public abstract class SpongeApiUtils {
     public static void traverseActionArguments(ActionMeta actionMeta, Consumer<QualifiedDataType> onType, boolean namedOnly) {
         if (actionMeta.getArgs() != null) {
             actionMeta.getArgs().forEach(
-                    argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly));
+                    argType -> DataTypeUtils.traverseDataType(new QualifiedDataType(argType.getName(), argType), onType, namedOnly, true));
         }
     }
 

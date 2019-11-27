@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -45,6 +44,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.client.ClientSubscription;
@@ -193,12 +193,12 @@ public abstract class GrpcApiServerBaseTest {
                 String sendEventActionName = "GrpcApiSendEvent";
                 SpongeRestClient restClient = grpcClient.getRestClient();
                 Map<String, ProvidedValue<?>> providedArgs =
-                        restClient.provideActionArgs(sendEventActionName, Arrays.asList("name"), new LinkedHashMap<>());
+                        restClient.provideActionArgs(sendEventActionName, new ProvideArgsParameters().withProvide(Arrays.asList("name")));
                 assertEquals(1, providedArgs.size());
                 assertEquals(1, providedArgs.get("name").getAnnotatedValueSet().size());
 
-                providedArgs = restClient.provideActionArgs(sendEventActionName, Arrays.asList("attributes"),
-                        SpongeUtils.immutableMapOf("name", eventName));
+                providedArgs = restClient.provideActionArgs(sendEventActionName, new ProvideArgsParameters()
+                        .withProvide(Arrays.asList("attributes")).withCurrent(SpongeUtils.immutableMapOf("name", eventName)));
                 Map<String, Object> providedAttributes =
                         (Map<String, Object>) ((DynamicValue<?>) providedArgs.get("attributes").getValue()).getValue();
                 assertEquals(0, providedAttributes.size());

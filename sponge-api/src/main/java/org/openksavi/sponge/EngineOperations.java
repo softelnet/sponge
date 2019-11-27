@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -134,60 +135,10 @@ public interface EngineOperations {
      * Provides action arguments. Submits arguments and/or returns provided values along with value sets.
      *
      * @param actionName the action name.
-     * @param provide the list of argument names to provide.
-     * @param submit the list of submitted argument names.
-     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        those arguments that the arguments specified in the {@code provide} and {@code submit} depend on and all arguments specified
-     *        by {@code submit}.
-     * @param features the features for arguments.
+     * @param parameters the parameters.
      * @return the map of argument names and values (value sets).
      */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current, Map<String, Map<String, Object>> features);
-
-    /**
-     * Provides action arguments. Submits arguments and/or returns provided values along with value sets.
-     *
-     * @param actionName the action name.
-     * @param provide the list of argument names to provide.
-     * @param submit the list of submitted argument names.
-     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        those arguments that the arguments specified in the {@code provide} and {@code submit} depend on and all arguments specified
-     *        by {@code submit}.
-     * @return the map of argument names and values (value sets).
-     */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current);
-
-    /**
-     * Provides action arguments. Returns provided values along with value sets.
-     *
-     * @param actionName the action name.
-     * @param provide the list of argument names to provide.
-     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        those arguments that the arguments specified in the {@code provide} and {@code submit} depend on.
-     * @return the map of argument names and values (value sets).
-     */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current);
-
-    /**
-     * Provides action arguments. Returns provided values along with value sets.
-     *
-     * @param actionName the action name.
-     * @param provide the list of argument names.
-     * @return the map of argument names and values (value sets).
-     */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide);
-
-    /**
-     * Submits action arguments. Internally invokes {@code provideActionArgs}.
-     *
-     * @param actionName the action name.
-     * @param submit the list of argument names to submit.
-     * @param current the map of argument names and their current values passed from a client code. The map is required to contain values of
-     *        {@code submit} and those arguments that the arguments specified in the {@code submit} depend on.
-     */
-    void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, ProvideArgsParameters parameters);
 
     /**
      * Shuts down the engine using the current thread.

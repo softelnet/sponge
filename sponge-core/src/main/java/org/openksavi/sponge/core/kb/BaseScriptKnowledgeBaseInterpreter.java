@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EventSetProcessorState;
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.DefaultProcessorInstanceHolder;
 import org.openksavi.sponge.core.engine.EngineConstants;
@@ -288,7 +289,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,
-                RuleEventSpec.class));
+                RuleEventSpec.class, ProvideArgsParameters.class));
         //@formatter:on
 
         classes.addAll(SpongeUtils.getSupportedTypes());
