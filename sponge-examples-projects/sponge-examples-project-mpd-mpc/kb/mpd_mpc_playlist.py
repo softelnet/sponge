@@ -18,7 +18,7 @@ class MpdPlaylist(Action):
             ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures(
                 {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "scroll":True, "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
-        ]).withNoResult().withCallable(False)
+        ]).withCallable(False)
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
                            "contextActions":["MpdLibrary()", "MpdPlaylistClear()"], "icon":"playlist-edit"})
 
@@ -56,7 +56,7 @@ class MpdPlaylist(Action):
                         entry.withFeature("icon", "play")
 
                 context.provided["playlist"] = ProvidedValue().withValue(AnnotatedValue(entries).withTypeLabel(
-                    "Playlist" + ((" (" + str(len(allPlaylist)) +")") if len(entries) > 0 else "")).withFeatures(
+                    "Playlist" + ((" (" + str(len(allPlaylist)) +")") if len(allPlaylist) > 0 else "")).withFeatures(
                         {"offset":offset, "limit":limit, "count":len(allPlaylist)}))
         finally:
             mpc.lock.unlock()

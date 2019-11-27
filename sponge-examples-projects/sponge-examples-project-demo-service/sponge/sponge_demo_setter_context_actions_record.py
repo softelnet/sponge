@@ -7,7 +7,7 @@ def createNumberFilterRecordType(name = None):
     return RecordType(name).withLabel("Filter").withAnnotated().withFields([
                 IntegerType("first").withLabel("First").withMinValue(0).withMaxValue(20),
                 IntegerType("last").withLabel("Last").withMinValue(0).withMaxValue(20)
-            ]).withDefaultValue(AnnotatedValue({"first":0, "last":10}))
+            ]).withDefaultValue(AnnotatedValue({"first":1, "last":5}))
 
 class NumbersViewFilterInline(Action):
     def onConfigure(self):
@@ -16,7 +16,7 @@ class NumbersViewFilterInline(Action):
             ListType("numbers").withLabel("Numbers").withAnnotated().withProvided(
                 ProvidedMeta().withValue().withDependency("filter").withOverwrite()).withElement(
                     IntegerType().withAnnotated())
-        ]).withCallable(False)
+        ]).withCallable(False).withFeatures({"showRefresh":True})
     def onProvideArgs(self, context):
         if "numbers" in context.provide:
             filter = context.current["filter"].value
