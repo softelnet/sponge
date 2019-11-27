@@ -81,7 +81,6 @@ import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
-import org.openksavi.sponge.restapi.type.converter.unit.TypeTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
@@ -107,8 +106,6 @@ public class DefaultRestApiService implements RestApiService {
     private RestApiErrorResponseProvider errorResponseProvider = new DefaultRestApiErrorResponseProvider();
 
     private TypeConverter typeConverter;
-
-    private TypeTypeUnitConverter defaultTypeTypeUnitConverter = new TypeTypeUnitConverter();
 
     private Comparator<RestActionMeta> actionsOrderComparator = RestApiServerUtils.createActionsOrderComparator();
 
@@ -269,18 +266,20 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     @SuppressWarnings("rawtypes")
     public DataType marshalDataType(DataType type) {
-        return defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), type);
+        return (DataType) typeConverter.marshal(new TypeType(), type);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public RestActionMeta marshalActionMeta(RestActionMeta actionMeta) {
         if (actionMeta != null) {
-            if (actionMeta.getArgs() != null) {
-                actionMeta.setArgs(actionMeta.getArgs().stream().map(argType -> marshalDataType(argType)).collect(Collectors.toList()));
+            List<DataType> args = actionMeta.getArgs();
+            if (args != null) {
+                actionMeta.setArgs(args.stream().map(argType -> marshalDataType(argType)).collect(Collectors.toList()));
             }
 
             if (actionMeta.getResult() != null) {
-                actionMeta.setResult(defaultTypeTypeUnitConverter.marshal(typeConverter, new TypeType(), actionMeta.getResult()));
+                actionMeta.setResult(marshalDataType(actionMeta.getResult()));
             }
         }
 
@@ -329,7 +328,9 @@ public class DefaultRestApiService implements RestApiService {
         if (!(e instanceof ApplicationServerSpongeException)) {
             getEngine().handleError(processorAdapter, e);
         } else {
-            logger.debug("REST API application error in " + (processorAdapter != null && processorAdapter.getMeta() != null ?processorAdapter.getMeta().getName() : "unknown"), e);
+            logger.debug("REST API application error in "
+                    + (processorAdapter != null && processorAdapter.getMeta() != null ? processorAdapter.getMeta().getName() : "unknown"),
+                    e);
         }
 
         return setupErrorResponse(response, request, e);
@@ -338,7 +339,7 @@ public class DefaultRestApiService implements RestApiService {
     protected <T extends SpongeResponse, R extends SpongeRequest> T handleError(String source, Throwable e, T response, R request) {
         if (!(e instanceof ApplicationServerSpongeException)) {
             getEngine().handleError(source, e);
-        }else {
+        } else {
             logger.debug("REST API application error in " + source, e);
         }
 

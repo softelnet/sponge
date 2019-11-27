@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
+import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.Descriptive;
 
 /**
@@ -59,7 +60,7 @@ public class DataType<T> implements Descriptive, Cloneable {
     private String format;
 
     /** The default value (optional). */
-    private T defaultValue;
+    private Object defaultValue;
 
     /** Tells if a value of this type may be null. The default is that a value must not be null, i.e. it is <b>not nullable</b>. */
     private boolean nullable = false;
@@ -113,6 +114,11 @@ public class DataType<T> implements Descriptive, Cloneable {
     }
 
     public DataType<T> withDefaultValue(T value) {
+        setDefaultValue(value);
+        return this;
+    }
+
+    public DataType<T> withDefaultValue(AnnotatedValue<T> value) {
         setDefaultValue(value);
         return this;
     }
@@ -204,11 +210,11 @@ public class DataType<T> implements Descriptive, Cloneable {
         this.format = format;
     }
 
-    public T getDefaultValue() {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 
-    public void setDefaultValue(T defaultValue) {
+    public void setDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
     }
 

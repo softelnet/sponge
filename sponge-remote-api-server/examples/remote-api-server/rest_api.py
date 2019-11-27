@@ -237,12 +237,17 @@ class DynamicResultAction(Action):
 
 class TypeResultAction(Action):
     def onConfigure(self):
-        self.withArg(StringType("type")).withResult(TypeType())
-    def onCall(self, type):
+        self.withArgs([
+            StringType("type"),
+            TypeType("arg").withNullable()
+        ]).withResult(TypeType())
+    def onCall(self, type, arg):
         if type == "string":
             return StringType()
         elif type == "boolean":
             return BooleanType()
+        elif type == "arg":
+            return arg
         else:
             return None
 
@@ -345,7 +350,7 @@ class ViewFruitsPaging(Action):
 class AnnotatedWithDefaultValue(Action):
     def onConfigure(self):
         self.withLabel("Action with annotated arg with default").withArgs([
-            StringType("annotated").withLabel("Annotated").withAnnotated().withDefaultValue("Value")
+            StringType("annotated").withLabel("Annotated").withAnnotated().withDefaultValue(AnnotatedValue("Value"))
         ]).withResult(StringType())
     def onCall(self, annotated):
         return annotated.value

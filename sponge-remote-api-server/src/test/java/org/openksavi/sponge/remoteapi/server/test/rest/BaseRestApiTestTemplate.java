@@ -71,6 +71,7 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
+import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
@@ -352,8 +353,29 @@ public abstract class BaseRestApiTestTemplate {
             DataType resultType = actionMeta.getResult();
             assertEquals(DataTypeKind.TYPE, resultType.getKind());
 
-            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string")) instanceof StringType);
-            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("boolean")) instanceof BooleanType);
+            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("string", null)) instanceof StringType);
+            assertTrue(client.call(DataType.class, actionMeta.getName(), Arrays.asList("boolean", null)) instanceof BooleanType);
+
+            StringType stringType = new StringType("string").withDefaultValue("DEF");
+
+            StringType resultStringType = client.call(StringType.class, actionMeta.getName(), Arrays.asList("arg", stringType));
+            assertEquals(stringType.getName(), resultStringType.getName());
+            assertEquals(stringType.getDefaultValue(), resultStringType.getDefaultValue());
+
+            RecordType recordType = new RecordType("record").withFields(Arrays.asList(new StringType("field1").withDefaultValue("DEF1"),
+                    new IntegerType("field2").withAnnotated().withDefaultValue(new AnnotatedValue<>(0))));
+
+            RecordType resultRecordType = client.call(RecordType.class, actionMeta.getName(), Arrays.asList("arg", recordType));
+            assertEquals(recordType.getName(), resultRecordType.getName());
+            assertEquals(2, resultRecordType.getFields().size());
+
+            DataType resultField1Type = resultRecordType.getFieldType("field1");
+            assertEquals("field1", resultField1Type.getName());
+            assertEquals("DEF1", resultField1Type.getDefaultValue());
+
+            DataType resultField2Type = resultRecordType.getFieldType("field2");
+            assertEquals("field2", resultField2Type.getName());
+            assertEquals(0, ((AnnotatedValue) resultField2Type.getDefaultValue()).getValue());
 
             assertFalse(engine.isError());
         }
@@ -874,7 +896,7 @@ public abstract class BaseRestApiTestTemplate {
             List<DataType> argTypes = actionMeta.getArgs();
 
             assertTrue(argTypes.get(0).isAnnotated());
-            assertEquals("Value", argTypes.get(0).getDefaultValue());
+            assertEquals("Value", ((AnnotatedValue) argTypes.get(0).getDefaultValue()).getValue());
 
             String newValue = "NEW VALUE";
             assertEquals(newValue, client.call(String.class, actionName, Arrays.asList(new AnnotatedValue<>(newValue))));
