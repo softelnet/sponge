@@ -37,6 +37,3 @@ class SetActuator(Action):
         if "actuator5" in context.provide:
             context.provided["actuator5"] = ProvidedValue().withValue(sponge.getVariable("actuator5", None)).withValueSet([
                 "X", "Y", "Z", context.current["actuator1"]])
-
-def onStartup():
-    sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

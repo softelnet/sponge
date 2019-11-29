@@ -181,13 +181,39 @@ class DynamicProvidedArgAction(Action):
         return str(dynamic.type.kind)
     def onProvideArgs(self, context):
         if "dynamic" in context.provide:
-            context.provided["dynamic"] = ProvidedValue().withValue(DynamicValue(
-                {"firstName":"James", "surname":"Joyce"},
+            context.provided["dynamic"] = ProvidedValue().withValue(DynamicValue({"firstName":"James", "surname":"Joyce"},
                 RecordType().withFields([
                     StringType("firstName").withLabel("First name"),
                     StringType("surname").withLabel("Surname")
                 ])
             ))
+
+class DynamicProvidedArgActionNestedProvided(Action):
+    def onConfigure(self):
+        self.withLabel("Action with a provided, dynamic, nested argument")
+        self.withArg(DynamicType("dynamic").withLabel("Dynamic argument").withProvided(ProvidedMeta().withValue()))
+        self.withResult(StringType().withLabel("Summary"))
+        self.withFeature("icon", "fan")
+
+    def onCall(self, dynamic):
+        return "{} - Q1A: {}; Q2A: {}.".format(dynamic.value["fullName"], dynamic.value["question1"] if dynamic.value["question1"] else "",
+                                              dynamic.value["question2"] if dynamic.value["question2"] else "")
+
+    def onProvideArgs(self, context):
+        if "dynamic" in context.provide:
+            context.provided["dynamic"] = ProvidedValue().withValue(DynamicValue({},
+                RecordType().withFields([
+                    StringType("firstName").withLabel("First name"),
+                    StringType("surname").withLabel("Surname"),
+                    StringType("fullName").withLabel("Full name").withNullable().withProvided(ProvidedMeta().withValue().withReadOnly().withDependencies([
+                        "dynamic.firstName", "dynamic.surname"]).withLazyUpdate()),
+                    StringType("question1").withLabel("Question 1").withNullable(),
+                    StringType("question2").withLabel("Question 2").withNullable()
+                ])
+            ))
+        if "dynamic.fullName" in context.provide:
+            context.provided["dynamic.fullName"] = ProvidedValue().withValue(
+                "{} {}".format(context.current["dynamic.firstName"], context.current["dynamic.surname"]))
 
 class RecordResultAction(Action):
     def onConfigure(self):

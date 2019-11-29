@@ -58,8 +58,15 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
         Validate.notNull(type, "The type must not be null");
 
-        if (type.isAnnotated() && value instanceof AnnotatedValue) {
-            AnnotatedValue<T> annotatedValue = (AnnotatedValue) value;
+        if (type.isAnnotated()) {
+            AnnotatedValue annotatedValue;
+            if (value instanceof AnnotatedValue) {
+                annotatedValue = (AnnotatedValue) value;
+            } else {
+                // Wrap if not wrapped.
+                annotatedValue = new AnnotatedValue(value);
+            }
+
             return new AnnotatedValue<>(
                     annotatedValue.getValue() != null ? getUnitConverter(type).marshal(this, type, annotatedValue.getValue()) : null,
                     annotatedValue.getValueLabel(), annotatedValue.getValueDescription(), annotatedValue.getFeatures(),
@@ -78,8 +85,17 @@ public abstract class BaseTypeConverter implements TypeConverter {
         Validate.notNull(type, "The type must not be null");
 
         // Handle a wrapped annotated value.
-        if (type.isAnnotated() && RestApiUtils.isAnnotatedValueMap(value)) {
-            AnnotatedValue annotatedValue = objectMapper.convertValue(value, AnnotatedValue.class);
+        if (type.isAnnotated()) {
+            AnnotatedValue annotatedValue;
+            if (value instanceof AnnotatedValue) {
+                annotatedValue = (AnnotatedValue) value;
+            } else if (RestApiUtils.isAnnotatedValueMap(value)) {
+                annotatedValue = objectMapper.convertValue(value, AnnotatedValue.class);
+            } else {
+                // Wrap if not wrapped.
+                annotatedValue = new AnnotatedValue(value);
+            }
+
             if (annotatedValue.getValue() != null) {
                 annotatedValue.setValue(getUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
             }

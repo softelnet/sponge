@@ -24,6 +24,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -37,7 +38,8 @@ public class NullHandlingTest {
 
         try {
             ActionMeta actionMeta = engine.getActionMeta("NullHandling");
-            ProvidedValue<?> provided = engine.getOperations().provideActionArgs(actionMeta.getName(), Arrays.asList("arg1")).get("arg1");
+            ProvidedValue<?> provided = engine.getOperations()
+                    .provideActionArgs(actionMeta.getName(), new ProvideArgsParameters().withProvide(Arrays.asList("arg1"))).get("arg1");
 
             assertNull(provided.getValue());
 

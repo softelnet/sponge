@@ -65,6 +65,3 @@ class ProvidedArgNoCallAction(Action):
     def onProvideArgs(self, context):
         if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])
-
-def onStartup():
-    sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())

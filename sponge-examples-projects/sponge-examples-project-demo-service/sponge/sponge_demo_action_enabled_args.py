@@ -29,12 +29,14 @@ class EnableArgsAction(Action):
         ]).withCallable(False)
     def onProvideArgs(self, context):
         if "dynamicallyDisabled" in context.provide:
-            context.provided["dynamicallyDisabled"] = ProvidedValue().withValue(AnnotatedValue(context.current["dynamicallyDisabled"].value).withFeature("enabled", context.current["enable"]))
+            context.provided["dynamicallyDisabled"] = ProvidedValue().withValue(AnnotatedValue(
+                context.current["dynamicallyDisabled"].value if context.current["dynamicallyDisabled"] else None).withFeature(
+                    "enabled", context.current["enable"]))
         if "list" in context.provide:
             context.provided["list"] = ProvidedValue().withValue(AnnotatedValue(
                 map(lambda element: AnnotatedValue(element).withFeature("contextActions", ["UpperCase()"]), ["a", "b", "c"])).withFeature("enabled", context.current["enable"]))
         if "record" in context.provide:
-            context.provided["record"] = ProvidedValue().withValue(AnnotatedValue(context.current["record"].value).withFeature(
+            context.provided["record"] = ProvidedValue().withValue(AnnotatedValue(context.current["record"].value if context.current["record"] else None).withFeature(
                 "enabled", context.current["enable"]))
         if "listOfRecords" in context.provide:
             elements = [{"id":1, "author":"James Joyce", "title":"Ulysses"}, {"id":2, "author":"Arthur Conan Doyle", "title":"Adventures of Sherlock Holmes"}]

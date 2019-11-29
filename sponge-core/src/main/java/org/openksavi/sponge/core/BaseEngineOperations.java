@@ -27,6 +27,7 @@ import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -120,36 +121,14 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current, Map<String, Map<String, Object>> features) {
+    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, ProvideArgsParameters parameters) {
         ActionAdapter actionAdapter =
                 Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
         try {
-            return actionAdapter.provideArgs(provide, submit, current, features);
+            return actionAdapter.provideArgs(parameters);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
         }
-    }
-
-    @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current) {
-        return provideActionArgs(actionName, provide, submit, current, null);
-    }
-
-    @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current) {
-        return provideActionArgs(actionName, provide, null, current);
-    }
-
-    @Override
-    public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide) {
-        return provideActionArgs(actionName, provide, null, null);
-    }
-
-    @Override
-    public void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current) {
-        provideActionArgs(actionName, null, submit, current);
     }
 
     /**

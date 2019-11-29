@@ -166,14 +166,8 @@ def onStartup():
 |`ValueHolder<Object> callIfExists(String actionName, List<Object> args)`
 |Calls the action if it exists. Returns the action result wrapped in a value holder or `null` if the action is not registered.
 
-|`Map<String, ProvidedValue> provideActionArgs(String actionName, List<String> provide, List<String> submit, Map<String, Object> current)`
+|`Map<String, ProvidedValue> provideActionArgs(String actionName, ProvideArgsParameters parameters)`
 |Provides action arguments. Submits arguments and/or returns provided values along with value sets.
-
-|`Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current)`
-|Provides action arguments. Returns provided values along with value sets.
-
-|`void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current)`
-|Submits action arguments. Internally invokes `provideActionArgs`.
 
 |`shutdown()`
 |Shuts down the engine using the current thread.

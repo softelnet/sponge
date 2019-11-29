@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
@@ -430,54 +431,10 @@ public interface SpongeRestClient extends Closeable {
      * Submits action arguments to the server and/or fetches action arguments from the server.
      *
      * @param actionName the action name.
-     * @param provide the names of arguments to fetch.
-     * @param submit the names of arguments to submit.
-     * @param current the current values of arguments from a client code.
-     * @param features the features for arguments.
+     * @param parameters the parameters.
      * @return the provided action arguments.
      */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current, Map<String, Map<String, Object>> features);
-
-    /**
-     * Submits action arguments to the server and/or fetches action arguments from the server.
-     *
-     * @param actionName the action name.
-     * @param provide the names of arguments to fetch.
-     * @param submit the names of arguments to submit.
-     * @param current the current values of arguments from a client code.
-     * @return the provided action arguments.
-     */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, List<String> submit,
-            Map<String, Object> current);
-
-    /**
-     * Fetches action arguments from the server.
-     *
-     * @param actionName the action name.
-     * @param provide the names of arguments to fetch.
-     * @param current the current values of arguments from a client code.
-     * @return the provided action arguments.
-     */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide, Map<String, Object> current);
-
-    /**
-     * Fetches action arguments from the server.
-     *
-     * @param actionName the action name.
-     * @param provide the names of arguments to fetch.
-     * @return the provided action arguments.
-     */
-    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, List<String> provide);
-
-    /**
-     * Submits action arguments. Internally invokes {@code provideActionArgs}.
-     *
-     * @param actionName the action name.
-     * @param submit the names of submitted arguments.
-     * @param current the current values of arguments from a client code.
-     */
-    void submitActionArgs(String actionName, List<String> submit, Map<String, Object> current);
+    Map<String, ProvidedValue<?>> provideActionArgs(String actionName, ProvideArgsParameters parameters);
 
     /**
      * Sends the {@code eventTypes} request to the server.

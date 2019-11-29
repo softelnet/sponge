@@ -40,6 +40,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -412,12 +413,12 @@ public class DefaultRestApiService implements RestApiService {
             UserContext userContext = authenticateRequest(request);
             actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
 
-            Map<String,
-                    ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
-                            request.getProvide(), request.getSubmit(),
-                            RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getCurrent()),
-                            request.getFeatures());
-            RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided);
+            Map<String, ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
+                    new ProvideArgsParameters(
+                            request.getProvide(), request.getSubmit(), RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter,
+                                    actionAdapter, request.getCurrent(), request.getDynamicTypes()),
+                            request.getDynamicTypes(), request.getFeatures()));
+            RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getDynamicTypes());
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
         } catch (Throwable e) {

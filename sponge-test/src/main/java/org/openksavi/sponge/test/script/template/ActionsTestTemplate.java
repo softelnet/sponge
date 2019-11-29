@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.examples.PowerEchoAction;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
@@ -222,8 +223,8 @@ public class ActionsTestTemplate {
             assertTrue(providedMeta.isValue());
             assertFalse(providedMeta.isReadOnly());
 
-            Map<String, ProvidedValue<?>> providedArgs =
-                    engine.getOperations().provideActionArgs(adapter.getMeta().getName(), Arrays.asList("text"));
+            Map<String, ProvidedValue<?>> providedArgs = engine.getOperations().provideActionArgs(adapter.getMeta().getName(),
+                    new ProvideArgsParameters().withProvide(Arrays.asList("text")));
             assertEquals(1, providedArgs.size());
 
             assertNotNull(providedArgs.get("text"));

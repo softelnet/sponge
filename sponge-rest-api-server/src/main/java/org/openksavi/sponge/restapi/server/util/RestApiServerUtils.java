@@ -122,10 +122,12 @@ public abstract class RestApiServerUtils {
 
     @SuppressWarnings({ "unchecked" })
     public static void marshalProvidedActionArgValues(TypeConverter typeConverter, ActionAdapter actionAdapter,
-            Map<String, ProvidedValue<?>> providedValues) {
+            Map<String, ProvidedValue<?>> providedValues, Map<String, DataType> dynamicTypes) {
 
         providedValues.forEach((argName, argValue) -> {
-            DataType argType = actionAdapter.getMeta().getArg(argName);
+            DataType argType = dynamicTypes != null && dynamicTypes.containsKey(argName) ? dynamicTypes.get(argName)
+                    : actionAdapter.getMeta().getArg(argName);
+
             ((ProvidedValue) argValue).setValue(typeConverter.marshal(argType, argValue.getValue()));
 
             if (argValue.getAnnotatedValueSet() != null) {
@@ -148,7 +150,7 @@ public abstract class RestApiServerUtils {
     }
 
     public static Map<String, Object> unmarshalAuxiliaryActionArgs(TypeConverter typeConverter, ActionAdapter actionAdapter,
-            Map<String, Object> jsonArgs) {
+            Map<String, Object> jsonArgs, Map<String, DataType> dynamicTypes) {
         // No arguments provided. No type checking.
         if (jsonArgs == null) {
             return null;
@@ -160,7 +162,11 @@ public abstract class RestApiServerUtils {
         }
 
         Map<String, Object> unmarshalled = new LinkedHashMap<>();
-        jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(actionAdapter.getMeta().getArg(name), value)));
+        if (jsonArgs != null) {
+            jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(
+                    dynamicTypes != null && dynamicTypes.containsKey(name) ? dynamicTypes.get(name) : actionAdapter.getMeta().getArg(name),
+                    value)));
+        }
 
         return unmarshalled;
     }

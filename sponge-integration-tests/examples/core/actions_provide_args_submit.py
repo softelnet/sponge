@@ -28,8 +28,9 @@ class SetActuator(Action):
             context.provided["actuator2"] = ProvidedValue().withValue(sponge.getVariable("actuator2", None))
 
 def onStartup():
-    sponge.submitActionArgs("SetActuator", ["actuator1"], {"actuator1":"B"})
-    sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator", ["actuator1"])["actuator1"].getValue())
+    sponge.provideActionArgs("SetActuator", ProvideArgsParameters().withSubmit(["actuator1"]).withCurrent({"actuator1":"B"}))
+    sponge.logger.debug("The provided value of actuator1 is: {}", sponge.provideActionArgs("SetActuator",
+                    ProvideArgsParameters().withProvide(["actuator1"]))["actuator1"].getValue())
 
     # Reset the state for tests.
     onInit()
