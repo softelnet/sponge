@@ -47,11 +47,6 @@
             <artifactId>sponge-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-client</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
