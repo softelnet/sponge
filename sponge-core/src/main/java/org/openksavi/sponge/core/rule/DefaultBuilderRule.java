@@ -26,7 +26,7 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.rule.RuleEventSpec;
 
 /**
- * A default rule for a builder;
+ * A default rule for a builder.
  */
 public class DefaultBuilderRule extends BaseRule {
 

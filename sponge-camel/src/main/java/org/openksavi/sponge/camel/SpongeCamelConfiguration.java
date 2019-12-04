@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.camel;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,13 @@ import org.openksavi.sponge.spring.SpringPlugin;
 
 @Configuration
 public abstract class SpongeCamelConfiguration extends CamelConfiguration {
+
+    @Override
+    protected void setupCamelContext(CamelContext camelContext) throws Exception {
+        super.setupCamelContext(camelContext);
+
+        camelContext.addStartupListener(camelPlugin());
+    }
 
     /**
      * Spring plugin that may be bound to the engine.
@@ -42,6 +50,9 @@ public abstract class SpongeCamelConfiguration extends CamelConfiguration {
      */
     @Bean
     public CamelPlugin camelPlugin() {
-        return new CamelPlugin();
+        CamelPlugin plugin = new CamelPlugin();
+        plugin.setWaitForContextFullyStarted(true);
+
+        return plugin;
     }
 }

@@ -92,10 +92,6 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
     @Override
     public StandaloneSpongeEngine build() {
         try {
-            if (commandLineArgs == null) {
-                return super.build();
-            }
-
             CommandLine commandLine = StandaloneUtils.parseCommandLine(commandLineArgs);
 
             if (commandLine.hasOption(StandaloneConstants.OPTION_HELP)) {
@@ -174,6 +170,8 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
 
             StandaloneEngineListener standaloneListener = new StandaloneEngineListener(engine);
 
+            StandaloneSettings settings = new StandaloneSettings();
+
             List<String> springConfigurationFiles = Stream.of(commandLine.getOptions())
                     .filter(option -> option.getOpt().equals(StandaloneConstants.OPTION_SPRING)).map(option -> {
                         String[] values = option.getValues();
@@ -185,14 +183,19 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                     }).collect(Collectors.toList());
 
             if (!springConfigurationFiles.isEmpty()) {
-                standaloneListener.setSpringConfigurations(springConfigurationFiles);
+                settings.setSpringConfigurationFiles(springConfigurationFiles);
             }
 
             if (commandLine.hasOption(StandaloneConstants.OPTION_CAMEL)) {
-                standaloneListener.setCamel(true);
+                settings.setCamel(true);
             }
 
             engine.setArgs(commandLine.getArgList());
+
+            engine.getOperations().setVariable(StandaloneSettings.VARIABLE_NAME, settings);
+
+            // Add a default standalone plugin.
+            engine.getPluginManager().addPlugin(new StandalonePlugin());
 
             engine.addOnStartupListener(standaloneListener);
             engine.addOnShutdownListener(standaloneListener);

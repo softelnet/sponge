@@ -26,9 +26,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.impl.CompositeRegistry;
+import org.apache.camel.CamelContextAware;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.spi.Registry;
+import org.apache.camel.support.DefaultRegistry;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.camel.CamelPlugin;
@@ -47,7 +48,7 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 /**
  * Sponge REST API server plugin.
  */
-public class RestApiServerPlugin extends JPlugin {
+public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
 
     public static final String NAME = "restApiServer";
 
@@ -226,12 +227,11 @@ public class RestApiServerPlugin extends JPlugin {
     }
 
     protected void setupSecurity(CamelContext camelContext) {
-        SimpleRegistry simpleRegistry = new SimpleRegistry();
-        simpleRegistry.put(settings.getSslContextParametersBeanName(),
-                CamelUtils.createSslContextParameters(settings.getSslConfiguration()));
+        Registry registry = new DefaultRegistry();
+        registry.bind(settings.getSslContextParametersBeanName(), CamelUtils.createSslContextParameters(settings.getSslConfiguration()));
 
         // TODO Handle many invocations of this method that cause growing of the registry list.
-        ((DefaultCamelContext) camelContext).setRegistry(new CompositeRegistry(Arrays.asList(simpleRegistry, camelContext.getRegistry())));
+        ((DefaultCamelContext) camelContext).setRegistry(new DefaultRegistry(Arrays.asList(registry, camelContext.getRegistry())));
     }
 
     public RestApiSession getSession() {
@@ -282,10 +282,12 @@ public class RestApiServerPlugin extends JPlugin {
         return RestApiServerUtils.canAccessResource(roleToResources, userContext, resourceName);
     }
 
+    @Override
     public CamelContext getCamelContext() {
         return camelContext;
     }
 
+    @Override
     public void setCamelContext(CamelContext camelContext) {
         this.camelContext = camelContext;
     }

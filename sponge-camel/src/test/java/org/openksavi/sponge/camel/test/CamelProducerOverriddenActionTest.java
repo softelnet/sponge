@@ -26,7 +26,8 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.spi.Registry;
+import org.apache.camel.support.DefaultRegistry;
 import org.junit.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
@@ -36,25 +37,24 @@ public class CamelProducerOverriddenActionTest {
 
     @Test
     public void testCamelProducerOverridenAction() throws Exception {
-        SimpleRegistry registry = new SimpleRegistry();
-        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_producer_overridden_action.py").build();
-        registry.put("spongeEngine", engine);
-        CamelContext camel = new DefaultCamelContext(registry);
+        Registry registry = new DefaultRegistry();
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase("camelkb", "examples/camel/camel_producer_overridden_action.py").build();
+        registry.bind("spongeEngine", engine);
+        try (CamelContext camel = new DefaultCamelContext(registry)) {
+            camel.addRoutes(new RouteBuilder() {
 
-        camel.addRoutes(new RouteBuilder() {
-
-            @Override
-            public void configure() {
+                @Override
+                public void configure() {
                 // @formatter:off
                 from("direct:start").routeId("spongeProducer")
                     .to("sponge:spongeEngine");
                 // @formatter:on
-            }
-        });
+                }
+            });
 
-        camel.start();
+            camel.start();
 
-        try {
             ProducerTemplate producerTemplate = camel.createProducerTemplate();
             producerTemplate.sendBody("direct:start", "Send me to the Sponge");
 
@@ -63,8 +63,6 @@ public class CamelProducerOverriddenActionTest {
 
             assertFalse(engine.getOperations().getVariable(AtomicBoolean.class, "sentCamelMessage_spongeProducer").get());
             assertFalse(engine.isError());
-        } finally {
-            camel.stop();
         }
     }
 }

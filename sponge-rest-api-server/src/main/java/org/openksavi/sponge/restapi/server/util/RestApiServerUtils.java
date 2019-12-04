@@ -162,11 +162,9 @@ public abstract class RestApiServerUtils {
         }
 
         Map<String, Object> unmarshalled = new LinkedHashMap<>();
-        if (jsonArgs != null) {
-            jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(
-                    dynamicTypes != null && dynamicTypes.containsKey(name) ? dynamicTypes.get(name) : actionAdapter.getMeta().getArg(name),
-                    value)));
-        }
+        jsonArgs.forEach((name, value) -> unmarshalled.put(name, typeConverter.unmarshal(
+                dynamicTypes != null && dynamicTypes.containsKey(name) ? dynamicTypes.get(name) : actionAdapter.getMeta().getArg(name),
+                value)));
 
         return unmarshalled;
     }

@@ -94,7 +94,7 @@
         <spring.version>5.2.1.RELEASE</spring.version>
         <spring-integration.version>5.2.1.RELEASE</spring-integration.version>
         <spring-security.version>5.2.1.RELEASE</spring-security.version>
-        <camel.version>2.24.2</camel.version>
+        <camel.version>3.0.0</camel.version>
         <awaitility.version>4.0.1</awaitility.version>
         <jline.version>3.13.2</jline.version>
         <py4j.version>0.10.8.1</py4j.version>
@@ -125,7 +125,7 @@
         <logback.version>1.2.3</logback.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <junit-platform.version>1.5.2</junit-platform.version>
-        <mockito.version>3.1.0</mockito.version>
+        <mockito.version>3.2.0</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
 
@@ -264,7 +264,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.26</version>
+                            <version>8.27</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -725,33 +725,10 @@
 
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-core</artifactId>
+                <artifactId>camel-bom</artifactId>
                 <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-javaconfig</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-test-spring</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-script</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-groovy</artifactId>
-                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -763,41 +740,6 @@
                         <artifactId>groovy</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-swagger-java</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jackson</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-http</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jetty</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-security</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-servlet</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-grpc</artifactId>
-                <version>${camel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jline</groupId>
@@ -961,6 +903,16 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>eclipse-paho</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <pluginRepositories>
         <pluginRepository>

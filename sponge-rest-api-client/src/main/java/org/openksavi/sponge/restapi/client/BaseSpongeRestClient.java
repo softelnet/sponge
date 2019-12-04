@@ -845,10 +845,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         GetEventTypesResponse response = execute(RestApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
 
         if (response != null && response.getEventTypes() != null) {
-            Map<String, RecordType> eventTypes = response.getEventTypes();
-            for (String key : eventTypes.keySet()) {
-                eventTypes.put(key, (RecordType) unmarshalDataType(eventTypes.get(key)));
-            }
+            response.getEventTypes().entrySet().forEach(entry -> entry.setValue((RecordType) unmarshalDataType(entry.getValue())));
 
             // Populate the cache.
             if (populateCache && configuration.isUseEventTypeCache() && eventTypeCache != null) {

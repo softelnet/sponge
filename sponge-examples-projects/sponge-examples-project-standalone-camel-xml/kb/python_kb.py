@@ -22,7 +22,7 @@ class PythonRoute(ScriptRouteBuilder):
     def configure(self):
         self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
                 .transform().simple("Python route - Received message: ${body}") \
-                .process(lambda exchange: sponge.setVariable("message", exchange.getIn().getBody())) \
+                .process(camel.processor(lambda exchange: sponge.setVariable("message", exchange.getIn().getBody()))) \
                 .to("stream:out")
 
 def onStartup():

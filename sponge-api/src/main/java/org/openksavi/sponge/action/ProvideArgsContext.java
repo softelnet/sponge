@@ -116,7 +116,7 @@ public class ProvideArgsContext {
 
     public Object getFeature(String argName, String featureName) {
         Validate.isTrue(features != null && features.get(argName) != null && features.get(argName).containsKey(featureName),
-                "There are no features for argument %s", argName);
+                "There is no feature %s for argument %s", featureName, argName);
 
         return features.get(argName).get(featureName);
     }

@@ -24,6 +24,11 @@
     </knowledgeBases>
 
     <plugins>
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <configuration>
+                <spring camel="true" />
+            </configuration>
+        </plugin>
         <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
             <configuration>
                 <allowAnonymous>true</allowAnonymous>

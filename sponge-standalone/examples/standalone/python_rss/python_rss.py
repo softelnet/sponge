@@ -5,8 +5,8 @@ Standalone with Camel example
 
 from org.openksavi.sponge.camel import ScriptRouteBuilder
 from org.openksavi.sponge.camel import CamelUtils
-from org.apache.camel.processor.idempotent import MemoryIdempotentRepository
-from org.apache.camel.builder.xml import XPathBuilder
+from org.apache.camel.support.processor.idempotent import MemoryIdempotentRepository
+from org.apache.camel.language.xpath import XPathBuilder
 from java.util.concurrent.atomic import AtomicInteger
 
 def onInit():
@@ -28,17 +28,17 @@ class PythonRoute(ScriptRouteBuilder):
         self.fromS("direct:rss").routeId("rss") \
             .marshal().rss() \
             .idempotentConsumer(self.xpath("/rss/channel/item/title/text()"), MemoryIdempotentRepository.memoryIdempotentRepository()) \
-            .process(lambda exchange: exchange.getIn().setBody(sponge.event("rss") \
+            .process(camel.processor(lambda exchange: exchange.getIn().setBody(sponge.event("rss") \
                 .set("channel", CamelUtils.xpath(exchange, "/rss/channel/title/text()")) \
                 .set("title", CamelUtils.xpath(exchange, "/rss/channel/item/title/text()")) \
                 .set("link", CamelUtils.xpath(exchange, "/rss/channel/item/link/text()")) \
                 .set("description", CamelUtils.xpath(exchange, "/rss/channel/item/description/text()")) \
-                    .make())) \
+                    .make()))) \
             .to("sponge:spongeEngine")
 
         self.fromS("sponge:spongeEngine").routeId("spongeConsumerCamelPython") \
             .transform().simple("${body}") \
-            .process(lambda exchange: sponge.getVariable("receivedRssCount").incrementAndGet()) \
+            .process(camel.processor(lambda exchange: sponge.getVariable("receivedRssCount").incrementAndGet())) \
             .to("stream:out")
 
 def onStartup():

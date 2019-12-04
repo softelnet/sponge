@@ -30,7 +30,7 @@ public class SpringConfiguration {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Bean
+    @Bean(SpringPlugin.NAME)
     public SpringPlugin spring() {
         return new SpringPlugin();
     }

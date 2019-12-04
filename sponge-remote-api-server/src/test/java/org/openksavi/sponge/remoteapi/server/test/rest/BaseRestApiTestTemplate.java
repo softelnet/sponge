@@ -889,7 +889,7 @@ public abstract class BaseRestApiTestTemplate {
 
             try {
                 // Without paging.
-                assertEquals("There are no features for argument fruits in example.ViewFruitsPaging",
+                assertEquals("There is no feature offset for argument fruits in example.ViewFruitsPaging",
                         Assertions
                                 .assertThrows(SpongeClientException.class,
                                         () -> client.provideActionArgs(actionName,

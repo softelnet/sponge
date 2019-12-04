@@ -17,7 +17,7 @@
 package org.openksavi.sponge.camel;
 
 import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.support.DefaultConsumer;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 

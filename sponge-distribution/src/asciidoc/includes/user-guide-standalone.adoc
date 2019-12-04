@@ -3,7 +3,7 @@ For a brief introduction to the {sponge} standalone command-line application see
 
 If you need additional libraries (e.g. Camel components) you should place JAR files into the `lib` directory. You should use only compatible versions of these libraries.
 
-Standalone command-line application doesn't support history of entered commands/expressions (i.e. upwards arrow doesn't work).
+The standalone command-line application doesn't support history of entered commands/expressions (i.e. upwards arrow doesn't work).
 
 == Command-line options
 
@@ -104,6 +104,7 @@ set SPONGE_HOME=%cd%
 ----
 
 == Standalone plugin configuration parameters
+The standalone command-line application uses the `StandalonePlugin` that creates Spring and Camel contexts if necessary. A default standalone plugin is created by the application, however a {sponge} XML configuration file can define a standalone plugin explicitly.
 
 .Standalone plugin configuration parameters
 [cols="1,1,4"]
@@ -128,7 +129,7 @@ set SPONGE_HOME=%cd%
 |===
 
 == Spring
-You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. The name of this plugin must be `"standalonePlugin"`.
+You may provide Spring configuration files using a command-line option or defining `StandalonePlugin` plugin in {sponge} XML configuration file. This plugin allows to specify Spring configuration files that will be loaded. The name of this plugin must be `"standalone"`.
 
 .Example of Spring configuration in StandalonePlugin
 [source,xml]
@@ -138,7 +139,7 @@ You may provide Spring configuration files using a command-line option or defini
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
-        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
             <configuration>
                 <spring engineBeanName="someEngine">
                     <file>spring-context-example-file-1.xml</file>
@@ -151,7 +152,7 @@ You may provide Spring configuration files using a command-line option or defini
 </sponge>
 ----
 
-This `standlonePlugin` sets up the Spring configuration XML file and Spring bean name that will reference the engine instance.
+This `standlonePlugin` sets up the Spring configuration XML file and a Spring bean name that will reference the engine instance.
 
 == Camel
 If you want to use Camel, you could setup a predefined Camel context configuration, so that a Camel context will be created automatically.
@@ -160,8 +161,6 @@ Available options are:
 
 * Setting `<spring camel="true">` will create a Camel context using a predefined Spring Java configuration.
 * Using `<spring>` without setting `camel` attribute will not create any Camel context automatically. In that case you may setup a Camel context in a custom way (for example using Spring).
-
-You may use only one Camel context in the {sponge} standalone command-line application.
 
 You could use Camel routes to send events to {sponge} from an external systems, for example by configuring http://camel.apache.org/rest-dsl.html[Camel Rest DSL].
 
@@ -175,7 +174,7 @@ You could use Camel routes to send events to {sponge} from an external systems, 
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
-        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
             <configuration>
                 <spring camel="true">
                     <file>examples/standalone/camel_route_xml/spring-camel-xml-config-example.xml</file>
@@ -216,7 +215,7 @@ You could use Camel routes to send events to {sponge} from an external systems, 
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
     <plugins>
-        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
             <configuration>
                 <spring camel="true">
                     <file>examples/standalone/camel_route_groovy/SpringCamelGroovyConfigExample.groovy</file>
@@ -354,17 +353,16 @@ Besides Camel core components and data formats, {sponge} standalone command-line
 
 |http://camel.apache.org/exec.html[camel-exec] |Executing system commands
 |http://camel.apache.org/grape.html[camel-grape] |Grape
-|http://camel.apache.org/http4.html[camel-http4] |HTTP
+|http://camel.apache.org/http.html[camel-http] |HTTP
 |http://camel.apache.org/mail.html[camel-mail] |Mail
 |http://camel.apache.org/jdbc.html[camel-jdbc] |JDBC
 |http://camel.apache.org/jms.html[camel-jms] |JMS
 |http://camel.apache.org/jmx.html[camel-jmx] |JMX
-|http://camel.apache.org/mqtt.html[camel-mqtt] |MQTT
 |http://camel.apache.org/mustache.html[camel-mustache] |Mustache
-|http://camel.apache.org/netty4.html[camel-netty4] |Netty
-|http://camel.apache.org/netty-http.html[camel-netty4-http] |Netty HTTP
+|http://camel.apache.org/netty.html[camel-netty] |Netty
+|http://camel.apache.org/netty-http.html[camel-netty-http] |Netty HTTP
 |http://camel.apache.org/paho.html[camel-paho] |Paho/MQTT
-|http://camel.apache.org/quartz2.html[camel-quartz2] |Quartz
+|http://camel.apache.org/quartz.html[camel-quartz] |Quartz
 |http://camel.apache.org/rss.html[camel-rss] |RSS
 |http://camel.apache.org/snmp.html[camel-snmp] |SNMP
 |http://camel.apache.org/sql-component.html[camel-sql] |SQL

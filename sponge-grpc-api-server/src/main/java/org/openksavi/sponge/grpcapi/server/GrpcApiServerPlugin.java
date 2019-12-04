@@ -28,6 +28,7 @@ import io.grpc.netty.NettyServerBuilder;
 import io.grpc.protobuf.services.ProtoReflectionService;
 import io.netty.handler.ssl.SslContextBuilder;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,6 +101,8 @@ public class GrpcApiServerPlugin extends JPlugin {
             setRestApiServerPlugin(getEngine().getOperations().getPlugin(RestApiServerPlugin.class));
         }
 
+        Validate.notNull(restApiServerPlugin, "The REST API server plugin is required for the gRPC API server plugin");
+
         startServer();
 
         restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, true);
@@ -170,7 +173,9 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     public void stop() {
-        restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
+        if (restApiServerPlugin != null) {
+            restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
+        }
 
         getSponge().disableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
 

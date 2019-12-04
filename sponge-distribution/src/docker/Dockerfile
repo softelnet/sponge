@@ -1,6 +1,6 @@
 # Dockerfile
 
-FROM openjdk:11
+FROM adoptopenjdk:11-jdk-hotspot
 
 ENV SPONGE_VERSION 1.13.0
 

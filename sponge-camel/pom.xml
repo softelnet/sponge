@@ -39,6 +39,10 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-javaconfig</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-attachments</artifactId>
+        </dependency>
 
         <!-- Required by Java 11. -->
         <dependency>
@@ -71,13 +75,11 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rss</artifactId>
-            <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
-            <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- Run JUnit4 tests that require Camel test support. -->

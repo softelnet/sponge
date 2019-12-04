@@ -17,6 +17,7 @@
 package org.openksavi.sponge.camel;
 
 import org.apache.camel.Endpoint;
+import org.apache.camel.builder.EndpointConsumerBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.RouteDefinition;
 
@@ -34,11 +35,7 @@ public abstract class ScriptRouteBuilder extends RouteBuilder {
         return from(endpoint);
     }
 
-    public RouteDefinition fromS(String... uris) {
-        return from(uris);
-    }
-
-    public RouteDefinition fromS(Endpoint... endpoints) {
-        return from(endpoints);
+    public RouteDefinition fromS(EndpointConsumerBuilder endpointDefinition) {
+        return from(endpointDefinition);
     }
 }

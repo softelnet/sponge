@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -84,22 +85,18 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      * @param pluginConfig plugin configuration.
      * @return a plugin.
      */
-    public Plugin createAndConfigurePlugin(Configuration pluginConfig) {
+    protected Plugin createAndConfigurePlugin(Configuration pluginConfig) {
         String pluginName = pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_NAME, null);
-        if (StringUtils.isBlank(pluginName)) {
-            throw new SpongeException("Plugin should have a name");
-        }
+
+        Validate.isTrue(!StringUtils.isBlank(pluginName), "Plugin should have a name");
 
         String className = pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_CLASS, null);
-        if (StringUtils.isBlank(className)) {
-            throw new SpongeException("Plugin configuration should specify a class: " + pluginName);
-        }
+        Validate.isTrue(!StringUtils.isBlank(className), "Plugin '%s' configuration should specify a class", pluginName);
 
         String knowledgeBaseName = pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_KB_NAME, null);
 
         Plugin plugin = createPluginStub(pluginName, knowledgeBaseName, className);
 
-        Validate.isTrue(!hasPlugin(plugin.getName()), "Plugin '%s' has already been registered.", plugin.getName());
         Validate.isTrue(isValidPluginName(plugin.getName()), "Invalid plugin name '%s'", plugin.getName());
 
         plugin.setLabel(pluginConfig.getAttribute(PluginManagerConstants.CFG_PLUGIN_LABEL, null));
@@ -116,7 +113,8 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     }
 
     /**
-     * Adds the specified plugin.
+     * Adds the specified plugin. If there is an existing plugin that has the same name and the engine is already running, an exception will
+     * be thrown.
      *
      * @param plugin plugin.
      */
@@ -124,9 +122,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
     public void addPlugin(Plugin plugin) {
         String name = plugin.getName();
 
-        if (pluginMap.containsKey(name)) {
-            throw new SpongeException("Plugin '" + name + "' has already been registered");
-        }
+        Validate.isTrue(!isRunning() || !pluginMap.containsKey(name), "Plugin '%s' has already been registered", plugin.getName());
 
         logger.debug("Adding plugin '{}'.", name);
 
@@ -314,7 +310,7 @@ public class DefaultPluginManager extends BaseEngineModule implements PluginMana
      */
     @Override
     public void doShutdown() {
-        getPlugins().forEach(plugin -> plugin.shutdown());
+        Lists.reverse(getPlugins()).forEach(plugin -> plugin.shutdown());
         pluginMap.clear();
     }
 

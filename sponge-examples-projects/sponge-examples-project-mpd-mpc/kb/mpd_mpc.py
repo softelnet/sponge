@@ -108,7 +108,10 @@ def onLoad():
     sponge.setVariable("lyricsService", LyricsService(sponge.getProperty("musixmatchApiKey", None)))
 
 def onStartup():
-    sponge.getVariable("mpc").startEventLoop()
+    try:
+        sponge.getVariable("mpc").startEventLoop()
+    except:
+        sponge.logger.warn("MPD event loop error: {}", sys.exc_info()[1])
     sponge.event("statusPolling").sendEvery(Duration.ofSeconds(1))
 
 def onShutdown():

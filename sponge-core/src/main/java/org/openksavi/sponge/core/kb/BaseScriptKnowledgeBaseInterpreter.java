@@ -285,7 +285,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
         //@formatter:off
         classes.addAll(Arrays.asList(EventMode.class, EventClonePolicy.class, SpongeUtils.class, SpongeException.class, ProcessorType.class,
                 Event.class, Configuration.class, EventSetProcessorState.class, EventName.class,
-                ProvidedMeta.class, ProvidedMode.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class, OutputStreamValue.class,
+                ProvidedMeta.class, ProvidedMode.class, ProvidedValue.class, AnnotatedValue.class, DynamicValue.class,
+                OutputStreamValue.class,
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,

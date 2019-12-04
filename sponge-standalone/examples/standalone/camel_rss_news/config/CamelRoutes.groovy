@@ -1,5 +1,7 @@
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.processor.idempotent.MemoryIdempotentRepository
+import org.apache.camel.support.processor.idempotent.MemoryIdempotentRepository
+import org.apache.camel.Exchange
+import org.apache.camel.Processor
 
 import org.openksavi.sponge.engine.SpongeEngine
 import org.openksavi.sponge.EngineOperations
@@ -29,6 +31,15 @@ class RssInputRoute extends RouteBuilder {
                     .setHeader(HEADER_SOURCE).constant(source)
                     .to("direct:rss")};
 
+        Processor processor = { it.getIn().setBody(operations.event("news")
+                        .set("source", it.getIn().getHeader(HEADER_SOURCE))
+                        .set("channel", CamelUtils.xpath(it, "/rss/channel/title/text()"))
+                        .set("title", CamelUtils.xpath(it, "/rss/channel/item/title/text()"))
+                        .set("link", CamelUtils.xpath(it, "/rss/channel/item/link/text()"))
+                        .set("description", CamelUtils.xpath(it, "/rss/channel/item/description/text()"))
+                        .make())
+                };
+
         // Gathers RSS from different sources and sends to Sponge engine as a normalized event.
         from("direct:rss").routeId("rss")
                 .marshal().rss()
@@ -36,13 +47,7 @@ class RssInputRoute extends RouteBuilder {
                 .idempotentConsumer(xpath("/rss/channel/item/title/text()"),
                         MemoryIdempotentRepository.memoryIdempotentRepository())
                 // Conversion from RSS XML to Sponge event with attributes.
-                .process { it.getIn().setBody(operations.event("news")
-                        .set("source", it.getIn().getHeader(HEADER_SOURCE))
-                        .set("channel", CamelUtils.xpath(it, "/rss/channel/title/text()"))
-                        .set("title", CamelUtils.xpath(it, "/rss/channel/item/title/text()"))
-                        .set("link", CamelUtils.xpath(it, "/rss/channel/item/link/text()"))
-                        .set("description", CamelUtils.xpath(it, "/rss/channel/item/description/text()"))
-                        .make()) }
+                .process(processor)
                 .to("sponge:camelRssEngine");
         // @formatter:on
     }

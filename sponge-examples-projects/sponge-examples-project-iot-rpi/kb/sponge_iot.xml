@@ -46,7 +46,7 @@
     </knowledgeBases>
 
     <plugins>
-        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
             <configuration>
                 <spring camel="true" />
             </configuration>

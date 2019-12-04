@@ -43,7 +43,7 @@ public class DefaultCamelService implements CamelService {
 
         rssSources.forEach((source, url) -> {
             try {
-                camelContext.stopRoute(source);
+                camelContext.getRouteController().stopRoute(source);
             } catch (Exception e) {
                 throw SpongeUtils.wrapException(e);
             }

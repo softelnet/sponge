@@ -2,6 +2,11 @@
 <FindBugsFilter>
     <!-- Reason: Optimization of uses -->
     <Match>
+        <Class name="org.openksavi.sponge.action.ProvideArgsContext" />
+        <Method name="getFeature" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH" />
+    </Match>
+    <Match>
         <Class name="org.openksavi.sponge.camel.CamelPlugin" />
         <Or>
             <Field name="camelContext" />

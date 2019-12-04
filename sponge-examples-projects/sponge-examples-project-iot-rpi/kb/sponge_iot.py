@@ -10,7 +10,7 @@ import sys
 import time
 
 class IoTRouteBuilder(ScriptRouteBuilder):
-    def createRoute(self, host, sensor):
+    def createRoute(self, brokerUrl, sensor):
         mqttPublishTopicNamePrefix = sponge.getProperty("mqtt.publishTopicNamePrefix", None)
         credentials = ""
         username = sponge.getProperty("mqtt.username", None)
@@ -21,14 +21,14 @@ class IoTRouteBuilder(ScriptRouteBuilder):
             credentials += "&password=" + password
 
         self.fromS("direct:" + sensor).routeId(sensor)\
-            .to("mqtt:{}?host={}&publishTopicName={}&byDefaultRetain=true{}".format(sensor, host,
-                    mqttPublishTopicNamePrefix + "/" + sensor, credentials))
+            .to("paho:{}?brokerUrl={}&retained=true{}".format(mqttPublishTopicNamePrefix + "/" + sensor, brokerUrl,
+                    credentials))
     def configure(self):
-        mqttHost = sponge.getProperty("mqtt.host", None)
-        if mqttHost is not None:
-            self.createRoute(mqttHost, "temperature")
-            self.createRoute(mqttHost, "humidity")
-            self.createRoute(mqttHost, "light")
+        brokerUrl = sponge.getProperty("mqtt.brokerUrl", None)
+        if brokerUrl is not None:
+            self.createRoute(brokerUrl, "temperature")
+            self.createRoute(brokerUrl, "humidity")
+            self.createRoute(brokerUrl, "light")
 
 class SensorChangeToMqtt(Trigger):
     def onConfigure(self):

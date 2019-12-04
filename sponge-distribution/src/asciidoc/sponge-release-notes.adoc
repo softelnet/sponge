@@ -15,7 +15,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added `ProvidedMeta.mode` - a provided read mode: `explicit` (default), `optional` or `implicit`.
 * Removed support for features in an action arguments provision result itself (`ProvidedValue`). Such features can be provided in an `AnnotatedValue`.
 * Removed experimental support for pageable value set and element value set.
-* Dependencies upgrade.
+* Renamed `StandalonePlugin` default name `standalonePlugin` to `standalone`.
+* Dependencies upgrade (e.g. Apache Camel upgraded to version 3.0.0).
 
 [discrete]
 == 1.13.0 (2019-10-30)

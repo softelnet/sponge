@@ -36,7 +36,6 @@ engine.startup();
 ----
 
 === Shutting down
-
 When a {sponge} instance is no longer needed it should be shut down by invoking `shutdown()` or `requestShutdown()` method. It instructs the engine to do some clean up, stop all managed threads, free resources, etc. The `shutdown()` uses the current thread to stop the engine. The `requestShutdown()` uses a new thread to stop the engine, thus allowing to shutdown the engine from the within, e.g. form an event processor.
 
 .Example of shutting down in Java

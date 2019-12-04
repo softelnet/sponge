@@ -17,11 +17,11 @@
 package org.openksavi.sponge.camel;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.builder.xml.XPathBuilder;
-import org.apache.camel.util.jsse.KeyManagersParameters;
-import org.apache.camel.util.jsse.KeyStoreParameters;
-import org.apache.camel.util.jsse.SSLContextParameters;
-import org.apache.camel.util.jsse.TrustManagersParameters;
+import org.apache.camel.language.xpath.XPathBuilder;
+import org.apache.camel.support.jsse.KeyManagersParameters;
+import org.apache.camel.support.jsse.KeyStoreParameters;
+import org.apache.camel.support.jsse.SSLContextParameters;
+import org.apache.camel.support.jsse.TrustManagersParameters;
 
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;

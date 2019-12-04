@@ -80,6 +80,7 @@ public final class EngineConstants {
             CorrelatorBuilder.class, BaseCorrelatorBuilder.class
             );
     //@formatter:on
+
     private EngineConstants() {
         //
     }

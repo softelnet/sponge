@@ -180,14 +180,14 @@
         </fileSet>
         <fileSet>
             <directory>../sponge-examples-projects/sponge-examples-project-iot-rpi</directory>
-            <outputDirectory>examples/sponge-iot-rpi</outputDirectory>
+            <outputDirectory>examples/project-iot-rpi</outputDirectory>
             <includes>
                 <include>kb/**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>../sponge-examples-projects/sponge-examples-project-mpd-mpc</directory>
-            <outputDirectory>examples/sponge-mpd-mpc</outputDirectory>
+            <outputDirectory>examples/project-mpd-mpc</outputDirectory>
             <includes>
                 <include>kb/**</include>
             </includes>

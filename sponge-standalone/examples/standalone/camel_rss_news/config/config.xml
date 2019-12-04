@@ -51,7 +51,7 @@
             </configuration>
         </plugin>
         <!-- Standalone plugin that configures Spring and Camel. -->
-        <plugin name="standalonePlugin" class="org.openksavi.sponge.standalone.StandalonePlugin">
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
             <configuration>
                 <spring engineBeanName="camelRssEngine" camel="true">
                     <file>${baseDir}/config/CamelRoutes.groovy</file>

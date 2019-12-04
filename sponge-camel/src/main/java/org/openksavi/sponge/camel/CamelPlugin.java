@@ -28,11 +28,14 @@ import javax.activation.FileDataSource;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
+import org.apache.camel.DeferredContextBinding;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExtendedStartupListener;
-import org.apache.camel.Message;
+import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +46,7 @@ import org.openksavi.sponge.java.JPlugin;
 /**
  * Sponge plugin that provides integration with Apache Camel.
  */
+@DeferredContextBinding
 public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedStartupListener {
 
     private static final Logger logger = LoggerFactory.getLogger(CamelPlugin.class);
@@ -205,8 +209,9 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
         return result;
     }
 
-    public void addAttachment(Message message, String attachmentFile) {
-        message.addAttachment(FilenameUtils.getName(attachmentFile), new DataHandler(new FileDataSource(attachmentFile)));
+    public void addAttachment(Exchange exchange, String attachmentFile) {
+        Validate.notNull(exchange.getMessage(AttachmentMessage.class), "The message doesn't support attachments")
+                .addAttachment(FilenameUtils.getName(attachmentFile), new DataHandler(new FileDataSource(attachmentFile)));
     }
 
     public String getRouteId(Exchange exchange) {
@@ -250,5 +255,9 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
     @Override
     public void onCamelContextFullyStarted(CamelContext context, boolean alreadyStarted) throws Exception {
         contextFullyStartedLatch.countDown();
+    }
+
+    public Processor processor(CamelProcessorProvider provider) {
+        return (Exchange exchange) -> provider.process(exchange);
     }
 }
