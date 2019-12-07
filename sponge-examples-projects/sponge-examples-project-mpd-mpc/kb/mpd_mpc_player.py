@@ -37,17 +37,20 @@ class MpdPlayer(Action):
 
         mpc.lock.lock()
         try:
-            if "position" in context.submit:
-                if context.current["position"]:
-                    status = mpc.seekByPercentage(context.current["position"].value)
-            if "volume" in context.submit:
-                status = mpc.setVolume(context.current["volume"].value)
-            if "play" in context.submit:
-                status = mpc.togglePlay(context.current["play"].value)
-            if "prev" in context.submit:
-                status = mpc.prev()
-            if "next" in context.submit:
-                status = mpc.next()
+            try:
+                if "position" in context.submit:
+                    if context.current["position"]:
+                        status = mpc.seekByPercentage(context.current["position"].value)
+                if "volume" in context.submit:
+                        status = mpc.setVolume(context.current["volume"].value)
+                if "play" in context.submit:
+                    status = mpc.togglePlay(context.current["play"].value)
+                if "prev" in context.submit:
+                    status = mpc.prev()
+                if "next" in context.submit:
+                    status = mpc.next()
+            except:
+                sponge.logger.warn("Submit error: {}", sys.exc_info()[0])
 
             if "song" in context.provide:
                 context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())

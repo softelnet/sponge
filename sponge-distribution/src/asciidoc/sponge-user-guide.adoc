@@ -1559,6 +1559,49 @@ $ tail -f ~/local/sponge-iot-rpi/logs/sponge-<current_date>.log
 * Repeat these steps until your knowledge bases are finished.
 * Start and enable the {sponge} system service.
 
+[[mpd-mpc-raspberry]]
+==== MPD client service
+
+[discrete]
+===== Running in Docker
+The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service that provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player.
+
+The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
+
+The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example https://volumio.org[Volumio] has been chosen.
+
+The architecture of this solution is: Raspberry PI + MPD server (Volumio) + Docker/{sponge} MPD service.
+
+Installing the {sponge} MPD service:
+
+* https://volumio.org/get-started/[Download], install and configure Volumio for Raspberry PI.
+* Enable https://volumio.github.io/docs/User_Manual/SSH.html[SSH].
+* Connect to the Raspberry PI via SSH as `volumio` user.
+* Install and configure https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi[Docker].
+
+----
+sudo curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+sudo usermod -aG docker volumio
+----
+
+* Run the {sponge} MPD service in Docker.
+
+----
+docker pull openksavi/sponge-mpd
+docker run --name sponge-mpd -d --restart always --network host openksavi/sponge-mpd
+----
+
+* Check the {sponge} MPD service logs.
+
+----
+docker logs sponge-mpd -f
+----
+
+Limitations:
+
+* The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
+* The MPD connection configuration (e.g. the MPD host) is not persisted.
+
 === Scripting examples
 The scripting examples show how to use certain {sponge} functionalities in script knowledge bases. See the sources in {sourcesUrl}/sponge-jython/examples/script/py[Python examples], {sourcesUrl}/sponge-jruby/examples/script/rb[Ruby examples], {sourcesUrl}/sponge-groovy/examples/script/groovy[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples/script/js[JavaScript examples].
 

@@ -87,7 +87,7 @@
 
     <profiles>
         <profile>
-            <id>docker</id>
+            <id>docker-push</id>
             <build>
                 <plugins>
                     <plugin>
@@ -96,12 +96,10 @@
                         <configuration>
                             <repository>openksavi/sponge-demo</repository>
                             <dockerfile>src/docker/Dockerfile</dockerfile>
-                            <skipPush>true</skipPush>
-                            <verbose>true</verbose>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>docker-tag-latest</id>
+                                <id>tag-latest</id>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>build</goal>
@@ -112,13 +110,49 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>docker-tag-version</id>
+                                <id>tag-version</id>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>tag</goal>
                                 </goals>
                                 <configuration>
                                     <tag>${release.version}</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>push-latest</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>
+                                        <argument>push</argument>
+                                        <argument>openksavi/sponge-demo:latest</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>push-version</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>
+                                        <argument>push</argument>
+                                        <argument>openksavi/sponge-demo:${release.version}</argument>
+                                    </arguments>
                                 </configuration>
                             </execution>
                         </executions>

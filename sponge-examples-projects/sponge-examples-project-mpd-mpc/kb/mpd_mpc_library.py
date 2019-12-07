@@ -74,7 +74,7 @@ class MpdLibrary(Action):
                 limit = context.getFeature("files", "limit")
 
                 context.provided["files"] = ProvidedValue().withValue(AnnotatedValue(files[offset:(offset + limit)]).withFeatures(
-                        {"offset":offset, "limit":limit, "count":len(files)}))
+                            {"offset":offset, "limit":limit, "count":len(files)}))
                 context.provided["parentDir"] = ProvidedValue().withValue(AnnotatedValue(parentDir))
         finally:
             mpc.lock.unlock()

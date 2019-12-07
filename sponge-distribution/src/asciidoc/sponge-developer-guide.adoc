@@ -2,6 +2,8 @@
 
 Sponge sources can be built with Java 8.
 
+NOTE: The Sponge Developer Guide is a work in progress and may contain outdated information.
+
 == Maven
 
 === Settings
@@ -72,27 +74,18 @@ If you get `ERROR: directory is already being watched!` message, simply ignore i
 
 === Docker
 
-==== Build Docker image
+==== Build and push a multiplatform Docker images
+Building a multiplatform Docker image requires Docker Desktop buildx. See https://engineering.docker.com/2019/04/multi-arch-images/ and https://docs.docker.com/buildx/working-with-buildx/.
 
 Remember to verify the Sponge version in Dockerfile in sponge-distribution/src/docker.
 
-If necessary assembly Docker base directory.
+ mvn install -Pdocker-push
+
+==== Publish locally a single platform Docker image
 
  cd sponge-distribution
- mvn package -Pdocker
+ mvn install -Pdocker-local
  cd ..
-
-Build Docker image.
-
- cd sponge-distribution/target/docker/docker
- docker build -t openksavi/sponge:1.0.6 -t openksavi/sponge:latest .
-
-==== Publish Docker image
-
-After building the Docker image, execute (according to https://docs.docker.com/docker-cloud/builds/push-images/):
-
- docker login
- docker push openksavi/sponge
 
 === Performance tests
 Performance tests have to be invoked manually, because they require more time to finish.

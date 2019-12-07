@@ -93,7 +93,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.6.0</version>
                         <configuration>
                             <mainClass>org.openksavi.sponge.distribution.tools.RestApiServiceGenerateOpenApiSpecificationMain</mainClass>
                             <arguments>
@@ -383,10 +382,10 @@
         </profile>
 
         <profile>
-            <id>docker</id>
+            <id>docker-push</id>
             <build>
                 <plugins>
-                   <plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <executions>
@@ -407,13 +406,77 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <!-- Building a multiplatform Docker image requires Docker Desktop buildx. -->
+                        <!-- [https://engineering.docker.com/2019/04/multi-arch-images/, https://docs.docker.com/buildx/working-with-buildx/] -->
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.build.directory}/docker-context/docker-context</workingDirectory>
+                            <arguments>
+                                <argument>buildx</argument>
+                                <argument>build</argument>
+                                <argument>--platform</argument>
+                                <argument>linux/amd64,linux/arm/v7</argument>
+                                <argument>--build-arg</argument>
+                                <argument>SPONGE_VERSION=${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge:${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge:latest</argument>
+                                <!-- Pushing to the hub is required here because of [https://github.com/docker/buildx/issues/59] -->
+                                <argument>--push</argument>
+                                <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>docker-local</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>docker-context-local</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>docker-context-local</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <descriptors>
+                                        <descriptor>src/assembly/docker.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>com.spotify</groupId>
                         <artifactId>dockerfile-maven-plugin</artifactId>
                         <configuration>
                             <repository>openksavi/sponge</repository>
                             <skipPush>true</skipPush>
-                            <verbose>true</verbose>
-                            <contextDirectory>${project.build.directory}/docker-context/docker-context</contextDirectory>
+                            <verbose>false</verbose>
+                            <contextDirectory>${project.build.directory}/docker-context-local/docker-context-local</contextDirectory>
+                            <buildArgs>
+                                <SPONGE_VERSION>${release.version}</SPONGE_VERSION>
+                            </buildArgs>
                         </configuration>
                         <executions>
                             <execution>

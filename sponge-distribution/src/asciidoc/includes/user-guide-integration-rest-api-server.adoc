@@ -232,7 +232,7 @@ The best way of adding a REST API user to a password file is to use a predefined
 .Adding a REST API user
 [source,bash,subs="verbatim,attributes"]
 ----
-docker run -it --rm -v `pwd`:/opt/tmp openksavi/sponge:latest ./sponge -k "classpath*:/org/openksavi/sponge/restapi/server/kb_add_remote_api_user.py" /opt/tmp/password.txt
+docker run -it --rm -v `pwd`:/opt/tmp openksavi/sponge -k "classpath*:/org/openksavi/sponge/restapi/server/kb_add_remote_api_user.py" /opt/tmp/password.txt
 ----
 
 A password can be generated manually and added to a password file as well.

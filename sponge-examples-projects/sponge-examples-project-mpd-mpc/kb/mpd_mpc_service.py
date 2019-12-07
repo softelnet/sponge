@@ -59,12 +59,16 @@ class Mpc:
         return self.__execute("status")
 
     def isStatusOk(self, status):
-        if not status or len(status.strip()) == 0 or self.isStatusNotPlaying(status):
+        if status is None or len(status.strip()) == 0 or self.isStatusNotPlaying(status):
             return False
         return True
 
     def getStats(self):
         return self.__execute("stats")
+
+    def isNoConnection(self):
+        error = sponge.process(self.__createProcessBuilder().outputAsString().errorAsString().exceptionOnExitCode(False)).run().errorString
+        return error == "mpd error: Cannot assign requested address"
 
     # Playlist operations.
 
@@ -262,7 +266,7 @@ class Mpc:
 
     def startEventLoop(self):
         self.eventLoopProcess = sponge.process(self.__createProcessBuilder().arguments("idleloop").outputAsConsumer
-                                               (PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone()).run()
+                                               (PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone().errorAsConsumer()).run()
     def stopEventLoop(self):
         if self.eventLoopProcess:
             self.eventLoopProcess.destroy()

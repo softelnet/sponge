@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.13.0</release.version>
+        <release.version>1.13.1-a1</release.version>
         <release.date>2019-10-30</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -91,8 +91,8 @@
         <quartz.version>2.3.2</quartz.version>
         <guava.version>28.1-jre</guava.version>
         <caffeine.version>2.8.0</caffeine.version>
-        <spring.version>5.2.1.RELEASE</spring.version>
-        <spring-integration.version>5.2.1.RELEASE</spring-integration.version>
+        <spring.version>5.2.2.RELEASE</spring.version>
+        <spring-integration.version>5.2.2.RELEASE</spring-integration.version>
         <spring-security.version>5.2.1.RELEASE</spring-security.version>
         <camel.version>3.0.0</camel.version>
         <awaitility.version>4.0.1</awaitility.version>
@@ -334,6 +334,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
                 </plugin>
                 <plugin>
                     <groupId>com.googlecode.maven-download-plugin</groupId>
@@ -970,9 +975,9 @@
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
                 <module>sponge-bom</module>
-                <module>sponge-examples-projects</module>
                 <module>sponge-standalone-extensions</module>
                 <module>sponge-distribution</module>
+                <module>sponge-examples-projects</module>
             </modules>
         </profile>
         <profile>

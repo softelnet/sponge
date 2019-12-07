@@ -60,4 +60,65 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>docker-push</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>docker-context</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>docker-context</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <descriptors>
+                                        <descriptor>src/assembly/docker.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.build.directory}/docker-context/docker-context</workingDirectory>
+                            <arguments>
+                                <argument>buildx</argument>
+                                <argument>build</argument>
+                                <argument>--build-arg</argument>
+                                <argument>SPONGE_VERSION=${release.version}</argument>
+                                <argument>--platform</argument>
+                                <argument>linux/amd64,linux/arm/v7</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge-mpd:${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge-mpd:latest</argument>
+                                <!-- Pushing to the hub here because of [https://github.com/docker/buildx/issues/59] -->
+                                <argument>--push</argument>
+                                <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
