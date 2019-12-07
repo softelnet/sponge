@@ -158,7 +158,6 @@ When {sponge} process is running you may send `HUP` signal to that process in or
 ----
 kill -HUP <pid>
 ----
-Where `<pid>` is the PID of the Java executable running the {sponge}. It isn't the PID of the shell script `sponge`.
 
 IMPORTANT: See User Guide for limitations of reloading knowledge bases.
 

@@ -16,6 +16,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Removed support for features in an action arguments provision result itself (`ProvidedValue`). Such features can be provided in an `AnnotatedValue`.
 * Removed experimental support for pageable value set and element value set.
 * Renamed `StandalonePlugin` default name `standalonePlugin` to `standalone`.
+* Multiplatform Docker images (e.g. for Raspberry PI).
 * Dependencies upgrade (e.g. Apache Camel upgraded to version 3.0.0).
 
 [discrete]

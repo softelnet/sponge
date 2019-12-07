@@ -37,4 +37,4 @@ if [ -z $COLUMNS ]; then
     fi
 fi
 
-$JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml org.openksavi.sponge.standalone.StandaloneEngineMain "$@"
+exec $JAVA_CMD $JAVA_OPTIONS -cp "$SPONGE_HOME/lib/*:$SPONGE_HOME/lib/ext/*" -Dsponge.home=$SPONGE_HOME -Dlogback.configurationFile=$SPONGE_HOME/config/logback.xml org.openksavi.sponge.standalone.StandaloneEngineMain "$@"

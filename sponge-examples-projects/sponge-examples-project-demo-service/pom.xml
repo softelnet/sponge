@@ -180,6 +180,10 @@
                             <name>digits.home</name>
                             <value>../../sponge-tensorflow/examples/tensorflow/digits</value>
                         </systemProperty>
+                        <systemProperty>
+                            <name>password.file</name>
+                            <value>password.txt</value>
+                        </systemProperty>
                     </systemProperties>
                 </configuration>
                 <dependencies>

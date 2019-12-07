@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
 
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
-import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
@@ -41,7 +40,7 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
     protected Optional<CamelContext> camelContext;
 
     @Bean
-    public SpongeEngine spongeEngine() {
+    public SpringSpongeEngine spongeEngine() {
         String spongeHome = System.getProperty(ConfigurationConstants.PROP_HOME);
         if (StringUtils.isBlank(spongeHome)) {
             spongeHome = "sponge";
