@@ -3,7 +3,7 @@ Sponge Knowledge base
 Rules - Event pattern
 """
 
-from org.openksavi.sponge.test.util import CorrelationEventsLog
+from org.openksavi.sponge.examples.util import CorrelationEventsLog
 
 def onInit():
     # Variables for assertions only

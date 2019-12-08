@@ -3,7 +3,7 @@
  * Using rules - events
  */
 
-import org.openksavi.sponge.test.util.CorrelationEventsLog
+import org.openksavi.sponge.examples.util.CorrelationEventsLog
 
 void onInit() {
     sponge.setVariable("defaultDuration", 1000)

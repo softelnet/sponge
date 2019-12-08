@@ -1,7 +1,7 @@
 # Sponge Knowledge base
 # Using rules - events
 
-java_import org.openksavi.sponge.test.util.CorrelationEventsLog
+java_import org.openksavi.sponge.examples.util.CorrelationEventsLog
 
 def onInit
     $defaultDuration = 1000

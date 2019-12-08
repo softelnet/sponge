@@ -4,7 +4,7 @@
  */
 
 import org.openksavi.sponge.examples.SameSourceJavaRule
-import org.openksavi.sponge.test.util.CorrelationEventsLog
+import org.openksavi.sponge.examples.util.CorrelationEventsLog
 
 
 class Constants {

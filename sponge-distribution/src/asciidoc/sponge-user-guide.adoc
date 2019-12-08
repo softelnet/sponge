@@ -1172,8 +1172,8 @@ TIP: You may see ignored events (i.e. events that go to the Output Event Queue) 
 
 == Examples
 
-=== Complete example projects of embedding {sponge}
-The complete projects could be used as a point of reference to embed {sponge} in your Java application. They are placed in `sponge-examples-projects`.
+=== Complete example projects
+The complete projects could be used as points of reference to use {sponge} in real world use cases. They are placed in `sponge-examples-projects`.
 
 ==== News project
 This project shows how to process news as events. It is placed in `sponge-examples-project-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-news[sources]).
@@ -1561,12 +1561,15 @@ $ tail -f ~/local/sponge-iot-rpi/logs/sponge-<current_date>.log
 
 [[mpd-mpc-raspberry]]
 ==== MPD client service
+The {sponge} MPD client service provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player.
+
+The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
+
+NOTE: One of the aims of the {sponge} MPD client service example is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a REST API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
 
 [discrete]
 ===== Running in Docker
-The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service that provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player.
-
-The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
+The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service.
 
 The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example https://volumio.org[Volumio] has been chosen.
 
@@ -1599,7 +1602,6 @@ docker logs sponge-mpd -f
 
 Limitations:
 
-* The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
 * The MPD connection configuration (e.g. the MPD host) is not persisted.
 
 === Scripting examples
@@ -1922,6 +1924,10 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |`sponge-logging`
 |Yes
 |The {sponge} logging used by the standalone application.
+
+|`sponge-examples-base`
+|Yes
+|Base classes used in examples.
 
 |`sponge-test`
 |Yes

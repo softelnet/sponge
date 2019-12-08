@@ -8,7 +8,7 @@ package org.openksavi.sponge.kotlin.examples
 import org.openksavi.sponge.event.Event
 import org.openksavi.sponge.kotlin.KKnowledgeBase
 import org.openksavi.sponge.kotlin.KTrigger
-import org.openksavi.sponge.test.util.TestStatus
+import org.openksavi.sponge.examples.util.TestStatus
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 

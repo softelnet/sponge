@@ -8,7 +8,7 @@ package org.openksavi.sponge.kotlin.examples
 import org.openksavi.sponge.event.Event
 import org.openksavi.sponge.kotlin.KKnowledgeBase
 import org.openksavi.sponge.kotlin.KRule
-import org.openksavi.sponge.test.util.CorrelationEventsLog
+import org.openksavi.sponge.examples.util.CorrelationEventsLog
 import java.time.Duration
 
 class RulesSyncAsync : KKnowledgeBase() {

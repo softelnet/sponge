@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.examples.util.CorrelationEventsLog;
 import org.openksavi.sponge.jython.PythonConstants;
 import org.openksavi.sponge.test.script.template.RulesTestTemplate;
-import org.openksavi.sponge.test.util.CorrelationEventsLog;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)

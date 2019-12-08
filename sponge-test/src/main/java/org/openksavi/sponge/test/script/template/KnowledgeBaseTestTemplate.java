@@ -28,9 +28,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.examples.util.TestStatus;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.test.util.ScriptTestUtils;
-import org.openksavi.sponge.test.util.TestStatus;
 import org.openksavi.sponge.test.util.TestUtils;
 
 public class KnowledgeBaseTestTemplate {

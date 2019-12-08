@@ -33,6 +33,7 @@ import org.springframework.util.SocketUtils;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.examples.util.CorrelationEventsLog;
 
 public class TestUtils {
 

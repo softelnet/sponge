@@ -33,8 +33,8 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.examples.EchoPlugin;
 import org.openksavi.sponge.examples.TestKnowledgeBase;
+import org.openksavi.sponge.examples.util.EventsLog;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
-import org.openksavi.sponge.test.util.EventsLog;
 
 public class EngineBuilderTest {
 

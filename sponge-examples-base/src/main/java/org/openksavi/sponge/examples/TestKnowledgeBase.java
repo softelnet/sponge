@@ -23,13 +23,13 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.examples.util.EventsLog;
 import org.openksavi.sponge.java.JFilter;
 import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.java.JTrigger;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.RuleEventSpec;
-import org.openksavi.sponge.test.util.EventsLog;
 
 public class TestKnowledgeBase extends JKnowledgeBase {
 

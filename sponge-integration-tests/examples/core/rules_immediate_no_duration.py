@@ -4,7 +4,7 @@ Using rules - immediate, no duration
 Note that auto-enable is turned off in the configuration.
 """
 
-from org.openksavi.sponge.test.util import CorrelationEventsLog
+from org.openksavi.sponge.examples.util import CorrelationEventsLog
 
 def onInit():
     global correlationEventsLog

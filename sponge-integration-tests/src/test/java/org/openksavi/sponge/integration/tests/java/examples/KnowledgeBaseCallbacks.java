@@ -20,9 +20,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.examples.util.TestStatus;
 import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
-import org.openksavi.sponge.test.util.TestStatus;
 
 /**
  * Sponge Knowledge base. Using knowledge base callbacks.

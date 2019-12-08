@@ -3,7 +3,7 @@ Sponge Knowledge base
 Rules load test.
 """
 
-from org.openksavi.sponge.test.util import CorrelationEventsLog
+from org.openksavi.sponge.examples.util import CorrelationEventsLog
 import time
 
 def onInit():

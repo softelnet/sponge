@@ -20,9 +20,9 @@ import java.time.Duration;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.examples.util.CorrelationEventsLog;
 import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRule;
-import org.openksavi.sponge.test.util.CorrelationEventsLog;
 
 /**
  * Sponge Knowledge base. Using rules - events.

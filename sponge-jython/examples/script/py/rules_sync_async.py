@@ -3,7 +3,7 @@ Sponge Knowledge base
 Using rules - synchronous and asynchronous
 """
 
-from org.openksavi.sponge.test.util import CorrelationEventsLog
+from org.openksavi.sponge.examples.util import CorrelationEventsLog
 
 def onInit():
     global correlationEventsLog
