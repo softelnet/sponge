@@ -10,7 +10,7 @@
         <!-- RSS endpoint URI parameters. -->
         <property name="rssEndpointParameters" variable="true">?sortEntries=false&amp;consumer.delay=1000</property>
         <!-- Duration of reading RSS feeds from sources (in seconds). -->
-        <property name="durationOfReadingRss" variable="true">5</property>
+        <property name="durationOfReadingRss" variable="true">20</property>
     </properties>
 
     <knowledgeBases>

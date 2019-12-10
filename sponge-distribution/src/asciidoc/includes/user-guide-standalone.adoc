@@ -7,35 +7,41 @@ The standalone command-line application doesn't support history of entered comma
 
 == Command-line options
 
-[cols="1,4"]
+[cols="1,3"]
 |===
 |Option |Description
 
-|`-c <arg>`
-|Use given Sponge XML configuration file. Only one configuration file may be provided.
+|`-c,--config <file>`
+|Use the given Sponge XML configuration file. Only one configuration file may be provided.
 
-|`-k [name=]files`
+|`-k,--knowledge-base <[name=]files]>`
 |Use given knowledge base by setting its name (optional) and files (comma-separated). When no name is provided, a default name 'kb' will be used. This option may be used more than once to provide many knowledge bases. Each of them could use many files.
 
-|`-s <file>`
+|`-s,--spring <file>`
 |Use given Spring configuration file. This option may be used more than once to provide many Spring configuration files.
 
-|`-m`
+|`-m,--camel`
 |Create an Apache Camel context.
 
-|`-i [name]`
+|`-i,--interactive <[name]>`
 |Run in an interactive mode by connecting to a knowledge base interpreter. You may provide the name of one of the loaded knowledge bases, otherwise the first loaded knowledge base will be chosen.
 
-|`-e`
-|Applicable only in an interactive mode. Print all exceptions (e.g. also thrown in event processors running in other threads). Helpful for development purposes.
+|`-q,--quiet`
+|Supresses logging to the console. Applicable only in a non interactive mode.
 
-|`-h`
+|`-t,--stack-trace`
+|Print exception stack traces to the console.
+
+|`-d,--debug`
+|Enable more debugging info. Print all logs to the console (including exception stack traces). Applicable only in an interactive mode. Options `debug` and `quiet` can't be used both.
+
+|`-h,--help`
 |Print help message and exit.
 
-|`-v`
+|`-v,--version`
 |Print the version information and exit.
 
-| `-D property=value` or `-Dproperty=value`
+|`-D,--system-property <property=value>`
 |Set the Java system property.
 |===
 
@@ -79,8 +85,8 @@ Standalone command-line application sets its own default values for the followin
 # Run in an interactive mode.
 ./sponge -k filtersKb=../examples/script/py/filters.py -i
 
-# Run in an interactive mode and setup printing all exceptions to the console.
-./sponge -k filtersKb=../examples/script/py/filters.py -i -e
+# Run in an interactive mode with debug.
+./sponge -k filtersKb=../examples/script/py/filters.py -i -d
 
 # Run one knowledge base that use two files. Take caution not to use the same names for functions or classes in the files belonging to the same knowledge base.
 ./sponge -k ../examples/standalone/multiple_kb_files/event_processors.py,../examples/standalone/multiple_kb_files/example2.py

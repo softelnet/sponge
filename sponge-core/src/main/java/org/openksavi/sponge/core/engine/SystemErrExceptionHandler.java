@@ -16,28 +16,26 @@
 
 package org.openksavi.sponge.core.engine;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ExceptionContext;
 import org.openksavi.sponge.engine.ExceptionHandler;
 
 /**
- * Logging exception handler.
+ * System.err exception handler.
  */
-public class LoggingExceptionHandler implements ExceptionHandler {
-
-    private static final Logger logger = LoggerFactory.getLogger(LoggingExceptionHandler.class);
+public class SystemErrExceptionHandler implements ExceptionHandler {
 
     private boolean includeStackTrace;
 
-    public LoggingExceptionHandler(boolean includeStackTrace) {
+    private boolean simplified;
+
+    public SystemErrExceptionHandler(boolean includeStackTrace, boolean simplified) {
         this.includeStackTrace = includeStackTrace;
+        this.simplified = simplified;
     }
 
-    public LoggingExceptionHandler() {
-        this(true);
+    public SystemErrExceptionHandler() {
+        this(true, false);
     }
 
     public boolean isIncludeStackTrace() {
@@ -48,8 +46,22 @@ public class LoggingExceptionHandler implements ExceptionHandler {
         this.includeStackTrace = includeStackTrace;
     }
 
+    public boolean isSimplified() {
+        return simplified;
+    }
+
+    public void setSimplified(boolean simplified) {
+        this.simplified = simplified;
+    }
+
     @Override
     public void handleException(Throwable exception, ExceptionContext context) {
-        logger.error(SpongeUtils.createErrorMessage(exception, context, includeStackTrace));
+        String message = exception.getLocalizedMessage();
+
+        if (message == null) {
+            message = exception.toString();
+        }
+
+        System.err.println(simplified ? "ERROR: " + message : SpongeUtils.createErrorMessage(exception, context, includeStackTrace));
     }
 }

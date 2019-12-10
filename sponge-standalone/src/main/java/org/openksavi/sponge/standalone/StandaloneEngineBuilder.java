@@ -33,6 +33,7 @@ import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.CombinedExceptionHandler;
 import org.openksavi.sponge.core.engine.EngineBuilder;
 import org.openksavi.sponge.core.engine.LoggingExceptionHandler;
+import org.openksavi.sponge.core.engine.SystemErrExceptionHandler;
 import org.openksavi.sponge.core.engine.interactive.DefaultInteractiveMode;
 import org.openksavi.sponge.core.engine.interactive.InteractiveModeConstants;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -148,23 +149,34 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
 
             applyDefaultParameters();
 
+            boolean optionDebug = commandLine.hasOption(StandaloneConstants.OPTION_DEBUG);
+            boolean optionPrintStackTrace = commandLine.hasOption(StandaloneConstants.OPTION_STACK_TRACE);
+            boolean optionQuiet = commandLine.hasOption(StandaloneConstants.OPTION_QUIET);
+
+            if (optionDebug && optionQuiet) {
+                throw new StandaloneInitializationException(
+                        "Options '" + StandaloneConstants.LONG_OPT_MAP.get(StandaloneConstants.OPTION_DEBUG) + "' and '"
+                                + StandaloneConstants.LONG_OPT_MAP.get(StandaloneConstants.OPTION_QUIET) + "' can't be used both.");
+            }
+
             if (commandLine.hasOption(StandaloneConstants.OPTION_INTERACTIVE)) {
                 InteractiveMode interactiveMode = new DefaultInteractiveMode(engine,
                         commandLine.getOptionValue(StandaloneConstants.OPTION_INTERACTIVE), interactiveModeConsoleSupplier);
-                ExceptionHandler interactiveExceptionHandler = new SystemErrExceptionHandler();
-                interactiveMode.setExceptionHandler(interactiveExceptionHandler);
 
+                ExceptionHandler systemErrExceptionHandler =
+                        new SystemErrExceptionHandler(optionDebug || optionPrintStackTrace, !optionDebug);
+
+                interactiveMode.setExceptionHandler(systemErrExceptionHandler);
                 engine.setInteractiveMode(interactiveMode);
 
-                if (commandLine.hasOption(StandaloneConstants.OPTION_PRINT_ALL_EXCEPTIONS)) {
-                    engine.setExceptionHandler(new CombinedExceptionHandler(interactiveExceptionHandler, new LoggingExceptionHandler()));
-                } else {
+                if (!optionDebug) {
                     LoggingUtils.logToConsole(false);
                 }
             } else {
-                if (commandLine.hasOption(StandaloneConstants.OPTION_PRINT_ALL_EXCEPTIONS)) {
-                    throw new StandaloneInitializationException("'" + StandaloneConstants.OPTION_PRINT_ALL_EXCEPTIONS
-                            + "' option may be used only if '" + StandaloneConstants.OPTION_INTERACTIVE + "' is also used.");
+                if (optionQuiet) {
+                    engine.setExceptionHandler(new CombinedExceptionHandler(new SystemErrExceptionHandler(optionPrintStackTrace, true),
+                            new LoggingExceptionHandler()));
+                    LoggingUtils.logToConsole(false);
                 }
             }
 

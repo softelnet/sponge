@@ -64,6 +64,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
@@ -95,6 +96,7 @@ import org.openksavi.sponge.core.event.EventId;
 import org.openksavi.sponge.core.rule.BaseRule;
 import org.openksavi.sponge.core.rule.CompositeEventCondition;
 import org.openksavi.sponge.core.rule.ReflectionEventCondition;
+import org.openksavi.sponge.engine.ExceptionContext;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.event.ControlEvent;
@@ -279,6 +281,19 @@ public abstract class SpongeUtils {
     public static String createLoggerName(KnowledgeBase knowledgeBase, String targetName) {
         return KnowledgeBaseConstants.LOGGER_NAME_PREFIX + "." + knowledgeBase.getType().getTypeCode() + "." + knowledgeBase.getName() + "."
                 + targetName;
+    }
+
+    public static String createErrorMessage(Throwable exception, ExceptionContext context, boolean includeStackTrace) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Error" + ((context.getSourceName() != null) ? (" in " + context.getSourceName()) : "") + ":\n");
+        sb.append(Throwables.getCausalChain(exception).stream().map(e -> " * " + e.toString()).collect(Collectors.joining("\n")));
+
+        if (includeStackTrace) {
+            sb.append("\nStack trace:\n" + Throwables.getStackTraceAsString(exception));
+        }
+
+        return sb.toString();
     }
 
     public static String createNonScriptKnowledgeBaseName(KnowledgeBase knowledgeBase) {
