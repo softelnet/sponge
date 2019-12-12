@@ -19,8 +19,6 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.Validate;
-
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -29,9 +27,11 @@ import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.ObjectType;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectType<O>> {
+public class ObjectTypeUnitConverter extends BaseUnitTypeConverter<Object, ObjectType> {
 
     private boolean useTransparentIfNotFound;
+
+    private boolean findClass = true;
 
     private Map<String, ObjectTypeConverterMapper> marshalers = new LinkedHashMap<>();
 
@@ -48,10 +48,49 @@ public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectT
     }
 
     @Override
-    public Object marshal(TypeConverter converter, ObjectType<O> type, O value) {
+    public Object marshal(TypeConverter converter, ObjectType type, Object value) {
+        String className = type.getClassName();
+
         // Use marshaler if registered.
-        if (marshalers.containsKey(type.getClassName())) {
-            return marshalers.get(type.getClassName()).map(converter, value);
+        if (marshalers.containsKey(className)) {
+            return marshalers.get(className).map(converter, value);
+        }
+
+        Class cls = getTypeValueClass(type);
+
+        if (cls != null && cls.isInstance(value)) {
+            return value;
+        }
+
+        // Class not found.
+        if (type.getCompanionType() != null) {
+            return converter.marshal(type.getCompanionType(), value);
+        }
+
+        if (!useTransparentIfNotFound) {
+            throw new SpongeException(String.format("Unsupported object type class name %s", className));
+        }
+
+        return value;
+    }
+
+    @Override
+    public Object unmarshal(TypeConverter converter, ObjectType type, Object value) {
+        String className = type.getClassName();
+
+        // Use unmarshaler if registered.
+        if (unmarshalers.containsKey(className)) {
+            return unmarshalers.get(className).map(converter, value);
+        }
+
+        Class cls = getTypeValueClass(type);
+        if (cls != null) {
+            return converter.getObjectMapper().convertValue(value, cls);
+        }
+
+        // Class not found.
+        if (type.getCompanionType() != null) {
+            return converter.unmarshal(type.getCompanionType(), value);
         }
 
         if (!useTransparentIfNotFound) {
@@ -61,21 +100,8 @@ public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectT
         return value;
     }
 
-    @Override
-    public O unmarshal(TypeConverter converter, ObjectType type, Object value) {
-        String className = type.getClassName();
-
-        // Use unmarshaler if registered.
-        if (unmarshalers.containsKey(type.getClassName())) {
-            return (O) unmarshalers.get(type.getClassName()).map(converter, value);
-        }
-
-        if (!useTransparentIfNotFound) {
-            throw new SpongeException(String.format("Unsupported object type class name %s", type.getClassName()));
-        }
-
-        return (O) converter.getObjectMapper().convertValue(value,
-                Validate.notNull(RestApiUtils.getClass(className), "Class %s not found", className));
+    protected Class getTypeValueClass(ObjectType type) {
+        return findClass ? RestApiUtils.getClass(type.getClassName()) : null;
     }
 
     public void addMarshaler(String className, ObjectTypeConverterMapper mapper) {
@@ -84,5 +110,21 @@ public class ObjectTypeUnitConverter<O> extends BaseUnitTypeConverter<O, ObjectT
 
     public void addUnmarshaler(String className, ObjectTypeConverterMapper mapper) {
         unmarshalers.put(className, mapper);
+    }
+
+    public boolean isUseTransparentIfNotFound() {
+        return useTransparentIfNotFound;
+    }
+
+    public void setUseTransparentIfNotFound(boolean useTransparentIfNotFound) {
+        this.useTransparentIfNotFound = useTransparentIfNotFound;
+    }
+
+    public boolean isFindClass() {
+        return findClass;
+    }
+
+    public void setFindClass(boolean findClass) {
+        this.findClass = findClass;
     }
 }

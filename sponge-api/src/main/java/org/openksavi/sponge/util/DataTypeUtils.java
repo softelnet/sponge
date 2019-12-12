@@ -27,6 +27,7 @@ import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
+import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -82,6 +83,12 @@ public abstract class DataTypeUtils {
                         qualifiedType.getPath() != null && valueType.getName() != null
                                 ? qualifiedType.getPath() + SpongeConstants.ACTION_SUB_ARG_SEPARATOR + valueType.getName() : null,
                         valueType));
+            }
+            break;
+        case OBJECT:
+            ObjectType objectType = ((ObjectType) qualifiedType.getType());
+            if (objectType.getCompanionType() != null) {
+                subTypes.add(qualifiedType.createChild(objectType.getCompanionType()));
             }
             break;
         default:

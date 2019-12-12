@@ -133,8 +133,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 logger.info("REST API error", processingException);
 
                 String operationType =
-                        Validate.notNull(exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, String.class),
-                                "The operation type is not set in the Camel route");
+                        Validate.notNull(exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_NAME, String.class),
+                                "The operation name is not set in the Camel route");
 
                 setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException));
             } catch (Throwable e) {
@@ -197,7 +197,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         }
     }
 
-    protected void setupResponse(String operationType, Exchange exchange, SpongeResponse response) {
+    protected void setupResponse(String operationName, Exchange exchange, SpongeResponse response) {
         try {
             if (apiService.getSettings().isIncludeResponseTimes()) {
                 response.getHeader()
@@ -211,14 +211,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, RestApiConstants.CONTENT_TYPE_JSON);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} response: {})", operationType, RestApiUtils.obfuscatePassword(responseBody));
+                logger.debug("REST API {} response: {})", operationName, RestApiUtils.obfuscatePassword(responseBody));
             }
         } catch (JsonProcessingException e) {
             throw SpongeUtils.wrapException(e);
         }
     }
 
-    protected void setupStreamResponse(String operationType, Exchange exchange, OutputStreamValue streamValue) {
+    protected void setupStreamResponse(String operationName, Exchange exchange, OutputStreamValue streamValue) {
         try {
             HttpServletResponse httpResponse = exchange.getIn(HttpMessage.class).getResponse();
             streamValue.getHeaders().forEach((name, value) -> {
@@ -250,15 +250,15 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void
             initializeOperationRouteDefinition(RouteDefinition operationRouteDefinition, RestApiOperation<I, O> operation) {
-        operationRouteDefinition.setHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_TYPE, constant(operation.getType()));
+        operationRouteDefinition.setHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_NAME, constant(operation.getName()));
     }
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void createPostOperation(RestDefinition restDefinition,
             RestApiOperation<I, O> operation) {
-        RouteDefinition operationRouteDefinition = restDefinition.post("/" + operation.getType()).description(operation.getDescription())
+        RouteDefinition operationRouteDefinition = restDefinition.post("/" + operation.getName()).description(operation.getDescription())
                 .type(operation.getRequestClass()).outType(operation.getResponseClass()).param().name("body").type(body)
                 .description(operation.getRequestDescription()).endParam().responseMessage().code(200)
-                .message(operation.getResponseDescription()).endResponseMessage().route().routeId("sponge-post-" + operation.getType());
+                .message(operation.getResponseDescription()).endResponseMessage().route().routeId("sponge-post-" + operation.getName());
 
         initializeOperationRouteDefinition(operationRouteDefinition, operation);
         setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
@@ -270,10 +270,10 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void createGetOperation(RestDefinition restDefinition,
             RestApiOperation<I, O> operation) {
-        RouteDefinition operationRouteDefinition = restDefinition.get("/" + operation.getType()).description(operation.getDescription())
+        RouteDefinition operationRouteDefinition = restDefinition.get("/" + operation.getName()).description(operation.getDescription())
                 .outType(operation.getResponseClass()).param().name("request").type(query).description(operation.getRequestDescription())
                 .endParam().responseMessage().code(200).message(operation.getResponseDescription()).endResponseMessage().route()
-                .routeId("sponge-get-" + operation.getType());
+                .routeId("sponge-get-" + operation.getName());
 
         initializeOperationRouteDefinition(operationRouteDefinition, operation);
         setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
@@ -321,7 +321,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
             String requestBody = requestBodyProvider.apply(exchange.getIn());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("REST API {} request: {}", operation.getType(), RestApiUtils.obfuscatePassword(requestBody));
+                logger.debug("REST API {} request: {}", operation.getName(), RestApiUtils.obfuscatePassword(requestBody));
             }
 
             // Allow empty body.
@@ -347,9 +347,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
                 if (streamValue == null) {
-                    setupResponse(operation.getType(), exchange, response);
+                    setupResponse(operation.getName(), exchange, response);
                 } else {
-                    setupStreamResponse(operation.getType(), exchange, streamValue);
+                    setupStreamResponse(operation.getName(), exchange, streamValue);
                 }
             } finally {
                 // Close the session.
@@ -359,8 +359,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
     }
 
     protected <I extends SpongeRequest, O extends SpongeResponse> void addOperation(RestApiOperation<I, O> operation) {
-        Validate.isTrue(operations.stream().allMatch(o -> !Objects.equals(o.getType(), operation.getType())),
-                "The operation '%s' has already been defined", operation.getType());
+        Validate.isTrue(operations.stream().allMatch(o -> !Objects.equals(o.getName(), operation.getName())),
+                "The operation '%s' has already been defined", operation.getName());
 
         operations.add(operation);
     }

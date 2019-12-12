@@ -52,6 +52,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.examples.CustomObject;
 import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
@@ -64,6 +65,8 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.type.converter.BaseTypeConverter;
+import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -73,6 +76,7 @@ import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
+import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
@@ -442,6 +446,63 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(book3.containsKey("comment"));
 
             assertFalse(engine.isError());
+        }
+    }
+
+    protected void assertObjectTypeWithRecord(ObjectType type) {
+        assertEquals(CustomObject.class.getName(), type.getClassName());
+        RecordType argRecordType = (RecordType) type.getCompanionType();
+        assertEquals(2, argRecordType.getFields().size());
+
+        assertTrue(argRecordType.getFields().get(0) instanceof IntegerType);
+        assertEquals("id", argRecordType.getFields().get(0).getName());
+        assertEquals("ID", argRecordType.getFields().get(0).getLabel());
+
+        assertTrue(argRecordType.getFields().get(1) instanceof StringType);
+        assertEquals("name", argRecordType.getFields().get(1).getName());
+        assertEquals("Name", argRecordType.getFields().get(1).getLabel());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCallObjectTypeWithCompanionType() {
+        try (SpongeRestClient client = createRestClient()) {
+            RestActionMeta actionMeta = client.getActionMeta("ObjectTypeWithCompanionTypeAction");
+            assertEquals(1, actionMeta.getArgs().size());
+            assertObjectTypeWithRecord((ObjectType) actionMeta.getArgs().get(0));
+            assertObjectTypeWithRecord((ObjectType) actionMeta.getResult());
+
+            CustomObject arg = new CustomObject();
+            arg.setId(1L);
+            arg.setName("Name 1");
+
+            // Call as an object.
+            CustomObject result = client.call(CustomObject.class, actionMeta.getName(), Arrays.asList(arg));
+            assertEquals(arg.getId(), result.getId());
+            assertEquals(arg.getName().toUpperCase(), result.getName());
+
+            // Call as a map.
+            result = client.call(CustomObject.class, actionMeta.getName(),
+                    Arrays.asList(SpongeUtils.immutableMapOf("id", arg.getId(), "name", arg.getName())));
+            assertEquals(arg.getId(), result.getId());
+            assertEquals(arg.getName().toUpperCase(), result.getName());
+
+            ObjectTypeUnitConverter objectConverter =
+                    (ObjectTypeUnitConverter) ((BaseTypeConverter) client.getTypeConverter()).getUnitConverter(DataTypeKind.OBJECT);
+            boolean prevFindClass = objectConverter.isFindClass();
+            try {
+                // Turn off searching for a class in the converter.
+                objectConverter.setFindClass(false);
+
+                Map<String, Object> mapArg = SpongeUtils.immutableMapOf("id", arg.getId(), "name", arg.getName());
+
+                // Result as a map.
+                Map<String, Object> mapResult = client.call(Map.class, actionMeta.getName(), Arrays.asList(mapArg));
+                assertEquals(arg.getId().intValue(), mapResult.get("id"));
+                assertEquals(arg.getName().toUpperCase(), mapResult.get("name"));
+            } finally {
+                objectConverter.setFindClass(prevFindClass);
+            }
         }
     }
 

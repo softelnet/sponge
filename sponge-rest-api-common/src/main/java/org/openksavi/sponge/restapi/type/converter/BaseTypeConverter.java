@@ -122,7 +122,11 @@ public abstract class BaseTypeConverter implements TypeConverter {
         return registry.remove(typeKind);
     }
 
-    protected <T, D extends DataType> UnitTypeConverter<T, D> getUnitConverter(D type) {
-        return Validate.notNull(registry.get(type.getKind()), "Unsupported type %s", type.getKind());
+    public <T, D extends DataType> UnitTypeConverter<T, D> getUnitConverter(D type) {
+        return getUnitConverter(type.getKind());
+    }
+
+    public UnitTypeConverter getUnitConverter(DataTypeKind typeKind) {
+        return Validate.notNull(registry.get(typeKind), "Unsupported type %s", typeKind);
     }
 }

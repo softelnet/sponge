@@ -43,10 +43,10 @@ import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends SpongeResponse, A> extends RestApiOperation<I, O> {
 
     @SuppressWarnings("unchecked")
-    public ActionDelegateRestApiOperation(String type, String description, Class<I> requestClass, String requestDescription,
+    public ActionDelegateRestApiOperation(String name, String description, Class<I> requestClass, String requestDescription,
             Class<O> responseClass, String responseDescription, String delegateActionName, RestApiService service,
             Function<I, List<Object>> argsMapper, BiConsumer<O, A> resultMapper) {
-        super(type, description, requestClass, requestDescription, responseClass, responseDescription, (request, exchange) -> {
+        super(name, description, requestClass, requestDescription, responseClass, responseDescription, (request, exchange) -> {
             ActionCallRequest actionCallRequest = new ActionCallRequest();
 
             actionCallRequest.getHeader().setId(request.getHeader().getId());
@@ -55,7 +55,7 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             actionCallRequest.getHeader().setAuthToken(request.getHeader().getAuthToken());
 
             // The default naming convention for an action name if not provided.
-            final String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(type);
+            final String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(name);
 
             actionCallRequest.setName(actionName);
             actionCallRequest.setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));

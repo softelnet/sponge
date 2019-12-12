@@ -3,6 +3,8 @@ Sponge Knowledge base
 Action metadata types
 """
 
+from java.math import BigDecimal
+
 class MultipleArgumentsAction(Action):
     def onConfigure(self):
         self.withLabel("Multiple arguments action").withDescription("Multiple arguments action.")
@@ -11,7 +13,7 @@ class MultipleArgumentsAction(Action):
             IntegerType("integerArg").withMinValue(1).withMaxValue(100).withDefaultValue(50),
             AnyType("anyArg").withNullable(),
             ListType("stringListArg", StringType()),
-            ListType("decimalListArg", ObjectType().withClassName("java.math.BigDecimal")),
+            ListType("decimalListArg", ObjectType().withClass(BigDecimal)),
             ObjectType("stringArrayArg").withClassName("java.lang.String[]"),
             ObjectType("javaClassArg").withClassName("org.openksavi.sponge.examples.CustomObject"),
             ListType("javaClassListArg", ObjectType().withClassName("org.openksavi.sponge.examples.CustomObject")),

@@ -374,7 +374,7 @@ The application may be switched to the dark theme in the settings.
 |Supported.
 
 |`ObjectType`
-|Not supported.
+|Supported only if an object type defines a companion type that is supported.
 
 |`RecordType`
 |Editing supported. Viewing support is limited to fields that have simple data types. This functionality is experimental.

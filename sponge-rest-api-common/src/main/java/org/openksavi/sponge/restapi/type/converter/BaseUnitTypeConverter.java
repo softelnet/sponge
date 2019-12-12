@@ -19,8 +19,8 @@ package org.openksavi.sponge.restapi.type.converter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 
-@SuppressWarnings({ "unchecked" })
-public abstract class BaseUnitTypeConverter<T, D extends DataType<?>> implements UnitTypeConverter<T, D> {
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public abstract class BaseUnitTypeConverter<T, D extends DataType> implements UnitTypeConverter<T, D> {
 
     protected BaseUnitTypeConverter(DataTypeKind typeKind) {
         this.typeKind = typeKind;

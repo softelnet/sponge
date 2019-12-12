@@ -1191,6 +1191,45 @@ public class CoreActionsTest {
         }
     }
 
+    protected void assertObjectTypeWithRecord(ObjectType type) {
+        assertEquals(CustomObject.class.getName(), type.getClassName());
+        RecordType argRecordType = (RecordType) type.getCompanionType();
+        assertEquals(2, argRecordType.getFields().size());
+
+        assertTrue(argRecordType.getFields().get(0) instanceof IntegerType);
+        assertEquals("id", argRecordType.getFields().get(0).getName());
+        assertEquals("ID", argRecordType.getFields().get(0).getLabel());
+
+        assertTrue(argRecordType.getFields().get(1) instanceof StringType);
+        assertEquals("name", argRecordType.getFields().get(1).getName());
+        assertEquals("Name", argRecordType.getFields().get(1).getLabel());
+    }
+
+    @Test
+    public void testActionsMetadataObjectTypeWithRecord() {
+        SpongeEngine engine =
+                DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_metadata_types_object.py").build();
+        engine.startup();
+
+        try {
+            ActionMeta actionMeta = engine.getActionMeta("ObjectTypeWithCompanionTypeAction");
+            assertEquals(1, actionMeta.getArgs().size());
+            assertObjectTypeWithRecord((ObjectType) actionMeta.getArgs().get(0));
+            assertObjectTypeWithRecord((ObjectType) actionMeta.getResult());
+
+            CustomObject arg = new CustomObject();
+            arg.setId(1L);
+            arg.setName("Name 1");
+            CustomObject result = engine.getOperations().call(CustomObject.class, actionMeta.getName(), Arrays.asList(arg));
+            assertEquals(arg.getId(), result.getId());
+            assertEquals(arg.getName().toUpperCase(), result.getName());
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
     @Test
     public void testProvidedArgNoCallAction() {
         SpongeEngine engine =

@@ -25,6 +25,7 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
  *
  * @param <T> object type.
  */
+@SuppressWarnings("rawtypes")
 public class ObjectType<T> extends DataType<T> {
 
     /** The feature name for the className. */
@@ -32,6 +33,9 @@ public class ObjectType<T> extends DataType<T> {
 
     /** The class name. */
     private String className;
+
+    /** The optional companion type that provides metadata. */
+    private DataType companionType;
 
     public ObjectType() {
         this(null);
@@ -121,7 +125,36 @@ public class ObjectType<T> extends DataType<T> {
         return this;
     }
 
+    public ObjectType<T> withCompanionType(DataType companionType) {
+        this.companionType = companionType;
+        return this;
+    }
+
+    public ObjectType<T> withClass(Class<T> cls) {
+        return withClassName(cls.getName());
+    }
+
     public String getClassName() {
         return className;
+    }
+
+    public DataType getCompanionType() {
+        return companionType;
+    }
+
+    public void setCompanionType(DataType companionType) {
+        this.companionType = companionType;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    @Override
+    public DataType<T> clone() {
+        ObjectType<T> cloned = (ObjectType<T>) super.clone();
+        cloned.companionType = companionType != null ? companionType.clone() : null;
+
+        return cloned;
     }
 }

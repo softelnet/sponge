@@ -28,7 +28,7 @@ import org.openksavi.sponge.restapi.model.response.SpongeResponse;
  */
 public class RestApiOperation<I extends SpongeRequest, O extends SpongeResponse> {
 
-    private String type;
+    private String name;
 
     private String description;
 
@@ -42,9 +42,9 @@ public class RestApiOperation<I extends SpongeRequest, O extends SpongeResponse>
 
     private BiFunction<I, Exchange, O> operationHandler;
 
-    public RestApiOperation(String type, String description, Class<I> requestClass, String requestDescription, Class<O> responseClass,
+    public RestApiOperation(String name, String description, Class<I> requestClass, String requestDescription, Class<O> responseClass,
             String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
-        this.type = type;
+        this.name = name;
         this.description = description;
         this.requestClass = requestClass;
         this.requestDescription = requestDescription;
@@ -53,12 +53,12 @@ public class RestApiOperation<I extends SpongeRequest, O extends SpongeResponse>
         this.operationHandler = operationHandler;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
