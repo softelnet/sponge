@@ -27,6 +27,14 @@ def onLoad():
     sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
     sponge.selectCategory("events", lambda processor: processor.kb.name in ("events", "eventsNotification", "eventsMemo", "eventsCounter"))
 
+class HelloWorldAction(Action):
+    def onConfigure(self):
+        self.withLabel("Hello world").withDescription("Returns a greeting text.")
+        self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name."))
+        self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text."))
+    def onCall(self, name):
+        return "Hello World! Hello {}!".format(name)
+
 class UpperCase(Action):
     def onConfigure(self):
         self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,27 @@
 
 package org.openksavi.sponge.restapi.model.request;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetVersionRequest", description = "A get version request")
-public class GetVersionRequest extends SpongeRequest {
+/**
+ * A request with a body.
+ */
+public abstract class BodySpongeRequest<T extends RequestBody> extends SpongeRequest {
 
+    private T body;
+
+    protected BodySpongeRequest(T body) {
+        this.body = body;
+    }
+
+    @ApiModelProperty(value = "The request body", required = true)
+    public T getBody() {
+        return body;
+    }
+
+    public void setBody(T body) {
+        this.body = body;
+    }
+
+    public abstract T createBody();
 }

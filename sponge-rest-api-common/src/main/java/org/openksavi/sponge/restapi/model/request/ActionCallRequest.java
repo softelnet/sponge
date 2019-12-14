@@ -22,23 +22,21 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
+import org.openksavi.sponge.restapi.model.request.ActionCallRequest.ActionCallRequestBody;
 
 @ApiModel(value = "ActionCallRequest", description = "An action call request")
-public class ActionCallRequest extends SpongeRequest implements ActionExecutionRequest {
+public class ActionCallRequest extends BodySpongeRequest<ActionCallRequestBody> {
 
-    private String name;
-
-    private List<Object> args;
-
-    private ProcessorQualifiedVersion qualifiedVersion;
+    public ActionCallRequest(ActionCallRequestBody body) {
+        super(body);
+    }
 
     public ActionCallRequest() {
+        this(new ActionCallRequestBody());
     }
 
     public ActionCallRequest(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
-        this.name = name;
-        this.args = args;
-        this.qualifiedVersion = qualifiedVersion;
+        this(new ActionCallRequestBody(name, args, qualifiedVersion));
     }
 
     public ActionCallRequest(String name, List<Object> args) {
@@ -46,33 +44,57 @@ public class ActionCallRequest extends SpongeRequest implements ActionExecutionR
     }
 
     @Override
-    @ApiModelProperty(value = "The action name", required = true)
-    public String getName() {
-        return name;
+    public ActionCallRequestBody createBody() {
+        return new ActionCallRequestBody();
     }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ApiModel(value = "ActionCallRequestBody", description = "An action call request body")
+    public static class ActionCallRequestBody implements RequestBody, ActionExecutionRequestBody {
 
-    @ApiModelProperty(value = "The action arguments", required = false)
-    public List<Object> getArgs() {
-        return args;
-    }
+        private String name;
 
-    public void setArgs(List<Object> args) {
-        this.args = args;
-    }
+        private List<Object> args;
 
-    @Override
-    @ApiModelProperty(value = "The action expected qualified version", required = false)
-    public ProcessorQualifiedVersion getQualifiedVersion() {
-        return qualifiedVersion;
-    }
+        private ProcessorQualifiedVersion qualifiedVersion;
 
-    @Override
-    public void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion) {
-        this.qualifiedVersion = qualifiedVersion;
+        public ActionCallRequestBody(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
+            this.name = name;
+            this.args = args;
+            this.qualifiedVersion = qualifiedVersion;
+        }
+
+        public ActionCallRequestBody() {
+        }
+
+        @Override
+        @ApiModelProperty(value = "The action name", required = true)
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @ApiModelProperty(value = "The action arguments", required = false)
+        public List<Object> getArgs() {
+            return args;
+        }
+
+        public void setArgs(List<Object> args) {
+            this.args = args;
+        }
+
+        @Override
+        @ApiModelProperty(value = "The action expected qualified version", required = false)
+        public ProcessorQualifiedVersion getQualifiedVersion() {
+            return qualifiedVersion;
+        }
+
+        @Override
+        public void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion) {
+            this.qualifiedVersion = qualifiedVersion;
+        }
     }
 }

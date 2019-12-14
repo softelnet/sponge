@@ -21,6 +21,4 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "GetFeaturesRequest", description = "A get features request")
 public class GetFeaturesRequest extends SpongeRequest {
 
-    public GetFeaturesRequest() {
-    }
 }

@@ -67,7 +67,7 @@ public class HttpTest extends BasicTestTemplate {
                         .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build())
                         .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
                 .execute();
-        assertEquals(200, okHttpResponse.code());
+        assertEquals(500, okHttpResponse.code());
         ObjectMapper mapper = RestApiUtils.createObjectMapper();
         SpongeResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), SpongeResponse.class);
         assertEquals(RestApiConstants.ERROR_CODE_GENERIC, apiResponse.getHeader().getErrorCode());
@@ -93,7 +93,8 @@ public class HttpTest extends BasicTestTemplate {
 
         Response okHttpResponse = client.newCall(new Request.Builder()
                 .url(new HttpUrl.Builder().scheme("http").host("localhost").port(port).addPathSegment(RestApiConstants.DEFAULT_PATH)
-                        .addPathSegment("call").addQueryParameter("request", "{\"name\":\"OutputStreamResultAction\",\"args\":[]}").build())
+                        .addPathSegment("call")
+                        .addQueryParameter("request", "{\"body\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}").build())
                 .get().build()).execute();
         assertEquals(200, okHttpResponse.code());
         byte[] responseBody = okHttpResponse.body().bytes();
@@ -106,15 +107,28 @@ public class HttpTest extends BasicTestTemplate {
     public void testOutputStreamResultActionPost() throws IOException {
         OkHttpClient client = createOkHttpClient();
 
-        Response okHttpResponse = client.newCall(new Request.Builder()
-                .url(String.format("http://localhost:%d/%s/call", port, RestApiConstants.DEFAULT_PATH))
-                .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build()).post(RequestBody
-                        .create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), "{\"name\":\"OutputStreamResultAction\",\"args\":[]}"))
-                .build()).execute();
+        Response okHttpResponse =
+                client.newCall(new Request.Builder().url(String.format("http://localhost:%d/%s/call", port, RestApiConstants.DEFAULT_PATH))
+                        .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build())
+                        .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON),
+                                "{\"body\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}"))
+                        .build()).execute();
         assertEquals(200, okHttpResponse.code());
         byte[] responseBody = okHttpResponse.body().bytes();
         String responseString = new String(responseBody);
         assertEquals("text/plain;charset=\"utf-8\"", StringUtils.remove(okHttpResponse.header("Content-Type").trim().toLowerCase(), " "));
         assertEquals("Sample text file\n", responseString);
+    }
+
+    @Test
+    public void testOutputStreamResultActionPostErrorInJson() throws IOException {
+        OkHttpClient client = createOkHttpClient();
+
+        Response okHttpResponse = client.newCall(new Request.Builder()
+                .url(String.format("http://localhost:%d/%s/call", port, RestApiConstants.DEFAULT_PATH))
+                .headers(new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build()).post(RequestBody
+                        .create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), "{\"name\":\"OutputStreamResultAction\",\"args\":[]}"))
+                .build()).execute();
+        assertEquals(500, okHttpResponse.code());
     }
 }

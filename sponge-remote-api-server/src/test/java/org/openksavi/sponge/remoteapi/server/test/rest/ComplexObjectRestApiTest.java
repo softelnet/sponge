@@ -78,7 +78,7 @@ public class ComplexObjectRestApiTest extends BasicTestTemplate {
         CompoundComplexObject compoundObject = RemoteApiTestUtils.createCompoundComplexObject();
 
         try (SpongeRestClient client = createRestClient()) {
-            Object value = client.call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getResult();
+            Object value = client.call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getBody().getResult();
 
             assertTrue(value instanceof Map);
 

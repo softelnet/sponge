@@ -58,13 +58,15 @@ The OpenAPI specification of the REST API is included in the Appendix A of the {
 
 The {sponge} REST API service can publish custom REST API operations as well.
 
+In case of an error, a response HTTP status code will be `500`.
+
 == OpenAPI specification
 An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/sponge.json/v1/doc`.
 
 NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for simple customized operations.
 
 == Request
-Each request may contain base properties.
+A request may contain base properties.
 
 .Base request properties
 [cols="2,1,4"]
@@ -74,6 +76,10 @@ Each request may contain base properties.
 |`header`
 |No
 |A request header.
+
+|`body`
+|No
+|A request body.
 |===
 
 .Request header properties
@@ -107,18 +113,18 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/spon
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"header":{"username":"john","password":"password"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"name":".*Case"}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"name":"UpperCase","args":["test1"]}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"body":{"name":".*Case"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"body":{"name":"UpperCase","args":["test1"]}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"header":{"username":"john","password":"password"},"body":{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
 curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
 
 curl http://localhost:1836/sponge.json/v1/version
 curl http://localhost:1836/sponge.json/v1/knowledgeBases
-curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"name":"OutputStreamResultAction","args":[]}'
+curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"body":{"name":"OutputStreamResultAction","args":[]}}'
 ----
 
 == Response
-Each response may contain base properties.
+A response may contain base properties.
 
 .Base response properties
 [cols="2,1,4"]
@@ -128,6 +134,10 @@ Each response may contain base properties.
 |`header`
 |No
 |A response header.
+
+|`body`
+|No
+|A response body.
 |===
 
 .Response header properties
@@ -159,6 +169,23 @@ Each response may contain base properties.
 |No
 |An optional response time, i.e. a server time (as Java Instant) of finishing processing a request.
 |===
+
+.Examples of REST API responses
+[source,bash]
+----
+{
+  "header" : {
+    "id" : null,
+    "errorCode" : null,
+    "errorMessage" : null,
+    "detailedErrorMessage" : null,
+    "requestTime" : "2019-12-14T20:17:26.769Z",
+    "responseTime" : "2019-12-14T20:17:26.770Z"
+  },
+  "body" : {
+    "result" : "TEST1"
+  }
+----
 
 == Security
 

@@ -19,45 +19,61 @@ package org.openksavi.sponge.restapi.model.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.restapi.model.request.GetActionsRequest.GetActionsRequestBody;
+
 @ApiModel(value = "GetActionsRequest", description = "A get actions request")
-public class GetActionsRequest extends SpongeRequest {
+public class GetActionsRequest extends BodySpongeRequest<GetActionsRequestBody> {
 
-    private String name;
-
-    private Boolean metadataRequired;
-
-    private Boolean registeredTypes;
+    public GetActionsRequest(GetActionsRequestBody body) {
+        super(body);
+    }
 
     public GetActionsRequest() {
+        super(new GetActionsRequestBody());
     }
 
-    @ApiModelProperty(
-            value = "The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
-            required = false)
-    public String getName() {
-        return name;
+    @Override
+    public GetActionsRequestBody createBody() {
+        return new GetActionsRequestBody();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ApiModel(value = "GetActionsRequestBody", description = "A get actions request body")
+    public static class GetActionsRequestBody implements RequestBody {
 
-    @ApiModelProperty(value = "The metadata required flag", required = false)
-    public Boolean getMetadataRequired() {
-        return metadataRequired;
-    }
+        private String name;
 
-    public void setMetadataRequired(Boolean metadataRequired) {
-        this.metadataRequired = metadataRequired;
-    }
+        private Boolean metadataRequired;
 
-    @ApiModelProperty(value = "The flag for requesting registered types used in the actions in the result (defaults to false)",
-            required = false)
-    public Boolean getRegisteredTypes() {
-        return registeredTypes;
-    }
+        private Boolean registeredTypes;
 
-    public void setRegisteredTypes(Boolean registeredTypes) {
-        this.registeredTypes = registeredTypes;
+        @ApiModelProperty(
+                value = "The action name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
+                required = false)
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @ApiModelProperty(value = "The metadata required flag", required = false)
+        public Boolean getMetadataRequired() {
+            return metadataRequired;
+        }
+
+        public void setMetadataRequired(Boolean metadataRequired) {
+            this.metadataRequired = metadataRequired;
+        }
+
+        @ApiModelProperty(value = "The flag for requesting registered types used in the actions in the result (defaults to false)",
+                required = false)
+        public Boolean getRegisteredTypes() {
+            return registeredTypes;
+        }
+
+        public void setRegisteredTypes(Boolean registeredTypes) {
+            this.registeredTypes = registeredTypes;
+        }
     }
 }

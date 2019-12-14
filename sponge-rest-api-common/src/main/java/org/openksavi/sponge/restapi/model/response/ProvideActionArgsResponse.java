@@ -21,26 +21,48 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse.ProvideActionArgsResponseBody;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 @ApiModel(value = "ProvideActionArgsResponse", description = "A provide action arguments response")
-public class ProvideActionArgsResponse extends SpongeResponse {
+public class ProvideActionArgsResponse extends BodySpongeResponse<ProvideActionArgsResponseBody> {
 
-    private Map<String, ProvidedValue<?>> provided;
+    public ProvideActionArgsResponse(ProvideActionArgsResponseBody body) {
+        super(body);
+    }
 
     public ProvideActionArgsResponse() {
+        this(new ProvideActionArgsResponseBody());
     }
 
     public ProvideActionArgsResponse(Map<String, ProvidedValue<?>> provided) {
-        this.provided = provided;
+        this(new ProvideActionArgsResponseBody(provided));
     }
 
-    @ApiModelProperty(value = "The provided action arguments", required = true)
-    public Map<String, ProvidedValue<?>> getProvided() {
-        return provided;
+    @Override
+    public ProvideActionArgsResponseBody createBody() {
+        return new ProvideActionArgsResponseBody();
     }
 
-    public void setProvided(Map<String, ProvidedValue<?>> provided) {
-        this.provided = provided;
+    @ApiModel(value = "ProvideActionArgsResponseBody", description = "A provide action arguments response body")
+    public static class ProvideActionArgsResponseBody implements ResponseBody {
+
+        private Map<String, ProvidedValue<?>> provided;
+
+        public ProvideActionArgsResponseBody() {
+        }
+
+        public ProvideActionArgsResponseBody(Map<String, ProvidedValue<?>> provided) {
+            this.provided = provided;
+        }
+
+        @ApiModelProperty(value = "The provided action arguments", required = true)
+        public Map<String, ProvidedValue<?>> getProvided() {
+            return provided;
+        }
+
+        public void setProvided(Map<String, ProvidedValue<?>> provided) {
+            this.provided = provided;
+        }
     }
 }

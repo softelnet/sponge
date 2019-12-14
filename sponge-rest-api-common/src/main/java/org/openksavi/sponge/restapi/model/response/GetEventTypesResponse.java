@@ -21,26 +21,48 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse.GetEventTypesResponseBody;
 import org.openksavi.sponge.type.RecordType;
 
 @ApiModel(value = "GetEventTypesResponse", description = "A get event types response")
-public class GetEventTypesResponse extends SpongeResponse {
+public class GetEventTypesResponse extends BodySpongeResponse<GetEventTypesResponseBody> {
 
-    private Map<String, RecordType> eventTypes;
+    public GetEventTypesResponse(GetEventTypesResponseBody body) {
+        super(body);
+    }
 
     public GetEventTypesResponse() {
+        this(new GetEventTypesResponseBody());
     }
 
     public GetEventTypesResponse(Map<String, RecordType> eventTypes) {
-        this.eventTypes = eventTypes;
+        this(new GetEventTypesResponseBody(eventTypes));
     }
 
-    @ApiModelProperty(value = "The available event types", required = true)
-    public Map<String, RecordType> getEventTypes() {
-        return eventTypes;
+    @Override
+    public GetEventTypesResponseBody createBody() {
+        return new GetEventTypesResponseBody();
     }
 
-    public void setEventTypes(Map<String, RecordType> eventTypes) {
-        this.eventTypes = eventTypes;
+    @ApiModel(value = "GetEventTypesResponseBody", description = "A get event types response body")
+    public static class GetEventTypesResponseBody implements ResponseBody {
+
+        private Map<String, RecordType> eventTypes;
+
+        public GetEventTypesResponseBody() {
+        }
+
+        public GetEventTypesResponseBody(Map<String, RecordType> eventTypes) {
+            this.eventTypes = eventTypes;
+        }
+
+        @ApiModelProperty(value = "The available event types", required = true)
+        public Map<String, RecordType> getEventTypes() {
+            return eventTypes;
+        }
+
+        public void setEventTypes(Map<String, RecordType> eventTypes) {
+            this.eventTypes = eventTypes;
+        }
     }
 }

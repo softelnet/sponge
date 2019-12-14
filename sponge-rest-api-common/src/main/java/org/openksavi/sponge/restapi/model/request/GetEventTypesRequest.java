@@ -19,26 +19,49 @@ package org.openksavi.sponge.restapi.model.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetEventTypesRequest", description = "A get event types request")
-public class GetEventTypesRequest extends SpongeRequest {
+import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest.GetEventTypesRequestBody;
 
-    private String name;
+@ApiModel(value = "GetEventTypesRequest", description = "A get event types request")
+public class GetEventTypesRequest extends BodySpongeRequest<GetEventTypesRequestBody> {
+
+    public GetEventTypesRequest(GetEventTypesRequestBody body) {
+        super(body);
+    }
 
     public GetEventTypesRequest() {
+        this(new GetEventTypesRequestBody());
     }
 
     public GetEventTypesRequest(String name) {
-        this.name = name;
+        this(new GetEventTypesRequestBody(name));
     }
 
-    @ApiModelProperty(
-            value = "The event name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
-            required = false)
-    public String getName() {
-        return name;
+    @Override
+    public GetEventTypesRequestBody createBody() {
+        return new GetEventTypesRequestBody();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @ApiModel(value = "GetEventTypesRequestBody", description = "A get event types request body")
+    public static class GetEventTypesRequestBody implements RequestBody {
+
+        private String name;
+
+        public GetEventTypesRequestBody(String name) {
+            this.name = name;
+        }
+
+        public GetEventTypesRequestBody() {
+        }
+
+        @ApiModelProperty(
+                value = "The event name or the regular expression (compatible with https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)",
+                required = false)
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

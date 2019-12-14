@@ -19,24 +19,47 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetVersionResponse", description = "A get version response")
-public class GetVersionResponse extends SpongeResponse {
+import org.openksavi.sponge.restapi.model.response.GetVersionResponse.GetVersionResponseBody;
 
-    private String version;
+@ApiModel(value = "GetVersionResponse", description = "A get version response")
+public class GetVersionResponse extends BodySpongeResponse<GetVersionResponseBody> {
+
+    public GetVersionResponse(GetVersionResponseBody body) {
+        super(body);
+    }
 
     public GetVersionResponse() {
+        this(new GetVersionResponseBody());
     }
 
     public GetVersionResponse(String version) {
-        this.version = version;
+        this(new GetVersionResponseBody(version));
     }
 
-    @ApiModelProperty(value = "The Sponge version", required = true)
-    public String getVersion() {
-        return version;
+    @Override
+    public GetVersionResponseBody createBody() {
+        return new GetVersionResponseBody();
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    @ApiModel(value = "GetVersionResponseBody", description = "A get version response body")
+    public static class GetVersionResponseBody implements ResponseBody {
+
+        private String version;
+
+        public GetVersionResponseBody() {
+        }
+
+        public GetVersionResponseBody(String version) {
+            this.version = version;
+        }
+
+        @ApiModelProperty(value = "The Sponge version", required = true)
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
     }
 }

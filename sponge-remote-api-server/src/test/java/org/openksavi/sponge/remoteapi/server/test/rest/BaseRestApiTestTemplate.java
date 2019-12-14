@@ -143,7 +143,7 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(null, response.getHeader().getErrorCode());
             assertEquals(null, response.getHeader().getErrorMessage());
             assertEquals(null, response.getHeader().getDetailedErrorMessage());
-            assertEquals(engine.getVersion(), response.getVersion());
+            assertEquals(engine.getVersion(), response.getBody().getVersion());
             assertEquals("1", response.getHeader().getId());
             assertEquals(response.getHeader().getId(), request.getHeader().getId());
         }
@@ -510,10 +510,10 @@ public abstract class BaseRestApiTestTemplate {
     public void testRegisteredTypeArgAction() {
         try (SpongeRestClient client = createRestClient()) {
             GetActionsRequest request = new GetActionsRequest();
-            request.setName("RegisteredTypeArgAction");
-            request.setRegisteredTypes(true);
+            request.getBody().setName("RegisteredTypeArgAction");
+            request.getBody().setRegisteredTypes(true);
 
-            Map<String, DataType<?>> types = client.getActions(request).getTypes();
+            Map<String, DataType<?>> types = client.getActions(request).getBody().getTypes();
             assertEquals(1, types.size());
             RemoteApiTestUtils.assertPersonRecordType((RecordType) types.get("Person"));
 
@@ -529,10 +529,10 @@ public abstract class BaseRestApiTestTemplate {
     public void testInheritedRegisteredTypeArgAction() {
         try (SpongeRestClient client = createRestClient()) {
             GetActionsRequest request = new GetActionsRequest();
-            request.setName("InheritedRegisteredTypeArgAction");
-            request.setRegisteredTypes(true);
+            request.getBody().setName("InheritedRegisteredTypeArgAction");
+            request.getBody().setRegisteredTypes(true);
 
-            Map<String, DataType<?>> types = client.getActions(request).getTypes();
+            Map<String, DataType<?>> types = client.getActions(request).getBody().getTypes();
             assertEquals(2, types.size());
             RemoteApiTestUtils.assertPersonRecordType((RecordType) types.get("Person"));
             RemoteApiTestUtils.assertCitizenRecordType((RecordType) types.get("Citizen"));
