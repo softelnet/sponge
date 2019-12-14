@@ -68,6 +68,8 @@ public final class RestApiConstants {
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 
+    public static final int HTTP_CODE_ERROR = 500;
+
     private RestApiConstants() {
         //
     }

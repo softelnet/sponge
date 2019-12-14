@@ -170,6 +170,6 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
     }
 
     protected UserContext authenticateRequest(SubscribeRequest request) {
-        return restApiService.authenticateRequest(GrpcApiServerUtils.createRestRequest(request));
+        return restApiService.authenticateRequest(GrpcApiServerUtils.createFakeRestRequest(request));
     }
 }

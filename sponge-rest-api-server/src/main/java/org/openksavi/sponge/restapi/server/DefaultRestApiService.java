@@ -227,9 +227,9 @@ public class DefaultRestApiService implements RestApiService {
 
             UserContext userContext = authenticateRequest(request);
 
-            boolean actualMetadataRequired = request.getMetadataRequired() != null ? request.getMetadataRequired()
+            boolean actualMetadataRequired = request.getBody().getMetadataRequired() != null ? request.getBody().getMetadataRequired()
                     : RestApiServerConstants.REST_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
-            String actionNameRegExp = request.getName();
+            String actionNameRegExp = request.getBody().getName();
 
             List<ActionAdapter> actions =
                     getEngine().getActions().stream()
@@ -240,7 +240,7 @@ public class DefaultRestApiService implements RestApiService {
                             .filter(action -> canCallAction(userContext, action)).collect(Collectors.toList());
 
             Map<String, DataType<?>> registeredTypes = null;
-            if (request.getRegisteredTypes() != null && request.getRegisteredTypes()) {
+            if (request.getBody().getRegisteredTypes() != null && request.getBody().getRegisteredTypes()) {
                 final Set<String> typeNames = new LinkedHashSet<>();
                 actions.stream().forEach(action -> typeNames.addAll(action.getRegisteredTypeNames()));
 
@@ -310,9 +310,10 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
             UserContext userContext = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
+            actionAdapter = getActionAdapterForRequest(request.getBody().getName(), request.getBody().getQualifiedVersion(), userContext);
 
-            Object actionResult = getEngine().getActionManager().callAction(request.getName(), unmarshalActionArgs(actionAdapter, request));
+            Object actionResult =
+                    getEngine().getActionManager().callAction(request.getBody().getName(), unmarshalActionArgs(actionAdapter, request));
 
             return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
         } catch (Throwable e) {
@@ -348,7 +349,7 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request) {
-        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, request.getArgs());
+        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, request.getBody().getArgs());
     }
 
     protected Object marshalActionResult(ActionAdapter actionAdapter, Object result) {
@@ -363,8 +364,8 @@ public class DefaultRestApiService implements RestApiService {
 
             UserContext userContext = authenticateRequest(request);
 
-            String eventName = request.getName();
-            Map<String, Object> attributes = request.getAttributes();
+            String eventName = request.getBody().getName();
+            Map<String, Object> attributes = request.getBody().getAttributes();
 
             // Unmarshal attributes if there is an event type registered.
             RecordType eventType = getEngine().getEventTypes().get(eventName);
@@ -372,7 +373,7 @@ public class DefaultRestApiService implements RestApiService {
                 attributes = (Map<String, Object>) typeConverter.unmarshal(eventType, attributes);
             }
 
-            Event event = sendEvent(eventName, attributes, request.getLabel(), request.getDescription(), userContext);
+            Event event = sendEvent(eventName, attributes, request.getBody().getLabel(), request.getBody().getDescription(), userContext);
 
             return setupSuccessResponse(new SendEventResponse(event.getId()), request);
         } catch (Throwable e) {
@@ -411,14 +412,15 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
             UserContext userContext = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getName(), request.getQualifiedVersion(), userContext);
+            actionAdapter = getActionAdapterForRequest(request.getBody().getName(), request.getBody().getQualifiedVersion(), userContext);
 
-            Map<String, ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
-                    new ProvideArgsParameters(
-                            request.getProvide(), request.getSubmit(), RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter,
-                                    actionAdapter, request.getCurrent(), request.getDynamicTypes()),
-                            request.getDynamicTypes(), request.getFeatures()));
-            RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getDynamicTypes());
+            Map<String,
+                    ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
+                            new ProvideArgsParameters(request.getBody().getProvide(), request.getBody().getSubmit(),
+                                    RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter,
+                                            request.getBody().getCurrent(), request.getBody().getDynamicTypes()),
+                                    request.getBody().getDynamicTypes(), request.getBody().getFeatures()));
+            RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getBody().getDynamicTypes());
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
         } catch (Throwable e) {
@@ -440,7 +442,7 @@ public class DefaultRestApiService implements RestApiService {
             authenticateRequest(request);
 
             // Match all events types if the name pattern is null.
-            String eventNameRegExp = request.getName() != null ? request.getName() : ".*";
+            String eventNameRegExp = request.getBody().getName() != null ? request.getBody().getName() : ".*";
 
             Map<String, RecordType> marshalledEventTypes = getEngine().getEventTypes().entrySet().stream()
                     .filter(entry -> getEngine().getPatternMatcher().matches(eventNameRegExp, entry.getKey())).collect(SpongeApiUtils

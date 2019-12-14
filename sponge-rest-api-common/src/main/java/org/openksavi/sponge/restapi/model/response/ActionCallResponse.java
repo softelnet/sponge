@@ -19,24 +19,47 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "ActionCallResponse", description = "An action call response")
-public class ActionCallResponse extends SpongeResponse {
+import org.openksavi.sponge.restapi.model.response.ActionCallResponse.ActionCallResponseBody;
 
-    private Object result;
+@ApiModel(value = "ActionCallResponse", description = "An action call response")
+public class ActionCallResponse extends BodySpongeResponse<ActionCallResponseBody> {
+
+    public ActionCallResponse(ActionCallResponseBody body) {
+        super(body);
+    }
 
     public ActionCallResponse() {
+        this(new ActionCallResponseBody());
     }
 
     public ActionCallResponse(Object result) {
-        this.result = result;
+        this(new ActionCallResponseBody(result));
     }
 
-    @ApiModelProperty(value = "The action result", required = true)
-    public Object getResult() {
-        return result;
+    @Override
+    public ActionCallResponseBody createBody() {
+        return new ActionCallResponseBody();
     }
 
-    public void setResult(Object result) {
-        this.result = result;
+    @ApiModel(value = "ActionCallResponseBody", description = "An action call response body")
+    public static class ActionCallResponseBody implements ResponseBody {
+
+        private Object result;
+
+        public ActionCallResponseBody() {
+        }
+
+        public ActionCallResponseBody(Object result) {
+            this.result = result;
+        }
+
+        @ApiModelProperty(value = "The action result", required = true)
+        public Object getResult() {
+            return result;
+        }
+
+        public void setResult(Object result) {
+            this.result = result;
+        }
     }
 }

@@ -19,24 +19,47 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "LoginResponse", description = "A login response")
-public class LoginResponse extends SpongeResponse {
+import org.openksavi.sponge.restapi.model.response.LoginResponse.LoginResponseBody;
 
-    private String authToken;
+@ApiModel(value = "LoginResponse", description = "A login response")
+public class LoginResponse extends BodySpongeResponse<LoginResponseBody> {
+
+    public LoginResponse(LoginResponseBody body) {
+        super(body);
+    }
 
     public LoginResponse() {
+        this(new LoginResponseBody());
     }
 
     public LoginResponse(String authToken) {
-        this.authToken = authToken;
+        this(new LoginResponseBody(authToken));
     }
 
-    @ApiModelProperty(value = "The authentication token", required = true)
-    public String getAuthToken() {
-        return authToken;
+    @Override
+    public LoginResponseBody createBody() {
+        return new LoginResponseBody();
     }
 
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    @ApiModel(value = "LoginResponseBody", description = "A login response body")
+    public static class LoginResponseBody implements ResponseBody {
+
+        private String authToken;
+
+        public LoginResponseBody() {
+        }
+
+        public LoginResponseBody(String authToken) {
+            this.authToken = authToken;
+        }
+
+        @ApiModelProperty(value = "The authentication token", required = true)
+        public String getAuthToken() {
+            return authToken;
+        }
+
+        public void setAuthToken(String authToken) {
+            this.authToken = authToken;
+        }
     }
 }

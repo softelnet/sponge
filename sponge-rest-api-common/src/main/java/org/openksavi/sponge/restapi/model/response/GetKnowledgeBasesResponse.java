@@ -22,25 +22,47 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
+import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse.GetKnowledgeBasesResponseBody;
 
 @ApiModel(value = "GetKnowledgeBasesResponse", description = "A get knowledge bases response")
-public class GetKnowledgeBasesResponse extends SpongeResponse {
+public class GetKnowledgeBasesResponse extends BodySpongeResponse<GetKnowledgeBasesResponseBody> {
 
-    private List<RestKnowledgeBaseMeta> knowledgeBases;
+    public GetKnowledgeBasesResponse(GetKnowledgeBasesResponseBody body) {
+        super(body);
+    }
 
     public GetKnowledgeBasesResponse() {
+        this(new GetKnowledgeBasesResponseBody());
     }
 
     public GetKnowledgeBasesResponse(List<RestKnowledgeBaseMeta> knowledgeBases) {
-        this.knowledgeBases = knowledgeBases;
+        this(new GetKnowledgeBasesResponseBody(knowledgeBases));
     }
 
-    @ApiModelProperty(value = "The available knowledge bases", required = true)
-    public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
-        return knowledgeBases;
+    @Override
+    public GetKnowledgeBasesResponseBody createBody() {
+        return new GetKnowledgeBasesResponseBody();
     }
 
-    public void setKnowledgeBases(List<RestKnowledgeBaseMeta> knowledgeBases) {
-        this.knowledgeBases = knowledgeBases;
+    @ApiModel(value = "GetKnowledgeBasesResponseBody", description = "A get knowledge bases response body")
+    public static class GetKnowledgeBasesResponseBody implements ResponseBody {
+
+        private List<RestKnowledgeBaseMeta> knowledgeBases;
+
+        public GetKnowledgeBasesResponseBody() {
+        }
+
+        public GetKnowledgeBasesResponseBody(List<RestKnowledgeBaseMeta> knowledgeBases) {
+            this.knowledgeBases = knowledgeBases;
+        }
+
+        @ApiModelProperty(value = "The available knowledge bases", required = true)
+        public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
+            return knowledgeBases;
+        }
+
+        public void setKnowledgeBases(List<RestKnowledgeBaseMeta> knowledgeBases) {
+            this.knowledgeBases = knowledgeBases;
+        }
     }
 }

@@ -21,6 +21,4 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "LogoutRequest", description = "A logout request")
 public class LogoutRequest extends SpongeRequest {
 
-    public LogoutRequest() {
-    }
 }

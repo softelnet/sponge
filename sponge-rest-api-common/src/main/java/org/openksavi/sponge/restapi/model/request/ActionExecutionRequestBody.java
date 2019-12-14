@@ -16,9 +16,18 @@
 
 package org.openksavi.sponge.restapi.model.request;
 
-import io.swagger.annotations.ApiModel;
+import org.openksavi.sponge.ProcessorQualifiedVersion;
 
-@ApiModel(value = "GetVersionRequest", description = "A get version request")
-public class GetVersionRequest extends SpongeRequest {
+/**
+ * An action execution related request body.
+ */
+public interface ActionExecutionRequestBody {
 
+    String getName();
+
+    void setName(String name);
+
+    ProcessorQualifiedVersion getQualifiedVersion();
+
+    void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion);
 }

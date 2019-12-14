@@ -113,7 +113,9 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                 logger.debug("REST API {} response: {})", operationType, RestApiUtils.obfuscatePassword(responseBody));
             }
 
-            Validate.isTrue(RestApiUtils.isHttpSuccess(httpResponse.code()), "HTTP status code is %s", httpResponse.code());
+            Validate.isTrue(
+                    httpResponse.isSuccessful() || httpResponse.code() == RestApiConstants.HTTP_CODE_ERROR && isJson(httpResponseBody),
+                    "HTTP error status code is %s", httpResponse.code());
 
             R response = null;
             try {
@@ -149,5 +151,11 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                 lock.unlock();
             }
         }
+    }
+
+    protected boolean isJson(ResponseBody httpResponseBody) {
+        return httpResponseBody != null && httpResponseBody.contentType() != null
+                && httpResponseBody.contentType().type().toLowerCase().equals("application")
+                && httpResponseBody.contentType().subtype().toLowerCase().equals("json");
     }
 }

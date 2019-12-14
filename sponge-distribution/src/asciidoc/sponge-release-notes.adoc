@@ -10,6 +10,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed `label` to `valueLabel` and `description` to `valueDescription` in `AnnotatedValue`.
 * API change: A default value for an annotatted type has to be wrapped in an `AnnotatedValue`.
 * API change: Removed `submitActionArgs` in the REST API. Use `provideActionArgs` directly.
+* REST API change: A payload in a request and a response has been moved to `body`.
 * Added `AnnotatedValue.typeLabel` and `AnnotatedValue.typeDescription`.
 * Added `ProvidedMeta.current` - a flag specifying if a current value in a client code should be passed to a server when its new value is to be provided.
 * Added `ProvidedMeta.mode` - a provided read mode: `explicit` (default), `optional` or `implicit`.

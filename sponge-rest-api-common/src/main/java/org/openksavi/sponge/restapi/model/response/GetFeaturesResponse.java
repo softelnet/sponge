@@ -22,24 +22,47 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "GetFeaturesResponse", description = "A get features response")
-public class GetFeaturesResponse extends SpongeResponse {
+import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse.GetFeaturesResponseBody;
 
-    private Map<String, Object> features = new LinkedHashMap<>();
+@ApiModel(value = "GetFeaturesResponse", description = "A get features response")
+public class GetFeaturesResponse extends BodySpongeResponse<GetFeaturesResponseBody> {
+
+    public GetFeaturesResponse(GetFeaturesResponseBody body) {
+        super(body);
+    }
 
     public GetFeaturesResponse() {
+        this(new GetFeaturesResponseBody());
     }
 
     public GetFeaturesResponse(Map<String, Object> features) {
-        this.features.putAll(features);
+        this(new GetFeaturesResponseBody(features));
     }
 
-    @ApiModelProperty(value = "The API features", required = true)
-    public Map<String, Object> getFeatures() {
-        return features;
+    @Override
+    public GetFeaturesResponseBody createBody() {
+        return new GetFeaturesResponseBody();
     }
 
-    public void setFeatures(Map<String, Object> features) {
-        this.features = features;
+    @ApiModel(value = "GetFeaturesResponseBody", description = "A get features response body")
+    public static class GetFeaturesResponseBody implements ResponseBody {
+
+        private Map<String, Object> features = new LinkedHashMap<>();
+
+        public GetFeaturesResponseBody() {
+        }
+
+        public GetFeaturesResponseBody(Map<String, Object> features) {
+            this.features.putAll(features);
+        }
+
+        @ApiModelProperty(value = "The API features", required = true)
+        public Map<String, Object> getFeatures() {
+            return features;
+        }
+
+        public void setFeatures(Map<String, Object> features) {
+            this.features = features;
+        }
     }
 }

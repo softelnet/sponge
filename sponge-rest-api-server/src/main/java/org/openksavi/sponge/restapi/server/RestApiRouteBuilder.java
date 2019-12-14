@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.restapi.model.request.BodySpongeRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
@@ -132,11 +133,13 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
                 logger.info("REST API error", processingException);
 
-                String operationType =
+                String operationName =
                         Validate.notNull(exchange.getIn().getHeader(RestApiServerConstants.EXCHANGE_HEADER_OPERATION_NAME, String.class),
                                 "The operation name is not set in the Camel route");
 
-                setupResponse(operationType, exchange, apiService.createGenericErrorResponse(processingException));
+                setupResponse(operationName, exchange, apiService.createGenericErrorResponse(processingException));
+
+                exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, RestApiConstants.HTTP_CODE_ERROR);
             } catch (Throwable e) {
                 logger.error("REST API send error response failure", e);
                 throw e;
@@ -302,7 +305,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
     private <O extends SpongeResponse> OutputStreamValue getActionCallOutputStreamResponse(O response) {
         if (response instanceof ActionCallResponse) {
-            Object actionCallResult = ((ActionCallResponse) response).getResult();
+            Object actionCallResult = ((ActionCallResponse) response).getBody().getResult();
             if (actionCallResult instanceof OutputStreamValue) {
                 return (OutputStreamValue) actionCallResult;
             }
@@ -315,6 +318,7 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         return new CamelRestApiSession(null, exchange);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected <I extends SpongeRequest, O extends SpongeResponse> Processor
             createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RestApiOperation<I, O> operation) {
         return exchange -> {
@@ -338,6 +342,14 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 // Set empty header if none.
                 if (request != null && request.getHeader() == null) {
                     request.setHeader(new RequestHeader());
+                }
+
+                // Set empty body if none.
+                if (request instanceof BodySpongeRequest) {
+                    BodySpongeRequest bodyRequest = (BodySpongeRequest) request;
+                    if (bodyRequest.getBody() == null) {
+                        bodyRequest.setBody(bodyRequest.createBody());
+                    }
                 }
 
                 exchange.getIn().setHeader(RestApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.now());

@@ -19,24 +19,47 @@ package org.openksavi.sponge.restapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "SendEventResponse", description = "A send event response")
-public class SendEventResponse extends SpongeResponse {
+import org.openksavi.sponge.restapi.model.response.SendEventResponse.SendEventResponseBody;
 
-    private String eventId;
+@ApiModel(value = "SendEventResponse", description = "A send event response")
+public class SendEventResponse extends BodySpongeResponse<SendEventResponseBody> {
+
+    public SendEventResponse(SendEventResponseBody body) {
+        super(body);
+    }
 
     public SendEventResponse() {
+        this(new SendEventResponseBody());
     }
 
     public SendEventResponse(String eventId) {
-        this.eventId = eventId;
+        this(new SendEventResponseBody(eventId));
     }
 
-    @ApiModelProperty(value = "The event id", required = true)
-    public String getEventId() {
-        return eventId;
+    @Override
+    public SendEventResponseBody createBody() {
+        return new SendEventResponseBody();
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    @ApiModel(value = "SendEventResponseBody", description = "A send event response body")
+    public static class SendEventResponseBody implements ResponseBody {
+
+        private String eventId;
+
+        public SendEventResponseBody() {
+        }
+
+        public SendEventResponseBody(String eventId) {
+            this.eventId = eventId;
+        }
+
+        @ApiModelProperty(value = "The event id", required = true)
+        public String getEventId() {
+            return eventId;
+        }
+
+        public void setEventId(String eventId) {
+            this.eventId = eventId;
+        }
     }
 }

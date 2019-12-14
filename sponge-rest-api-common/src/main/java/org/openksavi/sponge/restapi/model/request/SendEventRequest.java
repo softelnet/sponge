@@ -21,60 +21,83 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.restapi.model.request.SendEventRequest.SendEventRequestBody;
+
 @ApiModel(value = "SendEventRequest", description = "A send event request")
-public class SendEventRequest extends SpongeRequest {
+public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
 
-    private String name;
-
-    private Map<String, Object> attributes;
-
-    private String label;
-
-    private String description;
+    public SendEventRequest(SendEventRequestBody body) {
+        super(body);
+    }
 
     public SendEventRequest() {
+        this(new SendEventRequestBody());
     }
 
     public SendEventRequest(String name, Map<String, Object> attributes, String label, String description) {
-        this.name = name;
-        this.attributes = attributes;
-        this.label = label;
-        this.description = description;
+        this(new SendEventRequestBody(name, attributes, label, description));
     }
 
-    @ApiModelProperty(value = "The event name", required = true)
-    public String getName() {
-        return name;
+    @Override
+    public SendEventRequestBody createBody() {
+        return new SendEventRequestBody();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ApiModel(value = "SendEventRequestBody", description = "A send event request body")
+    public static class SendEventRequestBody implements RequestBody {
 
-    @ApiModelProperty(value = "The event attributes", required = false)
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
+        private String name;
 
-    public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
+        private Map<String, Object> attributes;
 
-    @ApiModelProperty(value = "The event label", required = false)
-    public String getLabel() {
-        return label;
-    }
+        private String label;
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+        private String description;
 
-    @ApiModelProperty(value = "The event description", required = false)
-    public String getDescription() {
-        return description;
-    }
+        public SendEventRequestBody(String name, Map<String, Object> attributes, String label, String description) {
+            this.name = name;
+            this.attributes = attributes;
+            this.label = label;
+            this.description = description;
+        }
 
-    public void setDescription(String description) {
-        this.description = description;
+        public SendEventRequestBody() {
+        }
+
+        @ApiModelProperty(value = "The event name", required = true)
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @ApiModelProperty(value = "The event attributes", required = false)
+        public Map<String, Object> getAttributes() {
+            return attributes;
+        }
+
+        public void setAttributes(Map<String, Object> attributes) {
+            this.attributes = attributes;
+        }
+
+        @ApiModelProperty(value = "The event label", required = false)
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        @ApiModelProperty(value = "The event description", required = false)
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
     }
 }

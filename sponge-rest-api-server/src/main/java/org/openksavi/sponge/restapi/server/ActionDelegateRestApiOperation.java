@@ -57,12 +57,12 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             // The default naming convention for an action name if not provided.
             final String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(name);
 
-            actionCallRequest.setName(actionName);
-            actionCallRequest.setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
+            actionCallRequest.getBody().setName(actionName);
+            actionCallRequest.getBody().setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
 
             ActionCallResponse actionCallResponse = service.call(actionCallRequest);
 
-            Object rawResult = actionCallResponse.getResult();
+            Object rawResult = actionCallResponse.getBody().getResult();
             O response;
             if (resultMapper != null) {
                 try {

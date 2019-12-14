@@ -23,38 +23,60 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.restapi.model.RestActionMeta;
+import org.openksavi.sponge.restapi.model.response.GetActionsResponse.GetActionsResponseBody;
 import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "GetActionsResponse", description = "A get actions response")
-public class GetActionsResponse extends SpongeResponse {
+public class GetActionsResponse extends BodySpongeResponse<GetActionsResponseBody> {
 
-    private List<RestActionMeta> actions;
-
-    private Map<String, DataType<?>> types;
+    public GetActionsResponse(GetActionsResponseBody body) {
+        super(body);
+    }
 
     public GetActionsResponse() {
+        this(new GetActionsResponseBody());
     }
 
     public GetActionsResponse(List<RestActionMeta> actions, Map<String, DataType<?>> types) {
-        this.actions = actions;
-        this.types = types;
+        this(new GetActionsResponseBody(actions, types));
     }
 
-    @ApiModelProperty(value = "The available actions", required = true)
-    public List<RestActionMeta> getActions() {
-        return actions;
+    @Override
+    public GetActionsResponseBody createBody() {
+        return new GetActionsResponseBody();
     }
 
-    public void setActions(List<RestActionMeta> actions) {
-        this.actions = actions;
-    }
+    @ApiModel(value = "GetActionsResponseBody", description = "A get actions response body")
+    public static class GetActionsResponseBody implements ResponseBody {
 
-    @ApiModelProperty(value = "The registered types used in the actions", required = false)
-    public Map<String, DataType<?>> getTypes() {
-        return types;
-    }
+        private List<RestActionMeta> actions;
 
-    public void setTypes(Map<String, DataType<?>> types) {
-        this.types = types;
+        private Map<String, DataType<?>> types;
+
+        public GetActionsResponseBody(List<RestActionMeta> actions, Map<String, DataType<?>> types) {
+            this.actions = actions;
+            this.types = types;
+        }
+
+        public GetActionsResponseBody() {
+        }
+
+        @ApiModelProperty(value = "The available actions", required = true)
+        public List<RestActionMeta> getActions() {
+            return actions;
+        }
+
+        public void setActions(List<RestActionMeta> actions) {
+            this.actions = actions;
+        }
+
+        @ApiModelProperty(value = "The registered types used in the actions", required = false)
+        public Map<String, DataType<?>> getTypes() {
+            return types;
+        }
+
+        public void setTypes(Map<String, DataType<?>> types) {
+            this.types = types;
+        }
     }
 }

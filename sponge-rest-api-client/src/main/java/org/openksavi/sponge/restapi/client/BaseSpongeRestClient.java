@@ -45,8 +45,9 @@ import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListen
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.ActionExecutionRequest;
+import org.openksavi.sponge.restapi.model.request.ActionExecutionRequestBody;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.restapi.model.request.GetActionsRequest.GetActionsRequestBody;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
@@ -59,7 +60,9 @@ import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.restapi.model.response.BodySpongeResponse;
 import org.openksavi.sponge.restapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.restapi.model.response.GetActionsResponse.GetActionsResponseBody;
 import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
@@ -132,6 +135,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     private void applyConfiguration() {
         ObjectMapper mapper = RestApiUtils.createObjectMapper();
         mapper.configure(SerializationFeature.INDENT_OUTPUT, configuration.isPrettyPrint());
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         typeConverter = new DefaultTypeConverter(mapper);
     }
@@ -315,10 +319,19 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return request;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected <T extends SpongeResponse> T setupResponse(String operation, T response) {
         // Set empty header if none.
         if (response.getHeader() == null) {
             response.setHeader(new ResponseHeader());
+        }
+
+        // Set empty body if none.
+        if (response instanceof BodySpongeResponse) {
+            BodySpongeResponse bodyResponse = (BodySpongeResponse) response;
+            if (bodyResponse.getBody() == null) {
+                bodyResponse.setBody(bodyResponse.createBody());
+            }
         }
 
         ResponseHeader header = response.getHeader();
@@ -433,7 +446,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public String getVersion() {
-        return getVersion(new GetVersionRequest()).getVersion();
+        return getVersion(new GetVersionRequest()).getBody().getVersion();
     }
 
     @Override
@@ -452,7 +465,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             lock.lock();
             try {
                 if (featuresCache == null) {
-                    featuresCache = getFeatures(new GetFeaturesRequest()).getFeatures();
+                    featuresCache = getFeatures(new GetFeaturesRequest()).getBody().getFeatures();
                 }
             } finally {
                 lock.unlock();
@@ -470,7 +483,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         try {
             currentAuthToken.set(null);
             response = executeDelegate(RestApiConstants.OPERATION_LOGIN, request, LoginResponse.class, context);
-            currentAuthToken.set(response.getAuthToken());
+            currentAuthToken.set(response.getBody().getAuthToken());
         } finally {
             lock.unlock();
         }
@@ -485,7 +498,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public String login() {
-        return login(new LoginRequest(configuration.getUsername(), configuration.getPassword())).getAuthToken();
+        return login(new LoginRequest(configuration.getUsername(), configuration.getPassword())).getBody().getAuthToken();
     }
 
     @Override
@@ -525,23 +538,24 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public List<RestKnowledgeBaseMeta> getKnowledgeBases() {
-        return getKnowledgeBases(new GetKnowledgeBasesRequest()).getKnowledgeBases();
+        return getKnowledgeBases(new GetKnowledgeBasesRequest()).getBody().getKnowledgeBases();
     }
 
     protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache, SpongeRequestContext context) {
         GetActionsResponse response = execute(RestApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class, context);
+        GetActionsResponseBody responseBody = response.getBody();
 
-        if (response.getActions() != null) {
-            response.getActions().forEach(actionMeta -> unmarshalActionMeta(actionMeta));
+        if (responseBody.getActions() != null) {
+            responseBody.getActions().forEach(actionMeta -> unmarshalActionMeta(actionMeta));
 
             // Populate the cache.
             if (populateCache && configuration.isUseActionMetaCache() && actionMetaCache != null) {
-                response.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
+                responseBody.getActions().forEach(actionMeta -> actionMetaCache.put(actionMeta.getName(), actionMeta));
             }
         }
 
-        if (response.getTypes() != null) {
-            response.getTypes().values().forEach(type -> unmarshalDataType(type));
+        if (responseBody.getTypes() != null) {
+            responseBody.getTypes().values().forEach(type -> unmarshalDataType(type));
         }
 
         return response;
@@ -608,24 +622,24 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public List<RestActionMeta> getActions(String name, Boolean metadataRequired) {
-        GetActionsRequest request = new GetActionsRequest();
-        request.setName(name);
-        request.setMetadataRequired(metadataRequired);
+        GetActionsRequestBody body = new GetActionsRequestBody();
+        body.setName(name);
+        body.setMetadataRequired(metadataRequired);
 
-        return getActions(request).getActions();
+        return getActions(new GetActionsRequest(body)).getBody().getActions();
     }
 
     @Override
     public List<RestActionMeta> getActions() {
-        return getActions(new GetActionsRequest()).getActions();
+        return getActions(new GetActionsRequest()).getBody().getActions();
     }
 
     protected RestActionMeta fetchActionMeta(String actionName, SpongeRequestContext context) {
-        GetActionsRequest request = new GetActionsRequest();
-        request.setName(actionName);
-        request.setMetadataRequired(true);
+        GetActionsRequestBody body = new GetActionsRequestBody();
+        body.setName(actionName);
+        body.setMetadataRequired(true);
 
-        List<RestActionMeta> actions = doGetActions(request, false, context).getActions();
+        List<RestActionMeta> actions = doGetActions(new GetActionsRequest(body), false, context).getBody().getActions();
 
         return actions != null ? actions.stream().findFirst().orElse(null) : null;
     }
@@ -654,23 +668,23 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return getActionMeta(actionName, DEFAULT_ALLOW_FETCH_METADATA);
     }
 
-    protected void setupActionExecutionRequest(RestActionMeta actionMeta, ActionExecutionRequest request) {
+    protected void setupActionExecutionRequest(RestActionMeta actionMeta, ActionExecutionRequestBody requestBody) {
         // Conditionally set the verification of the processor qualified version on the server side.
-        if (configuration.isVerifyProcessorVersion() && actionMeta != null && request.getQualifiedVersion() == null) {
-            request.setQualifiedVersion(actionMeta.getQualifiedVersion());
+        if (configuration.isVerifyProcessorVersion() && actionMeta != null && requestBody.getQualifiedVersion() == null) {
+            requestBody.setQualifiedVersion(actionMeta.getQualifiedVersion());
         }
 
-        Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), request.getName()),
+        Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), requestBody.getName()),
                 "Action name '%s' in the metadata doesn't match the action name '%s' in the request",
-                actionMeta != null ? actionMeta.getName() : null, request.getName());
+                actionMeta != null ? actionMeta.getName() : null, requestBody.getName());
     }
 
     protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request, SpongeRequestContext context) {
-        setupActionExecutionRequest(actionMeta, request);
+        setupActionExecutionRequest(actionMeta, request.getBody());
 
-        validateCallArgs(actionMeta, request.getArgs());
+        validateCallArgs(actionMeta, request.getBody().getArgs());
 
-        request.setArgs(marshalActionCallArgs(actionMeta, request.getArgs()));
+        request.getBody().setArgs(marshalActionCallArgs(actionMeta, request.getBody().getArgs()));
 
         ActionCallResponse response = execute(RestApiConstants.OPERATION_CALL, request, ActionCallResponse.class, context);
 
@@ -739,17 +753,17 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     protected void unmarshalCallResult(RestActionMeta actionMeta, ActionCallResponse response) {
-        if (actionMeta == null || actionMeta.getResult() == null || response.getResult() == null) {
+        if (actionMeta == null || actionMeta.getResult() == null || response.getBody().getResult() == null) {
             return;
         }
 
-        response.setResult(typeConverter.unmarshal(actionMeta.getResult(), response.getResult()));
+        response.getBody().setResult(typeConverter.unmarshal(actionMeta.getResult(), response.getBody().getResult()));
     }
 
     @Override
     public ActionCallResponse call(ActionCallRequest request, RestActionMeta actionMeta, boolean allowFetchMetadata,
             SpongeRequestContext context) {
-        return doCall(actionMeta != null ? actionMeta : getActionMeta(request.getName(), allowFetchMetadata), request, context);
+        return doCall(actionMeta != null ? actionMeta : getActionMeta(request.getBody().getName(), allowFetchMetadata), request, context);
     }
 
     @Override
@@ -769,7 +783,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public Object call(String actionName, List<Object> args) {
-        return call(new ActionCallRequest(actionName, args)).getResult();
+        return call(new ActionCallRequest(actionName, args)).getBody().getResult();
     }
 
     @Override
@@ -800,7 +814,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public String send(String eventName, Map<String, Object> attributes, String label, String description) {
-        return send(new SendEventRequest(eventName, attributes, label, description)).getEventId();
+        return send(new SendEventRequest(eventName, attributes, label, description)).getBody().getEventId();
     }
 
     @Override
@@ -815,16 +829,17 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, SpongeRequestContext context) {
-        RestActionMeta actionMeta = getActionMeta(request.getName());
-        setupActionExecutionRequest(actionMeta, request);
+        RestActionMeta actionMeta = getActionMeta(request.getBody().getName());
+        setupActionExecutionRequest(actionMeta, request.getBody());
 
-        request.setCurrent(marshalAuxiliaryActionArgsCurrent(actionMeta, request.getCurrent(), request.getDynamicTypes()));
+        request.getBody().setCurrent(
+                marshalAuxiliaryActionArgsCurrent(actionMeta, request.getBody().getCurrent(), request.getBody().getDynamicTypes()));
 
         ProvideActionArgsResponse response =
                 execute(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
 
         if (actionMeta != null) {
-            unmarshalProvidedActionArgValues(actionMeta, response.getProvided());
+            unmarshalProvidedActionArgValues(actionMeta, response.getBody().getProvided());
         }
 
         return response;
@@ -838,18 +853,19 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, ProvideArgsParameters parameters) {
         return provideActionArgs(new ProvideActionArgsRequest(actionName, parameters.getProvide(), parameters.getSubmit(),
-                parameters.getCurrent(), parameters.getDynamicTypes(), parameters.getFeatures())).getProvided();
+                parameters.getCurrent(), parameters.getDynamicTypes(), parameters.getFeatures())).getBody().getProvided();
     }
 
     protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {
         GetEventTypesResponse response = execute(RestApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
 
-        if (response != null && response.getEventTypes() != null) {
-            response.getEventTypes().entrySet().forEach(entry -> entry.setValue((RecordType) unmarshalDataType(entry.getValue())));
+        if (response != null && response.getBody().getEventTypes() != null) {
+            response.getBody().getEventTypes().entrySet()
+                    .forEach(entry -> entry.setValue((RecordType) unmarshalDataType(entry.getValue())));
 
             // Populate the cache.
             if (populateCache && configuration.isUseEventTypeCache() && eventTypeCache != null) {
-                response.getEventTypes().entrySet().forEach(entry -> eventTypeCache.put(entry.getKey(), entry.getValue()));
+                response.getBody().getEventTypes().entrySet().forEach(entry -> eventTypeCache.put(entry.getKey(), entry.getValue()));
             }
         }
 
@@ -868,11 +884,11 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public Map<String, RecordType> getEventTypes(String eventName) {
-        return getEventTypes(new GetEventTypesRequest(eventName)).getEventTypes();
+        return getEventTypes(new GetEventTypesRequest(eventName)).getBody().getEventTypes();
     }
 
     protected RecordType fetchEventType(String eventTypeName, SpongeRequestContext context) {
-        return doGetEventTypes(new GetEventTypesRequest(eventTypeName), false, context).getEventTypes().get(eventTypeName);
+        return doGetEventTypes(new GetEventTypesRequest(eventTypeName), false, context).getBody().getEventTypes().get(eventTypeName);
     }
 
     @Override

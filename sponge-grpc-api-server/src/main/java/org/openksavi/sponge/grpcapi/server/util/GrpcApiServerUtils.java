@@ -65,8 +65,9 @@ public abstract class GrpcApiServerUtils {
         return setupRestRequestHeader(new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
-    public static SpongeRequest createRestRequest(SubscribeRequest request) {
-        return setupRestRequestHeader(new SpongeRequest(), request.hasHeader() ? request.getHeader() : null);
+    public static SpongeRequest createFakeRestRequest(SubscribeRequest request) {
+        // Use a fake request.
+        return setupRestRequestHeader(new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
     public static ResponseHeader createResponseHeader(org.openksavi.sponge.restapi.model.response.ResponseHeader restHeader) {
@@ -90,8 +91,8 @@ public abstract class GrpcApiServerUtils {
     public static VersionResponse createResponse(GetVersionResponse restResponse) {
         VersionResponse.Builder builder = VersionResponse.newBuilder().setHeader(createResponseHeader(restResponse.getHeader()));
 
-        if (restResponse.getVersion() != null) {
-            builder.setVersion(restResponse.getVersion());
+        if (restResponse.getBody().getVersion() != null) {
+            builder.setVersion(restResponse.getBody().getVersion());
         }
 
         return builder.build();

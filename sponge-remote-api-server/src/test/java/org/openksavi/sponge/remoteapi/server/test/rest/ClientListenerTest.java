@@ -74,8 +74,8 @@ public class ClientListenerTest extends BasicTestTemplate {
             assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}}",
                     normalizeJson(requestStringList.get(0)));
             assertTrue(normalizeJson(responseStringList.get(0)).matches(
-                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\"\\},\"version\":\""
-                            + engine.getVersion() + "\"\\}"));
+                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\"\\},\"body\":\\{\"version\":\""
+                            + engine.getVersion() + "\"\\}\\}"));
         }
     }
 
@@ -91,7 +91,7 @@ public class ClientListenerTest extends BasicTestTemplate {
                     .onRequestSerializedListener((request, requestString) -> requestStringHolder.set(requestString))
                     .onResponseDeserializedListener((request, response, responseString) -> responseStringHolder.set(responseString))
                     .build();
-            String version = client.getVersion(new GetVersionRequest(), context).getVersion();
+            String version = client.getVersion(new GetVersionRequest(), context).getBody().getVersion();
 
             assertEquals(engine.getVersion(), version);
 
@@ -100,8 +100,8 @@ public class ClientListenerTest extends BasicTestTemplate {
             assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null}}",
                     normalizeJson(requestStringHolder.get()));
             assertTrue(normalizeJson(responseStringHolder.get()).matches(
-                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\"\\},\"version\":\""
-                            + engine.getVersion() + "\"\\}"));
+                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\"\\},\"body\":\\{\"version\":\""
+                            + engine.getVersion() + "\"\\}\\}"));
         }
     }
 }

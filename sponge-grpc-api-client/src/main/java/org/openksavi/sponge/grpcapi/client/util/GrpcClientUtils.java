@@ -30,7 +30,7 @@ import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.restapi.client.SpongeClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.model.RemoteEvent;
-import org.openksavi.sponge.restapi.model.request.SpongeRequest;
+import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 
@@ -105,7 +105,8 @@ public abstract class GrpcClientUtils {
      * @return the header.
      */
     public static RequestHeader createRequestHeader(SpongeRestClient restClient) {
-        org.openksavi.sponge.restapi.model.request.RequestHeader restHeader = restClient.setupRequest(new SpongeRequest()).getHeader();
+        // Create a fake request to obtain a header.
+        org.openksavi.sponge.restapi.model.request.RequestHeader restHeader = restClient.setupRequest(new GetVersionRequest()).getHeader();
 
         Builder builder = RequestHeader.newBuilder();
         if (restHeader.getId() != null) {
