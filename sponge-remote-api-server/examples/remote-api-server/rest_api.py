@@ -389,6 +389,16 @@ class ProvidedWithOptional(Action):
     def onProvideArgs(self, context):
         context.provided["arg"] = ProvidedValue().withValue("VALUE")
 
+class IsActionActiveAction(Action):
+    def onConfigure(self):
+        self.withLabel("Action with an activity status").withArgs([
+            StringType("arg").withLabel("Arg"),
+        ]).withNoResult()
+    def onIsActive(self, context):
+        return context.value is not None
+    def onCall(self, arg):
+        pass
+
 class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RemoteApi"))

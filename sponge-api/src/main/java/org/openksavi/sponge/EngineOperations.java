@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.ProcessorType;
@@ -130,6 +131,14 @@ public interface EngineOperations {
      * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
      */
     <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName);
+
+    /**
+     * Informs if an action in a given context is active.
+     *
+     * @param context the context.
+     * @return {@code true} if the action is active.
+     */
+    boolean isActionActive(String actionName, IsActionActiveContext context);
 
     /**
      * Provides action arguments. Submits arguments and/or returns provided values along with value sets.

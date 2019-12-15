@@ -3,11 +3,15 @@ Sponge Knowledge base
 MPD player.
 """
 
+import os
+
 class MpdPlayer(Action):
     def onConfigure(self):
         self.withLabel("Player").withDescription("The MPD player.")
         self.withArgs([
             StringType("song").withLabel("Song").withNullable().withFeatures({"multiline":True, "maxLines":2}).withProvided(
+                ProvidedMeta().withValue().withReadOnly()),
+            StringType("date").withLabel("Date").withNullable().withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
             IntegerType("position").withLabel("Position").withNullable().withAnnotated().withMinValue(0).withMaxValue(100).withFeatures(
                 {"widget":"slider", "group":"position"}).withProvided(
@@ -24,7 +28,7 @@ class MpdPlayer(Action):
                 ProvidedMeta().withValue().withOverwrite().withSubmittable())
         ]).withCallable(False)
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
-            "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
+            "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongInfo()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
         ]})
 
     def __ensureStatus(self, mpc, status):
@@ -52,8 +56,13 @@ class MpdPlayer(Action):
             except:
                 sponge.logger.warn("Submit error: {}", sys.exc_info()[0])
 
+            currentSong = None
+            if "song" in context.provide or "date" in context.provide:
+                currentSong = mpc.getCurrentSong()
             if "song" in context.provide:
-                context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
+                context.provided["song"] = ProvidedValue().withValue(mpc.getSongLabel(currentSong) if currentSong else None)
+            if "date" in context.provide:
+                context.provided["date"] = ProvidedValue().withValue(currentSong["date"] if currentSong else None)
             if "position" in context.provide or "context" in context.submit:
                 status = self.__ensureStatus(mpc, status)
                 context.provided["position"] = ProvidedValue().withValue(AnnotatedValue(mpc.getPositionByPercentage(status)).withFeature(

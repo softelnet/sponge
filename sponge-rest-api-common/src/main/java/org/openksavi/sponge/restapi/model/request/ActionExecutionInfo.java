@@ -19,9 +19,9 @@ package org.openksavi.sponge.restapi.model.request;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 
 /**
- * An action execution related request body.
+ * An action execution related info.
  */
-public interface ActionExecutionRequestBody {
+public interface ActionExecutionInfo {
 
     String getName();
 

@@ -8,15 +8,31 @@ from java.util.concurrent.locks import ReentrantLock
 import re
 import os
 
+def createSongType(name):
+    """ Creates a song record type.
+    """
+    return RecordType(name).withFields([
+        StringType("artist").withLabel("Artist").withNullable(),
+        StringType("album").withLabel("Album").withNullable(),
+        StringType("title").withLabel("Title").withNullable(),
+        StringType("track").withLabel("Track").withNullable(),
+        StringType("genre").withLabel("Genre").withNullable(),
+        StringType("date").withLabel("Date").withNullable(),
+        StringType("disc").withLabel("Disc").withNullable(),
+        StringType("file").withLabel("File")
+    ])
+
 class Mpc:
     def __init__(self, mpcExec = "mpc", host = None, port = None):
         self.mpcExec = mpcExec
-        self.tags = ["artist", "album", "title", "track", "name", "genre", "date", "composer", "performer", "comment", "disc", "file"]
+        self.allTags = ["artist", "album", "title", "track", "name", "genre", "date", "composer", "performer", "comment", "disc", "file"]
+        self.tags = ["artist", "album", "title", "track", "genre", "date", "disc", "file"]
         self.separator = "\t"
         self.host = host
         self.port = port
         self.eventLoopProcess = None
         self.lock = ReentrantLock(True)
+        self.format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), self.tags)))
 
     def __createProcessBuilder(self):
         args = []
@@ -49,6 +65,16 @@ class Mpc:
                 raise Exception("Incorrect value '{}' for {}".format(value, name))
             else:
                 return None
+
+    # Data type operations.
+    def createSongValue(self, songSpec):
+        tagValues = songSpec.split(self.separator)
+        if len(tagValues) != len(self.tags):
+            return None
+        song = {}
+        for i in range(len(self.tags)):
+            song[self.tags[i]] = tagValues[i].strip() if tagValues[i] else None
+        return song
 
     # Admin operations.
 
@@ -157,8 +183,7 @@ class Mpc:
         minYear = self.__num("minYear", aMinYear, True)
         maxYear = self.__num("maxYear", aMaxYear, True)
         selectedFiles = []
-        format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), self.tags)))
-        fileEntries = self.__execute("-f", format, "search", "artist", aArtist if aArtist else "", "album", aAlbum if aAlbum else "", "genre",
+        fileEntries = self.__execute("-f", self.format, "search", "artist", aArtist if aArtist else "", "album", aAlbum if aAlbum else "", "genre",
                                 aGenre if aGenre else "").splitlines()
         for fileEntry in fileEntries:
             tagValues = fileEntry.split(self.separator)
@@ -170,7 +195,7 @@ class Mpc:
             if (minYear is None or file["date"] and file["date"] >= minYear) and (maxYear is None or file["date"] and file["date"] <= maxYear):
                 selectedFiles.append(file)
 
-        if ("file" in self.tags):
+        if "file" in self.tags:
             selectedFiles.sort(key=lambda file: file["file"])
 
         return selectedFiles
@@ -183,7 +208,16 @@ class Mpc:
             process.waitFor()
 
     def getCurrentSong(self):
-        return self.__execute("current")
+        return self.createSongValue(self.__execute("current", "-f", self.format))
+
+    def getSongLabel(self, song):
+        label = None
+        if song:
+            if song["artist"] is not None and song["title"] is not None:
+                label = u"{} - {}".format(song["artist"], song["title"])
+            else:
+                label = os.path.basename(song["file"])
+        return label
 
     def seekByPercentage(self, value):
         return self.__execute("seek", str(value) + "%")

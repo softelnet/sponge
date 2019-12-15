@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,6 +41,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
@@ -57,6 +59,7 @@ import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
@@ -69,6 +72,7 @@ import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.IsActionActiveResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
@@ -310,10 +314,13 @@ public class DefaultRestApiService implements RestApiService {
         try {
             Validate.notNull(request, "The request must not be null");
             UserContext userContext = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getBody().getName(), request.getBody().getQualifiedVersion(), userContext);
 
-            Object actionResult =
-                    getEngine().getActionManager().callAction(request.getBody().getName(), unmarshalActionArgs(actionAdapter, request));
+            String actionName = request.getBody().getName();
+            actionAdapter = getActionAdapterForRequest(actionName, request.getBody().getQualifiedVersion(), userContext);
+
+            List<Object> args = unmarshalActionArgs(actionAdapter, request.getBody().getArgs());
+
+            Object actionResult = getEngine().getOperations().call(actionName, args);
 
             return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
         } catch (Throwable e) {
@@ -348,8 +355,8 @@ public class DefaultRestApiService implements RestApiService {
         return setupErrorResponse(response, request, e);
     }
 
-    protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, ActionCallRequest request) {
-        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, request.getBody().getArgs());
+    protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, List<Object> args) {
+        return RestApiServerUtils.unmarshalActionCallArgs(typeConverter, actionAdapter, args);
     }
 
     protected Object marshalActionResult(ActionAdapter actionAdapter, Object result) {
@@ -403,6 +410,35 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public Event sendEvent(String eventName, Map<String, Object> attributes, UserContext userContext) {
         return sendEvent(eventName, attributes, null, null, userContext);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public IsActionActiveResponse isActionActive(IsActionActiveRequest request) {
+        try {
+            Validate.notNull(request, "The request must not be null");
+            UserContext userContext = authenticateRequest(request);
+
+            List<Boolean> active = new ArrayList<>();
+
+            if (request.getBody().getEntries() != null) {
+                request.getBody().getEntries().forEach(entry -> {
+                    ActionAdapter actionAdapter = getActionAdapterForRequest(entry.getName(), entry.getQualifiedVersion(), userContext);
+
+                    DataType contextType = entry.getContextType() != null
+                            ? (DataType) typeConverter.unmarshal(new TypeType(), entry.getContextType()) : null;
+                    Object contextValue = entry.getContextValue() != null && contextType != null
+                            ? typeConverter.unmarshal(contextType, entry.getContextValue()) : entry.getContextValue();
+
+                    active.add(getEngine().getOperations().isActionActive(entry.getName(), new IsActionActiveContext(contextValue,
+                            contextType, unmarshalActionArgs(actionAdapter, entry.getArgs()), entry.getFeatures())));
+                });
+            }
+
+            return setupSuccessResponse(new IsActionActiveResponse(active), request);
+        } catch (Throwable e) {
+            return handleError("REST isActionActive", e, new IsActionActiveResponse(), request);
+        }
     }
 
     @Override

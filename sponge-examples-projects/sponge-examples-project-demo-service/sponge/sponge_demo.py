@@ -33,7 +33,7 @@ class HelloWorldAction(Action):
         self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name."))
         self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text."))
     def onCall(self, name):
-        return "Hello World! Hello {}!".format(name)
+        return u"Hello World! Hello {}!".format(name)
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -204,7 +204,7 @@ class DynamicProvidedArgActionNestedProvided(Action):
         self.withFeature("icon", "fan")
 
     def onCall(self, dynamic):
-        return "{} - Q1A: {}; Q2A: {}.".format(dynamic.value["fullName"], dynamic.value["question1"] if dynamic.value["question1"] else "",
+        return u"{} - Q1A: {}; Q2A: {}.".format(dynamic.value["fullName"], dynamic.value["question1"] if dynamic.value["question1"] else "",
                                               dynamic.value["question2"] if dynamic.value["question2"] else "")
 
     def onProvideArgs(self, context):

@@ -21,6 +21,7 @@
             <file>sponge_demo_binary_result.py</file>
             <file>sponge_demo_context_actions_action.py</file>
             <file>sponge_demo_context_actions_record.py</file>
+            <file>sponge_demo_context_actions_active.py</file>
             <file>sponge_demo_asynchronous_provided_action_arg.py</file>
             <file>sponge_demo_submittable_action_arg.py</file>
             <file>sponge_demo_action_enabled_args.py</file>

@@ -49,7 +49,7 @@ public class ActionCallRequest extends BodySpongeRequest<ActionCallRequestBody> 
     }
 
     @ApiModel(value = "ActionCallRequestBody", description = "An action call request body")
-    public static class ActionCallRequestBody implements RequestBody, ActionExecutionRequestBody {
+    public static class ActionCallRequestBody implements RequestBody, ActionExecutionInfo {
 
         private String name;
 

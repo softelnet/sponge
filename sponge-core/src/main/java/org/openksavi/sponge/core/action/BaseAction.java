@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.BaseProcessor;
 import org.openksavi.sponge.type.DataType;
@@ -44,6 +45,11 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
     @Override
     public final ActionAdapter createAdapter() {
         return new BaseActionAdapter(new BaseActionDefinition());
+    }
+
+    @Override
+    public boolean onIsActive(IsActionActiveContext context) {
+        return true;
     }
 
     @Override

@@ -222,4 +222,7 @@ The REST API supports a username/password and an authentication token authentica
 
 |`INVALID_USERNAME_PASSWORD`
 |Invalid username or password.
+
+|`INACTIVE_ACTION`
+|An action to be called is inactive.
 |===

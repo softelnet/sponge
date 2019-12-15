@@ -64,6 +64,7 @@ import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest.IsActionActiveEntry;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.restapi.type.converter.BaseTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
@@ -1021,6 +1022,23 @@ public abstract class BaseRestApiTestTemplate {
                     .provideActionArgs(actionName, new ProvideArgsParameters().withProvide(Arrays.asList())).get("arg");
 
             assertEquals("VALUE", provided.getValue());
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testIsActionActive() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "IsActionActiveAction";
+
+            List<Boolean> active = client.isActionActive(Arrays.asList(new IsActionActiveEntry(actionName).withContextValue("ACTIVE")));
+            assertEquals(1, active.size());
+            assertTrue(active.get(0));
+
+            active = client.isActionActive(Arrays.asList(new IsActionActiveEntry(actionName).withContextValue(null)));
+            assertEquals(1, active.size());
+            assertFalse(active.get(0));
 
             assertFalse(engine.isError());
         }

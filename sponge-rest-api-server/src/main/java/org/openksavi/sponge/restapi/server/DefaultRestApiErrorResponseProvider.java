@@ -18,6 +18,7 @@ package org.openksavi.sponge.restapi.server;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import org.openksavi.sponge.action.InactiveActionException;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
@@ -50,6 +51,8 @@ public class DefaultRestApiErrorResponseProvider implements RestApiErrorResponse
             response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INVALID_KB_VERSION);
         } else if (exception instanceof RestApiInvalidUsernamePasswordServerException) {
             response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD);
+        } else if (exception instanceof InactiveActionException) {
+            response.getHeader().setErrorCode(RestApiConstants.ERROR_CODE_INACTIVE_ACTION);
         }
     }
 }

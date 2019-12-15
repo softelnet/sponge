@@ -27,6 +27,7 @@ import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EngineOperations;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
@@ -118,6 +119,18 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName) {
         return callIfExists(resultClass, actionName, Collections.emptyList());
+    }
+
+    @Override
+    public boolean isActionActive(String actionName, IsActionActiveContext context) {
+        ActionAdapter actionAdapter =
+                Validate.notNull(engine.getActionManager().getActionAdapter(actionName), "Action '%s' not found", actionName);
+
+        try {
+            return actionAdapter.isActive(context);
+        } catch (Throwable e) {
+            throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
+        }
     }
 
     @Override
