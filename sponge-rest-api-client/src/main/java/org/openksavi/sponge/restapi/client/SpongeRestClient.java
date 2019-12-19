@@ -33,6 +33,8 @@ import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest.IsActionActiveEntry;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
@@ -45,6 +47,7 @@ import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.IsActionActiveResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
@@ -409,6 +412,30 @@ public interface SpongeRestClient extends Closeable {
      * @return the event ID.
      */
     String send(String eventName, Map<String, Object> attributes, String label, String description);
+
+    /**
+     * Sends the {@code isActionActive} request to the server.
+     *
+     * @param request the request.
+     * @param context the context.
+     * @return the response.
+     */
+    IsActionActiveResponse isActionActive(IsActionActiveRequest request, SpongeRequestContext context);
+
+    /**
+     * Sends the {@code isActionActive} request to the server.
+     *
+     * @param request the request.
+     * @return the response.
+     */
+    IsActionActiveResponse isActionActive(IsActionActiveRequest request);
+
+    /**
+     * Fetches active/inactive statuses for actions specified in the entries.
+     * 
+     * @param entries the reaction entries.
+     */
+    List<Boolean> isActionActive(List<IsActionActiveEntry> entries);
 
     /**
      * Sends the {@code provideActionArgs} request to the server. Fetches the provided action arguments from the server.

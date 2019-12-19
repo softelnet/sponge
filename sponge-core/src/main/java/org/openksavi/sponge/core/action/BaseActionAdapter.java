@@ -26,6 +26,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.BaseProcessorAdapter;
@@ -99,6 +100,17 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
     protected Map<String, Object> buildCurrentArgs(ProvideArgsParameters parameters) {
         return parameters.getCurrent() != null ? parameters.getCurrent() : Collections.emptyMap();
+    }
+
+    @Override
+    public boolean isActive(IsActionActiveContext context) {
+        IsActionActiveContext contextCopy = context.clone();
+
+        if (contextCopy.getFeatures() == null) {
+            contextCopy.setFeatures(new LinkedHashMap<>());
+        }
+
+        return getProcessor().onIsActive(contextCopy);
     }
 
     @Override

@@ -16,7 +16,7 @@ class MpdSetAndPlayPlaylist(Action):
             IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("The album maximum release year."),
             BooleanType("autoPlay").withDefaultValue(True).withLabel("Auto play").withDescription("Plays the playlist automatically.")
         ]).withResult(StringType().withLabel("Info").withDescription("A short info of the status of the action call."))
-        self.withFeatures({"icon":"playlist-star"})
+        self.withFeatures({"icon":"playlist-star", "visible":False})
     def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
         mpc = sponge.getVariable("mpc")
         sponge.logger.info("Setting the playlist...")
@@ -37,17 +37,19 @@ class ViewSongLyrics(Action):
             StringType("lyrics").withLabel("Lyrics").withProvided(
                 ProvidedMeta().withValue().withReadOnly().withDependency("song")),
         ]).withCallable(False)
-        self.withFeatures({"icon":"script-text-outline", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"]})
+        self.withFeatures({"icon":"script-text-outline", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
+    def onIsActive(self, context):
+        return sponge.getVariable("mpc").getCurrentSong() is not None
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
 
         if "song" in context.provide:
-            song = mpc.getCurrentSong()
+            song = mpc.getSongLabel(mpc.getCurrentSong())
             context.provided["song"] = ProvidedValue().withValue(song)
         if "lyrics" in context.provide:
             song = context.current["song"]
             try:
-                if song and " - " in song:
+                if song is not None and " - " in song:
                     (artist, title) = tuple(song.split(" - ", 2)[:2])
                     lyricsService = sponge.getVariable("lyricsService")
                     if lyricsService.configured:
@@ -61,6 +63,20 @@ class ViewSongLyrics(Action):
 
             context.provided["lyrics"] = ProvidedValue().withValue(lyrics)
 
+class ViewSongInfo(Action):
+    def onConfigure(self):
+        self.withLabel("Song info").withDescription("View the current song info.").withArgs([
+            createSongType("song").withProvided(ProvidedMeta().withValue().withReadOnly()),
+        ]).withCallable(False)
+        self.withFeatures({"icon":"information", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
+    def onIsActive(self, context):
+        return sponge.getVariable("mpc").getCurrentSong() is not None
+    def onProvideArgs(self, context):
+        mpc = sponge.getVariable("mpc")
+
+        if "song" in context.provide:
+            context.provided["song"] = ProvidedValue().withValue(mpc.getCurrentSong())
+
 class ViewMpdStatus(Action):
     def onConfigure(self):
         self.withLabel("MPD status").withDescription("Provides the MPD status and stats.")
@@ -68,7 +84,7 @@ class ViewMpdStatus(Action):
             StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withProvided(ProvidedMeta().withValue().withReadOnly()),
             StringType("stats").withLabel("Stats").withProvided(ProvidedMeta().withValue().withReadOnly())
         ]).withCallable(False)
-        self.withFeatures({"icon":"console", "cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification"]})
+        self.withFeatures({"icon":"console", "cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification"], "visible":False})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
         if "status" in context.provide:
@@ -81,7 +97,7 @@ class MpdSetServer(Action):
         self.withLabel("Choose an MPD server").withDescription("Sets an MPD server")
         self.withArg(StringType("host").withNullable().withLabel("Host").withDescription("The MPD host").withProvided(
             ProvidedMeta().withValue().withOverwrite()))
-        self.withNoResult().withFeatures({"icon":"record-player", "callLabel":"Save"})
+        self.withNoResult().withFeatures({"icon":"record-player", "callLabel":"Save", "visible":False})
     def onCall(self, host):
         if host:
             host = host.strip()
@@ -95,7 +111,7 @@ class MpdSetServer(Action):
 class MpdRefreshDatabase(Action):
     def onConfigure(self):
         self.withLabel("Refresh database").withDescription("Refreshes MPD database")
-        self.withNoArgs().withNoResult().withFeatures({"icon":"database-refresh", "confirmation":True})
+        self.withNoArgs().withNoResult().withFeatures({"icon":"database-refresh", "confirmation":True, "visible":False})
     def onCall(self):
         sponge.getVariable("mpc").refreshDatabase()
 

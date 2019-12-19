@@ -303,6 +303,7 @@ Limitations:
 * Conversion between a companion type value and an object type value is supported only in the {sponge} REST API.
 * Loops in nested data types are not supported.
 * Object inheritance is not supported (if a companion type is a record type).
+* A companion type is not validated against the object type class.
 
 == Features
 Features are represented by a map of names to values. They provide additional information to data types and processors. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].

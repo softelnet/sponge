@@ -54,7 +54,7 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
     }
 
     @ApiModel(value = "ProvideActionArgsRequestBody", description = "A provide action arguments request body")
-    public static class ProvideActionArgsRequestBody implements RequestBody, ActionExecutionRequestBody {
+    public static class ProvideActionArgsRequestBody implements RequestBody, ActionExecutionInfo {
 
         private String name;
 

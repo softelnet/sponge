@@ -14,7 +14,7 @@ class LyricsService:
         self.cache = SpongeUtils.cacheBuilder().build()
 
     def __createKey(self, artist, title):
-        return str(artist) + " - " + str(title)
+        return u"{} - {}".format(artist, title)
 
     def getLyrics(self, artist, title):
         # If not found, cache the result anyway.

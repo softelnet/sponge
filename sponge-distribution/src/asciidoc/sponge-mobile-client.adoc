@@ -261,6 +261,9 @@ For list elements only the `this` keyword as a result substitution is supported.
 
 If a context action returns `null` and the result substitution is `this`, the result will be ignored.
 
+==== Active or inactive context actions
+Before showing a list of context actions the application checks (by connecting to the server) if the context actions are active. Inactive actions will be greyed out.
+
 === List-details
 
 image::screens/mobile/action_form_list_actions_list.jpg[title="The list-details action in the action list",width=300,pdfwidth=35%,scaledwidth=35%]

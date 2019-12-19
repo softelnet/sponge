@@ -49,6 +49,8 @@ public final class RestApiConstants {
 
     public static final String OPERATION_SEND = "send";
 
+    public static final String OPERATION_IS_ACTION_ACTIVE = "isActionActive";
+
     public static final String OPERATION_PROVIDE_ACTION_ARGS = "provideActionArgs";
 
     public static final String OPERATION_EVENT_TYPES = "eventTypes";
@@ -65,6 +67,8 @@ public final class RestApiConstants {
     public static final String ERROR_CODE_INVALID_KB_VERSION = "INVALID_KB_VERSION";
 
     public static final String ERROR_CODE_INVALID_USERNAME_PASSWORD = "INVALID_USERNAME_PASSWORD";
+
+    public static final String ERROR_CODE_INACTIVE_ACTION = "INACTIVE_ACTION";
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 

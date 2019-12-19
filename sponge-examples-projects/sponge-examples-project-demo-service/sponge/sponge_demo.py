@@ -27,6 +27,14 @@ def onLoad():
     sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
     sponge.selectCategory("events", lambda processor: processor.kb.name in ("events", "eventsNotification", "eventsMemo", "eventsCounter"))
 
+class HelloWorldAction(Action):
+    def onConfigure(self):
+        self.withLabel("Hello world").withDescription("Returns a greeting text.")
+        self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name."))
+        self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text."))
+    def onCall(self, name):
+        return u"Hello World! Hello {}!".format(name)
+
 class UpperCase(Action):
     def onConfigure(self):
         self.withLabel("Convert to upper case").withDescription("Converts a string to upper case.")
@@ -196,7 +204,7 @@ class DynamicProvidedArgActionNestedProvided(Action):
         self.withFeature("icon", "fan")
 
     def onCall(self, dynamic):
-        return "{} - Q1A: {}; Q2A: {}.".format(dynamic.value["fullName"], dynamic.value["question1"] if dynamic.value["question1"] else "",
+        return u"{} - Q1A: {}; Q2A: {}.".format(dynamic.value["fullName"], dynamic.value["question1"] if dynamic.value["question1"] else "",
                                               dynamic.value["question2"] if dynamic.value["question2"] else "")
 
     def onProvideArgs(self, context):

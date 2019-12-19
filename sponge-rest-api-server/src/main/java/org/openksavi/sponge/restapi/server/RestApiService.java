@@ -28,6 +28,7 @@ import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
@@ -40,6 +41,7 @@ import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.IsActionActiveResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
@@ -82,6 +84,8 @@ public interface RestApiService extends HasEngine, Initializable {
     ActionCallResponse call(ActionCallRequest request);
 
     SendEventResponse send(SendEventRequest request);
+
+    IsActionActiveResponse isActionActive(IsActionActiveRequest request);
 
     ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request);
 

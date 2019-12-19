@@ -38,6 +38,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.action.InactiveActionException;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
@@ -45,13 +46,15 @@ import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListen
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
-import org.openksavi.sponge.restapi.model.request.ActionExecutionRequestBody;
+import org.openksavi.sponge.restapi.model.request.ActionExecutionInfo;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.restapi.model.request.GetActionsRequest.GetActionsRequestBody;
 import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest.IsActionActiveEntry;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
@@ -67,6 +70,7 @@ import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.IsActionActiveResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
@@ -346,7 +350,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             if (configuration.isThrowExceptionOnErrorResponse()) {
                 String message = errorMessage != null ? errorMessage : String.format("Error code: %s", errorCode);
 
-                ErrorResponseException exception;
+                RuntimeException exception;
                 switch (errorCode) {
                 case RestApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN:
                     exception = new InvalidAuthTokenException(message);
@@ -357,12 +361,17 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 case RestApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD:
                     exception = new InvalidUsernamePasswordException(message);
                     break;
+                case RestApiConstants.ERROR_CODE_INACTIVE_ACTION:
+                    exception = new InactiveActionException(message);
+                    break;
                 default:
                     exception = new ErrorResponseException(message);
                 }
 
-                exception.setErrorCode(errorCode);
-                exception.setDetailedErrorMessage(detailedErrorMessage);
+                if (exception instanceof ErrorResponseException) {
+                    ((ErrorResponseException) exception).setErrorCode(errorCode);
+                    ((ErrorResponseException) exception).setDetailedErrorMessage(detailedErrorMessage);
+                }
 
                 throw exception;
             }
@@ -562,6 +571,11 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @SuppressWarnings({ "rawtypes" })
+    protected DataType marshalDataType(DataType type) {
+        return (DataType) typeConverter.marshal(new TypeType(), type);
+    }
+
+    @SuppressWarnings({ "rawtypes" })
     protected DataType unmarshalDataType(DataType type) {
         return (DataType) typeConverter.unmarshal(new TypeType(), type);
     }
@@ -668,19 +682,19 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         return getActionMeta(actionName, DEFAULT_ALLOW_FETCH_METADATA);
     }
 
-    protected void setupActionExecutionRequest(RestActionMeta actionMeta, ActionExecutionRequestBody requestBody) {
+    protected void setupActionExecutionInfo(RestActionMeta actionMeta, ActionExecutionInfo info) {
         // Conditionally set the verification of the processor qualified version on the server side.
-        if (configuration.isVerifyProcessorVersion() && actionMeta != null && requestBody.getQualifiedVersion() == null) {
-            requestBody.setQualifiedVersion(actionMeta.getQualifiedVersion());
+        if (configuration.isVerifyProcessorVersion() && actionMeta != null && info.getQualifiedVersion() == null) {
+            info.setQualifiedVersion(actionMeta.getQualifiedVersion());
         }
 
-        Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), requestBody.getName()),
+        Validate.isTrue(actionMeta == null || Objects.equals(actionMeta.getName(), info.getName()),
                 "Action name '%s' in the metadata doesn't match the action name '%s' in the request",
-                actionMeta != null ? actionMeta.getName() : null, requestBody.getName());
+                actionMeta != null ? actionMeta.getName() : null, info.getName());
     }
 
     protected ActionCallResponse doCall(RestActionMeta actionMeta, ActionCallRequest request, SpongeRequestContext context) {
-        setupActionExecutionRequest(actionMeta, request.getBody());
+        setupActionExecutionInfo(actionMeta, request.getBody());
 
         validateCallArgs(actionMeta, request.getBody().getArgs());
 
@@ -828,9 +842,44 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
+    public IsActionActiveResponse isActionActive(IsActionActiveRequest request, SpongeRequestContext context) {
+        if (request.getBody().getEntries() != null) {
+            request.getBody().getEntries().forEach(entry -> {
+                RestActionMeta actionMeta = getActionMeta(entry.getName());
+                setupActionExecutionInfo(actionMeta, entry);
+
+                if (entry.getContextType() != null) {
+                    entry.setContextType(marshalDataType(entry.getContextType()));
+                }
+
+                if (entry.getContextValue() != null && entry.getContextType() != null) {
+                    entry.setContextValue(typeConverter.marshal(entry.getContextType(), entry.getContextValue()));
+                }
+
+                if (entry.getArgs() != null) {
+                    entry.setArgs(marshalActionCallArgs(actionMeta, entry.getArgs()));
+                }
+            });
+        }
+
+        return execute(RestApiConstants.OPERATION_IS_ACTION_ACTIVE, request, IsActionActiveResponse.class, context);
+    }
+
+    @Override
+    public IsActionActiveResponse isActionActive(IsActionActiveRequest request) {
+        return isActionActive(request, null);
+    }
+
+    @Override
+    public List<Boolean> isActionActive(List<IsActionActiveEntry> entries) {
+        return isActionActive(new IsActionActiveRequest(entries)).getBody().getActive();
+    }
+
+    @Override
     public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request, SpongeRequestContext context) {
         RestActionMeta actionMeta = getActionMeta(request.getBody().getName());
-        setupActionExecutionRequest(actionMeta, request.getBody());
+
+        setupActionExecutionInfo(actionMeta, request.getBody());
 
         request.getBody().setCurrent(
                 marshalAuxiliaryActionArgsCurrent(actionMeta, request.getBody().getCurrent(), request.getBody().getDynamicTypes()));

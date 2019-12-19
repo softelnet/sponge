@@ -26,6 +26,8 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.ProcessorNotFoundException;
 import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.action.InactiveActionException;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.core.BaseProcessorDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
@@ -72,6 +74,10 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
     @SuppressWarnings("unchecked")
     @Override
     public Object callAction(ActionAdapter actionAdapter, List<Object> args) {
+        if (!actionAdapter.isActive(new IsActionActiveContext(args))) {
+            throw new InactiveActionException(actionAdapter.getMeta().getName());
+        }
+
         try {
             return ((BaseProcessorDefinition) actionAdapter.getDefinition()).getProcessorProvider()
                     .invokeActionOnCall(actionAdapter.getProcessor(), args);

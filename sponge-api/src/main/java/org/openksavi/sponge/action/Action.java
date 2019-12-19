@@ -25,6 +25,14 @@ import org.openksavi.sponge.Processor;
 public interface Action extends Processor<ActionAdapter>, ActionOperations {
 
     /**
+     * A callback method that informs if the action in a given context is active.
+     *
+     * @param context the context.
+     * @return {@code true} if the action is active.
+     */
+    boolean onIsActive(IsActionActiveContext context);
+
+    /**
      * A callback method that provides argument values along with argument value sets (i.e. possible values of an argument) and/or submits
      * arguments.
      *

@@ -32,6 +32,9 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`Object onCall(_dynamic arguments_)`
 |A dynamic callback method that should be defined in a callable action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`.
 
+|`boolean onIsActive(IsActionActiveContext context)`
+|A callback method that informs if the action in a given context is active.
+
 |`void onProvideArgs(ProvideArgsContext context)`
 |A callback method that provides argument values along with argument value sets (i.e. possible values of an argument) and/or submits arguments. The provided arguments are explained later in this document.
 |===
@@ -169,6 +172,29 @@ class UpperEchoAction(Action):
     def onCall(self, text):
         return self.meta.label + " returns: " + text.upper()
 ----
+
+== Active
+An action can be active or inactive in a given context. The status has to be fetched manually in a client code if necessary.
+
+The `boolean onIsActive(IsActionActiveContext context)` method is used to provide this information.
+
+.`IsActionActiveContext` properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`Object value`
+|A context value. Can be `null`.
+
+|`DataType type`
+|A context value type. Can be `null`.
+
+|`List<Object> args`
+|Action arguments in the context. Can be `null`.
+
+|`Map<String, Object> features`
+|A context features. It is guaranteed to be non null in the `onIsActive` action callback method.
+|===
 
 [[provided_arguments]]
 == Provided arguments

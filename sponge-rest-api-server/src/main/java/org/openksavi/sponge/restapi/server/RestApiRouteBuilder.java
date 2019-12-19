@@ -58,6 +58,7 @@ import org.openksavi.sponge.restapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.restapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.restapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest;
 import org.openksavi.sponge.restapi.model.request.LoginRequest;
 import org.openksavi.sponge.restapi.model.request.LogoutRequest;
 import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
@@ -71,6 +72,7 @@ import org.openksavi.sponge.restapi.model.response.GetEventTypesResponse;
 import org.openksavi.sponge.restapi.model.response.GetFeaturesResponse;
 import org.openksavi.sponge.restapi.model.response.GetKnowledgeBasesResponse;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.model.response.IsActionActiveResponse;
 import org.openksavi.sponge.restapi.model.response.LoginResponse;
 import org.openksavi.sponge.restapi.model.response.LogoutResponse;
 import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
@@ -333,6 +335,8 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 requestBody = "{}";
             }
 
+            exchange.getIn().setHeader(RestApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.now());
+
             try {
                 // Open a new session. The user will be set later in the service.
                 apiService.openSession(createSession(exchange));
@@ -351,8 +355,6 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                         bodyRequest.setBody(bodyRequest.createBody());
                     }
                 }
-
-                exchange.getIn().setHeader(RestApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.now());
 
                 O response = operation.getOperationHandler().apply(request, exchange);
 
@@ -400,6 +402,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class,
                 "The send event request", SendEventResponse.class, "The send event response",
                 (request, exchange) -> apiService.send(request)));
+        addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_IS_ACTION_ACTIVE, "Is action active", IsActionActiveRequest.class,
+                "The action active request", IsActionActiveResponse.class, "The action active response",
+                (request, exchange) -> apiService.isActionActive(request)));
         addOperation(new RestApiOperation<>(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, "Provide action arguments",
                 ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
                 "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request)));

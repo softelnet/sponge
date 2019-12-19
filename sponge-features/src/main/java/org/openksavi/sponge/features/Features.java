@@ -108,17 +108,17 @@ public final class Features {
 
     public static final String CONTEXT_ACTIONS = "contextActions";
 
-    public static final String ACTION_ARG_LIST_CREATE_ACTION = "createAction";
+    public static final String SUB_ACTION_CREATE_ACTION = "createAction";
 
-    public static final String ACTION_ARG_LIST_READ_ACTION = "readAction";
+    public static final String SUB_ACTION_READ_ACTION = "readAction";
 
-    public static final String ACTION_ARG_LIST_UPDATE_ACTION = "updateAction";
+    public static final String SUB_ACTION_UPDATE_ACTION = "updateAction";
 
-    public static final String ACTION_ARG_LIST_DELETE_ACTION = "deleteAction";
+    public static final String SUB_ACTION_DELETE_ACTION = "deleteAction";
 
-    public static final String ACTION_ARG_LIST_ACTIVATE_ACTION = "activateAction";
+    public static final String SUB_ACTION_ACTIVATE_ACTION = "activateAction";
 
-    public static final String ACTION_ARG_LIST_ACTIVATE_ACTION_VALUE_SUBMIT = "submit";
+    public static final String TYPE_LIST_ACTIVATE_ACTION_VALUE_SUBMIT = "submit";
 
     public static final String BINARY_WIDTH = "width";
 
