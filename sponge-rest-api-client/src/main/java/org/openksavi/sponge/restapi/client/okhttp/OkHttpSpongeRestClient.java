@@ -43,8 +43,9 @@ import org.openksavi.sponge.restapi.model.response.SpongeResponse;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 
 /**
- * A Sponge REST API client that uses OkHttp. OkHttpSpongeRestApiClient performs best when you create a single OkHttpSpongeRestApiClient
- * instance and reuse it for all of your REST API calls.
+ * A Sponge REST API client that uses OkHttp. OkHttpSpongeRestApiClient performs
+ * best when you create a single OkHttpSpongeRestApiClient instance and reuse it
+ * for all of your REST API calls.
  */
 public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
 
@@ -87,8 +88,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
 
     @Override
     @SuppressWarnings("deprecation")
-    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request, Class<R> responseClass,
-            SpongeRequestContext context) {
+    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request,
+            Class<R> responseClass, SpongeRequestContext context) {
         Headers headers = new Headers.Builder().add("Content-Type", RestApiConstants.CONTENT_TYPE_JSON).build();
 
         try {
@@ -101,11 +102,10 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
             Stream.concat(Stream.of(context.getOnRequestSerializedListener()), onRequestSerializedListeners.stream())
                     .filter(Objects::nonNull).forEach(listener -> listener.onRequestSerialized(request, requestBody));
 
-            Response httpResponse =
-                    okHttpClient
-                            .newCall(new Request.Builder().url(getUrl(operationType)).headers(headers)
-                                    .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
-                            .execute();
+            Response httpResponse = okHttpClient.newCall(new Request.Builder().url(getUrl(operationType))
+                    .headers(headers)
+                    .post(RequestBody.create(MediaType.get(RestApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
+                    .execute();
 
             ResponseBody httpResponseBody = httpResponse.body();
             String responseBody = httpResponseBody != null ? httpResponseBody.string() : null;
@@ -114,7 +114,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
             }
 
             Validate.isTrue(
-                    httpResponse.isSuccessful() || httpResponse.code() == RestApiConstants.HTTP_CODE_ERROR && isJson(httpResponseBody),
+                    httpResponse.isSuccessful()
+                            || httpResponse.code() == RestApiConstants.HTTP_CODE_ERROR && isJson(httpResponseBody),
                     "HTTP error status code is %s", httpResponse.code());
 
             R response = null;
@@ -122,8 +123,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
                 response = getObjectMapper().readValue(responseBody, responseClass);
             } finally {
                 final R finalResponse = response;
-                Stream.concat(Stream.of(context.getOnResponseDeserializedListener()), onResponseDeserializedListeners.stream())
-                        .filter(Objects::nonNull)
+                Stream.concat(Stream.of(context.getOnResponseDeserializedListener()),
+                        onResponseDeserializedListeners.stream()).filter(Objects::nonNull)
                         .forEach(listener -> listener.onResponseDeserialized(request, finalResponse, responseBody));
 
                 httpResponse.close();
@@ -136,7 +137,8 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     }
 
     /**
-     * Closes aggressively the underlying OkHttpClient according to the OkHttpClient documentation.
+     * Closes aggressively the underlying OkHttpClient according to the OkHttpClient
+     * documentation.
      */
     @Override
     public void close() {
@@ -154,8 +156,16 @@ public class OkHttpSpongeRestClient extends BaseSpongeRestClient {
     }
 
     protected boolean isJson(ResponseBody httpResponseBody) {
-        return httpResponseBody != null && httpResponseBody.contentType() != null
-                && httpResponseBody.contentType().type().toLowerCase().equals("application")
-                && httpResponseBody.contentType().subtype().toLowerCase().equals("json");
+        if (httpResponseBody == null || httpResponseBody.contentType() == null) {
+            return false;
+        }
+
+        MediaType mediaType = httpResponseBody.contentType();
+
+        if (mediaType == null || mediaType.type() == null || mediaType.subtype() == null) {
+            return false;
+        }
+
+        return mediaType.type().toLowerCase().equals("application") && mediaType.subtype().toLowerCase().equals("json");
     }
 }

@@ -41,7 +41,10 @@ public class IsActionActiveContext implements Cloneable {
     /** The action arguments in the context. Can be {@code null}. */
     private List<Object> args;
 
-    /** The context features. It is guaranteed to be non null in the {@code onIsActive} action callback method. */
+    /**
+     * The context features. It is guaranteed to be non null in the
+     * {@code onIsActive} action callback method.
+     */
     private Map<String, Object> features;
 
     public IsActionActiveContext(Object value, DataType type, List<Object> args, Map<String, Object> features) {
@@ -92,7 +95,8 @@ public class IsActionActiveContext implements Cloneable {
     }
 
     public Object getFeature(String featureName) {
-        Validate.isTrue(features != null && features.containsKey(featureName), "There is no feature %s", featureName);
+        Validate.notNull(features, "There are no feature set");
+        Validate.isTrue(features.containsKey(featureName), "There is no feature %s", featureName);
 
         return features.get(featureName);
     }
