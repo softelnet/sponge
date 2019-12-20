@@ -1,0 +1,8 @@
+{
+    "java.format.settings.url": "sponge/sponge-development-tools/eclipse/configuration/openksavi_formatter.xml",
+    "[java]": {
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.tabSize": 4
+    }
+}
