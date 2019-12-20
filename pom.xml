@@ -101,7 +101,7 @@
         <tensorflow.version>1.13.1</tensorflow.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
-        <rxjava2.version>2.2.15</rxjava2.version>
+        <rxjava2.version>2.2.16</rxjava2.version>
         <okhttp.version> 4.2.2</okhttp.version>
         <reflections.version>0.9.11</reflections.version>
         <jackson.version>2.10.1</jackson.version>
@@ -110,9 +110,9 @@
         <jserialcomm.version>2.5.3</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.25.0</grpc.version>
-        <protobuf.version>3.10.0</protobuf.version>
-        <protoc.version>3.10.0</protoc.version>
+        <grpc.version>1.26.0</grpc.version>
+        <protobuf.version>3.11.1</protobuf.version>
+        <protoc.version>3.11.2</protoc.version>
         <netty-tcnative.version>2.0.26.Final</netty-tcnative.version>
 
         <activemq.version>5.14.5</activemq.version>
@@ -121,11 +121,11 @@
 
         <jetty.version>9.4.24.v20191120</jetty.version>
 
-        <slf4j.version>1.7.29</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <junit-platform.version>1.5.2</junit-platform.version>
-        <mockito.version>3.2.0</mockito.version>
+        <mockito.version>3.2.4</mockito.version>
         <jcip.version>1.0-1</jcip.version>
     </properties>
 
