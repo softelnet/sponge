@@ -53,10 +53,11 @@ image::screens/mobile/drawer.jpg[title="The navigation drawer",width=300,pdfwidt
 The navigation drawer allows switching between the available main views.
 
 === Action call
+When an action call screen is displayed, provided arguments will be fetched from the server.
 
 image::screens/mobile/action_call_manage_lcd.jpg[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
 
-Actions may have read only, provided arguments only to show a data from the server (see the `Current LCD text` attribute). The `REFRESH` button retrieves the current values of read only, provided arguments from the server.
+Actions may have read only, provided arguments to show data from the server (see the `Current LCD text` attribute). The `REFRESH` button retrieves the current values of such arguments manually.
 
 .The definition of the action that manages the Raspberry Pi LCD display
 [source,python]

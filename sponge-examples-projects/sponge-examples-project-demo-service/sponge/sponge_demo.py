@@ -198,7 +198,7 @@ class DynamicProvidedArgAction(Action):
 
 class DynamicProvidedArgActionNestedProvided(Action):
     def onConfigure(self):
-        self.withLabel("Action with a provided, dynamic, nested argument")
+        self.withLabel("Action with a provided, dynamic, nested argument (experimental)")
         self.withArg(DynamicType("dynamic").withLabel("Dynamic argument").withProvided(ProvidedMeta().withValue()))
         self.withResult(StringType().withLabel("Summary"))
         self.withFeature("icon", "fan")
@@ -213,8 +213,9 @@ class DynamicProvidedArgActionNestedProvided(Action):
                 RecordType().withFields([
                     StringType("firstName").withLabel("First name"),
                     StringType("surname").withLabel("Surname"),
-                    StringType("fullName").withLabel("Full name").withNullable().withProvided(ProvidedMeta().withValue().withReadOnly().withDependencies([
-                        "dynamic.firstName", "dynamic.surname"]).withLazyUpdate()),
+                    StringType("fullName").withLabel("Full name").withNullable().withProvided(
+                        ProvidedMeta().withValue().withReadOnly().withDependencies([
+                            "dynamic.firstName", "dynamic.surname"])),
                     StringType("question1").withLabel("Question 1").withNullable(),
                     StringType("question2").withLabel("Question 2").withNullable()
                 ])
