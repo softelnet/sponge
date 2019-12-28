@@ -363,7 +363,7 @@ The application may be switched to the dark theme in the settings.
 |Viewing supported. Editing is currently limited to the `DATE_TIME` date kind.
 
 |`DynamicType`
-|A limited support. This functionality is experimental.
+|A limited support. This functionality is experimental. A new dynamic value can be created only on the server side, i.e. in an `onProvideArgs` action callback method. A provided `DynamicValue.type` name will be ignored because a name of a parent dynamic type is used in the application.
 
 |`IntegerType`
 |Supported.

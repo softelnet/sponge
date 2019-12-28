@@ -27,6 +27,7 @@ import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.action.ActionOnCallCallback;
 import org.openksavi.sponge.action.ActionOnCallNoResultCallback;
 import org.openksavi.sponge.action.ActionOnCallResultCallback;
+import org.openksavi.sponge.action.ActionOnIsActiveCallback;
 import org.openksavi.sponge.action.ActionOnProvideArgsCallback;
 import org.openksavi.sponge.core.BaseProcessorBuilder;
 import org.openksavi.sponge.type.DataType;
@@ -37,6 +38,8 @@ import org.openksavi.sponge.type.VoidType;
  */
 @SuppressWarnings("rawtypes")
 public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements ActionBuilder {
+
+    private ActionOnIsActiveCallback onIsActiveCallback;
 
     private ActionOnCallCallback onCallCallback;
 
@@ -128,6 +131,13 @@ public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements A
     }
 
     @Override
+    public ActionBuilder withOnIsActive(ActionOnIsActiveCallback onIsActiveCallback) {
+        this.onIsActiveCallback = onIsActiveCallback;
+
+        return this;
+    }
+
+    @Override
     public ActionBuilder withOnCallArgs(ActionOnCallResultCallback onCallCallback) {
         this.onCallCallback = onCallCallback;
 
@@ -146,6 +156,14 @@ public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements A
         this.onProvideArgsCallback = onProvideArgsCallback;
 
         return this;
+    }
+
+    public ActionOnIsActiveCallback getOnIsActiveCallback() {
+        return onIsActiveCallback;
+    }
+
+    public void setOnIsActiveCallback(ActionOnIsActiveCallback onIsActiveCallback) {
+        this.onIsActiveCallback = onIsActiveCallback;
     }
 
     public ActionOnCallCallback getOnCallCallback() {

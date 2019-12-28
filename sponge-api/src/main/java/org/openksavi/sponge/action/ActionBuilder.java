@@ -67,6 +67,8 @@ public interface ActionBuilder extends ProcessorBuilder<Action> {
     @Override
     ActionBuilder withOnInit(ProcessorOnInitCallback<Action> onInitCallback);
 
+    ActionBuilder withOnIsActive(ActionOnIsActiveCallback onIsActiveCallback);
+
     ActionBuilder withOnCallArgs(ActionOnCallResultCallback onCallCallback);
 
     ActionBuilder withOnCallArgsNoResult(ActionOnCallNoResultCallback onCallCallback);

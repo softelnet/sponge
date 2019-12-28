@@ -24,6 +24,7 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionOnCallCallback;
 import org.openksavi.sponge.action.ActionOnCallNoResultCallback;
 import org.openksavi.sponge.action.ActionOnCallResultCallback;
+import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsContext;
 
 /**
@@ -51,6 +52,15 @@ public class DefaultBuilderAction extends BaseAction {
             builder.getOnInitCallback().onInit(this);
         } else {
             super.onInit();
+        }
+    }
+
+    @Override
+    public boolean onIsActive(IsActionActiveContext context) {
+        if (builder.getOnIsActiveCallback() != null) {
+            return builder.getOnIsActiveCallback().onIsActive(this, context);
+        } else {
+            return super.onIsActive(context);
         }
     }
 
