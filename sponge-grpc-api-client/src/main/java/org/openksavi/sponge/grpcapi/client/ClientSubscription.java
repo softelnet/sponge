@@ -94,7 +94,7 @@ public class ClientSubscription {
                 }
             };
 
-            requestObserver = grpcClient.getServiceAsyncStub().subscribe(responseObserver);
+            requestObserver = grpcClient.getServiceAsyncStub().subscribeManaged(responseObserver);
             requestObserver.onNext(createAndSetupSubscribeRequest());
 
             subscribed = true;

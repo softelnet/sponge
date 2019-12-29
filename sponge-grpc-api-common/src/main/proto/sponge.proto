@@ -30,7 +30,9 @@ package org.openksavi.sponge.grpcapi;
 service SpongeGrpcApi {
   rpc GetVersion (VersionRequest) returns (VersionResponse) {}
 
-  rpc Subscribe (stream SubscribeRequest) returns (stream SubscribeResponse) {}
+  rpc Subscribe (SubscribeRequest) returns (stream SubscribeResponse) {}
+
+  rpc SubscribeManaged (stream SubscribeRequest) returns (stream SubscribeResponse) {}
 }
 
 message ObjectValue {

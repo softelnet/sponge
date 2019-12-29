@@ -95,8 +95,31 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
         }
     }
 
+    protected void doSubscribe(long subscriptionId, SubscribeRequest request, StreamObserver<SubscribeResponse> responseObserver) {
+        try {
+            // Open a new session. The user will be set later in the REST API service.
+            restApiService.openSession(createSession());
+
+            // Check user credentials.
+            UserContext userContext = authenticateRequest(request);
+
+            logger.debug("New subscription {}", subscriptionId);
+            subscriptionManager.putSubscription(new ServerSubscription(subscriptionId, request.getEventNamesList(),
+                    request.getRegisteredTypeRequired(), responseObserver, userContext,
+                    request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId()) ? request.getHeader().getId() : null));
+        } finally {
+            // Close the session.
+            restApiService.closeSession();
+        }
+    }
+
     @Override
-    public StreamObserver<SubscribeRequest> subscribe(StreamObserver<SubscribeResponse> responseObserver) {
+    public void subscribe(SubscribeRequest request, StreamObserver<SubscribeResponse> responseObserver) {
+        doSubscribe(subscriptionManager.createNewSubscriptionId(), request, responseObserver);
+    }
+
+    @Override
+    public StreamObserver<SubscribeRequest> subscribeManaged(StreamObserver<SubscribeResponse> responseObserver) {
         return new StreamObserver<SubscribeRequest>() {
 
             private long subscriptionId = subscriptionManager.createNewSubscriptionId();
@@ -111,22 +134,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
                 // The first request in the client stream creates a new subscription.
                 if (previousSubscription == null && !isKeepAlive) {
-                    try {
-                        // Open a new session. The user will be set later in the REST API service.
-                        restApiService.openSession(createSession());
-
-                        // Check user credentials.
-                        UserContext userContext = authenticateRequest(request);
-
-                        logger.debug("New subscription {}", subscriptionId);
-                        subscriptionManager.putSubscription(new ServerSubscription(subscriptionId, request.getEventNamesList(),
-                                request.getRegisteredTypeRequired(), responseObserver, userContext,
-                                request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId()) ? request.getHeader().getId()
-                                        : null));
-                    } finally {
-                        // Close the session.
-                        restApiService.closeSession();
-                    }
+                    doSubscribe(subscriptionId, request, responseObserver);
                 }
 
                 if (isKeepAlive) {
