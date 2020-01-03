@@ -55,9 +55,10 @@ class MpdPlaylist(Action):
                     if position == currentPosition:
                         entry.withFeature("icon", "play")
 
+                indicatedIndex = currentPosition - 1 if currentPosition else None
                 context.provided["playlist"] = ProvidedValue().withValue(AnnotatedValue(entries).withTypeLabel(
                     "Playlist" + ((" (" + str(len(allPlaylist)) +")") if len(allPlaylist) > 0 else "")).withFeatures(
-                        {"offset":offset, "limit":limit, "count":len(allPlaylist)}))
+                        {"offset":offset, "limit":limit, "count":len(allPlaylist), "indicatedIndex":indicatedIndex}))
         finally:
             mpc.lock.unlock()
 

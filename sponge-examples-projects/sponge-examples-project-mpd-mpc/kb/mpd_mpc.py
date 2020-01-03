@@ -97,7 +97,7 @@ class MpdSetServer(Action):
         self.withLabel("Choose an MPD server").withDescription("Sets an MPD server")
         self.withArg(StringType("host").withNullable().withLabel("Host").withDescription("The MPD host").withProvided(
             ProvidedMeta().withValue().withOverwrite()))
-        self.withNoResult().withFeatures({"icon":"record-player", "callLabel":"Save", "visible":False})
+        self.withNoResult().withFeatures({"icon":"record-player", "callLabel":"Save"})
     def onCall(self, host):
         if host:
             host = host.strip()

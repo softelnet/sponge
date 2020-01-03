@@ -48,6 +48,10 @@ public final class Features {
 
     public static final String WIDGET = "widget";
 
+    public static final String GROUP = "group";
+
+    public static final String KEY = "key";
+
     public static final String RESPONSIVE = "responsive";
 
     public static final String ACTION_CONFIRMATION = "confirmation";
@@ -143,6 +147,8 @@ public final class Features {
     public static final String PROVIDE_VALUE_LIMIT = "limit";
 
     public static final String PROVIDE_VALUE_COUNT = "count";
+
+    public static final String PROVIDE_VALUE_INDICATED_INDEX = "indicatedIndex";
 
     public static final class Formats {
 

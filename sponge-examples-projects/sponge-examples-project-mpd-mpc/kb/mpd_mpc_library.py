@@ -11,7 +11,8 @@ class MpdLibrary(Action):
         self.withArgs([
             StringType("parentDir").withLabel("Directory").withAnnotated().withDefaultValue(AnnotatedValue("/")).withProvided(
                 ProvidedMeta().withValue().withReadOnly().withImplicitMode()),
-            ListType("files").withLabel("Files").withAnnotated().withFeatures({"scroll":True, "pageable":True}).withProvided(
+            # The key is used by the GUI to remember a scroll position in the list for every parentDir.
+            ListType("files").withLabel("Files").withAnnotated().withFeatures({"scroll":True, "pageable":True, "key":"parentDir"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("parentDir").withOptionalMode()).withElement(
                     RecordType("file").withAnnotated().withFields([
                         StringType("file"),
@@ -58,9 +59,11 @@ class MpdLibrary(Action):
         try:
             files = None
             parentDir = context.current["parentDir"].value
+
             if "files.file" in context.submit:
                 try:
-                    parentDir = self._changeDir(parentDir, context.current["files.file"].value)
+                    newDir = context.current["files.file"].value
+                    parentDir = self._changeDir(parentDir, newDir)
                     files = self._createFiles(parentDir)
                 except:
                     self.logger.warn(str(sys.exc_info()[1]))
