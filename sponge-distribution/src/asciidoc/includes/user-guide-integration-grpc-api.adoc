@@ -20,6 +20,10 @@ The following table contains a summary of the gRPC API operations.
 |Subscribe events
 |`Subscribe`
 |Subscribes to {sponge} events and returns a stream of events.
+
+|Subscribe events and manage a subscription
+|`SubscribeManaged`
+|Subscribes to {sponge} events and returns a stream of events. A subscription is managed by a stream of requests. This operation uses bidirectional steaming and is not supported in https://grpc.io/blog/state-of-grpc-web/[web gRPC clients].
 |===
 
 == Interface specification

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 
 import org.openksavi.sponge.grpcapi.client.util.GrpcClientUtils;
@@ -40,6 +41,8 @@ public class ClientSubscription {
 
     private boolean registeredTypeRequired;
 
+    private boolean managed;
+
     private boolean subscribed = false;
 
     private StreamObserver<RemoteEvent> eventStreamObserver;
@@ -48,11 +51,14 @@ public class ClientSubscription {
 
     private StreamObserver<SubscribeRequest> requestObserver;
 
-    public ClientSubscription(SpongeGrpcClient grpcClient, List<String> eventNames, boolean registeredTypeRequired,
+    private StreamObserver<SubscribeResponse> responseObserver;
+
+    public ClientSubscription(SpongeGrpcClient grpcClient, List<String> eventNames, boolean registeredTypeRequired, boolean managed,
             StreamObserver<RemoteEvent> eventStreamObserver) {
         this.grpcClient = grpcClient;
         this.eventNames = eventNames;
         this.registeredTypeRequired = registeredTypeRequired;
+        this.managed = managed;
         this.eventStreamObserver = eventStreamObserver;
     }
 
@@ -67,7 +73,7 @@ public class ClientSubscription {
                 return;
             }
 
-            StreamObserver<SubscribeResponse> responseObserver = new StreamObserver<SubscribeResponse>() {
+            responseObserver = new StreamObserver<SubscribeResponse>() {
 
                 @Override
                 public void onNext(SubscribeResponse response) {
@@ -94,8 +100,12 @@ public class ClientSubscription {
                 }
             };
 
-            requestObserver = grpcClient.getServiceAsyncStub().subscribeManaged(responseObserver);
-            requestObserver.onNext(createAndSetupSubscribeRequest());
+            if (managed) {
+                requestObserver = grpcClient.getServiceAsyncStub().subscribeManaged(responseObserver);
+                requestObserver.onNext(createAndSetupSubscribeRequest());
+            } else {
+                grpcClient.getServiceAsyncStub().subscribe(createAndSetupSubscribeRequest(), responseObserver);
+            }
 
             subscribed = true;
         } finally {
@@ -114,11 +124,20 @@ public class ClientSubscription {
                 .addAllEventNames(eventNames).setRegisteredTypeRequired(registeredTypeRequired).build();
     }
 
+    /**
+     * Closes the subscription. <p>WARNING: If the subscription is not managed, it will be cancelled using a gRPC context which may not work
+     * immediately.</p>
+     */
     public void close() {
         lock.lock();
         try {
-            if (requestObserver != null) {
-                requestObserver.onCompleted();
+            if (managed) {
+                if (requestObserver != null) {
+                    requestObserver.onCompleted();
+                }
+            } else {
+                // TODO Doesn't close the subscription immediately.
+                Context.current().withCancellation().close();
             }
 
             subscribed = false;
@@ -137,6 +156,14 @@ public class ClientSubscription {
 
     public boolean isRegisteredTypeRequired() {
         return registeredTypeRequired;
+    }
+
+    public boolean isManaged() {
+        return managed;
+    }
+
+    public void setManaged(boolean managed) {
+        this.managed = managed;
     }
 
     public boolean isSubscribed() {

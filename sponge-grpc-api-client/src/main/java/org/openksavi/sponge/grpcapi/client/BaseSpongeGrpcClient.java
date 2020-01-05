@@ -251,16 +251,22 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
     }
 
     @Override
-    public ClientSubscription subscribe(List<String> eventNames, boolean registeredTypeRequired,
+    public ClientSubscription subscribe(List<String> eventNames, boolean registeredTypeRequired, boolean managed,
             StreamObserver<RemoteEvent> eventStreamObserver) {
-        ClientSubscription subscription = new ClientSubscription(this, eventNames, registeredTypeRequired, eventStreamObserver);
+        ClientSubscription subscription = new ClientSubscription(this, eventNames, registeredTypeRequired, managed, eventStreamObserver);
         subscription.open();
 
         return subscription;
     }
 
     @Override
+    public ClientSubscription subscribe(List<String> eventNames, boolean registeredTypeRequired,
+            StreamObserver<RemoteEvent> eventStreamObserver) {
+        return subscribe(eventNames, registeredTypeRequired, true, eventStreamObserver);
+    }
+
+    @Override
     public ClientSubscription subscribe(List<String> eventNames, StreamObserver<RemoteEvent> eventStreamObserver) {
-        return subscribe(eventNames, false, eventStreamObserver);
+        return subscribe(eventNames, false, true, eventStreamObserver);
     }
 }

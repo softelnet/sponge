@@ -35,6 +35,9 @@ public interface SpongeGrpcClient extends Closeable {
 
     String getVersion();
 
+    ClientSubscription subscribe(List<String> eventNames, boolean registeredTypeRequired, boolean managed,
+            StreamObserver<RemoteEvent> eventStreamObserver);
+
     ClientSubscription subscribe(List<String> eventNames, boolean registeredTypeRequired, StreamObserver<RemoteEvent> eventStreamObserver);
 
     ClientSubscription subscribe(List<String> eventNames, StreamObserver<RemoteEvent> eventStreamObserver);

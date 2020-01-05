@@ -85,8 +85,7 @@ public abstract class GrpcApiServerBaseTest {
         }
     }
 
-    @Test
-    public void testSubscribe() throws Exception {
+    private void doTestSubscribe(boolean managed) throws Exception {
         int maxEvents = 3;
         final CountDownLatch finishLatch = new CountDownLatch(1);
         final List<RemoteEvent> events = Collections.synchronizedList(new ArrayList<>());
@@ -97,11 +96,11 @@ public abstract class GrpcApiServerBaseTest {
 
                 @Override
                 public void onNext(RemoteEvent event) {
-                    logger.info("Response event: {}", event.getName());
-                    events.add(event);
-
                     if (events.size() >= maxEvents) {
                         finishLatch.countDown();
+                    } else {
+                        logger.info("Response event: {}", event.getName());
+                        events.add(event);
                     }
                 }
 
@@ -118,7 +117,7 @@ public abstract class GrpcApiServerBaseTest {
             };
 
             List<String> eventNames = Arrays.asList("notification.*");
-            subscription = grpcClient.subscribe(eventNames, true, eventObserver);
+            subscription = grpcClient.subscribe(eventNames, true, managed, eventObserver);
             assertEquals(eventNames, subscription.getEventNames());
             assertTrue(subscription.isRegisteredTypeRequired());
             assertTrue(subscription.isSubscribed());
@@ -128,12 +127,25 @@ public abstract class GrpcApiServerBaseTest {
             }
 
             subscription.close();
+
+            // Terminate the connection.
+            grpcClient.close(true);
         }
 
         assertFalse(subscription.isSubscribed());
         assertEquals(maxEvents, events.size());
 
         assertEquals("Sponge", events.get(1).getAttributes().get("source"));
+    }
+
+    @Test
+    public void testSubscribe() throws Exception {
+        doTestSubscribe(true);
+    }
+
+    @Test
+    public void testSubscribeNotManaged() throws Exception {
+        doTestSubscribe(false);
     }
 
     @Test
