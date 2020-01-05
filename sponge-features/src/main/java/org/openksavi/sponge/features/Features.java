@@ -82,6 +82,8 @@ public final class Features {
 
     public static final String ACTION_INTENT_VALUE_RELOAD = "reload";
 
+    public static final String ACTION_INTENT_VALUE_RESET = "reset";
+
     public static final String ACTION_REFRESH_EVENTS = "refreshEvents";
 
     public static final String EVENT_HANDLER_ACTION = "handlerAction";

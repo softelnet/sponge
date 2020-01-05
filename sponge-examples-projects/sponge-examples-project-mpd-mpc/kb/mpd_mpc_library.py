@@ -71,7 +71,13 @@ class MpdLibrary(Action):
 
             if "files" in context.provide or "files.file" in context.submit:
                 if files is None:
-                    files = self._createFiles(parentDir)
+                    try:
+                        files = self._createFiles(parentDir)
+                    except:
+                        # Failsafe option.
+                        self.logger.warn(str(sys.exc_info()[1]))
+                        parentDir = AnnotatedValue("/")
+                        files = self._createFiles(parentDir)
 
                 offset = context.getFeature("files", "offset")
                 limit = context.getFeature("files", "limit")

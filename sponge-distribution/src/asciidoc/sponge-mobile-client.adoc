@@ -458,6 +458,10 @@ The application may be switched to the dark theme in the settings.
 |Type
 |A name of a group of action arguments or record fields. Grouped values will be placed in a compact GUI panel close to each other, if it is possible.
 
+|`key`
+|Action argument type
+|A name of other argument whose value will be used as a key (or a key fragment) of a GUI widget. For example it enables saving a scroll position in a list. This feature is experimental and is currently implemented only for pageable lists.
+
 |`responsive`
 |Type
 |A responsive GUI widget. If this feature is set for a provided type, every change in GUI will cause invoking a `provideActionArgs` operation. This feature may be resource consuming (especially when used with an _argument submit_ option) because of possible many server roundtrips.
@@ -509,6 +513,10 @@ The application may be switched to the dark theme in the settings.
 |`intent: reload`
 |Action
 |Should be set in an action that reloads knowledge bases. Refreshes actions cached in a mobile application.
+
+|`intent: reset`
+|Action
+|Refreshes actions cached in a mobile application after an action call.
 
 |`intent`
 |Type
@@ -669,6 +677,10 @@ A data type property can be dynamically overwritten by a corresponding feature i
 |`count`
 |`ListType` annotated value
 |A count of all available elements of a list. This value is optional.
+
+|`indicatedIndex`
+|`ListType` annotated value
+|An optional index of a single indicated element in a list. This feature is experimental and is implemented only for pageable lists with a limited functionality. If an element is indicated, the GUI will show a button enabling a user to jump to that element (but only if a page containing such element is already loaded from the server). Another limitation is that a jump resets a saved scroll position of a list.
 |===
 
 A pagination uses the `provideActionArgs` REST API operation. The features `offset` and `limit` have to be set when invoking `provideActionArgs`. A provided, annotated list must have the `offset` and the `limit` set and optionally the `count`. A client code is responsible for setting `offset` and `limit`. An action `onProvideArgs` callback method is not required to support `offset` or `limit` if they are not set in the request. A page size is established by a client code.
