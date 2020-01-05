@@ -93,3 +93,14 @@ If the REST API server is published as HTTPS, the gRPC server will be published 
 ----
 keytool -exportcert -rfc -file remote_api_selfsigned.pem -keystore remote_api_selfsigned.jks -alias rest_api -keypass sponge -storepass sponge
 ----
+
+== Envoy proxy
+The Envoy proxy for web clients can be run in Docker, e.g.:
+
+.Envoy proxy in Docker
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm --name envoy -p 8890:8890 -v "$(pwd)/envoy-config.yaml:/etc/envoy/envoy.yaml:ro" envoyproxy/envoy
+----
+
+The example of the Envoy proxy configuration is available in the {sponge} source repository.

@@ -15,7 +15,7 @@ void main() async {
 
   // Create a new Sponge gRPC API client associated with the REST API client.
   // Don't use insecure channel in production.
-  var grpcClient = SpongeGrpcClient(restClient,
+  var grpcClient = DefaultSpongeGrpcClient(restClient,
       channelOptions:
           ChannelOptions(credentials: const ChannelCredentials.insecure()));
 
@@ -34,12 +34,16 @@ The client follows the convention that a gRPC service port is a REST API port pl
 .Setting port in a gRPC API client
 [source,dart]
 ----
-SpongeGrpcClient(restClient,
+DefaultSpongeGrpcClient(restClient,
   configuration: SpongeGrpcClientConfiguration(port: 9000),
   channelOptions: ChannelOptions(credentials: const ChannelCredentials.insecure()));
 ----
 
-This project uses the https://pub.dev/packages/grpc[Dart implementation of gRPC] and doesn't support the web platform.
+This project uses the https://pub.dev/packages/grpc[Dart implementation of gRPC].
+
+The `DefaultSpongeGrpcClient` doesn't support a web platform.
+
+To use a {sponge} gRPC API client in a web client you have to instantiate `WebSpongeGrpcClient` instead of `DefaultSpongeGrpcClient` and import `package:sponge_grpc_client_dart/sponge_grpc_client_dart_web.dart`.
 
 Unless noted otherwise in the release notes, versions of the gRPC API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
 
