@@ -121,4 +121,13 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
         }
         return this;
     }
+
+    public BaseAction withNotCallable() {
+        return withCallable(false);
+    }
+
+    public BaseAction withActivatable() {
+        getMeta().setActivatable(true);
+        return this;
+    }
 }

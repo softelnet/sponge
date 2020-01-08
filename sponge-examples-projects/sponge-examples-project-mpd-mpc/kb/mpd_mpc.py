@@ -36,7 +36,7 @@ class ViewSongLyrics(Action):
                 ProvidedMeta().withValue().withReadOnly()),
             StringType("lyrics").withLabel("Lyrics").withProvided(
                 ProvidedMeta().withValue().withReadOnly().withDependency("song")),
-        ]).withCallable(False)
+        ]).withNotCallable().withActivatable()
         self.withFeatures({"icon":"script-text-outline", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
     def onIsActive(self, context):
         return sponge.getVariable("mpc").getCurrentSong() is not None
@@ -67,7 +67,7 @@ class ViewSongInfo(Action):
     def onConfigure(self):
         self.withLabel("Song info").withDescription("View the current song info.").withArgs([
             createSongType("song").withProvided(ProvidedMeta().withValue().withReadOnly()),
-        ]).withCallable(False)
+        ]).withNotCallable().withActivatable()
         self.withFeatures({"icon":"information", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
     def onIsActive(self, context):
         return sponge.getVariable("mpc").getCurrentSong() is not None

@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.14.1 (not released yet)
 * API change: Renamed the `subscribe` bidirectional streaming method to `subscribeManaged` and created a new `subscribe` method in the gRPC API.
+* Added an `activatable` flag to an action.
 
 [discrete]
 == 1.14.0 (2019-12-20)

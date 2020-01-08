@@ -126,6 +126,11 @@ public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements A
     }
 
     @Override
+    public ActionBuilder withNotCallable() {
+        return withCallable(false);
+    }
+
+    @Override
     public BaseActionBuilder withOnInit(ProcessorOnInitCallback<Action> onInitCallback) {
         return (BaseActionBuilder) super.withOnInit(onInitCallback);
     }
@@ -133,6 +138,8 @@ public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements A
     @Override
     public ActionBuilder withOnIsActive(ActionOnIsActiveCallback onIsActiveCallback) {
         this.onIsActiveCallback = onIsActiveCallback;
+
+        getMeta().setActivatable(onIsActiveCallback != null);
 
         return this;
     }

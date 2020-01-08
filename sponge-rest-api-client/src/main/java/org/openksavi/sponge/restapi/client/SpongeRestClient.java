@@ -431,8 +431,9 @@ public interface SpongeRestClient extends Closeable {
     IsActionActiveResponse isActionActive(IsActionActiveRequest request);
 
     /**
-     * Fetches active/inactive statuses for actions specified in the entries.
-     * 
+     * Fetches active/inactive statuses for actions specified in the entries. If none of the actions is activatable (based on the cached
+     * metadata), returns positive activity statuses without connecting the server.
+     *
      * @param entries the reaction entries.
      */
     List<Boolean> isActionActive(List<IsActionActiveEntry> entries);

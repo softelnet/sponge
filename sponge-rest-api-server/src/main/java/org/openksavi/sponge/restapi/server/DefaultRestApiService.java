@@ -264,7 +264,7 @@ public class DefaultRestApiService implements RestApiService {
         ActionMeta meta = actionAdapter.getMeta();
         return new RestActionMeta(meta.getName(), meta.getLabel(), meta.getDescription(),
                 createRestKnowledgeBase(actionAdapter.getKnowledgeBase()), createRestCategory(meta.getCategory()), meta.getFeatures(),
-                meta.getArgs(), meta.getResult(), meta.isCallable(), actionAdapter.getQualifiedVersion());
+                meta.getArgs(), meta.getResult(), meta.isCallable(), meta.isActivatable(), actionAdapter.getQualifiedVersion());
 
     }
 

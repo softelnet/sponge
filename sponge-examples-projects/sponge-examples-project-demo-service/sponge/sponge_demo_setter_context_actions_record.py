@@ -29,7 +29,7 @@ class NumbersViewFilterInContextAction(Action):
             createNumberFilterRecordType("filter").withFeature("visible", False),
             ListType("numbers").withLabel("Numbers").withAnnotated().withProvided(
                 ProvidedMeta().withValue().withDependency("filter").withOverwrite()
-            ).withElement(IntegerType().withAnnotated()).withFeatures({"scroll":True})
+            ).withElement(IntegerType().withAnnotated())
         ]).withNoResult().withCallable(False).withFeatures({"contextActions":["filter=NumbersViewFilterInContextAction_Filter(filter)",
                                                                               "this=NumbersViewFilterInContextAction_ThisSubstitution"]})
     def onProvideArgs(self, context):

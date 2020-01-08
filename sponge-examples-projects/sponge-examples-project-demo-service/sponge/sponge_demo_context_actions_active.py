@@ -13,6 +13,7 @@ class ContextActionsActiveInactive(Action):
 class ContextActionsActiveInactive_ContextAction1(Action):
     def onConfigure(self):
         self.withLabel("Active/inactive context action").withArg(BooleanType("active").withNullable().withFeature("visible", False)).withNoResult()
+        self.withActivatable()
     def onIsActive(self, context):
         return context.args[0] if context.args is not None and context.args[0] is not None else False
     def onCall(self, active):

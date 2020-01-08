@@ -29,11 +29,20 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`withCallable(boolean callable)`
 |Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used with provided arguments.
 
+|`withCallable(boolean callable)`
+|Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used with provided arguments.
+
+|`withNotCallable()`
+|Sets the action to be not callable.
+
+|`withActivatable()`
+|Sets an activatable flag for the action. An activatable action should have an `onIsActive` method defined. Defaults to `false`.
+
 |`Object onCall(_dynamic arguments_)`
 |A dynamic callback method that should be defined in a callable action. It will be invoked when an action is called, e.g.: `sponge.call(actionName, [argument list])`. The behavior of this method is dynamic, i.e. custom actions define `onCall` methods with the arbitrary number of named arguments, for example `def onCall(self, value, text)`. This is the reason that the `Action` interface doesn't force any implementation of `onCall`. The result is an `Object`.
 
 |`boolean onIsActive(IsActionActiveContext context)`
-|A callback method that informs if the action in a given context is active.
+|A callback method that informs if the action in a given context is active. If this method is implemented in an action, an activatable flag should to be set as well.
 
 |`void onProvideArgs(ProvideArgsContext context)`
 |A callback method that provides argument values along with argument value sets (i.e. possible values of an argument) and/or submits arguments. The provided arguments are explained later in this document.

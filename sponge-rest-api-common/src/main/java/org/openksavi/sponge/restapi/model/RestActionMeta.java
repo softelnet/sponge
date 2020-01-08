@@ -51,13 +51,15 @@ public class RestActionMeta implements Descriptive {
 
     private boolean callable = true;
 
+    private boolean activatable = false;
+
     private ProcessorQualifiedVersion qualifiedVersion;
 
     public RestActionMeta() {
     }
 
     public RestActionMeta(String name, String label, String description, RestKnowledgeBaseMeta knowledgeBase, RestCategoryMeta category,
-            Map<String, Object> features, List<DataType> args, DataType result, boolean callable,
+            Map<String, Object> features, List<DataType> args, DataType result, boolean callable, boolean activatable,
             ProcessorQualifiedVersion qualifiedVersion) {
         this.name = name;
         this.label = label;
@@ -68,6 +70,7 @@ public class RestActionMeta implements Descriptive {
         this.args = args;
         this.result = result;
         this.callable = callable;
+        this.activatable = activatable;
         this.qualifiedVersion = qualifiedVersion;
     }
 
@@ -156,6 +159,15 @@ public class RestActionMeta implements Descriptive {
 
     public void setCallable(boolean callable) {
         this.callable = callable;
+    }
+
+    @ApiModelProperty(value = "The action activatable flag.", required = false)
+    public boolean isActivatable() {
+        return activatable;
+    }
+
+    public void setActivatable(boolean activatable) {
+        this.activatable = activatable;
     }
 
     @ApiModelProperty(value = "The action qualified version", required = false)

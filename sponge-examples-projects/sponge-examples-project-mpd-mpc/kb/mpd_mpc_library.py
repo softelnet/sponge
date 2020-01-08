@@ -12,7 +12,7 @@ class MpdLibrary(Action):
             StringType("parentDir").withLabel("Directory").withAnnotated().withDefaultValue(AnnotatedValue("/")).withProvided(
                 ProvidedMeta().withValue().withReadOnly().withImplicitMode()),
             # The key is used by the GUI to remember a scroll position in the list for every parentDir.
-            ListType("files").withLabel("Files").withAnnotated().withFeatures({"scroll":True, "pageable":True, "key":"parentDir"}).withProvided(
+            ListType("files").withLabel("Files").withAnnotated().withFeatures({"pageable":True, "key":"parentDir"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("parentDir").withOptionalMode()).withElement(
                     RecordType("file").withAnnotated().withFields([
                         StringType("file"),

@@ -7,7 +7,7 @@ class ActionWithPageableList(Action):
     def onConfigure(self):
         self.withLabel("Action with a pageable list")
         self.withArgs([
-            ListType("list").withLabel("List").withAnnotated().withFeatures({"scroll":True, "pageable":True, "refreshable":True}).withProvided(
+            ListType("list").withLabel("List").withAnnotated().withFeatures({"pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()
                 ).withElement(
                     StringType("element").withAnnotated()

@@ -83,4 +83,19 @@ public interface ActionMeta extends ProcessorMeta {
      * @param callable the callable flag.
      */
     void setCallable(boolean callable);
+
+    /**
+     * Tells if this action is activatable. If {@code true}, the action should have the {@code onIsActive} callback method implemented.
+     * Defaults to {@code false}.
+     *
+     * @return {@code true} if this action is activatable.
+     */
+    boolean isActivatable();
+
+    /**
+     * Sets the activatable flag.
+     *
+     * @param activatable the activatable flag.
+     */
+    void setActivatable(boolean activatable);
 }

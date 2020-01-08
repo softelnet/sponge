@@ -30,6 +30,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -872,6 +874,20 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public List<Boolean> isActionActive(List<IsActionActiveEntry> entries) {
+        boolean areActivatableActions = false;
+        for (IsActionActiveEntry entry : entries) {
+            RestActionMeta actionMeta = getActionMeta(entry.getName(), false);
+            if (actionMeta != null ? actionMeta.isActivatable() : true) {
+                areActivatableActions = true;
+                break;
+            }
+        }
+
+        // No need to connect to the server.
+        if (!areActivatableActions) {
+            return Stream.generate(() -> Boolean.TRUE).limit(entries.size()).collect(Collectors.toList());
+        }
+
         return isActionActive(new IsActionActiveRequest(entries)).getBody().getActive();
     }
 

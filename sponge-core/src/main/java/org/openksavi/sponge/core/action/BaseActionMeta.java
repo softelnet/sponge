@@ -36,6 +36,8 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
 
     private boolean callable = true;
 
+    private boolean activatable = false;
+
     @Override
     public List<DataType> getArgs() {
         return args;
@@ -81,6 +83,16 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
     }
 
     @Override
+    public boolean isActivatable() {
+        return activatable;
+    }
+
+    @Override
+    public void setActivatable(boolean activatable) {
+        this.activatable = activatable;
+    }
+
+    @Override
     public void update(BaseProcessorMeta source) {
         super.update(source);
 
@@ -89,6 +101,7 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
             setArgs(sourceMeta.getArgs());
             setResult(sourceMeta.getResult());
             setCallable(sourceMeta.isCallable());
+            setActivatable(sourceMeta.isActivatable());
         }
     }
 }

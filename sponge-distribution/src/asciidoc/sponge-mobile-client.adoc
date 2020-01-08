@@ -664,7 +664,7 @@ A data type property can be dynamically overwritten by a corresponding feature i
 
 |`pageable`
 |`ListType`
-|If `True`, a list will be pageable. Defaults to `false`. A pageable list type has to be annotated, because values of offset, limit and count are passed by features in an annotated list value.
+|If `True`, a list will be pageable. Defaults to `false`. A pageable list type has to be annotated, because values of offset, limit and count are passed by features in an annotated list value. A pageable list is assumed to have the `scroll` feature set to `true`.
 
 |`offset`
 |`ListType` annotated value
@@ -680,14 +680,14 @@ A data type property can be dynamically overwritten by a corresponding feature i
 
 |`indicatedIndex`
 |`ListType` annotated value
-|An optional index of a single indicated element in a list. This feature is experimental and is implemented only for pageable lists with a limited functionality. If an element is indicated, the GUI will show a button enabling a user to jump to that element (but only if a page containing such element is already loaded from the server). Another limitation is that a jump resets a saved scroll position of a list.
+|An optional index of a single indicated element in a list. This feature is experimental and is implemented only for pageable lists with a limited functionality. If an element is indicated, the GUI will show a button enabling a user to jump to that element (but only if a page containing such element is already loaded from the server). Another limitation is that a jump resets a saved scroll position of a list. To use this feature in the application, you have to turn the application setting "_Use scrollable indexed list_" on.
 |===
 
 A pagination uses the `provideActionArgs` REST API operation. The features `offset` and `limit` have to be set when invoking `provideActionArgs`. A provided, annotated list must have the `offset` and the `limit` set and optionally the `count`. A client code is responsible for setting `offset` and `limit`. An action `onProvideArgs` callback method is not required to support `offset` or `limit` if they are not set in the request. A page size is established by a client code.
 
 The pagination is supported only for primary (i.e. not nested) action arguments and only for read provided annotated lists.
 
-A pageable list should also have the feature `scroll` set to true. The pagination works only _forward_, i.e. all previous list elements fetched from the server are stored in mobile device memory.
+The pagination works only _forward_, i.e. all previous list elements fetched from the server are stored in mobile device memory.
 
 == Included demos
 The access to actions in the mobile application is generic. However the application may include demos that use a customized UI.

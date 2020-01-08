@@ -393,7 +393,7 @@ class IsActionActiveAction(Action):
     def onConfigure(self):
         self.withLabel("Action with an activity status").withArgs([
             StringType("arg").withLabel("Arg"),
-        ]).withNoResult()
+        ]).withNoResult().withActivatable()
     def onIsActive(self, context):
         return context.value is not None
     def onCall(self, arg):

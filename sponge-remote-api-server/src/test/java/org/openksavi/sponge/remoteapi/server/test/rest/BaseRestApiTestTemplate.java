@@ -1032,6 +1032,8 @@ public abstract class BaseRestApiTestTemplate {
         try (SpongeRestClient client = createRestClient()) {
             String actionName = "IsActionActiveAction";
 
+            assertTrue(client.getActionMeta(actionName).isActivatable());
+
             List<Boolean> active = client.isActionActive(Arrays.asList(new IsActionActiveEntry(actionName).withContextValue("ACTIVE")));
             assertEquals(1, active.size());
             assertTrue(active.get(0));

@@ -28,7 +28,7 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
 public interface ActionAdapter extends ProcessorAdapter<Action>, ActionOperations {
 
     /**
-     * Informs if the action in a given context is active.
+     * Informs if the action in a given context is active. This method always returns {@code true} if the action is not activatable.
      *
      * @param context the context.
      * @return {@code true} if the action is active.

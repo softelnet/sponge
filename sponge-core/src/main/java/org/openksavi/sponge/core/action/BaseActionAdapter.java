@@ -104,6 +104,10 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
     @Override
     public boolean isActive(IsActionActiveContext context) {
+        if (!getMeta().isActivatable()) {
+            return true;
+        }
+
         IsActionActiveContext contextCopy = context.clone();
 
         if (contextCopy.getFeatures() == null) {
