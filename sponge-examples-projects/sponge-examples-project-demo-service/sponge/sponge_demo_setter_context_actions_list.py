@@ -24,7 +24,7 @@ class FruitsWithColorsContextSetter_Update(Action):
         self.withLabel("Update a fruit").withArgs([
             createFruitWithColorRecordType("fruit")
         ]).withResult(createFruitWithColorRecordType("fruit"))
-        self.withFeatures({"callLabel":"Save"})
+        self.withFeatures({"callLabel":"Save", "visible":False})
     def onCall(self, fruit):
         return fruit
 
@@ -39,7 +39,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
                     ProvidedMeta().withValue().withDependency("chosenFruit").withOptionalMode().withOverwrite()
                 ).withFeatures({"activateAction":"submit"})
         ]).withResult(createFruitWithColorRecordType())
-        self.withFeatures({"callLabel":"Choose"})
+        self.withFeatures({"callLabel":"Choose", "visible":True})
 
     def onCall(self, chosenFruit, fruits):
         if chosenFruit:

@@ -20,7 +20,7 @@ class MpdPlaylist(Action):
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withCallable(False)
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
-                           "contextActions":["MpdLibrary()", "MpdPlaylistClear()"], "icon":"playlist-edit", "visible":False})
+                           "contextActions":["MpdLibrary()", "MpdPlaylistClear()"], "icon":"playlist-edit", "visible":True})
 
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []

@@ -18,7 +18,7 @@ class MpdLibrary(Action):
                         StringType("file"),
                         BooleanType("isDir")
                     ]).withProvided(ProvidedMeta().withSubmittable().withDependency("parentDir")))
-        ]).withCallable(False).withFeatures({"icon":"library-music", "contextActions":["MpdRefreshDatabase()"], "visible":False})
+        ]).withCallable(False).withFeatures({"icon":"library-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
 
     def _isFile(self, file):
         return file is not None and file["file"] != ".." and not file["isDir"]
