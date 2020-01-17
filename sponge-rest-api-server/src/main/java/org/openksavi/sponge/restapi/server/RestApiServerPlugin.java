@@ -31,6 +31,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.spi.Registry;
 import org.apache.camel.support.DefaultRegistry;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.camel.CamelPlugin;
 import org.openksavi.sponge.camel.CamelUtils;
@@ -49,6 +51,8 @@ import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
  * Sponge REST API server plugin.
  */
 public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
+
+    private static final Logger logger = LoggerFactory.getLogger(RestApiServerPlugin.class);
 
     public static final String NAME = "restApiServer";
 
@@ -76,6 +80,8 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
     private RestApiAuthTokenService authTokenService;
 
     private CamelContext camelContext;
+
+    private ServiceDiscoveryRegistry discoveryRegistry;
 
     private Lock lock = new ReentrantLock(true);
 
@@ -151,6 +157,17 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
         }
     }
 
+    @Override
+    public void onShutdown() {
+        if (discoveryRegistry != null) {
+            try {
+                discoveryRegistry.unregister();
+            } catch (Exception e) {
+                logger.warn("Error unregistering the service", e);
+            }
+        }
+    }
+
     public RestApiSettings getSettings() {
         return settings;
     }
@@ -215,6 +232,14 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
                     service.init();
 
                     camelContext.addRoutes(routeBuilder);
+
+                    discoveryRegistry = new ServiceDiscoveryRegistry(getEngine(), settings);
+
+                    try {
+                        discoveryRegistry.register();
+                    } catch (Exception e) {
+                        logger.warn("Error registering the service", e);
+                    }
                 } catch (Exception e) {
                     throw SpongeUtils.wrapException(e);
                 }

@@ -52,6 +52,13 @@ import org.openksavi.sponge.util.ProcessorPredicate;
 public interface SpongeEngine extends EngineModule {
 
     /**
+     * Returns this engine UUID.
+     *
+     * @return this engine UUID.
+     */
+    String getUuid();
+
+    /**
      * Returns this engine name. May be {@code null}.
      *
      * @return this engine name.

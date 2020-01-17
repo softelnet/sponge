@@ -205,11 +205,19 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     /** Registered event types. */
     private Map<String, RecordType> eventTypes = new ConcurrentSkipListMap<>();
 
+    /** The engine UUID. */
+    private String uuid = SpongeUtils.getRandomUuidString();
+
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
      */
     public BaseSpongeEngine() {
         setEngine(this);
+    }
+
+    @Override
+    public String getUuid() {
+        return uuid;
     }
 
     /**

@@ -16,9 +16,9 @@
 
 package org.openksavi.sponge.core.engine;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.Session;
 import org.openksavi.sponge.engine.Variables;
 
@@ -85,7 +85,7 @@ public class DefaultSession implements Session {
     public static Session createNewSession() {
         DefaultSession session = new DefaultSession();
 
-        session.uuid = UUID.randomUUID().toString();
+        session.uuid = SpongeUtils.getRandomUuidString();
 
         return session;
     }

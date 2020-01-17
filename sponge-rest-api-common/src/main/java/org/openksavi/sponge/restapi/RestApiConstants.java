@@ -74,6 +74,14 @@ public final class RestApiConstants {
 
     public static final int HTTP_CODE_ERROR = 500;
 
+    public static final String SERVICE_DISCOVERY_TYPE = "_sponge._tcp";
+
+    public static final String SERVICE_DISCOVERY_PROPERTY_UUID = "uuid";
+
+    public static final String SERVICE_DISCOVERY_PROPERTY_NAME = "name";
+
+    public static final String SERVICE_DISCOVERY_PROPERTY_URL = "url";
+
     private RestApiConstants() {
         //
     }
