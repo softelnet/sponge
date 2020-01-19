@@ -70,7 +70,7 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 
 |`registerServiceDiscovery`
 |`boolean`
-|The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. in a local network) {sponge} services. Defaults to `true`.
+|The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. on the local network) {sponge} services. Defaults to `true`.
 
 |`serviceDiscoveryName`
 |`String`

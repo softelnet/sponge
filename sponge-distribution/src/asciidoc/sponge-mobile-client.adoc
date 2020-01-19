@@ -34,7 +34,7 @@ image::screens/mobile/connections_edit.jpg[title="Editing a connection to a Spon
 
 A {sponge} address is the URL of the {sponge} instance.
 
-The application can find nearby (i.e. located in a local network) {sponge} services.
+The application can find nearby (i.e. located on the local network) {sponge} services.
 
 === Action list
 
