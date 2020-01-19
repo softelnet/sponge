@@ -214,7 +214,8 @@ class SetActuatorSubmit(Action):
     def onConfigure(self):
         self.withLabel("Set actuator with submit").withDescription("Sets the actuator state with submit.")
         self.withArgs([
-            StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet().withSubmittable()),
+            StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet().withSubmittable(
+                SubmittableMeta().withInfluence("actuator2"))),
             BooleanType("actuator2").withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue())
         ]).withNoResult()
     def onCall(self, actuator1, actuator2):
@@ -224,6 +225,8 @@ class SetActuatorSubmit(Action):
         if "actuator1" in context.submit:
             # Set an actuator value with submit.
             sponge.setVariable("actuator1", context.current["actuator1"])
+
+            # The actuator1 influence on actuator2 could be implemented here.
 
         if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])

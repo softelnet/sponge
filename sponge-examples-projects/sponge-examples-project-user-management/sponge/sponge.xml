@@ -2,6 +2,8 @@
 <sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
 
+    <engine name="userManagement" label="User management"/>
+
     <knowledgeBases>
         <knowledgeBase name="service" label="Service">
             <file>service.py</file>

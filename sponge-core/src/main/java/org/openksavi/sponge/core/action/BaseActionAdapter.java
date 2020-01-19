@@ -211,7 +211,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     private static boolean isArgSubmittable(DataType argType) {
-        return argType.getProvided() != null && argType.getProvided().isSubmittable();
+        return argType.getProvided() != null && argType.getProvided().getSubmittable() != null;
     }
 
     private void validateResult(DataType resultType) {

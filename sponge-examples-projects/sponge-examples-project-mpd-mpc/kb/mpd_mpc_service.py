@@ -110,10 +110,11 @@ class Mpc:
     def addFilesAsRecords(self, files):
         sponge.process(self.__createProcessBuilder().arguments("add").inputAsString("\n".join(list(map(lambda file: file["file"], files))))).run().waitFor()
 
-    def setAndPlayFiles(self, files, autoPlay):
+    def addAndPlayFiles(self, files, autoPlay, replacePlaylist = False):
         if len(files) == 0:
             return
-        self.clearPlaylist()
+        if replacePlaylist:
+            self.clearPlaylist()
         self.addFileAsRecord(files[0])
         if autoPlay:
             # Play immediately after inserting the first file

@@ -48,8 +48,8 @@ public class ProvidedMeta {
     /** The flag specifying if the list element value set is provided. Applicable only for list types. Defaults to {@code false}. */
     private boolean elementValueSet = false;
 
-    /** The flag specifying if the value can be submitted (i.e. written). */
-    private boolean submittable = false;
+    /** The metadata specifying if the value can be submitted (i.e. written). */
+    private SubmittableMeta submittable;
 
     /** The flag specifying if the provided value should be updated lazily in a client code when a dependency changes (experimental). */
     @Experimental
@@ -107,9 +107,13 @@ public class ProvidedMeta {
         return this;
     }
 
-    public ProvidedMeta withSubmittable() {
-        submittable = true;
+    public ProvidedMeta withSubmittable(SubmittableMeta submittable) {
+        this.submittable = submittable;
         return this;
+    }
+
+    public ProvidedMeta withSubmittable() {
+        return withSubmittable(new SubmittableMeta());
     }
 
     public ProvidedMeta withLazyUpdate() {
@@ -191,11 +195,11 @@ public class ProvidedMeta {
         this.elementValueSet = elementValueSet;
     }
 
-    public boolean isSubmittable() {
+    public SubmittableMeta getSubmittable() {
         return submittable;
     }
 
-    public void setSubmittable(boolean submittable) {
+    public void setSubmittable(SubmittableMeta submittable) {
         this.submittable = submittable;
     }
 

@@ -17,7 +17,7 @@ class MpdLibrary(Action):
                     RecordType("file").withAnnotated().withFields([
                         StringType("file"),
                         BooleanType("isDir")
-                    ]).withProvided(ProvidedMeta().withSubmittable().withDependency("parentDir")))
+                    ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")))
         ]).withCallable(False).withFeatures({"icon":"library-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
 
     def _isFile(self, file):

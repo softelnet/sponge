@@ -5,28 +5,28 @@ Uses mpc (MPD client).
 
 import sys
 
-class MpdSetAndPlayPlaylist(Action):
+class MpdFindAndAddToPlaylist(Action):
     def onConfigure(self):
-        self.withLabel("Set and play a playlist").withDescription("Sets a playlist according to the arguments and starts playing it immediately. Uses mpc")
+        self.withLabel("Find and add to a playlist").withDescription("Adds songs to a playlist according to the arguments.")
         self.withArgs([
             StringType("artist").withNullable().withLabel("Artist").withDescription("The artist"),
             StringType("album").withNullable().withLabel("Album").withDescription("The album"),
             StringType("genre").withNullable().withLabel("Genre").withDescription("The genre"),
             IntegerType("minYear").withNullable().withLabel("Release year (since)").withDescription("The album minimum release year."),
             IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("The album maximum release year."),
-            BooleanType("autoPlay").withDefaultValue(True).withLabel("Auto play").withDescription("Plays the playlist automatically.")
-        ]).withResult(StringType().withLabel("Info").withDescription("A short info of the status of the action call."))
+            BooleanType("autoPlay").withDefaultValue(False).withLabel("Auto play").withDescription("Plays the playlist automatically."),
+            BooleanType("replacePlaylist").withDefaultValue(False).withLabel("Replace the playlist").withDescription(
+                "Clears the playlist before adding new songs.")
+        ]).withResult(StringType().withLabel("Info"))
         self.withFeatures({"icon":"playlist-star", "visible":False})
-    def onCall(self, artist, album, genre, minYear, maxYear, autoPlay):
+    def onCall(self, artist, album, genre, minYear, maxYear, autoPlay, replacePlaylist):
         mpc = sponge.getVariable("mpc")
-        sponge.logger.info("Setting the playlist...")
         selectedFiles = mpc.searchFiles(artist, album, genre, minYear, maxYear, useSimpleRegexp = True)
-        sponge.logger.info("{} files(s) found".format(len(selectedFiles)))
         if len(selectedFiles) > 0:
-            mpc.setAndPlayFiles(selectedFiles, autoPlay)
-            return "The playlist is set, {} files(s) found".format(len(selectedFiles))
+            mpc.addAndPlayFiles(selectedFiles, autoPlay, replacePlaylist)
+            return "Added {} song(s) to the playlist".format(len(selectedFiles))
         else:
-            return "No matching files found"
+            return "No matching songs found"
 
 class ViewSongLyrics(Action):
     def onConfigure(self):

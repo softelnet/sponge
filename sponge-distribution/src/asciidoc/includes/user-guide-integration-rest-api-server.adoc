@@ -67,6 +67,18 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 |`includeResponseTimes`
 |`boolean`
 |The flag specifying if a response header should have request and response time set. Defaults to `true`.
+
+|`registerServiceDiscovery`
+|`boolean`
+|The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. in a local network) {sponge} services. Defaults to `true`.
+
+|`serviceDiscoveryName`
+|`String`
+|The manually set service name used in a service discovery. The service name can be overwritten by a Java system property `sponge.restApiServer.serviceDiscoveryName`.
+
+|`serviceDiscoveryUrl`
+|`String`
+|The manually set service URL used in a service discovery. The service URL can be overwritten a Java system property `sponge.restApiServer.serviceDiscoveryUrl`.
 |===
 
 .The REST API server plugin XML configuration example

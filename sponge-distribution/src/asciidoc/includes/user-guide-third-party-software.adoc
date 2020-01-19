@@ -81,6 +81,10 @@
 |https://github.com/jwtk/jjwt[JJWT]
 |Apache 2.0
 |JSON Web Token for Java.
+
+|https://github.com/jmdns/jmdns[JmDNS]?
+|Apache 2.0
+|An implementation of multi-cast DNS in Java. It supports service discovery and service registration.
 |===
 
 The complete list of these libraries may be found in the `THIRD-PARTY.txt` and `licenses.xml` files of the standalone distribution.

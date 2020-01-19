@@ -1346,7 +1346,7 @@ public class CoreActionsTest {
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
             assertFalse(argTypes.get(0).getProvided().isReadOnly());
-            assertTrue(argTypes.get(0).getProvided().isSubmittable());
+            assertNotNull(argTypes.get(0).getProvided().getSubmittable());
             assertNotNull(argTypes.get(1).getProvided());
             assertTrue(argTypes.get(1).getProvided().isValue());
             assertFalse(argTypes.get(1).getProvided().hasValueSet());

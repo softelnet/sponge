@@ -842,13 +842,14 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
             assertFalse(argTypes.get(0).getProvided().isReadOnly());
-            assertTrue(argTypes.get(0).getProvided().isSubmittable());
+            assertNotNull(argTypes.get(0).getProvided().getSubmittable());
+            assertEquals(Arrays.asList("actuator2"), argTypes.get(0).getProvided().getSubmittable().getInfluences());
             assertNotNull(argTypes.get(1).getProvided());
             assertTrue(argTypes.get(1).getProvided().isValue());
             assertFalse(argTypes.get(1).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
             assertFalse(argTypes.get(1).getProvided().isReadOnly());
-            assertFalse(argTypes.get(1).getProvided().isSubmittable());
+            assertNull(argTypes.get(1).getProvided().getSubmittable());
 
             Map<String, ProvidedValue<?>> providedArgs;
 

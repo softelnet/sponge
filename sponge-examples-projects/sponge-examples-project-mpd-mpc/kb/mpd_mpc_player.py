@@ -28,7 +28,7 @@ class MpdPlayer(Action):
                 ProvidedMeta().withValue().withOverwrite().withSubmittable())
         ]).withCallable(False)
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
-            "MpdPlaylist()", "MpdSetAndPlayPlaylist()", "ViewSongInfo()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
+            "MpdPlaylist()", "MpdFindAndAddToPlaylist()", "ViewSongInfo()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
         ]})
 
     def __ensureStatus(self, mpc, status):

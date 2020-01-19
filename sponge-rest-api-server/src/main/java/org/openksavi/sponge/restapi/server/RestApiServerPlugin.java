@@ -40,6 +40,8 @@ import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
+import org.openksavi.sponge.restapi.server.discovery.ServiceDiscoveryInfo;
+import org.openksavi.sponge.restapi.server.discovery.ServiceDiscoveryRegistry;
 import org.openksavi.sponge.restapi.server.security.JwtRestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.NoSecuritySecurityService;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
@@ -82,6 +84,11 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
     private CamelContext camelContext;
 
     private ServiceDiscoveryRegistry discoveryRegistry;
+
+    /** The flag specifying if the service should be registered in a service discovery. Defaults to {@code true}. */
+    private boolean registerServiceDiscovery = true;
+
+    private ServiceDiscoveryInfo serviceDiscoveryInfo;
 
     private Lock lock = new ReentrantLock(true);
 
@@ -148,6 +155,15 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
 
         settings.setIncludeResponseTimes(
                 configuration.getBoolean(RestApiServerConstants.TAG_INCLUDE_RESPONSE_TIMES, settings.isIncludeResponseTimes()));
+
+        registerServiceDiscovery =
+                configuration.getBoolean(RestApiServerConstants.TAG_REGISTER_SERVICE_DISCOVERY, registerServiceDiscovery);
+
+        String serviceDiscoveryName = configuration.getString(RestApiServerConstants.TAG_SERVICE_DISCOVERY_NAME, null);
+        String serviceDiscoveryUrl = configuration.getString(RestApiServerConstants.TAG_SERVICE_DISCOVERY_URL, null);
+        if (serviceDiscoveryName != null || serviceDiscoveryUrl != null) {
+            serviceDiscoveryInfo = new ServiceDiscoveryInfo(serviceDiscoveryName, serviceDiscoveryUrl);
+        }
     }
 
     @Override
@@ -233,12 +249,13 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
 
                     camelContext.addRoutes(routeBuilder);
 
-                    discoveryRegistry = new ServiceDiscoveryRegistry(getEngine(), settings);
-
-                    try {
-                        discoveryRegistry.register();
-                    } catch (Exception e) {
-                        logger.warn("Error registering the service", e);
+                    if (registerServiceDiscovery) {
+                        discoveryRegistry = new ServiceDiscoveryRegistry(getEngine(), serviceDiscoveryInfo, settings);
+                        try {
+                            discoveryRegistry.register();
+                        } catch (Exception e) {
+                            logger.warn("Error registering the service", e);
+                        }
                     }
                 } catch (Exception e) {
                     throw SpongeUtils.wrapException(e);
@@ -301,6 +318,22 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
 
     public void setAuthTokenService(RestApiAuthTokenService authTokenService) {
         this.authTokenService = authTokenService;
+    }
+
+    public boolean isRegisterServiceDiscovery() {
+        return registerServiceDiscovery;
+    }
+
+    public void setRegisterServiceDiscovery(boolean registerServiceDiscovery) {
+        this.registerServiceDiscovery = registerServiceDiscovery;
+    }
+
+    public ServiceDiscoveryInfo getServiceDiscoveryInfo() {
+        return serviceDiscoveryInfo;
+    }
+
+    public void setServiceDiscoveryInfo(ServiceDiscoveryInfo serviceDiscoveryInfo) {
+        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
     }
 
     public boolean canAccessResource(Map<String, Collection<String>> roleToResources, UserContext userContext, String resourceName) {

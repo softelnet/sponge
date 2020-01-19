@@ -145,7 +145,7 @@ public abstract class DataTypeUtils {
     }
 
     public static boolean isProvidedWrite(DataType<?> type) {
-        return type.getProvided() != null && type.getProvided().isSubmittable();
+        return type.getProvided() != null && type.getProvided().getSubmittable() != null;
     }
 
     public static List<DataType> getTypes(DataType type) {

@@ -126,7 +126,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |A flag specifying if the provided value of this type should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
 
 |`submittable`
-|A flag specifying if a value can be submitted (i.e. written ad hoc), for example in an action irrespectively of an action call.
+|A metadata specifying if a value can be submitted (i.e. written ad hoc), for example in an action, irrespectively of an action call.
 
 |`lazyUpdate`
 |A flag specifying if a provided value should be updated lazily in a client code when a dependency changes. This flag is experimental.
@@ -136,6 +136,15 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 
 |`mode`
 |A provided read mode: `explicit` (a value has to specified to be provided in `provideArgs`), `optional` (a value may or may not be specified to be provided in `provideArgs`) or `implicit` (a value shouldn't be specified to be provided in `provideArgs`). Defaults to `explicit`. For example a value can be provided optionally or implicitly when an other value is submitted. To set this property to a value other than a default, use the `withOptionalMode()` or the `withImplicitMode()` method.
+|===
+
+.Submittable metadata properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`influences`
+|A list of object names that a submitted object influences (i.e. can change their values when submitted).
 |===
 
 See the <<provided_arguments,provided action arguments>> as a use case of provided types.

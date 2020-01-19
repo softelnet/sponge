@@ -110,11 +110,11 @@ public class RestApiSettings {
         this.port = port;
     }
 
-    protected String getPath() {
+    public String getPath() {
         return path;
     }
 
-    protected void setPath(String path) {
+    public void setPath(String path) {
         this.path = path;
     }
 

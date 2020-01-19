@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.restapi.server;
+package org.openksavi.sponge.restapi.server.discovery;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.server.RestApiServerConstants;
+import org.openksavi.sponge.restapi.server.RestApiSettings;
 
 /**
  * A REST API service discovery registry manager.
@@ -41,14 +43,17 @@ public class ServiceDiscoveryRegistry {
 
     private SpongeEngine engine;
 
+    private ServiceDiscoveryInfo serviceDiscoveryInfo;
+
     private RestApiSettings settings;
 
     private JmDNS jmDns;
 
     private ServiceInfo serviceInfo;
 
-    public ServiceDiscoveryRegistry(SpongeEngine engine, RestApiSettings settings) {
+    public ServiceDiscoveryRegistry(SpongeEngine engine, ServiceDiscoveryInfo serviceDiscoveryInfo, RestApiSettings settings) {
         this.engine = engine;
+        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
         this.settings = settings;
     }
 
@@ -60,12 +65,50 @@ public class ServiceDiscoveryRegistry {
         this.engine = engine;
     }
 
+    public ServiceDiscoveryInfo getServiceDiscoveryInfo() {
+        return serviceDiscoveryInfo;
+    }
+
+    public void setServiceDiscoveryInfo(ServiceDiscoveryInfo serviceDiscoveryInfo) {
+        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
+    }
+
     public RestApiSettings getSettings() {
         return settings;
     }
 
     public void setSettings(RestApiSettings settings) {
         this.settings = settings;
+    }
+
+    protected String createDefaultServiceName() {
+        String property = engine.getConfigurationManager().getProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_NAME);
+
+        if (property != null) {
+            return property;
+        }
+
+        return getEngine().getLabel() != null ? getEngine().getLabel() : (getEngine().getName() != null ? getEngine().getName() : "Sponge");
+    }
+
+    protected String createDefaultServiceUrl(InetAddress localHost, Integer port) {
+        String property = engine.getConfigurationManager().getProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_URL);
+
+        if (property != null) {
+            return property;
+        }
+
+        if (port == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(String.format("%s://%s:%d", getSettings().getSslConfiguration() != null ? "https" : "http",
+                localHost.getCanonicalHostName(), port));
+        if (getSettings().getPath() != null) {
+            sb.append("/" + getSettings().getPath());
+        }
+
+        return sb.toString();
     }
 
     public void register() {
@@ -81,17 +124,12 @@ public class ServiceDiscoveryRegistry {
 
             // Use defaults.
             if (port != null && isDefaultRestComponent) {
-                StringBuilder sb = new StringBuilder(String.format("%s://%s:%d",
-                        getSettings().getSslConfiguration() != null ? "https" : "http", localHost.getCanonicalHostName(), port));
-                if (getSettings().getPath() != null) {
-                    sb.append("/" + getSettings().getPath());
-                }
-
-                serviceName = getEngine().getLabel() != null ? getEngine().getLabel()
-                        : (getEngine().getName() != null ? getEngine().getName() : "Sponge");
-                serviceUrl = sb.toString();
+                serviceName = createDefaultServiceName();
+                serviceUrl = createDefaultServiceUrl(localHost, port);
             } else {
-                // TODO Use manual serviceName, serviceUrl if configured.
+
+                serviceName = serviceDiscoveryInfo != null ? serviceDiscoveryInfo.getName() : createDefaultServiceName();
+                serviceUrl = serviceDiscoveryInfo != null ? serviceDiscoveryInfo.getUrl() : createDefaultServiceUrl(localHost, port);
             }
 
             if (serviceName != null && serviceUrl != null) {
@@ -103,9 +141,10 @@ public class ServiceDiscoveryRegistry {
 
                 jmDns = JmDNS.create(localHost);
 
-                serviceInfo = ServiceInfo.create(RestApiConstants.SERVICE_DISCOVERY_TYPE + ".local.", serviceName, port, 0, 0, properties);
+                String type = RestApiConstants.SERVICE_DISCOVERY_TYPE + ".local.";
+                serviceInfo = ServiceInfo.create(type, serviceName, port, 0, 0, properties);
 
-                logger.info("Registering service as '{}' at {}", serviceName, serviceUrl);
+                logger.info("Registering service '{}' with URL {} as type {}", serviceName, serviceUrl, type);
 
                 jmDns.registerService(serviceInfo);
             }

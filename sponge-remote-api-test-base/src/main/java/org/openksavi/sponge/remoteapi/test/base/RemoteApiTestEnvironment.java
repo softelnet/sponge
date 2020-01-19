@@ -39,7 +39,7 @@ public class RemoteApiTestEnvironment {
     }
 
     public void clear() {
-        //
+        System.clearProperty(ConfigurationConstants.PROP_HOME);
     }
 
     public void start(int port) {

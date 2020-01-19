@@ -83,6 +83,12 @@ public final class RestApiServerConstants {
 
     public static final String TAG_INCLUDE_RESPONSE_TIMES = "includeResponseTimes";
 
+    public static final String TAG_REGISTER_SERVICE_DISCOVERY = "registerServiceDiscovery";
+
+    public static final String TAG_SERVICE_DISCOVERY_NAME = "serviceDiscoveryName";
+
+    public static final String TAG_SERVICE_DISCOVERY_URL = "serviceDiscoveryUrl";
+
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
 
     public static final String DEFAULT_ROLE_ADMIN = "admin";
@@ -98,6 +104,10 @@ public final class RestApiServerConstants {
     public static final String EXCHANGE_HEADER_EXCEPTION = "spongeException";
 
     public static final String EXCHANGE_HEADER_REQUEST_TIME = "requestTime";
+
+    public static final String PROP_SERVICE_DISCOVERY_NAME = "sponge.restApiServer.serviceDiscoveryName";
+
+    public static final String PROP_SERVICE_DISCOVERY_URL = "sponge.restApiServer.serviceDiscoveryUrl";
 
     private RestApiServerConstants() {
         //
