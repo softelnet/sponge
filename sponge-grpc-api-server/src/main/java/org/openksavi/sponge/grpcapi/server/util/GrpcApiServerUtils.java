@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.grpcapi.server.util;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.rpc.Code;
 import com.google.rpc.Status;
 
@@ -24,6 +27,7 @@ import io.grpc.protobuf.StatusProto;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
@@ -32,6 +36,7 @@ import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 
 /**
  * A set of common gRPC API utility methods.
@@ -42,7 +47,8 @@ public abstract class GrpcApiServerUtils {
         //
     }
 
-    public static <T extends SpongeRequest> T setupRestRequestHeader(T restRequest, RequestHeader header) {
+    @SuppressWarnings("unchecked")
+    public static <T extends SpongeRequest> T setupRestRequestHeader(TypeConverter typeConverter, T restRequest, RequestHeader header) {
         if (header != null) {
             if (!StringUtils.isEmpty(header.getId())) {
                 restRequest.getHeader().setId(header.getId());
@@ -56,18 +62,27 @@ public abstract class GrpcApiServerUtils {
             if (!StringUtils.isEmpty(header.getAuthToken())) {
                 restRequest.getHeader().setAuthToken(header.getAuthToken());
             }
+            if (header.hasFeatures()) {
+                try {
+                    Map<String, Object> jsonFeatures =
+                            (Map<String, Object>) typeConverter.getObjectMapper().readValue(header.getFeatures().getValueJson(), Map.class);
+                    restRequest.getHeader().setFeatures(jsonFeatures);
+                } catch (JsonProcessingException e) {
+                    throw SpongeUtils.wrapException(e);
+                }
+            }
         }
 
         return restRequest;
     }
 
-    public static GetVersionRequest createRestRequest(VersionRequest request) {
-        return setupRestRequestHeader(new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
+    public static GetVersionRequest createRestRequest(TypeConverter typeConverter, VersionRequest request) {
+        return setupRestRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
-    public static SpongeRequest createFakeRestRequest(SubscribeRequest request) {
+    public static SpongeRequest createFakeRestRequest(TypeConverter typeConverter, SubscribeRequest request) {
         // Use a fake request.
-        return setupRestRequestHeader(new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
+        return setupRestRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
     public static ResponseHeader createResponseHeader(org.openksavi.sponge.restapi.model.response.ResponseHeader restHeader) {

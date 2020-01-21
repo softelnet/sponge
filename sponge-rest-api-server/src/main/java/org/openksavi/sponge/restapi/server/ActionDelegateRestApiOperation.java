@@ -53,6 +53,7 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             actionCallRequest.getHeader().setUsername(request.getHeader().getUsername());
             actionCallRequest.getHeader().setPassword(request.getHeader().getPassword());
             actionCallRequest.getHeader().setAuthToken(request.getHeader().getAuthToken());
+            actionCallRequest.getHeader().setFeatures(request.getHeader().getFeatures());
 
             // The default naming convention for an action name if not provided.
             final String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(name);

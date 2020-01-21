@@ -523,8 +523,8 @@ public class DefaultRestApiService implements RestApiService {
     public UserContext authenticateRequest(SpongeRequest request) {
         UserAuthentication userAuthentication;
         if (request.getHeader().getAuthToken() != null) {
-            Validate.isTrue(request.getHeader().getUsername() == null, "No username is allowed when using a token-based auhentication");
-            Validate.isTrue(request.getHeader().getPassword() == null, "No password is allowed when using a token-based auhentication");
+            Validate.isTrue(request.getHeader().getUsername() == null, "Username is not allowed when using a token-based auhentication");
+            Validate.isTrue(request.getHeader().getPassword() == null, "Password is not allowed when using a token-based auhentication");
 
             userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getHeader().getAuthToken());
         } else {
@@ -544,6 +544,11 @@ public class DefaultRestApiService implements RestApiService {
         RestApiSession session = Validate.notNull(getSession(), "The session is not set");
         Validate.isTrue(session instanceof DefaultRestApiSession, "The session class should extend %s", DefaultRestApiSession.class);
         ((DefaultRestApiSession) session).setUserAuthentication(userAuthentication);
+
+        // Put reguest features to the session.
+        if (request.getHeader().getFeatures() != null) {
+            session.getFeatures().putAll(request.getHeader().getFeatures());
+        }
 
         securityService.openSecurityContext(userAuthentication);
 

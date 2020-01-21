@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model.request;
 
+import java.util.Map;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -32,6 +34,8 @@ public class RequestHeader {
     private String password;
 
     private String authToken;
+
+    private Map<String, Object> features;
 
     @ApiModelProperty(value = "The request id", required = false)
     public String getId() {
@@ -67,5 +71,14 @@ public class RequestHeader {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    @ApiModelProperty(value = "The request features", required = false)
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 }

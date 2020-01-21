@@ -102,6 +102,10 @@ A request may contain base properties.
 |`authToken`
 |No
 |An authentication token that may be used in a token-based authentication mode.
+
+|`features`
+|No
+|Request features that will be saved in a REST API session. They can be used for example to set a language if a knowledge base supports it.
 |===
 
 The {sponge} REST API supports both POST and GET methods.

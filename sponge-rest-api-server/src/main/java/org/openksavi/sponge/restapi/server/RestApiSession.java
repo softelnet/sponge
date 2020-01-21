@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.util.Map;
+
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 
 /**
@@ -24,4 +26,6 @@ import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 public interface RestApiSession {
 
     UserAuthentication getUserAuthentication();
+
+    Map<String, Object> getFeatures();
 }

@@ -20,10 +20,13 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.grpcapi.proto.Event;
+import org.openksavi.sponge.grpcapi.proto.ObjectValue;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader.Builder;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
@@ -120,6 +123,15 @@ public abstract class GrpcClientUtils {
         }
         if (restHeader.getAuthToken() != null) {
             builder.setAuthToken(restHeader.getAuthToken());
+        }
+        if (restHeader.getFeatures() != null) {
+            try {
+                builder.setFeatures(ObjectValue.newBuilder()
+                        .setValueJson(restClient.getTypeConverter().getObjectMapper().writeValueAsString(restHeader.getFeatures()))
+                        .build());
+            } catch (JsonProcessingException e) {
+                throw new SpongeClientException(e);
+            }
         }
 
         return builder.build();

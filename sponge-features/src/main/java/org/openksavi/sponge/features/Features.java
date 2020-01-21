@@ -152,6 +152,10 @@ public final class Features {
 
     public static final String PROVIDE_VALUE_INDICATED_INDEX = "indicatedIndex";
 
+    public static final String REQUEST_CHANNEL = "channel";
+
+    public static final String REQUEST_LANGUAGE = "language";
+
     public static final class Formats {
 
         public static final String STRING_FORMAT_PHONE = "phone";

@@ -322,6 +322,10 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             }
         }
 
+        if (configuration.getFeatures() != null && header.getFeatures() == null) {
+            header.setFeatures(configuration.getFeatures());
+        }
+
         return request;
     }
 

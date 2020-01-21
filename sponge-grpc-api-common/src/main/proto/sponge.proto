@@ -59,6 +59,7 @@ message RequestHeader {
    string username = 2;
    string password = 3;
    string auth_token = 4;
+   ObjectValue features = 5;
 }
 
 message ResponseHeader {

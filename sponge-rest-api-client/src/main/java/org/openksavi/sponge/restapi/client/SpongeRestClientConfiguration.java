@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.client;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -52,6 +54,8 @@ public class SpongeRestClientConfiguration {
     private boolean throwExceptionOnErrorResponse = true;
 
     private boolean prettyPrint = false;
+
+    private Map<String, Object> features;
 
     public void setUrl(String url) {
         this.url = url;
@@ -180,6 +184,14 @@ public class SpongeRestClientConfiguration {
 
     public void setPrettyPrint(boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
+    }
+
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 
     /**
@@ -372,6 +384,17 @@ public class SpongeRestClientConfiguration {
          */
         public Builder prettyPrint(boolean prettyPrint) {
             configuration.setPrettyPrint(prettyPrint);
+            return this;
+        }
+
+        /**
+         * Sets the request header features.
+         *
+         * @param features the request header features.
+         * @return the builder.
+         */
+        public Builder features(Map<String, Object> features) {
+            configuration.setFeatures(features);
             return this;
         }
     }

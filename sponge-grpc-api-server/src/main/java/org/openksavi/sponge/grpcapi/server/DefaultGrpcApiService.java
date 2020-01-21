@@ -75,7 +75,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
     @Override
     public void getVersion(VersionRequest request, StreamObserver<VersionResponse> responseObserver) {
         try {
-            GetVersionRequest restRequest = GrpcApiServerUtils.createRestRequest(request);
+            GetVersionRequest restRequest = GrpcApiServerUtils.createRestRequest(restApiService.getTypeConverter(), request);
 
             // Open a new session. The user will be set later in the service.
             restApiService.openSession(createSession());
@@ -178,6 +178,6 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
     }
 
     protected UserContext authenticateRequest(SubscribeRequest request) {
-        return restApiService.authenticateRequest(GrpcApiServerUtils.createFakeRestRequest(request));
+        return restApiService.authenticateRequest(GrpcApiServerUtils.createFakeRestRequest(restApiService.getTypeConverter(), request));
     }
 }

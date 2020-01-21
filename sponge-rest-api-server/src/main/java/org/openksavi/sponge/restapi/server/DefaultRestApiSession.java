@@ -16,6 +16,10 @@
 
 package org.openksavi.sponge.restapi.server;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 
 /**
@@ -24,6 +28,8 @@ import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 public class DefaultRestApiSession implements RestApiSession {
 
     private UserAuthentication userAuthentication;
+
+    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public DefaultRestApiSession(UserAuthentication userAuthentication) {
         this.userAuthentication = userAuthentication;
@@ -36,5 +42,10 @@ public class DefaultRestApiSession implements RestApiSession {
 
     public void setUserAuthentication(UserAuthentication userAuthentication) {
         this.userAuthentication = userAuthentication;
+    }
+
+    @Override
+    public Map<String, Object> getFeatures() {
+        return features;
     }
 }
