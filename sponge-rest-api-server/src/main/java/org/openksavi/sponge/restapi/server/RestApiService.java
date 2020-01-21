@@ -48,6 +48,8 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.server.listener.OnSessionCloseListener;
+import org.openksavi.sponge.restapi.server.listener.OnSessionOpenListener;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.UserContext;
@@ -220,4 +222,18 @@ public interface RestApiService extends HasEngine, Initializable {
      * @param <T> feature.
      */
     <T> T getFeature(Class<T> cls, String name, T defaultValue);
+
+    /**
+     * Sets the on session open listener. The listener is invoked after a request is authenticated.
+     *
+     * @param onSessionOpenListener the listener.
+     */
+    void setOnSessionOpenListener(OnSessionOpenListener onSessionOpenListener);
+
+    /**
+     * Sets the on session close listener. The listener is invoked before closiong the session.
+     *
+     * @param onSessionCloseListener the listener.
+     */
+    void setOnSessionCloseListener(OnSessionCloseListener onSessionCloseListener);
 }

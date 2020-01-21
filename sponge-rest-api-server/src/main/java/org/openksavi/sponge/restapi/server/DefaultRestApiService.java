@@ -79,6 +79,8 @@ import org.openksavi.sponge.restapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.server.listener.OnSessionCloseListener;
+import org.openksavi.sponge.restapi.server.listener.OnSessionOpenListener;
 import org.openksavi.sponge.restapi.server.security.RestApiAuthTokenService;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
@@ -117,6 +119,10 @@ public class DefaultRestApiService implements RestApiService {
     private ThreadLocal<RestApiSession> session = new ThreadLocal<>();
 
     private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
+
+    private OnSessionOpenListener onSessionOpenListener;
+
+    private OnSessionCloseListener onSessionCloseListener;
 
     public DefaultRestApiService() {
         setupDefaultFeatures();
@@ -552,6 +558,10 @@ public class DefaultRestApiService implements RestApiService {
 
         securityService.openSecurityContext(userAuthentication);
 
+        if (onSessionOpenListener != null) {
+            onSessionOpenListener.onSessionOpen(session);
+        }
+
         return userAuthentication.getUserContext();
     }
 
@@ -733,6 +743,11 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public void closeSession() {
         try {
+            RestApiSession currentSession = session.get();
+            if (onSessionCloseListener != null && currentSession != null) {
+                onSessionCloseListener.onSessionClose(currentSession);
+            }
+
             securityService.closeSecurityContext();
         } finally {
             session.set(null);
@@ -766,5 +781,23 @@ public class DefaultRestApiService implements RestApiService {
     @Override
     public <T> T getFeature(Class<T> cls, String name, T defaultValue) {
         return getFeature(name, defaultValue);
+    }
+
+    public OnSessionOpenListener getOnSessionOpenListener() {
+        return onSessionOpenListener;
+    }
+
+    @Override
+    public void setOnSessionOpenListener(OnSessionOpenListener onSessionOpenListener) {
+        this.onSessionOpenListener = onSessionOpenListener;
+    }
+
+    public OnSessionCloseListener getOnSessionCloseListener() {
+        return onSessionCloseListener;
+    }
+
+    @Override
+    public void setOnSessionCloseListener(OnSessionCloseListener onSessionCloseListener) {
+        this.onSessionCloseListener = onSessionCloseListener;
     }
 }

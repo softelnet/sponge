@@ -177,6 +177,8 @@ class LowerCaseHello(Action):
         return "Hello " + restApiServer.session.user.name + ": " + text.lower()
 ----
 
+In order to handle a session lifecycle you can implement and set the on session open and the on session close listeners in the `RestApiService`.
+
 == API features
 
 .Remote API features
