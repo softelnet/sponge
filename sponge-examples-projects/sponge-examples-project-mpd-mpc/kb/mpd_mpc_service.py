@@ -66,6 +66,10 @@ class Mpc:
             else:
                 return None
 
+    def validatePrerequisites(self):
+        # Check if the mpc is installed.
+        sponge.process(self.__createProcessBuilder().outputAsString().errorAsString().exceptionOnExitCode(False)).run()
+
     # Data type operations.
     def createSongValue(self, songSpec):
         tagValues = songSpec.split(self.separator)

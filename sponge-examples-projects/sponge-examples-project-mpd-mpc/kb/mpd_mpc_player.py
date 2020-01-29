@@ -54,7 +54,7 @@ class MpdPlayer(Action):
                 if "next" in context.submit:
                     status = mpc.next()
             except:
-                sponge.logger.warn("Submit error: {}", sys.exc_info()[0])
+                sponge.logger.warn("Submit error: {}", sys.exc_info()[1])
 
             currentSong = None
             if "song" in context.provide or "date" in context.provide:

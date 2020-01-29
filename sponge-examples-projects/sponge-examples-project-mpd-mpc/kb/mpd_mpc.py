@@ -121,11 +121,13 @@ def updateMpdService(newMpc = None):
         oldMpc.stopEventLoop()
 
     mpc = newMpc if newMpc else Mpc(host=oldMpc.host if oldMpc else None, port=oldMpc.port if oldMpc else None)
+    mpc.validatePrerequisites()
     sponge.setVariable("mpc", mpc)
+
     try:
         mpc.startEventLoop()
     except:
-        sponge.logger.warn("MPD event loop error: {}", sys.exc_info()[0])
+        sponge.logger.warn("MPD event loop error: {}", sys.exc_info()[1])
 
 def updateLyricsService():
     sponge.setVariable("lyricsService", LyricsService(sponge.getProperty("musixmatchApiKey", None)))
