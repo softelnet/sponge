@@ -6,7 +6,8 @@ function set_java_version_options() {
         ;;
     *)
         # Prevent most common Java illegal reflective access operation warnings, e.g. caused by Jython [https://bugs.jython.org/issue2656].
-        JAVA_VERSION_OPTIONS="--illegal-access=warn --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED"
+        JAVA_VERSION_OPTIONS="--illegal-access=warn --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
+ --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
         ;;
     esac
 }
