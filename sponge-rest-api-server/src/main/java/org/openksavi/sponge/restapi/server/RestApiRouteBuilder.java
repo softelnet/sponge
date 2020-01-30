@@ -169,9 +169,9 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
 
         restConfiguration.apiProperty("api.version", String.valueOf(getSettings().getVersion()));
 
-        if (getSettings().getTitle() != null) {
-            restConfiguration.apiProperty("api.title", getSettings().getTitle());
-        }
+        restConfiguration.apiProperty("api.title",
+                getSettings().getName() != null ? getSettings().getName() : RestApiServerConstants.DEFAULT_NAME);
+
         if (getSettings().getDescription() != null) {
             restConfiguration.apiProperty("api.description", getSettings().getDescription());
         }

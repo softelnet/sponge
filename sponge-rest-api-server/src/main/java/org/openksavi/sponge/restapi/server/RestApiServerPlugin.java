@@ -85,11 +85,6 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
 
     private ServiceDiscoveryRegistry discoveryRegistry;
 
-    /** The flag specifying if the service should be registered in a service discovery. Defaults to {@code true}. */
-    private boolean registerServiceDiscovery = true;
-
-    private ServiceDiscoveryInfo serviceDiscoveryInfo;
-
     private Lock lock = new ReentrantLock(true);
 
     public RestApiServerPlugin() {
@@ -105,6 +100,14 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
         settings.setRestComponentId(configuration.getString(RestApiServerConstants.TAG_REST_COMPONENT_ID, settings.getRestComponentId()));
         settings.setHost(configuration.getString(RestApiServerConstants.TAG_HOST, settings.getHost()));
         settings.setPort(configuration.getInteger(RestApiServerConstants.TAG_PORT, settings.getPort()));
+
+        String path = configuration.getString(RestApiServerConstants.TAG_PATH, null);
+        if (path != null) {
+            settings.setPath(path);
+        }
+
+        settings.setName(configuration.getString(RestApiServerConstants.TAG_NAME, settings.getName()));
+
         settings.setPrettyPrint(configuration.getBoolean(RestApiServerConstants.TAG_PRETTY_PRINT, settings.isPrettyPrint()));
 
         String publicActionsSpec = configuration.getString(RestApiServerConstants.TAG_PUBLIC_ACTIONS, null);
@@ -156,13 +159,72 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
         settings.setIncludeResponseTimes(
                 configuration.getBoolean(RestApiServerConstants.TAG_INCLUDE_RESPONSE_TIMES, settings.isIncludeResponseTimes()));
 
-        registerServiceDiscovery =
-                configuration.getBoolean(RestApiServerConstants.TAG_REGISTER_SERVICE_DISCOVERY, registerServiceDiscovery);
+        Boolean registerServiceDiscovery = configuration.getBoolean(RestApiServerConstants.TAG_REGISTER_SERVICE_DISCOVERY, null);
+        if (registerServiceDiscovery != null) {
+            settings.setRegisterServiceDiscovery(registerServiceDiscovery);
+        }
 
-        String serviceDiscoveryName = configuration.getString(RestApiServerConstants.TAG_SERVICE_DISCOVERY_NAME, null);
         String serviceDiscoveryUrl = configuration.getString(RestApiServerConstants.TAG_SERVICE_DISCOVERY_URL, null);
-        if (serviceDiscoveryName != null || serviceDiscoveryUrl != null) {
-            serviceDiscoveryInfo = new ServiceDiscoveryInfo(serviceDiscoveryName, serviceDiscoveryUrl);
+        if (serviceDiscoveryUrl != null) {
+            settings.setServiceDiscoveryInfo(new ServiceDiscoveryInfo(serviceDiscoveryUrl));
+
+            // Assume that the service should be registered.
+            if (registerServiceDiscovery == null) {
+                settings.setRegisterServiceDiscovery(true);
+            }
+        }
+    }
+
+    protected void refreshSettings() {
+        refreshBaseSettings();
+        refreshServiceDiscoverySettings();
+
+        logger.debug("Using settings: {}", settings);
+    }
+
+    protected void refreshBaseSettings() {
+        String propHost = getEngine().getConfigurationManager().getProperty(RestApiServerConstants.PROP_HOST);
+        if (propHost != null) {
+            settings.setHost(propHost.trim());
+        }
+
+        String propPortString = getEngine().getConfigurationManager().getProperty(RestApiServerConstants.PROP_PORT);
+        if (propPortString != null) {
+            settings.setPort(Integer.valueOf(propPortString.trim()));
+        }
+
+        String propPath = getEngine().getConfigurationManager().getProperty(RestApiServerConstants.PROP_PATH);
+        if (propPath != null) {
+            settings.setPath(propPath.trim());
+        }
+
+        String propName = getEngine().getConfigurationManager().getProperty(RestApiServerConstants.PROP_NAME);
+        if (propName != null) {
+            settings.setName(propName.trim());
+        }
+    }
+
+    protected void refreshServiceDiscoverySettings() {
+        String propRegisterServiceDiscoveryString =
+                getEngine().getConfigurationManager().getProperty(RestApiServerConstants.PROP_REGISTER_SERVICE_DISCOVERY);
+        if (propRegisterServiceDiscoveryString != null) {
+            settings.setRegisterServiceDiscovery(Boolean.valueOf(propRegisterServiceDiscoveryString.trim()));
+        }
+
+        String propServiceDiscoveryUrl =
+                getEngine().getConfigurationManager().getProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_URL);
+
+        if (propServiceDiscoveryUrl != null) {
+            if (settings.getServiceDiscoveryInfo() == null) {
+                settings.setServiceDiscoveryInfo(new ServiceDiscoveryInfo());
+            }
+
+            settings.getServiceDiscoveryInfo().setUrl(propServiceDiscoveryUrl);
+
+            // Assume that the service should be registered.
+            if (propRegisterServiceDiscoveryString == null) {
+                settings.setRegisterServiceDiscovery(true);
+            }
         }
     }
 
@@ -210,6 +272,8 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
         try {
             if (!started.get()) {
                 try {
+                    refreshSettings();
+
                     if (settings.getSslConfiguration() != null && settings.getSslContextParametersBeanName() != null) {
                         setupSecurity(camelContext);
                     }
@@ -249,8 +313,8 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
 
                     camelContext.addRoutes(routeBuilder);
 
-                    if (registerServiceDiscovery) {
-                        discoveryRegistry = new ServiceDiscoveryRegistry(getEngine(), serviceDiscoveryInfo, settings);
+                    if (settings.isRegisterServiceDiscovery()) {
+                        discoveryRegistry = new ServiceDiscoveryRegistry(getEngine(), settings);
                         try {
                             discoveryRegistry.register();
                         } catch (Exception e) {
@@ -320,22 +384,6 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
         this.authTokenService = authTokenService;
     }
 
-    public boolean isRegisterServiceDiscovery() {
-        return registerServiceDiscovery;
-    }
-
-    public void setRegisterServiceDiscovery(boolean registerServiceDiscovery) {
-        this.registerServiceDiscovery = registerServiceDiscovery;
-    }
-
-    public ServiceDiscoveryInfo getServiceDiscoveryInfo() {
-        return serviceDiscoveryInfo;
-    }
-
-    public void setServiceDiscoveryInfo(ServiceDiscoveryInfo serviceDiscoveryInfo) {
-        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
-    }
-
     public boolean canAccessResource(Map<String, Collection<String>> roleToResources, UserContext userContext, String resourceName) {
         return RestApiServerUtils.canAccessResource(roleToResources, userContext, resourceName);
     }
@@ -348,5 +396,9 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
     @Override
     public void setCamelContext(CamelContext camelContext) {
         this.camelContext = camelContext;
+    }
+
+    public ServiceDiscoveryRegistry getDiscoveryRegistry() {
+        return discoveryRegistry;
     }
 }

@@ -57,6 +57,10 @@ public final class RestApiServerConstants {
 
     public static final String TAG_PORT = "port";
 
+    public static final String TAG_PATH = "path";
+
+    public static final String TAG_NAME = "name";
+
     public static final String TAG_PRETTY_PRINT = "prettyPrint";
 
     public static final String TAG_PUBLIC_ACTIONS = "publicActions";
@@ -85,9 +89,9 @@ public final class RestApiServerConstants {
 
     public static final String TAG_REGISTER_SERVICE_DISCOVERY = "registerServiceDiscovery";
 
-    public static final String TAG_SERVICE_DISCOVERY_NAME = "serviceDiscoveryName";
-
     public static final String TAG_SERVICE_DISCOVERY_URL = "serviceDiscoveryUrl";
+
+    public static final String DEFAULT_NAME = "Sponge";
 
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
 
@@ -105,7 +109,15 @@ public final class RestApiServerConstants {
 
     public static final String EXCHANGE_HEADER_REQUEST_TIME = "requestTime";
 
-    public static final String PROP_SERVICE_DISCOVERY_NAME = "sponge.restApiServer.serviceDiscoveryName";
+    public static final String PROP_HOST = "sponge.restApiServer.host";
+
+    public static final String PROP_PORT = "sponge.restApiServer.port";
+
+    public static final String PROP_PATH = "sponge.restApiServer.path";
+
+    public static final String PROP_NAME = "sponge.restApiServer.name";
+
+    public static final String PROP_REGISTER_SERVICE_DISCOVERY = "sponge.restApiServer.registerServiceDiscovery";
 
     public static final String PROP_SERVICE_DISCOVERY_URL = "sponge.restApiServer.serviceDiscoveryUrl";
 

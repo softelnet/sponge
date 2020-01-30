@@ -12,8 +12,6 @@ COPY kb /opt/sponge/kb
 
 WORKDIR /opt/sponge
 
-ENTRYPOINT ["/opt/sponge/bin/sponge"]
-
-CMD ["-c", "kb/mpd_mpc.xml"]
+ENTRYPOINT ["/opt/sponge/bin/sponge", "-c", "kb/mpd_mpc.xml"]
 
 EXPOSE 1836 1837

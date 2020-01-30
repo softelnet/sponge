@@ -21,26 +21,14 @@ package org.openksavi.sponge.restapi.server.discovery;
  */
 public class ServiceDiscoveryInfo {
 
-    /** The service name used in a service discovery. */
-    private String name;
-
     /** The service URL used in a service discovery. */
     private String url;
 
     public ServiceDiscoveryInfo() {
     }
 
-    public ServiceDiscoveryInfo(String name, String url) {
-        this.name = name;
+    public ServiceDiscoveryInfo(String url) {
         this.url = url;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUrl() {
@@ -51,13 +39,13 @@ public class ServiceDiscoveryInfo {
         this.url = url;
     }
 
-    public ServiceDiscoveryInfo withName(String name) {
-        setName(name);
-        return this;
-    }
-
     public ServiceDiscoveryInfo withUrl(String url) {
         setUrl(url);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceDiscoveryInfo [url=" + url + "]";
     }
 }

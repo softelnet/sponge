@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
@@ -43,17 +42,14 @@ public class ServiceDiscoveryRegistry {
 
     private SpongeEngine engine;
 
-    private ServiceDiscoveryInfo serviceDiscoveryInfo;
-
     private RestApiSettings settings;
 
     private JmDNS jmDns;
 
     private ServiceInfo serviceInfo;
 
-    public ServiceDiscoveryRegistry(SpongeEngine engine, ServiceDiscoveryInfo serviceDiscoveryInfo, RestApiSettings settings) {
+    public ServiceDiscoveryRegistry(SpongeEngine engine, RestApiSettings settings) {
         this.engine = engine;
-        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
         this.settings = settings;
     }
 
@@ -65,14 +61,6 @@ public class ServiceDiscoveryRegistry {
         this.engine = engine;
     }
 
-    public ServiceDiscoveryInfo getServiceDiscoveryInfo() {
-        return serviceDiscoveryInfo;
-    }
-
-    public void setServiceDiscoveryInfo(ServiceDiscoveryInfo serviceDiscoveryInfo) {
-        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
-    }
-
     public RestApiSettings getSettings() {
         return settings;
     }
@@ -81,58 +69,48 @@ public class ServiceDiscoveryRegistry {
         this.settings = settings;
     }
 
-    protected String createDefaultServiceName() {
-        String property = engine.getConfigurationManager().getProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_NAME);
-
-        if (property != null) {
-            return property;
+    protected String resolveServiceName() {
+        if (settings.getName() != null) {
+            return settings.getName();
         }
 
-        return getEngine().getLabel() != null ? getEngine().getLabel() : (getEngine().getName() != null ? getEngine().getName() : "Sponge");
+        if (getEngine().getLabel() != null) {
+            return getEngine().getLabel();
+        }
+
+        if (getEngine().getName() != null) {
+            return getEngine().getName();
+        }
+
+        return RestApiServerConstants.DEFAULT_NAME;
     }
 
     protected String createDefaultServiceUrl(InetAddress localHost, Integer port) {
-        String property = engine.getConfigurationManager().getProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_URL);
-
-        if (property != null) {
-            return property;
-        }
-
         if (port == null) {
             return null;
         }
 
-        StringBuilder sb = new StringBuilder(String.format("%s://%s:%d", getSettings().getSslConfiguration() != null ? "https" : "http",
+        StringBuilder sb = new StringBuilder(String.format("%s://%s:%d", settings.getSslConfiguration() != null ? "https" : "http",
                 localHost.getCanonicalHostName(), port));
-        if (getSettings().getPath() != null) {
-            sb.append("/" + getSettings().getPath());
+        if (settings.getPath() != null) {
+            sb.append("/" + settings.getPath());
         }
 
         return sb.toString();
     }
 
     public void register() {
-        String serviceName = null;
-        String serviceUrl = null;
-
         try {
             InetAddress localHost = InetAddress.getLocalHost();
 
             Integer port = getSettings().getPort();
-            boolean isDefaultRestComponent =
-                    Objects.equals(getSettings().getRestComponentId(), RestApiServerConstants.DEFAULT_REST_COMPONENT_ID);
+            ServiceDiscoveryInfo serviceDiscoveryInfo = settings.getServiceDiscoveryInfo();
 
-            // Use defaults.
-            if (port != null && isDefaultRestComponent) {
-                serviceName = createDefaultServiceName();
-                serviceUrl = createDefaultServiceUrl(localHost, port);
-            } else {
+            String serviceName = resolveServiceName();
+            String serviceUrl = serviceDiscoveryInfo != null && serviceDiscoveryInfo.getUrl() != null ? serviceDiscoveryInfo.getUrl()
+                    : createDefaultServiceUrl(localHost, port);
 
-                serviceName = serviceDiscoveryInfo != null ? serviceDiscoveryInfo.getName() : createDefaultServiceName();
-                serviceUrl = serviceDiscoveryInfo != null ? serviceDiscoveryInfo.getUrl() : createDefaultServiceUrl(localHost, port);
-            }
-
-            if (serviceName != null && serviceUrl != null) {
+            if (serviceUrl != null) {
                 Map<String, Object> properties = new LinkedHashMap<>();
 
                 properties.put(RestApiConstants.SERVICE_DISCOVERY_PROPERTY_UUID, getEngine().getUuid());
@@ -142,7 +120,7 @@ public class ServiceDiscoveryRegistry {
                 jmDns = JmDNS.create(localHost);
 
                 String type = RestApiConstants.SERVICE_DISCOVERY_TYPE + ".local.";
-                serviceInfo = ServiceInfo.create(type, serviceName, port, 0, 0, properties);
+                serviceInfo = ServiceInfo.create(type, serviceName, port != null ? port : 0, 0, 0, properties);
 
                 logger.info("Registering service '{}' with URL {} as type {}", serviceName, serviceUrl, type);
 

@@ -18,11 +18,19 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 
 |`host`
 |`String`
-|The REST API host.
+|The REST API host. It can be overwritten by a Java system property `sponge.restApiServer.host`.
 
 |`port`
 |`int`
-|The REST API port. Defaults to `1836`.
+|The REST API port. Defaults to `1836`. It can be overwritten by a Java system property `sponge.restApiServer.port`.
+
+|`path`
+|`String`
+|The REST API path. Defaults to `sponge.json/v1`. It can be overwritten by a Java system property `sponge.restApiServer.path`.
+
+|`name`
+|`String`
+|The REST API name. It can be overwritten by a Java system property `sponge.restApiServer.name`.
 
 |`prettyPrint`
 |`boolean`
@@ -72,13 +80,13 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 |`boolean`
 |The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. on the local network) {sponge} services. Defaults to `true`.
 
-|`serviceDiscoveryName`
-|`String`
-|The manually set service name used in a service discovery. The service name can be overwritten by a Java system property `sponge.restApiServer.serviceDiscoveryName`.
+|`registerServiceDiscovery`
+|`boolean`
+|The flag specifying if the service should be registered in a service discovery. Defaults to `false`. It can be overwritten by a Java system property `sponge.restApiServer.registerServiceDiscovery`.
 
 |`serviceDiscoveryUrl`
 |`String`
-|The manually set service URL used in a service discovery. The service URL can be overwritten a Java system property `sponge.restApiServer.serviceDiscoveryUrl`.
+|The service URL used in a service discovery. It can be overwritten by a Java system property `sponge.restApiServer.serviceDiscoveryUrl`. This property automatically sets the `registerServiceDiscovery` flag to `true` as well.
 |===
 
 .The REST API server plugin XML configuration example
@@ -260,6 +268,9 @@ echo -n username-password | shasum -a 512 | awk '{ print $1 }'
 
 == HTTPS
 In production mode you should configure HTTPS. Otherwise your passwords could be sent in plain text over the network as a part of the REST API JSON requests.
+
+== Service discovery
+The {sponge} REST API can be registered using the the mDNS/DNS-SD service discovery to provide a zero-configuration connection setup for {sponge} REST API clients in a local network.
 
 == Environment
 

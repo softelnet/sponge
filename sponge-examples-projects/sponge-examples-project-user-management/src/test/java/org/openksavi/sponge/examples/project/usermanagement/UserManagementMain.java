@@ -26,6 +26,8 @@ import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 public class UserManagementMain {
 
     public static void main(String... args) throws UnknownHostException {
+        System.setProperty(RestApiServerConstants.PROP_NAME, "USER MANAGEMENT");
+
         System.setProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_URL, String.format("http://%s:%s/%s",
                 InetAddress.getLocalHost().getHostAddress(), RemoteApiTestEnvironment.DEFAULT_PORT, RestApiConstants.DEFAULT_PATH));
 

@@ -190,8 +190,7 @@ public class GrpcApiServerPlugin extends JPlugin {
             }
 
             logger.info("Stopping the gRPC server");
-            server.shutdown();
-            server.awaitTermination(30, TimeUnit.SECONDS);
+            server.shutdownNow().awaitTermination(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             throw SpongeUtils.wrapException(e);
         } finally {

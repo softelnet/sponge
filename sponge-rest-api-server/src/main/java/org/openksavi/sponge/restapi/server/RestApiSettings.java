@@ -25,6 +25,7 @@ import java.util.Map;
 import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.server.discovery.ServiceDiscoveryInfo;
 
 /**
  * REST API settings.
@@ -46,11 +47,11 @@ public class RestApiSettings {
     /** The API version. */
     private int version = RestApiConstants.API_VERSION;
 
-    /** The API title. */
-    private String title = RestApiConstants.DEFAULT_TITLE;
+    /** The API name. */
+    private String name;
 
     /** The API description. */
-    private String description = RestApiConstants.DEFAULT_DESCRIPTION;
+    private String description;
 
     /** The pretty print option. */
     private boolean prettyPrint = RestApiServerConstants.DEFAULT_PRETTY_PRINT;
@@ -85,6 +86,12 @@ public class RestApiSettings {
 
     /** The flag specifying if a response header should have request and response time set. Defaults to {@code true}. */
     private boolean includeResponseTimes = RestApiServerConstants.DEFAULT_INCLUDE_RESPONSE_TIMES;
+
+    /** The flag specifying if the service should be registered in a service discovery. Defaults to {@code false}. */
+    private boolean registerServiceDiscovery = false;
+
+    /** The service discovery info. */
+    private ServiceDiscoveryInfo serviceDiscoveryInfo;
 
     public String getRestComponentId() {
         return restComponentId;
@@ -122,12 +129,12 @@ public class RestApiSettings {
         return version;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -256,5 +263,33 @@ public class RestApiSettings {
 
     public void setIncludeResponseTimes(boolean includeResponseTimes) {
         this.includeResponseTimes = includeResponseTimes;
+    }
+
+    public boolean isRegisterServiceDiscovery() {
+        return registerServiceDiscovery;
+    }
+
+    public void setRegisterServiceDiscovery(boolean registerServiceDiscovery) {
+        this.registerServiceDiscovery = registerServiceDiscovery;
+    }
+
+    public ServiceDiscoveryInfo getServiceDiscoveryInfo() {
+        return serviceDiscoveryInfo;
+    }
+
+    public void setServiceDiscoveryInfo(ServiceDiscoveryInfo serviceDiscoveryInfo) {
+        this.serviceDiscoveryInfo = serviceDiscoveryInfo;
+    }
+
+    @Override
+    public String toString() {
+        return "RestApiSettings [restComponentId=" + restComponentId + ", host=" + host + ", port=" + port + ", path=" + path + ", version="
+                + version + ", name=" + name + ", description=" + description + ", prettyPrint=" + prettyPrint + ", publicActions="
+                + publicActions + ", publicEvents=" + publicEvents + ", sslContextParametersBeanName=" + sslContextParametersBeanName
+                + ", sslConfiguration=" + sslConfiguration + ", publishReload=" + publishReload + ", allowAnonymous=" + allowAnonymous
+                + ", adminRole=" + adminRole + ", anonymousRole=" + anonymousRole + ", includeDetailedErrorMessage="
+                + includeDetailedErrorMessage + ", authTokenExpirationDuration=" + authTokenExpirationDuration + ", openApiProperties="
+                + openApiProperties + ", includeResponseTimes=" + includeResponseTimes + ", registerServiceDiscovery="
+                + registerServiceDiscovery + ", serviceDiscoveryInfo=" + serviceDiscoveryInfo + "]";
     }
 }

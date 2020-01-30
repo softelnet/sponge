@@ -8,6 +8,8 @@
         <property name="pictureFormat" variable="true">jpg</property>
     </properties>
 
+    <engine name="iot" label="Sponge IoT"/>
+
     <knowledgeBases>
         <knowledgeBase name="grovepi" label="Grove Pi">
             <file>sponge_iot_grovepi_device.py</file>
@@ -61,6 +63,7 @@
                 <autoStart>false</autoStart>
                 <allowAnonymous>false</allowAnonymous>
                 <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <registerServiceDiscovery>true</registerServiceDiscovery>
             </configuration>
         </plugin>
         <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin">

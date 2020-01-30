@@ -467,38 +467,28 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
-                            <repository>openksavi/sponge</repository>
-                            <skipPush>true</skipPush>
-                            <verbose>false</verbose>
-                            <contextDirectory>${project.build.directory}/docker-context-local/docker-context-local</contextDirectory>
-                            <buildArgs>
-                                <SPONGE_VERSION>${release.version}</SPONGE_VERSION>
-                            </buildArgs>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.build.directory}/docker-context-local/docker-context-local</workingDirectory>
+                            <arguments>
+                                <argument>build</argument>
+                                <argument>--build-arg</argument>
+                                <argument>SPONGE_VERSION=${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge:${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge:latest</argument>
+                                <argument>.</argument>
+                            </arguments>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>docker-tag-latest</id>
                                 <phase>install</phase>
                                 <goals>
-                                    <goal>build</goal>
-                                    <goal>tag</goal>
+                                    <goal>exec</goal>
                                 </goals>
-                                <configuration>
-                                    <tag>latest</tag>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>docker-tag-version</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>tag</goal>
-                                </goals>
-                                <configuration>
-                                    <tag>${release.version}</tag>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

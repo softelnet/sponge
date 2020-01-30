@@ -10,6 +10,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Changed `submittable` type from `boolean` to `SubmittableMeta` in the `ProvidedMeta`.
 * API change: Renamed the `subscribe` bidirectional streaming method to `subscribeManaged` and created a new `subscribe` method in the gRPC API.
 * Added `features` to the request header in the REST API.
+* Added support for overwriting the `host`, `port` and `path` in the REST API service by corresponding Java system properties.
 * Added an `activatable` flag to an action.
 * Added a REST API service discovery.
 * Added the _on session open_ and the _on session close_ listeners to the REST API service.

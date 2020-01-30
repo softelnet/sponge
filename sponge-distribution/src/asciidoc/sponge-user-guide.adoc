@@ -1590,13 +1590,13 @@ The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD servi
 
 The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example https://volumio.org[Volumio] has been chosen.
 
-The architecture of this solution is: Raspberry PI + MPD server (Volumio) + Docker/{sponge} MPD service.
+The architecture of this solution is: Raspberry PI with the MPD server (Volumio) and Docker containing the {sponge} MPD service.
 
 Installing the {sponge} MPD service:
 
 * https://volumio.org/get-started/[Download], install and configure Volumio for Raspberry PI.
 * Enable https://volumio.github.io/docs/User_Manual/SSH.html[SSH].
-* Connect to the Raspberry PI via SSH as `volumio` user.
+* Connect to the Raspberry PI via SSH as the `volumio` user.
 * Install and configure https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi[Docker].
 
 ----
@@ -1608,8 +1608,10 @@ sudo usermod -aG docker volumio
 
 ----
 docker pull openksavi/sponge-mpd
-docker run --name sponge-mpd -d --restart always --network host openksavi/sponge-mpd
+docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836/sponge.json/v1"
 ----
+
+Setting the `sponge.restApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service in a local network. If you want to change the service name, provide the `sponge.restApiServer.name` property as well, e.g. `-Dsponge.restApiServer.name="Docker MPD"`.
 
 * Check the {sponge} MPD service logs.
 
@@ -1619,7 +1621,8 @@ docker logs sponge-mpd -f
 
 Limitations:
 
-* The MPD connection configuration (e.g. the MPD host) is not persisted.
+* The MPD connection configuration (e.g. the MPD host) is not persisted between restarts.
+* This Docker image has been tested only on a Linux host.
 
 === Scripting examples
 The scripting examples show how to use certain {sponge} functionalities in script knowledge bases. See the sources in {sourcesUrl}/sponge-jython/examples/script/py[Python examples], {sourcesUrl}/sponge-jruby/examples/script/rb[Ruby examples], {sourcesUrl}/sponge-groovy/examples/script/groovy[Groovy examples] and {sourcesUrl}/sponge-nashorn/examples/script/js[JavaScript examples].

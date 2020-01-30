@@ -34,6 +34,7 @@
             <configuration>
                 <allowAnonymous>true</allowAnonymous>
                 <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <registerServiceDiscovery>true</registerServiceDiscovery>
             </configuration>
         </plugin>
         <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin"/>
