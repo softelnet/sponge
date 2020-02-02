@@ -164,6 +164,41 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>docker-local</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>docker</executable>
+                            <arguments>
+                                <argument>build</argument>
+                                <argument>-f</argument>
+                                <argument>src/docker/Dockerfile</argument>
+                                <argument>--build-arg</argument>
+                                <argument>SPONGE_VERSION=${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge-demo:${release.version}</argument>
+                                <argument>-t</argument>
+                                <argument>openksavi/sponge-demo:latest</argument>
+                                <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>
