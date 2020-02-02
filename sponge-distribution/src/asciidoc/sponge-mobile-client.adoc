@@ -599,6 +599,14 @@ The application may be switched to the dark or light theme in the settings.
 |Action, `RecordType`, `ListType` action argument
 |Context actions. For more information on context actions and sub-actions see the <<mobile-advanced-use-cases,Advanced use cases>> chapter.
 
+|`cacheableArgs`
+|Action
+|A flag indicating that the action argument values can be cached (i.e. preserved between this action call screens) in a client. Defaults to `true`.
+
+|`cacheableContextArgs`
+|Action
+|A flag indicating that argument values of the action that is used as a _context action_ can be cached (i.e. preserved between this action call screens) in a client. Defaults to `false`. If set to `true` the `cacheableArgs` should be `true` as well.
+
 |`createAction`
 |`ListType` action argument
 |A _create_ sub-action for a list element.

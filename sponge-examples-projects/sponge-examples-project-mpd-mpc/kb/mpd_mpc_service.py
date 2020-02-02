@@ -184,12 +184,12 @@ class Mpc:
     def refreshDatabase(self):
         self.__execute("update")
 
-    def searchFiles(self, aArtist, aAlbum, aGenre, aMinYear, aMaxYear, useSimpleRegexp = False):
+    def searchFiles(self, aArtist, aAlbum, aTitle, aGenre, aMinYear, aMaxYear, useSimpleRegexp = False):
         minYear = self.__num("minYear", aMinYear, True)
         maxYear = self.__num("maxYear", aMaxYear, True)
         selectedFiles = []
-        fileEntries = self.__execute("-f", self.format, "search", "artist", aArtist if aArtist else "", "album", aAlbum if aAlbum else "", "genre",
-                                aGenre if aGenre else "").splitlines()
+        fileEntries = self.__execute("-f", self.format, "search", "artist", aArtist if aArtist else "", "album", aAlbum if aAlbum else "",
+                                     "title", aTitle if aTitle else "", "genre", aGenre if aGenre else "").splitlines()
         for fileEntry in fileEntries:
             tagValues = fileEntry.split(self.separator)
             file = {}

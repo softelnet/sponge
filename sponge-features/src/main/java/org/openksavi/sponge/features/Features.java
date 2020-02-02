@@ -114,6 +114,10 @@ public final class Features {
 
     public static final String CONTEXT_ACTIONS = "contextActions";
 
+    public static final String CACHEABLE_ARGS = "cacheableArgs";
+
+    public static final String CACHEABLE_CONTEXT_ARGS = "cacheableContextArgs";
+
     public static final String SUB_ACTION_CREATE_ACTION = "createAction";
 
     public static final String SUB_ACTION_READ_ACTION = "readAction";

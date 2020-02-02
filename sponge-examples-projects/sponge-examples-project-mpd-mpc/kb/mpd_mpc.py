@@ -11,6 +11,7 @@ class MpdFindAndAddToPlaylist(Action):
         self.withArgs([
             StringType("artist").withNullable().withLabel("Artist").withDescription("The artist"),
             StringType("album").withNullable().withLabel("Album").withDescription("The album"),
+            StringType("title").withNullable().withLabel("Song").withDescription("The song title"),
             StringType("genre").withNullable().withLabel("Genre").withDescription("The genre"),
             IntegerType("minYear").withNullable().withLabel("Release year (since)").withDescription("The album minimum release year."),
             IntegerType("maxYear").withNullable().withLabel("Release year (to)").withDescription("The album maximum release year."),
@@ -18,10 +19,10 @@ class MpdFindAndAddToPlaylist(Action):
             BooleanType("replacePlaylist").withDefaultValue(False).withLabel("Replace the playlist").withDescription(
                 "Clears the playlist before adding new songs.")
         ]).withResult(StringType().withLabel("Info"))
-        self.withFeatures({"icon":"playlist-star", "visible":False})
-    def onCall(self, artist, album, genre, minYear, maxYear, autoPlay, replacePlaylist):
+        self.withFeatures({"icon":"playlist-star", "showClear":True, "showCancel":True, "cacheableContextArgs":True, "visible":False})
+    def onCall(self, artist, album, title, genre, minYear, maxYear, autoPlay, replacePlaylist):
         mpc = sponge.getVariable("mpc")
-        selectedFiles = mpc.searchFiles(artist, album, genre, minYear, maxYear, useSimpleRegexp = True)
+        selectedFiles = mpc.searchFiles(artist, album, title, genre, minYear, maxYear, useSimpleRegexp = True)
         if len(selectedFiles) > 0:
             mpc.addAndPlayFiles(selectedFiles, autoPlay, replacePlaylist)
             return "Added {} song(s) to the playlist".format(len(selectedFiles))
