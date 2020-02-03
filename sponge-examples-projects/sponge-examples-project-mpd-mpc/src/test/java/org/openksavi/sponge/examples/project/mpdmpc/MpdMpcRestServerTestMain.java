@@ -45,8 +45,8 @@ public class MpdMpcRestServerTestMain {
     }
 
     protected SpongeRestClient createRestClient() {
-        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
-                .url(String.format("http://localhost:%d/%s", RestApiConstants.DEFAULT_PORT, RestApiConstants.DEFAULT_PATH)).build());
+        return new DefaultSpongeRestClient(
+                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", RestApiConstants.DEFAULT_PORT)).build());
     }
 
     public void testMpdPlaylist() {

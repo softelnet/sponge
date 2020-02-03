@@ -19,7 +19,6 @@ package org.openksavi.sponge.remoteapi.server.test.rest;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
@@ -30,7 +29,6 @@ public class OkHttpHttpRestApiTest extends BaseHttpRestApiTest {
 
     @Override
     protected SpongeRestClient createRestClient() {
-        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder()
-                .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
+        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", port)).build());
     }
 }

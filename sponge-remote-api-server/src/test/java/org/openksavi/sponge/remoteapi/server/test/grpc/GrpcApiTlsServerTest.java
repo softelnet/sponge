@@ -42,7 +42,6 @@ import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClientConfiguration;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
@@ -90,7 +89,7 @@ public class GrpcApiTlsServerTest extends GrpcApiServerBaseTest {
     @Override
     protected BaseSpongeRestClient createRestClient(boolean useEventTypeCache) {
         return new OkHttpSpongeRestClient(
-                SpongeRestClientConfiguration.builder().url(String.format("https://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
+                SpongeRestClientConfiguration.builder().url(String.format("https://localhost:%d", port))
                         .useEventTypeCache(useEventTypeCache).build(),
                 // Insecure connection only for tests.
                 new OkHttpClient.Builder()

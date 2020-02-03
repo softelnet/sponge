@@ -79,7 +79,7 @@
         <finalName>sponge-rest-api-test-service</finalName>
         <plugins>
             <!-- Allows running this example with mvn jetty:run. -->
-            <!-- Test: curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/version -->
+            <!-- Test: curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/version -->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>

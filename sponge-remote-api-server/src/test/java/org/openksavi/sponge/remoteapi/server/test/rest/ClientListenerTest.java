@@ -32,7 +32,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRequestContext;
@@ -47,8 +46,7 @@ import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 public class ClientListenerTest extends BasicTestTemplate {
 
     protected BaseSpongeRestClient createRestClient() {
-        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
-                .url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH)).build());
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", port)).build());
     }
 
     private String normalizeJson(String json) {

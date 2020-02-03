@@ -39,7 +39,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.InvalidAuthTokenException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
@@ -97,9 +96,8 @@ public class AuthTokenExpirationTest {
     }
 
     protected SpongeRestClient createRestClient(String username, String password) {
-        return new DefaultSpongeRestClient(
-                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
-                        .username(username).password(password).build());
+        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", port))
+                .username(username).password(password).build());
     }
 
     @Test

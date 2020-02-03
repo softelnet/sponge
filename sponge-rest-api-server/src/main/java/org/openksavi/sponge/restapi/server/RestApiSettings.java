@@ -42,7 +42,7 @@ public class RestApiSettings {
     private Integer port = RestApiConstants.DEFAULT_PORT;
 
     /** The URL path. */
-    private String path = RestApiConstants.DEFAULT_PATH;
+    private String path;
 
     /** The API version. */
     private int version = RestApiConstants.API_VERSION;

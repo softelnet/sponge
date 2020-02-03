@@ -6,7 +6,7 @@ The {sponge} gRPC API client for Java simplifies connecting to a remote {sponge}
 ----
 // Create a new Sponge REST API client.
 try (SpongeRestClient restClient = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
-        .url("http://localhost:8080/sponge.json/v1")
+        .url("http://localhost:8080")
         .build())) {
     // Create a new Sponge gRPC API client associated with the REST API client.
     // It is assumed that this gRPC service is insecure because the REST API is published as HTTP.

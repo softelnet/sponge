@@ -27,8 +27,6 @@ public final class RestApiConstants {
 
     public static final int DEFAULT_PORT = 1836;
 
-    public static final String DEFAULT_PATH = String.format("sponge.json/v%d", API_VERSION);
-
     public static final String OPERATION_VERSION = "version";
 
     public static final String OPERATION_FEATURES = "features";

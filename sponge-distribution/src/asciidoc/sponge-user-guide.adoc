@@ -1343,7 +1343,7 @@ The port `8080` is used by the REST API and the port `8081` is used by the gRPC 
 [source,bash,subs="verbatim,attributes"]
 ----
 # Test the service.
-curl http://localhost:8080/sponge.json/v1/version
+curl http://localhost:8080/version
 
 # Invoke shell in the container.
 docker exec -it sponge-demo /bin/bash
@@ -1364,7 +1364,7 @@ class HelloWorld(Action):
         return "Hello World!"
 
 # Reload the knowledge bases as admin via a commandline tool or the {sponge} mobile client application.
-curl -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/reload -d '{"header":{"username":"admin","password":"password"}}'
+curl -X POST -H "Content-type:application/json" http://localhost:8080/reload -d '{"header":{"username":"admin","password":"password"}}'
 
 # Refresh actions in the {sponge} mobile client application.
 # The new action will be visible in the action list.
@@ -1408,7 +1408,7 @@ Deploy the web application as `sponge-demo-api` using the Tomcat Web Application
 
 [source,bash]
 ----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/sponge.json/v1/version
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/version
 ----
 
 [discrete]
@@ -1608,7 +1608,7 @@ sudo usermod -aG docker volumio
 
 ----
 docker pull openksavi/sponge-mpd
-docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836/sponge.json/v1"
+docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
 ----
 
 Setting the `sponge.restApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service in a local network. If you want to change the service name, provide the `sponge.restApiServer.name` property as well, e.g. `-Dsponge.restApiServer.name="Docker MPD"`.

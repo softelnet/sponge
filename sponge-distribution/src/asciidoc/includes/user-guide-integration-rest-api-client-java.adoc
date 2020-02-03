@@ -7,7 +7,7 @@ IMPORTANT: The fully featured {sponge} REST API client is the client for *Dart*.
 [source,java]
 ----
 try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
-        .url("http://localhost:8080/sponge.json/v1")
+        .url("http://localhost:8080")
         .build())) { // <1>
     String upperCaseText = client.call(String.class, "UpperCase",  Arrays.asList("text")); // <2>
 }
@@ -19,7 +19,7 @@ try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfi
 [source,java]
 ----
 SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
-        .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH))
+        .url(String.format("http://localhost:%d", PORT))
         .username(username)
         .password(password)
         .build());

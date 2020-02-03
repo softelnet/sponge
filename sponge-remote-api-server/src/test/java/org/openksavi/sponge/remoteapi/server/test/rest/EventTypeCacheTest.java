@@ -28,7 +28,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
@@ -42,9 +41,8 @@ import org.openksavi.sponge.type.RecordType;
 public class EventTypeCacheTest extends BasicTestTemplate {
 
     protected BaseSpongeRestClient createRestClient(boolean useEventTypeCache) {
-        return new OkHttpSpongeRestClient(
-                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
-                        .useEventTypeCache(useEventTypeCache).build());
+        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", port))
+                .useEventTypeCache(useEventTypeCache).build());
     }
 
     @Test

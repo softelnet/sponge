@@ -48,7 +48,7 @@ The main features of {sponge}:
 * Allows *publishing a custom REST API of your application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
 * Provides *REST API client libraries* for *Java* and *Dart* to simplify writing a client code.
 * Provides integration with *https://www.tensorflow.org[TensorFlow]*, an open source *machine learning* framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
-* Provides *Sponge Remote* (_currently under development_), a *generic, opinionated mobile application* backed by a server-side business logic. The business logic is placed in {sponge} actions. Sponge Remote provides a generic GUI to call those actions. Sponge Remote could be useful in cases when a mobile GUI doesn't have to be customized.
+* Provides *Sponge Remote* (_currently under development_), a *generic, minimalistic, opinionated mobile application* backed by a server-side business logic. The business logic is placed in {sponge} actions. Sponge Remote provides a generic GUI to call those actions. Sponge Remote could be useful in cases when a mobile GUI doesn't have to be customized.
 * Allows *development of mobile applications* using the *Sponge Flutter API* library (_currently under development_) for cases when the GUI that connects to {sponge} has to be customized.
 * Provides a comprehensive documentation and many examples.
 

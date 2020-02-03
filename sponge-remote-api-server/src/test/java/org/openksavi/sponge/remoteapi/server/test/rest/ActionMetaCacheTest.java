@@ -28,7 +28,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.BaseSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
@@ -42,9 +41,8 @@ import org.openksavi.sponge.restapi.model.RestActionMeta;
 public class ActionMetaCacheTest extends BasicTestTemplate {
 
     protected BaseSpongeRestClient createRestClient(boolean useActionMetaCache) {
-        return new OkHttpSpongeRestClient(
-                SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
-                        .useActionMetaCache(useActionMetaCache).build());
+        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", port))
+                .useActionMetaCache(useActionMetaCache).build());
     }
 
     @Test

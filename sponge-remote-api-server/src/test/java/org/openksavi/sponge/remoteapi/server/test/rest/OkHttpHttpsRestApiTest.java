@@ -23,7 +23,6 @@ import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.restapi.client.okhttp.OkHttpSpongeRestClient;
@@ -35,9 +34,7 @@ public class OkHttpHttpsRestApiTest extends BaseHttpsRestApiTest {
 
     @Override
     protected SpongeRestClient createRestClient() {
-        return new OkHttpSpongeRestClient(
-                SpongeRestClientConfiguration.builder().url(String.format("https://localhost:%d/%s", port, RestApiConstants.DEFAULT_PATH))
-                        .build(),
+        return new OkHttpSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("https://localhost:%d", port)).build(),
                 // Insecure connection only for tests.
                 new OkHttpClient.Builder()
                         .sslSocketFactory(RestClientUtils.createTrustAllSslContext().getSocketFactory(),

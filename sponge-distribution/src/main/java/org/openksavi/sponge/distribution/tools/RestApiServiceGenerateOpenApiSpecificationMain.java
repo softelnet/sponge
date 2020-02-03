@@ -53,8 +53,7 @@ public class RestApiServiceGenerateOpenApiSpecificationMain {
         ctx.start();
 
         try {
-            FileUtils.writeStringToFile(new File(filename),
-                    RestClientUtils.fetchOpenApiJson(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)),
+            FileUtils.writeStringToFile(new File(filename), RestClientUtils.fetchOpenApiJson(String.format("http://localhost:%d", PORT)),
                     StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new SpongeException(e);

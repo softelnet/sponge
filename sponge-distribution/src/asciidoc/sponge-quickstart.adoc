@@ -285,10 +285,10 @@ If the {sponge} REST API server is configured, you could call this action remote
 [source,bash]
 ----
 # Call the action to get the JSON response with the result.
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"body":{"name":"HelloWorldAction","args":["Sponge user"]}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"body":{"name":"HelloWorldAction","args":["Sponge user"]}}'
 
 # You could also get the action metadata as a JSON response.
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"body":{"name":"HelloWorldAction"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"body":{"name":"HelloWorldAction"}}'
 ----
 
 ==== Python

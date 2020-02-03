@@ -26,7 +26,7 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 
 |`path`
 |`String`
-|The REST API path. Defaults to `sponge.json/v1`. It can be overwritten by a Java system property `sponge.restApiServer.path`.
+|The REST API path. Defaults to `null`. It can be overwritten by a Java system property `sponge.restApiServer.path`.
 
 |`name`
 |`String`

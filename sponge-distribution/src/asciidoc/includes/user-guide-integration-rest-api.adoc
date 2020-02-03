@@ -61,7 +61,7 @@ The {sponge} REST API service can publish custom REST API operations as well.
 In case of an error, a response HTTP status code will be `500`.
 
 == OpenAPI specification
-An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/sponge.json/v1/doc`.
+An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/doc`.
 
 NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for simple customized operations.
 
@@ -113,18 +113,18 @@ The {sponge} REST API supports both POST and GET methods.
 .Examples of REST API requests
 [source,bash]
 ----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/version
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/knowledgeBases
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"header":{"username":"john","password":"password"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/actions -d '{"body":{"name":".*Case"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/call -d '{"body":{"name":"UpperCase","args":["test1"]}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/send -d '{"header":{"username":"john","password":"password"},"body":{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/sponge.json/v1/reload
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/version
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/knowledgeBases
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"header":{"username":"john","password":"password"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"body":{"name":".*Case"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"body":{"name":"UpperCase","args":["test1"]}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/send -d '{"header":{"username":"john","password":"password"},"body":{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/reload
 
-curl http://localhost:1836/sponge.json/v1/version
-curl http://localhost:1836/sponge.json/v1/knowledgeBases
-curl -G "http://localhost:1836/sponge.json/v1/call" --data-urlencode 'request={"body":{"name":"OutputStreamResultAction","args":[]}}'
+curl http://localhost:1836/version
+curl http://localhost:1836/knowledgeBases
+curl -G "http://localhost:1836/call" --data-urlencode 'request={"body":{"name":"OutputStreamResultAction","args":[]}}'
 ----
 
 == Response

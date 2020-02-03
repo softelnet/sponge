@@ -27,7 +27,6 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
 import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
@@ -48,8 +47,8 @@ public class StandaloneRestApiTest {
 
             String arg1 = "test1";
 
-            try (SpongeRestClient client = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
-                    .url(String.format("http://localhost:%d/%s", PORT, RestApiConstants.DEFAULT_PATH)).build())) {
+            try (SpongeRestClient client = new DefaultSpongeRestClient(
+                    SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build())) {
                 Object result = client.call("UpperCase", Arrays.asList(arg1));
 
                 assertTrue(result instanceof String);
