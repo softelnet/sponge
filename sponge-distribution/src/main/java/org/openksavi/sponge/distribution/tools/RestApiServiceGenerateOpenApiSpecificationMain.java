@@ -42,6 +42,9 @@ public class RestApiServiceGenerateOpenApiSpecificationMain {
             plugin.getSettings().setPublishReload(true);
             plugin.getSettings().setPrettyPrint(true);
 
+            plugin.getSettings().setName("Sponge REST API");
+            plugin.getSettings().setDescription(plugin.getSettings().getName());
+
             return plugin;
         }
     }
@@ -67,6 +70,14 @@ public class RestApiServiceGenerateOpenApiSpecificationMain {
             throw new SpongeException("Filename argument missing");
         }
 
-        new RestApiServiceGenerateOpenApiSpecificationMain().run(args[0]);
+        String file = args[0];
+
+        System.out.println("Writing to " + file);
+
+        try {
+            new RestApiServiceGenerateOpenApiSpecificationMain().run(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
