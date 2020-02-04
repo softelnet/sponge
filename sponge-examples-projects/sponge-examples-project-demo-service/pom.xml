@@ -128,10 +128,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>docker</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>push-latest</id>
@@ -140,6 +136,8 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <executable>docker</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
                                     <arguments>
                                         <argument>push</argument>
                                         <argument>openksavi/sponge-demo:latest</argument>
@@ -153,9 +151,38 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <executable>docker</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
                                     <arguments>
                                         <argument>push</argument>
                                         <argument>openksavi/sponge-demo:${release.version}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>push-lite</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>buildx</argument>
+                                        <argument>build</argument>
+                                        <argument>-f</argument>
+                                        <argument>src/docker/Dockerfile-lite</argument>
+                                        <argument>--build-arg</argument>
+                                        <argument>SPONGE_VERSION=${release.version}</argument>
+                                        <argument>--platform</argument>
+                                        <argument>linux/amd64,linux/arm/v7</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge-demo-lite:${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge-demo-lite:latest</argument>
+                                        <!-- Pushing to the hub here because of [https://github.com/docker/buildx/issues/59] -->
+                                        <argument>--push</argument>
+                                        <argument>.</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -172,27 +199,50 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>docker</executable>
-                            <arguments>
-                                <argument>build</argument>
-                                <argument>-f</argument>
-                                <argument>src/docker/Dockerfile</argument>
-                                <argument>--build-arg</argument>
-                                <argument>SPONGE_VERSION=${release.version}</argument>
-                                <argument>-t</argument>
-                                <argument>openksavi/sponge-demo:${release.version}</argument>
-                                <argument>-t</argument>
-                                <argument>openksavi/sponge-demo:latest</argument>
-                                <argument>.</argument>
-                            </arguments>
-                        </configuration>
                         <executions>
                             <execution>
+                                <id>docker-local</id>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>build</argument>
+                                        <argument>-f</argument>
+                                        <argument>src/docker/Dockerfile</argument>
+                                        <argument>--build-arg</argument>
+                                        <argument>SPONGE_VERSION=${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge-demo:${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge-demo:latest</argument>
+                                        <argument>.</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>docker-local-lite</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>build</argument>
+                                        <argument>-f</argument>
+                                        <argument>src/docker/Dockerfile-lite</argument>
+                                        <argument>--build-arg</argument>
+                                        <argument>SPONGE_VERSION=${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge-demo-lite:${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge-demo-lite:latest</argument>
+                                        <argument>.</argument>
+                                    </arguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

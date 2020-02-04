@@ -482,7 +482,7 @@ The plugin may run a CPython script as a subprocess.
 ----
 
 == ReactiveX
-The ReactiveX plugin (`ReactiveXPlugin`) provides support for using http://reactivex.io[ReactiveX] in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming. The plugin uses https://github.com/ReactiveX/RxJava[RxJava library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+The ReactiveX plugin (`ReactiveXPlugin`) provides support for using http://reactivex.io[ReactiveX] in knowledge bases, e.g. for processing stream of {sponge} events using reactive programming. The plugin uses https://github.com/ReactiveX/RxJava[RxJava library]. The current version of the plugin is very simple and hasn't got any configuration parameters.
 
 The default name of the ReactiveX plugin (which can be used in knowledge bases) is `rx`.
 
@@ -620,7 +620,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 == Raspberry Pi - Pi4J
-The Pi4J plugin (`Pi4JPlugin`) allows using the http://pi4j.com[Pi4J] library in {sponge} knowledge bases. The Pi4J library provides a friendly object-oriented I/O API and implementation libraries to access the full I/O capabilities of the Raspberry Pi platform. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+The Pi4J plugin (`Pi4JPlugin`) allows using the http://pi4j.com[Pi4J] library in {sponge} knowledge bases. The Pi4J library provides a friendly object-oriented I/O API and implementation libraries to access the full I/O capabilities of the Raspberry Pi platform. The current version of the plugin is very simple and hasn't got any configuration parameters.
 
 The default name of the Pi4J plugin (which can be used in knowledge bases) is `pi4j`.
 
@@ -691,7 +691,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 ----
 
 == Raspberry Pi - GrovePi
-The GrovePi plugin (`GrovePiPlugin`) allows accessing the https://www.dexterindustries.com/grovepi/[GrovePi] hardware in {sponge} knowledge bases. GrovePi is an electronics board for Raspberry Pi that may have a variety of sensors and actuators connected to. The plugin uses https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library]. The current version of the plugin is very simple. For example it hasn't got any configuration parameters.
+The GrovePi plugin (`GrovePiPlugin`) allows accessing the https://github.com/DexterInd/GrovePi[GrovePi] hardware in {sponge} knowledge bases. GrovePi is an electronics board for Raspberry Pi that may have a variety of sensors and actuators connected to. The plugin uses https://github.com/DexterInd/GrovePi/tree/master/Software/Java8[Java 8 GrovePi library]. The current version of the plugin is very simple and hasn't got any configuration parameters.
 
 The default name of the GrovePi plugin (which can be used in knowledge bases) is `grovepi`.
 

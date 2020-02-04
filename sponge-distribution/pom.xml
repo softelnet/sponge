@@ -93,17 +93,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <mainClass>org.openksavi.sponge.distribution.tools.RestApiServiceGenerateOpenApiSpecificationMain</mainClass>
-                            <commandlineArgs>${openApiDir}/${openApiBasename}.json</commandlineArgs>
-                            <cleanupDaemonThreads>false</cleanupDaemonThreads>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>logback.configurationFile</key>
-                                    <value>../sponge-test/src/main/resources/logback.xml</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>generate-openapi-spec</id>
@@ -111,6 +100,17 @@
                                 <goals>
                                     <goal>java</goal>
                                 </goals>
+                                <configuration>
+                                    <mainClass>org.openksavi.sponge.distribution.tools.RestApiServiceGenerateOpenApiSpecificationMain</mainClass>
+                                    <commandlineArgs>${openApiDir}/${openApiBasename}.json</commandlineArgs>
+                                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                                    <systemProperties>
+                                        <systemProperty>
+                                            <key>logback.configurationFile</key>
+                                            <value>../sponge-test/src/main/resources/logback.xml</value>
+                                        </systemProperty>
+                                    </systemProperties>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -118,26 +118,26 @@
                     <plugin>
                         <groupId>io.github.swagger2markup</groupId>
                         <artifactId>swagger2markup-maven-plugin</artifactId>
-                        <configuration>
-                            <swaggerInput>${openApiDir}/${openApiBasename}.json</swaggerInput>
-                            <outputFile>${documentationCopyDir}/includes/${openApiBasename}</outputFile>
-                            <config>
-                                <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-                                <swagger2markup.pathSecuritySectionEnabled>false</swagger2markup.pathSecuritySectionEnabled>
-                                <swagger2markup.anchorPrefix>swagger_</swagger2markup.anchorPrefix>
-                                <swagger2markup.propertyOrderBy>AS_IS</swagger2markup.propertyOrderBy>
-                                <swagger2markup.parameterOrderBy>AS_IS</swagger2markup.parameterOrderBy>
-                                <swagger2markup.operationOrderBy>AS_IS</swagger2markup.operationOrderBy>
-                                <swagger2markup.definitionOrderBy>NATURAL</swagger2markup.definitionOrderBy>
-                                <swagger2markup.responseOrderBy>AS_IS</swagger2markup.responseOrderBy>
-                            </config>
-                        </configuration>
                         <executions>
                             <execution>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>convertSwagger2markup</goal>
                                 </goals>
+                                <configuration>
+                                    <swaggerInput>${openApiDir}/${openApiBasename}.json</swaggerInput>
+                                    <outputFile>${documentationCopyDir}/includes/${openApiBasename}</outputFile>
+                                    <config>
+                                        <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+                                        <swagger2markup.pathSecuritySectionEnabled>false</swagger2markup.pathSecuritySectionEnabled>
+                                        <swagger2markup.anchorPrefix>swagger_</swagger2markup.anchorPrefix>
+                                        <swagger2markup.propertyOrderBy>AS_IS</swagger2markup.propertyOrderBy>
+                                        <swagger2markup.parameterOrderBy>AS_IS</swagger2markup.parameterOrderBy>
+                                        <swagger2markup.operationOrderBy>AS_IS</swagger2markup.operationOrderBy>
+                                        <swagger2markup.definitionOrderBy>NATURAL</swagger2markup.definitionOrderBy>
+                                        <swagger2markup.responseOrderBy>AS_IS</swagger2markup.responseOrderBy>
+                                    </config>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -414,31 +414,31 @@
                         <!-- [https://engineering.docker.com/2019/04/multi-arch-images/, https://docs.docker.com/buildx/working-with-buildx/] -->
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>docker</executable>
-                            <workingDirectory>${project.build.directory}/docker-context/docker-context</workingDirectory>
-                            <arguments>
-                                <argument>buildx</argument>
-                                <argument>build</argument>
-                                <argument>--platform</argument>
-                                <argument>linux/amd64,linux/arm/v7</argument>
-                                <argument>--build-arg</argument>
-                                <argument>SPONGE_VERSION=${release.version}</argument>
-                                <argument>-t</argument>
-                                <argument>openksavi/sponge:${release.version}</argument>
-                                <argument>-t</argument>
-                                <argument>openksavi/sponge:latest</argument>
-                                <!-- Pushing to the hub is required here because of [https://github.com/docker/buildx/issues/59] -->
-                                <argument>--push</argument>
-                                <argument>.</argument>
-                            </arguments>
-                        </configuration>
                         <executions>
                             <execution>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <workingDirectory>${project.build.directory}/docker-context/docker-context</workingDirectory>
+                                    <arguments>
+                                        <argument>buildx</argument>
+                                        <argument>build</argument>
+                                        <argument>--platform</argument>
+                                        <argument>linux/amd64,linux/arm/v7</argument>
+                                        <argument>--build-arg</argument>
+                                        <argument>SPONGE_VERSION=${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge:${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge:latest</argument>
+                                        <!-- Pushing to the hub is required here because of [https://github.com/docker/buildx/issues/59] -->
+                                        <argument>--push</argument>
+                                        <argument>.</argument>
+                                    </arguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -473,26 +473,26 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <executable>docker</executable>
-                            <workingDirectory>${project.build.directory}/docker-context-local/docker-context-local</workingDirectory>
-                            <arguments>
-                                <argument>build</argument>
-                                <argument>--build-arg</argument>
-                                <argument>SPONGE_VERSION=${release.version}</argument>
-                                <argument>-t</argument>
-                                <argument>openksavi/sponge:${release.version}</argument>
-                                <argument>-t</argument>
-                                <argument>openksavi/sponge:latest</argument>
-                                <argument>.</argument>
-                            </arguments>
-                        </configuration>
                         <executions>
                             <execution>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <workingDirectory>${project.build.directory}/docker-context-local/docker-context-local</workingDirectory>
+                                    <arguments>
+                                        <argument>build</argument>
+                                        <argument>--build-arg</argument>
+                                        <argument>SPONGE_VERSION=${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge:${release.version}</argument>
+                                        <argument>-t</argument>
+                                        <argument>openksavi/sponge:latest</argument>
+                                        <argument>.</argument>
+                                    </arguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

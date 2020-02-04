@@ -1,0 +1,18 @@
+# Demo Service Lite
+
+ARG SPONGE_VERSION
+
+FROM openksavi/sponge:$SPONGE_VERSION
+
+RUN apt-get -qq update \
+    && apt-get clean all
+
+COPY sponge /opt/sponge/kb
+COPY target/sponge-scripts.zip /opt/sponge/
+COPY password.txt /opt/sponge/kb
+
+WORKDIR /opt/sponge
+
+ENTRYPOINT ["/opt/sponge/bin/sponge", "-c", "kb/sponge-lite.xml", "-Dsponge.home=/opt/sponge/kb", "-Dpassword.file=/opt/sponge/kb/password.txt"]
+
+EXPOSE 1836 1837

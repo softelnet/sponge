@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <!-- Set these properties via system properties! -->
+        <!-- <property name="digits.home">digits</property> -->
+        <!-- <property name="password.file">password.txt</property> -->
+
+        <!-- The optional prediction probability threshold. -->
+        <property name="predictionThreshold" variable="true">0.6</property>
+
+        <property name="doodlesDir">${sponge.home}/data/doodles</property>
+    </properties>
+
+    <engine name="demoLite" label="Sponge Demo Service Lite"/>
+
+    <knowledgeBases>
+        <knowledgeBase name="demo" label="Demo">
+            <file>sponge_demo.py</file>
+            <file>sponge_demo_choose_color.py</file>
+            <file>sponge_demo_depending.py</file>
+            <file>sponge_demo_binary_result.py</file>
+            <file>sponge_demo_context_actions_action.py</file>
+            <file>sponge_demo_context_actions_record.py</file>
+            <file>sponge_demo_context_actions_active.py</file>
+            <file>sponge_demo_asynchronous_provided_action_arg.py</file>
+            <file>sponge_demo_submittable_action_arg.py</file>
+            <file>sponge_demo_action_enabled_args.py</file>
+            <file>sponge_demo_action_annotated_with_default.py</file>
+            <file>sponge_demo_setter_context_actions_record.py</file>
+            <file>sponge_demo_setter_context_actions_list.py</file>
+            <file>sponge_demo_list_pageable.py</file>
+            <file>sponge_demo_object_type_with_companion.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoForms" label="Action forms/Base">
+            <file>sponge_demo_forms_base.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoFormsLibraryArgs" label="Action forms/Library args">
+            <file>sponge_demo_forms_library_common.py</file>
+            <file>sponge_demo_forms_library_args.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoFormsLibraryRecord" label="Action forms/Library records">
+            <file>sponge_demo_forms_library_common.py</file>
+            <file>sponge_demo_forms_library_records.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoPlus" label="Demo plus">
+            <file>sponge_demo_doodles.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="events" label="Events">
+            <file>sponge_demo_events.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsNotification" label="Notification">
+            <file>sponge_demo_events_notification.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsMemo" label="Memo">
+            <file>sponge_demo_events_memo.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsCounter" label="Counter">
+            <file>sponge_demo_events_counter_event_handler.py</file>
+            <file>sponge_demo_events_counter_viewer.py</file>
+            <file>sponge_demo_events_counter_sender.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="engine" label="Engine">
+            <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="admin" label="Admin">
+            <file>classpath*:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" label="Security">
+            <file>rest_api_security.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <configuration>
+                <spring camel="true" />
+            </configuration>
+        </plugin>
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
+            <configuration>
+                <allowAnonymous>true</allowAnonymous>
+                <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <registerServiceDiscovery>true</registerServiceDiscovery>
+                <publishReload>true</publishReload>
+                <prettyPrint>true</prettyPrint>
+            </configuration>
+        </plugin>
+        <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin"/>
+    </plugins>
+</sponge>
+

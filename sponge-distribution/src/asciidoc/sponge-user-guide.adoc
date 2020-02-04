@@ -1321,7 +1321,9 @@ curl -H "Content-type:application/json" https://spongedemoapi.openksavi.org/vers
 
 [discrete]
 ==== Running in Docker
-The Docker image `openksavi/sponge-demo` contains a predefined REST API Demo Service running in Tomcat. I can be used as a {sponge} mobile client application playground in your local environment.
+The Docker image `openksavi/sponge-demo` contains a predefined REST API Demo Service running in Tomcat. It can be used as a {sponge} mobile client application playground in your local environment.
+
+NOTE: This image doesn't work on Raspberry Pi. To run the Demo Service on Raspberry Pi see the next chapter.
 
 NOTE: The predefined file `password.txt` contains the hashed, insecure password `password` for the user `admin`. You should change it or use this demo only for tests in a secure network.
 
@@ -1373,6 +1375,24 @@ curl -X POST -H "Content-type:application/json" http://localhost:8080/reload -d 
 
 # Refresh actions in the {sponge} mobile client application.
 # The new action will be visible in the action list.
+----
+
+[discrete]
+==== Running in Docker on Raspberry Pi
+The Docker image `openksavi/sponge-demo-lite` contains the REST API Demo Service Light that can be run on Raspberry Pi. It can be used as a {sponge} mobile client application playground in your Raspberry Pi device. The Demo Service Light provides the same actions as the Demo Service except those related to the digit recognition. It doesn't contain Tensorflow and runs as a standalone application.
+
+.Running the REST API Demo Service Light in Docker on Raspberry Pi
+[source,bash,subs="verbatim,attributes"]
+----
+docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+----
+
+The default port `1836` is used by the REST API and the port `1837` is used by the gRPC API.
+
+.Verification
+[source,bash,subs="verbatim,attributes"]
+----
+curl http://localhost:1836/version
 ----
 
 [discrete]
