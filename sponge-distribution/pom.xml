@@ -150,10 +150,10 @@
                             <sourceDirectory>${documentationCopyDir}</sourceDirectory>
 
                             <attributes>
-                                <toclevels>5</toclevels>
                                 <homepage>${homepage}</homepage>
                                 <sectnums>true</sectnums>
-                                <sectnumlevels>5</sectnumlevels>
+                                <toclevels>3</toclevels>
+                                <sectnumlevels>3</sectnumlevels>
                                 <icons>font</icons>
                                 <prewrap>false</prewrap>
                                 <linkattrs>true</linkattrs>

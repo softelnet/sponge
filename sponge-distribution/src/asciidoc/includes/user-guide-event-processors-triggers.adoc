@@ -1,0 +1,100 @@
+= Triggers
+Triggers run a specified code when an event happens.
+
+The alias for the base class for script-based triggers is `Trigger`. The base class for Java-based filters is `JTrigger`.
+
+== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, triggers provide the following ones.
+
+.Trigger properties and methods
+[cols="2,5"]
+|===
+|Property / Method |Description
+
+|*`withEvents(List<String> eventNames)` or `withEvent(String eventName)`*
+|Sets a name (a name pattern) or names (name patterns) of the events that cause this trigger to fire. The event names can be read using `self.meta.eventNames`. Setting an event or events is mandatory. It should be set in the `onConfigure` callback method. You may use only one of these methods in a processor.
+
+|*`onRun(event)`*
+|The callback method used for processing the event, called when the specified event (or one of the events) happens. This method is mandatory.
+
+|`boolean onAccept(event)`
+|This optional callback method checks if an incoming event should processed by this trigger. The default implementation returns `true`.
+|===
+
+Every trigger should implement abstract `onConfigure` and `onRun` methods.
+
+.Trigger builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`*withOnRun(TriggerOnRunCallback onRunCallback)*`
+|Configures the `onRun()` callback function that takes arguments: the trigger instance and an event, e.g. `withOnRun(lambda trigger, event: trigger.logger.info("OK"))`.
+
+|`withOnAccept(TriggerOnAcceptCallback onAcceptCallback)`
+|Configures the `onAccept()` callback function that takes arguments: the trigger instance and an event, e.g. `withOnAccept(lambda trigger, event: event.get("attr1") == 1)`.
+|===
+
+[discrete]
+== Example in a script language
+The code presented below defines a trigger named `TriggerA` listening to events named `"a"`.
+
+.Trigger example
+[source,python]
+----
+class TriggerA(Trigger): # <1>
+    def onConfigure(self): # <2>
+        self.withEvent("a") # <3>
+    def onRun(self, event): # <4>
+        self.logger.debug("Received event: {}", event.name) # <5>
+----
+<1> The definition of the trigger `TriggerA`. The trigger is represented by a class of the same name.
+<2> The trigger configuration callback method.
+<3> Sets up `TriggerA` to listen to `a` events (i.e. events that have name `"a"`).
+<4> The trigger `onRun` method will be called when an event `a` happens. The `event` argument specifies that event instance.
+<5> Logs the event.
+
+The trigger `TriggerA` will be enabled automatically. The enabling creates an instance of `TriggerA` class and invokes `TriggerA.onConfigure` method to set it up. Since that moment the trigger listens to the specified events.
+
+[discrete]
+== Example in Java
+The code presented below defines a trigger named `SampleJavaTrigger` listening to events named `"e1"`.
+
+.Java trigger example
+[source,java]
+----
+public class SampleJavaTrigger extends JTrigger { // <1>
+
+    @Override
+    public void onConfigure() { // <2>
+        withEvent("e1"); // <3>
+    }
+
+    @Override
+    public void onRun(Event event) { // <4>
+        getLogger().debug("Received event {}", event); // <5>
+    }
+}
+----
+<1> The definition of the trigger `SampleJavaTrigger`. The trigger is represented by a Java class of the same name.
+<2> The trigger configuration callback method.
+<3> Sets up `SampleJavaTrigger` to listen to `e1` events (i.e. events that have name `"e1"`).
+<4> The trigger `onRun` method will be called when an event `e1` happen. The `event` argument specifies that event instance.
+<5> Logs the event.
+
+.Java trigger manual registration in the script knowledge base
+[source,python]
+----
+sponge.enableJava(SampleJavaTrigger)
+----
+
+[discrete]
+== Example of a trigger builder
+The code presented below defines and enables a trigger named `TriggerA`.
+
+.Trigger builder example
+[source,python]
+----
+def onLoad():
+    sponge.enable(TriggerBuilder("TriggerA").withEvent("a").withOnRun(lambda trigger, event: trigger.logger.debug("Received event: {}", event.name)))
+----

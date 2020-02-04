@@ -182,7 +182,7 @@ class UpperEchoAction(Action):
         return self.meta.label + " returns: " + text.upper()
 ----
 
-== Active
+== Active/Inactive actions
 An action can be active or inactive in a given context. The status has to be fetched manually in a client code if necessary.
 
 The `boolean onIsActive(IsActionActiveContext context)` method is used to provide this information.

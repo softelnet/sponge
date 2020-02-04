@@ -37,10 +37,10 @@ asciidoctor:
     - projectVersion=${release.version}
     - projectDate=${release.date}
     - imagesdir=/docs/images
-    - toclevels=5
     - homepage=https://sponge.openksavi.org
     - sectnums=true
-    - sectnumlevels=5
+    - toclevels=3
+    - sectnumlevels=3
     - icons=font
     - prewrap=false
     - linkattrs=true

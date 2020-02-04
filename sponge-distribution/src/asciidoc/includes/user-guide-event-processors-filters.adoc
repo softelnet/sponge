@@ -1,0 +1,126 @@
+= Filters
+Filters allow only certain events to be processed by the engine. Filters are executed in the same order as the order of their registration (i.e. enabling).
+
+You could modify event attributes in filters if necessary.
+
+The alias for the base class for script-based filters is `Filter`. The base class for Java-based filters is `JFilter`.
+
+== Properties and methods
+In addition to the inherited <<processor-methods,processor properties and methods>>, filters provide the following ones.
+
+.Filter properties and methods
+[cols="2,5"]
+|===
+|Property / Method |Description
+
+|*`withEvents(List<String> eventNames)` or `withEvent(String eventName)`*
+|Sets a name (a name pattern) or names (name patterns) of filtered events. The event names can be read using `self.meta.eventNames`. Setting an event or events is mandatory. It should be set in the `onConfigure` callback method. You may use only one of these methods in a processor.
+
+|*`boolean onAccept(event)`*
+|This method checks if an incoming event should be further processed. If `onAccept` method returns `false`, then the event will be discarded. Otherwise it will be processed by the other event processors. This method is mandatory.
+|===
+
+Every filter defined by a class should implement the abstract `onConfigure` method. Every filter should implement  the `onAccept` method.
+
+.Filter builder specific properties and methods
+[cols="1,5"]
+|===
+|Property / Method |Description
+
+|`*withOnAccept(FilterOnAcceptCallback onAcceptCallback)*`
+|Configures the `onAccept()` callback function that takes arguments: the filter instance and an event, e.g. `withOnAccept(lambda filter, event: event.get("attr1") == 1)`.
+|===
+
+[discrete]
+== Example in a script language
+The code presented below creates a filter which filters only events whose name is `"e1"`. Other events are not processed by this filter. Events `e1` successfully pass through the filter only if they have an attribute `"color"` set to the value `"blue"`. The others are rejected.
+
+TIP: Class methods defined in a Python class have an instance object (`self`) as the first parameter.
+
+.Filter example
+[source,python]
+----
+class ColorFilter(Filter): # <1>
+    def onConfigure(self): # <2>
+        self.withEvent("e1") # <3>
+    def onAccept(self, event): # <4>
+        self.logger.debug("Received event {}", event) # <5>
+        color = event.get("color", None) # <6>
+        if color is None or color != "blue": # <7>
+            self.logger.debug("rejected")
+            return False
+        else: # <8>
+            self.logger.debug("accepted")
+            return True
+----
+<1> The definition of the filter `ColorFilter`. The filter is represented by the class of the same name.
+<2> The filter configuration callback method.
+<3> Sets up `ColorFilter` to listen to `e1` events (i.e. events named `"e1"`).
+<4> The filter `onAccept` method will be called when an event `e1` happens. The `event` argument specifies that event instance.
+<5> Logs the event.
+<6> Assigns the value of the event attribute `"color"` to the local variable `color`.
+<7> If `color` is not set or is not `"blue"` then rejects that event by returning `false`.
+<8> Otherwise accepts the event by returning `true`.
+
+The filter `ColorFilter` will be enabled automatically. The enabling creates one instance of `ColorFilter` class and invokes `ColorFilter.onConfigure` method to set it up. Since that moment the filter listens to the specified events.
+
+[discrete]
+== Example in Java
+The filter presented below checks if an event named `"e1"` or `"e2"` or `"e3"` has an attribute `"shape"` set. If not, an event is ignored and will not be processed further.
+
+.Java filter example
+[source,java]
+----
+public class ShapeFilter extends JFilter { // <1>
+
+    @Override
+    public void onConfigure() { // <2>
+        withEvents("e1", "e2", "e3"); // <3>
+    }
+
+    @Override
+    public boolean onAccept(Event event) { // <4>
+        String shape = event.get("shape", String.class); // <5>
+        if (shape == null) {
+            getLogger().debug("No shape for event: {}; event rejected", event);
+            return false; // <6>
+        }
+
+        getLogger().debug("Shape is set in event {}; event accepted", event);
+
+        return true; // <7>
+    }
+}
+----
+<1> The definition of the filter `ShapeFilter`. The filter is represented by the Java class of the same name.
+<2> The filter configuration callback method.
+<3> Sets up `ShapeFilter` to listen to `e1`, `e2` and `e3` events. Java-based filters have a convenience method that accepts varargs.
+<4> The filter `onAccept` method will be called when any of these events happen. The `event` argument specifies that event instance.
+<5> Assigns a value of an event attribute `"shape"` to the local variable `shape`.
+<6> If `shape` is not set then rejects that event by returning `false`.
+<7> Otherwise accepts the event by returning `true`.
+
+This Java-based filter can be enabled only manually, for example in a script knowledge base e.g.:
+
+.Enabling a Java-based filter
+[source,python]
+----
+sponge.enableJava(ShapeFilter)
+----
+
+[discrete]
+== Example of a filter builder
+The code presented below defines and enables a filter named `ColorFilter`.
+
+.Filter builder example
+[source,python]
+----
+def onLoad():
+    def onAccept(filter, event):
+        color = event.get("color", None)
+        if color is None or color != "blue":
+            return False
+        else:
+            return True
+    sponge.enable(FilterBuilder("ColorFilter").withEvent("e1").withOnAccept(onAccept))
+----

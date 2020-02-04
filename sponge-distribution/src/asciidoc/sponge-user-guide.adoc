@@ -709,6 +709,14 @@ include::includes/user-guide-actions.adoc[leveloffset=+1]
 
 include::includes/user-guide-event-processors.adoc[leveloffset=+1]
 
+include::includes/user-guide-event-processors-filters.adoc[leveloffset=+1]
+
+include::includes/user-guide-event-processors-triggers.adoc[leveloffset=+1]
+
+include::includes/user-guide-event-processors-rules.adoc[leveloffset=+1]
+
+include::includes/user-guide-event-processors-correlators.adoc[leveloffset=+1]
+
 == Plugins
 Plugins are used for expanding {sponge} with new functionalities and use them in knowledge bases. Typically they provide access to and from external systems.
 
@@ -1189,10 +1197,7 @@ TIP: You may see ignored events (i.e. events that go to the Output Event Queue) 
 
 == Examples
 
-=== Complete example projects
-The complete projects could be used as points of reference to use {sponge} in real world use cases. They are placed in `sponge-examples-projects`.
-
-==== News project
+=== News project
 This project shows how to process news as events. It is placed in `sponge-examples-project-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-news[sources]).
 
 Event flow:
@@ -1253,7 +1258,7 @@ include::{completeExamplesProject}/sponge-examples-project-news/kb/news_generato
 include::{completeExamplesProject}/sponge-examples-project-news/src/main/java/org/openksavi/sponge/examples/project/news/MultiEchoPlugin.java[lines=17..-1]
 ----
 
-==== Camel RSS News project
+=== Camel RSS News project
 This example is an enhancement over the News project example. It is placed in `sponge-examples-project-camel-rss-news` (see {sourcesUrl}/sponge-examples-projects/sponge-examples-project-camel-rss-news[sources]).
 
 The main change here is that news are acquired as RSS feeds from news services: BBC and CNN. Reading RSS feeds and transformation to {sponge} events is performed in a Camel route. {sponge} acts as a producer in this Camel route. This example shows {sponge} as a consumer in other Camel routes as well.
@@ -1302,11 +1307,11 @@ include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/con
 ----
 
 [[rest-api-demo-service]]
-==== REST API Demo Service
+=== REST API Demo Service project
 The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>. There are a few options to run the demo.
 
 [discrete]
-===== Using the hosted Demo Service
+==== Using the hosted Demo Service
 The Demo Service hosted at `https://spongedemoapi.openksavi.org` provides an anonymous access to the {sponge} demo. It is used by the {sponge} mobile client application as a predefined connection. You can also connect to the service using command line tools.
 
 [source,bash,subs="verbatim,attributes"]
@@ -1315,7 +1320,7 @@ curl -H "Content-type:application/json" https://spongedemoapi.openksavi.org/vers
 ----
 
 [discrete]
-===== Running in Docker
+==== Running in Docker
 The Docker image `openksavi/sponge-demo` contains a predefined REST API Demo Service running in Tomcat. I can be used as a {sponge} mobile client application playground in your local environment.
 
 NOTE: The predefined file `password.txt` contains the hashed, insecure password `password` for the user `admin`. You should change it or use this demo only for tests in a secure network.
@@ -1371,7 +1376,7 @@ curl -X POST -H "Content-type:application/json" http://localhost:8080/reload -d 
 ----
 
 [discrete]
-===== Setting up manually and deploying in Tomcat
+==== Setting up manually and deploying in Tomcat
 First, you have to create the web application and {sponge} scripts.
 [source,bash,subs="verbatim,attributes"]
 ----
@@ -1412,7 +1417,7 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/vers
 ----
 
 [discrete]
-===== Running in Jetty
+==== Running in Jetty
 You may also run this example using the Jetty server started by the maven command:
 
 .Example of the REST API servlet
@@ -1423,13 +1428,13 @@ mvn jetty:run
 ----
 
 [[iot-rpi-service]]
-==== IoT on Raspberry Pi
+=== IoT on Raspberry Pi project
 The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-iot-rpi[IoT on Raspberry Pi] project shows how to use {sponge} to read sensors, set actuators, take pictures, send SMS messages, send emails and execute OS commands.
 
 The {sponge} standalone command line application is installed on a Raspberry Pi with a GrovePi extension board. {sponge} provides a synchronous REST API to remotely call actions (that for example change state of actuators). It also sends sensor data (temperature, humidity and light) to an MQTT broker using Apache Camel. The project allows processing sensor data on two levels: locally on the Raspberry Pi edge device by {sponge} (to avoid sending too much data to a management system) or by an external system that connects to the MQTT broker.
 
 [discrete]
-===== The hardware
+==== The hardware
 
 .The sensors and actuators connected to the GrovePi
 [cols="2,3"]
@@ -1456,7 +1461,7 @@ The {sponge} standalone command line application is installed on a Raspberry Pi 
 |===
 
 [discrete]
-===== Prerequisites
+==== Prerequisites
 The Linux distribution used for this example is Raspbian. All command are invoked by the user `pi`. For SMS sending the `gammu` utility should be installed.
 
 [source,bash]
@@ -1465,7 +1470,7 @@ $ sudo apt-get install gammu
 ----
 
 [discrete]
-===== Installation
+==== Installation
 First you should download and unpack the {sponge} standalone command line application into the `/home/pi/local/app/` directory. The directory `/home/pi/local/app/examples/sponge-iot-rpi` (containing the example knowledge base files) should be copied to `/home/pi/local/` in order to modify the configuration files in a fresh copy.
 
 The preferred installation is as a systemd service.
@@ -1499,13 +1504,13 @@ $ sudo systemctl enable sponge_iot.service
 ----
 
 [discrete]
-===== Configuration
+==== Configuration
 The `sponge_iot.properties` file allows the configuration of the service name, the phone number that will receive SMS notifications, the email address for notifications, the temperature threshold to trigger sending an SMS notification, the email client settings and the MQTT broker settings.
 
 Note that the provided password file `password.txt` stores sample passwords. For each user the password is: password.
 
 [discrete]
-===== REST API Actions
+==== REST API Actions
 The subset of {sponge} actions is published via the {sponge} REST API. The published actions have their metadata configured. These actions could be used by the {sponge} mobile client application to manage the IoT device using a GUI.
 
 .The published actions
@@ -1533,11 +1538,11 @@ The subset of {sponge} actions is published via the {sponge} REST API. The publi
 The REST API uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
 
 [discrete]
-===== MQTT
+==== MQTT
 {sponge} publishes the values of temperature, humidity and light sensors to the MQTT topics `sponge/temperature`, `sponge/humidity` and `sponge/light`. The topic prefix can be changed in the configuration.
 
 [discrete]
-===== Modifications in the knowledge bases
+==== Modifications in the knowledge bases
 After installation, configuration and an initial run you could add your modifications to the knowledge bases. The preferred way to do this is:
 
 * Temporarily stop and disable the {sponge} system service.
@@ -1577,7 +1582,7 @@ $ tail -f ~/local/sponge-iot-rpi/logs/sponge-<current_date>.log
 * Start and enable the {sponge} system service.
 
 [[mpd-mpc-raspberry]]
-==== MPD client service
+=== MPD client service project
 The {sponge} MPD client service provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player.
 
 The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
@@ -1585,7 +1590,7 @@ The {sponge} MPD service uses the `mpc` client commandline to communicate with t
 NOTE: One of the aims of the {sponge} MPD client service example is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a REST API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
 
 [discrete]
-===== Running in Docker
+==== Running in Docker
 The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service.
 
 The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example https://volumio.org[Volumio] has been chosen.
@@ -1735,8 +1740,8 @@ ifdef::useReferences[({pySourcesUrl}/triggers_event_pattern.py[py], {rbSourcesUr
 |Shows how to define and use triggers that specify events they listen to as a pattern based on a regular expression.
 |===
 
-=== Features examples
-The features examples show how to use some of {sponge} features. They are not implemented in all supported scripting languages.
+=== Functionality examples
+The features examples show how to use some of {sponge} functionalities. They are not implemented in all supported scripting languages.
 
 .Features examples
 [cols="1,3"]
