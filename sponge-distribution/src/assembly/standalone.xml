@@ -156,7 +156,7 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>../sponge-standalone</directory>
+            <directory>../sponge-standalone-app</directory>
             <outputDirectory></outputDirectory>
             <includes>
                 <include>examples/**</include>

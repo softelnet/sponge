@@ -55,7 +55,7 @@ asciidoctor:
     - rootDir=root
     - includesRootDir=../{rootDir}
     - completeExamplesProject={rootDir}/sponge-examples-projects
-    - standaloneDir={rootDir}/sponge-standalone
+    - standaloneDir=sponge-${release.version}
     - standalonePackage=sponge-{projectVersion}-standalone
     - sourcesUrl=https://github.com/softelnet/sponge/tree/master
     - dartClientSourcesUrl=https://github.com/softelnet/sponge_client_dart/tree/master

@@ -15,6 +15,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a REST API service discovery.
 * Added the _on session open_ and the _on session close_ listeners to the REST API service.
 * The default REST API path is now empty. The previous value was `sponge.json/v1`.
+* Added a new artifact `sponge-standalone-app` that contains the dependencies for the standalone commandline application.
 
 [discrete]
 == 1.14.0 (2019-12-20)

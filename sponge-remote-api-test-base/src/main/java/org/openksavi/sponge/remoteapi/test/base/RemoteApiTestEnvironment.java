@@ -34,6 +34,8 @@ public class RemoteApiTestEnvironment {
 
     protected Server server;
 
+    protected String resourceBase = "src/main/webapp";
+
     public void init() {
         System.setProperty(ConfigurationConstants.PROP_HOME, "sponge");
     }
@@ -51,7 +53,7 @@ public class RemoteApiTestEnvironment {
             server.setStopAtShutdown(true);
             WebAppContext webAppContext = new WebAppContext();
             webAppContext.setContextPath("/");
-            webAppContext.setResourceBase("src/main/webapp");
+            webAppContext.setResourceBase(resourceBase);
             webAppContext.setClassLoader(getClass().getClassLoader());
             server.setHandler(webAppContext);
             server.start();
@@ -86,5 +88,13 @@ public class RemoteApiTestEnvironment {
 
     public void run() {
         run(DEFAULT_PORT);
+    }
+
+    public String getResourceBase() {
+        return resourceBase;
+    }
+
+    public void setResourceBase(String resourceBase) {
+        this.resourceBase = resourceBase;
     }
 }

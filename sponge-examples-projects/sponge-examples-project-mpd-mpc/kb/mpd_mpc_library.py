@@ -18,7 +18,11 @@ class MpdLibrary(Action):
                         StringType("file"),
                         BooleanType("isDir")
                     ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")))
-        ]).withCallable(False).withFeatures({"icon":"library-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
+        ]).withCallable(False).withActivatable()
+        self.withFeatures({"icon":"library-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
+
+    def onIsActive(self, context):
+        return sponge.getVariable("mpc").isConnected()
 
     def _isFile(self, file):
         return file is not None and file["file"] != ".." and not file["isDir"]

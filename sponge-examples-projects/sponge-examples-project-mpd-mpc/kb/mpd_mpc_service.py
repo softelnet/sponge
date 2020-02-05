@@ -96,9 +96,11 @@ class Mpc:
     def getStats(self):
         return self.__execute("stats")
 
-    def isNoConnection(self):
+    def isConnected(self):
         error = sponge.process(self.__createProcessBuilder().outputAsString().errorAsString().exceptionOnExitCode(False)).run().errorString
-        return error == "mpd error: Cannot assign requested address"
+        if error and (error.endswith("Cannot assign requested address") or error.endswith("Connection refused")):
+            return False
+        return True
 
     # Playlist operations.
 

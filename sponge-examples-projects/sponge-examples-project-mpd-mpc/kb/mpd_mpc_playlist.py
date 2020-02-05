@@ -18,9 +18,12 @@ class MpdPlaylist(Action):
             ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures(
                 {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
-        ]).withCallable(False)
+        ]).withCallable(False).withActivatable()
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
                            "contextActions":["MpdLibrary()", "MpdFindAndAddToPlaylist()", "MpdPlaylistClear()"], "icon":"playlist-edit", "visible":True})
+
+    def onIsActive(self, context):
+        return sponge.getVariable("mpc").isConnected()
 
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []

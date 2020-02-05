@@ -39,7 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-standalone</artifactId>
+            <artifactId>sponge-standalone-app</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -248,6 +248,7 @@
                                     </dependencySourceIncludes>
                                     <dependencySourceExcludes>
                                         <dependencySourceExclude>org.openksavi.sponge:sponge-distribution</dependencySourceExclude>
+                                        <dependencySourceExclude>org.openksavi.sponge:sponge-standalone-app</dependencySourceExclude>
                                         <dependencySourceExclude>org.openksavi.sponge:sponge-standalone-extensions</dependencySourceExclude>
                                         <dependencySourceExclude>org.openksavi.sponge:sponge-examples*</dependencySourceExclude>
                                     </dependencySourceExcludes>

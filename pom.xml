@@ -975,6 +975,7 @@
                 <module>sponge-gsm-modem</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
+                <module>sponge-standalone-app</module>
                 <module>sponge-bom</module>
                 <module>sponge-standalone-extensions</module>
                 <module>sponge-distribution</module>
@@ -1093,7 +1094,6 @@
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-standalone</module>
-                <module>sponge-standalone-extensions</module>
                 <module>sponge-bom</module>
             </modules>
             <build>

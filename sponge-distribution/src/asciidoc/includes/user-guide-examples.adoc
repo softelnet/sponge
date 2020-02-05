@@ -133,6 +133,8 @@ NOTE: The predefined file `password.txt` contains the hashed, insecure password 
 .Initialization and configuration
 [source,bash,subs="verbatim,attributes"]
 ----
+docker pull openksavi/sponge-demo
+
 # Run the demo in Docker using the predefined {sponge} configuration.
 docker run --name sponge-demo -it --rm -p 8080:8080 -p 8081:8081 openksavi/sponge-demo
 
@@ -187,6 +189,8 @@ The Docker image `openksavi/sponge-demo-lite` contains the REST API Demo Service
 .Running the REST API Demo Service Light in Docker on Raspberry Pi
 [source,bash,subs="verbatim,attributes"]
 ----
+docker pull openksavi/sponge-demo-lite
+
 docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
 ----
 
@@ -416,22 +420,22 @@ NOTE: One of the aims of the {sponge} MPD client service example is to showcase 
 === Running in Docker
 The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service.
 
-The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example https://volumio.org[Volumio] has been chosen.
+The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example the https://moodeaudio.org[moOde audio player] has been chosen.
 
-The architecture of this solution is: Raspberry PI with the MPD server (Volumio) and Docker containing the {sponge} MPD service.
+The architecture of this solution is: Raspberry PI with the MPD server (running in the moOde audio distribution) and Docker containing the {sponge} MPD service.
 
 Installing the {sponge} MPD service:
 
-* https://volumio.org/get-started/[Download], install and configure Volumio for Raspberry PI.
-* Enable https://volumio.github.io/docs/User_Manual/SSH.html[SSH].
-* Connect to the Raspberry PI via SSH as the `volumio` user.
+* https://moodeaudio.org[Download], install and https://github.com/moode-player/moode/blob/master/www/setup.txt[setup] the moOde audio player for Raspberry PI.
+* Connect to the Raspberry PI via SSH as the `pi` user.
 * Install and configure https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi[Docker].
 
 ----
 sudo curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-sudo usermod -aG docker volumio
+sudo usermod -aG docker pi
 ----
 
+* Relogin.
 * Run the {sponge} MPD service in Docker.
 
 ----
@@ -645,11 +649,11 @@ The standalone examples show how to use some of {sponge} features in the standal
 |Name |Description
 
 |`standalone_news`
-ifdef::useReferences[({sourcesUrl}/sponge-standalone/examples/standalone/news[sources])]
+ifdef::useReferences[({sourcesUrl}/sponge-standalone-app/examples/standalone/news[sources])]
 |This example is based on complete example project of embedding {sponge} - News, but adjusted to a standalone version.
 
 |`standalone_camel_rss_news`
-ifdef::useReferences[({sourcesUrl}/sponge-standalone/examples/standalone/camel_rss_news[sources])]
+ifdef::useReferences[({sourcesUrl}/sponge-standalone-app/examples/standalone/camel_rss_news[sources])]
 |This example is based on complete example project of embedding {sponge} - Camel RSS News, but adjusted to a standalone version.
 
 |`camel_route_groovy`

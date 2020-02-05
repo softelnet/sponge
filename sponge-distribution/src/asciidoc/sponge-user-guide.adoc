@@ -1299,11 +1299,7 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 
 |`sponge-standalone`
 |Yes
-|The standalone version of {sponge}.
-
-|`sponge-standalone-extensions`
-|Yes
-|Dependencies for external libraries used by the standalone command-line application.
+|The base classes for the standalone command-line application.
 
 |`sponge-logging`
 |Yes
@@ -1316,6 +1312,14 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |`sponge-test`
 |Yes
 |The {sponge} test support.
+
+|`sponge-standalone-app`
+|No
+|The standalone command-line application.
+
+|`sponge-standalone-extensions`
+|No
+|Dependencies for external libraries used by the standalone command-line application.
 
 |`sponge-rpi-grovepi`
 |No

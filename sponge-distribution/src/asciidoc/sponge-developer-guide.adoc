@@ -95,7 +95,7 @@ Performance tests have to be invoked manually, because they require more time to
 
 === Running the standalone application in Maven
 
- cd sponge-standalone/
+ cd sponge-standalone-app/
  mvn exec:java -Dexec.args="-k examples/standalone/trigger_simple.py -i"
 
 == Code style

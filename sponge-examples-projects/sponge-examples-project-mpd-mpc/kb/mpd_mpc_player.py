@@ -26,10 +26,13 @@ class MpdPlayer(Action):
                 ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
             VoidType("next").withLabel("Next").withAnnotated().withFeatures({"icon":"skip-next", "group":"navigation"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable())
-        ]).withCallable(False)
+        ]).withCallable(False).withActivatable()
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
             "MpdPlaylist()", "MpdFindAndAddToPlaylist()", "ViewSongInfo()", "ViewSongLyrics()", "MpdLibrary()", "ViewMpdStatus()",
         ]})
+
+    def onIsActive(self, context):
+        return sponge.getVariable("mpc").isConnected()
 
     def __ensureStatus(self, mpc, status):
         return status if mpc.isStatusOk(status) else mpc.getStatus()
