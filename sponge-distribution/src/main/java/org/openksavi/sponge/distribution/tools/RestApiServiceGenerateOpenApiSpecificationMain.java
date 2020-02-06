@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,8 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
  * Generates a REST API OpenAPI specification JSON.
  */
 public class RestApiServiceGenerateOpenApiSpecificationMain {
+
+    private static final Logger logger = LoggerFactory.getLogger(RestApiServiceGenerateOpenApiSpecificationMain.class);
 
     protected static final int PORT = RestApiConstants.DEFAULT_PORT;
 
@@ -72,7 +76,7 @@ public class RestApiServiceGenerateOpenApiSpecificationMain {
 
         String file = args[0];
 
-        System.out.println("Writing to " + file);
+        logger.info("Writing to " + file);
 
         try {
             new RestApiServiceGenerateOpenApiSpecificationMain().run(file);

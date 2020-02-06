@@ -104,12 +104,7 @@
                                     <mainClass>org.openksavi.sponge.distribution.tools.RestApiServiceGenerateOpenApiSpecificationMain</mainClass>
                                     <commandlineArgs>${openApiDir}/${openApiBasename}.json</commandlineArgs>
                                     <cleanupDaemonThreads>false</cleanupDaemonThreads>
-                                    <systemProperties>
-                                        <systemProperty>
-                                            <key>logback.configurationFile</key>
-                                            <value>../sponge-test/src/main/resources/logback.xml</value>
-                                        </systemProperty>
-                                    </systemProperties>
+                                    <includeProjectDependencies>true</includeProjectDependencies>
                                 </configuration>
                             </execution>
                         </executions>

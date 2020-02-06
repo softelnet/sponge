@@ -81,7 +81,7 @@ class StartNotificationTrigger(Trigger):
             sponge.logger.warn("SendNotificationEmail error: {}", sys.exc_info()[1])
 
 def onStartup():
-    sponge.call("SetLcd", ["Spoonge starting...", "006030"])
+    sponge.call("SetLcd", ["Sponge starting...", "006030"])
 
     # Manual start of the REST API (autoStart is turned off) because the REST API server must start after the Camel context has started.
     camel.waitForContextFullyStarted()
