@@ -51,10 +51,6 @@
             <file>${digits.home}/actions/digits_predict_probabilities.py</file>
             <file>sponge_demo_digits.py</file>
         </knowledgeBase>
-        <knowledgeBase name="digitsLearn" label="Digits learn">
-            <file>${digits.home}/actions/digits_common.py</file>
-            <file>${digits.home}/actions/digits_learn.py</file>
-        </knowledgeBase>
         <knowledgeBase name="events" label="Events">
             <file>sponge_demo_events.py</file>
         </knowledgeBase>
