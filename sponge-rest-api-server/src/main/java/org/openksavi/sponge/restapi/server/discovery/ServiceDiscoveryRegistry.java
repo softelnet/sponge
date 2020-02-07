@@ -17,7 +17,10 @@
 package org.openksavi.sponge.restapi.server.discovery;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -85,13 +88,18 @@ public class ServiceDiscoveryRegistry {
         return RestApiServerConstants.DEFAULT_NAME;
     }
 
-    protected String createDefaultServiceUrl(InetAddress localHost, Integer port) {
+    protected String createDefaultServiceUrl(Integer port) {
         if (port == null) {
             return null;
         }
 
-        StringBuilder sb = new StringBuilder(String.format("%s://%s:%d", settings.getSslConfiguration() != null ? "https" : "http",
-                localHost.getCanonicalHostName(), port));
+        String hostAddress = resolveServiceHostAddress();
+        if (hostAddress == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(
+                String.format("%s://%s:%d", settings.getSslConfiguration() != null ? "https" : "http", hostAddress, port));
         if (settings.getPath() != null) {
             sb.append("/" + settings.getPath());
         }
@@ -99,16 +107,32 @@ public class ServiceDiscoveryRegistry {
         return sb.toString();
     }
 
+    protected String resolveServiceHostAddress() {
+        try {
+            for (NetworkInterface network : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (!network.isLoopback() && network.isUp()) {
+                    for (InetAddress address : Collections.list(network.getInetAddresses())) {
+                        if (!address.isLinkLocalAddress() && !address.isLoopbackAddress() && address instanceof Inet4Address) {
+                            return address.getHostAddress();
+                        }
+                    }
+                }
+            }
+
+            return null;
+        } catch (IOException e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
     public void register() {
         try {
-            InetAddress localHost = InetAddress.getLocalHost();
-
             Integer port = getSettings().getPort();
             ServiceDiscoveryInfo serviceDiscoveryInfo = settings.getServiceDiscoveryInfo();
 
             String serviceName = resolveServiceName();
             String serviceUrl = serviceDiscoveryInfo != null && serviceDiscoveryInfo.getUrl() != null ? serviceDiscoveryInfo.getUrl()
-                    : createDefaultServiceUrl(localHost, port);
+                    : createDefaultServiceUrl(port);
 
             if (serviceUrl != null) {
                 Map<String, Object> properties = new LinkedHashMap<>();
@@ -117,7 +141,7 @@ public class ServiceDiscoveryRegistry {
                 properties.put(RestApiConstants.SERVICE_DISCOVERY_PROPERTY_NAME, serviceName);
                 properties.put(RestApiConstants.SERVICE_DISCOVERY_PROPERTY_URL, serviceUrl);
 
-                jmDns = JmDNS.create(localHost);
+                jmDns = JmDNS.create(InetAddress.getLocalHost());
 
                 String type = RestApiConstants.SERVICE_DISCOVERY_TYPE + ".local.";
                 serviceInfo = ServiceInfo.create(type, serviceName, port != null ? port : 0, 0, 0, properties);
@@ -125,6 +149,8 @@ public class ServiceDiscoveryRegistry {
                 logger.info("Registering service '{}' with URL {} as type {}", serviceName, serviceUrl, type);
 
                 jmDns.registerService(serviceInfo);
+            } else {
+                logger.warn("The service can't be registered because a default service URL couldn't be resolved");
             }
         } catch (IOException e) {
             throw SpongeUtils.wrapException(e);

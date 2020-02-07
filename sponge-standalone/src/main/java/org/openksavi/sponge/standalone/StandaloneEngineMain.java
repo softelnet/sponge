@@ -62,12 +62,17 @@ public class StandaloneEngineMain {
             // If help or version option are specified (i.e. when the engine is null), do nothing.
             if (engine != null) {
                 engine.startup();
+
                 if (engine.getInteractiveMode() != null) {
                     runInteractiveLoop();
                 }
             }
         } catch (Throwable e) {
-            handleError(e);
+            if (engine != null && engine.getInteractiveMode() != null) {
+                e.printStackTrace();
+            } else {
+                handleError(e);
+            }
 
             if (!embeddedMode) {
                 System.exit(1);

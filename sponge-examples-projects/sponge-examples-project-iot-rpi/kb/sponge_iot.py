@@ -72,13 +72,13 @@ class StartNotificationTrigger(Trigger):
         try:
             sponge.call("SendNotificationSms", ["{} started".format(serviceName)])
         except:
-            sponge.logger.warn("SendNotificationSms error: {}", sys.exc_info()[1])
+            sponge.logger.warn("SendNotificationSms error", sys.exc_info()[1])
 
         try:
             sponge.call("SendNotificationEmail", ["{} started".format(serviceName), "Host: {}".format(socket.gethostname()),
                     [sponge.call("TakePictureAsFile")]])
         except:
-            sponge.logger.warn("SendNotificationEmail error: {}", sys.exc_info()[1])
+            sponge.logger.warn("SendNotificationEmail error", sys.exc_info()[1])
 
 def onStartup():
     sponge.call("SetLcd", ["Sponge starting...", "006030"])
@@ -103,7 +103,7 @@ def onShutdown():
      try:
          sponge.call("SetLcd", ["", "000000"])
      except:
-         sponge.logger.warn("Shutdown error: {}", sys.exc_info()[1])
+         sponge.logger.warn("Shutdown error", sys.exc_info()[1])
 
 def onAfterReload():
     pass
