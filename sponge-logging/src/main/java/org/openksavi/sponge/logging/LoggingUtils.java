@@ -57,7 +57,7 @@ public abstract class LoggingUtils {
     }
 
     public static void initLoggingBridge() {
-        // Optionally remove existing handlers attached to j.u.l root logger.
+        // Remove existing handlers attached to j.u.l root logger.
         SLF4JBridgeHandler.removeHandlersForRootLogger();
 
         // Add SLF4JBridgeHandler to j.u.l's root logger, should be done once during the initialization phase of your application.

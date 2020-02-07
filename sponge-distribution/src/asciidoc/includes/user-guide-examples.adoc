@@ -196,6 +196,14 @@ docker run --name sponge-demo-lite -d --restart always --network=host openksavi/
 
 The default port `1836` is used by the REST API and the port `1837` is used by the gRPC API.
 
+.Running the REST API Demo Service Light in Docker on Raspberry Pi on non standard ports
+[source,bash,subs="verbatim,attributes"]
+----
+docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.port=1846 -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1846"
+----
+
+In that case the gRPC API will be published on port `1847`.
+
 .Verification
 [source,bash,subs="verbatim,attributes"]
 ----
@@ -289,7 +297,11 @@ The {sponge} standalone command line application is installed on a Raspberry Pi 
 
 [discrete]
 === Prerequisites
-The Linux distribution used for this example is Raspbian. All command are invoked by the user `pi`. For SMS sending the `gammu` utility should be installed.
+The Linux distribution used for this example is Raspbian. All commands are invoked as the `pi` user.
+
+* For SMS sending the `gammu` utility should be installed.
+* Mosquitto MQTT broker.
+* The Pi4J 1.2 library, that is used in this example, https://github.com/Pi4J/pi4j/issues/442[works only on Oracle JDK 8].
 
 [source,bash]
 ----

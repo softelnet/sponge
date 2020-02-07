@@ -261,6 +261,8 @@ public class CoreActionsTest {
                     + "    self.withNoArgs().withResult(StringType().label_error(\"Test action\"))\n"
                     + "AttributeError: 'org.openksavi.sponge.type.StringType' object has no attribute 'label_error'\n" + " in "
                     + sourceName;
+//            String expectedMessage =
+//                    "AttributeError: 'org.openksavi.sponge.type.StringType' object has no attribute 'label_error' in " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
