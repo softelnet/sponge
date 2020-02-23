@@ -463,6 +463,8 @@ Setting the `sponge.restApiServer.serviceDiscoveryUrl` property allows client ap
 docker logs sponge-mpd -f
 ----
 
+If you have a https://developer.musixmatch.com[Musixmatch API key], you can configure the service to access song lyrics by adding `-DmusixmatchApiKey=YOUR_MUSIXMATCH_API_KEY` to the `docker run` command line. Song lyrics can be shown in the Sponge Remote application.
+
 Limitations:
 
 * The MPD connection configuration (e.g. the MPD host) is not persisted between restarts.
