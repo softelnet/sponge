@@ -92,10 +92,10 @@
         <quartz.version>2.3.2</quartz.version>
         <guava.version>28.1-jre</guava.version>
         <caffeine.version>2.8.1</caffeine.version>
-        <spring.version>5.2.3.RELEASE</spring.version>
-        <spring-integration.version>5.2.3.RELEASE</spring-integration.version>
+        <spring.version>5.2.4.RELEASE</spring.version>
+        <spring-integration.version>5.2.4.RELEASE</spring-integration.version>
         <spring-security.version>5.2.2.RELEASE</spring-security.version>
-        <camel.version>3.0.1</camel.version>
+        <camel.version>3.1.0</camel.version>
         <awaitility.version>4.0.2</awaitility.version>
         <jline.version>3.13.3</jline.version>
         <py4j.version>0.10.9</py4j.version>
@@ -110,7 +110,7 @@
         <jserialcomm.version>2.6.0</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.27.1</grpc.version>
+        <grpc.version>1.27.2</grpc.version>
         <protobuf.version>3.11.4</protobuf.version>
         <protoc.version>3.11.4</protoc.version>
         <netty-tcnative.version>2.0.26.Final</netty-tcnative.version>
@@ -182,7 +182,7 @@
                         <dependency>
                             <groupId>org.asciidoctor</groupId>
                             <artifactId>asciidoctorj-pdf</artifactId>
-                            <version>1.5.0</version>
+                            <version>1.5.2</version>
                         </dependency>
                     </dependencies>
                 </plugin>
