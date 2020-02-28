@@ -105,8 +105,13 @@ A request may contain base properties.
 
 |`features`
 |No
-|Request features that will be saved in a REST API session. They can be used for example to set a language if a knowledge base supports it.
+|Request features that will be saved in a REST API session.
 |===
+
+The request features can be used for:
+
+* Setting a requested language if a knowledge base supports it.
+* Sending an API key to the service. For example, on the server side you could add an `OnSessionOpenListener` implementing the `onSessionOpen(RestApiSession session)` method that checks a value of `session.getFeatures().get("apiKey")`. If the API key is incorrect an exception will be thrown.
 
 The {sponge} REST API supports both POST and GET methods.
 
