@@ -32,6 +32,7 @@
             <file>sponge_demo_setter_context_actions_list.py</file>
             <file>sponge_demo_list_pageable.py</file>
             <file>sponge_demo_object_type_with_companion.py</file>
+            <file>sponge_demo_geo_map.py</file>
         </knowledgeBase>
         <knowledgeBase name="demoForms" label="Action forms/Base">
             <file>sponge_demo_forms_base.py</file>

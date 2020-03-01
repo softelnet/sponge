@@ -46,6 +46,12 @@ public final class Features {
 
     public static final String ICON = "icon";
 
+    public static final String ICON_COLOR = "iconColor";
+
+    public static final String ICON_WIDTH = "iconWidth";
+
+    public static final String ICON_HEIGHT = "iconHeight";
+
     public static final String WIDGET = "widget";
 
     public static final String GROUP = "group";
@@ -155,6 +161,10 @@ public final class Features {
     public static final String PROVIDE_VALUE_COUNT = "count";
 
     public static final String PROVIDE_VALUE_INDICATED_INDEX = "indicatedIndex";
+
+    public static final String GEO_MAP = "geoMap";
+
+    public static final String GEO_POSITION = "geoPosition";
 
     public static final String REQUEST_CHANNEL = "channel";
 

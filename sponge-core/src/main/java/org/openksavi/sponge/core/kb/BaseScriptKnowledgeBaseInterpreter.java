@@ -56,6 +56,9 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.type.DateTimeKind;
+import org.openksavi.sponge.type.model.geo.GeoLayer;
+import org.openksavi.sponge.type.model.geo.GeoPosition;
+import org.openksavi.sponge.type.model.geo.GeoMap;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.provided.ProvidedMode;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -291,7 +294,8 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 CategoryMeta.class, DateTimeKind.class, ValueSetMeta.class,
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,
-                RuleEventSpec.class, ProvideArgsParameters.class));
+                RuleEventSpec.class, ProvideArgsParameters.class,
+                GeoPosition.class, GeoLayer.class, GeoMap.class));
         //@formatter:on
 
         classes.addAll(SpongeUtils.getSupportedTypes());
