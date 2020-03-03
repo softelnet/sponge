@@ -125,10 +125,10 @@ public class DefaultRestApiService implements RestApiService {
     private OnSessionCloseListener onSessionCloseListener;
 
     public DefaultRestApiService() {
-        setupDefaultFeatures();
     }
 
     protected void setupDefaultFeatures() {
+        setFeature(RestApiConstants.REMOTE_API_FEATURE_VERSION, getEngine().getVersion());
         setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
     }
 
@@ -138,6 +138,8 @@ public class DefaultRestApiService implements RestApiService {
         mapper.configure(SerializationFeature.INDENT_OUTPUT, settings.isPrettyPrint());
 
         typeConverter = new DefaultTypeConverter(mapper);
+
+        setupDefaultFeatures();
     }
 
     @Override

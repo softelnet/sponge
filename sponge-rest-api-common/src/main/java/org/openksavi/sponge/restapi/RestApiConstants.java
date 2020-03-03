@@ -64,6 +64,8 @@ public final class RestApiConstants {
 
     public static final String ERROR_CODE_INACTIVE_ACTION = "INACTIVE_ACTION";
 
+    public static final String REMOTE_API_FEATURE_VERSION = "version";
+
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 
     public static final int HTTP_CODE_ERROR = 500;
