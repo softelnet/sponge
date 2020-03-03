@@ -262,6 +262,10 @@ cd sponge-examples-projects/sponge-examples-project-demo-service
 mvn jetty:run
 ----
 
+[discrete]
+=== OpenStreetMap tiles servers usage
+The example action `Action with a geo map` (`ActionWithGeoMap`) uses the OpenStreetMap tiles servers to show a base map. Please see the https://operations.osmfoundation.org/policies/tiles/[Tile Usage Policy] requirements.
+
 [[iot-rpi-service]]
 == IoT on Raspberry Pi project
 The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-iot-rpi[IoT on Raspberry Pi] project shows how to use {sponge} to read sensors, set actuators, take pictures, send SMS messages, send emails and execute OS commands.

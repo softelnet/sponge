@@ -17,7 +17,9 @@
 package org.openksavi.sponge.type.model.geo;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A map.
@@ -35,6 +37,8 @@ public class GeoMap {
     private String crs;
 
     private List<GeoLayer> layers = new ArrayList<>();
+
+    private Map<String, Object> features = new LinkedHashMap<>();
 
     public GeoMap() {
     }
@@ -71,6 +75,16 @@ public class GeoMap {
 
     public GeoMap withLayer(GeoLayer layer) {
         layers.add(layer);
+        return this;
+    }
+
+    public GeoMap withFeatures(Map<String, Object> features) {
+        this.features.putAll(features);
+        return this;
+    }
+
+    public GeoMap withFeature(String name, Object value) {
+        features.put(name, value);
         return this;
     }
 
@@ -120,5 +134,13 @@ public class GeoMap {
 
     public void setLayers(List<GeoLayer> layers) {
         this.layers = layers;
+    }
+
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 }

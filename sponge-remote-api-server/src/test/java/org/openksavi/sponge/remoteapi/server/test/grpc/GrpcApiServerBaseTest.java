@@ -152,7 +152,6 @@ public abstract class GrpcApiServerBaseTest {
     public void testRemoteApiFeatures() {
         try (SpongeRestClient client = createRestClient(false)) {
             Map<String, Object> features = client.getFeatures();
-            assertEquals(1, features.size());
             assertTrue((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
         }
     }

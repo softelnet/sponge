@@ -166,6 +166,8 @@ public final class Features {
 
     public static final String GEO_POSITION = "geoPosition";
 
+    public static final String GEO_ATTRIBUTION = "attribution";
+
     public static final String REQUEST_CHANNEL = "channel";
 
     public static final String REQUEST_LANGUAGE = "language";

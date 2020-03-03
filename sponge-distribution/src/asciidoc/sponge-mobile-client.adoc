@@ -650,6 +650,10 @@ The application may be switched to the dark or light theme in the settings.
 |`scroll`
 |`ListType`
 |A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists. This feature is only supported for main action arguments (i.e. not nested).
+
+|`geoMap`
+|`ListType`
+|Shows list elements in a geographical map. List elements should be of an annotated type and should contain geo position annotations. Supports https://en.wikipedia.org/wiki/Tiled_web_map[XYZ tiling] schemes as basemaps for list data. A `ListType` that has this feature should not be pageable.
 |===
 
 ==== Widgets
@@ -701,6 +705,87 @@ A pagination uses the `provideActionArgs` REST API operation. The features `offs
 The pagination is supported only for primary (i.e. not nested) action arguments and only for read provided annotated lists.
 
 The pagination works only _forward_, i.e. all previous list elements fetched from the server are stored in mobile device memory.
+
+==== Geographical map
+A geographical map feature is represented by the `GeoMap` class that contains layers (instances of `GeoLayer`).
+
+.Map properties
+[cols="1,1,3"]
+|===
+|Property |Type |Description
+
+|`center`
+|`GeoPosition`
+|A map center.
+
+|`zoom`
+|`Double`
+|A map zoom.
+
+|`minZoom`
+|`Double`
+|A map minimum zoom.
+
+|`maxZoom`
+|`Double`
+|A map maximum zoom.
+
+|`layers`
+|`List<GeoLayer>`
+|Map base layers.
+
+|`features`
+|`Map<String, Object>`
+|Map features.
+|===
+
+.Map layer properties
+[cols="1,1,3"]
+|===
+|Property |Type |Description
+
+|`name`
+|`String`
+|A map name.
+
+|`label`
+|`String`
+|A map label.
+
+|`description`
+|`String`
+|A map description.
+
+|`urlTemplate`
+|`String`
+|A map URL template.
+
+|`subdomains`
+|`List<String>`
+|An optional list of map server subdomains, e.g. `GeoLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").withSubdomains(["a", "b", "c"])`.
+
+|`options`
+|`Map<String, String>`
+|Layer additional options.
+
+|`features`
+|`Map<String, Object>`
+|Layer features.
+|===
+
+.Geographical position properties
+[cols="1,1,3"]
+|===
+|Property |Type |Description
+
+|`latitude`
+|`Double`
+|Latitude.
+
+|`longitude`
+|`Double`
+|Longitude.
+|===
 
 == Customized applications
 Access to actions in the {appName} is generic. However you could build a customized GUI using your own Flutter code using the upcoming {sponge} Flutter API library.
