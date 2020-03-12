@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.type.model.geo;
+package org.openksavi.sponge.features.model.geo;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.openksavi.sponge.util.Descriptive;
@@ -25,9 +24,9 @@ import org.openksavi.sponge.util.Descriptive;
 /**
  * A map layer.
  */
-public class GeoLayer implements Descriptive {
+public abstract class GeoLayer implements Descriptive {
 
-    private String urlTemplate;
+    private GeoLayerType type;
 
     private String name;
 
@@ -35,22 +34,15 @@ public class GeoLayer implements Descriptive {
 
     private String description;
 
-    private Map<String, String> options = new LinkedHashMap<>();
-
-    private List<String> subdomains;
-
     private Map<String, Object> features = new LinkedHashMap<>();
 
-    public GeoLayer(String urlTemplate) {
-        this.urlTemplate = urlTemplate;
+    protected GeoLayer(GeoLayerType type, String name) {
+        this.type = type;
+        this.name = name;
     }
 
-    public GeoLayer() {
-    }
-
-    public GeoLayer withUrlTemplate(String urlTemplate) {
-        setUrlTemplate(urlTemplate);
-        return this;
+    protected GeoLayer(GeoLayerType type) {
+        this(type, null);
     }
 
     public GeoLayer withName(String name) {
@@ -68,16 +60,6 @@ public class GeoLayer implements Descriptive {
         return this;
     }
 
-    public GeoLayer withSubdomains(List<String> subdomains) {
-        setSubdomains(subdomains);
-        return this;
-    }
-
-    public GeoLayer withOptions(Map<String, String> options) {
-        setOptions(options);
-        return this;
-    }
-
     public GeoLayer withFeatures(Map<String, Object> features) {
         this.features.putAll(features);
         return this;
@@ -88,12 +70,12 @@ public class GeoLayer implements Descriptive {
         return this;
     }
 
-    public String getUrlTemplate() {
-        return urlTemplate;
+    public GeoLayerType getType() {
+        return type;
     }
 
-    public void setUrlTemplate(String urlTemplate) {
-        this.urlTemplate = urlTemplate;
+    public void setType(GeoLayerType type) {
+        this.type = type;
     }
 
     @Override
@@ -124,22 +106,6 @@ public class GeoLayer implements Descriptive {
     @Override
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<String> getSubdomains() {
-        return subdomains;
-    }
-
-    public void setSubdomains(List<String> subdomains) {
-        this.subdomains = subdomains;
-    }
-
-    public Map<String, String> getOptions() {
-        return options;
-    }
-
-    public void setOptions(Map<String, String> options) {
-        this.options = options;
     }
 
     public Map<String, Object> getFeatures() {

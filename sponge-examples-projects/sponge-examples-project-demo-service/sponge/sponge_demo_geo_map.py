@@ -10,7 +10,9 @@ class ActionWithGeoMap(Action):
             ListType("locations").withLabel("Locations").withAnnotated().withFeatures({
                     "geoMap":GeoMap().withCenter(GeoPosition(50.06143, 19.93658)).withZoom(15).withLayers([
                         # See the OpenStreetMap Tile Usage Policy at https://operations.osmfoundation.org/policies/tiles/
-                        GeoLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").withLabel("OSM")
+                        GeoTileLayer().withUrlTemplate("https://tile.openstreetmap.org/{z}/{x}/{y}.png").withLabel("OpenStreetMap"),
+                        GeoMarkerLayer("buildings").withLabel("Buildings"),
+                        GeoMarkerLayer("persons").withLabel("Persons")
                     ]).withFeature("attribution", u"© OpenStreetMap contributors")
                 }).withProvided(
                     ProvidedMeta().withValue().withOverwrite()
@@ -22,11 +24,19 @@ class ActionWithGeoMap(Action):
     def onProvideArgs(self, context):
         if "locations" in context.provide:
             locations = [
-                AnnotatedValue("location1").withValueLabel("Location with actions").withValueDescription("Description of Location 1").withFeatures({
-                    "geoPosition":GeoPosition(50.06143, 19.93658), "icon":"home", "iconColor":"FF0000", "iconWidth":50, "iconHeight":50}).withFeature(
+                AnnotatedValue("building1").withValueLabel("Building (with actions)").withValueDescription("Description of building 1").withFeatures({
+                    "geoPosition":GeoPosition(50.06043, 19.93558), "icon":"home", "iconColor":"FF0000", "iconWidth":50, "iconHeight":50,
+                    "geoLayerName":"buildings"}).withFeature(
                         "contextActions", ["ActionWithGeoMapViewLocation"]),
-                AnnotatedValue("location2").withValueLabel("Location without actions").withValueDescription("Description of Location 2").withFeatures({
-                    "geoPosition":GeoPosition(50.06253, 19.93768), "icon":"face", "iconColor":"000000", "iconWidth":30, "iconHeight":30})
+                AnnotatedValue("building2").withValueLabel("Building (without actions)").withValueDescription("Description of building 2").withFeatures({
+                    "geoPosition":GeoPosition(50.06253, 19.93768), "icon":"home", "iconColor":"00FF00", "iconWidth":50, "iconHeight":50,
+                    "geoLayerName":"buildings"}),
+                AnnotatedValue("person1").withValueLabel("Person 1 (without actions)").withValueDescription("Description of person 1").withFeatures({
+                    "geoPosition":GeoPosition(50.06143, 19.93658), "icon":"face", "iconColor":"000000", "iconWidth":30, "iconHeight":30,
+                    "geoLayerName":"persons"}),
+                AnnotatedValue("person2").withValueLabel("Person 2 (without actions)").withValueDescription("Description of person 2").withFeatures({
+                    "geoPosition":GeoPosition(50.06353, 19.93868), "icon":"face", "iconColor":"0000FF", "iconWidth":30, "iconHeight":30,
+                    "geoLayerName":"persons"})
             ]
             context.provided["locations"] = ProvidedValue().withValue(AnnotatedValue(locations))
 

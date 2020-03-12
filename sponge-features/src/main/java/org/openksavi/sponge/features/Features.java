@@ -168,6 +168,8 @@ public final class Features {
 
     public static final String GEO_ATTRIBUTION = "attribution";
 
+    public static final String GEO_LATER_NAME = "geoLayerName";
+
     public static final String REQUEST_CHANNEL = "channel";
 
     public static final String REQUEST_LANGUAGE = "language";

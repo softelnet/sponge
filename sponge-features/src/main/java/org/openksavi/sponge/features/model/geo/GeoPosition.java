@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.type.model.geo;
+package org.openksavi.sponge.features.model.geo;
 
 /**
  * A geo position.

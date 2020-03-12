@@ -46,6 +46,10 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.features.Features;
+import org.openksavi.sponge.features.model.geo.GeoMap;
+import org.openksavi.sponge.features.model.geo.GeoMarkerLayer;
+import org.openksavi.sponge.features.model.geo.GeoPosition;
+import org.openksavi.sponge.features.model.geo.GeoTileLayer;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
@@ -56,9 +60,6 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventMode;
 import org.openksavi.sponge.rule.RuleEventSpec;
 import org.openksavi.sponge.type.DateTimeKind;
-import org.openksavi.sponge.type.model.geo.GeoLayer;
-import org.openksavi.sponge.type.model.geo.GeoPosition;
-import org.openksavi.sponge.type.model.geo.GeoMap;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.provided.ProvidedMode;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -295,7 +296,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,
                 RuleEventSpec.class, ProvideArgsParameters.class,
-                GeoPosition.class, GeoLayer.class, GeoMap.class));
+                GeoPosition.class, GeoTileLayer.class, GeoMarkerLayer.class, GeoMap.class));
         //@formatter:on
 
         classes.addAll(SpongeUtils.getSupportedTypes());

@@ -22,13 +22,9 @@
             <artifactId>sponge-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- <dependency> -->
-        <!-- <groupId>org.python</groupId> -->
-        <!-- <artifactId>jython-slim</artifactId> -->
-        <!-- </dependency> -->
         <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>jython-shaded</artifactId>
+            <groupId>org.python</groupId>
+            <artifactId>jython-slim</artifactId>
         </dependency>
 
         <dependency>

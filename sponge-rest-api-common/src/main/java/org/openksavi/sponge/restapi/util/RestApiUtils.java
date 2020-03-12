@@ -27,8 +27,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.ClassUtils;
 
+import org.openksavi.sponge.features.model.geo.GeoLayer;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestDataType;
+import org.openksavi.sponge.restapi.model.RestGeoLayer;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.QualifiedDataType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
@@ -51,6 +53,8 @@ public abstract class RestApiUtils {
 
         // Ensure a proper Type inheritance hierarchy deserialization from JSON to Java.
         mapper.addMixIn(DataType.class, RestDataType.class);
+
+        mapper.addMixIn(GeoLayer.class, RestGeoLayer.class);
 
         return mapper;
     }

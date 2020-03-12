@@ -101,10 +101,7 @@ public class CoreProcessorsTest {
                 throw SpongeUtils.wrapException(action, e);
             }
         } catch (Throwable e) {
-            String expectedMessage = "Traceback (most recent call last):\n"
-                    + "  File \"examples/core/processors_interface.py\", line 18, in isVisible\n" + "    return context_error == \"day\"\n"
-                    + "NameError: global name 'context_error' is not defined\n" + " in kb.EdvancedMetaActionWithError";
-//            String expectedMessage = "NameError: global name 'context_error' is not defined in kb.EdvancedMetaActionWithError";
+            String expectedMessage = "NameError: global name 'context_error' is not defined in kb.EdvancedMetaActionWithError";
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
             assertEquals(expectedToString, e.toString());
             assertEquals(expectedMessage, e.getMessage());

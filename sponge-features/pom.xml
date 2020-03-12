@@ -18,6 +18,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
