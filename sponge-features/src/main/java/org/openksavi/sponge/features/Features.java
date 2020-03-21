@@ -27,6 +27,10 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.features.model.geo.GeoMap;
+import org.openksavi.sponge.features.model.geo.GeoPosition;
+import org.openksavi.sponge.features.model.ui.IconInfo;
+
 /**
  * The predefined action and type features.
  */
@@ -45,12 +49,6 @@ public final class Features {
     public static final String REFRESHABLE = "refreshable";
 
     public static final String ICON = "icon";
-
-    public static final String ICON_COLOR = "iconColor";
-
-    public static final String ICON_WIDTH = "iconWidth";
-
-    public static final String ICON_HEIGHT = "iconHeight";
 
     public static final String WIDGET = "widget";
 
@@ -219,5 +217,17 @@ public final class Features {
         }
 
         return Collections.emptyList();
+    }
+
+    public static IconInfo getIcon(Map<String, Object> features) {
+        return (IconInfo) features.get(ICON);
+    }
+
+    public static GeoMap getGeoMap(Map<String, Object> features) {
+        return (GeoMap) features.get(GEO_MAP);
+    }
+
+    public static GeoPosition getGeoPosition(Map<String, Object> features) {
+        return (GeoPosition) features.get(GEO_POSITION);
     }
 }

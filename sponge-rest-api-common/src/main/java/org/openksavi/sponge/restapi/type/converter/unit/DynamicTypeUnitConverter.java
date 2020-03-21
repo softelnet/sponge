@@ -18,8 +18,10 @@ package org.openksavi.sponge.restapi.type.converter.unit;
 
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DynamicType;
+import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.value.DynamicValue;
 
 @SuppressWarnings("rawtypes")
@@ -32,7 +34,9 @@ public class DynamicTypeUnitConverter extends BaseUnitTypeConverter<DynamicValue
     @SuppressWarnings("unchecked")
     @Override
     public Object marshal(TypeConverter converter, DynamicType type, DynamicValue value) {
-        return new DynamicValue<>(converter.marshal(value.getType(), value.getValue()), value.getType());
+        // Marshal the data type in the DynamicValue as well.
+        return new DynamicValue<>(converter.marshal(value.getType(), value.getValue()),
+                (DataType) converter.marshal(new TypeType(), value.getType()));
     }
 
     @SuppressWarnings("unchecked")
@@ -40,6 +44,9 @@ public class DynamicTypeUnitConverter extends BaseUnitTypeConverter<DynamicValue
     public DynamicValue unmarshal(TypeConverter converter, DynamicType type, Object value) {
         DynamicValue dynamicValue = converter.getObjectMapper().convertValue(value, DynamicValue.class);
         dynamicValue.setValue(converter.unmarshal(dynamicValue.getType(), dynamicValue.getValue()));
+
+        // Unmarshal the data type in the DynamicValue as well.
+        dynamicValue.setType((DataType) converter.unmarshal(new TypeType(), dynamicValue.getType()));
 
         return dynamicValue;
     }

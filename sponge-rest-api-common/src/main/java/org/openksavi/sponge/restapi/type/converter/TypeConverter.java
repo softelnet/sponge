@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
 
@@ -80,4 +81,8 @@ public interface TypeConverter {
      * @return the JSON object mapper.
      */
     ObjectMapper getObjectMapper();
+
+    FeatureConverter getFeatureConverter();
+
+    void setFeatureConverter(FeatureConverter featureConverter);
 }

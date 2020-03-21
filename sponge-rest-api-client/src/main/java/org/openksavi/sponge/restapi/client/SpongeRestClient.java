@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
+import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -611,6 +612,10 @@ public interface SpongeRestClient extends Closeable {
     TypeConverter getTypeConverter();
 
     void setTypeConverter(TypeConverter typeConverter);
+
+    FeatureConverter getFeatureConverter();
+
+    void setFeatureConverter(FeatureConverter typeConverter);
 
     <T extends SpongeRequest> T setupRequest(T request);
 

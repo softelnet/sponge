@@ -45,6 +45,9 @@ import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.client.listener.OnRequestSerializedListener;
 import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListener;
+import org.openksavi.sponge.restapi.feature.converter.DefaultFeatureConverter;
+import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -108,6 +111,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     private TypeConverter typeConverter;
 
+    private FeatureConverter featureConverter;
+
     private Lock lock = new ReentrantLock(true);
 
     private LoadingCache<String, RestActionMeta> actionMetaCache;
@@ -144,6 +149,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         typeConverter = new DefaultTypeConverter(mapper);
+        featureConverter = new DefaultFeatureConverter(mapper);
+
+        typeConverter.setFeatureConverter(featureConverter);
     }
 
     @Override
@@ -154,6 +162,16 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public void setTypeConverter(TypeConverter typeConverter) {
         this.typeConverter = typeConverter;
+    }
+
+    @Override
+    public FeatureConverter getFeatureConverter() {
+        return featureConverter;
+    }
+
+    @Override
+    public void setFeatureConverter(FeatureConverter featureConverter) {
+        this.featureConverter = featureConverter;
     }
 
     @Override
@@ -598,6 +616,11 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
             if (actionMeta.getResult() != null) {
                 actionMeta.setResult(unmarshalDataType(actionMeta.getResult()));
+            }
+
+            actionMeta.setFeatures(FeaturesUtils.unmarshal(featureConverter, actionMeta.getFeatures()));
+            if (actionMeta.getCategory() != null) {
+                actionMeta.getCategory().setFeatures(FeaturesUtils.unmarshal(featureConverter, actionMeta.getCategory().getFeatures()));
             }
         }
     }

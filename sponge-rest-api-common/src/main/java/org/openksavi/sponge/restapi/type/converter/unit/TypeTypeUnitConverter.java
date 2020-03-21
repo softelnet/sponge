@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.restapi.type.converter.unit;
 
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
@@ -30,26 +31,33 @@ public class TypeTypeUnitConverter extends BaseUnitTypeConverter<DataType, TypeT
         super(DataTypeKind.TYPE);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DataType marshal(TypeConverter converter, TypeType type, DataType value) {
-        // Recursively marshal default values.
+        // It's very important to clone the instance because the copy will be modified.
         DataType result = value.clone();
 
+        // Recursively marshal default values and features.
         for (DataType t : DataTypeUtils.getTypes(result)) {
             t.setDefaultValue(converter.marshal(t, t.getDefaultValue()));
+
+            t.setFeatures(FeaturesUtils.marshal(converter.getFeatureConverter(), t.getFeatures()));
         }
 
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DataType unmarshal(TypeConverter converter, TypeType type, Object value) {
         DataType unmarshalled =
                 value instanceof DataType ? (DataType) value : converter.getObjectMapper().convertValue(value, DataType.class);
 
-        // Recursively unmarshal default values.
+        // Recursively unmarshal default values and features.
         for (DataType t : DataTypeUtils.getTypes(unmarshalled)) {
             t.setDefaultValue(converter.unmarshal(t, t.getDefaultValue()));
+
+            t.setFeatures(FeaturesUtils.unmarshal(converter.getFeatureConverter(), t.getFeatures()));
         }
 
         return unmarshalled;

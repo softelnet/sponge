@@ -50,6 +50,9 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventDefinition;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.restapi.RestApiConstants;
+import org.openksavi.sponge.restapi.feature.converter.DefaultFeatureConverter;
+import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestCategoryMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
@@ -114,6 +117,8 @@ public class DefaultRestApiService implements RestApiService {
 
     private TypeConverter typeConverter;
 
+    private FeatureConverter featureConverter;
+
     private Comparator<RestActionMeta> actionsOrderComparator = RestApiServerUtils.createActionsOrderComparator();
 
     private ThreadLocal<RestApiSession> session = new ThreadLocal<>();
@@ -138,6 +143,9 @@ public class DefaultRestApiService implements RestApiService {
         mapper.configure(SerializationFeature.INDENT_OUTPUT, settings.isPrettyPrint());
 
         typeConverter = new DefaultTypeConverter(mapper);
+        featureConverter = new DefaultFeatureConverter(mapper);
+
+        typeConverter.setFeatureConverter(featureConverter);
 
         setupDefaultFeatures();
     }
@@ -293,6 +301,12 @@ public class DefaultRestApiService implements RestApiService {
 
             if (actionMeta.getResult() != null) {
                 actionMeta.setResult(marshalDataType(actionMeta.getResult()));
+            }
+
+            actionMeta.setFeatures(FeaturesUtils.marshal(featureConverter, actionMeta.getFeatures()));
+
+            if (actionMeta.getCategory() != null) {
+                actionMeta.getCategory().setFeatures(FeaturesUtils.marshal(featureConverter, actionMeta.getCategory().getFeatures()));
             }
         }
 

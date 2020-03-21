@@ -50,6 +50,7 @@ import org.openksavi.sponge.features.model.geo.GeoMap;
 import org.openksavi.sponge.features.model.geo.GeoMarkerLayer;
 import org.openksavi.sponge.features.model.geo.GeoPosition;
 import org.openksavi.sponge.features.model.geo.GeoTileLayer;
+import org.openksavi.sponge.features.model.ui.IconInfo;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
@@ -296,7 +297,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,
                 RuleEventSpec.class, ProvideArgsParameters.class,
-                GeoPosition.class, GeoTileLayer.class, GeoMarkerLayer.class, GeoMap.class));
+                GeoPosition.class, GeoTileLayer.class, GeoMarkerLayer.class, GeoMap.class, IconInfo.class));
         //@formatter:on
 
         classes.addAll(SpongeUtils.getSupportedTypes());

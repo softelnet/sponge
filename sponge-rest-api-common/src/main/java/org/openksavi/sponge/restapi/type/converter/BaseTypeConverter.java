@@ -27,6 +27,8 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
@@ -41,6 +43,8 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
     private ObjectMapper objectMapper;
 
+    private FeatureConverter featureConverter;
+
     protected BaseTypeConverter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
@@ -48,6 +52,16 @@ public abstract class BaseTypeConverter implements TypeConverter {
     @Override
     public ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+
+    @Override
+    public FeatureConverter getFeatureConverter() {
+        return featureConverter;
+    }
+
+    @Override
+    public void setFeatureConverter(FeatureConverter featureConverter) {
+        this.featureConverter = featureConverter;
     }
 
     @Override
@@ -69,8 +83,9 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
             return new AnnotatedValue<>(
                     annotatedValue.getValue() != null ? getUnitConverter(type).marshal(this, type, annotatedValue.getValue()) : null,
-                    annotatedValue.getValueLabel(), annotatedValue.getValueDescription(), annotatedValue.getFeatures(),
-                    annotatedValue.getTypeLabel(), annotatedValue.getTypeDescription());
+                    annotatedValue.getValueLabel(), annotatedValue.getValueDescription(),
+                    FeaturesUtils.marshal(featureConverter, annotatedValue.getFeatures()), annotatedValue.getTypeLabel(),
+                    annotatedValue.getTypeDescription());
         }
 
         return getUnitConverter(type).marshal(this, type, value);
@@ -100,6 +115,8 @@ public abstract class BaseTypeConverter implements TypeConverter {
                 annotatedValue.setValue(getUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
             }
 
+            annotatedValue.setFeatures(FeaturesUtils.unmarshal(featureConverter, annotatedValue.getFeatures()));
+
             return annotatedValue;
         }
 
@@ -108,7 +125,7 @@ public abstract class BaseTypeConverter implements TypeConverter {
 
     @Override
     public void register(UnitTypeConverter unitConverter) {
-        logger.trace("Registering {} converter: {}", unitConverter.getTypeKind(), unitConverter.getClass());
+        logger.trace("Registering {} type converter: {}", unitConverter.getTypeKind(), unitConverter.getClass());
         registry.put(unitConverter.getTypeKind(), unitConverter);
     }
 

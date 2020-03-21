@@ -11,7 +11,7 @@ class ActionWithGeoMap(Action):
                     "geoMap":GeoMap().withCenter(GeoPosition(50.06143, 19.93658)).withZoom(15).withLayers([
                         # See the OpenStreetMap Tile Usage Policy at https://operations.osmfoundation.org/policies/tiles/
                         GeoTileLayer().withUrlTemplate("https://tile.openstreetmap.org/{z}/{x}/{y}.png").withLabel("OpenStreetMap"),
-                        GeoMarkerLayer("buildings").withLabel("Buildings"),
+                        GeoMarkerLayer("buildings").withLabel("Buildings").withFeature("icon", IconInfo("home").withSize(50)),
                         GeoMarkerLayer("persons").withLabel("Persons")
                     ]).withFeature("attribution", u"© OpenStreetMap contributors")
                 }).withProvided(
@@ -25,17 +25,17 @@ class ActionWithGeoMap(Action):
         if "locations" in context.provide:
             locations = [
                 AnnotatedValue("building1").withValueLabel("Building (with actions)").withValueDescription("Description of building 1").withFeatures({
-                    "geoPosition":GeoPosition(50.06043, 19.93558), "icon":"home", "iconColor":"FF0000", "iconWidth":50, "iconHeight":50,
+                    "geoPosition":GeoPosition(50.06043, 19.93558), "icon":IconInfo("home").withColor("FF0000").withSize(50),
                     "geoLayerName":"buildings"}).withFeature(
                         "contextActions", ["ActionWithGeoMapViewLocation"]),
                 AnnotatedValue("building2").withValueLabel("Building (without actions)").withValueDescription("Description of building 2").withFeatures({
-                    "geoPosition":GeoPosition(50.06253, 19.93768), "icon":"home", "iconColor":"00FF00", "iconWidth":50, "iconHeight":50,
+                    "geoPosition":GeoPosition(50.06253, 19.93768),
                     "geoLayerName":"buildings"}),
                 AnnotatedValue("person1").withValueLabel("Person 1 (without actions)").withValueDescription("Description of person 1").withFeatures({
-                    "geoPosition":GeoPosition(50.06143, 19.93658), "icon":"face", "iconColor":"000000", "iconWidth":30, "iconHeight":30,
+                    "geoPosition":GeoPosition(50.06143, 19.93658), "icon":IconInfo("face").withColor("000000").withSize(30),
                     "geoLayerName":"persons"}),
                 AnnotatedValue("person2").withValueLabel("Person 2 (without actions)").withValueDescription("Description of person 2").withFeatures({
-                    "geoPosition":GeoPosition(50.06353, 19.93868), "icon":"face", "iconColor":"0000FF", "iconWidth":30, "iconHeight":30,
+                    "geoPosition":GeoPosition(50.06353, 19.93868), "icon":IconInfo("face").withColor("0000FF").withSize(30),
                     "geoLayerName":"persons"})
             ]
             context.provided["locations"] = ProvidedValue().withValue(AnnotatedValue(locations))
@@ -62,10 +62,6 @@ class ActionWithGeoMapViewLocation(Action):
         if "description" in context.provide:
             context.provided["description"] = ProvidedValue().withValue(context.current["location"].valueDescription)
         if "latitude" in context.provide:
-            # TODO Fearures convertion
-            #context.provided["latitude"] = ProvidedValue().withValue(context.current["location"].features["geoPosition"].latitude)
-            context.provided["latitude"] = ProvidedValue().withValue(context.current["location"].features["geoPosition"]["latitude"])
+            context.provided["latitude"] = ProvidedValue().withValue(context.current["location"].features["geoPosition"].latitude)
         if "longitude" in context.provide:
-            # TODO Fearures convertion
-            #context.provided["longitude"] = ProvidedValue().withValue(context.current["location"].features["geoPosition"].longitude)
-            context.provided["longitude"] = ProvidedValue().withValue(context.current["location"].features["geoPosition"]["longitude"])
+            context.provided["longitude"] = ProvidedValue().withValue(context.current["location"].features["geoPosition"].longitude)
