@@ -26,7 +26,7 @@ class RecordLibraryForm(Action):
                 }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withElement(
                         createBookRecordType("book").withAnnotated()
                 )
-        ]).withCallable(False).withFeature("icon", "library-books")
+        ]).withCallable(False).withFeature("icon", "library")
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.provide:

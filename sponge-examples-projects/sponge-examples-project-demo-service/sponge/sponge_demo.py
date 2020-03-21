@@ -109,7 +109,7 @@ class MarkdownText(Action):
     def onConfigure(self):
         self.withLabel("Markdown text").withDescription("Returns the markdown text.")
         self.withNoArgs().withResult(StringType().withFormat("markdown").withLabel("Markdown text"))
-        self.withFeatures({"icon":"markdown"})
+        self.withFeatures({"icon":"language-markdown"})
     def onCall(self):
         return """Heading
 =======

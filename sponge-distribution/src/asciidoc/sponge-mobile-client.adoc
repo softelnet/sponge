@@ -449,7 +449,7 @@ The application may be switched to the dark or light theme in the settings.
 
 |`icon`
 |Action
-|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/4.5.95/[material design icons (currently v4.5.95)].
+|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/5.0.45/[material design icons (currently v5.0.45)].
 
 |`icon`
 |Type

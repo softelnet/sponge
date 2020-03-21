@@ -19,7 +19,7 @@ class MpdFindAndAddToPlaylist(Action):
             BooleanType("replacePlaylist").withDefaultValue(False).withLabel("Replace the playlist").withDescription(
                 "Clears the playlist before adding new songs.")
         ]).withResult(StringType().withLabel("Info"))
-        self.withFeatures({"icon":"playlist-star", "showClear":True, "showCancel":True, "cacheableContextArgs":True, "visible":False})
+        self.withFeatures({"icon":"file-search", "showClear":True, "showCancel":True, "cacheableContextArgs":True, "visible":False})
     def onCall(self, artist, album, title, genre, minYear, maxYear, autoPlay, replacePlaylist):
         mpc = sponge.getVariable("mpc")
         selectedFiles = mpc.searchFiles(artist, album, title, genre, minYear, maxYear, useSimpleRegexp = True)

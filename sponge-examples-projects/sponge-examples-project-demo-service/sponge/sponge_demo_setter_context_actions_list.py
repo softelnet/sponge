@@ -30,7 +30,7 @@ class FruitsWithColorsContextSetter_Update(Action):
 
 class FruitsWithColorsContextSetter_Choose(Action):
     def onConfigure(self):
-        self.withLabel("Choose a fruit").withArgs([
+        self.withLabel("Choose a fruit").withDescription("Choose a fruit. The action icon has a custom color.").withArgs([
             createFruitWithColorRecordType("chosenFruit").withNullable().withFeature("visible", False).withProvided(
                 ProvidedMeta().withValue().withImplicitMode()),
             ListType("fruits").withLabel("Fruits").withElement(
@@ -39,7 +39,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
                     ProvidedMeta().withValue().withDependency("chosenFruit").withOptionalMode().withOverwrite()
                 ).withFeatures({"activateAction":"submit"})
         ]).withResult(createFruitWithColorRecordType())
-        self.withFeatures({"callLabel":"Choose", "visible":True})
+        self.withFeatures({"callLabel":"Choose", "icon":IconInfo("palm-tree").withColor("00FF00"), "visible":True})
 
     def onCall(self, chosenFruit, fruits):
         if chosenFruit:

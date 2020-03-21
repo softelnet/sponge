@@ -19,7 +19,7 @@ class MpdLibrary(Action):
                         BooleanType("isDir")
                     ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")))
         ]).withCallable(False).withActivatable()
-        self.withFeatures({"icon":"library-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
+        self.withFeatures({"icon":"folder-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
 
     def onIsActive(self, context):
         return sponge.getVariable("mpc").isConnected()

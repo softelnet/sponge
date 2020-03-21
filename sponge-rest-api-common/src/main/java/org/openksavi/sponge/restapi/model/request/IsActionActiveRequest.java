@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi.model.request;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest.IsActionActiveRequestBody;
 import org.openksavi.sponge.type.DataType;
 
@@ -70,7 +73,7 @@ public class IsActionActiveRequest extends BodySpongeRequest<IsActionActiveReque
 
     @ApiModel(value = "IsActionActiveEntry", description = "An action active request entry")
     @SuppressWarnings("rawtypes")
-    public static class IsActionActiveEntry implements ActionExecutionInfo {
+    public static class IsActionActiveEntry implements ActionExecutionInfo, Cloneable {
 
         private String name;
 
@@ -182,6 +185,20 @@ public class IsActionActiveRequest extends BodySpongeRequest<IsActionActiveReque
         public IsActionActiveEntry withQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion) {
             setQualifiedVersion(qualifiedVersion);
             return this;
+        }
+
+        @Override
+        public IsActionActiveEntry clone() {
+            try {
+                IsActionActiveEntry cloned = (IsActionActiveEntry) super.clone();
+
+                cloned.args = args != null ? new ArrayList<>(args) : null;
+                cloned.features = features != null ? new LinkedHashMap<>(features) : null;
+
+                return cloned;
+            } catch (CloneNotSupportedException e) {
+                throw new SpongeException(e);
+            }
         }
     }
 }

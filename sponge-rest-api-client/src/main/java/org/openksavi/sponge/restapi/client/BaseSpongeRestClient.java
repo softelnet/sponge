@@ -888,6 +888,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
                 if (entry.getArgs() != null) {
                     entry.setArgs(marshalActionCallArgs(actionMeta, entry.getArgs()));
                 }
+
+                entry.setFeatures(FeaturesUtils.marshal(featureConverter, entry.getFeatures()));
             });
         }
 
@@ -915,6 +917,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
             return Stream.generate(() -> Boolean.TRUE).limit(entries.size()).collect(Collectors.toList());
         }
 
+        // Clone all entries in order to modify their copies later.
+        entries = entries.stream().map((entry) -> entry != null ? entry.clone() : null).collect(Collectors.toList());
+
         return isActionActive(new IsActionActiveRequest(entries)).getBody().getActive();
     }
 
@@ -927,6 +932,9 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         request.getBody().setCurrent(
                 marshalAuxiliaryActionArgsCurrent(actionMeta, request.getBody().getCurrent(), request.getBody().getDynamicTypes()));
 
+        // Clone the features and marshal all features.
+        request.getBody().setFeatures(marshalProvideArgsFeaturesMap(request.getBody().getFeatures()));
+
         ProvideActionArgsResponse response =
                 execute(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
 
@@ -935,6 +943,19 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
 
         return response;
+    }
+
+    protected Map<String, Map<String, Object>> marshalProvideArgsFeaturesMap(Map<String, Map<String, Object>> featuresMap) {
+        if (featuresMap == null) {
+            return null;
+        }
+
+        Map<String, Map<String, Object>> result = new LinkedHashMap<>();
+        for (String argName : featuresMap.keySet()) {
+            result.put(argName, FeaturesUtils.marshal(featureConverter, featuresMap.get(argName)));
+        }
+
+        return result;
     }
 
     @Override

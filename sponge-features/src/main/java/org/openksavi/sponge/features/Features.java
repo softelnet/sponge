@@ -220,14 +220,14 @@ public final class Features {
     }
 
     public static IconInfo getIcon(Map<String, Object> features) {
-        return (IconInfo) features.get(ICON);
+        return features != null ? (IconInfo) features.get(ICON) : null;
     }
 
     public static GeoMap getGeoMap(Map<String, Object> features) {
-        return (GeoMap) features.get(GEO_MAP);
+        return features != null ? (GeoMap) features.get(GEO_MAP) : null;
     }
 
     public static GeoPosition getGeoPosition(Map<String, Object> features) {
-        return (GeoPosition) features.get(GEO_POSITION);
+        return features != null ? (GeoPosition) features.get(GEO_POSITION) : null;
     }
 }

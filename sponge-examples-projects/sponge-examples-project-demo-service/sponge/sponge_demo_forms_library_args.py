@@ -17,7 +17,7 @@ class ArgLibraryForm(Action):
             }).withElement(
                 IntegerType().withAnnotated()
             )
-        ]).withCallable(False).withFeature("icon", "library-books")
+        ]).withCallable(False).withFeature("icon", "library")
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.provide:

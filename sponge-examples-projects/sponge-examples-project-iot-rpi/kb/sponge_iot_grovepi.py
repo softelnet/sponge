@@ -13,7 +13,7 @@ class SetGrovePiMode(Action):
         self.withLabel("Set the GrovePi mode").withDescription("Sets the GrovePi mode.")
         self.withArg(StringType("mode").withLabel("The GrovePi mode").withProvided(ProvidedMeta().withValue().withValueSet().withOverwrite()))
         self.withNoResult()
-        self.withFeature("icon", "settings")
+        self.withFeature("icon", "raspberry-pi")
     def onCall(self, mode):
         if mode not in ["auto", "manual"]:
             raise Exception("Unsupported GrovePi mode: " + mode)

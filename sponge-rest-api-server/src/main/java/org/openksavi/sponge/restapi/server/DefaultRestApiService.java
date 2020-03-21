@@ -452,8 +452,9 @@ public class DefaultRestApiService implements RestApiService {
                     Object contextValue = entry.getContextValue() != null && contextType != null
                             ? typeConverter.unmarshal(contextType, entry.getContextValue()) : entry.getContextValue();
 
-                    active.add(getEngine().getOperations().isActionActive(entry.getName(), new IsActionActiveContext(contextValue,
-                            contextType, unmarshalActionArgs(actionAdapter, entry.getArgs()), entry.getFeatures())));
+                    active.add(getEngine().getOperations().isActionActive(entry.getName(),
+                            new IsActionActiveContext(contextValue, contextType, unmarshalActionArgs(actionAdapter, entry.getArgs()),
+                                    FeaturesUtils.unmarshal(featureConverter, entry.getFeatures()))));
                 });
             }
 
@@ -477,7 +478,7 @@ public class DefaultRestApiService implements RestApiService {
                             new ProvideArgsParameters(request.getBody().getProvide(), request.getBody().getSubmit(),
                                     RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter,
                                             request.getBody().getCurrent(), request.getBody().getDynamicTypes()),
-                                    request.getBody().getDynamicTypes(), request.getBody().getFeatures()));
+                                    request.getBody().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getBody().getFeatures())));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getBody().getDynamicTypes());
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
@@ -488,6 +489,17 @@ public class DefaultRestApiService implements RestApiService {
                 return handleError("REST provideActionArgs", e, new ProvideActionArgsResponse(), request);
             }
         }
+    }
+
+    protected Map<String, Map<String, Object>> unmarshalProvideArgsFeaturesMap(Map<String, Map<String, Object>> featuresMap) {
+        if (featuresMap == null) {
+            return null;
+        }
+
+        Map<String, Map<String, Object>> result = new LinkedHashMap<>();
+        featuresMap.forEach((argName, features) -> result.put(argName, FeaturesUtils.unmarshal(featureConverter, features)));
+
+        return result;
     }
 
     @Override

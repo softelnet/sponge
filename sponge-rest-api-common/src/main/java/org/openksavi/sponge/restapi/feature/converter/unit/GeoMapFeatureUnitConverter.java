@@ -33,13 +33,11 @@ public class GeoMapFeatureUnitConverter extends BaseUnitFeatureConverter {
     public Object unmarshal(FeatureConverter converter, Object value) {
         GeoMap geoMap = converter.getObjectMapper().convertValue(value, GeoMap.class);
 
-        if (geoMap != null) {
-            geoMap.setFeatures(FeaturesUtils.unmarshal(converter, geoMap.getFeatures()));
+        geoMap.setFeatures(FeaturesUtils.unmarshal(converter, geoMap.getFeatures()));
 
-            if (geoMap.getLayers() != null) {
-                for (GeoLayer layer : geoMap.getLayers()) {
-                    layer.setFeatures(FeaturesUtils.unmarshal(converter, layer.getFeatures()));
-                }
+        if (geoMap.getLayers() != null) {
+            for (GeoLayer layer : geoMap.getLayers()) {
+                layer.setFeatures(FeaturesUtils.unmarshal(converter, layer.getFeatures()));
             }
         }
 

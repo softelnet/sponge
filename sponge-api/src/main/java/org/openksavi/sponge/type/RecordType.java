@@ -39,10 +39,10 @@ public class RecordType extends DataType<Map<String, Object>> {
     private List<DataType> fields;
 
     /** The base record type. */
-    private RecordType baseType;
+    private transient RecordType baseType;
 
     /** The flag that tells if inheritance has been applied to this type. */
-    private boolean inheritationApplied = false;
+    private transient boolean inheritationApplied = false;
 
     private transient Map<String, DataType> fieldLookupMap;
 
