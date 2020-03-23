@@ -23,10 +23,12 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.openksavi.sponge.util.HasFeatures;
+
 /**
  * An annotated value. The class is not thread safe.
  */
-public class AnnotatedValue<T> implements DecoratedValue<T> {
+public class AnnotatedValue<T> implements DecoratedValue<T>, HasFeatures {
 
     public static Set<String> FIELDS =
             new LinkedHashSet<>(Arrays.asList("value", "valueLabel", "valueDescription", "features", "typeLabel", "typeDescription"));
@@ -93,10 +95,12 @@ public class AnnotatedValue<T> implements DecoratedValue<T> {
         this.valueDescription = valueDescription;
     }
 
+    @Override
     public Map<String, Object> getFeatures() {
         return Collections.unmodifiableMap(features);
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = new LinkedHashMap<>(features);
     }

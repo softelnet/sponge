@@ -18,6 +18,7 @@ package org.openksavi.sponge.restapi.util;
 
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,11 +29,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.ClassUtils;
 
 import org.openksavi.sponge.features.model.geo.GeoLayer;
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestDataType;
 import org.openksavi.sponge.restapi.model.RestGeoLayer;
+import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.QualifiedDataType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 
@@ -100,5 +105,48 @@ public abstract class RestApiUtils {
     @SuppressWarnings("rawtypes")
     public static boolean isAnnotatedValueMap(Object value) {
         return value instanceof Map && AnnotatedValue.FIELDS.equals(((Map) value).keySet());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static RemoteEvent marshalRemoteEvent(RemoteEvent event, TypeConverter converter,
+            Function<String, RecordType> eventTypeSupplier) {
+        if (event == null) {
+            return null;
+        }
+
+        event = event.clone();
+
+        RecordType eventType = eventTypeSupplier != null ? eventTypeSupplier.apply(event.getName()) : null;
+        if (eventType != null) {
+            event.setAttributes((Map<String, Object>) converter.marshal(eventType, event.getAttributes()));
+        }
+
+        event.setFeatures(FeaturesUtils.marshal(converter.getFeatureConverter(), event.getFeatures()));
+
+        return event;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static RemoteEvent unmarshalRemoteEvent(Object eventObject, TypeConverter converter,
+            Function<String, RecordType> eventTypeSupplier) {
+        if (eventObject == null) {
+            return null;
+        }
+
+        RemoteEvent event = (eventObject instanceof RemoteEvent) ? (RemoteEvent) eventObject
+                : converter.getObjectMapper().convertValue(eventObject, RemoteEvent.class);
+
+        if (event == null) {
+            return null;
+        }
+
+        RecordType eventType = eventTypeSupplier != null ? eventTypeSupplier.apply(event.getName()) : null;
+        if (eventType != null) {
+            event.setAttributes((Map<String, Object>) converter.unmarshal(eventType, event.getAttributes()));
+        }
+
+        event.setFeatures(FeaturesUtils.unmarshal(converter.getFeatureConverter(), event.getFeatures()));
+
+        return event;
     }
 }

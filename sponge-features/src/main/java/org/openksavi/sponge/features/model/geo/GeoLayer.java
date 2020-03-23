@@ -16,15 +16,19 @@
 
 package org.openksavi.sponge.features.model.geo;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasFeatures;
 
 /**
  * A map layer.
  */
-public abstract class GeoLayer implements Descriptive {
+public abstract class GeoLayer implements Descriptive, HasFeatures, Serializable {
+
+    private static final long serialVersionUID = -4882052436310260925L;
 
     private GeoLayerType type;
 
@@ -108,10 +112,12 @@ public abstract class GeoLayer implements Descriptive {
         this.description = description;
     }
 
+    @Override
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }

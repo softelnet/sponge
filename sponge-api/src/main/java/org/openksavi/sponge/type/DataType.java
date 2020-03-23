@@ -26,11 +26,12 @@ import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasFeatures;
 
 /**
  * A data type. Used for example in action arguments metadata.
  */
-public class DataType<T> implements Descriptive, Cloneable {
+public class DataType<T> implements Descriptive, HasFeatures, Cloneable {
 
     /** The feature name for the format. */
     public static final String FEATURE_FORMAT = "format";
@@ -226,10 +227,12 @@ public class DataType<T> implements Descriptive, Cloneable {
         this.nullable = nullable;
     }
 
+    @Override
     public Map<String, Object> getFeatures() {
         return Collections.unmodifiableMap(features);
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = new LinkedHashMap<>(features);
     }

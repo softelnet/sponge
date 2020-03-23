@@ -81,6 +81,18 @@ public class DefaultEventDefinition implements EventDefinition {
     }
 
     @Override
+    public EventDefinition feature(String name, Object value) {
+        event.addFeature(name, value);
+        return this;
+    }
+
+    @Override
+    public EventDefinition features(Map<String, Object> features) {
+        event.addFeatures(features);
+        return this;
+    }
+
+    @Override
     public DefaultEventDefinition modify(EventDefinitionModifier modifier) {
         modifier.modify(event);
         return this;

@@ -48,6 +48,7 @@ import org.openksavi.sponge.restapi.client.listener.OnResponseDeserializedListen
 import org.openksavi.sponge.restapi.feature.converter.DefaultFeatureConverter;
 import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
 import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
 import org.openksavi.sponge.restapi.model.request.ActionCallRequest;
@@ -66,6 +67,7 @@ import org.openksavi.sponge.restapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.restapi.model.request.ReloadRequest;
 import org.openksavi.sponge.restapi.model.request.RequestHeader;
 import org.openksavi.sponge.restapi.model.request.SendEventRequest;
+import org.openksavi.sponge.restapi.model.request.SendEventRequest.SendEventRequestBody;
 import org.openksavi.sponge.restapi.model.request.SpongeRequest;
 import org.openksavi.sponge.restapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.restapi.model.response.BodySpongeResponse;
@@ -83,10 +85,13 @@ import org.openksavi.sponge.restapi.model.response.ReloadResponse;
 import org.openksavi.sponge.restapi.model.response.ResponseHeader;
 import org.openksavi.sponge.restapi.model.response.SendEventResponse;
 import org.openksavi.sponge.restapi.model.response.SpongeResponse;
+import org.openksavi.sponge.restapi.type.converter.BaseTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.TypeType;
@@ -149,9 +154,26 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         typeConverter = new DefaultTypeConverter(mapper);
+        initObjectTypeMarshalers(typeConverter);
+
         featureConverter = new DefaultFeatureConverter(mapper);
 
         typeConverter.setFeatureConverter(featureConverter);
+    }
+
+    protected void initObjectTypeMarshalers(TypeConverter typeConverter) {
+        ObjectTypeUnitConverter objectConverter =
+                (ObjectTypeUnitConverter) ((BaseTypeConverter) typeConverter).getInternalUnitConverter(DataTypeKind.OBJECT);
+
+        if (objectConverter == null) {
+            return;
+        }
+
+        // Add RemoteEvent marshaler and unmarshaler.
+        objectConverter.addMarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME, (TypeConverter converter,
+                Object value) -> RestApiUtils.marshalRemoteEvent((RemoteEvent) value, converter, eventName -> getEventType(eventName)));
+        objectConverter.addUnmarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME, (TypeConverter converter,
+                Object value) -> RestApiUtils.unmarshalRemoteEvent(value, converter, eventName -> getEventType(eventName)));
     }
 
     @Override
@@ -847,6 +869,17 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
 
     @Override
     public SendEventResponse send(SendEventRequest request, SpongeRequestContext context) {
+        SendEventRequestBody body = request.getBody();
+
+        // Use a temporary RemoteEvent to marshal attributes and features.
+        RemoteEvent event = new RemoteEvent(null, body.getName(), null, 0, body.getLabel(), body.getDescription(), body.getAttributes(),
+                body.getFeatures());
+        event = RestApiUtils.marshalRemoteEvent(event, typeConverter, eventName -> getEventType(eventName));
+
+        // Set marshalled fields.
+        body.setAttributes(event.getAttributes());
+        body.setFeatures(event.getFeatures());
+
         return execute(RestApiConstants.OPERATION_SEND, request, SendEventResponse.class, context);
     }
 
@@ -856,8 +889,13 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
+    public String send(String eventName, Map<String, Object> attributes, String label, String description, Map<String, Object> features) {
+        return send(new SendEventRequest(eventName, attributes, label, description, features)).getBody().getEventId();
+    }
+
+    @Override
     public String send(String eventName, Map<String, Object> attributes, String label, String description) {
-        return send(new SendEventRequest(eventName, attributes, label, description)).getBody().getEventId();
+        return send(eventName, attributes, label, description, null);
     }
 
     @Override

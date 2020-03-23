@@ -22,11 +22,12 @@ import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasFeatures;
 
 /**
  * A category metadata.
  */
-public class CategoryMeta implements Descriptive {
+public class CategoryMeta implements Descriptive, HasFeatures {
 
     /** The category name. */
     private String name;
@@ -78,10 +79,12 @@ public class CategoryMeta implements Descriptive {
         this.description = description;
     }
 
+    @Override
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         Validate.notNull(features, "The category features cannot be null");
         this.features = new LinkedHashMap<>(features);

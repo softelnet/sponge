@@ -23,6 +23,8 @@ import java.util.Map;
  */
 public class GeoMarkerLayer extends GeoLayer {
 
+    private static final long serialVersionUID = -1334911752731089966L;
+
     public GeoMarkerLayer(String name) {
         super(GeoLayerType.MARKER, name);
     }

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.restapi;
 
+import org.openksavi.sponge.restapi.model.RemoteEvent;
+
 /**
  * Sponge REST API constants.
  */
@@ -67,6 +69,8 @@ public final class RestApiConstants {
     public static final String REMOTE_API_FEATURE_VERSION = "version";
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
+
+    public static final String REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME = RemoteEvent.class.getName();
 
     public static final int HTTP_CODE_ERROR = 500;
 

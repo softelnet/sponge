@@ -28,6 +28,7 @@ import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.restapi.model.request.IsActionActiveRequest.IsActionActiveRequestBody;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.util.HasFeatures;
 
 @ApiModel(value = "IsActionActiveRequest", description = "An action active request")
 public class IsActionActiveRequest extends BodySpongeRequest<IsActionActiveRequestBody> {
@@ -73,7 +74,7 @@ public class IsActionActiveRequest extends BodySpongeRequest<IsActionActiveReque
 
     @ApiModel(value = "IsActionActiveEntry", description = "An action active request entry")
     @SuppressWarnings("rawtypes")
-    public static class IsActionActiveEntry implements ActionExecutionInfo, Cloneable {
+    public static class IsActionActiveEntry implements ActionExecutionInfo, HasFeatures, Cloneable {
 
         private String name;
 
@@ -142,11 +143,13 @@ public class IsActionActiveRequest extends BodySpongeRequest<IsActionActiveReque
             this.args = args;
         }
 
+        @Override
         @ApiModelProperty(value = "The features", required = false)
         public Map<String, Object> getFeatures() {
             return features;
         }
 
+        @Override
         public void setFeatures(Map<String, Object> features) {
             this.features = features;
         }

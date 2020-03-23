@@ -111,11 +111,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.google</pattern>
-                                    <shadedPattern>${shade.package}.com.google</shadedPattern>
+                                    <shadedPattern>org.openksavi.sponge.core.${shade.subpackage}.com.google</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.reflections</pattern>
-                                    <shadedPattern>${shade.package}.org.reflections</shadedPattern>
+                                    <shadedPattern>org.openksavi.sponge.core.${shade.subpackage}.org.reflections</shadedPattern>
                                 </relocation>
                             </relocations>
                             <transformers>

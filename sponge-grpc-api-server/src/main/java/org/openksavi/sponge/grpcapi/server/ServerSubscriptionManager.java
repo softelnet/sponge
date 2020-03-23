@@ -37,6 +37,7 @@ import org.openksavi.sponge.grpcapi.proto.Event;
 import org.openksavi.sponge.grpcapi.proto.ObjectValue;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.restapi.server.RestApiService;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
@@ -192,6 +193,21 @@ public class ServerSubscriptionManager {
             }
 
             eventBuilder.setAttributes(attributesValueBuilder.build());
+        }
+
+        Map<String, Object> features = event.getFeatures();
+        if (features != null) {
+            TypeConverter typeConverter = restApiService.getTypeConverter();
+            ObjectValue.Builder featuresValueBuilder = ObjectValue.newBuilder();
+
+            try {
+                featuresValueBuilder.setValueJson(typeConverter.getObjectMapper()
+                        .writeValueAsString(FeaturesUtils.marshal(typeConverter.getFeatureConverter(), features)));
+            } catch (JsonProcessingException e) {
+                throw SpongeUtils.wrapException(e);
+            }
+
+            eventBuilder.setFeatures(featuresValueBuilder.build());
         }
 
         return eventBuilder.build();

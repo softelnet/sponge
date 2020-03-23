@@ -18,10 +18,13 @@ package org.openksavi.sponge.core.event;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 
@@ -52,6 +55,9 @@ public abstract class BaseEvent implements Event {
 
     /** Event description. */
     protected String description;
+
+    /** Event features as a map of names to values. */
+    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * Creates a new event that has no ID and time set (both are 0).
@@ -235,9 +241,58 @@ public abstract class BaseEvent implements Event {
     }
 
     @Override
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    @Override
+    public void setFeatures(Map<String, Object> features) {
+        if (features != null) {
+            features.forEach((name, value) -> validateFeature(name, value));
+        }
+
+        features = Collections.synchronizedMap(new LinkedHashMap<>(features));
+    }
+
+    public void addFeature(String name, Object value) {
+        validateFeature(name, value);
+
+        features.put(name, value);
+    }
+
+    public void addFeatures(Map<String, Object> features) {
+        if (features != null) {
+            features.forEach((name, value) -> validateFeature(name, value));
+            features.putAll(features);
+        }
+    }
+
+    protected void validateFeature(String name, Object value) {
+        if (clonePolicy == EventClonePolicy.DEEP && !(value instanceof Serializable)) {
+            throw new SpongeException("Not serializable feature can't be deep cloned.");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public BaseEvent clone() {
         try {
-            return (BaseEvent) super.clone();
+            BaseEvent cloned = (BaseEvent) super.clone();
+
+            if (features != null) {
+                switch (clonePolicy) {
+                case SHALLOW:
+                    cloned.setFeatures(features);
+                    break;
+                case DEEP:
+                    cloned.setFeatures((Map<String, Object>) SpongeUtils.deepClone((Serializable) features));
+                    break;
+                default:
+                    throw new SpongeException("Unsupported clone policy: " + clonePolicy);
+                }
+            }
+
+            return cloned;
         } catch (CloneNotSupportedException e) {
             throw new SpongeException(e);
         }

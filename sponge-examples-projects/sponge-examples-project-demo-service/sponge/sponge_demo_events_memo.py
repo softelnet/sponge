@@ -7,7 +7,7 @@ from org.openksavi.sponge.restapi.model import RemoteEvent
 def onBeforeLoad():
     sponge.addEventType("memo", RecordType().withFields([
         StringType("message").withLabel("Message"),
-    ]).withLabel("Memo").withFeature("handlerAction", "ViewMemoEvent"))
+    ]).withLabel("Memo").withFeatures({"handlerAction":"ViewMemoEvent", "icon":"note-text-outline"}))
 
 class ViewMemoEvent(Action):
     def onConfigure(self):

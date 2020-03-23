@@ -16,10 +16,14 @@
 
 package org.openksavi.sponge.features.model.geo;
 
+import java.io.Serializable;
+
 /**
  * A geo position.
  */
-public class GeoPosition {
+public class GeoPosition implements Serializable {
+
+    private static final long serialVersionUID = -711901067929339815L;
 
     private Double latitude;
 

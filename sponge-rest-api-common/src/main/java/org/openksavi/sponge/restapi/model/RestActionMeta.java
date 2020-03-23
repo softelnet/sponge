@@ -27,11 +27,12 @@ import io.swagger.annotations.ApiModelProperty;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasFeatures;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
 @ApiModel(value = "ActionMeta", description = "An action metadata")
 @SuppressWarnings("rawtypes")
-public class RestActionMeta implements Descriptive {
+public class RestActionMeta implements Descriptive, HasFeatures {
 
     private String name;
 
@@ -125,11 +126,13 @@ public class RestActionMeta implements Descriptive {
         this.category = category;
     }
 
+    @Override
     @ApiModelProperty(value = "The action features", required = true)
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }

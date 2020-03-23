@@ -140,6 +140,20 @@ public interface RestApiService extends HasEngine, Initializable {
     UserContext authenticateRequest(SpongeRequest request);
 
     /**
+     * Sends a new event. The attributes and features maps should be unmarshalled first.
+     *
+     * @param eventName the event name.
+     * @param attributes the event attributes map.
+     * @param label the event label.
+     * @param description the event description.
+     * @param features the event the event description..
+     * @param userContext the user context.
+     * @return the sent event.
+     */
+    Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, Map<String, Object> features,
+            UserContext userContext);
+
+    /**
      * Sends a new event. The attributes map should be unmarshalled first.
      *
      * @param eventName the event name.

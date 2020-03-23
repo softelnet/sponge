@@ -16,10 +16,14 @@
 
 package org.openksavi.sponge.features.model.ui;
 
+import java.io.Serializable;
+
 /**
  * An icon info.
  */
-public class IconInfo {
+public class IconInfo implements Serializable {
+
+    private static final long serialVersionUID = -9096035775039112799L;
 
     private String name;
 

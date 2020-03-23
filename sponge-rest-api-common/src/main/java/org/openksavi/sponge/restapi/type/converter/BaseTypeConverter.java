@@ -82,13 +82,14 @@ public abstract class BaseTypeConverter implements TypeConverter {
             }
 
             return new AnnotatedValue<>(
-                    annotatedValue.getValue() != null ? getUnitConverter(type).marshal(this, type, annotatedValue.getValue()) : null,
+                    annotatedValue.getValue() != null ? getInternalUnitConverter(type).marshal(this, type, annotatedValue.getValue())
+                            : null,
                     annotatedValue.getValueLabel(), annotatedValue.getValueDescription(),
                     FeaturesUtils.marshal(featureConverter, annotatedValue.getFeatures()), annotatedValue.getTypeLabel(),
                     annotatedValue.getTypeDescription());
         }
 
-        return getUnitConverter(type).marshal(this, type, value);
+        return getInternalUnitConverter(type).marshal(this, type, value);
     }
 
     @Override
@@ -112,7 +113,7 @@ public abstract class BaseTypeConverter implements TypeConverter {
             }
 
             if (annotatedValue.getValue() != null) {
-                annotatedValue.setValue(getUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
+                annotatedValue.setValue(getInternalUnitConverter(type).unmarshal(this, type, annotatedValue.getValue()));
             }
 
             annotatedValue.setFeatures(FeaturesUtils.unmarshal(featureConverter, annotatedValue.getFeatures()));
@@ -120,7 +121,7 @@ public abstract class BaseTypeConverter implements TypeConverter {
             return annotatedValue;
         }
 
-        return getUnitConverter(type).unmarshal(this, type, value);
+        return getInternalUnitConverter(type).unmarshal(this, type, value);
     }
 
     @Override
@@ -139,11 +140,17 @@ public abstract class BaseTypeConverter implements TypeConverter {
         return registry.remove(typeKind);
     }
 
-    public <T, D extends DataType> UnitTypeConverter<T, D> getUnitConverter(D type) {
-        return getUnitConverter(type.getKind());
+    public <T, D extends DataType> UnitTypeConverter<T, D> getInternalUnitConverter(D type) {
+        return getInternalUnitConverter(type.getKind());
     }
 
-    public UnitTypeConverter getUnitConverter(DataTypeKind typeKind) {
+    /**
+     * Returns the internal unit converter. The returned converter should not be used to convert values directly.
+     *
+     * @param typeKind the data type kind.
+     * @return the unit converter.
+     */
+    public UnitTypeConverter getInternalUnitConverter(DataTypeKind typeKind) {
         return Validate.notNull(registry.get(typeKind), "Unsupported type %s", typeKind);
     }
 }

@@ -59,6 +59,23 @@ public interface EventDefinition {
     EventDefinition set(Map<String, Object> attributes);
 
     /**
+     * Add an event feature.
+     *
+     * @param name the feature name.
+     * @param value the feature value.
+     * @return this event definition for fluent API.
+     */
+    EventDefinition feature(String name, Object value);
+
+    /**
+     * Adds event features.
+     *
+     * @param features the features map.
+     * @return this event for fluent API.
+     */
+    EventDefinition features(Map<String, Object> features);
+
+    /**
      * Modifies the underlying event.
      *
      * @param modifier event definition modifier.
