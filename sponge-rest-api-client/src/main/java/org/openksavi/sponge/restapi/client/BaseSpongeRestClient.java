@@ -932,7 +932,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         request.getBody().setCurrent(
                 marshalAuxiliaryActionArgsCurrent(actionMeta, request.getBody().getCurrent(), request.getBody().getDynamicTypes()));
 
-        // Clone the features and marshal all features.
+        // Clone and marshal all features.
         request.getBody().setFeatures(marshalProvideArgsFeaturesMap(request.getBody().getFeatures()));
 
         ProvideActionArgsResponse response =

@@ -10,10 +10,14 @@ class ActionWithGeoMap(Action):
             ListType("locations").withLabel("Locations").withAnnotated().withFeatures({
                     "geoMap":GeoMap().withCenter(GeoPosition(50.06143, 19.93658)).withZoom(15).withLayers([
                         # See the OpenStreetMap Tile Usage Policy at https://operations.osmfoundation.org/policies/tiles/
-                        GeoTileLayer().withUrlTemplate("https://tile.openstreetmap.org/{z}/{x}/{y}.png").withLabel("OpenStreetMap"),
+                        GeoTileLayer().withUrlTemplate("https://tile.openstreetmap.org/{z}/{x}/{y}.png").withLabel("OpenStreetMap")
+                            .withFeatures({"visible":True, "attribution":u"© OpenStreetMap contributors"}),
+                        # See the Google Maps Terms of Service at https://cloud.google.com/maps-platform/terms
+                        GeoTileLayer().withUrlTemplate("https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}").withLabel("Google Hybrid")
+                            .withFeatures({"visible":False, "attribution":u"Imagery ©2020 CNES/Airbus, MGGP Aero, Maxar Technologies, Map data ©2020 Google"}),
                         GeoMarkerLayer("buildings").withLabel("Buildings").withFeature("icon", IconInfo("home").withSize(50)),
                         GeoMarkerLayer("persons").withLabel("Persons")
-                    ]).withFeature("attribution", u"© OpenStreetMap contributors")
+                    ])
                 }).withProvided(
                     ProvidedMeta().withValue().withOverwrite()
                 ).withElement(
