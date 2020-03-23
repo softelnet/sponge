@@ -23,9 +23,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasFeatures;
 
 @ApiModel(value = "CategoryMeta", description = "A category metadata")
-public class RestCategoryMeta implements Descriptive {
+public class RestCategoryMeta implements Descriptive, HasFeatures {
 
     /** The category name. */
     private String name;
@@ -85,11 +86,13 @@ public class RestCategoryMeta implements Descriptive {
         this.description = description;
     }
 
+    @Override
     @ApiModelProperty(value = "The category features", required = true)
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }

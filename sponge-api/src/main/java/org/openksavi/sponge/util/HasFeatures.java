@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge;
+package org.openksavi.sponge.util;
 
-import org.openksavi.sponge.util.Descriptive;
-import org.openksavi.sponge.util.HasFeatures;
-import org.openksavi.sponge.util.HasVersion;
+import java.util.Map;
 
 /**
- * A processor metadata.
+ * Represents an entity that has features.
  */
-public interface ProcessorMeta extends Descriptive, HasVersion, HasFeatures {
+public interface HasFeatures {
 
     /**
-     * Returns the optional category name or {@code null} if not set.
+     * Returns the features. The default value is the empty map.
      *
-     * @return the category name.
+     * @return the features. Never returns {@code null}.
      */
-    String getCategory();
+    Map<String, Object> getFeatures();
 
     /**
-     * Sets the category name.
+     * Sets the features. Must not be {@code null}.
      *
-     * @param category the category name.
+     * @param features the features.
      */
-    void setCategory(String category);
+    void setFeatures(Map<String, Object> features);
 }

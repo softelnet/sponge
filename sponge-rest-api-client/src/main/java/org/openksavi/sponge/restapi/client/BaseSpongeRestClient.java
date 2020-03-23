@@ -152,6 +152,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         featureConverter = new DefaultFeatureConverter(mapper);
 
         typeConverter.setFeatureConverter(featureConverter);
+
+        // TODO Add RemoteEvent marshaler/unmarshaler similar to DefaultRestApiService.initObjectTypeMarshalers.
     }
 
     @Override
@@ -856,8 +858,13 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     }
 
     @Override
+    public String send(String eventName, Map<String, Object> attributes, String label, String description, Map<String, Object> features) {
+        return send(new SendEventRequest(eventName, attributes, label, description, features)).getBody().getEventId();
+    }
+
+    @Override
     public String send(String eventName, Map<String, Object> attributes, String label, String description) {
-        return send(new SendEventRequest(eventName, attributes, label, description)).getBody().getEventId();
+        return send(eventName, attributes, label, description, null);
     }
 
     @Override

@@ -439,6 +439,10 @@ The application may be switched to the dark or light theme in the settings.
 |Type
 |If `True`, an action argument or a record field is visible in the action call screen. Defaults to `true`.
 
+|`visible`
+|`GeoLayer`
+|If `True`, a map layer will be initially visible on a map. Defaults to `true`.
+
 |`enabled`
 |Type
 |If `True`, an action argument or a record field is enabled for editing. Defaults to `true`.
@@ -449,11 +453,15 @@ The application may be switched to the dark or light theme in the settings.
 
 |`icon`
 |Action
-|An action icon name. The supported set of icons is limited to the https://cdn.materialdesignicons.com/5.0.45/[material design icons (currently v5.0.45)].
+|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.0.45/[material design icons (currently v5.0.45)].
 
 |`icon`
 |Type
-|An type icon name. Currently supported only for list elements.
+|An type icon. Currently supported only for list elements.
+
+|`icon`
+|`GeoMarkerLayer`
+|A map marker layer icon. Shows a layer marker on a map as a specified icon.
 
 |`widget`
 |Type

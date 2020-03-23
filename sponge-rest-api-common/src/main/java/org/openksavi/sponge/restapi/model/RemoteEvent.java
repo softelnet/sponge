@@ -21,10 +21,12 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.openksavi.sponge.SpongeException;
+
 /**
  * A Sponge Remote API event.
  */
-public class RemoteEvent {
+public class RemoteEvent implements Cloneable {
 
     private String id;
 
@@ -39,6 +41,8 @@ public class RemoteEvent {
     private String description;
 
     private Map<String, Object> attributes = Collections.synchronizedMap(new LinkedHashMap<>());
+
+    private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public RemoteEvent(String id, String name, Instant time, int priority, String label, String description,
             Map<String, Object> attributes) {
@@ -112,5 +116,26 @@ public class RemoteEvent {
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = Collections.synchronizedMap(new LinkedHashMap<>(attributes));
+    }
+
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, Object> features) {
+        this.features = Collections.synchronizedMap(new LinkedHashMap<>(features));
+    }
+
+    @Override
+    public RemoteEvent clone() {
+        try {
+            RemoteEvent cloned = (RemoteEvent) super.clone();
+            cloned.attributes = attributes != null ? Collections.synchronizedMap(new LinkedHashMap<>(attributes)) : null;
+            cloned.features = features != null ? Collections.synchronizedMap(new LinkedHashMap<>(features)) : null;
+
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new SpongeException(e);
+        }
     }
 }

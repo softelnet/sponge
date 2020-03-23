@@ -25,12 +25,13 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.util.HasFeatures;
 
 /**
  * A context for the {@code onIsActive} callback method.
  */
 @SuppressWarnings("rawtypes")
-public class IsActionActiveContext implements Cloneable {
+public class IsActionActiveContext implements HasFeatures, Cloneable {
 
     /** The context value. Can be {@code null}. */
     private Object value;
@@ -42,8 +43,7 @@ public class IsActionActiveContext implements Cloneable {
     private List<Object> args;
 
     /**
-     * The context features. It is guaranteed to be non null in the
-     * {@code onIsActive} action callback method.
+     * The context features. It is guaranteed to be non null in the {@code onIsActive} action callback method.
      */
     private Map<String, Object> features;
 
@@ -86,10 +86,12 @@ public class IsActionActiveContext implements Cloneable {
         this.args = args;
     }
 
+    @Override
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }

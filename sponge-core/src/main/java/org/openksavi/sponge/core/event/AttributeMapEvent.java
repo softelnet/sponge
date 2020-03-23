@@ -115,7 +115,7 @@ public class AttributeMapEvent extends BaseEvent {
                 event.attributes = (Map<String, Object>) SpongeUtils.deepClone((Serializable) attributes);
                 break;
             default:
-                throw new SpongeException("Unsupported value: " + clonePolicy);
+                throw new SpongeException("Unsupported clone policy: " + clonePolicy);
             }
         }
 

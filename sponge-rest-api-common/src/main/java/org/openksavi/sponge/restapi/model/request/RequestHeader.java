@@ -21,11 +21,13 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.openksavi.sponge.util.HasFeatures;
+
 /**
  * A request header.
  */
 @ApiModel(value = "RequestHeader", description = "A request header")
-public class RequestHeader {
+public class RequestHeader implements HasFeatures {
 
     private String id;
 
@@ -73,11 +75,13 @@ public class RequestHeader {
         this.authToken = authToken;
     }
 
+    @Override
     @ApiModelProperty(value = "The request features", required = false)
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }

@@ -66,7 +66,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
         <development.tools.version>1</development.tools.version>
-        <shade.package>org.openksavi.sponge.shaded</shade.package>
+        <shade.subpackage>shaded</shade.subpackage>
 
         <sponge.root>${basedir}</sponge.root>
 

@@ -34,8 +34,8 @@ public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
         this(new SendEventRequestBody());
     }
 
-    public SendEventRequest(String name, Map<String, Object> attributes, String label, String description) {
-        this(new SendEventRequestBody(name, attributes, label, description));
+    public SendEventRequest(String name, Map<String, Object> attributes, String label, String description, Map<String, Object> features) {
+        this(new SendEventRequestBody(name, attributes, label, description, features));
     }
 
     @Override
@@ -54,11 +54,15 @@ public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
 
         private String description;
 
-        public SendEventRequestBody(String name, Map<String, Object> attributes, String label, String description) {
+        private Map<String, Object> features;
+
+        public SendEventRequestBody(String name, Map<String, Object> attributes, String label, String description,
+                Map<String, Object> features) {
             this.name = name;
             this.attributes = attributes;
             this.label = label;
             this.description = description;
+            this.attributes = features;
         }
 
         public SendEventRequestBody() {
@@ -98,6 +102,15 @@ public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        @ApiModelProperty(value = "The event features", required = false)
+        public Map<String, Object> getFeatures() {
+            return features;
+        }
+
+        public void setFeatures(Map<String, Object> features) {
+            this.features = features;
         }
     }
 }

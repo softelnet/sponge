@@ -315,9 +315,13 @@ Limitations:
 * A companion type is not validated against the object type class.
 
 == Features
-Features are represented by a map of names to values. They provide additional information to data types and processors. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].
+Features are represented by a map of names to values. They provide additional information to data types, processors and other entities. They are flexible in a sense that they are not a part of the static API. The predefined features are listed in the {sourcesUrl}/sponge-features/src/main/java/org/openksavi/sponge/features/Features.java[`Features.java`].
 
-Features can be used in a client code to provide specialized behavior.
+Features can be used in a client code to provide customized behavior.
+
+A feature can have a _feature converter_ registered for its name. The converter is used by the REST API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
+
+If a feature is used in events, its values should be `Serializable`.
 
 == Events
 Events are the basic element of processing in {sponge}. They have properties such as id, name and send time. The name of an event is also the type of this event. All events than have the same name belong to the same type. Event names should follow Java naming conventions for variable names. Events may have any number of attributes. These attributes will be available, for example, in event processors.
@@ -363,6 +367,9 @@ Events are the basic element of processing in {sponge}. They have properties suc
 
 |`all`
 |A property that returns a map of all attributes. This is a shortcut for the `getAll()` method.
+
+|`Map<String, Object> features`
+|Event features.
 
 |`Event clone()`
 |A method that clones an event.
@@ -436,6 +443,12 @@ An event may be sent as:
 
 |`EventDefinition set(String name, Object value)`
 |Sets the event attribute.
+
+|`EventDefinition feature(String name, Object value)`
+|Add an event feature.
+
+|`EventDefinition features(Map<String, Object> features)`
+|Add event features.
 
 |`EventDefinition modify(EventDefinitionModifier modifier)`
 |Modifies the underlying event.
@@ -1053,8 +1066,6 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
-The dependency for Jython used in {sponge} is https://github.com/scijava/jython-shaded[Jython shaded].
-
 === Ruby
 
 [discrete]
@@ -1223,7 +1234,7 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 
 |`sponge-jython`
 |Yes
-|The support for Python-based scripting knowledge bases using Jython.
+|The support for Python-based scripting knowledge bases using Jython. This artifact includes a shaded dependencies (e.g. the Guava library).
 
 |`sponge-jruby`
 |Yes

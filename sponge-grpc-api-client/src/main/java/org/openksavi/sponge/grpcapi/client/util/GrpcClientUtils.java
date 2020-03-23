@@ -32,6 +32,7 @@ import org.openksavi.sponge.grpcapi.proto.RequestHeader.Builder;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.restapi.client.SpongeClientException;
 import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.restapi.model.RemoteEvent;
 import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -73,7 +74,7 @@ public abstract class GrpcClientUtils {
         }
 
         if (grpcEvent.hasAttributes()) {
-            Validate.isTrue(!grpcEvent.getAttributes().hasValueAny(), "Any not supported for an event attributes");
+            Validate.isTrue(!grpcEvent.getAttributes().hasValueAny(), "Any not supported for event attributes");
             if (StringUtils.isNotEmpty(grpcEvent.getAttributes().getValueJson())) {
                 try {
                     TypeConverter typeConverter = restClient.getTypeConverter();
@@ -94,7 +95,22 @@ public abstract class GrpcClientUtils {
                 } catch (IOException e) {
                     throw new SpongeClientException(e);
                 }
+            }
+        }
 
+        if (grpcEvent.hasFeatures()) {
+            Validate.isTrue(!grpcEvent.getFeatures().hasValueAny(), "Any not supported for event features");
+            if (StringUtils.isNotEmpty(grpcEvent.getFeatures().getValueJson())) {
+                try {
+                    TypeConverter typeConverter = restClient.getTypeConverter();
+
+                    Map<String, Object> jsonFeatures = (Map<String, Object>) typeConverter.getObjectMapper()
+                            .readValue(grpcEvent.getFeatures().getValueJson(), Map.class);
+
+                    event.setFeatures(FeaturesUtils.unmarshal(typeConverter.getFeatureConverter(), jsonFeatures));
+                } catch (IOException e) {
+                    throw new SpongeClientException(e);
+                }
             }
         }
 

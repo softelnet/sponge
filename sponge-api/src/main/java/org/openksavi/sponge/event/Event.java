@@ -21,12 +21,13 @@ import java.time.Instant;
 import java.util.Map;
 
 import org.openksavi.sponge.util.Descriptive;
+import org.openksavi.sponge.util.HasFeatures;
 import org.openksavi.sponge.util.HasPriority;
 
 /**
  * An event. Event has the following standard attributes: name (type), id, time, priority, label and description.
  */
-public interface Event extends Cloneable, Serializable, HasPriority<Event>, Descriptive {
+public interface Event extends Cloneable, Serializable, HasPriority<Event>, Descriptive, HasFeatures {
 
     /**
      * Returns the event name.
@@ -124,6 +125,21 @@ public interface Event extends Cloneable, Serializable, HasPriority<Event>, Desc
      * @return the attribute map.
      */
     Map<String, Object> getAll();
+
+    /**
+     * Adds a new event feature.
+     *
+     * @param name the feature name.
+     * @param value the feature value.
+     */
+    void addFeature(String name, Object value);
+
+    /**
+     * Adds event features.
+     *
+     * @param features the features.
+     */
+    void addFeatures(Map<String, Object> features);
 
     /**
      * Compares events by ID.

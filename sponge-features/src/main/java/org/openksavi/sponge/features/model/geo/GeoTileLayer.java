@@ -25,6 +25,8 @@ import java.util.Map;
  */
 public class GeoTileLayer extends GeoLayer {
 
+    private static final long serialVersionUID = 1575569726806173109L;
+
     private String urlTemplate;
 
     private Map<String, String> options = new LinkedHashMap<>();

@@ -16,15 +16,20 @@
 
 package org.openksavi.sponge.features.model.geo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openksavi.sponge.util.HasFeatures;
+
 /**
  * A map.
  */
-public class GeoMap {
+public class GeoMap implements HasFeatures, Serializable {
+
+    private static final long serialVersionUID = 659974545540192399L;
 
     private GeoPosition center;
 
@@ -136,10 +141,12 @@ public class GeoMap {
         this.layers = layers;
     }
 
+    @Override
     public Map<String, Object> getFeatures() {
         return features;
     }
 
+    @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
     }

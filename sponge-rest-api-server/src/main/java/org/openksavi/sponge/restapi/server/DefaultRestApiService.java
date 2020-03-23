@@ -53,6 +53,7 @@ import org.openksavi.sponge.restapi.RestApiConstants;
 import org.openksavi.sponge.restapi.feature.converter.DefaultFeatureConverter;
 import org.openksavi.sponge.restapi.feature.converter.FeatureConverter;
 import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
+import org.openksavi.sponge.restapi.model.RemoteEvent;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.model.RestCategoryMeta;
 import org.openksavi.sponge.restapi.model.RestKnowledgeBaseMeta;
@@ -89,10 +90,13 @@ import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.UserAuthentication;
 import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
+import org.openksavi.sponge.restapi.type.converter.BaseTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.DefaultTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.restapi.type.converter.unit.ObjectTypeUnitConverter;
 import org.openksavi.sponge.restapi.util.RestApiUtils;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
@@ -139,15 +143,61 @@ public class DefaultRestApiService implements RestApiService {
 
     @Override
     public void init() {
+        initConverters();
+
+        setupDefaultFeatures();
+    }
+
+    protected void initConverters() {
         ObjectMapper mapper = RestApiUtils.createObjectMapper();
         mapper.configure(SerializationFeature.INDENT_OUTPUT, settings.isPrettyPrint());
 
         typeConverter = new DefaultTypeConverter(mapper);
+        initObjectTypeMarshalers(typeConverter);
+
         featureConverter = new DefaultFeatureConverter(mapper);
 
         typeConverter.setFeatureConverter(featureConverter);
+    }
 
-        setupDefaultFeatures();
+    @SuppressWarnings("unchecked")
+    protected void initObjectTypeMarshalers(TypeConverter typeConverter) {
+        ObjectTypeUnitConverter objectConverter =
+                (ObjectTypeUnitConverter) ((BaseTypeConverter) typeConverter).getInternalUnitConverter(DataTypeKind.OBJECT);
+
+        if (objectConverter == null) {
+            return;
+        }
+
+        // Add RemoteEvent marshaler and unmarshaler.
+
+        objectConverter.addMarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME, (TypeConverter converter, Object value) -> {
+            RemoteEvent event = ((RemoteEvent) value).clone();
+
+            RecordType eventType = getEngine().hasEventType(event.getName()) ? getEngine().getEventType(event.getName()) : null;
+            if (eventType != null) {
+                event.setAttributes((Map<String, Object>) converter.marshal(eventType, event.getAttributes()));
+            }
+
+            event.setFeatures(FeaturesUtils.marshal(converter.getFeatureConverter(), event.getFeatures()));
+
+            return event;
+        });
+
+        objectConverter.addUnmarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME, (TypeConverter converter, Object value) -> {
+            RemoteEvent event = converter.getObjectMapper().convertValue(value, RemoteEvent.class);
+
+            if (event != null) {
+                RecordType eventType = getEngine().hasEventType(event.getName()) ? getEngine().getEventType(event.getName()) : null;
+                if (eventType != null) {
+                    event.setAttributes((Map<String, Object>) converter.unmarshal(eventType, event.getAttributes()));
+                }
+
+                event.setFeatures(FeaturesUtils.unmarshal(converter.getFeatureConverter(), event.getFeatures()));
+            }
+
+            return event;
+        });
     }
 
     @Override
@@ -402,7 +452,10 @@ public class DefaultRestApiService implements RestApiService {
                 attributes = (Map<String, Object>) typeConverter.unmarshal(eventType, attributes);
             }
 
-            Event event = sendEvent(eventName, attributes, request.getBody().getLabel(), request.getBody().getDescription(), userContext);
+            Map<String, Object> features = FeaturesUtils.unmarshal(typeConverter.getFeatureConverter(), request.getBody().getFeatures());
+
+            Event event = sendEvent(eventName, attributes, request.getBody().getLabel(), request.getBody().getDescription(), features,
+                    userContext);
 
             return setupSuccessResponse(new SendEventResponse(event.getId()), request);
         } catch (Throwable e) {
@@ -411,7 +464,8 @@ public class DefaultRestApiService implements RestApiService {
     }
 
     @Override
-    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, UserContext userContext) {
+    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, Map<String, Object> features,
+            UserContext userContext) {
         Validate.isTrue(canSendEvent(userContext, eventName), "No privileges to send the '%s' event", eventName);
 
         EventDefinition definition = getEngine().getOperations().event(eventName);
@@ -421,7 +475,16 @@ public class DefaultRestApiService implements RestApiService {
 
         definition.label(label).description(description);
 
+        if (features != null) {
+            definition.features(features);
+        }
+
         return definition.send();
+    }
+
+    @Override
+    public Event sendEvent(String eventName, Map<String, Object> attributes, String label, String description, UserContext userContext) {
+        return sendEvent(eventName, attributes, label, description, null, userContext);
     }
 
     @Override

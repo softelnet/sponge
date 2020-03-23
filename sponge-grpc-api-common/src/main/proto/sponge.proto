@@ -52,6 +52,8 @@ message Event {
   string description = 6;
   // Event attributes as a JSON string containing event aributes map corresponding a registered event record type.
   ObjectValue attributes = 7;
+  // Event features as a JSON string.
+  ObjectValue features = 8;
 }
 
 message RequestHeader {

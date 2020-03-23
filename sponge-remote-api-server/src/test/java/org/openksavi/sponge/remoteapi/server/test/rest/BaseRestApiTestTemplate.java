@@ -490,7 +490,7 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals(arg.getName().toUpperCase(), result.getName());
 
             ObjectTypeUnitConverter objectConverter =
-                    (ObjectTypeUnitConverter) ((BaseTypeConverter) client.getTypeConverter()).getUnitConverter(DataTypeKind.OBJECT);
+                    (ObjectTypeUnitConverter) ((BaseTypeConverter) client.getTypeConverter()).getInternalUnitConverter(DataTypeKind.OBJECT);
             boolean prevFindClass = objectConverter.isFindClass();
             try {
                 // Turn off searching for a class in the converter.
