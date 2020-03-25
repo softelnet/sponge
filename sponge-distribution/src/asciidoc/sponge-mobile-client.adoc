@@ -62,7 +62,7 @@ When an action call screen is displayed, provided arguments will be fetched from
 
 An action call screen can be closed by swiping right.
 
-image::screens/mobile/action_call_manage_lcd.jpg[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_manage_lcd.png[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may have read only, provided arguments to show data from the server (see the `Current LCD text` attribute). The `REFRESH` button retrieves the current values of such arguments manually.
 
@@ -72,7 +72,7 @@ Actions may have read only, provided arguments to show data from the server (see
 include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_grovepi_manage_lcd.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_manage_sensors.jpg[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_manage_sensors.png[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The action call screen allows editing the action arguments.
 
@@ -82,7 +82,7 @@ The action call screen allows editing the action arguments.
 include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_grovepi_manage_sensors.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_send_sms.jpg[title="The action call that sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_send_sms.png[title="The action call that sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions arguments may be edited in multiline text fields.
 
@@ -160,7 +160,7 @@ Actions may return contents that can be viewed for example as a HTML or a PDF fi
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_binary_result.py[lines=5..-1]
 ----
 
-image::screens/mobile/actions_console_result.jpg[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/actions_console_result.png[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return a console output, for example the result of running the `df -h` command on the server.
 
