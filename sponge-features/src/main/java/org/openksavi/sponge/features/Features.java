@@ -50,6 +50,10 @@ public final class Features {
 
     public static final String ICON = "icon";
 
+    public static final String COLOR = "color";
+
+    public static final String OPACITY = "opacity";
+
     public static final String WIDGET = "widget";
 
     public static final String GROUP = "group";
@@ -166,7 +170,9 @@ public final class Features {
 
     public static final String GEO_ATTRIBUTION = "attribution";
 
-    public static final String GEO_LATER_NAME = "geoLayerName";
+    public static final String GEO_TMS = "tms";
+
+    public static final String GEO_LAYER_NAME = "geoLayerName";
 
     public static final String REQUEST_CHANNEL = "channel";
 

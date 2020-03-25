@@ -11,6 +11,8 @@ class MpdPlayer(Action):
         self.withArgs([
             StringType("song").withLabel("Song").withNullable().withFeatures({"multiline":True, "maxLines":2}).withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
+            StringType("album").withLabel("Album").withNullable().withFeatures({"multiline":True, "maxLines":2}).withProvided(
+                ProvidedMeta().withValue().withReadOnly()),
             StringType("date").withLabel("Date").withNullable().withProvided(
                 ProvidedMeta().withValue().withReadOnly()),
             IntegerType("position").withLabel("Position").withNullable().withAnnotated().withMinValue(0).withMaxValue(100).withFeatures(
@@ -64,6 +66,8 @@ class MpdPlayer(Action):
                 currentSong = mpc.getCurrentSong()
             if "song" in context.provide:
                 context.provided["song"] = ProvidedValue().withValue(mpc.getSongLabel(currentSong) if currentSong else None)
+            if "album" in context.provide:
+                context.provided["album"] = ProvidedValue().withValue(currentSong["album"] if currentSong else None)
             if "date" in context.provide:
                 context.provided["date"] = ProvidedValue().withValue(currentSong["date"] if currentSong else None)
             if "position" in context.provide or "context" in context.submit:
