@@ -37,10 +37,10 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 public abstract class CamelProducerCustomActionAbstractTest {
 
-    @EndpointInject(uri = "mock:direct:log")
+    @EndpointInject("mock:direct:log")
     protected MockEndpoint logEndpoint;
 
-    @Produce(uri = "direct:start")
+    @Produce("direct:start")
     protected ProducerTemplate testProducer;
 
     @Inject

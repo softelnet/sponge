@@ -126,6 +126,8 @@
         <junit-platform.version>5.6.1</junit-platform.version>
         <mockito.version>3.3.3</mockito.version>
         <jcip.version>1.0-1</jcip.version>
+
+        <log4j2.version>2.13.1</log4j2.version>
     </properties>
 
     <prerequisites>
@@ -893,6 +895,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-to-slf4j</artifactId>
+                <version>${log4j2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

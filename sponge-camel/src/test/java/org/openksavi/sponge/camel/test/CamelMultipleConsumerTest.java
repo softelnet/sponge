@@ -42,22 +42,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 
+@SuppressWarnings("deprecation")
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { CamelMultipleConsumerTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @MockEndpoints
 @DirtiesContext
 public class CamelMultipleConsumerTest {
 
-    @EndpointInject(uri = "mock:direct:end")
+    @EndpointInject("mock:direct:end")
     protected MockEndpoint endEndpoint;
 
-    @EndpointInject(uri = "mock:direct:error")
+    @EndpointInject("mock:direct:error")
     protected MockEndpoint errorEndpoint;
 
-    @EndpointInject(uri = "mock:direct:log")
+    @EndpointInject("mock:direct:log")
     protected MockEndpoint logEndpoint;
 
-    @Produce(uri = "direct:test")
+    @Produce("direct:test")
     protected ProducerTemplate testProducer;
 
     @Inject

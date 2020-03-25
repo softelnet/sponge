@@ -35,8 +35,8 @@ public abstract class FeaturesUtils {
 
         Map<String, Object> result = new LinkedHashMap<>();
         if (features != null) {
-            for (String featureName : features.keySet()) {
-                result.put(featureName, converter.marshal(featureName, features.get(featureName)));
+            for (Map.Entry<String, Object> entry : features.entrySet()) {
+                result.put(entry.getKey(), converter.marshal(entry.getKey(), entry.getValue()));
             }
         }
 
@@ -50,8 +50,8 @@ public abstract class FeaturesUtils {
 
         Map<String, Object> result = new LinkedHashMap<>();
         if (features != null) {
-            for (String featureName : features.keySet()) {
-                result.put(featureName, converter.unmarshal(featureName, features.get(featureName)));
+            for (Map.Entry<String, Object> entry : features.entrySet()) {
+                result.put(entry.getKey(), converter.unmarshal(entry.getKey(), entry.getValue()));
             }
         }
 

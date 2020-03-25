@@ -989,8 +989,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         }
 
         Map<String, Map<String, Object>> result = new LinkedHashMap<>();
-        for (String argName : featuresMap.keySet()) {
-            result.put(argName, FeaturesUtils.marshal(featureConverter, featuresMap.get(argName)));
+        for (Map.Entry<String, Map<String, Object>> entry : featuresMap.entrySet()) {
+            result.put(entry.getKey(), FeaturesUtils.marshal(featureConverter, entry.getValue()));
         }
 
         return result;

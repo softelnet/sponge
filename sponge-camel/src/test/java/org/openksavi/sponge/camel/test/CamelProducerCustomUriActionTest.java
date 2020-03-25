@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
+@SuppressWarnings("deprecation")
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { CamelProducerCustomUriActionTest.TestConfig.class },
         loader = CamelSpringDelegatingTestContextLoader.class)
