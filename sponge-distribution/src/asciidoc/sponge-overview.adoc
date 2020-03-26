@@ -10,10 +10,11 @@ This documentation applies to version {projectVersion} (release date: {projectDa
 
 There are several ways to use {sponge}:
 
-* Embed {sponge} as a software library in your Java application using Maven dependency.
-* Download the {sponge} standalone command-line program and use it in your environment.
-* Run the {sponge} standalone command-line program in a Docker container.
-* Connect to an existing {sponge} instance via the REST API or the {sponge} mobile client application (currently under development).
+* *Embed* {sponge} as a software library in your *Java application* using Maven dependency.
+* Download the {sponge} *standalone command-line program* and use it in your environment.
+* Run the {sponge} *standalone command-line program in a Docker* container.
+* Connect to a {sponge} service via the *REST API*.
+* Connect to a {sponge} service via the *Sponge Remote mobile application* (currently under development).
 
 Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. *Python*, *Ruby*, *Groovy*, *JavaScript* as well as in *Java* or *Kotlin*.
 

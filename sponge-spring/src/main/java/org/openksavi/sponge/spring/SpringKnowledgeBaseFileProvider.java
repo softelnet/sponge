@@ -40,6 +40,7 @@ public class SpringKnowledgeBaseFileProvider implements KnowledgeBaseFileProvide
 
     private KnowledgeBaseFileProvider defaultKnowledgeBaseFileProvider = new DefaultKnowledgeBaseFileProvider();
 
+    @SuppressWarnings("resource")
     @Override
     public List<KnowledgeBaseReaderHolder> getReaders(SpongeEngine engine, String filename, Charset charset) {
         try {

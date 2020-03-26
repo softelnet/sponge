@@ -251,15 +251,17 @@ public abstract class BaseEvent implements Event {
             features.forEach((name, value) -> validateFeature(name, value));
         }
 
-        features = Collections.synchronizedMap(new LinkedHashMap<>(features));
+        this.features = features != null ? Collections.synchronizedMap(new LinkedHashMap<>(features)) : null;
     }
 
+    @Override
     public void addFeature(String name, Object value) {
         validateFeature(name, value);
 
         features.put(name, value);
     }
 
+    @Override
     public void addFeatures(Map<String, Object> features) {
         if (features != null) {
             features.forEach((name, value) -> validateFeature(name, value));

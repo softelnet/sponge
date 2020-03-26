@@ -1,9 +1,9 @@
 = Standalone command-line application
 For a brief introduction to the {sponge} standalone command-line application see Quickstart.
 
-If you need additional libraries (e.g. Camel components) you should place JAR files into the `lib` directory. You should use only compatible versions of these libraries.
+If you need additional libraries (e.g. Camel components) you can place JAR files into the `lib` directory. You should use only compatible versions of these libraries.
 
-The standalone command-line application doesn't support history of entered commands/expressions (i.e. upwards arrow doesn't work).
+The standalone command-line application in the interactive mode supports history of entered commands/expressions (by the upwards arrow).
 
 == Command-line options
 

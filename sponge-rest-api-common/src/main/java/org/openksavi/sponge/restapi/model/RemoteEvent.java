@@ -44,8 +44,8 @@ public class RemoteEvent implements Cloneable {
 
     private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
 
-    public RemoteEvent(String id, String name, Instant time, int priority, String label, String description,
-            Map<String, Object> attributes) {
+    public RemoteEvent(String id, String name, Instant time, int priority, String label, String description, Map<String, Object> attributes,
+            Map<String, Object> features) {
         this.id = id;
         this.name = name;
         this.time = time;
@@ -53,10 +53,7 @@ public class RemoteEvent implements Cloneable {
         this.label = label;
         this.description = description;
         setAttributes(attributes);
-    }
-
-    public RemoteEvent(String id, String name, Instant time, int priority, String label, String description) {
-        this(id, name, time, priority, label, description, Collections.emptyMap());
+        setFeatures(features);
     }
 
     public RemoteEvent() {
@@ -115,7 +112,7 @@ public class RemoteEvent implements Cloneable {
     }
 
     public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = Collections.synchronizedMap(new LinkedHashMap<>(attributes));
+        this.attributes = attributes != null ? Collections.synchronizedMap(new LinkedHashMap<>(attributes)) : null;
     }
 
     public Map<String, Object> getFeatures() {
@@ -123,7 +120,7 @@ public class RemoteEvent implements Cloneable {
     }
 
     public void setFeatures(Map<String, Object> features) {
-        this.features = Collections.synchronizedMap(new LinkedHashMap<>(features));
+        this.features = features != null ? Collections.synchronizedMap(new LinkedHashMap<>(features)) : null;
     }
 
     @Override

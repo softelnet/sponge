@@ -1,4 +1,4 @@
-= Sponge Remote - The Mobile Client Application
+= Sponge Remote mobile client application
 :page-permalink: /mobile/
 :toc:
 :appName: Sponge Remote
@@ -23,17 +23,23 @@ NOTE: The {sponge} Flutter API library is currently under development and is not
 == Functionalities
 The following chapters show the key functionalities of the mobile application.
 
+=== Navigation
+
+image::screens/mobile/drawer.png[title="The navigation drawer",width=300,pdfwidth=35%,scaledwidth=35%]
+
+The navigation drawer allows switching between the main screens.
+
 === Connections
 
-image::screens/mobile/actions_connection_list.jpg[title="Selecting a connection to the Sponge instance in the action list screen",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/actions_connection_list.png[title="Selecting a connection to the Sponge instance in the action list screen",width=300,pdfwidth=35%,scaledwidth=35%]
 
 You may configure many connections to {sponge} REST API services. The application allows you to connect to a single service at the same time.
 
-image::screens/mobile/connections.jpg[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/connections.png[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
 
 You may add, edit and remove connections to {sponge} instances as well as activate a connection. To remove a connection swipe the corresponding element.
 
-image::screens/mobile/connections_edit.jpg[title="Editing a connection to a Sponge instance",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/connections_edit.png[title="Editing a connection to a Sponge instance",width=300,pdfwidth=35%,scaledwidth=35%]
 
 A {sponge} address is the URL of the {sponge} instance.
 
@@ -41,7 +47,7 @@ The application can find nearby (i.e. located on the local network) {sponge} ser
 
 === Action list
 
-image::screens/mobile/actions.jpg[title="The action list",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/actions.png[title="The action list",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The main screen shows the list of actions defined in the connected {sponge} engine. Only actions that have argument and result metadata are available. This is because the application uses a generic access to the actions utilizing their data types, labels, descriptions, features and so on. The number in the action icon is the number of action arguments.
 
@@ -51,16 +57,12 @@ The floating button allows to refresh the action list from the server. The refre
 
 NOTE: The application currently doesn't supports all {sponge} data types.
 
-=== Navigation
-
-image::screens/mobile/drawer.jpg[title="The navigation drawer",width=300,pdfwidth=35%,scaledwidth=35%]
-
-The navigation drawer allows switching between the available main views.
-
 === Action call
 When an action call screen is displayed, provided arguments will be fetched from the server.
 
-image::screens/mobile/action_call_manage_lcd.jpg[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
+An action call screen can be closed by swiping right.
+
+image::screens/mobile/action_call_manage_lcd.png[title="The action call that manages the Raspberry Pi LCD display",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may have read only, provided arguments to show data from the server (see the `Current LCD text` attribute). The `REFRESH` button retrieves the current values of such arguments manually.
 
@@ -70,7 +72,7 @@ Actions may have read only, provided arguments to show data from the server (see
 include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_grovepi_manage_lcd.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_manage_sensors.jpg[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_manage_sensors.png[title="The action call that manages the Grove Pi sensors and actuators",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The action call screen allows editing the action arguments.
 
@@ -80,7 +82,7 @@ The action call screen allows editing the action arguments.
 include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_grovepi_manage_sensors.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_send_sms.jpg[title="The action call that sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_send_sms.png[title="The action call that sends an SMS from the Raspberry Pi",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions arguments may be edited in multiline text fields.
 
@@ -90,7 +92,7 @@ Actions arguments may be edited in multiline text fields.
 include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_sms.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_color.jpg[title="The action call argument editor for a color type",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_color.png[title="The action call argument editor for a color type",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The color picker widget allows a user to choose a color as an argument value.
 
@@ -100,7 +102,7 @@ The color picker widget allows a user to choose a color as an argument value.
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_choose_color.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_digit_drawing.jpg[title="The action call argument editor for a digit drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_digit_drawing.png[title="The action call argument editor for a digit drawing",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The drawing panel allows a user to paint an image that will be set as an argument value in an action call.
 
@@ -110,11 +112,11 @@ The drawing panel allows a user to paint an image that will be set as an argumen
 include::{rootDir}/sponge-tensorflow/examples/tensorflow/digits/actions/digits_predict.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_digit.jpg[title="The action call for an attribute of type drawing",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_digit.png[title="The action call for an attribute of type drawing",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The action call screen shows all action arguments.
 
-image::screens/mobile/action_call_digit_result.jpg[title="The action call result for a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_digit_result.png[title="The action call result for a digit recognition",width=300,pdfwidth=35%,scaledwidth=35%]
 
 If the action has been called, the result is shown below the action label. If the result can't be fully shown in the action list, you may tap the result to see the details.
 
@@ -132,7 +134,7 @@ image::screens/mobile/action_call_doodle.jpg[title="The action call for a doodle
 
 The action call screen shows all action arguments, for example a drawing.
 
-image::screens/mobile/action_call_arg_depends.jpg[title="The action call that shows argument dependencies",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_arg_depends.png[title="The action call that shows argument dependencies",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Action arguments may depend on each other. Argument dependencies are supported in the action call panel and allow creating simple, interactive forms where some arguments are provided by the server, some entered by the user, some read only and some depend on the values of others. The important thing is that all that configuration is defined in an action in a knowledge base placed on the server side, not in the mobile application.
 
@@ -142,13 +144,13 @@ Action arguments may depend on each other. Argument dependencies are supported i
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_depending.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_call_arg_depends_value_set.jpg[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_arg_depends_value_set.png[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Allowed argument values can be defined in an action and provided from the server every time the action call screen is shown or an argument dependency value changes.
 
 === Action result
 
-image::screens/mobile/actions_binary_result.jpg[title="The action binary result",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/actions_binary_result.png[title="The action binary result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return contents that can be viewed for example as a HTML or a PDF file using the mobile OS viewers.
 
@@ -158,7 +160,7 @@ Actions may return contents that can be viewed for example as a HTML or a PDF fi
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_binary_result.py[lines=5..-1]
 ----
 
-image::screens/mobile/actions_console_result.jpg[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/actions_console_result.png[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return a console output, for example the result of running the `df -h` command on the server.
 
@@ -168,7 +170,7 @@ Actions may return a console output, for example the result of running the `df -
 include::{completeExamplesProject}/sponge-examples-project-iot-rpi/kb/sponge_iot_os.py[lines=5..-1]
 ----
 
-image::screens/mobile/actions_markdown_result.jpg[title="The action Markdown formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/actions_markdown_result.png[title="The action Markdown formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
 
 Actions may return a https://en.wikipedia.org/wiki/Markdown[Markdown] formatted text.
 
@@ -180,12 +182,14 @@ There are a few places where {sponge} events are directly used in the applicatio
 * An event list screen (handles events subscribed globally for the application).
 * An action call screen for actions that have _refresh events_ configured (handles events subscribed locally for an action).
 
+image::screens/mobile/actions_events.png[title="Event related actions",width=300,pdfwidth=35%,scaledwidth=35%]
+
 ==== Event subscription
 Events can be subscribed globally for the application. Subscription management is performed by a subscription action, i.e. an action that has the `intent` feature set to `subscription`. {sponge} provides a default subscription action `GrpcApiManageSubscription`.
 
 In case of a new event an operating system notification will be displayed.
 
-image::screens/mobile/event_subscription_management.jpg[title="Event subscription management",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/event_subscription_management.png[title="Event subscription management",width=300,pdfwidth=35%,scaledwidth=35%]
 
 ==== Event list
 The event list screen shows all events the application has subscribed for but only those that has been sent when the application is running.
@@ -194,7 +198,7 @@ By tapping on an event the user will be directed to a screen presenting an actio
 
 If there is no event handler action defined for a specific event type, a default event handler action will be shown. The default action is searched by its `intent` feature which has to be `defaultEventHandler`. {sponge} provides a default event handler action `GrpcApiViewEvent`.
 
-image::screens/mobile/event_list.jpg[title="Event list",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/event_list.png[title="Event list",width=300,pdfwidth=35%,scaledwidth=35%]
 
 .Event type with a default event handler action
 [source,python]
@@ -202,7 +206,7 @@ image::screens/mobile/event_list.jpg[title="Event list",width=300,pdfwidth=35%,s
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_notification.py[lines=5..-1]
 ----
 
-image::screens/mobile/event_handler_action_notification.jpg[title="Default event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/event_handler_action_notification.png[title="Default event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
 
 .Event type with a custom event handler action
 [source,python]
@@ -210,7 +214,7 @@ image::screens/mobile/event_handler_action_notification.jpg[title="Default event
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_memo.py[lines=5..-1]
 ----
 
-image::screens/mobile/event_handler_action_memo.jpg[title="Custom event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/event_handler_action_memo.png[title="Custom event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
 
 ==== Action with refresh events
 Every action can have _refresh events_ configured. When such an action is shown in the GUI, the application will subscribe to refresh events. When such event arrives, the action arguments will be automatically refreshed. Event arguments are ignored.
@@ -221,12 +225,12 @@ Every action can have _refresh events_ configured. When such an action is shown 
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_counter_viewer.py[lines=5..-1]
 ----
 
-image::screens/mobile/actions_counter.jpg[title="Action with refresh events",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_counter.png[title="Action with refresh events",width=300,pdfwidth=35%,scaledwidth=35%]
 
 ==== Sending events
 Events can be sent by the application using an action. {sponge} provides a default, generic action for sending events `GrpcApiSendEvent`.
 
-image::screens/mobile/event_send.jpg[title="Action that sends events",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/event_send.png[title="Action that sends events",width=300,pdfwidth=35%,scaledwidth=35%]
 
 [[mobile-advanced-use-cases]]
 == Advanced use cases
@@ -234,7 +238,7 @@ image::screens/mobile/event_send.jpg[title="Action that sends events",width=300,
 === Context actions
 Context actions can be specified for actions, record arguments and list elements (see the list-details) to provide related, customized sub-actions. Context actions should be specified as the `contextActions` feature statically for a type or an action or dynamically for an annotated value. The latter option takes precedence.
 
-image::screens/mobile/action_context_actions.jpg[title="The action with context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_context_actions.png[title="The action with context actions",width=300,pdfwidth=35%,scaledwidth=35%]
 
 .The definition of the action with context actions
 [source,python]
@@ -272,27 +276,25 @@ Before showing a list of context actions the application checks (by connecting t
 
 === List-details
 
-image::screens/mobile/action_form_list_actions_list.jpg[title="The list-details action in the action list",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_actions_list.png[title="The list-details action in the action list",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_main_action.jpg[title="The list-details main action screen",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_main_action.png[title="The list-details main action screen",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subactions.jpg[title="The CRUD and context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subactions.png[title="The CRUD and context actions",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_create.jpg[title="The create/add sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_create.png[title="The create/add sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_read.jpg[title="The read/view sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_read.png[title="The read/view sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_update.jpg[title="The update/modify sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_update.png[title="The update/modify sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_delete.jpg[title="The delete/remove sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_delete.png[title="The delete/remove sub-action",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_context_binary.jpg[title="The context action returning a binary result",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_context_binary.png[title="The context action returning a binary result",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_context_no_result.jpg[title="The context action with no result",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_context_args.png[title="The context action with an additional argument",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/action_form_list_details_subaction_context_args.jpg[title="The context action with an additional argument",width=300,pdfwidth=35%,scaledwidth=35%]
-
-image::screens/mobile/action_form_list_details_subaction_context_args_result.jpg[title="The result of the context action with an additional argument",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_form_list_details_subaction_context_args_result.png[title="The result of the context action with an additional argument",width=300,pdfwidth=35%,scaledwidth=35%]
 
 .The definitions of actions implementing the list-details
 [source,python]
@@ -323,9 +325,38 @@ The following example shows a very simple MPD player implemented as a {sponge} a
 include::{completeExamplesProject}/sponge-examples-project-mpd-mpc/kb/mpd_mpc_player.py[lines=5..-1]
 ----
 
-image::screens/mobile/actions_mpd_player_main.jpg[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_mpd_player_main.png[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/actions_mpd_player_context_actions.jpg[title="The context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_mpd_player_context_actions.png[title="The context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+
+=== Geographical map
+`ListType` elements can be shown on a geographical map if its list type has the `geoMap` feature configured.
+
+Each list element that has the `geoPosition` feature will be displayed on the map. You can tap on an icon that represents an element to see the element label and its context actions.
+
+If an action has only one argument which is a list with a geo map and the action has no buttons, the map will be displayed in a full action call screen. If a list with a geo map is an argument in an action that doesn't meet that criteria, the action call screen will display only a button for this argument. If the button is tapped a map screen will be shown.
+
+If a list element has the `geoLayerName` feature that corresponds to a configured marker layer name, it will be assigned to that layer. If there is no marker layer configured, a default one with the `null` name will be created.
+
+NOTE: The map functionality is experimental.
+
+.Geographical map example
+[source,python]
+----
+include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_geo_map.py[lines=5..-1]
+----
+
+image::screens/mobile/action_call_geo_map_overview.png[title="The map overview",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_geo_map_menu.png[title="The main map menu",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_geo_map_no_clusters.png[title="The map with expanded clusters",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_geo_map_badges.png[title="The map with element badges",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_geo_map_context_actions.png[title="The element context actions menu",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_call_geo_map_context_action_call.png[title="The element context action call",width=300,pdfwidth=35%,scaledwidth=35%]
 
 === Choose dialog
 A choose dialog can be used to pick a value and pass it as a result to a parent action argument.
@@ -336,15 +367,19 @@ A choose dialog can be used to pick a value and pass it as a result to a parent 
 include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_setter_context_actions_list.py[lines=5..-1]
 ----
 
-image::screens/mobile/actions_call_choose_dialog_parent.png[title="The choose dialog parent action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_choose_dialog_parent.png[title="The choose dialog parent action",width=300,pdfwidth=35%,scaledwidth=35%]
 
-image::screens/mobile/actions_call_choose_dialog.png[title="The choose dialog action",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/action_call_choose_dialog.png[title="The choose dialog action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+== Settings
+
+image::screens/mobile/settings.png[title="The application settings",width=300,pdfwidth=35%,scaledwidth=35%]
 
 == User experience
 
-image::screens/mobile/dark_theme.jpg[title="The application dart theme",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/light_theme.png[title="The application light theme",width=300,pdfwidth=35%,scaledwidth=35%]
 
-The application may be switched to the dark or light theme in the settings.
+The application may be switched to the dark or the light theme in the settings.
 
 == Supported {sponge} concepts
 
@@ -427,246 +462,331 @@ The application may be switched to the dark or light theme in the settings.
 === Features
 
 .Supported features
-[cols="1,1,3"]
+[cols="1,1,1,3"]
 |===
-|Feature |Applies to |Description
+|Feature |Type |Applies to |Description
 
 |`visible`
+|`boolean`
 |Action
 |If `True`, an action will be visible in the main list of actions in the application. Defaults to `true`.
 
 |`visible`
+|`boolean`
 |Type
 |If `True`, an action argument or a record field is visible in the action call screen. Defaults to `true`.
 
 |`visible`
+|`boolean`
 |`GeoLayer`
 |If `True`, a map layer will be initially visible on a map. Defaults to `true`.
 
 |`enabled`
+|`boolean`
 |Type
 |If `True`, an action argument or a record field is enabled for editing. Defaults to `true`.
 
 |`refreshable`
+|`boolean`
 |`ListType`
 |If `True`, a provided list will have a button to refresh (i.e. provide arguments from the server). Defaults to `false`.
 
 |`icon`
+|`IconInfo` or `String`
 |Action
 |An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.0.45/[material design icons (currently v5.0.45)].
 
 |`icon`
+|`IconInfo` or `String`
 |Type
-|An type icon. Currently supported only for list elements.
+|A type icon. Currently supported only for list elements.
 
 |`icon`
+|`IconInfo` or `String`
 |`GeoMarkerLayer`
 |A map marker layer icon. Shows a layer marker on a map as a specified icon.
 
 |`widget`
+|`String`
 |Type
 |A GUI widget type. See the table below for supported values. Support for this feature is limited. In most cases a default, opinionated widget will be used.
 
 |`group`
+|`String`
 |Type
 |A name of a group of action arguments or record fields. Grouped values will be placed in a compact GUI panel close to each other, if it is possible.
 
+|`group`
+|`String`
+|`GeoLayer`
+|Map layers that have the same `group` will be grouped and only one of them will be visible at the same time.
+
 |`key`
+|`String`
 |Action argument type
 |A name of other argument whose value will be used as a key (or a key fragment) of a GUI widget. For example it enables saving a scroll position in a list. This feature is experimental and is currently implemented only for pageable lists.
 
 |`responsive`
+|`boolean`
 |Type
 |A responsive GUI widget. If this feature is set for a provided type, every change in GUI will cause invoking a `provideActionArgs` operation. This feature may be resource consuming (especially when used with an _argument submit_ option) because of possible many server roundtrips.
 
 |`confirmation`
+|`boolean`
 |Action
 |If `True` then before calling the action a confirmation dialog will be shown. Defaults to `false`.
 
 |`characteristic`
+|`String`
 |Type
 |A value of this feature indicates a special meaning of the type.
 
-|`characteristic: drawing`
-|`BinaryType`
-|A `BinaryType` that represents a drawing. Currently supported only for mime type `image/png`.
-
-|`characteristic: color`
-|`StringType`
-|A `StringType` that represents a color as a hexadecimal RGB string.
-
 |`filename`
+|`String`
 |`BinaryType`
 |A filename associated with a binary value.
 
 |`intent`
+|`String`
 |Action
 |An action with an intent is handled by the application in a specific way.
 
-|`intent: login`
-|Action
-|Should be set in an action that represents a user _login_ in the user management functionality. See {sourcesUrl}/sponge-examples-projects/sponge-examples-project-user-management[the user management example project].
-
-|`intent: logout`
-|Action
-|Should be set in an action that represents a user _logout_ in the user management functionality.
-
-|`intent: signUp`
-|Action
-|Should be set in an action that implements a user _sign up_ in the user management functionality.
-
-|`intent: subscription`
-|Action
-|Should be set in an action that manages event subscriptions.
-
-|`intent: defaultEventHandler`
-|Action
-|A default event handler action.
-
-|`intent: reload`
-|Action
-|Should be set in an action that reloads knowledge bases. Refreshes actions cached in a mobile application.
-
-|`intent: reset`
-|Action
-|Refreshes actions cached in a mobile application after an action call.
-
 |`intent`
+|`String`
 |Type
 |A type with an intent is handled by the application in a specific way.
 
-|`intent: username`
-|Action argument type
-|Indicates that the action argument represents a username. Applies only to actions that implement the user management functionality. This intent may be omitted if an action argument name is `username`.
-
-|`intent: password`
-|Action argument type
-|Indicates that the action argument represents a password. Applies only to actions that implement the user management functionality. This intent may be omitted if an action argument name is `password`.
-
-|`intent: eventNames`
-|Action argument type
-|Indicates that the action argument represents event names to subscribe. Applies only to event subscription actions.
-
-|`intent: subscribe`
-|Action argument type
-|Indicates that the action argument represents a flag telling if to turn on or off an event subscribtion. Applies only to event subscription actions.
-
 |`refreshEvents`
+|`List<String>`
 |Action
 |Refresh event names for an action.
 
 |`handlerAction`
+|`String`
 |Event type
 |An event handler action name.
 
 |`multiline`
+|`boolean`
 |`StringType`
 |If `True`, a string will be multilined in the GUI. Defaults to `false`.
 
 |`maxLines`
+|`int`
 |`StringType`
 |A maximum number of lines in the GUI.
 
 |`obscure`
+|`boolean`
 |`StringType`
 |If `True`, a string will be obscured in the GUI, e.g. in case of passwords. Defaults to `false`.
 
 |`showCall`
+|`boolean`
 |Action
 |An action call button will be shown in the action call screen. Defaults to `true`.
 
 |`showRefresh`
+|`boolean`
 |Action
 |An action arguments refresh button will be shown in the action call screen. Defaults to `false`. The refresh button fetches provided action arguments from the server. Only arguments provided with read only or overwrite flags will be refreshed.
 
 |`showClear`
+|`boolean`
 |Action
 |An action arguments clear button will be shown in the action call screen. Defaults to `false`. The clear button resets the action argument values.
 
 |`showCancel`
+|`boolean`
 |Action
 |A cancel button will be shown in the action call screen. Defaults to `false`.
 
 |`callLabel`
+|`String`
 |Action
 |An action call button label in the action call screen. Defaults to `RUN` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`refreshLabel`
+|`String`
 |Action
 |An action refresh button label in the action call screen. Defaults to `REFRESH` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`clearLabel`
+|`String`
 |Action
 |An action clear button label in the action call screen. Defaults to `CLEAR` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`cancelLabel`
+|`String`
 |Action
 |An action cancel button label in the action call screen. Defaults to `CANCEL` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`contextActions`
+|`List<String>`
 |Action, `RecordType`, `ListType` action argument
 |Context actions. For more information on context actions and sub-actions see the <<mobile-advanced-use-cases,Advanced use cases>> chapter.
 
 |`cacheableArgs`
+|`boolean`
 |Action
 |A flag indicating that the action argument values can be cached (i.e. preserved between this action call screens) in a client. Defaults to `true`.
 
 |`cacheableContextArgs`
+|`boolean`
 |Action
 |A flag indicating that argument values of the action that is used as a _context action_ can be cached (i.e. preserved between this action call screens) in a client. Defaults to `false`. If set to `true` the `cacheableArgs` should be `true` as well.
 
 |`createAction`
+|`String`
 |`ListType` action argument
 |A _create_ sub-action for a list element.
 
 |`readAction`
+|`String`
 |`ListType` action argument
 |A _read_ sub-action for a list element.
 
 |`updateAction`
+|`String`
 |`ListType` action argument
 |A _update_ sub-action for a list element.
 
 |`deleteAction`
+|`String`
 |`ListType` action argument
 |A _delete_ sub-action for a list element.
 
 |`activateAction`
+|`String`
 |`ListType` action argument
 |An action that will be called on list element tap. If the action string has the special value `submit`, then instead of calling an action, a `provideActionArgs` will be invoked with the submitted list element.
 
 |`width`
+|`int`
 |`BinaryType` drawing
 |An image width.
 
 |`height`
+|`int`
 |`BinaryType` drawing
 |An image height.
 
 |`strokeWidth`
+|_number_
 |`BinaryType` drawing
 |A drawing stroke width.
 
-|`color`
-|`BinaryType` drawing
-|A drawing pen color.
-
 |`background`
+|`String`
 |`BinaryType` drawing
 |A drawing background color.
 
+|`color`
+|`String`
+|`BinaryType` drawing
+|A drawing pen color.
+
+|`color`
+|`String`
+|`GeoMap`
+|A map background color.
+
+|`opacity`
+|`boolean`
+|`GeoTileLayer`
+|A map tile layer opacity as a double value between 0 and 1.
+
 |`scroll`
+|`boolean`
 |`ListType`
-|A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists. This feature is only supported for main action arguments (i.e. not nested).
+|A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists. This feature is only supported for main action arguments (i.e. not nested). Defaults to `false`.
 
 |`geoMap`
+|`GeoMap`
 |`ListType`
 |Shows list elements in a geographical map. List elements should be of an annotated type and should contain geo position annotations. Supports https://en.wikipedia.org/wiki/Tiled_web_map[XYZ tiling] schemes as basemaps for list data. A `ListType` that has this feature should not be pageable.
+
+|`tms`
+|`boolean`
+|`GeoTileLayer`
+|A flag that informs if a tile layer service is https://en.wikipedia.org/wiki/Tile_Map_Service[TMS]. Defaults to `false`.
+|===
+
+Colors are represented by a hexadecimal value specified with `RRGGBB` (Red, Green, Blue), e.g. `"FF0000"`.
+
+A _number_ can be an integer or a floating point value.
+
+==== Intents
+
+.Supported values for the `intent` feature
+[cols="1,1,5"]
+|===
+|Intent |Applies to |Description
+
+|`login`
+|Action
+|Should be set in an action that represents a user _login_ in the user management functionality. See {sourcesUrl}/sponge-examples-projects/sponge-examples-project-user-management[the user management example project].
+
+|`logout`
+|Action
+|Should be set in an action that represents a user _logout_ in the user management functionality.
+
+|`signUp`
+|Action
+|Should be set in an action that implements a user _sign up_ in the user management functionality.
+
+|`subscription`
+|Action
+|Should be set in an action that manages event subscriptions.
+
+|`defaultEventHandler`
+|Action
+|A default event handler action.
+
+|`reload`
+|Action
+|Should be set in an action that reloads knowledge bases. Refreshes actions cached in a mobile application.
+
+|`reset`
+|Action
+|Refreshes actions cached in a mobile application after an action call.
+
+|`username`
+|Action argument type
+|Indicates that the action argument represents a username. Applies only to actions that implement the user management functionality. This intent may be omitted if an action argument name is `username`.
+
+|`password`
+|Action argument type
+|Indicates that the action argument represents a password. Applies only to actions that implement the user management functionality. This intent may be omitted if an action argument name is `password`.
+
+|`eventNames`
+|Action argument type
+|Indicates that the action argument represents event names to subscribe. Applies only to event subscription actions.
+
+|`subscribe`
+|Action argument type
+|Indicates that the action argument represents a flag telling if to turn on or off an event subscribtion. Applies only to event subscription actions.
+|===
+
+==== Characteristic
+
+.Supported values for the `characteristic` feature
+[cols="1,1,5"]
+|===
+|Characteristic |Applies to |Description
+
+|`drawing`
+|`BinaryType`
+|A `BinaryType` that represents a drawing. Currently supported only for the `image/png` mime type.
+
+|`color`
+|`StringType`
+|A `StringType` that represents a color as a hexadecimal RGB string.
 |===
 
 ==== Widgets
 
-.Supported widget types for a `widget` feature
+.Supported widget types for the `widget` feature
 [cols="1,5"]
 |===
 |Widget |Description
@@ -683,27 +803,32 @@ A data type property can be dynamically overwritten by a corresponding feature i
 ==== List pagination
 
 .List pagination features
-[cols="1,1,3"]
+[cols="1,1,1,3"]
 |===
-|Feature |Applies to |Description
+|Feature |Type |Applies to |Description
 
 |`pageable`
+|`boolean`
 |`ListType`
 |If `True`, a list will be pageable. Defaults to `false`. A pageable list type has to be annotated, because values of offset, limit and count are passed by features in an annotated list value. A pageable list is assumed to have the `scroll` feature set to `true`.
 
 |`offset`
+|`int`
 |`ListType` annotated value
 |An offset of the first element of a page.
 
 |`limit`
+|`int`
 |`ListType` annotated value
 |A limit of a page, i.e. a maximum number of elements in a page.
 
 |`count`
+|`int`
 |`ListType` annotated value
 |A count of all available elements of a list. This value is optional.
 
 |`indicatedIndex`
+|`int`
 |`ListType` annotated value
 |An optional index of a single indicated element in a list. This feature is experimental and is implemented only for pageable lists with a limited functionality. If an element is indicated, the GUI will show a button enabling a user to jump to that element (but only if a page containing such element is already loaded from the server). Another limitation is that a jump resets a saved scroll position of a list. To use this feature in the application, you have to turn the application setting "_Use scrollable indexed list_" on.
 |===
@@ -715,9 +840,14 @@ The pagination is supported only for primary (i.e. not nested) action arguments 
 The pagination works only _forward_, i.e. all previous list elements fetched from the server are stored in mobile device memory.
 
 ==== Geographical map
-A geographical map feature is represented by the `GeoMap` class that contains layers (instances of `GeoLayer`).
+A geographical map feature is represented by the `GeoMap` class that contains layers as instances of `GeoLayer`:
 
-.Map properties
+* `GeoTileLayer` represents a tile layer,
+* `GeoMarkerLayer` represents marker layers.
+
+A geographical position is represented by `GeoPosition`.
+
+.Map (`GeoMap`) properties
 [cols="1,1,3"]
 |===
 |Property |Type |Description
@@ -747,26 +877,36 @@ A geographical map feature is represented by the `GeoMap` class that contains la
 |Map features.
 |===
 
-.Map layer properties
+.Common map layer (`GeoLayer`) properties
 [cols="1,1,3"]
 |===
 |Property |Type |Description
 
 |`name`
 |`String`
-|A map name.
+|A layer name.
 
 |`label`
 |`String`
-|A map label.
+|A layer label.
 
 |`description`
 |`String`
-|A map description.
+|A layer description.
+
+|`features`
+|`Map<String, Object>`
+|Layer features.
+|===
+
+.Additional map tile layer (`GeoTileLayer`) properties
+[cols="1,1,3"]
+|===
+|Property |Type |Description
 
 |`urlTemplate`
 |`String`
-|A map URL template.
+|A tile service URL template.
 
 |`subdomains`
 |`List<String>`
@@ -774,14 +914,10 @@ A geographical map feature is represented by the `GeoMap` class that contains la
 
 |`options`
 |`Map<String, String>`
-|Layer additional options.
-
-|`features`
-|`Map<String, Object>`
-|Layer features.
+|Additional layer options.
 |===
 
-.Geographical position properties
+.Geographical position (`GeoPosition`) properties
 [cols="1,1,3"]
 |===
 |Property |Type |Description
@@ -803,6 +939,6 @@ The {sponge} Digit Recognition mobile application is an example of using a custo
 
 NOTE: The {sponge} Digit Recognition application is currently under development and is not officially published. It will be released as an open source.
 
-image::screens/mobile/digits_drawing.jpg[title="The digit recognition - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
+image::screens/mobile/digits_drawing.png[title="The digit recognition - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The application allows drawing a digit that will be recognized by a {sponge} action. After each stroke the remote action call is made and the result is shown in the circle.

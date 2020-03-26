@@ -28,7 +28,6 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spring.javaconfig.SingleRouteCamelConfiguration;
 import org.apache.camel.support.processor.idempotent.MemoryIdempotentRepository;
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.apache.camel.test.spring.MockEndpoints;
 import org.junit.Test;
@@ -43,7 +42,7 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { CamelRssTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { CamelRssTest.TestConfig.class })
 @MockEndpoints
 @DirtiesContext
 public class CamelRssTest {

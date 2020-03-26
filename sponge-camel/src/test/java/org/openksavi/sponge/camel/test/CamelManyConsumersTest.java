@@ -37,13 +37,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 
+@SuppressWarnings("deprecation")
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = { CamelManyConsumersTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
 @MockEndpoints
 @DirtiesContext
 public class CamelManyConsumersTest {
 
-    @EndpointInject(uri = "mock:direct:log")
+    @EndpointInject("mock:direct:log")
     protected MockEndpoint logEndpoint;
 
     @Inject

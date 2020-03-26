@@ -263,8 +263,13 @@ mvn jetty:run
 ----
 
 [discrete]
-=== OpenStreetMap tiles servers usage
-The example action `Action with a geo map` (`ActionWithGeoMap`) uses the OpenStreetMap tiles servers to show a base map. Please see the https://operations.osmfoundation.org/policies/tiles/[Tile Usage Policy] requirements.
+=== Tiles servers usage in maps
+The example action `Action with a geo map` (`ActionWithGeoMap`) uses the tiles servers to show a base map:
+
+* OpenStreetMap. Please see the https://operations.osmfoundation.org/policies/tiles/[OpenStreetMap Tile Usage Policy] requirements.
+* Google. Please see the https://cloud.google.com/maps-platform/terms[Google Maps Terms of Service].
+
+You may use other online XYZ tile map servers as well.
 
 [[iot-rpi-service]]
 == IoT on Raspberry Pi project

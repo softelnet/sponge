@@ -160,7 +160,6 @@ public class DefaultRestApiService implements RestApiService {
         typeConverter.setFeatureConverter(featureConverter);
     }
 
-    @SuppressWarnings("unchecked")
     protected void initObjectTypeMarshalers(TypeConverter typeConverter) {
         ObjectTypeUnitConverter objectConverter =
                 (ObjectTypeUnitConverter) ((BaseTypeConverter) typeConverter).getInternalUnitConverter(DataTypeKind.OBJECT);
@@ -170,34 +169,12 @@ public class DefaultRestApiService implements RestApiService {
         }
 
         // Add RemoteEvent marshaler and unmarshaler.
-
-        objectConverter.addMarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME, (TypeConverter converter, Object value) -> {
-            RemoteEvent event = ((RemoteEvent) value).clone();
-
-            RecordType eventType = getEngine().hasEventType(event.getName()) ? getEngine().getEventType(event.getName()) : null;
-            if (eventType != null) {
-                event.setAttributes((Map<String, Object>) converter.marshal(eventType, event.getAttributes()));
-            }
-
-            event.setFeatures(FeaturesUtils.marshal(converter.getFeatureConverter(), event.getFeatures()));
-
-            return event;
-        });
-
-        objectConverter.addUnmarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME, (TypeConverter converter, Object value) -> {
-            RemoteEvent event = converter.getObjectMapper().convertValue(value, RemoteEvent.class);
-
-            if (event != null) {
-                RecordType eventType = getEngine().hasEventType(event.getName()) ? getEngine().getEventType(event.getName()) : null;
-                if (eventType != null) {
-                    event.setAttributes((Map<String, Object>) converter.unmarshal(eventType, event.getAttributes()));
-                }
-
-                event.setFeatures(FeaturesUtils.unmarshal(converter.getFeatureConverter(), event.getFeatures()));
-            }
-
-            return event;
-        });
+        objectConverter.addMarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME,
+                (TypeConverter converter, Object value) -> RestApiUtils.marshalRemoteEvent((RemoteEvent) value, converter,
+                        eventName -> getEngine().getEventTypes().get(eventName)));
+        objectConverter.addUnmarshaler(RestApiConstants.REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME,
+                (TypeConverter converter, Object value) -> RestApiUtils.unmarshalRemoteEvent(value, converter,
+                        eventName -> getEngine().getEventTypes().get(eventName)));
     }
 
     @Override
