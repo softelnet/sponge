@@ -474,7 +474,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
                 throw exceptionHolder.get();
             }
 
-            logger.debug("Sponge is terminated");
+            logger.debug("Sponge is shut down");
         } catch (Throwable e) {
             throw SpongeUtils.wrapException("shutdown", e);
         } finally {

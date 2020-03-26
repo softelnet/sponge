@@ -3,13 +3,17 @@ Sponge Knowledge base
 Demo
 """
 
-from java.lang import String
+from java.lang import String, Boolean
 from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.time.format import DateTimeFormatter
 from java.time import LocalDateTime
 from org.apache.commons.io import IOUtils
 
 def onInit():
+    sponge.setVariable("demo.readOnly", Boolean.valueOf(sponge.getProperty("demo.readOnly", "false")))
+    if sponge.getVariable("demo.readOnly"):
+        sponge.logger.info("RUNNING IN THE READ ONLY MODE")
+
     sponge.addCategories(
         CategoryMeta("basic").withLabel("Basic"),
         CategoryMeta("forms").withLabel("Forms"),

@@ -54,6 +54,7 @@ asciidoctor:
     - sponge=Sponge
     - rootDir=root
     - includesRootDir=../{rootDir}
+    - completeExamplesProjectIncludes={includesRootDir}/sponge-examples-projects
     - completeExamplesProject={rootDir}/sponge-examples-projects
     - standaloneDir=sponge-${release.version}
     - standalonePackage=sponge-{projectVersion}-standalone

@@ -16,49 +16,49 @@ Event flow:
 .Main class - NewsExampleMain
 [source,java]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/src/main/java/org/openksavi/sponge/examples/project/news/NewsExampleMain.java[lines=17..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/src/main/java/org/openksavi/sponge/examples/project/news/NewsExampleMain.java[lines=17..-1]
 ----
 
 .{sponge} XML configuration file - config.xml
 [source,xml]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/config/config.xml[]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/config/config.xml[]
 ----
 
 .Python-based knowledge base 'main' file - main_event_processors.py
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/kb/main_event_processors.py[lines=5..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/kb/main_event_processors.py[lines=5..-1]
 ----
 
 .Python-based knowledge base 'main' file - main_functions.py
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/kb/main_functions.py[lines=5..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/kb/main_functions.py[lines=5..-1]
 ----
 
 .Python-based knowledge base 'main' file - main_plugins.py
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/kb/main_plugins.py[lines=5..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/kb/main_plugins.py[lines=5..-1]
 ----
 
 .JavaScript-based knowledge base 'actions' file - actions.js
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/kb/actions.js[actions.js]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/kb/actions.js[actions.js]
 ----
 
 .Python-based knowledge base that generates sample news - news_generator.py
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/kb/news_generator.py[lines=5..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/kb/news_generator.py[lines=5..-1]
 ----
 
 .Java-based plugin class - MultiEchoPlugin
 [source,java]
 ----
-include::{completeExamplesProject}/sponge-examples-project-news/src/main/java/org/openksavi/sponge/examples/project/news/MultiEchoPlugin.java[lines=17..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-news/src/main/java/org/openksavi/sponge/examples/project/news/MultiEchoPlugin.java[lines=17..-1]
 ----
 
 == Camel RSS News project
@@ -82,36 +82,40 @@ Event flow:
 .Main class - CamelRssNewsExampleMain
 [source,java]
 ----
-include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/src/main/java/org/openksavi/sponge/examples/project/camelrssnews/CamelRssNewsExampleMain.java[lines=17..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-camel-rss-news/src/main/java/org/openksavi/sponge/examples/project/camelrssnews/CamelRssNewsExampleMain.java[lines=17..-1]
 ----
 
 .Spring Java configuration - SpringConfiguration
 [source,java]
 ----
-include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/src/main/java/org/openksavi/sponge/examples/project/camelrssnews/SpringConfiguration.java[lines=17..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-camel-rss-news/src/main/java/org/openksavi/sponge/examples/project/camelrssnews/SpringConfiguration.java[lines=17..-1]
 ----
 
 .{sponge} XML configuration file - config.xml
 [source,xml]
 ----
-include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/config/config.xml[]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-camel-rss-news/config/config.xml[]
 ----
 
 .Python-based extended configuration - config.py
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/config.py[lines=5..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-camel-rss-news/kb/config.py[lines=5..-1]
 ----
 
 .Python-based knowledge base that sends messages to Camel as a consumer - consumer.py
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-camel-rss-news/kb/consumer.py[lines=5..-1]
+include::{completeExamplesProjectIncludes}/sponge-examples-project-camel-rss-news/kb/consumer.py[lines=5..-1]
 ----
 
 [[rest-api-demo-service]]
 == REST API Demo Service project
-The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>. There are a few options to run the demo.
+The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+
+The demo can be launched in the read only mode by setting the Java system property `-Ddemo.readOnly=true`.
+
+There are a few options to run the demo.
 
 [discrete]
 === Using the hosted Demo Service
@@ -121,6 +125,8 @@ The Demo Service hosted at `https://spongedemoapi.openksavi.org` provides an ano
 ----
 curl -H "Content-type:application/json" https://spongedemoapi.openksavi.org/version
 ----
+
+NOTE: The hosted Demo Service runs in the read only mode.
 
 [discrete]
 === Running in Docker
@@ -227,6 +233,9 @@ sponge.home=/opt/tomcat/sponge
 digits.home=/opt/tomcat/sponge/digits
 password.file=/opt/tomcat/sponge/password.txt
 sponge.grpc.port=8081
+
+# Optionally set the read only mode
+# demo.readOnly=true
 ----
 
 The sample file `password.txt` contains the hashed, insecure password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. This simple password can be used only for development and tests. In the case of publishing the service, this file should contain the hashed, secret and strong password.

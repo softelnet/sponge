@@ -161,6 +161,7 @@
                                 <projectDate>${release.date}</projectDate>
                                 <rootDir>${rootDir}</rootDir>
                                 <includesRootDir>${rootDir}</includesRootDir>
+                                <completeExamplesProjectIncludes>${completeExamplesProject}</completeExamplesProjectIncludes>
                                 <completeExamplesProject>${completeExamplesProject}</completeExamplesProject>
                                 <standaloneDir>${standalonePackageName}</standaloneDir>
                                 <standalonePackage>${standalonePackage}</standalonePackage>
@@ -345,7 +346,7 @@
                         <executions>
                             <execution>
                                 <id>jekyll</id>
-                                <phase>package</phase>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>single</goal>
                                 </goals>
@@ -365,7 +366,7 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>

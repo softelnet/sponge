@@ -17,9 +17,12 @@ class DrawAndUploadDoodle(Action):
         self.withResult(StringType().withLabel("Status"))
         self.withFeatures({"icon":"brush"})
     def onCall(self, image):
-        filename = str(System.currentTimeMillis()) + ".png"
-        SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + filename)
-        return "Uploaded as " + filename
+        if not sponge.getVariable("demo.readOnly", False):
+            filename = str(System.currentTimeMillis()) + ".png"
+            SpongeUtils.writeByteArrayToFile(image, sponge.getProperty("doodlesDir") + "/" + filename)
+            return "Uploaded as " + filename
+        else:
+            return "Uploading disabled in the read only mode"
 
 class ListDoodles(Action):
     def onConfigure(self):
