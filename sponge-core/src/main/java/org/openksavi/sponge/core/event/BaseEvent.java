@@ -265,7 +265,7 @@ public abstract class BaseEvent implements Event {
     public void addFeatures(Map<String, Object> features) {
         if (features != null) {
             features.forEach((name, value) -> validateFeature(name, value));
-            features.putAll(features);
+            this.features.putAll(features);
         }
     }
 
@@ -306,6 +306,6 @@ public abstract class BaseEvent implements Event {
 
     @Override
     public String toString() {
-        return toStringBase() + ", attributes=" + getAll();
+        return toStringBase() + ", attributes=" + getAll() + ", features=" + getFeatures();
     }
 }

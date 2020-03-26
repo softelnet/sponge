@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.features.model.ui.IconInfo;
 import org.openksavi.sponge.grpcapi.client.ClientSubscription;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClient;
 import org.openksavi.sponge.grpcapi.client.SpongeGrpcClientConfiguration;
@@ -164,6 +166,57 @@ public abstract class GrpcApiServerBaseTest {
         }
     }
 
+    protected RemoteEvent waitForEvent(SpongeGrpcClient grpcClient, String eventName, Runnable onSend, Predicate<RemoteEvent> predicate) {
+        // Subscribe to events of types equal to the one that will be sent.
+        final CountDownLatch finishLatch = new CountDownLatch(1);
+        AtomicReference<RemoteEvent> receivedEvent = new AtomicReference<>();
+
+        StreamObserver<RemoteEvent> eventObserver = new StreamObserver<RemoteEvent>() {
+
+            @Override
+            public void onNext(RemoteEvent event) {
+                if (event.getName().equals(eventName) && predicate.test(event)) {
+                    receivedEvent.set(event);
+                    finishLatch.countDown();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                logger.warn("Error: {}", Status.fromThrowable(t));
+                finishLatch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                finishLatch.countDown();
+            }
+        };
+
+        ClientSubscription subscription = null;
+        try {
+            subscription = grpcClient.subscribe(Arrays.asList(eventName), true, eventObserver);
+
+            // Wait for the subscription to prevent race condition errors.
+            Thread.sleep(500);
+
+            onSend.run();
+
+            if (!finishLatch.await(20, TimeUnit.SECONDS)) {
+                fail("Timeout while waiting for the event.");
+            }
+        } catch (InterruptedException e) {
+            throw SpongeUtils.wrapException(e);
+        } finally {
+            if (subscription != null) {
+                subscription.close();
+            }
+        }
+
+        return receivedEvent.get();
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     public void testSendEventAction() {
         String eventName = "notification";
@@ -172,35 +225,7 @@ public abstract class GrpcApiServerBaseTest {
                 SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce"));
 
         try (SpongeGrpcClient grpcClient = createGrpcClient()) {
-            // Subscribe to events of types equal to the one that will be sent.
-            final CountDownLatch finishLatch = new CountDownLatch(1);
-            AtomicBoolean receivedEvent = new AtomicBoolean(false);
-
-            StreamObserver<RemoteEvent> eventObserver = new StreamObserver<RemoteEvent>() {
-
-                @Override
-                public void onNext(RemoteEvent event) {
-                    if (event.getName().equals(eventName) && event.getAttributes().equals(eventAttributes)
-                            && event.getLabel().equals(eventLabel)) {
-                        receivedEvent.set(true);
-                        finishLatch.countDown();
-                    }
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    logger.warn("Error: {}", Status.fromThrowable(t));
-                    finishLatch.countDown();
-                }
-
-                @Override
-                public void onCompleted() {
-                    finishLatch.countDown();
-                }
-            };
-
-            ClientSubscription subscription = grpcClient.subscribe(Arrays.asList(eventName), true, eventObserver);
-            try {
+            RemoteEvent receivedEvent = waitForEvent(grpcClient, eventName, () -> {
                 String sendEventActionName = "GrpcApiSendEvent";
                 SpongeRestClient restClient = grpcClient.getRestClient();
                 Map<String, ProvidedValue<?>> providedArgs =
@@ -221,17 +246,33 @@ public abstract class GrpcApiServerBaseTest {
                 restClient.call(sendEventActionName,
                         Arrays.asList(eventName, new DynamicValue<Map<String, Object>>(eventAttributes, eventType), eventLabel, null));
 
-                if (!finishLatch.await(20, TimeUnit.SECONDS)) {
-                    fail("Timeout while waiting for the event.");
-                }
+            }, (event) -> event.getAttributes().equals(eventAttributes) && event.getLabel().equals(eventLabel));
 
-                assertTrue(receivedEvent.get());
+            assertNotNull(receivedEvent);
+        }
+    }
 
-            } catch (InterruptedException e) {
-                throw SpongeUtils.wrapException(e);
-            } finally {
-                subscription.close();
-            }
+    @Test
+    public void testSendEvent() {
+        String eventName = "notification";
+        String eventLabel = "NOTIFICATION LABEL";
+        String eventDescription = "NOTIFICATION DESCRIPTION";
+        Map<String, Object> eventAttributes = SpongeUtils.immutableMapOf("source", "SOURCE", "severity", 5, "person",
+                SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce"));
+        Map<String, Object> eventFeatures =
+                SpongeUtils.immutableMapOf("icon", new IconInfo("alarm").withColor("FFFFFF"), "extra", "Extra feature");
+        Predicate<RemoteEvent> predicate = (event) -> event.getFeatures().get("icon") != null
+                && ((IconInfo) event.getFeatures().get("icon")).getName().equals(((IconInfo) eventFeatures.get("icon")).getName())
+                && ((IconInfo) event.getFeatures().get("icon")).getColor().equals(((IconInfo) eventFeatures.get("icon")).getColor())
+                && event.getFeatures().get("extra") != null && event.getFeatures().get("extra").equals(eventFeatures.get("extra"));
+
+        try (SpongeGrpcClient grpcClient = createGrpcClient()) {
+            RemoteEvent receivedEvent = waitForEvent(grpcClient, eventName,
+                    () -> grpcClient.getRestClient().send(eventName, eventAttributes, eventLabel, eventDescription, eventFeatures),
+                    (event) -> event.getAttributes().equals(eventAttributes) && predicate.test(event) && event.getLabel().equals(eventLabel)
+                            && event.getDescription().equals(eventDescription));
+
+            assertNotNull(receivedEvent);
         }
     }
 }

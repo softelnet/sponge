@@ -16,15 +16,21 @@
 
 package org.openksavi.sponge.integration.tests.core;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JTriggerBuilder;
 
 public class EventsTest {
 
@@ -68,6 +74,31 @@ public class EventsTest {
 
         try {
             assertThrows(IllegalArgumentException.class, () -> engine.getOperations().event("e:1").send());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testEventFeatures() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().build();
+        engine.startup();
+
+        try {
+            Event event = engine.getOperations().event("e").set("value", 1).feature("icon", "alarm").make();
+
+            AtomicReference<Event> eventHolder = new AtomicReference<>();
+
+            engine.getOperations()
+                    .enable(new JTriggerBuilder("TriggerA").withEvent(event.getName()).withOnRun((trigger, e) -> eventHolder.set(e)));
+
+            engine.getOperations().event(event).send();
+
+            await().atMost(10, TimeUnit.SECONDS).until(() -> eventHolder.get() != null);
+
+            assertEquals("alarm", eventHolder.get().getFeatures().get("icon"));
+
+            assertFalse(engine.isError());
         } finally {
             engine.shutdown();
         }

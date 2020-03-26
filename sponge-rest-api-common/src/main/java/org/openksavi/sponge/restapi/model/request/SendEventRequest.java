@@ -62,7 +62,7 @@ public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
             this.attributes = attributes;
             this.label = label;
             this.description = description;
-            this.attributes = features;
+            this.features = features;
         }
 
         public SendEventRequestBody() {

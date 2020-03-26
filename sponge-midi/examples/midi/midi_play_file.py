@@ -21,7 +21,7 @@ class Log(Trigger):
     def onConfigure(self):
         self.withEvent("midi.*")
     def onRun(self, event):
-        self.logger.info("{}MIDI message: {}", "[" + MidiUtils.getKeyNote(event.data1) + "] " if event.category.code == "short"
+        self.logger.info("{}MIDI message: {}", "[" + MidiUtils.getKeyNote(event.data1) + "] " if event.midiCategory.code == "short"
                          and event.command == ShortMessage.NOTE_ON else "", event.messageString)
 
 class Stop(Trigger):
