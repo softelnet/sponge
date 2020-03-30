@@ -6,7 +6,7 @@ ENV CATALINA_HOME /usr/local/tomcat
 ENV CATALINA_PROPERTIES $CATALINA_HOME/conf/catalina.properties
 
 RUN apt-get -qq update \
-    && apt-get -y -qq --no-install-recommends install python3 python3-dev python3-pip \
+    && apt-get -y -qq --no-install-recommends install python3 python3-dev python3-pip python3-setuptools \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
     && pip3 install -U virtualenv \
