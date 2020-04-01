@@ -33,6 +33,7 @@
             <file>sponge_demo_geo_map.py</file>
             <file>sponge_demo_geo_map_simple.py</file>
             <file>sponge_demo_geo_map_indirect.py</file>
+            <file>sponge_demo_map_type.py</file>
         </knowledgeBase>
         <knowledgeBase name="demoForms" label="Action forms/Base">
             <file>sponge_demo_forms_base.py</file>
