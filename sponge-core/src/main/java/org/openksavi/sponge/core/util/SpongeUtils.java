@@ -383,12 +383,12 @@ public abstract class SpongeUtils {
         return doWrapException(sourceName, interpreter, throwable);
     }
 
-    public static boolean containsException(Throwable exception, final Class<?> type) {
+    public static boolean containsException(Throwable exception, final Class<? extends Throwable> type) {
         return ExceptionUtils.indexOfType(exception, type) > -1;
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getException(Throwable exception, final Class<T> type) {
+    public static <T> T getException(Throwable exception, final Class<? extends Throwable> type) {
         return (T) ExceptionUtils.getThrowableList(exception).get(ExceptionUtils.indexOfType(exception, type));
     }
 
