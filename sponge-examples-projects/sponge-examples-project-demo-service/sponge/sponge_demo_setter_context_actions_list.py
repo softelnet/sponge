@@ -32,7 +32,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
     def onConfigure(self):
         self.withLabel("Choose a fruit").withDescription("Choose a fruit. The action icon has a custom color.").withArgs([
             createFruitWithColorRecordType("chosenFruit").withNullable().withFeature("visible", False).withProvided(
-                ProvidedMeta().withValue().withImplicitMode()),
+                ProvidedMeta().withValue().withOverwrite().withImplicitMode()),
             ListType("fruits").withLabel("Fruits").withElement(
                     createFruitWithColorRecordType("fruit").withProvided(ProvidedMeta().withSubmittable())
                 ).withProvided(

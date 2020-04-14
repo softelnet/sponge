@@ -18,6 +18,8 @@ The {appName} uses several {sponge} concepts such as actions and action argument
 
 You could build a customized GUI using your own Flutter code that will call the same {sponge} actions as the {appName}, using the upcoming {sponge} Flutter API library.
 
+Unless noted otherwise in the release notes, the {appName} and the {sponge} Flutter API library versions `0.minor.*` are compatible only with the {sponge} service versions `1.minor.*`, e.g. the `0.16.5` version of the {appName} will be compatible with the `1.16.1` version of the {sponge} service.
+
 NOTE: The {sponge} Flutter API library is currently under development and is not officially published. It will be released as an open source.
 
 == Functionalities
@@ -58,7 +60,7 @@ The floating button allows to refresh the action list from the server. The refre
 NOTE: The application currently doesn't supports all {sponge} data types.
 
 === Action call
-When an action call screen is displayed, provided arguments will be fetched from the server.
+When an action call screen is displayed, provided arguments will be fetched from the server. If an action call screen for the same action has been displayed earlier and a provided argument has been modified by a user, that argument will be fetched again only if it has the _overwrite_ flag.
 
 An action call screen can be closed by swiping right.
 

@@ -123,7 +123,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |A flag specifying if this type is read only. Defaults to `false`.
 
 |`overwrite`
-|A flag specifying if the provided value of this type should overwrite the value set in a client code. Defaults to `false`. This flag should be handled by a client code.
+|A flag specifying if the provided value of this type should overwrite a value modified in a client code (in most cases by a user). Defaults to `false`. This flag should be handled by a client code.
 
 |`submittable`
 |A metadata specifying if a value can be submitted (i.e. written ad hoc), for example in an action, irrespectively of an action call.

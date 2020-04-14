@@ -521,7 +521,6 @@ class MyAction1(Action):
 Processors and plugins defined in non-Java languages can extend respectively Java-based processors and Java-based plugins. However this functionality is limited in different scripting languages.
 
 .Support for extending Java-based processors and plugins in non-Java knowledge bases
-[cols="1,5"]
 |===
 |Entity     |Python |Ruby |Groovy |JavaScript |Kotlin
 
