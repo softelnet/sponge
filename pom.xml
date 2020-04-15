@@ -95,7 +95,7 @@
         <spring-security.version>5.3.1.RELEASE</spring-security.version>
         <camel.version>3.1.0</camel.version>
         <awaitility.version>4.0.2</awaitility.version>
-        <jline.version>3.14.0</jline.version>
+        <jline.version>3.14.1</jline.version>
         <py4j.version>0.10.9</py4j.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
@@ -951,6 +951,7 @@
                 <module>sponge-examples-base</module>
                 <module>sponge-test</module>
                 <module>sponge-jython</module>
+                <module>sponge-jython-shaded</module>
                 <module>sponge-jruby</module>
                 <module>sponge-nashorn</module>
                 <module>sponge-groovy</module>
@@ -1074,6 +1075,7 @@
                 <module>sponge-examples-base</module>
                 <module>sponge-test</module>
                 <module>sponge-jython</module>
+                <module>sponge-jython-shaded</module>
                 <module>sponge-jruby</module>
                 <module>sponge-nashorn</module>
                 <module>sponge-groovy</module>

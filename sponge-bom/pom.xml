@@ -51,6 +51,11 @@
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-jython-shaded</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
                 <artifactId>sponge-jruby</artifactId>
                 <version>${project.version}</version>
             </dependency>

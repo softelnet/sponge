@@ -1234,7 +1234,11 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 
 |`sponge-jython`
 |Yes
-|The support for Python-based scripting knowledge bases using Jython. This artifact includes a shaded dependencies (e.g. the Guava library).
+|The support for Python-based scripting knowledge bases using Jython.
+
+|`sponge-jython-shaded`
+|Yes
+|The support for Python-based scripting knowledge bases using Jython. It contains several shaded dependencies. It is an experimental artifact in case of dependency conflicts in an embedded {sponge}.
 
 |`sponge-jruby`
 |Yes
