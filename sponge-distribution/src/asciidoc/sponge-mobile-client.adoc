@@ -316,6 +316,8 @@ The result of a _create_, an _update_ and a _delete_ action is ignored and shoul
 
 After calling a CRUD action the main action arguments are refreshed.
 
+A _create_ CRUD action has some limitations. It doesn't support argument substitutions and checking if the _create_ action is inactive.
+
 === Interactive form
 An interactive form provides live update in a GUI and an instant modifications of a server state. It can be implemented by an action with provided and submittable arguments and action refresh events. Interactive forms can be used for example to manage IoT devices.
 

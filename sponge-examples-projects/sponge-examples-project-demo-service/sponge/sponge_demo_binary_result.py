@@ -26,7 +26,7 @@ class HtmlFileOutput(Action):
 class PdfFileOutput(Action):
     def onConfigure(self):
         self.withLabel("PDF file output").withDescription("Returns the PDF file.")
-        self.withNoArgs().withResult(BinaryType().withMimeType("application/pdf").withLabel("PDF file"))
+        self.withNoArgs().withResult(BinaryType().withMimeType("application/pdf").withLabel("PDF file").withFeatures({"icon":"file-pdf"}))
         self.withFeatures({"icon":"file-pdf"})
     def onCall(self):
         return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
