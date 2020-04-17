@@ -56,14 +56,18 @@ public class ProvideArgsContext {
      */
     private Map<String, Map<String, Object>> features;
 
+    /** The flag indicating if this is the initial provide action arguments request. */
+    private boolean initial;
+
     public ProvideArgsContext(Set<String> provide, Set<String> submit, Map<String, Object> current, Map<String, ProvidedValue<?>> provided,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, boolean initial) {
         this.provide = provide;
         this.submit = submit;
         this.current = current;
         this.provided = provided;
         this.dynamicTypes = dynamicTypes;
         this.features = features;
+        this.initial = initial;
     }
 
     public Set<String> getProvide() {
@@ -128,5 +132,13 @@ public class ProvideArgsContext {
         }
 
         return (T) features.get(argName).get(featureName);
+    }
+
+    public boolean isInitial() {
+        return initial;
+    }
+
+    public void setInitial(boolean initial) {
+        this.initial = initial;
     }
 }

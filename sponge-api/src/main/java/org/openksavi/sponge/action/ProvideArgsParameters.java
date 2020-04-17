@@ -46,26 +46,32 @@ public class ProvideArgsParameters {
     /** The features for arguments. */
     private Map<String, Map<String, Object>> features;
 
+    private Boolean initial = false;
+
     public ProvideArgsParameters(List<String> provide, List<String> submit, Map<String, Object> current, Map<String, DataType> dynamicTypes,
-            Map<String, Map<String, Object>> features) {
+            Map<String, Map<String, Object>> features, Boolean initial) {
         this.provide = provide;
         this.submit = submit;
         this.current = current;
         this.dynamicTypes = dynamicTypes;
         this.features = features;
+
+        if (initial != null) {
+            this.initial = initial;
+        }
     }
 
     public ProvideArgsParameters(List<String> provide, List<String> submit, Map<String, Object> current,
             Map<String, DataType> dynamicTypes) {
-        this(provide, submit, current, dynamicTypes, null);
+        this(provide, submit, current, dynamicTypes, null, null);
     }
 
     public ProvideArgsParameters(List<String> provide, List<String> submit, Map<String, Object> current) {
-        this(provide, submit, current, null, null);
+        this(provide, submit, current, null, null, null);
     }
 
     public ProvideArgsParameters(List<String> provide) {
-        this(provide, null, null, null, null);
+        this(provide, null, null, null, null, null);
     }
 
     public ProvideArgsParameters() {
@@ -134,5 +140,13 @@ public class ProvideArgsParameters {
     public ProvideArgsParameters withFeatures(Map<String, Map<String, Object>> features) {
         setFeatures(features);
         return this;
+    }
+
+    public Boolean isInitial() {
+        return initial;
+    }
+
+    public void setInitial(Boolean initial) {
+        this.initial = initial;
     }
 }

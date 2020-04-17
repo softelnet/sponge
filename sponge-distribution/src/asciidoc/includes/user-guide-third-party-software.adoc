@@ -1,5 +1,5 @@
 = Third party software
-{sponge} uses or supports third party software released under various open-source licenses.
+{sponge} uses third party software released under various open-source licenses.
 
 .Key third party software
 [cols="1,1,2"]

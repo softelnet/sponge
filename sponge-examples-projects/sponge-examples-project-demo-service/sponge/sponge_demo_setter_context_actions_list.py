@@ -55,7 +55,9 @@ class FruitsWithColorsContextSetter_Choose(Action):
             context.provided["chosenFruit"] = ProvidedValue().withValue(chosenFruit)
 
         if "fruits" in context.provide or "fruits.fruit" in context.submit:
-            if chosenFruit is None:
+            # The context.initial check is to ensure that for the initial request the previously chosen fruit (if any) will be cleared.
+            # This behavior is only for the purpose of this example.
+            if chosenFruit is None and not context.initial:
                 chosenFruit = context.current["chosenFruit"]
             chosenFruitName = chosenFruit.value["name"] if chosenFruit else None
 

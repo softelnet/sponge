@@ -39,13 +39,14 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion) {
-        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, features, qualifiedVersion));
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion,
+            Boolean initial) {
+        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, features, qualifiedVersion, initial));
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
             Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
-        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, features, null));
+        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, features, null, null));
     }
 
     @Override
@@ -70,8 +71,11 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
 
         private ProcessorQualifiedVersion qualifiedVersion;
 
+        private Boolean initial;
+
         public ProvideActionArgsRequestBody(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-                Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion) {
+                Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion,
+                Boolean initial) {
             this.name = name;
             this.provide = provide;
             this.submit = submit;
@@ -79,11 +83,12 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
             this.dynamicTypes = dynamicTypes;
             this.features = features;
             this.qualifiedVersion = qualifiedVersion;
+            this.initial = initial;
         }
 
         public ProvideActionArgsRequestBody(String name, List<String> provide, List<String> submit, Map<String, Object> current,
                 Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
-            this(name, provide, submit, current, dynamicTypes, features, null);
+            this(name, provide, submit, current, dynamicTypes, features, null, null);
         }
 
         public ProvideActionArgsRequestBody() {
@@ -154,6 +159,15 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
         @Override
         public void setQualifiedVersion(ProcessorQualifiedVersion qualifiedVersion) {
             this.qualifiedVersion = qualifiedVersion;
+        }
+
+        @ApiModelProperty(value = "The flag indicating if this is the initial provide action arguments request", required = false)
+        public Boolean getInitial() {
+            return initial;
+        }
+
+        public void setInitial(Boolean initial) {
+            this.initial = initial;
         }
     }
 }

@@ -138,7 +138,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
 
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
         getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, buildCurrentArgs(parameters), provided,
-                efefctiveDynamicTypes, effectiveFeatures));
+                efefctiveDynamicTypes, effectiveFeatures, parameters.isInitial()));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(resolveDataType(providedArg, parameters).getProvided() != null,

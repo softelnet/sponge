@@ -513,12 +513,12 @@ public class DefaultRestApiService implements RestApiService {
             UserContext userContext = authenticateRequest(request);
             actionAdapter = getActionAdapterForRequest(request.getBody().getName(), request.getBody().getQualifiedVersion(), userContext);
 
-            Map<String,
-                    ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
-                            new ProvideArgsParameters(request.getBody().getProvide(), request.getBody().getSubmit(),
-                                    RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter,
-                                            request.getBody().getCurrent(), request.getBody().getDynamicTypes()),
-                                    request.getBody().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getBody().getFeatures())));
+            Map<String, ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
+                    new ProvideArgsParameters(request.getBody().getProvide(), request.getBody().getSubmit(),
+                            RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getBody().getCurrent(),
+                                    request.getBody().getDynamicTypes()),
+                            request.getBody().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getBody().getFeatures()),
+                            request.getBody().getInitial()));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getBody().getDynamicTypes());
 
             return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);

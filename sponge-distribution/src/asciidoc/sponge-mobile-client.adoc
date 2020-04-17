@@ -946,3 +946,9 @@ NOTE: The {sponge} Digit Recognition application is currently under development 
 image::screens/mobile/digits_drawing.png[title="The digit recognition - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
 
 The application allows drawing a digit that will be recognized by a {sponge} action. After each stroke the remote action call is made and the result is shown in the circle.
+
+== Third party Dart/Flutter software
+The {appName} and the {sponge} Flutter API library use third party software released under various open-source licenses. Besides the dependencies stated in the respective Flutter projects, the following components use modified versions of other open-source software:
+
+* `AsyncPopupMenuButton` - a modified Flutter `PopupMenuButton` widget that adds support for an asynchronous item builder.
+* `Painter` - a modified https://pub.dartlang.org/packages/painter2 library. It is used for drawings.
