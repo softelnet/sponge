@@ -210,6 +210,12 @@ public class RestApiRouteBuilder extends RouteBuilder implements HasRestApiServi
                 response.getHeader().setResponseTime(Instant.now());
             }
 
+            // Put response features from the session to the response header.
+            RestApiSession session = apiService.getSession();
+            if (session != null && !session.getResponseFeatures().isEmpty()) {
+                response.getHeader().setFeatures(session.getResponseFeatures());
+            }
+
             String responseBody = getObjectMapper().writeValueAsString(response);
 
             exchange.getIn().setBody(responseBody);

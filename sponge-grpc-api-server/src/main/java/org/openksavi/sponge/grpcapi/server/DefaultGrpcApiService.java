@@ -81,7 +81,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
             restApiService.openSession(createSession());
             GetVersionResponse restResponse = restApiService.getVersion(restRequest);
 
-            VersionResponse response = GrpcApiServerUtils.createResponse(restResponse);
+            VersionResponse response = GrpcApiServerUtils.createResponse(restApiService.getTypeConverter(), restResponse);
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();

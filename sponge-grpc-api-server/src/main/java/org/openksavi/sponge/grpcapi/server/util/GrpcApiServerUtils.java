@@ -28,6 +28,7 @@ import io.grpc.protobuf.StatusProto;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.grpcapi.proto.ObjectValue;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
@@ -85,7 +86,8 @@ public abstract class GrpcApiServerUtils {
         return setupRestRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
-    public static ResponseHeader createResponseHeader(org.openksavi.sponge.restapi.model.response.ResponseHeader restHeader) {
+    public static ResponseHeader createResponseHeader(TypeConverter typeConverter,
+            org.openksavi.sponge.restapi.model.response.ResponseHeader restHeader) {
         ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
         if (restHeader.getId() != null) {
             headerBuilder.setId(restHeader.getId());
@@ -99,12 +101,21 @@ public abstract class GrpcApiServerUtils {
         if (restHeader.getDetailedErrorMessage() != null) {
             headerBuilder.setDetailedErrorMessage(restHeader.getDetailedErrorMessage());
         }
+        if (restHeader.getFeatures() != null) {
+            try {
+                headerBuilder.setFeatures(ObjectValue.newBuilder()
+                        .setValueJson(typeConverter.getObjectMapper().writeValueAsString(restHeader.getFeatures())).build());
+            } catch (JsonProcessingException e) {
+                throw SpongeUtils.wrapException(e);
+            }
+        }
 
         return headerBuilder.build();
     }
 
-    public static VersionResponse createResponse(GetVersionResponse restResponse) {
-        VersionResponse.Builder builder = VersionResponse.newBuilder().setHeader(createResponseHeader(restResponse.getHeader()));
+    public static VersionResponse createResponse(TypeConverter typeConverter, GetVersionResponse restResponse) {
+        VersionResponse.Builder builder =
+                VersionResponse.newBuilder().setHeader(createResponseHeader(typeConverter, restResponse.getHeader()));
 
         if (restResponse.getBody().getVersion() != null) {
             builder.setVersion(restResponse.getBody().getVersion());

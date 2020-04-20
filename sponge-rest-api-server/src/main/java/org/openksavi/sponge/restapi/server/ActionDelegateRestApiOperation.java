@@ -89,6 +89,7 @@ public class ActionDelegateRestApiOperation<I extends SpongeRequest, O extends S
             response.getHeader().setDetailedErrorMessage(actionCallResponse.getHeader().getDetailedErrorMessage());
             response.getHeader().setRequestTime(actionCallResponse.getHeader().getRequestTime());
             response.getHeader().setResponseTime(actionCallResponse.getHeader().getResponseTime());
+            response.getHeader().setFeatures(actionCallResponse.getHeader().getFeatures());
 
             return response;
         });

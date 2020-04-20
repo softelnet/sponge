@@ -69,6 +69,7 @@ message ResponseHeader {
    string error_code = 2;
    string error_message = 3;
    string detailed_error_message = 4;
+   ObjectValue features = 5;
 }
 
 message VersionRequest {

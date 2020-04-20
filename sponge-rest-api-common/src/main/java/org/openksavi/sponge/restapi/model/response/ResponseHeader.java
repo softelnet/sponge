@@ -17,15 +17,18 @@
 package org.openksavi.sponge.restapi.model.response;
 
 import java.time.Instant;
+import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.openksavi.sponge.util.HasFeatures;
 
 /**
  * A response header.
  */
 @ApiModel(value = "ResponseHeader", description = "A response header")
-public class ResponseHeader {
+public class ResponseHeader implements HasFeatures {
 
     private String id;
 
@@ -38,6 +41,8 @@ public class ResponseHeader {
     private Instant requestTime;
 
     private Instant responseTime;
+
+    private Map<String, Object> features;
 
     @ApiModelProperty(value = "The corresponding request id", required = false)
     public String getId() {
@@ -91,5 +96,16 @@ public class ResponseHeader {
 
     public void setResponseTime(Instant responseTime) {
         this.responseTime = responseTime;
+    }
+
+    @Override
+    @ApiModelProperty(value = "The response features", required = false)
+    public Map<String, Object> getFeatures() {
+        return features;
+    }
+
+    @Override
+    public void setFeatures(Map<String, Object> features) {
+        this.features = features;
     }
 }

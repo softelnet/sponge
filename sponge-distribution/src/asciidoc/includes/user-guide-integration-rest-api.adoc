@@ -113,6 +113,8 @@ The request features can be used for:
 * Setting a requested language if a knowledge base supports it.
 * Sending an API key to the service. For example, on the server side you could add an `OnSessionOpenListener` implementing the `onSessionOpen(RestApiSession session)` method that checks a value of `session.getFeatures().get("apiKey")`. If the API key is incorrect an exception will be thrown.
 
+NOTE: Request and response features are not converted by the feature converter.
+
 The {sponge} REST API supports both POST and GET methods.
 
 .Examples of REST API requests
@@ -177,6 +179,10 @@ A response may contain base properties.
 |`responseTime`
 |No
 |An optional response time, i.e. a server time (as Java Instant) of finishing processing a request.
+
+|`features`
+|No
+|Response features that will be obtained from a REST API session.
 |===
 
 .Examples of REST API responses

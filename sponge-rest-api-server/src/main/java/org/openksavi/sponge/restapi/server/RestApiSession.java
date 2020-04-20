@@ -28,4 +28,6 @@ public interface RestApiSession {
     UserAuthentication getUserAuthentication();
 
     Map<String, Object> getFeatures();
+
+    Map<String, Object> getResponseFeatures();
 }

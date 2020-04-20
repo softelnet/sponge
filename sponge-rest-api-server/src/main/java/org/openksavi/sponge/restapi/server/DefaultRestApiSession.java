@@ -31,6 +31,8 @@ public class DefaultRestApiSession implements RestApiSession {
 
     private Map<String, Object> features = Collections.synchronizedMap(new LinkedHashMap<>());
 
+    private Map<String, Object> responseFeatures = Collections.synchronizedMap(new LinkedHashMap<>());
+
     public DefaultRestApiSession(UserAuthentication userAuthentication) {
         this.userAuthentication = userAuthentication;
     }
@@ -47,5 +49,10 @@ public class DefaultRestApiSession implements RestApiSession {
     @Override
     public Map<String, Object> getFeatures() {
         return features;
+    }
+
+    @Override
+    public Map<String, Object> getResponseFeatures() {
+        return responseFeatures;
     }
 }
