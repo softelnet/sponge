@@ -83,8 +83,8 @@ class MpdLibrary(Action):
                         parentDir = AnnotatedValue("/")
                         files = self._createFiles(parentDir)
 
-                offset = context.getFeature("files", "offset")
-                limit = context.getFeature("files", "limit")
+                offset = context.getArgFeature("files", "offset")
+                limit = context.getArgFeature("files", "limit")
 
                 context.provided["files"] = ProvidedValue().withValue(AnnotatedValue(files[offset:(offset + limit)]).withFeatures(
                             {"offset":offset, "limit":limit, "count":len(files)}))

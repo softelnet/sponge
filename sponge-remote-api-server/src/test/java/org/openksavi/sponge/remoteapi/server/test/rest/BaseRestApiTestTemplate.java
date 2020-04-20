@@ -914,7 +914,7 @@ public abstract class BaseRestApiTestTemplate {
                     ?> providedFruits = client
                             .provideActionArgs(actionName,
                                     new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
-                                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(
+                                            .withArgFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(
                                                     Features.PROVIDE_VALUE_OFFSET, 0, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                             .get("fruits");
 
@@ -927,7 +927,7 @@ public abstract class BaseRestApiTestTemplate {
 
             providedFruits = client.provideActionArgs(actionName,
                     new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
-                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
+                            .withArgFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
                                     valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                     .get("fruits");
 
@@ -940,7 +940,7 @@ public abstract class BaseRestApiTestTemplate {
 
             providedFruits = client.provideActionArgs(actionName,
                     new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
-                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
+                            .withArgFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
                                     2 * valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                     .get("fruits");
 

@@ -20,8 +20,8 @@ class ActionWithPageableList(Action):
 
     def onProvideArgs(self, context):
         if "list" in context.provide:
-            offset = context.getFeature("list", "offset")
-            limit = context.getFeature("list", "limit")
+            offset = context.getArgFeature("list", "offset")
+            limit = context.getArgFeature("list", "limit")
 
             allElements = list(self.elements)
             allElements[self.selected].withFeature("icon", "star")

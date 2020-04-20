@@ -54,19 +54,19 @@ public class ProvideArgsContext {
      * The not null map of features for arguments in a context, set by a client code. Each argument specified in {@code provide} or
      * {@code submit} has its (possibly empty) features map.
      */
-    private Map<String, Map<String, Object>> features;
+    private Map<String, Map<String, Object>> argFeatures;
 
     /** The flag indicating if this is the initial provide action arguments request. */
     private boolean initial;
 
     public ProvideArgsContext(Set<String> provide, Set<String> submit, Map<String, Object> current, Map<String, ProvidedValue<?>> provided,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, boolean initial) {
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures, boolean initial) {
         this.provide = provide;
         this.submit = submit;
         this.current = current;
         this.provided = provided;
         this.dynamicTypes = dynamicTypes;
-        this.features = features;
+        this.argFeatures = argFeatures;
         this.initial = initial;
     }
 
@@ -110,28 +110,28 @@ public class ProvideArgsContext {
         this.dynamicTypes = dynamicTypes;
     }
 
-    public Map<String, Map<String, Object>> getFeatures() {
-        return features;
+    public Map<String, Map<String, Object>> getArgFeatures() {
+        return argFeatures;
     }
 
-    public void setFeatures(Map<String, Map<String, Object>> features) {
-        this.features = features;
+    public void setArgFeatures(Map<String, Map<String, Object>> argFeatures) {
+        this.argFeatures = argFeatures;
     }
 
-    public Object getFeature(String argName, String featureName) {
-        Validate.isTrue(features != null && features.get(argName) != null && features.get(argName).containsKey(featureName),
+    public Object getArgFeature(String argName, String featureName) {
+        Validate.isTrue(argFeatures != null && argFeatures.get(argName) != null && argFeatures.get(argName).containsKey(featureName),
                 "There is no feature %s for argument %s", featureName, argName);
 
-        return features.get(argName).get(featureName);
+        return argFeatures.get(argName).get(featureName);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getFeature(String argName, String featureName, T defaultValue) {
-        if (features == null || features.get(argName) == null || !features.get(argName).containsKey(featureName)) {
+    public <T> T getArgFeature(String argName, String featureName, T defaultValue) {
+        if (argFeatures == null || argFeatures.get(argName) == null || !argFeatures.get(argName).containsKey(featureName)) {
             return defaultValue;
         }
 
-        return (T) features.get(argName).get(featureName);
+        return (T) argFeatures.get(argName).get(featureName);
     }
 
     public boolean isInitial() {

@@ -517,7 +517,7 @@ public class DefaultRestApiService implements RestApiService {
                     new ProvideArgsParameters(request.getBody().getProvide(), request.getBody().getSubmit(),
                             RestApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getBody().getCurrent(),
                                     request.getBody().getDynamicTypes()),
-                            request.getBody().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getBody().getFeatures()),
+                            request.getBody().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getBody().getArgFeatures()),
                             request.getBody().getInitial()));
             RestApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getBody().getDynamicTypes());
 

@@ -1419,7 +1419,7 @@ public class CoreActionsTest {
             int fruitsSize = engine.getOperations().getVariable(Collection.class, "fruits").size();
 
             ProvidedValue<?> providedFruits = engine.getOperations().provideActionArgs(actionMeta.getName(),
-                    new ProvideArgsParameters().withProvide(Arrays.asList("fruits")).withFeatures(SpongeUtils.immutableMapOf("fruits",
+                    new ProvideArgsParameters().withProvide(Arrays.asList("fruits")).withArgFeatures(SpongeUtils.immutableMapOf("fruits",
                             SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET, 0, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                     .get("fruits");
 
@@ -1434,7 +1434,7 @@ public class CoreActionsTest {
                     engine.getOperations()
                             .provideActionArgs(actionMeta.getName(),
                                     new ProvideArgsParameters().withProvide(Arrays.asList("fruits"))
-                                            .withFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(
+                                            .withArgFeatures(SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(
                                                     Features.PROVIDE_VALUE_OFFSET, valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                             .get("fruits");
 
@@ -1447,7 +1447,7 @@ public class CoreActionsTest {
 
             providedFruits = engine.getOperations()
                     .provideActionArgs(actionMeta.getName(),
-                            new ProvideArgsParameters().withProvide(Arrays.asList("fruits")).withFeatures(
+                            new ProvideArgsParameters().withProvide(Arrays.asList("fruits")).withArgFeatures(
                                     SpongeUtils.immutableMapOf("fruits", SpongeUtils.immutableMapOf(Features.PROVIDE_VALUE_OFFSET,
                                             2 * valueLimit, Features.PROVIDE_VALUE_LIMIT, valueLimit))))
                     .get("fruits");

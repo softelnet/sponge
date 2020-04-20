@@ -233,7 +233,7 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 |`Map<String, ProvidedValue> provided`
 |An initially empty map of argument names (or name paths) and their provided values (value sets) that is to be set up in an `onProvideArgs` callback method implementation.
 
-|`Map<String, Map<String, Object>> features`
+|`Map<String, Map<String, Object>> argFeatures`
 |A not null map of features for arguments in a context, set by a client code. Each argument specified in `provide` or `submit` has its (possibly empty) features map.
 
 |`Boolean initial`

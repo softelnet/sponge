@@ -44,17 +44,17 @@ public class ProvideArgsParameters {
     private Map<String, DataType> dynamicTypes;
 
     /** The features for arguments. */
-    private Map<String, Map<String, Object>> features;
+    private Map<String, Map<String, Object>> argFeatures;
 
     private Boolean initial = false;
 
     public ProvideArgsParameters(List<String> provide, List<String> submit, Map<String, Object> current, Map<String, DataType> dynamicTypes,
-            Map<String, Map<String, Object>> features, Boolean initial) {
+            Map<String, Map<String, Object>> argFeatures, Boolean initial) {
         this.provide = provide;
         this.submit = submit;
         this.current = current;
         this.dynamicTypes = dynamicTypes;
-        this.features = features;
+        this.argFeatures = argFeatures;
 
         if (initial != null) {
             this.initial = initial;
@@ -109,12 +109,20 @@ public class ProvideArgsParameters {
         this.dynamicTypes = dynamicTypes;
     }
 
-    public Map<String, Map<String, Object>> getFeatures() {
-        return features;
+    public Map<String, Map<String, Object>> getArgFeatures() {
+        return argFeatures;
     }
 
-    public void setFeatures(Map<String, Map<String, Object>> features) {
-        this.features = features;
+    public void setArgFeatures(Map<String, Map<String, Object>> argFeatures) {
+        this.argFeatures = argFeatures;
+    }
+
+    public Boolean isInitial() {
+        return initial;
+    }
+
+    public void setInitial(Boolean initial) {
+        this.initial = initial;
     }
 
     public ProvideArgsParameters withProvide(List<String> provide) {
@@ -137,16 +145,13 @@ public class ProvideArgsParameters {
         return this;
     }
 
-    public ProvideArgsParameters withFeatures(Map<String, Map<String, Object>> features) {
-        setFeatures(features);
+    public ProvideArgsParameters withArgFeatures(Map<String, Map<String, Object>> features) {
+        setArgFeatures(features);
         return this;
     }
 
-    public Boolean isInitial() {
-        return initial;
-    }
-
-    public void setInitial(Boolean initial) {
-        this.initial = initial;
+    public ProvideArgsParameters withInitial(Boolean initial) {
+        setInitial(initial);
+        return this;
     }
 }

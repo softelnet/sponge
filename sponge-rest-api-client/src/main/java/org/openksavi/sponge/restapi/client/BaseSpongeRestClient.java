@@ -970,8 +970,8 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
         request.getBody().setCurrent(
                 marshalAuxiliaryActionArgsCurrent(actionMeta, request.getBody().getCurrent(), request.getBody().getDynamicTypes()));
 
-        // Clone and marshal all features.
-        request.getBody().setFeatures(marshalProvideArgsFeaturesMap(request.getBody().getFeatures()));
+        // Clone and marshal all argument features.
+        request.getBody().setArgFeatures(marshalProvideArgsFeaturesMap(request.getBody().getArgFeatures()));
 
         ProvideActionArgsResponse response =
                 execute(RestApiConstants.OPERATION_PROVIDE_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
@@ -1004,7 +1004,7 @@ public abstract class BaseSpongeRestClient implements SpongeRestClient {
     @Override
     public Map<String, ProvidedValue<?>> provideActionArgs(String actionName, ProvideArgsParameters parameters) {
         return provideActionArgs(new ProvideActionArgsRequest(actionName, parameters.getProvide(), parameters.getSubmit(),
-                parameters.getCurrent(), parameters.getDynamicTypes(), parameters.getFeatures())).getBody().getProvided();
+                parameters.getCurrent(), parameters.getDynamicTypes(), parameters.getArgFeatures())).getBody().getProvided();
     }
 
     protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {

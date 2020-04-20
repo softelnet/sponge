@@ -39,14 +39,14 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion,
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures, ProcessorQualifiedVersion qualifiedVersion,
             Boolean initial) {
-        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, features, qualifiedVersion, initial));
+        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, argFeatures, qualifiedVersion, initial));
     }
 
     public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
-        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, features, null, null));
+            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures) {
+        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, argFeatures, null, null));
     }
 
     @Override
@@ -67,21 +67,21 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
 
         private Map<String, DataType> dynamicTypes;
 
-        private Map<String, Map<String, Object>> features;
+        private Map<String, Map<String, Object>> argFeatures;
 
         private ProcessorQualifiedVersion qualifiedVersion;
 
         private Boolean initial;
 
         public ProvideActionArgsRequestBody(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-                Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features, ProcessorQualifiedVersion qualifiedVersion,
-                Boolean initial) {
+                Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures,
+                ProcessorQualifiedVersion qualifiedVersion, Boolean initial) {
             this.name = name;
             this.provide = provide;
             this.submit = submit;
             this.current = current;
             this.dynamicTypes = dynamicTypes;
-            this.features = features;
+            this.argFeatures = argFeatures;
             this.qualifiedVersion = qualifiedVersion;
             this.initial = initial;
         }
@@ -142,12 +142,12 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
         }
 
         @ApiModelProperty(value = "The features for arguments", required = false)
-        public Map<String, Map<String, Object>> getFeatures() {
-            return features;
+        public Map<String, Map<String, Object>> getArgFeatures() {
+            return argFeatures;
         }
 
-        public void setFeatures(Map<String, Map<String, Object>> features) {
-            this.features = features;
+        public void setArgFeatures(Map<String, Map<String, Object>> argFeatures) {
+            this.argFeatures = argFeatures;
         }
 
         @Override

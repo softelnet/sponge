@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.16.0 (not released yet)
 * API change: Added `ProvideActionArgsRequestBody.initial` in the REST API.
+* API change: Renamed `ProvideActionArgsRequestBody.features` and `ProvideArgsContext.features` to `argFeatures`.
 * Unshaded dependencies in the `sponge-core` and `sponge-jython` artifacts.
 * Added a new artifact `sponge-jython-shaded` that contains several shaded dependencies.
 * Dependencies upgrade.

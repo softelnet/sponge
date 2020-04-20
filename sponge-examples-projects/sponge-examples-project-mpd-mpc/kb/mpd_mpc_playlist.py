@@ -42,8 +42,8 @@ class MpdPlaylist(Action):
         mpc.lock.lock()
         try:
             if "playlist" in context.provide:
-                offset = context.getFeature("playlist", "offset")
-                limit = context.getFeature("playlist", "limit")
+                offset = context.getArgFeature("playlist", "offset")
+                limit = context.getArgFeature("playlist", "limit")
 
                 allPlaylist = mpc.getPlaylist()
                 mpcPlaylist = allPlaylist[offset:(offset + limit)]

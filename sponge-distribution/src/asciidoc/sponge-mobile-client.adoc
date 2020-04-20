@@ -431,7 +431,7 @@ The application may be switched to the dark or the light theme in the settings.
 |Not supported.
 
 |`StringType`
-|Supported.
+|Supported. A `StringType` value in a text field is always trimmed when the field is submitted. So for example you can't enter only white spaces in such text field if the type is not nullable.
 
 |`TypeType`
 |Not supported.

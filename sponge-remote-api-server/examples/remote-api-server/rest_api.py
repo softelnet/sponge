@@ -361,8 +361,8 @@ class ViewFruitsPaging(Action):
         self.fruits = ["apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi", "plum"]
     def onProvideArgs(self, context):
         if "fruits" in context.provide:
-            offset = context.getFeature("fruits", "offset")
-            limit = context.getFeature("fruits", "limit")
+            offset = context.getArgFeature("fruits", "offset")
+            limit = context.getArgFeature("fruits", "limit")
             context.provided["fruits"] = ProvidedValue().withValue(AnnotatedValue(self.fruits[offset:(offset + limit)]).withFeatures(
                     {"offset":offset, "limit":limit, "count":len(self.fruits)}))
 

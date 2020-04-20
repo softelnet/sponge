@@ -121,9 +121,9 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     public Map<String, ProvidedValue<?>> provideArgs(ProvideArgsParameters parameters) {
         Validate.notNull(getMeta().getArgs(), "Arguments not defined");
 
-        Map<String, Map<String, Object>> effectiveFeatures = new LinkedHashMap<>();
-        if (parameters.getFeatures() != null) {
-            effectiveFeatures.putAll(parameters.getFeatures());
+        Map<String, Map<String, Object>> effectiveArgFeatures = new LinkedHashMap<>();
+        if (parameters.getArgFeatures() != null) {
+            effectiveArgFeatures.putAll(parameters.getArgFeatures());
         }
 
         Map<String, DataType> efefctiveDynamicTypes =
@@ -133,12 +133,12 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
         Set<String> submitSet = buildSubmitArgsNames(parameters);
 
         // Setup features map.
-        provideSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
-        submitSet.forEach(name -> effectiveFeatures.putIfAbsent(name, new LinkedHashMap<>()));
+        provideSet.forEach(name -> effectiveArgFeatures.putIfAbsent(name, new LinkedHashMap<>()));
+        submitSet.forEach(name -> effectiveArgFeatures.putIfAbsent(name, new LinkedHashMap<>()));
 
         Map<String, ProvidedValue<?>> provided = new LinkedHashMap<>();
         getProcessor().onProvideArgs(new ProvideArgsContext(provideSet, submitSet, buildCurrentArgs(parameters), provided,
-                efefctiveDynamicTypes, effectiveFeatures, parameters.isInitial()));
+                efefctiveDynamicTypes, effectiveArgFeatures, parameters.isInitial()));
 
         provided.keySet().forEach(providedArg -> {
             Validate.isTrue(resolveDataType(providedArg, parameters).getProvided() != null,

@@ -18,8 +18,8 @@ class ViewFruits(Action):
         ]).withNoResult().withCallable(False)
     def onProvideArgs(self, context):
         if "fruits" in context.provide:
-            offset = context.getFeature("fruits", "offset")
-            limit = context.getFeature("fruits", "limit")
+            offset = context.getArgFeature("fruits", "offset")
+            limit = context.getArgFeature("fruits", "limit")
 
             fruits = sponge.getVariable("fruits")
 
