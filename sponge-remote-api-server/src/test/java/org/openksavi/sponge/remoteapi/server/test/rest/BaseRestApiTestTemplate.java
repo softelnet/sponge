@@ -392,11 +392,15 @@ public abstract class BaseRestApiTestTemplate {
     public void testCallDateTimeType() {
         try (SpongeRestClient client = createRestClient()) {
             RestActionMeta actionMeta = client.getActionMeta("DateTimeAction");
-            assertEquals(DateTimeKind.DATE_TIME, ((DateTimeType) actionMeta.getArgs().get(0)).getDateTimeKind());
+            DateTimeType firstType = (DateTimeType) actionMeta.getArgs().get(0);
+            assertEquals(DateTimeKind.DATE_TIME, firstType.getDateTimeKind());
             assertEquals(DateTimeKind.DATE_TIME_ZONE, ((DateTimeType) actionMeta.getArgs().get(1)).getDateTimeKind());
             assertEquals(DateTimeKind.DATE, ((DateTimeType) actionMeta.getArgs().get(2)).getDateTimeKind());
             assertEquals(DateTimeKind.TIME, ((DateTimeType) actionMeta.getArgs().get(3)).getDateTimeKind());
             assertEquals(DateTimeKind.INSTANT, ((DateTimeType) actionMeta.getArgs().get(4)).getDateTimeKind());
+
+            assertEquals(LocalDateTime.of(2020, 1, 1, 0, 0), firstType.getMinValue());
+            assertEquals(LocalDateTime.of(2030, 1, 1, 0, 0), firstType.getMaxValue());
 
             LocalDateTime dateTime = LocalDateTime.now();
             ZonedDateTime dateTimeZone = ZonedDateTime.now(ZoneId.of("America/Detroit"));

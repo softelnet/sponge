@@ -150,7 +150,7 @@ source code example
 class DateTimeAction(Action):
     def onConfigure(self):
         self.withLabel("Action with a date/time argument")
-        self.withArg(DateTimeType("dateTime").withDateTime().withFormat("yyyy-MM-dd HH:mm").withLabel("Date and time"))
+        self.withArg(DateTimeType("dateTime").withDateTime().withFormat("yyyy-MM-dd HH:mm").withMinValue(LocalDateTime.of(2020, 1, 1, 0, 0)).withLabel("Date and time"))
         self.withResult(StringType().withLabel("Formatted text"))
         self.withFeature("icon", "timer")
     def onCall(self, dateTime):

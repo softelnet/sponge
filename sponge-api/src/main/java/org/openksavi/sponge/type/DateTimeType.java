@@ -16,7 +16,10 @@
 
 package org.openksavi.sponge.type;
 
+import java.time.temporal.Temporal;
 import java.util.Map;
+
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.type.provided.ProvidedMeta;
 
@@ -30,6 +33,12 @@ public class DateTimeType extends DataType<Object> {
 
     /** The date/time kind. */
     private DateTimeKind dateTimeKind;
+
+    /** The minimum value (optional). Technical note: the type is Object because this class is used internally to marshaling as well. */
+    private Object minValue;
+
+    /** The maximum value (optional). Technical note: the type is Object because this class is used internally to marshaling as well. */
+    private Object maxValue;
 
     public DateTimeType() {
         this(null);
@@ -87,6 +96,7 @@ public class DateTimeType extends DataType<Object> {
 
     @Override
     public DateTimeType withDefaultValue(Object value) {
+        Validate.isTrue(value == null || value instanceof Temporal, "The DateTimeType default value has to be an instance of Temporal");
         return (DateTimeType) super.withDefaultValue(value);
     }
 
@@ -118,6 +128,22 @@ public class DateTimeType extends DataType<Object> {
         this.dateTimeKind = dateTimeKind;
     }
 
+    public Object getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Object minValue) {
+        this.minValue = minValue;
+    }
+
+    public Object getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Object maxValue) {
+        this.maxValue = maxValue;
+    }
+
     public DateTimeType withDateTime() {
         setDateTimeKind(DateTimeKind.DATE_TIME);
         return this;
@@ -140,6 +166,16 @@ public class DateTimeType extends DataType<Object> {
 
     public DateTimeType withInstant() {
         setDateTimeKind(DateTimeKind.INSTANT);
+        return this;
+    }
+
+    public DateTimeType withMinValue(Temporal minValue) {
+        setMinValue(minValue);
+        return this;
+    }
+
+    public DateTimeType withMaxValue(Temporal maxValue) {
+        setMaxValue(maxValue);
         return this;
     }
 }

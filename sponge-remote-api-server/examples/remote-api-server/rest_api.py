@@ -5,6 +5,7 @@ Used for testing a REST API server and clients.
 
 from java.util.concurrent.atomic import AtomicBoolean
 from org.apache.commons.io import IOUtils
+from java.time import LocalDateTime
 
 def onInit():
     # Variables for assertions only.
@@ -273,7 +274,7 @@ class TypeResultAction(Action):
 class DateTimeAction(Action):
     def onConfigure(self):
         self.withArgs([
-            DateTimeType("dateTime").withDateTime(),
+            DateTimeType("dateTime").withDateTime().withMinValue(LocalDateTime.of(2020, 1, 1, 0, 0)).withMaxValue(LocalDateTime.of(2030, 1, 1, 0, 0)),
             DateTimeType("dateTimeZone").withDateTimeZone(),
             DateTimeType("date").withDate().withFormat("yyyy-MM-dd"),
             DateTimeType("time").withTime().withFormat("HH:mm:ss"),

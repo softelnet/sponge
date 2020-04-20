@@ -270,7 +270,7 @@ This default behavior can be changed by providing a custom implementation of `Kn
 === Spring based provider
 The Spring based provider is implemented by the `SpringKnowledgeBaseFileProvider`. It will be automatically set if the `SpringEngineBuilder` is used. It additionally supports:
 
-* the Spring `classpath*:` URL protocol for loading resources as well as other protocols supported by the Spring `PathMatchingResourcePatternResolver`,
+* the Spring `classpath*:` URL protocol for loading resources as well as other protocols supported by the Spring https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/io/support/PathMatchingResourcePatternResolver.html[`PathMatchingResourcePatternResolver`],
 * the {sponge} `spar` URL protocol for loading script knowledge base files from JAR archives located in a filesystem.
 
 The `spar` protocol name is an acronym for SPonge ARchive. The `spar` protocol accepts wildcards both in an archive content path and in an archive file path itself.

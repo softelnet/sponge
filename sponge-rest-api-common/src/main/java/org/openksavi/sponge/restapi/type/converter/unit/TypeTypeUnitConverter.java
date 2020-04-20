@@ -21,6 +21,7 @@ import org.openksavi.sponge.restapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DataTypeKind;
+import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.util.DataTypeUtils;
 
@@ -42,6 +43,8 @@ public class TypeTypeUnitConverter extends BaseUnitTypeConverter<DataType, TypeT
             t.setDefaultValue(converter.marshal(t, t.getDefaultValue()));
 
             t.setFeatures(FeaturesUtils.marshal(converter.getFeatureConverter(), t.getFeatures()));
+
+            marshalSpecificTypeProperties(converter, t);
         }
 
         return result;
@@ -58,8 +61,24 @@ public class TypeTypeUnitConverter extends BaseUnitTypeConverter<DataType, TypeT
             t.setDefaultValue(converter.unmarshal(t, t.getDefaultValue()));
 
             t.setFeatures(FeaturesUtils.unmarshal(converter.getFeatureConverter(), t.getFeatures()));
+
+            unmarshalSpecificTypeProperties(converter, unmarshalled);
         }
 
         return unmarshalled;
+    }
+
+    protected void marshalSpecificTypeProperties(TypeConverter converter, DataType value) {
+        if (value instanceof DateTimeType) {
+            ((DateTimeType) value).setMinValue(converter.marshal(value, ((DateTimeType) value).getMinValue()));
+            ((DateTimeType) value).setMaxValue(converter.marshal(value, ((DateTimeType) value).getMaxValue()));
+        }
+    }
+
+    protected void unmarshalSpecificTypeProperties(TypeConverter converter, DataType unmarshalled) {
+        if (unmarshalled instanceof DateTimeType) {
+            ((DateTimeType) unmarshalled).setMinValue(converter.unmarshal(unmarshalled, ((DateTimeType) unmarshalled).getMinValue()));
+            ((DateTimeType) unmarshalled).setMaxValue(converter.unmarshal(unmarshalled, ((DateTimeType) unmarshalled).getMaxValue()));
+        }
     }
 }
