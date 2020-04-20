@@ -135,7 +135,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |A flag specifying if a current value in a client code should be passed to a server when its new value is to be provided.
 
 |`mode`
-|A provided read mode: `explicit` (a value has to specified to be provided in `provideArgs`), `optional` (a value may or may not be specified to be provided in `provideArgs`) or `implicit` (a value shouldn't be specified to be provided in `provideArgs`). Defaults to `explicit`. For example a value can be provided optionally or implicitly when an other value is submitted. To set this property to a value other than a default, use the `withOptionalMode()` or the `withImplicitMode()` method.
+|A provided read mode: `explicit` (a value has to specified to be provided in `provideArgs`), `optional` (a value may or may not be specified to be provided in `provideArgs`) or `implicit` (a value shouldn't be specified to be provided in `provideArgs`). Defaults to `explicit`. For example a value can be provided optionally or implicitly when another value is submitted. To set this property to a value other than a default, use the `withOptionalMode()` or the `withImplicitMode()` method.
 |===
 
 .Submittable metadata properties

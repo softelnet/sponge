@@ -209,7 +209,7 @@ The `boolean onIsActive(IsActionActiveContext context)` method is used to provid
 == Provided arguments
 An action argument can be _provided_, i.e. its value and possible value set may be computed and returned to a client code any time before calling an action. A provided argument gives more flexibility than the `defaultValue` in the argument data type. Nested values of action arguments can be provided as well. In that case both a type being provided and a dependency path have to be named and can't contain collections (lists or maps) as intermediate path elements.
 
-An action argument can also be _submitted_ by a client code (i.e. written ad hoc), irrespectively of an action call.
+An action argument can also be _submitted_ by a client code, irrespectively of an action call.
 
 The `onProvideArgs(ProvideArgsContext context)` method is used to provide action argument values.
 
@@ -235,13 +235,16 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 
 |`Map<String, Map<String, Object>> features`
 |A not null map of features for arguments in a context, set by a client code. Each argument specified in `provide` or `submit` has its (possibly empty) features map.
+
+|`Boolean initial`
+|The flag indicating if this is the initial provide action arguments request. This flag can be set by a client code and used in the `onProvideArgs` method to perform advanced argument initialization.
 |===
 
 Provided arguments make easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
 
 A provided argument can be `readOnly`. In that case its value in the `onCall` method should be ignored. A read only argument type has to be nullable.
 
-A provided argument can _depend_ on other arguments but only those that are specified earlier. In the example argument `actuator5` depends on `actuator1`. Its possible value set contains the value of `actuator1`.
+A provided argument can _depend_ on other arguments but only those that are specified earlier.
 
 Arguments configured as provided with a value, a value set or a element value set have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `withValue` method sets the provided value. The optional `withAnnotatedValueSet` method sets the value set along with annotations (e.g. labels) where each element is an instance of the `AnnotatedValue` class. The optional `withValueSet` method sets the possible value set with no annotations.
 

@@ -61,7 +61,7 @@ public class ProvidedMeta {
     /**
      * The provided read mode: {@code explicit} (a value has to specified to be provided in {@code provideArgs}), {@code optional} (a value
      * may or may not be specified to be provided in {@code provideArgs}) or {@code implicit} (a value shouldn't be specified to be provided
-     * in {@code provideArgs}). Defaults to {@code explicit}. For example a value can be provided optionally or implicitly when an other
+     * in {@code provideArgs}). Defaults to {@code explicit}. For example a value can be provided optionally or implicitly when another
      * value is submitted.
      */
     private ProvidedMode mode = ProvidedMode.EXPLICIT;

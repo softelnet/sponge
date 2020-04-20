@@ -3,9 +3,9 @@ Sponge Knowledge base
 Demo - A map type
 """
 
-class ActionWithMapTypeArgs(Action):
+class ActionWithMapTypeResult(Action):
     def onConfigure(self):
-        self.withLabel("Map type arguments")
+        self.withLabel("Map type result")
         self.withArg(StringType("data").withLabel("Map data").withProvided(ProvidedMeta().withValueSet())).withResult(
             MapType().withLabel("Map")
                 .withKey(IntegerType("key").withLabel("Key"))
