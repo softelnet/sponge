@@ -326,7 +326,7 @@ The following example shows a very simple MPD player implemented as a {sponge} a
 .Interactive form example
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-mpd-mpc/kb/mpd_mpc_player.py[lines=5..-1]
+include::{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_mpd_player_main.png[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]

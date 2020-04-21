@@ -46,6 +46,11 @@
 
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-kb-mpd-mpc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-test</artifactId>
             <scope>test</scope>
         </dependency>

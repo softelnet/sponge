@@ -476,6 +476,60 @@ For more information see {sponge} Javadoc.
 == Predefined knowledge base libraries
 {sponge} provides a few predefined script files that may be used as one of files in your compatible (i.e. written in the same language) knowledge bases. For example you may use the Jython library in your XML configuration file: `<file>classpath*:org/openksavi/sponge/jython/jython_library.py</file>`. The `classpath*` notation is available only for Spring aware engines and allows to use Ant style (`*`) specifications for directories and files.
 
+== Knowledge base artifacts
+Knowledge bases artifacts provide selected functionalities that can be used in your projects ad hoc. They are intended for more advanced cases than the predefined knowledge base libraries.
+
+A knowledge base artifact can be written in only one scripting language. It can be used as a part of a bigger knowledge base, but other script files must be written in the same language.
+
+=== Usage
+
+[discrete]
+==== Embedded
+
+.Maven dependency
+[source,xml]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>[ArtifactId]</artifactId>
+</dependency>
+----
+
+.Sponge configuration
+[source,xml]
+----
+<knowledgeBase ...>
+    <file>classpath*:sponge/[Name]/**/*.py</file>
+</knowledgeBase>
+----
+
+For example `<file>classpath*:sponge/mpd-mpc/**/*.py</file>`.
+
+[discrete]
+==== Standalone commadline application
+
+If a knowledge base artifact is not included in the standalone commadline application, add the following entry to your {sponge} configuration.
+
+.Sponge configuration
+[source,xml]
+----
+<knowledgeBase ...>
+    <file>spar:[ArtifactId]-*.jar!/**/*.py</file>
+</knowledgeBase>
+----
+
+For example `<file>spar:sponge-kb-mpd-mpc-*.jar!/**/*.py</file>`.
+
+Otherwise add the following entry.
+
+.Sponge configuration
+[source,xml]
+----
+<knowledgeBase ...>
+    <file>classpath*:sponge/[Name]/**/*.py</file>
+</knowledgeBase>
+----
+
 == Knowledge base versioning
 You may specify a version number for a knowledge base as an integer. It could be useful for example to enforce version checking when calling actions via the REST API. You should set the version in the `onLoad` callback function. After editing the knowledge base file and before reloading the engine, you could increase the version number.
 

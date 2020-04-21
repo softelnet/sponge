@@ -87,6 +87,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-kb-mpd-mpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-swagger-java</artifactId>
         </dependency>

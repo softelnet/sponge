@@ -903,14 +903,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- TODO Remove dependency here. -->
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-    </dependencies>
-
     <repositories>
         <repository>
             <id>eclipse-paho</id>
@@ -976,6 +968,7 @@
                 <module>sponge-remote-api-test-base</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
+                <module>sponge-kb</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
                 <module>sponge-standalone-app</module>
@@ -1097,6 +1090,7 @@
                 <module>sponge-remote-api-server</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
+                <module>sponge-kb</module>
                 <module>sponge-standalone</module>
                 <module>sponge-bom</module>
             </modules>
