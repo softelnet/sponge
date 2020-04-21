@@ -40,7 +40,7 @@ import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.spring.SpringPlugin;
 
 /**
- * A plugin for standalone command-line application.
+ * A plugin for the standalone command-line application.
  */
 public class StandalonePlugin extends JPlugin {
 

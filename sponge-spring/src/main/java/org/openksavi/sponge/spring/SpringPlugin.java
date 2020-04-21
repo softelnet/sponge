@@ -23,8 +23,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.openksavi.sponge.java.JPlugin;
 
 /**
- * Sponge plugin that provides integration with Spring framework. It should be set up in the Spring configuration as a bean and added to the
- * Engine Builder.
+ * Sponge plugin that provides integration with the Spring framework. It should be set up in the Spring configuration as a bean and added to
+ * the Engine Builder.
  */
 public class SpringPlugin extends JPlugin implements ApplicationContextAware {
 

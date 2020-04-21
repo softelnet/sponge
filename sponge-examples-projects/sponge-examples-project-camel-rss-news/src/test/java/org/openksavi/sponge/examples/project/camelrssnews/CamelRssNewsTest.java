@@ -23,14 +23,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 
 public class CamelRssNewsTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(CamelRssNewsTest.class);
 
     @Test
     public void testCamelRssNews() throws InterruptedException {
@@ -49,21 +45,6 @@ public class CamelRssNewsTest {
             }
         } finally {
             example.shutdown();
-        }
-    }
-
-    /**
-     * This test results in a nondeterministic error after running a few iterations and when //.filter((exchange) -> false) line is
-     * uncommented in SpringConfiguration.java. Possibly a Jython bug. The error is: java.lang.NullPointerException at
-     * org.python.core.PyType$MROMergeState.isMerged(PyType.java:2094) or java.lang.NullPointerException at
-     * org.python.core.PyType$MROMergeState.pastnextContains(PyType.java:2114).
-     */
-    // @Test
-    public void testCamelRssNewsLoop() throws InterruptedException {
-        int i = 0;
-        while (true) {
-            logger.info("Iteration {}", i++);
-            testCamelRssNews();
         }
     }
 }
