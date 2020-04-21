@@ -938,53 +938,6 @@ class ScriptPlugin(Plugin):
 . In case of reloading a knowledge base, the method `onBeforeReload()` of each plugin is invoked before the method `onBeforeReload()` of knowledge bases. Invoking the methods `onAfterReload()` goes in reverse (first the methods `onAfterReload()` of all knowledge bases and then the methods defined in plugins).
 . Before {sponge} shuts down, methods `onShutdown()` of all knowledge bases are invoked and then the method `onShutdown()` is invoked for each plugin.
 
-=== Standard plugins
-
-.Standard plugin list
-[cols="1,4"]
-|===
-|Name |Description
-
-|`ClientServerPy4JPlugin`
-|Provides integration with CPython using Py4J ClientServer.
-
-|`GatewayServerPy4JPlugin`
-|Provides integration with CPython using Py4J GatewayServer.
-
-|`CamelPlugin`
-|Provides integration with Apache Camel.
-
-|`GammuGsmModemPlugin`
-|A GSM modem plugin that uses Gammu.
-
-|`GrovePiPlugin`
-|Provides GrovePi integration. GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
-
-|`GrpcApiServerPlugin`
-|{sponge} gRPC API server plugin.
-
-|`MidiPlugin`
-|MIDI plugin.
-
-|`Pi4JPlugin`
-|Pi4J plugin.
-
-|`ReactiveXPlugin`
-|ReactiveX plugin.
-
-|`RestApiServerPlugin`
-|{sponge} REST API server plugin.
-
-|`SerialPortGsmModemPlugin`
-|A GSM modem plugin that uses a serial port. Experimental.
-
-|`SpringPlugin`
-|Provides integration with the Spring framework.
-
-|`StandalonePlugin`
-|A plugin for the {sponge} standalone command-line application.
-|===
-
 == Exception handling
 {sponge} introduces its own runtime exception defined as a Java class `SpongeException`. Exception handling in custom Java components (for example plugins) should follow standard Java conventions. Exception handling in scripting knowledge bases should follow standard conventions for the corresponding scripting language.
 
@@ -1252,6 +1205,65 @@ private static final Logger logger = LoggerFactory.getLogger(ConnectionPlugin.cl
 ----
 
 TIP: You may see ignored events (i.e. events that go to the Output Event Queue) in the logs by setting the `sponge.event.ignored` logger to `INFO`.
+
+== Standard plugins
+
+.Standard plugin list
+[cols="1,4"]
+|===
+|Name |Description
+
+|`ClientServerPy4JPlugin`
+|Provides integration with CPython using Py4J ClientServer.
+
+|`GatewayServerPy4JPlugin`
+|Provides integration with CPython using Py4J GatewayServer.
+
+|`CamelPlugin`
+|Provides integration with Apache Camel.
+
+|`GammuGsmModemPlugin`
+|A GSM modem plugin that uses Gammu.
+
+|`GrovePiPlugin`
+|Provides GrovePi integration. GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+
+|`GrpcApiServerPlugin`
+|{sponge} gRPC API server plugin.
+
+|`MidiPlugin`
+|MIDI plugin.
+
+|`Pi4JPlugin`
+|Pi4J plugin.
+
+|`ReactiveXPlugin`
+|ReactiveX plugin.
+
+|`RestApiServerPlugin`
+|{sponge} REST API server plugin.
+
+|`SerialPortGsmModemPlugin`
+|A GSM modem plugin that uses a serial port. Experimental.
+
+|`SpringPlugin`
+|Provides integration with the Spring framework.
+
+|`StandalonePlugin`
+|A plugin for the {sponge} standalone command-line application.
+|===
+
+== Predefined knowledge base artifacts
+
+.Predefined knowledge base artifacts
+[cols="1,1,5"]
+|===
+|Name |ArtifactId |Description
+
+|`mpd-mpc`
+|`sponge-kb-mpd-mpc`
+|The MPD/MPC knowledge base uses the `mpc` commandline MPD client to connect to an MPD server providing music player related actions.
+|===
 
 include::includes/user-guide-examples.adoc[leveloffset=+1]
 

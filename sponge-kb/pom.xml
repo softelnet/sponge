@@ -9,21 +9,15 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>sponge-api</artifactId>
-    <name>Sponge - API</name>
+    <artifactId>sponge-kb</artifactId>
+    <name>Sponge - Knowledge Bases</name>
+    <packaging>pom</packaging>
 
     <properties>
         <sponge.root>${basedir}/..</sponge.root>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>sponge-kb-mpd-mpc</module>
+    </modules>
 </project>

@@ -1,0 +1,34 @@
+= Sponge Knowledge Base - MPD/MPC
+
+This is the source code for the Sponge MPD/MPC knowledge base. The knowledge base uses the `mpc` commandline MPD client to connect to an MPD server.
+
+This knowledge base requires Python.
+
+== Supported properties
+
+* `musixmatchApiKey` - an optional Musixmatch API key to get song lyrics. How to get a Musixmatch API key see https://developer.musixmatch.com.
+
+== Usage
+
+If you embed Sponge in your Java project, add the following Maven dependency.
+
+.Maven dependency
+[source,xml]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-kb-mpd-mpc</artifactId>
+</dependency>
+----
+
+For both embedded or standalone {sponge} add the following entry to your {sponge} configuration.
+
+.Sponge configuration
+[source,xml]
+----
+<knowledgeBase name="mpd" label="MPD">
+    <file>classpath*:sponge/mpd-mpc/**/*.py</file>
+</knowledgeBase>
+----
+
+

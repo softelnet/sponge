@@ -185,12 +185,14 @@
                 <include>kb/**</include>
             </includes>
         </fileSet>
+
         <fileSet>
-            <directory>../sponge-examples-projects/sponge-examples-project-mpd-mpc</directory>
+            <directory>../sponge-examples-projects/sponge-examples-project-mpd-mpc/kb</directory>
             <outputDirectory>examples/project-mpd-mpc</outputDirectory>
-            <includes>
-                <include>kb/**</include>
-            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc</directory>
+            <outputDirectory>examples/project-mpd-mpc</outputDirectory>
         </fileSet>
 
         <fileSet>
