@@ -32,6 +32,14 @@ The default name of the REST API plugin (which can be used in knowledge bases) i
 |`String`
 |The REST API name. It can be overwritten by a Java system property `sponge.restApiServer.name`.
 
+|`description`
+|`String`
+|The REST API description.
+
+|`license`
+|`String`
+|The license text of a particular REST API service.
+
 |`prettyPrint`
 |`boolean`
 |The pretty print option. Defaults to `false`.
@@ -186,18 +194,6 @@ class LowerCaseHello(Action):
 ----
 
 In order to handle a session lifecycle you can implement and set the on session open and the on session close listeners in the `RestApiService`.
-
-== API features
-
-.Remote API features
-[cols="2,1,4"]
-|===
-|Name |Type |Description
-
-|`grpcEnabled`
-|`Boolean`
-|Set to `true` if the optional {sponge} gRPC API service is enabled.
-|===
 
 == Security
 The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed.

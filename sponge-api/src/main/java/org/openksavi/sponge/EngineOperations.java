@@ -240,6 +240,13 @@ public interface EngineOperations {
     String getVersion();
 
     /**
+     * Returns the engine license.
+     *
+     * @return the engine license.
+     */
+    String getLicense();
+
+    /**
      * Returns the engine info.
      *
      * @return the engine info.

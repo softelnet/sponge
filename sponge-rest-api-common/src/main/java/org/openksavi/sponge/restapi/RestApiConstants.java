@@ -70,6 +70,12 @@ public final class RestApiConstants {
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 
+    public static final String REMOTE_API_FEATURE_NAME = "name";
+
+    public static final String REMOTE_API_FEATURE_DESCRIPTION = "description";
+
+    public static final String REMOTE_API_FEATURE_LICENSE = "license";
+
     public static final String REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME = RemoteEvent.class.getName();
 
     public static final int HTTP_CODE_ERROR = 500;

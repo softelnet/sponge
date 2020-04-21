@@ -139,6 +139,11 @@ public class DefaultRestApiService implements RestApiService {
     protected void setupDefaultFeatures() {
         setFeature(RestApiConstants.REMOTE_API_FEATURE_VERSION, getEngine().getVersion());
         setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
+        setFeature(RestApiConstants.REMOTE_API_FEATURE_NAME, RestApiServerUtils.resolveServiceName(getEngine(), settings));
+        setFeature(RestApiConstants.REMOTE_API_FEATURE_DESCRIPTION,
+                settings.getDescription() != null ? settings.getDescription() : getEngine().getDescription());
+        setFeature(RestApiConstants.REMOTE_API_FEATURE_LICENSE,
+                settings.getLicense() != null ? settings.getLicense() : getEngine().getLicense());
     }
 
     @Override

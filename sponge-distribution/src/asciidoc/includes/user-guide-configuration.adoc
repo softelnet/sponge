@@ -76,7 +76,9 @@ Properties can also be used as {sponge} variables in the engine scope. In that c
 Properties may be loaded from an optional properties file located in the same directory as the configuration file, which name follows the convention `<XML configuration file basename>.properties`. If not found in the configuration file directory, the properties file is looked up using the same strategy as the configuration file. This properties file is supposed to be encoded in UTF-8.
 
 === Engine configuration
-The engine configuration section (`<engine>`) contains engine configuration parameters and an optional name of the {sponge} engine. The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
+The engine configuration section (`<engine>`) contains engine configuration parameters and an optional name and a label of the {sponge} engine. You can set an engine description and a license as well.
+
+The most important parameters are `mainProcessingUnitThreadCount`, `asyncEventSetProcessorExecutorThreadCount` and `eventQueueCapacity`.
 
 .Engine parameters
 [cols="2,5,1"]

@@ -7,10 +7,12 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.0 (not released yet)
-* Added `features` to the response header in the REST API.
+* API change: Added `features` to the response header in the REST API.
 * API change: Added `ProvideActionArgsRequestBody.initial` in the REST API.
 * API change: Renamed `ProvideActionArgsRequestBody.features` and `ProvideArgsContext.features` to `argFeatures`.
 * API change: Added `minValue` and `maxValue` to `DateTimeType`.
+* Added a license property to the engine configuration.
+* Added the `license` and the `description` to the REST API features.
 * Unshaded dependencies in the `sponge-core` and `sponge-jython` artifacts.
 * Added a new artifact `sponge-jython-shaded` that contains several shaded dependencies.
 * Dependencies upgrade.

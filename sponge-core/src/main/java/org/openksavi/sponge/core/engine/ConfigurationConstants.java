@@ -69,6 +69,8 @@ public final class ConfigurationConstants {
 
     public static final String TAG_ENGINE_DESCRIPTION = "description";
 
+    public static final String TAG_ENGINE_LICENSE = "license";
+
     private ConfigurationConstants() {
         //
     }

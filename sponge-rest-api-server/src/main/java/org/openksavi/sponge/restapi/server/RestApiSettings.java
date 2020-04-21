@@ -53,6 +53,9 @@ public class RestApiSettings {
     /** The API description. */
     private String description;
 
+    /** The API license. */
+    private String license;
+
     /** The pretty print option. */
     private boolean prettyPrint = RestApiServerConstants.DEFAULT_PRETTY_PRINT;
 
@@ -143,6 +146,14 @@ public class RestApiSettings {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
     }
 
     public void setVersion(int version) {
@@ -284,12 +295,13 @@ public class RestApiSettings {
     @Override
     public String toString() {
         return "RestApiSettings [restComponentId=" + restComponentId + ", host=" + host + ", port=" + port + ", path=" + path + ", version="
-                + version + ", name=" + name + ", description=" + description + ", prettyPrint=" + prettyPrint + ", publicActions="
-                + publicActions + ", publicEvents=" + publicEvents + ", sslContextParametersBeanName=" + sslContextParametersBeanName
-                + ", sslConfiguration=" + sslConfiguration + ", publishReload=" + publishReload + ", allowAnonymous=" + allowAnonymous
-                + ", adminRole=" + adminRole + ", anonymousRole=" + anonymousRole + ", includeDetailedErrorMessage="
-                + includeDetailedErrorMessage + ", authTokenExpirationDuration=" + authTokenExpirationDuration + ", openApiProperties="
-                + openApiProperties + ", includeResponseTimes=" + includeResponseTimes + ", registerServiceDiscovery="
-                + registerServiceDiscovery + ", serviceDiscoveryInfo=" + serviceDiscoveryInfo + "]";
+                + version + ", name=" + name + ", description=" + description + ", license=" + license + ", prettyPrint=" + prettyPrint
+                + ", publicActions=" + publicActions + ", publicEvents=" + publicEvents + ", sslContextParametersBeanName="
+                + sslContextParametersBeanName + ", sslConfiguration=" + sslConfiguration + ", publishReload=" + publishReload
+                + ", allowAnonymous=" + allowAnonymous + ", adminRole=" + adminRole + ", anonymousRole=" + anonymousRole
+                + ", includeDetailedErrorMessage=" + includeDetailedErrorMessage + ", authTokenExpirationDuration="
+                + authTokenExpirationDuration + ", openApiProperties=" + openApiProperties + ", includeResponseTimes="
+                + includeResponseTimes + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo="
+                + serviceDiscoveryInfo + "]";
     }
 }

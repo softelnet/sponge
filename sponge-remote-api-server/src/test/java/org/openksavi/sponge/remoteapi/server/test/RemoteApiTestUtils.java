@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 
 import org.openksavi.sponge.remoteapi.test.base.ComplexObject;
 import org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject;
+import org.openksavi.sponge.restapi.server.RestApiSettings;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.RecordType;
 
@@ -93,6 +94,12 @@ public abstract class RemoteApiTestUtils {
         assertEquals("Severity", notificationType.getFields().get(1).getLabel());
 
         assertPersonRecordType(notificationType.getFieldType("person"));
+    }
+
+    public static void setupRestService(RestApiSettings settings) {
+        settings.setName("Sponge Test REST API");
+        settings.setDescription("Sponge Test REST API description");
+        settings.setLicense("Apache 2.0");
     }
 
     private RemoteApiTestUtils() {

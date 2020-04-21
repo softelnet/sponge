@@ -27,8 +27,10 @@ import java.util.stream.Collectors;
 
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.restapi.server.RestApiServerConstants;
+import org.openksavi.sponge.restapi.server.RestApiSettings;
 import org.openksavi.sponge.restapi.server.security.User;
 import org.openksavi.sponge.restapi.server.security.UserContext;
 import org.openksavi.sponge.restapi.type.converter.TypeConverter;
@@ -218,5 +220,21 @@ public abstract class RestApiServerUtils {
 
             return SpongeUtils.getDisplayLabel(action1).compareTo(SpongeUtils.getDisplayLabel(action2));
         };
+    }
+
+    public static String resolveServiceName(SpongeEngine engine, RestApiSettings settings) {
+        if (settings.getName() != null) {
+            return settings.getName();
+        }
+
+        if (engine.getLabel() != null) {
+            return engine.getLabel();
+        }
+
+        if (engine.getName() != null) {
+            return engine.getName();
+        }
+
+        return RestApiServerConstants.DEFAULT_NAME;
     }
 }

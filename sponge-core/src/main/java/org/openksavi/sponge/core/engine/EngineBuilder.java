@@ -83,7 +83,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the engine name.
      *
      * @param name the engine name.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> name(String name) {
         engine.setName(name);
@@ -91,10 +91,43 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     }
 
     /**
+     * Sets the engine label.
+     *
+     * @param name the engine label.
+     * @return this builder.
+     */
+    public EngineBuilder<T> label(String label) {
+        engine.setLabel(label);
+        return this;
+    }
+
+    /**
+     * Sets the engine description.
+     *
+     * @param name the engine description.
+     * @return this builder.
+     */
+    public EngineBuilder<T> description(String description) {
+        engine.setDescription(description);
+        return this;
+    }
+
+    /**
+     * Sets the engine license.
+     *
+     * @param name the engine license.
+     * @return this builder.
+     */
+    public EngineBuilder<T> license(String license) {
+        engine.setLicense(license);
+        return this;
+    }
+
+    /**
      * Sets the module provider.
      *
      * @param moduleProvider the moduleProvider to set.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> moduleProvider(EngineModuleProvider moduleProvider) {
         engine.setModuleProvider(moduleProvider);
@@ -105,7 +138,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the knowledge base interpreter factory providers.
      *
      * @param knowledgeBaseInterpreterFactoryProviders the knowledge base interpreter factory providers.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBaseInterpreterFactoryProviders(
             List<KnowledgeBaseInterpreterFactoryProvider> knowledgeBaseInterpreterFactoryProviders) {
@@ -117,7 +150,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the event queue provider.
      *
      * @param eventQueueProvider the event queue provider.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> eventQueueProvider(EventQueueProvider eventQueueProvider) {
         engine.setEventQueueProvider(eventQueueProvider);
@@ -128,7 +161,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the processing unit provider.
      *
      * @param processingUnitProvider the processing unit provider.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> processingUnitProvider(ProcessingUnitProvider processingUnitProvider) {
         engine.setProcessingUnitProvider(processingUnitProvider);
@@ -139,7 +172,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the knowledge base file provider.
      *
      * @param knowledgeBaseFileProvider the knowledge base file provider.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBaseFileProvider(KnowledgeBaseFileProvider knowledgeBaseFileProvider) {
         engine.setKnowledgeBaseFileProvider(knowledgeBaseFileProvider);
@@ -150,7 +183,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the configuration filename.
      *
      * @param configFilename the configuration filename.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> config(String configFilename) {
         engine.setConfigurationFilename(configFilename);
@@ -171,7 +204,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @param value the property value.
      * @param variable should the property be used as a variable.
      * @param system is the property a system property.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> property(String name, Object value, boolean variable, boolean system) {
         propertyEntries.put(name, new GenericPropertyEntry(value, variable, system));
@@ -183,7 +216,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      *
      * @param name the property name.
      * @param value the property value.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> property(String name, Object value) {
         return property(name, value, false, false);
@@ -194,7 +227,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      *
      * @param name the property name.
      * @param value the property value.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> systemProperty(String name, Object value) {
         return property(name, value, false, true);
@@ -205,7 +238,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      *
      * @param name the property name.
      * @param value the property value.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> variableProperty(String name, Object value) {
         return property(name, value, true, false);
@@ -215,7 +248,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the properties.
      *
      * @param simpleProperties the properties.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> properties(Map<String, Object> simpleProperties) {
         simpleProperties.forEach((name, value) -> property(name, value));
@@ -226,7 +259,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the system properties.
      *
      * @param systemProperties the system properties.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> systemProperties(Map<String, String> systemProperties) {
         systemProperties.forEach((name, value) -> systemProperty(name, value));
@@ -237,7 +270,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the variable properties.
      *
      * @param variableProperties the variable properties.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> variableProperties(Map<String, String> variableProperties) {
         variableProperties.forEach((name, value) -> variableProperty(name, value));
@@ -248,7 +281,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Adds the plugin.
      *
      * @param plugin the plugin.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> plugin(Plugin plugin) {
         additionalPlugins.get().add(plugin);
@@ -259,7 +292,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Adds the plugins.
      *
      * @param plugins the plugins.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> plugins(Plugin... plugins) {
         Stream.of(plugins).forEachOrdered(plugin -> plugin(plugin));
@@ -270,7 +303,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Adds the knowledge base.
      *
      * @param knowledgeBase the knowledge base.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(KnowledgeBase knowledgeBase) {
         additionalKnowledgeBases.get().add(knowledgeBase);
@@ -283,7 +316,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @param name the knowledge base name.
      * @param type the knowledge base type.
      * @param files the knowledge base files.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, String... files) {
         return knowledgeBase(name, type, Stream.of(files).map(file -> new FileKnowledgeBaseScript(file)).collect(Collectors.toList()));
@@ -294,7 +327,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      *
      * @param name the knowledge base name.
      * @param files the knowledge base files.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(String name, String... files) {
         return knowledgeBase(name, Stream.of(files).map(file -> new FileKnowledgeBaseScript(file)).collect(Collectors.toList()));
@@ -305,7 +338,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      *
      * @param name the knowledge base name.
      * @param scripts the knowledge base scripts.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseScript... scripts) {
         return knowledgeBase(name, null, Stream.of(scripts).collect(Collectors.toList()));
@@ -317,7 +350,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @param name the knowledge base name.
      * @param type the knowledge base type.
      * @param scripts the knowledge base scripts.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, KnowledgeBaseScript... scripts) {
         return knowledgeBase(name, type, Stream.of(scripts).collect(Collectors.toList()));
@@ -328,7 +361,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      *
      * @param name the knowledge base name.
      * @param scripts the knowledge base scripts.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(String name, List<KnowledgeBaseScript> scripts) {
         return knowledgeBase(name, null, scripts);
@@ -340,7 +373,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @param name the knowledge base name.
      * @param type the knowledge base type.
      * @param scripts the knowledge base scripts.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBase(String name, KnowledgeBaseType type, List<KnowledgeBaseScript> scripts) {
         ScriptKnowledgeBase knowledgeBase = new DefaultScriptKnowledgeBase(name, type);
@@ -356,7 +389,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * @param name the knowledge base name.
      * @param type the knowledge base type.
      * @param body the String-based knowledge base body.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> knowledgeBaseString(String name, KnowledgeBaseType type, String body) {
         return knowledgeBase(name, type, Stream.of(new StringKnowledgeBaseScript(body)).collect(Collectors.toList()));
@@ -366,7 +399,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
      * Sets the exception handler.
      *
      * @param exceptionHandler the new exception handler.
-     * @return this Engine Builder.
+     * @return this builder.
      */
     public EngineBuilder<T> exceptionHandler(ExceptionHandler exceptionHandler) {
         engine.setExceptionHandler(exceptionHandler);

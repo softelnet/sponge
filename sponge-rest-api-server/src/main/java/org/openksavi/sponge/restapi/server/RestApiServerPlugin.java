@@ -107,6 +107,8 @@ public class RestApiServerPlugin extends JPlugin implements CamelContextAware {
         }
 
         settings.setName(configuration.getString(RestApiServerConstants.TAG_NAME, settings.getName()));
+        settings.setDescription(configuration.getString(RestApiServerConstants.TAG_DESCRIPTION, settings.getDescription()));
+        settings.setLicense(configuration.getString(RestApiServerConstants.TAG_LICENSE, settings.getLicense()));
 
         settings.setPrettyPrint(configuration.getBoolean(RestApiServerConstants.TAG_PRETTY_PRINT, settings.isPrettyPrint()));
 

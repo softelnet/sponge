@@ -61,6 +61,10 @@ public final class RestApiServerConstants {
 
     public static final String TAG_NAME = "name";
 
+    public static final String TAG_DESCRIPTION = "description";
+
+    public static final String TAG_LICENSE = "license";
+
     public static final String TAG_PRETTY_PRINT = "prettyPrint";
 
     public static final String TAG_PUBLIC_ACTIONS = "publicActions";

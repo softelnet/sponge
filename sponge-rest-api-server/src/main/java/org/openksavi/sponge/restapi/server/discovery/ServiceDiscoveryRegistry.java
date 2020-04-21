@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 import org.openksavi.sponge.restapi.server.RestApiSettings;
+import org.openksavi.sponge.restapi.server.util.RestApiServerUtils;
 
 /**
  * A REST API service discovery registry manager.
@@ -70,22 +70,6 @@ public class ServiceDiscoveryRegistry {
 
     public void setSettings(RestApiSettings settings) {
         this.settings = settings;
-    }
-
-    protected String resolveServiceName() {
-        if (settings.getName() != null) {
-            return settings.getName();
-        }
-
-        if (getEngine().getLabel() != null) {
-            return getEngine().getLabel();
-        }
-
-        if (getEngine().getName() != null) {
-            return getEngine().getName();
-        }
-
-        return RestApiServerConstants.DEFAULT_NAME;
     }
 
     protected String createDefaultServiceUrl(Integer port) {
@@ -130,7 +114,7 @@ public class ServiceDiscoveryRegistry {
             Integer port = getSettings().getPort();
             ServiceDiscoveryInfo serviceDiscoveryInfo = settings.getServiceDiscoveryInfo();
 
-            String serviceName = resolveServiceName();
+            String serviceName = RestApiServerUtils.resolveServiceName(getEngine(), settings);
             String serviceUrl = serviceDiscoveryInfo != null && serviceDiscoveryInfo.getUrl() != null ? serviceDiscoveryInfo.getUrl()
                     : createDefaultServiceUrl(port);
 

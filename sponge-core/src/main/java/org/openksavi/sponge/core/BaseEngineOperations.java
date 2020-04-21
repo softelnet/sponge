@@ -199,6 +199,11 @@ public class BaseEngineOperations implements EngineOperations {
         return engine.getVersion();
     }
 
+    @Override
+    public String getLicense() {
+        return engine.getLicense();
+    }
+
     /**
      * Returns the engine info.
      *

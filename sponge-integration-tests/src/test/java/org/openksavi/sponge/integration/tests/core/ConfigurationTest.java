@@ -106,6 +106,7 @@ public class ConfigurationTest {
             assertEquals("Descriptive engine", engine.getLabel());
             assertEquals("Engine description", engine.getDescription());
             assertEquals("Sponge (descriptiveEngine) " + engine.getVersion(), engine.getInfo());
+            assertEquals("Engine license", engine.getLicense());
 
             KnowledgeBase kb = engine.getKnowledgeBaseManager().getKnowledgeBase("sampleKb");
             assertEquals("sampleKb", kb.getName());

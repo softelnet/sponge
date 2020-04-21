@@ -26,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
+import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
 import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
 import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
@@ -57,6 +58,8 @@ public abstract class BaseHttpRestApiTest extends BaseRestApiTestTemplate {
             plugin.getSettings().setAllowAnonymous(true);
             plugin.getSettings().setPublishReload(true);
             plugin.setSecurityService(restApiSecurityService());
+
+            RemoteApiTestUtils.setupRestService(plugin.getSettings());
 
             return plugin;
         }

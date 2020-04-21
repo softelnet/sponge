@@ -110,6 +110,20 @@ public interface ConfigurationManager extends EngineModule {
     void setEngineDescription(String engineDescription);
 
     /**
+     * Returns the engine license.
+     *
+     * @return the engine license.
+     */
+    String getEngineLicense();
+
+    /**
+     * Sets the engine license.
+     *
+     * @param engineLicense the engine license.
+     */
+    void setEngineLicense(String engineLicense);
+
+    /**
      * Returns the number of the Main Processing Unit worker threads.
      *
      * @return the number of the Main Processing Unit worker threads.

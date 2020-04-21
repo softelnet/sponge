@@ -183,6 +183,9 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     /** Version info. */
     private VersionInfo versionInfo = new VersionInfo();
 
+    /** The license. */
+    private String license;
+
     /** Default parameters. */
     private EngineParameters defaultParameters = new DefaultEngineParameters();
 
@@ -431,9 +434,9 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     }
 
     /**
-     * Setup the name, label and description.
+     * Setup the engine descriptions.
      */
-    protected void setupEngineDescriptive() {
+    protected void setupEngineDescriptions() {
         if (getName() == null && configurationManager.getEngineName() != null) {
             setName(configurationManager.getEngineName());
         }
@@ -444,6 +447,10 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
         if (getDescription() == null && configurationManager.getEngineDescription() != null) {
             setDescription(configurationManager.getEngineDescription());
+        }
+
+        if (getLicense() == null && configurationManager.getEngineLicense() != null) {
+            setLicense(configurationManager.getEngineLicense());
         }
     }
 
@@ -503,7 +510,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
      * Configures engine modules.
      */
     protected void configureEngineModules() {
-        setupEngineDescriptive();
+        setupEngineDescriptions();
 
         // Register interpreter factories for scripting languages.
         knowledgeBaseManager.setKnowledgeBaseInterpreterFactoryProviders(knowledgeBaseInterpreterFactoryProviders);
@@ -759,6 +766,16 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public String getInfo() {
         return versionInfo.getInfo(getName());
+    }
+
+    @Override
+    public String getLicense() {
+        return license;
+    }
+
+    @Override
+    public void setLicense(String license) {
+        this.license = license;
     }
 
     /**

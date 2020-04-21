@@ -220,6 +220,20 @@ public interface SpongeEngine extends EngineModule {
     String getVersion();
 
     /**
+     * Returns the engine license.
+     *
+     * @return the engine license.
+     */
+    String getLicense();
+
+    /**
+     * Sets the engine license.
+     *
+     * @param license the engine license.
+     */
+    void setLicense(String license);
+
+    /**
      * Returns the engine info.
      *
      * @return the engine info.

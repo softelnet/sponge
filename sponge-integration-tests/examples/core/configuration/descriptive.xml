@@ -4,6 +4,7 @@
 
     <engine name="descriptiveEngine" label="Descriptive engine">
         <description>Engine description</description>
+        <license>Engine license</license>
     </engine>
 
     <knowledgeBases>

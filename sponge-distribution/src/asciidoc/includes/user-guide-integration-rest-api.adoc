@@ -219,6 +219,34 @@ The REST API supports a username/password and an authentication token authentica
 |Every request has to contain an authentication token, returned by the `login` operation that has to be invoked earlier. It may not contain neither username nor password. The authentication token has an expiration time. When an operation returns an error message with an error code `INVALID_AUTH_TOKEN` you have to invoke the `login` operation once more to obtain a new authentication token.
 |===
 
+== API features
+
+.API features
+[cols="2,1,4"]
+|===
+|Name |Type |Description
+
+|`version`
+|`String`
+|The {sponge} engine version.
+
+|`name`
+|`String`
+|The REST API service name.
+
+|`description`
+|`String`
+|The REST API service description.
+
+|`license`
+|`String`
+|The REST API service license.
+
+|`grpcEnabled`
+|`Boolean`
+|Set to `true` if the optional {sponge} gRPC API service is enabled.
+|===
+
 == Error codes
 
 .REST API error codes

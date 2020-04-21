@@ -82,6 +82,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** The engine description. */
     private String engineDescription;
 
+    /** The engine license. */
+    private String engineLicense;
+
     /** Root configuration. */
     private CommonsConfiguration rootConfig;
 
@@ -167,6 +170,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         engineName = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_NAME, null);
         engineLabel = engineConfig.getAttribute(ConfigurationConstants.ENGINE_ATTRIBUTE_LABEL, null);
         engineDescription = engineConfig.getString(ConfigurationConstants.TAG_ENGINE_DESCRIPTION, null);
+        engineLicense = engineConfig.getString(ConfigurationConstants.TAG_ENGINE_LICENSE, null);
         setupEngineParameters();
 
         // Home can be set in a configuration file. In that case it has to be resolved again.
@@ -444,6 +448,16 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public void setEngineDescription(String engineDescription) {
         this.engineDescription = engineDescription;
+    }
+
+    @Override
+    public String getEngineLicense() {
+        return engineLicense;
+    }
+
+    @Override
+    public void setEngineLicense(String engineLicense) {
+        this.engineLicense = engineLicense;
     }
 
     /**

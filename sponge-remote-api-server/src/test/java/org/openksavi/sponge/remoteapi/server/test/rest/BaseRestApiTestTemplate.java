@@ -128,8 +128,13 @@ public abstract class BaseRestApiTestTemplate {
     public void testFeatures() {
         try (SpongeRestClient client = createRestClient()) {
             Map<String, Object> features = client.getFeatures();
-            assertEquals(2, features.size());
+            assertEquals(5, features.size());
             assertEquals(engine.getVersion(), features.get(RestApiConstants.REMOTE_API_FEATURE_VERSION));
+
+            assertEquals("Sponge Test REST API", features.get(RestApiConstants.REMOTE_API_FEATURE_NAME));
+            assertEquals("Sponge Test REST API description", features.get(RestApiConstants.REMOTE_API_FEATURE_DESCRIPTION));
+            assertEquals("Apache 2.0", features.get(RestApiConstants.REMOTE_API_FEATURE_LICENSE));
+
             assertTrue((Boolean) features.get(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED));
         }
     }
