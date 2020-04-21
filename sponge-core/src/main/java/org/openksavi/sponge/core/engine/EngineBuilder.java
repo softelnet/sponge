@@ -70,6 +70,8 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     /** Properties. */
     protected Map<String, PropertyEntry> propertyEntries = new LinkedHashMap<>();
 
+    private boolean initialized = false;
+
     /**
      * Creates a new Engine Builder.
      *
@@ -416,13 +418,23 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
         return engine.getDefaultParameters();
     }
 
+    public EngineBuilder<T> init() {
+        if (!initialized) {
+            engine.init();
+
+            initialized = true;
+        }
+
+        return this;
+    }
+
     /**
      * Build the engine.
      *
      * @return the engine.
      */
     public T build() {
-        engine.init();
+        init();
 
         if (propertyEntries != null) {
             engine.getConfigurationManager().setPropertyEntries(propertyEntries);

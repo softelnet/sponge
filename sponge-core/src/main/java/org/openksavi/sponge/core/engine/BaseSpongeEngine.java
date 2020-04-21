@@ -242,6 +242,7 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         this.moduleProvider = moduleProvider;
     }
 
+    @Override
     public List<KnowledgeBaseInterpreterFactoryProvider> getKnowledgeBaseInterpreterFactoryProviders() {
         return knowledgeBaseInterpreterFactoryProviders;
     }

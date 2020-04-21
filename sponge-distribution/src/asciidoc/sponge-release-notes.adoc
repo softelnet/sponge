@@ -15,6 +15,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added the `license` and the `description` to the REST API features.
 * Unshaded dependencies in the `sponge-core` and `sponge-jython` artifacts.
 * Added a new artifact `sponge-jython-shaded` that contains several shaded dependencies.
+* Added the `-l,--language <language>` option to the standalone commandline application.
 * Dependencies upgrade.
 
 [discrete]

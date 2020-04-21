@@ -26,6 +26,9 @@ The standalone command-line application in the interactive mode supports history
 |`-i,--interactive <[name]>`
 |Run in an interactive mode by connecting to a knowledge base interpreter. You may provide the name of one of the loaded knowledge bases, otherwise the first loaded knowledge base will be chosen.
 
+|`-l,--language <language>`
+|Run the given script language intepreter in an interactive mode as a new, empty knowledge base. Supported languages: python, groovy, ruby, javascript. Applicable only in an interactive mode.
+
 |`-q,--quiet`
 |Supresses logging to the console. Applicable only in a non interactive mode.
 

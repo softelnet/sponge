@@ -105,6 +105,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseInterpreter;
+import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
@@ -976,5 +977,11 @@ public abstract class SpongeUtils {
 
     public static EventCondition createRuleEventConditionForMethod(Rule rule, String name) {
         return ReflectionEventCondition.create(rule, name);
+    }
+
+    public static KnowledgeBaseType getKnowledgeBaseType(SpongeEngine engine, String language) {
+        return engine.getKnowledgeBaseInterpreterFactoryProviders().stream()
+                .map((provider) -> provider.getKnowledgeBaseInterpreterFactory().getSupportedType())
+                .filter((type) -> Objects.equals(type.getLanguage(), language) && type.isScript()).findFirst().orElse(null);
     }
 }

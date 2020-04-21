@@ -17,13 +17,16 @@
 package org.openksavi.sponge.standalone.test;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.jline.terminal.TerminalBuilder;
 import org.junit.jupiter.api.Test;
@@ -31,6 +34,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.standalone.StandaloneEngineBuilder;
 import org.openksavi.sponge.standalone.StandaloneSpongeEngine;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 
@@ -38,25 +42,27 @@ import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
 @net.jcip.annotations.NotThreadSafe
 public class InteractiveModeStandaloneTest {
 
-    private StandaloneSpongeEngine engine;
+    static interface InteractiveTest {
 
-    private PipedOutputStream outIn;
+        void run(StandaloneSpongeEngine engine, OutputStream out) throws Exception;
+    }
 
-    @Test
-    public void testInteractive() throws Exception {
+    protected void testInteractive(StandaloneEngineBuilder builder, InteractiveTest test) throws Exception {
+        AtomicReference<StandaloneSpongeEngine> engineRef = new AtomicReference<>();
+
         PipedInputStream in = new PipedInputStream();
 
         try (PipedOutputStream pipedOutputStream = new PipedOutputStream(in)) {
-            outIn = pipedOutputStream;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            engine = StandaloneSpongeEngine.builder().commandLineArgs("-k", "examples/standalone/interactive.py", "-i")
-                    .interactiveModeConsoleSupplier(() -> {
-                        JLineInteractiveModeConsole console = new JLineInteractiveModeConsole();
-                        console.setTerminalBuilder(TerminalBuilder.builder().streams(in, out));
+            StandaloneSpongeEngine engine = builder.interactiveModeConsoleSupplier(() -> {
+                JLineInteractiveModeConsole console = new JLineInteractiveModeConsole();
+                console.setTerminalBuilder(TerminalBuilder.builder().streams(in, out));
 
-                        return console;
-                    }).build();
+                return console;
+            }).build();
+
+            engineRef.set(engine);
 
             SpongeUtils.executeConcurrentlyOnce(engine, () -> {
                 engine.startup();
@@ -66,39 +72,106 @@ public class InteractiveModeStandaloneTest {
             await().atMost(10, TimeUnit.SECONDS)
                     .until(() -> engine != null && engine.isRunning() && engine.getInteractiveMode().isRunning());
 
-            // Print the message.
-            write("print 'Starting interactive mode tests.'");
-
-            // Send the alarm.
-            write("sponge.event(\"alarm\").send()");
-            await().atMost(10, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(Number.class, "alarms").intValue() >= 1);
-
-            // Create trigger and send event.
-            writeMulti("class T(Trigger):\\");
-            writeMulti("    def onConfigure(self):\\");
-            writeMulti("        self.withEvent(\"notification\")\\");
-            writeMulti("    def onRun(self, event):\\");
-            writeMulti("        sponge.getVariable(\"notifications\").incrementAndGet()\\");
-            writeMulti("        print \"Received the notification!\"");
-            write("");
-            write("sponge.enable(T)");
-            write("sponge.event(\"notification\").send()");
-            await().atMost(10, TimeUnit.SECONDS)
-                    .until(() -> engine.getOperations().getVariable(Number.class, "notifications").intValue() >= 1);
+            test.run(engine, pipedOutputStream);
 
             assertFalse(engine.isError());
         } finally {
-            if (engine != null) {
-                engine.shutdown();
+            if (engineRef.get() != null) {
+                engineRef.get().shutdown();
             }
         }
     }
 
-    private void write(String command) throws IOException {
-        outIn.write((command + "\r\n").getBytes());
+    @Test
+    public void testInteractive() throws Exception {
+        testInteractive(StandaloneSpongeEngine.builder().commandLineArgs("-k", "examples/standalone/interactive.py", "-i"),
+                (engine, out) -> {
+                    // Send the alarm.
+                    write(out, "sponge.event(\"alarm\").send()");
+                    await().atMost(10, TimeUnit.SECONDS)
+                            .until(() -> engine.getOperations().getVariable(Number.class, "alarms").intValue() >= 1);
+
+                    // Create trigger and send event.
+                    writeMulti(out, "class T(Trigger):\\");
+                    writeMulti(out, "    def onConfigure(self):\\");
+                    writeMulti(out, "        self.withEvent(\"notification\")\\");
+                    writeMulti(out, "    def onRun(self, event):\\");
+                    writeMulti(out, "        sponge.getVariable(\"notifications\").incrementAndGet()\\");
+                    writeMulti(out, "        print \"Received the notification!\"");
+                    write(out, "");
+                    write(out, "sponge.enable(T)");
+                    write(out, "sponge.event(\"notification\").send()");
+
+                    await().atMost(10, TimeUnit.SECONDS)
+                            .until(() -> engine.getOperations().getVariable(Number.class, "notifications").intValue() >= 1);
+                });
     }
 
-    private void writeMulti(String command) throws IOException {
-        outIn.write((command + "\n").getBytes());
+    @Test
+    public void testInteractiveLangGroovy() throws Exception {
+        testInteractive(StandaloneSpongeEngine.builder().commandLineArgs("-i", "-l", "groovy"), (engine, out) -> {
+            write(out, "sponge.setVariable(\"lang\", sponge.kb.type.language)");
+            write(out, "text = \"Example\"");
+            write(out, "sponge.setVariable(\"text\", text)");
+
+            await().atMost(5, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().hasVariable("lang") && engine.getOperations().hasVariable("text"));
+
+            assertEquals("groovy", engine.getOperations().getVariable("lang"));
+            assertEquals("Example", engine.getOperations().getVariable("text"));
+        });
+    }
+
+    @Test
+    public void testInteractiveLangPython() throws Exception {
+        testInteractive(StandaloneSpongeEngine.builder().commandLineArgs("-i", "-l", "python"), (engine, out) -> {
+            write(out, "sponge.setVariable(\"lang\", sponge.kb.type.language)");
+            write(out, "text = \"Example\"");
+            write(out, "sponge.setVariable(\"text\", text)");
+
+            await().atMost(5, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().hasVariable("lang") && engine.getOperations().hasVariable("text"));
+
+            assertEquals("python", engine.getOperations().getVariable("lang"));
+            assertEquals("Example", engine.getOperations().getVariable("text"));
+        });
+    }
+
+    @Test
+    public void testInteractiveLangRuby() throws Exception {
+        testInteractive(StandaloneSpongeEngine.builder().commandLineArgs("-i", "-l", "ruby"), (engine, out) -> {
+            write(out, "$sponge.setVariable(\"lang\", $sponge.kb.type.language)");
+            write(out, "text = \"Example\"");
+            write(out, "$sponge.setVariable(\"text\", text)");
+
+            await().atMost(5, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().hasVariable("lang") && engine.getOperations().hasVariable("text"));
+
+            assertEquals("ruby", engine.getOperations().getVariable("lang"));
+            assertEquals("Example", engine.getOperations().getVariable("text"));
+        });
+    }
+
+    @Test
+    public void testInteractiveLangJavascript() throws Exception {
+        testInteractive(StandaloneSpongeEngine.builder().commandLineArgs("-i", "-l", "javascript"), (engine, out) -> {
+            write(out, "sponge.setVariable(\"lang\", sponge.kb.type.language)");
+            write(out, "text = \"Example\"");
+            write(out, "sponge.setVariable(\"text\", text)");
+
+            await().atMost(5, TimeUnit.SECONDS)
+                    .until(() -> engine.getOperations().hasVariable("lang") && engine.getOperations().hasVariable("text"));
+
+            assertEquals("javascript", engine.getOperations().getVariable("lang"));
+            assertEquals("Example", engine.getOperations().getVariable("text"));
+        });
+    }
+
+    private static void write(OutputStream out, String command) throws IOException {
+        out.write((command + "\r\n").getBytes());
+    }
+
+    private static void writeMulti(OutputStream out, String command) throws IOException {
+        out.write((command + "\n").getBytes());
     }
 }

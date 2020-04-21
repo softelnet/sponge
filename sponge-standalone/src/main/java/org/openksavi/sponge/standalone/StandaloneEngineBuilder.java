@@ -36,10 +36,12 @@ import org.openksavi.sponge.core.engine.LoggingExceptionHandler;
 import org.openksavi.sponge.core.engine.SystemErrExceptionHandler;
 import org.openksavi.sponge.core.engine.interactive.DefaultInteractiveMode;
 import org.openksavi.sponge.core.engine.interactive.InteractiveModeConstants;
+import org.openksavi.sponge.core.kb.DefaultScriptKnowledgeBase;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ExceptionHandler;
 import org.openksavi.sponge.engine.interactive.InteractiveMode;
 import org.openksavi.sponge.engine.interactive.InteractiveModeConsole;
+import org.openksavi.sponge.kb.KnowledgeBaseType;
 import org.openksavi.sponge.logging.LoggingUtils;
 import org.openksavi.sponge.spring.SpringKnowledgeBaseFileProvider;
 import org.openksavi.sponge.standalone.interactive.JLineInteractiveModeConsole;
@@ -139,9 +141,37 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                     });
 
             if (!commandLine.hasOption(StandaloneConstants.OPTION_CONFIG)
-                    && !commandLine.hasOption(StandaloneConstants.OPTION_KNOWLEDGE_BASE)) {
+                    && !commandLine.hasOption(StandaloneConstants.OPTION_KNOWLEDGE_BASE)
+                    && !commandLine.hasOption(StandaloneConstants.OPTION_LANG)) {
                 throw new StandaloneInitializationException(
                         "A Sponge XML configuration file or a knowledge base file(s) should be provided.");
+            }
+
+            if (commandLine.hasOption(StandaloneConstants.OPTION_LANG) && !commandLine.hasOption(StandaloneConstants.OPTION_INTERACTIVE)) {
+                throw new StandaloneInitializationException("The language option requires an interactive mode.");
+            }
+
+            // Initialize the engine to provide supported knowledge base types.
+            super.init();
+
+            boolean isLang = false;
+
+            if (commandLine.hasOption(StandaloneConstants.OPTION_LANG)) {
+                String lang = commandLine.getOptionValue(StandaloneConstants.OPTION_LANG);
+
+                if (lang == null) {
+                    throw new StandaloneInitializationException("The language is not specified.");
+                }
+
+                KnowledgeBaseType kbType = SpongeUtils.getKnowledgeBaseType(engine, lang.trim().toLowerCase());
+
+                if (kbType == null) {
+                    throw new StandaloneInitializationException(String.format("The %s language is not supported.", lang));
+                }
+
+                knowledgeBase(new DefaultScriptKnowledgeBase(StandaloneConstants.INTERACTIVE_LANG_KB_NAME, kbType));
+
+                isLang = true;
             }
 
             // Apply standard parameters.
@@ -160,8 +190,9 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
             }
 
             if (commandLine.hasOption(StandaloneConstants.OPTION_INTERACTIVE)) {
-                InteractiveMode interactiveMode = new DefaultInteractiveMode(engine,
-                        commandLine.getOptionValue(StandaloneConstants.OPTION_INTERACTIVE), interactiveModeConsoleSupplier);
+                String kbName = isLang ? StandaloneConstants.INTERACTIVE_LANG_KB_NAME
+                        : commandLine.getOptionValue(StandaloneConstants.OPTION_INTERACTIVE);
+                InteractiveMode interactiveMode = new DefaultInteractiveMode(engine, kbName, interactiveModeConsoleSupplier);
 
                 ExceptionHandler systemErrExceptionHandler =
                         new SystemErrExceptionHandler(optionDebug || optionPrintStackTrace, !optionDebug);

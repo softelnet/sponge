@@ -30,7 +30,7 @@ import org.openksavi.sponge.logging.LoggingUtils;
  */
 public class StandaloneEngineMain {
 
-    // Important: This class must not use the static logger because the logger configuration in the main method would be too late.
+    // Important: This class must not use the static logger because the logger configuration in the main method would be called too late.
 
     private StandaloneEngineBuilder builder;
 
@@ -116,8 +116,6 @@ public class StandaloneEngineMain {
         } else {
             if (e instanceof StandaloneInitializationException && !embeddedMode) {
                 System.out.println(e.getMessage());
-                System.out.println("");
-                builder.printHelp();
             } else {
                 getLogger().error("Error", e);
             }

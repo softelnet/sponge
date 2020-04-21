@@ -279,6 +279,13 @@ public interface SpongeEngine extends EngineModule {
     KnowledgeBaseFileProvider getKnowledgeBaseFileProvider();
 
     /**
+     * Returns the supported knowledge base interpreter factory providers.
+     *
+     * @return the supported knowledge base interpreter factory providers.
+     */
+    List<KnowledgeBaseInterpreterFactoryProvider> getKnowledgeBaseInterpreterFactoryProviders();
+
+    /**
      * Adds the OnStartup listener.
      *
      * @param onStartupListener the OnStartup listener.
