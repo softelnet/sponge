@@ -448,6 +448,7 @@ public interface SpongeRestClient extends Closeable {
      * metadata), returns positive activity statuses without connecting the server.
      *
      * @param entries the reaction entries.
+     * @return the list of flags.
      */
     List<Boolean> isActionActive(List<IsActionActiveEntry> entries);
 

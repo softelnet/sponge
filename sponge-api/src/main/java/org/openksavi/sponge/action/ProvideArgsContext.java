@@ -119,10 +119,14 @@ public class ProvideArgsContext {
     }
 
     public Object getArgFeature(String argName, String featureName) {
-        Validate.isTrue(argFeatures != null && argFeatures.get(argName) != null && argFeatures.get(argName).containsKey(featureName),
-                "There is no feature %s for argument %s", featureName, argName);
+        Validate.notNull(argFeatures, "Argument features not set");
 
-        return argFeatures.get(argName).get(featureName);
+        Map<String, Object> features = argFeatures.get(argName);
+        Validate.notNull(features, "There are no features for argument %s", argName);
+
+        Validate.isTrue(features.containsKey(featureName), "There is no feature %s for argument %s", featureName, argName);
+
+        return features.get(featureName);
     }
 
     @SuppressWarnings("unchecked")

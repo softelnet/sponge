@@ -41,6 +41,7 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      * Enables a processor.
      *
      * @param processorBuilder the processor builder.
+     * @param <T> the processor type.
      */
     <T extends Processor<?>> void enable(ProcessorBuilder<T> processorBuilder);
 

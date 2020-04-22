@@ -135,6 +135,7 @@ public interface EngineOperations {
     /**
      * Informs if an action in a given context is active.
      *
+     * @param actionName the action name.
      * @param context the context.
      * @return {@code true} if the action is active.
      */
