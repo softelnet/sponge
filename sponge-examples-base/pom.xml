@@ -22,5 +22,11 @@
             <artifactId>sponge-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-kb-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

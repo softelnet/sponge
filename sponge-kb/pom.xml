@@ -18,6 +18,8 @@
     </properties>
 
     <modules>
+        <module>sponge-kb-engine</module>
+        <module>sponge-kb-user-management</module>
         <module>sponge-kb-mpd-mpc</module>
     </modules>
 </project>

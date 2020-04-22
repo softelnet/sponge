@@ -5,13 +5,13 @@
     <knowledgeBases>
         <knowledgeBase name="example" label="Example">
             <file>rest_api.py</file>
-            <file>classpath:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
+            <file>classpath:sponge/engine/engine_public_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="grpc" label="gRPC">
             <file>grpc_api.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" label="Admin">
-            <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
+            <file>classpath:sponge/engine/engine_admin_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" label="Security">
             <file>rest_api_security.py</file>

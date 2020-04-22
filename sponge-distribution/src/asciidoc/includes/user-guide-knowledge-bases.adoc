@@ -507,8 +507,17 @@ For example `<file>classpath*:sponge/mpd-mpc/**/*.py</file>`.
 
 [discrete]
 ==== Standalone commadline application
+If a knowledge base artifact is included in the standalone commadline application, add the following entry to your {sponge} configuration.
 
-If a knowledge base artifact is not included in the standalone commadline application, add the following entry to your {sponge} configuration.
+.Sponge configuration
+[source,xml]
+----
+<knowledgeBase ...>
+    <file>classpath*:sponge/[Name]/**/*.py</file>
+</knowledgeBase>
+----
+
+Otherwise add the following entry.
 
 .Sponge configuration
 [source,xml]
@@ -518,17 +527,7 @@ If a knowledge base artifact is not included in the standalone commadline applic
 </knowledgeBase>
 ----
 
-For example `<file>spar:sponge-kb-mpd-mpc-*.jar!/**/*.py</file>`.
-
-Otherwise add the following entry.
-
-.Sponge configuration
-[source,xml]
-----
-<knowledgeBase ...>
-    <file>classpath*:sponge/[Name]/**/*.py</file>
-</knowledgeBase>
-----
+For example `<file>spar:sponge-kb-mpd-mpc-\*.jar!/\*\*/\*.py</file>`, where the `sponge-kb-mpd-mpc-*.jar` is a file in the filesystem.
 
 == Knowledge base versioning
 You may specify a version number for a knowledge base as an integer. It could be useful for example to enforce version checking when calling actions via the REST API. You should set the version in the `onLoad` callback function. After editing the knowledge base file and before reloading the engine, you could increase the version number.

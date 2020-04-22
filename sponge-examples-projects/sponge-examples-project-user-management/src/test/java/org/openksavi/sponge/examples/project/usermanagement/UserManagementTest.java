@@ -71,6 +71,8 @@ public class UserManagementTest {
 
     @Test
     public void testUserManagement() {
+        String signUpActionName = "SignUpWithEmail";
+
         try (SpongeRestClient client = createRestClient()) {
             // Anonymous.
             List<RestActionMeta> anonymousActions = client.getActions();
@@ -82,7 +84,7 @@ public class UserManagementTest {
 
             RestActionMeta signUpAction = anonymousActions.stream()
                     .filter(action -> Objects.equals(action.getFeatures().get("intent"), "signUp")).findFirst().get();
-            assertEquals("SignUp", signUpAction.getName());
+            assertEquals(signUpActionName, signUpAction.getName());
 
             client.getConfiguration().setUsername("user1@openksavi.org");
             client.getConfiguration().setPassword("password");
@@ -111,10 +113,10 @@ public class UserManagementTest {
 
             signUpAction = anonymousActions.stream().filter(action -> Objects.equals(action.getFeatures().get("intent"), "signUp"))
                     .findFirst().get();
-            assertEquals("SignUp", signUpAction.getName());
+            assertEquals(signUpActionName, signUpAction.getName());
 
             // Sign up.
-            client.call("SignUp", Arrays.asList("user2@openksavi.org", "John", "Smith", "password", "password"));
+            client.call(signUpActionName, Arrays.asList("user2@openksavi.org", "John", "Smith", "password", "password"));
 
             // Login as a new user.
             client.getConfiguration().setUsername("user2@openksavi.org");

@@ -1,0 +1,223 @@
+= Applications
+The {sponge} project contains a few predefined {sponge}-based applications that can be used ad hoc. Their source codes are placed under the `sponge-kb` multi-module project.
+
+[[rest-api-demo-service]]
+== REST API Demo Service
+The {sourcesUrl}/sponge-app/sponge-app-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+
+The demo can be launched in the read only mode by setting the Java system property `-Ddemo.readOnly=true`.
+
+There are a few options to run the demo.
+
+[discrete]
+=== Using the hosted Demo Service
+The Demo Service hosted at `https://spongedemoapi.openksavi.org` provides an anonymous access to the {sponge} demo. It is used by the {sponge} mobile client application as a predefined connection. You can also connect to the service using command line tools.
+
+[source,bash,subs="verbatim,attributes"]
+----
+curl -H "Content-type:application/json" https://spongedemoapi.openksavi.org/version
+----
+
+NOTE: The hosted Demo Service runs in the read only mode.
+
+[discrete]
+=== Running in Docker
+The Docker image `openksavi/sponge-demo` contains a predefined REST API Demo Service running in Tomcat. It can be used as a {sponge} mobile client application playground in your local environment.
+
+NOTE: This image doesn't work on Raspberry Pi. To run the Demo Service on Raspberry Pi see the next chapter.
+
+NOTE: The predefined file `password.txt` contains the hashed, insecure password `password` for the user `admin`. You should change it or use this demo only for tests in a secure network.
+
+.Initialization and configuration
+[source,bash,subs="verbatim,attributes"]
+----
+docker pull openksavi/sponge-demo
+
+# Run the demo in Docker using the predefined {sponge} configuration.
+docker run --name sponge-demo -it --rm -p 8080:8080 -p 8081:8081 openksavi/sponge-demo
+
+# Copy the predefined {sponge} configuration to the host in order to modify knowledge base files.
+docker cp sponge-demo:/opt/sponge/ .
+
+# Stop the running container.
+docker stop sponge-demo
+
+# Start a new container using a new {sponge} configuration located in the host filesystem.
+# The configurtion directory is expected to have the sponge.xml file.
+docker run --name sponge-demo -it --rm -p 8080:8080 -p 8081:8081 --mount type=bind,source="$(pwd)/sponge",target=/opt/sponge openksavi/sponge-demo
+----
+
+The port `8080` is used by the REST API and the port `8081` is used by the gRPC API.
+
+.Verification
+[source,bash,subs="verbatim,attributes"]
+----
+# Test the service.
+curl http://localhost:8080/version
+
+# Invoke shell in the container.
+docker exec -it sponge-demo /bin/bash
+----
+
+.Development process
+[source,bash,subs="verbatim,attributes"]
+----
+# Modify the {sponge} configuration in the host.
+vi sponge_demo.py
+# For example add a new action.
+class HelloWorld(Action):
+    def onConfigure(self):
+        self.withLabel("Hello World").withDescription("The action created in a running Docker container.")
+        self.withNoArgs().withResult(StringType().withLabel("Greeting"))
+        self.withFeature("icon", "human-greeting")
+    def onCall(self):
+        return "Hello World!"
+
+# Reload the knowledge bases as admin via a commandline tool or the {sponge} mobile client application.
+curl -X POST -H "Content-type:application/json" http://localhost:8080/reload -d '{"header":{"username":"admin","password":"password"}}'
+
+# Refresh actions in the {sponge} mobile client application.
+# The new action will be visible in the action list.
+----
+
+[discrete]
+=== Running in Docker on Raspberry Pi
+The Docker image `openksavi/sponge-demo-lite` contains the REST API Demo Service Light that can be run on Raspberry Pi. It can be used as a {sponge} mobile client application playground in your Raspberry Pi device. The Demo Service Light provides the same actions as the Demo Service except those related to the digit recognition. It doesn't contain Tensorflow and runs as a standalone application.
+
+.Running the REST API Demo Service Light in Docker on Raspberry Pi
+[source,bash,subs="verbatim,attributes"]
+----
+docker pull openksavi/sponge-demo-lite
+
+docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+----
+
+The default port `1836` is used by the REST API and the port `1837` is used by the gRPC API.
+
+.Running the REST API Demo Service Light in Docker on Raspberry Pi on non standard ports
+[source,bash,subs="verbatim,attributes"]
+----
+docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.port=1846 -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1846"
+----
+
+In that case the gRPC API will be published on port `1847`.
+
+.Verification
+[source,bash,subs="verbatim,attributes"]
+----
+curl http://localhost:1836/version
+----
+
+[discrete]
+=== Setting up manually and deploying in Tomcat
+First, you have to create the web application and {sponge} scripts.
+[source,bash,subs="verbatim,attributes"]
+----
+cd sponge-app/sponge-app-demo-service
+mvn clean install -Pall
+----
+
+The resulting archive `target/sponge-demo-api.war` is the web application providing the Demo REST API service. The archive `target/sponge-scripts.zip` contains Sponge script files and the Digits recognition example files (see the TensorFlow integration chapter) that will be accessed by the web application.
+
+Assuming that Tomcat is installed in `/opt/tomcat` and the Sponge script files and the Digits recognition example files are extracted into the `/opt/tomcat/sponge` directory, you should add the following properties to the `catalina.properties` file:
+----
+sponge.home=/opt/tomcat/sponge
+digits.home=/opt/tomcat/sponge/digits
+password.file=/opt/tomcat/sponge/password.txt
+sponge.grpc.port=8081
+
+# Optionally set the read only mode
+# demo.readOnly=true
+----
+
+The sample file `password.txt` contains the hashed, insecure password `password` for the user `admin`. The user `admin` has access to more actions that the _anonymous_ user. This simple password can be used only for development and tests. In the case of publishing the service, this file should contain the hashed, secret and strong password.
+
+[source,bash]
+----
+# Create the password file.
+sudo echo -n username-password | shasum -a 512 | awk '{ print $1 }' > /opt/tomcat/sponge/password.txt
+
+# Setup privileges.
+cd /opt/tomcat
+sudo chown -R tomcat:tomcat sponge
+
+# Restart Tomcat.
+sudo systemctl restart tomcat.service
+----
+
+Deploy the web application as `sponge-demo-api` using the Tomcat Web Application Manager. Then test the service.
+
+[source,bash]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/version
+----
+
+[discrete]
+=== Running in Jetty
+You may also run this example using the Jetty server started by the maven command:
+
+.Example of the REST API servlet
+[source,bash,subs="verbatim,attributes"]
+----
+cd sponge-app/sponge-app-demo-service
+mvn jetty:run
+----
+
+[discrete]
+=== Tiles servers usage in maps
+The example action `Action with a geo map` (`ActionWithGeoMap`) uses the tiles servers to show a base map:
+
+* OpenStreetMap. Please see the https://operations.osmfoundation.org/policies/tiles/[OpenStreetMap Tile Usage Policy] requirements.
+* Google. Please see the https://cloud.google.com/maps-platform/terms[Google Maps Terms of Service].
+
+You may use other online XYZ tile map servers as well.
+
+[[mpd-mpc-raspberry]]
+== MPD client service project
+The {sponge} MPD client service provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player. It includes the `sponge-kb-mpd-mpc` knowledge base artifact.
+
+The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
+
+NOTE: One of the aims of the {sponge} MPD client service application is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a REST API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
+
+[discrete]
+=== Running in Docker
+The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service.
+
+The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example the https://moodeaudio.org[moOde audio player] has been chosen.
+
+The architecture of this solution is: Raspberry PI with the MPD server (running in the moOde audio distribution) and Docker containing the {sponge} MPD service.
+
+Installing the {sponge} MPD service:
+
+* https://moodeaudio.org[Download], install and https://github.com/moode-player/moode/blob/master/www/setup.txt[setup] the moOde audio player for Raspberry PI.
+* Connect to the Raspberry PI via SSH as the `pi` user.
+* Install and configure https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi[Docker].
+
+----
+sudo curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+sudo usermod -aG docker pi
+----
+
+* Relogin.
+* Run the {sponge} MPD service in Docker.
+
+----
+docker pull openksavi/sponge-mpd
+docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+----
+
+Setting the `sponge.restApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service in a local network. If you want to change the service name, provide the `sponge.restApiServer.name` property as well, e.g. `-Dsponge.restApiServer.name="Docker MPD"`.
+
+* Check the {sponge} MPD service logs.
+
+----
+docker logs sponge-mpd -f
+----
+
+If you have a https://developer.musixmatch.com[Musixmatch API key], you can configure the service to access song lyrics by adding `-DmusixmatchApiKey=YOUR_MUSIXMATCH_API_KEY` to the `docker run` command line. Song lyrics can be shown in the Sponge Remote application.
+
+Limitations:
+
+* The MPD connection configuration (e.g. the MPD host) is not persisted between restarts.
+* This Docker image has been tested only on a Linux host.

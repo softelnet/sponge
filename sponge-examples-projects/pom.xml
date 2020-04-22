@@ -21,10 +21,8 @@
         <module>sponge-examples-project-camel-rss-news</module>
         <module>sponge-examples-project-standalone-camel-xml</module>
         <module>sponge-examples-project-standalone-camel-groovy</module>
-        <module>sponge-examples-project-demo-service</module>
         <module>sponge-examples-project-remote-api-client-test-service</module>
         <module>sponge-examples-project-iot-rpi</module>
-        <module>sponge-examples-project-mpd-mpc</module>
         <module>sponge-examples-project-user-management</module>
     </modules>
  </project>

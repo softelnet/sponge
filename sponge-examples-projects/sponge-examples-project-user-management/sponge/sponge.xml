@@ -7,16 +7,17 @@
     <knowledgeBases>
         <knowledgeBase name="service" label="Service">
             <file>service.py</file>
-            <file>classpath*:org/openksavi/sponge/restapi/server/engine_public_library.py</file>
+            <file>classpath:sponge/engine/engine_public_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="admin" label="Admin">
-            <file>classpath*:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
+            <file>classpath:sponge/engine/engine_admin_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="public" label="Public">
-            <file>anonymous_account_management.py</file>
+            <file>classpath:sponge/user-management/user_management_public.py</file>
+            <file>classpath:sponge/user-management/user_management_sign_up_email.py</file>
         </knowledgeBase>
         <knowledgeBase name="account" label="Account">
-            <file>account_management.py</file>
+            <file>classpath:sponge/user-management/user_management_logged.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" label="Security">
             <file>rest_api_security.py</file>

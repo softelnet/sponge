@@ -101,7 +101,7 @@ The color picker widget allows a user to choose a color as an argument value.
 .The definition of the action that takes a color argument
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_choose_color.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_choose_color.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_digit_drawing.png[title="The action call argument editor for a digit drawing",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -129,7 +129,7 @@ Drawing panels can be configured in a corresponding action definition, where a c
 .The definitions of actions that represent drawing and viewing a doodle
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_doodles.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_doodles.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_doodle.jpg[title="The action call for a doodle drawing as an argument",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -143,7 +143,7 @@ Action arguments may depend on each other. Argument dependencies are supported i
 .The definition of the action that provides arguments with dependencies
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_depending.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_depending.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_arg_depends_value_set.png[title="The action call that shows argument dependencies and value sets",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -159,7 +159,7 @@ Actions may return contents that can be viewed for example as a HTML or a PDF fi
 .The definitions of the actions that return a HTML and a PDF file respectively
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_binary_result.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_binary_result.py[lines=5..-1]
 ----
 
 image::screens/mobile/actions_console_result.png[title="The action console formatted result",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -205,7 +205,7 @@ image::screens/mobile/event_list.png[title="Event list",width=300,pdfwidth=35%,s
 .Event type with a default event handler action
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_notification.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_events_notification.py[lines=5..-1]
 ----
 
 image::screens/mobile/event_handler_action_notification.png[title="Default event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -213,7 +213,7 @@ image::screens/mobile/event_handler_action_notification.png[title="Default event
 .Event type with a custom event handler action
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_memo.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_events_memo.py[lines=5..-1]
 ----
 
 image::screens/mobile/event_handler_action_memo.png[title="Custom event handler action",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -224,7 +224,7 @@ Every action can have _refresh events_ configured. When such an action is shown 
 .Action with refresh events
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_events_counter_viewer.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_events_counter_viewer.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_counter.png[title="Action with refresh events",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -245,7 +245,7 @@ image::screens/mobile/action_context_actions.png[title="The action with context 
 .The definition of the action with context actions
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_context_actions_action.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_context_actions_action.py[lines=5..-1]
 ----
 
 ==== Arguments substitution
@@ -301,7 +301,7 @@ image::screens/mobile/action_form_list_details_subaction_context_args_result.png
 .The definitions of actions implementing the list-details
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_forms_library_records.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_forms_library_records.py[lines=5..-1]
 ----
 
 The main action should have a list argument that is provided with the overwrite option. The action shouldn't be callable. The list argument type can be annotated and the provided list elements may have labels (`AnnotatedValue().withLabel()`) and descriptions. The list argument may have the following features: `createAction`, `readAction`, `updateAction`, `deleteAction`. Their values are the sub-action names that will be called to perform the CRUD operations.
@@ -347,7 +347,7 @@ NOTE: The map functionality is experimental.
 .Geographical map example
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_geo_map.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_geo_map.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_geo_map_overview.png[title="The map overview",width=300,pdfwidth=35%,scaledwidth=35%]
@@ -368,7 +368,7 @@ A choose dialog can be used to pick a value and pass it as a result to a parent 
 .Choose dialog example
 [source,python]
 ----
-include::{completeExamplesProject}/sponge-examples-project-demo-service/sponge/sponge_demo_setter_context_actions_list.py[lines=5..-1]
+include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_setter_context_actions_list.py[lines=5..-1]
 ----
 
 image::screens/mobile/action_call_choose_dialog_parent.png[title="The choose dialog parent action",width=300,pdfwidth=35%,scaledwidth=35%]
