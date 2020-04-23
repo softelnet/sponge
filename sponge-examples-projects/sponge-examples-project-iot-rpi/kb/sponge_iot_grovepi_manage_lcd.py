@@ -17,7 +17,7 @@ class ManageLcd(Action):
             BooleanType("clearText").withNullable(True).withDefaultValue(False)
                 .withLabel("Clear text").withDescription("The text the LCD will be cleared.")
         ]).withNoResult()
-        self.withFeature("icon", "monitor")
+        self.withFeatures({"icon":"monitor", "showRefresh":True, "refreshEvents":["lcdChange"]})
     def onCall(self, currentText, text, color, clearText = None):
         sponge.call("SetLcd", [text, color, clearText])
     def onProvideArgs(self, context):

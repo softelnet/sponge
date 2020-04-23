@@ -83,6 +83,7 @@ class GrovePiDevice:
             self.__lcd.text = newText
             self.__lcdText = newText
         grovepi.set(doSetLcd)
+        sponge.event("lcdChange").set("text", self.__lcdText).send()
 
     def getLcdText(self):
         return self.__lcdText

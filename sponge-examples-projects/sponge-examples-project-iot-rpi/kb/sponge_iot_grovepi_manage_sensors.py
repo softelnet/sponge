@@ -16,7 +16,7 @@ class ManageSensorActuatorValues(Action):
             IntegerType("blueLed").withMinValue(0).withMaxValue(255).withLabel("Blue LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
             BooleanType("buzzer").withLabel("Buzzer").withProvided(ProvidedMeta().withValue().withOverwrite())
         ]).withNoResult()
-        self.withFeature("icon", "thermometer")
+        self.withFeatures({"icon":"thermometer", "refreshEvents":["sensorChange"]})
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         grovePiDevice.setRedLed(redLed)
