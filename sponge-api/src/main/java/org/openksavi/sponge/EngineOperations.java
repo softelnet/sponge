@@ -241,6 +241,27 @@ public interface EngineOperations {
     String getVersion();
 
     /**
+     * Returns the engine name.
+     *
+     * @return the engine name.
+     */
+    String getName();
+
+    /**
+     * Returns the engine label.
+     *
+     * @return the engine label.
+     */
+    String getLabel();
+
+    /**
+     * Returns the engine description.
+     *
+     * @return the engine description.
+     */
+    String getDescription();
+
+    /**
      * Returns the engine license.
      *
      * @return the engine license.

@@ -173,12 +173,12 @@ The example action `Action with a geo map` (`ActionWithGeoMap`) uses the tiles s
 You may use other online XYZ tile map servers as well.
 
 [[mpd-mpc-raspberry]]
-== MPD client service project
-The {sponge} MPD client service provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player. It includes the `sponge-kb-mpd-mpc` knowledge base artifact.
+== MPD Client Service
+The {sponge} MPD Client Service provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player. It includes the `sponge-kb-mpd-mpc` knowledge base artifact.
 
 The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
 
-NOTE: One of the aims of the {sponge} MPD client service application is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a REST API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
+NOTE: One of the aims of the {sponge} MPD Client Service application is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a REST API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
 
 [discrete]
 === Running in Docker

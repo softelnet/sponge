@@ -200,6 +200,21 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
+    public String getName() {
+        return engine.getName();
+    }
+
+    @Override
+    public String getLabel() {
+        return engine.getLabel();
+    }
+
+    @Override
+    public String getDescription() {
+        return engine.getDescription();
+    }
+
+    @Override
     public String getLicense() {
         return engine.getLicense();
     }

@@ -967,9 +967,9 @@
                 <module>sponge-standalone-app</module>
                 <module>sponge-bom</module>
                 <module>sponge-standalone-extensions</module>
-                <module>sponge-app</module>
                 <module>sponge-distribution</module>
                 <module>sponge-examples-projects</module>
+                <module>sponge-app</module>
             </modules>
         </profile>
         <profile>
