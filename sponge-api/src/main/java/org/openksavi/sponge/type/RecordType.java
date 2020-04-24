@@ -119,6 +119,16 @@ public class RecordType extends DataType<Map<String, Object>> {
     }
 
     @Override
+    public RecordType withReadOnly(boolean readOnly) {
+        return (RecordType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public RecordType withReadOnly() {
+        return (RecordType) super.withReadOnly();
+    }
+
+    @Override
     public RecordType withOptional() {
         return (RecordType) super.withOptional();
     }

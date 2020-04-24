@@ -91,6 +91,16 @@ public class StreamType extends DataType<OutputStreamValue> {
     }
 
     @Override
+    public StreamType withReadOnly(boolean readOnly) {
+        return (StreamType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public StreamType withReadOnly() {
+        return (StreamType) super.withReadOnly();
+    }
+
+    @Override
     public StreamType withOptional() {
         return (StreamType) super.withOptional();
     }

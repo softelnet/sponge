@@ -9,10 +9,10 @@ class AsynchronousProvidedActionArg(Action):
     def onConfigure(self):
         self.withLabel("Asynchronous provided argument")
         self.withArgs([
-            StringType("arg1").withLabel("Argument 1").withFeatures({"multiline":True, "maxLines":2}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withReadOnly()),
-            StringType("arg2").withLabel("Argument 2").withProvided(
-                ProvidedMeta().withValue().withReadOnly().withOverwrite().withDependency("arg1")),
+            StringType("arg1").withLabel("Argument 1").withFeatures({"multiline":True, "maxLines":2}).withReadOnly().withProvided(
+                ProvidedMeta().withValue().withOverwrite()),
+            StringType("arg2").withLabel("Argument 2").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withOverwrite().withDependency("arg1")),
         ]).withNoResult().withCallable(False).withFeatures({"cancelLabel":"Close"})
     def onProvideArgs(self, context):
         if "arg1" in context.provide:

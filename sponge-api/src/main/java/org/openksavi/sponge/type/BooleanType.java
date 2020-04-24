@@ -89,6 +89,16 @@ public class BooleanType extends DataType<Boolean> {
     }
 
     @Override
+    public BooleanType withReadOnly(boolean readOnly) {
+        return (BooleanType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public BooleanType withReadOnly() {
+        return (BooleanType) super.withReadOnly();
+    }
+
+    @Override
     public BooleanType withOptional() {
         return (BooleanType) super.withOptional();
     }

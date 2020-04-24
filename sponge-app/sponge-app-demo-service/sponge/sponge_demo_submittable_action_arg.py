@@ -11,12 +11,12 @@ class SubmittableActionArg(Action):
         self.withArgs([
             StringType("arg1").withLabel("Argument 1").withNullable().withProvided(
                 ProvidedMeta().withValue().withSubmittable()).withFeatures({"responsive":True}),
-            StringType("arg2").withLabel("Argument 2").withNullable().withProvided(
-                ProvidedMeta().withValue().withReadOnly().withDependency("arg1").withLazyUpdate()),
-            StringType("arg3").withLabel("Argument 3").withNullable().withProvided(
-                ProvidedMeta().withValue().withReadOnly().withDependency("arg1")),
-            StringType("arg4").withLabel("Argument 4").withProvided(
-                ProvidedMeta().withValue().withReadOnly().withDependency("arg1")),
+            StringType("arg2").withLabel("Argument 2").withNullable().withReadOnly().withProvided(
+                ProvidedMeta().withValue().withDependency("arg1").withLazyUpdate()),
+            StringType("arg3").withLabel("Argument 3").withNullable().withReadOnly().withProvided(
+                ProvidedMeta().withValue().withDependency("arg1")),
+            StringType("arg4").withLabel("Argument 4").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withDependency("arg1")),
         ]).withCallable(False)
         self.withFeatures({"cancelLabel":"Close"})
     def onInit(self):

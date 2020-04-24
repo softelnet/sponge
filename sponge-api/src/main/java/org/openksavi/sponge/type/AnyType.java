@@ -89,6 +89,16 @@ public class AnyType extends DataType<Object> {
     }
 
     @Override
+    public AnyType withReadOnly(boolean readOnly) {
+        return (AnyType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public AnyType withReadOnly() {
+        return (AnyType) super.withReadOnly();
+    }
+
+    @Override
     public AnyType withOptional() {
         return (AnyType) super.withOptional();
     }

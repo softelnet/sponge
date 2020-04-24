@@ -260,7 +260,7 @@ public abstract class GrpcApiServerBaseTest {
         Map<String, Object> eventAttributes = SpongeUtils.immutableMapOf("source", "SOURCE", "severity", 5, "person",
                 SpongeUtils.immutableMapOf("firstName", "James", "surname", "Joyce"));
         Map<String, Object> eventFeatures =
-                SpongeUtils.immutableMapOf("icon", new IconInfo("alarm").withColor("FFFFFF"), "extra", "Extra feature");
+                SpongeUtils.immutableMapOf("icon", new IconInfo().withName("alarm").withColor("FFFFFF"), "extra", "Extra feature");
         Predicate<RemoteEvent> predicate = (event) -> event.getFeatures().get("icon") != null
                 && ((IconInfo) event.getFeatures().get("icon")).getName().equals(((IconInfo) eventFeatures.get("icon")).getName())
                 && ((IconInfo) event.getFeatures().get("icon")).getColor().equals(((IconInfo) eventFeatures.get("icon")).getColor())

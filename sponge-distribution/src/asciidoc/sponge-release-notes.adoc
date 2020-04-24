@@ -7,6 +7,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.0 (not released yet)
+* API change: Moved the `readOnly` flag from `ProvidedMeta` to `DataType`.
 * API change: Added `features` to the response header in the REST API.
 * API change: Added `ProvideActionArgsRequestBody.initial` in the REST API.
 * API change: Renamed `ProvideActionArgsRequestBody.features` and `ProvideArgsContext.features` to `argFeatures`.

@@ -95,6 +95,16 @@ public class BinaryType extends DataType<byte[]> {
     }
 
     @Override
+    public BinaryType withReadOnly(boolean readOnly) {
+        return (BinaryType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public BinaryType withReadOnly() {
+        return (BinaryType) super.withReadOnly();
+    }
+
+    @Override
     public BinaryType withOptional() {
         return (BinaryType) super.withOptional();
     }

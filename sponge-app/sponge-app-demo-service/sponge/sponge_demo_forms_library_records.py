@@ -10,7 +10,8 @@ def createBookRecordType(name):
     return RecordType(name).withFields([
         IntegerType("id").withLabel("ID").withNullable().withFeature("visible", False),
         StringType("author").withLabel("Author"),
-        StringType("title").withLabel("Title")
+        StringType("title").withLabel("Title"),
+        StringType("cover").withNullable().withReadOnly().withFeatures({"characteristic":"networkImage"}),
 ])
 
 class RecordLibraryForm(Action):
@@ -35,8 +36,9 @@ class RecordLibraryForm(Action):
         if "books" in context.provide:
             context.provided["books"] = ProvidedValue().withValue(
                 # Context actions are provided dynamically in an annotated value.
-                map(lambda book: AnnotatedValue(book.toMap()).withValueLabel("{} - {}".format(book.author, book.title)).withFeature("contextActions", [
-                        "RecordBookContextBinaryResult", "RecordBookContextNoResult", "RecordBookContextAdditionalArgs"]),
+                map(lambda book: AnnotatedValue(book.toMap()).withValueLabel("{} - {}".format(book.author, book.title)).withFeatures({
+                    "contextActions":["RecordBookContextBinaryResult", "RecordBookContextNoResult", "RecordBookContextAdditionalArgs"],
+                    "icon":(IconInfo().withUrl(book.cover) if book.cover else None)}),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 
 class RecordCreateBook(Action):
@@ -66,8 +68,8 @@ class RecordReadBook(Action):
     def onConfigure(self):
         self.withLabel("View the book")
         # Must set withOverwrite to replace with the current value.
-        self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withProvided(
-            ProvidedMeta().withValue().withOverwrite().withDependency("book.id").withReadOnly()))
+        self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withReadOnly().withProvided(
+            ProvidedMeta().withValue().withOverwrite().withDependency("book.id")))
         self.withCallable(False).withFeatures({"visible":False, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
         global LIBRARY
@@ -87,7 +89,7 @@ class RecordUpdateBook(Action):
         self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"square-edit-outline"})
     def onCall(self, book):
         global LIBRARY
-        LIBRARY.updateBook(book.value["id"], book.value["author"], book.value["title"])
+        LIBRARY.updateBook(book.value["id"], book.value["author"], book.value["title"], book.value["cover"])
     def onProvideArgs(self, context):
         global LIBRARY
         if "book" in context.provide:

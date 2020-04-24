@@ -111,6 +111,16 @@ public class DateTimeType extends DataType<Object> {
     }
 
     @Override
+    public DateTimeType withReadOnly(boolean readOnly) {
+        return (DateTimeType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public DateTimeType withReadOnly() {
+        return (DateTimeType) super.withReadOnly();
+    }
+
+    @Override
     public DateTimeType withOptional() {
         return (DateTimeType) super.withOptional();
     }

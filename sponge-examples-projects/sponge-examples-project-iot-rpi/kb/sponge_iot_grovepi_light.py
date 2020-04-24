@@ -8,7 +8,7 @@ class ViewLightStatusWithAutoRefresh(Action):
         self.withLabel("View the light status (with auto refresh)")
         self.withDescription("Provides the light status and refreshes it automatically.")
         self.withArgs([
-            BooleanType("light").withNullable().withLabel("Light").withProvided(ProvidedMeta().withValue().withReadOnly())
+            BooleanType("light").withNullable().withLabel("Light").withReadOnly().withProvided(ProvidedMeta().withValue())
         ]).withNoResult()
         self.withFeatures({"cancelLabel":"Close", "icon":"lightbulb-outline", "refreshEvents":["lightNotification"]})
         self.withCallable(False)

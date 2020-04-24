@@ -219,9 +219,10 @@ public class ActionsTestTemplate {
 
         try {
             ActionAdapter adapter = engine.getActionManager().getActionAdapter("ProvidedArgsAction");
-            ProvidedMeta providedMeta = adapter.getMeta().getArg("text").getProvided();
+            DataType arg = adapter.getMeta().getArg("text");
+            ProvidedMeta providedMeta = arg.getProvided();
             assertTrue(providedMeta.isValue());
-            assertFalse(providedMeta.isReadOnly());
+            assertFalse(arg.isReadOnly());
 
             Map<String, ProvidedValue<?>> providedArgs = engine.getOperations().provideActionArgs(adapter.getMeta().getName(),
                     new ProvideArgsParameters().withProvide(Arrays.asList("text")));

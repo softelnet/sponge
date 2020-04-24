@@ -39,16 +39,16 @@ public class GrpcApiViewEvent extends JAction {
     public void onConfigure() {
         withLabel("Event").withDescription("Shows the event.");
         withArgs(new ObjectType<>("event", RemoteEvent.class).withFeature("visible", false),
-                new StringType("type").withLabel("Type").withDescription("Event type.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("event").withReadOnly()),
-                new DateTimeType("time", DateTimeKind.INSTANT).withLabel("Time").withDescription("Event time.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("event").withReadOnly()),
-                new DynamicType("attributes").withLabel("Attributes").withDescription("Event attributes.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("event").withReadOnly()),
-                new StringType("label").withNullable().withLabel("Event label").withDescription("Event label.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("event").withReadOnly()),
+                new StringType("type").withLabel("Type").withDescription("Event type.").withReadOnly()
+                        .withProvided(new ProvidedMeta().withValue().withDependency("event")),
+                new DateTimeType("time", DateTimeKind.INSTANT).withLabel("Time").withDescription("Event time.").withReadOnly()
+                        .withProvided(new ProvidedMeta().withValue().withDependency("event")),
+                new DynamicType("attributes").withLabel("Attributes").withDescription("Event attributes.").withReadOnly()
+                        .withProvided(new ProvidedMeta().withValue().withDependency("event")),
+                new StringType("label").withNullable().withLabel("Event label").withDescription("Event label.").withReadOnly()
+                        .withProvided(new ProvidedMeta().withValue().withDependency("event")),
                 new StringType("description").withNullable().withLabel("Event description").withDescription("Event description.")
-                        .withProvided(new ProvidedMeta().withValue().withDependency("event").withReadOnly()));
+                        .withReadOnly().withProvided(new ProvidedMeta().withValue().withDependency("event")));
 
         withNoResult();
         withFeatures(SpongeUtils.immutableMapOf("visible", false, "intent", "defaultEventHandler", "callLabel", "Dismiss", "refreshLabel",

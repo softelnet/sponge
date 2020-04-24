@@ -14,8 +14,8 @@ class ViewMemoEvent(Action):
         self.withLabel("Memo").withDescription("Shows the memo event.")
         self.withArgs([
             ObjectType("event", RemoteEvent).withFeature("visible", False),
-            StringType("uppercaseMessage").withLabel("Upper case message").withProvided(
-                    ProvidedMeta().withValue().withReadOnly().withDependency("event")),
+            StringType("uppercaseMessage").withLabel("Upper case message").withReadOnly().withProvided(
+                    ProvidedMeta().withValue().withDependency("event")),
         ])
         self.withNoResult()
         self.withFeatures({"visible":False, "callLabel":"Dismiss", "cancelLabel":"Close"})

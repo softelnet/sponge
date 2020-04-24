@@ -217,8 +217,8 @@ class DynamicProvidedArgActionNestedProvided(Action):
                 RecordType().withFields([
                     StringType("firstName").withLabel("First name"),
                     StringType("surname").withLabel("Surname"),
-                    StringType("fullName").withLabel("Full name").withNullable().withProvided(
-                        ProvidedMeta().withValue().withReadOnly().withDependencies([
+                    StringType("fullName").withLabel("Full name").withNullable().withReadOnly().withProvided(
+                        ProvidedMeta().withValue().withDependencies([
                             "dynamic.firstName", "dynamic.surname"])),
                     StringType("question1").withLabel("Question 1").withNullable(),
                     StringType("question2").withLabel("Question 2").withNullable()

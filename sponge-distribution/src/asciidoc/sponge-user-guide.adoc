@@ -90,6 +90,9 @@ Data types are represented by instances of classes. The type classes are located
 |`nullable`
 |Tells if a value of this type can be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
 
+|`readOnly`
+|A flag specifying if this type is read only. Defaults to `false`.
+
 |`features` (or `feature`)
 |Optional features as a map of names to values (as the `Object` type).
 
@@ -118,9 +121,6 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 
 |`depends`
 |A list of type names of name paths that this type depends on.
-
-|`readOnly`
-|A flag specifying if this type is read only. Defaults to `false`.
 
 |`overwrite`
 |A flag specifying if the provided value of this type should overwrite a value modified in a client code (in most cases by a user). Defaults to `false`. This flag should be handled by a client code.

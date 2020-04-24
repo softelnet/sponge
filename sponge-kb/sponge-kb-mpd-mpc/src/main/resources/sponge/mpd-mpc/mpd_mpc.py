@@ -33,10 +33,10 @@ class ViewSongLyrics(Action):
     def onConfigure(self):
         self.withLabel("Song lyrics").withDescription("View the current song lyrics.")
         self.withArgs([
-            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withProvided(
-                ProvidedMeta().withValue().withReadOnly()),
-            StringType("lyrics").withLabel("Lyrics").withProvided(
-                ProvidedMeta().withValue().withReadOnly().withDependency("song")),
+            StringType("song").withLabel("Song").withFeatures({"multiline":True, "maxLines":2}).withReadOnly().withProvided(
+                ProvidedMeta().withValue()),
+            StringType("lyrics").withLabel("Lyrics").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withDependency("song")),
         ]).withNotCallable().withActivatable()
         self.withFeatures({"icon":"script-text-outline", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
     def onIsActive(self, context):
@@ -67,7 +67,7 @@ class ViewSongLyrics(Action):
 class ViewSongInfo(Action):
     def onConfigure(self):
         self.withLabel("Song info").withDescription("View the current song info.").withArgs([
-            createSongType("song").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            createSongType("song").withReadOnly().withProvided(ProvidedMeta().withValue()),
         ]).withNotCallable().withActivatable()
         self.withFeatures({"icon":"information", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
     def onIsActive(self, context):
@@ -82,8 +82,9 @@ class ViewMpdStatus(Action):
     def onConfigure(self):
         self.withLabel("MPD status").withDescription("Provides the MPD status and stats.")
         self.withArgs([
-            StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withProvided(ProvidedMeta().withValue().withReadOnly()),
-            StringType("stats").withLabel("Stats").withProvided(ProvidedMeta().withValue().withReadOnly())
+            StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withReadOnly().withProvided(
+                ProvidedMeta().withValue()),
+            StringType("stats").withLabel("Stats").withReadOnly().withProvided(ProvidedMeta().withValue())
         ]).withCallable(False)
         self.withFeatures({"icon":"console", "cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification"], "visible":False})
     def onProvideArgs(self, context):

@@ -19,7 +19,7 @@ class ActionWithGeoMap(Action):
                             .withFeatures({"visible":False, "attribution":u"Imagery ©2020 CNES/Airbus, MGGP Aero, Maxar Technologies, Map data ©2020 Google",
                                            "group":"basemap", "opacity":0.9}),
 
-                        GeoMarkerLayer("buildings").withLabel("Buildings").withFeature("icon", IconInfo("home").withSize(50)),
+                        GeoMarkerLayer("buildings").withLabel("Buildings").withFeature("icon", IconInfo().withName("home").withSize(50)),
                         GeoMarkerLayer("persons").withLabel("Persons")
                     ]).withFeatures({"color":"FFFFFF"})
                 }).withProvided(
@@ -33,17 +33,17 @@ class ActionWithGeoMap(Action):
         if "locations" in context.provide:
             locations = [
                 AnnotatedValue("building1").withValueLabel("Building (with actions)").withValueDescription("Description of building 1").withFeatures({
-                    "geoPosition":GeoPosition(50.06043, 19.93558), "icon":IconInfo("home").withColor("FF0000").withSize(50),
+                    "geoPosition":GeoPosition(50.06043, 19.93558), "icon":IconInfo().withName("home").withColor("FF0000").withSize(50),
                     "geoLayerName":"buildings"}).withFeature(
                         "contextActions", ["ActionWithGeoMapViewLocation"]),
                 AnnotatedValue("building2").withValueLabel("Building (without actions)").withValueDescription("Description of building 2").withFeatures({
                     "geoPosition":GeoPosition(50.06253, 19.93768),
                     "geoLayerName":"buildings"}),
                 AnnotatedValue("person1").withValueLabel("Person 1 (without actions)").withValueDescription("Description of person 1").withFeatures({
-                    "geoPosition":GeoPosition(50.06143, 19.93658), "icon":IconInfo("face").withColor("000000").withSize(30),
+                    "geoPosition":GeoPosition(50.06143, 19.93658), "icon":IconInfo().withName("face").withColor("000000").withSize(30),
                     "geoLayerName":"persons"}),
                 AnnotatedValue("person2").withValueLabel("Person 2 (without actions)").withValueDescription("Description of person 2").withFeatures({
-                    "geoPosition":GeoPosition(50.06353, 19.93868), "icon":IconInfo("face").withColor("0000FF").withSize(30),
+                    "geoPosition":GeoPosition(50.06353, 19.93868), "icon":IconInfo().withName("face").withColor("0000FF").withSize(30),
                     "geoLayerName":"persons"})
             ]
             context.provided["locations"] = ProvidedValue().withValue(AnnotatedValue(locations))
@@ -54,14 +54,14 @@ class ActionWithGeoMapViewLocation(Action):
         # Must set withOverwrite to replace with the current value.
         self.withArgs([
             StringType("location").withAnnotated().withLabel("Location").withFeature("visible", False),
-            NumberType("label").withLabel("Label").withProvided(
-                ProvidedMeta().withValue().withOverwrite().withReadOnly().withDependency("location")),
-            NumberType("description").withLabel("Description").withProvided(
-                ProvidedMeta().withValue().withOverwrite().withReadOnly().withDependency("location")),
-            NumberType("latitude").withLabel("Latitude").withProvided(
-                ProvidedMeta().withValue().withOverwrite().withReadOnly().withDependency("location")),
-            NumberType("longitude").withLabel("Longitude").withProvided(
-                ProvidedMeta().withValue().withOverwrite().withReadOnly().withDependency("location")),
+            NumberType("label").withLabel("Label").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withOverwrite().withDependency("location")),
+            NumberType("description").withLabel("Description").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withOverwrite().withDependency("location")),
+            NumberType("latitude").withLabel("Latitude").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withOverwrite().withDependency("location")),
+            NumberType("longitude").withLabel("Longitude").withReadOnly().withProvided(
+                ProvidedMeta().withValue().withOverwrite().withDependency("location")),
             ])
         self.withCallable(False).withFeatures({"visible":False, "cancelLabel":"Close", "icon":"map-marker"})
     def onProvideArgs(self, context):

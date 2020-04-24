@@ -66,6 +66,9 @@ public class DataType<T> implements Descriptive, HasFeatures, Cloneable {
     /** Tells if a value of this type may be null. The default is that a value must not be null, i.e. it is <b>not nullable</b>. */
     private boolean nullable = false;
 
+    /** The flag specifying if a value of this type is read only. Defaults to {@code false}. */
+    private boolean readOnly = false;
+
     /** The data type features as a map of names to values. */
     private Map<String, Object> features = new LinkedHashMap<>();
 
@@ -131,6 +134,15 @@ public class DataType<T> implements Descriptive, HasFeatures, Cloneable {
 
     public DataType<T> withNullable() {
         return withNullable(true);
+    }
+
+    public DataType<T> withReadOnly(boolean readOnly) {
+        setReadOnly(readOnly);
+        return this;
+    }
+
+    public DataType<T> withReadOnly() {
+        return withReadOnly(true);
     }
 
     public DataType<T> withFeatures(Map<String, Object> features) {
@@ -225,6 +237,14 @@ public class DataType<T> implements Descriptive, HasFeatures, Cloneable {
 
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     @Override

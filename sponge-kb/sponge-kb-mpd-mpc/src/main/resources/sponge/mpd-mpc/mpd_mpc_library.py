@@ -9,8 +9,8 @@ class MpdLibrary(Action):
     def onConfigure(self):
         self.withLabel("Library").withDescription("The MPD library.")
         self.withArgs([
-            StringType("parentDir").withLabel("Directory").withAnnotated().withDefaultValue(AnnotatedValue("/")).withProvided(
-                ProvidedMeta().withValue().withReadOnly().withImplicitMode()),
+            StringType("parentDir").withLabel("Directory").withAnnotated().withDefaultValue(AnnotatedValue("/")).withReadOnly().withProvided(
+                ProvidedMeta().withValue().withImplicitMode()),
             # The key is used by the GUI to remember a scroll position in the list for every parentDir.
             ListType("files").withLabel("Files").withAnnotated().withFeatures({"pageable":True, "key":"parentDir"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("parentDir").withOptionalMode()).withElement(

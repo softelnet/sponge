@@ -30,7 +30,7 @@ class NotificationSender(Trigger):
 
         sponge.event("notification").set({"source":"Sponge", "severity":10, "person":{"firstName":"James", "surname":"Joyce"}}).label(
             "The notification " + eventNo).description("The new event " + eventNo + " notification").feature(
-                "icon", IconInfo("alarm-light").withColor("FF0000" if (notificationNo % 2) == 0 else "00FF00")
+                "icon", IconInfo().withName("alarm-light").withColor("FF0000" if (notificationNo % 2) == 0 else "00FF00")
             ).send()
 
 def onStartup():

@@ -68,6 +68,8 @@ public final class Features {
 
     public static final String TYPE_CHARACTERISTIC_DRAWING = "drawing";
 
+    public static final String TYPE_CHARACTERISTIC_NETWORK_IMAGE = "networkImage";
+
     public static final String TYPE_CHARACTERISTIC_COLOR = "color";
 
     public static final String TYPE_FILENAME = "filename";

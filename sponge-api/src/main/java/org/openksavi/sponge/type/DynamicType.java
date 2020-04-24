@@ -92,6 +92,16 @@ public class DynamicType extends DataType<DynamicValue> {
     }
 
     @Override
+    public DynamicType withReadOnly(boolean readOnly) {
+        return (DynamicType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public DynamicType withReadOnly() {
+        return (DynamicType) super.withReadOnly();
+    }
+
+    @Override
     public DynamicType withOptional() {
         return (DynamicType) super.withOptional();
     }

@@ -113,6 +113,16 @@ public class IntegerType extends DataType<Number> {
     }
 
     @Override
+    public IntegerType withReadOnly(boolean readOnly) {
+        return (IntegerType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public IntegerType withReadOnly() {
+        return (IntegerType) super.withReadOnly();
+    }
+
+    @Override
     public IntegerType withOptional() {
         return (IntegerType) super.withOptional();
     }

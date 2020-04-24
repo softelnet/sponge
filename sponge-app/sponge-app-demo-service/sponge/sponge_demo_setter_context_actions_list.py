@@ -39,7 +39,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
                     ProvidedMeta().withValue().withDependency("chosenFruit").withOptionalMode().withOverwrite()
                 ).withFeatures({"activateAction":"submit"})
         ]).withResult(createFruitWithColorRecordType())
-        self.withFeatures({"callLabel":"Choose", "icon":IconInfo("palm-tree").withColor("00FF00"), "visible":True})
+        self.withFeatures({"callLabel":"Choose", "icon":IconInfo().withName("palm-tree").withColor("00FF00"), "visible":True})
 
     def onCall(self, chosenFruit, fruits):
         if chosenFruit:

@@ -18,8 +18,8 @@ class ViewCounterEvent(Action):
             # Define a required event argument. It won't be shown in a GUI.
             ObjectType("event", RemoteEvent).withFeature("visible", False),
             # The counter value associated with an event (not necessarily a current value) will be shown in a GUI.
-            NumberType("counter").withLabel("Counter").withProvided(
-                    ProvidedMeta().withValue().withReadOnly().withDependency("event")),
+            NumberType("counter").withLabel("Counter").withReadOnly().withProvided(
+                    ProvidedMeta().withValue().withDependency("event")),
         ]).withNoResult()
         # The action will not be shown in an action list in a GUI.
         self.withFeatures({"visible":False, "callLabel":"Dismiss", "cancelLabel":"Close"})

@@ -7,7 +7,7 @@ class ViewCounter(Action):
     def onConfigure(self):
         self.withLabel("Counter").withDescription("Shows the counter.")
         self.withArgs([
-            NumberType("counter").withLabel("Counter").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            NumberType("counter").withLabel("Counter").withReadOnly().withProvided(ProvidedMeta().withValue()),
         ]).withCallable(False)
         # This action when open in a GUI will subscribe to counterNotification events. When such event arrives, the action arguments
         # will be automatically refreshed, so the counter argument will be read from the variable and provided to a GUI.
