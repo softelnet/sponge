@@ -16,7 +16,7 @@ class SetActuator(Action):
         self.withArgs([
             StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet()),
             BooleanType("actuator2").withLabel("Actuator 2 state").withProvided(ProvidedMeta().withValue()),
-            IntegerType("actuator3").withNullable().withLabel("Actuator 3 state").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            IntegerType("actuator3").withNullable().withReadOnly().withLabel("Actuator 3 state").withProvided(ProvidedMeta().withValue()),
             IntegerType("actuator4").withLabel("Actuator 4 state"),
             StringType("actuator5").withLabel("Actuator 5 state").withProvided(ProvidedMeta().withValue().withValueSet().withDependency("actuator1"))
         ]).withNoResult()

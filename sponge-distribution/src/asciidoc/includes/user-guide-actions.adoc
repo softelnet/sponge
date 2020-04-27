@@ -242,8 +242,6 @@ The `onProvideArgs(ProvideArgsContext context)` method is used to provide action
 
 Provided arguments make easier creating a generic UI for an action call that reads and presents the actual state of the entities that are to be changed or only viewed by the action and its arguments.
 
-A provided argument can be `readOnly`. In that case its value in the `onCall` method should be ignored. A read only argument type has to be nullable.
-
 A provided argument can _depend_ on other arguments but only those that are specified earlier.
 
 Arguments configured as provided with a value, a value set or a element value set have to be calculated in the `onProvideArgs` callback method and set in the `provided` map. For each provided argument its value and possible value set can be produced as the instance of the `ArgValue` class. The optional `withValue` method sets the provided value. The optional `withAnnotatedValueSet` method sets the value set along with annotations (e.g. labels) where each element is an instance of the `AnnotatedValue` class. The optional `withValueSet` method sets the possible value set with no annotations.

@@ -101,6 +101,16 @@ public class StringType extends DataType<String> {
     }
 
     @Override
+    public StringType withReadOnly(boolean readOnly) {
+        return (StringType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public StringType withReadOnly() {
+        return (StringType) super.withReadOnly();
+    }
+
+    @Override
     public StringType withOptional() {
         return (StringType) super.withOptional();
     }

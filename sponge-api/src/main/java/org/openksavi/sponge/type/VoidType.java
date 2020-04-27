@@ -89,6 +89,16 @@ public class VoidType extends DataType<Void> {
     }
 
     @Override
+    public VoidType withReadOnly(boolean readOnly) {
+        return (VoidType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public VoidType withReadOnly() {
+        return (VoidType) super.withReadOnly();
+    }
+
+    @Override
     public VoidType withOptional() {
         return (VoidType) super.withOptional();
     }

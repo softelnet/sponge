@@ -90,6 +90,9 @@ Data types are represented by instances of classes. The type classes are located
 |`nullable`
 |Tells if a value of this type can be `null`. The default is that a value must not be null, i.e. it is *not nullable*.
 
+|`readOnly`
+|A flag specifying if this type is read only. Defaults to `false`.
+
 |`features` (or `feature`)
 |Optional features as a map of names to values (as the `Object` type).
 
@@ -118,9 +121,6 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 
 |`depends`
 |A list of type names of name paths that this type depends on.
-
-|`readOnly`
-|A flag specifying if this type is read only. Defaults to `false`.
 
 |`overwrite`
 |A flag specifying if the provided value of this type should overwrite a value modified in a client code (in most cases by a user). Defaults to `false`. This flag should be handled by a client code.
@@ -319,7 +319,7 @@ Features are represented by a map of names to values. They provide additional in
 
 Features can be used in a client code to provide customized behavior.
 
-A feature can have a _feature converter_ registered for its name. The converter is used by the REST API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
+A feature can have a _feature converter_ registered for its name. The converter is used by the REST API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo().withName("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
 
 If a feature is used in events, its values should be `Serializable`.
 
@@ -1260,10 +1260,20 @@ TIP: You may see ignored events (i.e. events that go to the Output Event Queue) 
 |===
 |Name |ArtifactId |Description
 
+|`engine`
+|`sponge-kb-engine`
+|The Engine Knowledge Base artifact provides `engine_admin_library.py` and `engine_public_library.py` script files that define actions related to {sponge} engine, e.g. `EngineReload`, `EngineGetVersion`.
+
+|`user-management`
+|`sponge-kb-user-management`
+|The User Management Knowledge Base artifact provides actions for user log in, log out and the default implementation of a sign up with an email action. This artifact is intended to use with the {sponge} REST API.
+
 |`mpd-mpc`
 |`sponge-kb-mpd-mpc`
-|The MPD/MPC knowledge base uses the `mpc` commandline MPD client to connect to an MPD server providing music player related actions.
+|The MPD/MPC Knowledge Base uses the `mpc` commandline MPD client to connect to an MPD server providing music player related actions. This artifact is intended to use with the {sponge} REST API.
 |===
+
+include::includes/user-guide-applications.adoc[leveloffset=+1]
 
 include::includes/user-guide-examples.adoc[leveloffset=+1]
 

@@ -164,7 +164,7 @@
         </fileSet>
         <fileSet>
             <directory>../sponge-examples-projects/sponge-examples-project-standalone-camel-groovy</directory>
-            <outputDirectory>examples/standalone/camel_groovy</outputDirectory>
+            <outputDirectory>examples/standalone/project-camel-groovy</outputDirectory>
             <includes>
                 <include>config/**</include>
                 <include>kb/**</include>
@@ -172,7 +172,7 @@
         </fileSet>
         <fileSet>
             <directory>../sponge-examples-projects/sponge-examples-project-standalone-camel-xml</directory>
-            <outputDirectory>examples/standalone/camel_xml</outputDirectory>
+            <outputDirectory>examples/standalone/project-camel-xml</outputDirectory>
             <includes>
                 <include>config/**</include>
                 <include>kb/**</include>
@@ -187,7 +187,16 @@
         </fileSet>
 
         <fileSet>
-            <directory>../sponge-examples-projects/sponge-examples-project-mpd-mpc/kb</directory>
+            <directory>../sponge-app/sponge-app-demo-service/sponge</directory>
+            <outputDirectory>examples/project-demo-service</outputDirectory>
+            <includes>
+                <include>*.py</include>
+                <include>*.xml</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <directory>../sponge-app/sponge-app-mpd-mpc/kb</directory>
             <outputDirectory>examples/project-mpd-mpc</outputDirectory>
         </fileSet>
         <fileSet>

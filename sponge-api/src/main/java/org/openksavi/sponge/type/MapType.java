@@ -109,6 +109,16 @@ public class MapType<K, V> extends CollectionType<Map<K, V>> {
     }
 
     @Override
+    public MapType<K, V> withReadOnly(boolean readOnly) {
+        return (MapType<K, V>) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public MapType<K, V> withReadOnly() {
+        return (MapType<K, V>) super.withReadOnly();
+    }
+
+    @Override
     public MapType<K, V> withOptional() {
         return (MapType<K, V>) super.withOptional();
     }

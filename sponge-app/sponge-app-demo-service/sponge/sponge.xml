@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <!-- Set these properties via system properties in a servlet container environment! -->
+        <!-- <property name="digits.home">digits</property> -->
+        <!-- <property name="password.file">password.txt</property> -->
+
+        <!-- The optional prediction probability threshold. -->
+        <property name="predictionThreshold" variable="true">0.6</property>
+
+        <property name="doodlesDir">${sponge.home}/data/doodles</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="demo" label="Demo">
+            <file>sponge_demo.py</file>
+            <file>sponge_demo_choose_color.py</file>
+            <file>sponge_demo_depending.py</file>
+            <file>sponge_demo_binary_result.py</file>
+            <file>sponge_demo_context_actions_action.py</file>
+            <file>sponge_demo_context_actions_record.py</file>
+            <file>sponge_demo_context_actions_active.py</file>
+            <file>sponge_demo_asynchronous_provided_action_arg.py</file>
+            <file>sponge_demo_submittable_action_arg.py</file>
+            <file>sponge_demo_action_enabled_args.py</file>
+            <file>sponge_demo_action_annotated_with_default.py</file>
+            <file>sponge_demo_setter_context_actions_record.py</file>
+            <file>sponge_demo_setter_context_actions_list.py</file>
+            <file>sponge_demo_list_pageable.py</file>
+            <file>sponge_demo_object_type_with_companion.py</file>
+            <file>sponge_demo_geo_map.py</file>
+            <file>sponge_demo_geo_map_simple.py</file>
+            <file>sponge_demo_geo_map_indirect.py</file>
+            <file>sponge_demo_map_type.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoForms" label="Action forms/Base">
+            <file>sponge_demo_forms_base.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoFormsLibraryArgs" label="Action forms/Library args">
+            <file>sponge_demo_forms_library_common.py</file>
+            <file>sponge_demo_forms_library_args.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoFormsLibraryRecord" label="Action forms/Library records">
+            <file>sponge_demo_forms_library_common.py</file>
+            <file>sponge_demo_forms_library_records.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="demoPlus" label="Demo plus">
+            <file>sponge_demo_doodles.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="digits" label="Digits">
+            <file>${digits.home}/actions/digits_common.py</file>
+            <file>${digits.home}/actions/digits_predict.py</file>
+            <file>${digits.home}/actions/digits_predict_probabilities.py</file>
+            <file>sponge_demo_digits.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="events" label="Events">
+            <file>sponge_demo_events.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsNotification" label="Notification">
+            <file>sponge_demo_events_notification.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsMemo" label="Memo">
+            <file>sponge_demo_events_memo.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="eventsCounter" label="Counter">
+            <file>sponge_demo_events_counter_event_handler.py</file>
+            <file>sponge_demo_events_counter_viewer.py</file>
+            <file>sponge_demo_events_counter_sender.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="engine" label="Engine">
+            <file>classpath:sponge/engine/engine_public_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="admin" label="Admin">
+            <file>classpath:sponge/engine/engine_admin_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" label="Security">
+            <file>rest_api_security.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="py4j" class="org.openksavi.sponge.py4j.ClientServerPy4JPlugin">
+            <configuration>
+                <facadeInterface>org.openksavi.sponge.tensorflow.ImageClassifierService</facadeInterface>
+                <pythonScript>
+                    <executable>${user.home}/tensorflow/bin/python3</executable>
+                    <argument>digits_service.py</argument>
+                    <!-- The model file and the temporary directory are specified relative to the Python workingDir. -->
+                    <argument>--modelfile=../data/digits_model.h5</argument>
+                    <argument>--workspacedir=../_workspace_</argument>
+                    <workingDir>${digits.home}/python</workingDir>
+                    <waitForPositiveLineRegexp>The service has started.</waitForPositiveLineRegexp>
+                    <waitForNegativeLineRegexp>The service has failed to start.</waitForNegativeLineRegexp>
+                    <outputRedirect>CONSUMER</outputRedirect>
+                    <errorRedirect>CONSUMER</errorRedirect>
+                </pythonScript>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

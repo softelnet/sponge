@@ -375,17 +375,17 @@ public class CoreActionsTest {
             assertTrue(argTypes.get(0).getProvided().isValue());
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertFalse(argTypes.get(0).isReadOnly());
             assertNotNull(argTypes.get(1).getProvided());
             assertTrue(argTypes.get(1).getProvided().isValue());
             assertFalse(argTypes.get(1).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+            assertFalse(argTypes.get(1).isReadOnly());
             assertNotNull(argTypes.get(2).getProvided());
             assertTrue(argTypes.get(2).getProvided().isValue());
             assertFalse(argTypes.get(2).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(2).getProvided().getDependencies().size());
-            assertTrue(argTypes.get(2).getProvided().isReadOnly());
+            assertTrue(argTypes.get(2).isReadOnly());
             assertNull(argTypes.get(3).getProvided());
 
             providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(),
@@ -452,7 +452,7 @@ public class CoreActionsTest {
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertTrue(argTypes.get(0).getProvided().getValueSet().isLimited());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertFalse(argTypes.get(0).isReadOnly());
 
             providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(),
                     new ProvideArgsParameters().withProvide(Arrays.asList("actuatorType")));
@@ -1342,13 +1342,13 @@ public class CoreActionsTest {
             assertTrue(argTypes.get(0).getProvided().isValue());
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertFalse(argTypes.get(0).isReadOnly());
             assertNotNull(argTypes.get(0).getProvided().getSubmittable());
             assertNotNull(argTypes.get(1).getProvided());
             assertTrue(argTypes.get(1).getProvided().isValue());
             assertFalse(argTypes.get(1).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+            assertFalse(argTypes.get(1).isReadOnly());
 
             providedArgs = engine.getOperations().provideActionArgs(actionMeta.getName(),
                     new ProvideArgsParameters().withProvide(Arrays.asList("actuator1", "actuator2")));

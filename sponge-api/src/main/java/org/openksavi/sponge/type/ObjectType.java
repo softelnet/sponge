@@ -111,6 +111,16 @@ public class ObjectType<T> extends DataType<T> {
     }
 
     @Override
+    public ObjectType<T> withReadOnly(boolean readOnly) {
+        return (ObjectType<T>) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public ObjectType<T> withReadOnly() {
+        return (ObjectType<T>) super.withReadOnly();
+    }
+
+    @Override
     public ObjectType<T> withOptional() {
         return (ObjectType<T>) super.withOptional();
     }

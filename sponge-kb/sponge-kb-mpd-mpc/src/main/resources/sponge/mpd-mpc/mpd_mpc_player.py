@@ -9,17 +9,17 @@ class MpdPlayer(Action):
     def onConfigure(self):
         self.withLabel("Player").withDescription("The MPD player.")
         self.withArgs([
-            StringType("song").withLabel("Song").withNullable().withFeatures({"multiline":True, "maxLines":2}).withProvided(
-                ProvidedMeta().withValue().withReadOnly()),
-            StringType("album").withLabel("Album").withNullable().withFeatures({"multiline":True, "maxLines":2}).withProvided(
-                ProvidedMeta().withValue().withReadOnly()),
-            StringType("date").withLabel("Date").withNullable().withProvided(
-                ProvidedMeta().withValue().withReadOnly()),
+            StringType("song").withLabel("Song").withNullable().withReadOnly().withFeatures({"multiline":True, "maxLines":2}).withProvided(
+                ProvidedMeta().withValue()),
+            StringType("album").withLabel("Album").withNullable().withReadOnly().withFeatures({"multiline":True, "maxLines":2}).withProvided(
+                ProvidedMeta().withValue()),
+            StringType("date").withLabel("Date").withNullable().withReadOnly().withProvided(
+                ProvidedMeta().withValue()),
             IntegerType("position").withLabel("Position").withNullable().withAnnotated().withMinValue(0).withMaxValue(100).withFeatures(
                 {"widget":"slider", "group":"position"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()),
-            StringType("time").withLabel("Time").withNullable().withFeatures({"group":"position"}).withProvided(
-                ProvidedMeta().withValue().withReadOnly()),
+            StringType("time").withLabel("Time").withNullable().withReadOnly().withFeatures({"group":"position"}).withProvided(
+                ProvidedMeta().withValue()),
             IntegerType("volume").withLabel("Volume").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
             VoidType("prev").withLabel("Previous").withAnnotated().withFeatures({"icon":"skip-previous", "group":"navigation"}).withProvided(

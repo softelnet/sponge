@@ -612,15 +612,15 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertTrue(argTypes.get(0).getProvided().getValueSet().isLimited());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertFalse(argTypes.get(0).isReadOnly());
             assertTrue(argTypes.get(1).getProvided().isValue());
             assertFalse(argTypes.get(1).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+            assertFalse(argTypes.get(1).isReadOnly());
             assertTrue(argTypes.get(2).getProvided().isValue());
             assertFalse(argTypes.get(2).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(2).getProvided().getDependencies().size());
-            assertTrue(argTypes.get(2).getProvided().isReadOnly());
+            assertTrue(argTypes.get(2).isReadOnly());
             assertNull(argTypes.get(3).getProvided());
 
             // Reset the test state.
@@ -851,14 +851,14 @@ public abstract class BaseRestApiTestTemplate {
             assertTrue(argTypes.get(0).getProvided().isValue());
             assertTrue(argTypes.get(0).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(0).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(0).getProvided().isReadOnly());
+            assertFalse(argTypes.get(0).isReadOnly());
             assertNotNull(argTypes.get(0).getProvided().getSubmittable());
             assertEquals(Arrays.asList("actuator2"), argTypes.get(0).getProvided().getSubmittable().getInfluences());
             assertNotNull(argTypes.get(1).getProvided());
             assertTrue(argTypes.get(1).getProvided().isValue());
             assertFalse(argTypes.get(1).getProvided().hasValueSet());
             assertEquals(0, argTypes.get(1).getProvided().getDependencies().size());
-            assertFalse(argTypes.get(1).getProvided().isReadOnly());
+            assertFalse(argTypes.get(1).isReadOnly());
             assertNull(argTypes.get(1).getProvided().getSubmittable());
 
             Map<String, ProvidedValue<?>> providedArgs;

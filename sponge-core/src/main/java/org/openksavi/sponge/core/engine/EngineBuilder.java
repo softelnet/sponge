@@ -95,7 +95,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     /**
      * Sets the engine label.
      *
-     * @param name the engine label.
+     * @param label the engine label.
      * @return this builder.
      */
     public EngineBuilder<T> label(String label) {
@@ -106,7 +106,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     /**
      * Sets the engine description.
      *
-     * @param name the engine description.
+     * @param description the engine description.
      * @return this builder.
      */
     public EngineBuilder<T> description(String description) {
@@ -117,7 +117,7 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     /**
      * Sets the engine license.
      *
-     * @param name the engine license.
+     * @param license the engine license.
      * @return this builder.
      */
     public EngineBuilder<T> license(String license) {

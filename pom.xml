@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>1.15.1-SNAPSHOT</version>
+    <version>1.16.0-SNAPSHOT</version>
     <name>Sponge - Parent</name>
     <description>Sponge Parent POM</description>
     <url>https://sponge.openksavi.org</url>
@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.15.0</release.version>
+        <release.version>1.16.0-rc1</release.version>
         <release.date>2020-03-30</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -108,10 +108,10 @@
         <jserialcomm.version>2.6.1</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
-        <grpc.version>1.28.1</grpc.version>
+        <grpc.version>1.29.0</grpc.version>
         <protobuf.version>3.11.4</protobuf.version>
         <protoc.version>3.11.4</protoc.version>
-        <netty-tcnative.version>2.0.28.Final</netty-tcnative.version>
+        <netty-tcnative.version>2.0.30.Final</netty-tcnative.version>
         <jmdns.version>3.5.5</jmdns.version>
 
         <activemq.version>5.14.5</activemq.version>
@@ -199,7 +199,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -226,7 +226,7 @@
                             <exclude>*/sponge/integration/tests/performance/*</exclude>
                             <exclude>*/sponge/integration/tests/stability/*</exclude>
                             <exclude>*/sponge/kotlin/script/test/*</exclude>
-                            <exclude>*/sponge/examples/project/demoservice/test/stability/*</exclude>
+                            <exclude>*/sponge/app/demoservice/test/stability/*</exclude>
                         </excludes>
                         <parallel>classesAndMethods</parallel>
                         <threadCount>2</threadCount>
@@ -259,14 +259,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.1.0</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>8.31</version>
-                        </dependency>
-                    </dependencies>
+                    <version>3.1.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -976,6 +969,7 @@
                 <module>sponge-standalone-extensions</module>
                 <module>sponge-distribution</module>
                 <module>sponge-examples-projects</module>
+                <module>sponge-app</module>
             </modules>
         </profile>
         <profile>

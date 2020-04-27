@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+    <properties>
+        <property name="password.file">${sponge.configDir}/password.txt</property>
+    </properties>
+
+    <engine name="mpd" label="MPD"/>
+
+    <knowledgeBases>
+        <knowledgeBase name="mpd" label="MPD">
+            <file>classpath*:sponge/mpd-mpc/**/*.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="administration" label="Administration">
+            <file>classpath*:sponge/engine/**/*.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" label="Security">
+            <file>rest_api_security.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <configuration>
+                <spring camel="true" />
+            </configuration>
+        </plugin>
+        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
+            <configuration>
+                <allowAnonymous>true</allowAnonymous>
+                <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <registerServiceDiscovery>true</registerServiceDiscovery>
+            </configuration>
+        </plugin>
+        <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin"/>
+    </plugins>
+</sponge>
+

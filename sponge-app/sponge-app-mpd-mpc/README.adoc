@@ -1,0 +1,5 @@
+= Sponge MPD/MPC application
+
+This is the source code for the Sponge MPD client application that uses mpc.
+
+The sample passwords for user `admin` and `user` configured in the `password.txt` are: `password`.

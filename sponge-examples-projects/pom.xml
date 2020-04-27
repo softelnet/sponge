@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openksavi.sponge</groupId>
         <artifactId>sponge-parent</artifactId>
-        <version>1.15.1-SNAPSHOT</version>
+        <version>1.16.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,10 +21,8 @@
         <module>sponge-examples-project-camel-rss-news</module>
         <module>sponge-examples-project-standalone-camel-xml</module>
         <module>sponge-examples-project-standalone-camel-groovy</module>
-        <module>sponge-examples-project-demo-service</module>
         <module>sponge-examples-project-remote-api-client-test-service</module>
         <module>sponge-examples-project-iot-rpi</module>
-        <module>sponge-examples-project-mpd-mpc</module>
         <module>sponge-examples-project-user-management</module>
     </modules>
  </project>

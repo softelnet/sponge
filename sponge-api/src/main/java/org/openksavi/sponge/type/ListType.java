@@ -108,6 +108,16 @@ public class ListType<E> extends CollectionType<List<E>> {
     }
 
     @Override
+    public ListType<E> withReadOnly(boolean readOnly) {
+        return (ListType<E>) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public ListType<E> withReadOnly() {
+        return (ListType<E>) super.withReadOnly();
+    }
+
+    @Override
     public ListType<E> withOptional() {
         return (ListType<E>) super.withOptional();
     }

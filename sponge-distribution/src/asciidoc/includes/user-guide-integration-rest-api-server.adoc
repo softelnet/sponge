@@ -141,16 +141,6 @@ public static class Config extends SpongeCamelConfiguration {
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/restapi/server/RestApiServerPlugin.html[`RestApiServerPlugin` Javadoc].
 
-The REST API plugin provides a simple predefined knowledge base libraries: `engine_admin_library.py` and `engine_public_library.py`.
-
-.Example use of the REST API predefined knowledge base library
-[source,xml]
-----
-<knowledgeBase name="security" label="Security">
-    <file>classpath:org/openksavi/sponge/restapi/server/engine_admin_library.py</file>
-</knowledgeBase>
-----
-
 [discrete]
 == Maven configuration
 Maven users will need to add the following dependency to their `pom.xml`:

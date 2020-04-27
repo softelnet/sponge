@@ -90,6 +90,16 @@ public class TypeType extends DataType<DataType> {
     }
 
     @Override
+    public TypeType withReadOnly(boolean readOnly) {
+        return (TypeType) super.withReadOnly(readOnly);
+    }
+
+    @Override
+    public TypeType withReadOnly() {
+        return (TypeType) super.withReadOnly();
+    }
+
+    @Override
     public TypeType withOptional() {
         return (TypeType) super.withOptional();
     }

@@ -36,9 +36,6 @@ public class ProvidedMeta {
     /** The list of names that this provided object depends on. */
     private List<String> dependencies = new ArrayList<>();
 
-    /** The flag specifying if this provided object is read only. Defaults to {@code false}. */
-    private boolean readOnly = false;
-
     /**
      * The flag specifying if the provided value of this object should overwrite the value set in a client code. Defaults to {@code false}.
      * This flag should be handled by a client code.
@@ -90,11 +87,6 @@ public class ProvidedMeta {
 
     public ProvidedMeta withDependency(String dependency) {
         return withDependencies(Arrays.asList(dependency));
-    }
-
-    public ProvidedMeta withReadOnly() {
-        readOnly = true;
-        return this;
     }
 
     public ProvidedMeta withOverwrite() {
@@ -169,14 +161,6 @@ public class ProvidedMeta {
 
     public void setDependencies(List<String> dependencies) {
         this.dependencies = new ArrayList<>(dependencies);
-    }
-
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
     }
 
     public boolean isOverwrite() {

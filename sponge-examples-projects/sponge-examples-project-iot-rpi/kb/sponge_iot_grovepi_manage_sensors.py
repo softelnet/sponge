@@ -7,16 +7,16 @@ class ManageSensorActuatorValues(Action):
     def onConfigure(self):
         self.withLabel("Manage the sensor and actuator values").withDescription("Provides management of the sensor and actuator values.")
         self.withArgs([
-            NumberType("temperatureSensor").withNullable().withLabel(u"Temperature sensor (°C)").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("humiditySensor").withNullable().withLabel(u"Humidity sensor (%)").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("lightSensor").withNullable().withLabel(u"Light sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("rotarySensor").withNullable().withLabel(u"Rotary sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
-            NumberType("soundSensor").withNullable().withLabel(u"Sound sensor").withProvided(ProvidedMeta().withValue().withReadOnly()),
+            NumberType("temperatureSensor").withNullable().withReadOnly().withLabel(u"Temperature sensor (°C)").withProvided(ProvidedMeta().withValue()),
+            NumberType("humiditySensor").withNullable().withReadOnly().withLabel(u"Humidity sensor (%)").withProvided(ProvidedMeta().withValue()),
+            NumberType("lightSensor").withNullable().withReadOnly().withLabel(u"Light sensor").withProvided(ProvidedMeta().withValue()),
+            NumberType("rotarySensor").withNullable().withReadOnly().withLabel(u"Rotary sensor").withProvided(ProvidedMeta().withValue()),
+            NumberType("soundSensor").withNullable().withReadOnly().withLabel(u"Sound sensor").withProvided(ProvidedMeta().withValue()),
             BooleanType("redLed").withLabel("Red LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
             IntegerType("blueLed").withMinValue(0).withMaxValue(255).withLabel("Blue LED").withProvided(ProvidedMeta().withValue().withOverwrite()),
             BooleanType("buzzer").withLabel("Buzzer").withProvided(ProvidedMeta().withValue().withOverwrite())
         ]).withNoResult()
-        self.withFeature("icon", "thermometer")
+        self.withFeatures({"icon":"thermometer", "refreshEvents":["sensorChange"]})
     def onCall(self, temperatureSensor, humiditySensor, lightSensor, rotarySensor, soundSensor, redLed, blueLed, buzzer):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         grovePiDevice.setRedLed(redLed)

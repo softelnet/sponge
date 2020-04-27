@@ -31,9 +31,7 @@ public class IconInfo implements Serializable {
 
     private Double size;
 
-    public IconInfo(String name) {
-        this.name = name;
-    }
+    private String url;
 
     public IconInfo() {
     }
@@ -50,6 +48,11 @@ public class IconInfo implements Serializable {
 
     public IconInfo withSize(Double size) {
         setSize(size);
+        return this;
+    }
+
+    public IconInfo withUrl(String url) {
+        setUrl(url);
         return this;
     }
 
@@ -75,5 +78,13 @@ public class IconInfo implements Serializable {
 
     public void setSize(Double size) {
         this.size = size;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

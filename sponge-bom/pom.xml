@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.openksavi.sponge</groupId>
         <artifactId>sponge-parent</artifactId>
-        <version>1.15.1-SNAPSHOT</version>
+        <version>1.16.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -163,6 +163,16 @@
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
                 <artifactId>sponge-kb</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-kb-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-kb-user-management</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
