@@ -46,8 +46,9 @@ class RecordCreateBook(Action):
         self.withLabel("Add a new book")
         self.withArg(
             createBookRecordType("book").withLabel("Book").withProvided(ProvidedMeta().withValue()).withFields([
-                # Overwrite the author field.
+                # Overwrite the author and cover fields.
                 StringType("author").withLabel("Author").withProvided(ProvidedMeta().withValueSet(ValueSetMeta().withNotLimited())),
+                StringType("cover").withNullable().withFeatures({"visible":False}),
             ])
         ).withNoResult()
         self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"plus-box"})

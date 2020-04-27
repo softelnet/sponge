@@ -786,6 +786,10 @@ A _number_ can be an integer or a floating point value.
 |`color`
 |`StringType`
 |A `StringType` that represents a color as a hexadecimal RGB string.
+
+|`networkImage`
+|`StringType`
+|A `StringType` that represents a network image URL.
 |===
 
 ==== Widgets

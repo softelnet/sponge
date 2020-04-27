@@ -319,7 +319,7 @@ Features are represented by a map of names to values. They provide additional in
 
 Features can be used in a client code to provide customized behavior.
 
-A feature can have a _feature converter_ registered for its name. The converter is used by the REST API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
+A feature can have a _feature converter_ registered for its name. The converter is used by the REST API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo().withName("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
 
 If a feature is used in events, its values should be `Serializable`.
 

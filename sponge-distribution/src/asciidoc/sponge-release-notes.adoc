@@ -21,6 +21,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Unshaded dependencies in the `sponge-core` and `sponge-jython` artifacts.
 * Added a new artifact `sponge-jython-shaded` that contains several shaded dependencies.
 * Added the `-l,--language <language>` option to the standalone commandline application.
+* Added `networkImage` to the supported `characteristic` feature values.
 * Dependencies upgrade.
 
 [discrete]
