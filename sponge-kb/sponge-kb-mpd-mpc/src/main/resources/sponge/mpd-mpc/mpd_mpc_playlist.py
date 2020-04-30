@@ -20,7 +20,7 @@ class MpdPlaylist(Action):
                 "activateAction":SubAction("MpdPlaylistEntryPlay").withArg("entry", "this"),
                 "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
-        ]).withCallable(False).withActivatable()
+        ]).withNonCallable().withActivatable()
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
                            "contextActions":[
                                SubAction("MpdLibrary"),

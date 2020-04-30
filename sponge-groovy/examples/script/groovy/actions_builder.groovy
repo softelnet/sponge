@@ -28,7 +28,7 @@ void onLoad() {
 
     sponge.enable(new ActionBuilder("NoArgAndResultAction").withOnCall({ action -> sponge.setVariable("called_" + action.meta.name, true) }))
 
-    sponge.enable(new ActionBuilder("ProvidedArgsAction").withArg(new StringType("text").withProvided(new ProvidedMeta().withValue())).withCallable(false)
+    sponge.enable(new ActionBuilder("ProvidedArgsAction").withArg(new StringType("text").withProvided(new ProvidedMeta().withValue())).withNonCallable()
         .withOnProvideArgs({action, context ->
             if (context.provide.contains("text")) {
                 context.provided.put("text", new ProvidedValue().withValue("ABC"))

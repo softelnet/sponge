@@ -26,7 +26,7 @@ class EnableArgsAction(Action):
                         StringType("title").withLabel("Title")
                     ]).withFeature("refreshable", True)
             ),
-        ]).withCallable(False)
+        ]).withNonCallable()
     def onProvideArgs(self, context):
         if "dynamicallyDisabled" in context.provide:
             context.provided["dynamicallyDisabled"] = ProvidedValue().withValue(AnnotatedValue(

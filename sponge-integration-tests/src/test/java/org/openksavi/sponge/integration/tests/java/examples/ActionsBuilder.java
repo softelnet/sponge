@@ -58,7 +58,7 @@ public class ActionsBuilder extends JKnowledgeBase {
 
         getSponge().enable(
                 new JActionBuilder("ProvidedArgsAction").withArg(new StringType("text").withProvided(new ProvidedMeta().withValue()))
-                        .withCallable(false).withOnProvideArgs((action, context) -> {
+                        .withNonCallable().withOnProvideArgs((action, context) -> {
                             if (context.getProvide().contains("text")) {
                                 context.getProvided().put("text", new ProvidedValue<>().withValue("ABC"));
                             }

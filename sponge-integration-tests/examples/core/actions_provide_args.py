@@ -61,7 +61,7 @@ class ProvidedArgNoCallAction(Action):
     def onConfigure(self):
         self.withArgs([
             StringType("actuator1").withLabel("Actuator 1 state").withProvided(ProvidedMeta().withValue().withValueSet(ValueSetMeta().withNotLimited())),
-        ]).withNoResult().withCallable(False)
+        ]).withNonCallable()
     def onProvideArgs(self, context):
         if "actuator1" in context.provide:
             context.provided["actuator1"] = ProvidedValue().withValue(sponge.getVariable("actuator1", None)).withValueSet(["A", "B", "C"])

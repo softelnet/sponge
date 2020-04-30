@@ -26,7 +26,7 @@ def onLoad
 
     $sponge.enable(ActionBuilder.new("NoArgAndResultAction").withOnCall {|action| $sponge.setVariable("called_" + action.meta.name, true)} )
 
-    $sponge.enable(ActionBuilder.new("ProvidedArgsAction").withArg(StringType.new("text").withProvided(ProvidedMeta.new().withValue())).withCallable(false)
+    $sponge.enable(ActionBuilder.new("ProvidedArgsAction").withArg(StringType.new("text").withProvided(ProvidedMeta.new().withValue())).withNonCallable()
         .withOnProvideArgs do |action, context|
             if context.provide === "text"
                 context.provided.put("text", ProvidedValue.new().withValue("ABC"))

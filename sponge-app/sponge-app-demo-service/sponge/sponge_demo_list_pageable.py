@@ -12,7 +12,7 @@ class ActionWithPageableList(Action):
                 ).withElement(
                     StringType("element").withAnnotated()
                 )
-        ]).withCallable(False).withFeatures({"icon":"library"})
+        ]).withNonCallable().withFeatures({"icon":"library"})
 
     def onInit(self):
         self.elements = list(map(lambda n: AnnotatedValue(n).withValueLabel("Element " + str(n)), range(0, 25)))

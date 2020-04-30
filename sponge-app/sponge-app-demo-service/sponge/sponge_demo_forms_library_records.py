@@ -28,7 +28,7 @@ class RecordLibraryForm(Action):
                     "refreshable":True,
                 # Provided with overwrite to allow GUI refresh.
                 }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"]))
-        ]).withCallable(False).withFeature("icon", "library")
+        ]).withNonCallable().withFeature("icon", "library")
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.provide:
@@ -76,7 +76,7 @@ class RecordReadBook(Action):
         # Must set withOverwrite to replace with the current value.
         self.withArg(createBookRecordType("book").withAnnotated().withLabel("Book").withReadOnly().withProvided(
             ProvidedMeta().withValue().withOverwrite().withDependency("book.id")))
-        self.withCallable(False).withFeatures({"visible":False, "cancelLabel":"Close", "icon":"book-open"})
+        self.withNonCallable().withFeatures({"visible":False, "cancelLabel":"Close", "icon":"book-open"})
     def onProvideArgs(self, context):
         global LIBRARY
         if "book" in context.provide:

@@ -20,7 +20,7 @@ class ArgLibraryForm(Action):
             }).withElement(
                 IntegerType().withAnnotated()
             )
-        ]).withCallable(False).withFeature("icon", "library")
+        ]).withNonCallable().withFeature("icon", "library")
     def onProvideArgs(self, context):
         global LIBRARY
         if "order" in context.provide:
@@ -63,7 +63,7 @@ class ArgAbstractReadUpdateBook(Action):
 class ArgReadBook(ArgAbstractReadUpdateBook):
     def onConfigure(self):
         ArgAbstractReadUpdateBook.onConfigure(self)
-        self.withLabel("View the book").withCallable(False)
+        self.withLabel("View the book").withNonCallable()
         self.withFeatures({"cancelLabel":"Close"})
 
     def onCall(self, bookId, author, title):

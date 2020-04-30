@@ -7,7 +7,7 @@ class ContextActionsActiveInactive(Action):
     def onConfigure(self):
         self.withLabel("Action with active/inactive context actions").withArgs([
             BooleanType("active").withLabel("Active").withDefaultValue(False)
-        ]).withCallable(False).withFeatures({"contextActions":[
+        ]).withNonCallable().withFeatures({"contextActions":[
             SubAction("ContextActionsActiveInactive_ContextAction1").withArg("active", "active"),
             SubAction("ContextActionsActiveInactive_ContextAction2")
         ]})

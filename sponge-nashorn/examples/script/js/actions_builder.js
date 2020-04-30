@@ -34,7 +34,7 @@ function onLoad() {
         sponge.setVariable("called_" + action.meta.name, true)
     }))
 
-    sponge.enable(new ActionBuilder("ProvidedArgsAction").withArg(new StringType("text").withProvided(new ProvidedMeta().withValue())).withCallable(false)
+    sponge.enable(new ActionBuilder("ProvidedArgsAction").withArg(new StringType("text").withProvided(new ProvidedMeta().withValue())).withNonCallable()
             .withOnProvideArgs(function (action, context) {
                 if (context.provide.has("text")) {
                     context.provided["text"] = new ProvidedValue().withValue("ABC")

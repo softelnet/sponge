@@ -31,5 +31,5 @@ def onLoad():
         if "text" in context.provide:
             context.provided["text"] = ProvidedValue().withValue("ABC")
 
-    sponge.enable(ActionBuilder("ProvidedArgsAction").withArg(StringType("text").withProvided(ProvidedMeta().withValue())).withCallable(
-        False).withOnProvideArgs(onProvideArgs))
+    sponge.enable(ActionBuilder("ProvidedArgsAction").withArg(StringType("text").withProvided(ProvidedMeta().withValue())).withNonCallable()
+                  .withOnProvideArgs(onProvideArgs))

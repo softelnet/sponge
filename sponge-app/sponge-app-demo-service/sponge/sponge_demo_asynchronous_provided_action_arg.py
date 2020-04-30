@@ -13,7 +13,7 @@ class AsynchronousProvidedActionArg(Action):
                 ProvidedMeta().withValue().withOverwrite()),
             StringType("arg2").withLabel("Argument 2").withReadOnly().withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("arg1")),
-        ]).withNoResult().withCallable(False).withFeatures({"cancelLabel":"Close"})
+        ]).withNonCallable().withFeatures({"cancelLabel":"Close"})
     def onProvideArgs(self, context):
         if "arg1" in context.provide:
             context.provided["arg1"] = ProvidedValue().withValue("v" + str(Random().nextInt(100) + 1))

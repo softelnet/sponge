@@ -15,7 +15,7 @@ class ViewFruits(Action):
         self.withLabel("Fruits").withArgs([
             ListType("fruits", StringType()).withLabel("Fruits").withAnnotated().withProvided(ProvidedMeta().withValue()).withFeatures({
                 "pageable":True})
-        ]).withNoResult().withCallable(False)
+        ]).withNonCallable()
     def onProvideArgs(self, context):
         if "fruits" in context.provide:
             offset = context.getArgFeature("fruits", "offset")

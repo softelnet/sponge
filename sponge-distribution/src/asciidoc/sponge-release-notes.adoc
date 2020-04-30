@@ -13,6 +13,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Renamed `ProvideActionArgsRequestBody.features` and `ProvideArgsContext.features` to `argFeatures`.
 * API change: Added `minValue` and `maxValue` to `DateTimeType`.
 * API change: Introduced a `SubAction` typed feature for `contextActions`, `createAction`, `readAction`, `updateAction`, `deleteAction` and `activateAction` instead of string specifications.
+* API change: Renamed `withNotCallable` to `withNonCallable` in the action metadata.
 * Introduced knowledge base artifacts.
 * Added `sponge-kb-engine`, `sponge-kb-user-management` and `sponge-kb-mpd-mpc` knowledge base artifacts.
 * Introduced predefined {sponge}-based applications that can be used ad hoc. Their projects are placed under the `sponge-kb` multi-module project.

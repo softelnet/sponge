@@ -29,11 +29,8 @@ In addition to the inherited <<processor-methods,processor properties and method
 |`withCallable(boolean callable)`
 |Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used with provided arguments.
 
-|`withCallable(boolean callable)`
-|Sets a callable flag for the action. A callable action must have an `onCall` method defined. Defaults to `true`. The reason an action would be not callable is if it is used with provided arguments.
-
-|`withNotCallable()`
-|Sets the action to be not callable.
+|`withNonCallable()`
+|Sets the action to be non callable.
 
 |`withActivatable()`
 |Sets an activatable flag for the action. An activatable action should have an `onIsActive` method defined. Defaults to `false`.

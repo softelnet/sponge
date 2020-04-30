@@ -16,7 +16,7 @@ class NumbersViewFilterInline(Action):
             ListType("numbers").withLabel("Numbers").withAnnotated().withProvided(
                 ProvidedMeta().withValue().withDependency("filter").withOverwrite()).withElement(
                     IntegerType().withAnnotated())
-        ]).withCallable(False).withFeatures({"showRefresh":True})
+        ]).withNonCallable().withFeatures({"showRefresh":True})
     def onProvideArgs(self, context):
         if "numbers" in context.provide:
             filter = context.current["filter"].value
@@ -30,7 +30,7 @@ class NumbersViewFilterInContextAction(Action):
             ListType("numbers").withLabel("Numbers").withAnnotated().withProvided(
                 ProvidedMeta().withValue().withDependency("filter").withOverwrite()
             ).withElement(IntegerType().withAnnotated())
-        ]).withNoResult().withCallable(False).withFeatures({"contextActions":[
+        ]).withNonCallable().withFeatures({"contextActions":[
             SubAction("NumbersViewFilterInContextAction_Filter").withArg("filter", "filter").withResult("filter"),
             SubAction("NumbersViewFilterInContextAction_ThisSubstitution").withArg("record", "this").withResult("this")
         ]})

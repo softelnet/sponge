@@ -126,7 +126,7 @@ public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements A
     }
 
     @Override
-    public ActionBuilder withNotCallable() {
+    public ActionBuilder withNonCallable() {
         return withCallable(false);
     }
 

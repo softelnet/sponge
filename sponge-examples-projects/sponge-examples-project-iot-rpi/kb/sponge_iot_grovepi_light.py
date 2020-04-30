@@ -9,9 +9,8 @@ class ViewLightStatusWithAutoRefresh(Action):
         self.withDescription("Provides the light status and refreshes it automatically.")
         self.withArgs([
             BooleanType("light").withNullable().withLabel("Light").withReadOnly().withProvided(ProvidedMeta().withValue())
-        ]).withNoResult()
+        ]).withNonCallable()
         self.withFeatures({"cancelLabel":"Close", "icon":"lightbulb-outline", "refreshEvents":["lightNotification"]})
-        self.withCallable(False)
     def onProvideArgs(self, context):
         grovePiDevice = sponge.getVariable("grovePiDevice")
         if "light" in context.provide:

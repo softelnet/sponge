@@ -18,7 +18,7 @@ class ActionWithGeoMapIndirect(Action):
                 ).withElement(
                     StringType("location").withAnnotated()
                 )
-        ]).withCallable(False).withFeatures({"icon":"map"})
+        ]).withNonCallable().withFeatures({"icon":"map"})
 
     def onProvideArgs(self, context):
         if "locations" in context.provide:

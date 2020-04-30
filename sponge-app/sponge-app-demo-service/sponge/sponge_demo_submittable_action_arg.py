@@ -17,7 +17,7 @@ class SubmittableActionArg(Action):
                 ProvidedMeta().withValue().withDependency("arg1")),
             StringType("arg4").withLabel("Argument 4").withReadOnly().withProvided(
                 ProvidedMeta().withValue().withDependency("arg1")),
-        ]).withCallable(False)
+        ]).withNonCallable()
         self.withFeatures({"cancelLabel":"Close"})
     def onInit(self):
         self.arg1value = "a"

@@ -18,7 +18,7 @@ class MpdLibrary(Action):
                         StringType("file"),
                         BooleanType("isDir")
                     ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")))
-        ]).withCallable(False).withActivatable()
+        ]).withNonCallable().withActivatable()
         self.withFeatures({"icon":"folder-music", "contextActions":[SubAction("MpdRefreshDatabase")], "visible":True})
 
     def onIsActive(self, context):

@@ -37,7 +37,7 @@ class ViewSongLyrics(Action):
                 ProvidedMeta().withValue()),
             StringType("lyrics").withLabel("Lyrics").withReadOnly().withProvided(
                 ProvidedMeta().withValue().withDependency("song")),
-        ]).withNotCallable().withActivatable()
+        ]).withNonCallable().withActivatable()
         self.withFeatures({"icon":"script-text-outline", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
     def onIsActive(self, context):
         return sponge.getVariable("mpc").getCurrentSong() is not None
@@ -68,7 +68,7 @@ class ViewSongInfo(Action):
     def onConfigure(self):
         self.withLabel("Song info").withDescription("View the current song info.").withArgs([
             createSongType("song").withReadOnly().withProvided(ProvidedMeta().withValue()),
-        ]).withNotCallable().withActivatable()
+        ]).withNonCallable().withActivatable()
         self.withFeatures({"icon":"information", "cancelLabel":"Close", "refreshEvents":["mpdNotification_player"], "visible":False})
     def onIsActive(self, context):
         return sponge.getVariable("mpc").getCurrentSong() is not None
@@ -85,7 +85,7 @@ class ViewMpdStatus(Action):
             StringType("status").withLabel("Status").withFeatures({"multiline":True, "maxLines":3}).withReadOnly().withProvided(
                 ProvidedMeta().withValue()),
             StringType("stats").withLabel("Stats").withReadOnly().withProvided(ProvidedMeta().withValue())
-        ]).withCallable(False)
+        ]).withNonCallable()
         self.withFeatures({"icon":"console", "cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification"], "visible":False})
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")

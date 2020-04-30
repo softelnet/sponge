@@ -64,7 +64,7 @@ public interface ActionBuilder extends ProcessorBuilder<Action> {
 
     ActionBuilder withCallable(boolean callable);
 
-    ActionBuilder withNotCallable();
+    ActionBuilder withNonCallable();
 
     @Override
     ActionBuilder withOnInit(ProcessorOnInitCallback<Action> onInitCallback);

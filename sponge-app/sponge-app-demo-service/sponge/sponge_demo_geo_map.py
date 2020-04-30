@@ -27,7 +27,7 @@ class ActionWithGeoMap(Action):
                 ).withElement(
                     StringType("location").withAnnotated()
                 )
-        ]).withCallable(False).withFeatures({"icon":"map"})
+        ]).withNonCallable().withFeatures({"icon":"map"})
 
     def onProvideArgs(self, context):
         if "locations" in context.provide:
@@ -63,7 +63,7 @@ class ActionWithGeoMapViewLocation(Action):
             NumberType("longitude").withLabel("Longitude").withReadOnly().withProvided(
                 ProvidedMeta().withValue().withOverwrite().withDependency("location")),
             ])
-        self.withCallable(False).withFeatures({"visible":False, "cancelLabel":"Close", "icon":"map-marker"})
+        self.withNonCallable().withFeatures({"visible":False, "cancelLabel":"Close", "icon":"map-marker"})
     def onProvideArgs(self, context):
         if "label" in context.provide:
             context.provided["label"] = ProvidedValue().withValue(context.current["location"].valueLabel)

@@ -357,7 +357,7 @@ class ViewFruitsPaging(Action):
         self.withLabel("Fruits with value paging").withArgs([
             ListType("fruits", StringType()).withLabel("Fruits").withAnnotated().withProvided(ProvidedMeta().withValue()).withFeatures({
                 "pageable":True})
-        ]).withNoResult().withCallable(False)
+        ]).withNonCallable()
     def onInit(self):
         self.fruits = ["apple", "orange", "lemon", "banana", "cherry", "grapes", "peach", "mango", "grapefruit", "kiwi", "plum"]
     def onProvideArgs(self, context):
@@ -380,7 +380,7 @@ class ProvidedWithCurrentAndLazyUpdate(Action):
         self.withLabel("Provided with current and lazy update").withArgs([
             StringType("arg").withLabel("Arg").withAnnotated().withProvided(
                 ProvidedMeta().withValue().withOverwrite().withCurrent().withLazyUpdate()),
-        ]).withNoResult().withCallable(False)
+        ]).withNonCallable()
     def onProvideArgs(self, context):
         if "arg" in context.provide:
             context.provided["arg"] = ProvidedValue().withValue(AnnotatedValue(context.current["arg"].value))
@@ -389,7 +389,7 @@ class ProvidedWithOptional(Action):
     def onConfigure(self):
         self.withLabel("Provided with optional").withArgs([
             StringType("arg").withLabel("Arg").withProvided(ProvidedMeta().withValue().withOptionalMode()),
-        ]).withNoResult().withCallable(False)
+        ]).withNonCallable()
     def onProvideArgs(self, context):
         context.provided["arg"] = ProvidedValue().withValue("VALUE")
 
@@ -409,7 +409,7 @@ class SubActionsAction(Action):
         self.withArgs([
             StringType("arg1"),
             ListType("arg2", StringType()).withDefaultValue(["a", "b", "c"])
-        ]).withNoResult().withCallable(False).withFeatures({"contextActions":[
+        ]).withNonCallable().withFeatures({"contextActions":[
             SubAction("SubAction1").withLabel("Sub-action 1/1").withArg("target1", "arg1").withResult("arg1"),
             SubAction("SubAction1").withLabel("Sub-action 1/2 (no result substitution)").withArg("target1", "arg1"),
             SubAction("SubAction1").withLabel("Sub-action 1/3 (no arg and result substitution)"),

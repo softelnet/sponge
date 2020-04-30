@@ -122,7 +122,7 @@ public abstract class BaseAction extends BaseProcessor<ActionAdapter> implements
         return this;
     }
 
-    public BaseAction withNotCallable() {
+    public BaseAction withNonCallable() {
         return withCallable(false);
     }
 
