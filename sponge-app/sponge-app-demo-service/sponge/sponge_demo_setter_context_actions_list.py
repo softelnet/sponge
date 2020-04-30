@@ -38,7 +38,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
                     createFruitWithColorRecordType("fruit").withProvided(ProvidedMeta().withSubmittable())
                 ).withProvided(
                     ProvidedMeta().withValue().withDependency("chosenFruit").withOptionalMode().withOverwrite()
-                ).withFeatures({"activateAction":SubAction("submit")})
+                ).withFeatures({"activateAction":SubAction("@submit")})
         ]).withResult(createFruitWithColorRecordType())
         self.withFeatures({"callLabel":"Choose", "icon":IconInfo().withName("palm-tree").withColor("00FF00"), "visible":True})
 

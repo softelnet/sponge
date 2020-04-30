@@ -712,7 +712,7 @@ The application may be switched to the dark or the light theme in the settings.
 |`activateAction`
 |`SubAction`
 |`ListType` action argument
-|An action that will be called on list element tap. If the action name has the special value `submit`, then instead of calling an action, a `provideActionArgs` will be invoked with the submitted list element.
+|An action that will be called on list element tap. If the action name has the special value `@submit`, then instead of calling an action, a `provideActionArgs` will be invoked with the submitted list element.
 
 |`width`
 |`int`

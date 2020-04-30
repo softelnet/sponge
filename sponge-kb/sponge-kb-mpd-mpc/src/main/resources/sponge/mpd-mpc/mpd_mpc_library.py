@@ -43,7 +43,7 @@ class MpdLibrary(Action):
 
         for file in files:
             if file.value["isDir"]:
-                file.withFeatures({"activateAction":SubAction("submit")})
+                file.withFeatures({"activateAction":SubAction("@submit")})
         return files
 
     def _changeDir(self, parentDir, file):

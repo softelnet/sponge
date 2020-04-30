@@ -138,7 +138,7 @@ public final class Features {
 
     public static final String SUB_ACTION_ACTIVATE_ACTION = "activateAction";
 
-    public static final String TYPE_LIST_ACTIVATE_ACTION_VALUE_SUBMIT = "submit";
+    public static final String TYPE_LIST_ACTIVATE_ACTION_VALUE_SUBMIT = "@submit";
 
     public static final String BINARY_WIDTH = "width";
 
