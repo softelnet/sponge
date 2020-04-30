@@ -403,6 +403,33 @@ class IsActionActiveAction(Action):
     def onCall(self, arg):
         pass
 
+class SubActionsAction(Action):
+    def onConfigure(self):
+        self.withLabel("Sub-actions action")
+        self.withArgs([
+            StringType("arg1"),
+            ListType("arg2", StringType()).withDefaultValue(["a", "b", "c"])
+        ]).withNoResult().withCallable(False).withFeatures({"contextActions":[
+            SubAction("SubAction1").withLabel("Sub-action 1/1").withArg("target1", "arg1").withResult("arg1"),
+            SubAction("SubAction1").withLabel("Sub-action 1/2 (no result substitution)").withArg("target1", "arg1"),
+            SubAction("SubAction1").withLabel("Sub-action 1/3 (no arg and result substitution)"),
+            SubAction("SubAction2").withLabel("Sub-action 2/1 (arg by value)").withArg("target1", "arg2").withResult("arg2"),
+        ]})
+
+class SubAction1(Action):
+    def onConfigure(self):
+        self.withLabel("SubAction 1")
+        self.withArgs([StringType("target1")]).withResult(StringType())
+    def onCall(self, arg1):
+        return upper(arg1)
+
+class SubAction2(Action):
+    def onConfigure(self):
+        self.withLabel("SubAction 2")
+        self.withArgs([ListType("target1")]).withResult(ListType())
+    def onCall(self, target1):
+        return target1 + ["z"]
+
 class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):
         return not (actionAdapter.meta.name.startswith("Private") or actionAdapter.meta.name.startswith("RemoteApi"))

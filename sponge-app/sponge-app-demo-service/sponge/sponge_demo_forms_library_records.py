@@ -20,13 +20,14 @@ class RecordLibraryForm(Action):
         self.withArgs([
             StringType("search").withNullable().withLabel("Search").withFeature("responsive", True),
             StringType("order").withLabel("Sort by").withProvided(ProvidedMeta().withValue().withValueSet()),
-            ListType("books").withLabel("Books").withFeatures({
-                    "createAction":"RecordCreateBook", "readAction":"RecordReadBook", "updateAction":"RecordUpdateBook", "deleteAction":"RecordDeleteBook",
+            ListType("books").withLabel("Books").withElement(createBookRecordType("book").withAnnotated()).withFeatures({
+                    "createAction":SubAction("RecordCreateBook"),
+                    "readAction":SubAction("RecordReadBook").withArg("book", "this"),
+                    "updateAction":SubAction("RecordUpdateBook").withArg("book", "this"),
+                    "deleteAction":SubAction("RecordDeleteBook").withArg("book", "this"),
                     "refreshable":True,
                 # Provided with overwrite to allow GUI refresh.
-                }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"])).withElement(
-                        createBookRecordType("book").withAnnotated()
-                )
+                }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"]))
         ]).withCallable(False).withFeature("icon", "library")
     def onProvideArgs(self, context):
         global LIBRARY
@@ -37,7 +38,11 @@ class RecordLibraryForm(Action):
             context.provided["books"] = ProvidedValue().withValue(
                 # Context actions are provided dynamically in an annotated value.
                 map(lambda book: AnnotatedValue(book.toMap()).withValueLabel("{} - {}".format(book.author, book.title)).withFeatures({
-                    "contextActions":["RecordBookContextBinaryResult", "RecordBookContextNoResult", "RecordBookContextAdditionalArgs"],
+                    "contextActions":[
+                        SubAction("RecordBookContextBinaryResult").withArg("book", "this"),
+                        SubAction("RecordBookContextNoResult").withArg("book", "this"),
+                        SubAction("RecordBookContextAdditionalArgs").withArg("book", "this")
+                    ],
                     "icon":(IconInfo().withUrl(book.cover) if book.cover else None)}),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))
 

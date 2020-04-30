@@ -15,12 +15,18 @@ class MpdPlaylist(Action):
     def onConfigure(self):
         self.withLabel("Playlist").withDescription("The MPD playlist.")
         self.withArgs([
-            ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures(
-                {"createAction":"MpdLibrary()", "activateAction":"MpdPlaylistEntryPlay", "pageable":True, "refreshable":True}).withProvided(
+            ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures({
+                "createAction":SubAction("MpdLibrary"),
+                "activateAction":SubAction("MpdPlaylistEntryPlay").withArg("entry", "this"),
+                "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withCallable(False).withActivatable()
         self.withFeatures({"cancelLabel":"Close", "refreshEvents":["mpdNotification_playlist", "mpdNotification_player"],
-                           "contextActions":["MpdLibrary()", "MpdFindAndAddToPlaylist()", "MpdPlaylistClear()"], "icon":"playlist-edit", "visible":True})
+                           "contextActions":[
+                               SubAction("MpdLibrary"),
+                               SubAction("MpdFindAndAddToPlaylist"),
+                               SubAction("MpdPlaylistClear")
+                            ], "icon":"playlist-edit", "visible":True})
 
     def onIsActive(self, context):
         return sponge.getVariable("mpc").isConnected()
@@ -28,10 +34,10 @@ class MpdPlaylist(Action):
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []
         if position is not None and position > 1:
-            contextActions.append("MpdPlaylistEntryUp")
+            contextActions.append(SubAction("MpdPlaylistEntryUp").withArg("entry", "this"))
         if position is not None and position < entriesSize:
-            contextActions.append("MpdPlaylistEntryDown")
-        contextActions.append("MpdPlaylistEntryRemove")
+            contextActions.append(SubAction("MpdPlaylistEntryDown").withArg("entry", "this"))
+        contextActions.append(SubAction("MpdPlaylistEntryRemove").withArg("entry", "this"))
 
         return contextActions
 

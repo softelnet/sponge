@@ -16,17 +16,22 @@
 
 package org.openksavi.sponge.restapi.feature.converter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class BaseUnitFeatureConverter implements UnitFeatureConverter {
 
-    protected BaseUnitFeatureConverter(String name) {
-        this.name = name;
+    protected BaseUnitFeatureConverter(String name, String... names) {
+        this.names.add(name);
+        this.names.addAll(Arrays.asList(names));
     }
 
-    protected String name;
+    protected List<String> names = new ArrayList<>();
 
     @Override
-    public String getName() {
-        return name;
+    public List<String> getNames() {
+        return names;
     }
 
     @Override

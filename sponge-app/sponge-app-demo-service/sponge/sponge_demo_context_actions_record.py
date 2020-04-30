@@ -10,7 +10,8 @@ class RecordWithContextActions(Action):
                 StringType("author").withLabel("Author"),
                 StringType("title").withLabel("Title"),
             ]).withProvided(ProvidedMeta().withValue()).withFeature("contextActions", [
-                "RecordWithContextActionsAction1(author)", "RecordWithContextActionsAction2(title)"
+                SubAction("RecordWithContextActionsAction1").withArg("author", "author"),
+                SubAction("RecordWithContextActionsAction2").withArg("title", "title")
             ])
         ).withNoResult()
     def onCall(self, book):

@@ -54,6 +54,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.examples.CustomObject;
 import org.openksavi.sponge.features.Features;
+import org.openksavi.sponge.features.model.SubAction;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.restapi.RestApiConstants;
@@ -1052,6 +1053,26 @@ public abstract class BaseRestApiTestTemplate {
             active = client.isActionActive(Arrays.asList(new IsActionActiveEntry(actionName).withContextValue(null)));
             assertEquals(1, active.size());
             assertFalse(active.get(0));
+
+            assertFalse(engine.isError());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSubActions() {
+        try (SpongeRestClient client = createRestClient()) {
+            String actionName = "SubActionsAction";
+
+            List<SubAction> subActions = (List<SubAction>) client.getActionMeta(actionName).getFeatures().get(Features.CONTEXT_ACTIONS);
+            assertEquals(4, subActions.size());
+
+            assertEquals("SubAction1", subActions.get(0).getName());
+            assertEquals("Sub-action 1/1", subActions.get(0).getLabel());
+            assertEquals(1, subActions.get(0).getArgs().size());
+            assertEquals("target1", subActions.get(0).getArgs().get(0).getTarget());
+            assertEquals("arg1", subActions.get(0).getArgs().get(0).getSource());
+            assertEquals("arg1", subActions.get(0).getResult().getTarget());
 
             assertFalse(engine.isError());
         }

@@ -14,7 +14,8 @@ class Library(Action):
     def onConfigure(self):
         self.withArgs([
             ListType("books").withLabel("Books").withProvided(ProvidedMeta().withValue()).withFeatures({
-                    "createAction":"RecordCreateBook", "readAction":"RecordReadBook", "updateAction":"RecordUpdateBook", "deleteAction":"RecordDeleteBook",
+                    "createAction":SubAction("RecordCreateBook"),
+                    "updateAction":SubAction("RecordUpdateBook").withArg("book", "this"),
                 }).withElement(
                     createBookRecordType("book").withAnnotated()
                 )
@@ -28,7 +29,7 @@ class Library(Action):
                 {"id":2, "author":"Arthur Conan Doyle", "title":"Adventures of Sherlock Holmes"}
             ])
 
-class CreateBook(Action):
+class RecordCreateBook(Action):
     def onConfigure(self):
         self.withArgs([
             createBookRecordType("book").withLabel("Book").withFields([
@@ -41,7 +42,7 @@ class CreateBook(Action):
         if "book.author" in context.provide:
             context.provided["book.author"] = ProvidedValue().withValueSet(["James Joyce", "Arthur Conan Doyle"])
 
-class UpdateBook(Action):
+class RecordUpdateBook(Action):
     def onConfigure(self):
         self.withArg(
             createBookRecordType("book").withAnnotated().withProvided(ProvidedMeta().withValue().withDependency("book.id")).withFields([

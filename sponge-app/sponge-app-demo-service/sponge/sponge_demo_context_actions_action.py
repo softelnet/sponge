@@ -9,9 +9,13 @@ class ActionWithContextActions(Action):
             StringType("arg1").withLabel("Argument 1"),
             StringType("arg2").withLabel("Argument 2")
         ]).withNoResult().withFeature("contextActions", [
-            "ActionWithContextActionsContextAction1", "ActionWithContextActionsContextAction2(arg2)", "ActionWithContextActionsContextAction3(arg2=arg2)",
-            "ActionWithContextActionsContextAction4(arg1)", "ActionWithContextActionsContextAction5", "ActionWithContextActionsContextAction6",
-            "MarkdownText()"
+            SubAction("ActionWithContextActionsContextAction1").withArg("arg", "this"),
+            SubAction("ActionWithContextActionsContextAction2").withArg("arg", "arg2"),
+            SubAction("ActionWithContextActionsContextAction3").withArg("arg2", "arg2"),
+            SubAction("ActionWithContextActionsContextAction4").withArg("arg1NotVisible", "arg1"),
+            SubAction("ActionWithContextActionsContextAction5").withArg("arg", "this"),
+            SubAction("ActionWithContextActionsContextAction6").withArg("arg", "this"),
+            SubAction("MarkdownText")
         ])
         self.withFeature("icon", "attachment")
     def onCall(self, arg1, arg2):

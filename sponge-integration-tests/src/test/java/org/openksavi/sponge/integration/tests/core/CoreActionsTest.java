@@ -1148,7 +1148,8 @@ public class CoreActionsTest {
         engine.startup();
 
         try {
-            ActionMeta actionMeta = engine.getActionMeta("UpdateBook");
+            String actionName = "RecordUpdateBook";
+            ActionMeta actionMeta = engine.getActionMeta(actionName);
             RecordType argType = (RecordType) actionMeta.getArgs().get(0);
 
             assertEquals(3, argType.getFields().size());
@@ -1168,7 +1169,7 @@ public class CoreActionsTest {
             Map<String, Object> book =
                     new LinkedHashMap<>(SpongeUtils.immutableMapOf("id", 1, "author", "James Joyce", "title", "Ulysses"));
             Map<String, ProvidedValue<?>> provideActionArgs =
-                    engine.getOperations().provideActionArgs("UpdateBook", new ProvideArgsParameters()
+                    engine.getOperations().provideActionArgs(actionName, new ProvideArgsParameters()
                             .withProvide(Arrays.asList("book", "book.author")).withCurrent(SpongeUtils.immutableMapOf("book.id", 5)));
             List authorValueSet = SpongeApiUtils.unwrapAnnotatedValueList(provideActionArgs.get("book.author").getAnnotatedValueSet());
             assertEquals("James Joyce", authorValueSet.get(0));
@@ -1180,7 +1181,7 @@ public class CoreActionsTest {
             assertEquals("Ulysses", providedBook.get("title"));
 
             book.put("author", "Arthur Conan Doyle");
-            engine.getOperations().call("UpdateBook", Arrays.asList(book));
+            engine.getOperations().call(actionName, Arrays.asList(book));
 
             assertFalse(engine.isError());
         } finally {

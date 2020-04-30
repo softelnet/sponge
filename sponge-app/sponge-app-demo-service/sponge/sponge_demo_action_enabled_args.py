@@ -34,11 +34,12 @@ class EnableArgsAction(Action):
                     "enabled", context.current["enable"]))
         if "list" in context.provide:
             context.provided["list"] = ProvidedValue().withValue(AnnotatedValue(
-                map(lambda element: AnnotatedValue(element).withFeature("contextActions", ["UpperCase()"]), ["a", "b", "c"])).withFeature("enabled", context.current["enable"]))
+                map(lambda element: AnnotatedValue(element).withFeature("contextActions", [SubAction("UpperCase")]),
+                    ["a", "b", "c"])).withFeature("enabled", context.current["enable"]))
         if "record" in context.provide:
             context.provided["record"] = ProvidedValue().withValue(AnnotatedValue(context.current["record"].value if context.current["record"] else None).withFeature(
                 "enabled", context.current["enable"]))
         if "listOfRecords" in context.provide:
             elements = [{"id":1, "author":"James Joyce", "title":"Ulysses"}, {"id":2, "author":"Arthur Conan Doyle", "title":"Adventures of Sherlock Holmes"}]
             context.provided["listOfRecords"] = ProvidedValue().withValue(AnnotatedValue(
-                map(lambda element: AnnotatedValue(element).withFeature("contextActions", ["UpperCase()"]), elements)).withFeature("enabled", context.current["enable"]))
+                map(lambda element: AnnotatedValue(element).withFeature("contextActions", [SubAction("UpperCase")]), elements)).withFeature("enabled", context.current["enable"]))

@@ -21,13 +21,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.util.HasFeatures;
 
 /**
  * A map.
  */
-public class GeoMap implements HasFeatures, Serializable {
+public class GeoMap implements HasFeatures, Serializable, Cloneable {
 
     private static final long serialVersionUID = 659974545540192399L;
 
@@ -74,7 +76,7 @@ public class GeoMap implements HasFeatures, Serializable {
     }
 
     public GeoMap withLayers(List<GeoLayer> layers) {
-        setLayers(layers);
+        layers.addAll(layers);
         return this;
     }
 
@@ -149,5 +151,19 @@ public class GeoMap implements HasFeatures, Serializable {
     @Override
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
+    }
+
+    @Override
+    public GeoMap clone() {
+        try {
+            GeoMap cloned = (GeoMap) super.clone();
+            cloned.center = center != null ? center.clone() : null;
+            cloned.layers = layers != null ? layers.stream().map(layer -> layer.clone()).collect(Collectors.toList()) : null;
+            cloned.features = features != null ? new LinkedHashMap<>(features) : null;
+
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new SpongeException(e);
+        }
     }
 }

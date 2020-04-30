@@ -12,7 +12,10 @@ class ArgLibraryForm(Action):
             # Provided with overwrite to allow GUI refresh.
             ListType("books").withLabel("Books").withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(
                 ["search", "order"])).withFeatures({
-                "createAction":"ArgCreateBook", "readAction":"ArgReadBook", "updateAction":"ArgUpdateBook", "deleteAction":"ArgDeleteBook",
+                "createAction":SubAction("ArgCreateBook"),
+                "readAction":SubAction("ArgReadBook").withArg("bookId", "this"),
+                "updateAction":SubAction("ArgUpdateBook").withArg("bookId", "this"),
+                "deleteAction":SubAction("ArgDeleteBook").withArg("bookId", "this"),
                 "refreshable":True,
             }).withElement(
                 IntegerType().withAnnotated()

@@ -30,6 +30,21 @@ public class GeoMapFeatureUnitConverter extends BaseUnitFeatureConverter {
     }
 
     @Override
+    public Object marshal(FeatureConverter converter, Object value) {
+        GeoMap geoMap = ((GeoMap) value).clone();
+
+        geoMap.setFeatures(FeaturesUtils.marshal(converter, geoMap.getFeatures()));
+
+        if (geoMap.getLayers() != null) {
+            for (GeoLayer layer : geoMap.getLayers()) {
+                layer.setFeatures(FeaturesUtils.marshal(converter, layer.getFeatures()));
+            }
+        }
+
+        return geoMap;
+    }
+
+    @Override
     public Object unmarshal(FeatureConverter converter, Object value) {
         GeoMap geoMap = converter.getObjectMapper().convertValue(value, GeoMap.class);
 

@@ -626,7 +626,7 @@ The application may be switched to the dark or the light theme in the settings.
 |An action cancel button label in the action call screen. Defaults to `CANCEL` if the feature is not set. If set to `None`, the button will not be shown.
 
 |`contextActions`
-|`List<String>`
+|`List<SubAction>`
 |Action, `RecordType`, `ListType` action argument
 |Context actions. For more information on context actions and sub-actions see the <<mobile-advanced-use-cases,Advanced use cases>> chapter.
 
@@ -641,29 +641,29 @@ The application may be switched to the dark or the light theme in the settings.
 |A flag indicating that argument values of the action that is used as a _context action_ can be cached (i.e. preserved between this action call screens) in a client. Defaults to `false`. If set to `true` the `cacheableArgs` should be `true` as well.
 
 |`createAction`
-|`String`
+|`SubAction`
 |`ListType` action argument
 |A _create_ sub-action for a list element.
 
 |`readAction`
-|`String`
+|`SubAction`
 |`ListType` action argument
 |A _read_ sub-action for a list element.
 
 |`updateAction`
-|`String`
+|`SubAction`
 |`ListType` action argument
 |A _update_ sub-action for a list element.
 
 |`deleteAction`
-|`String`
+|`SubAction`
 |`ListType` action argument
 |A _delete_ sub-action for a list element.
 
 |`activateAction`
-|`String`
+|`SubAction`
 |`ListType` action argument
-|An action that will be called on list element tap. If the action string has the special value `submit`, then instead of calling an action, a `provideActionArgs` will be invoked with the submitted list element.
+|An action that will be called on list element tap. If the action name has the special value `submit`, then instead of calling an action, a `provideActionArgs` will be invoked with the submitted list element.
 
 |`width`
 |`int`

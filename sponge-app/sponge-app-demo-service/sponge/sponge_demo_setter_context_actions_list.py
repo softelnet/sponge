@@ -16,7 +16,8 @@ class FruitsWithColorsContextSetter(Action):
                 AnnotatedValue({"name":"Orange", "color":"orange"}),
                 AnnotatedValue({"name":"Lemon", "color":"yellow"}),
                 AnnotatedValue({"name":"Apple", "color":"red"})]).withFeatures({
-                    "updateAction":"this=FruitsWithColorsContextSetter_Update(this)", "contextActions":["this=FruitsWithColorsContextSetter_Choose"]})
+                    "updateAction":SubAction("FruitsWithColorsContextSetter_Update").withArg("fruit", "this").withResult("this"),
+                    "contextActions":[SubAction("FruitsWithColorsContextSetter_Choose").withArg("chosenFruit", "this").withResult("this")]})
         ]).withCallable(False)
 
 class FruitsWithColorsContextSetter_Update(Action):
@@ -37,7 +38,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
                     createFruitWithColorRecordType("fruit").withProvided(ProvidedMeta().withSubmittable())
                 ).withProvided(
                     ProvidedMeta().withValue().withDependency("chosenFruit").withOptionalMode().withOverwrite()
-                ).withFeatures({"activateAction":"submit"})
+                ).withFeatures({"activateAction":SubAction("submit")})
         ]).withResult(createFruitWithColorRecordType())
         self.withFeatures({"callLabel":"Choose", "icon":IconInfo().withName("palm-tree").withColor("00FF00"), "visible":True})
 

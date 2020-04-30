@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openksavi.sponge.restapi.feature.converter.unit.GeoMapFeatureUnitConverter;
 import org.openksavi.sponge.restapi.feature.converter.unit.GeoPositionFeatureUnitConverter;
 import org.openksavi.sponge.restapi.feature.converter.unit.IconFeatureUnitConverter;
+import org.openksavi.sponge.restapi.feature.converter.unit.SubActionFeatureUnitConverter;
+import org.openksavi.sponge.restapi.feature.converter.unit.SubActionFeaturesUnitConverter;
 
 /**
  * A default feature converter.
@@ -33,6 +35,7 @@ public class DefaultFeatureConverter extends BaseFeatureConverter {
         super(objectMapper);
 
         // Register default unit converters.
-        registerAll(Arrays.asList(new IconFeatureUnitConverter(), new GeoMapFeatureUnitConverter(), new GeoPositionFeatureUnitConverter()));
+        registerAll(Arrays.asList(new SubActionFeatureUnitConverter(), new SubActionFeaturesUnitConverter(), new IconFeatureUnitConverter(),
+                new GeoMapFeatureUnitConverter(), new GeoPositionFeatureUnitConverter()));
     }
 }

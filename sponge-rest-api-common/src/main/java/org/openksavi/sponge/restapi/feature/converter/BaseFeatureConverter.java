@@ -65,8 +65,8 @@ public abstract class BaseFeatureConverter implements FeatureConverter {
 
     @Override
     public void register(UnitFeatureConverter unitConverter) {
-        logger.trace("Registering {} feature converter: {}", unitConverter.getName(), unitConverter.getClass());
-        registry.put(unitConverter.getName(), unitConverter);
+        logger.trace("Registering {} feature(s) converter: {}", unitConverter.getNames(), unitConverter.getClass());
+        unitConverter.getNames().forEach(name -> registry.put(name, unitConverter));
     }
 
     @Override

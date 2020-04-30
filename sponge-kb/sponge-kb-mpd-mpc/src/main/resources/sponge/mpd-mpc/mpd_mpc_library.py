@@ -19,7 +19,7 @@ class MpdLibrary(Action):
                         BooleanType("isDir")
                     ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")))
         ]).withCallable(False).withActivatable()
-        self.withFeatures({"icon":"folder-music", "contextActions":["MpdRefreshDatabase()"], "visible":True})
+        self.withFeatures({"icon":"folder-music", "contextActions":[SubAction("MpdRefreshDatabase")], "visible":True})
 
     def onIsActive(self, context):
         return sponge.getVariable("mpc").isConnected()
@@ -34,13 +34,16 @@ class MpdLibrary(Action):
         mpc = sponge.getVariable("mpc")
 
         files = list(map(lambda file: AnnotatedValue({"file":file[0], "isDir":file[1]}).withValueLabel(os.path.basename(file[0])).withFeatures(
-            {"contextActions":["MpdLibraryAdd", "MpdLibraryAddAndPlay"]}), mpc.getFiles(parentDir)))
+            {"contextActions":[
+                SubAction("MpdLibraryAdd").withArg("file", "this"),
+                SubAction("MpdLibraryAddAndPlay").withArg("file", "this")
+            ]}), mpc.getFiles(parentDir)))
         if parentDir != "/":
             files.insert(0, AnnotatedValue({"file":"..", "isDir":True}).withValueLabel(".."))
 
         for file in files:
             if file.value["isDir"]:
-                file.withFeatures({"activateAction":"submit"})
+                file.withFeatures({"activateAction":SubAction("submit")})
         return files
 
     def _changeDir(self, parentDir, file):

@@ -46,6 +46,9 @@ import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventName;
 import org.openksavi.sponge.features.Features;
+import org.openksavi.sponge.features.model.SubAction;
+import org.openksavi.sponge.features.model.SubActionArg;
+import org.openksavi.sponge.features.model.SubActionResult;
 import org.openksavi.sponge.features.model.geo.GeoMap;
 import org.openksavi.sponge.features.model.geo.GeoMarkerLayer;
 import org.openksavi.sponge.features.model.geo.GeoPosition;
@@ -297,6 +300,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 Duration.class, Instant.class, ChronoUnit.class, TimeUnit.class,
                 Features.class,
                 RuleEventSpec.class, ProvideArgsParameters.class,
+                SubAction.class, SubActionArg.class, SubActionResult.class,
                 GeoPosition.class, GeoTileLayer.class, GeoMarkerLayer.class, GeoMap.class, IconInfo.class));
         //@formatter:on
 

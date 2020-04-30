@@ -16,17 +16,19 @@
 
 package org.openksavi.sponge.restapi.feature.converter;
 
+import java.util.List;
+
 /**
  * A unit feature converter.
  */
 public interface UnitFeatureConverter {
 
     /**
-     * Returns the feature name.
+     * Returns the feature names.
      *
-     * @return the feature name.
+     * @return the feature names.
      */
-    String getName();
+    List<String> getNames();
 
     /**
      * Marshals the value as a feature.

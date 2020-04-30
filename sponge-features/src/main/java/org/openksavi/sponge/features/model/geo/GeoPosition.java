@@ -18,10 +18,12 @@ package org.openksavi.sponge.features.model.geo;
 
 import java.io.Serializable;
 
+import org.openksavi.sponge.SpongeException;
+
 /**
  * A geo position.
  */
-public class GeoPosition implements Serializable {
+public class GeoPosition implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -711901067929339815L;
 
@@ -61,5 +63,14 @@ public class GeoPosition implements Serializable {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public GeoPosition clone() {
+        try {
+            return (GeoPosition) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new SpongeException(e);
+        }
     }
 }
