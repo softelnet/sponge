@@ -237,8 +237,64 @@ image::screens/mobile/event_send.png[title="Action that sends events",width=300,
 [[mobile-advanced-use-cases]]
 == Advanced use cases
 
+=== Sub-actions
+Sub-actions provide references to actions associated with a parent entity (e.g. a parent action, a record). A sub-action is represented by the `SubAction` class.
+
+Sub-actions support argument and result substitutions.
+
+.Sub-action properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`name`
+|A sub-action name.
+
+|`label`
+|A sub-action label.
+
+|`description`
+|A sub-action description.
+
+|`List<SubActionArg> args`
+|Sub-action argument substitutions. An argument substitution is represented by the `SubActionArg` class. It can be added using the following methods: `withArgs(List<SubActionArg> args)`, `withArg(SubActionArg arg)` and `withArg(String target, String source)`.
+
+|`SubActionResult result`
+|A sub-action result substitution. A result substitution is represented by the `SubActionResult` class. It can be added using the following methods: `withResult(SubActionResult result)` and `withResult(String target)`.
+
+|`Map<String, Object> features`
+|Sub-action features.
+|===
+
+.Argument substitution properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`String target`
+|A target attribute name (i.e. an argument name of a sub-action).
+
+|`String source`
+|A source attribute (i.e. an argument name of a parent entity).
+
+|`Map<String, Object> features`
+|Argument substitution features.
+|===
+
+.Result substitution properties
+[cols="1,3"]
+|===
+|Property |Description
+
+|`String target`
+|A target attribute for the result (i.e. a nargument name of a parent entity).
+
+|`Map<String, Object> features`
+|Result substitution features.
+|===
+
 === Context actions
-Context actions can be specified for actions, record arguments and list elements (see the list-details) to provide related, customized sub-actions. Context actions should be specified as the `contextActions` feature statically for a type or an action or dynamically for an annotated value. The latter option takes precedence.
+Context actions are sub-actions that can be specified for an action, a record and a list element (see the list-details). Context actions should be specified as the `contextActions` feature statically for a type or an action or dynamically for an annotated value. The latter option takes precedence.
 
 image::screens/mobile/action_context_actions.png[title="The action with context actions",width=300,pdfwidth=35%,scaledwidth=35%]
 
@@ -249,16 +305,9 @@ include::{rootDir}/sponge-app/sponge-app-demo-service/sponge/sponge_demo_context
 ----
 
 ==== Arguments substitution
-Modes of passing arguments to a context action:
+A target argument must have the same type as a source value.
 
-* Default (e.g. `"ContextAction"`). In case of a context action for an action, all action arguments as a record (represented as a map) will be passed as the first argument of the context action. In case of a record argument or a list element, the record or the list element value will be passed as the first argument respectively.
-* Explicit substitution (format `"ContextAction(targetArgName=sourceArgName,...)"`, e.g. `"ContextAction(contextArg1=arg1,contextArg2=arg2)"`). In case of a context action for an action, the argument `contextArg1` of the context action will be set to a value of the argument `arg1` of the parent action and the argument `contextArg2` of the context action will be set to a value of the argument `arg2`.
-* Implicit substitution (format `"ContextAction(sourceArgName,...)"`, e.g. `"ContextAction(arg1)"`). In case of a context action for an action, the first argument of the context action will be set to a value of the argument `arg1` of the parent action.
-* No arguments passed (e.g. `"ContextAction()"`).
-
-The target argument must have the same type as the source value.
-
-A source argument name could be a path if a source value is a record, e.g. `"ContextAction(contextArg1=arg1.field1)"`. The `this` keyword can be used as the source argument name. In case of a context action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
+A source argument name could be a path if a source value is a record, e.g. `"arg1.field1"`. The `@this` keyword can be used as the source argument name. In case of a context action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
 
 If a context action has any visible arguments, a new action call screen will be shown. If a context value is an annotated value, the screen will show a header containing a label of the annotated value.
 
@@ -267,11 +316,11 @@ The context actions feature is not propagated to sub-actions in an annotated val
 Context actions can use globally saved (in a mobile application) action arguments but only if there is no argument substitutions (i.e. there are no arguments passed from the main action). It is necessary to avoid inconsistency.
 
 ==== Result substitution
-A context action result can be assigned to a main action argument by using the notation `"parentArgName=ContextAction()"`. As a parent argument name you can use the `this` keyword which means all action arguments or all record value or a list element.
+A context action result can be assigned to a parent action argument. As a parent argument name you can use the `@this` keyword which means all action arguments or a whole record value or a list element.
 
-For list elements only the `this` keyword as a result substitution is supported.
+For list elements only the `@this` keyword as a result substitution is supported.
 
-If a context action returns `null` and the result substitution is `this`, the result will be ignored.
+If a context action returns `null` and the result substitution is `@this`, the result will be ignored.
 
 ==== Active or inactive context actions
 Before showing a list of context actions the application checks (by connecting to the server) if the context actions are active. Inactive actions will be greyed out.

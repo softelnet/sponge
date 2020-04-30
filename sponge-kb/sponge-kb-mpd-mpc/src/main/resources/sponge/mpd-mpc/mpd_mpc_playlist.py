@@ -17,7 +17,7 @@ class MpdPlaylist(Action):
         self.withArgs([
             ListType("playlist").withLabel("Playlist").withAnnotated().withFeatures({
                 "createAction":SubAction("MpdLibrary"),
-                "activateAction":SubAction("MpdPlaylistEntryPlay").withArg("entry", "this"),
+                "activateAction":SubAction("MpdPlaylistEntryPlay").withArg("entry", "@this"),
                 "pageable":True, "refreshable":True}).withProvided(
                 ProvidedMeta().withValue().withOverwrite()).withElement(createPlaylistEntry("song").withAnnotated())
         ]).withNonCallable().withActivatable()
@@ -34,10 +34,10 @@ class MpdPlaylist(Action):
     def __createContextActionsForEntry(self, position, entriesSize):
         contextActions = []
         if position is not None and position > 1:
-            contextActions.append(SubAction("MpdPlaylistEntryUp").withArg("entry", "this"))
+            contextActions.append(SubAction("MpdPlaylistEntryUp").withArg("entry", "@this"))
         if position is not None and position < entriesSize:
-            contextActions.append(SubAction("MpdPlaylistEntryDown").withArg("entry", "this"))
-        contextActions.append(SubAction("MpdPlaylistEntryRemove").withArg("entry", "this"))
+            contextActions.append(SubAction("MpdPlaylistEntryDown").withArg("entry", "@this"))
+        contextActions.append(SubAction("MpdPlaylistEntryRemove").withArg("entry", "@this"))
 
         return contextActions
 

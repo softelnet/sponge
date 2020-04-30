@@ -24,7 +24,7 @@ class ActionWithGeoMapSimple(Action):
             locations = [
                 AnnotatedValue("building1").withValueLabel("Building (with actions)").withValueDescription("Description of building 1").withFeatures({
                     "geoPosition":GeoPosition(50.06043, 19.93558), "icon":"home", "iconColor":"FF0000"}).withFeature(
-                        "contextActions", [SubAction("ActionWithGeoMapViewLocation").withArg("location", "this")]),
+                        "contextActions", [SubAction("ActionWithGeoMapViewLocation").withArg("location", "@this")]),
                 AnnotatedValue("building2").withValueLabel("Building (without actions)").withValueDescription("Description of building 2").withFeatures({
                     "geoPosition":GeoPosition(50.06253, 19.93768), "icon":"home"}),
                 AnnotatedValue("person1").withValueLabel("Person 1 (without actions)").withValueDescription("Description of person 1").withFeatures({

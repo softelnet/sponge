@@ -9,12 +9,12 @@ class ActionWithContextActions(Action):
             StringType("arg1").withLabel("Argument 1"),
             StringType("arg2").withLabel("Argument 2")
         ]).withNoResult().withFeature("contextActions", [
-            SubAction("ActionWithContextActionsContextAction1").withArg("arg", "this"),
+            SubAction("ActionWithContextActionsContextAction1").withArg("arg", "@this"),
             SubAction("ActionWithContextActionsContextAction2").withArg("arg", "arg2"),
             SubAction("ActionWithContextActionsContextAction3").withArg("arg2", "arg2"),
             SubAction("ActionWithContextActionsContextAction4").withArg("arg1NotVisible", "arg1"),
-            SubAction("ActionWithContextActionsContextAction5").withArg("arg", "this"),
-            SubAction("ActionWithContextActionsContextAction6").withArg("arg", "this"),
+            SubAction("ActionWithContextActionsContextAction5").withArg("arg", "@this"),
+            SubAction("ActionWithContextActionsContextAction6").withArg("arg", "@this"),
             SubAction("MarkdownText")
         ])
         self.withFeature("icon", "attachment")

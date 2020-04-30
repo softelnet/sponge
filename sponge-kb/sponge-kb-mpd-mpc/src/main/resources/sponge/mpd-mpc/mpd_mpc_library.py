@@ -35,8 +35,8 @@ class MpdLibrary(Action):
 
         files = list(map(lambda file: AnnotatedValue({"file":file[0], "isDir":file[1]}).withValueLabel(os.path.basename(file[0])).withFeatures(
             {"contextActions":[
-                SubAction("MpdLibraryAdd").withArg("file", "this"),
-                SubAction("MpdLibraryAddAndPlay").withArg("file", "this")
+                SubAction("MpdLibraryAdd").withArg("file", "@this"),
+                SubAction("MpdLibraryAddAndPlay").withArg("file", "@this")
             ]}), mpc.getFiles(parentDir)))
         if parentDir != "/":
             files.insert(0, AnnotatedValue({"file":"..", "isDir":True}).withValueLabel(".."))

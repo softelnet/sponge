@@ -13,9 +13,9 @@ class ArgLibraryForm(Action):
             ListType("books").withLabel("Books").withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(
                 ["search", "order"])).withFeatures({
                 "createAction":SubAction("ArgCreateBook"),
-                "readAction":SubAction("ArgReadBook").withArg("bookId", "this"),
-                "updateAction":SubAction("ArgUpdateBook").withArg("bookId", "this"),
-                "deleteAction":SubAction("ArgDeleteBook").withArg("bookId", "this"),
+                "readAction":SubAction("ArgReadBook").withArg("bookId", "@this"),
+                "updateAction":SubAction("ArgUpdateBook").withArg("bookId", "@this"),
+                "deleteAction":SubAction("ArgDeleteBook").withArg("bookId", "@this"),
                 "refreshable":True,
             }).withElement(
                 IntegerType().withAnnotated()

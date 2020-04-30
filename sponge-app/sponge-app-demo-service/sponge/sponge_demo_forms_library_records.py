@@ -22,9 +22,9 @@ class RecordLibraryForm(Action):
             StringType("order").withLabel("Sort by").withProvided(ProvidedMeta().withValue().withValueSet()),
             ListType("books").withLabel("Books").withElement(createBookRecordType("book").withAnnotated()).withFeatures({
                     "createAction":SubAction("RecordCreateBook"),
-                    "readAction":SubAction("RecordReadBook").withArg("book", "this"),
-                    "updateAction":SubAction("RecordUpdateBook").withArg("book", "this"),
-                    "deleteAction":SubAction("RecordDeleteBook").withArg("book", "this"),
+                    "readAction":SubAction("RecordReadBook").withArg("book", "@this"),
+                    "updateAction":SubAction("RecordUpdateBook").withArg("book", "@this"),
+                    "deleteAction":SubAction("RecordDeleteBook").withArg("book", "@this"),
                     "refreshable":True,
                 # Provided with overwrite to allow GUI refresh.
                 }).withProvided(ProvidedMeta().withValue().withOverwrite().withDependencies(["search", "order"]))
@@ -39,9 +39,9 @@ class RecordLibraryForm(Action):
                 # Context actions are provided dynamically in an annotated value.
                 map(lambda book: AnnotatedValue(book.toMap()).withValueLabel("{} - {}".format(book.author, book.title)).withFeatures({
                     "contextActions":[
-                        SubAction("RecordBookContextBinaryResult").withArg("book", "this"),
-                        SubAction("RecordBookContextNoResult").withArg("book", "this"),
-                        SubAction("RecordBookContextAdditionalArgs").withArg("book", "this")
+                        SubAction("RecordBookContextBinaryResult").withArg("book", "@this"),
+                        SubAction("RecordBookContextNoResult").withArg("book", "@this"),
+                        SubAction("RecordBookContextAdditionalArgs").withArg("book", "@this")
                     ],
                     "icon":(IconInfo().withUrl(book.cover) if book.cover else None)}),
                     sorted(LIBRARY.findBooks(context.current["search"]), key = lambda book: book.author.lower() if context.current["order"] == "author" else book.title.lower())))

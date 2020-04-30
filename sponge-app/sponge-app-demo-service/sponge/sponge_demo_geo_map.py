@@ -35,7 +35,7 @@ class ActionWithGeoMap(Action):
                 AnnotatedValue("building1").withValueLabel("Building (with actions)").withValueDescription("Description of building 1").withFeatures({
                     "geoPosition":GeoPosition(50.06043, 19.93558), "icon":IconInfo().withName("home").withColor("FF0000").withSize(50),
                     "geoLayerName":"buildings"}).withFeature(
-                        "contextActions", [SubAction("ActionWithGeoMapViewLocation").withArg("location", "this")]),
+                        "contextActions", [SubAction("ActionWithGeoMapViewLocation").withArg("location", "@this")]),
                 AnnotatedValue("building2").withValueLabel("Building (without actions)").withValueDescription("Description of building 2").withFeatures({
                     "geoPosition":GeoPosition(50.06253, 19.93768),
                     "geoLayerName":"buildings"}),

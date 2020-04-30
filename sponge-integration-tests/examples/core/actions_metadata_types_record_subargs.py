@@ -15,7 +15,7 @@ class Library(Action):
         self.withArgs([
             ListType("books").withLabel("Books").withProvided(ProvidedMeta().withValue()).withFeatures({
                     "createAction":SubAction("RecordCreateBook"),
-                    "updateAction":SubAction("RecordUpdateBook").withArg("book", "this"),
+                    "updateAction":SubAction("RecordUpdateBook").withArg("book", "@this"),
                 }).withElement(
                     createBookRecordType("book").withAnnotated()
                 )

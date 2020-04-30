@@ -32,7 +32,7 @@ class NumbersViewFilterInContextAction(Action):
             ).withElement(IntegerType().withAnnotated())
         ]).withNonCallable().withFeatures({"contextActions":[
             SubAction("NumbersViewFilterInContextAction_Filter").withArg("filter", "filter").withResult("filter"),
-            SubAction("NumbersViewFilterInContextAction_ThisSubstitution").withArg("record", "this").withResult("this")
+            SubAction("NumbersViewFilterInContextAction_ThisSubstitution").withArg("record", "@this").withResult("@this")
         ]})
     def onProvideArgs(self, context):
         if "numbers" in context.provide:
