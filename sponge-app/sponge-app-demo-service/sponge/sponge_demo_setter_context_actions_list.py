@@ -17,7 +17,9 @@ class FruitsWithColorsContextSetter(Action):
                 AnnotatedValue({"name":"Lemon", "color":"yellow"}),
                 AnnotatedValue({"name":"Apple", "color":"red"})]).withFeatures({
                     "updateAction":SubAction("FruitsWithColorsContextSetter_Update").withArg("fruit", "@this").withResult("@this"),
-                    "contextActions":[SubAction("FruitsWithColorsContextSetter_Choose").withArg("chosenFruit", "@this").withResult("@this")]})
+                    "contextActions":[
+                        SubAction("FruitsWithColorsContextSetter_Choose").withLabel("Choose a new fruit").withArg("chosenFruit", "@this").withResult("@this")
+                    ]})
         ]).withNonCallable()
 
 class FruitsWithColorsContextSetter_Update(Action):
