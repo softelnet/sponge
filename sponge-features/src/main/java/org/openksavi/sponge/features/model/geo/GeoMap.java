@@ -76,7 +76,7 @@ public class GeoMap implements HasFeatures, Serializable, Cloneable {
     }
 
     public GeoMap withLayers(List<GeoLayer> layers) {
-        layers.addAll(layers);
+        this.layers.addAll(layers);
         return this;
     }
 
