@@ -293,10 +293,35 @@ Sub-actions support argument and result substitutions.
 |Result substitution features.
 |===
 
-==== Argument substitution
-A target argument must have the same type as a source value.
 
-A source argument name could be a path if a source value is a record, e.g. `"arg1.field1"`. The `@this` keyword can be used as the source argument name. In case of a sub-action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
+.Substitution keywords
+[cols="1,2,4"]
+|===
+|Keyword |Substitution |Description
+
+|`@this`
+|argument source
+|In case of a sub-action for an action it is a record of all parent action arguments. In case of a record argument or a list element it is the value itself.
+
+|`@this`
+|result target
+|It represents all action arguments or a whole record value or a list element. If a sub-action returns `null` and the result substitution is `@this`, the result will be ignored.
+
+|`@index`
+|argument source
+|A list element index. Applies only for lists.
+
+|`@parent`
+|argument source
+|A whole list for a list element sub-actions. Applies only for lists.
+
+|`@parent`
+|result target
+|A whole list for a list element sub-actions. Applies only for lists.
+|===
+
+==== Argument substitution
+A target argument must have the same type as a source value. A source argument name could be a path if a source value is a record, e.g. `"arg1.field1"`.
 
 If a sub-action has any visible arguments, a new action call screen will be shown.
 
@@ -305,11 +330,7 @@ The sub-action related features are not propagated to a sub-action in an annotat
 Sub-actions can use globally saved (in a mobile application) action arguments but only if there is no argument substitutions (i.e. there are no arguments passed from the main action). It is necessary to avoid inconsistency.
 
 ==== Result substitution
-A sub-action result can be assigned to a parent action argument. As a parent argument name you can use the `@this` keyword which means all action arguments or a whole record value or a list element.
-
-For list elements only the `@this` keyword as a result substitution is supported.
-
-If a sub-action returns `null` and the result substitution is `@this`, the result will be ignored.
+A sub-action result can be assigned to a parent action argument.
 
 === Context actions
 Context actions are sub-actions that can be specified for an action, a record and a list element (see the list-details). Context actions should be specified as the `contextActions` feature statically for a type or an action or dynamically for an annotated value. The latter option takes precedence.

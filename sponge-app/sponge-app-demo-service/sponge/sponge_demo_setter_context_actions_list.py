@@ -18,7 +18,9 @@ class FruitsWithColorsContextSetter(Action):
                 AnnotatedValue({"name":"Apple", "color":"red"})]).withFeatures({
                     "updateAction":SubAction("FruitsWithColorsContextSetter_Update").withArg("fruit", "@this").withResult("@this"),
                     "contextActions":[
-                        SubAction("FruitsWithColorsContextSetter_Choose").withLabel("Choose a new fruit").withArg("chosenFruit", "@this").withResult("@this")
+                        SubAction("FruitsWithColorsContextSetter_Choose").withLabel("Choose a new fruit").withArg("chosenFruit", "@this").withResult("@this"),
+                        SubAction("FruitsWithColorsContextSetter_Index").withArg("indexArg", "@index"),
+                        SubAction("FruitsWithColorsContextSetter_Parent").withArg("parentArg", "@parent").withResult("@parent"),
                     ]})
         ]).withNonCallable()
 
@@ -68,3 +70,24 @@ class FruitsWithColorsContextSetter_Choose(Action):
                 AnnotatedValue({"name":"Kiwi", "color":"green"}).withValueLabel("Kiwi").withFeature("icon", "star" if chosenFruitName == "Kiwi" else None),
                 AnnotatedValue({"name":"Banana", "color":"yellow"}).withValueLabel("Banana").withFeature("icon", "star" if chosenFruitName == "Banana" else None)
             ])
+
+class FruitsWithColorsContextSetter_Index(Action):
+    def onConfigure(self):
+        self.withLabel("Get list index").withArgs([
+            IntegerType("indexArg").withFeature("visible", False)
+        ]).withResult(IntegerType().withLabel("Index"))
+        self.withFeatures({"visible":False})
+    def onCall(self, indexArg):
+        return indexArg
+
+class FruitsWithColorsContextSetter_Parent(Action):
+    def onConfigure(self):
+        self.withLabel("Update a whole list").withArgs([
+            ListType("parentArg", createFruitWithColorRecordType("fruit")).withFeature("visible", False)
+        ]).withResult(ListType().withElement(createFruitWithColorRecordType("fruit")))
+        self.withFeatures({"visible":False})
+    def onCall(self, parentArg):
+        if len(parentArg) < 4:
+            return parentArg + [AnnotatedValue({"name":"Strawberry", "color":"red"})]
+        else:
+            return parentArg[:-1]
