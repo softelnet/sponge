@@ -89,9 +89,9 @@
         <commons-compress.version>1.20</commons-compress.version>
         <quartz.version>2.3.2</quartz.version>
         <guava.version>29.0-jre</guava.version>
-        <caffeine.version>2.8.1</caffeine.version>
-        <spring.version>5.2.5.RELEASE</spring.version>
-        <spring-integration.version>5.2.5.RELEASE</spring-integration.version>
+        <caffeine.version>2.8.2</caffeine.version>
+        <spring.version>5.2.6.RELEASE</spring.version>
+        <spring-integration.version>5.2.6.RELEASE</spring-integration.version>
         <spring-security.version>5.3.1.RELEASE</spring-security.version>
         <camel.version>3.1.0</camel.version>
         <awaitility.version>4.0.2</awaitility.version>
@@ -100,12 +100,12 @@
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
         <rxjava2.version>2.2.19</rxjava2.version>
-        <okhttp.version>4.5.0</okhttp.version>
+        <okhttp.version>4.6.0</okhttp.version>
         <reflections.version>0.9.12</reflections.version>
-        <jackson.version>2.10.3</jackson.version>
+        <jackson.version>2.11.0</jackson.version>
         <swagger.version>1.6.1</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <jserialcomm.version>2.6.1</jserialcomm.version>
+        <jserialcomm.version>2.6.2</jserialcomm.version>
         <telecom-charsets.version>1.0.1</telecom-charsets.version>
         <jaxb.version>2.3.1</jaxb.version>
         <grpc.version>1.29.0</grpc.version>
@@ -127,7 +127,7 @@
         <mockito.version>3.3.3</mockito.version>
         <jcip.version>1.0-1</jcip.version>
 
-        <log4j2.version>2.13.1</log4j2.version>
+        <log4j2.version>2.13.2</log4j2.version>
     </properties>
 
     <prerequisites>
