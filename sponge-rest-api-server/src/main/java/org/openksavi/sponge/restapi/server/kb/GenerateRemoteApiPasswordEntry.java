@@ -33,7 +33,7 @@ public class GenerateRemoteApiPasswordEntry extends JAction {
 
         String username = null;
         while (username == null || username.isEmpty()) {
-            username = console.readLine("Enter a new user name: ");
+            username = console.readLine("Enter a new username: ");
             if (username != null) {
                 username = username.trim();
             }

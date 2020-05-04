@@ -48,7 +48,7 @@ public class RequestHeader implements HasFeatures {
         this.id = id;
     }
 
-    @ApiModelProperty(value = "The user name", required = false)
+    @ApiModelProperty(value = "The username", required = false)
     public String getUsername() {
         return username;
     }

@@ -8,8 +8,8 @@ class Login(Action):
         self.withLabel("Log in")
         self.withArgs([
             StringType("email").withFormat("email").withLabel("Email").withDescription("The user email.").withFeature("intent", "username"),
-            StringType("password").withLabel("Password").withDescription("The password.").withFeature("obscure", True),
-        ]).withNoResult().withFeatures({"intent":"login", "callLabel":"Log in"})
-        self.withFeature("icon", "login")
-    def onCall(self, email, password):
+            StringType("password").withLabel("Password").withDescription("The password.").withFeature("intent", "password").withFeature("obscure", True),
+            BooleanType("savePassword").withLabel("Save password").withDescription("Save the password.").withFeature("intent", "savePassword").withOptional(),
+        ]).withNoResult().withFeatures({"intent":"login", "icon":"login", "callLabel":"Log in"})
+    def onCall(self, email, password, savePassword = None):
         pass

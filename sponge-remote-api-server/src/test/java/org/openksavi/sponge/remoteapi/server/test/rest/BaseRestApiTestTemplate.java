@@ -1074,6 +1074,25 @@ public abstract class BaseRestApiTestTemplate {
             assertEquals("arg1", subActions.get(0).getArgs().get(0).getSource());
             assertEquals("arg1", subActions.get(0).getResult().getTarget());
 
+            assertEquals("SubAction1", subActions.get(1).getName());
+            assertEquals("Sub-action 1/2 (no result substitution)", subActions.get(1).getLabel());
+            assertEquals(1, subActions.get(1).getArgs().size());
+            assertEquals("target1", subActions.get(1).getArgs().get(0).getTarget());
+            assertEquals("arg1", subActions.get(1).getArgs().get(0).getSource());
+            assertNull(subActions.get(1).getResult());
+
+            assertEquals("SubAction1", subActions.get(2).getName());
+            assertEquals("Sub-action 1/3 (no arg and result substitution)", subActions.get(2).getLabel());
+            assertEquals(0, subActions.get(2).getArgs().size());
+            assertNull(subActions.get(2).getResult());
+
+            assertEquals("SubAction2", subActions.get(3).getName());
+            assertEquals("Sub-action 2/1 (arg by value)", subActions.get(3).getLabel());
+            assertEquals(1, subActions.get(3).getArgs().size());
+            assertEquals("target1", subActions.get(3).getArgs().get(0).getTarget());
+            assertEquals("arg2", subActions.get(3).getArgs().get(0).getSource());
+            assertEquals("arg2", subActions.get(3).getResult().getTarget());
+
             assertFalse(engine.isError());
         }
     }

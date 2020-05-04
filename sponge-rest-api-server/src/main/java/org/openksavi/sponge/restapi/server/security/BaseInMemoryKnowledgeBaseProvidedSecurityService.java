@@ -70,7 +70,7 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
     /**
      * Returns {@code null} if the user doesn't exist or the password is incorrect.
      *
-     * @param username the user name.
+     * @param username the username.
      * @param password the password
      * @return the user.
      */

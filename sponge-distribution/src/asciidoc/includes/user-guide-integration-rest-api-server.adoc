@@ -186,7 +186,7 @@ class LowerCaseHello(Action):
 In order to handle a session lifecycle you can implement and set the on session open and the on session close listeners in the `RestApiService`.
 
 == Security
-The REST API provides only simple security out of the box and only if turned on. All requests allow passing a user name and a password. If the user name is not set, the _anonymous_ user is assumed.
+The REST API provides only simple security out of the box and only if turned on. All requests allow passing a username and a password. If the username is not set, the _anonymous_ user is assumed.
 
 A user may have roles.
 
@@ -248,7 +248,7 @@ A password can be generated manually and added to a password file as well.
 .Generating a password hash manually
 [source,bash,subs="verbatim,attributes"]
 ----
-# Note that the user name must be lower case.
+# Note that the username must be lower case.
 echo -n username-password | shasum -a 512 | awk '{ print $1 }'
 ----
 

@@ -806,7 +806,7 @@ A _number_ can be an integer or a floating point value.
 
 |`logout`
 |Action
-|Should be set in an action that represents a user _logout_ in the user management functionality.
+|Should be set in an action that represents a user _logout_ in the user management functionality. User logout is equivalent to setting a connection to anonymous.
 
 |`signUp`
 |Action

@@ -84,6 +84,8 @@ public final class Features {
 
     public static final String TYPE_INTENT_VALUE_PASSWORD = "password";
 
+    public static final String TYPE_INTENT_VALUE_SAVE_PASSWORD = "savePassword";
+
     public static final String ACTION_INTENT_VALUE_SUBSCRIPTION = "subscription";
 
     public static final String TYPE_INTENT_VALUE_EVENT_NAMES = "eventNames";
