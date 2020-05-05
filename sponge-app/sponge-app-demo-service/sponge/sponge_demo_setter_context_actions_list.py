@@ -70,6 +70,7 @@ class FruitsWithColorsContextSetter_Choose(Action):
                 AnnotatedValue({"name":"Kiwi", "color":"green"}).withValueLabel("Kiwi").withFeature("icon", "star" if chosenFruitName == "Kiwi" else None),
                 AnnotatedValue({"name":"Banana", "color":"yellow"}).withValueLabel("Banana").withFeature("icon", "star" if chosenFruitName == "Banana" else None)
             ])
+            context.provided["chosenFruit"] = ProvidedValue().withValue(chosenFruit)
 
 class FruitsWithColorsContextSetter_Index(Action):
     def onConfigure(self):

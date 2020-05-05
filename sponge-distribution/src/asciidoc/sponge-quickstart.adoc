@@ -242,9 +242,15 @@ You may exit the program by entering `exit`, `quit` or pressing `CTRL-D`.
 
 === Docker
 
-The standalone command-line program may also be installed as a https://www.docker.com[Docker] container.
+The standalone command-line program may also be run as a https://www.docker.com[Docker] container.
 
-.Invoke {sponge} in an interactive mode in a Docker container
+.Invoke {sponge} in an interactive mode with the Python interpreter in a Docker container
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm openksavi/sponge -i -l python
+----
+
+.Invoke {sponge} in a Docker container in an interactive mode in a Docker container
 [source,bash,subs="verbatim,attributes"]
 ----
 docker run -it --rm openksavi/sponge -c ../examples/script/py/triggers_hello_world.xml -i

@@ -108,7 +108,7 @@
                                     <systemProperties>
                                         <systemProperty>
                                             <key>logback.configurationFile</key>
-                                            <value>src/release/logback.xml</value>
+                                            <value>${basedir}/src/release/logback.xml</value>
                                         </systemProperty>
                                     </systemProperties>
                                 </configuration>
