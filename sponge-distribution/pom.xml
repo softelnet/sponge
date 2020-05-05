@@ -105,6 +105,12 @@
                                     <commandlineArgs>${openApiDir}/${openApiBasename}.json</commandlineArgs>
                                     <cleanupDaemonThreads>false</cleanupDaemonThreads>
                                     <includeProjectDependencies>true</includeProjectDependencies>
+                                    <systemProperties>
+                                        <systemProperty>
+                                            <key>logback.configurationFile</key>
+                                            <value>src/release/logback.xml</value>
+                                        </systemProperty>
+                                    </systemProperties>
                                 </configuration>
                             </execution>
                         </executions>
