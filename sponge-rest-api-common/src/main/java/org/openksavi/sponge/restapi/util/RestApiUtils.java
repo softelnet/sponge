@@ -19,6 +19,8 @@ package org.openksavi.sponge.restapi.util;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,8 +84,14 @@ public abstract class RestApiUtils {
         return 200 <= code && code <= 299;
     }
 
-    public static String obfuscatePassword(String request) {
-        return request != null ? request.replaceAll("\"password\":\".*?\"", "\"password\":\"***\"") : null;
+    public static String obfuscatePassword(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        Matcher m = Pattern.compile("\"(\\w*password\\w*)\":\".*?\"", Pattern.CASE_INSENSITIVE).matcher(text);
+
+        return m.find() ? m.replaceAll("\"$1\":\"***\"") : text;
     }
 
     /**

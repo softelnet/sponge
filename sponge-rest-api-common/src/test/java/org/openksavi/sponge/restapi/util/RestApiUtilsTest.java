@@ -51,6 +51,10 @@ public class RestApiUtilsTest {
                         + "\"name\":\"TestAction\",\"args\":[\"TEST\",null],\"version\":null}",
                 RestApiUtils.obfuscatePassword("{\"id\":null,\"username\":\"test\",\"password\":\"password\",\"authToken\":null,"
                         + "\"name\":\"TestAction\",\"args\":[\"TEST\",null],\"version\":null}"));
+
+        assertEquals("{\"passwordRetype\":\"***\"}", RestApiUtils.obfuscatePassword("{\"passwordRetype\":\"secret!!!\"}"));
+        assertEquals("{\"PASSwordRetype\":\"***\"}", RestApiUtils.obfuscatePassword("{\"PASSwordRetype\":\"secret!!!\"}"));
+        assertEquals("{\"a\":\"b\"}", RestApiUtils.obfuscatePassword("{\"a\":\"b\"}"));
     }
 
     @Test
