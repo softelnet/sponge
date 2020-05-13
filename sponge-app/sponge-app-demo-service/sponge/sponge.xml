@@ -46,6 +46,9 @@
             <file>sponge_demo_forms_library_common.py</file>
             <file>sponge_demo_forms_library_records.py</file>
         </knowledgeBase>
+        <knowledgeBase name="types" label="Types">
+            <file>sponge_demo_types.py</file>
+        </knowledgeBase>
         <knowledgeBase name="demoPlus" label="Demo plus">
             <file>sponge_demo_doodles.py</file>
         </knowledgeBase>

@@ -111,28 +111,28 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |Property |Description
 
 |`value`
-|A flag specifying if this type value is provided.
+|A flag that specifies if this type value is provided. An action should implement the `onProvideArgs` callback method.
 
 |`valueSet`
-|Metadata specifying if a value set is provided. Defaults to `null`. A value set is a list of allowed values. This list of values may be limited (the default setting) or not limited. A limited set means that the type value can be chosen only from the value set. To configure a not limited value set use `withValueSet(ValueSetMeta().withNotLimited())`.
+|Metadata that specifies if a value set is provided. Defaults to `null`. A value set is a list of allowed values. This list of values may be limited (the default setting) or not limited. A limited set means that the type value can be chosen only from the value set. To configure a not limited value set use `withValueSet(ValueSetMeta().withNotLimited())`. An action should handle a value set in the `onProvideArgs` callback method.
 
 |`elementValueSet`
-|A flag specifying if the list element value set is provided. Applicable only for list types. Defaults to `false`. Along with `ListType.unique` it can represent multichoice.
+|A flag that specifies if the list element value set is provided. Applicable only for list types. Defaults to `false`. Along with `ListType.unique` it can represent multichoice. An action should handle an element value set in the `onProvideArgs` callback method.
 
 |`depends`
 |A list of type names of name paths that this type depends on.
 
 |`overwrite`
-|A flag specifying if the provided value of this type should overwrite a value modified in a client code (in most cases by a user). Defaults to `false`. This flag should be handled by a client code.
+|A flag that specifies if the provided value of this type should overwrite a value modified in a client code (in most cases by a user). Defaults to `false`. This flag should be handled by a client code.
 
 |`submittable`
-|A metadata specifying if a value can be submitted (i.e. written ad hoc), for example in an action, irrespectively of an action call.
+|A metadata that specifies if a value can be submitted (i.e. written ad hoc), for example in an action, irrespectively of an action call.
 
 |`lazyUpdate`
-|A flag specifying if a provided value should be updated lazily in a client code when a dependency changes. This flag is experimental.
+|A flag that specifies if a provided value should be updated lazily in a client code when a dependency changes. This flag is experimental.
 
 |`current`
-|A flag specifying if a current value in a client code should be passed to a server when its new value is to be provided.
+|A flag that specifies if a current value in a client code should be passed to a server when its new value is to be provided.
 
 |`mode`
 |A provided read mode: `explicit` (a value has to specified to be provided in `provideArgs`), `optional` (a value may or may not be specified to be provided in `provideArgs`) or `implicit` (a value shouldn't be specified to be provided in `provideArgs`). Defaults to `explicit`. For example a value can be provided optionally or implicitly when another value is submitted. To set this property to a value other than a default, use the `withOptionalMode()` or the `withImplicitMode()` method.

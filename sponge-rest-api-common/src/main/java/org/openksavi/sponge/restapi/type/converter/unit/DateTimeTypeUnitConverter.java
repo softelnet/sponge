@@ -81,9 +81,9 @@ public class DateTimeTypeUnitConverter<T> extends BaseUnitTypeConverter<Object, 
         case DATE_TIME_ZONE:
             return DateTimeFormatter.ISO_ZONED_DATE_TIME;
         case DATE:
-            return DateTimeFormatter.ISO_DATE;
+            return DateTimeFormatter.ISO_LOCAL_DATE;
         case TIME:
-            return DateTimeFormatter.ISO_TIME;
+            return DateTimeFormatter.ISO_LOCAL_TIME;
         case INSTANT:
             return DateTimeFormatter.ISO_INSTANT;
         default:

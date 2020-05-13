@@ -31,6 +31,8 @@ public class DateTimeType extends DataType<Object> {
     /** The feature name for the dateTimeKind. */
     public static final String FEATURE_DATE_TIME_KIND = "dateTimeKind";
 
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-dd-MM";
+
     /** The date/time kind. */
     private DateTimeKind dateTimeKind;
 
@@ -52,6 +54,8 @@ public class DateTimeType extends DataType<Object> {
         super(DataTypeKind.DATE_TIME, name);
 
         this.dateTimeKind = dateTimeKind;
+
+        updateFormat();
     }
 
     @Override
@@ -154,29 +158,30 @@ public class DateTimeType extends DataType<Object> {
         this.maxValue = maxValue;
     }
 
-    public DateTimeType withDateTime() {
-        setDateTimeKind(DateTimeKind.DATE_TIME);
+    public DateTimeType withDateTimeKind(DateTimeKind dateTimeKind) {
+        setDateTimeKind(dateTimeKind);
+        updateFormat();
         return this;
+    }
+
+    public DateTimeType withDateTime() {
+        return withDateTimeKind(DateTimeKind.DATE_TIME);
     }
 
     public DateTimeType withDateTimeZone() {
-        setDateTimeKind(DateTimeKind.DATE_TIME_ZONE);
-        return this;
+        return withDateTimeKind(DateTimeKind.DATE_TIME_ZONE);
     }
 
     public DateTimeType withDate() {
-        setDateTimeKind(DateTimeKind.DATE);
-        return this;
+        return withDateTimeKind(DateTimeKind.DATE);
     }
 
     public DateTimeType withTime() {
-        setDateTimeKind(DateTimeKind.TIME);
-        return this;
+        return withDateTimeKind(DateTimeKind.TIME);
     }
 
     public DateTimeType withInstant() {
-        setDateTimeKind(DateTimeKind.INSTANT);
-        return this;
+        return withDateTimeKind(DateTimeKind.INSTANT);
     }
 
     public DateTimeType withMinValue(Temporal minValue) {
@@ -187,5 +192,17 @@ public class DateTimeType extends DataType<Object> {
     public DateTimeType withMaxValue(Temporal maxValue) {
         setMaxValue(maxValue);
         return this;
+    }
+
+    private void updateFormat() {
+        if (getFormat() == null) {
+            switch (dateTimeKind) {
+            case DATE:
+                setFormat(DEFAULT_DATE_FORMAT);
+                break;
+            default:
+                break;
+            }
+        }
     }
 }

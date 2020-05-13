@@ -571,7 +571,7 @@ The application may be switched to the dark or the light theme in the settings.
 |`icon`
 |`IconInfo` or `String`
 |Action
-|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.0.45/[material design icons (currently v5.0.45)].
+|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.1.45/[material design icons (currently v5.1.45)].
 
 |`icon`
 |`IconInfo` or `String`
@@ -1029,3 +1029,9 @@ The {appName} and the {sponge} Flutter API library use third party software rele
 
 * `AsyncPopupMenuButton` - a modified Flutter `PopupMenuButton` widget that adds support for an asynchronous item builder.
 * `Painter` - a modified https://pub.dartlang.org/packages/painter2 library. It is used for drawings.
+
+== Application development
+
+=== State management
+The {sponge} Flutter API library uses the MVP pattern mixed with BLoC and Provider.
+

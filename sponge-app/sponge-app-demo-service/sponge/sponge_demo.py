@@ -17,6 +17,7 @@ def onInit():
     sponge.addCategories(
         CategoryMeta("basic").withLabel("Basic"),
         CategoryMeta("forms").withLabel("Forms"),
+        CategoryMeta("types").withLabel("Types"),
         CategoryMeta("digits").withLabel("Digits"),
         CategoryMeta("admin").withLabel("Admin"),
         CategoryMeta("plus").withLabel("Extra"),
@@ -26,6 +27,7 @@ def onInit():
 def onLoad():
     sponge.selectCategory("basic", lambda processor: processor.kb.name in ("demo", "engine"))
     sponge.selectCategory("forms", lambda processor: processor.kb.name in ("demoForms", "demoFormsLibraryArgs", "demoFormsLibraryRecord"))
+    sponge.selectCategory("types", lambda processor: processor.kb.name in ("types"))
     sponge.selectCategory("digits", lambda processor: processor.kb.name in ("digits"))
     sponge.selectCategory("admin", lambda processor: processor.kb.name in ("admin"))
     sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
