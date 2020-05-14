@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.features.model.geo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,5 +104,14 @@ public class GeoTileLayer extends GeoLayer {
 
     public void setOptions(Map<String, String> options) {
         this.options = options;
+    }
+
+    @Override
+    public GeoTileLayer clone() {
+        GeoTileLayer cloned = (GeoTileLayer) super.clone();
+        cloned.options = options != null ? new LinkedHashMap<>(options) : null;
+        cloned.subdomains = subdomains != null ? new ArrayList<>(subdomains) : null;
+
+        return cloned;
     }
 }

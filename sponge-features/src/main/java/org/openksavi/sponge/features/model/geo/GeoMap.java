@@ -41,7 +41,7 @@ public class GeoMap implements HasFeatures, Serializable, Cloneable {
 
     private Double maxZoom;
 
-    private String crs;
+    private GeoCrs crs;
 
     private List<GeoLayer> layers = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class GeoMap implements HasFeatures, Serializable, Cloneable {
         return this;
     }
 
-    public GeoMap withCrs(String crs) {
+    public GeoMap withCrs(GeoCrs crs) {
         setCrs(crs);
         return this;
     }
@@ -127,11 +127,11 @@ public class GeoMap implements HasFeatures, Serializable, Cloneable {
         this.maxZoom = maxZoom;
     }
 
-    public String getCrs() {
+    public GeoCrs getCrs() {
         return crs;
     }
 
-    public void setCrs(String crs) {
+    public void setCrs(GeoCrs crs) {
         this.crs = crs;
     }
 
@@ -158,6 +158,7 @@ public class GeoMap implements HasFeatures, Serializable, Cloneable {
         try {
             GeoMap cloned = (GeoMap) super.clone();
             cloned.center = center != null ? center.clone() : null;
+            cloned.crs = crs != null ? crs.clone() : null;
             cloned.layers = layers != null ? layers.stream().map(layer -> layer.clone()).collect(Collectors.toList()) : null;
             cloned.features = features != null ? new LinkedHashMap<>(features) : null;
 

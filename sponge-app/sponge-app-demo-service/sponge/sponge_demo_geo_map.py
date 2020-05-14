@@ -12,10 +12,12 @@ class ActionWithGeoMap(Action):
                         # Use the same "group" feature to allow only one basemap to be visible at the same time.
 
                         # See the OpenStreetMap Tile Usage Policy at https://operations.osmfoundation.org/policies/tiles/
-                        GeoTileLayer().withUrlTemplate("https://tile.openstreetmap.org/{z}/{x}/{y}.png").withLabel("OpenStreetMap")
+                        GeoTileLayer().withUrlTemplate("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").withSubdomains(["a", "b", "c"])
+                            .withLabel("OpenStreetMap")
                             .withFeatures({"visible":True, "attribution":u"© OpenStreetMap contributors", "group":"basemap"}),
                         # See the Google Maps Terms of Service at https://cloud.google.com/maps-platform/terms
-                        GeoTileLayer().withUrlTemplate("https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}").withLabel("Google Hybrid")
+                        GeoTileLayer().withUrlTemplate("https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}")
+                            .withLabel("Google Hybrid")
                             .withFeatures({"visible":False, "attribution":u"Imagery ©2020 CNES/Airbus, MGGP Aero, Maxar Technologies, Map data ©2020 Google",
                                            "group":"basemap", "opacity":0.9}),
 

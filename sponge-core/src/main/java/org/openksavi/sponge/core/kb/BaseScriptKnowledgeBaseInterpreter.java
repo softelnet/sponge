@@ -49,10 +49,12 @@ import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.features.model.SubAction;
 import org.openksavi.sponge.features.model.SubActionArg;
 import org.openksavi.sponge.features.model.SubActionResult;
+import org.openksavi.sponge.features.model.geo.GeoCrs;
 import org.openksavi.sponge.features.model.geo.GeoMap;
 import org.openksavi.sponge.features.model.geo.GeoMarkerLayer;
 import org.openksavi.sponge.features.model.geo.GeoPosition;
 import org.openksavi.sponge.features.model.geo.GeoTileLayer;
+import org.openksavi.sponge.features.model.geo.GeoWmsLayer;
 import org.openksavi.sponge.features.model.ui.IconInfo;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
@@ -301,7 +303,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
                 Features.class,
                 RuleEventSpec.class, ProvideArgsParameters.class,
                 SubAction.class, SubActionArg.class, SubActionResult.class,
-                GeoPosition.class, GeoTileLayer.class, GeoMarkerLayer.class, GeoMap.class, IconInfo.class));
+                GeoPosition.class, GeoTileLayer.class, GeoMarkerLayer.class, GeoWmsLayer.class, GeoMap.class, GeoCrs.class, IconInfo.class));
         //@formatter:on
 
         classes.addAll(SpongeUtils.getSupportedTypes());

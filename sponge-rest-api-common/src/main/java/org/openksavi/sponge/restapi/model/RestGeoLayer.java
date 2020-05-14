@@ -25,10 +25,12 @@ import io.swagger.annotations.ApiModel;
 import org.openksavi.sponge.features.model.geo.GeoLayerType;
 import org.openksavi.sponge.features.model.geo.GeoMarkerLayer;
 import org.openksavi.sponge.features.model.geo.GeoTileLayer;
+import org.openksavi.sponge.features.model.geo.GeoWmsLayer;
 
 @ApiModel(value = "GeoLayer", description = "A geo layer")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = GeoTileLayer.class, name = GeoLayerType.CODE_TILE),
-        @Type(value = GeoMarkerLayer.class, name = GeoLayerType.CODE_MARKER) })
+        @Type(value = GeoMarkerLayer.class, name = GeoLayerType.CODE_MARKER),
+        @Type(value = GeoWmsLayer.class, name = GeoLayerType.CODE_WMS) })
 public abstract class RestGeoLayer {
 }

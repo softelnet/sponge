@@ -21,9 +21,11 @@ package org.openksavi.sponge.features.model.geo;
  */
 public enum GeoLayerType {
 
-    TILE, MARKER;
+    TILE, MARKER, WMS;
 
     public static final String CODE_TILE = "TILE";
 
     public static final String CODE_MARKER = "MARKER";
+
+    public static final String CODE_WMS = "WMS";
 }

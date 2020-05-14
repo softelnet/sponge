@@ -26,7 +26,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new artifact `sponge-jython-shaded` that contains several shaded dependencies.
 * Added the `-l,--language <language>` option to the standalone commandline application.
 * Added `networkImage` to the supported `characteristic` feature values.
-* Support for `@index` and `@parent` sub-action substitutions.
+* Added support for `@index` and `@parent` sub-action substitutions.
+* Added support for `GeoCrs` and `GeoWmsLayer`.
 * Dependencies upgrade.
 
 [discrete]
