@@ -17,6 +17,9 @@
 package org.openksavi.sponge.features.model.geo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openksavi.sponge.SpongeException;
 
@@ -30,6 +33,8 @@ public class GeoCrs implements Serializable, Cloneable {
     private String code;
 
     private String projection;
+
+    private List<Double> resolutions = new ArrayList<>();
 
     public GeoCrs(String code, String projection) {
         this.code = code;
@@ -53,6 +58,12 @@ public class GeoCrs implements Serializable, Cloneable {
         return this;
     }
 
+    // List of Numbers instead of Doubles to support Integer arrays in Jython.
+    public GeoCrs withResolutions(List<Number> resolutions) {
+        this.resolutions.addAll(resolutions.stream().map(r -> r != null ? r.doubleValue() : null).collect(Collectors.toList()));
+        return this;
+    }
+
     public String getCode() {
         return code;
     }
@@ -69,10 +80,22 @@ public class GeoCrs implements Serializable, Cloneable {
         this.projection = projection;
     }
 
+    public List<Double> getResolutions() {
+        return resolutions;
+    }
+
+    public void setResolutions(List<Double> resolutions) {
+        this.resolutions = resolutions;
+    }
+
     @Override
     public GeoCrs clone() {
         try {
-            return (GeoCrs) super.clone();
+            GeoCrs cloned = (GeoCrs) super.clone();
+
+            cloned.resolutions = resolutions != null ? new ArrayList<>(resolutions) : null;
+
+            return cloned;
         } catch (CloneNotSupportedException e) {
             throw new SpongeException(e);
         }
