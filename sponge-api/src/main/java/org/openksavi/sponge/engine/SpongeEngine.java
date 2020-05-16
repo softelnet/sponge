@@ -45,6 +45,8 @@ import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
 import org.openksavi.sponge.util.ProcessorPredicate;
+import org.openksavi.sponge.util.process.ProcessConfiguration;
+import org.openksavi.sponge.util.process.ProcessInstance;
 
 /**
  * The Sponge engine. This is the main interface of the system. An instance of this interface manages all main components.
@@ -621,4 +623,12 @@ public interface SpongeEngine extends EngineModule {
      * @return {@code true} if the event type was registered.
      */
     boolean removeEventType(String eventTypeName);
+
+    /**
+     * Creates a new process instance but doesn't run it.
+     *
+     * @param configuration the process configuration.
+     * @return a new process instance.
+     */
+    ProcessInstance createProcessInstance(ProcessConfiguration configuration);
 }

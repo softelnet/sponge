@@ -3,7 +3,6 @@ Sponge Knowledge base
 MPD/MPC service.
 """
 
-from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.util.concurrent.locks import ReentrantLock
 import re
 import os
@@ -34,7 +33,7 @@ class Mpc:
         self.lock = ReentrantLock(True)
         self.format = self.separator.join(list(map(lambda tag: "%{}%".format(tag), self.tags)))
 
-    def __createProcessBuilder(self):
+    def __createProcess(self):
         args = []
         if self.host:
             args.append("-h")
@@ -43,15 +42,12 @@ class Mpc:
             args.append("-p")
             args.append(str(self.port))
 
-        return ProcessConfiguration.builder(self.mpcExec).arguments(args)
+        return sponge.process(self.mpcExec).arguments(args)
 
     def __execute(self, *argv):
         self.lock.lock()
         try:
-            process = sponge.process(self.__createProcessBuilder().arguments(argv).outputAsString().errorAsException()).run()
-            #process = sponge.process(self.createProcessBuilder().arguments(argv).outputAsString().errorAsString().exceptionOnExitCode(False)).run()
-            #if process.errorString:
-            #     sponge.logger.warn(process.errorString)
+            process = self.__createProcess().arguments(argv).outputAsString().errorAsException().run()
 
             return process.outputString
         finally:
@@ -68,7 +64,7 @@ class Mpc:
 
     def validatePrerequisites(self):
         # Check if the mpc is installed.
-        sponge.process(self.__createProcessBuilder().outputAsString().errorAsString().exceptionOnExitCode(False)).run()
+        self.__createProcess().outputAsString().errorAsString().exceptionOnExitCode(False).run()
 
     # Data type operations.
     def createSongValue(self, songSpec):
@@ -97,7 +93,7 @@ class Mpc:
         return self.__execute("stats")
 
     def isConnected(self):
-        error = sponge.process(self.__createProcessBuilder().outputAsString().errorAsString().exceptionOnExitCode(False)).run().errorString
+        error = self.__createProcess().outputAsString().errorAsString().exceptionOnExitCode(False).run().errorString
         if error and (error.endswith("Cannot assign requested address") or error.endswith("Connection refused")):
             return False
         return True
@@ -111,10 +107,10 @@ class Mpc:
         self.addFile(file["file"])
 
     def addFiles(self, files):
-        sponge.process(self.__createProcessBuilder().arguments("add").inputAsString("\n".join(files))).run().waitFor()
+        self.__createProcess().arguments("add").inputAsString("\n".join(files)).run()
 
     def addFilesAsRecords(self, files):
-        sponge.process(self.__createProcessBuilder().arguments("add").inputAsString("\n".join(list(map(lambda file: file["file"], files))))).run().waitFor()
+        self.__createProcess().arguments("add").inputAsString("\n".join(list(map(lambda file: file["file"], files)))).run()
 
     def addAndPlayFiles(self, files, autoPlay, replacePlaylist = False):
         if len(files) == 0:
@@ -210,7 +206,7 @@ class Mpc:
     # Player operations.
 
     def play(self, position = 1, waitFor = False):
-        process = sponge.process(self.__createProcessBuilder().arguments("play", str(position))).run()
+        process = self.__createProcess().arguments("play", str(position)).run()
         if waitFor:
             process.waitFor()
 
@@ -306,8 +302,8 @@ class Mpc:
         sponge.event("mpdNotification_" + event).send()
 
     def startEventLoop(self):
-        self.eventLoopProcess = sponge.process(self.__createProcessBuilder().arguments("idleloop").outputAsConsumer
-                                               (PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone().errorAsConsumer()).run()
+        self.eventLoopProcess = self.__createProcess().arguments("idleloop").outputAsConsumer(
+                PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone().errorAsConsumer().run()
     def stopEventLoop(self):
         if self.eventLoopProcess:
             self.eventLoopProcess.destroy()

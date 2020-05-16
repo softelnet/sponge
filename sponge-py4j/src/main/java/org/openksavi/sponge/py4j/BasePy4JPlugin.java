@@ -129,12 +129,9 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
             }
 
             try {
-                scriptProcess = getEngineOperations().process(finalConfiguration).run();
+                scriptProcess = getEngineOperations().process(finalConfiguration).runAsync();
             } catch (InterruptedException e) {
                 throw SpongeUtils.wrapException(e);
-            }
-            if (scriptProcess.getOutputString() != null) {
-                logger.info("Python script output: {}", scriptProcess.getOutputString());
             }
         }
     }
@@ -165,8 +162,8 @@ public abstract class BasePy4JPlugin<T> extends JPlugin {
 
         if (configuration.hasChildConfiguration(TAG_PYTHON_SCRIPT)) {
             pythonScriptConfiguration =
-                    ProcessUtils.createProcessConfigurationBuilder(configuration.getChildConfiguration(TAG_PYTHON_SCRIPT))
-                            .name("Python script").build();
+                    ProcessUtils.createProcessInstanceBuilder(getEngine(), configuration.getChildConfiguration(TAG_PYTHON_SCRIPT))
+                            .name("Python script").getConfiguration();
             if (pythonScriptConfiguration.getExecutable() == null) {
                 pythonScriptConfiguration.setExecutable(DEFAULT_PYTHON_EXECUTABLE);
             }

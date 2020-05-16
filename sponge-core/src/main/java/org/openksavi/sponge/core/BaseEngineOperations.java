@@ -32,7 +32,6 @@ import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.core.util.process.DefaultProcessDefinition;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.event.Event;
@@ -50,8 +49,7 @@ import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
-import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
-import org.openksavi.sponge.util.process.ProcessDefinition;
+import org.openksavi.sponge.util.process.ProcessInstanceBuilder;
 
 public class BaseEngineOperations implements EngineOperations {
 
@@ -372,13 +370,13 @@ public class BaseEngineOperations implements EngineOperations {
     }
 
     @Override
-    public ProcessDefinition process(ProcessConfiguration processConfiguration) {
-        return new DefaultProcessDefinition(engine, processConfiguration);
+    public ProcessInstanceBuilder process(ProcessConfiguration configuration) {
+        return new ProcessInstanceBuilder(engine, configuration);
     }
 
     @Override
-    public ProcessDefinition process(ProcessConfigurationBuilder processConfigurationBuilder) {
-        return process(processConfigurationBuilder.build());
+    public ProcessInstanceBuilder process(String executable, String... arguments) {
+        return new ProcessInstanceBuilder(engine, executable).arguments(arguments);
     }
 
     @Override

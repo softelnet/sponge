@@ -22,7 +22,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
-import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
 
 /**
@@ -55,10 +54,10 @@ public class GammuGsmModemPlugin extends JPlugin {
         lock.lock();
         try {
             String unicode = canEncodeGsm(message) ? null : "-unicode";
-            ProcessInstance process = getEngineOperations().process(ProcessConfiguration.builder("gammu")
-                    .arguments("sendsms", "TEXT", number, unicode).inputAsString(message).outputAsString()).run();
+            ProcessInstance process = getEngineOperations().process("gammu", "sendsms", "TEXT", number, unicode).inputAsString(message)
+                    .outputAsString().run();
 
-            if (process.waitFor() != 0) {
+            if (process.getExitCode() != 0) {
                 throw new SpongeException(String.format("Exit code %d: %s", process.getExitCode(), process.getOutputString()));
             }
         } catch (InterruptedException e) {

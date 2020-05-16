@@ -2,7 +2,6 @@
 Sponge Knowledge base
 Demo Forms - Library as records
 """
-from org.openksavi.sponge.util.process import ProcessConfiguration
 
 def createBookRecordType(name):
     """ Creates a book record type.
@@ -122,8 +121,8 @@ class RecordBookContextBinaryResult(Action):
         ).withResult(BinaryType().withAnnotated().withMimeType("application/pdf").withLabel("PDF"))
         self.withFeatures({"visible":False, "icon":"file-pdf"})
     def onCall(self, book):
-        return AnnotatedValue(sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
-                              .outputAsBinary()).run().outputBinary)
+        return AnnotatedValue(sponge.process("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
+                              .outputAsBinary().run().outputBinary)
 
 class RecordBookContextNoResult(Action):
     def onConfigure(self):

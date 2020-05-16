@@ -33,7 +33,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.engine.DefaultSpongeEngine;
 import org.openksavi.sponge.engine.SpongeEngine;
-import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
 
 @net.jcip.annotations.NotThreadSafe
@@ -44,8 +43,7 @@ public class ProcessInstanceTest {
     public void testProcessEcho() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance process =
-                engine.getOperations().process(ProcessConfiguration.builder("echo").arguments("TEST").outputAsString()).run();
+        ProcessInstance process = engine.getOperations().process("echo", "TEST").outputAsString().run();
         assertEquals("TEST", process.getOutputString());
     }
 
@@ -53,9 +51,8 @@ public class ProcessInstanceTest {
     public void testProcessEnv() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance process = engine.getOperations()
-                .process(ProcessConfiguration.builder("printenv").arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputAsString())
-                .run();
+        ProcessInstance process =
+                engine.getOperations().process("printenv", "TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputAsString().run();
         assertEquals("TEST", process.getOutputString());
     }
 
@@ -63,18 +60,16 @@ public class ProcessInstanceTest {
     public void testProcessWaitForOutput() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        engine.getOperations().process(ProcessConfiguration.builder("echo").arguments("MSG").outputAsConsumer()
-                .waitForPositiveLineRegexp(".*MSG.*").waitForNegativeLineRegexp(".*ERROR.*")).run();
+        engine.getOperations().process("echo", "MSG").outputAsConsumer().waitForPositiveLineRegexp(".*MSG.*")
+                .waitForNegativeLineRegexp(".*ERROR.*").run();
     }
 
     @Test
     public void testInfiniteProcessWaitForOutputPython() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance process = engine.getOperations()
-                .process(ProcessConfiguration.builder("python").arguments("src/test/resources/test_infinite_process_wait_for_output.py")
-                        .outputAsConsumer().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*"))
-                .run();
+        ProcessInstance process = engine.getOperations().process("python", "src/test/resources/test_infinite_process_wait_for_output.py")
+                .outputAsConsumer().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*").runAsync();
 
         process.destroy();
     }
@@ -83,9 +78,8 @@ public class ProcessInstanceTest {
     public void testInfiniteProcessWaitForOutputBash() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance process =
-                engine.getOperations().process(ProcessConfiguration.builder("bash").arguments("-c").arguments("echo STARTED; sleep 600")
-                        .outputAsConsumer().waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*")).run();
+        ProcessInstance process = engine.getOperations().process("bash", "-c", "echo STARTED; sleep 600").outputAsConsumer()
+                .waitForPositiveLineRegexp(".*STARTED.*").waitForNegativeLineRegexp(".*ERROR.*").runAsync();
 
         process.destroy();
     }
@@ -95,9 +89,7 @@ public class ProcessInstanceTest {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         assertThrows(SpongeException.class, () -> {
-            engine.getOperations().process(
-                    ProcessConfiguration.builder("echo").arguments("ERROR").outputAsConsumer().waitForNegativeLineRegexp(".*ERROR.*"))
-                    .run();
+            engine.getOperations().process("echo", "ERROR").outputAsConsumer().waitForNegativeLineRegexp(".*ERROR.*").run();
         });
     }
 
@@ -105,16 +97,14 @@ public class ProcessInstanceTest {
     public void testProcessWaitForNonexistingOutputEarlyExit() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        engine.getOperations().process(
-                ProcessConfiguration.builder("echo").arguments("OK").outputAsConsumer().waitForPositiveLineRegexp(".*NONEXISTING.*")).run();
+        engine.getOperations().process("echo", "OK").outputAsConsumer().waitForPositiveLineRegexp(".*NONEXISTING.*").run();
     }
 
     @Test
     public void testProcessRedirectToBinary() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance process =
-                engine.getOperations().process(ProcessConfiguration.builder("echo").arguments("-n", "MSG").outputAsBinary()).run();
+        ProcessInstance process = engine.getOperations().process("echo", "-n", "MSG").outputAsBinary().run();
         assertArrayEquals(new byte[] { 'M', 'S', 'G' }, process.getOutputBinary());
     }
 
@@ -124,8 +114,7 @@ public class ProcessInstanceTest {
 
         byte[] data = new byte[] { '1', '2', '3' };
 
-        ProcessInstance process =
-                engine.getOperations().process(ProcessConfiguration.builder("base64").inputAsBinary(data).outputAsString()).run();
+        ProcessInstance process = engine.getOperations().process("base64").inputAsBinary(data).outputAsString().run();
 
         assertEquals(Base64.getEncoder().encodeToString(data), process.getOutputString());
     }
@@ -137,8 +126,7 @@ public class ProcessInstanceTest {
         byte[] data = new byte[] { '1', '2', '3' };
         String stringData = Base64.getEncoder().encodeToString(data);
 
-        ProcessInstance process = engine.getOperations()
-                .process(ProcessConfiguration.builder("base64").arguments("--decode").inputAsString(stringData).outputAsBinary()).run();
+        ProcessInstance process = engine.getOperations().process("base64", "--decode").inputAsString(stringData).outputAsBinary().run();
 
         assertArrayEquals(data, process.getOutputBinary());
     }
@@ -149,8 +137,7 @@ public class ProcessInstanceTest {
 
         byte[] data = new byte[] { '1', '2', '3' };
 
-        ProcessInstance process =
-                engine.getOperations().process(ProcessConfiguration.builder("base64").inputAsStream().outputAsString()).run();
+        ProcessInstance process = engine.getOperations().process("base64").inputAsStream().outputAsString().runAsync();
 
         // Feed the subprocess standard input.
         IOUtils.write(data, process.getInput());
@@ -164,9 +151,8 @@ public class ProcessInstanceTest {
     public void testProcessInputFileOutputString() throws InterruptedException {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
-        ProcessInstance process = engine.getOperations().process(
-                ProcessConfiguration.builder("base64").inputAsFile("src/test/resources/process_instance_test_input.txt").outputAsString())
-                .run();
+        ProcessInstance process = engine.getOperations().process("base64").inputAsFile("src/test/resources/process_instance_test_input.txt")
+                .outputAsString().run();
         assertEquals("MTIz", process.getOutputString());
     }
 
@@ -175,9 +161,7 @@ public class ProcessInstanceTest {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         String outputFilename = "target/testProcessInputStringOutputFile_output.txt";
-        engine.getOperations()
-                .process(ProcessConfiguration.builder("base64").arguments("--decode").inputAsString("MTIz").outputAsFile(outputFilename))
-                .run();
+        engine.getOperations().process("base64", "--decode").inputAsString("MTIz").outputAsFile(outputFilename).run();
 
         File resultFile = new File(outputFilename);
         try {
@@ -192,8 +176,8 @@ public class ProcessInstanceTest {
         SpongeEngine engine = DefaultSpongeEngine.builder().build();
 
         String outputFilename = "target/testProcessInputFileOutputFile_output.txt";
-        engine.getOperations().process(ProcessConfiguration.builder("cat").arguments("-")
-                .inputAsFile("src/test/resources/process_instance_test_input.txt").outputAsFile(outputFilename)).run();
+        engine.getOperations().process("cat", "-").inputAsFile("src/test/resources/process_instance_test_input.txt")
+                .outputAsFile(outputFilename).run();
 
         File resultFile = new File(outputFilename);
         try {

@@ -25,11 +25,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.config.Configuration;
+import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.util.process.ErrorRedirect;
 import org.openksavi.sponge.util.process.InputRedirect;
 import org.openksavi.sponge.util.process.OutputRedirect;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
-import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
+import org.openksavi.sponge.util.process.ProcessInstanceBuilder;
 
 /**
  * This class defines a set of process utility methods.
@@ -70,14 +71,14 @@ public abstract class ProcessUtils {
         //
     }
 
-    public static ProcessConfigurationBuilder createProcessConfigurationBuilder(Configuration configuration) {
+    public static ProcessInstanceBuilder createProcessInstanceBuilder(SpongeEngine engine, Configuration configuration) {
         Map<String, String> env = new LinkedHashMap<>();
         configuration.getConfigurationsAt(TAG_PROCESS_ENV).forEach(c -> {
             env.put(Validate.notNull(c.getAttribute(ATTR_PROCESS_ENV_NAME, null), "The environment variable must have a name"),
                     c.getValue());
         });
 
-        ProcessConfigurationBuilder builder = ProcessConfiguration.builder(configuration.getString(TAG_PROCESS_EXECUTABLE, null))
+        ProcessInstanceBuilder builder = new ProcessInstanceBuilder(engine, configuration.getString(TAG_PROCESS_EXECUTABLE, null))
                 .arguments(configuration.getConfigurationsAt(TAG_PROCESS_ARGUMENT).stream().map(Configuration::getValue)
                         .collect(Collectors.toList()))
                 .workingDir(configuration.getString(TAG_PROCESS_WORKING_DIR, null)).env(env)

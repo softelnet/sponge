@@ -51,6 +51,7 @@ import org.openksavi.sponge.core.spi.DefaultProcessingUnitProvider;
 import org.openksavi.sponge.core.util.RegexPatternMatcher;
 import org.openksavi.sponge.core.util.ServiceLoaderUtils;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.process.DefaultProcessInstance;
 import org.openksavi.sponge.correlator.CorrelatorAdapterGroup;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
 import org.openksavi.sponge.engine.ActionManager;
@@ -95,6 +96,8 @@ import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
 import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.SpongeApiUtils;
+import org.openksavi.sponge.util.process.ProcessConfiguration;
+import org.openksavi.sponge.util.process.ProcessInstance;
 
 /**
  * Base Sponge engine implementation.
@@ -1091,5 +1094,10 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public boolean removeEventType(String eventTypeName) {
         return eventTypes.remove(eventTypeName) != null;
+    }
+
+    @Override
+    public ProcessInstance createProcessInstance(ProcessConfiguration configuration) {
+        return new DefaultProcessInstance(this, configuration);
     }
 }

@@ -958,6 +958,7 @@
                 <module>sponge-grpc-api-client</module>
                 <module>sponge-grpc-api-server</module>
                 <module>sponge-remote-api-server</module>
+                <module>sponge-remote-api-tools</module>
                 <module>sponge-remote-api-test-base</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
@@ -1082,6 +1083,7 @@
                 <module>sponge-grpc-api-client</module>
                 <module>sponge-grpc-api-server</module>
                 <module>sponge-remote-api-server</module>
+                <module>sponge-remote-api-tools</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-kb</module>

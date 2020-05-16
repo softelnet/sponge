@@ -4,7 +4,6 @@ Demo
 """
 
 from java.lang import String, Boolean
-from org.openksavi.sponge.util.process import ProcessConfiguration
 from java.time.format import DateTimeFormatter
 from java.time import LocalDateTime
 from org.apache.commons.io import IOUtils

@@ -133,7 +133,19 @@ public interface ProcessInstance {
     InputStream getError();
 
     /**
-     * Runs a new process. Should be invoked only once. Waits if necessary (in compliance with the configuration).
+     * Runs a new process synchronously. Should be invoked only once. Waits for the process exit.
+     *
+     * <p>If the input redirect type is STREAM you should invoke {@link org.openksavi.sponge.util.process.ProcessInstance#runAsync()
+     * ProcessInstance.runAsync()}.
+     *
+     * @return this process instance.
+     * @throws InterruptedException on interrupted.
+     */
+    ProcessInstance run() throws InterruptedException;
+
+    /**
+     * Runs a new process asynchronously. Should be invoked only once. Waits for the process exit only if necessary (in compliance with the
+     * configuration).
      *
      * <p>If the input redirect type is STREAM you should invoke manually
      * {@link org.openksavi.sponge.util.process.ProcessInstance#waitForReady() ProcessInstance.waitForReady()} after writing to and closing
@@ -142,7 +154,7 @@ public interface ProcessInstance {
      * @return this process instance.
      * @throws InterruptedException on interrupted.
      */
-    ProcessInstance run() throws InterruptedException;
+    ProcessInstance runAsync() throws InterruptedException;
 
     /**
      * Waits until the process is ready. A process readiness depends on the configuration. In most cases this method is invoked

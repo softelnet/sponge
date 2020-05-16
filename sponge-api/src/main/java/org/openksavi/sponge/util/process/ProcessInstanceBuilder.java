@@ -27,29 +27,76 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
+import org.openksavi.sponge.engine.SpongeEngine;
+
 /**
- * A process configuration builder.
+ * A process instance builder.
  */
-public class ProcessConfigurationBuilder {
+public class ProcessInstanceBuilder {
+
+    private SpongeEngine engine;
 
     private ProcessConfiguration configuration;
 
     /**
-     * Creates a new process configuration builder.
+     * Creates a new process instance builder.
      *
+     * @param engine the engine.
      * @param executable the executable.
      */
-    public ProcessConfigurationBuilder(String executable) {
-        configuration = new ProcessConfiguration(executable);
+    public ProcessInstanceBuilder(SpongeEngine engine, String executable) {
+        this(engine, new ProcessConfiguration(executable));
+    }
+
+    public ProcessInstanceBuilder(SpongeEngine engine, ProcessConfiguration configuration) {
+        this.engine = engine;
+        this.configuration = configuration;
     }
 
     /**
-     * Builds the process configuration.
+     * Returns the process configuration.
      *
      * @return the process configuration.
      */
-    public ProcessConfiguration build() {
+    public ProcessConfiguration getConfiguration() {
         return configuration;
+    }
+
+    /**
+     * Builds the process instance but doesn't run it.
+     *
+     * @return the process instance.
+     */
+    public ProcessInstance build() {
+        return engine.createProcessInstance(configuration);
+    }
+
+    /**
+     * Runs a new process synchronously. Should be invoked only once.
+     *
+     * <p>If the input redirect type is STREAM you should invoke {@link org.openksavi.sponge.util.process.ProcessInstance#runAsync()
+     * ProcessInstance.runAsync()}.
+     *
+     * @return the process instance.
+     * @throws InterruptedException on interrupted.
+     */
+    public ProcessInstance run() throws InterruptedException {
+        return build().run();
+    }
+
+    /**
+     * Runs a new process asynchronously. Should be invoked only once. Waits if necessary (in compliance with the configuration).
+     *
+     * <p>If the input redirect type is STREAM you should invoke manually
+     * {@link org.openksavi.sponge.util.process.ProcessInstanceBuilder#waitForReady() ProcessInstanceBuilder.waitForReady()} after writing
+     * to and closing the subprocess standard input {@link org.openksavi.sponge.util.process.ProcessInstance#getInput()
+     * ProcessInstance.getInput()}.
+     *
+     * @return the process instance.
+     * @throws InterruptedException on interrupted.
+     */
+    public ProcessInstance runAsync() throws InterruptedException {
+        return build().runAsync();
     }
 
     /**
@@ -58,7 +105,7 @@ public class ProcessConfigurationBuilder {
      * @param name the process name.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder name(String name) {
+    public ProcessInstanceBuilder name(String name) {
         configuration.setName(name);
         return this;
     }
@@ -69,7 +116,7 @@ public class ProcessConfigurationBuilder {
      * @param arguments the process arguments.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder arguments(String... arguments) {
+    public ProcessInstanceBuilder arguments(String... arguments) {
         arguments(Arrays.asList(arguments));
         return this;
     }
@@ -80,7 +127,7 @@ public class ProcessConfigurationBuilder {
      * @param arguments the process arguments.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder arguments(List<String> arguments) {
+    public ProcessInstanceBuilder arguments(List<String> arguments) {
         configuration.getArguments().addAll(arguments.stream().filter(Objects::nonNull).collect(Collectors.toList()));
         return this;
     }
@@ -91,7 +138,7 @@ public class ProcessConfigurationBuilder {
      * @param workingDir the process working directory. If {@code null} (the default value) then the current directory will be used.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder workingDir(String workingDir) {
+    public ProcessInstanceBuilder workingDir(String workingDir) {
         configuration.setWorkingDir(workingDir);
         return this;
     }
@@ -103,7 +150,7 @@ public class ProcessConfigurationBuilder {
      * @param value the environment variable value.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder env(String name, String value) {
+    public ProcessInstanceBuilder env(String name, String value) {
         configuration.getEnv().put(name, value);
         return this;
     }
@@ -114,7 +161,7 @@ public class ProcessConfigurationBuilder {
      * @param env the environment variables.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder env(Map<String, String> env) {
+    public ProcessInstanceBuilder env(Map<String, String> env) {
         configuration.getEnv().putAll(env);
         return this;
     }
@@ -126,7 +173,7 @@ public class ProcessConfigurationBuilder {
      * @param waitSeconds the maximum number of seconds to wait or {@code null} (the default value) if the thread shouldn't wait.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder waitSeconds(Long waitSeconds) {
+    public ProcessInstanceBuilder waitSeconds(Long waitSeconds) {
         configuration.setWaitSeconds(waitSeconds);
         return this;
     }
@@ -137,7 +184,7 @@ public class ProcessConfigurationBuilder {
      * @param inputRedirect the input redirect type.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inputRedirect(InputRedirect inputRedirect) {
+    public ProcessInstanceBuilder inputRedirect(InputRedirect inputRedirect) {
         configuration.setInputRedirect(inputRedirect);
         return this;
     }
@@ -148,7 +195,7 @@ public class ProcessConfigurationBuilder {
      * @param outputRedirect the standard output redirect type.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputRedirect(OutputRedirect outputRedirect) {
+    public ProcessInstanceBuilder outputRedirect(OutputRedirect outputRedirect) {
         configuration.setOutputRedirect(outputRedirect);
         return this;
     }
@@ -159,7 +206,7 @@ public class ProcessConfigurationBuilder {
      * @param errorRedirect the error output redirect type.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorRedirect(ErrorRedirect errorRedirect) {
+    public ProcessInstanceBuilder errorRedirect(ErrorRedirect errorRedirect) {
         configuration.setErrorRedirect(errorRedirect);
         return this;
     }
@@ -170,7 +217,7 @@ public class ProcessConfigurationBuilder {
      * @param charset the charset.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder charset(Charset charset) {
+    public ProcessInstanceBuilder charset(Charset charset) {
         configuration.setCharset(charset);
         return this;
     }
@@ -182,7 +229,7 @@ public class ProcessConfigurationBuilder {
      * @param waitForPositiveLineRegexp the Java regular expression or {@code null} if the thread shouldn't wait for a specific line.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder waitForPositiveLineRegexp(String waitForPositiveLineRegexp) {
+    public ProcessInstanceBuilder waitForPositiveLineRegexp(String waitForPositiveLineRegexp) {
         configuration.setWaitForPositiveLineRegexp(waitForPositiveLineRegexp);
         return this;
     }
@@ -194,7 +241,7 @@ public class ProcessConfigurationBuilder {
      * @param waitForNegativeLineRegexp the Java regular expression or {@code null} if the thread shouldn't look for a specific error line.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder waitForNegativeLineRegexp(String waitForNegativeLineRegexp) {
+    public ProcessInstanceBuilder waitForNegativeLineRegexp(String waitForNegativeLineRegexp) {
         configuration.setWaitForNegativeLineRegexp(waitForNegativeLineRegexp);
         return this;
     }
@@ -206,7 +253,7 @@ public class ProcessConfigurationBuilder {
      * @param waitForLineTimeout the timeout for waiting for a specific line or {@code null} if the thread could wait indefinitely.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder waitForLineTimeout(Long waitForLineTimeout) {
+    public ProcessInstanceBuilder waitForLineTimeout(Long waitForLineTimeout) {
         configuration.setWaitForLineTimeout(waitForLineTimeout);
         return this;
     }
@@ -218,7 +265,7 @@ public class ProcessConfigurationBuilder {
      * @param outputLoggingConsumer the logging consumer.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputLoggingConsumer(BiConsumer<Logger, String> outputLoggingConsumer) {
+    public ProcessInstanceBuilder outputLoggingConsumer(BiConsumer<Logger, String> outputLoggingConsumer) {
         configuration.setOutputLoggingConsumer(outputLoggingConsumer);
         return this;
     }
@@ -228,7 +275,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputLoggingConsumerNone() {
+    public ProcessInstanceBuilder outputLoggingConsumerNone() {
         return outputLoggingConsumer((logger, line) -> {
         });
     }
@@ -240,7 +287,7 @@ public class ProcessConfigurationBuilder {
      * @param errorLoggingConsumer the logging consumer.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorLoggingConsumer(BiConsumer<Logger, String> errorLoggingConsumer) {
+    public ProcessInstanceBuilder errorLoggingConsumer(BiConsumer<Logger, String> errorLoggingConsumer) {
         configuration.setErrorLoggingConsumer(errorLoggingConsumer);
         return this;
     }
@@ -250,7 +297,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inheritIo() {
+    public ProcessInstanceBuilder inheritIo() {
         return inputRedirect(InputRedirect.INHERIT).outputRedirect(OutputRedirect.INHERIT).errorRedirect(ErrorRedirect.INHERIT);
     }
 
@@ -260,7 +307,7 @@ public class ProcessConfigurationBuilder {
      * @param processBuilderConsumer the Java ProcessBuilder consumer.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder processBuilderConsumer(Consumer<ProcessBuilder> processBuilderConsumer) {
+    public ProcessInstanceBuilder processBuilderConsumer(Consumer<ProcessBuilder> processBuilderConsumer) {
         configuration.setProcessBuilderConsumer(processBuilderConsumer);
         return this;
     }
@@ -271,7 +318,7 @@ public class ProcessConfigurationBuilder {
      * @param redirectErrorStream redirect error stream flag.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder redirectErrorStream(boolean redirectErrorStream) {
+    public ProcessInstanceBuilder redirectErrorStream(boolean redirectErrorStream) {
         configuration.setRedirectErrorStream(redirectErrorStream);
         return this;
     }
@@ -282,7 +329,7 @@ public class ProcessConfigurationBuilder {
      * @param exceptionOnExitCode exception on exit code flag.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder exceptionOnExitCode(boolean exceptionOnExitCode) {
+    public ProcessInstanceBuilder exceptionOnExitCode(boolean exceptionOnExitCode) {
         configuration.setExceptionOnExitCode(exceptionOnExitCode);
         return this;
     }
@@ -292,7 +339,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inputAsInherit() {
+    public ProcessInstanceBuilder inputAsInherit() {
         return inputRedirect(InputRedirect.INHERIT);
     }
 
@@ -302,7 +349,7 @@ public class ProcessConfigurationBuilder {
      * @param inputString the input string.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inputAsString(String inputString) {
+    public ProcessInstanceBuilder inputAsString(String inputString) {
         configuration.setInputRedirect(InputRedirect.STRING);
         configuration.setInputString(inputString);
         return this;
@@ -314,7 +361,7 @@ public class ProcessConfigurationBuilder {
      * @param inputBinary the input binary.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inputAsBinary(byte[] inputBinary) {
+    public ProcessInstanceBuilder inputAsBinary(byte[] inputBinary) {
         configuration.setInputRedirect(InputRedirect.BINARY);
         configuration.setInputBinary(inputBinary);
         return this;
@@ -326,7 +373,7 @@ public class ProcessConfigurationBuilder {
      * @param inputFile the input filename.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inputAsFile(String inputFile) {
+    public ProcessInstanceBuilder inputAsFile(String inputFile) {
         configuration.setInputRedirect(InputRedirect.FILE);
         configuration.setInputFile(inputFile);
         return this;
@@ -337,7 +384,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder inputAsStream() {
+    public ProcessInstanceBuilder inputAsStream() {
         return inputRedirect(InputRedirect.STREAM);
     }
 
@@ -346,7 +393,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsInherit() {
+    public ProcessInstanceBuilder outputAsInherit() {
         return outputRedirect(OutputRedirect.INHERIT);
     }
 
@@ -355,7 +402,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsString() {
+    public ProcessInstanceBuilder outputAsString() {
         return outputRedirect(OutputRedirect.STRING);
     }
 
@@ -364,7 +411,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsBinary() {
+    public ProcessInstanceBuilder outputAsBinary() {
         return outputRedirect(OutputRedirect.BINARY);
     }
 
@@ -374,7 +421,7 @@ public class ProcessConfigurationBuilder {
      * @param outputFile the output filename.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsFile(String outputFile) {
+    public ProcessInstanceBuilder outputAsFile(String outputFile) {
         configuration.setOutputRedirect(OutputRedirect.FILE);
         configuration.setOutputFile(outputFile);
         return this;
@@ -386,7 +433,7 @@ public class ProcessConfigurationBuilder {
      * @param outputLineConsumer the line consumer.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsConsumer(Consumer<String> outputLineConsumer) {
+    public ProcessInstanceBuilder outputAsConsumer(Consumer<String> outputLineConsumer) {
         configuration.setOutputRedirect(OutputRedirect.CONSUMER);
         configuration.setOutputLineConsumer(outputLineConsumer);
         return this;
@@ -397,7 +444,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder outputAsConsumer() {
+    public ProcessInstanceBuilder outputAsConsumer() {
         return outputRedirect(OutputRedirect.CONSUMER);
     }
 
@@ -406,7 +453,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsInherit() {
+    public ProcessInstanceBuilder errorAsInherit() {
         return errorRedirect(ErrorRedirect.INHERIT);
     }
 
@@ -415,7 +462,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsString() {
+    public ProcessInstanceBuilder errorAsString() {
         return errorRedirect(ErrorRedirect.STRING);
     }
 
@@ -425,7 +472,7 @@ public class ProcessConfigurationBuilder {
      * @param errorFile the error file.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsFile(String errorFile) {
+    public ProcessInstanceBuilder errorAsFile(String errorFile) {
         configuration.setErrorRedirect(ErrorRedirect.FILE);
         configuration.setErrorFile(errorFile);
         return this;
@@ -437,7 +484,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsException() {
+    public ProcessInstanceBuilder errorAsException() {
         return errorRedirect(ErrorRedirect.EXCEPTION);
     }
 
@@ -447,7 +494,7 @@ public class ProcessConfigurationBuilder {
      *
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsConsumer() {
+    public ProcessInstanceBuilder errorAsConsumer() {
         return errorRedirect(ErrorRedirect.CONSUMER);
     }
 
@@ -458,7 +505,7 @@ public class ProcessConfigurationBuilder {
      * @param errorLineConsumer the line consumer.
      * @return this builder.
      */
-    public ProcessConfigurationBuilder errorAsConsumer(Consumer<String> errorLineConsumer) {
+    public ProcessInstanceBuilder errorAsConsumer(Consumer<String> errorLineConsumer) {
         configuration.setErrorRedirect(ErrorRedirect.CONSUMER);
         configuration.setErrorLineConsumer(errorLineConsumer);
         return this;

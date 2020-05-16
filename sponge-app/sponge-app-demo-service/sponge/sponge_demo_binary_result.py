@@ -29,5 +29,4 @@ class PdfFileOutput(Action):
         self.withNoArgs().withResult(BinaryType().withMimeType("application/pdf").withLabel("PDF file").withFeatures({"icon":"file-pdf"}))
         self.withFeatures({"icon":"file-pdf"})
     def onCall(self):
-        return sponge.process(ProcessConfiguration.builder("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
-                              .outputAsBinary()).run().outputBinary
+        return sponge.process("curl", "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf").outputAsBinary().run().outputBinary

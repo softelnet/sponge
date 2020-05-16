@@ -7,6 +7,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.0 (not released yet)
+* API change: Changed the `EngineOperations.process` method to accept an executable and arguments and to return a process instance builder instead of a process definition. Moreover the `ProcessInstance.run()` method is always synchronous now. To run a new process asynchronously use the `ProcessInstance.runAsync()` method.
 * API change: Moved the `readOnly` flag from `ProvidedMeta` to `DataType`.
 * API change: Added `features` to the response header in the REST API.
 * API change: Added `ProvideActionArgsRequestBody.initial` in the REST API.

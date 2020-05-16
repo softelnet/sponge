@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.openksavi.sponge.SpongeException;
 
 /**
- * A process configuration. See the {@link org.openksavi.sponge.util.process.ProcessConfigurationBuilder API}.
+ * A process configuration. See the {@link org.openksavi.sponge.util.process.ProcessInstanceBuilder API}.
  */
 public class ProcessConfiguration implements Cloneable {
 
@@ -291,16 +291,5 @@ public class ProcessConfiguration implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new SpongeException(e);
         }
-    }
-
-    /**
-     * Returns a new process configuration builder.
-     *
-     * @param executable the executable filename.
-     * @param arguments the optional arguments.
-     * @return the builder.
-     */
-    public static ProcessConfigurationBuilder builder(String executable, String... arguments) {
-        return new ProcessConfigurationBuilder(executable).arguments(arguments);
     }
 }

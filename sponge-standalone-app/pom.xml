@@ -82,6 +82,11 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-remote-api-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-gsm-modem</artifactId>
             <version>${project.version}</version>
         </dependency>

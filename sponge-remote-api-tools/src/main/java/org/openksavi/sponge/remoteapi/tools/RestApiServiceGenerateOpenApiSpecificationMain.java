@@ -1,4 +1,4 @@
-package org.openksavi.sponge.distribution.tools;
+package org.openksavi.sponge.remoteapi.tools;
 
 import java.io.File;
 import java.io.IOException;

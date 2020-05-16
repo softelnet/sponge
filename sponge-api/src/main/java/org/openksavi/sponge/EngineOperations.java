@@ -41,8 +41,7 @@ import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
-import org.openksavi.sponge.util.process.ProcessConfigurationBuilder;
-import org.openksavi.sponge.util.process.ProcessDefinition;
+import org.openksavi.sponge.util.process.ProcessInstanceBuilder;
 
 /**
  * An engine operations.
@@ -462,20 +461,21 @@ public interface EngineOperations {
     String getHome();
 
     /**
-     * Create a new process definition.
+     * Creates a new process instance builder.
      *
-     * @param processConfiguration the process configuration.
-     * @return a new process definition.
+     * @param configuration the process configuration.
+     * @return a new process instance builder.
      */
-    ProcessDefinition process(ProcessConfiguration processConfiguration);
+    ProcessInstanceBuilder process(ProcessConfiguration configuration);
 
     /**
-     * Create a new process definition.
+     * Creates a new process instance builder.
      *
-     * @param processConfigurationBuilder the process configuration builder.
-     * @return a new process definition.
+     * @param executable the executable.
+     * @param arguments the arguments.
+     * @return a new process instance builder.
      */
-    ProcessDefinition process(ProcessConfigurationBuilder processConfigurationBuilder);
+    ProcessInstanceBuilder process(String executable, String... arguments);
 
     /**
      * Adds or updates a category.

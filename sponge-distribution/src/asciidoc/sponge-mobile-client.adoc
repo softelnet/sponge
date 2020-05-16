@@ -791,7 +791,7 @@ A non-limited value set is supported only for `StringType`.
 
 |`opacity`
 |`boolean`
-|`GeoTileLayer`
+|`GeoTileLayer`, `GeoWmsLayer`
 |A map tile layer opacity as a double value between 0 and 1.
 
 |`scroll`
@@ -945,7 +945,8 @@ The pagination works only _forward_, i.e. all previous list elements fetched fro
 A geographical map feature is represented by the `GeoMap` class that contains layers as instances of `GeoLayer`:
 
 * `GeoTileLayer` represents a tile layer,
-* `GeoMarkerLayer` represents marker layers.
+* `GeoWmsLayer` represents a WMS layer,
+* `GeoMarkerLayer` represents a marker layer,
 
 A geographical position is represented by `GeoPosition`.
 
@@ -973,6 +974,10 @@ A geographical position is represented by `GeoPosition`.
 |`layers`
 |`List<GeoLayer>`
 |Map base layers.
+
+|`crs`
+|`GeoCrs`
+|A Coordinate Reference System.
 
 |`features`
 |`Map<String, Object>`

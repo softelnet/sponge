@@ -5,7 +5,6 @@ Camera
 
 from java.lang import System
 from java.util.concurrent.locks import ReentrantLock
-from org.openksavi.sponge.util.process import ProcessConfiguration
 import os
 
 def onInit():
@@ -21,8 +20,7 @@ class TakePicture(Action):
     def onCall(self):
         CAMERA_LOCK.lock()
         try:
-            return sponge.process(createRaspistillBuilder().arguments(
-                "--output", "-").outputAsBinary().errorAsException()).run().outputBinary
+            return createRaspistillProcess().arguments("--output", "-").outputAsBinary().errorAsException().run().outputBinary
         finally:
             CAMERA_LOCK.unlock()
 
@@ -37,12 +35,11 @@ class TakePictureAsFile(Action):
         pictureFilename = "{}/{}.{}".format(cameraDir, str(System.currentTimeMillis()), sponge.getVariable("pictureFormat"))
         CAMERA_LOCK.lock()
         try:
-            sponge.process(createRaspistillBuilder().arguments("--output", pictureFilename).errorAsException()).run().waitFor()
+            createRaspistillProcess().arguments("--output", pictureFilename).errorAsException().run()
         finally:
             CAMERA_LOCK.unlock()
 
         return pictureFilename
 
-def createRaspistillBuilder():
-    return ProcessConfiguration.builder("raspistill", "--width", "500", "--height", "500","--encoding",
-                                        sponge.getVariable("pictureFormat"))
+def createRaspistillProcess():
+    return sponge.process("raspistill", "--width", "500", "--height", "500","--encoding", sponge.getVariable("pictureFormat"))

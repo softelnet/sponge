@@ -223,36 +223,37 @@ In general, an external process can be executed using:
 
 The preferred way to configure redirects is to use `inputAs...`, `outputAs...` and `errorAs...` methods.
 
+In order to run a new process you have to create a process instance builder by invoking `sponge.process()`. Then you can run a new process:
+
+* Synchronously by invoking the `run()` method. The current thread waits for the process exit.
+* Asynchronously by invoking the `runAsync()` method. The current thread waits for the process exit only if necessary (in compliance with the process configuration).
+
 .Example of running an external executable with arguments in Java
 [source,java]
 ----
-ProcessInstance process = engine.getOperations().process(ProcessConfiguration.builder("echo", "TEST").outputAsString()).run();
+ProcessInstance process = engine.getOperations().process("echo", "TEST").outputAsString().run();
 String output = process.getOutputString();
 ----
 
 .Example of running an external executable with arguments in Python
 [source,python]
 ----
-from org.openksavi.sponge.util.process import ProcessConfiguration
-
-process = sponge.process(ProcessConfiguration.builder("echo", "TEST").outputAsString()).run()
+process = sponge.process("echo", "TEST").outputAsString().run()
 print process.outputString
 ----
 
 .Example of running an external executable with an additional environment in Java
 [source,java]
 ----
-ProcessInstance process = engine.getOperations().process(ProcessConfiguration.builder("printenv")
-        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputAsString()).run();
+ProcessInstance process = engine.getOperations().process("printenv")
+        .arguments("TEST_VARIABLE").env("TEST_VARIABLE", "TEST").outputAsString().run();
 ----
 
 .Example of running an external executable with an additional environment in Python
 [source,python]
 ----
-from org.openksavi.sponge.util.process import ProcessConfiguration
-
-process = sponge.process(ProcessConfiguration.builder("printenv").arguments("TEST_VARIABLE")
-                .env("TEST_VARIABLE", "TEST").outputAsString()).run()
+process = sponge.process("printenv").arguments("TEST_VARIABLE")
+                .env("TEST_VARIABLE", "TEST").outputAsString().run()
 ----
 
 For more examples see {sourcesUrl}/sponge-core/src/test/java/org/openksavi/sponge/core/util/process/ProcessInstanceTest.java[ProcessInstanceTest.java].
@@ -780,13 +781,11 @@ class SendSms(Action):
 .Example of sending SMS using the `ProcessInstance` API
 [source,python]
 ----
-from org.openksavi.sponge.util.process import ProcessConfiguration
-
 def sendSms(recipient, message):
-    process = sponge.runProcess(ProcessConfiguration.builder("gammu").arguments("sendsms", "TEXT", recipient,
+    process = sponge.process("gammu").arguments("sendsms", "TEXT", recipient,
             None if gsm.canEncodeGsm(message) else "-unicode")
-            .inputAsString(message).outputAsString().build())
-    if process.waitFor() != 0:
+            .inputAsString(message).outputAsString().run()
+    if process.exitCode != 0:
         raise Exception("Exit code {}: {}".format(process.exitCode, process.outputString))
 ----
 

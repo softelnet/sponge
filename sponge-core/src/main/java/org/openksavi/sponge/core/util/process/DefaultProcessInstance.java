@@ -54,6 +54,16 @@ public class DefaultProcessInstance implements ProcessInstance {
         Validate.isTrue(internalProcess == null, "The process has already started");
 
         runtime.start();
+        runtime.waitFor();
+
+        return this;
+    }
+
+    @Override
+    public ProcessInstance runAsync() throws InterruptedException {
+        Validate.isTrue(internalProcess == null, "The process has already started");
+
+        runtime.start();
 
         return this;
     }
