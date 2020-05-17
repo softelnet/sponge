@@ -108,7 +108,7 @@
                                     <systemProperties>
                                         <systemProperty>
                                             <key>logback.configurationFile</key>
-                                            <value>${basedir}/src/release/logback.xml</value>
+                                            <value>${sponge.root}/sponge-test/src/main/resources/logback.xml</value>
                                         </systemProperty>
                                     </systemProperties>
                                 </configuration>

@@ -89,8 +89,10 @@ public class ClientSubscription {
 
                 @Override
                 public void onError(Throwable t) {
-                    subscribed = false;
-                    eventStreamObserver.onError(t);
+                    if (subscribed) {
+                        subscribed = false;
+                        eventStreamObserver.onError(t);
+                    }
                 }
 
                 @Override

@@ -47,7 +47,9 @@ public class SpongeConsumer extends DefaultConsumer {
 
     @Override
     protected void doStop() throws Exception {
-        CamelUtils.getPlugin(engine).removeConsumer(camelConsumer);
+        if (CamelUtils.hasPlugin(engine)) {
+            CamelUtils.getPlugin(engine).removeConsumer(camelConsumer);
+        }
 
         camelConsumer = null;
 

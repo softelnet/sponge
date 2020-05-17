@@ -58,7 +58,12 @@ public class GeoCrs implements Serializable, Cloneable {
         return this;
     }
 
-    // List of Numbers instead of Doubles to support Integer arrays in Jython.
+    /**
+     * Accepts a list of Numbers instead of Doubles to support Integer arrays in Jython.
+     *
+     * @param resolutions the resolutions.
+     * @return this instance.
+     */
     public GeoCrs withResolutions(List<Number> resolutions) {
         this.resolutions.addAll(resolutions.stream().map(r -> r != null ? r.doubleValue() : null).collect(Collectors.toList()));
         return this;

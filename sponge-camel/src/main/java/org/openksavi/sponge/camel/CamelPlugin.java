@@ -215,7 +215,7 @@ public class CamelPlugin extends JPlugin implements CamelContextAware, ExtendedS
     }
 
     public String getRouteId(Exchange exchange) {
-        return exchange.getUnitOfWork().getRouteContext().getRoute().getId();
+        return exchange.getUnitOfWork().getRoute().getId();
     }
 
     @Override

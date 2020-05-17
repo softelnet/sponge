@@ -88,9 +88,8 @@ public class ProcessInstanceBuilder {
      * Runs a new process asynchronously. Should be invoked only once. Waits if necessary (in compliance with the configuration).
      *
      * <p>If the input redirect type is STREAM you should invoke manually
-     * {@link org.openksavi.sponge.util.process.ProcessInstanceBuilder#waitForReady() ProcessInstanceBuilder.waitForReady()} after writing
-     * to and closing the subprocess standard input {@link org.openksavi.sponge.util.process.ProcessInstance#getInput()
-     * ProcessInstance.getInput()}.
+     * {@link org.openksavi.sponge.util.process.ProcessInstance#waitForReady() ProcessInstance.waitForReady()} after writing to and closing
+     * the subprocess standard input {@link org.openksavi.sponge.util.process.ProcessInstance#getInput() ProcessInstance.getInput()}.
      *
      * @return the process instance.
      * @throws InterruptedException on interrupted.

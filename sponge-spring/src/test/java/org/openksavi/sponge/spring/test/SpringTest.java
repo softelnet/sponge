@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -139,7 +138,7 @@ public class SpringTest {
 
             ctx.start();
             fail("Exception expected");
-        } catch (BeanCreationException e) {
+        } catch (Exception e) {
             assertTrue(e.getCause() instanceof ConfigException);
         } finally {
             if (ctx != null) {

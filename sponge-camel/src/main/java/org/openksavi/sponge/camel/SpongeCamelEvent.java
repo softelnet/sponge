@@ -128,11 +128,11 @@ public class SpongeCamelEvent extends BaseEvent {
 
     public static SpongeCamelEvent create(SpongeEngine engine, String name, Exchange exchange) {
         return new SpongeCamelEvent(name, engine.getConfigurationManager().getEventClonePolicy(),
-                exchange.getUnitOfWork().getRouteContext().getRoute().getId(), exchange.getIn().getBody(), exchange.getIn().getHeaders());
+                exchange.getUnitOfWork().getRoute().getId(), exchange.getIn().getBody(), exchange.getIn().getHeaders());
     }
 
     public static SpongeCamelEvent create(SpongeEngine engine, Exchange exchange) {
-        String exchangRouteId = exchange.getUnitOfWork().getRouteContext().getRoute().getId();
+        String exchangRouteId = exchange.getUnitOfWork().getRoute().getId();
         return new SpongeCamelEvent(exchangRouteId, engine.getConfigurationManager().getEventClonePolicy(), exchangRouteId,
                 exchange.getIn().getBody(), exchange.getIn().getHeaders());
     }

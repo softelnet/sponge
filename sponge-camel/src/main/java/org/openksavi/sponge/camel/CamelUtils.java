@@ -66,6 +66,10 @@ public abstract class CamelUtils {
         return engine.getOperations().getPlugin(CamelPlugin.class, CamelPlugin.NAME);
     }
 
+    public static boolean hasPlugin(SpongeEngine engine) {
+        return engine.getOperations().hasPlugin(CamelPlugin.class, CamelPlugin.NAME);
+    }
+
     public static SSLContextParameters createSslContextParameters(SslConfiguration security) {
         KeyStoreParameters keyStoreParameters = new KeyStoreParameters();
         keyStoreParameters.setResource(security.getKeyStore());

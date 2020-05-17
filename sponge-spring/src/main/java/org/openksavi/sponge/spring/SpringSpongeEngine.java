@@ -21,13 +21,14 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.SmartLifecycle;
 
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 
 /**
  * A Spring aware Sponge engine. Startup and shutdown is managed by Spring.
  */
-public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationContextAware, InitializingBean, DisposableBean {
+public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationContextAware, SmartLifecycle {
 
     private ApplicationContext applicationContext;
 
@@ -59,24 +60,25 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        if (autoStartup) {
-            startup();
-        }
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        if (autoStartup) {
-            shutdown();
-        }
-    }
-
     public boolean isAutoStartup() {
         return autoStartup;
     }
 
     public void setAutoStartup(boolean autoStartup) {
         this.autoStartup = autoStartup;
+    }
+
+    @Override
+    public void start() {
+        if (autoStartup) {
+            startup();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (autoStartup) {
+            shutdown();
+        }
     }
 }

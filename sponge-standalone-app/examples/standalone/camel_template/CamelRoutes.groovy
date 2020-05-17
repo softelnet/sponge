@@ -14,10 +14,11 @@ class TemplateRoute extends RouteBuilder {
     SpongeEngine engine;
 
     void configure() {
+        String template = engine.operations.getVariable("templateUri")
+
         // @formatter:off
         from("direct:template")
-                .setHeader(MustacheConstants.MUSTACHE_RESOURCE_URI).constant(engine.operations.getVariable("templateUri"))
-                .to("mustache:dummy");
+                .toD("mustache:${template}");
         // @formatter:on
     }
 }

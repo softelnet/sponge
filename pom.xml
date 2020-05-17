@@ -93,7 +93,7 @@
         <spring.version>5.2.6.RELEASE</spring.version>
         <spring-integration.version>5.3.0.RELEASE</spring-integration.version>
         <spring-security.version>5.3.2.RELEASE</spring-security.version>
-        <camel.version>3.1.0</camel.version>
+        <camel.version>3.3.0</camel.version>
         <awaitility.version>4.0.2</awaitility.version>
         <jline.version>3.14.1</jline.version>
         <py4j.version>0.10.9</py4j.version>
@@ -127,7 +127,7 @@
         <mockito.version>3.3.3</mockito.version>
         <jcip.version>1.0-1</jcip.version>
 
-        <log4j2.version>2.13.2</log4j2.version>
+        <log4j2.version>2.13.3</log4j2.version>
     </properties>
 
     <prerequisites>
@@ -189,7 +189,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -278,7 +278,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
