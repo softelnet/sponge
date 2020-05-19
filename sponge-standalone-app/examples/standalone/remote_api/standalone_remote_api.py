@@ -9,7 +9,3 @@ class UpperCase(Action):
     def onCall(self, text):
         self.logger.info("Action {} called", self.meta.name)
         return text.upper()
-
-def onStartup():
-    # Manual start of the Remote API (autoStart is turned off) because the Remote API server must start after the Camel context has started.
-    remoteApiServer.start()
