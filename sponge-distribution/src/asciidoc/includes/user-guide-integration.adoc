@@ -71,16 +71,13 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 include::user-guide-integration-camel.adoc[leveloffset=+1]
 
-== {sponge} Remote API
-The {sponge} Remote API is a common name for the {sponge} REST API and the {sponge} gRPC API. The main remote API for {sponge} is the REST API.
+include::user-guide-integration-remote-api.adoc[leveloffset=+1]
 
-include::user-guide-integration-rest-api.adoc[leveloffset=+1]
+include::user-guide-integration-remote-api-server.adoc[leveloffset=+1]
 
-include::user-guide-integration-rest-api-server.adoc[leveloffset=+1]
+include::user-guide-integration-remote-api-client-java.adoc[leveloffset=+1]
 
-include::user-guide-integration-rest-api-client-java.adoc[leveloffset=+1]
-
-include::user-guide-integration-rest-api-client-dart.adoc[leveloffset=+1]
+include::user-guide-integration-remote-api-client-dart.adoc[leveloffset=+1]
 
 include::user-guide-integration-grpc-api.adoc[leveloffset=+1]
 

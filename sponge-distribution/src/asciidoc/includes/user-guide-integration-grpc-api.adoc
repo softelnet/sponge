@@ -1,7 +1,7 @@
 = {sponge} gRPC API
 The {sponge} gRPC API allows users to remotely subscribe to {sponge} events.
 
-The gRPC has been chosen to provide event subscriptions because the main remote {sponge} API, that is REST, has limited options for push notifications. The {sponge} gRPC API can be seen as an addition to the {sponge} REST API.
+The gRPC has been chosen to provide event subscriptions because the main {sponge} Remote API has limited options for push notifications. The {sponge} gRPC API can be seen as an addition to the {sponge} Remote API.
 
 NOTE: Events are pushed online, i.e. if a client subscribes to an event type, only events that come after that time will be delivered.
 
@@ -35,9 +35,9 @@ include::{includesRootDir}/sponge-grpc-api-common/src/main/proto/sponge.proto[li
 ----
 
 == Configuration
-The convention is that the gRPC server port is the REST API port plus `1`, e.g. if the REST API port is `8080` then the gRPC API port will be `8081`.
+The convention is that the gRPC server port is the Remote API port plus `1`, e.g. if the Remote API port is `8080` then the gRPC API port will be `8081`.
 
-A web gRPC client requires a https://grpc.io/docs/tutorials/basic/web/[proxy] to forward a gRPC browser request to a backend {sponge} gRPC service. In that case the convention is that the proxy port is the REST API port plus `2`.
+A web gRPC client requires a https://grpc.io/docs/tutorials/basic/web/[proxy] to forward a gRPC browser request to a backend {sponge} gRPC service. In that case the convention is that the proxy port is the Remote API port plus `2`.
 
 == Error handling
-An application error is returned to a client in a response message, just like in the REST API. An internal error is returned as a gRPC exception with a status.
+An application error is returned to a client in a response message, just like in the Remote API. An internal error is returned as a gRPC exception with a status.

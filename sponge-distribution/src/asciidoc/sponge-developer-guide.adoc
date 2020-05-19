@@ -33,7 +33,7 @@ In order to skip tests, run:
 NOTE: The assertions in some tests heavily depend on the values of timeouts, durations, etc. and the speed of the test environment, therefore running the tests on a very slow machine may cause assertion failures that (in most cases) would not indicate bugs.
 
 === Generate OpenAPI documentation
-A REST API OpenAPI documentation is generated automatically in maven.
+A Remote API OpenAPI documentation is generated automatically in maven.
 
 A generated OpenAPI specification in Asciidoc will be automatically included in the main documentation.
  

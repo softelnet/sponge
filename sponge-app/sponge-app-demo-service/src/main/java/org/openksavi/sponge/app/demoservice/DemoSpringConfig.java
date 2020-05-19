@@ -28,9 +28,9 @@ import org.springframework.context.annotation.Configuration;
 import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
-import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
-import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @Configuration
@@ -46,29 +46,29 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
             spongeHome = "sponge";
         }
 
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRemoteApiPlugin(), spongeGrpcApiPlugin())
                 .config(spongeHome + "/sponge.xml").build();
     }
 
     @Bean
-    public RestApiServerPlugin spongeRestApiPlugin() {
-        RestApiServerPlugin plugin = new RestApiServerPlugin();
+    public RemoteApiServerPlugin spongeRemoteApiPlugin() {
+        RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
 
         // Use the servlet configuration.
-        plugin.getSettings().setRestComponentId("servlet");
+        plugin.getSettings().setComponentId("servlet");
 
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setPublishReload(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
         plugin.getSettings().setPrettyPrint(true);
 
-        plugin.setSecurityService(restApiSecurityService());
+        plugin.setSecurityService(remoteApiSecurityService());
 
         return plugin;
     }
 
     @Bean
-    public RestApiSecurityService restApiSecurityService() {
+    public RemoteApiSecurityService remoteApiSecurityService() {
         return new SimpleSpringInMemorySecurityService();
     }
 

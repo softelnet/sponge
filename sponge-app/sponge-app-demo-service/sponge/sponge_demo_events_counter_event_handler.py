@@ -3,7 +3,7 @@ Sponge Knowledge base
 gRPC demo - Counter - event handler.
 """
 
-from org.openksavi.sponge.restapi.model import RemoteEvent
+from org.openksavi.sponge.remoteapi.model import RemoteEvent
 
 def onBeforeLoad():
     # Define an event type with a handler action. This event type won't be shown in a list of events to subscribe in a GUI.

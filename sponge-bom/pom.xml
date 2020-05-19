@@ -106,17 +106,22 @@
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-rest-api-common</artifactId>
+                <artifactId>sponge-remote-api-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-rest-api-client</artifactId>
+                <artifactId>sponge-remote-api-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-rest-api-server</artifactId>
+                <artifactId>sponge-remote-api-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-remote-api-tools</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -132,16 +137,6 @@
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
                 <artifactId>sponge-grpc-api-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-remote-api-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openksavi.sponge</groupId>
-                <artifactId>sponge-remote-api-tools</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

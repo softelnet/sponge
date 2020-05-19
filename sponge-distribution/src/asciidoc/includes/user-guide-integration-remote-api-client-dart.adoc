@@ -1,0 +1,48 @@
+= {sponge} Remote API client for Dart
+The {sponge} Remote API client for Dart simplifies connecting to a remote {sponge} Remote API service from applications written in Dart. It could be used in a https://flutter.io[Flutter] mobile application or an https://webdev.dartlang.org/angular[AngularDart] web application to connect to a {sponge} based back-end. The Remote API client uses POST methods.
+
+IMPORTANT: The fully featured {sponge} Remote API client is the client for *Dart*. Clients for other languages may have less features.
+
+.Remote API client example
+[source,dart]
+----
+import 'package:sponge_client_dart/sponge_client_dart.dart';
+
+void main() async {
+  // Create a new client for an anonymous user.
+  var client = SpongeClient(
+      SpongeClientConfiguration('http://localhost:8888'));
+
+  // Get the Sponge server version.
+  var version = await client.getVersion();
+  print('Sponge version: $version.');
+
+  // Get actions metadata.
+  List<ActionMeta> actionsMeta = await client.getActions();
+  print('Available action count: ${actionsMeta.length}.');
+
+  // Call the action with arguments.
+  String upperCaseText = await client.call('UpperCase', ['Text to upper case']);
+  print('Upper case text: $upperCaseText.');
+
+  // Send a new event to the Sponge engine.
+  var eventId = await client.send('alarm',
+      attributes: {'source': 'Dart client', 'message': 'Something happened'});
+  print('Sent event id: $eventId.');
+
+  // Create a new client for a named user.
+  client = SpongeClient(
+    SpongeClientConfiguration('http://localhost:8888')
+      ..username = 'john'
+      ..password = 'password',
+  );
+}
+----
+
+Unless noted otherwise in the release notes, versions of the Remote API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
+
+The Remote API client for Dart is published as `sponge_client_dart` at https://pub.dartlang.org/packages/sponge_client_dart[pub.dartlang.org].
+
+For more information see the {dartClientDartdoc}/SpongeClient-class.html[`SpongeResClient` Dartdoc] and the project {dartClientSourcesUrl}/[source code].
+
+The example of using the Remote API client for Dart in the AngularDart web application is hosted at https://github.com/softelnet/sponge_client_angular_dart_example.

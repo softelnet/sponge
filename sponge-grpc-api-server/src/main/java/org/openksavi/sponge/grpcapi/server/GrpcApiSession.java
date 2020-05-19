@@ -16,13 +16,13 @@
 
 package org.openksavi.sponge.grpcapi.server;
 
-import org.openksavi.sponge.restapi.server.DefaultRestApiSession;
-import org.openksavi.sponge.restapi.server.security.UserAuthentication;
+import org.openksavi.sponge.remoteapi.server.DefaultRemoteApiSession;
+import org.openksavi.sponge.remoteapi.server.security.UserAuthentication;
 
 /**
- * A gRPC-based REST API session.
+ * A gRPC-based Remote API session.
  */
-public class GrpcApiSession extends DefaultRestApiSession {
+public class GrpcApiSession extends DefaultRemoteApiSession {
 
     public GrpcApiSession(UserAuthentication userAuthentication) {
         super(userAuthentication);

@@ -116,20 +116,6 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../sponge-rest-api-client</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>examples/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>../sponge-rest-api-server</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>examples/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
             <directory>../sponge-remote-api-client</directory>
             <outputDirectory></outputDirectory>
             <includes>
@@ -138,6 +124,13 @@
         </fileSet>
         <fileSet>
             <directory>../sponge-remote-api-server</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>examples/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../sponge-remote-api-intergation-tests</directory>
             <outputDirectory></outputDirectory>
             <includes>
                 <include>examples/**</include>

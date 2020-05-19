@@ -285,9 +285,9 @@ The shell commands that execute the examples require installation of the {sponge
 === Hello World action example
 Let's start with the time-honored Hello World example. We will define a `HelloWorldAction` action that accepts one string argument (your name) and returns a greeting text. The same action will be implemented in different scripting languages in the following chapters.
 
-If the {sponge} REST API server is configured, you could call this action remotely.
+If the {sponge} Remote API server is configured, you could call this action remotely.
 
-.Example of calling the action via the REST API
+.Example of calling the action via the Remote API
 [source,bash]
 ----
 # Call the action to get the JSON response with the result.
@@ -314,7 +314,7 @@ def onStartup(): # <7>
     sponge.logger.info("{}", sponge.call("HelloWorldAction", ["Sponge user"])) # <8>
 ----
 <1> The definition of the `HelloWorldAction` action.
-<2> The action configuration callback method. The method body defines the optional action metadata. The metadata could be used by a client code, for example a generic UI for calling actions or a REST API client.
+<2> The action configuration callback method. The method body defines the optional action metadata. The metadata could be used by a client code, for example a generic UI for calling actions or a Remote API client.
 <3> Sets up the action label and the description.
 <4> Sets up the action argument metadata. There is only one argument named `name` of String type.
 <5> Sets up the action result metadata.

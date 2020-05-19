@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-common</artifactId>
+            <artifactId>sponge-remote-api-common</artifactId>
             <version>${project.version}</version>
         </dependency>
 

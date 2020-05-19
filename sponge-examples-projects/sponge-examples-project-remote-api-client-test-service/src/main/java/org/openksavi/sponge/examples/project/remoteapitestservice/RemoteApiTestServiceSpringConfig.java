@@ -30,10 +30,10 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
-import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
-import org.openksavi.sponge.restapi.server.RestApiSettings;
-import org.openksavi.sponge.restapi.server.security.RestApiSecurityService;
-import org.openksavi.sponge.restapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.RemoteApiSettings;
+import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @Configuration
@@ -49,16 +49,16 @@ public class RemoteApiTestServiceSpringConfig extends SpongeCamelConfiguration {
             spongeHome = "sponge";
         }
 
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRestApiPlugin(), spongeGrpcApiPlugin())
-                .config(spongeHome + "/sponge_rest_api_test.xml").build();
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), spongeRemoteApiPlugin(), spongeGrpcApiPlugin())
+                .config(spongeHome + "/sponge_remote_api_test.xml").build();
     }
 
     @Bean
-    public RestApiServerPlugin spongeRestApiPlugin() {
-        RestApiServerPlugin plugin = new RestApiServerPlugin();
+    public RemoteApiServerPlugin spongeRemoteApiPlugin() {
+        RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
 
         // Use the servlet configuration.
-        plugin.getSettings().setRestComponentId("servlet");
+        plugin.getSettings().setComponentId("servlet");
 
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(true);
@@ -67,15 +67,15 @@ public class RemoteApiTestServiceSpringConfig extends SpongeCamelConfiguration {
 
         plugin.getSettings().setPrettyPrint(true);
 
-        plugin.setSecurityService(restApiSecurityService());
+        plugin.setSecurityService(remoteApiSecurityService());
 
-        setupRestService(plugin.getSettings());
+        setupRemoteApiService(plugin.getSettings());
 
         return plugin;
     }
 
     @Bean
-    public RestApiSecurityService restApiSecurityService() {
+    public RemoteApiSecurityService remoteApiSecurityService() {
         return new SimpleSpringInMemorySecurityService();
     }
 
@@ -84,9 +84,9 @@ public class RemoteApiTestServiceSpringConfig extends SpongeCamelConfiguration {
         return new GrpcApiServerPlugin();
     }
 
-    public static void setupRestService(RestApiSettings settings) {
-        settings.setName("Sponge Test REST API");
-        settings.setDescription("Sponge Test REST API description");
+    public static void setupRemoteApiService(RemoteApiSettings settings) {
+        settings.setName("Sponge Test Remote API");
+        settings.setDescription("Sponge Test Remote API description");
         settings.setLicense("Apache 2.0");
     }
 }

@@ -1,0 +1,41 @@
+<configuration debug="false" scan="false" scanPeriod="60 seconds">
+
+    <contextName>sponge-logger</contextName>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <jmxConfigurator />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.openksavi" level="info" />
+    <logger name="org.openksavi.sponge.core.rule" level="info" />
+    <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapterGroup" level="info" />
+    <logger name="org.openksavi.sponge.core.BaseEventSetProcessorAdapter" level="info" />
+    <logger name="org.openksavi.sponge.core.engine.processing.decomposed.DecomposedQueue" level="error" />
+    <logger name="org.openksavi.sponge.jruby.core.JRubyLogErrorWriter" level="warn" />
+    <logger name="org.openksavi.sponge.shaded" level="warn" />
+    <logger name="org.openksavi.sponge.remoteapi.client" level="info" />
+    <logger name="sponge.kb" level="debug" />
+
+    <logger name="jdbc.sqlonly" level="warn" />
+    <logger name="org.apache.commons.beanutils.FluentPropertyBeanIntrospector" level="warn" />
+    <logger name="org.quartz" level="warn" />
+    <logger name="org.apache.camel" level="warn" />
+    <logger name="org.springframework" level="warn" />
+    <logger name="org.iot.raspberry.grovepi" level="error" />
+    <logger name="GrovePi" level="error" />
+    <logger name="org.reflections" level="warn" />
+    <logger name="ch.qos.logback" level="warn" />
+
+    <root level="info">
+        <appender-ref ref="console" />
+    </root>
+</configuration>

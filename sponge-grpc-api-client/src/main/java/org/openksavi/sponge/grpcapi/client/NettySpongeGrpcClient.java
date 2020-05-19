@@ -20,28 +20,28 @@ import java.util.function.Consumer;
 
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
 
 /**
  * A Netty based Sponge gRPC API client.
  */
 public class NettySpongeGrpcClient extends BaseSpongeGrpcClient<NettyChannelBuilder> {
 
-    public NettySpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration,
+    public NettySpongeGrpcClient(SpongeClient spongeClient, SpongeGrpcClientConfiguration configuration,
             Consumer<NettyChannelBuilder> channelBuilderConfigurer) {
-        super(restClient, configuration, channelBuilderConfigurer);
+        super(spongeClient, configuration, channelBuilderConfigurer);
     }
 
-    public NettySpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration) {
-        super(restClient, configuration);
+    public NettySpongeGrpcClient(SpongeClient spongeClient, SpongeGrpcClientConfiguration configuration) {
+        super(spongeClient, configuration);
     }
 
-    public NettySpongeGrpcClient(SpongeRestClient restClient, Consumer<NettyChannelBuilder> channelBuilderConfigurer) {
-        super(restClient, channelBuilderConfigurer);
+    public NettySpongeGrpcClient(SpongeClient spongeClient, Consumer<NettyChannelBuilder> channelBuilderConfigurer) {
+        super(spongeClient, channelBuilderConfigurer);
     }
 
-    public NettySpongeGrpcClient(SpongeRestClient restClient) {
-        super(restClient);
+    public NettySpongeGrpcClient(SpongeClient spongeClient) {
+        super(spongeClient);
     }
 
     @Override

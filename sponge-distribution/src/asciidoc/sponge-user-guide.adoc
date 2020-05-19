@@ -164,7 +164,7 @@ See the <<provided_arguments,provided action arguments>> as a use case of provid
 |A boolean type.
 
 |`DateTimeType`
-|A date/time type. This type requires a `DateTimeKind` parameter, which is is an enumeration of `DATE_TIME` (a value of this type in Java has to be an instance of `LocalDateTime`), `DATE_TIME_ZONE` (an instance of `ZonedDateTime`), `DATE` (an instance of `LocalDate`), `TIME` (an instance of `LocalTime`), `INSTANT` (an instance of `Instant`). To ensure interoperability with other systems, defining a type format (especially for `DATE` and `TIME`) is recommended and in some cases required. A type format uses the ICU/JDK date/time pattern specification. The {sponge} REST API uses a type format (if defined) to serialize a value of `DateTimeType` to JSON. The default date/time kind is `DATE_TIME`. Provides optional properties `minValue` and `maxValue`, e.g.: `DateTimeType().withDateTime().withMinValue(LocalDateTime.of(2020, 1, 1, 0, 0))`.
+|A date/time type. This type requires a `DateTimeKind` parameter, which is is an enumeration of `DATE_TIME` (a value of this type in Java has to be an instance of `LocalDateTime`), `DATE_TIME_ZONE` (an instance of `ZonedDateTime`), `DATE` (an instance of `LocalDate`), `TIME` (an instance of `LocalTime`), `INSTANT` (an instance of `Instant`). To ensure interoperability with other systems, defining a type format (especially for `DATE` and `TIME`) is recommended and in some cases required. A type format uses the ICU/JDK date/time pattern specification. The {sponge} Remote API uses a type format (if defined) to serialize a value of `DateTimeType` to JSON. The default date/time kind is `DATE_TIME`. Provides optional properties `minValue` and `maxValue`, e.g.: `DateTimeType().withDateTime().withMinValue(LocalDateTime.of(2020, 1, 1, 0, 0))`.
 
 |`DynamicType`
 |An dynamic type representing dynamically typed values. A value of this type has to be an instance of `DynamicValue`.
@@ -309,7 +309,7 @@ If a data type is annotated and has a default value, the default value should be
 === Object type companion type
 Limitations:
 
-* Conversion between a companion type value and an object type value is supported only in the {sponge} REST API.
+* Conversion between a companion type value and an object type value is supported only in the {sponge} Remote API.
 * Loops in nested data types are not supported.
 * Object inheritance is not supported (if a companion type is a record type).
 * A companion type is not validated against the object type class.
@@ -319,7 +319,7 @@ Features are represented by a map of names to values. They provide additional in
 
 Features can be used in a client code to provide customized behavior.
 
-A feature can have a _feature converter_ registered for its name. The converter is used by the REST API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo().withName("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
+A feature can have a _feature converter_ registered for its name. The converter is used by the Remote API. It allows to use complex feature values in knowledge bases (e.g. `"icon":IconInfo().withName("home").withColor("FF0000").withSize(50)`) that will be marshalled and unmarshalled to and from JSON. If a feature has a converter, all usages of this feature will have to conform to a feature type supported by the converter (e.g. the `"icon"` feature converter supports an instance of `IconInfo` or `String` as a value).
 
 If a feature is used in events, its values should be `Serializable`.
 
@@ -686,7 +686,7 @@ A processor defined by a processor builder can be disabled by its name.
 |Sets a processor description. The description can be read using `self.meta.description`. A description is not used internally but could be useful in a client code.
 
 |`withVersion(Integer version)`
-|Sets a processor version. The version can be read using `self.meta.version`. A version is not used internally by the engine. However it is used to enforce version checking when calling actions via the REST API.
+|Sets a processor version. The version can be read using `self.meta.version`. A version is not used internally by the engine. However it is used to enforce version checking when calling actions via the Remote API.
 
 |`withFeatures(Map<String, Object> features)`
 |Adds processor features. The features can be read using `self.meta.features`. The processor features is simply a map of String to Object associated with a processor definition (not instance). It could be used to provide a custom behavior in a client code.
@@ -1240,8 +1240,8 @@ TIP: You may see ignored events (i.e. events that go to the Output Event Queue) 
 |`ReactiveXPlugin`
 |ReactiveX plugin.
 
-|`RestApiServerPlugin`
-|{sponge} REST API server plugin.
+|`RemoteApiServerPlugin`
+|{sponge} Remote API server plugin.
 
 |`SerialPortGsmModemPlugin`
 |A GSM modem plugin that uses a serial port. Experimental.
@@ -1266,11 +1266,11 @@ TIP: You may see ignored events (i.e. events that go to the Output Event Queue) 
 
 |`user-management`
 |`sponge-kb-user-management`
-|The User Management Knowledge Base artifact provides actions for user log in, log out and the default implementation of a sign up with an email action. This artifact is intended to use with the {sponge} REST API.
+|The User Management Knowledge Base artifact provides actions for user log in, log out and the default implementation of a sign up with an email action. This artifact is intended to use with the {sponge} Remote API.
 
 |`mpd-mpc`
 |`sponge-kb-mpd-mpc`
-|The MPD/MPC Knowledge Base uses the `mpc` commandline MPD client to connect to an MPD server providing music player related actions. This artifact is intended to use with the {sponge} REST API.
+|The MPD/MPC Knowledge Base uses the `mpc` commandline MPD client to connect to an MPD server providing music player related actions. This artifact is intended to use with the {sponge} Remote API.
 |===
 
 include::includes/user-guide-applications.adoc[leveloffset=+1]
@@ -1357,13 +1357,17 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |Yes
 |The predefined action and type features.
 
-|`sponge-rest-api-client`
+|`sponge-remote-api-client`
 |Yes
-|The Sponge REST API client.
+|The Sponge Remote API client.
 
-|`sponge-rest-api-server`
+|`sponge-remote-api-server`
 |Yes
-|The Sponge REST API server.
+|The Sponge Remote API server.
+
+|`sponge-remote-api-tools`
+|Yes
+|The Sponge Remote API tools.
 
 |`sponge-grpc-api-client`
 |Yes
@@ -1372,10 +1376,6 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |`sponge-grpc-api-server`
 |Yes
 |The Sponge gRPC API server.
-
-|`sponge-remote-api-server`
-|Yes
-|The Sponge Remote API server (has dependencies on the REST and the gRPC API servers).
 
 |`sponge-tensorflow`
 |Yes

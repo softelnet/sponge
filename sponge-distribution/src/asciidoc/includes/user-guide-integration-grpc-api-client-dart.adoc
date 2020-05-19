@@ -9,13 +9,13 @@ import 'package:sponge_client_dart/sponge_client_dart.dart';
 import 'package:sponge_grpc_client_dart/sponge_grpc_client_dart.dart';
 
 void main() async {
-  // Create a new Sponge REST API client.
-  var restClient = SpongeRestClient(
-      SpongeRestClientConfiguration('http://localhost:8888'));
+  // Create a new Sponge Remote API client.
+  var spongeClient = SpongeClient(
+      SpongeClientConfiguration('http://localhost:8888'));
 
-  // Create a new Sponge gRPC API client associated with the REST API client.
+  // Create a new Sponge gRPC API client associated with the Remote API client.
   // Don't use insecure channel in production.
-  var grpcClient = DefaultSpongeGrpcClient(restClient,
+  var grpcClient = DefaultSpongeGrpcClient(spongeClient,
       channelOptions:
           ChannelOptions(credentials: const ChannelCredentials.insecure()));
 
@@ -29,12 +29,12 @@ void main() async {
 }
 ----
 
-The client follows the convention that a gRPC service port is a REST API port plus `1`. If the gRPC service uses a different port, set this port in the client configuration.
+The client follows the convention that a gRPC service port is a Remote API port plus `1`. If the gRPC service uses a different port, set this port in the client configuration.
 
 .Setting port in a gRPC API client
 [source,dart]
 ----
-DefaultSpongeGrpcClient(restClient,
+DefaultSpongeGrpcClient(spongeClient,
   configuration: SpongeGrpcClientConfiguration(port: 9000),
   channelOptions: ChannelOptions(credentials: const ChannelCredentials.insecure()));
 ----

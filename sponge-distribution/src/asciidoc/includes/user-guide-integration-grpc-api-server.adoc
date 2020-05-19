@@ -1,5 +1,5 @@
 = {sponge} gRPC API server
-The gRPC API server provides a {sponge} gRPC API service. The gRPC API server plugin (`GrpcApiServerPlugin`) starts the gRPC[https://grpc.io] server. The gRPC API server plugin requires the REST API plugin because it reuses some parts of the configuration.
+The gRPC API server provides a {sponge} gRPC API service. The gRPC API server plugin (`GrpcApiServerPlugin`) starts the gRPC[https://grpc.io] server. The gRPC API server plugin requires the Remote API plugin because it reuses some parts of the configuration.
 
 The default name of the gRPC API plugin (which can be used in knowledge bases) is `grpcApiServer`.
 
@@ -41,13 +41,13 @@ public static class Config extends SpongeCamelConfiguration {
 
     @Bean
     public SpongeEngine spongeEngine() {
-        return SpringSpongeEngine.builder().plugins(camelPlugin(), restApiPlugin(), grpcApiPlugin())
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), remoteApiPlugin(), grpcApiPlugin())
                 .config("sponge_config.xml").build();
     }
 
     @Bean
-    public RestApiServerPlugin restApiPlugin() {
-        return new RestApiServerPlugin();
+    public RemoteApiServerPlugin remoteApiPlugin() {
+        return new RemoteApiServerPlugin();
     }
 
     @Bean
@@ -86,12 +86,12 @@ Maven users will need to add the following dependency to their `pom.xml`:
 The gRPC server port can be set by a Java system property `sponge.grpc.port` or by setting the `port` property of the plugin or by a convention.
 
 == Security
-If the REST API server is published as HTTPS, the gRPC server will be published as secure (TLS) using the same SSL/TLS configuration as the REST API.
+If the Remote API server is published as HTTPS, the gRPC server will be published as secure (TLS) using the same SSL/TLS configuration as the Remote API.
 
-.Example of generating a PEM file from the JKS keystore used by the REST API
+.Example of generating a PEM file from the JKS keystore used by the Remote API
 [source,bash,subs="verbatim,attributes"]
 ----
-keytool -exportcert -rfc -file remote_api_selfsigned.pem -keystore remote_api_selfsigned.jks -alias rest_api -keypass sponge -storepass sponge
+keytool -exportcert -rfc -file remote_api_selfsigned.pem -keystore remote_api_selfsigned.jks -alias remote_api -keypass sponge -storepass sponge
 ----
 
 == Envoy proxy

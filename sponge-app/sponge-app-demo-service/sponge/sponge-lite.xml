@@ -76,7 +76,7 @@
             <file>classpath:sponge/engine/engine_admin_library.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" label="Security">
-            <file>rest_api_security.py</file>
+            <file>remote_api_security.py</file>
         </knowledgeBase>
     </knowledgeBases>
 
@@ -86,10 +86,10 @@
                 <spring camel="true" />
             </configuration>
         </plugin>
-        <plugin name="restApiServer" class="org.openksavi.sponge.restapi.server.RestApiServerPlugin">
+        <plugin name="remoteApiServer" class="org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin">
             <configuration>
                 <allowAnonymous>true</allowAnonymous>
-                <securityServiceClass>org.openksavi.sponge.restapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <securityServiceClass>org.openksavi.sponge.remoteapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
                 <registerServiceDiscovery>true</registerServiceDiscovery>
                 <publishReload>true</publishReload>
                 <prettyPrint>true</prettyPrint>

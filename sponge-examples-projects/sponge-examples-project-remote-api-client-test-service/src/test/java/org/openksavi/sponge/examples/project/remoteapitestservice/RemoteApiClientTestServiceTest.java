@@ -28,10 +28,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -62,13 +62,13 @@ public class RemoteApiClientTestServiceTest {
         environment.stop();
     }
 
-    protected SpongeRestClient createRestClient() {
-        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
+    protected SpongeClient createClient() {
+        return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
     }
 
     @Test
     public void testActionUppercase() {
-        try (SpongeRestClient client = createRestClient()) {
+        try (SpongeClient client = createClient()) {
             assertEquals("TEXT TO UPPERCASE", client.call("UpperCase", Arrays.asList("Text to uppercase")));
         }
     }

@@ -34,10 +34,10 @@ import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
-import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
-import org.openksavi.sponge.restapi.model.request.SpongeRequest;
-import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
-import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
+import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 
 /**
  * A set of common gRPC API utility methods.
@@ -49,62 +49,62 @@ public abstract class GrpcApiServerUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends SpongeRequest> T setupRestRequestHeader(TypeConverter typeConverter, T restRequest, RequestHeader header) {
+    public static <T extends SpongeRequest> T setupRemoteApiRequestHeader(TypeConverter typeConverter, T remoteApiRequest, RequestHeader header) {
         if (header != null) {
             if (!StringUtils.isEmpty(header.getId())) {
-                restRequest.getHeader().setId(header.getId());
+                remoteApiRequest.getHeader().setId(header.getId());
             }
             if (!StringUtils.isEmpty(header.getUsername())) {
-                restRequest.getHeader().setUsername(header.getUsername());
+                remoteApiRequest.getHeader().setUsername(header.getUsername());
             }
             if (!StringUtils.isEmpty(header.getPassword())) {
-                restRequest.getHeader().setPassword(header.getPassword());
+                remoteApiRequest.getHeader().setPassword(header.getPassword());
             }
             if (!StringUtils.isEmpty(header.getAuthToken())) {
-                restRequest.getHeader().setAuthToken(header.getAuthToken());
+                remoteApiRequest.getHeader().setAuthToken(header.getAuthToken());
             }
             if (header.hasFeatures()) {
                 try {
                     Map<String, Object> jsonFeatures =
                             (Map<String, Object>) typeConverter.getObjectMapper().readValue(header.getFeatures().getValueJson(), Map.class);
-                    restRequest.getHeader().setFeatures(jsonFeatures);
+                    remoteApiRequest.getHeader().setFeatures(jsonFeatures);
                 } catch (JsonProcessingException e) {
                     throw SpongeUtils.wrapException(e);
                 }
             }
         }
 
-        return restRequest;
+        return remoteApiRequest;
     }
 
-    public static GetVersionRequest createRestRequest(TypeConverter typeConverter, VersionRequest request) {
-        return setupRestRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
+    public static GetVersionRequest createRemoteApiRequest(TypeConverter typeConverter, VersionRequest request) {
+        return setupRemoteApiRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
-    public static SpongeRequest createFakeRestRequest(TypeConverter typeConverter, SubscribeRequest request) {
+    public static SpongeRequest createFakeRemoteApiRequest(TypeConverter typeConverter, SubscribeRequest request) {
         // Use a fake request.
-        return setupRestRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
+        return setupRemoteApiRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
     public static ResponseHeader createResponseHeader(TypeConverter typeConverter,
-            org.openksavi.sponge.restapi.model.response.ResponseHeader restHeader) {
+            org.openksavi.sponge.remoteapi.model.response.ResponseHeader remoteApiHeader) {
         ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
-        if (restHeader.getId() != null) {
-            headerBuilder.setId(restHeader.getId());
+        if (remoteApiHeader.getId() != null) {
+            headerBuilder.setId(remoteApiHeader.getId());
         }
-        if (restHeader.getErrorCode() != null) {
-            headerBuilder.setErrorCode(restHeader.getErrorCode());
+        if (remoteApiHeader.getErrorCode() != null) {
+            headerBuilder.setErrorCode(remoteApiHeader.getErrorCode());
         }
-        if (restHeader.getErrorMessage() != null) {
-            headerBuilder.setErrorMessage(restHeader.getErrorMessage());
+        if (remoteApiHeader.getErrorMessage() != null) {
+            headerBuilder.setErrorMessage(remoteApiHeader.getErrorMessage());
         }
-        if (restHeader.getDetailedErrorMessage() != null) {
-            headerBuilder.setDetailedErrorMessage(restHeader.getDetailedErrorMessage());
+        if (remoteApiHeader.getDetailedErrorMessage() != null) {
+            headerBuilder.setDetailedErrorMessage(remoteApiHeader.getDetailedErrorMessage());
         }
-        if (restHeader.getFeatures() != null) {
+        if (remoteApiHeader.getFeatures() != null) {
             try {
                 headerBuilder.setFeatures(ObjectValue.newBuilder()
-                        .setValueJson(typeConverter.getObjectMapper().writeValueAsString(restHeader.getFeatures())).build());
+                        .setValueJson(typeConverter.getObjectMapper().writeValueAsString(remoteApiHeader.getFeatures())).build());
             } catch (JsonProcessingException e) {
                 throw SpongeUtils.wrapException(e);
             }
@@ -113,12 +113,12 @@ public abstract class GrpcApiServerUtils {
         return headerBuilder.build();
     }
 
-    public static VersionResponse createResponse(TypeConverter typeConverter, GetVersionResponse restResponse) {
+    public static VersionResponse createResponse(TypeConverter typeConverter, GetVersionResponse remoteApiResponse) {
         VersionResponse.Builder builder =
-                VersionResponse.newBuilder().setHeader(createResponseHeader(typeConverter, restResponse.getHeader()));
+                VersionResponse.newBuilder().setHeader(createResponseHeader(typeConverter, remoteApiResponse.getHeader()));
 
-        if (restResponse.getBody().getVersion() != null) {
-            builder.setVersion(restResponse.getBody().getVersion());
+        if (remoteApiResponse.getBody().getVersion() != null) {
+            builder.setVersion(remoteApiResponse.getBody().getVersion());
         }
 
         return builder.build();

@@ -30,11 +30,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
+import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
-import org.openksavi.sponge.restapi.model.RestActionMeta;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -65,24 +65,24 @@ public class UserManagementTest {
         environment.stop();
     }
 
-    protected SpongeRestClient createRestClient() {
-        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
+    protected SpongeClient createClient() {
+        return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
     }
 
     @Test
     public void testUserManagement() {
         String signUpActionName = "SignUpWithEmail";
 
-        try (SpongeRestClient client = createRestClient()) {
+        try (SpongeClient client = createClient()) {
             // Anonymous.
-            List<RestActionMeta> anonymousActions = client.getActions();
+            List<RemoteActionMeta> anonymousActions = client.getActions();
             assertEquals(2, anonymousActions.size());
 
-            RestActionMeta loginAction = anonymousActions.stream()
+            RemoteActionMeta loginAction = anonymousActions.stream()
                     .filter(action -> Objects.equals(action.getFeatures().get("intent"), "login")).findFirst().get();
             assertEquals("Login", loginAction.getName());
 
-            RestActionMeta signUpAction = anonymousActions.stream()
+            RemoteActionMeta signUpAction = anonymousActions.stream()
                     .filter(action -> Objects.equals(action.getFeatures().get("intent"), "signUp")).findFirst().get();
             assertEquals(signUpActionName, signUpAction.getName());
 
@@ -91,9 +91,9 @@ public class UserManagementTest {
             client.call("Login", Arrays.asList(client.getConfiguration().getUsername(), client.getConfiguration().getPassword()));
 
             // Logged.
-            List<RestActionMeta> loggedActions = client.getActions();
+            List<RemoteActionMeta> loggedActions = client.getActions();
             assertEquals(5, loggedActions.size());
-            RestActionMeta logoutAction =
+            RemoteActionMeta logoutAction =
                     loggedActions.stream().filter(action -> Objects.equals(action.getFeatures().get("intent"), "logout")).findFirst().get();
             assertEquals("Logout", logoutAction.getName());
 

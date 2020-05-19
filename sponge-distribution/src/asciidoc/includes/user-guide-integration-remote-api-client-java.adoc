@@ -1,0 +1,44 @@
+= {sponge} Remote API client for Java
+The {sponge} Remote API client for Java simplifies connecting to a remote {sponge} Remote API server from applications written in Java. The default implementation uses the http://square.github.io/okhttp/[OkHttp] library. The Remote API client uses POST methods.
+
+IMPORTANT: The fully featured {sponge} Remote API client is the client for *Dart*. Clients for other languages may have less features. For more information check the client API.
+
+.Remote API client for an anonymous user
+[source,java]
+----
+try (SpongeClient client = new DefaultSpongeClient(SpongeClientConfiguration.builder()
+        .url("http://localhost:8080")
+        .build())) { // <1>
+    String upperCaseText = client.call(String.class, "UpperCase",  Arrays.asList("text")); // <2>
+}
+----
+<1> Create a new Remote API client.
+<2> Call the remote action.
+
+.Remote API client for a named user
+[source,java]
+----
+SpongeClient client = new DefaultSpongeClient(SpongeClientConfiguration.builder()
+        .url(String.format("http://localhost:%d", PORT))
+        .username(username)
+        .password(password)
+        .build());
+----
+
+`DefaultSpongeClient` performs best when you create a single instance and reuse it for all of your Remote API calls.
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/remoteapi/client/DefaultSpongeClient.html[`DefaultSpongeClient` Javadoc] and examples in the source code.
+
+[discrete]
+== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-remote-api-client</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+

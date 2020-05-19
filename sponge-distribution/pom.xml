@@ -32,7 +32,7 @@
         <spongeJavaDocUrl>${homepage}/docs/javadoc</spongeJavaDocUrl>
 
         <openApiDir>${project.build.directory}/openapi</openApiDir>
-        <openApiBasename>rest-api-openapi-specification</openApiBasename>
+        <openApiBasename>remote-api-openapi-specification</openApiBasename>
         <documentationCopyDir>${project.build.directory}/documentation-copy/documentation-copy</documentationCopyDir>
     </properties>
 
@@ -89,7 +89,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Generate a REST API OpenAPI specification JSON. -->
+                    <!-- Generate an RPC API OpenAPI specification JSON. -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
@@ -101,7 +101,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>org.openksavi.sponge.remoteapi.tools.RestApiServiceGenerateOpenApiSpecificationMain</mainClass>
+                                    <mainClass>org.openksavi.sponge.remoteapi.tools.RemoteApiServiceGenerateOpenApiSpecificationMain</mainClass>
                                     <commandlineArgs>${openApiDir}/${openApiBasename}.json</commandlineArgs>
                                     <cleanupDaemonThreads>false</cleanupDaemonThreads>
                                     <includeProjectDependencies>true</includeProjectDependencies>
@@ -115,7 +115,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Generate Asciidoc form the REST API OpenAPI specification JSON. -->
+                    <!-- Generate Asciidoc form the RPC API OpenAPI specification JSON. -->
                     <plugin>
                         <groupId>io.github.swagger2markup</groupId>
                         <artifactId>swagger2markup-maven-plugin</artifactId>

@@ -25,9 +25,9 @@ import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.java.JAction;
-import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
-import org.openksavi.sponge.restapi.server.RestApiService;
-import org.openksavi.sponge.restapi.server.security.UserContext;
+import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.RemoteApiService;
+import org.openksavi.sponge.remoteapi.server.security.UserContext;
 import org.openksavi.sponge.type.DynamicType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
@@ -38,7 +38,7 @@ import org.openksavi.sponge.type.value.DynamicValue;
 
 public class GrpcApiSendEvent extends JAction {
 
-    private RestApiServerPlugin plugin;
+    private RemoteApiServerPlugin plugin;
 
     @Override
     public void onConfigure() {
@@ -56,25 +56,25 @@ public class GrpcApiSendEvent extends JAction {
 
     @Override
     public void onInit() {
-        plugin = getSponge().getPlugin(RestApiServerPlugin.class);
+        plugin = getSponge().getPlugin(RemoteApiServerPlugin.class);
     }
 
     public void onCall(String name, DynamicValue<Map<String, Object>> attributes, String label, String description) {
         plugin.getService().sendEvent(name, attributes.getValue(), label, description,
-                getRestApiService().getSession().getUserAuthentication().getUserContext());
+                getRemoteApiService().getSession().getUserAuthentication().getUserContext());
     }
 
     @Override
     public void onProvideArgs(ProvideArgsContext context) {
         if (context.getProvide().contains("name")) {
             // Get the user from the current thread local session.
-            UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
+            UserContext userContext = getRemoteApiService().getSession().getUserAuthentication().getUserContext();
 
             List<AnnotatedValue<String>> annotatedValueSet = getSponge().getEventTypes().entrySet().stream()
                     // Get only visible event types.
                     .filter(entry -> ((Boolean) entry.getValue().getFeatures().getOrDefault(Features.VISIBLE, Boolean.TRUE)))
                     // Check permissions.
-                    .filter(entry -> getRestApiService().canSendEvent(userContext, entry.getKey()))
+                    .filter(entry -> getRemoteApiService().canSendEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
                             .withValueLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class GrpcApiSendEvent extends JAction {
         }
     }
 
-    private RestApiService getRestApiService() {
+    private RemoteApiService getRemoteApiService() {
         return plugin.getService();
     }
 }

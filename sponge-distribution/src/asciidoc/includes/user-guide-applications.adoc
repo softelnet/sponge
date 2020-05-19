@@ -1,9 +1,9 @@
 = Applications
 The {sponge} project contains a few predefined {sponge}-based applications that can be used ad hoc. Their source codes are placed under the `sponge-kb` multi-module project.
 
-[[rest-api-demo-service]]
-== REST API Demo Service
-The {sourcesUrl}/sponge-app/sponge-app-demo-service[Demo Service] use case shows how to deploy the REST API as a servlet. It uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+[[remote-api-demo-service]]
+== Remote API Demo Service
+The {sourcesUrl}/sponge-app/sponge-app-demo-service[Demo Service] use case shows how to deploy the Remote API as a servlet. It uses <<remote-api-server-simple-security-strategy,the simple security strategy>>.
 
 The demo can be launched in the read only mode by setting the Java system property `-Ddemo.readOnly=true`.
 
@@ -22,7 +22,7 @@ NOTE: The hosted Demo Service runs in the read only mode.
 
 [discrete]
 === Running in Docker
-The Docker image `openksavi/sponge-demo` contains a predefined REST API Demo Service running in Tomcat. It can be used as a {sponge} mobile client application playground in your local environment.
+The Docker image `openksavi/sponge-demo` contains a predefined Remote API Demo Service running in Tomcat. It can be used as a {sponge} mobile client application playground in your local environment.
 
 NOTE: This image doesn't work on Raspberry Pi. To run the Demo Service on Raspberry Pi see the next chapter.
 
@@ -47,7 +47,7 @@ docker stop sponge-demo
 docker run --name sponge-demo -it --rm -p 8080:8080 -p 8081:8081 --mount type=bind,source="$(pwd)/sponge",target=/opt/sponge openksavi/sponge-demo
 ----
 
-The port `8080` is used by the REST API and the port `8081` is used by the gRPC API.
+The port `8080` is used by the Remote API and the port `8081` is used by the gRPC API.
 
 .Verification
 [source,bash,subs="verbatim,attributes"]
@@ -82,22 +82,22 @@ curl -X POST -H "Content-type:application/json" http://localhost:8080/reload -d 
 
 [discrete]
 === Running in Docker on Raspberry Pi
-The Docker image `openksavi/sponge-demo-lite` contains the REST API Demo Service Light that can be run on Raspberry Pi. It can be used as a {sponge} mobile client application playground in your Raspberry Pi device. The Demo Service Light provides the same actions as the Demo Service except those related to the digit recognition. It doesn't contain Tensorflow and runs as a standalone application.
+The Docker image `openksavi/sponge-demo-lite` contains the Remote API Demo Service Light that can be run on Raspberry Pi. It can be used as a {sponge} mobile client application playground in your Raspberry Pi device. The Demo Service Light provides the same actions as the Demo Service except those related to the digit recognition. It doesn't contain Tensorflow and runs as a standalone application.
 
-.Running the REST API Demo Service Light in Docker on Raspberry Pi
+.Running the Remote API Demo Service Light in Docker on Raspberry Pi
 [source,bash,subs="verbatim,attributes"]
 ----
 docker pull openksavi/sponge-demo-lite
 
-docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.remoteApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
 ----
 
-The default port `1836` is used by the REST API and the port `1837` is used by the gRPC API.
+The default port `1836` is used by the Remote API and the port `1837` is used by the gRPC API.
 
-.Running the REST API Demo Service Light in Docker on Raspberry Pi on non standard ports
+.Running the Remote API Demo Service Light in Docker on Raspberry Pi on non standard ports
 [source,bash,subs="verbatim,attributes"]
 ----
-docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.restApiServer.port=1846 -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1846"
+docker run --name sponge-demo-lite -d --restart always --network=host openksavi/sponge-demo-lite -Dsponge.remoteApiServer.port=1846 -Dsponge.remoteApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1846"
 ----
 
 In that case the gRPC API will be published on port `1847`.
@@ -117,7 +117,7 @@ cd sponge-app/sponge-app-demo-service
 mvn clean install -Pall
 ----
 
-The resulting archive `target/sponge-demo-api.war` is the web application providing the Demo REST API service. The archive `target/sponge-scripts.zip` contains Sponge script files and the Digits recognition example files (see the TensorFlow integration chapter) that will be accessed by the web application.
+The resulting archive `target/sponge-demo-api.war` is the web application providing the Demo Remote API service. The archive `target/sponge-scripts.zip` contains Sponge script files and the Digits recognition example files (see the TensorFlow integration chapter) that will be accessed by the web application.
 
 Assuming that Tomcat is installed in `/opt/tomcat` and the Sponge script files and the Digits recognition example files are extracted into the `/opt/tomcat/sponge` directory, you should add the following properties to the `catalina.properties` file:
 ----
@@ -156,7 +156,7 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/vers
 === Running in Jetty
 You may also run this example using the Jetty server started by the maven command:
 
-.Example of the REST API servlet
+.Example of the Remote API servlet
 [source,bash,subs="verbatim,attributes"]
 ----
 cd sponge-app/sponge-app-demo-service
@@ -178,7 +178,7 @@ The {sponge} MPD Client Service provides a basic set of Music Player Demon (MPD)
 
 The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
 
-NOTE: One of the aims of the {sponge} MPD Client Service application is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a REST API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
+NOTE: One of the aims of the {sponge} MPD Client Service application is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a Remote API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
 
 [discrete]
 === Running in Docker
@@ -204,10 +204,10 @@ sudo usermod -aG docker pi
 
 ----
 docker pull openksavi/sponge-mpd
-docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.restApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.remoteApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
 ----
 
-Setting the `sponge.restApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service in a local network. If you want to change the service name, provide the `sponge.restApiServer.name` property as well, e.g. `-Dsponge.restApiServer.name="Docker MPD"`.
+Setting the `sponge.remoteApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service in a local network. If you want to change the service name, provide the `sponge.remoteApiServer.name` property as well, e.g. `-Dsponge.remoteApiServer.name="Docker MPD"`.
 
 * Check the {sponge} MPD service logs.
 

@@ -22,7 +22,7 @@ import java.util.List;
 import io.grpc.stub.StreamObserver;
 
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
-import org.openksavi.sponge.restapi.server.security.UserContext;
+import org.openksavi.sponge.remoteapi.server.security.UserContext;
 
 public class ServerSubscription {
 

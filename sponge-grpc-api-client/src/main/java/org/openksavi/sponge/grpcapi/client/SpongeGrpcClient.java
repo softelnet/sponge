@@ -23,8 +23,8 @@ import io.grpc.stub.StreamObserver;
 
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiBlockingStub;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiStub;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.model.RemoteEvent;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 
 /**
  * A Sponge gRPC API client.
@@ -46,7 +46,7 @@ public interface SpongeGrpcClient extends Closeable {
 
     SpongeGrpcApiStub getServiceAsyncStub();
 
-    SpongeRestClient getRestClient();
+    SpongeClient getSpongeClient();
 
     long getKeepAliveTime();
 

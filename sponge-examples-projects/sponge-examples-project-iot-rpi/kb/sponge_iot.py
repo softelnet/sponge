@@ -83,10 +83,10 @@ class StartNotificationTrigger(Trigger):
 def onStartup():
     sponge.call("SetLcd", ["Sponge starting...", "006030"])
 
-    # Manual start of the REST API (autoStart is turned off) because the REST API server must start after the Camel context has started.
+    # Manual start of the Remote API (autoStart is turned off) because the Remote API server must start after the Camel context has started.
     camel.waitForContextFullyStarted()
     camel.context.addRoutes(IoTRouteBuilder())
-    restApiServer.start()
+    remoteApiServer.start()
     grpcApiServer.start()
 
     sponge.call("SetLcd", ["Sponge started", "00f767"])

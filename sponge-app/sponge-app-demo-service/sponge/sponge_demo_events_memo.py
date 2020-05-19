@@ -2,7 +2,7 @@
 Sponge Knowledge base
 gRPC demo - Memo.
 """
-from org.openksavi.sponge.restapi.model import RemoteEvent
+from org.openksavi.sponge.remoteapi.model import RemoteEvent
 
 def onBeforeLoad():
     sponge.addEventType("memo", RecordType().withFields([

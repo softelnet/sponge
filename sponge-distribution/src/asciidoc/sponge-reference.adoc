@@ -10,8 +10,8 @@ include::sponge-user-guide.adoc[leveloffset=+1]
 include::sponge-mobile-client.adoc[leveloffset=+1]
 
 [appendix]
-== The REST API specification
-include::includes/rest-api-openapi-specification.adoc[leveloffset=+2]
+== The Remote API specification
+include::includes/remote-api-openapi-specification.adoc[leveloffset=+2]
 
 [appendix]
 include::sponge-release-notes.adoc[leveloffset=+1]

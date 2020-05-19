@@ -19,48 +19,54 @@
     <dependencies>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-server</artifactId>
+            <artifactId>sponge-remote-api-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-grpc-api-server</artifactId>
+            <artifactId>sponge-camel</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-swagger-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-security</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jmdns</groupId>
+            <artifactId>jmdns</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-test</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-client</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-grpc-api-client</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-remote-api-test-base</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-jython</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

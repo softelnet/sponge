@@ -39,8 +39,8 @@ import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
 import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
-import org.openksavi.sponge.restapi.RestApiConstants;
-import org.openksavi.sponge.restapi.server.RestApiServerPlugin;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
 
 /**
  * Sponge gRPC API server plugin.
@@ -55,7 +55,7 @@ public class GrpcApiServerPlugin extends JPlugin {
 
     public static final String KB_SUPPORT_PACKAGE_TO_SCAN = GrpcApiManageSubscription.class.getPackage().getName();
 
-    private RestApiServerPlugin restApiServerPlugin;
+    private RemoteApiServerPlugin remoteApiServerPlugin;
 
     private DefaultGrpcApiService service;
 
@@ -96,16 +96,16 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     public void start() {
-        if (restApiServerPlugin == null) {
-            // The REST API server plugin is required by the Sponge gRPC API.
-            setRestApiServerPlugin(getEngine().getOperations().getPlugin(RestApiServerPlugin.class));
+        if (remoteApiServerPlugin == null) {
+            // The Remote API server plugin is required by the Sponge gRPC API.
+            setRemoteApiServerPlugin(getEngine().getOperations().getPlugin(RemoteApiServerPlugin.class));
         }
 
-        Validate.notNull(restApiServerPlugin, "The REST API server plugin is required for the gRPC API server plugin");
+        Validate.notNull(remoteApiServerPlugin, "The Remote API server plugin is required for the gRPC API server plugin");
 
         startServer();
 
-        restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, true);
+        remoteApiServerPlugin.getService().setFeature(RemoteApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, true);
 
         getSponge().enableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
     }
@@ -121,7 +121,7 @@ public class GrpcApiServerPlugin extends JPlugin {
         }
 
         // Default port convention.
-        return restApiServerPlugin.getSettings().getPort() + 1;
+        return remoteApiServerPlugin.getSettings().getPort() + 1;
     }
 
     /**
@@ -139,8 +139,8 @@ public class GrpcApiServerPlugin extends JPlugin {
                 service = new DefaultGrpcApiService();
             }
             service.setEngine(getEngine());
-            service.setRestApiService(restApiServerPlugin.getService());
-            service.setSubscriptionManager(new ServerSubscriptionManager(getEngine(), restApiServerPlugin.getService()));
+            service.setRemoteApiService(remoteApiServerPlugin.getService());
+            service.setSubscriptionManager(new ServerSubscriptionManager(getEngine(), remoteApiServerPlugin.getService()));
 
             int port = resolveServerPort();
             NettyServerBuilder builder = NettyServerBuilder.forPort(port).addService(service);
@@ -149,9 +149,9 @@ public class GrpcApiServerPlugin extends JPlugin {
             // [https://github.com/grpc/grpc-java/blob/master/documentation/server-reflection-tutorial.md].
             builder.addService(ProtoReflectionService.newInstance());
 
-            SslConfiguration sslConfiguration = restApiServerPlugin.getService().getSettings().getSslConfiguration();
+            SslConfiguration sslConfiguration = remoteApiServerPlugin.getService().getSettings().getSslConfiguration();
             if (sslConfiguration != null) {
-                // Use the TLS configuration from the REST API server.
+                // Use the TLS configuration from the Remote API server.
                 builder.sslContext(GrpcSslContexts
                         .configure(SslContextBuilder.forServer(SpongeUtils.createKeyManagerFactory(sslConfiguration))).build());
             }
@@ -173,8 +173,8 @@ public class GrpcApiServerPlugin extends JPlugin {
     }
 
     public void stop() {
-        if (restApiServerPlugin != null) {
-            restApiServerPlugin.getService().setFeature(RestApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
+        if (remoteApiServerPlugin != null) {
+            remoteApiServerPlugin.getService().setFeature(RemoteApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
         }
 
         getSponge().disableJavaByScan(KB_CORE_PACKAGE_TO_SCAN);
@@ -216,12 +216,12 @@ public class GrpcApiServerPlugin extends JPlugin {
         service.pushEvent(event);
     }
 
-    public RestApiServerPlugin getRestApiServerPlugin() {
-        return restApiServerPlugin;
+    public RemoteApiServerPlugin getRemoteApiServerPlugin() {
+        return remoteApiServerPlugin;
     }
 
-    public void setRestApiServerPlugin(RestApiServerPlugin restApiServerPlugin) {
-        this.restApiServerPlugin = restApiServerPlugin;
+    public void setRemoteApiServerPlugin(RemoteApiServerPlugin remoteApiServerPlugin) {
+        this.remoteApiServerPlugin = remoteApiServerPlugin;
     }
 
     public DefaultGrpcApiService getService() {

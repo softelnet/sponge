@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.16.0-rc2</release.version>
+        <release.version>1.16.0-rc3</release.version>
         <release.date>2020-03-30</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -951,15 +951,15 @@
                 <module>sponge-reactivex</module>
                 <module>sponge-signal</module>
                 <module>sponge-features</module>
-                <module>sponge-rest-api-common</module>
-                <module>sponge-rest-api-client</module>
-                <module>sponge-rest-api-server</module>
-                <module>sponge-grpc-api-common</module>
-                <module>sponge-grpc-api-client</module>
-                <module>sponge-grpc-api-server</module>
+                <module>sponge-remote-api-common</module>
+                <module>sponge-remote-api-client</module>
                 <module>sponge-remote-api-server</module>
                 <module>sponge-remote-api-tools</module>
                 <module>sponge-remote-api-test-base</module>
+                <module>sponge-grpc-api-common</module>
+                <module>sponge-grpc-api-client</module>
+                <module>sponge-grpc-api-server</module>
+                <module>sponge-remote-api-integration-tests</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-kb</module>
@@ -1076,14 +1076,13 @@
                 <module>sponge-rpi-pi4j</module>
                 <module>sponge-reactivex</module>
                 <module>sponge-features</module>
-                <module>sponge-rest-api-common</module>
-                <module>sponge-rest-api-client</module>
-                <module>sponge-rest-api-server</module>
+                <module>sponge-remote-api-common</module>
+                <module>sponge-remote-api-client</module>
+                <module>sponge-remote-api-server</module>
+                <module>sponge-remote-api-tools</module>
                 <module>sponge-grpc-api-common</module>
                 <module>sponge-grpc-api-client</module>
                 <module>sponge-grpc-api-server</module>
-                <module>sponge-remote-api-server</module>
-                <module>sponge-remote-api-tools</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
                 <module>sponge-kb</module>

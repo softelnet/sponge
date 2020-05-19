@@ -69,7 +69,7 @@
         <Bug pattern="EI_EXPOSE_REP" />
     </Match>
     <Match>
-        <Class name="org.openksavi.sponge.restapi.util.RestApiUtils" />
+        <Class name="org.openksavi.sponge.remoteapi.util.RemoteApiUtils" />
         <Or>
             <Method name="unmarshalValue" />
         </Or>

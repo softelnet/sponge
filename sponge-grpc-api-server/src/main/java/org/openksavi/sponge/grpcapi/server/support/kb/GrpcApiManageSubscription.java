@@ -26,8 +26,8 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.features.Features;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.java.JAction;
-import org.openksavi.sponge.restapi.server.RestApiService;
-import org.openksavi.sponge.restapi.server.security.UserContext;
+import org.openksavi.sponge.remoteapi.server.RemoteApiService;
+import org.openksavi.sponge.remoteapi.server.security.UserContext;
 import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.StringType;
@@ -64,13 +64,13 @@ public class GrpcApiManageSubscription extends JAction {
     public void onProvideArgs(ProvideArgsContext context) {
         if (context.getProvide().contains("eventNames")) {
             // Get the user from the current thread local session.
-            UserContext userContext = getRestApiService().getSession().getUserAuthentication().getUserContext();
+            UserContext userContext = getRemoteApiService().getSession().getUserAuthentication().getUserContext();
 
             List<AnnotatedValue<String>> annotatedElementValueSet = getSponge().getEventTypes().entrySet().stream()
                     // Get only visible event types.
                     .filter(entry -> ((Boolean) entry.getValue().getFeatures().getOrDefault(Features.VISIBLE, Boolean.TRUE)))
                     // Check permissions.
-                    .filter(entry -> getRestApiService().canSubscribeEvent(userContext, entry.getKey()))
+                    .filter(entry -> getRemoteApiService().canSubscribeEvent(userContext, entry.getKey()))
                     .map(entry -> new AnnotatedValue<>(entry.getKey())
                             .withValueLabel(entry.getValue().getLabel() != null ? entry.getValue().getLabel() : entry.getKey()))
                     .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class GrpcApiManageSubscription extends JAction {
         }
     }
 
-    private RestApiService getRestApiService() {
-        return plugin.getRestApiServerPlugin().getService();
+    private RemoteApiService getRemoteApiService() {
+        return plugin.getRemoteApiServerPlugin().getService();
     }
 }

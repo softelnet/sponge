@@ -7,10 +7,11 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.0 (not released yet)
+* API change: The {sponge} REST API has been renamed to the {sponge} Remote API. This change resulted in a major refactoring of the server side (`sponge-remote-api-server`) and some adjustments of the client side (`sponge-remote-api-client`). The API concepts were clarified in the documentation.
 * API change: Changed the `EngineOperations.process` method to accept an executable and arguments and to return a process instance builder instead of a process definition. Moreover the `ProcessInstance.run()` method is always synchronous now. To run a new process asynchronously use the `ProcessInstance.runAsync()` method.
 * API change: Moved the `readOnly` flag from `ProvidedMeta` to `DataType`.
-* API change: Added `features` to the response header in the REST API.
-* API change: Added `ProvideActionArgsRequestBody.initial` in the REST API.
+* API change: Added `features` to the response header in the Remote API.
+* API change: Added `ProvideActionArgsRequestBody.initial` in the Remote API.
 * API change: Renamed `ProvideActionArgsRequestBody.features` and `ProvideArgsContext.features` to `argFeatures`.
 * API change: Added `minValue` and `maxValue` to `DateTimeType`.
 * API change: Introduced a `SubAction` typed feature for `contextActions`, `createAction`, `readAction`, `updateAction`, `deleteAction` and `activateAction` instead of string specifications.
@@ -22,7 +23,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Introduced predefined {sponge}-based applications that can be used ad hoc. Their projects are placed under the `sponge-kb` multi-module project.
 * Added `sponge-app-demo-service` and `sponge-app-mpd-mpc` predefined applications.
 * Added a license property to the engine configuration.
-* Added the `license` and the `description` to the REST API features.
+* Added the `license` and the `description` to the Remote API features.
 * Unshaded dependencies in the `sponge-core` and `sponge-jython` artifacts.
 * Added a new artifact `sponge-jython-shaded` that contains several shaded dependencies.
 * Added the `-l,--language <language>` option to the standalone commandline application.

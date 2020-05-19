@@ -1,0 +1,278 @@
+= {sponge} Remote API
+The {sponge} Remote API provides users a remote access to the key {sponge} functionalities.
+
+The {sponge} Remote API is an RPC (remote procedure call) style API similar (but not compatible) to JSON-RPC that adopts some REST concepts:
+
+* a request is sent the same way (e.g. via HTTP POST or GET) like JSON-RPC but doesn't contain a method name,
+* it uses different URLs for different operations like REST.
+
+The reason that the API is a mix of JSON-RPC and REST is that the key {sponge} Remote API operation is the {sponge} action call that is a kind of an RPC in itself.
+
+== Operations summary
+The following table contains a summary of the Remote API operations. For a complete list of operations see the <<_swagger_overview, specification>> generated using Swagger and https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup].
+
+.The Remote API operations summary
+[cols="2,1,4"]
+|===
+|Name |URI |Description
+
+|Get the Sponge version
+|`version`
+|Returns the Sponge version.
+
+|Get the API features
+|`features`
+|Returns the API features.
+
+|Login
+|`login`
+|User login. Used in a token-based authentication scenario.
+
+|Logout
+|`logout`
+|User logout. Used in a token-based authentication scenario.
+
+|Get knowledge bases
+|`knowledgeBases`
+|Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge basses).
+
+|Get actions
+|`actions`
+|Returns the metadata of actions that are available to the user. If you want to get metadata for specified actions, set the request property `name` to an action name or a Java-compatible regular expression. If you want to get only actions that have argument and result metadata specified in their configuration, set the request property `metadataRequired` to `true` (defaults to `false`). Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence number reflects the order in which categories or knowledge bases have been added to the engine. The optional request property `registeredTypes` is a flag for requesting registered types used in the actions in the result (defaults to `false`).
+
+|Call an action
+|`call`
+|Calls an action.
+
+|Provide action arguments
+|`actionArgs`
+|Returns _provided arguments_, i.e. values along with value sets of action arguments. The request accepts the following properties: `name` - the action name, `argNames` -  the optional list of argument names that are to be provided (if `null`, all provided arguments will be produced), `current` - the optional map of argument names and their current values passed from a client code.
+
+|Send a new event
+|`send`
+|Sends a new event.
+
+|Get event types
+|`eventTypes`
+|Returns the registered event types.
+
+|Reload knowledge bases
+|`reload`
+|Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
+|===
+
+The OpenAPI specification of the Remote API is included in the Appendix A of the {sponge} Reference Documentation.
+
+The {sponge} Remote API service can publish custom Remote API operations as well.
+
+In case of an error, a response HTTP status code will be `500`.
+
+== OpenAPI specification
+An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/doc`.
+
+NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for simple customized operations.
+
+== Request
+A request may contain base properties.
+
+.Base request properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`header`
+|No
+|A request header.
+
+|`body`
+|No
+|A request body.
+|===
+
+.Request header properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`id`
+|No
+|A request identifier. If it is present, the response will contain a header with same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
+
+|`username`
+|No
+|A username that may be used in a user/password authentication mode. In that case, if there is no username present, the _anonumous_ user is assumed.
+
+|`password`
+|No
+|A user password that may be used in a user/password authentication mode.
+
+|`authToken`
+|No
+|An authentication token that may be used in a token-based authentication mode.
+
+|`features`
+|No
+|Request features that will be saved in a Remote API session.
+|===
+
+The request features can be used for:
+
+* Setting a requested language if a knowledge base supports it.
+* Sending an API key to the service. For example, on the server side you could add an `OnSessionOpenListener` implementing the `onSessionOpen(RemoteApiSession session)` method that checks a value of `session.getFeatures().get("apiKey")`. If the API key is incorrect an exception will be thrown.
+
+NOTE: Request and response features are not converted by the feature converter.
+
+The {sponge} Remote API supports both POST and GET methods.
+
+.Examples of Remote API requests
+[source,bash]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/version
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/knowledgeBases
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"header":{"username":"john","password":"password"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"body":{"name":".*Case"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"body":{"name":"UpperCase","args":["test1"]}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/send -d '{"header":{"username":"john","password":"password"},"body":{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/reload
+
+curl http://localhost:1836/version
+curl http://localhost:1836/knowledgeBases
+curl -G "http://localhost:1836/call" --data-urlencode 'request={"body":{"name":"OutputStreamResultAction","args":[]}}'
+----
+
+== Response
+A response may contain base properties.
+
+.Base response properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`header`
+|No
+|A response header.
+
+|`body`
+|No
+|A response body.
+|===
+
+.Response header properties
+[cols="2,1,4"]
+|===
+|Name |Required |Description
+
+|`id`
+|No
+|A corresponding request id.
+
+|`errorCode`
+|No
+|An optional error code in case of server side error.
+
+|`errorMessage`
+|No
+|An optional error message in case of server side error.
+
+|`detailedErrorMessage`
+|No
+|An optional detailed error message in case of server side error.
+
+|`requestTime`
+|No
+|An optional request time, i.e. a server time (as Java Instant) of starting processing a request.
+
+|`responseTime`
+|No
+|An optional response time, i.e. a server time (as Java Instant) of finishing processing a request.
+
+|`features`
+|No
+|Response features that will be obtained from a Remote API session.
+|===
+
+.Examples of Remote API responses
+[source,bash]
+----
+{
+  "header" : {
+    "id" : null,
+    "errorCode" : null,
+    "errorMessage" : null,
+    "detailedErrorMessage" : null,
+    "requestTime" : "2019-12-14T20:17:26.769Z",
+    "responseTime" : "2019-12-14T20:17:26.770Z"
+  },
+  "body" : {
+    "result" : "TEST1"
+  }
+----
+
+== Security
+
+=== Authentication mode
+The Remote API supports a username/password and an authentication token authentication modes.
+
+.Authentication modes
+[cols="1,4"]
+|===
+|Name |Description
+
+|Username/password
+|Every request has to contain a username and a password. Invoking the `login` operation switches to the authentication token mode.
+
+|Authentication token
+|Every request has to contain an authentication token, returned by the `login` operation that has to be invoked earlier. It may not contain neither username nor password. The authentication token has an expiration time. When an operation returns an error message with an error code `INVALID_AUTH_TOKEN` you have to invoke the `login` operation once more to obtain a new authentication token.
+|===
+
+== API features
+
+.API features
+[cols="2,1,4"]
+|===
+|Name |Type |Description
+
+|`version`
+|`String`
+|The {sponge} engine version.
+
+|`name`
+|`String`
+|The Remote API service name.
+
+|`description`
+|`String`
+|The Remote API service description.
+
+|`license`
+|`String`
+|The Remote API service license.
+
+|`grpcEnabled`
+|`Boolean`
+|Set to `true` if the optional {sponge} gRPC API service is enabled.
+|===
+
+== Error codes
+
+.Remote API error codes
+[cols="1,2"]
+|===
+|Code |Description
+
+|`GENERIC`
+|A generic error.
+
+|`INVALID_AUTH_TOKEN`
+|Invalid or expired authentication token.
+
+|`INVALID_KB_VERSION`
+|An action version in the engine differs from the one passed to the Remote API from a client code.
+
+|`INVALID_USERNAME_PASSWORD`
+|Invalid username or password.
+
+|`INACTIVE_ACTION`
+|An action to be called is inactive.
+|===

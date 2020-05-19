@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-client</artifactId>
+            <artifactId>sponge-remote-api-client</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

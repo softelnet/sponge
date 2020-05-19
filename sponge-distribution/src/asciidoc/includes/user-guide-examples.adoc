@@ -113,7 +113,7 @@ include::{completeExamplesProjectIncludes}/sponge-examples-project-camel-rss-new
 == IoT on Raspberry Pi project
 The {sourcesUrl}/sponge-examples-projects/sponge-examples-project-iot-rpi[IoT on Raspberry Pi] project shows how to use {sponge} to read sensors, set actuators, take pictures, send SMS messages, send emails and execute OS commands.
 
-The {sponge} standalone command line application is installed on a Raspberry Pi with a GrovePi extension board. {sponge} provides a synchronous REST API to remotely call actions (that for example change state of actuators). It also sends sensor data (temperature, humidity and light) to an MQTT broker using Apache Camel. The project allows processing sensor data on two levels: locally on the Raspberry Pi edge device by {sponge} (to avoid sending too much data to a management system) or by an external system that connects to the MQTT broker.
+The {sponge} standalone command line application is installed on a Raspberry Pi with a GrovePi extension board. {sponge} provides a synchronous Remote API to remotely call actions (that for example change state of actuators). It also sends sensor data (temperature, humidity and light) to an MQTT broker using Apache Camel. The project allows processing sensor data on two levels: locally on the Raspberry Pi edge device by {sponge} (to avoid sending too much data to a management system) or by an external system that connects to the MQTT broker.
 
 [discrete]
 === The hardware
@@ -196,8 +196,8 @@ The `sponge_iot.properties` file allows the configuration of the service name, t
 Note that the provided password file `password.txt` stores sample passwords. For each user the password is: password.
 
 [discrete]
-=== REST API Actions
-The subset of {sponge} actions is published via the {sponge} REST API. The published actions have their metadata configured. These actions could be used by the {sponge} mobile client application to manage the IoT device using a GUI.
+=== Remote API Actions
+The subset of {sponge} actions is published via the {sponge} Remote API. The published actions have their metadata configured. These actions could be used by the {sponge} mobile client application to manage the IoT device using a GUI.
 
 .The published actions
 [cols="1,4"]
@@ -221,7 +221,7 @@ The subset of {sponge} actions is published via the {sponge} REST API. The publi
 |OsDmesg |Executes `dmesg` and returns the output as a markdown string.
 |===
 
-The REST API uses <<rest-api-server-simple-security-strategy,the simple security strategy>>.
+The Remote API uses <<remote-api-server-simple-security-strategy,the simple security strategy>>.
 
 [discrete]
 === MQTT

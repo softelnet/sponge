@@ -3,7 +3,7 @@ Sponge Knowledge Base
 User Management - Sign Up with an Email
 """
 
-from org.openksavi.sponge.restapi.server.security import User
+from org.openksavi.sponge.remoteapi.server.security import User
 
 class SignUpWithEmail(Action):
     def onConfigure(self):
@@ -21,5 +21,5 @@ class SignUpWithEmail(Action):
     def onCall(self, email, firstName, lastName, password, passwordConfirmation):
         if password != passwordConfirmation:
             raise Exception("Passwords don't match")
-        encryptedPassword = restApiServer.service.securityService.hashPassword(email, password)
-        restApiServer.service.securityService.addUser(User(email, encryptedPassword, ["standard"]))
+        encryptedPassword = remoteApiServer.service.securityService.hashPassword(email, password)
+        remoteApiServer.service.securityService.addUser(User(email, encryptedPassword, ["standard"]))

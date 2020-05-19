@@ -30,10 +30,10 @@ import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.grpcapi.server.util.GrpcApiServerUtils;
-import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
-import org.openksavi.sponge.restapi.model.response.GetVersionResponse;
-import org.openksavi.sponge.restapi.server.RestApiService;
-import org.openksavi.sponge.restapi.server.security.UserContext;
+import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.remoteapi.server.RemoteApiService;
+import org.openksavi.sponge.remoteapi.server.security.UserContext;
 
 public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
@@ -43,7 +43,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
     private ServerSubscriptionManager subscriptionManager;
 
-    private RestApiService restApiService;
+    private RemoteApiService remoteApiService;
 
     public DefaultGrpcApiService() {
     }
@@ -56,12 +56,12 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
         this.engine = engine;
     }
 
-    public RestApiService getRestApiService() {
-        return restApiService;
+    public RemoteApiService getRemoteApiService() {
+        return remoteApiService;
     }
 
-    public void setRestApiService(RestApiService restApiService) {
-        this.restApiService = restApiService;
+    public void setRemoteApiService(RemoteApiService remoteApiService) {
+        this.remoteApiService = remoteApiService;
     }
 
     public ServerSubscriptionManager getSubscriptionManager() {
@@ -75,13 +75,13 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
     @Override
     public void getVersion(VersionRequest request, StreamObserver<VersionResponse> responseObserver) {
         try {
-            GetVersionRequest restRequest = GrpcApiServerUtils.createRestRequest(restApiService.getTypeConverter(), request);
+            GetVersionRequest remoteApiRequest = GrpcApiServerUtils.createRemoteApiRequest(remoteApiService.getTypeConverter(), request);
 
             // Open a new session. The user will be set later in the service.
-            restApiService.openSession(createSession());
-            GetVersionResponse restResponse = restApiService.getVersion(restRequest);
+            remoteApiService.openSession(createSession());
+            GetVersionResponse remoteApiResponse = remoteApiService.getVersion(remoteApiRequest);
 
-            VersionResponse response = GrpcApiServerUtils.createResponse(restApiService.getTypeConverter(), restResponse);
+            VersionResponse response = GrpcApiServerUtils.createResponse(remoteApiService.getTypeConverter(), remoteApiResponse);
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -91,14 +91,14 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
             responseObserver.onError(GrpcApiServerUtils.createInternalException(e));
         } finally {
             // Close the session.
-            restApiService.closeSession();
+            remoteApiService.closeSession();
         }
     }
 
     protected void doSubscribe(long subscriptionId, SubscribeRequest request, StreamObserver<SubscribeResponse> responseObserver) {
         try {
-            // Open a new session. The user will be set later in the REST API service.
-            restApiService.openSession(createSession());
+            // Open a new session. The user will be set later in the Remote API service.
+            remoteApiService.openSession(createSession());
 
             // Check user credentials.
             UserContext userContext = authenticateRequest(request);
@@ -109,7 +109,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
                     request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId()) ? request.getHeader().getId() : null));
         } finally {
             // Close the session.
-            restApiService.closeSession();
+            remoteApiService.closeSession();
         }
     }
 
@@ -178,6 +178,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
     }
 
     protected UserContext authenticateRequest(SubscribeRequest request) {
-        return restApiService.authenticateRequest(GrpcApiServerUtils.createFakeRestRequest(restApiService.getTypeConverter(), request));
+        return remoteApiService
+                .authenticateRequest(GrpcApiServerUtils.createFakeRemoteApiRequest(remoteApiService.getTypeConverter(), request));
     }
 }

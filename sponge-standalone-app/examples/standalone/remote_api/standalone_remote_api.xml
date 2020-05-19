@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <knowledgeBases>
+        <knowledgeBase name="remoteApiKb" label="Remote API">
+            <file>standalone_remote_api.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <configuration>
+                <spring camel="true"/>
+            </configuration>
+        </plugin>
+        <plugin name="remoteApiServer" class="org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin">
+            <configuration>
+                <port>11836</port>
+                <autoStart>false</autoStart>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+

@@ -4,7 +4,7 @@
 :appName: Sponge Remote
 
 == Introduction
-The {appName} is a https://flutter.io[Flutter] mobile application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} REST API. All business logic has to be placed in {sponge} actions, so the only requirement to have the application working is to create your own {sponge} service by writing a knowledge base that define actions that will be visible and ready to run in the application or to connect to an existing {sponge} service.
+The {appName} is a https://flutter.io[Flutter] mobile application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} Remote API. All business logic has to be placed in {sponge} actions, so the only requirement to have the application working is to create your own {sponge} service by writing a knowledge base that define actions that will be visible and ready to run in the application or to connect to an existing {sponge} service.
 
 NOTE: The application is currently under development and is not officially published. It will be released as an open source.
 
@@ -35,7 +35,7 @@ The navigation drawer allows switching between the main screens.
 
 image::screens/mobile/actions_connection_list.png[title="Selecting a connection to the Sponge instance in the action list screen",width=300,pdfwidth=35%,scaledwidth=35%]
 
-You may configure many connections to {sponge} REST API services. The application allows you to connect to a single service at the same time.
+You may configure many connections to {sponge} Remote API services. The application allows you to connect to a single service at the same time.
 
 image::screens/mobile/connections.png[title="List of connections to Sponge instances",width=300,pdfwidth=35%,scaledwidth=35%]
 
@@ -177,7 +177,7 @@ image::screens/mobile/actions_markdown_result.png[title="The action Markdown for
 Actions may return a https://en.wikipedia.org/wiki/Markdown[Markdown] formatted text.
 
 === Events
-The {appName} can subscribe to {sponge} events. The subscription uses a {sponge} gRPC service published on a default port (i.e. the REST API port plus `1`). A user must have priviliges to subscribe to events and to send events.
+The {appName} can subscribe to {sponge} events. The subscription uses a {sponge} gRPC service published on a default port (i.e. the Remote API port plus `1`). A user must have priviliges to subscribe to events and to send events.
 
 There are a few places where {sponge} events are directly used in the application:
 
@@ -480,7 +480,7 @@ Partially supported.
 
 `DATE_TIME_ZONE` and `INSTANT` editing is not supported.
 
-The default format for `DATE` is `"yyyy-dd-MM"`. A format for `TIME` is required for the {sponge} REST API Dart client.
+The default format for `DATE` is `"yyyy-dd-MM"`. A format for `TIME` is required for the {sponge} Remote API Dart client.
 
 === `DynamicType`
 Partially supported. This functionality is considered experimental.
@@ -935,7 +935,7 @@ A data type property can be dynamically overwritten by a corresponding feature i
 |An optional index of a single indicated element in a list. This feature is experimental and is implemented only for pageable lists with a limited functionality. If an element is indicated, the GUI will show a button enabling a user to jump to that element (but only if a page containing such element is already loaded from the server). Another limitation is that a jump resets a saved scroll position of a list. To use this feature in the application, you have to turn the application setting "_Use scrollable indexed list_" on.
 |===
 
-A pagination uses the `provideActionArgs` REST API operation. The features `offset` and `limit` have to be set when invoking `provideActionArgs`. A provided, annotated list must have the `offset` and the `limit` set and optionally the `count`. A client code is responsible for setting `offset` and `limit`. An action `onProvideArgs` callback method is not required to support `offset` or `limit` if they are not set in the request. A page size is established by a client code.
+A pagination uses the `provideActionArgs` Remote API operation. The features `offset` and `limit` have to be set when invoking `provideActionArgs`. A provided, annotated list must have the `offset` and the `limit` set and optionally the `count`. A client code is responsible for setting `offset` and `limit`. An action `onProvideArgs` callback method is not required to support `offset` or `limit` if they are not set in the request. A page size is established by a client code.
 
 The pagination is supported only for primary (i.e. not nested) action arguments and only for read provided annotated lists.
 

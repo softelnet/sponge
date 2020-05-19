@@ -26,7 +26,7 @@ import io.grpc.stub.StreamObserver;
 import org.openksavi.sponge.grpcapi.client.util.GrpcClientUtils;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
-import org.openksavi.sponge.restapi.model.RemoteEvent;
+import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 
 /**
  * A client side event subscription.
@@ -83,7 +83,7 @@ public class ClientSubscription {
                     }
 
                     if (subscribed) {
-                        eventStreamObserver.onNext(GrpcClientUtils.createEventFromGrpc(grpcClient.getRestClient(), response.getEvent()));
+                        eventStreamObserver.onNext(GrpcClientUtils.createEventFromGrpc(grpcClient.getSpongeClient(), response.getEvent()));
                     }
                 }
 
@@ -116,13 +116,13 @@ public class ClientSubscription {
     }
 
     protected SubscribeRequest createAndSetupSubscribeRequest() {
-        if (grpcClient.getRestClient().getConfiguration().isAutoUseAuthToken()) {
+        if (grpcClient.getSpongeClient().getConfiguration().isAutoUseAuthToken()) {
             // Invoke the synchronous gRPC API operation to ensure the current authToken renewal. The auth token is shared
-            // by both the REST and gRPC connection. Here the `getVersion` operation is used.
+            // by both the Remote API and gRPC API connection. Here the `getVersion` operation is used.
             grpcClient.getVersion();
         }
 
-        return SubscribeRequest.newBuilder().setHeader(GrpcClientUtils.createRequestHeader(grpcClient.getRestClient()))
+        return SubscribeRequest.newBuilder().setHeader(GrpcClientUtils.createRequestHeader(grpcClient.getSpongeClient()))
                 .addAllEventNames(eventNames).setRegisteredTypeRequired(registeredTypeRequired).build();
     }
 

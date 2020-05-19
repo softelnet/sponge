@@ -1,0 +1,267 @@
+= {sponge} Remote API server
+The Remote API server provides a {sponge} Remote API service. The server plugin (`RemoteApiServerPlugin`) uses Apache Camel REST DSL in order to configure the service.
+
+The default name of the Remote API plugin (which can be used in knowledge bases) is `remoteApiServer`.
+
+.Key Remote API plugin configuration parameters
+[cols="1,1,4"]
+|===
+|Name |Type |Description
+
+|`autoStart`
+|`boolean`
+|If `true` then the Remote API service will start when the plugin starts up. Defaults to `true`.
+
+|`componentId`
+|`String`
+|The Camel REST component id. Defaults to `"jetty"`.
+
+|`host`
+|`String`
+|The Remote API host. It can be overwritten by a Java system property `sponge.remoteApiServer.host`.
+
+|`port`
+|`int`
+|The Remote API port. Defaults to `1836`. It can be overwritten by a Java system property `sponge.remoteApiServer.port`.
+
+|`path`
+|`String`
+|The Remote API path. Defaults to `null`. It can be overwritten by a Java system property `sponge.remoteApiServer.path`.
+
+|`name`
+|`String`
+|The Remote API name. It can be overwritten by a Java system property `sponge.remoteApiServer.name`.
+
+|`description`
+|`String`
+|The Remote API description.
+
+|`license`
+|`String`
+|The license text of a particular Remote API service.
+
+|`prettyPrint`
+|`boolean`
+|The pretty print option. Defaults to `false`.
+
+|`publicActions`
+|`List<ProcessorQualifiedName>`
+|Public actions.
+
+|`publicEvents`
+|`List<String>`
+|Public event names.
+
+|`sslConfiguration`
+|`SslConfiguration`
+|The SSL configuration.
+
+|`publishReload`
+|`boolean`
+|If `true` then the reload operation will be published. Defaults to `false`.
+
+|`routeBuilderClass`
+|`String`
+|The name of the class extending `RemoteApiRouteBuilder` (which is the default route builder).
+
+|`apiServiceClass`
+|`String`
+|The `RemoteApiService` implementation class name. Defaults to `DefaultRemoteApiService`.
+
+|`securityServiceClass`
+|`String`
+|The `RemoteApiSecurityService` implementation class name. Defaults to `NoSecuritySecurityService`.
+
+|`authTokenServiceClass`
+|`String`
+|The `RemoteApiAuthTokenService` implementation class name. The default implementation is `JwtRemoteApiAuthTokenService` that uses JSON Web Token (JWT) for Java https://github.com/jwtk/jjwt[JJWT] library. Note that tokens used by the default implementation are signed but not encrypted.
+
+|`authTokenExpirationDurationSeconds`
+|`Long`
+|The duration (in seconds) after which an authentication token will expire. The value `null` or less than or equal to 0 means infinity. Defaults to 30 minutes.
+
+|`includeResponseTimes`
+|`boolean`
+|The flag specifying if a response header should have request and response time set. Defaults to `true`.
+
+|`registerServiceDiscovery`
+|`boolean`
+|The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. on the local network) {sponge} services. Defaults to `true`.
+
+|`registerServiceDiscovery`
+|`boolean`
+|The flag specifying if the service should be registered in a service discovery. Defaults to `false`. It can be overwritten by a Java system property `sponge.remoteApiServer.registerServiceDiscovery`.
+
+|`serviceDiscoveryUrl`
+|`String`
+|The service URL used in a service discovery. It can be overwritten by a Java system property `sponge.remoteApiServer.serviceDiscoveryUrl`. This property automatically sets the `registerServiceDiscovery` flag to `true` as well.
+|===
+
+.The Remote API server plugin XML configuration example
+[source,xml,subs="verbatim,attributes"]
+----
+<sponge>
+    <plugins>
+        <plugin name="remoteApiServer" class="org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin">
+            <configuration>
+                <port>1836</port>
+                <autoStart>false</autoStart>
+            </configuration>
+        </plugin>
+    </plugins>
+</sponge>
+----
+
+.The Remote API server plugin Java configuration example
+[source,java]
+----
+@Configuration
+public static class Config extends SpongeCamelConfiguration {
+
+    @Bean
+    public SpongeEngine spongeEngine() {
+        return SpringSpongeEngine.builder().plugins(camelPlugin(), remoteApiPlugin())
+                .config("sponge_config.xml").build();
+    }
+
+    @Bean
+    public RemoteApiServerPlugin remoteApiPlugin() {
+        RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
+        plugin.setSecurityService(remoteApiSecurityService());
+
+        return plugin;
+    }
+
+    @Bean
+    public RemoteApiSecurityService remoteApiSecurityService() {
+        return new SimpleInMemorySecurityService();
+    }
+}
+----
+
+For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/remoteapi/server/RemoteApiServerPlugin.html[`RemoteApiServerPlugin` Javadoc].
+
+[discrete]
+== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml`:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-remote-api-server</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
+
+== Custom operations
+You can define a custom Remote API operation (using the `ActionDelegateRemoteApiOperation` class in the route builder) that delegates a Remote API request to an action call (e.g. to allow implementing an operation body in a scripting language but providing a static Remote API interface).
+
+== OpenAPI specification
+After starting the plugin, the online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be accesible.
+
+== JSON/Java mapping
+The Remote API uses the https://github.com/FasterXML/jackson[Jackson] library to process JSON. A transformation of action arguments and result values is determined by types specified in the corresponding action arguments and result metadata.
+
+The default Jackson configuration for the Remote API sets the ISO8601 format for dates.
+
+NOTE: A `BinaryType` value is marshalled to a base64 encoded string. This encoding adds significant overhead and should be used only for relatively small binary data.
+
+== Session
+For each request the Remote API service creates a thread local session. The session provides access to a logged user and a Camel exchange for a thread handling the request. The session can be accessed in an action via the Remote API server plugin.
+
+.Accessing the Remote API session
+[source,python]
+----
+class LowerCaseHello(Action):
+    def onConfigure(self):
+        self.withLabel("Hello with lower case")
+        self.withArg(StringType("text").withLabel("Text to lower case")).withResult(StringType().withLabel("Lower case text"))
+    def onCall(self, text):
+        return "Hello " + remoteApiServer.session.user.name + ": " + text.lower()
+----
+
+In order to handle a session lifecycle you can implement and set the on session open and the on session close listeners in the `RemoteApiService`.
+
+== Security
+The Remote API provides only simple security out of the box and only if turned on. All requests allow passing a username and a password. If the username is not set, the _anonymous_ user is assumed.
+
+A user may have roles.
+
+You may set a security strategy by providing an implementation of the `RemoteApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
+
+[[remote-api-server-simple-security-strategy]]
+=== Simple security strategy
+The simple security strategy uses in-memory user data or user data stored in a password file. User privileges and access to knowledge bases, actions and events are verified by calling {sponge} actions (`RemoteApiIsActionPublic`, `RemoteApiIsEventPublic`, `RemoteApiCanUseKnowledgeBase`, `RemoteApiCanSendEvent`, `RemoteApiCanSubscribeEvent`). Passwords are stored as SHA-512 hashes.
+
+.Example of the Remote API simple security
+[source,python]
+----
+# Simple access configuration: role -> knowledge base names regexps.
+ROLES_TO_KB = { "admin":[".*"], "anonymous":["demo", "digits", "demoForms.*"]}
+# Simple access configuration: role -> event names regexps.
+ROLES_TO_SEND_EVENT = { "admin":[".*"], "anonymous":[]}
+ROLES_TO_SUBSCRIBE_EVENT = { "admin":[".*"], "anonymous":["notification.*"]}
+
+class RemoteApiCanUseKnowledgeBase(Action):
+    def onCall(self, userContext, kbName):
+        return remoteApiServer.canAccessResource(ROLES_TO_KB, userContext, kbName)
+
+class RemoteApiCanSendEvent(Action):
+    def onCall(self, userContext, eventName):
+        return remoteApiServer.canAccessResource(ROLES_TO_SEND_EVENT, userContext, eventName)
+
+class RemoteApiCanSubscribeEvent(Action):
+    def onCall(self, userContext, eventName):
+        return remoteApiServer.canAccessResource(ROLES_TO_SUBSCRIBE_EVENT, userContext, eventName)
+
+def onStartup():
+    # Load users from a password file.
+    remoteApiServer.service.securityService.loadUsers()
+----
+
+A password file is specified by a `password.file` configuration property.
+
+For more information see examples in the source code.
+
+=== Adding a Remote API user to a password file
+A Remote API user password file is a way to configure users for a {sponge} Remote API simple security strategy. Each user has its entry in a separate line. The entry contains colon-separated: a username, a comma-separated list of groups and a hashed password.
+
+.Example of a password file
+[source,bash,subs="verbatim,attributes"]
+----
+admin:admin:86975030682e27eca6fa4fb90e9d4b4aa3b3efc381149385347c7573b0b7002d48b1462c7f2e20db7a48cffdcc329bb1b6868551b7372d19a2781571919cc831
+----
+
+The best way of adding a Remote API user to a password file is to use a predefined knowledge base `kb_add_remote_api_user.py` in a Docker container. The knowledge base requires an argument specifying a password file.
+
+.Adding a Remote API user
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm -v `pwd`:/opt/tmp openksavi/sponge -k "classpath*:/org/openksavi/sponge/remoteapi/server/kb_add_remote_api_user.py" -q /opt/tmp/password.txt
+----
+
+A password can be generated manually and added to a password file as well.
+
+.Generating a password hash manually
+[source,bash,subs="verbatim,attributes"]
+----
+# Note that the username must be lower case.
+echo -n username-password | shasum -a 512 | awk '{ print $1 }'
+----
+
+== HTTPS
+In production mode you should configure HTTPS. Otherwise your passwords could be sent in plain text over the network as a part of the Remote API JSON requests.
+
+== Service discovery
+The {sponge} Remote API can be registered using the the mDNS/DNS-SD service discovery to provide a zero-configuration connection setup for {sponge} Remote API clients in a local network.
+
+== Environment
+
+=== Standalone
+This is the default configuration that uses the embedded Jetty server.
+
+=== Servlet container
+The {sponge} Remote API service may also be deployed into a servlet container (e.g. https://tomcat.apache.org[Tomcat]) as a web application. See the <<remote-api-demo-service,Remote API Demo Service>> example.

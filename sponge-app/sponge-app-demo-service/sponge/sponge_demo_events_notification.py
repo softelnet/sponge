@@ -4,7 +4,7 @@ gRPC demo - Notification.
 """
 
 from java.util.concurrent.atomic import AtomicLong
-from org.openksavi.sponge.restapi.model import RemoteEvent
+from org.openksavi.sponge.remoteapi.model import RemoteEvent
 
 def onInit():
     sponge.setVariable("notificationNo", AtomicLong(1))

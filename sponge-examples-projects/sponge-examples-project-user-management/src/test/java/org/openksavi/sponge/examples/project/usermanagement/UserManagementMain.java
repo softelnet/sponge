@@ -19,15 +19,15 @@ package org.openksavi.sponge.examples.project.usermanagement;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.openksavi.sponge.remoteapi.server.RemoteApiServerConstants;
 import org.openksavi.sponge.remoteapi.test.base.RemoteApiTestEnvironment;
-import org.openksavi.sponge.restapi.server.RestApiServerConstants;
 
 public class UserManagementMain {
 
     public static void main(String... args) throws UnknownHostException {
-        System.setProperty(RestApiServerConstants.PROP_NAME, "USER MANAGEMENT");
+        System.setProperty(RemoteApiServerConstants.PROP_NAME, "USER MANAGEMENT");
 
-        System.setProperty(RestApiServerConstants.PROP_SERVICE_DISCOVERY_URL,
+        System.setProperty(RemoteApiServerConstants.PROP_SERVICE_DISCOVERY_URL,
                 String.format("http://%s:%s", InetAddress.getLocalHost().getHostAddress(), RemoteApiTestEnvironment.DEFAULT_PORT));
 
         new RemoteApiTestEnvironment().run();

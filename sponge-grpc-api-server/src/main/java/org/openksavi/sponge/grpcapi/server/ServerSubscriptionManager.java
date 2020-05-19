@@ -37,9 +37,9 @@ import org.openksavi.sponge.grpcapi.proto.Event;
 import org.openksavi.sponge.grpcapi.proto.ObjectValue;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
-import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
-import org.openksavi.sponge.restapi.server.RestApiService;
-import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
+import org.openksavi.sponge.remoteapi.server.RemoteApiService;
+import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.SpongeApiUtils;
 
@@ -52,15 +52,15 @@ public class ServerSubscriptionManager {
 
     private SpongeEngine engine;
 
-    private RestApiService restApiService;
+    private RemoteApiService remoteApiService;
 
     private AtomicLong currentSubscriptionId = new AtomicLong(0);
 
     private Map<Long, ServerSubscription> subscriptions = new ConcurrentHashMap<>();
 
-    public ServerSubscriptionManager(SpongeEngine engine, RestApiService restApiService) {
+    public ServerSubscriptionManager(SpongeEngine engine, RemoteApiService remoteApiService) {
         this.engine = engine;
-        this.restApiService = restApiService;
+        this.remoteApiService = remoteApiService;
     }
 
     public SpongeEngine getEngine() {
@@ -71,12 +71,12 @@ public class ServerSubscriptionManager {
         this.engine = engine;
     }
 
-    public RestApiService getRestApiService() {
-        return restApiService;
+    public RemoteApiService getRemoteApiService() {
+        return remoteApiService;
     }
 
-    public void setRestApiService(RestApiService restApiService) {
-        this.restApiService = restApiService;
+    public void setRemoteApiService(RemoteApiService remoteApiService) {
+        this.remoteApiService = remoteApiService;
     }
 
     public AtomicLong getCurrentSubscriptionId() {
@@ -110,7 +110,7 @@ public class ServerSubscriptionManager {
                         .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))
                 && (!subscription.isRegisteredTypeRequired() || hasEventType)
                 // Check subscribe privileges for the event instance.
-                && restApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName());
+                && remoteApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName());
     }
 
     public void pushEvent(org.openksavi.sponge.event.Event event) {
@@ -173,7 +173,7 @@ public class ServerSubscriptionManager {
 
         Map<String, Object> attributes = event.getAll();
         if (attributes != null) {
-            TypeConverter typeConverter = restApiService.getTypeConverter();
+            TypeConverter typeConverter = remoteApiService.getTypeConverter();
             ObjectValue.Builder attributesValueBuilder = ObjectValue.newBuilder();
 
             try {
@@ -197,7 +197,7 @@ public class ServerSubscriptionManager {
 
         Map<String, Object> features = event.getFeatures();
         if (features != null) {
-            TypeConverter typeConverter = restApiService.getTypeConverter();
+            TypeConverter typeConverter = remoteApiService.getTypeConverter();
             ObjectValue.Builder featuresValueBuilder = ObjectValue.newBuilder();
 
             try {

@@ -42,13 +42,13 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-server</artifactId>
+            <artifactId>sponge-remote-api-server</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-client</artifactId>
+            <artifactId>sponge-remote-api-client</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

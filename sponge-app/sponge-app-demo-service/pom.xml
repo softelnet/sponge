@@ -28,6 +28,10 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-grpc-api-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-tensorflow</artifactId>
         </dependency>
         <dependency>

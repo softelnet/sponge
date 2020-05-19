@@ -530,7 +530,7 @@ Otherwise add the following entry.
 For example `<file>spar:sponge-kb-mpd-mpc-\*.jar!/\*\*/\*.py</file>`, where the `sponge-kb-mpd-mpc-*.jar` is a file in the filesystem.
 
 == Knowledge base versioning
-You may specify a version number for a knowledge base as an integer. It could be useful for example to enforce version checking when calling actions via the REST API. You should set the version in the `onLoad` callback function. After editing the knowledge base file and before reloading the engine, you could increase the version number.
+You may specify a version number for a knowledge base as an integer. It could be useful for example to enforce version checking when calling actions via the Remote API. You should set the version in the `onLoad` callback function. After editing the knowledge base file and before reloading the engine, you could increase the version number.
 
 .Example of setting the knowledge base version.
 [source,python]

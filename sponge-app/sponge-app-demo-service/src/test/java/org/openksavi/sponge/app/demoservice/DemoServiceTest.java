@@ -30,9 +30,9 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -63,16 +63,16 @@ public class DemoServiceTest {
         environment.stop();
     }
 
-    protected SpongeRestClient createRestClient() {
-        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
+    protected SpongeClient createRemoteClient() {
+        return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
     }
 
     @Test
-    public void testRestCallPredict() {
+    public void testCallPredict() {
         byte[] imageData = SpongeUtils.readFileToByteArray(
                 Paths.get(System.getProperty(DemoServiceTestEnvironment.PROPERTY_DIGITS_HOME), "data/5_0.png").toString());
 
-        try (SpongeRestClient client = createRestClient()) {
+        try (SpongeClient client = createRemoteClient()) {
             assertEquals(5, client.call(Number.class, "DigitsPredict", Arrays.asList(imageData)));
         }
     }

@@ -28,6 +28,10 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
+            <artifactId>sponge-grpc-api-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openksavi.sponge</groupId>
             <artifactId>sponge-logging</artifactId>
         </dependency>
 
@@ -58,7 +62,7 @@
         </dependency>
         <dependency>
             <groupId>org.openksavi.sponge</groupId>
-            <artifactId>sponge-rest-api-client</artifactId>
+            <artifactId>sponge-remote-api-client</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -76,7 +80,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>sponge-rest-api-test-service</finalName>
+        <finalName>sponge-remote-api-test-service</finalName>
         <plugins>
             <!-- Allows running this example with mvn jetty:run. -->
             <!-- Test: curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/version -->

@@ -16,8 +16,8 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ----
 
-== The Digits recognition REST API service example
-This example shows how to expose the TensorFlow machine learning model trained for the https://en.wikipedia.org/wiki/MNIST_database[MNIST database] as a REST API service to recognize handwritten digits. For the complete source code see {sourcesUrl}/sponge-tensorflow. Please note that the Python language is used both in the {sponge} knowledge base (Jython version 2.7) and in the script running TensorFlow (CPython version 3).
+== The Digits recognition Remote API service example
+This example shows how to expose the TensorFlow machine learning model trained for the https://en.wikipedia.org/wiki/MNIST_database[MNIST database] as a Remote API service to recognize handwritten digits. For the complete source code see {sourcesUrl}/sponge-tensorflow. Please note that the Python language is used both in the {sponge} knowledge base (Jython version 2.7) and in the script running TensorFlow (CPython version 3).
 
 .CPython prerequisites
 [source,bash,subs="verbatim,attributes"]
@@ -43,12 +43,12 @@ source ./bin/activate
 |The Java interface of the image classifier Python service. This interface is used by Py4J to expose Python functionality to a Java process.
 
 |{tensorflowSourcesUrl}/digits/actions/digits_predict.py[`actions/digits_predict.py`]
-|The {sponge} knowledge base that contains definitions of actions that will be exposed in the {sponge} REST API service. The `DigitsPredict` action takes a binary representation of a PNG file and passes it to the running Python script file by invoking `ImageClassifierService.predict(byte[] image)` method. This method will be invoked on the remote object running in the Python process.
+|The {sponge} knowledge base that contains definitions of actions that will be exposed in the {sponge} Remote API service. The `DigitsPredict` action takes a binary representation of a PNG file and passes it to the running Python script file by invoking `ImageClassifierService.predict(byte[] image)` method. This method will be invoked on the remote object running in the Python process.
 
-|{tensorflowSourcesUrl}/digits/digits_rest_server.xml[`digits_rest_server.xml`]
-|The {sponge} configuration file that instructs {sponge} to create the Py4J plugin, execute the Python script file that will load a TensorFlow model and start the REST API server.
+|{tensorflowSourcesUrl}/digits/digits_remote_server.xml[`digits_remote_server.xml`]
+|The {sponge} configuration file that instructs {sponge} to create the Py4J plugin, execute the Python script file that will load a TensorFlow model and start the Remote API server.
 
-|{tensorflowSourcesUrl}/digits/digits_rest_server.py[`digits_rest_server.py`]
+|{tensorflowSourcesUrl}/digits/digits_remote_server.py[`digits_remote_server.py`]
 |The main {sponge} knowledge base file (compatible with Jython) for that example.
 
 |{tensorflowSourcesUrl}/digits/python/digits_model.py[`python/digits_model.py`]
@@ -61,4 +61,4 @@ source ./bin/activate
 |The auxiliary Python script file (compatible with CPython) that manually creates, trains and saves the model. It overrides the model file. Additionally the script plots the training and validation loss side by side, as well as the training and validation accuracy.
 |===
 
-NOTE: The {sponge} REST API configuration used for this example is not secure. In the production environment you should use HTTPS as well as user authentication.
+NOTE: The {sponge} Remote API configuration used for this example is not secure. In the production environment you should use HTTPS as well as user authentication.

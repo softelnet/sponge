@@ -37,11 +37,11 @@ import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiBlockingStub;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiStub;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClientException;
+import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
-import org.openksavi.sponge.restapi.client.SpongeClientException;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.model.RemoteEvent;
 
 /**
  * A base Sponge gRPC API client.
@@ -50,7 +50,7 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     private static final Logger logger = LoggerFactory.getLogger(BaseSpongeGrpcClient.class);
 
-    private SpongeRestClient restClient;
+    private SpongeClient spongeClient;
 
     private SpongeGrpcClientConfiguration configuration;
 
@@ -70,30 +70,30 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     private Lock lock = new ReentrantLock(true);
 
-    protected BaseSpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration,
+    protected BaseSpongeGrpcClient(SpongeClient spongeClient, SpongeGrpcClientConfiguration configuration,
             Consumer<T> channelBuilderConfigurer) {
-        this.restClient = restClient;
+        this.spongeClient = spongeClient;
         this.configuration = configuration;
         this.channelBuilderConfigurer = channelBuilderConfigurer;
 
         open();
     }
 
-    protected BaseSpongeGrpcClient(SpongeRestClient restClient, SpongeGrpcClientConfiguration configuration) {
-        this(restClient, configuration, null);
+    protected BaseSpongeGrpcClient(SpongeClient spongeClient, SpongeGrpcClientConfiguration configuration) {
+        this(spongeClient, configuration, null);
     }
 
-    protected BaseSpongeGrpcClient(SpongeRestClient restClient, Consumer<T> channelBuilderConfigurer) {
-        this(restClient, null, channelBuilderConfigurer);
+    protected BaseSpongeGrpcClient(SpongeClient spongeClient, Consumer<T> channelBuilderConfigurer) {
+        this(spongeClient, null, channelBuilderConfigurer);
     }
 
-    protected BaseSpongeGrpcClient(SpongeRestClient restClient) {
-        this(restClient, null, null);
+    protected BaseSpongeGrpcClient(SpongeClient spongeClient) {
+        this(spongeClient, null, null);
     }
 
     @Override
-    public SpongeRestClient getRestClient() {
-        return restClient;
+    public SpongeClient getSpongeClient() {
+        return spongeClient;
     }
 
     @Override
@@ -154,23 +154,23 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
                 return;
             }
 
-            URI restUri = new URI(restClient.getConfiguration().getUrl());
+            URI remoteUri = new URI(spongeClient.getConfiguration().getUrl());
 
-            String host = restUri.getHost();
+            String host = remoteUri.getHost();
 
             Integer port = configuration != null ? configuration.getPort() : null;
             if (port == null) {
-                // If the port is not configured explicitly, use the Sponge gRPC API service port convention: REST API port + 1.
-                int restPort = restUri.getPort() > -1 ? restUri.getPort() : (restClient.getConfiguration().isSsl() ? 443 : 80);
-                port = restPort + 1;
+                // If the port is not configured explicitly, use the Sponge gRPC API service port convention: Remote API port + 1.
+                int remotePort = remoteUri.getPort() > -1 ? remoteUri.getPort() : (spongeClient.getConfiguration().isSsl() ? 443 : 80);
+                port = remotePort + 1;
             }
 
             logger.info("Creating a new client to the Sponge gRPC API service on {}:{}", host, port);
 
             T channelBuilder = createChannelBuilder(host, port);
 
-            // If the REST API service is not HTTPS, use insecure gRPC.
-            if (!restClient.getConfiguration().isSsl()) {
+            // If the Remote API service is not HTTPS, use insecure gRPC.
+            if (!spongeClient.getConfiguration().isSsl()) {
                 channelBuilder.usePlaintext();
             }
 
@@ -234,12 +234,12 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     @Override
     public String getVersion() {
-        VersionRequest request = VersionRequest.newBuilder().setHeader(GrpcClientUtils.createRequestHeader(restClient)).build();
+        VersionRequest request = VersionRequest.newBuilder().setHeader(GrpcClientUtils.createRequestHeader(spongeClient)).build();
 
-        VersionResponse response = restClient.executeWithAuthentication(request, request.getHeader().getUsername(),
+        VersionResponse response = spongeClient.executeWithAuthentication(request, request.getHeader().getUsername(),
                 request.getHeader().getPassword(), request.getHeader().getAuthToken(), (VersionRequest req) -> {
                     VersionResponse versionResponse = serviceBlockingStub.getVersion(req);
-                    GrpcClientUtils.handleResponseHeader(restClient, "getVersion",
+                    GrpcClientUtils.handleResponseHeader(spongeClient, "getVersion",
                             versionResponse.hasHeader() ? versionResponse.getHeader() : null);
                     return versionResponse;
                 }, () -> {

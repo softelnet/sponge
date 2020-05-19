@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.app.demoservice.DemoServiceTestEnvironment;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.restapi.client.DefaultSpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.client.SpongeRestClientConfiguration;
+import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.test.util.TestUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -81,8 +81,8 @@ public class DemoServiceLoadTest {
         environment.stop();
     }
 
-    protected SpongeRestClient createRestClient() {
-        return new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
+    protected SpongeClient createRemoteClient() {
+        return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("http://localhost:%d", PORT)).build());
     }
 
     protected byte[] getImageData(int digit) {
@@ -91,7 +91,7 @@ public class DemoServiceLoadTest {
                         .toString());
     }
 
-    protected Callable<Void> createTestCallable(int threadNumber, List<Pair<Integer, byte[]>> images, SpongeRestClient client) {
+    protected Callable<Void> createTestCallable(int threadNumber, List<Pair<Integer, byte[]>> images, SpongeClient client) {
         return () -> {
             for (int i = 0; i < TEST_COUNT; i++) {
                 logger.info("Iteration ({}): {}/{}", threadNumber, i + 1, TEST_COUNT);
@@ -104,11 +104,11 @@ public class DemoServiceLoadTest {
     }
 
     @Test
-    public void testRestCallPredictLoad() throws Exception {
+    public void testCallPredictLoad() throws Exception {
         List<Pair<Integer, byte[]>> images =
                 Arrays.asList(1, 5, 7).stream().map(digit -> new ImmutablePair<>(digit, getImageData(digit))).collect(Collectors.toList());
 
-        try (SpongeRestClient client = createRestClient()) {
+        try (SpongeClient client = createRemoteClient()) {
             ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
             List<? extends Callable<Void>> tasks = IntStream.rangeClosed(1, THREAD_COUNT)
                     .mapToObj(threadNo -> createTestCallable(threadNo, images, client)).collect(Collectors.toList());

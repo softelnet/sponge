@@ -22,7 +22,7 @@ import java.util.Map;
 import org.openksavi.sponge.action.ProvideArgsContext;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JAction;
-import org.openksavi.sponge.restapi.model.RemoteEvent;
+import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 import org.openksavi.sponge.type.DateTimeKind;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.DynamicType;

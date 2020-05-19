@@ -30,12 +30,12 @@ import org.openksavi.sponge.grpcapi.proto.ObjectValue;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader.Builder;
 import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
-import org.openksavi.sponge.restapi.client.SpongeClientException;
-import org.openksavi.sponge.restapi.client.SpongeRestClient;
-import org.openksavi.sponge.restapi.feature.converter.FeaturesUtils;
-import org.openksavi.sponge.restapi.model.RemoteEvent;
-import org.openksavi.sponge.restapi.model.request.GetVersionRequest;
-import org.openksavi.sponge.restapi.type.converter.TypeConverter;
+import org.openksavi.sponge.remoteapi.client.SpongeClient;
+import org.openksavi.sponge.remoteapi.client.SpongeClientException;
+import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
+import org.openksavi.sponge.remoteapi.model.RemoteEvent;
+import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
+import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.RecordType;
 
 /**
@@ -48,7 +48,7 @@ public abstract class GrpcClientUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static RemoteEvent createEventFromGrpc(SpongeRestClient restClient, Event grpcEvent) {
+    public static RemoteEvent createEventFromGrpc(SpongeClient spongeClient, Event grpcEvent) {
         RemoteEvent event = new RemoteEvent();
 
         if (StringUtils.isNotEmpty(grpcEvent.getId())) {
@@ -77,12 +77,12 @@ public abstract class GrpcClientUtils {
             Validate.isTrue(!grpcEvent.getAttributes().hasValueAny(), "Any not supported for event attributes");
             if (StringUtils.isNotEmpty(grpcEvent.getAttributes().getValueJson())) {
                 try {
-                    TypeConverter typeConverter = restClient.getTypeConverter();
+                    TypeConverter typeConverter = spongeClient.getTypeConverter();
 
                     Map<String, Object> jsonAttributes = (Map<String, Object>) typeConverter.getObjectMapper()
                             .readValue(grpcEvent.getAttributes().getValueJson(), Map.class);
 
-                    RecordType eventType = restClient.getEventType(event.getName());
+                    RecordType eventType = spongeClient.getEventType(event.getName());
 
                     // Unmarshal event attributes only if the event type is registered.
                     if (eventType != null) {
@@ -102,7 +102,7 @@ public abstract class GrpcClientUtils {
             Validate.isTrue(!grpcEvent.getFeatures().hasValueAny(), "Any not supported for event features");
             if (StringUtils.isNotEmpty(grpcEvent.getFeatures().getValueJson())) {
                 try {
-                    TypeConverter typeConverter = restClient.getTypeConverter();
+                    TypeConverter typeConverter = spongeClient.getTypeConverter();
 
                     Map<String, Object> jsonFeatures = (Map<String, Object>) typeConverter.getObjectMapper()
                             .readValue(grpcEvent.getFeatures().getValueJson(), Map.class);
@@ -118,33 +118,32 @@ public abstract class GrpcClientUtils {
     }
 
     /**
-     * Uses the REST client in order to setup the gRPC request header by reusing the REST API authentication data.
+     * Uses the Remote API client in order to setup the gRPC request header by reusing the Remote API authentication data.
      *
-     * @param restClient the REST client.
+     * @param spongeClient the Remote API client.
      * @return the header.
      */
-    public static RequestHeader createRequestHeader(SpongeRestClient restClient) {
+    public static RequestHeader createRequestHeader(SpongeClient spongeClient) {
         // Create a fake request to obtain a header.
-        org.openksavi.sponge.restapi.model.request.RequestHeader restHeader = restClient.setupRequest(new GetVersionRequest()).getHeader();
+        org.openksavi.sponge.remoteapi.model.request.RequestHeader header = spongeClient.setupRequest(new GetVersionRequest()).getHeader();
 
         Builder builder = RequestHeader.newBuilder();
-        if (restHeader.getId() != null) {
-            builder.setId(restHeader.getId());
+        if (header.getId() != null) {
+            builder.setId(header.getId());
         }
-        if (restHeader.getUsername() != null) {
-            builder.setUsername(restHeader.getUsername());
+        if (header.getUsername() != null) {
+            builder.setUsername(header.getUsername());
         }
-        if (restHeader.getPassword() != null) {
-            builder.setPassword(restHeader.getPassword());
+        if (header.getPassword() != null) {
+            builder.setPassword(header.getPassword());
         }
-        if (restHeader.getAuthToken() != null) {
-            builder.setAuthToken(restHeader.getAuthToken());
+        if (header.getAuthToken() != null) {
+            builder.setAuthToken(header.getAuthToken());
         }
-        if (restHeader.getFeatures() != null) {
+        if (header.getFeatures() != null) {
             try {
                 builder.setFeatures(ObjectValue.newBuilder()
-                        .setValueJson(restClient.getTypeConverter().getObjectMapper().writeValueAsString(restHeader.getFeatures()))
-                        .build());
+                        .setValueJson(spongeClient.getTypeConverter().getObjectMapper().writeValueAsString(header.getFeatures())).build());
             } catch (JsonProcessingException e) {
                 throw new SpongeClientException(e);
             }
@@ -153,12 +152,12 @@ public abstract class GrpcClientUtils {
         return builder.build();
     }
 
-    public static void handleResponseHeader(SpongeRestClient restClient, String operation, ResponseHeader header) {
+    public static void handleResponseHeader(SpongeClient spongeClient, String operation, ResponseHeader header) {
         if (header == null) {
             return;
         }
 
-        restClient.handleResponseHeader(operation, StringUtils.isNotEmpty(header.getErrorCode()) ? header.getErrorCode() : null,
+        spongeClient.handleResponseHeader(operation, StringUtils.isNotEmpty(header.getErrorCode()) ? header.getErrorCode() : null,
                 StringUtils.isNotEmpty(header.getErrorMessage()) ? header.getErrorMessage() : null,
                 StringUtils.isNotEmpty(header.getDetailedErrorMessage()) ? header.getDetailedErrorMessage() : null);
     }

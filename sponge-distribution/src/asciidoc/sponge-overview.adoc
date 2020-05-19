@@ -13,7 +13,7 @@ There are several ways to use {sponge}:
 * *Embed* {sponge} as a software library in your *Java application* using Maven dependency.
 * Download the {sponge} *standalone command-line program* and use it in your environment.
 * Run the {sponge} *standalone command-line program in a Docker* container.
-* Connect to a {sponge} service via the *REST API*.
+* Connect to a {sponge} service via the *Remote API*.
 * Connect to a {sponge} service via the *Sponge Remote mobile application* (currently under development).
 
 Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. *Python*, *Ruby*, *Groovy*, *JavaScript* as well as in *Java* or *Kotlin*.
@@ -46,8 +46,8 @@ The main features of {sponge}:
 * The standalone command-line application allows, for example, *management of Camel routes without the need of writing Java code* (you may use any of the supported scripting languages or XML).
 * Supports *reloading of knowledge bases on the fly* (i.e. while the system is running).
 * Supports processing of streams of {sponge} events by using *http://reactivex.io[Reactive Extensions (ReactiveX)]*.
-* Allows *publishing a custom REST API of your application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
-* Provides *REST API client libraries* for *Java* and *Dart* to simplify writing a client code.
+* Allows *publishing a custom Remote API of your application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
+* Provides *Remote API client libraries* for *Java* and *Dart* to simplify writing a client code.
 * Provides integration with *https://www.tensorflow.org[TensorFlow]*, an open source *machine learning* framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
 * Provides *Sponge Remote* (_currently under development_), a *generic, minimalistic, opinionated mobile application* backed by a server-side business logic. The business logic is placed in {sponge} actions. Sponge Remote provides a generic GUI to call those actions. Sponge Remote could be useful in cases when a mobile GUI doesn't have to be customized.
 * Allows *development of mobile applications* using the *Sponge Flutter API* library (_currently under development_) for cases when the GUI that connects to {sponge} has to be customized.
@@ -57,7 +57,7 @@ The main features of {sponge}:
 {sponge} could be used as a component in various types of applications. Here are some examples.
 
 Task automation::
-Tasks could be programmed in any of the supported scripting languages as {sponge} actions, published via the REST API and call remotely in the {sponge} mobile client application.
+Tasks could be programmed in any of the supported scripting languages as {sponge} actions, published via the Remote API and call remotely in the {sponge} mobile client application.
 
 https://en.wikipedia.org/wiki/Internet_of_things[Internet of Things (IoT)]::
 {sponge} as a part of https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway] can locally process data provided by the devices in the field, thus only important data is sent to the central node where data is collected, stored and manipulated by enterprise applications.

@@ -4,25 +4,25 @@ The {sponge} gRPC API client for Java simplifies connecting to a remote {sponge}
 .gRPC API client
 [source,java]
 ----
-// Create a new Sponge REST API client.
-try (SpongeRestClient restClient = new DefaultSpongeRestClient(SpongeRestClientConfiguration.builder()
+// Create a new Sponge Remote API client.
+try (SpongeClient spongeClient = new DefaultSpongeClient(SpongeClientConfiguration.builder()
         .url("http://localhost:8080")
         .build())) {
-    // Create a new Sponge gRPC API client associated with the REST API client.
-    // It is assumed that this gRPC service is insecure because the REST API is published as HTTP.
-    try (SpongeGrpcClient grpcClient = new DefaultSpongeGrpcClient(restClient)) {
+    // Create a new Sponge gRPC API client associated with the Remote API client.
+    // It is assumed that this gRPC service is insecure because the Remote API is published as HTTP.
+    try (SpongeGrpcClient grpcClient = new DefaultSpongeGrpcClient(spongeClient)) {
         // Get the Sponge version.
         String version = grpcClient.getVersion();
     }
 }
 ----
 
-The client follows the convention that a gRPC service port is a REST API port plus `1`. If the gRPC service uses a different port, set this port in the client configuration.
+The client follows the convention that a gRPC service port is a Remote API port plus `1`. If the gRPC service uses a different port, set this port in the client configuration.
 
 .Setting port in a gRPC API client
 [source,java]
 ----
-new DefaultSpongeGrpcClient(restClient, SpongeGrpcClientConfiguration.builder().port(9000).build())
+new DefaultSpongeGrpcClient(spongeClient, SpongeGrpcClientConfiguration.builder().port(9000).build())
 ----
 
 For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/grpcapi/client/DefaultSpongeGrpcClient.html[`DefaultSpongeGrpcClient` Javadoc] and examples in the source code.
