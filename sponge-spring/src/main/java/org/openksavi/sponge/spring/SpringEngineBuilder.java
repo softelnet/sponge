@@ -46,4 +46,9 @@ public class SpringEngineBuilder extends EngineBuilder<SpringSpongeEngine> {
         engine.setAutoStartup(autoStartup);
         return this;
     }
+
+    public SpringEngineBuilder phase(int phase) {
+        engine.setPhase(phase);
+        return this;
+    }
 }

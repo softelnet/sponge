@@ -17,8 +17,6 @@
 package org.openksavi.sponge.spring;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
@@ -33,6 +31,8 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
     private ApplicationContext applicationContext;
 
     private boolean autoStartup = true;
+
+    private int phase = DEFAULT_PHASE;
 
     /**
      * Creates a new engine.
@@ -80,5 +80,14 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
         if (autoStartup) {
             shutdown();
         }
+    }
+
+    public void setPhase(int phase) {
+        this.phase = phase;
+    }
+
+    @Override
+    public int getPhase() {
+        return phase;
     }
 }
