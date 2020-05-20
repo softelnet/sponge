@@ -19,7 +19,7 @@ void main() async {
       channelOptions:
           ChannelOptions(credentials: const ChannelCredentials.insecure()));
 
-  // Get the Sponge version.
+  // Get the Sponge Remote API version.
   var version = await grpcClient.getVersion();
 
   print('Version: $version');

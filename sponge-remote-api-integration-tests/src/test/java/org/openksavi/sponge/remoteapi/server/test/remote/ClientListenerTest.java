@@ -66,7 +66,9 @@ public class ClientListenerTest extends BasicTestTemplate {
             String version = client.getVersion();
             client.getVersion();
 
+            // Works only if the API version is not set manually in the service.
             assertEquals(engine.getVersion(), version);
+
             assertEquals(3, requestStringList.size());
             assertEquals(3, responseStringList.size());
             assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null,\"features\":null}}",
@@ -91,6 +93,7 @@ public class ClientListenerTest extends BasicTestTemplate {
                     .build();
             String version = client.getVersion(new GetVersionRequest(), context).getBody().getVersion();
 
+            // Works only if the API version is not set manually in the service.
             assertEquals(engine.getVersion(), version);
 
             client.getVersion();

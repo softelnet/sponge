@@ -157,7 +157,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
 
 == Custom operations
-You can define a custom Remote API operation (using the `ActionDelegateRemoteApiOperation` class in the route builder) that delegates a Remote API request to an action call (e.g. to allow implementing an operation body in a scripting language but providing a static Remote API interface).
+You can define a custom Remote API operation (using the `ActionDelegateRemoteApiOperation.builder()` in the route builder) that delegates a Remote API request to an action call (e.g. to allow implementing an operation body in a scripting language but providing a static Remote API interface).
 
 == OpenAPI specification
 After starting the plugin, the online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be accesible.

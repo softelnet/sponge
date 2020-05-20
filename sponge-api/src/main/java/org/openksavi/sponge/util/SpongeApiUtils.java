@@ -83,7 +83,7 @@ public abstract class SpongeApiUtils {
     }
 
     // Sub-arguments only for records.
-    public static Map<String, DataType> createNamedActionArgTypesMap(ActionMeta actionMeta) {
+    public static Map<String, DataType> createNamedActionArgTypesMapRecursively(ActionMeta actionMeta) {
         Map<String, DataType> argTypesMap = new LinkedHashMap<>();
 
         traverseActionArguments(actionMeta, qualifiedType -> argTypesMap.put(qualifiedType.getPath(), qualifiedType.getType()), true);

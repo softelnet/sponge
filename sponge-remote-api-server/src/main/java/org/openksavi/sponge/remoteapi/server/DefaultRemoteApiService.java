@@ -57,6 +57,7 @@ import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteCategoryMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 import org.openksavi.sponge.remoteapi.model.RemoteKnowledgeBaseMeta;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest;
@@ -137,7 +138,8 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     protected void setupDefaultFeatures() {
-        setFeature(RemoteApiConstants.REMOTE_API_FEATURE_VERSION, getEngine().getVersion());
+        setFeature(RemoteApiConstants.REMOTE_API_FEATURE_SPONGE_VERSION, getEngine().getVersion());
+        setFeature(RemoteApiConstants.REMOTE_API_FEATURE_API_VERSION, settings.getVersion());
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_NAME, RemoteApiServerUtils.resolveServiceName(getEngine(), settings));
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_DESCRIPTION,
@@ -187,6 +189,10 @@ public class DefaultRemoteApiService implements RemoteApiService {
         //
     }
 
+    public String getApiVersion() {
+        return settings.getVersion() != null ? settings.getVersion() : getEngine().getVersion();
+    }
+
     @Override
     public GetVersionResponse getVersion(GetVersionRequest request) {
         try {
@@ -195,7 +201,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
                 authenticateRequest(request);
             }
 
-            return setupSuccessResponse(new GetVersionResponse(getEngine().getVersion()), request);
+            return setupSuccessResponse(new GetVersionResponse(getApiVersion()), request);
         } catch (Throwable e) {
             return handleError("Remote API getVersion", e, new GetVersionResponse(), request);
         }
@@ -382,6 +388,34 @@ public class DefaultRemoteApiService implements RemoteApiService {
                 return handleError(actionAdapter, e, new ActionCallResponse(), request);
             } else {
                 return handleError("Remote API call", e, new ActionCallResponse(), request);
+            }
+        }
+    }
+
+    @Override
+    public ActionCallResponse callNamed(ActionCallNamedRequest request) {
+        ActionAdapter actionAdapter = null;
+
+        try {
+            Validate.notNull(request, "The request must not be null");
+            UserContext userContext = authenticateRequest(request);
+
+            String actionName = request.getBody().getName();
+            actionAdapter = getActionAdapterForRequest(actionName, request.getBody().getQualifiedVersion(), userContext);
+
+            List<Object> argsAsList = request.getBody().getArgs() != null
+                    ? SpongeUtils.buildActionArgsList(actionAdapter, request.getBody().getArgs()) : null;
+
+            List<Object> args = unmarshalActionArgs(actionAdapter, argsAsList);
+
+            Object actionResult = getEngine().getOperations().call(actionName, args);
+
+            return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
+        } catch (Throwable e) {
+            if (actionAdapter != null) {
+                return handleError(actionAdapter, e, new ActionCallResponse(), request);
+            } else {
+                return handleError("Remote API callNamed", e, new ActionCallResponse(), request);
             }
         }
     }

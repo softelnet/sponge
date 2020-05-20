@@ -499,4 +499,39 @@ public class BaseEngineOperations implements EngineOperations {
     public boolean removeEventType(String eventTypeName) {
         return engine.removeEventType(eventTypeName);
     }
+
+    @Override
+    public Object call(String actionName, Map<String, ?> args) {
+        return engine.getActionManager().callAction(actionName, args);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T call(Class<T> resultClass, String actionName, Map<String, ?> args) {
+        Object result = call(actionName, args);
+
+        Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
+
+        return (T) result;
+    }
+
+    @Override
+    public ValueHolder<Object> callIfExists(String actionName, Map<String, ?> args) {
+        return engine.getActionManager().callActionIfExists(actionName, args);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName, Map<String, ?> args) {
+        ValueHolder<Object> resultHolder = callIfExists(actionName, args);
+
+        if (resultHolder == null) {
+            return null;
+        }
+
+        Object result = resultHolder.getValue();
+        Validate.isTrue(result == null || resultClass.isInstance(result), "Action result cannot be cast to expected class %s", resultClass);
+
+        return new ValueHolder<>((T) result);
+    }
 }

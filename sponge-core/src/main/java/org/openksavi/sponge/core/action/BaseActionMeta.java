@@ -18,6 +18,7 @@ package org.openksavi.sponge.core.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.core.BaseProcessorMeta;
@@ -60,6 +61,11 @@ public class BaseActionMeta extends BaseProcessorMeta implements ActionMeta {
     @Override
     public DataType getArg(String name) {
         return SpongeApiUtils.getActionArgType(args, name);
+    }
+
+    @Override
+    public boolean hasArg(String name) {
+        return args != null ? args.stream().anyMatch(arg -> Objects.equals(arg.getName(), name)) : false;
     }
 
     @Override

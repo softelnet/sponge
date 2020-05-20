@@ -94,6 +94,26 @@ public interface EngineOperations {
     <T> T call(Class<T> resultClass, String actionName);
 
     /**
+     * Calls the registered action with named arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
+     *
+     * @param actionName actionName the action name.
+     * @param args arguments to pass to action.
+     * @return result of action called for specified arguments.
+     */
+    Object call(String actionName, Map<String, ?> args);
+
+    /**
+     * Calls the registered action with named arguments. Throws {@code ProcessorNotFoundException} when such action is not registered.
+     *
+     * @param resultClass result class.
+     * @param actionName actionName the action name.
+     * @param args arguments to pass to action.
+     * @param <T> result type.
+     * @return result of action called for specified arguments.
+     */
+    <T> T call(Class<T> resultClass, String actionName, Map<String, ?> args);
+
+    /**
      * Calls the action if it exists.
      *
      * @param actionName actionName the action name.
@@ -130,6 +150,26 @@ public interface EngineOperations {
      * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
      */
     <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName);
+
+    /**
+     * Calls the action with named arguments if it exists.
+     *
+     * @param actionName actionName the action name.
+     * @param args arguments to pass to action.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    ValueHolder<Object> callIfExists(String actionName, Map<String, ?> args);
+
+    /**
+     * Calls the action with named arguments if it exists.
+     *
+     * @param resultClass result class.
+     * @param actionName actionName the action name.
+     * @param args arguments to pass to action.
+     * @param <T> result type.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    <T> ValueHolder<T> callIfExists(Class<T> resultClass, String actionName, Map<String, ?> args);
 
     /**
      * Informs if an action in a given context is active.

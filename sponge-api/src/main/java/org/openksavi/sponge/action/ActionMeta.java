@@ -57,6 +57,13 @@ public interface ActionMeta extends ProcessorMeta {
     DataType getArg(String name);
 
     /**
+     * Tells if an argument named {@code name} exists.
+     *
+     * @return {@code true} if an argument named {@code name} exists.
+     */
+    boolean hasArg(String name);
+
+    /**
      * Returns the result type or {@code null} in not specified.
      *
      * @return the result type.

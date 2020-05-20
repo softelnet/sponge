@@ -118,4 +118,29 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
                         && (actionNameRegexp == null || adapter.getMeta().getName().matches(actionNameRegexp)))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Object callAction(String actionName, Map<String, ?> args) {
+        ActionAdapter action = registeredActions.get(actionName);
+        if (action == null) {
+            throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
+        }
+
+        return callAction(action, args);
+    }
+
+    @Override
+    public Object callAction(ActionAdapter actionAdapter, Map<String, ?> args) {
+        return callAction(actionAdapter, SpongeUtils.buildActionArgsList(actionAdapter, args));
+    }
+
+    @Override
+    public ValueHolder<Object> callActionIfExists(String actionName, Map<String, ?> args) {
+        ActionAdapter action = registeredActions.get(actionName);
+        if (action == null) {
+            return null;
+        }
+
+        return new ValueHolder<>(callAction(action, args));
+    }
 }

@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.BodySpongeRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
@@ -167,8 +168,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
         getSettings().getOpenApiProperties().forEach((name, value) -> configuration.apiProperty(name, value));
 
-        configuration.apiProperty("api.version", String.valueOf(getSettings().getVersion()));
-
+        configuration.apiProperty("api.version", apiService.getApiVersion());
         configuration.apiProperty("api.title",
                 getSettings().getName() != null ? getSettings().getName() : RemoteApiServerConstants.DEFAULT_NAME);
 
@@ -362,7 +362,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                     }
                 }
 
-                O response = operation.getOperationHandler().apply(request, exchange);
+                O response = operation.getOperationHandler().handle(getRemoteApiService(), request, exchange);
 
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
@@ -388,39 +388,43 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
     protected void createDefaultOperations() {
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_VERSION, "Get the Sponge version", GetVersionRequest.class,
                 "The get Sponge version request", GetVersionResponse.class, "The Sponge version response",
-                (request, exchange) -> apiService.getVersion(request)));
+                (service, request, exchange) -> service.getVersion(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_FEATURES, "Get the API features", GetFeaturesRequest.class,
                 "The get API features request", GetFeaturesResponse.class, "The API features response",
-                (request, exchange) -> apiService.getFeatures(request)));
+                (service, request, exchange) -> service.getFeatures(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_LOGIN, "Login", LoginRequest.class, "The login request",
-                LoginResponse.class, "The login response", (request, exchange) -> apiService.login(request)));
+                LoginResponse.class, "The login response", (service, request, exchange) -> service.login(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "The logout request",
-                LogoutResponse.class, "The logout response", (request, exchange) -> apiService.logout(request)));
+                LogoutResponse.class, "The logout response", (service, request, exchange) -> service.logout(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_KNOWLEDGE_BASES, "Get knowledge bases",
                 GetKnowledgeBasesRequest.class, "The get knowledge bases request", GetKnowledgeBasesResponse.class,
-                "The get knowledge bases response", (request, exchange) -> apiService.getKnowledgeBases(request)));
+                "The get knowledge bases response", (service, request, exchange) -> service.getKnowledgeBases(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_ACTIONS, "Get actions", GetActionsRequest.class,
                 "The get actions request", GetActionsResponse.class, "The get actions response",
-                (request, exchange) -> apiService.getActions(request)));
+                (service, request, exchange) -> service.getActions(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_CALL, "Call an action", ActionCallRequest.class,
                 "The call action request", ActionCallResponse.class, "The action call response",
-                (request, exchange) -> apiService.call(request)));
+                (service, request, exchange) -> service.call(request)));
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_CALL_NAMED, "Call an action with named arguments",
+                ActionCallNamedRequest.class, "The call action with named arguments request", ActionCallResponse.class,
+                "The action call response", (service, request, exchange) -> service.callNamed(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class,
                 "The send event request", SendEventResponse.class, "The send event response",
-                (request, exchange) -> apiService.send(request)));
+                (service, request, exchange) -> service.send(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_IS_ACTION_ACTIVE, "Is action active",
                 IsActionActiveRequest.class, "The action active request", IsActionActiveResponse.class, "The action active response",
-                (request, exchange) -> apiService.isActionActive(request)));
+                (service, request, exchange) -> service.isActionActive(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_PROVIDE_ACTION_ARGS, "Provide action arguments",
                 ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
-                "The provide action arguments response", (request, exchange) -> apiService.provideActionArgs(request)));
+                "The provide action arguments response", (service, request, exchange) -> service.provideActionArgs(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
                 "The get event types request", GetEventTypesResponse.class, "The get event types response",
-                (request, exchange) -> apiService.getEventTypes(request)));
+                (service, request, exchange) -> service.getEventTypes(request)));
 
         if (getSettings().isPublishReload()) {
             addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,
-                    "The reload request", ReloadResponse.class, "The reload response", (request, exchange) -> apiService.reload(request)));
+                    "The reload request", ReloadResponse.class, "The reload response",
+                    (service, request, exchange) -> service.reload(request)));
         }
     }
 

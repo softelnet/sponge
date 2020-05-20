@@ -43,10 +43,10 @@ import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends SpongeResponse, A> extends RemoteApiOperation<I, O> {
 
     @SuppressWarnings("unchecked")
-    public ActionDelegateRemoteApiOperation(String name, String description, Class<I> requestClass, String requestDescription,
-            Class<O> responseClass, String responseDescription, String delegateActionName, RemoteApiService service,
-            Function<I, List<Object>> argsMapper, BiConsumer<O, A> resultMapper) {
-        super(name, description, requestClass, requestDescription, responseClass, responseDescription, (request, exchange) -> {
+    protected ActionDelegateRemoteApiOperation(String name, String description, Class<I> requestClass, String requestDescription,
+            Class<O> responseClass, String responseDescription, String actionName, Function<I, List<Object>> argsMapper,
+            BiConsumer<O, A> resultMapper) {
+        super(name, description, requestClass, requestDescription, responseClass, responseDescription, (service, request, exchange) -> {
             ActionCallRequest actionCallRequest = new ActionCallRequest();
 
             actionCallRequest.getHeader().setId(request.getHeader().getId());
@@ -56,9 +56,9 @@ public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends
             actionCallRequest.getHeader().setFeatures(request.getHeader().getFeatures());
 
             // The default naming convention for an action name if not provided.
-            final String actionName = delegateActionName != null ? delegateActionName : StringUtils.capitalize(name);
+            final String delegateActionName = actionName != null ? actionName : StringUtils.capitalize(name);
 
-            actionCallRequest.getBody().setName(actionName);
+            actionCallRequest.getBody().setName(delegateActionName);
             actionCallRequest.getBody().setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
 
             ActionCallResponse actionCallResponse = service.call(actionCallRequest);
@@ -76,7 +76,7 @@ public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends
 
                 resultMapper.accept(response, (A) rawResult);
             } else {
-                Validate.isInstanceOf(responseClass, rawResult, "The %s action result class is %s but should be %s", actionName,
+                Validate.isInstanceOf(responseClass, rawResult, "The %s action result class is %s but should be %s", delegateActionName,
                         rawResult != null ? rawResult.getClass() : null, responseClass);
 
                 response = (O) rawResult;
@@ -95,9 +95,86 @@ public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends
         });
     }
 
-    public ActionDelegateRemoteApiOperation(String type, String description, Class<I> requestClass, String requestDescription,
-            Class<O> responseClass, String responseDescription, String delegateActionName, RemoteApiService service) {
-        this(type, description, requestClass, requestDescription, responseClass, responseDescription, delegateActionName, service, null,
-                null);
+    public static <I extends SpongeRequest, O extends SpongeResponse, A> ActionDelegateRemoteApiOperationBuilder<I, O, A> builder() {
+        return new ActionDelegateRemoteApiOperationBuilder<>();
+    }
+
+    public static class ActionDelegateRemoteApiOperationBuilder<I extends SpongeRequest, O extends SpongeResponse, A> {
+
+        private String name;
+
+        private String description;
+
+        private Class<I> requestClass;
+
+        private String requestDescription;
+
+        private Class<O> responseClass;
+
+        private String responseDescription;
+
+        private String actionName;
+
+        private Function<I, List<Object>> argsMapper;
+
+        private BiConsumer<O, A> resultMapper;
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> requestClass(Class<I> requestClass) {
+            this.requestClass = requestClass;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> requestDescription(String requestDescription) {
+            this.requestDescription = requestDescription;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> responseClass(Class<O> responseClass) {
+            this.responseClass = responseClass;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> responseDescription(String responseDescription) {
+            this.responseDescription = responseDescription;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> actionName(String actionName) {
+            this.actionName = actionName;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> argsMapper(Function<I, List<Object>> argsMapper) {
+            this.argsMapper = argsMapper;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperationBuilder<I, O, A> resultMapper(BiConsumer<O, A> resultMapper) {
+            this.resultMapper = resultMapper;
+            return this;
+        }
+
+        public ActionDelegateRemoteApiOperation<I, O, A> build() {
+            Validate.notNull(name, "The operation name must be set");
+            Validate.notNull(requestClass, "The operation request class must be set");
+            Validate.notNull(requestDescription, "The operation request description must be set");
+            Validate.notNull(responseClass, "The operation response class must be set");
+            Validate.notNull(responseDescription, "The operation response description must be set");
+            Validate.notNull(argsMapper, "The action args mapper must be set");
+            Validate.notNull(resultMapper, "The action result mapper must be set");
+
+            return new ActionDelegateRemoteApiOperation<>(name, description, requestClass, requestDescription, responseClass,
+                    responseDescription, actionName, argsMapper, resultMapper);
+        }
     }
 }

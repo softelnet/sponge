@@ -36,6 +36,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -111,6 +112,7 @@ public abstract class BaseRemoteApiTestTemplate {
     @Test
     public void testVersion() {
         try (SpongeClient client = createClient()) {
+            // Works only if the API version is not set manually in the service.
             assertEquals(engine.getVersion(), client.getVersion());
         }
     }
@@ -129,8 +131,8 @@ public abstract class BaseRemoteApiTestTemplate {
     public void testFeatures() {
         try (SpongeClient client = createClient()) {
             Map<String, Object> features = client.getFeatures();
-            assertEquals(5, features.size());
-            assertEquals(engine.getVersion(), features.get(RemoteApiConstants.REMOTE_API_FEATURE_VERSION));
+            assertEquals(6, features.size());
+            assertEquals(engine.getVersion(), features.get(RemoteApiConstants.REMOTE_API_FEATURE_SPONGE_VERSION));
 
             assertEquals("Sponge Test Remote API", features.get(RemoteApiConstants.REMOTE_API_FEATURE_NAME));
             assertEquals("Sponge Test Remote API description", features.get(RemoteApiConstants.REMOTE_API_FEATURE_DESCRIPTION));
@@ -232,6 +234,23 @@ public abstract class BaseRemoteApiTestTemplate {
             assertEquals(arg1.toUpperCase(), result);
 
             await().atMost(30, TimeUnit.SECONDS).until(() -> engine.getOperations().getVariable(AtomicBoolean.class, "actionCalled").get());
+            assertFalse(engine.isError());
+        }
+    }
+
+    @Test
+    public void testCallNamed() {
+        try (SpongeClient client = createClient()) {
+            String arg1 = "test1";
+
+            Map<String, String> args = new LinkedHashMap<>();
+            args.put("text", arg1);
+
+            Object result = client.callNamed("UpperCase", args);
+
+            assertTrue(result instanceof String);
+            assertEquals(arg1.toUpperCase(), result);
+
             assertFalse(engine.isError());
         }
     }

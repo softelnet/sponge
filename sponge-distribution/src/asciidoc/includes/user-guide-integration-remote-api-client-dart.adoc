@@ -13,9 +13,9 @@ void main() async {
   var client = SpongeClient(
       SpongeClientConfiguration('http://localhost:8888'));
 
-  // Get the Sponge server version.
+  // Get the Sponge Remote API version.
   var version = await client.getVersion();
-  print('Sponge version: $version.');
+  print('Sponge Remote API version: $version.');
 
   // Get actions metadata.
   List<ActionMeta> actionsMeta = await client.getActions();
@@ -39,7 +39,7 @@ void main() async {
 }
 ----
 
-Unless noted otherwise in the release notes, versions of the Remote API client for Dart that have the same `major.minor` numbers as the {sponge} service are compatible.
+Unless noted otherwise in the release notes, versions of the Remote API client for Dart that have the same `major.minor` numbers as the {sponge} version are compatible. Note that the Sponge Remote API version can be different than the {sponge} version.
 
 The Remote API client for Dart is published as `sponge_client_dart` at https://pub.dartlang.org/packages/sponge_client_dart[pub.dartlang.org].
 

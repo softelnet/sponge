@@ -16,10 +16,6 @@
 
 package org.openksavi.sponge.remoteapi.server;
 
-import java.util.function.BiFunction;
-
-import org.apache.camel.Exchange;
-
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 
@@ -40,10 +36,10 @@ public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeRespons
 
     private String responseDescription;
 
-    private BiFunction<I, Exchange, O> operationHandler;
+    private RemoteApiOperationHandler<I, O> operationHandler;
 
     public RemoteApiOperation(String name, String description, Class<I> requestClass, String requestDescription, Class<O> responseClass,
-            String responseDescription, BiFunction<I, Exchange, O> operationHandler) {
+            String responseDescription, RemoteApiOperationHandler<I, O> operationHandler) {
         this.name = name;
         this.description = description;
         this.requestClass = requestClass;
@@ -101,11 +97,11 @@ public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeRespons
         this.responseDescription = responseDescription;
     }
 
-    public BiFunction<I, Exchange, O> getOperationHandler() {
+    public RemoteApiOperationHandler<I, O> getOperationHandler() {
         return operationHandler;
     }
 
-    public void setOperationHandler(BiFunction<I, Exchange, O> operationHandler) {
+    public void setOperationHandler(RemoteApiOperationHandler<I, O> operationHandler) {
         this.operationHandler = operationHandler;
     }
 }

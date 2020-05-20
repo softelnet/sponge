@@ -51,6 +51,7 @@ import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 import org.openksavi.sponge.remoteapi.model.RemoteKnowledgeBaseMeta;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionExecutionInfo;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
@@ -779,11 +780,15 @@ public abstract class BaseSpongeClient implements SpongeClient {
         }
 
         // Validate non-nullable arguments.
-        for (int i = 0; i < actionMeta.getArgs().size(); i++) {
-            DataType argType = actionMeta.getArgs().get(i);
-            Validate.isTrue(argType.isOptional() || argType.isNullable() || args.get(i) != null, "Action argument '%s' is not set",
-                    argType.getLabel() != null ? argType.getLabel() : argType.getName());
+        for (int i = 0; i < actionMeta.getArgs().size() && i < args.size(); i++) {
+            validateCallArg(actionMeta.getArgs().get(i), args.get(i));
         }
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected void validateCallArg(DataType argType, Object value) {
+        Validate.isTrue(argType.isOptional() || argType.isNullable() || value != null, "Action argument '%s' is not set",
+                argType.getLabel() != null ? argType.getLabel() : argType.getName());
     }
 
     protected List<Object> marshalActionCallArgs(RemoteActionMeta actionMeta, List<Object> args) {
@@ -795,6 +800,17 @@ public abstract class BaseSpongeClient implements SpongeClient {
         for (int i = 0; i < args.size(); i++) {
             result.add(typeConverter.marshal(actionMeta.getArgs().get(i), args.get(i)));
         }
+
+        return result;
+    }
+
+    protected Map<String, ?> marshalActionCallArgs(RemoteActionMeta actionMeta, Map<String, ?> args) {
+        if (args == null || actionMeta == null || actionMeta.getArgs() == null) {
+            return args;
+        }
+
+        Map<String, Object> result = new LinkedHashMap<>(args.size());
+        args.forEach((name, value) -> result.put(name, typeConverter.marshal(actionMeta.getArg(name), value)));
 
         return result;
     }
@@ -1100,5 +1116,52 @@ public abstract class BaseSpongeClient implements SpongeClient {
     @Override
     public String getCurrentAuthToken() {
         return currentAuthToken.get();
+    }
+
+    @Override
+    public ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta, boolean allowFetchMetadata,
+            SpongeRequestContext context) {
+        return doCallNamed(actionMeta != null ? actionMeta : getActionMeta(request.getBody().getName(), allowFetchMetadata), request,
+                context);
+    }
+
+    @Override
+    public ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta, boolean allowFetchMetadata) {
+        return callNamed(request, actionMeta, allowFetchMetadata, null);
+    }
+
+    @Override
+    public ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta) {
+        return callNamed(request, actionMeta, true);
+    }
+
+    @Override
+    public ActionCallResponse callNamed(ActionCallNamedRequest request) {
+        return callNamed(request, null);
+    }
+
+    @Override
+    public Object callNamed(String actionName, Map<String, ?> args) {
+        return callNamed(new ActionCallNamedRequest(actionName, args)).getBody().getResult();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T callNamed(Class<T> resultClass, String actionName, Map<String, ?> args) {
+        return (T) callNamed(actionName, args);
+    }
+
+    protected ActionCallResponse doCallNamed(RemoteActionMeta actionMeta, ActionCallNamedRequest request, SpongeRequestContext context) {
+        setupActionExecutionInfo(actionMeta, request.getBody());
+
+        // TODO validateCallArgs(actionMeta, request.getBody().getArgs());
+
+        request.getBody().setArgs(marshalActionCallArgs(actionMeta, request.getBody().getArgs()));
+
+        ActionCallResponse response = execute(RemoteApiConstants.OPERATION_CALL_NAMED, request, ActionCallResponse.class, context);
+
+        unmarshalCallResult(actionMeta, response);
+
+        return response;
     }
 }

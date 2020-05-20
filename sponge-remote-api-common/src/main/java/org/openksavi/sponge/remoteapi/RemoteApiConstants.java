@@ -23,8 +23,6 @@ import org.openksavi.sponge.remoteapi.model.RemoteEvent;
  */
 public final class RemoteApiConstants {
 
-    public static final int API_VERSION = 1;
-
     public static final String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
 
     public static final int DEFAULT_PORT = 1836;
@@ -42,6 +40,8 @@ public final class RemoteApiConstants {
     public static final String OPERATION_ACTIONS = "actions";
 
     public static final String OPERATION_CALL = "call";
+
+    public static final String OPERATION_CALL_NAMED = "callNamed";
 
     public static final String OPERATION_SEND = "send";
 
@@ -66,7 +66,9 @@ public final class RemoteApiConstants {
 
     public static final String ERROR_CODE_INACTIVE_ACTION = "INACTIVE_ACTION";
 
-    public static final String REMOTE_API_FEATURE_VERSION = "version";
+    public static final String REMOTE_API_FEATURE_SPONGE_VERSION = "spongeVersion";
+
+    public static final String REMOTE_API_FEATURE_API_VERSION = "apiVersion";
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 

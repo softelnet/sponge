@@ -63,6 +63,8 @@ public final class RemoteApiServerConstants {
 
     public static final String TAG_DESCRIPTION = "description";
 
+    public static final String TAG_VERSION = "version";
+
     public static final String TAG_LICENSE = "license";
 
     public static final String TAG_PRETTY_PRINT = "prettyPrint";
@@ -120,6 +122,8 @@ public final class RemoteApiServerConstants {
     public static final String PROP_PATH = "sponge.remoteApiServer.path";
 
     public static final String PROP_NAME = "sponge.remoteApiServer.name";
+
+    public static final String PROP_VERSION = "sponge.remoteApiServer.version";
 
     public static final String PROP_REGISTER_SERVICE_DISCOVERY = "sponge.remoteApiServer.registerServiceDiscovery";
 

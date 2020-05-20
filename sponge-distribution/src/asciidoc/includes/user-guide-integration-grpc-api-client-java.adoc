@@ -11,7 +11,7 @@ try (SpongeClient spongeClient = new DefaultSpongeClient(SpongeClientConfigurati
     // Create a new Sponge gRPC API client associated with the Remote API client.
     // It is assumed that this gRPC service is insecure because the Remote API is published as HTTP.
     try (SpongeGrpcClient grpcClient = new DefaultSpongeGrpcClient(spongeClient)) {
-        // Get the Sponge version.
+        // Get the Sponge Remote API version.
         String version = grpcClient.getVersion();
     }
 }

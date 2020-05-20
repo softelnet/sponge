@@ -13,9 +13,9 @@ The following table contains a summary of the gRPC API operations.
 |===
 |Name |URI |Description
 
-|Get the Sponge version
+|Get the Sponge Remote API version
 |`GetVersion`
-|Returns the Sponge version.
+|Returns the Sponge Remote API version.
 
 |Subscribe events
 |`Subscribe`

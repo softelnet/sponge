@@ -62,6 +62,26 @@ public interface ActionManager extends EngineModule {
     Object callAction(ActionAdapter actionAdapter, List<Object> args);
 
     /**
+     * Calls the action with named arguments. Throws {@code ProcessorNotFoundException} if the action is not registered.
+     *
+     * @param actionName the name of the registered action.
+     * @param args the arguments for the action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     *        action.
+     * @return the result of executing the action.
+     */
+    Object callAction(String actionName, Map<String, ?> args);
+
+    /**
+     * Calls the action with named arguments. Throws {@code ProcessorNotFoundException} if the action is not registered.
+     *
+     * @param actionAdapter the action adapter.
+     * @param args the arguments for the action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     *        action.
+     * @return the result of executing the action.
+     */
+    Object callAction(ActionAdapter actionAdapter, Map<String, ?> args);
+
+    /**
      * Calls the action if it exists.
      *
      * @param actionName the name of the registered action.
@@ -70,6 +90,16 @@ public interface ActionManager extends EngineModule {
      * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
      */
     ValueHolder<Object> callActionIfExists(String actionName, List<Object> args);
+
+    /**
+     * Calls the action with named arguments if it exists.
+     *
+     * @param actionName the name of the registered action.
+     * @param args the arguments for the action call. This parameter may be {@code null} and in that case no arguments will be passed to the
+     *        action.
+     * @return the action result wrapped in a value holder or {@code null} if the action is not registered.
+     */
+    ValueHolder<Object> callActionIfExists(String actionName, Map<String, ?> args);
 
     /**
      * Returns registered processor adapter map.

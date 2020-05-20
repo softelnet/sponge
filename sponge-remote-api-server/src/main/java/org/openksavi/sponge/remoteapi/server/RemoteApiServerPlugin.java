@@ -108,6 +108,7 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
 
         settings.setName(configuration.getString(RemoteApiServerConstants.TAG_NAME, settings.getName()));
         settings.setDescription(configuration.getString(RemoteApiServerConstants.TAG_DESCRIPTION, settings.getDescription()));
+        settings.setVersion(configuration.getString(RemoteApiServerConstants.TAG_VERSION, settings.getVersion()));
         settings.setLicense(configuration.getString(RemoteApiServerConstants.TAG_LICENSE, settings.getLicense()));
 
         settings.setPrettyPrint(configuration.getBoolean(RemoteApiServerConstants.TAG_PRETTY_PRINT, settings.isPrettyPrint()));
@@ -203,6 +204,11 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
         String propName = getEngine().getConfigurationManager().getProperty(RemoteApiServerConstants.PROP_NAME);
         if (propName != null) {
             settings.setName(propName.trim());
+        }
+
+        String propVersion = getEngine().getConfigurationManager().getProperty(RemoteApiServerConstants.PROP_VERSION);
+        if (propVersion != null) {
+            settings.setVersion(propVersion.trim());
         }
     }
 

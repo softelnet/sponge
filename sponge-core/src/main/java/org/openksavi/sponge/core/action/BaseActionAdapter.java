@@ -186,7 +186,7 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
     }
 
     private void validateArgProvided() {
-        Map<String, DataType> fullArgTypesMap = SpongeApiUtils.createNamedActionArgTypesMap(getMeta());
+        Map<String, DataType> fullArgTypesMap = SpongeApiUtils.createNamedActionArgTypesMapRecursively(getMeta());
 
         SpongeApiUtils.traverseActionArguments(getMeta(), qualifiedType -> {
             DataType type = qualifiedType.getType();

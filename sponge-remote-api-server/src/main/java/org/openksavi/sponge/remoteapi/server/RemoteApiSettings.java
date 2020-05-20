@@ -45,7 +45,7 @@ public class RemoteApiSettings {
     private String path;
 
     /** The API version. */
-    private int version = RemoteApiConstants.API_VERSION;
+    private String version;
 
     /** The API name. */
     private String name;
@@ -128,7 +128,7 @@ public class RemoteApiSettings {
         this.path = path;
     }
 
-    public int getVersion() {
+    public String getVersion() {
         return version;
     }
 
@@ -156,7 +156,7 @@ public class RemoteApiSettings {
         this.license = license;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 

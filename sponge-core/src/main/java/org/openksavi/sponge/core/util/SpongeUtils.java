@@ -90,6 +90,7 @@ import org.openksavi.sponge.ProcessorOperations;
 import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
 import org.openksavi.sponge.core.event.EventId;
@@ -983,5 +984,47 @@ public abstract class SpongeUtils {
         return engine.getKnowledgeBaseInterpreterFactoryProviders().stream()
                 .map((provider) -> provider.getKnowledgeBaseInterpreterFactory().getSupportedType())
                 .filter((type) -> Objects.equals(type.getLanguage(), language) && type.isScript()).findFirst().orElse(null);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static List<Object> buildActionArgsList(ActionAdapter actionAdapter, Map<String, ?> argsMap) {
+        if (argsMap == null) {
+            return null;
+        }
+
+        List<DataType> argsMeta = actionAdapter.getMeta().getArgs();
+        Validate.notNull(argsMeta, "Action %s doesn't have argument metadata", actionAdapter.getMeta().getName());
+
+        Map<String, Integer> indexes = getActionArgIndexes(actionAdapter, argsMap.keySet());
+
+        List<Object> args = new ArrayList<>(argsMeta.size());
+        argsMeta.forEach(argMeta -> args.add(null));
+
+        argsMap.forEach((name, value) -> args.set(indexes.get(name), argsMap.get(name)));
+
+        return args;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Map<String, Integer> getActionArgIndexes(ActionAdapter actionAdapter, Set<String> argNames) {
+        List<DataType> argsMeta = actionAdapter.getMeta().getArgs();
+        Validate.notNull(argsMeta, "Action %s doesn't have argument metadata", actionAdapter.getMeta().getName());
+
+        Map<String, Integer> indexes = new LinkedHashMap<>();
+        for (int i = 0; i < argsMeta.size(); i++) {
+            DataType argMeta = argsMeta.get(i);
+
+            if (argNames.contains(argMeta.getName())) {
+                indexes.put(argMeta.getName(), i);
+            }
+        }
+
+        // Validate if all of the argNames exist.
+        if (indexes.size() < argNames.size()) {
+            String notFoundArg = argNames.stream().filter(name -> !indexes.containsKey(name)).findFirst().orElseGet(() -> null);
+            Validate.isTrue(notFoundArg == null, "Argument %s not found in action %s", notFoundArg, actionAdapter.getMeta().getName());
+        }
+
+        return indexes;
     }
 }

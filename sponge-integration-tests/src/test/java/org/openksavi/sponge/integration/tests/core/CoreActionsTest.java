@@ -1474,4 +1474,42 @@ public class CoreActionsTest {
             engine.shutdown();
         }
     }
+
+    @Test
+    public void testActionCallNamed() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call.py").build();
+        engine.startup();
+
+        try {
+            String text = "TeXt";
+            Map<String, String> args = new LinkedHashMap<>();
+            args.put("text", text);
+            String result = engine.getOperations().call(String.class, "UpperCase", args);
+
+            assertEquals(text.toUpperCase(), result);
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
+    
+    @Test
+    public void testActionCallNamedError() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call.py").build();
+        engine.startup();
+
+        try {
+            String text = "TeXt";
+            Map<String, String> args = new LinkedHashMap<>();
+            args.put("text", text);
+            String result = engine.getOperations().call(String.class, "UpperCase", args);
+
+            assertEquals(text.toUpperCase(), result);
+
+            assertFalse(engine.isError());
+        } finally {
+            engine.shutdown();
+        }
+    }
 }
