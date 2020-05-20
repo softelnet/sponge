@@ -66,6 +66,7 @@ public class RemoteApiTestServiceSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 
         plugin.getSettings().setPrettyPrint(true);
+        plugin.getSettings().setIncludeResponseTimes(true);
 
         plugin.setSecurityService(remoteApiSecurityService());
 

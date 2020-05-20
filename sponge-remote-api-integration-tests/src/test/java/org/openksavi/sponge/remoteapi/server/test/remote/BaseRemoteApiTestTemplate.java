@@ -263,8 +263,9 @@ public abstract class BaseRemoteApiTestTemplate {
             RemoteActionMeta actionMeta = client.getActionMeta("UpperCase");
             actionMeta.setQualifiedVersion(new ProcessorQualifiedVersion(1, 1));
 
-            assertThrows(InvalidKnowledgeBaseVersionException.class, () -> client.call("UpperCase", Arrays.asList(arg1)),
-                    "The expected action qualified version (1.1) differs from the actual (2.2)");
+            assertEquals("The expected action qualified version (1.1) differs from the actual (2.2)",
+                    assertThrows(InvalidKnowledgeBaseVersionException.class, () -> client.call("UpperCase", Arrays.asList(arg1)))
+                            .getMessage());
         } finally {
             engine.clearError();
         }

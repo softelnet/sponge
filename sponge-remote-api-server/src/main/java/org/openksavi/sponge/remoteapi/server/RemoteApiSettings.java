@@ -87,7 +87,7 @@ public class RemoteApiSettings {
 
     private Map<String, String> openApiProperties = Collections.synchronizedMap(new LinkedHashMap<>());
 
-    /** The flag specifying if a response header should have request and response time set. Defaults to {@code true}. */
+    /** The flag specifying if a response header should have request and response time set. Defaults to {@code false}. */
     private boolean includeResponseTimes = RemoteApiServerConstants.DEFAULT_INCLUDE_RESPONSE_TIMES;
 
     /** The flag specifying if the service should be registered in a service discovery. Defaults to {@code false}. */

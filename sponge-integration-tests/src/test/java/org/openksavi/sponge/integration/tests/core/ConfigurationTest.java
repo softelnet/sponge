@@ -218,7 +218,8 @@ public class ConfigurationTest {
         SpongeEngine engine =
                 DefaultSpongeEngine.builder().config("config_in_home.xml").property(ConfigurationConstants.PROP_HOME, null).build();
 
-        assertThrows(ConfigException.class, () -> engine.startup(), "Configuration file config_in_home.xml not found");
+        assertEquals("Configuration file config_in_home.xml not found",
+                assertThrows(ConfigException.class, () -> engine.startup()).getMessage());
 
         try {
             assertTrue(engine.isError());

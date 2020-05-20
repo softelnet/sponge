@@ -82,7 +82,7 @@ The default name of the Remote API plugin (which can be used in knowledge bases)
 
 |`includeResponseTimes`
 |`boolean`
-|The flag specifying if a response header should have request and response time set. Defaults to `true`.
+|The flag specifying if a response header should have request and response time set. Defaults to `false`.
 
 |`registerServiceDiscovery`
 |`boolean`

@@ -63,6 +63,7 @@ public abstract class BaseHttpsRemoteApiTest extends BaseRemoteApiTestTemplate {
 
             plugin.getSettings().setAllowAnonymous(true);
             plugin.getSettings().setPublishReload(true);
+            plugin.getSettings().setIncludeResponseTimes(true);
             plugin.setSecurityService(remoteApiSecurityService());
 
             RemoteApiTestUtils.setupRemoteService(plugin.getSettings());

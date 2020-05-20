@@ -11,3 +11,16 @@ class UpperCase(Action):
         ).withResult(StringType().withLabel("Upper case text"))
     def onCall(self, text):
         return text.upper()
+
+class ActionDelegateWithNamedArgs(Action):
+    def onConfigure(self):
+        self.withArgs([
+            StringType("actionName"),
+            MapType("actionArgs").withKey(StringType()).withValue(AnyType())
+        ]).withResult(AnyType())
+    def onCall(self, actionName, actionArgs):
+        return sponge.call(actionName, actionArgs)
+
+class UpperCaseNoMeta(Action):
+    def onCall(self, text):
+        return text.upper()

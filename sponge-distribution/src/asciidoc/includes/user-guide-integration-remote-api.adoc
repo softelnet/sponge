@@ -18,7 +18,7 @@ The following table contains a summary of the Remote API operations. For a compl
 
 |Get the Sponge Remote API version
 |`version`
-|Returns the Sponge Remote API version if it is set in the configuration, otherwise returns the {sponge} version.
+|Returns the Sponge Remote API version if it is set in the configuration, otherwise returns the {sponge} engine version.
 
 |Get the API features
 |`features`
@@ -46,7 +46,7 @@ The following table contains a summary of the Remote API operations. For a compl
 
 |Call an action with named arguments
 |`callNamed`
-|Calls an action with named arguments as a map.
+|Calls an action with named arguments (as a map). The action is required to have arguments metadata.
 
 |Provide action arguments
 |`actionArgs`

@@ -51,6 +51,7 @@ public class BasicTestTemplate {
             RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
             plugin.getSettings().setPort(spongeRemoteApiPort());
             plugin.getSettings().setPrettyPrint(true);
+            plugin.getSettings().setIncludeResponseTimes(true);
 
             return plugin;
         }

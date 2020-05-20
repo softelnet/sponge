@@ -107,7 +107,7 @@ public final class RemoteApiServerConstants {
 
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 
-    public static final boolean DEFAULT_INCLUDE_RESPONSE_TIMES = true;
+    public static final boolean DEFAULT_INCLUDE_RESPONSE_TIMES = false;
 
     public static final String EXCHANGE_HEADER_OPERATION_NAME = "spongeOperationName";
 

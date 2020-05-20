@@ -1461,13 +1461,14 @@ public class CoreActionsTest {
             assertEquals(fruitsSize, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
             // Without paging.
-            Assertions
-                    .assertThrows(SpongeException.class,
-                            () -> engine.getOperations()
-                                    .provideActionArgs(actionMeta.getName(),
-                                            new ProvideArgsParameters().withProvide(Arrays.asList("fruits")))
-                                    .get("fruits"),
-                            "The are are no features for argument fruits in kb.ViewFruits");
+            assertEquals("There is no feature offset for argument fruits in kb.ViewFruits",
+                    Assertions
+                            .assertThrows(SpongeException.class,
+                                    () -> engine.getOperations()
+                                            .provideActionArgs(actionMeta.getName(),
+                                                    new ProvideArgsParameters().withProvide(Arrays.asList("fruits")))
+                                            .get("fruits"))
+                            .getMessage());
 
             assertFalse(engine.isError());
         } finally {
@@ -1484,18 +1485,32 @@ public class CoreActionsTest {
             String text = "TeXt";
             Map<String, String> args = new LinkedHashMap<>();
             args.put("text", text);
-            String result = engine.getOperations().call(String.class, "UpperCase", args);
 
-            assertEquals(text.toUpperCase(), result);
-
-            assertFalse(engine.isError());
+            assertEquals(text.toUpperCase(), engine.getOperations().call(String.class, "UpperCase", args));
         } finally {
             engine.shutdown();
         }
     }
-    
+
     @Test
-    public void testActionCallNamedError() {
+    public void testActionCallNamedWrongAgrError() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call.py").build();
+        engine.startup();
+
+        try {
+            String text = "TeXt";
+            Map<String, String> args = new LinkedHashMap<>();
+            args.put("wrongArg", text);
+
+            assertEquals("Argument wrongArg not found in action UpperCase", Assertions
+                    .assertThrows(Exception.class, () -> engine.getOperations().call(String.class, "UpperCase", args)).getMessage());
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionCallNamedNoMetaError() {
         SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call.py").build();
         engine.startup();
 
@@ -1503,11 +1518,26 @@ public class CoreActionsTest {
             String text = "TeXt";
             Map<String, String> args = new LinkedHashMap<>();
             args.put("text", text);
-            String result = engine.getOperations().call(String.class, "UpperCase", args);
 
-            assertEquals(text.toUpperCase(), result);
+            assertEquals("Action UpperCaseNoMeta doesn't have argument metadata", Assertions
+                    .assertThrows(Exception.class, () -> engine.getOperations().call(String.class, "UpperCaseNoMeta", args)).getMessage());
+        } finally {
+            engine.shutdown();
+        }
+    }
 
-            assertFalse(engine.isError());
+    @Test
+    public void testActionCallNamedInPython() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(TestUtils.DEFAULT_KB, "examples/core/actions_call.py").build();
+        engine.startup();
+
+        try {
+            String text = "TeXt";
+            Map<String, Object> args = new LinkedHashMap<>();
+            args.put("actionName", "UpperCase");
+            args.put("actionArgs", SpongeUtils.immutableMapOf("text", text));
+
+            assertEquals(text.toUpperCase(), engine.getOperations().call(String.class, "ActionDelegateWithNamedArgs", args));
         } finally {
             engine.shutdown();
         }
