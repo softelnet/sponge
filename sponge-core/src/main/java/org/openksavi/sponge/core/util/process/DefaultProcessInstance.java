@@ -19,6 +19,7 @@ package org.openksavi.sponge.core.util.process;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
 
@@ -125,10 +126,22 @@ public class DefaultProcessInstance implements ProcessInstance {
     }
 
     @Override
+    public boolean waitFor(long timeout, TimeUnit unit) throws InterruptedException {
+        validateStarted();
+
+        return runtime.waitFor(timeout, unit);
+    }
+
+    @Override
     public void destroy() throws InterruptedException {
         if (runtime != null) {
             runtime.destroy();
         }
+    }
+
+    @Override
+    public boolean destroy(long timeout, TimeUnit unit) throws InterruptedException {
+        return runtime != null ? runtime.destroy(timeout, unit) : true;
     }
 
     @Override

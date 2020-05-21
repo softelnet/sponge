@@ -19,6 +19,7 @@ package org.openksavi.sponge.util.process;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A process instance.
@@ -173,6 +174,16 @@ public interface ProcessInstance {
     int waitFor() throws InterruptedException;
 
     /**
+     * Invokes {@code waitFor(timeout, unit)} in the underlying process. If not run previously, invokes {@code waitForReady()} first.
+     *
+     * @param timeout the maximum time to wait.
+     * @param unit the time unit of the {@code timeout} argument.
+     * @return {@code true} if the subprocess has exited and {@code false} if the waiting time elapsed before the subprocess has exited.
+     * @throws InterruptedException on interrupted.
+     */
+    boolean waitFor(long timeout, TimeUnit unit) throws InterruptedException;
+
+    /**
      * Tests whether the subprocess is alive.
      *
      * @return {@code true} if the subprocess is alive.
@@ -185,6 +196,16 @@ public interface ProcessInstance {
      * @throws InterruptedException on interrupted.
      */
     void destroy() throws InterruptedException;
+
+    /**
+     * Kills the subprocess.
+     *
+     * @param timeout the maximum time to wait.
+     * @param unit the time unit of the {@code timeout} argument.
+     * @return {@code true} if the subprocess has exited and {@code false} if the waiting time elapsed before the subprocess has exited.
+     * @throws InterruptedException on interrupted.
+     */
+    boolean destroy(long timeout, TimeUnit unit) throws InterruptedException;
 
     /**
      * Returns the exit value for the subprocess.

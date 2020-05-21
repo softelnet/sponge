@@ -376,9 +376,34 @@ public class ProcessInstanceRuntime {
         return exitCode;
     }
 
+    public boolean waitFor(long timeout, TimeUnit unit) throws InterruptedException {
+        waitForReady();
+
+        boolean exited = instance.getInternalProcess().waitFor(timeout, unit);
+        if (exited) {
+            optionallyValidateExitCode();
+        }
+
+        return exited;
+    }
+
     public void destroy() throws InterruptedException {
         instance.getInternalProcess().destroyForcibly().waitFor();
 
+        cleanupDestroyed();
+    }
+
+    public boolean destroy(long timeout, TimeUnit unit) throws InterruptedException {
+        boolean exited = instance.getInternalProcess().destroyForcibly().waitFor(timeout, unit);
+
+        if (exited) {
+            cleanupDestroyed();
+        }
+
+        return exited;
+    }
+
+    protected void cleanupDestroyed() {
         // Stop thread(s) reading the standard output and the error output.
         inputStreamLineConsumerRunnableFutures.forEach(future -> future.cancel(true));
 
