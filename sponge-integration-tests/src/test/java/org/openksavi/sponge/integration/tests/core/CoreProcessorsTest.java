@@ -101,7 +101,7 @@ public class CoreProcessorsTest {
                 throw SpongeUtils.wrapException(action, e);
             }
         } catch (Throwable e) {
-            String expectedMessage = "NameError: global name 'context_error' is not defined in kb.EdvancedMetaActionWithError";
+            String expectedMessage = "NameError: global name 'context_error' is not defined at kb.EdvancedMetaActionWithError";
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
             assertEquals(expectedToString, e.toString());
             assertEquals(expectedMessage, e.getMessage());

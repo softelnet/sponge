@@ -26,12 +26,12 @@ public class WrappedExceptionTest {
 
     @Test
     public void testWrappedException() {
-        assertEquals("java.lang.IllegalArgumentException: Illegal arg in source",
+        assertEquals("java.lang.IllegalArgumentException: Illegal arg at source",
                 new WrappedException("source", new Exception(new IllegalArgumentException("Illegal arg"))).getMessage());
-        assertEquals("Illegal arg in source",
+        assertEquals("Illegal arg at source",
                 new WrappedException("source", new IllegalArgumentException("Illegal arg", new Exception("cause"))).getMessage());
-        assertEquals("Illegal arg in source", new WrappedException("source", new IllegalArgumentException("Illegal arg")).getMessage());
-        assertEquals("Important message in source",
+        assertEquals("Illegal arg at source", new WrappedException("source", new IllegalArgumentException("Illegal arg")).getMessage());
+        assertEquals("Important message at source",
                 new WrappedException("source", "Important message", new IllegalArgumentException("Illegal arg")).getMessage());
     }
 }

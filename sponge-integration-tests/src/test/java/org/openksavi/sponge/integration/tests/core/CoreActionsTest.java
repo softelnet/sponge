@@ -257,7 +257,7 @@ public class CoreActionsTest {
             logger.debug("Expected exception", e);
             String sourceName = "kb.TestAction.onConfigure";
             String expectedMessage =
-                    "AttributeError: 'org.openksavi.sponge.type.StringType' object has no attribute 'label_error' in " + sourceName;
+                    "AttributeError: 'org.openksavi.sponge.type.StringType' object has no attribute 'label_error' at " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
@@ -282,7 +282,7 @@ public class CoreActionsTest {
             String sourceName = "kb.TestAction.onCall";
             String expectedMessage =
                     "NameError: global name 'error_here' is not defined in examples/core/actions_on_call_error.py at line number 8"
-                            + " in kb.ErrorCauseAction.onCall in examples/core/actions_on_call_error.py at line number 12 in " + sourceName;
+                            + " at kb.ErrorCauseAction.onCall in examples/core/actions_on_call_error.py at line number 12 at " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
@@ -313,8 +313,8 @@ public class CoreActionsTest {
             String sourceName = "kb.DeepNestedTestAction.onCall";
             String expectedMessage =
                     "NameError: global name 'error_here' is not defined in examples/core/actions_on_call_error.py at line number 8"
-                            + " in kb.ErrorCauseAction.onCall in examples/core/actions_on_call_error.py at line number 12 in kb.TestAction.onCall"
-                            + " in examples/core/actions_on_call_error.py" + " at line number 16 in " + sourceName;
+                            + " at kb.ErrorCauseAction.onCall in examples/core/actions_on_call_error.py at line number 12 at kb.TestAction.onCall"
+                            + " in examples/core/actions_on_call_error.py" + " at line number 16 at " + sourceName;
             String expectedToString = WrappedException.class.getName() + ": " + expectedMessage;
 
             assertEquals(sourceName, e.getSourceName());
@@ -1260,7 +1260,7 @@ public class CoreActionsTest {
             engine.startup();
             fail("Execption expected");
         } catch (SpongeException e) {
-            assertEquals(e.getMessage(), "A loop in the type specification has been found in the argument 'listArg' in kb.TypeLoopAction");
+            assertEquals(e.getMessage(), "A loop in the type specification has been found in the argument 'listArg' at kb.TypeLoopAction");
         } finally {
             engine.shutdown();
         }
@@ -1461,7 +1461,7 @@ public class CoreActionsTest {
             assertEquals(fruitsSize, fruits.getFeatures().get(Features.PROVIDE_VALUE_COUNT));
 
             // Without paging.
-            assertEquals("There is no feature offset for argument fruits in kb.ViewFruits",
+            assertEquals("There is no feature offset for argument fruits at kb.ViewFruits",
                     Assertions
                             .assertThrows(SpongeException.class,
                                     () -> engine.getOperations()

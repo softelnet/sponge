@@ -48,7 +48,7 @@ public class WrappedException extends SpongeException {
 
     @Override
     public String getMessage() {
-        return super.getMessage() + " in " + sourceName;
+        return super.getMessage() + " at " + sourceName;
     }
 
     protected static String getCoreExceptionMessage(String message, Throwable e) {
