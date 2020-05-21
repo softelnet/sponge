@@ -280,6 +280,15 @@ public interface SpongeClient extends Closeable {
     void validateCallArgs(RemoteActionMeta actionMeta, List<Object> args);
 
     /**
+     * Validates the action call arguments. This method is invoked internally by the {@code call} methods. Throws exception on validation
+     * failure.
+     *
+     * @param actionMeta the action metadata.
+     * @param args the named action arguments.
+     */
+    void validateCallArgs(RemoteActionMeta actionMeta, Map<String, ?> args);
+
+    /**
      * Calls the action. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a metadata is defined.
      *
      * @param request the request.
@@ -399,6 +408,7 @@ public interface SpongeClient extends Closeable {
 
     /**
      * Calls the action with named arguments. Allows fetching the action metadata.
+     *
      * @param request the request.
      * @param actionMeta the action metadata.
      *
@@ -408,6 +418,7 @@ public interface SpongeClient extends Closeable {
 
     /**
      * Calls the action with named arguments. Allows fetching the action metadata.
+     *
      * @param request the request.
      *
      * @return the response.

@@ -16,7 +16,9 @@
 
 package org.openksavi.sponge.remoteapi.util;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -29,7 +31,9 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.Validate;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.features.model.geo.GeoLayer;
 import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
@@ -156,5 +160,19 @@ public abstract class RemoteApiUtils {
         event.setFeatures(FeaturesUtils.unmarshal(converter.getFeatureConverter(), event.getFeatures()));
 
         return event;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static int getActionArgIndex(RemoteActionMeta actionMeta, String argName) {
+        List<DataType> args = actionMeta.getArgs();
+        Validate.notNull(args, "Action %s doesn't have argument metadata", actionMeta.getName());
+
+        for (int i = 0; i < args.size(); i++) {
+            if (Objects.equals(args.get(i).getName(), argName)) {
+                return i;
+            }
+        }
+
+        throw new SpongeException(String.format("Argument %s not found", argName));
     }
 }

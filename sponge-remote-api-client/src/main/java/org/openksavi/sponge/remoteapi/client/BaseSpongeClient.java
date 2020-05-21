@@ -99,6 +99,7 @@ import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
+import org.openksavi.sponge.util.SpongeApiUtils;
 
 /**
  * A base Sponge Remote API client.
@@ -766,29 +767,18 @@ public abstract class BaseSpongeClient implements SpongeClient {
             return;
         }
 
-        int expectedAllArgCount = actionMeta.getArgs().size();
-        int expectedNonOptionalArgCount = (int) actionMeta.getArgs().stream().filter(argType -> !argType.isOptional()).count();
-        int actualArgCount = args != null ? args.size() : 0;
-
-        if (expectedNonOptionalArgCount == expectedAllArgCount) {
-            Validate.isTrue(expectedAllArgCount == actualArgCount, "Incorrect number of arguments. Expected %d but got %d",
-                    expectedAllArgCount, actualArgCount);
-        } else {
-            Validate.isTrue(expectedNonOptionalArgCount <= actualArgCount && actualArgCount <= expectedAllArgCount,
-                    "Incorrect number of arguments. Expected between %d and %d but got %d", expectedNonOptionalArgCount,
-                    expectedAllArgCount, actualArgCount);
-        }
-
-        // Validate non-nullable arguments.
-        for (int i = 0; i < actionMeta.getArgs().size() && i < args.size(); i++) {
-            validateCallArg(actionMeta.getArgs().get(i), args.get(i));
-        }
+        SpongeApiUtils.validateActionCallArgs(actionMeta.getArgs(), args);
     }
 
-    @SuppressWarnings("rawtypes")
-    protected void validateCallArg(DataType argType, Object value) {
-        Validate.isTrue(argType.isOptional() || argType.isNullable() || value != null, "Action argument '%s' is not set",
-                argType.getLabel() != null ? argType.getLabel() : argType.getName());
+    @Override
+    public void validateCallArgs(RemoteActionMeta actionMeta, Map<String, ?> args) {
+        if (actionMeta == null || actionMeta.getArgs() == null) {
+            return;
+        }
+
+        args.forEach((name, value) -> {
+            SpongeApiUtils.validateActionCallArg(actionMeta.getArgs().get(RemoteApiUtils.getActionArgIndex(actionMeta, name)), value);
+        });
     }
 
     protected List<Object> marshalActionCallArgs(RemoteActionMeta actionMeta, List<Object> args) {
@@ -1154,7 +1144,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
     protected ActionCallResponse doCallNamed(RemoteActionMeta actionMeta, ActionCallNamedRequest request, SpongeRequestContext context) {
         setupActionExecutionInfo(actionMeta, request.getBody());
 
-        // TODO validateCallArgs(actionMeta, request.getBody().getArgs());
+        validateCallArgs(actionMeta, request.getBody().getArgs());
 
         request.getBody().setArgs(marshalActionCallArgs(actionMeta, request.getBody().getArgs()));
 

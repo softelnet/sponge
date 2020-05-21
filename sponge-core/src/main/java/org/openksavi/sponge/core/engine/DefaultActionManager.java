@@ -33,6 +33,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ActionManager;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.util.SpongeApiUtils;
 import org.openksavi.sponge.util.ValueHolder;
 
 /**
@@ -78,12 +79,22 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
             throw new InactiveActionException(actionAdapter.getMeta().getName());
         }
 
+        validateActionCallArgs(actionAdapter, args);
+
         try {
             return ((BaseProcessorDefinition) actionAdapter.getDefinition()).getProcessorProvider()
                     .invokeActionOnCall(actionAdapter.getProcessor(), args);
         } catch (Throwable e) {
             throw SpongeUtils.wrapException(actionAdapter.getProcessor(), e);
         }
+    }
+
+    protected void validateActionCallArgs(ActionAdapter actionAdapter, List<Object> args) {
+        if (args == null) {
+            return;
+        }
+
+        SpongeApiUtils.validateActionCallArgs(actionAdapter.getMeta().getArgs(), args);
     }
 
     @Override

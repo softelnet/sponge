@@ -137,4 +137,33 @@ public abstract class SpongeApiUtils {
         return annotatedValueList != null ? annotatedValueList.stream()
                 .map(annotatedValue -> annotatedValue != null ? annotatedValue.getValue() : null).collect(Collectors.toList()) : null;
     }
+
+    public static void validateActionCallArgs(List<DataType> argsMeta, List args) {
+        if (argsMeta == null) {
+            return;
+        }
+
+        int expectedAllArgCount = argsMeta.size();
+        int expectedNonOptionalArgCount = (int) argsMeta.stream().filter(argType -> !argType.isOptional()).count();
+        int actualArgCount = args != null ? args.size() : 0;
+
+        if (expectedNonOptionalArgCount == expectedAllArgCount) {
+            Validate.isTrue(expectedAllArgCount == actualArgCount, "Incorrect number of arguments. Expected %d but got %d",
+                    expectedAllArgCount, actualArgCount);
+        } else {
+            Validate.isTrue(expectedNonOptionalArgCount <= actualArgCount && actualArgCount <= expectedAllArgCount,
+                    "Incorrect number of arguments. Expected between %d and %d but got %d", expectedNonOptionalArgCount,
+                    expectedAllArgCount, actualArgCount);
+        }
+
+        // Validate non-nullable arguments.
+        for (int i = 0; i < argsMeta.size() && i < args.size(); i++) {
+            validateActionCallArg(argsMeta.get(i), args.get(i));
+        }
+    }
+
+    public static void validateActionCallArg(DataType argType, Object value) {
+        Validate.isTrue(argType.isOptional() || argType.isNullable() || value != null, "Action argument '%s' is not set",
+                argType.getLabel() != null ? argType.getLabel() : argType.getName());
+    }
 }
