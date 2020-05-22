@@ -29,13 +29,13 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.remoteapi.server.util.RemoteApiSecurityUtils;
 
-public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends KnowledgeBaseProvidedSecurityService {
+public abstract class BaseInMemorySecurityService extends BaseSecurityService {
 
     private String passwordEntryFormat;
 
     protected Set<User> users = Collections.synchronizedSet(new LinkedHashSet<>());
 
-    protected BaseInMemoryKnowledgeBaseProvidedSecurityService() {
+    protected BaseInMemorySecurityService() {
         //
     }
 
@@ -75,6 +75,10 @@ public abstract class BaseInMemoryKnowledgeBaseProvidedSecurityService extends K
      * @return the user.
      */
     protected User verifyInMemory(String username, String password) {
+        if (username == null || password == null) {
+            return null;
+        }
+
         // Hash the password.
         String hashedPassword = hashPassword(username, password);
 

@@ -85,7 +85,7 @@ public final class RemoteApiServerConstants {
 
     public static final String TAG_API_SERVICE_CLASS = "apiServiceClass";
 
-    public static final String TAG_SECURITY_SERVICE_CLASS = "securityServiceClass";
+    public static final String TAG_SECURITY_PROVIDER_CLASS = "securityProviderClass";
 
     public static final String TAG_AUTH_TOKEN_SERVICE_CLASS = "authTokenServiceClass";
 

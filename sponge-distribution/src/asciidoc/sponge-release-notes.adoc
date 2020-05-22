@@ -7,7 +7,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.0 (not released yet)
-* API change: The {sponge} REST API has been renamed to the {sponge} Remote API. This change resulted in a major refactoring of the server side (`sponge-remote-api-server`) and some adjustments of the client side (`sponge-remote-api-client`). The API concepts were clarified in the documentation.
+* API change: The {sponge} REST API has been renamed to the {sponge} Remote API. This change resulted in a major refactoring of the server side (`sponge-remote-api-server`) and some adjustments of the client side (`sponge-remote-api-client`). The API concepts were clarified in the documentation. The `securityServiceClass` setting has been removed and the `securityProviderClass` setting should be used instead.
 * API change: Changed the `EngineOperations.process` method to accept an executable and arguments and to return a process instance builder instead of a process definition. Moreover the `ProcessInstance.run()` method is always synchronous now. To run a new process asynchronously use the `ProcessInstance.runAsync()` method.
 * API change: Moved the `readOnly` flag from `ProvidedMeta` to `DataType`.
 * API change: Added `features` to the response header in the Remote API.
@@ -33,7 +33,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added `networkImage` to the supported `characteristic` feature values.
 * Added support for `@index` and `@parent` sub-action substitutions.
 * Added support for `GeoCrs` and `GeoWmsLayer`.
-* Added an `ActionDelegateRemoteApiOperation` builder.
+* Added an `ActionDelegateOperation` builder.
 * Added a `sponge.remoteApiServer.version` Java system property in the Remote API.
 * Added a new `callNamed` Remote API operation to call an action with named arguments (as a map).
 * Added a new `EngineOperations.call` method that call an action with named arguments (as a map).

@@ -48,8 +48,7 @@ import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -83,7 +82,8 @@ public class RemoteApiSimpleSpringSecurityTest {
             plugin.getSettings().setPort(spongeRemoteApiPort());
             plugin.getSettings().setAllowAnonymous(false);
             plugin.getSettings().setPublishReload(true);
-            plugin.setSecurityService(remoteApiSecurityService());
+
+            plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
             return plugin;
         }
@@ -93,10 +93,6 @@ public class RemoteApiSimpleSpringSecurityTest {
             return new GrpcApiServerPlugin();
         }
 
-        @Bean
-        public RemoteApiSecurityService remoteApiSecurityService() {
-            return new SimpleSpringInMemorySecurityService();
-        }
     }
 
     protected SpongeClient createClient(String username, String password) {

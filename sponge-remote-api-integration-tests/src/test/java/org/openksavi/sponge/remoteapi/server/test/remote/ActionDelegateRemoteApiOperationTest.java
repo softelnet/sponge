@@ -39,11 +39,10 @@ import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
-import org.openksavi.sponge.remoteapi.server.ActionDelegateRemoteApiOperation;
+import org.openksavi.sponge.remoteapi.server.ActionDelegateOperation;
 import org.openksavi.sponge.remoteapi.server.RemoteApiRouteBuilder;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseRequest;
 import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseResponse;
@@ -80,7 +79,7 @@ public class ActionDelegateRemoteApiOperationTest {
             plugin.getSettings().setAllowAnonymous(true);
             plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 
-            plugin.setSecurityService(remoteApiSecurityService());
+            plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
             plugin.setRouteBuilder(new ActionDelegateRemoteApiOperationTestRouteBuilder());
 
@@ -90,11 +89,6 @@ public class ActionDelegateRemoteApiOperationTest {
         @Bean
         public GrpcApiServerPlugin spongeGrpcApiPlugin() {
             return new GrpcApiServerPlugin();
-        }
-
-        @Bean
-        public RemoteApiSecurityService remoteApiSecurityService() {
-            return new SimpleSpringInMemorySecurityService();
         }
     }
 
@@ -117,7 +111,7 @@ public class ActionDelegateRemoteApiOperationTest {
 
         @Override
         protected void createCustomOperations() {
-            addOperation(ActionDelegateRemoteApiOperation.<UpperCaseRequest, UpperCaseResponse, String>builder().name("upperCase")
+            addOperation(ActionDelegateOperation.<UpperCaseRequest, UpperCaseResponse, String>builder().name("upperCase")
                     .requestClass(UpperCaseRequest.class).requestDescription("Text").responseClass(UpperCaseResponse.class)
                     .responseDescription("Result").argsMapper(request -> Arrays.asList(request.getBody().getText()))
                     .resultMapper((response, result) -> response.getBody().setResult(result)).build());

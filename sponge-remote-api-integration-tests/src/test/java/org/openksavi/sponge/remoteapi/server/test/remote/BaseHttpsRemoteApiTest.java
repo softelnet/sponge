@@ -27,8 +27,7 @@ import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
@@ -64,7 +63,8 @@ public abstract class BaseHttpsRemoteApiTest extends BaseRemoteApiTestTemplate {
             plugin.getSettings().setAllowAnonymous(true);
             plugin.getSettings().setPublishReload(true);
             plugin.getSettings().setIncludeResponseTimes(true);
-            plugin.setSecurityService(remoteApiSecurityService());
+
+            plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
             RemoteApiTestUtils.setupRemoteService(plugin.getSettings());
 
@@ -74,11 +74,6 @@ public abstract class BaseHttpsRemoteApiTest extends BaseRemoteApiTestTemplate {
         @Bean
         public GrpcApiServerPlugin spongeGrpcApiPlugin() {
             return new GrpcApiServerPlugin();
-        }
-
-        @Bean
-        public RemoteApiSecurityService remoteApiSecurityService() {
-            return new SimpleSpringInMemorySecurityService();
         }
     }
 }

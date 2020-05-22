@@ -41,6 +41,7 @@ import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.security.NoSecuritySecurityProvider;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 import org.openksavi.sponge.test.util.TestUtils;
 
@@ -69,6 +70,8 @@ public class DigitsServerTest {
         public RemoteApiServerPlugin spongeRemoteApiPlugin() {
             RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
             plugin.getSettings().setPort(PORT);
+
+            plugin.setSecurityProvider(new NoSecuritySecurityProvider());
 
             return plugin;
         }

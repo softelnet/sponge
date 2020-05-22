@@ -18,21 +18,20 @@ package org.openksavi.sponge.remoteapi.server.security;
 
 import org.apache.commons.lang3.Validate;
 
-import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.kb.KnowledgeBase;
-import org.openksavi.sponge.remoteapi.server.RemoteApiInvalidUsernamePasswordServerException;
+import org.openksavi.sponge.remoteapi.server.InvalidUsernamePasswordServerException;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerConstants;
 import org.openksavi.sponge.remoteapi.server.util.RemoteApiServerUtils;
 
-public class NoSecuritySecurityService extends BaseRemoteApiSecurityService {
+public class NoSecuritySecurityService extends BaseSecurityService {
 
     private UserContext createAnonymousUserContext() {
         return RemoteApiServerUtils.createAnonymousUserContext(RemoteApiServerConstants.DEFAULT_ROLE_ANONYMOUS);
     }
 
     @Override
-    public UserAuthentication authenticateUser(String username, String password) throws RemoteApiInvalidUsernamePasswordServerException {
-        Validate.isTrue(username == null && password == null, "Only anonymous access is allowed with the no-security configuration");
+    public UserAuthentication authenticateUser(UserAuthenticationQuery query) throws InvalidUsernamePasswordServerException {
+        Validate.isTrue(query.getUsername() == null && query.getPassword() == null,
+                "Only anonymous access is allowed with the no-security configuration");
         return new UserAuthentication(createAnonymousUserContext());
     }
 
@@ -47,25 +46,5 @@ public class NoSecuritySecurityService extends BaseRemoteApiSecurityService {
 
     @Override
     public void closeSecurityContext() {
-    }
-
-    @Override
-    public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {
-        return true;
-    }
-
-    @Override
-    public boolean canSendEvent(UserContext userContext, String eventName) {
-        return true;
-    }
-
-    @Override
-    public boolean canSubscribeEvent(UserContext userContext, String eventName) {
-        return true;
-    }
-
-    @Override
-    public boolean canUseKnowledgeBase(UserContext userContext, KnowledgeBase knowledgeBase) {
-        return true;
     }
 }

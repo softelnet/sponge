@@ -68,13 +68,13 @@ The default name of the Remote API plugin (which can be used in knowledge bases)
 |`String`
 |The `RemoteApiService` implementation class name. Defaults to `DefaultRemoteApiService`.
 
-|`securityServiceClass`
+|`securityProviderClass`
 |`String`
-|The `RemoteApiSecurityService` implementation class name. Defaults to `NoSecuritySecurityService`.
+|The `SecurityProvider` implementation class name. *The `SecurityProvider` is required* if both `SecurityService` and `AccessService` are not set.
 
 |`authTokenServiceClass`
 |`String`
-|The `RemoteApiAuthTokenService` implementation class name. The default implementation is `JwtRemoteApiAuthTokenService` that uses JSON Web Token (JWT) for Java https://github.com/jwtk/jjwt[JJWT] library. Note that tokens used by the default implementation are signed but not encrypted.
+|The `AuthTokenService` implementation class name. The default implementation is `JwtAuthTokenService` that uses JSON Web Token (JWT) for Java https://github.com/jwtk/jjwt[JJWT] library. Note that tokens used by the default implementation are signed but not encrypted.
 
 |`authTokenExpirationDurationSeconds`
 |`Long`
@@ -127,14 +127,9 @@ public static class Config extends SpongeCamelConfiguration {
     @Bean
     public RemoteApiServerPlugin remoteApiPlugin() {
         RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
-        plugin.setSecurityService(remoteApiSecurityService());
+        plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
         return plugin;
-    }
-
-    @Bean
-    public RemoteApiSecurityService remoteApiSecurityService() {
-        return new SimpleInMemorySecurityService();
     }
 }
 ----
@@ -157,7 +152,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 Depending on the REST Camel component, you should add a corresponding dependency, e.g. `camel-jetty` for Jetty, `camel-servlet` for a generic servlet. For more information see the Camel documentation.
 
 == Custom operations
-You can define a custom Remote API operation (using the `ActionDelegateRemoteApiOperation.builder()` in the route builder) that delegates a Remote API request to an action call (e.g. to allow implementing an operation body in a scripting language but providing a static Remote API interface).
+You can define a custom Remote API operation (using the `ActionDelegateOperation.builder()` in the route builder) that delegates a Remote API request to an action call (e.g. to allow implementing an operation body in a scripting language but providing a static Remote API interface).
 
 == OpenAPI specification
 After starting the plugin, the online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be accesible.
@@ -183,6 +178,8 @@ class LowerCaseHello(Action):
         return "Hello " + remoteApiServer.session.user.name + ": " + text.lower()
 ----
 
+The Camel `Exchange` instance can be accessed by `remoteApiServer.session.exchange`.
+
 In order to handle a session lifecycle you can implement and set the on session open and the on session close listeners in the `RemoteApiService`.
 
 == Security
@@ -190,7 +187,7 @@ The Remote API provides only simple security out of the box and only if turned o
 
 A user may have roles.
 
-You may set a security strategy by providing an implementation of the `RemoteApiSecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
+You may set a security strategy by providing an implementation of the `SecurityProvider` interface as well as the `SecurityService` interface. You may find a few examples of such implementations in the source code. In production mode we suggest using https://spring.io/projects/spring-security[Spring Security] and configure Camel security. An advanced security configuration has to be set up in Java rather than in a {sponge} XML configuration file. You may implement various authorization scenarios, for example using HTTP headers that are available in a Camel exchange.
 
 [[remote-api-server-simple-security-strategy]]
 === Simple security strategy

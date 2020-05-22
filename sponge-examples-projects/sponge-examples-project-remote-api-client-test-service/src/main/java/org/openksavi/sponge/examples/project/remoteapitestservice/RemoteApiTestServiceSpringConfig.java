@@ -32,8 +32,7 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiSettings;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @Configuration
@@ -68,16 +67,11 @@ public class RemoteApiTestServiceSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setPrettyPrint(true);
         plugin.getSettings().setIncludeResponseTimes(true);
 
-        plugin.setSecurityService(remoteApiSecurityService());
+        plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
         setupRemoteApiService(plugin.getSettings());
 
         return plugin;
-    }
-
-    @Bean
-    public RemoteApiSecurityService remoteApiSecurityService() {
-        return new SimpleSpringInMemorySecurityService();
     }
 
     @Bean

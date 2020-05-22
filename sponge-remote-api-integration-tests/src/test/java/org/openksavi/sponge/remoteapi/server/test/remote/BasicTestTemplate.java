@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.security.NoSecuritySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -52,6 +53,8 @@ public class BasicTestTemplate {
             plugin.getSettings().setPort(spongeRemoteApiPort());
             plugin.getSettings().setPrettyPrint(true);
             plugin.getSettings().setIncludeResponseTimes(true);
+
+            plugin.setSecurityProvider(new NoSecuritySecurityProvider());
 
             return plugin;
         }

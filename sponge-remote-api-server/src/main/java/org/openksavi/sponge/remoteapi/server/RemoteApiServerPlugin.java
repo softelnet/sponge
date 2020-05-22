@@ -42,10 +42,12 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.remoteapi.server.discovery.ServiceDiscoveryInfo;
 import org.openksavi.sponge.remoteapi.server.discovery.ServiceDiscoveryRegistry;
-import org.openksavi.sponge.remoteapi.server.security.JwtRemoteApiAuthTokenService;
-import org.openksavi.sponge.remoteapi.server.security.NoSecuritySecurityService;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiAuthTokenService;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
+import org.openksavi.sponge.remoteapi.server.security.AccessService;
+import org.openksavi.sponge.remoteapi.server.security.AuthTokenService;
+import org.openksavi.sponge.remoteapi.server.security.JwtAuthTokenService;
+import org.openksavi.sponge.remoteapi.server.security.RequestAuthenticationService;
+import org.openksavi.sponge.remoteapi.server.security.SecurityProvider;
+import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 import org.openksavi.sponge.remoteapi.server.util.RemoteApiServerUtils;
 
@@ -60,9 +62,7 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
 
     private static final Supplier<RemoteApiService> DEFAULT_API_SERVICE_PROVIDER = () -> new DefaultRemoteApiService();
 
-    private static final Supplier<RemoteApiSecurityService> DEFAULT_SECURITY_SERVICE_PROVIDER = () -> new NoSecuritySecurityService();
-
-    private static final Supplier<RemoteApiAuthTokenService> DEFAULT_AUTH_TOKEN_SERVICE_PROVIDER = () -> new JwtRemoteApiAuthTokenService();
+    private static final Supplier<AuthTokenService> DEFAULT_AUTH_TOKEN_SERVICE_PROVIDER = () -> new JwtAuthTokenService();
 
     private static final Supplier<RemoteApiRouteBuilder> DEFAULT_ROUTE_BUILDER_PROVIDER = () -> new RemoteApiRouteBuilder();
 
@@ -77,9 +77,15 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
 
     private RemoteApiService service;
 
-    private RemoteApiSecurityService securityService;
+    private SecurityProvider securityProvider;
 
-    private RemoteApiAuthTokenService authTokenService;
+    private SecurityService securityService;
+
+    private RequestAuthenticationService requestAuthenticationService;
+
+    private AccessService accessService;
+
+    private AuthTokenService authTokenService;
 
     private CamelContext camelContext;
 
@@ -143,14 +149,14 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
             service = SpongeUtils.createInstance(apiServiceClass, RemoteApiService.class);
         }
 
-        String securityServiceClass = configuration.getString(RemoteApiServerConstants.TAG_SECURITY_SERVICE_CLASS, null);
-        if (securityServiceClass != null) {
-            securityService = SpongeUtils.createInstance(securityServiceClass, RemoteApiSecurityService.class);
+        String securityProviderClass = configuration.getString(RemoteApiServerConstants.TAG_SECURITY_PROVIDER_CLASS, null);
+        if (securityProviderClass != null) {
+            securityProvider = SpongeUtils.createInstance(securityProviderClass, SecurityProvider.class);
         }
 
         String authTokenServiceClass = configuration.getString(RemoteApiServerConstants.TAG_AUTH_TOKEN_SERVICE_CLASS, null);
         if (authTokenServiceClass != null) {
-            authTokenService = SpongeUtils.createInstance(authTokenServiceClass, RemoteApiAuthTokenService.class);
+            authTokenService = SpongeUtils.createInstance(authTokenServiceClass, AuthTokenService.class);
         }
 
         Long authTokenExpirationDurationSeconds =
@@ -245,13 +251,7 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
 
     @Override
     public void onShutdown() {
-        if (discoveryRegistry != null) {
-            try {
-                discoveryRegistry.unregister();
-            } catch (Exception e) {
-                logger.warn("Error unregistering the service", e);
-            }
-        }
+        stop();
     }
 
     public RemoteApiSettings getSettings() {
@@ -295,11 +295,34 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
 
                     if (securityService == null) {
                         // Create a default.
-                        securityService = DEFAULT_SECURITY_SERVICE_PROVIDER.get();
+                        securityService =
+                                Validate.notNull(securityProvider, "Can't create a security service. The security provider is not set")
+                                        .createSecurityService();
                     }
 
                     securityService.setRemoteApiService(service);
                     service.setSecurityService(securityService);
+
+                    if (requestAuthenticationService == null) {
+                        // Create a default.
+                        requestAuthenticationService = Validate
+                                .notNull(securityProvider,
+                                        "Can't create a request authentication service. The security provider is not set")
+                                .createRequestAuthenticationService();
+                    }
+
+                    requestAuthenticationService.setRemoteApiService(service);
+                    service.setRequestAuthenticationService(requestAuthenticationService);
+
+                    if (accessService == null) {
+                        // Create a default.
+                        accessService =
+                                Validate.notNull(securityProvider, "Can't create an access service. The security provider is not set")
+                                        .createAccessService();
+                    }
+
+                    accessService.setRemoteApiService(service);
+                    service.setAccessService(accessService);
 
                     if (authTokenService == null) {
                         // Create a default.
@@ -316,6 +339,8 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
 
                     // Init services.
                     securityService.init();
+                    requestAuthenticationService.init();
+                    accessService.init();
                     authTokenService.init();
                     service.init();
 
@@ -334,6 +359,33 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
                 }
 
                 started.set(true);
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void stop() {
+        lock.lock();
+
+        try {
+            if (started.get()) {
+                if (discoveryRegistry != null) {
+                    try {
+                        discoveryRegistry.unregister();
+                    } catch (Exception e) {
+                        logger.warn("Error unregistering the service", e);
+                    }
+                }
+
+                // Dispose services.
+                service.dispose();
+                authTokenService.dispose();
+                accessService.dispose();
+                requestAuthenticationService.dispose();
+                securityService.dispose();
+
+                started.set(false);
             }
         } finally {
             lock.unlock();
@@ -376,19 +428,43 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
         this.service = service;
     }
 
-    public RemoteApiSecurityService getSecurityService() {
+    public SecurityProvider getSecurityProvider() {
+        return securityProvider;
+    }
+
+    public void setSecurityProvider(SecurityProvider securityProvider) {
+        this.securityProvider = securityProvider;
+    }
+
+    public SecurityService getSecurityService() {
         return securityService;
     }
 
-    public void setSecurityService(RemoteApiSecurityService securityService) {
+    public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
     }
 
-    public RemoteApiAuthTokenService getAuthTokenService() {
+    public RequestAuthenticationService getRequestAuthenticationService() {
+        return requestAuthenticationService;
+    }
+
+    public void setRequestAuthenticationService(RequestAuthenticationService requestAuthenticationService) {
+        this.requestAuthenticationService = requestAuthenticationService;
+    }
+
+    public AccessService getAccessService() {
+        return accessService;
+    }
+
+    public void setAccessService(AccessService accessService) {
+        this.accessService = accessService;
+    }
+
+    public AuthTokenService getAuthTokenService() {
         return authTokenService;
     }
 
-    public void setAuthTokenService(RemoteApiAuthTokenService authTokenService) {
+    public void setAuthTokenService(AuthTokenService authTokenService) {
         this.authTokenService = authTokenService;
     }
 

@@ -62,7 +62,7 @@
             <configuration>
                 <autoStart>false</autoStart>
                 <allowAnonymous>false</allowAnonymous>
-                <securityServiceClass>org.openksavi.sponge.remoteapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <securityProviderClass>org.openksavi.sponge.remoteapi.server.security.SimpleInMemorySecurityProvider</securityProviderClass>
                 <registerServiceDiscovery>true</registerServiceDiscovery>
             </configuration>
         </plugin>

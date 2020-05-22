@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,28 @@
 
 package org.openksavi.sponge.remoteapi.server.security;
 
-import org.openksavi.sponge.remoteapi.server.RemoteApiService;
+import org.openksavi.sponge.action.ActionAdapter;
+import org.openksavi.sponge.kb.KnowledgeBase;
 
-public abstract class BaseRemoteApiSecurityService implements RemoteApiSecurityService {
+public class NoSecurityAccessService extends BaseAccessService {
 
-    private RemoteApiService remoteApiService;
-
-    protected BaseRemoteApiSecurityService() {
-        //
+    @Override
+    public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {
+        return true;
     }
 
     @Override
-    public RemoteApiService getRemoteApiService() {
-        return remoteApiService;
+    public boolean canSendEvent(UserContext userContext, String eventName) {
+        return true;
     }
 
     @Override
-    public void setRemoteApiService(RemoteApiService remoteApiService) {
-        this.remoteApiService = remoteApiService;
+    public boolean canSubscribeEvent(UserContext userContext, String eventName) {
+        return true;
     }
 
     @Override
-    public void init() {
-        //
-    }
-
-    @Override
-    public void destroy() {
-        //
+    public boolean canUseKnowledgeBase(UserContext userContext, KnowledgeBase knowledgeBase) {
+        return true;
     }
 }

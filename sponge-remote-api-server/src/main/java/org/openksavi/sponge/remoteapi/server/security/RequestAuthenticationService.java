@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.remoteapi.server;
+package org.openksavi.sponge.remoteapi.server.security;
 
-import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
+import org.openksavi.sponge.remoteapi.server.HasRemoteApiService;
+import org.openksavi.sponge.util.Initializable;
 
-/**
- * Error response provider.
- */
-@FunctionalInterface
-public interface RemoteApiErrorResponseProvider {
+public interface RequestAuthenticationService extends HasRemoteApiService, Initializable {
 
-    void applyException(RemoteApiService service, SpongeResponse response, Throwable exception);
+    UserAuthentication authenticateRequest(SpongeRequest request);
 }

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.util;
+package org.openksavi.sponge.remoteapi.server;
+
+import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 
 /**
- * An entity that may be initialized and destroyed.
+ * Error response provider.
  */
-public interface Initializable {
+@FunctionalInterface
+public interface ErrorResponseProvider {
 
-    void init();
-
-    void dispose();
+    void applyException(RemoteApiService service, SpongeResponse response, Throwable exception);
 }

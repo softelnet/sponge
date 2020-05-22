@@ -16,16 +16,16 @@
 
 package org.openksavi.sponge.remoteapi.server;
 
-public class RemoteApiInvalidAuthTokenServerException extends ApplicationServerSpongeException {
+public class InvalidKnowledgeBaseVersionServerException extends ApplicationServerSpongeException {
 
-    private static final long serialVersionUID = -9070276571660804800L;
+    private static final long serialVersionUID = 5429837374793138193L;
 
     /**
      * Creates a new exception.
      *
      * @param message exception message.
      */
-    public RemoteApiInvalidAuthTokenServerException(String message) {
+    public InvalidKnowledgeBaseVersionServerException(String message) {
         super(message);
     }
 
@@ -34,7 +34,7 @@ public class RemoteApiInvalidAuthTokenServerException extends ApplicationServerS
      *
      * @param throwable source throwable.
      */
-    public RemoteApiInvalidAuthTokenServerException(Throwable throwable) {
+    public InvalidKnowledgeBaseVersionServerException(Throwable throwable) {
         super(throwable);
     }
 
@@ -44,7 +44,7 @@ public class RemoteApiInvalidAuthTokenServerException extends ApplicationServerS
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public RemoteApiInvalidAuthTokenServerException(String message, Throwable throwable) {
+    public InvalidKnowledgeBaseVersionServerException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

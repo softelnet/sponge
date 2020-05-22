@@ -110,7 +110,7 @@ public class ServerSubscriptionManager {
                         .anyMatch(eventNamePattern -> engine.getPatternMatcher().matches(eventNamePattern, event.getName()))
                 && (!subscription.isRegisteredTypeRequired() || hasEventType)
                 // Check subscribe privileges for the event instance.
-                && remoteApiService.getSecurityService().canSubscribeEvent(subscription.getUserContext(), event.getName());
+                && remoteApiService.getAccessService().canSubscribeEvent(subscription.getUserContext(), event.getName());
     }
 
     public void pushEvent(org.openksavi.sponge.event.Event event) {

@@ -55,6 +55,8 @@ public final class RemoteApiConstants {
 
     public static final String OPERATION_DOC = "doc";
 
+    public static final String OPERATION_RPC = "rpc";
+
     /** A generic error code. */
     public static final String ERROR_CODE_GENERIC = "GENERIC";
 

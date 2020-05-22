@@ -46,6 +46,7 @@ import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.client.okhttp.OkHttpSpongeClient;
 import org.openksavi.sponge.remoteapi.client.util.SpongeClientUtils;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.security.NoSecuritySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -70,6 +71,8 @@ public class GrpcApiTlsServerTest extends GrpcApiServerBaseTest {
             RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
             plugin.getSettings().setPort(spongeRemoteApiPort());
             plugin.getSettings().setPrettyPrint(true);
+
+            plugin.setSecurityProvider(new NoSecuritySecurityProvider());
 
             SslConfiguration sslConfiguration = new SslConfiguration();
             sslConfiguration.setKeyStore("security/remote_api_selfsigned.jks");

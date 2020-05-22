@@ -33,6 +33,7 @@
         </plugin>
         <plugin name="remoteApiServer" class="org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin">
             <configuration>
+                <securityProviderClass>org.openksavi.sponge.remoteapi.server.security.NoSecuritySecurityProvider</securityProviderClass>
             </configuration>
         </plugin>
     </plugins>

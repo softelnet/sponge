@@ -16,27 +16,16 @@
 
 package org.openksavi.sponge.remoteapi.server.security;
 
-import org.openksavi.sponge.action.ActionAdapter;
-import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.remoteapi.server.HasRemoteApiService;
-import org.openksavi.sponge.remoteapi.server.RemoteApiInvalidUsernamePasswordServerException;
 import org.openksavi.sponge.util.Initializable;
 
-public interface RemoteApiSecurityService extends HasRemoteApiService, Initializable {
+public interface SecurityService extends HasRemoteApiService, Initializable {
 
-    UserAuthentication authenticateUser(String username, String password) throws RemoteApiInvalidUsernamePasswordServerException;
+    UserAuthentication authenticateUser(UserAuthenticationQuery query);
 
     UserAuthentication authenticateAnonymous(User anonymous);
 
     void openSecurityContext(UserAuthentication userAuthentication);
 
     void closeSecurityContext();
-
-    boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter);
-
-    boolean canSendEvent(UserContext userContext, String eventName);
-
-    boolean canSubscribeEvent(UserContext userContext, String eventName);
-
-    boolean canUseKnowledgeBase(UserContext userContext, KnowledgeBase knowledgeBase);
 }

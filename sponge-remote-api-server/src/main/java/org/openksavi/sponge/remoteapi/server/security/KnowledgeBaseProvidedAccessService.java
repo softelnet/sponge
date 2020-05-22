@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,7 @@ import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerConstants;
 import org.openksavi.sponge.util.ValueHolder;
 
-public abstract class KnowledgeBaseProvidedSecurityService extends BaseRemoteApiSecurityService {
-
-    protected KnowledgeBaseProvidedSecurityService() {
-        //
-    }
+public class KnowledgeBaseProvidedAccessService extends BaseAccessService {
 
     @Override
     public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {

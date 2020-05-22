@@ -40,10 +40,10 @@ import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
  * @param <O> a response.
  * @param <A> an action result.
  */
-public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends SpongeResponse, A> extends RemoteApiOperation<I, O> {
+public class ActionDelegateOperation<I extends SpongeRequest, O extends SpongeResponse, A> extends RemoteApiOperation<I, O> {
 
     @SuppressWarnings("unchecked")
-    protected ActionDelegateRemoteApiOperation(String name, String description, Class<I> requestClass, String requestDescription,
+    protected ActionDelegateOperation(String name, String description, Class<I> requestClass, String requestDescription,
             Class<O> responseClass, String responseDescription, String actionName, Function<I, List<Object>> argsMapper,
             BiConsumer<O, A> resultMapper) {
         super(name, description, requestClass, requestDescription, responseClass, responseDescription, (service, request, exchange) -> {
@@ -164,7 +164,7 @@ public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends
             return this;
         }
 
-        public ActionDelegateRemoteApiOperation<I, O, A> build() {
+        public ActionDelegateOperation<I, O, A> build() {
             Validate.notNull(name, "The operation name must be set");
             Validate.notNull(requestClass, "The operation request class must be set");
             Validate.notNull(requestDescription, "The operation request description must be set");
@@ -173,7 +173,7 @@ public class ActionDelegateRemoteApiOperation<I extends SpongeRequest, O extends
             Validate.notNull(argsMapper, "The action args mapper must be set");
             Validate.notNull(resultMapper, "The action result mapper must be set");
 
-            return new ActionDelegateRemoteApiOperation<>(name, description, requestClass, requestDescription, responseClass,
+            return new ActionDelegateOperation<>(name, description, requestClass, requestDescription, responseClass,
                     responseDescription, actionName, argsMapper, resultMapper);
         }
     }

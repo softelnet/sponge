@@ -26,7 +26,7 @@ import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 /**
  * A default error response provider.
  */
-public class DefaultRemoteApiErrorResponseProvider implements RemoteApiErrorResponseProvider {
+public class DefaultErrorResponseProvider implements ErrorResponseProvider {
 
     @Override
     public void applyException(RemoteApiService service, SpongeResponse response, Throwable exception) {
@@ -45,11 +45,11 @@ public class DefaultRemoteApiErrorResponseProvider implements RemoteApiErrorResp
     }
 
     protected void applySpecificErrorCodes(RemoteApiService service, SpongeResponse response, Throwable exception) {
-        if (exception instanceof RemoteApiInvalidAuthTokenServerException) {
+        if (exception instanceof InvalidAuthTokenServerException) {
             response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
-        } else if (exception instanceof RemoteApiInvalidKnowledgeBaseVersionServerException) {
+        } else if (exception instanceof InvalidKnowledgeBaseVersionServerException) {
             response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INVALID_KB_VERSION);
-        } else if (exception instanceof RemoteApiInvalidUsernamePasswordServerException) {
+        } else if (exception instanceof InvalidUsernamePasswordServerException) {
             response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD);
         } else if (exception instanceof InactiveActionException) {
             response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INACTIVE_ACTION);

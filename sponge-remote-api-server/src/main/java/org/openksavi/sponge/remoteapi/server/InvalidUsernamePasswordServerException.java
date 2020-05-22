@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2019 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package org.openksavi.sponge.remoteapi.server;
 
-public class RemoteApiInvalidKnowledgeBaseVersionServerException extends ApplicationServerSpongeException {
+public class InvalidUsernamePasswordServerException extends ApplicationServerSpongeException {
 
-    private static final long serialVersionUID = 5429837374793138193L;
+    private static final long serialVersionUID = 5920757216003601488L;
 
     /**
      * Creates a new exception.
      *
      * @param message exception message.
      */
-    public RemoteApiInvalidKnowledgeBaseVersionServerException(String message) {
+    public InvalidUsernamePasswordServerException(String message) {
         super(message);
     }
 
@@ -34,7 +34,7 @@ public class RemoteApiInvalidKnowledgeBaseVersionServerException extends Applica
      *
      * @param throwable source throwable.
      */
-    public RemoteApiInvalidKnowledgeBaseVersionServerException(Throwable throwable) {
+    public InvalidUsernamePasswordServerException(Throwable throwable) {
         super(throwable);
     }
 
@@ -44,7 +44,7 @@ public class RemoteApiInvalidKnowledgeBaseVersionServerException extends Applica
      * @param message exception message.
      * @param throwable source throwable.
      */
-    public RemoteApiInvalidKnowledgeBaseVersionServerException(String message, Throwable throwable) {
+    public InvalidUsernamePasswordServerException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }

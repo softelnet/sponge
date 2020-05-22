@@ -29,8 +29,7 @@ import org.openksavi.sponge.camel.SpongeCamelConfiguration;
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @Configuration
@@ -59,13 +58,8 @@ public class UserManagementSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
 
-        plugin.setSecurityService(remoteApiSecurityService());
+        plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
         return plugin;
-    }
-
-    @Bean
-    public RemoteApiSecurityService remoteApiSecurityService() {
-        return new SimpleSpringInMemorySecurityService();
     }
 }

@@ -89,7 +89,7 @@
         <plugin name="remoteApiServer" class="org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin">
             <configuration>
                 <allowAnonymous>true</allowAnonymous>
-                <securityServiceClass>org.openksavi.sponge.remoteapi.server.security.SimpleInMemorySecurityService</securityServiceClass>
+                <securityProviderClass>org.openksavi.sponge.remoteapi.server.security.SimpleInMemorySecurityProvider</securityProviderClass>
                 <registerServiceDiscovery>true</registerServiceDiscovery>
                 <publishReload>true</publishReload>
                 <prettyPrint>true</prettyPrint>

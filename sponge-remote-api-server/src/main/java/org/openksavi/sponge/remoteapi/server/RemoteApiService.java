@@ -51,8 +51,10 @@ import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionCloseListener;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionOpenListener;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiAuthTokenService;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
+import org.openksavi.sponge.remoteapi.server.security.AccessService;
+import org.openksavi.sponge.remoteapi.server.security.AuthTokenService;
+import org.openksavi.sponge.remoteapi.server.security.SecurityService;
+import org.openksavi.sponge.remoteapi.server.security.RequestAuthenticationService;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
@@ -70,17 +72,25 @@ public interface RemoteApiService extends HasEngine, Initializable {
 
     String getApiVersion();
 
-    RemoteApiSecurityService getSecurityService();
+    SecurityService getSecurityService();
 
-    void setSecurityService(RemoteApiSecurityService securityService);
+    void setSecurityService(SecurityService securityService);
 
-    RemoteApiAuthTokenService getAuthTokenService();
+    RequestAuthenticationService getRequestAuthenticationService();
 
-    void setAuthTokenService(RemoteApiAuthTokenService authTokenService);
+    void setRequestAuthenticationService(RequestAuthenticationService requestAuthenticationService);
 
-    RemoteApiErrorResponseProvider getErrorResponseProvider();
+    AccessService getAccessService();
 
-    void setErrorResponseProvider(RemoteApiErrorResponseProvider errorResponseProvider);
+    void setAccessService(AccessService accessService);
+
+    AuthTokenService getAuthTokenService();
+
+    void setAuthTokenService(AuthTokenService authTokenService);
+
+    ErrorResponseProvider getErrorResponseProvider();
+
+    void setErrorResponseProvider(ErrorResponseProvider errorResponseProvider);
 
     LoginResponse login(LoginRequest request);
 
@@ -104,11 +114,11 @@ public interface RemoteApiService extends HasEngine, Initializable {
 
     GetFeaturesResponse getFeatures(GetFeaturesRequest request);
 
-    Map<String, Object> getFeatures();
-
     GetEventTypesResponse getEventTypes(GetEventTypesRequest request);
 
     ReloadResponse reload(ReloadRequest request);
+
+    Map<String, Object> getFeatures();
 
     SpongeResponse createGenericErrorResponse(Throwable e);
 

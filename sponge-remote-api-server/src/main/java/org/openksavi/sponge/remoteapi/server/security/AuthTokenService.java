@@ -19,7 +19,7 @@ package org.openksavi.sponge.remoteapi.server.security;
 import org.openksavi.sponge.remoteapi.server.HasRemoteApiService;
 import org.openksavi.sponge.util.Initializable;
 
-public interface RemoteApiAuthTokenService extends HasRemoteApiService, Initializable {
+public interface AuthTokenService extends HasRemoteApiService, Initializable {
 
     /**
      * Creates a new auth token.

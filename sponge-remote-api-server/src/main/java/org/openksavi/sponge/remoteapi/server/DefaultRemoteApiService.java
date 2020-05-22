@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.IsActionActiveContext;
@@ -86,9 +85,12 @@ import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionCloseListener;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionOpenListener;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiAuthTokenService;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
+import org.openksavi.sponge.remoteapi.server.security.AccessService;
+import org.openksavi.sponge.remoteapi.server.security.AuthTokenService;
+import org.openksavi.sponge.remoteapi.server.security.RequestAuthenticationService;
+import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.UserAuthentication;
+import org.openksavi.sponge.remoteapi.server.security.UserAuthenticationQuery;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 import org.openksavi.sponge.remoteapi.server.util.RemoteApiServerUtils;
 import org.openksavi.sponge.remoteapi.type.converter.BaseTypeConverter;
@@ -114,11 +116,15 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     private RemoteApiSettings settings;
 
-    private RemoteApiSecurityService securityService;
+    private SecurityService securityService;
 
-    private RemoteApiAuthTokenService authTokenService;
+    private RequestAuthenticationService requestAuthenticationService;
 
-    private RemoteApiErrorResponseProvider errorResponseProvider = new DefaultRemoteApiErrorResponseProvider();
+    private AccessService accessService;
+
+    private AuthTokenService authTokenService;
+
+    private ErrorResponseProvider errorResponseProvider = new DefaultErrorResponseProvider();
 
     private TypeConverter typeConverter;
 
@@ -185,10 +191,11 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @Override
-    public void destroy() {
+    public void dispose() {
         //
     }
 
+    @Override
     public String getApiVersion() {
         return settings.getVersion() != null ? settings.getVersion() : getEngine().getVersion();
     }
@@ -232,7 +239,10 @@ public class DefaultRemoteApiService implements RemoteApiService {
             Validate.notNull(request, "The request must not be null");
             Validate.notNull(request.getHeader().getUsername(), "The username must not be null");
 
-            UserAuthentication userAuthentication = authenticateUser(request.getHeader().getUsername(), request.getHeader().getPassword());
+            UserAuthentication userAuthentication =
+                    securityService.authenticateUser(new UserAuthenticationQuery(request.getHeader().getUsername(),
+                            request.getHeader().getPassword(), request.getHeader().getAuthToken(), getSession()));
+
             String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
 
             return setupSuccessResponse(new LoginResponse(authToken), request);
@@ -249,7 +259,9 @@ public class DefaultRemoteApiService implements RemoteApiService {
             authenticateRequest(request);
 
             if (request.getHeader().getAuthToken() != null) {
-                getSafeAuthTokenService().removeAuthToken(request.getHeader().getAuthToken());
+                if (authTokenService != null) {
+                    authTokenService.removeAuthToken(request.getHeader().getAuthToken());
+                }
             }
 
             return setupSuccessResponse(new LogoutResponse(), request);
@@ -268,7 +280,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
             UserContext userContext = authenticateRequest(request);
 
             return setupSuccessResponse(new GetKnowledgeBasesResponse(getEngine().getKnowledgeBaseManager().getKnowledgeBases().stream()
-                    .filter(kb -> securityService.canUseKnowledgeBase(userContext, kb))
+                    .filter(kb -> accessService.canUseKnowledgeBase(userContext, kb))
                     .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRemoteKnowledgeBase(kb))
                     .collect(Collectors.toList())), request);
         } catch (Throwable e) {
@@ -359,7 +371,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
         Validate.isTrue(canCallAction(userContext, actionAdapter), "No privileges to call action %s", actionName);
 
         if (qualifiedVersion != null && !qualifiedVersion.equals(actionAdapter.getQualifiedVersion())) {
-            throw new RemoteApiInvalidKnowledgeBaseVersionServerException(
+            throw new InvalidKnowledgeBaseVersionServerException(
                     String.format("The expected action qualified version (%s) differs from the actual (%s)", qualifiedVersion.toString(),
                             actionAdapter.getQualifiedVersion().toString()));
         }
@@ -623,10 +635,6 @@ public class DefaultRemoteApiService implements RemoteApiService {
         }
     }
 
-    protected RemoteApiAuthTokenService getSafeAuthTokenService() {
-        return Validate.notNull(authTokenService, "Auth token service not configured");
-    }
-
     /**
      * Throws exception if the request can't be successfully authenticated.
      *
@@ -635,34 +643,18 @@ public class DefaultRemoteApiService implements RemoteApiService {
      */
     @Override
     public UserContext authenticateRequest(SpongeRequest request) {
-        UserAuthentication userAuthentication;
-        if (request.getHeader().getAuthToken() != null) {
-            Validate.isTrue(request.getHeader().getUsername() == null, "Username is not allowed when using a token-based auhentication");
-            Validate.isTrue(request.getHeader().getPassword() == null, "Password is not allowed when using a token-based auhentication");
-
-            userAuthentication = getSafeAuthTokenService().validateAuthToken(request.getHeader().getAuthToken());
-        } else {
-            if (request.getHeader().getUsername() == null) {
-                if (settings.isAllowAnonymous()) {
-                    userAuthentication =
-                            securityService.authenticateAnonymous(RemoteApiServerUtils.createAnonymousUser(settings.getAnonymousRole()));
-                } else {
-                    throw new SpongeException("Anonymous access is not allowed");
-                }
-            } else {
-                userAuthentication = authenticateUser(request.getHeader().getUsername(), request.getHeader().getPassword());
-            }
-        }
-
-        // Set the user in the thread local session.
         RemoteApiSession session = Validate.notNull(getSession(), "The session is not set");
-        Validate.isTrue(session instanceof DefaultRemoteApiSession, "The session class should extend %s", DefaultRemoteApiSession.class);
-        ((DefaultRemoteApiSession) session).setUserAuthentication(userAuthentication);
 
-        // Put reguest features to the session.
+        // Put reguest features to the thread local session.
         if (request.getHeader().getFeatures() != null) {
             session.getFeatures().putAll(request.getHeader().getFeatures());
         }
+
+        UserAuthentication userAuthentication = requestAuthenticationService.authenticateRequest(request);
+
+        // Set the user in the thread local session.
+        Validate.isTrue(session instanceof DefaultRemoteApiSession, "The session class should extend %s", DefaultRemoteApiSession.class);
+        ((DefaultRemoteApiSession) session).setUserAuthentication(userAuthentication);
 
         securityService.openSecurityContext(userAuthentication);
 
@@ -671,10 +663,6 @@ public class DefaultRemoteApiService implements RemoteApiService {
         }
 
         return userAuthentication.getUserContext();
-    }
-
-    protected UserAuthentication authenticateUser(String username, String password) throws RemoteApiInvalidUsernamePasswordServerException {
-        return securityService.authenticateUser(username != null ? username.toLowerCase() : null, password);
     }
 
     protected boolean isActionPublic(ActionAdapter actionAdapter) {
@@ -709,17 +697,17 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public boolean canCallAction(UserContext userContext, ActionAdapter actionAdapter) {
-        return isActionPublic(actionAdapter) && securityService.canCallAction(userContext, actionAdapter);
+        return isActionPublic(actionAdapter) && accessService.canCallAction(userContext, actionAdapter);
     }
 
     @Override
     public boolean canSendEvent(UserContext userContext, String eventName) {
-        return isEventPublic(eventName) && securityService.canSendEvent(userContext, eventName);
+        return isEventPublic(eventName) && accessService.canSendEvent(userContext, eventName);
     }
 
     @Override
     public boolean canSubscribeEvent(UserContext userContext, String eventName) {
-        return isEventPublic(eventName) && securityService.canSubscribeEvent(userContext, eventName);
+        return isEventPublic(eventName) && accessService.canSubscribeEvent(userContext, eventName);
     }
 
     protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
@@ -800,32 +788,52 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @Override
-    public RemoteApiSecurityService getSecurityService() {
+    public SecurityService getSecurityService() {
         return securityService;
     }
 
     @Override
-    public void setSecurityService(RemoteApiSecurityService securityService) {
+    public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
     }
 
     @Override
-    public RemoteApiAuthTokenService getAuthTokenService() {
+    public RequestAuthenticationService getRequestAuthenticationService() {
+        return requestAuthenticationService;
+    }
+
+    @Override
+    public void setRequestAuthenticationService(RequestAuthenticationService requestAuthenticationService) {
+        this.requestAuthenticationService = requestAuthenticationService;
+    }
+
+    @Override
+    public AccessService getAccessService() {
+        return accessService;
+    }
+
+    @Override
+    public void setAccessService(AccessService accessService) {
+        this.accessService = accessService;
+    }
+
+    @Override
+    public AuthTokenService getAuthTokenService() {
         return authTokenService;
     }
 
     @Override
-    public void setAuthTokenService(RemoteApiAuthTokenService authTokenService) {
+    public void setAuthTokenService(AuthTokenService authTokenService) {
         this.authTokenService = authTokenService;
     }
 
     @Override
-    public RemoteApiErrorResponseProvider getErrorResponseProvider() {
+    public ErrorResponseProvider getErrorResponseProvider() {
         return errorResponseProvider;
     }
 
     @Override
-    public void setErrorResponseProvider(RemoteApiErrorResponseProvider errorResponseProvider) {
+    public void setErrorResponseProvider(ErrorResponseProvider errorResponseProvider) {
         this.errorResponseProvider = errorResponseProvider;
     }
 

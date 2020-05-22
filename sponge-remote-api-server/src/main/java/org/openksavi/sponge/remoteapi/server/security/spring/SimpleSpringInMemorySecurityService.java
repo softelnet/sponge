@@ -27,13 +27,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.openksavi.sponge.remoteapi.server.RemoteApiInvalidUsernamePasswordServerException;
-import org.openksavi.sponge.remoteapi.server.security.BaseInMemoryKnowledgeBaseProvidedSecurityService;
+import org.openksavi.sponge.remoteapi.server.InvalidUsernamePasswordServerException;
+import org.openksavi.sponge.remoteapi.server.security.BaseInMemorySecurityService;
 import org.openksavi.sponge.remoteapi.server.security.User;
 import org.openksavi.sponge.remoteapi.server.security.UserAuthentication;
+import org.openksavi.sponge.remoteapi.server.security.UserAuthenticationQuery;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 
-public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
+public class SimpleSpringInMemorySecurityService extends BaseInMemorySecurityService {
 
     private AuthenticationManager authenticationManager = new SimpleAuthenticationManager();
 
@@ -50,15 +51,20 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemoryKnowledgeBa
     }
 
     @Override
-    public UserAuthentication authenticateUser(String username, String password) throws RemoteApiInvalidUsernamePasswordServerException {
+    public UserAuthentication authenticateUser(UserAuthenticationQuery query) {
+        String username = query.getUsername() != null ? query.getUsername().toLowerCase() : null;
+
+        Validate.isTrue(username != null && query.getPassword() != null, "The %s requires username and password", getClass());
+
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Authentication authentication =
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, query.getPassword()));
             UserContext userContext = new UserContext(username,
                     authentication.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toList()));
 
             return new SimpleSpringUserAuthentication(userContext, authentication);
         } catch (AuthenticationException e) {
-            throw new RemoteApiInvalidUsernamePasswordServerException("Incorrect username or password", e);
+            throw new InvalidUsernamePasswordServerException("Incorrect username or password", e);
         }
     }
 

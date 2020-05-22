@@ -43,8 +43,7 @@ import org.openksavi.sponge.remoteapi.client.InvalidAuthTokenException;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
-import org.openksavi.sponge.remoteapi.server.security.RemoteApiSecurityService;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -79,7 +78,7 @@ public class AuthTokenExpirationTest {
             plugin.getSettings().setAllowAnonymous(false);
             plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 
-            plugin.setSecurityService(remoteApiSecurityService());
+            plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
             return plugin;
         }
@@ -87,11 +86,6 @@ public class AuthTokenExpirationTest {
         @Bean
         public GrpcApiServerPlugin spongeGrpcApiPlugin() {
             return new GrpcApiServerPlugin();
-        }
-
-        @Bean
-        public RemoteApiSecurityService remoteApiSecurityService() {
-            return new SimpleSpringInMemorySecurityService();
         }
     }
 

@@ -33,12 +33,12 @@ import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.openksavi.sponge.core.util.LocalCache;
 import org.openksavi.sponge.core.util.LocalCacheBuilder;
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.remoteapi.server.RemoteApiInvalidAuthTokenServerException;
+import org.openksavi.sponge.remoteapi.server.InvalidAuthTokenServerException;
 
 /**
  * AN auth token service that uses JSON Web Token (JWT).
  */
-public class JwtRemoteApiAuthTokenService extends BaseRemoteApiAuthTokenService {
+public class JwtAuthTokenService extends BaseAuthTokenService {
 
     protected static final String CLAIM_AUTH_SESSION_ID = "authSessionId";
 
@@ -106,17 +106,17 @@ public class JwtRemoteApiAuthTokenService extends BaseRemoteApiAuthTokenService 
             Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
 
             if (authSessionId == null) {
-                throw new RemoteApiInvalidAuthTokenServerException("Invalid or expired authentication token");
+                throw new InvalidAuthTokenServerException("Invalid or expired authentication token");
             }
 
             AuthTokenSession authSession = authTokenSessions.getIfPresent(authSessionId);
             if (authSession == null) {
-                throw new RemoteApiInvalidAuthTokenServerException("Invalid or expired authentication token");
+                throw new InvalidAuthTokenServerException("Invalid or expired authentication token");
             }
 
             return authSession.getUserAuthentication();
         } catch (JwtException e) {
-            throw new RemoteApiInvalidAuthTokenServerException(e.getMessage(), e);
+            throw new InvalidAuthTokenServerException(e.getMessage(), e);
         }
     }
 

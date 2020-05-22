@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
 
 package org.openksavi.sponge.remoteapi.server.security;
 
-/**
- * An authentication mode.
- */
-public enum RemoteApiAuthenticationMode {
-    /** Every request has to contain a username and a password. */
-    USERNAME_PASSWORD,
+public interface SecurityProvider {
 
-    /** Every request has to contain an authentication token, returned by a login operation. */
-    AUTH_TOKEN
+    SecurityService createSecurityService();
+
+    RequestAuthenticationService createRequestAuthenticationService();
+
+    AccessService createAccessService();
 }

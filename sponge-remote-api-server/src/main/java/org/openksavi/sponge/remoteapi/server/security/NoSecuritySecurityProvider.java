@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.util;
+package org.openksavi.sponge.remoteapi.server.security;
 
-/**
- * An entity that may be initialized and destroyed.
- */
-public interface Initializable {
+public class NoSecuritySecurityProvider implements SecurityProvider {
 
-    void init();
+    @Override
+    public SecurityService createSecurityService() {
+        return new NoSecuritySecurityService();
+    }
 
-    void dispose();
+    @Override
+    public AccessService createAccessService() {
+        return new NoSecurityAccessService();
+    }
+
+    @Override
+    public RequestAuthenticationService createRequestAuthenticationService() {
+        return new DefaultRequestAuthenticationService();
+    }
 }

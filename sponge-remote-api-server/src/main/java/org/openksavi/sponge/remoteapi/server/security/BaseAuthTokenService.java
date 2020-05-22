@@ -18,11 +18,11 @@ package org.openksavi.sponge.remoteapi.server.security;
 
 import org.openksavi.sponge.remoteapi.server.RemoteApiService;
 
-public abstract class BaseRemoteApiAuthTokenService implements RemoteApiAuthTokenService {
+public abstract class BaseAuthTokenService implements AuthTokenService {
 
     private RemoteApiService remoteApiService;
 
-    protected BaseRemoteApiAuthTokenService() {
+    protected BaseAuthTokenService() {
         //
     }
 
@@ -42,7 +42,7 @@ public abstract class BaseRemoteApiAuthTokenService implements RemoteApiAuthToke
     }
 
     @Override
-    public void destroy() {
+    public void dispose() {
         //
     }
 }

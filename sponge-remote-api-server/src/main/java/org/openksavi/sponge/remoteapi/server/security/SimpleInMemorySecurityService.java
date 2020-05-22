@@ -16,19 +16,25 @@
 
 package org.openksavi.sponge.remoteapi.server.security;
 
-import org.openksavi.sponge.remoteapi.server.RemoteApiInvalidUsernamePasswordServerException;
+import org.apache.commons.lang3.Validate;
 
-public class SimpleInMemorySecurityService extends BaseInMemoryKnowledgeBaseProvidedSecurityService {
+import org.openksavi.sponge.remoteapi.server.InvalidUsernamePasswordServerException;
+
+public class SimpleInMemorySecurityService extends BaseInMemorySecurityService {
 
     public SimpleInMemorySecurityService() {
         //
     }
 
     @Override
-    public UserAuthentication authenticateUser(String username, String password) throws RemoteApiInvalidUsernamePasswordServerException {
-        User user = verifyInMemory(username, password);
+    public UserAuthentication authenticateUser(UserAuthenticationQuery query) {
+        String username = query.getUsername() != null ? query.getUsername().toLowerCase() : null;
+
+        Validate.isTrue(username != null && query.getPassword() != null, "The %s requires username and password", getClass());
+
+        User user = verifyInMemory(username, query.getPassword());
         if (user == null) {
-            throw new RemoteApiInvalidUsernamePasswordServerException("Invalid username or password");
+            throw new InvalidUsernamePasswordServerException("Invalid username or password");
         }
 
         return new UserAuthentication(new UserContext(user.getName(), user.getRoles()));
